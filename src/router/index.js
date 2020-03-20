@@ -257,14 +257,14 @@ export const asyncRoutes = [
     children: [
       {
         path: 'user/list',
-        component: () => import('@/views/users/List.vue'), // Parent router-view
-        name: 'List',
+        component: () => import('@/views/users/UserList.vue'), // Parent router-view
+        name: 'UserList',
         meta: { title: 'List' }
       },
       {
         path: 'user/:id',
-        component: () => import('@/views/users/Edit.vue'), // Parent router-view
-        name: 'Edit',
+        component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
+        name: 'UserEdit',
         meta: { title: 'Edit' },
         hidden: true
       }

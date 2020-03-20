@@ -1,11 +1,22 @@
 <template>
   <div class="backplayground">
-    <slot />
+    <div class="title">
+      <div class="title-context">
+        {{ title }}
+      </div>
+      <slot />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    title: {
+      type: String,
+      default: () => { return 'Title' }
+    }
+  }
 
 }
 </script>
@@ -18,5 +29,21 @@ export default {
     margin-right:0.5%;
     margin-top:1%;
     margin-bottom:1%;
+}
+.title{
+  width: 98%;
+  margin-left:1%;
+  margin-top:1%;
+  padding-bottom:1%;
+  background-color: #fff;
+  .title-context{
+    text-align: left;
+    font-size: 14px;
+    padding-top:15px;
+    padding-left:15px;
+    padding-bottom: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #e7eaec !important;
+  }
 }
 </style>

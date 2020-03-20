@@ -1,10 +1,6 @@
 <template>
   <div>
-    <!--面包屑导航-->
     <div class="tableTitle">
-      <div class="tableTitle-context">
-        {{ tabletitle }}
-      </div>
       <el-row class="tableTitle-menu">
         <el-col :span="2"><el-button size="small" type="primary" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebotton }}</el-button></el-col>
         <el-col :span="3" :offset="17">
@@ -50,10 +46,6 @@
 <script>
 export default {
   props: {
-    tabletitle: {
-      type: String,
-      default: () => { return 'TableTitle' }
-    },
     tablebotton: {
       type: String,
       default: () => { return 'TableBotton' }
@@ -120,20 +112,7 @@ el-breadcrumb__item{
   background-color: #fff;
 }
 .tableTitle{
-  width: 98%;
-  margin-left:1%;
-  margin-top:1%;
   padding-bottom:1%;
-  background-color: #fff;
-  .tableTitle-context{
-    text-align: left;
-    font-size: 14px;
-    padding-top:15px;
-    padding-left:15px;
-    padding-bottom: 15px;
-    font-weight: 600;
-    border-bottom: 1px solid #e7eaec !important;
-  }
   .tableTitle-menu{
     padding-top:15px;
   }
