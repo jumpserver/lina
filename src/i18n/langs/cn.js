@@ -299,6 +299,9 @@ const cn = {
     'setting': '系统设置',
     'basicsetting': '基本设置'
   },
+  'route': {
+    'Users': '用户管理'
+  },
   ...zhLocale
 }
 
