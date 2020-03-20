@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: 'JumpServer',
 
   /**
    * @type {boolean} true | false

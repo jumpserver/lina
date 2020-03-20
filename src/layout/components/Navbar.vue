@@ -1,33 +1,32 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-    <breadcrumb class="breadcrumb-container" />
-
-    <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              Home
-            </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+    <el-menu class="el-menu-demo" mode="horizontal">
+      <el-menu-item index="0"><hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /></el-menu-item>
+      <el-menu-item index="1"><breadcrumb class="breadcrumb-container" /></el-menu-item>
+      <el-submenu index="2" class="el-submenu-right">
+        <template slot="title">
+          <img
+            src="@/assets/img/admin.png"
+            class="header-menu-logo"
+            style="height:30px;weight:30px;border-radius: 50%;margin-right:5px;"
+          >管理员
+        </template>
+        <el-menu-item index="2-1">个人信息</el-menu-item>
+        <el-menu-item index="2-2">用户界面</el-menu-item>
+        <el-menu-item index="2-2">API key</el-menu-item>
+        <el-menu-item index="2-2">注销登录</el-menu-item>
+      </el-submenu>
+      <el-submenu index="3" class="el-submenu-right">
+        <template slot="title" style="font-weight:600;"><i class="fa fa-globe header-menu-icon" style="margin-right:5px;" />{{ $t('header.language') }}</template>
+        <el-menu-item index="3-1" @click="changeLangToZH()">中文</el-menu-item>
+        <el-menu-item index="3-2" @click="changeLangToEnglish()">English</el-menu-item>
+      </el-submenu>
+      <el-submenu index="4" class="el-submenu-right">
+        <template slot="title"><i class="fa fa-handshake-o header-menu-icon" style="margin-right:5px;" />{{ $t('header.help') }}</template>
+        <el-menu-item index="4-1">{{ $t('header.Documents') }}</el-menu-item>
+        <el-menu-item index="4-2">{{ $t('header.CommercialSupport') }}</el-menu-item>
+      </el-submenu>
+    </el-menu>
   </div>
 </template>
 
@@ -54,10 +53,45 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    changeLangToZH() {
+      this.$i18n.locale = 'cn'
+    },
+    changeLangToEnglish() {
+      this.$i18n.locale = 'en'
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.el-header{
+  background-color: #ffffff;
+  //border-bottom: 1px solid #e7eaec !important;
+}
+.el-submenu-right{
+  float: right !important;
+}
+  //重置Font-weight
+.el-submenu-right /deep/ .el-submenu__title{
+  font-weight: 600;
+  border-bottom: 0px !important;
+  color: #888888 !important;
+}
+//重置导航菜单选中样式
+.el-menu--horizontal>.el-menu-item.is-active {
+  border-bottom: 0px;
+}
+.el-menu--horizontal>.el-menu-item{
+  height: 50px;
+  line-height: 50px;
+}
+.el-submenu /deep/ .el-submenu__title{
+  height: 50px;
+  line-height: 50px;
+}
+
+</style>
 
 <style lang="scss" scoped>
 .navbar {
@@ -68,7 +102,7 @@ export default {
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
-    line-height: 46px;
+    line-height:50px;
     height: 100%;
     float: left;
     cursor: pointer;
