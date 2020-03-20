@@ -44,30 +44,125 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: 'dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: 'dashboard', icon: 'dashboard' }
     }]
   },
 
   {
-    path: '/example',
+    path: '/users/',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    name: 'users',
+    meta: { title: 'users', icon: 'user' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'users',
+        name: 'userList',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: 'userList' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'groups',
+        name: 'userGroupList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: 'userGroupList' }
+      }
+    ]
+  },
+  {
+    path: '/assets/',
+    component: Layout,
+    name: 'assets',
+    meta: { title: 'assets', icon: 'user' },
+    children: [
+      {
+        path: 'assets',
+        name: 'assetList',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'assetList' }
+      },
+      {
+        path: 'domains',
+        name: 'domainList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'domainList' }
+      },
+      {
+        path: 'admin-users',
+        name: 'adminUserList',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'adminUserList' }
+      },
+      {
+        path: 'system-users',
+        name: 'systemUserList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'systemUserList' }
+      },
+      {
+        path: 'labels',
+        name: 'labelList',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'labelList' }
+      },
+      {
+        path: 'command-filters',
+        name: 'commandFilterList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'commandFilterList' }
+      },
+      {
+        path: 'platforms',
+        name: 'platformList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'platformList' }
+      }
+    ]
+  },
+  {
+    path: '/applications/',
+    component: Layout,
+    name: 'applications',
+    meta: { title: 'applications', icon: 'user' },
+    children: [
+      {
+        path: 'remote-apps',
+        name: 'remoteAppList',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'remoteAppList' }
+      },
+      {
+        path: 'databases',
+        name: 'databaseList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'databaseList' }
+      }
+    ]
+  },
+  {
+    path: '/perms/',
+    component: Layout,
+    name: 'perms',
+    meta: { title: 'perms', icon: 'user' },
+    children: [
+      {
+        path: 'assets-permissions',
+        name: 'assetPermissionList',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'assetPermissionList' }
+      },
+      {
+        path: 'remote-apps-permissions',
+        name: 'remoteAppPermissionList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'remoteAppPermissionList' }
+      },
+      {
+        path: 'database-permissions',
+        name: 'databasePermissionList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'databasePermissionList' }
       }
     ]
   },
