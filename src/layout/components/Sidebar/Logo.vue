@@ -3,11 +3,11 @@
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 v-else class="sidebar-title">{{ title }} </h1>
+        <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logo" :src="logo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{ title }} </h1>
+        <img v-if="logoText" :src="logoText" class="sidebar-logo-text">
+<!--        <h1 class="sidebar-title">{{ title }}</h1>-->
       </router-link>
     </transition>
   </div>
@@ -24,8 +24,9 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Admin Template',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: 'JumpServer',
+      logoText: require('@/assets/img/logo-text.png'),
+      logo: require('@/assets/img/logo.png')
     }
   }
 }
@@ -57,6 +58,13 @@ export default {
     & .sidebar-logo {
       width: 32px;
       height: 32px;
+      vertical-align: middle;
+      margin-right: 0;
+    }
+
+    & .sidebar-logo-text {
+      width: 165px;
+      height: 50px;
       vertical-align: middle;
       margin-right: 12px;
     }

@@ -71,7 +71,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/assets/',
+    path: '/static/',
     component: Layout,
     name: 'assets',
     meta: { title: 'assets', icon: 'user' },
@@ -147,7 +147,7 @@ export const constantRoutes = [
     meta: { title: 'perms', icon: 'user' },
     children: [
       {
-        path: 'assets-permissions',
+        path: 'static-permissions',
         name: 'assetPermissionList',
         component: () => import('@/views/table/index'),
         meta: { title: 'assetPermissionList' }
