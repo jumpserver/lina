@@ -7,7 +7,7 @@
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <img v-if="logoText" :src="logoText" class="sidebar-logo-text">
-<!--        <h1 class="sidebar-title">{{ title }}</h1>-->
+        <!--        <h1 class="sidebar-title">{{ title }}</h1>-->
       </router-link>
     </transition>
   </div>
