@@ -10,12 +10,19 @@ const cn = {
     'Documents': '文档',
     'CommercialSupport': '商业支持'
   },
-  menu: {
+  route: {
     'dashboard': '仪表盘',
     'users': '用户管理',
-    'userlist': '用户列表',
-    'usergroup': '用户组',
+    'userList': '用户列表',
+    'userGroupList': '用户组',
     'assets': '资产管理',
+    'assetList': '资产列表',
+    'domainList': '网关列表',
+    'adminUserList': '管理用户',
+    'systemUserList': '系统用户',
+    'labelList': '标签管理',
+    'commandFilterList': '命令过滤',
+    'platformList': '平台列表',
     'applications': '应用管理',
     'perms': '权限管理',
     'sessions': '会话管理',
@@ -298,9 +305,6 @@ const cn = {
   setting: {
     'setting': '系统设置',
     'basicsetting': '基本设置'
-  },
-  'route': {
-    'Users': '用户管理'
   },
   ...zhLocale
 }

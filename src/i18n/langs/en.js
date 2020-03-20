@@ -9,12 +9,11 @@ const en = {
     'help': 'help',
     'Documents': 'Documents',
     'CommercialSupport': 'Commercial Support'
-
   },
-  menu: {
+  route: {
     'dashboard': 'Dashboard',
     'users': 'Users',
-    'userlist': 'User List',
+    'userList': 'User List',
     'usergroup': 'User Group',
     'assets': 'Assets',
     'applications': 'Applications',
