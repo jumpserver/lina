@@ -16,6 +16,14 @@ export function getInfo(token) {
   })
 }
 
+export function getUserList(data) {
+  return request({
+    url: '/api/v1/users/users/',
+    method: 'get',
+    params: data
+  })
+}
+
 export function logout() {
   return request({
     url: '/vue-admin-template/user/logout',
