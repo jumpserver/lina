@@ -6,7 +6,7 @@
         {{ tabletitle }}
       </div>
       <el-row class="tableTitle-menu">
-        <el-col :span="2"><el-button size="small" type="primary" @click="$router.push({ name: tableroute })">{{ tablebotton }}</el-button></el-col>
+        <el-col :span="2"><el-button size="small" type="primary" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebotton }}</el-button></el-col>
         <el-col :span="3" :offset="17">
           <el-input
             size="small"

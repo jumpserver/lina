@@ -3,11 +3,12 @@
     <ListTables
       :tabletitle="$t('users.usergrouplist')"
       :tablebotton="$t('users.createusergroup')"
-      :tableroute="404"
+      tableroute="Edit"
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
     >
       <el-table
+        v-loading="listLoading"
         :data="tableData"
         stripe
         border
@@ -83,7 +84,8 @@ export default {
   mixins: [Tables],
   data() {
     return {
-      tableData: []
+      tableData: [],
+      listLoading: true
     }
   },
   created() {
@@ -101,9 +103,11 @@ export default {
       this.getUsers(val, this.page_size, this.offset)
     },
     getUsers(draw, limit, offset) {
+      this.listLoading = true
       getUserList({ draw, limit, offset }).then(response => {
         this.tableData = response.results
         this.total = response.count
+        this.listLoading = false
       })
     }
   }

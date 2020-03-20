@@ -256,15 +256,17 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'list',
+        path: 'user/list',
         component: () => import('@/views/users/List.vue'), // Parent router-view
         name: 'List',
         meta: { title: 'List' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
+        path: 'user/:id',
+        component: () => import('@/views/users/Edit.vue'), // Parent router-view
+        name: 'Edit',
+        meta: { title: 'Edit' },
+        hidden: true
       }
     ]
   },

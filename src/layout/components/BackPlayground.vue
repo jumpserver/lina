@@ -13,6 +13,7 @@ export default {
 <style lang="less" scoped>
 .backplayground{
     height: 100%;
+    background-color: #ffffff;
     margin-left:0.5%;
     margin-right:0.5%;
     margin-top:1%;
