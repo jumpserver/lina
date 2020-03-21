@@ -38,7 +38,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -50,24 +49,55 @@ export const constantRoutes = [
       meta: { title: 'dashboard', icon: 'dashboard' }
     }]
   },
-
   {
-    path: '/users/',
+    path: '/users',
     component: Layout,
-    name: 'users',
-    meta: { title: 'users', icon: 'user' },
+    redirect: '/users/list',
+    name: 'Users',
+    meta: {
+      title: 'Users',
+      icon: 'nested'
+    },
     children: [
       {
-        path: 'users',
-        name: 'userList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'userList' }
+        path: 'user/list',
+        component: () => import('@/views/users/UserList.vue'), // Parent router-view
+        name: 'UserList',
+        meta: { title: 'UserList' }
       },
       {
-        path: 'groups',
-        name: 'userGroupList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'userGroupList' }
+        path: 'user/:id',
+        component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
+        name: 'UserEdit',
+        meta: { title: 'UserEdit' },
+        hidden: true
+      },
+      {
+        path: 'user/detail/:id',
+        component: () => import('@/views/users/UserDetail.vue'), // Parent router-view
+        name: 'UserDetail',
+        meta: { title: 'UserDetail' },
+        hidden: true
+      },
+      {
+        path: 'usergrop/list',
+        component: () => import('@/views/users/UserGroupList.vue'), // Parent router-view
+        name: 'UserGroupList',
+        meta: { title: 'UserGroupList' }
+      },
+      {
+        path: 'usergroup/:id',
+        component: () => import('@/views/users/UserGroupEdit.vue'), // Parent router-view
+        name: 'UserGroupEdit',
+        meta: { title: 'UserGroupEdit' },
+        hidden: true
+      },
+      {
+        path: 'usergroup/detail/:id',
+        component: () => import('@/views/users/UserGroupDetail.vue'), // Parent router-view
+        name: 'UserGroupDetail',
+        meta: { title: 'UserGroupDetail' },
+        hidden: true
       }
     ]
   },
@@ -245,31 +275,31 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/users',
-    component: Layout,
-    redirect: '/users/list',
-    name: 'Users',
-    meta: {
-      title: 'Users',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'user/list',
-        component: () => import('@/views/users/UserList.vue'), // Parent router-view
-        name: 'UserList',
-        meta: { title: 'List' }
-      },
-      {
-        path: 'user/:id',
-        component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
-        name: 'UserEdit',
-        meta: { title: 'Edit' },
-        hidden: true
-      }
-    ]
-  },
+  // {
+  //   path: '/users',
+  //   component: Layout,
+  //   redirect: '/users/list',
+  //   name: 'Users',
+  //   meta: {
+  //     title: 'Users',
+  //     icon: 'nested'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'user/list',
+  //       component: () => import('@/views/users/UserList.vue'), // Parent router-view
+  //       name: 'UserList',
+  //       meta: { title: 'List' }
+  //     },
+  //     {
+  //       path: 'user/:id',
+  //       component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
+  //       name: 'UserEdit',
+  //       meta: { title: 'Edit' },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
   {
     path: 'external-link',
     component: Layout,

@@ -12,9 +12,9 @@ const cn = {
   },
   route: {
     'dashboard': '仪表盘',
-    'users': '用户管理',
-    'userList': '用户列表',
-    'userGroupList': '用户组',
+    'Users': '用户管理',
+    'UserList': '用户列表',
+    'UserGroupList': '用户组',
     'assets': '资产管理',
     'assetList': '资产列表',
     'domainList': '网关列表',

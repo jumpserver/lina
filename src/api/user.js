@@ -23,6 +23,34 @@ export function getUserList(data) {
     params: data
   })
 }
+export function getUserGroupList(data) {
+  return request({
+    url: '/api/v1/users/groups/',
+    method: 'get',
+    params: data
+  })
+}
+export function getUserGroup(data) {
+  return request({
+    url: '/api/v1/users/groups/' + data + '/',
+    method: 'get'
+  })
+}
+
+export function editUserGroup(data) {
+  return request({
+    url: '/api/v1/users/groups/',
+    method: 'post',
+    data: data
+  })
+}
+export function updateUserGroup(id, data) {
+  return request({
+    url: '/api/v1/users/groups/' + id + '/',
+    method: 'put',
+    data: data
+  })
+}
 
 export function logout() {
   return request({
