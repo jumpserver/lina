@@ -34,7 +34,7 @@ export default {
   width: 98%;
   margin-left:1%;
   margin-top:1%;
-  padding-bottom:1%;
+  margin-bottom:calc(1% + 35px);
   background-color: #fff;
   .title-context{
     text-align: left;
