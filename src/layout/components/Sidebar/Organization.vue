@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isCollapse" style="display: block; background-color: transparent; padding: 14px 20px 14px 25px">
+  <div v-if="!isCollapse && orglist.length>1" style="display: block; background-color: transparent; padding: 14px 20px 14px 25px">
     <el-dropdown size="medium">
       <span class="el-dropdown-link" style="color: rgb(167, 177, 194);">
         <i class="fa fa-bookmark" style="width: 14px; " />
