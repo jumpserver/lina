@@ -12,6 +12,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
+        <Organization :is-collapse="isCollapse" />
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
@@ -22,10 +23,11 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
+import Organization from './Organization'
 import variables from '@/styles/variables.scss'
 
 export default {
-  components: { SidebarItem, Logo },
+  components: { SidebarItem, Logo, Organization },
   computed: {
     ...mapGetters([
       'permission_routes',

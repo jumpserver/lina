@@ -5,7 +5,8 @@ import {
 } from 'element-ui'
 import store from '@/store'
 import {
-  getToken
+  getToken,
+  getCurrentOrg
 } from '@/utils/auth'
 
 // create an axios instance
@@ -25,6 +26,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers['X-CSRFToken'] = getToken()
+      config.headers['X-JMS-ORG'] = getCurrentOrg().id
     }
     return config
   },

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   login,
   logout,
@@ -5,6 +6,8 @@ import {
 } from '@/api/user'
 import {
   getToken,
+  getCurrentOrg,
+  setCurrentOrg,
   setToken,
   removeToken
 } from '@/utils/auth'
@@ -17,7 +20,9 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    currentOrg: getCurrentOrg(),
+    orgs: []
   }
 }
 
@@ -38,6 +43,13 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ORGS: (state, roles) => {
+    state.orgs = roles
+  },
+  SET_CURRENT_ORG(state, z) {
+    state.currentOrg = z
+    setCurrentOrg(z)
   }
 }
 
@@ -70,7 +82,8 @@ const actions = {
         const {
           role,
           name,
-          avatar_url
+          avatar_url,
+          admin_orgs
         } = response
         const rules = [role]
         // roles must be a non-empty array
@@ -80,6 +93,7 @@ const actions = {
         commit('SET_ROLES', rules)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar_url)
+        commit('SET_ORGS', admin_orgs)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -113,6 +127,9 @@ const actions = {
       commit('RESET_STATE')
       resolve()
     })
+  },
+  setCurrentOrg({ commit }, data) {
+    commit('SET_CURRENT_ORG', data)
   }
 }
 
