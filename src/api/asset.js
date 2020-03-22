@@ -32,3 +32,11 @@ export function getLabelList(data) {
   })
 }
 
+export function getCommandFilterList(data) {
+  return request({
+    url: '/api/v1/assets/cmd-filters/',
+    method: 'get',
+    params: data
+  })
+}
+

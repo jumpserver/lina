@@ -146,10 +146,10 @@ export const constantRoutes = [
         meta: { title: 'LabelList' }
       },
       {
-        path: 'command-filters',
-        name: 'commandFilterList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'commandFilterList' }
+        path: 'cmd-filter/list',
+        name: 'CommandFilterList',
+        component: () => import('@/views/assets/CommandFilterList.vue'),
+        meta: { title: 'CommandFilterList' }
       },
       {
         path: 'platforms',

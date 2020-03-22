@@ -21,7 +21,7 @@ const cn = {
     'AdminUserList': '管理用户',
     'SystemUserList': '系统用户',
     'LabelList': '标签管理',
-    'commandFilterList': '命令过滤',
+    'CommandFilterList': '命令过滤',
     'platformList': '平台列表',
     'applications': '应用管理',
     'perms': '权限管理',
