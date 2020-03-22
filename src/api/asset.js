@@ -8,3 +8,11 @@ export function getAdminUserList(data) {
   })
 }
 
+export function getSystemUserList(data) {
+  return request({
+    url: '/api/v1/assets/system-users/',
+    method: 'get',
+    params: data
+  })
+}
+

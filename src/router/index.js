@@ -121,7 +121,7 @@ export const constantRoutes = [
         meta: { title: 'DomainList' }
       },
       {
-        path: 'admin-user',
+        path: 'admin-user/list',
         name: 'AdminUserList',
         component: () => import('@/views/assets/AdminUserList'),
         meta: { title: 'AdminUserList' }
@@ -134,10 +134,10 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'system-users',
-        name: 'systemUserList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'systemUserList' }
+        path: 'system-user/list',
+        name: 'SystemUserList',
+        component: () => import('@/views/assets/SystemUserList.vue'),
+        meta: { title: 'SystemUserList' }
       },
       {
         path: 'labels',

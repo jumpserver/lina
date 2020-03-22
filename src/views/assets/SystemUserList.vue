@@ -40,7 +40,28 @@
           </template>
         </el-table-column>
         <el-table-column
+          :label="this.$t('assets.protocol')"
+          sortable
+          align="center"
+          header-align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.protocol }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="this.$t('assets.login_mode')"
+          sortable
+          align="center"
+          header-align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.login_mode_display }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           :label="this.$t('assets.asset')"
+          sortable
           align="center"
           header-align="center"
         >
@@ -50,6 +71,7 @@
         </el-table-column>
         <el-table-column
           :label="this.$t('assets.comment')"
+          sortable
           align="center"
           header-align="center"
         >
@@ -82,7 +104,7 @@
 
 <script>
 import { ListTables, BackPlayground } from '@/layout/components'
-import { getAdminUserList } from '@/api/asset'
+import { getSystemUserList } from '@/api/asset'
 import Tables from '@/layout/mixin/ListTables'
 export default {
   components: {
@@ -97,27 +119,27 @@ export default {
     }
   },
   created() {
-    this.getAdminUser(this.current_page, this.page_size, this.offset)
+    this.getSystemUser(this.current_page, this.page_size, this.offset)
   },
   methods: {
     handleDetail: function(index, row) {
-      this.$router.push({ name: 'AdminUserDetail', params: { id: row.id }})
+      this.$router.push({ name: 'SystemUserDetail', params: { id: row.id }})
     },
     handleSizeChange(val) {
       // 当每页数量改变触发
       this.offset = (this.current_page - 1) * val
       this.page_size = val
-      this.getAdminUser(this.current_page, val, this.offset)
+      this.getSystemUser(this.current_page, val, this.offset)
     },
     handleCurrentChange(val) {
       // 当页码改变触发
       this.offset = (val - 1) * this.page_size
       this.current_page = val
-      this.getAdminUser(val, this.page_size, this.offset)
+      this.getSystemUser(val, this.page_size, this.offset)
     },
-    getAdminUser(draw, limit, offset) {
+    getSystemUser(draw, limit, offset) {
       this.listLoading = true
-      getAdminUserList({ draw, limit, offset }).then(response => {
+      getSystemUserList({ draw, limit, offset }).then(response => {
         this.tableData = response.results
         this.total = response.count
         this.listLoading = false
