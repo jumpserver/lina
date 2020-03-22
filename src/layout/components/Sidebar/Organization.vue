@@ -1,15 +1,17 @@
 <template>
-  <div v-if="!isCollapse && orglist.length>1" style="display: block; background-color: transparent; padding: 14px 20px 14px 20px">
-    <el-dropdown size="medium">
-      <span class="el-dropdown-link" style="color: rgb(167, 177, 194);">
-        <i class="fa fa-bookmark" style="width: 14px;margin-right: 12px; " />
-        {{ currentorg.name }}<i class="el-icon-arrow-down el-icon--right" />
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="(option) in orglist" :key="option.id" @click.native="changeOrg(option.name, option.id)">{{ option.name }}</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-  </div>
+  <transition name="sidebarLogoFade">
+    <div v-if="!isCollapse && orglist.length>1" style="display: block; background-color: transparent; padding: 14px 20px 14px 20px">
+      <el-dropdown size="medium">
+        <span class="el-dropdown-link" style="color: rgb(167, 177, 194);">
+          <i class="fa fa-bookmark" style="width: 14px;margin-right: 12px; " />
+          {{ currentorg.name }}<i class="el-icon-arrow-down el-icon--right" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(option) in orglist" :key="option.id" @click.native="changeOrg(option.name, option.id)">{{ option.name }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -41,19 +43,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-dropdown-menu{
+.sidebarLogoFade-enter-active {
+  transition: opacity 1.5s;
+}
+
+.sidebarLogoFade-enter,
+.sidebarLogoFade-leave-to {
+  opacity: 0;
+}
+  .el-dropdown-menu{
   width: 200px;
-}
-.el-dropdown-menu >>> .popper__arrow{
+  }
+  .el-dropdown-menu >>> .popper__arrow{
   display: none;
-}
-.el-dropdown{
+  }
+  .el-dropdown{
   width: 100%;
-}
-.el-icon-arrow-down{
-    position: absolute;
-    top: 50%;
-    right: 0px;
-    margin-top: -7px;
-}
+  }
+  .el-icon-arrow-down{
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  margin-top: -7px;
+  }
 </style>
