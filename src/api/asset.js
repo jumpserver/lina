@@ -16,3 +16,11 @@ export function getSystemUserList(data) {
   })
 }
 
+export function getDomainList(data) {
+  return request({
+    url: '/api/v1/assets/domains/',
+    method: 'get',
+    params: data
+  })
+}
+

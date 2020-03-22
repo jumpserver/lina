@@ -115,9 +115,9 @@ export const constantRoutes = [
         meta: { title: 'AssetList' }
       },
       {
-        path: 'domains',
-        name: 'domainList',
-        component: () => import('@/views/tree/index'),
+        path: 'domain/list',
+        name: 'DomainList',
+        component: () => import('@/views/assets/DomainList.vue'),
         meta: { title: 'DomainList' }
       },
       {
