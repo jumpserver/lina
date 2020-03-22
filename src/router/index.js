@@ -52,7 +52,7 @@ export const constantRoutes = [
   {
     path: '/users',
     component: Layout,
-    redirect: '/users/list',
+    redirect: '/user/list',
     name: 'Users',
     meta: {
       title: 'Users',
@@ -102,28 +102,36 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/static/',
+    path: '/assets',
     component: Layout,
+    redirect: '/asset/list',
     name: 'assets',
-    meta: { title: 'assets', icon: 'user' },
+    meta: { title: 'Assets', icon: 'user' },
     children: [
       {
-        path: 'assets',
-        name: 'assetList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'assetList' }
+        path: 'asset/list',
+        name: 'AssetList',
+        component: () => import('@/views/assets/AssetList.vue'),
+        meta: { title: 'AssetList' }
       },
       {
         path: 'domains',
         name: 'domainList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'domainList' }
+        meta: { title: 'DomainList' }
       },
       {
-        path: 'admin-users',
-        name: 'adminUserList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'adminUserList' }
+        path: 'admin-user',
+        name: 'AdminUserList',
+        component: () => import('@/views/assets/AdminUserList'),
+        meta: { title: 'AdminUserList' }
+      },
+      {
+        path: 'admin-user/detail/:id',
+        component: () => import('@/views/assets/AdminUserDetail.vue'), // Parent router-view
+        name: 'AdminUserDetail',
+        meta: { title: 'AdminUserDetail' },
+        hidden: true
       },
       {
         path: 'system-users',
