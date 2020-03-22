@@ -24,3 +24,11 @@ export function getDomainList(data) {
   })
 }
 
+export function getLabelList(data) {
+  return request({
+    url: '/api/v1/assets/labels/',
+    method: 'get',
+    params: data
+  })
+}
+

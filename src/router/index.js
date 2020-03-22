@@ -140,10 +140,10 @@ export const constantRoutes = [
         meta: { title: 'SystemUserList' }
       },
       {
-        path: 'labels',
-        name: 'labelList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'labelList' }
+        path: 'label/list',
+        name: 'LabelList',
+        component: () => import('@/views/assets/LabelList.vue'),
+        meta: { title: 'LabelList' }
       },
       {
         path: 'command-filters',
