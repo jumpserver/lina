@@ -75,8 +75,8 @@
       color: $subMenuActiveText !important;
     }
 
-    & .nest-menu .el-submenu>.el-submenu__title,
-    & .el-submenu .el-menu-item {
+    & .nest-menu .el-submenu-sidebar>.el-submenu__title,
+    & .el-submenu-sidebar .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg !important;
 
@@ -108,7 +108,7 @@
       }
     }
 
-    .el-submenu {
+    .el-submenu-sidebar {
       overflow: hidden;
 
       &>.el-submenu__title {
@@ -125,7 +125,7 @@
     }
 
     .el-menu--collapse {
-      .el-submenu {
+      .el-submenu-sidebar {
         &>.el-submenu__title {
           &>span {
             height: 0;
@@ -139,7 +139,7 @@
     }
   }
 
-  .el-menu--collapse .el-menu .el-submenu {
+  .el-menu--collapse .el-menu .el-submenu-sidebar {
     min-width: $sideBarWidth !important;
   }
 
@@ -180,7 +180,7 @@
     }
   }
 
-  .nest-menu .el-submenu>.el-submenu__title,
+  .nest-menu .el-submenu-sidebar>.el-submenu__title,
   .el-menu-item {
     &:hover {
       // you can use $subMenuHover

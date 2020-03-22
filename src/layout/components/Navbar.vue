@@ -86,8 +86,9 @@ export default {
   height: 50px;
   line-height: 50px;
 }
-.el-submenu /deep/ .el-submenu__title{
+.el-submenu-right /deep/ .el-submenu__title{
   height: 50px;
+  padding: 0 20px !important;
   line-height: 50px;
 }
 
