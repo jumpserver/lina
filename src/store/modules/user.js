@@ -45,10 +45,17 @@ const mutations = {
     state.roles = roles
   },
   SET_ORGS: (state, roles) => {
+    // API BUG FIX
+    for (let index = 0; index < roles.length; index++) {
+      if (roles[index].id === 'DEFAULT') {
+        roles[index].id = ''
+      }
+    }
     state.orgs = roles
   },
   SET_CURRENT_ORG(state, z) {
     state.currentOrg = z
+    console.log(z)
     setCurrentOrg(z)
   }
 }

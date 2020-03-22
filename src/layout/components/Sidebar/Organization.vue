@@ -6,7 +6,7 @@
         {{ currentorg.name }}<i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="(option) in orglist" :key="option.id" @click.native="changeOrg(option.name,option.id)">{{ option.name }}</el-dropdown-item>
+        <el-dropdown-item v-for="(option) in orglist" :key="option.id" @click.native="changeOrg(option.name, option.id)">{{ option.name }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -29,7 +29,8 @@ export default {
   },
   methods: {
     changeOrg(x, y) {
-      console.log(this.$store)
+      console.log(x, y)
+
       this.$store.dispatch('user/setCurrentOrg', {
         name: x,
         id: y

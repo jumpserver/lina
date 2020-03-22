@@ -26,7 +26,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers['X-CSRFToken'] = getToken()
-      config.headers['X-JMS-ORG'] = getCurrentOrg().id
+      if (getCurrentOrg().id !== '') { config.headers['X-JMS-ORG'] = getCurrentOrg().id }
     }
     return config
   },

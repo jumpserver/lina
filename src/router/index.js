@@ -80,7 +80,7 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'usergrop/list',
+        path: 'usergroup/list',
         component: () => import('@/views/users/UserGroupList.vue'), // Parent router-view
         name: 'UserGroupList',
         meta: { title: 'UserGroupList' }
