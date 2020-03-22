@@ -52,7 +52,7 @@ export const constantRoutes = [
   {
     path: '/users',
     component: Layout,
-    redirect: '/users/list',
+    redirect: '/user/list',
     name: 'Users',
     meta: {
       title: 'Users',
@@ -102,46 +102,54 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/static/',
+    path: '/assets',
     component: Layout,
+    redirect: '/asset/list',
     name: 'assets',
-    meta: { title: 'assets', icon: 'user' },
+    meta: { title: 'Assets', icon: 'user' },
     children: [
       {
-        path: 'assets',
-        name: 'assetList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'assetList' }
+        path: 'asset/list',
+        name: 'AssetList',
+        component: () => import('@/views/assets/AssetList.vue'),
+        meta: { title: 'AssetList' }
       },
       {
-        path: 'domains',
-        name: 'domainList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'domainList' }
+        path: 'domain/list',
+        name: 'DomainList',
+        component: () => import('@/views/assets/DomainList.vue'),
+        meta: { title: 'DomainList' }
       },
       {
-        path: 'admin-users',
-        name: 'adminUserList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'adminUserList' }
+        path: 'admin-user/list',
+        name: 'AdminUserList',
+        component: () => import('@/views/assets/AdminUserList'),
+        meta: { title: 'AdminUserList' }
       },
       {
-        path: 'system-users',
-        name: 'systemUserList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'systemUserList' }
+        path: 'admin-user/detail/:id',
+        component: () => import('@/views/assets/AdminUserDetail.vue'), // Parent router-view
+        name: 'AdminUserDetail',
+        meta: { title: 'AdminUserDetail' },
+        hidden: true
       },
       {
-        path: 'labels',
-        name: 'labelList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'labelList' }
+        path: 'system-user/list',
+        name: 'SystemUserList',
+        component: () => import('@/views/assets/SystemUserList.vue'),
+        meta: { title: 'SystemUserList' }
       },
       {
-        path: 'command-filters',
-        name: 'commandFilterList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'commandFilterList' }
+        path: 'label/list',
+        name: 'LabelList',
+        component: () => import('@/views/assets/LabelList.vue'),
+        meta: { title: 'LabelList' }
+      },
+      {
+        path: 'cmd-filter/list',
+        name: 'CommandFilterList',
+        component: () => import('@/views/assets/CommandFilterList.vue'),
+        meta: { title: 'CommandFilterList' }
       },
       {
         path: 'platforms',

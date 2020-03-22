@@ -1,7 +1,7 @@
 <template>
-  <BackPlayground :title="$t('route.UserList')">
+  <BackPlayground :title="$t('route.AdminUserList')">
     <ListTables
-      :tablebotton="$t('assets.createuser')"
+      :tablebotton="$t('assets.AdminUserCreate')"
       tableroute="UserEdit"
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
@@ -20,7 +20,7 @@
           header-align="center"
         />
         <el-table-column
-          :label="this.$t('usergroup.name')"
+          :label="this.$t('assets.name')"
           sortable
           align="center"
           header-align="center"
@@ -30,18 +30,26 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="this.$t('usergroup.user')"
+          :label="this.$t('assets.asset')"
           align="center"
           header-align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.users_amount }}</span>
+            <span>{{ scope.row.asset_count }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          :label="this.$t('usergroup.comment')"
+          :label="this.$t('assets.gateway')"
           align="center"
-          sortable
+          header-align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.gateway_count }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="this.$t('assets.comment')"
+          align="center"
           header-align="center"
         >
           <template slot-scope="scope">
@@ -49,7 +57,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="this.$t('usergroup.action')"
+          :label="this.$t('assets.action')"
           align="center"
           header-align="center"
         >
@@ -58,12 +66,12 @@
               size="mini"
               type="primary"
               @click="handleEdit(scope.$index, scope.row)"
-            >{{ $t('usergroup.update') }}</el-button>
+            >{{ $t('assets.update') }}</el-button>
             <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
-            >{{ $t('usergroup.delete') }}</el-button>
+            >{{ $t('assets.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,7 +81,7 @@
 
 <script>
 import { ListTables, BackPlayground } from '@/layout/components'
-import { getUserList } from '@/api/user'
+import { getDomainList } from '@/api/asset'
 import Tables from '@/layout/mixin/ListTables'
 export default {
   components: {
@@ -88,29 +96,27 @@ export default {
     }
   },
   created() {
-    this.getUsers(this.current_page, this.page_size, this.offset)
+    this.getDomain(this.current_page, this.page_size, this.offset)
   },
   methods: {
-    // 处理显示详情
     handleDetail: function(index, row) {
-      this.$router.push({ name: 'UserDetail', params: { id: row.id }})
+      this.$router.push({ name: 'DomainDetail', params: { id: row.id }})
     },
-    // 处理页面显示数量更新
     handleSizeChange(val) {
+      // 当每页数量改变触发
       this.offset = (this.current_page - 1) * val
       this.page_size = val
-      this.getUsers(this.current_page, val, this.offset)
+      this.getDomain(this.current_page, val, this.offset)
     },
-    // 处理页码更新
     handleCurrentChange(val) {
+      // 当页码改变触发
       this.offset = (val - 1) * this.page_size
       this.current_page = val
-      this.getUsers(val, this.page_size, this.offset)
+      this.getDomain(val, this.page_size, this.offset)
     },
-    // 获取数据详情
-    getUsers(draw, limit, offset) {
+    getDomain(draw, limit, offset) {
       this.listLoading = true
-      getUserList({ draw, limit, offset }).then(response => {
+      getDomainList({ draw, limit, offset }).then(response => {
         this.tableData = response.results
         this.total = response.count
         this.listLoading = false
