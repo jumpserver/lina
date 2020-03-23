@@ -36,16 +36,14 @@
           align="center"
           sortable
           header-align="center"
-        >
-        </el-table-column>
+        />
         <el-table-column
           :label="this.$t('common.role')"
           prop="role_display"
           sortable
           align="center"
           header-align="center"
-        >
-        </el-table-column>
+        />
         <el-table-column
           :label="this.$t('common.action')"
           align="center"
