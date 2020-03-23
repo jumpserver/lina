@@ -1,7 +1,7 @@
 <template>
   <BackPlayground :title="$t('route.UserList')">
     <ListTables
-      :tablebotton="$t('assets.createuser')"
+      :tablebutton="$t('users.createUser')"
       tableroute="UserEdit"
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
@@ -11,6 +11,7 @@
         :data="tableData"
         stripe
         border
+        fit
         class="userTable"
       >
         <el-table-column
@@ -20,36 +21,33 @@
           header-align="center"
         />
         <el-table-column
-          :label="this.$t('usergroup.name')"
+          :label="this.$t('common.name')"
           sortable
           align="center"
           header-align="center"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small" style="font-size:14px" @click="handleDetail(scope.$index, scope.row)">{{ scope.row.name }}</el-button>
+            <el-link type="success" size="small" style="font-size:14px" @click="handleDetail(scope.$index, scope.row)">{{ scope.row.name }}</el-link>
           </template>
         </el-table-column>
         <el-table-column
-          :label="this.$t('usergroup.user')"
-          align="center"
-          header-align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.users_amount }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="this.$t('usergroup.comment')"
+          :label="this.$t('common.username')"
+          prop="username"
           align="center"
           sortable
           header-align="center"
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.comment }}</span>
-          </template>
         </el-table-column>
         <el-table-column
-          :label="this.$t('usergroup.action')"
+          :label="this.$t('common.role')"
+          prop="role_display"
+          sortable
+          align="center"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          :label="this.$t('common.action')"
           align="center"
           header-align="center"
         >
@@ -58,12 +56,12 @@
               size="mini"
               type="primary"
               @click="handleEdit(scope.$index, scope.row)"
-            >{{ $t('usergroup.update') }}</el-button>
+            >{{ $t('action.update') }}</el-button>
             <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
-            >{{ $t('usergroup.delete') }}</el-button>
+            >{{ $t('action.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>

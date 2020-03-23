@@ -7,6 +7,7 @@
         :collapse="isCollapse"
         :background-color="variables.menuBg"
         :text-color="variables.menuText"
+        :text-weigth="variables.menuTextWeight"
         :unique-opened="true"
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"

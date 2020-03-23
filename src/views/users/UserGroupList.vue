@@ -1,7 +1,7 @@
 <template>
   <BackPlayground :title="$t('users.usergrouplist')">
     <ListTables
-      :tablebotton="$t('users.createusergroup')"
+      :tablebutton="$t('users.createusergroup')"
       tableroute="UserGroupEdit"
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"

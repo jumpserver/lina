@@ -5,6 +5,8 @@
   font-weight: 400 !important;
 }
 
+$--color-primary: red;
+
 .el-upload {
   input[type="file"] {
     display: none !important;
@@ -43,7 +45,12 @@
   }
 }
 
+.el-table th > .cell {
+  color: rgb(104, 106, 108);
+}
+
 // to fix el-date-picker css style
 .el-range-separator {
   box-sizing: content-box;
 }
+

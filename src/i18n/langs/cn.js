@@ -10,6 +10,16 @@ const cn = {
     'Documents': '文档',
     'CommercialSupport': '商业支持'
   },
+  action: {
+    'update': '更新',
+    'delete': '删除'
+  },
+  common: {
+    'name': '名称',
+    'action': '动作',
+    'role': '角色',
+    'username': '用户名'
+  },
   route: {
     'dashboard': '仪表盘',
     'Users': '用户管理',
@@ -30,10 +40,10 @@ const cn = {
   },
   // 用户模块翻译
   users: {
-    'createuser': '创建用户',
-    'updateuser': '更新用户',
+    'createUser': '创建用户',
+    'updateUser': '更新用户',
     'user_detail': '用户详情',
-    'name': '名称',
+    'name': '姓名',
     'username': '用户名',
     'email': '邮箱',
     'usergroup': '用户组',

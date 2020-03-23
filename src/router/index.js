@@ -52,22 +52,22 @@ export const constantRoutes = [
   {
     path: '/users',
     component: Layout,
-    redirect: '/user/list',
+    redirect: '/users/users/',
     name: 'Users',
     meta: {
       title: 'Users',
-      icon: 'nested'
+      icon: 'users'
     },
     children: [
       {
-        path: 'user/list',
+        path: 'users',
         component: () => import('@/views/users/UserList.vue'), // Parent router-view
         name: 'UserList',
         meta: { title: 'UserList' }
       },
       {
-        path: 'user/:id',
-        component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
+        path: 'users/:id',
+        component: () => import('@/views/users/UserCreate.vue'), // Parent router-view
         name: 'UserEdit',
         meta: { title: 'UserEdit' },
         hidden: true
@@ -106,7 +106,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/asset/list',
     name: 'assets',
-    meta: { title: 'Assets', icon: 'user' },
+    meta: { title: 'Assets', icon: 'inbox' },
     children: [
       {
         path: 'asset/list',
@@ -163,7 +163,7 @@ export const constantRoutes = [
     path: '/applications/',
     component: Layout,
     name: 'applications',
-    meta: { title: 'applications', icon: 'user' },
+    meta: { title: 'applications', icon: 'th' },
     children: [
       {
         path: 'remote-apps',
@@ -183,7 +183,7 @@ export const constantRoutes = [
     path: '/perms/',
     component: Layout,
     name: 'perms',
-    meta: { title: 'perms', icon: 'user' },
+    meta: { title: 'perms', icon: 'edit' },
     children: [
       {
         path: 'static-permissions',
@@ -301,7 +301,7 @@ export const asyncRoutes = [
   //     },
   //     {
   //       path: 'user/:id',
-  //       component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
+  //       component: () => import('@/views/users/UserCreate.vue'), // Parent router-view
   //       name: 'UserEdit',
   //       meta: { title: 'Edit' },
   //       hidden: true
@@ -326,6 +326,7 @@ export const asyncRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
+  mode: 'history',
   routes: constantRoutes
 })
 

@@ -2,7 +2,7 @@
   <div>
     <div class="tableTitle">
       <el-row class="tableTitle-menu">
-        <el-col :span="2"><el-button size="small" type="primary" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebotton }}</el-button></el-col>
+        <el-col :span="2"><el-button size="small" type="primary" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebutton }}</el-button></el-col>
         <el-col :span="3" :offset="17">
           <el-input
             size="small"
@@ -46,9 +46,9 @@
 <script>
 export default {
   props: {
-    tablebotton: {
+    tablebutton: {
       type: String,
-      default: () => { return 'TableBotton' }
+      default: () => { return 'tablebutton' }
     },
     tableroute: {
       type: String,
@@ -126,5 +126,9 @@ el-breadcrumb__item{
 }
 .el-table /deep/ td, .el-table /deep/ th {
   padding: 8px 0 !important;
+  /*line-height: 1.42857;*/
+  /*padding: 8px;*/
+  /*vertical-align: top;*/
+  /*border: 1px solid #e7e7e7;*/
 }
 </style>
