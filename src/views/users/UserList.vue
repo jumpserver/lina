@@ -5,6 +5,7 @@
       tableroute="UserEdit"
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
+      @MutiSelectChange="handleMutiSelectChange"
     >
       <el-table
         v-loading="listLoading"
@@ -36,16 +37,14 @@
           align="center"
           sortable
           header-align="center"
-        >
-        </el-table-column>
+        />
         <el-table-column
           :label="this.$t('common.role')"
           prop="role_display"
           sortable
           align="center"
           header-align="center"
-        >
-        </el-table-column>
+        />
         <el-table-column
           :label="this.$t('common.action')"
           align="center"
@@ -92,6 +91,9 @@ export default {
     // 处理显示详情
     handleDetail: function(index, row) {
       this.$router.push({ name: 'UserDetail', params: { id: row.id }})
+    },
+    handleMutiSelectChange(val) {
+      console.log(val)
     },
     // 处理页面显示数量更新
     handleSizeChange(val) {
