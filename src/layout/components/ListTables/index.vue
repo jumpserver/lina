@@ -29,16 +29,17 @@
       <slot />
     </div>
     <div class="block">
-      <div style="float:left">
+      <div style="float:left;position: absolute;">
         <el-select v-model="value" size="small" placeholder="请选择">
           <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="item.disabled"
           />
         </el-select>
-        <el-button type="primary" size="small" style="font-size:14px" @click="MutiSelectAction(value)">提交</el-button>
+        <el-button type="primary" size="mini" style="font-size:14px" @click="MutiSelectAction(value)">提交</el-button>
       </div>
       <el-pagination
         background
@@ -86,20 +87,19 @@ export default {
   data() {
     return {
       options: [{
-        value: '选项1',
-        label: '黄金糕'
+        value: '1',
+        label: '批量删除'
       }, {
-        value: '选项2',
-        label: '双皮奶'
+        value: '2',
+        disabled: true,
+        label: '批量更新'
+
       }, {
-        value: '选项3',
-        label: '蚵仔煎'
+        value: '3',
+        label: '禁用所选'
       }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
+        value: '4',
+        label: '激活所选'
       }],
       value: ''
     }
@@ -110,6 +110,9 @@ export default {
     },
     handleCurrentChange(val) {
       this.$emit('CurrentChange', val)
+    },
+    MutiSelectAction(val) {
+      this.$emit('MutiSelectChange', val)
     }
   }
 }
