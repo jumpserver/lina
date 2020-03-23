@@ -3,47 +3,71 @@
   font-weight: 600;
 }
 
-.el-menu {
-  border: 0px !important;
-}
-// 重置下拉菜单Padding
-li.el-submenu.is-opened > ul > .el-menu-item {
-  padding-left: 50px !important;
-  font-size: 13px !important;
-  height: 30px !important;
-  line-height: 30px !important;
-}
-//重置字体大小 菜单宽度
-.el-submenu /deep/ .el-submenu__title, .submenu-title-noDropdown{
-  height: 46px !important;
-  line-height: 46px !important;
+.el-menu  i.fa {
+  width: 14px;
+  margin-right: 10px;
 }
 
-.el-submenu, .el-menu-item {
-  font-size: 14px !important;
-  font-weight: 600;
+.el-menu .is-active i.fa {
+  color: white;
 }
 
-.el-menu-item:not(.submenu-title-noDropdown) {
-  height: 32px !important;
-  line-height: inherit !important;
+.el-submenu .el-menu-item {
+  height: 35px;
+  line-height: 35px;
+  padding: 0 52px;
+  min-width: 200px;
 }
 
-.nest-menu:last-child {
-  margin-bottom: 10px;
+.el-menu-item, .el-submenu__title {
+  height: 46px;
+  line-height: 46px;
 }
 
 li.is-opened{
   border-left: 4px solid #19aa8d;
 }
 
-.el-submenu.is-opened > ul > li > li{
-  padding-right: 41px !important;
-  min-width: 0 !important;
-}
-.el-submenu > div i{
-  margin-right: 10px;
-}
-.el-menu-item i {
-  margin-right: 10px;
-}
+//
+//.el-menu {
+//  border: 0px !important;
+//}
+//// 重置下拉菜单Padding
+//li.el-submenu.is-opened > ul > .el-menu-item {
+//  padding-left: 50px !important;
+//  font-size: 13px !important;
+//  height: 30px !important;
+//  line-height: 30px !important;
+//}
+////重置字体大小 菜单宽度
+//.el-submenu /deep/ .el-submenu__title, .submenu-title-noDropdown{
+//  height: 46px !important;
+//  line-height: 46px !important;
+//}
+//
+//.el-submenu, .el-menu-item {
+//  font-size: 14px !important;
+//  font-weight: 600;
+//}
+//
+//.el-menu-item:not(.submenu-title-noDropdown) {
+//  height: 32px !important;
+//  line-height: inherit !important;
+//}
+//
+//.nest-menu:last-child {
+//  margin-bottom: 10px;
+//}
+//
+
+//
+//.el-submenu.is-opened > ul > li > li{
+//  padding-right: 41px !important;
+//  min-width: 0 !important;
+//}
+//.el-submenu > div i{
+//  margin-right: 10px;
+//}
+//.el-menu-item i {
+//  margin-right: 10px;
+//}
