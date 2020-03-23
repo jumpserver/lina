@@ -37,7 +37,7 @@
           :rows="3"
         />
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="foot_button">
         <el-button @click="resetForm('usergroup')">重置</el-button>
         <el-button type="primary" @click="submitForm('usergroup')">{{ buttonTitle }}</el-button>
       </el-form-item>
@@ -151,7 +151,9 @@ export default {
   width: 80%;
   margin-left: 10%;
 }
-
+.foot_button{
+  padding-bottom: 18px ;
+}
 //重置El-select宽度
 .el-select{
   width: 100%;
