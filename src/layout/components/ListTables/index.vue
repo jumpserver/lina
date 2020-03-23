@@ -29,6 +29,18 @@
       <slot />
     </div>
     <div class="block">
+      <div style="float:left;position: absolute;">
+        <el-select v-model="value" size="small" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          />
+        </el-select>
+        <el-button type="primary" size="mini" style="font-size:14px" @click="MutiSelectAction(value)">提交</el-button>
+      </div>
       <el-pagination
         background
         :current-page="currentPage"
@@ -74,6 +86,22 @@ export default {
   },
   data() {
     return {
+      options: [{
+        value: '1',
+        label: '批量删除'
+      }, {
+        value: '2',
+        disabled: true,
+        label: '批量更新'
+
+      }, {
+        value: '3',
+        label: '禁用所选'
+      }, {
+        value: '4',
+        label: '激活所选'
+      }],
+      value: ''
     }
   },
   methods: {
@@ -82,6 +110,9 @@ export default {
     },
     handleCurrentChange(val) {
       this.$emit('CurrentChange', val)
+    },
+    MutiSelectAction(val) {
+      this.$emit('MutiSelectChange', val)
     }
   }
 }
