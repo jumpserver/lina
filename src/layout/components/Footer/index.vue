@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" :style="style">
     <div class="pull-right">
       Version <strong>1.5.6-228
       </strong> GPLv2.
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'Footer',
   components: {
@@ -20,6 +20,15 @@ export default {
     return {
 
     }
+  },
+  computed: {
+    ...mapGetters([
+      'sidebar'
+    ]),
+    style() {
+      return this.sidebar.opened ? ('margin-left: 210px;') : ('margin-left: 54px')
+    }
+
   }
 }
 </script>
@@ -40,7 +49,7 @@ export default {
     padding: 10px 20px;
     background: white;
     border-top: 1px solid #e7eaec;
-    margin-left: 190px;
+    transition:margin-left 0.3s;
     //border-top: 1px solid #e7eaec;
     div{
         font-size: 13px;
