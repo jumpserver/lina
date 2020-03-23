@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     handleDetail: function(index, row) {
-      this.$router.push({ name: 'UserDetail', params: { id: row.id }})
+      this.$router.push({ name: 'UserGroupDetail', params: { id: row.id }})
     },
     handleEdit: function(index, row) {
       this.$router.push({ name: 'UserGroupEdit', params: { id: row.id }})
