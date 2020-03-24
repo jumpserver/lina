@@ -105,7 +105,7 @@ export const constantRoutes = [
     path: '/assets',
     component: Layout,
     redirect: '/assets/asset/',
-    name: 'assets',
+    name: 'Assets',
     meta: { title: 'Assets', icon: 'inbox' },
     children: [
       {
@@ -183,26 +183,27 @@ export const constantRoutes = [
   {
     path: '/perms/',
     component: Layout,
-    name: 'perms',
-    meta: { title: 'perms', icon: 'edit' },
+    redirect: '/perms/asset-permission/',
+    name: 'Perms',
+    meta: { title: 'Perms', icon: 'edit' },
     children: [
       {
-        path: 'static-permissions',
-        name: 'assetPermissionList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'assetPermissionList' }
+        path: 'asset-permissions',
+        name: 'AssetPermissionList',
+        component: () => import('@/views/perms/AssetPermissionList'),
+        meta: { title: 'AssetPermissionList' }
       },
       {
-        path: 'remote-apps-permissions',
-        name: 'remoteAppPermissionList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'remoteAppPermissionList' }
+        path: 'remote-app-permissions',
+        name: 'RemoteAppPermissionList',
+        component: () => import('@/views/perms/RemoteAppPermissionList'),
+        meta: { title: 'RemoteAppPermissionList' }
       },
       {
-        path: 'database-permissions',
-        name: 'databasePermissionList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'databasePermissionList' }
+        path: 'database-app-permissions',
+        name: 'DatabasePermissionList',
+        component: () => import('@/views/perms/DatabaseAppPermissionList'),
+        meta: { title: 'DatabasePermissionList' }
       }
     ]
   },
