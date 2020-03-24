@@ -8,6 +8,8 @@ module.exports = {
    */
   fixedHeader: false,
 
+  tagsView: true,
+
   /**
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar

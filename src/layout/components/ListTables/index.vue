@@ -1,36 +1,9 @@
 <template>
   <div>
     <div class="tableTitle">
-      <el-row class="tableTitle-menu">
-        <el-col :span="2"><el-button size="small" type="primary" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebutton }}</el-button></el-col>
-        <el-col :span="3" :offset="17">
-          <el-input
-            size="small"
-            :placeholder="this.$t('users.search')"
-          >
-            <i slot="prefix" class="el-input__icon el-icon-search" />
-          </el-input>
-        </el-col>
-        <el-col :span="1" style="margin-left:6px;">
-          <el-dropdown>
-            <el-button size="small" type="default">
-              CSV<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>导入</el-dropdown-item>
-              <el-dropdown-item>导出</el-dropdown-item>
-              <el-dropdown-item>更新</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="userTableBasic">
-      <slot />
-    </div>
-    <div class="block">
-      <div style="float:left;position: absolute;">
-        <el-select v-model="value" size="small" placeholder="请选择">
+      <div class="tableTitle-menu">
+        <el-button size="small" type="primary" style="margin-left:12px;" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebutton }}</el-button>
+        <el-select v-model="value" size="small" placeholder="更多操作" style="margin-left:8px">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -39,7 +12,40 @@
             :disabled="item.disabled"
           />
         </el-select>
-        <el-button type="primary" size="mini" style="font-size:14px" @click="MutiSelectAction(value)">提交</el-button>
+        <el-dropdown style="float:right;margin-right:12px;margin-left:8px;">
+          <el-button size="small" type="default">
+            CSV<i class="el-icon-arrow-down el-icon--right" />
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>导入</el-dropdown-item>
+            <el-dropdown-item>导出</el-dropdown-item>
+            <el-dropdown-item>更新</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-input
+          style="display:inline-block;float:right"
+          size="small"
+          :placeholder="this.$t('users.search')"
+        >
+          <i slot="prefix" class="el-input__icon el-icon-search" />
+        </el-input>
+      </div>
+    </div>
+    <div class="userTableBasic">
+      <slot />
+    </div>
+    <div class="block">
+      <div style="float:left;position: absolute;">
+        <!-- <el-select v-model="value" size="small" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          />
+        </el-select>
+        <el-button type="primary" size="mini" style="font-size:14px" @click="MutiSelectAction(value)">提交</el-button> -->
       </div>
       <el-pagination
         background
@@ -124,7 +130,10 @@ export default {
   padding: 20px;
   background-color: #fff;
 }
-el-breadcrumb__item{
+.el-input{
+  width:inherit;
+}
+.el-breadcrumb__item{
   font-size:13px !important;
 }
 .el-header{
@@ -132,13 +141,11 @@ el-breadcrumb__item{
   //border-bottom: 1px solid #e7eaec !important;
 }
 .userTable{
-  width: 96%;
   // margin-left:1%;
-  margin-left: 2%;
 }
 .userTableBasic{
-  width: 98%;
-  margin-left:1%;
+  margin-right:12px;
+  margin-left:12px;
   padding-bottom:1%;
   background-color: #fff;
 }
