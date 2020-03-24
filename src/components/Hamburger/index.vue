@@ -1,6 +1,6 @@
 <template>
   <div style="" @click="toggleClick">
-    <el-button type="primary" size="mini"> <i class="fa fa-bars" style="color: white" /> </el-button>
+    <el-button type="primary" size="mini"> <i class="fa fa-bars" style="color: white; margin-right: 0" /> </el-button>
   </div>
 </template>
 

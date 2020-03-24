@@ -66,37 +66,37 @@ export const constantRoutes = [
         meta: { title: 'UserList' }
       },
       {
-        path: 'users/:id',
+        path: 'users/create',
         component: () => import('@/views/users/UserCreate.vue'), // Parent router-view
-        name: 'UserEdit',
-        meta: { title: 'UserEdit' },
+        name: 'UserCreate',
+        meta: { title: 'UserCreate' },
         hidden: true
       },
       {
-        path: 'user/detail/:id',
+        path: 'users/:id',
         component: () => import('@/views/users/UserDetail.vue'), // Parent router-view
         name: 'UserDetail',
-        meta: { title: 'UserDetail' },
+        meta: { title: 'UserDetail', activeMenu: '/users/users' },
         hidden: true
       },
       {
-        path: 'usergroup/list',
+        path: 'groups',
         component: () => import('@/views/users/UserGroupList.vue'), // Parent router-view
         name: 'UserGroupList',
         meta: { title: 'UserGroupList' }
       },
       {
-        path: 'usergroup/:id',
+        path: 'groups/:id/update',
         component: () => import('@/views/users/UserGroupEdit.vue'), // Parent router-view
         name: 'UserGroupEdit',
         meta: { title: 'UserGroupEdit' },
         hidden: true
       },
       {
-        path: 'usergroup/detail/:id',
+        path: 'groups/:id',
         component: () => import('@/views/users/UserGroupDetail.vue'), // Parent router-view
         name: 'UserGroupDetail',
-        meta: { title: 'UserGroupDetail' },
+        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' },
         hidden: true
       }
     ]
@@ -104,49 +104,49 @@ export const constantRoutes = [
   {
     path: '/assets',
     component: Layout,
-    redirect: '/assets/asset/',
-    name: 'Assets',
+    redirect: '/assets/assets/',
+    name: 'assets',
     meta: { title: 'Assets', icon: 'inbox' },
     children: [
       {
-        path: 'asset',
+        path: 'assets',
         name: 'AssetList',
         component: () => import('@/views/assets/AssetList.vue'),
         meta: { title: 'AssetList' }
       },
       {
-        path: 'domain',
+        path: 'domains',
         name: 'DomainList',
         component: () => import('@/views/assets/DomainList.vue'),
         meta: { title: 'DomainList' }
       },
       {
-        path: 'admin-user',
+        path: 'admin-users',
         name: 'AdminUserList',
         component: () => import('@/views/assets/AdminUserList'),
         meta: { title: 'AdminUserList' }
       },
       {
-        path: 'admin-user/detail/:id',
-        component: () => import('@/views/assets/AdminUserDetail.vue'),
+        path: 'admin-users/:id',
+        component: () => import('@/views/assets/AdminUserDetail.vue'), // Parent router-view
         name: 'AdminUserDetail',
         meta: { title: 'AdminUserDetail' },
         hidden: true
       },
       {
-        path: 'system-user',
+        path: 'system-users',
         name: 'SystemUserList',
         component: () => import('@/views/assets/SystemUserList.vue'),
         meta: { title: 'SystemUserList' }
       },
       {
-        path: 'label',
+        path: 'labels',
         name: 'LabelList',
         component: () => import('@/views/assets/LabelList.vue'),
         meta: { title: 'LabelList' }
       },
       {
-        path: 'cmd-filter',
+        path: 'cmd-filters',
         name: 'CommandFilterList',
         component: () => import('@/views/assets/CommandFilterList.vue'),
         meta: { title: 'CommandFilterList' }
@@ -204,19 +204,6 @@ export const constantRoutes = [
         name: 'DatabasePermissionList',
         component: () => import('@/views/perms/DatabaseAppPermissionList'),
         meta: { title: 'DatabasePermissionList' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
       }
     ]
   }
