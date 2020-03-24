@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import router from './router'
 import store from './store'
 import {
@@ -16,7 +17,7 @@ NProgress.configure({
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
 

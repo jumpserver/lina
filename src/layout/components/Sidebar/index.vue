@@ -42,7 +42,7 @@ export default {
         console.log(meta.activeMenu)
         return meta.activeMenu
       }
-      console.log(path);
+      console.log(path)
       return path
     },
     showLogo() {
