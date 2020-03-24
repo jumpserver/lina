@@ -76,6 +76,9 @@ service.interceptors.response.use(
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
+      if (response.config.raw === 1) {
+        return response
+      }
       return res
     }
   },

@@ -28,11 +28,11 @@
   color: white;
 }
 
-.el-menu--collapse.el-menu .fa {
-  padding: 14px 20px 14px 20px;
-}
+//.el-menu--collapse.el-menu .fa {
+//  padding: 14px 20px 14px 20px;
+//}
 
-.navbar li.is-active {
+.navbar li.is-active, .navbar li.is-opened {
   border: none;
 }
 

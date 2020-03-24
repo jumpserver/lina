@@ -16,6 +16,7 @@ import i18n from './i18n/i18n'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -35,6 +36,39 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
+
+import ElDataTable from '@femessage/el-data-table'
+import ElFormRenderer from '@femessage/el-form-renderer'
+import {
+  Message,
+  MessageBox
+} from 'element-ui'
+import service from '@/utils/request';
+
+import {
+  Button,
+  Dialog,
+  Form,
+  FormItem,
+  Pagination,
+  Table,
+  TableColumn,
+} from 'element-ui'
+
+Vue.use(Button)
+Vue.use(Dialog)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Pagination)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.component('el-form-renderer', ElFormRenderer)
+Vue.component('el-data-table', ElDataTable)
+Vue.prototype.$confirm = MessageBox.confirm
+// show tips
+Vue.prototype.$message = Message
+// if the table component cannot access `this.$axios`, it cannot send request
+Vue.prototype.$axios = service
 
 new Vue({
   el: '#app',
