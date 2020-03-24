@@ -2,9 +2,10 @@
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
-    <div class="main-container">
+    <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar />
+        <tags-view v-if="needTagsView" />
       </div>
       <app-main />
       <Footer />
@@ -13,7 +14,7 @@
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, Footer } from './components'
+import { Navbar, Sidebar, AppMain, Footer, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -22,7 +23,8 @@ export default {
     Navbar,
     Sidebar,
     AppMain,
-    Footer
+    Footer,
+    TagsView
   },
   mixins: [ResizeMixin],
   computed: {
@@ -34,6 +36,9 @@ export default {
     },
     fixedHeader() {
       return this.$store.state.settings.fixedHeader
+    },
+    needTagsView() {
+      return this.$store.state.settings.tagsView
     },
     classObj() {
       return {
