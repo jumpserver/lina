@@ -40,8 +40,24 @@ const cn = {
     'AssetPermission': '资产授权',
     'RemoteAppPermission': '远程应用授权',
     'DatabasePermission': '数据库应用授权',
-    'sessions': '会话管理',
-    'jobcenter': '作业中心'
+    'Sessions': '会话管理',
+    'SessionOnline': '在线会话',
+    'SessionOffline': '历史会话',
+    'Commands': '命令记录',
+    'WebTerminal': 'Web终端',
+    'FileManager': '文件管理',
+    'Terminal': '终端管理',
+    'JobCenter': '作业中心',
+    'TaskList': '任务列表',
+    'BatchCommand': '批量命令',
+    'TaskMonitor': '任务监控',
+    'Tickets': '工单管理',
+    'Audits': '日志审计',
+    'LoginLog': '登录日志',
+    'FtpLog': 'FTP日志',
+    'OperateLog': '操作日志',
+    'PasswordChangeLog': '改密日志',
+    'Settings': '系统设置'
   },
   // 用户模块翻译
   users: {
