@@ -10,7 +10,7 @@
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: auto;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
@@ -65,4 +65,9 @@ div:focus {
 // main-container global css
 .app-container {
   padding: 20px;
+}
+
+td .el-button.el-button--mini {
+  padding: 1px 5px;
+  line-height: 1.5;
 }

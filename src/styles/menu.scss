@@ -3,7 +3,7 @@
   font-weight: 600;
 }
 
-.el-menu  i.fa {
+.el-menu i.fa {
   width: 14px;
   margin-right: 10px;
 }
@@ -24,7 +24,23 @@
   line-height: 46px;
 }
 
-li.is-opened{
+.el-menu-item:hover, .el-menu-item:focus {
+  color: white;
+}
+
+//.el-menu--collapse.el-menu .fa {
+//  padding: 14px 20px 14px 20px;
+//}
+
+.navbar li.is-active, .navbar li.is-opened {
+  border: none;
+}
+
+.nest-menu li.is-active {
+  border: none;
+}
+
+li.is-opened, li.is-active {
   border-left: 4px solid #19aa8d;
 }
 

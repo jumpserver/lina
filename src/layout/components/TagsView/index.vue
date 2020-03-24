@@ -221,15 +221,15 @@ export default {
       margin-left: 5px;
       margin-top: 4px;
       &:first-of-type {
-        margin-left: 15px;
+        margin-left: 20px;
       }
       &:last-of-type {
         margin-right: 15px;
       }
       &.active {
-        background-color: #42b983;
+        background-color: #1AB394;
         color: #fff;
-        border-color: #42b983;
+        border-color: #1AB394;
         &::before {
           content: "";
           background: #fff;

@@ -1,6 +1,8 @@
 <template>
-  <div style="" @click="toggleClick">
-    <el-button type="primary" size="mini"> <i class="fa fa-bars" style="color: white; margin-right: 0" /> </el-button>
+  <div style="">
+    <el-button type="primary" class="hamburger" size="mini"  @click="toggleClick">
+      <i class="fa fa-bars" style="color: white; margin-right: 0"></i>
+    </el-button>
   </div>
 </template>
 
@@ -23,13 +25,11 @@ export default {
 
 <style scoped>
 .hamburger {
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
+ padding: 7px 10px;
 }
 
 .hamburger.is-active {
   transform: rotate(180deg);
 }
+
 </style>
