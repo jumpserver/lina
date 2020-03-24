@@ -104,49 +104,49 @@ export const constantRoutes = [
   {
     path: '/assets',
     component: Layout,
-    redirect: '/asset/list',
+    redirect: '/assets/asset/',
     name: 'assets',
     meta: { title: 'Assets', icon: 'inbox' },
     children: [
       {
-        path: 'asset/list',
+        path: 'asset',
         name: 'AssetList',
         component: () => import('@/views/assets/AssetList.vue'),
         meta: { title: 'AssetList' }
       },
       {
-        path: 'domain/list',
+        path: 'domain',
         name: 'DomainList',
         component: () => import('@/views/assets/DomainList.vue'),
         meta: { title: 'DomainList' }
       },
       {
-        path: 'admin-user/list',
+        path: 'admin-user',
         name: 'AdminUserList',
         component: () => import('@/views/assets/AdminUserList'),
         meta: { title: 'AdminUserList' }
       },
       {
         path: 'admin-user/detail/:id',
-        component: () => import('@/views/assets/AdminUserDetail.vue'), // Parent router-view
+        component: () => import('@/views/assets/AdminUserDetail.vue'),
         name: 'AdminUserDetail',
         meta: { title: 'AdminUserDetail' },
         hidden: true
       },
       {
-        path: 'system-user/list',
+        path: 'system-user',
         name: 'SystemUserList',
         component: () => import('@/views/assets/SystemUserList.vue'),
         meta: { title: 'SystemUserList' }
       },
       {
-        path: 'label/list',
+        path: 'label',
         name: 'LabelList',
         component: () => import('@/views/assets/LabelList.vue'),
         meta: { title: 'LabelList' }
       },
       {
-        path: 'cmd-filter/list',
+        path: 'cmd-filter',
         name: 'CommandFilterList',
         component: () => import('@/views/assets/CommandFilterList.vue'),
         meta: { title: 'CommandFilterList' }
@@ -162,20 +162,21 @@ export const constantRoutes = [
   {
     path: '/applications/',
     component: Layout,
+    redirect: '/applications/remote-apps/',
     name: 'applications',
-    meta: { title: 'applications', icon: 'th' },
+    meta: { title: 'Applications', icon: 'th' },
     children: [
       {
         path: 'remote-apps',
         name: 'remoteAppList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'remoteAppList' }
+        component: () => import('@/views/applications/RemoteAppList'),
+        meta: { title: 'RemoteAppList' }
       },
       {
-        path: 'databases',
-        name: 'databaseList',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'databaseList' }
+        path: 'database-apps',
+        name: 'DatabaseAppList',
+        component: () => import('@/views/applications/DatabaseAppList'),
+        meta: { title: 'DatabaseAppList' }
       }
     ]
   },
