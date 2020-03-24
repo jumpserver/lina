@@ -124,7 +124,7 @@ export const constantRoutes = [
         path: 'admin-users',
         name: 'AdminUserList',
         component: () => import('@/views/assets/AdminUserList'),
-        meta: { title: 'AdminUserList' }
+        meta: { title: 'AdminUser' }
       },
       {
         path: 'admin-users/:id',
@@ -137,25 +137,25 @@ export const constantRoutes = [
         path: 'system-users',
         name: 'SystemUserList',
         component: () => import('@/views/assets/SystemUserList.vue'),
-        meta: { title: 'SystemUserList' }
+        meta: { title: 'SystemUser' }
       },
       {
         path: 'labels',
         name: 'LabelList',
         component: () => import('@/views/assets/LabelList.vue'),
-        meta: { title: 'LabelList' }
+        meta: { title: 'Labels' }
       },
       {
         path: 'cmd-filters',
         name: 'CommandFilterList',
         component: () => import('@/views/assets/CommandFilterList.vue'),
-        meta: { title: 'CommandFilterList' }
+        meta: { title: 'CommandFilters' }
       },
       {
         path: 'platforms',
         name: 'platformList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'platformList' }
+        meta: { title: 'PlatformList' }
       }
     ]
   },
@@ -170,13 +170,13 @@ export const constantRoutes = [
         path: 'remote-apps',
         name: 'remoteAppList',
         component: () => import('@/views/applications/RemoteAppList'),
-        meta: { title: 'RemoteAppList' }
+        meta: { title: 'RemoteApp' }
       },
       {
         path: 'database-apps',
         name: 'DatabaseAppList',
         component: () => import('@/views/applications/DatabaseAppList'),
-        meta: { title: 'DatabaseAppList' }
+        meta: { title: 'DatabaseApp' }
       }
     ]
   },
@@ -191,19 +191,19 @@ export const constantRoutes = [
         path: 'asset-permissions',
         name: 'AssetPermissionList',
         component: () => import('@/views/perms/AssetPermissionList'),
-        meta: { title: 'AssetPermissionList' }
+        meta: { title: 'AssetPermission' }
       },
       {
         path: 'remote-app-permissions',
         name: 'RemoteAppPermissionList',
         component: () => import('@/views/perms/RemoteAppPermissionList'),
-        meta: { title: 'RemoteAppPermissionList' }
+        meta: { title: 'RemoteAppPermission' }
       },
       {
         path: 'database-app-permissions',
         name: 'DatabasePermissionList',
         component: () => import('@/views/perms/DatabaseAppPermissionList'),
-        meta: { title: 'DatabasePermissionList' }
+        meta: { title: 'DatabasePermission' }
       }
     ]
   }

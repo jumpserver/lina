@@ -1,7 +1,7 @@
 <template>
-  <BackPlayground :title="$t('route.Applications')">
+  <BackPlayground :title="$t('applications.DatabaseAppList')">
     <ListTables
-      :tablebutton="$t('applications.DatabaseAppList')"
+      :tablebutton="$t('applications.DatabaseAppCreate')"
       tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"

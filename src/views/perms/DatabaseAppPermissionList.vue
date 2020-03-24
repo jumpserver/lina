@@ -1,7 +1,7 @@
 <template>
-  <BackPlayground :title="$t('route.Perms')">
+  <BackPlayground :title="$t('perms.DatabaseAppPermissionList')">
     <ListTables
-      :tablebutton="$t('perms.DatabaseAppPermissionList')"
+      :tablebutton="$t('perms.DatabaseAppPermissionCreate')"
       tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"

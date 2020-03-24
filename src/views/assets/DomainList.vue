@@ -1,8 +1,8 @@
 <template>
-  <BackPlayground :title="$t('route.AdminUserList')">
+  <BackPlayground :title="$t('assets.DomainList')">
     <ListTables
-      :tablebutton="$t('assets.AdminUserCreate')"
-      tableroute="UserEdit"
+      :tablebutton="$t('assets.DomainCreate')"
+      tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
     >

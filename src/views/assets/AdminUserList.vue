@@ -1,5 +1,5 @@
 <template>
-  <BackPlayground :title="$t('route.AdminUserList')">
+  <BackPlayground :title="$t('assets.AdminUserList')">
     <ListTables
       :tablebutton="$t('assets.AdminUserCreate')"
       tableroute="UserEdit"
