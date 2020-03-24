@@ -2,6 +2,7 @@
   <BackPlayground :title="$t('applications.RemoteAppList')">
     <ListTables
       :tablebutton="$t('applications.RemoteAppCreate')"
+      :total="total"
       tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
@@ -95,7 +96,8 @@ export default {
   data() {
     return {
       tableData: [],
-      listLoading: true
+      listLoading: true,
+      total: 0
     }
   },
   created() {

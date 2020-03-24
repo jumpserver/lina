@@ -2,7 +2,8 @@
   <BackPlayground :title="$t('assets.CommandFilterList')">
     <ListTables
       :tablebutton="$t('assets.CommandFilterCreate')"
-      tableroute="UserEdit"
+      :total="total"
+      tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
     >
@@ -93,7 +94,8 @@ export default {
   data() {
     return {
       tableData: [],
-      listLoading: true
+      listLoading: true,
+      total: 0
     }
   },
   created() {

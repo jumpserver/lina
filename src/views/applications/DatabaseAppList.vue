@@ -2,6 +2,7 @@
   <BackPlayground :title="$t('applications.DatabaseAppList')">
     <ListTables
       :tablebutton="$t('applications.DatabaseAppCreate')"
+      :total="total"
       tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
@@ -115,7 +116,8 @@ export default {
   data() {
     return {
       tableData: [],
-      listLoading: true
+      listLoading: true,
+      total: 0
     }
   },
   created() {

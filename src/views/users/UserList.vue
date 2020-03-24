@@ -2,7 +2,8 @@
   <BackPlayground :title="$t('route.UserList')">
     <ListTables
       :tablebutton="$t('users.createUser')"
-      tableroute="UserEdit"
+      :total="total"
+      tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
       @MutiSelectChange="handleMutiSelectChange"
@@ -81,7 +82,8 @@ export default {
   data() {
     return {
       tableData: [],
-      listLoading: true
+      listLoading: true,
+      total: 0
     }
   },
   created() {

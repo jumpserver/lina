@@ -2,7 +2,8 @@
   <BackPlayground :title="$t('assets.LabelList')">
     <ListTables
       :tablebutton="$t('assets.LabelCreate')"
-      tableroute="UserEdit"
+      :total="total"
+      tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
     >
@@ -84,7 +85,8 @@ export default {
   data() {
     return {
       tableData: [],
-      listLoading: true
+      listLoading: true,
+      total: 0
     }
   },
   created() {

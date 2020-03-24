@@ -2,6 +2,7 @@
   <BackPlayground :title="$t('users.usergrouplist')">
     <ListTables
       :tablebutton="$t('users.createusergroup')"
+      :total="total"
       tableroute="UserGroupEdit"
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
@@ -84,7 +85,8 @@ export default {
   data() {
     return {
       tableData: [],
-      listLoading: true
+      listLoading: true,
+      total: 0
     }
   },
   created() {

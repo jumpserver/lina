@@ -2,7 +2,7 @@
   <BackPlayground :title="$t('assets.AdminUserList')">
     <ListTables
       :tablebutton="$t('assets.AdminUserCreate')"
-      tableroute="UserEdit"
+      tableroute=""
       @SizeChange="handleSizeChange"
       @CurrentChange="handleCurrentChange"
     >
