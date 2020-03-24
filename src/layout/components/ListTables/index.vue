@@ -3,7 +3,7 @@
     <div class="tableTitle">
       <div class="tableTitle-menu">
         <el-button size="small" type="primary" style="margin-left:12px;" @click="$router.push({ name: tableroute, params:{id:'create'} })">{{ tablebutton }}</el-button>
-        <el-select v-model="value" size="small" placeholder="更多操作" styl="margin-left:8px">
+        <el-select v-model="value" size="small" placeholder="更多操作" style="margin-left:8px">
           <el-option
             v-for="item in options"
             :key="item.value"
