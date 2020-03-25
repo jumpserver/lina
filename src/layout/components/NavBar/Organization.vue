@@ -1,15 +1,16 @@
 <template>
   <transition name="sidebarLogoFade">
     <el-select
-      class="org-didi"
       v-if="!isCollapse && userAdminOrgList.length>1"
+      class="org-didi"
       :value="currentOrg.id"
       filterable
       placeholder="请选择"
-      @change="changeOrg">
+      @change="changeOrg"
+    >
 
       <template slot="prefix">
-        <i class="fa fa-bookmark"></i>
+        <i class="fa fa-bookmark" />
       </template>
 
       <el-option
@@ -17,8 +18,8 @@
         :key="item.id"
         selected="item.id == currentOrg.id"
         :label="item.name"
-        :value="item.id">
-      </el-option>
+        :value="item.id"
+      />
     </el-select>
   </transition>
 </template>

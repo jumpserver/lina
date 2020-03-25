@@ -18,7 +18,9 @@ const cn = {
     'name': '名称',
     'action': '动作',
     'role': '角色',
-    'username': '用户名'
+    'username': '用户名',
+    'Language': '语言',
+    'Help': '帮助'
   },
   route: {
     'dashboard': '仪表盘',

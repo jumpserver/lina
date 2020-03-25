@@ -22,7 +22,8 @@ const getDefaultState = () => {
     avatar: '',
     roles: [],
     currentOrg: getCurrentOrg(),
-    orgs: []
+    orgs: [],
+    user: {}
   }
 }
 
@@ -57,6 +58,9 @@ const mutations = {
     state.currentOrg = z
     console.log(z)
     setCurrentOrg(z)
+  },
+  SET_USER(state, user) {
+    state.user = user
   }
 }
 
@@ -97,6 +101,7 @@ const actions = {
         if (!rules || rules.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
+        commit('SET_USER', response)
         commit('SET_ROLES', rules)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar_url)

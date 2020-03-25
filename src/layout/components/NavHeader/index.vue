@@ -5,59 +5,32 @@
       <breadcrumb class="breadcrumb-container" />
     </div>
     <div class="navbar-right">
-      <div class="">
-        <el-dropdown trigger="click">
-        <span class="el-dropdown-link">
-          下拉菜单 <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
+      <div class="header-item">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            {{ $t('common.Help') }}<i class="el-icon-arrow-down el-icon--right" />
+          </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-check">蚵仔煎</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-plus">{{ $t('Docs') }}</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-circle-plus">{{ $t('Support') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-
+      <div class="header-item">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            {{ $t('common.Language') }}<i class="el-icon-arrow-down el-icon--right" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>中文(简体)</el-dropdown-item>
+            <el-dropdown-item>English</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <div class="header-item header-profile">
+        <AccountDropdown />
+      </div>
     </div>
-
-    <!--    <el-menu class="el-menu-demo" mode="horizontal">-->
-    <!--      <el-menu-item index="0"></el-menu-item>-->
-    <!--      <el-menu-item index="1"><breadcrumb class="breadcrumb-container" /></el-menu-item>-->
-    <!--      <el-submenu index="2" class="el-submenu-right">-->
-    <!--        <template slot="title">-->
-    <!--          <img-->
-    <!--            src="@/assets/img/admin.png"-->
-    <!--            class="header-menu-logo"-->
-    <!--            style="height:30px;weight:30px;border-radius: 50%;margin-right:5px;"-->
-    <!--          >管理员-->
-    <!--        </template>-->
-    <!--        <el-menu-item index="2-1">个人信息</el-menu-item>-->
-    <!--        <el-menu-item index="2-2">用户界面</el-menu-item>-->
-    <!--        <el-menu-item index="2-2">API key</el-menu-item>-->
-    <!--        <el-menu-item index="2-2">注销登录</el-menu-item>-->
-    <!--      </el-submenu>-->
-    <!--      <el-dropdown trigger="click">-->
-    <!--      <span class="el-dropdown-link">-->
-    <!--        下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>-->
-    <!--      </span>-->
-    <!--        <el-dropdown-menu slot="dropdown">-->
-    <!--          <el-dropdown-item icon="el-icon-plus">中文</el-dropdown-item>-->
-    <!--          <el-dropdown-item icon="el-icon-circle-plus">英文</el-dropdown-item>-->
-    <!--        </el-dropdown-menu>-->
-    <!--      </el-dropdown>-->
-    <!--      <el-submenu index="3" class="el-submenu-right">-->
-    <!--        <template slot="title" style="font-weight:600;"><i class="fa fa-globe header-menu-icon" style="margin-right:5px;" />{{ $t('header.language') }}</template>-->
-    <!--        <el-menu-item index="3-1" @click="changeLangToZH()">中文</el-menu-item>-->
-    <!--        <el-menu-item index="3-2" @click="changeLangToEnglish()">English</el-menu-item>-->
-    <!--      </el-submenu>-->
-    <!--      <el-submenu index="4" class="el-submenu-right">-->
-    <!--        <template slot="title"><i class="fa fa-handshake-o header-menu-icon" style="margin-right:5px;" />{{ $t('header.help') }}</template>-->
-    <!--        <el-menu-item index="4-1">{{ $t('header.Documents') }}</el-menu-item>-->
-    <!--        <el-menu-item index="4-2">{{ $t('header.CommercialSupport') }}</el-menu-item>-->
-    <!--      </el-submenu>-->
-    <!--    </el-menu>-->
   </div>
 </template>
 
@@ -65,11 +38,13 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import AccountDropdown from './AccountDropdown'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    AccountDropdown
   },
   computed: {
     ...mapGetters([
@@ -95,41 +70,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .el-header{
-    background-color: #ffffff;
-    //border-bottom: 1px solid #e7eaec !important;
-  }
-  .el-submenu-right{
-    float: right !important;
-  }
-  //重置Font-weight
-  .el-submenu-right /deep/ .el-submenu__title{
-    font-weight: 600;
-    border-bottom: 0px !important;
-    color: #888888 !important;
-  }
-  //重置导航菜单选中样式
-  .el-menu--horizontal>.el-menu-item.is-active {
-    border-bottom: 0px;
-  }
-  .el-menu--horizontal>.el-menu-item{
-    height: 50px;
-    line-height: 50px;
-  }
-  .el-submenu-right /deep/ .el-submenu__title{
-    height: 50px;
-    padding: 0 20px !important;
-    line-height: 50px;
-  }
-</style>
-
-<style lang="scss" scoped>
   .navbar {
     height: 50px;
     overflow: hidden;
     position: relative;
     background: #fff;
-    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
     .hamburger-container {
       line-height: 50px;
@@ -137,19 +83,27 @@ export default {
       float: left;
       cursor: pointer;
       transition: background .3s;
-      -webkit-tap-highlight-color:transparent;
+      -webkit-tap-highlight-color: transparent;
       padding-left: 20px;
     }
 
     .navbar-right {
       float: right;
-      /*<!--margin-right: -15px;-->*/
+      margin-right: 10px;
+    }
+
+    .header-item {
+      line-height: 50px;
+      display: inline-block;
+      padding-right: 20px;
     }
 
     .breadcrumb-container {
       float: left;
+      padding-left: 20px;
     }
 
+    /*
     .right-menu {
       float: right;
       height: 100%;
@@ -201,5 +155,10 @@ export default {
         }
       }
     }
+     */
+  }
+  .el-header {
+    background-color: #ffffff;
   }
 </style>
+

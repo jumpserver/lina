@@ -9,6 +9,7 @@ const getters = {
   userAdminOrgList: state => state.user.orgs,
   permission_routes: state => state.permission.routes,
   visitedViews: state => state.tagsView.visitedViews,
-  cachedViews: state => state.tagsView.cachedViews
+  cachedViews: state => state.tagsView.cachedViews,
+  currentUser: state => state.user.user
 }
 export default getters

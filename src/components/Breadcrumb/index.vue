@@ -70,9 +70,14 @@ export default {
   line-height: 50px;
   margin-left: 8px;
 
+  span >>> a:hover {
+    color: inherit;
+  }
+
   .no-redirect {
-    color: #97a8be;
+    /*color: #97a8be;*/
     cursor: text;
+    font-weight: 600;
   }
 }
 </style>

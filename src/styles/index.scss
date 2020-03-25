@@ -82,3 +82,12 @@ td .el-button.el-button--mini {
 .main-container {
   background-color: #f3f3f4;
 }
+
+.el-dropdown:hover {
+  cursor: pointer;
+}
+
+.el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: #f5f5f5;
+  color: inherit;
+}
