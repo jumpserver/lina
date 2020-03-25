@@ -10,7 +10,7 @@
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: auto;
+  //-webkit-font-smoothing: auto;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
@@ -70,4 +70,24 @@ div:focus {
 td .el-button.el-button--mini {
   padding: 1px 5px;
   line-height: 1.5;
+}
+
+.el-tabs__item.is-active, .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+  color: #555555;
+}
+
+.el-tabs--border-card>.el-tabs__header .el-tabs__item:not(.is-disabled):hover {
+  color: #555555;
+}
+.main-container {
+  background-color: #f3f3f4;
+}
+
+.el-dropdown:hover {
+  cursor: pointer;
+}
+
+.el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: #f5f5f5;
+  color: inherit;
 }

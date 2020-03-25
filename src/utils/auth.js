@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 
 const TokenKey = 'csrftoken'
-const CurrentOrg = 'currentorg'
+const CurrentOrg = 'currentOrg'
 
 export function getToken() {
   return Cookies.get(TokenKey)

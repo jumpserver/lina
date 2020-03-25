@@ -1,5 +1,5 @@
 <template>
-  <BackPlayground :title="$t('route.AdminUserList')">
+  <IBox :title="$t('route.AdminUserList')">
     <ListTables
       :tablebutton="$t('assets.AdminUserCreate')"
       tableroute="UserEdit"
@@ -68,16 +68,16 @@
         </el-table-column>
       </el-table>
     </ListTables>
-  </BackPlayground>
+  </IBox>
 </template>
 
 <script>
-import { ListTables, BackPlayground } from '@/layout/components'
+import { ListTables, IBox } from '@/layout/components'
 import { getLabelList } from '@/api/asset'
 import Tables from '@/layout/mixin/ListTables'
 export default {
   components: {
-    BackPlayground,
+    IBox,
     ListTables
   },
   mixins: [Tables],

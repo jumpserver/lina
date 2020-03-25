@@ -1,5 +1,5 @@
 <template>
-  <BackPlayground :title="$t('route.UserList')">
+  <IBox :title="$t('route.UserList')">
     <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
       <template v-slot:header="{selected}">
         <el-dropdown>
@@ -15,16 +15,16 @@
         </el-dropdown>
       </template>
     </el-data-table>
-  </BackPlayground>
+  </IBox>
 </template>
 
 <script>
-import { BackPlayground } from '@/layout/components'
+import { IBox } from '@/layout/components'
 import Tables from '@/layout/mixin/ListTables'
 
 export default {
   components: {
-    BackPlayground
+    IBox
   },
   mixins: [Tables],
   data() {
@@ -32,7 +32,6 @@ export default {
       tableData: [],
       listLoading: true,
       tableConfig: {
-
         axiosConfig: {
           raw: 1
         },
@@ -85,11 +84,13 @@ export default {
           },
           {
             prop: 'username',
+            align: 'center',
             label: this.$t('users.username'),
             sortable: true
           },
           {
             prop: 'role',
+            align: 'center',
             label: this.$t('users.role'),
             sortable: true
           },

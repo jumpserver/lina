@@ -18,13 +18,16 @@ const cn = {
     'name': '名称',
     'action': '动作',
     'role': '角色',
-    'username': '用户名'
+    'username': '用户名',
+    'Language': '语言',
+    'Help': '帮助'
   },
   route: {
     'dashboard': '仪表盘',
     'Users': '用户管理',
     'UserList': '用户列表',
     'UserGroupList': '用户组',
+    'UserGroupDetail': '用户组详情',
     'Assets': '资产管理',
     'AssetList': '资产列表',
     'DomainList': '网关列表',

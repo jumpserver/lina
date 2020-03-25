@@ -1,5 +1,5 @@
 <template>
-  <BackPlayground :title="$t('users.usergrouplist')">
+  <IBox :title="$t('users.usergrouplist')">
     <ListTables
       :tablebutton="$t('users.createusergroup')"
       tableroute="UserGroupEdit"
@@ -68,17 +68,17 @@
         </el-table-column>
       </el-table>
     </ListTables>
-  </BackPlayground>
+  </IBox>
 </template>
 
 <script>
-import { ListTables, BackPlayground } from '@/layout/components'
+import { ListTables, IBox } from '@/layout/components'
 import { getUserGroupList } from '@/api/user'
 import Tables from '@/layout/mixin/ListTables'
 export default {
   components: {
-    BackPlayground,
-    ListTables
+    ListTables,
+    IBox
   },
   mixins: [Tables],
   data() {
