@@ -20,13 +20,11 @@
 
 <script>
 import { IBox } from '@/layout/components'
-import Tables from '@/layout/mixin/ListTables'
 
 export default {
   components: {
     IBox
   },
-  mixins: [Tables],
   data() {
     return {
       tableData: [],
