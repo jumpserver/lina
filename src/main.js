@@ -36,8 +36,8 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-import ElDataTable from '@femessage/el-data-table'
-import ElFormRenderer from '@femessage/el-form-renderer'
+import ElDataTable from '@/layout/components/el-data-table/el-data-table.vue'
+import ElFormRenderer from '@/layout/components/el-form-renderer/el-form-renderer.vue'
 import {
   Message,
   MessageBox
@@ -61,8 +61,8 @@ Vue.use(FormItem)
 Vue.use(Pagination)
 Vue.use(Table)
 Vue.use(TableColumn)
-Vue.component('el-form-renderer', ElFormRenderer)
 Vue.component('el-data-table', ElDataTable)
+Vue.component('el-form-renderer', ElFormRenderer)
 Vue.prototype.$confirm = MessageBox.confirm
 // show tips
 Vue.prototype.$message = Message
