@@ -16,7 +16,6 @@ import i18n from './i18n/i18n'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -37,13 +36,13 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-import ElDataTable from '@femessage/el-data-table'
-import ElFormRenderer from '@femessage/el-form-renderer'
+import ElDataTable from '@/layout/components/el-data-table/el-data-table.vue'
+import ElFormRenderer from '@/layout/components/el-form-renderer/el-form-renderer.vue'
 import {
   Message,
   MessageBox
 } from 'element-ui'
-import service from '@/utils/request';
+import service from '@/utils/request'
 
 import {
   Button,
@@ -52,7 +51,7 @@ import {
   FormItem,
   Pagination,
   Table,
-  TableColumn,
+  TableColumn
 } from 'element-ui'
 
 Vue.use(Button)
@@ -62,8 +61,8 @@ Vue.use(FormItem)
 Vue.use(Pagination)
 Vue.use(Table)
 Vue.use(TableColumn)
-Vue.component('el-form-renderer', ElFormRenderer)
 Vue.component('el-data-table', ElDataTable)
+Vue.component('el-form-renderer', ElFormRenderer)
 Vue.prototype.$confirm = MessageBox.confirm
 // show tips
 Vue.prototype.$message = Message

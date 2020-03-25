@@ -1,84 +1,30 @@
 <template>
   <BackPlayground :title="$t('route.UserList')">
-<!--    <ListTables-->
-<!--      :tablebutton="$t('users.createUser')"-->
-<!--      tableroute="UserEdit"-->
-<!--      @SizeChange="handleSizeChange"-->
-<!--      @CurrentChange="handleCurrentChange"-->
-<!--      @MutiSelectChange="handleMutiSelectChange"-->
-<!--    >-->
-<!--      <el-table-->
-<!--        v-loading="listLoading"-->
-<!--        :data="tableData"-->
-<!--        stripe-->
-<!--        border-->
-<!--        fit-->
-<!--        class="userTable"-->
-<!--      >-->
-<!--        <el-table-column-->
-<!--          type="selection"-->
-<!--          width="55"-->
-<!--          align="center"-->
-<!--          header-align="center"-->
-<!--        />-->
-<!--        <el-table-column-->
-<!--          :label="this.$t('common.name')"-->
-<!--          sortable-->
-<!--          align="center"-->
-<!--          header-align="center"-->
-<!--        >-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-link type="success" size="small" style="font-size:14px" @click="handleDetail(scope.$index, scope.row)">{{ scope.row.name }}</el-link>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          :label="this.$t('common.username')"-->
-<!--          prop="username"-->
-<!--          align="center"-->
-<!--          sortable-->
-<!--          header-align="center"-->
-<!--        />-->
-<!--        <el-table-column-->
-<!--          :label="this.$t('common.role')"-->
-<!--          prop="role_display"-->
-<!--          sortable-->
-<!--          align="center"-->
-<!--          header-align="center"-->
-<!--        />-->
-<!--        <el-table-column-->
-<!--          :label="this.$t('common.action')"-->
-<!--          align="center"-->
-<!--          width="150px"-->
-<!--          class="table-action"-->
-<!--          header-align="center"-->
-<!--        >-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-button-->
-<!--              size="mini"-->
-<!--              type="primary"-->
-<!--              @click="handleEdit(scope.$index, scope.row)"-->
-<!--            >{{ $t('action.update') }}</el-button>-->
-<!--            <el-button-->
-<!--              size="mini"-->
-<!--              type="danger"-->
-<!--              @click="handleDelete(scope.$index, scope.row)"-->
-<!--            >{{ $t('action.delete') }}</el-button>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--      </el-table>-->
-      <el-data-table v-bind="tableConfig"></el-data-table>
-<!--    </ListTables>-->
+    <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
+      <template v-slot:header="{selected}">
+        <!-- <el-tag>slot=header{{ selected.length }}</el-tag> -->
+        <el-dropdown>
+          <el-button type="primary" size="small">
+            更多菜单<i class="el-icon-arrow-down el-icon--right" />
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>批量删除</el-dropdown-item>
+            <el-dropdown-item>批量更新</el-dropdown-item>
+            <el-dropdown-item>禁用所选</el-dropdown-item>
+            <el-dropdown-item>激活所选</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </template>
+    </el-data-table>
   </BackPlayground>
 </template>
 
 <script>
-import { ListTables, BackPlayground } from '@/layout/components'
-import { getUserList } from '@/api/user'
+import { BackPlayground } from '@/layout/components'
 import Tables from '@/layout/mixin/ListTables'
 export default {
   components: {
-    BackPlayground,
-    ListTables
+    BackPlayground
   },
   mixins: [Tables],
   data() {
@@ -86,97 +32,113 @@ export default {
       tableData: [],
       listLoading: true,
       tableConfig: {
-        form: [
-          {
-            type: 'input',
-            id: 'login',
-            label: '用户名',
-            rules: [
-              {
-                required: true,
-                message: '请输入用户名',
-                trigger: 'blur',
-                transform: v => v && v.trim()
-              }
-            ],
-            el: {placeholder: '请输入用户名'}
-          },
-          {
-            type: 'select',
-            id: 'type',
-            label: '账户类型',
-            rules: [{required: true, message: '请选择账户类型', trigger: 'blur'}],
-            options: ['Organization', 'User'].map(f => ({label: f, value: f})),
-            el: {
-              placeholder: '请选择'
-            }
-          }
-        ],
+
         axiosConfig: {
-          params: {
-            draw: 1
-          },
           raw: 1
         },
         url: '/api/v1/users/users/',
         dataPath: 'results',
         totalPath: 'count',
         pageSizeKey: 'limit',
-        pageKey: 'offset',
+        pageKey: 'offset', // 数据偏移量
+        saveQuery: false, // 关闭路径保存查询参数
+        persistSelection: true, // 切换页面 已勾选项不会丢失
+        hasEdit: false, // 有编辑按钮
+        newText: '创建',
+        firstPage: 0, // 初始页页码
+        hasDelete: false,
+        hasNew: true,
+        // editText: this.$t('action.update'), // 编辑按钮文案
+        tableAttrs: {
+          stripe: true, // 斑马纹表格
+          border: true, // 表格边框
+          fit: true // 宽度自适应
+        },
+        extraButtons: [
+          {
+            type: 'primary',
+            // disabled: row => row.date === '2016-05-04',
+            text: this.$t('users.update'),
+            // Bug
+            // https://github.com/FEMessage/el-data-table/blob/7557c0edbcb567de53b90eb440d289dbf8040b00/src/el-data-table.vue#L225
+            atClick(row) {
+              // this.$route.push({ name: 'UserEdit', params: { id: row.id }})
+
+            }
+          },
+          {
+            type: 'warning',
+            // disabled: row => row.date === '2016-05-04',
+            text: this.$t('users.delete'),
+            // Bug
+            // https://github.com/FEMessage/el-data-table/blob/7557c0edbcb567de53b90eb440d289dbf8040b00/src/el-data-table.vue#L225
+            atClick(row) {
+              // this.$route.push({ name: 'UserEdit', params: { id: row.id }})
+            }
+          }
+
+        ],
         columns: [
           { type: 'selection' },
+          // Bug
+          // 应该让我插入Slot,使这个用户名可点击
           {
             prop: 'name',
-            label: 'Name'
+            align: 'center',
+            label: () => this.$t('users.name'),
+            sortable: true // 可排序
           },
           {
             prop: 'username',
-            label: 'Username',
+            label: this.$t('users.username'),
+            sortable: true
           },
           {
             prop: 'role',
-            label: 'Role'
+            label: this.$t('users.role'),
+            sortable: true
+          },
+          // Bug API没有返回组织名称
+          {
+            prop: 'group',
+            align: 'center',
+            label: this.$t('users.usergroup'),
+            sortable: true
+          },
+          {
+            prop: 'source',
+            align: 'center',
+            label: this.$t('users.source'),
+            sortable: true
           }
         ]
       }
     }
   },
   created() {
-    // this.getUsers(this.current_page, this.page_size, this.offset)
   },
   methods: {
-    // 处理显示详情
-    handleDetail: function(index, row) {
-      this.$router.push({ name: 'UserDetail', params: { id: row.id }})
-    },
-    handleMutiSelectChange(val) {
-      console.log(val)
-    },
-    // 处理页面显示数量更新
-    handleSizeChange(val) {
-      this.offset = (this.current_page - 1) * val
-      this.page_size = val
-      this.getUsers(this.current_page, val, this.offset)
-    },
-    // 处理页码更新
-    handleCurrentChange(val) {
-      this.offset = (val - 1) * this.page_size
-      this.current_page = val
-      this.getUsers(val, this.page_size, this.offset)
-    },
-    // 获取数据详情
-    getUsers(draw, limit, offset) {
-      this.listLoading = true
-      getUserList({ draw, limit, offset }).then(response => {
-        this.tableData = response.results
-        this.total = response.count
-        this.listLoading = false
-      })
-    }
+
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+// 重制表单样式
+.el-data-table /deep/ .el-pagination{
+  text-align: center !important;
+}
+.el-data-table /deep/ .el-table td{
+  padding: 4px 0;
+}
+.el-data-table /deep/ .el-table th{
+  padding: 4px 0;
+}
+.el-data-table/deep/ .el-form-item{
+  margin-bottom:10px !important ;
+  margin-top:10px;
+}
+.el-data-table/deep/ .el-pagination{
+  padding:15px  0 !important ;
+}
 </style>

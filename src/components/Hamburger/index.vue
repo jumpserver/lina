@@ -1,7 +1,7 @@
 <template>
   <div style="">
-    <el-button type="primary" class="hamburger" size="mini"  @click="toggleClick">
-      <i class="fa fa-bars" style="color: white; margin-right: 0"></i>
+    <el-button type="primary" class="hamburger" size="mini" @click="toggleClick">
+      <i class="fa fa-bars" style="color: white; margin-right: 0" />
     </el-button>
   </div>
 </template>

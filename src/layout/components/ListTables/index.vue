@@ -22,31 +22,23 @@
             <el-dropdown-item>更新</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-input
-          style="display:inline-block;float:right"
-          size="small"
-          :placeholder="this.$t('users.search')"
-        >
-          <i slot="prefix" class="el-input__icon el-icon-search" />
-        </el-input>
+        <!-- bug 待修复 -->
+        <div style="display:inline-block;float:right">
+          <el-input v-model="input3" placeholder="请输入内容" class="input-with-select" size="small">
+            <el-select slot="prepend" v-model="select" placeholder="请选择">
+              <el-option label="餐厅名" value="1" />
+              <el-option label="订单号" value="2" />
+              <el-option label="用户电话" value="3" />
+            </el-select>
+            <i slot="prefix" class="el-input__icon el-icon-search" />
+          </el-input>
+        </div>
       </div>
     </div>
     <div class="userTableBasic">
       <slot />
     </div>
     <div class="block">
-      <div style="float:left;position: absolute;">
-        <!-- <el-select v-model="value" size="small" placeholder="请选择">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          />
-        </el-select>
-        <el-button type="primary" size="mini" style="font-size:14px" @click="MutiSelectAction(value)">提交</el-button> -->
-      </div>
       <el-pagination
         background
         :current-page="currentPage"
@@ -92,6 +84,8 @@ export default {
   },
   data() {
     return {
+      select: '',
+      input3: '',
       options: [{
         value: '1',
         label: '批量删除'
