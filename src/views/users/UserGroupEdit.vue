@@ -1,5 +1,5 @@
 <template>
-  <BackPlayground :title="title">
+  <IBox :title="title">
     <el-form
       ref="usergroup"
       size="small"
@@ -42,15 +42,15 @@
         <el-button type="primary" @click="submitForm('usergroup')">{{ buttonTitle }}</el-button>
       </el-form-item>
     </el-form>
-  </BackPlayground>
+  </IBox>
 </template>
 
 <script>
-import { BackPlayground } from '@/layout/components'
+import { IBox } from '@/layout/components'
 import { getUserList, editUserGroup, getUserGroup, updateUserGroup } from '@/api/user'
 export default {
   components: {
-    BackPlayground
+    IBox
   },
   data() {
     return {

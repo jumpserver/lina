@@ -1,16 +1,16 @@
 <template>
-  <BackPlayground :title="$t('route.UserList')">
+  <IBox :title="$t('route.UserList')">
     <el-data-table v-bind="tableConfig" />
-  </BackPlayground>
+  </IBox>
 </template>
 
 <script>
-import { BackPlayground } from '@/layout/components'
+import { IBox } from '@/layout/components'
 import { getUserList } from '@/api/user'
 import Tables from '@/layout/mixin/ListTables'
 export default {
   components: {
-    BackPlayground
+    IBox
   },
   mixins: [Tables],
   data() {

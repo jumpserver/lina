@@ -7,14 +7,16 @@
         <navbar />
         <tags-view v-if="needTagsView" />
       </div>
-      <app-main />
+      <WrapperContent>
+        <app-main />
+      </WrapperContent>
       <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, Footer, TagsView } from './components'
+import { Navbar, Sidebar, AppMain, Footer, TagsView, WrapperContent } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -24,7 +26,8 @@ export default {
     Sidebar,
     AppMain,
     Footer,
-    TagsView
+    TagsView,
+    WrapperContent
   },
   mixins: [ResizeMixin],
   computed: {
@@ -38,7 +41,7 @@ export default {
       return this.$store.state.settings.fixedHeader
     },
     needTagsView() {
-      return false
+      // return false
       return this.$store.state.settings.tagsView
     },
     classObj() {
