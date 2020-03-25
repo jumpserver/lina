@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="navbar-header">
       <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-      <breadcrumb class="breadcrumb-container" />
+<!--      <breadcrumb class="breadcrumb-container" />-->
     </div>
     <div class="navbar-right">
       <div class="header-item">
@@ -36,13 +36,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
+// import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
 
 export default {
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     Hamburger,
     AccountDropdown
   },
@@ -74,7 +74,7 @@ export default {
     height: 50px;
     overflow: hidden;
     position: relative;
-    background: #fff;
+    background: #f3f3f4;
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
     .hamburger-container {

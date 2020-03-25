@@ -38,7 +38,7 @@ export default {
       return this.$store.state.settings.fixedHeader
     },
     needTagsView() {
-      // return false
+      return false
       return this.$store.state.settings.tagsView
     },
     classObj() {

@@ -94,7 +94,7 @@ export const constantRoutes = [
       },
       {
         path: 'groups/:id',
-        component: () => import('@/views/users/UserGroupDetail.vue'), // Parent router-view
+        component: () => import('@/views/users/UserGroupDetail/index.vue'), // Parent router-view
         name: 'UserGroupDetail',
         meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' },
         hidden: true

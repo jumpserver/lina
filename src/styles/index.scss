@@ -10,7 +10,7 @@
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
-  //-webkit-font-smoothing: auto;
+  -webkit-font-smoothing: auto;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
@@ -90,4 +90,12 @@ td .el-button.el-button--mini {
 .el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
   background-color: #f5f5f5;
   color: inherit;
+}
+
+.el-tabs__item:hover {
+  color: inherit;
+}
+
+.el-tabs__item.is-active {
+  font-weight: 600;
 }
