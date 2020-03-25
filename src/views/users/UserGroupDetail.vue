@@ -1,21 +1,21 @@
 <template>
   <el-row class="content-main">
-    <el-col :span="16">
+    <el-col :span="24">
       <tab :group="data" />
     </el-col>
-    <el-col :span="8" style="background-color: #f3f3f4;">
-      <card />
-    </el-col>
+<!--    <el-col :span="8" style="background-color: #f3f3f4;">-->
+<!--      <card />-->
+<!--    </el-col>-->
   </el-row>
 </template>
 
 <script>
-import { Card, Tab } from './components'
+import { Tab } from './components'
 import { getUserGroup } from '@/api/user'
 export default {
   components: {
-    Tab,
-    Card
+    Tab
+    // Card
   },
   data() {
     return {

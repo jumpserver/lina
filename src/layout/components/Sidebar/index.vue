@@ -1,6 +1,9 @@
 <template>
   <div :class="{'has-logo':showLogo}">
-    <logo v-if="showLogo" :collapse="isCollapse" />
+    <div class="nav-header">
+      <logo v-if="showLogo" :collapse="isCollapse" />
+      <Organization :is-collapse="isCollapse" />
+    </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -13,7 +16,6 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <Organization :is-collapse="isCollapse" />
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
@@ -39,10 +41,8 @@ export default {
       const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
-        console.log(meta.activeMenu)
         return meta.activeMenu
       }
-      console.log(path)
       return path
     },
     showLogo() {
@@ -57,3 +57,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .nav-header {
+    background-image: url('~@/assets/img/header-profile.png');
+  }
+</style>

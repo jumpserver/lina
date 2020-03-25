@@ -1,16 +1,25 @@
 <template>
   <transition name="sidebarLogoFade">
-    <div v-if="!isCollapse && orglist.length>1" style="display: block; background-color: transparent; padding: 14px 20px 14px 20px">
-      <el-dropdown size="medium">
-        <span class="el-dropdown-link" style="color: rgb(167, 177, 194);">
-          <i class="fa fa-bookmark" style="width: 14px;margin-right: 12px; " />
-          {{ currentorg.name }}<i class="el-icon-arrow-down el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(option) in orglist" :key="option.id" @click.native="changeOrg(option.name, option.id)">{{ option.name }}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+    <el-select
+      class="org-didi"
+      v-if="!isCollapse && userAdminOrgList.length>1"
+      :value="currentOrg.id"
+      filterable
+      placeholder="请选择"
+      @change="changeOrg">
+
+      <template slot="prefix">
+        <i class="fa fa-bookmark"></i>
+      </template>
+
+      <el-option
+        v-for="item in userAdminOrgList"
+        :key="item.id"
+        selected="item.id == currentOrg.id"
+        :label="item.name"
+        :value="item.id">
+      </el-option>
+    </el-select>
   </transition>
 </template>
 
@@ -25,17 +34,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentorg',
-      'orglist'
+      'currentOrg',
+      'userAdminOrgList'
     ])
   },
   methods: {
-    changeOrg(x, y) {
-      console.log(x, y)
-
+    changeOrg(orgId) {
+      console.log('Change to org: ', orgId)
       this.$store.dispatch('user/setCurrentOrg', {
-        name: x,
-        id: y
+        id: orgId
       })
     }
   }
@@ -43,27 +50,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sidebarLogoFade-enter-active {
-  transition: opacity 1.5s;
-}
+  .org-didi {
+    padding: 0 10px 0 18px;
+    transition: opacity 0s;
+  }
 
-.sidebarLogoFade-enter,
-.sidebarLogoFade-leave-to {
-  opacity: 0;
-}
-  .el-dropdown-menu{
-  width: 200px;
+  .org-didi >>> input.el-input__inner {
+    background: none;
+    border: none;
+    color: #8095a8;
   }
-  .el-dropdown-menu >>> .popper__arrow{
-  display: none;
+
+  .org-didi >>> input.el-input__inner::placeholder {
+    opacity: 0.2;
   }
-  .el-dropdown{
-  width: 100%;
+
+  .org-didi >>> .el-input__prefix {
+    line-height: 40px;
+    /*margin: auto 5px;*/
   }
-  .el-icon-arrow-down{
-  position: absolute;
-  top: 50%;
-  right: 0px;
-  margin-top: -7px;
+
+  .sidebarLogoFade-enter,
+  .sidebarLogoFade-leave-to {
+    opacity: 0;
   }
 </style>

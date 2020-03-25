@@ -16,7 +16,6 @@ import i18n from './i18n/i18n'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -43,7 +42,7 @@ import {
   Message,
   MessageBox
 } from 'element-ui'
-import service from '@/utils/request';
+import service from '@/utils/request'
 
 import {
   Button,
@@ -52,7 +51,7 @@ import {
   FormItem,
   Pagination,
   Table,
-  TableColumn,
+  TableColumn
 } from 'element-ui'
 
 Vue.use(Button)

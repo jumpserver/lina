@@ -25,6 +25,7 @@ const cn = {
     'Users': '用户管理',
     'UserList': '用户列表',
     'UserGroupList': '用户组',
+    'UserGroupDetail': '用户组详情',
     'Assets': '资产管理',
     'AssetList': '资产列表',
     'DomainList': '网关列表',
