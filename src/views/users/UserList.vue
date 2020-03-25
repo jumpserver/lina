@@ -2,9 +2,8 @@
   <BackPlayground :title="$t('route.UserList')">
     <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
       <template v-slot:header="{selected}">
-        <!-- <el-tag>slot=header{{ selected.length }}</el-tag> -->
         <el-dropdown>
-          <el-button type="primary" size="small">
+          <el-button type="primary" size="small" :disabled="selected.length>0?false:true">
             更多菜单<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
@@ -22,6 +21,7 @@
 <script>
 import { BackPlayground } from '@/layout/components'
 import Tables from '@/layout/mixin/ListTables'
+
 export default {
   components: {
     BackPlayground
@@ -59,24 +59,19 @@ export default {
             type: 'primary',
             // disabled: row => row.date === '2016-05-04',
             text: this.$t('users.update'),
-            // Bug
-            // https://github.com/FEMessage/el-data-table/blob/7557c0edbcb567de53b90eb440d289dbf8040b00/src/el-data-table.vue#L225
-            atClick(row) {
-              // this.$route.push({ name: 'UserEdit', params: { id: row.id }})
-
+            // 必须使用箭头函数
+            atClick: (row) => {
+              this.$router.push({ name: '404' })
             }
           },
           {
             type: 'warning',
             // disabled: row => row.date === '2016-05-04',
             text: this.$t('users.delete'),
-            // Bug
-            // https://github.com/FEMessage/el-data-table/blob/7557c0edbcb567de53b90eb440d289dbf8040b00/src/el-data-table.vue#L225
-            atClick(row) {
-              // this.$route.push({ name: 'UserEdit', params: { id: row.id }})
+            atClick: (row) => {
+
             }
           }
-
         ],
         columns: [
           { type: 'selection' },
@@ -85,7 +80,7 @@ export default {
           {
             prop: 'name',
             align: 'center',
-            label: () => this.$t('users.name'),
+            label: this.$t('users.name'),
             sortable: true // 可排序
           },
           {
