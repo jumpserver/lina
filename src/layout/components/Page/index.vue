@@ -1,8 +1,7 @@
 <template>
   <div class="page">
-    <PageHeading :title="title"></PageHeading>
-    <div class="wrapper-content">
-    </div>
+    <PageHeading :title="title" />
+    <div class="wrapper-content" />
   </div>
 </template>
 

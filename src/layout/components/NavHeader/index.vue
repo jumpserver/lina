@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="navbar-header">
       <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-<!--      <breadcrumb class="breadcrumb-container" />-->
+      <!--      <breadcrumb class="breadcrumb-container" />-->
     </div>
     <div class="navbar-right">
       <div class="header-item">

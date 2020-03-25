@@ -39,7 +39,7 @@ export default {
     },
     needTagsView() {
       return false
-      return this.$store.state.settings.tagsView
+      // return this.$store.state.settings.tagsView
     },
     classObj() {
       return {

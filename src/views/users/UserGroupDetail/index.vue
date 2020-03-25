@@ -4,7 +4,7 @@
       <div class="title">ins-goc12paf（研发团队测试环境，谁删了我跟他拼命）</div>
     </div>
     <div class="tabs">
-      <el-tabs v-model="activeName" >
+      <el-tabs v-model="activeName">
         <el-tab-pane label="用户管理" name="first">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -12,7 +12,7 @@
               <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
             </div>
             <div v-for="o in 4" :key="o" class="text item">
-              {{'列表内容 ' + o }}
+              {{ '列表内容 ' + o }}
             </div>
           </el-card>
         </el-tab-pane>
