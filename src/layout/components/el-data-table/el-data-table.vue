@@ -290,7 +290,7 @@ import getLocatedSlotKeys from './utils/extract-keys'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
 
-const defaultFirstPage = 1
+const defaultFirstPage = 0
 const noPaginationDataPath = 'payload'
 
 export default {
@@ -826,7 +826,8 @@ export default {
         // 多级表头默认居中
         return 'center'
       } else {
-        return ''
+        // 默认居中 //修改点
+        return 'center'
       }
     },
     routerMode() {
@@ -1243,7 +1244,10 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
+// 自定义样式
+@import url(./index.less);
+
 .el-data-table {
   @color-blue: #2196f3;
   @space-width: 18px;

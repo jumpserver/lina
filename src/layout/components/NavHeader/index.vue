@@ -22,8 +22,8 @@
             {{ $t('common.Language') }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>中文(简体)</el-dropdown-item>
-            <el-dropdown-item>English</el-dropdown-item>
+            <el-dropdown-item @click.native="changeLangToZH">中文(简体)</el-dropdown-item>
+            <el-dropdown-item @click.native="changeLangToEnglish">English</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>

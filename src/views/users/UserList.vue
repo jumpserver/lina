@@ -3,7 +3,7 @@
     <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
       <template v-slot:header="{selected}">
         <el-dropdown>
-          <el-button type="primary" size="small" :disabled="selected.length>0?false:true">
+          <el-button size="small" :disabled="selected.length>0?false:true">
             更多菜单<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
@@ -27,8 +27,6 @@ export default {
   },
   data() {
     return {
-      tableData: [],
-      listLoading: true,
       tableConfig: {
         axiosConfig: {
           raw: 1
@@ -42,7 +40,6 @@ export default {
         persistSelection: true, // 切换页面 已勾选项不会丢失
         hasEdit: false, // 有编辑按钮
         newText: '创建',
-        firstPage: 0, // 初始页页码
         hasDelete: false,
         hasNew: true,
         // editText: this.$t('action.update'), // 编辑按钮文案
@@ -76,32 +73,27 @@ export default {
           // 应该让我插入Slot,使这个用户名可点击
           {
             prop: 'name',
-            align: 'center',
             label: this.$t('users.name'),
             sortable: true // 可排序
           },
           {
             prop: 'username',
-            align: 'center',
             label: this.$t('users.username'),
             sortable: true
           },
           {
             prop: 'role',
-            align: 'center',
             label: this.$t('users.role'),
             sortable: true
           },
           // Bug API没有返回组织名称
           {
             prop: 'group',
-            align: 'center',
             label: this.$t('users.usergroup'),
             sortable: true
           },
           {
             prop: 'source',
-            align: 'center',
             label: this.$t('users.source'),
             sortable: true
           }
@@ -118,21 +110,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// 重制表单样式
-.el-data-table /deep/ .el-pagination{
-  text-align: center !important;
-}
-.el-data-table /deep/ .el-table td{
-  padding: 4px 0;
-}
-.el-data-table /deep/ .el-table th{
-  padding: 4px 0;
-}
-.el-data-table/deep/ .el-form-item{
-  margin-bottom:10px !important ;
-  margin-top:10px;
-}
-.el-data-table/deep/ .el-pagination{
-  padding:15px  0 !important ;
-}
+
 </style>
