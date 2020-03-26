@@ -6,7 +6,7 @@
       </div>
       <Breadcrumb></Breadcrumb>
     </el-col>
-    <el-col :span="4"></el-col>
+    <el-col :span="4" />
   </el-row>
 </template>
 
