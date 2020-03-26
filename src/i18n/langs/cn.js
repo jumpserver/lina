@@ -21,7 +21,11 @@ const cn = {
     'username': '用户名',
     'Language': '语言',
     'Help': '帮助',
-    'more': '更多'
+    'more': '更多',
+    'Update': '更新',
+    'update': '更新',
+    'Delete': '删除',
+    'delete': '删除',
   },
   route: {
     'dashboard': '仪表盘',

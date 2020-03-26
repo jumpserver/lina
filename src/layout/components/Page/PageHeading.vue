@@ -6,15 +6,7 @@
       </el-col>
       <el-col :span="8" class="page-heading-right">
         <div class="page-heading-right-actions">
-          <el-button size="small" icon="el-icon-edit">{{ $t('action.update') }}</el-button>
-          <el-dropdown>
-            <el-button size="small">
-              <i class="el-icon-more"></i><i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-delete">{{ $t('action.delete') }} </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <ActionsGroup size="small" :actions="actions" :more-actions="moreActions"></ActionsGroup>
         </div>
       </el-col>
     </el-row>
@@ -24,15 +16,40 @@
 
 <script>
 import Breadcrumb from '@/components/Breadcrumb'
+import ActionsGroup from '@/components/ActionsGroup'
 export default {
   name: 'PageHeading',
   components: {
-    Breadcrumb
+    Breadcrumb,
+    ActionsGroup
   },
   props: {
     title: {
       type: String,
       default: () => ''
+    }
+  },
+  data() {
+    return {
+      actions: [
+        {
+          name: 'update',
+          icon: 'el-icon-edit-outline',
+          title: this.$tc('Update')
+        },
+        {
+          name: 'delete',
+          icon: 'el-icon-delete',
+          title: this.$tc('Delete')
+        }
+      ],
+      moreActions: [
+        // {
+        //   name: 'delete',
+        //   icon: 'el-icon-delete',
+        //   title: this.$tc('Delete')
+        // }
+      ]
     }
   }
 }
@@ -57,5 +74,9 @@ export default {
 
   .page-heading-right-actions {
     float: right;
+  }
+
+  .btn-more-actions {
+    border-left: rgb(220, 223, 230) solid 1px;
   }
 </style>
