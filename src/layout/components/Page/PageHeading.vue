@@ -6,7 +6,7 @@
       </el-col>
       <el-col :span="8" class="page-heading-right">
         <div class="page-heading-right-actions">
-          <ActionsGroup size="small" :actions="actions" :more-actions="moreActions"></ActionsGroup>
+          <slot name="actions"></slot>
         </div>
       </el-col>
     </el-row>
@@ -16,40 +16,15 @@
 
 <script>
 import Breadcrumb from '@/components/Breadcrumb'
-import ActionsGroup from '@/components/ActionsGroup'
 export default {
   name: 'PageHeading',
   components: {
     Breadcrumb,
-    ActionsGroup
   },
   props: {
     title: {
       type: String,
       default: () => ''
-    }
-  },
-  data() {
-    return {
-      actions: [
-        {
-          name: 'update',
-          icon: 'el-icon-edit-outline',
-          title: this.$tc('Update')
-        },
-        {
-          name: 'delete',
-          icon: 'el-icon-delete',
-          title: this.$tc('Delete')
-        }
-      ],
-      moreActions: [
-        // {
-        //   name: 'delete',
-        //   icon: 'el-icon-delete',
-        //   title: this.$tc('Delete')
-        // }
-      ]
     }
   }
 }
@@ -58,7 +33,7 @@ export default {
 <style scoped>
   .page-heading {
     border-top: 0;
-    padding: 10px 30px 20px 25px;
+    padding: 20px 30px 20px 25px;
     background-color: #ffffff;
     min-height: 1px;
   }
@@ -67,7 +42,6 @@ export default {
     font-size: 24px;
     font-weight: 100;
     line-height: 26px;
-    margin-top: 10px;
     margin-bottom: 12px;
     max-height: 32px;
   }

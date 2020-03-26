@@ -1,21 +1,25 @@
 <template>
-  <el-button-group>
-    <el-button v-for="item in actions" :key="item.name" :size="size" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }}</el-button>
+  <div :class="grouped ? 'el-button-group' : ''">
+    <el-button v-for="item in actions" :key="item.name" :type="item.type" :size="size" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }}</el-button>
     <el-dropdown v-if="moreActions.length > 0">
-      <el-button size="small" class="btn-more-actions">
+      <el-button :size="size" class="btn-more-actions">
         更多操作<i class="el-icon-arrow-down el-icon--right"></i>
       </el-button>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item v-for="item in moreActions" :key="item.name" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-  </el-button-group>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'ActionsGroup',
   props: {
+    grouped: {
+      type: Boolean,
+      default: true
+    },
     size: {
       type: String,
       default: 'small'
@@ -35,7 +39,7 @@ export default {
   },
   methods: {
     handleClick(item) {
-      console.log(item)
+      this.$emit('clickAction', item)
     }
   }
 
