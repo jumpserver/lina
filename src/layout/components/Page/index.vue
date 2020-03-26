@@ -1,22 +1,33 @@
 <template>
   <div class="page">
-    <PageHeading :title="title"></PageHeading>
-    <div class="wrapper-content">
-    </div>
+    <PageHeading>
+      <slot name="title">{{ pageTitle }}</slot>
+    </PageHeading>
+    <PageContent>
+      <slot name="content"></slot>
+    </PageContent>
   </div>
 </template>
 
 <script>
 import PageHeading from './PageHeading'
+import PageContent from './PageContent'
 export default {
   name: 'Page',
   components: {
-    PageHeading
+    PageHeading,
+    PageContent
   },
   props: {
     title: {
       type: String,
-      default: () => 'Page title'
+      default: () => null
+    }
+  },
+  computed: {
+    pageTitle() {
+      // return ''
+      return this.title || this.$t('route.' + this.$route.meta.title)
     }
   }
 }
