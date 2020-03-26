@@ -20,7 +20,8 @@ const cn = {
     'role': '角色',
     'username': '用户名',
     'Language': '语言',
-    'Help': '帮助'
+    'Help': '帮助',
+    'more': '更多'
   },
   route: {
     'dashboard': '仪表盘',

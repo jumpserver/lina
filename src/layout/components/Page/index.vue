@@ -27,7 +27,7 @@ export default {
   computed: {
     pageTitle() {
       // return ''
-      return this.title || this.$t('route.' + this.$route.meta.title)
+      return this.title || this.$tr(this.$route.meta.title)
     }
   }
 }
