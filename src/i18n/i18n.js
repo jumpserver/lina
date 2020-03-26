@@ -11,4 +11,8 @@ const i18n = new VueI18n({
 })
 locale.i18n((key, value) => i18n.t(key, value)) // 重点: 为了实现element插件的多语言切换
 
+Vue.prototype.$ti = (key) => {
+  i18n.t(key.toLowerCase)
+}
+
 export default i18n

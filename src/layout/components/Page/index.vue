@@ -4,7 +4,7 @@
       <slot name="title">{{ pageTitle }}</slot>
     </PageHeading>
     <PageContent>
-      <slot name="content"></slot>
+      <slot name="content" />
     </PageContent>
   </div>
 </template>

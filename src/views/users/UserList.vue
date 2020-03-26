@@ -1,20 +1,6 @@
 <template>
   <IBox :title="$t('route.UserList')">
-    <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
-      <template v-slot:header="{selected}">
-        <el-dropdown>
-          <el-button size="small" :disabled="selected.length>0?false:true">
-            更多菜单<i class="el-icon-arrow-down el-icon--right" />
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>批量删除</el-dropdown-item>
-            <el-dropdown-item>批量更新</el-dropdown-item>
-            <el-dropdown-item>禁用所选</el-dropdown-item>
-            <el-dropdown-item>激活所选</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
-    </el-data-table>
+    <el-data-table v-bind="tableConfig" :on-new="onNew" style="margin:0 12px 12px 12px;" />
   </IBox>
 </template>
 
@@ -41,6 +27,8 @@ export default {
         hasEdit: false, // 有编辑按钮
         newText: '创建',
         hasDelete: false,
+        hasAction: true, // 是否有更多操作
+        hasUpload: false,
         hasNew: true,
         // editText: this.$t('action.update'), // 编辑按钮文案
         tableAttrs: {
@@ -67,6 +55,15 @@ export default {
             }
           }
         ],
+        searchForm: [
+          {
+            type: 'input',
+            id: 'search', // 发起请求附带的查询参数
+            width: '200px',
+            el: { placeholder: '搜索', clearable: true, size: 'small' },
+            rules: [{ required: false, trigger: 'blur', max: 12 }]
+          }
+        ],
         columns: [
           { type: 'selection' },
           // Bug
@@ -74,7 +71,8 @@ export default {
           {
             prop: 'name',
             label: this.$t('users.name'),
-            sortable: true // 可排序
+            sortable: true, // 可排序
+            url: 'UserDetail' // 第一个函数指定 路由Template
           },
           {
             prop: 'username',
@@ -104,7 +102,9 @@ export default {
   created() {
   },
   methods: {
-
+    onNew: () => {
+      alert('创建')
+    }
   }
 }
 </script>

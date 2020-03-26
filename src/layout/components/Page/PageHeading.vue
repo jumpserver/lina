@@ -4,7 +4,7 @@
       <div class="page-heading-left-title">
         <slot><h2>{{ title }}</h2></slot>
       </div>
-      <Breadcrumb></Breadcrumb>
+      <Breadcrumb />
     </el-col>
     <el-col :span="4" />
   </el-row>
