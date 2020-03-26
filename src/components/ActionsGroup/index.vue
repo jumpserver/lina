@@ -3,7 +3,7 @@
     <el-button v-for="item in actions" :key="item.name" :type="item.type" :size="size" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }}</el-button>
     <el-dropdown v-if="moreActions.length > 0">
       <el-button :size="size" class="btn-more-actions">
-        更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+        更多操作<i class="el-icon-arrow-down el-icon--right" />
       </el-button>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item v-for="item in moreActions" :key="item.name" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>

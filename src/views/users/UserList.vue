@@ -1,29 +1,32 @@
 <template>
-  <IBox :title="$t('route.UserList')">
-    <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
-      <template v-slot:header="{selected}">
-        <el-dropdown>
-          <el-button type="primary" size="small" :disabled="selected.length>0?false:true">
-            更多菜单<i class="el-icon-arrow-down el-icon--right" />
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>批量删除</el-dropdown-item>
-            <el-dropdown-item>批量更新</el-dropdown-item>
-            <el-dropdown-item>禁用所选</el-dropdown-item>
-            <el-dropdown-item>激活所选</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </template>
-    </el-data-table>
-  </IBox>
+  <Page>
+    <IBox slot="content" :title="$t('route.UserList')">
+      <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
+        <template v-slot:header="{selected}">
+          <el-dropdown>
+            <el-button type="primary" size="small" :disabled="selected.length>0?false:true">
+              更多菜单<i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>批量删除</el-dropdown-item>
+              <el-dropdown-item>批量更新</el-dropdown-item>
+              <el-dropdown-item>禁用所选</el-dropdown-item>
+              <el-dropdown-item>激活所选</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+      </el-data-table>
+    </IBox>
+  </Page>
 </template>
 
 <script>
-import { IBox } from '@/layout/components'
+import { IBox, Page } from '@/layout/components'
 
 export default {
   components: {
-    IBox
+    IBox,
+    Page
   },
   data() {
     return {

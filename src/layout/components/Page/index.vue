@@ -2,9 +2,12 @@
   <div class="page">
     <PageHeading>
       <slot name="title">{{ pageTitle }}</slot>
+      <span slot="actions">
+        <slot name="actions" />
+      </span>
     </PageHeading>
     <PageContent>
-      <slot name="content"></slot>
+      <slot name="content" />
     </PageContent>
   </div>
 </template>
@@ -22,6 +25,17 @@ export default {
     title: {
       type: String,
       default: () => null
+    }
+  },
+  data() {
+    return {
+      actions: [
+        {
+          name: 'update',
+          title: 'Update',
+          icon: 'el-icon-edit'
+        }
+      ]
     }
   },
   computed: {

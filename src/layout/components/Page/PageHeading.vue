@@ -6,11 +6,11 @@
       </el-col>
       <el-col :span="8" class="page-heading-right">
         <div class="page-heading-right-actions">
-          <slot name="actions"></slot>
+          <slot name="actions" />
         </div>
       </el-col>
     </el-row>
-    <Breadcrumb></Breadcrumb>
+    <Breadcrumb />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 export default {
   name: 'PageHeading',
   components: {
-    Breadcrumb,
+    Breadcrumb
   },
   props: {
     title: {

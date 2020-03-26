@@ -25,7 +25,7 @@ const cn = {
     'Update': '更新',
     'update': '更新',
     'Delete': '删除',
-    'delete': '删除',
+    'delete': '删除'
   },
   route: {
     'dashboard': '仪表盘',
