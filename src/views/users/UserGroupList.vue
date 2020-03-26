@@ -1,75 +1,77 @@
 <template>
-  <Page :title="'hello'">
-    <IBox :title="$t('users.usergrouplist')">
-      <ListTables
-        :tablebutton="$t('users.createusergroup')"
-        tableroute="UserGroupEdit"
-        @SizeChange="handleSizeChange"
-        @CurrentChange="handleCurrentChange"
-      >
-        <el-table
-          v-loading="listLoading"
-          :data="tableData"
-          stripe
-          border
-          class="userTable"
+  <Page>
+    <template slot="content">
+      <IBox :title="$t('users.usergrouplist')">
+        <ListTables
+          :tablebutton="$t('users.createusergroup')"
+          tableroute="UserGroupEdit"
+          @SizeChange="handleSizeChange"
+          @CurrentChange="handleCurrentChange"
         >
-          <el-table-column
-            type="selection"
-            width="55"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column
-            :label="this.$t('usergroup.name')"
-            sortable
-            align="center"
-            header-align="center"
+          <el-table
+            v-loading="listLoading"
+            :data="tableData"
+            stripe
+            border
+            class="userTable"
           >
-            <template slot-scope="scope">
-              <el-button type="text" size="small" style="font-size:14px" @click="handleDetail(scope.$index, scope.row)">{{ scope.row.name }}</el-button>
-            </template>
-          </el-table-column>
-          <el-table-column
-            :label="this.$t('usergroup.user')"
-            align="center"
-            header-align="center"
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.users_amount }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            :label="this.$t('usergroup.comment')"
-            align="center"
-            sortable
-            header-align="center"
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.comment }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            :label="this.$t('usergroup.action')"
-            align="center"
-            header-align="center"
-          >
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="primary"
-                @click="handleEdit(scope.$index, scope.row)"
-              >{{ $t('usergroup.update') }}</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
-              >{{ $t('usergroup.delete') }}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </ListTables>
-    </IBox>
+            <el-table-column
+              type="selection"
+              width="55"
+              align="center"
+              header-align="center"
+            />
+            <el-table-column
+              :label="this.$t('usergroup.name')"
+              sortable
+              align="center"
+              header-align="center"
+            >
+              <template slot-scope="scope">
+                <el-button type="text" size="small" style="font-size:14px" @click="handleDetail(scope.$index, scope.row)">{{ scope.row.name }}</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column
+              :label="this.$t('usergroup.user')"
+              align="center"
+              header-align="center"
+            >
+              <template slot-scope="scope">
+                <span>{{ scope.row.users_amount }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              :label="this.$t('usergroup.comment')"
+              align="center"
+              sortable
+              header-align="center"
+            >
+              <template slot-scope="scope">
+                <span>{{ scope.row.comment }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              :label="this.$t('usergroup.action')"
+              align="center"
+              header-align="center"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="handleEdit(scope.$index, scope.row)"
+                >{{ $t('usergroup.update') }}</el-button>
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+                >{{ $t('usergroup.delete') }}</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </ListTables>
+      </IBox>
+    </template>
   </Page>
 </template>
 

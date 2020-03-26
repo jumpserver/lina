@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 .hamburger {
- padding: 7px 10px;
+ padding: 7px 12px;
 }
 
 .hamburger.is-active {
