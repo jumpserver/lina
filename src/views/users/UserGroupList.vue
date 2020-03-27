@@ -1,13 +1,10 @@
 <template>
   <Page>
     <template slot="content">
-      <el-alert
-        title="成功提示的文案"
-        type="success"
-      />
-      <IBox>
+      <el-alert type="success"> 这里是一个成功的文案 </el-alert>
+      <el-card>
         <tables v-bind="tableConfig" />
-      </IBox>
+      </el-card>
     </template>
   </Page>
 </template>
@@ -20,7 +17,6 @@ export default {
   components: {
     Page,
     Tables,
-    IBox
   },
   data() {
     return {

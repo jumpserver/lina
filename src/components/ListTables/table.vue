@@ -12,22 +12,21 @@
         v-loading="loading"
         :data="tabledata"
         stripe
-        border
       >
         <el-table-column
           v-if="hasSelect"
           type="selection"
-          align="center"
+          :align="align"
           width="42px"
-          header-align="center"
+          :header-align="align"
         />
         <el-table-column
           v-for="col of columns"
           :key="col.props"
-          align="center"
+          :align="align"
           :label="col.label"
           :sortable="col.sortable"
-          header-align="center"
+          :header-align="align"
         >
           <template slot-scope="scope">
             <el-button v-if="col.link" type="text" size="small" style="font-size:14px" @click="$router.push({name: col.link, params: { id: scope.row.id }})">{{ scope.row[col.key] }}</el-button>
@@ -38,19 +37,19 @@
         <el-table-column
           v-if="action !== []"
           :label="this.$t('usergroup.action')"
-          align="center"
+          :align="align"
           width="140px"
-          header-align="center"
+          :header-align="align"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
-              type="primary"
+              type="text"
               @click="handleEdit(scope.$index, scope.row)"
             >{{ $t('usergroup.update') }}</el-button>
             <el-button
               size="mini"
-              type="danger"
+              type="text"
               @click="handleDelete(scope.$index, scope.row)"
             >{{ $t('usergroup.delete') }}</el-button>
           </template>
@@ -86,6 +85,10 @@ export default {
     getData: {
       type: Function,
       default: () => []
+    },
+    align: {
+      type: String,
+      default: 'left',
     },
     hasSelect: {
       type: Boolean,
