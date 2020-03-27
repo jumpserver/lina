@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { IBox, Page, Tables } from '@/layout/components'
+import { IBox, Page } from '@/layout/components'
+import Tables from '@/components/ListTables/table'
 import { getUserGroupList } from '@/api/user'
 export default {
   components: {
@@ -27,7 +28,8 @@ export default {
             prop: 'name',
             label: this.$t('usergroup.name'),
             key: 'name',
-            nextroute: 'UserDetail'
+            link: 'UserDetail',
+            sortable: true
           },
           {
             prop: 'user',
@@ -39,7 +41,12 @@ export default {
             label: this.$t('usergroup.comment'),
             key: 'comment'
           }
-        ]
+        ],
+        // 写路由名字，table组件会自动传作为参数
+        action: {
+          hasEdit: 'UserGroupEdit',
+          newClick: 'UserGroupEdit'
+        }
       }
     }
   }
