@@ -82,6 +82,8 @@ export default {
   }
 
   &.collapse {
+    height: 50px;
+    line-height: 50px;
     .sidebar-logo {
       margin-right: 0px;
     }

@@ -1,36 +1,73 @@
 <template>
-  <div class="detail">
-    <div class="header">
-      <div class="title">ins-goc12paf（研发团队测试环境，谁删了我跟他拼命）</div>
+  <SubMenuPage :submenu="submenu" :active-menu="activeSubMenu">
+    <span slot="title">{{ $t('users.userGroup') }}: {{ group.name }}</span>
+    <ActionsGroup slot="headingRightSide" :actions="pageActions"></ActionsGroup>
+
+    <div slot="info">
+      <el-row :gutter="20">
+        <el-col :span="10">
+          <DetailCard :title="cardTitle" :items="cardItems"></DetailCard>
+        </el-col>
+      </el-row>
     </div>
-    <div class="tabs">
-      <el-tabs v-model="activeName">
-        <el-tab-pane label="用户管理" name="first">
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>卡片名称</span>
-              <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
-            </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              {{ '列表内容 ' + o }}
-            </div>
-          </el-card>
-        </el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
-      </el-tabs>
-    </div>
-  </div>
+  </SubMenuPage>
 </template>
 
 <script>
 import { getUserGroup } from '@/api/user'
+import { SubMenuPage } from '@/layout/components'
+import ActionsGroup from '@/components/ActionsGroup'
+import DetailCard from '@/components/DetailCard'
 
 export default {
+  components: {
+    SubMenuPage,
+    ActionsGroup,
+    DetailCard
+  },
   data() {
     return {
-      activeName: 'first'
+      activeSubMenu: 'info',
+      group: { name: '' },
+      pageActions: [
+        {
+          name: 'Update',
+          title: this.$tc('Update')
+        }
+      ],
+      submenu: [
+        {
+          title: this.$tc('baseInfo'),
+          name: 'info'
+        },
+        {
+          title: this.$t('users.Group members'),
+          name: 'members'
+        },
+        {
+          title: this.$t('perms.Asset permissions'),
+          name: 'assetPermissions'
+        }
+      ],
+      cardTitle: '基本信息',
+      cardItems: [
+        {
+          key: '名称',
+          value: '我是中国人的美好一天是从什么时候开始的'
+        },
+        {
+          key: '创建者',
+          value: '广宏伟'
+        },
+        {
+          key: '创建日期',
+          value: '2019年10月17日 15:54'
+        },
+        {
+          key: '备注',
+          value: '这个是滴滴'
+        }
+      ]
     }
   },
   mounted() {
@@ -39,7 +76,7 @@ export default {
   methods: {
     getGroupDetail() {
       getUserGroup(this.$route.params.id).then(response => {
-        this.data = response
+        this.group = response
       })
     }
   }
@@ -47,29 +84,5 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .detail {
-    /*background-color: white;*/
-    margin-right: -20px;
-    margin-left: -20px;
-    margin-top: -8px;
-  }
 
-  .tabs >>> .el-tabs__header {
-    padding: 0 0 0 20px;
-    background-color: white;
-  }
-
-  .header {
-    padding: 10px 20px;
-    background-color: white;
-  }
-
-  .tabs > > > .el-tabs__nav div.el-tabs__item {
-    /*margin-left: 10px;*/
-  }
-
-  .tabs > > > .el-tab-pane {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
 </style>

@@ -1,15 +1,18 @@
 <template>
-  <IBox :title="$t('route.UserList')">
-    <el-data-table v-bind="tableConfig" :on-new="onNew" style="margin:0 12px 12px 12px;" />
-  </IBox>
+  <Page>
+    <IBox :title="$t('route.UserList')">
+      <el-data-table v-bind="tableConfig" :on-new="onNew" style="margin:0 12px 12px 12px;" />
+    </IBox>
+  </Page>
 </template>
 
 <script>
-import { IBox } from '@/layout/components'
+import { IBox, Page } from '@/layout/components'
 
 export default {
   components: {
-    IBox
+    IBox,
+    Page
   },
   data() {
     return {

@@ -1,7 +1,11 @@
 <template>
   <Page>
     <template slot="content">
-      <IBox :title="$t('users.usergrouplist')">
+      <el-alert
+        title="成功提示的文案"
+        type="success"
+      />
+      <IBox>
         <tables v-bind="tableConfig" />
       </IBox>
     </template>
@@ -14,9 +18,9 @@ import Tables from '@/components/ListTables/table'
 import { getUserGroupList } from '@/api/user'
 export default {
   components: {
-    IBox,
     Page,
-    Tables
+    Tables,
+    IBox
   },
   data() {
     return {
