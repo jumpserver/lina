@@ -1,30 +1,32 @@
 <template>
-  <div class="page-heading">
-    <el-row :gutter="0" class="page-heading-top">
-      <el-col :span="16" class="page-heading-left">
-        <slot><h2>{{ title }}</h2></slot>
-      </el-col>
-      <el-col :span="8" class="page-heading-right">
-        <div class="page-heading-right-actions">
-          <slot name="actions" />
-        </div>
-      </el-col>
-    </el-row>
-    <Breadcrumb />
+  <div class="page-heading-a">
+    <div class="page-heading">
+      <el-row :gutter="0" class="page-heading-top">
+        <el-col :span="16" class="page-heading-left">
+          <slot><h2>{{ title }}</h2></slot>
+        </el-col>
+        <el-col :span="8" class="page-heading-right">
+          <div class="page-heading-right-actions">
+            <slot name="actions" />
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+<!--    <Breadcrumb />-->
   </div>
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
+// import Breadcrumb from '@/components/Breadcrumb'
 export default {
   name: 'PageHeading',
   components: {
-    Breadcrumb
+    // Breadcrumb
   },
   props: {
     title: {
       type: String,
-      default: () => ''
+      default: ''
     }
   }
 }
@@ -33,16 +35,17 @@ export default {
 <style scoped>
   .page-heading {
     border-top: 0;
-    padding: 20px 30px 20px 25px;
+    padding: 15px 30px 15px 25px;
     background-color: #ffffff;
     min-height: 1px;
   }
 
   .page-heading-left, h2 {
-    font-size: 24px;
-    font-weight: 100;
-    line-height: 26px;
-    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.5;
+    /*margin-bottom: 12px;*/
+    height: 30px;
     max-height: 32px;
   }
 

@@ -1,19 +1,16 @@
 <template>
   <Page>
     <template slot="content">
-      <IBox :title="$t('users.usergrouplist')">
-        <tables v-bind="tableConfig" />
-      </IBox>
+      <tables v-bind="tableConfig" />
     </template>
   </Page>
 </template>
 
 <script>
-import { IBox, Page, Tables } from '@/layout/components'
+import { Page, Tables } from '@/layout/components'
 import { getUserGroupList } from '@/api/user'
 export default {
   components: {
-    IBox,
     Page,
     Tables
   },
@@ -27,7 +24,7 @@ export default {
             prop: 'name',
             label: this.$t('usergroup.name'),
             key: 'name',
-            nextroute: 'UserDetail'
+            nextroute: 'UserGroupDetail'
           },
           {
             prop: 'user',

@@ -19,12 +19,20 @@ export default {
   name: 'Page',
   components: {
     PageHeading,
-    PageContent
+    PageContent,
   },
   props: {
     title: {
       type: String,
       default: () => null
+    },
+    submenu: {
+      type: Array,
+      default: () => []
+    },
+    activeName: {
+      type: String,
+      default: () => ''
     }
   },
   data() {

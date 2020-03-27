@@ -2,7 +2,8 @@
   <div class="header-tools header-profile">
     <el-dropdown>
       <span class="el-dropdown-link">
-        <img src="@/assets/img/admin.png" class="header-avatar"> {{ currentUser.name }}
+         <el-avatar :src="avatarUrl" class="header-avatar"></el-avatar>
+        {{ currentUser.name }}
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
@@ -19,6 +20,11 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'AccountDropdown',
+  data() {
+    return {
+      avatarUrl: require('@/assets/img/admin.png')
+    }
+  },
   computed: {
     ...mapGetters([
       'currentUser'
@@ -31,7 +37,6 @@ export default {
   .header-avatar {
     height: 30px;
     width: 30px;
-    border-radius: 50%;
     margin-right: 5px;
     vertical-align: middle;
   }

@@ -99,3 +99,23 @@ td .el-button.el-button--mini {
   border-bottom-left-radius: 0;
   border-left-color: rgb(220, 223, 230);
 }
+
+.el-alert--success.is-light {
+  border: #bce8f1 solid 1px;
+}
+
+.el-alert--info.is-light {
+  border: #bce8f1 solid 1px;
+}
+
+.el-alert--warning.is-light {
+  border: #faebcc solid 1px;
+}
+
+.el-alert--error.is-light {
+  border: #f1dfe2 solid 1px;
+}
+
+.el-alert__content {
+  line-height: 1.5;
+}

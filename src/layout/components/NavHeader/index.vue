@@ -35,7 +35,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
 
@@ -77,7 +76,7 @@ export default {
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
     .hamburger-container {
-      line-height: 50px;
+      line-height: 46px;
       height: 100%;
       float: left;
       cursor: pointer;

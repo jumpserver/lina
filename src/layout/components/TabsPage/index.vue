@@ -21,23 +21,15 @@ export default {
 
 <style scoped>
   .tabs-content {
-    /*background-color: white;*/
     margin-top: -30px;
   }
 
-  .tabs-content>>> .el-tabs__header {
+  .tabs-content >>> .el-tabs__header {
     background-color: white;
+    border-bottom: #e5e7ed solid 1px;
     margin-left: -25px;
+    padding-left: 25px;
     margin-right: -25px;
-    padding: 0 0 0 25px;
-  }
-
-  .header {
-    padding: 10px 20px;
-    background-color: white;
-  }
-
-  .tabs-content >>> .el-tabs__nav div.el-tabs__item {
-    /*margin-left: 10px;*/
+    padding-right: 25px;
   }
 </style>
