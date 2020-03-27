@@ -25,7 +25,10 @@ const cn = {
     'Update': '更新',
     'update': '更新',
     'Delete': '删除',
-    'delete': '删除'
+    'delete': '删除',
+    'Detail': '详情',
+    'detail': '详情',
+    'baseInfo': '基本信息'
   },
   route: {
     'dashboard': '仪表盘',
@@ -50,12 +53,13 @@ const cn = {
   users: {
     'createUser': '创建用户',
     'updateUser': '更新用户',
-    'user_detail': '用户详情',
+    'userDetail': '用户详情',
     'name': '姓名',
     'username': '用户名',
     'email': '邮箱',
-    'usergroup': '用户组',
+    'userGroup': '用户组',
     'role': '角色',
+    'Group members': '组下成员',
     'MFAcertification': 'MFA 认证',
     'source': '来源',
     'validity': '有效',
@@ -253,6 +257,7 @@ const cn = {
     'asset_permission_detail': '资产授权详情',
     'create_asset_permission': '创建资产授权规则',
     'update_asset_permission': '更新资产授权规则',
+    'Asset permissions': '资产授权',
     'name': '名称',
     'user': '用户',
     'user_group': '用户组',

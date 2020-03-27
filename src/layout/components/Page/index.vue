@@ -15,16 +15,26 @@
 <script>
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
+// import PageSubMenu from './PageSubMenu'
 export default {
   name: 'Page',
   components: {
     PageHeading,
     PageContent
+    // PageSubMenu,
   },
   props: {
     title: {
       type: String,
       default: ''
+    },
+    submenu: {
+      type: Array,
+      default: () => []
+    },
+    activeMenu: {
+      type: String,
+      default: () => ''
     }
   },
   computed: {
