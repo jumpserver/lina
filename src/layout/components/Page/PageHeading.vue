@@ -1,28 +1,22 @@
 <template>
-  <div class="page-heading-a">
-    <div class="page-heading">
-      <el-row :gutter="0" class="page-heading-top">
-        <el-col :span="16" class="page-heading-left">
-          <slot><h2>{{ title }}</h2></slot>
-        </el-col>
-        <el-col :span="8" class="page-heading-right">
-          <div class="page-heading-right-actions">
-            <slot name="actions" />
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-<!--    <Breadcrumb />-->
+  <div class="page-heading">
+    <el-row :gutter="0">
+      <el-col :span="16" class="page-heading-left">
+        <slot><h2>{{ title }}</h2></slot>
+      </el-col>
+      <el-col :span="8">
+        <div class="page-heading-right">
+          <slot name="rightSide" />
+        </div>
+      </el-col>
+    </el-row>
   </div>
+<!--    <Breadcrumb />-->
 </template>
 
 <script>
-// import Breadcrumb from '@/components/Breadcrumb'
 export default {
   name: 'PageHeading',
-  components: {
-    // Breadcrumb
-  },
   props: {
     title: {
       type: String,
@@ -49,11 +43,7 @@ export default {
     max-height: 32px;
   }
 
-  .page-heading-right-actions {
+  .page-heading-right {
     float: right;
-  }
-
-  .btn-more-actions {
-    border-left: rgb(220, 223, 230) solid 1px;
   }
 </style>

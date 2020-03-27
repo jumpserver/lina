@@ -2,8 +2,8 @@
   <div class="page">
     <PageHeading>
       <slot name="title">{{ pageTitle }}</slot>
-      <span slot="actions">
-        <slot name="actions" />
+      <span slot="rightSide">
+        <slot name="headingRightSide" />
       </span>
     </PageHeading>
     <PageContent>
@@ -19,31 +19,12 @@ export default {
   name: 'Page',
   components: {
     PageHeading,
-    PageContent,
+    PageContent
   },
   props: {
     title: {
       type: String,
-      default: () => null
-    },
-    submenu: {
-      type: Array,
-      default: () => []
-    },
-    activeName: {
-      type: String,
-      default: () => ''
-    }
-  },
-  data() {
-    return {
-      actions: [
-        {
-          name: 'update',
-          title: 'Update',
-          icon: 'el-icon-edit'
-        }
-      ]
+      default: ''
     }
   },
   computed: {

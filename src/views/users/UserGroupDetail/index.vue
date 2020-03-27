@@ -1,12 +1,13 @@
 <template>
   <TabsPage>
     <span slot="title">{{ group.name }}</span>
+    <ActionsGroup slot="headingRightSide" :actions="pageActions"></ActionsGroup>
+
     <el-tabs slot="content" class="page-heading-submenu">
       <el-tab-pane label="用户管理" name="first">
         <el-alert
           title="成功提示的文案"
-          type="success"
-          style="margin-bottom: 15px">
+          type="success">
         </el-alert>
         <el-card class="box-card">
           <div v-for="o in 4" :key="o" class="text item">
@@ -30,28 +31,21 @@
 <script>
 import { getUserGroup } from '@/api/user'
 import { TabsPage } from '@/layout/components'
-// import { ActionsGroup } from '@/'
+import ActionsGroup from '@/components/ActionsGroup'
 
 export default {
   components: {
-    TabsPage
+    TabsPage,
+    ActionsGroup
   },
   data() {
     return {
       activeName: 'detail',
       group: { name: '' },
-      submenu: [
+      pageActions: [
         {
-          name: 'detail',
-          title: '详情'
-        },
-        {
-          name: 'online',
-          title: '在线会话'
-        },
-        {
-          name: 'offline',
-          title: '离线会话'
+          name: 'Update',
+          title: this.$tc('Update')
         }
       ]
     }

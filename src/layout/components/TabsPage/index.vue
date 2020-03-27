@@ -3,6 +3,9 @@
     <span slot="title">
       <slot name="title" />
     </span>
+    <span slot="headingRightSide">
+      <slot name="headingRightSide" />
+    </span>
     <div slot="content" class="tabs-content">
       <slot name="content" />
     </div>

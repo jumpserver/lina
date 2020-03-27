@@ -1,6 +1,10 @@
 <template>
   <Page>
     <template slot="content">
+      <el-alert
+        title="成功提示的文案"
+        type="success">
+      </el-alert>
       <tables v-bind="tableConfig" />
     </template>
   </Page>

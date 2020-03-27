@@ -15,6 +15,10 @@ export default {
     padding: 20px 25px 40px;
   }
 
+  .wrapper-content >>> .el-alert {
+    margin-bottom: 15px;
+  }
+
   .page-alert >>> .el-alert {
     margin-bottom: 20px;
   }
