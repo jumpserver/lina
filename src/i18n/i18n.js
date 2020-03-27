@@ -27,4 +27,8 @@ Vue.prototype.$tic = (key) => {
   return i18n.t(key.toLowerCase())
 }
 
+Vue.prototype.$ti = (key) => {
+  i18n.t(key.toLowerCase)
+}
+
 export default i18n

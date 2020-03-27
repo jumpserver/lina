@@ -36,8 +36,8 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-import ElDataTable from '@/layout/components/el-data-table/el-data-table.vue'
-import ElFormRenderer from '@/layout/components/el-form-renderer/el-form-renderer.vue'
+import ElDataTable from '@/components/el-data-table/el-data-table.vue'
+import ElFormRenderer from '@/components/el-form-renderer/el-form-renderer.vue'
 import {
   Message,
   MessageBox

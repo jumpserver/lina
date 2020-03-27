@@ -9,7 +9,7 @@
       <!-- @submit.native.prevent -->
       <!-- 阻止表单提交的默认行为 -->
       <!-- https://www.w3.org/MarkUp/html-spec/html-spec_8.html#SEC8.2 -->
-      <el-form-renderer
+      <!-- <el-form-renderer
         v-if="hasSearchForm"
         ref="searchForm"
         :content="_searchForm"
@@ -21,11 +21,11 @@
           :slot="slot.replace('search:', 'id:')"
           :name="slot"
         />
-        <!--@slot 额外的搜索内容, 当searchForm不满足需求时可以使用-->
-        <slot name="search" />
+        @slot 额外的搜索内容, 当searchForm不满足需求时可以使用-->
+      <!-- <slot name="search" />
         <el-form-item>
-          <!--https://github.com/ElemeFE/element/pull/5920-->
-          <el-button
+          https://github.com/ElemeFE/element/pull/5920-->
+      <!-- <el-button
             native-type="submit"
             type="primary"
             :size="buttonSize"
@@ -33,7 +33,7 @@
           >查询</el-button>
           <el-button :size="buttonSize" @click="resetSearch">重置</el-button>
         </el-form-item>
-      </el-form-renderer>
+      </el-form-renderer> -->
 
       <el-form v-if="hasHeader">
         <el-form-item>
@@ -66,10 +66,58 @@
             :disabled="selected.length === 0 || (single && selected.length > 1)"
             @click="onDefaultDelete(single ? selected[0] : selected)"
           >{{ deleteText }}</el-button>
-
+          <!-- @dropdown 修改点: 是否有Actions按钮 -->
+          <el-dropdown v-if="hasAction" class="slotaction">
+            <el-button size="small" :disabled="selected.length>0?false:true">
+              更多菜单<i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>批量删除</el-dropdown-item>
+              <el-dropdown-item>批量更新</el-dropdown-item>
+              <el-dropdown-item>禁用所选</el-dropdown-item>
+              <el-dropdown-item>激活所选</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- 样式bug -->
+          <el-dropdown v-if="hasUpload" class="slotupload" style="float:right;">
+            <el-button size="small">
+              CSV<i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>上传</el-dropdown-item>
+              <el-dropdown-item>下载</el-dropdown-item>
+              <el-dropdown-item>更新</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-form-renderer
+            v-if="hasSearchForm"
+            ref="searchForm"
+            class="slotsearch"
+            style="float:right;"
+            :content="_searchForm"
+            inline
+            @submit.native.prevent
+          >
+            <slot
+              v-for="slot in searchLocatedSlotKeys"
+              :slot="slot.replace('search:', 'id:')"
+              :name="slot"
+            />
+            <!--@slot 额外的搜索内容, 当searchForm不满足需求时可以使用-->
+            <slot name="search" />
+            <el-form-item style="display:none">
+              <!--https://github.com/ElemeFE/element/pull/5920-->
+              <el-button
+                native-type="submit"
+                type="primary"
+                :size="buttonSize"
+                @click="search"
+              >查询</el-button>
+              <el-button :size="buttonSize" @click="resetSearch">重置</el-button>
+            </el-form-item>
+          </el-form-renderer>
           <!--@slot 额外的header内容, 当headerButtons不满足需求时可以使用，作用域传入selected -->
           <slot name="header" :selected="selected" />
-
           <!--@collapse 自定义折叠按钮, 默认的样式文案不满足时可以使用，scope 默认返回当前折叠状态 Boolean -->
           <slot name="collapse" :isSearchCollapse="isSearchCollapse">
             <el-button
@@ -169,8 +217,22 @@
 
         <!--非树-->
         <template v-else>
+          <!-- 硬核Hack修改 -->
           <el-data-table-column
-            v-for="col in columns"
+            key="selection-key"
+            v-bind="{align: columnsAlign, ...columns[0]}"
+          />
+          <el-data-table-column
+            key="columns-url"
+            v-bind="{align: columnsAlign, ...columns[1]}"
+          >
+            <template slot-scope="scope">
+              <!-- 硬编码到ID -->
+              <el-button type="text" size="small" style="font-size:14px" @click="$router.push({name: columns[1].url, params: { id: scope.row.id }})">{{ scope.row.name }}</el-button>
+            </template>
+          </el-data-table-column>
+          <el-data-table-column
+            v-for="col in columns.filter((c, i) => i !== 0&& i !=1) "
             :key="col.prop"
             v-bind="{align: columnsAlign, ...col}"
           />
@@ -290,7 +352,7 @@ import getLocatedSlotKeys from './utils/extract-keys'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
 
-const defaultFirstPage = 1
+const defaultFirstPage = 0
 const noPaginationDataPath = 'payload'
 
 export default {
@@ -433,6 +495,20 @@ export default {
      * 是否有新增按钮
      */
     hasNew: {
+      type: Boolean,
+      default: true
+    },
+    /**
+     * 是否有动作按钮
+     */
+    hasAction: {
+      type: Boolean,
+      default: true
+    },
+    /**
+     * 是否有动作按钮
+     */
+    hasUpload: {
       type: Boolean,
       default: true
     },
@@ -813,20 +889,19 @@ export default {
     hasSelect() {
       return this.columns.length && this.columns[0].type === 'selection'
     },
-
     selectable() {
       if (this.hasSelect && this.columns[0].selectable) {
         return this.columns[0].selectable
       }
       return () => true
     },
-
     columnsAlign() {
       if (this.columns.some(col => col.columns && col.columns.length)) {
         // 多级表头默认居中
         return 'center'
       } else {
-        return ''
+        // 默认居中 //修改点
+        return 'center'
       }
     },
     routerMode() {
@@ -1090,8 +1165,8 @@ export default {
     // 弹窗相关
     // 除非树形结构在操作列点击新增, 否则 row 是 MouseEvent
     onDefaultNew(row) {
-      this.row = row
-      this.$refs.dialog.show(dialogModes.new)
+      // 屏蔽默认New方法
+      this.onNew()
     },
     onDefaultView(row) {
       this.row = row
@@ -1243,7 +1318,10 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
+// 自定义样式
+@import url(./index.less);
+
 .el-data-table {
   @color-blue: #2196f3;
   @space-width: 18px;

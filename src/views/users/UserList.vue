@@ -1,21 +1,7 @@
 <template>
   <Page>
-    <IBox slot="content" :title="$t('route.UserList')">
-      <el-data-table v-bind="tableConfig" style="margin:0 12px 12px 12px;">
-        <template v-slot:header="{selected}">
-          <el-dropdown>
-            <el-button type="primary" size="small" :disabled="selected.length>0?false:true">
-              更多菜单<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>批量删除</el-dropdown-item>
-              <el-dropdown-item>批量更新</el-dropdown-item>
-              <el-dropdown-item>禁用所选</el-dropdown-item>
-              <el-dropdown-item>激活所选</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </template>
-      </el-data-table>
+    <IBox :title="$t('route.UserList')">
+      <el-data-table v-bind="tableConfig" :on-new="onNew" style="margin:0 12px 12px 12px;" />
     </IBox>
   </Page>
 </template>
@@ -30,8 +16,6 @@ export default {
   },
   data() {
     return {
-      tableData: [],
-      listLoading: true,
       tableConfig: {
         axiosConfig: {
           raw: 1
@@ -45,8 +29,9 @@ export default {
         persistSelection: true, // 切换页面 已勾选项不会丢失
         hasEdit: false, // 有编辑按钮
         newText: '创建',
-        firstPage: 0, // 初始页页码
         hasDelete: false,
+        hasAction: true, // 是否有更多操作
+        hasUpload: false,
         hasNew: true,
         // editText: this.$t('action.update'), // 编辑按钮文案
         tableAttrs: {
@@ -73,38 +58,43 @@ export default {
             }
           }
         ],
+        searchForm: [
+          {
+            type: 'input',
+            id: 'search', // 发起请求附带的查询参数
+            width: '200px',
+            el: { placeholder: '搜索', clearable: true, size: 'small' },
+            rules: [{ required: false, trigger: 'blur', max: 12 }]
+          }
+        ],
         columns: [
           { type: 'selection' },
           // Bug
           // 应该让我插入Slot,使这个用户名可点击
           {
             prop: 'name',
-            align: 'center',
             label: this.$t('users.name'),
-            sortable: true // 可排序
+            sortable: true, // 可排序
+            url: 'UserDetail' // 第一个函数指定 路由Template
           },
           {
             prop: 'username',
-            align: 'center',
             label: this.$t('users.username'),
             sortable: true
           },
           {
             prop: 'role',
-            align: 'center',
             label: this.$t('users.role'),
             sortable: true
           },
           // Bug API没有返回组织名称
           {
             prop: 'group',
-            align: 'center',
             label: this.$t('users.usergroup'),
             sortable: true
           },
           {
             prop: 'source',
-            align: 'center',
             label: this.$t('users.source'),
             sortable: true
           }
@@ -115,27 +105,13 @@ export default {
   created() {
   },
   methods: {
-
+    onNew: () => {
+      alert('创建')
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-// 重制表单样式
-.el-data-table /deep/ .el-pagination{
-  text-align: center !important;
-}
-.el-data-table /deep/ .el-table td{
-  padding: 4px 0;
-}
-.el-data-table /deep/ .el-table th{
-  padding: 4px 0;
-}
-.el-data-table/deep/ .el-form-item{
-  margin-bottom:10px !important ;
-  margin-top:10px;
-}
-.el-data-table/deep/ .el-pagination{
-  padding:15px  0 !important ;
-}
+
 </style>
