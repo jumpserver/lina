@@ -11,8 +11,8 @@
       <el-table
         v-loading="loading"
         :data="tabledata"
-        @selection-change="handleSelectionChange"
         stripe
+        @selection-change="handleSelectionChange"
       >
         <el-table-column
           v-if="hasSelect"
@@ -122,8 +122,8 @@ export default {
       total: 0,
       offset: 0,
       headeractiontext: 'title',
-      multipleSelection:[],
-      selectDisable:true
+      multipleSelection: [],
+      selectDisable: true
     }
   },
   created() {
@@ -150,9 +150,9 @@ export default {
       })
     },
     handleSelectionChange(val) {
-        this.multipleSelection = val;
-        (val.length>0) ? (this.selectDisable = false) : (this.selectDisable = true)
-      },
+      this.multipleSelection = val;
+      (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
+    },
     handleEdit: function(index, row) {
       try {
         this.$router.push({ name: this.action.hasEdit, params: { id: row.id }})
