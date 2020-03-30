@@ -198,7 +198,7 @@ const cn = {
     'SystemUserCreate': '创建系统用户',
     'SystemUserUpdate': '更新系统用户',
     'protocol': '协议',
-    'login_mode': '登录模式',
+    'loginMode': '登录模式',
     'quick_update': '快速更新',
     'auto_push': '自动更新',
     // 标签

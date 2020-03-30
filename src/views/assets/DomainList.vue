@@ -34,8 +34,8 @@ export default {
           },
           {
             prop: 'asset',
-            label: this.$t('common.asset'),
-            key: 'assets_amount'
+            label: this.$t('assets.asset'),
+            key: 'asset_count'
           },
           {
             prop: 'gateway',
