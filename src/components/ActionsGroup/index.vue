@@ -1,6 +1,6 @@
 <template>
   <div :class="grouped ? 'el-button-group' : ''">
-    <el-button v-for="item in actions" :key="item.name" :type="item.type" :size="size" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }}</el-button>
+    <el-button v-for="item in actions" :key="item.name" :type="item.type" :size="size" :disabled="item.disabled" :icon="item.icon" @click="handleClick(item.name)">{{ item.title }}</el-button>
     <el-dropdown v-if="moreActions.length > 0">
       <el-button :size="size" class="btn-more-actions">
         更多操作<i class="el-icon-arrow-down el-icon--right" />
@@ -18,7 +18,7 @@ export default {
   props: {
     grouped: {
       type: Boolean,
-      default: true
+      default: false
     },
     size: {
       type: String,

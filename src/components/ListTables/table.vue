@@ -62,7 +62,8 @@
         :page-sizes="[10, 20, 50, 100]"
         :page-size="page_size"
         :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
+        :pager-count="5"
+        layout="total, sizes, prev, pager, next"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -115,7 +116,7 @@ export default {
     return {
       tabledata: [],
       loading: false,
-      page_size: 10,
+      page_size: 20,
       current_page: 1,
       total: 0,
       offset: 0,

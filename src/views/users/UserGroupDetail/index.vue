@@ -1,8 +1,5 @@
 <template>
-  <SubMenuPage :submenu="submenu" :active-menu="activeSubMenu">
-    <span slot="title">{{ $t('users.userGroup') }}: {{ group.name }}</span>
-    <ActionsGroup slot="headingRightSide" :actions="pageActions"></ActionsGroup>
-
+  <BaseDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
     <div slot="info">
       <el-row :gutter="20">
         <el-col :span="10">
@@ -10,31 +7,24 @@
         </el-col>
       </el-row>
     </div>
-  </SubMenuPage>
+  </BaseDetailPage>
 </template>
 
 <script>
 import { getUserGroup } from '@/api/user'
-import { SubMenuPage } from '@/layout/components'
-import ActionsGroup from '@/components/ActionsGroup'
+import { BaseDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard'
 
 export default {
   components: {
-    SubMenuPage,
-    ActionsGroup,
+    BaseDetailPage,
     DetailCard
   },
   data() {
     return {
       activeSubMenu: 'info',
       group: { name: '' },
-      pageActions: [
-        {
-          name: 'Update',
-          title: this.$tc('Update')
-        }
-      ],
+
       submenu: [
         {
           title: this.$tc('baseInfo'),
@@ -68,6 +58,11 @@ export default {
           value: '这个是滴滴'
         }
       ]
+    }
+  },
+  computed: {
+    title() {
+      return this.$t('users.userGroup') + ': ' + this.group.name
     }
   },
   mounted() {

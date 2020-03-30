@@ -2,7 +2,7 @@
   <Page>
     <template slot="content">
       <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card>
+      <el-card >
         <tables v-bind="tableConfig" />
       </el-card>
     </template>
@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import { IBox, Page } from '@/layout/components'
+import { Page } from '@/layout/components'
 import Tables from '@/components/ListTables/table'
 import { getUserGroupList } from '@/api/user'
 export default {
   components: {
     Page,
-    Tables,
+    Tables
   },
   data() {
     return {
@@ -28,7 +28,7 @@ export default {
             prop: 'name',
             label: this.$t('usergroup.name'),
             key: 'name',
-            link: 'UserDetail',
+            link: 'UserGroupDetail',
             sortable: true
           },
           {
