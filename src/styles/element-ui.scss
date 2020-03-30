@@ -5,7 +5,11 @@
   font-weight: 400 !important;
 }
 
-$--color-primary: red;
+$--color-primary: #1ab394;
+$--color-success: #1c84c6;
+$--color-info: #23c6c8;
+$--color-warning: #f8ac59;
+$--color-danger: #ed5565;
 
 .el-upload {
   input[type="file"] {
@@ -122,5 +126,72 @@ td .el-button.el-button--mini {
 
 .el-card__header {
   padding: 10px 15px;
+  font-size: 14px;
+  line-height: 18.5px;
+  font-weight: normal;
   color: #333;
+}
+
+.el-card.primary > .el-card__header {
+  background-color: $--color-primary;
+  border-color: $--color-primary;
+  color: white;
+}
+
+.el-card.success > .el-card__header {
+  background-color: $--color-success;
+  border-color: $--color-success;
+  color: #ffffff;
+}
+
+.el-card.info > .el-card__header {
+  background-color: $--color-info;
+  border-color: $--color-info;
+  color: #ffffff;
+}
+
+.el-input__inner {
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  display: block;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.5;
+  height: 35px;
+}
+
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
+  color: #606266;
+  background-color: #ddd;
+  font-weight: 400;
+}
+
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after {
+  color: $--color-primary;
+}
+
+.el-tag.el-tag--info {
+  background-color: #f1f1f1;
+  border-color: #e5e6e7;
+  color: #333333;
+}
+
+.el-tag.el-tag--info .el-tag__close {
+  color: #333333;
+  background-color: inherit;
+}
+
+.el-tag.el-tag--info.is-hit {
+  border-color: #e5e6e7;
+}
+
+.el-tag.el-tag--info .el-tag__close:hover {
+  color: #000000;
+  font-weight: 600;
+  background-color: inherit;
 }

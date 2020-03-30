@@ -16,6 +16,7 @@ const cn = {
   },
   common: {
     'name': '名称',
+    'Name': '名称',
     'action': '动作',
     'role': '角色',
     'username': '用户名',
@@ -28,7 +29,10 @@ const cn = {
     'delete': '删除',
     'Detail': '详情',
     'detail': '详情',
-    'baseInfo': '基本信息'
+    'baseInfo': '基本信息',
+    'Created by': '创建人',
+    'Date Created': '创建日期',
+    'Comment': '备注'
   },
   route: {
     'dashboard': '仪表盘',

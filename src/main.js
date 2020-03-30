@@ -36,6 +36,10 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+// vue select
+import vSelect from 'vue-select'
+Vue.component('v-select', vSelect)
+
 import ElDataTable from '@/components/el-data-table/el-data-table.vue'
 import ElFormRenderer from '@/components/el-form-renderer/el-form-renderer.vue'
 import {
@@ -44,23 +48,6 @@ import {
 } from 'element-ui'
 import service from '@/utils/request'
 
-import {
-  Button,
-  Dialog,
-  Form,
-  FormItem,
-  Pagination,
-  Table,
-  TableColumn
-} from 'element-ui'
-
-Vue.use(Button)
-Vue.use(Dialog)
-Vue.use(Form)
-Vue.use(FormItem)
-Vue.use(Pagination)
-Vue.use(Table)
-Vue.use(TableColumn)
 Vue.component('el-data-table', ElDataTable)
 Vue.component('el-form-renderer', ElFormRenderer)
 Vue.prototype.$confirm = MessageBox.confirm
