@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import { IBox, Page } from '@/layout/components'
+import { Page } from '@/layout/components'
 import Tables from '@/components/ListTables/table'
 import { getUserGroupList } from '@/api/user'
 export default {
   components: {
     Page,
-    Tables,
+    Tables
   },
   data() {
     return {
