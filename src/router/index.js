@@ -153,57 +153,192 @@ export const constantRoutes = [
       },
       {
         path: 'platforms',
-        name: 'platformList',
+        name: 'PlatformList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'platformList' }
+        meta: { title: 'PlatformList' }
       }
     ]
   },
   {
     path: '/applications/',
     component: Layout,
+    redirect: '/applications/remote-apps/',
     name: 'applications',
-    meta: { title: 'applications', icon: 'th' },
+    meta: { title: 'Applications', icon: 'th' },
     children: [
       {
         path: 'remote-apps',
         name: 'remoteAppList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'remoteAppList' }
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'RemoteApp' }
       },
       {
-        path: 'databases',
-        name: 'databaseList',
+        path: 'database-apps',
+        name: 'DatabaseAppList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'databaseList' }
+        meta: { title: 'DatabaseApp' }
       }
     ]
   },
   {
     path: '/perms/',
     component: Layout,
-    name: 'perms',
-    meta: { title: 'perms', icon: 'edit' },
+    redirect: '/perms/asset-permission/',
+    name: 'Perms',
+    meta: { title: 'Perms', icon: 'edit' },
     children: [
       {
         path: 'asset-permissions',
-        name: 'assetPermissionList',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'assetPermissionList' }
+        name: 'AssetPermissionList',
+        component: import('@/views/tree/index'),
+        meta: { title: 'AssetPermission' }
       },
       {
-        path: 'remote-apps-permissions',
-        name: 'remoteAppPermissionList',
+        path: 'remote-app-permissions',
+        name: 'RemoteAppPermissionList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'remoteAppPermissionList' }
+        meta: { title: 'RemoteAppPermission' }
       },
       {
-        path: 'database-permissions',
-        name: 'databasePermissionList',
+        path: 'database-app-permissions',
+        name: 'DatabaseAppPermissionList',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'databasePermissionList' }
+        meta: { title: 'DatabaseAppPermission' }
       }
     ]
+  },
+  {
+    path: '/terminal/',
+    component: Layout,
+    redirect: '/terminal/session-online/',
+    name: 'Sessions',
+    meta: { title: 'Sessions', icon: 'rocket' },
+    children: [
+      {
+        path: 'session-online',
+        name: 'SessionOnlineList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'SessionOnline' }
+      },
+      {
+        path: 'session-offline',
+        name: 'SessionOfflineList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'SessionOffline' }
+      },
+      {
+        path: 'command',
+        name: 'CommandsList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'Commands' }
+      },
+      {
+        path: 'luna',
+        name: 'WebTerminal',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'WebTerminal' }
+      },
+      {
+        path: 'sftp',
+        name: 'FileManager',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'FileManager' }
+      },
+      {
+        path: 'terminal',
+        name: 'TerminalList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'Terminal' }
+      }
+    ]
+  },
+  {
+    path: '/ops/',
+    component: Layout,
+    redirect: '/ops/task/',
+    name: 'JobCenter',
+    meta: { title: 'JobCenter', icon: 'coffee' },
+    children: [
+      {
+        path: 'task',
+        name: 'TaskList',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'TaskList' }
+      },
+      {
+        path: 'command-executions/create',
+        name: 'BatchCommand',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'BatchCommand' }
+      },
+      {
+        path: 'flower',
+        name: 'TaskMonitor',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'TaskMonitor' }
+      }
+    ]
+  },
+  {
+    path: '/tickets/',
+    component: Layout,
+    redirect: '/tickets/tickets/',
+    children: [{
+      path: 'tickets',
+      name: 'Tickets',
+      component: () => import('@/views/tree/index'),
+      meta: { title: 'Tickets', icon: 'check-square-o' }
+    }]
+  },
+  {
+    path: '/audits/',
+    component: Layout,
+    redirect: '/audits/login-log/',
+    name: 'Audits',
+    meta: { title: 'Audits', icon: 'history' },
+    children: [
+      {
+        path: 'login-log',
+        name: 'LoginLog',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'LoginLog' }
+      },
+      {
+        path: 'ftp-log',
+        name: 'FtpLog',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'FtpLog' }
+      },
+      {
+        path: 'operate-log',
+        name: 'OperateLog',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'OperateLog' }
+      },
+      {
+        path: 'password-change-log',
+        name: 'PasswordChangeLog',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'PasswordChangeLog' }
+      },
+      {
+        path: 'command-execution-log',
+        name: 'BatchCommand',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'BatchCommand' }
+      }
+    ]
+  },
+  {
+    path: '/settings',
+    component: Layout,
+    redirect: '/settings/',
+    children: [{
+      path: 'settings',
+      name: 'Settings',
+      component: () => import('@/views/tree/index'),
+      meta: { title: 'Settings', icon: 'gears' }
+    }]
   }
 ]
 
