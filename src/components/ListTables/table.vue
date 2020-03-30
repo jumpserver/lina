@@ -2,7 +2,7 @@
   <div>
     <div style="display:flex;flex-direction:row;justify-content:space-between;">
       <!--TODO: 事件交互 -->
-      <headeraction v-if="hasHeader" class="actionHeader" style="display:flex;flex-direction:row;" @newClick="handleNewClick" @actionClick="handleActionClick" />
+      <headeraction v-if="hasHeader" class="actionHeader" :has-selection="hasSelect" :select-disable="selectDisable" style="display:flex;flex-direction:row;" @newClick="handleNewClick" @actionClick="handleActionClick" />
       <!-- TODO: 事件交互 -->
       <search v-if="hasSearch" class="search" @serachAction="handleSearch" />
       <slot name="header" />
@@ -12,6 +12,7 @@
         v-loading="loading"
         :data="tabledata"
         stripe
+        @selection-change="handleSelectionChange"
       >
         <el-table-column
           v-if="hasSelect"
@@ -19,7 +20,7 @@
           :align="align"
           width="42px"
           :header-align="align"
-        />
+        ></el-table-column>
         <el-table-column
           v-for="col of columns"
           :key="col.props"
@@ -37,36 +38,37 @@
         <el-table-column
           v-if="action !== []"
           :label="this.$t('usergroup.action')"
-          :align="align"
-          width="140px"
-          :header-align="align"
+          align="center"
+          width="240px"
+          header-align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
-              type="text"
+              type="primary"
               @click="handleEdit(scope.$index, scope.row)"
-            >{{ $t('usergroup.update') }}</el-button>
+            >{{ $tc('update') }}</el-button>
             <el-button
               size="mini"
-              type="text"
+              type="danger"
               @click="handleDelete(scope.$index, scope.row)"
-            >{{ $t('usergroup.delete') }}</el-button>
+            >{{ $tc('delete') }}</el-button>
           </template>
         </el-table-column>
         <slot name="extraAction" />
       </el-table>
       <el-pagination
-        style="text-align:center;margin-top:20px;"
+        style="text-align:right;margin-top:20px;"
         :current-page="current_page"
+        background
         :page-sizes="[10, 20, 50, 100]"
         :page-size="page_size"
         :total="total"
-        :pager-count="5"
         layout="total, sizes, prev, pager, next"
+        :pager-count="5"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      />
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -89,7 +91,7 @@ export default {
     },
     align: {
       type: String,
-      default: 'left',
+      default: 'left'
     },
     hasSelect: {
       type: Boolean,
@@ -120,7 +122,9 @@ export default {
       current_page: 1,
       total: 0,
       offset: 0,
-      headeractiontext: 'title'
+      headeractiontext: 'title',
+      multipleSelection: [],
+      selectDisable: true
     }
   },
   created() {
@@ -145,6 +149,10 @@ export default {
         this.total = response.count
         this.loading = false
       })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
     },
     handleEdit: function(index, row) {
       try {
@@ -199,4 +207,17 @@ export default {
 .table{
   margin-top: 15px;
 }
+
+//分页
+.el-pagination /deep/ .el-pagination__total{
+  float: left;
+}
+
+.el-pagination /deep/ .el-pagination__sizes{
+  float: left;
+}
+//修改颜色
+// .el-button--text{
+//   color: #409EFF;
+// }
 </style>

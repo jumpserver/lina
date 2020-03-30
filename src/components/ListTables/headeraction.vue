@@ -1,10 +1,12 @@
 <template>
   <div>
     <el-button type="primary" size="small" @click="handleClick">{{ this.$t('users.createUser') }}</el-button>
-    <el-select v-model="value" size="small" placeholder="请选择" style="width:150px; margin-left:10px;">
+    <el-select v-if="hasSelection" v-model="value" :disabled="selectDisable" size="small" placeholder="更多操作" style="width:150px; margin-left:10px;">
       <el-option label="批量删除" value="delete" />
+      <el-option label="批量更新" value="delete" />
+      <el-option label="禁用所选" value="delete" />
+      <el-option label="激活所选" value="delete" />
     </el-select>
-    <el-button style="margin-left:10px;" type="primary" size="small" @click="handleAction">执行</el-button>
   </div>
 </template>
 
@@ -12,6 +14,16 @@
 export default {
   prop: {
 
+  },
+  props: {
+    hasSelection: {
+      type: Boolean,
+      default: () => true
+    },
+    selectDisable: {
+      type: Boolean,
+      default: () => true
+    }
   },
   data() {
     return {
