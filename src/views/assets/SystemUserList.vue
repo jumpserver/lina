@@ -10,7 +10,7 @@
 </template>
 <script>
 import { Page } from '@/layout/components'
-import Tables from '@/components/ListTables/table'
+import Tables from '@/components/ListTable/index'
 import { getSystemUserList } from '@/api/asset'
 
 export default {

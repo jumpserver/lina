@@ -11,7 +11,7 @@
 
 <script>
 import { Page } from '@/layout/components'
-import Tables from '@/components/ListTables/table'
+import Tables from '@/components/ListTable/index'
 import { getCommandFilterList } from '@/api/asset'
 
 export default {

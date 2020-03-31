@@ -1,9 +1,10 @@
 <template>
-  <ElDatableTable v-bind="tableConfig"></ElDatableTable>
+  <ElDatableTable class="el-table" v-bind="tableConfig"></ElDatableTable>
 </template>
 
 <script>
-import { default as ElDatableTable } from '@/components/el-data-table'
+import { default as ElDatableTable } from './compenents/el-data-table'
+
 export default {
   name: 'DataTable',
   components: {
@@ -21,7 +22,7 @@ export default {
         axiosConfig: {
           raw: 1,
           params: {
-            draw: 1
+            display: 1
           }
         },
         dataPath: 'results',
@@ -43,7 +44,8 @@ export default {
         paginationLayout: 'total, sizes, prev, pager, next',
         transformQuery: query => {
           if (query.page && query.size) {
-            const offset = query.page * query.size
+            const page = query.page || 1
+            const offset = (page - 1) * query.size
             const limit = query.size
             query.offset = offset
             query.limit = limit
@@ -58,7 +60,6 @@ export default {
   computed: {
     tableConfig() {
       const config = Object.assign(this.defaultConfig, this.config)
-      console.log(config)
       return config
     }
   }

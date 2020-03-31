@@ -7,7 +7,7 @@
       <ActionsGroup slot="headingRightSide" :actions="pageActions" />
     </span>
 
-    <div slot="content">
+    <div>
       <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="activeName" class="page-submenu">
         <el-tab-pane v-for="item in submenu" :key="item.name" :label="item.title" :name="item.name">
           <slot :name="item.name">

@@ -25,7 +25,12 @@ export default {
           label: 'Operation',
           prop: 'operation',
           key: 'prop',
-          align: 'center',
+          align: 'center'
+        },
+        extraPaginationAttrs: {
+          background: true,
+          pagerCount: 5,
+          pageSizes: [10, 100]
         },
         extraButtons: [
           {
@@ -46,9 +51,8 @@ export default {
             }
           }
         ],
-        align: 'left',
         columns: [
-          { type: 'index' },
+          { type: 'selection' },
           // Bug
           // 应该让我插入Slot,使这个用户名可点击
           {

@@ -3,7 +3,7 @@
     <template>
       <el-alert type="success"> 这里是一个成功的文案 </el-alert>
       <el-card>
-        <tables v-bind="tableConfig" />
+        <ListTable :table-config="tableConfig" :more-actions="moreActions" />
       </el-card>
     </template>
   </Page>
@@ -11,34 +11,35 @@
 
 <script>
 import { Page } from '@/layout/components'
-import Tables from '@/components/ListTables/table'
-import { getUserGroupList } from '@/api/user'
+import ListTable from '@/components/ListTable'
 export default {
   components: {
     Page,
-    Tables
+    ListTable
   },
   data() {
     return {
       tableConfig: {
-        getData: getUserGroupList,
-        hasSelect: true,
+        url: '/api/v1/users/groups/',
         columns: [
           {
+            type: 'selection'
+          },
+          {
             prop: 'name',
-            label: this.$t('usergroup.name'),
+            label: this.$tc('Name'),
             key: 'name',
             link: 'UserGroupDetail',
             sortable: true
           },
           {
-            prop: 'user',
-            label: this.$t('usergroup.user'),
+            prop: 'users_amount',
+            label: this.$t('users.User'),
             key: 'users_amount'
           },
           {
             prop: 'comment',
-            label: this.$t('usergroup.comment'),
+            label: this.$tc('Comment'),
             key: 'comment'
           }
         ],
@@ -47,7 +48,17 @@ export default {
           hasEdit: 'UserGroupEdit',
           newClick: 'UserGroupEdit'
         }
-      }
+      },
+      moreActions: [
+        {
+          title: this.$tc('Delete selected'),
+          name: 'deleteSelected'
+        },
+        {
+          title: this.$tc('Update selected'),
+          name: 'updateSelected'
+        }
+      ]
     }
   }
 }

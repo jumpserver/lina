@@ -32,7 +32,11 @@ const cn = {
     'baseInfo': '基本信息',
     'Created by': '创建人',
     'Date Created': '创建日期',
-    'Comment': '备注'
+    'Comment': '备注',
+    'Create': '创建',
+    'More actions': '更多操作',
+    'Delete selected': '删除所选',
+    'Update selected': '更新所选'
   },
   route: {
     'dashboard': '仪表盘',
@@ -101,6 +105,7 @@ const cn = {
     'createusergroup': '创建用户组',
     'comment': '备注',
     'user': '用户',
+    'User': '用户',
     'admin': '管理员',
     'auditor': '审计员',
     'off': 'OFF',

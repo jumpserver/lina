@@ -1,1 +1,1 @@
-export { default as Tables } from './ListTables/table.vue'
+export { default as ListTable } from './ListTable/index.vue'

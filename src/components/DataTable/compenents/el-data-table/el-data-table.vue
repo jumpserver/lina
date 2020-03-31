@@ -176,10 +176,10 @@
         :total="total"
         style="text-align: right; padding: 10px 0;"
         :layout="paginationLayout"
-        :pager-count="paginationPagerCount"
+        v-bind="extraPaginationAttrs"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      />
+      ></el-pagination>
 
       <the-dialog
         ref="dialog"
@@ -742,6 +742,14 @@ export default {
     defaultAlign: {
       type: String,
       default: 'center'
+    },
+    paginationBackground: {
+      type: Boolean,
+      default: true
+    },
+    extraPaginationAttrs: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -846,11 +854,11 @@ export default {
        * @property {array} rows - 已选中的行数据的数组
        */
       this.$emit('selection-change', val)
+      console.log('Selected', this.selected)
+      console.log('Val', val)
     }
   },
   mounted() {
-    console.log(this.url)
-    console.log(this.com)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {
@@ -1205,7 +1213,7 @@ export default {
 </script>
 <style lang="less" scoped>
 // 自定义样式
-@import url(./index.less);
+@import url(index.less);
 
 .el-data-table {
   @color-blue: #2196f3;
