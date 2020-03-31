@@ -6,7 +6,7 @@
         <el-col v-show="show3" :span="4">这里是节点树</el-col>
         <el-col :span="1" class="mini"><div style="display:block" class="mini-button" @click="show3=!show3"><i v-show="show3" id="toggle-icon" class="fa fa-angle-left fa-x" /><i v-show="!show3" class="fa fa-angle-right fa-x" /></div></el-col>
         <el-col :span="show3?19:23">
-          <el-card >
+          <el-card>
             <tables v-bind="tableConfig" />
           </el-card>
         </el-col>

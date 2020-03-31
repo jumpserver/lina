@@ -2,7 +2,7 @@
   <Page>
     <template slot="content">
       <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card >
+      <el-card>
         <tables v-bind="tableConfig" />
       </el-card>
     </template>
