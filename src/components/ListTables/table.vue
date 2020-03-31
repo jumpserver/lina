@@ -12,6 +12,7 @@
         v-loading="loading"
         :data="tabledata"
         stripe
+        border
         @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -20,7 +21,7 @@
           :align="align"
           width="42px"
           :header-align="align"
-        ></el-table-column>
+        />
         <el-table-column
           v-for="col of columns"
           :key="col.props"
@@ -30,7 +31,7 @@
           :header-align="align"
         >
           <template slot-scope="scope">
-            <el-button v-if="col.link" type="text" size="small" style="font-size:14px" @click="$router.push({name: col.link, params: { id: scope.row.id }})">{{ scope.row[col.key] }}</el-button>
+            <el-link v-if="col.link" type="success" :underline="false" size="small" style="font-size:14px" @click="$router.push({name: col.link, params: { id: scope.row.id }})">{{ scope.row[col.key] }}</el-link>
             <span v-else>{{ scope.row[col.key] }}</span>
           </template>
         </el-table-column>
@@ -68,7 +69,7 @@
         :pager-count="5"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      ></el-pagination>
+      />
     </div>
   </div>
 </template>
@@ -77,12 +78,14 @@
 /* eslint-disable no-unused-vars */
 import search from './search'
 import headeraction from './headeraction'
+// import ActionsGroup from '../ActionsGroup'
 const _vm = this
 export default {
   name: 'Tables',
   components: {
     search,
     headeraction
+    // ActionsGroup,
   },
   props: {
     getData: {
@@ -191,7 +194,8 @@ export default {
 <style lang="less" scoped>
 
 .el-table /deep/ .el-table__row > td {
-  padding: 0 !important;
+  line-height: 1.5;
+  padding: 8px;
 }
 .el-table /deep/ .el-table__row > td> div > span {
   text-overflow: ellipsis;
@@ -200,9 +204,10 @@ export default {
   white-space: nowrap;
 }
 .el-table /deep/ .el-table__header > thead > tr >th {
-  padding:3px !important;
+  padding: 8px;
   background-color: #F5F5F6;
   font-size: 13px;
+  line-height: 1.5;
 }
 .table{
   margin-top: 15px;

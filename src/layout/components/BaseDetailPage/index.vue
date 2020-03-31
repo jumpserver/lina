@@ -4,7 +4,7 @@
       {{ title }}
     </span>
     <span slot="headingRightSide">
-      <ActionsGroup slot="headingRightSide" :actions="pageActions"></ActionsGroup>
+      <ActionsGroup slot="headingRightSide" :actions="pageActions" />
     </span>
 
     <div slot="content">
@@ -58,7 +58,7 @@ export default {
         }
       ]
     }
-  },
+  }
 }
 </script>
 

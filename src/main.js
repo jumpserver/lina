@@ -36,23 +36,8 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
-// vue select
-import vSelect from 'vue-select'
-Vue.component('v-select', vSelect)
-
-import ElDataTable from '@/components/el-data-table/el-data-table.vue'
-import ElFormRenderer from '@/components/el-form-renderer/el-form-renderer.vue'
-import {
-  Message,
-  MessageBox
-} from 'element-ui'
 import service from '@/utils/request'
 
-Vue.component('el-data-table', ElDataTable)
-Vue.component('el-form-renderer', ElFormRenderer)
-Vue.prototype.$confirm = MessageBox.confirm
-// show tips
-Vue.prototype.$message = Message
 // if the table component cannot access `this.$axios`, it cannot send request
 Vue.prototype.$axios = service
 

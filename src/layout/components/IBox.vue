@@ -1,6 +1,6 @@
 <template>
   <el-card class="ibox" shadow="never">
-    <div slot="header" class="clearfix ibox-title">
+    <div slot="header" class="clearfix ibox-title" v-if="title">
       <h5>{{ title }}</h5>
       <div class="ibox-tools">
         <a class="collapse-link">
@@ -24,7 +24,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: () => { return 'Title' }
+      default: () => null
     }
   }
 }

@@ -3,16 +3,16 @@
     <div slot="info">
       <el-row :gutter="20">
         <el-col :span="14">
-          <DetailCard :title="cardTitle" :items="detailItems"></DetailCard>
+          <DetailCard :title="cardTitle" :items="detailItems" />
         </el-col>
         <el-col :span="10">
           <el-card class="box-card primary">
             <div slot="header" class="clearfix">
-              <i class="fa fa-user"></i>
+              <i class="fa fa-user" />
               <span>组下用户</span>
             </div>
             <div>
-              <Select2 v-model="value" :url="url"></Select2>
+              <Select2 v-model="value" :url="url" />
             </div>
           </el-card>
         </el-col>

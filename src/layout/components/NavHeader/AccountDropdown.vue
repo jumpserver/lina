@@ -2,7 +2,7 @@
   <div class="header-tools header-profile">
     <el-dropdown>
       <span class="el-dropdown-link">
-         <el-avatar :src="avatarUrl" class="header-avatar"></el-avatar>
+        <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}
         <i class="el-icon-arrow-down el-icon--right" />
       </span>

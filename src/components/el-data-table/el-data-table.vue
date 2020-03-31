@@ -5,132 +5,6 @@
       <slot name="no-data" />
     </template>
     <template v-else>
-      <!-- 搜索字段 -->
-      <!-- @submit.native.prevent -->
-      <!-- 阻止表单提交的默认行为 -->
-      <!-- https://www.w3.org/MarkUp/html-spec/html-spec_8.html#SEC8.2 -->
-      <!-- <el-form-renderer
-        v-if="hasSearchForm"
-        ref="searchForm"
-        :content="_searchForm"
-        inline
-        @submit.native.prevent
-      >
-        <slot
-          v-for="slot in searchLocatedSlotKeys"
-          :slot="slot.replace('search:', 'id:')"
-          :name="slot"
-        />
-        @slot 额外的搜索内容, 当searchForm不满足需求时可以使用-->
-      <!-- <slot name="search" />
-        <el-form-item>
-          https://github.com/ElemeFE/element/pull/5920-->
-      <!-- <el-button
-            native-type="submit"
-            type="primary"
-            :size="buttonSize"
-            @click="search"
-          >查询</el-button>
-          <el-button :size="buttonSize" @click="resetSearch">重置</el-button>
-        </el-form-item>
-      </el-form-renderer> -->
-
-      <el-form v-if="hasHeader">
-        <el-form-item>
-          <el-button
-            v-if="hasNew"
-            type="primary"
-            :size="buttonSize"
-            @click="onDefaultNew"
-          >{{ newText }}</el-button>
-          <template v-for="(btn, i) in headerButtons">
-            <self-loading-button
-              v-if="'show' in btn ? btn.show(selected) : true"
-              :key="i"
-              :disabled="'disabled' in btn ? btn.disabled(selected) : false"
-              :click="btn.atClick"
-              :params="selected"
-              :callback="getList"
-              :size="buttonSize"
-              v-bind="btn"
-            >
-              {{
-                typeof btn.text === 'function' ? btn.text(selected) : btn.text
-              }}
-            </self-loading-button>
-          </template>
-          <el-button
-            v-if="hasSelect && hasDelete"
-            type="danger"
-            :size="buttonSize"
-            :disabled="selected.length === 0 || (single && selected.length > 1)"
-            @click="onDefaultDelete(single ? selected[0] : selected)"
-          >{{ deleteText }}</el-button>
-          <!-- @dropdown 修改点: 是否有Actions按钮 -->
-          <el-dropdown v-if="hasAction" class="slotaction">
-            <el-button size="small" :disabled="selected.length>0?false:true">
-              更多菜单<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>批量删除</el-dropdown-item>
-              <el-dropdown-item>批量更新</el-dropdown-item>
-              <el-dropdown-item>禁用所选</el-dropdown-item>
-              <el-dropdown-item>激活所选</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <!-- 样式bug -->
-          <el-dropdown v-if="hasUpload" class="slotupload" style="float:right;">
-            <el-button size="small">
-              CSV<i class="el-icon-arrow-down el-icon--right" />
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>上传</el-dropdown-item>
-              <el-dropdown-item>下载</el-dropdown-item>
-              <el-dropdown-item>更新</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-form-renderer
-            v-if="hasSearchForm"
-            ref="searchForm"
-            class="slotsearch"
-            style="float:right;"
-            :content="_searchForm"
-            inline
-            @submit.native.prevent
-          >
-            <slot
-              v-for="slot in searchLocatedSlotKeys"
-              :slot="slot.replace('search:', 'id:')"
-              :name="slot"
-            />
-            <!--@slot 额外的搜索内容, 当searchForm不满足需求时可以使用-->
-            <slot name="search" />
-            <el-form-item style="display:none">
-              <!--https://github.com/ElemeFE/element/pull/5920-->
-              <el-button
-                native-type="submit"
-                type="primary"
-                :size="buttonSize"
-                @click="search"
-              >查询</el-button>
-              <el-button :size="buttonSize" @click="resetSearch">重置</el-button>
-            </el-form-item>
-          </el-form-renderer>
-          <!--@slot 额外的header内容, 当headerButtons不满足需求时可以使用，作用域传入selected -->
-          <slot name="header" :selected="selected" />
-          <!--@collapse 自定义折叠按钮, 默认的样式文案不满足时可以使用，scope 默认返回当前折叠状态 Boolean -->
-          <slot name="collapse" :isSearchCollapse="isSearchCollapse">
-            <el-button
-              v-if="canSearchCollapse"
-              type="default"
-              :size="buttonSize"
-              :icon="`el-icon-arrow-${isSearchCollapse ? 'down' : 'up'}`"
-              @click="isSearchCollapse = !isSearchCollapse"
-            >{{ isSearchCollapse ? '展开' : '折叠' }}搜索</el-button>
-          </slot>
-        </el-form-item>
-      </el-form>
-
       <el-table
         ref="table"
         v-loading="loading"
@@ -177,7 +51,8 @@
               v-for="col in columns.filter((c, i) => i !== 0 && i !== 1)"
               :key="col.prop"
               v-bind="{align: columnsAlign, ...col}"
-            />
+            >
+            </el-data-table-column>
           </template>
 
           <!--无选择-->
@@ -217,32 +92,18 @@
 
         <!--非树-->
         <template v-else>
-          <!-- 硬核Hack修改 -->
           <el-data-table-column
-            key="selection-key"
-            v-bind="{align: columnsAlign, ...columns[0]}"
-          />
-          <el-data-table-column
-            key="columns-url"
-            v-bind="{align: columnsAlign, ...columns[1]}"
-          >
-            <template slot-scope="scope">
-              <!-- 硬编码到ID -->
-              <el-button type="text" size="small" style="font-size:14px" @click="$router.push({name: columns[1].url, params: { id: scope.row.id }})">{{ scope.row.name }}</el-button>
-            </template>
-          </el-data-table-column>
-          <el-data-table-column
-            v-for="col in columns.filter((c, i) => i !== 0&& i !=1) "
+            v-for="col in columns"
             :key="col.prop"
             v-bind="{align: columnsAlign, ...col}"
-          />
+          >
+          </el-data-table-column>
         </template>
 
         <!--默认操作列-->
         <el-data-table-column
           v-if="hasOperation"
-          label="操作"
-
+          :label="$tc('action')"
           v-bind="{align: columnsAlign, ...operationAttrs}"
         >
           <template slot-scope="scope">
@@ -315,6 +176,7 @@
         :total="total"
         style="text-align: right; padding: 10px 0;"
         :layout="paginationLayout"
+        :pager-count="paginationPagerCount"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -423,6 +285,13 @@ export default {
       default() {
         return []
       }
+    },
+    /**
+     * 请求之前可以转换query的内容, 提供一种方式可以让自定义query, 如有的分页用的是offset机制, offset = page * size, limit = size
+     */
+    transformQuery: {
+      type: Function,
+      default: null
     },
     /**
      * 查询字段渲染, 配置参考el-form-renderer
@@ -653,6 +522,10 @@ export default {
       type: Array,
       default: () => [10, 20, 30, 40, 50]
     },
+    paginationPagerCount: {
+      type: Number,
+      default: 5
+    },
     /**
      * 分页组件的每页显示个数选择器默认选项，对应element-ui pagination的page-size属性
      * @link https://element.eleme.cn/2.4/#/zh-CN/component/pagination
@@ -862,6 +735,13 @@ export default {
       default() {
         return {}
       }
+    },
+    /*
+    * 设置默认对齐方式
+    */
+    defaultAlign: {
+      type: String,
+      default: 'center'
     }
   },
   data() {
@@ -901,7 +781,7 @@ export default {
         return 'center'
       } else {
         // 默认居中 //修改点
-        return 'center'
+        return this.defaultAlign
       }
     },
     routerMode() {
@@ -969,6 +849,8 @@ export default {
     }
   },
   mounted() {
+    console.log(this.url)
+    console.log(this.com)
     if (this.saveQuery) {
       const query = queryUtil.get(location.href)
       if (query) {
@@ -991,7 +873,6 @@ export default {
      */
     getList({ loading = true } = {}) {
       const { url } = this
-
       if (!url) {
         console.warn('DataTable: url 为空, 不发送请求')
         return
@@ -1021,6 +902,10 @@ export default {
           obj[k] = query[k].toString().trim()
           return obj
         }, {})
+
+      if (this.transformQuery) {
+        query = this.transformQuery(query)
+      }
 
       const queryStr =
         (url.indexOf('?') > -1 ? '&' : '?') +

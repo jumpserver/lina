@@ -7,7 +7,7 @@
       </span>
     </PageHeading>
     <PageContent>
-      <slot name="content" />
+      <slot name="default"/>
     </PageContent>
   </div>
 </template>
@@ -21,7 +21,6 @@ export default {
   components: {
     PageHeading,
     PageContent
-    // PageSubMenu,
   },
   props: {
     title: {

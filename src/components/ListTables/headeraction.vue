@@ -13,7 +13,18 @@
 <script>
 export default {
   prop: {
-
+    size: {
+      style: String,
+      default: 'small'
+    },
+    actions: {
+      type: Array,
+      default: () => []
+    },
+    moreActions: {
+      type: Array,
+      default: () => []
+    }
   },
   props: {
     hasSelection: {

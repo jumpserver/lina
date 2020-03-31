@@ -16,8 +16,7 @@
       :key="item.value"
       :label="item.label"
       :value="item.value"
-    >
-    </el-option>
+    />
   </el-select>
 </template>
 
@@ -28,7 +27,7 @@ export default {
     'loadmore': {
       bind(el, binding) {
         // 获取element-ui定义好的scroll盒子
-        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
+        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap')
         SELECTWRAP_DOM.addEventListener('scroll', function() {
           /**
            * scrollHeight 获取元素内容高度(只读)
@@ -80,7 +79,7 @@ export default {
         hasMore: true
       },
       defaultMakeParams: params => {
-        const page = params.page || 1;
+        const page = params.page || 1
         return {
           search: params.search,
           offset: (page - 1) * 10,
