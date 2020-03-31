@@ -263,6 +263,7 @@ const cn = {
     'update': '更新',
     'delete': '删除',
     'comment': '备注',
+    // 数据库应用
     'database_app_list': '数据库应用列表',
     'database_app_detail': '数据库应用详情',
     'create_database_app': '创建数据库应用',

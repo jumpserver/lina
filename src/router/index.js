@@ -168,14 +168,14 @@ export const constantRoutes = [
     children: [
       {
         path: 'remote-apps',
-        name: 'remoteAppList',
-        component: () => import('@/views/tree/index'),
+        name: 'RemoteAppList',
+        component: () => import('@/views/applications/RemoteAppList'),
         meta: { title: 'RemoteApp' }
       },
       {
         path: 'database-apps',
         name: 'DatabaseAppList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/applications/DatabaseAppList'),
         meta: { title: 'DatabaseApp' }
       }
     ]
