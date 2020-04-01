@@ -3,17 +3,12 @@
     <slot name="header">
       <!--TODO: 事件交互 -->
       <div class="table-header-left-side">
-        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action"></ActionsGroup>
+        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick"></ActionsGroup>
       </div>
       <!-- TODO: 事件交互 -->
       <div class="table-action-right-side">
         <el-input v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch"></el-input>
-        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item"></ActionsGroup>
-<!--        <el-button-group class="right-side-actions right-side-item">-->
-<!--          <el-button size="mini"><i class="fa fa-download"></i></el-button>-->
-<!--          <el-button size="mini"><i class="fa fa-upload"></i></el-button>-->
-<!--          <el-button size="mini"><i class="fa fa-refresh"></i></el-button>-->
-<!--        </el-button-group>-->
+        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick"></ActionsGroup>
       </div>
     </slot>
   </div>
@@ -21,56 +16,81 @@
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
+const defaultTrue = { type: Boolean, default: true }
 export default {
   name: 'TableAction',
   components: {
     ActionsGroup
   },
+  props: {
+    hasExport: defaultTrue,
+    hasImport: defaultTrue,
+    hasRefresh: defaultTrue,
+    hasCreate: defaultTrue,
+    hasDelete: defaultTrue,
+    hasUpdate: defaultTrue,
+    hasLeftActions: defaultTrue,
+    hasSearch: defaultTrue,
+    hasRightActions: defaultTrue,
+  },
   data() {
     return {
-      hasLeftActions: true,
-      hasSearch: true,
-      hasRightActions: true,
-      createAction: {
-        name: 'create',
+      defaultRightSideActions: {
+        Export: { name: 'actionExport', fa: 'fa-download' },
+        Import: { name: 'actionImport', fa: 'fa-upload' },
+        Refresh: { name: 'actionRefresh', fa: 'fa-refresh' }
+      },
+      defaultCreateAction: {
+        name: 'actionCreate',
         title: this.$tc('Create'),
         type: 'primary'
       },
-      actions: [{
-        name: 'create',
-        title: this.$tc('Create'),
-        type: 'primary'
-      }],
-      rightSideActions: [
-        {
-          name: 'export',
-          fa: 'fa-download'
-        },
-        {
-          name: 'import',
-          fa: 'fa-upload'
-        },
-        {
-          name: 'refresh',
-          fa: 'fa-refresh'
-        }
-      ],
       keyword: '',
-      moreActions: [
-        {
+      defaultMoreActions: {
+        Delete: {
           title: this.$tc('Delete selected'),
-          name: 'deleteSelected'
+          name: 'actionDeleteSelected'
         },
-        {
+        Update: {
           title: this.$tc('Update selected'),
-          name: 'updateSelected'
+          name: 'actionUpdateSelected'
         }
-      ]
+      }
+    }
+  },
+  computed: {
+    rightSideActions() {
+      const actions = []
+      for (const k in this.defaultRightSideActions) {
+        if (this['has' + k]) {
+          actions.push(this.defaultRightSideActions[k])
+        }
+      }
+      return actions
+    },
+    actions() {
+      const actions = []
+      if (this.hasCreate) {
+        actions.push(this.defaultCreateAction)
+      }
+      return actions
+    },
+    moreActions() {
+      const actions = []
+      for (const k in this.defaultMoreActions) {
+        if (this['has' + k]) {
+          actions.push(this.defaultMoreActions[k])
+        }
+      }
+      return actions
     }
   },
   methods: {
     handleSearch(keyword) {
       console.log('Search: ', keyword)
+    },
+    handleActionClick(item) {
+      console.log('Action: ', item)
     }
   }
 }

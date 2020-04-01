@@ -4,12 +4,12 @@
       <i v-if="item.fa" :class="'fa ' + item.fa"></i>
       {{ item.title }}
     </el-button>
-    <el-dropdown v-if="moreActions.length > 0" trigger="click">
+    <el-dropdown v-if="moreActions.length > 0" trigger="click" @command="handleClick">
       <el-button :size="size" class="btn-more-actions">
         {{ this.$tc('More actions') }}<i class="el-icon-arrow-down el-icon--right"></i>
       </el-button>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="item in moreActions" :key="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
+        <el-dropdown-item v-for="item in moreActions" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
