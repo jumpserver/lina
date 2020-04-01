@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable class="el-table" v-bind="tableConfig"></ElDatableTable>
+  <ElDatableTable class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
 </template>
 
 <script>
@@ -25,6 +25,7 @@ export default {
             display: 1
           }
         },
+        defaultAlign: 'left',
         dataPath: 'results',
         totalPath: 'count',
         saveQuery: false, // 关闭路径保存查询参数

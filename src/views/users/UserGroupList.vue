@@ -1,11 +1,7 @@
 <template>
   <Page>
-    <template>
-      <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card>
-        <ListTable :table-config="tableConfig" :more-actions="moreActions" />
-      </el-card>
-    </template>
+    <el-alert type="success"> 这里是一个成功的文案 </el-alert>
+    <ListTable :table-config="tableConfig" />
   </Page>
 </template>
 
@@ -40,7 +36,8 @@ export default {
           {
             prop: 'comment',
             label: this.$tc('Comment'),
-            key: 'comment'
+            key: 'comment',
+            showOverflowTooltip: true
           }
         ],
         // 写路由名字，table组件会自动传作为参数
@@ -49,16 +46,7 @@ export default {
           newClick: 'UserGroupEdit'
         }
       },
-      moreActions: [
-        {
-          title: this.$tc('Delete selected'),
-          name: 'deleteSelected'
-        },
-        {
-          title: this.$tc('Update selected'),
-          name: 'updateSelected'
-        }
-      ]
+
     }
   }
 }

@@ -1,28 +1,21 @@
 <template>
   <div>
-    <div class="table-header">
-      <slot name="header">
-        <!--TODO: 事件交互 -->
-        <HeaderActions :actions="totalActions" :more-actions="moreActions"></HeaderActions>
-        <!-- TODO: 事件交互 -->
-        <search v-if="hasSearch" class="search" @serachAction="handleSearch" />
-      </slot>
-    </div>
-    <DataTable :config="tableConfig" class="table-content"></DataTable>
+    <TableAction></TableAction>
+    <el-card class="table-content">
+      <DataTable :config="tableConfig" @selection-change="handleSelectionChange" ></DataTable>
+    </el-card>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-import search from './search'
 import DataTable from '../DataTable'
-import HeaderActions from './HeaderActions'
+import TableAction from './TableAction'
 export default {
   name: 'ListTable',
   components: {
-    HeaderActions,
     DataTable,
-    search,
+    TableAction
   },
   props: {
     // 定义 table 的配置
@@ -31,18 +24,7 @@ export default {
       default: () => {}
     },
     // 是否显示table左侧的action
-    hasAction: {
-      type: Boolean,
-      default: true
-    },
-    hasSearch: {
-      type: Boolean,
-      default: true
-    },
-    hasCreate: {
-      type: Boolean,
-      default: true
-    },
+
     createTitle: {
       type: String,
       default() {
@@ -70,6 +52,7 @@ export default {
   },
   data() {
     return {
+      selectRows: []
     }
   },
   computed: {
@@ -85,16 +68,9 @@ export default {
     }
   },
   methods: {
-    handleSearch(val) {
-      this.loading = true
-      // this.getData({ search: val, draw: this.current_page, limit: this.page_size, offset: this.offset }, { row: 1 }).then(response => {
-      //   console.log(response)
-      //   this.tabledata = response.results
-      //   this.total = response.count
-      //   this.loading = false
-      // })
-    },
     handleSelectionChange(val) {
+      console.log('lIst table', val)
+      this.selectRows = val
       this.multipleSelection = val;
       (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
     },
@@ -106,7 +82,7 @@ export default {
       }
     },
     handleHeaderActionClick(item) {
-      this.$emit('headerActionClick', item)
+      this.$emit('headerActionClick', item, this.selectRows)
     },
     handleDelete: (index, row) => {
     },
@@ -125,13 +101,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .table-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+
   .table-content {
-    margin-top: 15px;
+    margin-top: 10px;
   }
   //修改颜色
   // .el-button--text{

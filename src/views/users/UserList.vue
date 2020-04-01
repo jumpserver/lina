@@ -27,11 +27,7 @@ export default {
           key: 'prop',
           align: 'center'
         },
-        extraPaginationAttrs: {
-          background: true,
-          pagerCount: 5,
-          pageSizes: [10, 100]
-        },
+
         extraButtons: [
           {
             type: 'primary',
@@ -58,8 +54,7 @@ export default {
           {
             prop: 'name',
             label: this.$t('users.name'),
-            sortable: true, // 可排序
-            type: 'link',
+            sortable: true // 可排序
             // url: 'UserDetail' // 第一个函数指定 路由Template
           },
           {

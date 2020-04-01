@@ -854,8 +854,6 @@ export default {
        * @property {array} rows - 已选中的行数据的数组
        */
       this.$emit('selection-change', val)
-      console.log('Selected', this.selected)
-      console.log('Val', val)
     }
   },
   mounted() {
