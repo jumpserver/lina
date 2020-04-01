@@ -2,14 +2,15 @@
   <el-select
     v-model="vaultOrDefault"
     v-loadmore="loadMore"
-    :placeholder="placeholder"
     :options="options"
     :remote-method="filterOptions"
     :loading="loading"
     multiple
     filterable
     remote
+    v-bind="$attrs"
     class="select2"
+    v-on="$listeners"
   >
     <el-option
       v-for="item in options"
@@ -45,10 +46,6 @@ export default {
     }
   },
   props: {
-    placeholder: {
-      type: String,
-      default: null
-    },
     url: {
       type: String,
       required: true

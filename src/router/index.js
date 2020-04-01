@@ -86,6 +86,13 @@ export const constantRoutes = [
         meta: { title: 'UserGroupList' }
       },
       {
+        path: 'groups/create',
+        component: () => import('@/views/users/UserGroupEdit.vue'), // Parent router-view
+        name: 'UserGroupEdit',
+        meta: { title: 'UserGroupEdit' },
+        hidden: true
+      },
+      {
         path: 'groups/:id/update',
         component: () => import('@/views/users/UserGroupEdit.vue'), // Parent router-view
         name: 'UserGroupEdit',

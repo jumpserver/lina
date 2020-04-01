@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable class="el-table" v-bind="tableConfig"></ElDatableTable>
+  <ElDatableTable class="el-table" v-bind="tableConfig" />
 </template>
 
 <script>

@@ -3,12 +3,12 @@
     <div class="table-header">
       <slot name="header">
         <!--TODO: 事件交互 -->
-        <HeaderActions :actions="totalActions" :more-actions="moreActions"></HeaderActions>
+        <HeaderActions :actions="totalActions" :more-actions="moreActions" />
         <!-- TODO: 事件交互 -->
         <search v-if="hasSearch" class="search" @serachAction="handleSearch" />
       </slot>
     </div>
-    <DataTable :config="tableConfig" class="table-content"></DataTable>
+    <DataTable :config="tableConfig" class="table-content" />
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   components: {
     HeaderActions,
     DataTable,
-    search,
+    search
   },
   props: {
     // 定义 table 的配置
@@ -98,9 +98,9 @@ export default {
       this.multipleSelection = val;
       (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
     },
-    handleEdit: function (index, row) {
+    handleEdit: function(index, row) {
       try {
-        this.$router.push({name: this.action.hasEdit, params: {id: row.id}})
+        this.$router.push({ name: this.action.hasEdit, params: { id: row.id }})
       } catch (error) {
         console.log(error)
       }
