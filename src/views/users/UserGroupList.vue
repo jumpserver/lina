@@ -1,19 +1,14 @@
 <template>
-  <Page>
-    <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { Page } from '@/layout/components'
-import ListTable from '@/components/ListTable'
+import { GenericListPage } from '@/layout/components'
 import DetailFormatter from '@/components/DataTable/formatters/DetailFormatter'
 
 export default {
   components: {
-    Page,
-    ListTable
+    GenericListPage
   },
   data() {
     return {
