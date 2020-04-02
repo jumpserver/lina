@@ -48,7 +48,10 @@ export default {
           }
         ],
         columns: [
-          { type: 'selection' },
+          {
+            type: 'selection',
+            align: 'center'
+          },
           // Bug
           // 应该让我插入Slot,使这个用户名可点击
           {
