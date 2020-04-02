@@ -244,7 +244,7 @@ const cn = {
     'update_command_filter': '更新命令过滤器',
     'command_filter_detail': '命令过滤器详情',
     'rules': '规则',
-    'system_user': '系统用户',
+    'systemUser': '系统用户',
     'date_updated': '更新日期',
     'binding_to_system_user': '绑定到系统用户',
     // 系统平台
