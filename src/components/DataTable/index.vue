@@ -70,7 +70,7 @@ export default {
 
   .el-table /deep/ .el-table__row > td {
     line-height: 1.5;
-    padding: 8px;
+    padding: 8px 0;
   }
   .el-table /deep/ .el-table__row > td> div > span {
     text-overflow: ellipsis;
@@ -79,7 +79,7 @@ export default {
     white-space: nowrap;
   }
   .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px;
+    padding: 8px 0;
     background-color: #F5F5F6;
     font-size: 13px;
     line-height: 1.5;
