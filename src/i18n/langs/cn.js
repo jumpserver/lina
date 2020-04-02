@@ -322,7 +322,7 @@ const cn = {
     'update_remote_app_permission': '更新远程应用授权规则',
     'remote_app_count': '远程应用数量',
     //
-    'DatabaseaApp': '数据库应用',
+    'DatabaseApp': '数据库应用',
     'database_app_permission_list': '数据库应用授权列表',
     'database_app_permission_detail': '数据库应用授权详情',
     'create_database_app_permission': '创建数据库应用授权规则',
