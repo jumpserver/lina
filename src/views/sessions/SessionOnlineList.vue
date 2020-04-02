@@ -63,8 +63,18 @@ export default {
         ],
         tableActions: {
           hasEdit: false,
-          hadDelete: false
-        }
+          hasDelete: false
+        },
+        extraButtons: [
+          {
+            type: 'danger',
+            text: this.$t('sessions.terminate'),
+            // 必须使用箭头函数
+            atClick: (row) => {
+              this.$router.push({ name: '404' })
+            }
+          }
+        ]
       },
       headerActions: {
         hasCreate: false,

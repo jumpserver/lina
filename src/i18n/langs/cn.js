@@ -354,7 +354,9 @@ const cn = {
     'quick_modify': '快速修改',
     'terminate_session': '终止会话',
     'confirm': '确认',
-    'commands': '命令记录'
+    'commands': '命令记录',
+    'replay': '回放',
+    'download': '下载'
   },
   setting: {
     'setting': '系统设置',

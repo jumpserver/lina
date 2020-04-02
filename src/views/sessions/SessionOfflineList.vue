@@ -23,7 +23,10 @@ export default {
         },
         url: '/api/v1/terminal/sessions/',
         columns: [
-          { type: 'index' },
+          {
+            label: this.$t('sessions.id'),
+            type: 'index'
+          },
           {
             prop: 'user',
             label: this.$t('sessions.user'),
@@ -64,8 +67,25 @@ export default {
         ],
         tableActions: {
           hasEdit: false,
-          hadDelete: false
-        }
+          hasDelete: false
+        },
+        extraButtons: [
+          {
+            type: 'warning',
+            text: this.$t('sessions.replay'),
+            // 必须使用箭头函数
+            atClick: (row) => {
+              this.$router.push({ name: '404' })
+            }
+          },
+          {
+            type: 'primary',
+            text: this.$t('sessions.download'),
+            atClick: (row) => {
+              this.$router.push({ name: '404' })
+            }
+          }
+        ]
       },
       headerActions: {
         hasCreate: false,
