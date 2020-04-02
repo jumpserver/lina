@@ -1,6 +1,6 @@
 <template>
   <div :class="grouped ? 'el-button-group' : ''">
-    <el-button v-for="item in actions" :key="item.name" :size="size" v-bind="item" @click="handleClick(item.name)">
+    <el-button v-for="item in primaryActions" :key="item.name" :size="size" v-bind="item" @click="handleClick(item.name)">
       <i v-if="item.fa" :class="'fa ' + item.fa"></i>
       {{ item.title }}
     </el-button>
@@ -35,9 +35,19 @@ export default {
       type: Array,
       default: () => []
     },
-    moreActions: {
-      type: Array,
-      default: () => []
+    primaryShowSize: {
+      type: Number,
+      default: 2
+    },
+  },
+  data() {
+  },
+  computed: {
+    primaryActions() {
+      return this.actions.slice(0, this.primaryShowSize - 1)
+    },
+    moreActions() {
+      return this.actions.slice(this.primaryShowSize - 1, this.action.length)
     }
   },
   methods: {

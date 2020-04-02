@@ -2,14 +2,13 @@
   <div>
     <i :class="'fa ' + iconClass"></i>
   </div>
-
 </template>
 
 <script>
 import BaseFormatter from './base'
 export default {
   name: 'ChoicesFormatter',
-  extends: [BaseFormatter],
+  extends: BaseFormatter,
   data() {
     return {
       defaultIconChoices: {

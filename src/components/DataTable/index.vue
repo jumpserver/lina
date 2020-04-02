@@ -40,6 +40,8 @@ export default {
           align: 'center',
           width: '150px'
         },
+        operationButtonType: 'button',
+        buttonSize: 'mini',
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
@@ -59,6 +61,7 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
+        paginationSizes: [15, 30, 50, 100],
         paginationSize: 15,
         transformQuery: query => {
           if (query.page && query.size) {

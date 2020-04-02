@@ -3,12 +3,10 @@
 </template>
 
 <script>
+import BaseFormatter from './base'
 export default {
   name: 'DisplayFormatter',
-  props: {
-    col: Object,
-    row: Object
-  },
+  extends: BaseFormatter,
   data() {
     let displayKey = this.col.displayKey
     if (!displayKey) {

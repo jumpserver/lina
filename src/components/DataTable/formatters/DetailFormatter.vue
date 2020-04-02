@@ -3,23 +3,10 @@
 </template>
 
 <script>
+import BaseFormatter from './base'
 export default {
   name: 'DetailFormatter',
-  props: {
-    row: {
-      type: Object,
-      default: null
-    },
-    col: {
-      type: Object,
-      default: null
-    }
-  },
-  computed: {
-    cellValue() {
-      return this.row[this.col.prop]
-    }
-  },
+  extends: BaseFormatter,
   methods: {
     goDetail() {
       const routeName = this.col.route || ''
