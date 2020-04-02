@@ -1,13 +1,15 @@
 <template>
   <Page>
     <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-    <ListTable :table-config="tableConfig" />
+    <ListTable :table-config="tableConfig" :action-config="actionConfig" />
   </Page>
 </template>
 
 <script>
 import { Page } from '@/layout/components'
 import ListTable from '@/components/ListTable'
+import DetailFormatter from '@/components/DataTable/formatters/DetailFormatter'
+
 export default {
   components: {
     Page,
@@ -19,14 +21,12 @@ export default {
         url: '/api/v1/users/groups/',
         columns: [
           {
-            type: 'selection'
-          },
-          {
             prop: 'name',
             label: this.$tc('Name'),
             key: 'name',
-            link: 'UserGroupDetail',
-            sortable: true
+            formatter: DetailFormatter,
+            sortable: true,
+            route: 'UserDetail'
           },
           {
             prop: 'users_amount',
@@ -46,6 +46,8 @@ export default {
           newClick: 'UserGroupEdit'
         }
       },
+      actionConfig: {
+      }
 
     }
   }

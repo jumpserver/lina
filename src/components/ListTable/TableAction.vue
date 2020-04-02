@@ -90,7 +90,7 @@ export default {
       console.log('Search: ', keyword)
     },
     handleActionClick(item) {
-      console.log('Action: ', item)
+      this.$emit('clickAction', item)
     }
   }
 }

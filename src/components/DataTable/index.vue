@@ -30,12 +30,14 @@ export default {
         totalPath: 'count',
         saveQuery: false, // 关闭路径保存查询参数
         persistSelection: true, // 切换页面 已勾选项不会丢失
-        hasEdit: false, // 有编辑按钮
-        hasDelete: false,
-        hasAction: false, // 是否有更多操作
-        hasUpload: false,
+        hasEdit: true, // 有编辑按钮
+        hasDelete: true,
         hasNew: false,
         // editText: this.$t('action.update'), // 编辑按钮文案
+        operationAttrs: {
+          align: 'center',
+          width: '150px'
+        },
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框

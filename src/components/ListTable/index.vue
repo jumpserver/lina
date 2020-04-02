@@ -1,8 +1,8 @@
 <template>
   <div>
-    <TableAction></TableAction>
+    <TableAction v-bind="actionConfig" @clickAction="handleActionClick"></TableAction>
     <el-card class="table-content">
-      <DataTable :config="tableConfig" @selection-change="handleSelectionChange" ></DataTable>
+      <DataTable :config="tableConfig" @selection-change="handleSelectionChange"></DataTable>
     </el-card>
   </div>
 </template>
@@ -24,30 +24,9 @@ export default {
       default: () => {}
     },
     // 是否显示table左侧的action
-
-    createTitle: {
-      type: String,
-      default() {
-        return this.$tc('Create')
-      }
-    },
-    createAction: {
+    actionConfig: {
       type: Object,
-      default() {
-        return {
-          type: 'primary',
-          name: 'create',
-          title: this.createTitle
-        }
-      }
-    },
-    moreActions: {
-      type: Array,
-      default: () => []
-    },
-    actions: {
-      type: Array,
-      default: () => []
+      default: () => ({ })
     }
   },
   data() {
@@ -56,46 +35,16 @@ export default {
     }
   },
   computed: {
-    totalActions() {
-      let actions = this.actions
-      if (this.hasCreate) {
-        actions = [
-          this.createAction,
-          ... actions
-        ]
-      }
-      return actions
-    }
   },
   methods: {
     handleSelectionChange(val) {
-      console.log('lIst table', val)
       this.selectRows = val
       this.multipleSelection = val;
       (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
     },
-    handleEdit: function (index, row) {
-      try {
-        this.$router.push({name: this.action.hasEdit, params: {id: row.id}})
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    handleHeaderActionClick(item) {
-      this.$emit('headerActionClick', item, this.selectRows)
-    },
-    handleDelete: (index, row) => {
-    },
-    get(draw, limit, offset) {
-      this.loading = true
-      // this.getData({ draw, limit, offset }, { row: 1 }).then(response => {
-      //   console.log(response)
-      //   this.tabledata = response.results
-      //   this.total = response.count
-      //   this.loading = false
-      // })
+    handleActionClick(item) {
+      console.log('Handle ', item, this.selectRows)
     }
-
   }
 }
 </script>
