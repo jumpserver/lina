@@ -21,14 +21,14 @@ export default {
             label: this.$t('assets.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'PlatformDetail'
           },
           {
             prop: 'base',
             label: this.$t('assets.BasePlatform')
           },
           {
-            prop: '',
+            prop: 'comment',
             label: this.$t('assets.comment')
           }
         ],
@@ -40,7 +40,7 @@ export default {
       headerActions: {
         hasDelete: false,
         hasUpdate: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'PlatformCreate'
       }
     }
   }

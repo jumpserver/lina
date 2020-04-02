@@ -14,26 +14,34 @@ export default {
     return {
       showTree: true,
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/applications/database-apps/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('applications.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'DatabaseAppDetail'
           },
           {
-            prop: 'rules',
-            label: this.$t('assets.rules')
+            prop: 'get_type_display',
+            label: this.$t('applications.appType')
           },
           {
-            prop: 'system_users',
-            label: this.$t('assets.systemUser')
+            prop: 'host',
+            label: this.$t('applications.host')
+          },
+          {
+            prop: 'port',
+            label: this.$t('applications.port')
+          },
+          {
+            prop: 'database',
+            label: this.$t('applications.database')
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment')
+            label: this.$t('applications.comment')
           }
         ],
         tableActions: {
@@ -44,7 +52,7 @@ export default {
       headerActions: {
         hasDelete: false,
         hasUpdate: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'DatabaseAppCreate'
       }
     }
   }

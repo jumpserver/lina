@@ -263,7 +263,7 @@ const cn = {
     'remote_app_detail': '远程应用详情',
     'update_remote_app': '更新远程应用',
     'name': '名称',
-    'app_type': '应用类型',
+    'appType': '应用类型',
     'asset': '资产',
     'action': '操作',
     'update': '更新',

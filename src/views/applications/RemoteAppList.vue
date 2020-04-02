@@ -14,26 +14,26 @@ export default {
     return {
       showTree: true,
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/applications/remote-apps/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('applications.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'RemoteAppDetail'
           },
           {
-            prop: 'rules',
-            label: this.$t('assets.rules')
+            prop: 'get_type_display',
+            label: this.$t('applications.appType')
           },
           {
-            prop: 'system_users',
-            label: this.$t('assets.systemUser')
+            prop: 'asset_info',
+            label: this.$t('applications.asset')
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment')
+            label: this.$t('applications.comment')
           }
         ],
         tableActions: {
@@ -44,7 +44,7 @@ export default {
       headerActions: {
         hasDelete: false,
         hasUpdate: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'RemoteAppCreate'
       }
     }
   }
