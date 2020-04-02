@@ -31,7 +31,7 @@ export default {
     hasUpdate: defaultTrue,
     hasLeftActions: defaultTrue,
     hasSearch: defaultTrue,
-    hasRightActions: defaultTrue,
+    hasRightActions: defaultTrue
   },
   data() {
     return {

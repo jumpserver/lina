@@ -486,12 +486,8 @@ export default {
      */
     onEdit: {
       type: Function,
-      default(data) {
-        return this.$axios.put(
-          `${this.url}/${this.row[this.id]}`,
-          data,
-          this.axiosConfig
-        )
+      default(row) {
+        console.log('On delete row')
       }
     },
     /**
@@ -1094,7 +1090,7 @@ export default {
     },
     onDefaultEdit(row) {
       this.row = row
-      this.$refs.dialog.show(dialogModes.edit, row)
+      this.onEdit(row)
     },
     async onConfirm(isNew, formValue, done) {
       const data = {

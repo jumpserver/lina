@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TableAction v-bind="actionConfig" @clickAction="handleActionClick"></TableAction>
+    <TableAction v-bind="headerActions" @clickAction="handleActionClick"></TableAction>
     <el-card class="table-content">
       <DataTable :config="tableConfig" @selection-change="handleSelectionChange"></DataTable>
     </el-card>
@@ -24,14 +24,14 @@ export default {
       default: () => {}
     },
     // 是否显示table左侧的action
-    actionConfig: {
+    headerActions: {
       type: Object,
       default: () => ({ })
     }
   },
   data() {
     return {
-      selectRows: []
+      selectRows: [],
     }
   },
   computed: {
@@ -43,7 +43,27 @@ export default {
       (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
     },
     handleActionClick(item) {
-      console.log('Handle ', item, this.selectRows)
+      const handler = this.getActionHandler(item)
+      handler(this.selectRows)
+    },
+    handleActionCreate() {
+      const routeName = this.headerActions.createRoute || ''
+      this.$router.push({ name: routeName })
+      console.log('handle create')
+    },
+    getActionHandler(item) {
+      let handler = this.headerActions.item
+      const defaultHandlerName = 'handle' + item[0].toUpperCase() + item.slice(1, item.length)
+      if (!handler) {
+        handler = this[defaultHandlerName]
+      }
+      if (!handler) {
+        handler = () => {
+          console.log('No handler found for ', item)
+        }
+      }
+      console.log(handler)
+      return handler
     }
   }
 }

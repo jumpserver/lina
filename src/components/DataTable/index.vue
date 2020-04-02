@@ -17,6 +17,7 @@ export default {
     }
   },
   data() {
+    const userTableActions = this.config.tableActions || {}
     return {
       defaultConfig: {
         axiosConfig: {
@@ -30,8 +31,8 @@ export default {
         totalPath: 'count',
         saveQuery: false, // 关闭路径保存查询参数
         persistSelection: true, // 切换页面 已勾选项不会丢失
-        hasEdit: true, // 有编辑按钮
-        hasDelete: true,
+        hasEdit: userTableActions.hasEdit !== false, // 有编辑按钮
+        hasDelete: userTableActions.hasDelete !== false,
         hasNew: false,
         // editText: this.$t('action.update'), // 编辑按钮文案
         operationAttrs: {
@@ -42,6 +43,18 @@ export default {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
           fit: true // 宽度自适应
+        },
+        extraButtons: userTableActions.extraButtons,
+        onEdit: (row) => {
+          const defaultOnEdit = (row) => {
+            const routeName = userTableActions.editRoute
+            this.$router.push({ name: routeName, params: { id: row.id }})
+          }
+          let onEdit = userTableActions.onEdit
+          if (!onEdit) {
+            onEdit = defaultOnEdit
+          }
+          return onEdit(row)
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',

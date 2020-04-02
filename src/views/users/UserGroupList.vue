@@ -1,7 +1,7 @@
 <template>
   <Page>
     <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-    <ListTable :table-config="tableConfig" :action-config="actionConfig" />
+    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
   </Page>
 </template>
 
@@ -41,12 +41,13 @@ export default {
           }
         ],
         // 写路由名字，table组件会自动传作为参数
-        action: {
-          hasEdit: 'UserGroupEdit',
-          newClick: 'UserGroupEdit'
+        tableActions: {
+          hasEdit: true,
+          editRoute: '404'
         }
       },
-      actionConfig: {
+      headerActions: {
+        createRoute: 'UserGroupCreate'
       }
 
     }
