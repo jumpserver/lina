@@ -190,26 +190,26 @@ export const constantRoutes = [
   {
     path: '/perms/',
     component: Layout,
-    redirect: '/perms/asset-permission/',
+    redirect: '/perms/asset-permissions/',
     name: 'Perms',
     meta: { title: 'Perms', icon: 'edit' },
     children: [
       {
         path: 'asset-permissions',
         name: 'AssetPermissionList',
-        component: import('@/views/tree/index'),
+        component: () => import('@/views/perms/AssetPermissionList'),
         meta: { title: 'AssetPermission' }
       },
       {
         path: 'remote-app-permissions',
         name: 'RemoteAppPermissionList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/perms/RemoteAppPermissionList'),
         meta: { title: 'RemoteAppPermission' }
       },
       {
         path: 'database-app-permissions',
         name: 'DatabaseAppPermissionList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/perms/DatabaseAppPermissionList'),
         meta: { title: 'DatabaseAppPermission' }
       }
     ]
