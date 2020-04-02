@@ -224,13 +224,13 @@ export const constantRoutes = [
       {
         path: 'session-online',
         name: 'SessionOnlineList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/SessionOnlineList'),
         meta: { title: 'SessionOnline' }
       },
       {
         path: 'session-offline',
         name: 'SessionOfflineList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/SessionOfflineList'),
         meta: { title: 'SessionOffline' }
       },
       {
