@@ -161,7 +161,7 @@ export const constantRoutes = [
       {
         path: 'platforms',
         name: 'PlatformList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/assets/PlatformList'),
         meta: { title: 'PlatformList' }
       }
     ]

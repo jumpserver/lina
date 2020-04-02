@@ -252,7 +252,7 @@ const cn = {
     'create_platform': '创建系统平台',
     'update_platform': '更新系统平台',
     'platform_detail': '平台详情',
-    'base_platform': '基础平台',
+    'BasePlatform': '基础平台',
     'charset': '编码',
     'meta': '元数据'
   },
