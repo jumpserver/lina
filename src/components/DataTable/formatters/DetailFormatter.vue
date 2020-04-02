@@ -1,5 +1,5 @@
 <template>
-  <el-link :type="col.type || 'success'" @click="goDetail">{{ cellValue }}</el-link>
+  <el-link class="detail" :type="col.type || 'success'" @click="goDetail">{{ cellValue }}</el-link>
 </template>
 
 <script>
@@ -30,5 +30,7 @@ export default {
 </script>
 
 <style scoped>
-
+.detail {
+  font-weight: 400;
+}
 </style>

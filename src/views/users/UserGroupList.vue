@@ -18,7 +18,6 @@ export default {
           {
             prop: 'name',
             label: this.$tc('Name'),
-            key: 'name',
             formatter: DetailFormatter,
             sortable: true,
             route: 'UserDetail'
@@ -31,13 +30,11 @@ export default {
           {
             prop: 'comment',
             label: this.$tc('Comment'),
-            key: 'comment',
             showOverflowTooltip: true
           }
         ],
         // 写路由名字，table组件会自动传作为参数
         tableActions: {
-          hasEdit: true,
           editRoute: '404'
         }
       },

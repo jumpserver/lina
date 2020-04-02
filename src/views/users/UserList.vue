@@ -1,91 +1,63 @@
 <template>
-  <Page>
-    <IBox>
-      <DataTable :config="tableConfig" />
-    </IBox>
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { IBox, Page } from '@/layout/components'
-import DataTable from '@/components/DataTable'
+import { GenericListPage } from '@/layout/components'
+import { DetailFormatter, DisplayFormatter, ChoicesFormatter } from '@/components/DataTable/formatters/index'
 
 export default {
   components: {
-    IBox,
-    Page,
-    DataTable
+    GenericListPage,
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/users/users/',
-        defaultAlign: 'left',
-        operationAttrs: {
-          label: 'Operation',
-          prop: 'operation',
-          key: 'prop',
-          align: 'center'
-        },
-
-        extraButtons: [
-          {
-            type: 'primary',
-            // disabled: row => row.date === '2016-05-04',
-            text: this.$t('users.update'),
-            // 必须使用箭头函数
-            atClick: (row) => {
-              this.$router.push({ name: '404' })
-            }
-          },
-          {
-            type: 'warning',
-            // disabled: row => row.date === '2016-05-04',
-            text: this.$t('users.delete'),
-            atClick: (row) => {
-
-            }
-          }
-        ],
         columns: [
           {
-            type: 'selection',
-            align: 'center'
-          },
-          // Bug
-          // 应该让我插入Slot,使这个用户名可点击
-          {
             prop: 'name',
-            label: this.$t('users.name'),
-            sortable: true // 可排序
-            // url: 'UserDetail' // 第一个函数指定 路由Template
+            label: this.$tc('Name'),
+            formatter: DetailFormatter,
+            sortable: 'custom',
+            route: 'UserDetail'
           },
           {
             prop: 'username',
-            label: this.$t('users.username'),
-            sortable: true,
+            label: this.$t('users.Username'),
+            sortable: 'custom',
           },
           {
             prop: 'role',
-            label: this.$t('users.role'),
-            sortable: true
+            label: this.$t('users.Role'),
+            formatter: DisplayFormatter,
+            sortable: 'custom',
           },
-          // Bug API没有返回组织名称
           {
-            prop: 'group',
-            label: this.$t('users.usergroup'),
-            sortable: true,
-            align: 'left',
-            formatter: row => {
-              return <a href='http://qq.com' target='_blank'>hello</a>
-            }
+            prop: 'groups_display',
+            label: this.$t('users.User Groups')
           },
           {
             prop: 'source',
-            label: this.$t('users.source'),
-            sortable: true
+            label: this.$tc('Source'),
+            sortable: 'custom',
+            formatter: DisplayFormatter
+          },
+          {
+            prop: 'is_valid',
+            label: this.$tc('Status'),
+            formatter: ChoicesFormatter,
+            align: 'center',
+            width: '80px'
           }
-        ]
+        ],
+        // 写路由名字，table组件会自动传作为参数
+        tableActions: {
+          editRoute: '404'
+        }
+      },
+      headerActions: {
+        createRoute: 'UserGroupCreate'
       }
     }
   }

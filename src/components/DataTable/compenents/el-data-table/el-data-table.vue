@@ -14,6 +14,7 @@
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
         @select-all="selectStrategy.onSelectAll($event, selectable)"
+        @sort-change="onSortChange"
       >
         <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
         <template v-if="isTree">
@@ -103,6 +104,7 @@
                 :is="col.formatter"
                 :row="row"
                 :col="col"
+                :cell-value="row[col.prop]"
               >
               </div>
               <template v-else>
@@ -717,7 +719,7 @@ export default {
     extraQuery: {
       type: Object,
       default() {
-        return undefined
+        return {}
       }
     },
     /**
@@ -1230,6 +1232,19 @@ export default {
     iconShow(index, record) {
       //      return index ===0 && record.children && record.children.length > 0;
       return record[this.treeChildKey] && record[this.treeChildKey].length > 0
+    },
+    onSortChange({ column, prop, order }) {
+      if (!this.extraQuery) {
+        this.extraQuery = {}
+      }
+      if (!order) {
+        delete this.extraQuery['sort']
+        delete this.extraQuery['direction']
+      } else {
+        this.extraQuery['sort'] = prop
+        this.extraQuery['direction'] = order
+      }
+      this.getList()
     }
   }
 }
