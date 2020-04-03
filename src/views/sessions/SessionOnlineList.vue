@@ -24,6 +24,10 @@ export default {
         url: '/api/v1/terminal/sessions/',
         columns: [
           {
+            label: this.$t('sessions.id'),
+            type: 'index'
+          },
+          {
             prop: 'user',
             label: this.$t('sessions.user'),
             sortable: true
