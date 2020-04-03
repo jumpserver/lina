@@ -8,13 +8,23 @@
         <el-input v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch"></el-input>
         <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick"></ActionsGroup>
       </div>
+      <Dialog :title="$t('Export')">
+        <el-form>
+          <el-form-item label="导出范围" :label-width="'100px'">
+            <el-radio v-model="exportValue" class="export-item" label="1">导出全部</el-radio>
+            <el-radio v-model="exportValue" class="export-item" label="2">仅导出选中项</el-radio>
+            <el-radio v-model="exportValue" class="export-item" label="3">仅导出搜索项</el-radio>
+          </el-form-item>
+        </el-form>
+      </Dialog>
     </slot>
   </div>
 </template>
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
-import _ from 'lodash';
+import { Dialog } from '../Dialog'
+import _ from 'lodash'
 import { createSourceIdCache } from '@/api/common'
 
 const defaultTrue = { type: Boolean, default: true }
@@ -23,7 +33,8 @@ const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
-    ActionsGroup
+    ActionsGroup,
+    Dialog
   },
   props: {
     hasExport: defaultTrue,
@@ -44,6 +55,10 @@ export default {
       default: '404'
     },
     reloadTable: {
+      type: Function,
+      default: () => {}
+    },
+    performBulkDelete: {
       type: Function,
       default: () => {}
     },
@@ -72,8 +87,8 @@ export default {
     return {
       keyword: '',
       defaultRightSideActions: [
-        { name: 'actionExport', fa: 'fa-download', has: this.hasExport },
-        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport },
+        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport },
+        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport },
         { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
       ],
       defaultActions: [
@@ -101,7 +116,9 @@ export default {
           has: this.hasBulkUpdate,
           callback: this.handleBulkUpdate
         }
-      ]
+      ],
+      dialogExportVisible: false,
+      exportValue: 2
     }
   },
   computed: {
@@ -152,7 +169,7 @@ export default {
     defaultBulkDeleteCallback(rows) {
       const msg = this.$tc('Are you sure to delete') + ' ' + rows.length + ' ' + this.$tc('rows')
       const title = this.$tc('Info')
-      const performDelete = this.defaultPerformBulkDelete
+      const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
         type: 'warning',
         confirmButtonClass: 'el-button--danger',
@@ -187,6 +204,7 @@ export default {
     handleBulkUpdate(rows) {
     },
     handleExport() {
+      this.dialogExportVisible = true
     },
     handleImport() {
     },
@@ -262,6 +280,11 @@ export default {
   .table-action-right-side {
     display: flex;
     justify-content:center;
+  }
+
+  .export-item {
+    display: block;
+    padding: 5px 20px;
   }
 
 </style>

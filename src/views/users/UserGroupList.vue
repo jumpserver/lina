@@ -51,7 +51,10 @@ export default {
         ]
       },
       headerActions: {
-        createRoute: 'UserGroupCreate'
+        createRoute: 'UserGroupCreate',
+        performBulkDelete: function(rows) {
+          console.log('hello')
+        }
       }
     }
   }
