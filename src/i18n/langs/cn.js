@@ -37,7 +37,9 @@ const cn = {
     'More actions': '更多操作',
     'Delete selected': '删除所选',
     'Update selected': '更新所选',
-    'Search': '搜索'
+    'Search': '搜索',
+    'Source': '来源',
+    'Status': '状态'
   },
   route: {
     'dashboard': '仪表盘',
@@ -77,7 +79,7 @@ const cn = {
     'FtpLog': 'FTP日志',
     'OperateLog': '操作日志',
     'PasswordChangeLog': '改密日志',
-    'Settings': '系统设置'
+    'Settings': '系统设置',
   },
   // 用户模块翻译
   users: {
@@ -86,6 +88,9 @@ const cn = {
     'userDetail': '用户详情',
     'name': '姓名',
     'username': '用户名',
+    'Username': '用户名',
+    'Role': '角色',
+    'User Groups': '用户组',
     'email': '邮箱',
     'userGroup': '用户组',
     'role': '角色',

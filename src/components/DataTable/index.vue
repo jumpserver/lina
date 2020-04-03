@@ -23,7 +23,8 @@ export default {
         axiosConfig: {
           raw: 1,
           params: {
-            display: 1
+            display: 1,
+            draw: 1
           }
         },
         defaultAlign: 'left',
@@ -39,6 +40,8 @@ export default {
           align: 'center',
           width: '150px'
         },
+        operationButtonType: 'button',
+        buttonSize: 'mini',
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
@@ -58,15 +61,24 @@ export default {
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
+        paginationSizes: [15, 30, 50, 100],
+        paginationSize: 15,
         transformQuery: query => {
           if (query.page && query.size) {
-            const page = query.page || 1
+            const page = query.page > 0 ? query.page : 1
             const offset = (page - 1) * query.size
             const limit = query.size
             query.offset = offset
             query.limit = limit
             delete query['page']
             delete query['size']
+          }
+          if (query.sort) {
+            let ordering = query.direction === 'descending' ? '-' : ''
+            ordering += query.sort
+            query.order = ordering
+            delete query['sort']
+            delete query['direction']
           }
           return query
         }

@@ -32,8 +32,7 @@ export default {
             placeholder: 'test placeholder'
           },
           rules: [
-            { required: true, message: 'miss name', trigger: 'blur' },
-            { min: 3, max: 5, message: 'length between 3 to 5', trigger: 'blur' }
+            { required: true, message: 'miss name', trigger: 'blur' }
           ]
         },
         {

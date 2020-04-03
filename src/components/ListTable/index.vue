@@ -1,8 +1,12 @@
 <template>
   <div>
     <TableAction v-bind="headerActions" @clickAction="handleActionClick"></TableAction>
-    <el-card class="table-content">
-      <DataTable :config="tableConfig" @selection-change="handleSelectionChange"></DataTable>
+    <el-card class="table-content" shadow="never">
+      <DataTable :config="tableConfig" @selection-change="handleSelectionChange">
+        <template v-slot:actions="row">
+          {{ row.id }}
+        </template>
+      </DataTable>
     </el-card>
   </div>
 </template>
@@ -21,12 +25,12 @@ export default {
     // 定义 table 的配置
     tableConfig: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     // 是否显示table左侧的action
     headerActions: {
       type: Object,
-      default: () => ({ })
+      default: () => ({})
     }
   },
   data() {
@@ -35,6 +39,23 @@ export default {
     }
   },
   computed: {
+    actionColumn() {
+      const actions = []
+      let tc = this.tableConfig
+      if (tc.hasEdit !== false) {
+        actions.push({
+          name: 'update',
+          title: this.$tc('Update')
+        })
+      }
+
+      if (tc.hasDelete !== false) {
+        actions.push({
+          name: 'delete',
+          title: this.$tc('Delete')
+        })
+      }
+    }
   },
   methods: {
     handleSelectionChange(val) {
