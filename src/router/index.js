@@ -67,7 +67,7 @@ export const constantRoutes = [
       },
       {
         path: 'users/create',
-        component: () => import('@/views/users/UserCreate.vue'), // Parent router-view
+        component: () => import('@/views/users/UserEdit.vue'), // Parent router-view
         name: 'UserCreate',
         meta: { title: 'UserCreate' },
         hidden: true
