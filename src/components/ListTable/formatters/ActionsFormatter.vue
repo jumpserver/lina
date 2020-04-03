@@ -5,13 +5,16 @@
 <script>
 import ActionsGroup from '@/components/ActionsGroup/index'
 import BaseFormatter from './base'
+
 const defaultPerformDelete = function({row, col}) {
   const id = row.id
   const url = `/api/v1/users/groups/${id}/`
   return this.$axios.delete(url)
 }
-const defaultUpdateCallback = ({row, col, cellValue, reload}) => {
-
+const defaultUpdateCallback = function({row, col}) {
+  const id = row.id
+  const routeName = col.actions.updateRoute || '404'
+  this.$router.push({name: routeName, params: {id: id}})
 }
 
 const defaultDeleteCallback = function({row, col, cellValue, reload}) {

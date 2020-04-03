@@ -37,6 +37,7 @@ const cn = {
     'More actions': '更多操作',
     'Delete selected': '删除所选',
     'Update selected': '更新所选',
+    'Delete success': '删除成功',
     'Search': '搜索',
     'Source': '来源',
     'Status': '状态',

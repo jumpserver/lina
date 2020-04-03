@@ -11,7 +11,6 @@ export default {
     GenericListPage
   },
   data() {
-    const data = []
     return {
       tableConfig: {
         url: '/api/v1/users/groups/',
@@ -21,7 +20,7 @@ export default {
             label: this.$tc('Name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'UserDetail'
+            route: 'UserGroupDetail'
           },
           {
             prop: 'users_amount',
@@ -38,7 +37,16 @@ export default {
             label: this.$tc('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
-            width: '200px'
+            width: '200px',
+            actions: {
+              updateRoute: 'UserGroupUpdate',
+              extraActions: [
+                {
+                  name: 'run',
+                  title: this.$tc('Run')
+                }
+              ]
+            }
           }
         ],
         // 写路由名字，table组件会自动传作为参数
