@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import DetailFormatter from '@/components/DataTable/formatters/DetailFormatter'
+import { DetailFormatter, ActionsFormatter } from '@/components/DataTable/formatters/index'
 
 export default {
   components: {
@@ -31,6 +31,32 @@ export default {
             prop: 'comment',
             label: this.$tc('Comment'),
             showOverflowTooltip: true
+          },
+          {
+            prop: 'id',
+            label: this.$tc('Action'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            actions: {
+              hasDelete: true,
+              hasUpdate: (row, cellValue) => {
+                return true
+              },
+              canDelete: (row, cellValue) => {
+                return false
+              },
+              canUpdate: (row, cellValue) => {},
+              extraActions: [
+                {
+                  name: 'run',
+                  title: this.$tc('Run')
+                },
+                {
+                  name: 'monitor',
+                  title: this.$tc('Monitor')
+                }
+              ]
+            }
           }
         ],
         // 写路由名字，table组件会自动传作为参数

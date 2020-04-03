@@ -91,6 +91,7 @@
 
         <!--非树-->
         <template v-else>
+          <el-data-table-column v-if="hasSelection" type="selection" :align="columnsAlign"></el-data-table-column>
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
@@ -99,8 +100,8 @@
           >
             <template slot-scope="{row}">
               <div
-                v-if="col.formatter && typeof col.formatter !== 'function'"
                 :is="col.formatter"
+                v-if="col.formatter && typeof col.formatter !== 'function'"
                 :key="row.id"
                 :row="row"
                 :col="col"
@@ -113,8 +114,6 @@
             </template>
           </el-data-table-column>
         </template>
-
-        <!--@slot 自定义操作列, 当extraButtons不满足需求时可以使用 -->
         <slot />
       </el-table>
 

@@ -3,7 +3,7 @@
     <slot name="header">
       <!--TODO: 事件交互 -->
       <div class="table-header-left-side">
-        <ActionsGroup :actions="actions" class="header-action" @actionClick="handleActionClick"></ActionsGroup>
+        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick"></ActionsGroup>
       </div>
       <!-- TODO: 事件交互 -->
       <div class="table-action-right-side">
