@@ -24,11 +24,13 @@ export default {
           },
           {
             prop: 'rules',
-            label: this.$t('assets.rules')
+            label: this.$t('assets.rules'),
+            formatter: row => (<span>{row.rules.length}</span>)
           },
           {
             prop: 'system_users',
-            label: this.$t('assets.systemUser')
+            label: this.$t('assets.systemUser'),
+            formatter: row => (<span>{row.system_users.length}</span>)
           },
           {
             prop: 'comment',

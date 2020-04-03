@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/DataTable/formatters/index'
+import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/DataTable/formatters/index'
 
 export default {
   components: {
@@ -32,7 +32,8 @@ export default {
           },
           {
             prop: 'reachable',
-            label: this.$t('assets.reachable')
+            label: this.$t('assets.reachable'),
+            formatter: ChoicesFormatter
           },
           {
             prop: 'id',

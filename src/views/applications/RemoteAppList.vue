@@ -28,7 +28,8 @@ export default {
           },
           {
             prop: 'asset_info',
-            label: this.$t('applications.asset')
+            label: this.$t('applications.asset'),
+            formatter: row => (<span>{row.asset_info.hostname}</span>)
           },
           {
             prop: 'comment',

@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/DataTable/formatters/index'
+import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/DataTable/formatters/index'
 
 export default {
   components: {
@@ -24,23 +24,30 @@ export default {
           },
           {
             prop: 'users',
-            label: this.$t('perms.user')
+            label: this.$t('perms.user'),
+            formatter: row => (<span>{row.users.length}</span>)
           },
           {
             prop: 'user_groups',
-            label: this.$t('perms.userGroup')
+            label: this.$t('perms.userGroup'),
+            formatter: row => (<span>{row.user_groups.length}</span>)
           },
           {
             prop: 'remote_apps',
-            label: this.$t('perms.RemoteApp')
+            label: this.$t('perms.RemoteApp'),
+            formatter: row => (<span>{row.remote_apps.length}</span>)
           },
           {
             prop: 'system_users',
-            label: this.$t('perms.systemUser')
+            label: this.$t('perms.systemUser'),
+            formatter: row => (<span>{row.system_users.length}</span>)
           },
           {
             prop: 'is_valid',
-            label: this.$t('perms.validity')
+            label: this.$t('perms.validity'),
+            formatter: ChoicesFormatter,
+            align: 'center',
+            width: '80px'
           },
           {
             prop: 'id',

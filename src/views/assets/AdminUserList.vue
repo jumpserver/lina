@@ -27,7 +27,7 @@ export default {
             label: this.$t('common.username')
           },
           {
-            prop: 'assets',
+            prop: 'assets_amount',
             label: this.$t('assets.asset')
           },
           {
