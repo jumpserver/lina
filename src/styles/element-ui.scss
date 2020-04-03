@@ -195,3 +195,11 @@ td .el-button.el-button--mini {
   font-weight: 600;
   background-color: inherit;
 }
+
+.el-table .ascending .sort-caret.ascending {
+  border-bottom-color: #676a6c;
+}
+
+.el-table .descending .sort-caret.descending {
+  border-top-color: #676a6c;
+}

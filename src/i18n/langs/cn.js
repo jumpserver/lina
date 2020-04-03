@@ -36,7 +36,8 @@ const cn = {
     'Create': '创建',
     'More actions': '更多操作',
     'Delete selected': '删除所选',
-    'Update selected': '更新所选'
+    'Update selected': '更新所选',
+    'Search': '搜索'
   },
   route: {
     'dashboard': '仪表盘',

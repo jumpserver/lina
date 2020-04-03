@@ -74,9 +74,7 @@
                   class="tree-ctrl"
                   @click="toggleExpanded(scope.$index)"
                 >
-                  <i
-                    :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`"
-                  />
+                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`"/>
                 </span>
                 {{ scope.row[columns[0].prop] }}
               </template>
@@ -92,11 +90,25 @@
 
         <!--非树-->
         <template v-else>
+          <el-data-table-column v-if="hasSelection" type="selection" :align="columnsAlign"></el-data-table-column>
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
+            :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             v-bind="{align: columnsAlign, ...col}"
           >
+            <template slot-scope="{row}">
+              <div
+                v-if="col.formatter && typeof col.formatter !== 'function'"
+                :is="col.formatter"
+                :row="row"
+                :col="col"
+              >
+              </div>
+              <template v-else>
+                {{ row[col.prop] }}
+              </template>
+            </template>
           </el-data-table-column>
         </template>
 
@@ -119,6 +131,7 @@
             <self-loading-button
               v-if="hasEdit"
               type="primary"
+              :disable="!canEdit(scope.row)"
               :size="operationButtonType === 'text' ? '' : buttonSize"
               :is-text="operationButtonType === 'text'"
               @click="onDefaultEdit(scope.row)"
@@ -153,8 +166,9 @@
               </self-loading-button>
             </template>
             <self-loading-button
-              v-if="!hasSelect && hasDelete && canDelete(scope.row)"
+              v-if="hasDelete"
               type="danger"
+              :disable="!canDelete(scope.row)"
               :size="operationButtonType === 'text' ? '' : buttonSize"
               :is-text="operationButtonType === 'text'"
               @click="onDefaultDelete(scope.row)"
@@ -450,6 +464,12 @@ export default {
         return true
       }
     },
+    canEdit: {
+      type: Function,
+      default() {
+        return true
+      }
+    },
     /**
      * 点击新增按钮时的方法, 当默认新增方法不满足需求时使用, 需要返回promise
      * 参数(data, row) data 是form表单的数据, row 是当前行的数据, 只有isTree为true时, 点击操作列的新增按钮才会有值
@@ -466,12 +486,8 @@ export default {
      */
     onEdit: {
       type: Function,
-      default(data) {
-        return this.$axios.put(
-          `${this.url}/${this.row[this.id]}`,
-          data,
-          this.axiosConfig
-        )
+      default(row) {
+        console.log('On delete row')
       }
     },
     /**
@@ -484,7 +500,7 @@ export default {
         const ids = Array.isArray(data)
           ? data.map(v => v[this.id]).join(',')
           : data[this.id]
-        return this.$axios.delete(this.url + '/' + ids, this.axiosConfig)
+        return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
       }
     },
     /**
@@ -750,6 +766,14 @@ export default {
     extraPaginationAttrs: {
       type: Object,
       default: () => {}
+    },
+    hasSelection: {
+      type: Boolean,
+      default: true
+    },
+    hasDetail: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -775,6 +799,7 @@ export default {
   },
   computed: {
     hasSelect() {
+      console.log(this.columns.length && this.columns[0].type === 'selection')
       return this.columns.length && this.columns[0].type === 'selection'
     },
     selectable() {
@@ -854,8 +879,6 @@ export default {
        * @property {array} rows - 已选中的行数据的数组
        */
       this.$emit('selection-change', val)
-      console.log('Selected', this.selected)
-      console.log('Val', val)
     }
   },
   mounted() {
@@ -1067,7 +1090,7 @@ export default {
     },
     onDefaultEdit(row) {
       this.row = row
-      this.$refs.dialog.show(dialogModes.edit, row)
+      this.onEdit(row)
     },
     async onConfirm(isNew, formValue, done) {
       const data = {

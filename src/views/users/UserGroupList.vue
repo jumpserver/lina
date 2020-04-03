@@ -1,21 +1,14 @@
 <template>
-  <Page>
-    <template>
-      <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card>
-        <ListTable :table-config="tableConfig" :more-actions="moreActions" />
-      </el-card>
-    </template>
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { Page } from '@/layout/components'
-import ListTable from '@/components/ListTable'
+import { GenericListPage } from '@/layout/components'
+import DetailFormatter from '@/components/DataTable/formatters/DetailFormatter'
+
 export default {
   components: {
-    Page,
-    ListTable
+    GenericListPage
   },
   data() {
     return {
@@ -23,14 +16,12 @@ export default {
         url: '/api/v1/users/groups/',
         columns: [
           {
-            type: 'selection'
-          },
-          {
             prop: 'name',
             label: this.$tc('Name'),
             key: 'name',
-            link: 'UserGroupDetail',
-            sortable: true
+            formatter: DetailFormatter,
+            sortable: true,
+            route: 'UserDetail'
           },
           {
             prop: 'users_amount',
@@ -40,25 +31,20 @@ export default {
           {
             prop: 'comment',
             label: this.$tc('Comment'),
-            key: 'comment'
+            key: 'comment',
+            showOverflowTooltip: true
           }
         ],
         // 写路由名字，table组件会自动传作为参数
-        action: {
-          hasEdit: 'UserGroupEdit',
-          newClick: 'UserGroupEdit'
+        tableActions: {
+          hasEdit: true,
+          editRoute: '404'
         }
       },
-      moreActions: [
-        {
-          title: this.$tc('Delete selected'),
-          name: 'deleteSelected'
-        },
-        {
-          title: this.$tc('Update selected'),
-          name: 'updateSelected'
-        }
-      ]
+      headerActions: {
+        createRoute: 'UserGroupCreate'
+      }
+
     }
   }
 }

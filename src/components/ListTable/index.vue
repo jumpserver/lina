@@ -1,28 +1,21 @@
 <template>
   <div>
-    <div class="table-header">
-      <slot name="header">
-        <!--TODO: 事件交互 -->
-        <HeaderActions :actions="totalActions" :more-actions="moreActions" />
-        <!-- TODO: 事件交互 -->
-        <search v-if="hasSearch" class="search" @serachAction="handleSearch" />
-      </slot>
-    </div>
-    <DataTable :config="tableConfig" class="table-content" />
+    <TableAction v-bind="headerActions" @clickAction="handleActionClick"></TableAction>
+    <el-card class="table-content">
+      <DataTable :config="tableConfig" @selection-change="handleSelectionChange"></DataTable>
+    </el-card>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-import search from './search'
 import DataTable from '../DataTable'
-import HeaderActions from './HeaderActions'
+import TableAction from './TableAction'
 export default {
   name: 'ListTable',
   components: {
-    HeaderActions,
     DataTable,
-    search
+    TableAction
   },
   props: {
     // 定义 table 的配置
@@ -31,107 +24,55 @@ export default {
       default: () => {}
     },
     // 是否显示table左侧的action
-    hasAction: {
-      type: Boolean,
-      default: true
-    },
-    hasSearch: {
-      type: Boolean,
-      default: true
-    },
-    hasCreate: {
-      type: Boolean,
-      default: true
-    },
-    createTitle: {
-      type: String,
-      default() {
-        return this.$tc('Create')
-      }
-    },
-    createAction: {
+    headerActions: {
       type: Object,
-      default() {
-        return {
-          type: 'primary',
-          name: 'create',
-          title: this.createTitle
-        }
-      }
-    },
-    moreActions: {
-      type: Array,
-      default: () => []
-    },
-    actions: {
-      type: Array,
-      default: () => []
+      default: () => ({ })
     }
   },
   data() {
     return {
+      selectRows: [],
     }
   },
   computed: {
-    totalActions() {
-      let actions = this.actions
-      if (this.hasCreate) {
-        actions = [
-          this.createAction,
-          ... actions
-        ]
-      }
-      return actions
-    }
   },
   methods: {
-    handleSearch(val) {
-      this.loading = true
-      // this.getData({ search: val, draw: this.current_page, limit: this.page_size, offset: this.offset }, { row: 1 }).then(response => {
-      //   console.log(response)
-      //   this.tabledata = response.results
-      //   this.total = response.count
-      //   this.loading = false
-      // })
-    },
     handleSelectionChange(val) {
+      this.selectRows = val
       this.multipleSelection = val;
       (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
     },
-    handleEdit: function(index, row) {
-      try {
-        this.$router.push({ name: this.action.hasEdit, params: { id: row.id }})
-      } catch (error) {
-        console.log(error)
+    handleActionClick(item) {
+      const handler = this.getActionHandler(item)
+      handler(this.selectRows)
+    },
+    handleActionCreate() {
+      const routeName = this.headerActions.createRoute || ''
+      this.$router.push({ name: routeName })
+      console.log('handle create')
+    },
+    getActionHandler(item) {
+      let handler = this.headerActions.item
+      const defaultHandlerName = 'handle' + item[0].toUpperCase() + item.slice(1, item.length)
+      if (!handler) {
+        handler = this[defaultHandlerName]
       }
-    },
-    handleHeaderActionClick(item) {
-      this.$emit('headerActionClick', item)
-    },
-    handleDelete: (index, row) => {
-    },
-    get(draw, limit, offset) {
-      this.loading = true
-      // this.getData({ draw, limit, offset }, { row: 1 }).then(response => {
-      //   console.log(response)
-      //   this.tabledata = response.results
-      //   this.total = response.count
-      //   this.loading = false
-      // })
+      if (!handler) {
+        handler = () => {
+          console.log('No handler found for ', item)
+        }
+      }
+      console.log(handler)
+      return handler
     }
-
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .table-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+
   .table-content {
-    margin-top: 15px;
+    margin-top: 10px;
   }
   //修改颜色
   // .el-button--text{

@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable class="el-table" v-bind="tableConfig" />
+  <ElDatableTable class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
 </template>
 
 <script>
@@ -17,6 +17,7 @@ export default {
     }
   },
   data() {
+    const userTableActions = this.config.tableActions || {}
     return {
       defaultConfig: {
         axiosConfig: {
@@ -25,20 +26,35 @@ export default {
             display: 1
           }
         },
+        defaultAlign: 'left',
         dataPath: 'results',
         totalPath: 'count',
         saveQuery: false, // 关闭路径保存查询参数
         persistSelection: true, // 切换页面 已勾选项不会丢失
-        hasEdit: false, // 有编辑按钮
-        hasDelete: false,
-        hasAction: false, // 是否有更多操作
-        hasUpload: false,
+        hasEdit: userTableActions.hasEdit !== false, // 有编辑按钮
+        hasDelete: userTableActions.hasDelete !== false,
         hasNew: false,
         // editText: this.$t('action.update'), // 编辑按钮文案
+        operationAttrs: {
+          align: 'center',
+          width: '150px'
+        },
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
           fit: true // 宽度自适应
+        },
+        extraButtons: userTableActions.extraButtons,
+        onEdit: (row) => {
+          const defaultOnEdit = (row) => {
+            const routeName = userTableActions.editRoute
+            this.$router.push({ name: routeName, params: { id: row.id }})
+          }
+          let onEdit = userTableActions.onEdit
+          if (!onEdit) {
+            onEdit = defaultOnEdit
+          }
+          return onEdit(row)
         },
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
@@ -70,7 +86,7 @@ export default {
 
   .el-table /deep/ .el-table__row > td {
     line-height: 1.5;
-    padding: 8px;
+    padding: 8px 0;
   }
   .el-table /deep/ .el-table__row > td> div > span {
     text-overflow: ellipsis;
@@ -79,7 +95,7 @@ export default {
     white-space: nowrap;
   }
   .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px;
+    padding: 8px 0;
     background-color: #F5F5F6;
     font-size: 13px;
     line-height: 1.5;
