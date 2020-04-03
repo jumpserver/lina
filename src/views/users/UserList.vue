@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, DisplayFormatter, ChoicesFormatter } from '@/components/DataTable/formatters/index'
+import { DetailFormatter, DisplayFormatter, ChoicesFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {

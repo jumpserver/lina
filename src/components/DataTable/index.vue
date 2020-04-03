@@ -36,16 +36,12 @@ export default {
         hasDelete: userTableActions.hasDelete !== false,
         hasNew: false,
         // editText: this.$t('action.update'), // 编辑按钮文案
-        operationAttrs: {
-          align: 'center',
-          width: '150px'
-        },
-        operationButtonType: 'button',
         buttonSize: 'mini',
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
-          fit: true // 宽度自适应
+          fit: true, // 宽度自适应,
+          tooltipEffect: 'dark'
         },
         extraButtons: userTableActions.extraButtons,
         onEdit: (row) => {

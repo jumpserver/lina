@@ -3,32 +3,70 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup'
+import ActionsGroup from '@/components/ActionsGroup/index'
 import BaseFormatter from './base'
+const defaultPerformDelete = function({row, col}) {
+  const id = row.id
+  const url = `/api/v1/users/groups/${id}/`
+  return this.$axios.delete(url)
+}
+const defaultUpdateCallback = ({row, col, cellValue, reload}) => {
+
+}
+
+const defaultDeleteCallback = function({row, col, cellValue, reload}) {
+  const msg = this.$tc('Are you sure to delete') + ' "' + row.name + '"'
+  const title = this.$tc('Info')
+  const performDelete = col.actions.performDelete || defaultPerformDelete.bind(this)
+  this.$alert(msg, title, {
+    type: 'warning',
+    confirmButtonClass: 'el-button--danger',
+    showCancelButton: true,
+    beforeClose: async(action, instance, done) => {
+      if (action !== 'confirm') return done()
+      instance.confirmButtonLoading = true
+      try {
+        await performDelete({row: row, col: col})
+        done()
+        reload()
+        this.$message.success(this.$tc('Delete success'))
+      } catch (error) {
+        this.$message.error(this.$tc('Delete failed'))
+        console.warn(error)
+      } finally {
+        instance.confirmButtonLoading = false
+      }
+    }
+  }).catch(() => {
+    /* 取消*/
+  })
+}
+
 export default {
   name: 'ActionsFormatter',
   components: { ActionsGroup },
   extends: BaseFormatter,
   data() {
+    const colActions = this.col.actions || {}
     const defaultActions = [
       {
         name: 'update',
         title: this.$tc('Update'),
         type: 'primary',
-        has: this.col.actions.hasUpdate || true,
-        can: this.col.actions.canUpdate || true,
-        callback: this.col.actions.onUpdate
+        has: colActions.hasUpdate || true,
+        can: colActions.canUpdate || true,
+        callback: colActions.onUpdate || defaultUpdateCallback.bind(this)
       },
       {
         name: 'delete',
         title: this.$tc('Delete'),
         type: 'danger',
-        has: this.col.actions.hasDelete || true,
-        can: this.col.actions.canDelete || true,
-        callback: this.col.actions.onDelete
+        has: colActions.hasDelete || true,
+        can: colActions.canDelete || true,
+        callback: colActions.onDelete || defaultDeleteCallback.bind(this)
       }
     ]
-    const extraActions = this.col.actions.extraActions || []
+    const extraActions = colActions.extraActions || []
     return {
       defaultActions: defaultActions,
       extraActions: extraActions
@@ -70,8 +108,14 @@ export default {
     handleActionClick(item) {
       const action = this.namedValidActions[item]
       if (action && action.callback) {
-        console.log(this.setting)
-        action.callback(this.row, this.col, this.cellValue)
+        const attrs = {
+          reload: this.reload,
+          row: this.row,
+          col: this.col,
+          cellValue: this.cellValue,
+          tableData: this.tableData
+        }
+        action.callback(attrs)
       }
     },
     checkItem(item, attr) {

@@ -102,8 +102,9 @@
               <div
                 :is="col.formatter"
                 :key="row.id"
-                :setting="data"
+                :table-data="data"
                 :row="row"
+                :reload="getList"
                 :col="col"
                 :cell-value="row[col.prop]"
               >

@@ -2,7 +2,7 @@
   <div>
     <TableAction v-bind="headerActions" @clickAction="handleActionClick"></TableAction>
     <el-card class="table-content" shadow="never">
-      <DataTable :config="tableConfig" @selection-change="handleSelectionChange">
+      <DataTable ref="table" :config="tableConfig" @selection-change="handleSelectionChange">
         <template v-slot:actions="row">
           {{ row.id }}
         </template>
@@ -39,29 +39,13 @@ export default {
     }
   },
   computed: {
-    actionColumn() {
-      const actions = []
-      let tc = this.tableConfig
-      if (tc.hasEdit !== false) {
-        actions.push({
-          name: 'update',
-          title: this.$tc('Update')
-        })
-      }
-
-      if (tc.hasDelete !== false) {
-        actions.push({
-          name: 'delete',
-          title: this.$tc('Delete')
-        })
-      }
-    }
   },
   methods: {
     handleSelectionChange(val) {
       this.selectRows = val
       this.multipleSelection = val;
       (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
+      console.log(this.$refs.table)
     },
     handleActionClick(item) {
       const handler = this.getActionHandler(item)

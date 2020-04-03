@@ -144,7 +144,6 @@ export default {
         }
         data.results.forEach((v) => {
           this.options.push(v)
-          console.log(v)
         })
       }).catch(err => {
         console.log(err)

@@ -39,7 +39,12 @@ const cn = {
     'Update selected': '更新所选',
     'Search': '搜索',
     'Source': '来源',
-    'Status': '状态'
+    'Status': '状态',
+    'Actions': '动作',
+    'Monitor': '监控',
+    'Run': '执行',
+    'Are you sure to delete': '你确定要删除',
+    'Info': '提示'
   },
   route: {
     'dashboard': '仪表盘',
