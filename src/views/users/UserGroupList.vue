@@ -48,8 +48,7 @@ export default {
               ]
             }
           }
-        ],
-        // 写路由名字，table组件会自动传作为参数
+        ]
       },
       headerActions: {
         createRoute: 'UserGroupCreate'

@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
+  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
 </template>
 
 <script>
@@ -86,6 +86,12 @@ export default {
       const config = Object.assign(this.defaultConfig, this.config)
       return config
     }
+  },
+  methods: {
+    getList() {
+      this.$refs.table.clearSelection()
+      return this.$refs.table.getList()
+    }
   }
 }
 </script>
@@ -98,7 +104,6 @@ export default {
   }
   .el-table /deep/ .el-table__row > td> div > span {
     text-overflow: ellipsis;
-    -moz-text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }

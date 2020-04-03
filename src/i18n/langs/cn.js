@@ -45,7 +45,8 @@ const cn = {
     'Monitor': '监控',
     'Run': '执行',
     'Are you sure to delete': '你确定要删除',
-    'Info': '提示'
+    'Info': '提示',
+    'More': '更多'
   },
   route: {
     'dashboard': '仪表盘',
