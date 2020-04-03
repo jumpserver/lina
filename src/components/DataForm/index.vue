@@ -1,5 +1,11 @@
 <template>
-  <elFormRender ref="dataForm" :content="content" v-bind="$attrs" v-on="$listeners">
+  <elFormRender
+    ref="dataForm"
+    :content="content"
+    v-bind="$attrs"
+    :form="basicForm"
+    v-on="$listeners"
+  >
     <!-- slot 透传 -->
     <slot v-for="item in content" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
     <slot v-for="item in content" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
@@ -26,26 +32,35 @@ export default {
     content: {
       type: Array,
       default: () => []
+    },
+    // 初始值
+    form: {
+      type: Object,
+      default: () => { return {} }
     }
   },
+  data() {
+    return {
+      basicForm: {}
+    }
+  },
+  mounted() {
+    this.basicForm = this.form
+  },
   methods: {
+    // 获取表单数据
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('submit')
+          this.$emit('submit', this.$refs[formName].getFormValue())
         } else {
-          console.log('error submit!!')
           return false
         }
       })
     },
+    // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    getBasic() {
-      if (this.url) {
-        console.log('has Url')
-      }
     }
   }
 }
@@ -58,5 +73,4 @@ export default {
     margin-left:12%;
     width:73%;
 }
-
 </style>
