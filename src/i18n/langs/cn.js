@@ -347,7 +347,10 @@ const cn = {
     'download': '下载',
     'RiskLevel': '风险等级',
     'session': '会话',
-    'date': '日期'
+    'date': '日期',
+    'addr': '地址',
+    'active': '激活中',
+    'alive': '在线'
   },
   setting: {
     'setting': '系统设置',

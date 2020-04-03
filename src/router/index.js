@@ -254,7 +254,7 @@ export const constantRoutes = [
       {
         path: 'terminal',
         name: 'TerminalList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/TerminalList'),
         meta: { title: 'Terminal' }
       }
     ]
