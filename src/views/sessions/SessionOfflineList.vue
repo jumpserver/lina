@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-      showTree: true,
       tableConfig: {
         axiosConfig: {
           raw: 1,

@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-      showTree: true,
       tableConfig: {
         url: '/api/v1/applications/database-apps/',
         columns: [

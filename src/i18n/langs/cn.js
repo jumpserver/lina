@@ -330,9 +330,6 @@ const cn = {
     'database_app_count': '数据库应用数量'
   },
   sessions: {
-    'session_online': '在线会话',
-    'session_online_list': '在线会话',
-    'session_detail': '会话详情',
     'id': 'ID',
     'user': '用户',
     'asset': '资产',
@@ -343,20 +340,14 @@ const cn = {
     'command': '命令',
     'dateStart': '开始日期',
     'duration': '时长',
-    'action': '动作',
-    'search': '搜索',
-    'terminate_selected': '终断所选',
-    'confirm_finished': '确认已完成',
-    'submit': '提交',
     'terminate': '终断',
-    'command_list': '命令记录列表',
     'date_end': '结束日期',
-    'quick_modify': '快速修改',
-    'terminate_session': '终止会话',
-    'confirm': '确认',
     'commands': '命令记录',
     'replay': '回放',
-    'download': '下载'
+    'download': '下载',
+    'RiskLevel': '风险等级',
+    'session': '会话',
+    'date': '日期'
   },
   setting: {
     'setting': '系统设置',

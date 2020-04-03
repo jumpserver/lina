@@ -20,11 +20,25 @@ export default {
             is_finished: 0
           }
         },
-        url: '/api/v1/terminal/sessions/',
+        hasSelection: false,
+        hasOperation: false,
+        url: '/api/v1/terminal/commands/',
         columns: [
           {
-            label: this.$t('sessions.id'),
-            type: 'index'
+            type: 'expand'
+          },
+          {
+            prop: 'input',
+            label: this.$t('sessions.command')
+          },
+          {
+            prop: 'output',
+            label: '命令输出结果 (怎么放到隐藏内容 ？？)',
+            expand: true
+          },
+          {
+            prop: 'risk_level',
+            label: this.$t('sessions.RiskLevel')
           },
           {
             prop: 'user',
@@ -40,44 +54,18 @@ export default {
             label: this.$t('sessions.systemUser')
           },
           {
-            prop: 'remote_addr',
-            label: this.$t('sessions.remoteAddr')
+            prop: 'session',
+            label: this.$t('sessions.session')
           },
           {
-            prop: 'protocol',
-            label: this.$t('sessions.protocol')
-          },
-          {
-            prop: 'login_from_display',
-            label: this.$t('sessions.loginForm')
-          },
-          {
-            prop: 'command',
-            label: this.$t('sessions.command')
-          },
-          {
-            prop: 'date_start',
-            label: this.$t('sessions.dateStart')
-          },
-          {
-            prop: 'duration',
-            label: this.$t('sessions.duration')
+            prop: 'timestamp',
+            label: this.$t('sessions.date')
           }
         ],
         tableActions: {
           hasEdit: false,
           hasDelete: false
-        },
-        extraButtons: [
-          {
-            type: 'danger',
-            text: this.$t('sessions.terminate'),
-            // 必须使用箭头函数
-            atClick: (row) => {
-              this.$router.push({ name: '404' })
-            }
-          }
-        ]
+        }
       },
       headerActions: {
         hasCreate: false,

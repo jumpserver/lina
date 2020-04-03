@@ -235,8 +235,8 @@ export const constantRoutes = [
       },
       {
         path: 'command',
-        name: 'CommandsList',
-        component: () => import('@/views/tree/index'),
+        name: 'CommandList',
+        component: () => import('@/views/sessions/CommandList'),
         meta: { title: 'Commands' }
       },
       {
