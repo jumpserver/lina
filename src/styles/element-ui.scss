@@ -203,3 +203,23 @@ td .el-button.el-button--mini {
 .el-table .descending .sort-caret.descending {
   border-top-color: #676a6c;
 }
+
+.text-danger {
+  color: $--color-danger;
+}
+
+.text-primary {
+  color: $--color-primary;
+}
+
+.text-info {
+  color: $--color-info;
+}
+
+.text-warning {
+  color: $--color-warning;
+}
+
+.text-success {
+  color: $--color-success;
+}

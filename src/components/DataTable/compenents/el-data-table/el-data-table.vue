@@ -14,6 +14,7 @@
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
         @select-all="selectStrategy.onSelectAll($event, selectable)"
+        @sort-change="onSortChange"
       >
         <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
         <template v-if="isTree">
@@ -97,88 +98,19 @@
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             v-bind="{align: columnsAlign, ...col}"
           >
-            <template slot-scope="{row}">
+            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row}">
               <div
-                v-if="col.formatter && typeof col.formatter !== 'function'"
                 :is="col.formatter"
+                :key="row.id"
+                :setting="data"
                 :row="row"
                 :col="col"
+                :cell-value="row[col.prop]"
               >
               </div>
-              <template v-else>
-                {{ row[col.prop] }}
-              </template>
             </template>
           </el-data-table-column>
         </template>
-
-        <!--默认操作列-->
-        <el-data-table-column
-          v-if="hasOperation"
-          :label="$tc('action')"
-          v-bind="{align: columnsAlign, ...operationAttrs}"
-        >
-          <template slot-scope="scope">
-            <self-loading-button
-              v-if="isTree && hasNew"
-              type="primary"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultNew(scope.row)"
-            >
-              {{ newText }}
-            </self-loading-button>
-            <self-loading-button
-              v-if="hasEdit"
-              type="primary"
-              :disable="!canEdit(scope.row)"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultEdit(scope.row)"
-            >
-              {{ editText }}
-            </self-loading-button>
-            <self-loading-button
-              v-if="hasView"
-              type="primary"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultView(scope.row)"
-            >
-              {{ viewText }}
-            </self-loading-button>
-            <template v-for="(btn, i) in extraButtons">
-              <self-loading-button
-                v-if="'show' in btn ? btn.show(scope.row) : true"
-                :key="i"
-                :is-text="operationButtonType === 'text'"
-                v-bind="btn"
-                :params="scope.row"
-                :callback="getList"
-                :disabled="'disabled' in btn ? btn.disabled(scope.row) : false"
-                :click="btn.atClick"
-              >
-                {{
-                  typeof btn.text === 'function'
-                    ? btn.text(scope.row)
-                    : btn.text
-                }}
-              </self-loading-button>
-            </template>
-            <self-loading-button
-              v-if="hasDelete"
-              type="danger"
-              :disable="!canDelete(scope.row)"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultDelete(scope.row)"
-            >
-              {{ deleteText }}
-            </self-loading-button>
-          </template>
-        </el-data-table-column>
-
-        <!--@slot 自定义操作列, 当extraButtons不满足需求时可以使用 -->
         <slot />
       </el-table>
 
@@ -717,7 +649,7 @@ export default {
     extraQuery: {
       type: Object,
       default() {
-        return undefined
+        return {}
       }
     },
     /**
@@ -1230,6 +1162,19 @@ export default {
     iconShow(index, record) {
       //      return index ===0 && record.children && record.children.length > 0;
       return record[this.treeChildKey] && record[this.treeChildKey].length > 0
+    },
+    onSortChange({ column, prop, order }) {
+      if (!this.extraQuery) {
+        this.extraQuery = {}
+      }
+      if (!order) {
+        delete this.extraQuery['sort']
+        delete this.extraQuery['direction']
+      } else {
+        this.extraQuery['sort'] = prop
+        this.extraQuery['direction'] = order
+      }
+      this.getList()
     }
   }
 }
