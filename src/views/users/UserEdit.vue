@@ -2,12 +2,15 @@
   <Page>
     <template>
       <el-card>
-        <dataform :content="content" label-position="left" label-width="140px" :form="form">
+        <dataform :form="form" :content="content" label-position="left" label-width="140px">
           <formgroupheader slot="id:name" title="账户" :line="false" style="margin:0 50px;" />
           <formgroupheader slot="id:passwordrule" title="认证" :line="true" style="margin:0 50px;" />
+          <formgroupheader slot="id:role" title="角色安全" :line="true" style="margin:0 50px;" />
+          <formgroupheader slot="id:phone" title="认证" :line="true" style="margin:0 50px;" />
         </dataform>
       </el-card>
     </template>
+    <el-button @click="debug" />
   </page>
 </template>
 
@@ -26,13 +29,21 @@ export default {
   },
   data() {
     return {
+      form: {
+        name: '姓名',
+        passwordrule: '1',
+        mfa_level: 0,
+        source: 'local',
+        role: 'Admin',
+        date_expired: '2099-12-31 00:00:00 +0800'
+      },
       content: [
         {
           type: 'input',
           id: 'name',
           label: this.$t('users.name'),
           el: {
-            size: 'mini'
+            size: 'small'
           },
           rules: [
             { required: true, message: 'miss name', trigger: 'blur' }
@@ -43,7 +54,7 @@ export default {
           id: 'username',
           label: this.$t('users.username'),
           el: {
-            size: 'mini'
+            size: 'small'
           },
           rules: [
             { required: true, message: 'miss name', trigger: 'blur' }
@@ -54,7 +65,7 @@ export default {
           id: 'email',
           label: this.$t('users.email'),
           el: {
-            size: 'mini'
+            size: 'small'
           },
           rules: [
             { required: true, message: 'miss name', trigger: 'blur' }
@@ -64,7 +75,7 @@ export default {
           id: 'users',
           label: '用户组',
           el: {
-            size: 'mini',
+            size: 'small',
             placeholder: '添加到用户组',
             value: [
               {
@@ -94,6 +105,9 @@ export default {
           el: {
             size: 'small'
           },
+          hidden: (formValue, item) => {
+            return this.$route.params.id
+          },
           options: [{
             label: '生成重置密码链接，通过邮件发送给用户',
             value: '1'
@@ -109,30 +123,47 @@ export default {
           id: 'password',
           label: '密码',
           hidden: (formValue, item) => {
-            console.log(formValue, item)
-            formValue.passwordrule !== '2'
+            if (this.$route.params.id === undefined) {
+              return (formValue.passwordrule !== '2')
+            } else {
+              return true
+            }
           },
           el: {
-            size: 'mini',
+            size: 'small',
             type: 'password'
+          }
+        },
+        {
+          type: 'input',
+          id: 'sshkey',
+          label: 'ssh公钥',
+          hidden: (formValue, item) => {
+            return !this.$route.params.id
           },
-          rules: [
-            { required: true, message: 'miss name', trigger: 'blur' }
-          ]
+          el: {
+            placeholder: 'ssh-rsa AAAA...',
+            type: 'textarea',
+            rows: 3
+          }
         },
         {
           type: 'radio-group',
-          id: 'mfa',
-          label: '密码策略',
+          id: 'mfa_level',
+          label: '多因子认证',
           el: {
             size: 'small'
           },
+          size: 0,
           options: [{
-            label: '禁用'
+            label: '禁用',
+            value: 0
           }, {
-            label: '启用'
+            label: '启用',
+            value: 1
           }, {
-            label: '强制启用'
+            label: '强制启用',
+            value: 2
           }],
           rules: [
             { required: true, message: 'miss resource', trigger: 'change' }
@@ -144,12 +175,79 @@ export default {
           el: {
             size: 'small'
           },
+          default: '数据库',
           options: [{
-            label: 'area1',
-            value: 'shanghai'
-          }]
+            label: '数据库',
+            value: 'local'
+          }],
+          rules: [
+            { required: true, message: 'miss resource', trigger: 'change' }
+          ]
+        },
+        {
+          type: 'select',
+          id: 'role',
+          label: '角色',
+          el: {
+            size: 'small'
+          },
+          default: 'User',
+          options: [{
+            label: '管理员',
+            value: 'Admin'
+          }, {
+            label: '用户',
+            value: 'User'
+          }, {
+            label: '审计员',
+            value: 'Auditor'
+          }],
+          rules: [
+            { required: true, message: 'miss resource', trigger: 'change' }
+          ]
+        },
+        {
+          type: 'date-picker',
+          id: 'date_expired',
+          label: '过期时间',
+          el: {
+            type: 'datetime',
+            size: 'small',
+            placeholder: 'select date'
+          },
+          rules: [
+            { type: 'date', required: true, message: 'miss date', trigger: 'change' }
+          ]
+        },
+        {
+          type: 'input',
+          id: 'phone',
+          label: '手机',
+          el: {
+            size: 'small'
+          }
+        }, {
+          type: 'input',
+          id: 'wechat',
+          label: '微信',
+          el: {
+            size: 'small'
+          }
+        }, {
+          type: 'input',
+          id: 'comment',
+          label: '备注',
+          el: {
+            type: 'textarea',
+            row: '4'
+          }
         }
       ]
+    }
+  },
+  methods: {
+    debug() {
+      console.log(this)
     }
   }
 }
@@ -157,6 +255,9 @@ export default {
 
 <style lang="less" scoped>
 .el-form /deep/ .el-select{
+  width:100%;
+}
+.el-form /deep/ .el-form-item__content > .el-date-editor{
   width:100%;
 }
 </style>
