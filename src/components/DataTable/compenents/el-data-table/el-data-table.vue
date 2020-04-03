@@ -727,7 +727,8 @@ export default {
       // JSON.stringify是为了后面深拷贝作准备
       initExtraQuery: JSON.stringify(this.extraQuery || this.customQuery || {}),
       isSearchCollapse: false,
-      showNoData: false
+      showNoData: false,
+      innerQuery: {}
     }
   },
   computed: {
@@ -849,6 +850,7 @@ export default {
         formValue = this.$refs.searchForm.getFormValue()
         Object.assign(query, formValue)
       }
+      Object.assign(query, this.innerQuery)
       Object.assign(query, this._extraQuery)
 
       query[this.pageSizeKey] = this.hasPagination
@@ -939,18 +941,9 @@ export default {
           this.loading = false
         })
     },
-    async search() {
-      const form = this.$refs.searchForm
-      const valid = await new Promise(r => form.validate(r))
-      if (!valid) return
-
-      try {
-        await this.beforeSearch(form.getFormValue())
-        this.page = defaultFirstPage
-        this.getList()
-      } catch (err) {
-        this.$emit('error', err)
-      }
+    search(attrs) {
+      this.innerQuery = Object.assign(this.innerQuery, attrs)
+      return this.getList()
     },
     /**
      * 重置查询，相当于点击「重置」按钮
@@ -1165,15 +1158,12 @@ export default {
       return record[this.treeChildKey] && record[this.treeChildKey].length > 0
     },
     onSortChange({ column, prop, order }) {
-      if (!this.extraQuery) {
-        this.extraQuery = {}
-      }
       if (!order) {
-        delete this.extraQuery['sort']
-        delete this.extraQuery['direction']
+        delete this.innerQuery['sort']
+        delete this.innerQuery['direction']
       } else {
-        this.extraQuery['sort'] = prop
-        this.extraQuery['direction'] = order
+        this.innerQuery['sort'] = prop
+        this.innerQuery['direction'] = order
       }
       this.getList()
     }

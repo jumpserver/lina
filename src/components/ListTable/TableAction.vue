@@ -14,6 +14,7 @@
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
+import _ from 'lodash';
 import { createSourceIdCache } from '@/api/common'
 
 const defaultTrue = { type: Boolean, default: true }
@@ -46,6 +47,10 @@ export default {
       type: Function,
       default: () => {}
     },
+    searchTable: {
+      type: Function,
+      default: () => {}
+    },
     selectedRows: {
       type: Array,
       default: () => ([])
@@ -57,6 +62,10 @@ export default {
     extraMoreActions: {
       type: Array,
       default: () => ([])
+    },
+    extraRightSideActions: {
+      type: Array,
+      default: () => ([])
     }
   },
   data() {
@@ -65,7 +74,7 @@ export default {
       defaultRightSideActions: [
         { name: 'actionExport', fa: 'fa-download', has: this.hasExport },
         { name: 'actionImport', fa: 'fa-upload', has: this.hasImport },
-        { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh }
+        { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
       ],
       defaultActions: [
         {
@@ -97,33 +106,18 @@ export default {
   },
   computed: {
     rightSideActions() {
-      const actions = []
-      return actions
-      for (const k in this.defaultRightSideActions) {
-        if (this['has' + k]) {
-          actions.push(this.defaultRightSideActions[k])
-        }
-      }
-      return actions
+      const actions = [...this.defaultRightSideActions, ...this.extraRightSideActions]
+      return this.cleanActions(actions)
     },
     actions() {
       const actions = [...this.defaultActions, ...this.extraActions]
-      const validActions = []
-      for (const action of actions) {
-        let ok = this.checkItem(action, 'has')
-        if (!ok) {
-          continue
-        }
-        ok = this.checkItem(action, 'can')
-        action.disabled = !ok
-        validActions.push(action)
-      }
-      console.log(validActions)
-      return validActions
+      return this.cleanActions(actions)
     },
     moreActions() {
-      return this.defaultMoreActions
+      const actions = [...this.defaultMoreActions, ...this.extraMoreActions]
+      return this.cleanActions(actions)
     },
+
     namedActions() {
       const totalActions = [...this.actions, ...this.moreActions, ...this.rightSideActions]
       const actions = {}
@@ -137,10 +131,11 @@ export default {
     }
   },
   methods: {
-    handleSearch(keyword) {
-      console.log('Search: ', keyword)
-    },
+    handleSearch: _.debounce(function() {
+      this.searchTable({search: this.keyword})
+    }, 500),
     handleActionClick(item) {
+      console.log('name cations', this.namedActions)
       let handler = this.namedActions[item] ? this.namedActions[item].callback : null
       if (!handler) {
         handler = () => {
@@ -185,12 +180,31 @@ export default {
       const ids = rows.map((v) => {
         return v.id
       })
-      console.log('Delete ids: ', ids)
       const data = await createSourceIdCache(ids)
       const url = `${this.tableUrl}?spm=` + data.spm
       return this.$axios.delete(url)
     },
     handleBulkUpdate(rows) {
+    },
+    handleExport() {
+    },
+    handleImport() {
+    },
+    handleRefresh() {
+      this.reloadTable()
+    },
+    cleanActions(actions) {
+      const validActions = []
+      for (const action of actions) {
+        let ok = this.checkItem(action, 'has')
+        if (!ok) {
+          continue
+        }
+        ok = this.checkItem(action, 'can')
+        action.disabled = !ok
+        validActions.push(action)
+      }
+      return validActions
     },
     checkItem(item, attr) {
       let ok = item[attr]

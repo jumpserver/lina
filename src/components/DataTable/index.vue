@@ -91,6 +91,9 @@ export default {
     getList() {
       this.$refs.table.clearSelection()
       return this.$refs.table.getList()
+    },
+    search(attrs) {
+      return this.$refs.table.search(attrs)
     }
   }
 }

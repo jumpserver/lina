@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TableAction :table-url="tableConfig.url" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable"></TableAction>
+    <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable"></TableAction>
     <el-card class="table-content" shadow="never">
       <DataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange">
       </DataTable>
@@ -48,6 +48,9 @@ export default {
     },
     reloadTable() {
       this.$refs.dataTable.getList()
+    },
+    search(attrs) {
+      return this.$refs.dataTable.search(attrs)
     }
   }
 }
