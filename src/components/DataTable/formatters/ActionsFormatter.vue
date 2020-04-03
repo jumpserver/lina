@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="actions" @actionClick="handleActionClick"></ActionsGroup>
+  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" @actionClick="handleActionClick"></ActionsGroup>
 </template>
 
 <script>
@@ -10,47 +10,78 @@ export default {
   components: { ActionsGroup },
   extends: BaseFormatter,
   data() {
-    const actions = []
-    let hasUpdate = this.col.actions.hasUpdate
-    if (typeof this.col.actions.hasUpdate === 'function') {
-      hasUpdate = this.col.actions.hasUpdate(this.row, this.cellValue)
-    }
-    if (hasUpdate) {
-      let canUpdate = this.col.actions.canUpdate
-      if (typeof this.col.actions.canUpdate === 'function') {
-        canUpdate = this.col.actions.canUpdate(this.row, this.cellValue)
-      }
-      actions.push({
-        name: 'edit',
+    const defaultActions = [
+      {
+        name: 'update',
         title: this.$tc('Update'),
         type: 'primary',
-        disabled: !canUpdate
-      })
-    }
-
-    let hasDelete = this.col.actions.hasDelete
-    if (typeof this.col.actions.hasDelete === 'function') {
-      hasDelete = this.col.actions.hasDelete(this.row, this.cellValue)
-    }
-    if (hasDelete) {
-      let canDelete = this.col.actions.canDelete
-      if (typeof this.col.actions.canDelete === 'function') {
-        canDelete = this.col.actions.canDelete(this.row, this.cellValue)
-      }
-      actions.push({
+        has: this.col.actions.hasUpdate || true,
+        can: this.col.actions.canUpdate || true,
+        callback: this.col.actions.onUpdate
+      },
+      {
         name: 'delete',
         title: this.$tc('Delete'),
         type: 'danger',
-        disabled: !canDelete
-      })
-    }
+        has: this.col.actions.hasDelete || true,
+        can: this.col.actions.canDelete || true,
+        callback: this.col.actions.onDelete
+      }
+    ]
+    const extraActions = this.col.actions.extraActions || []
     return {
-      actions: actions
+      defaultActions: defaultActions,
+      extraActions: extraActions
+    }
+  },
+  computed: {
+    validActions() {
+      const actions = [...this.defaultActions, ...this.extraActions]
+      const validActions = []
+      for (const v of actions) {
+        const has = this.checkItem(v, 'has')
+        if (!has) {
+          continue
+        }
+        const can = this.checkItem(v, 'can')
+        v.disabled = !can
+        validActions.push(v)
+      }
+      return validActions
+    },
+    actions() {
+      return this.validActions.slice(0, 2)
+    },
+    moreActions() {
+      return this.validActions.slice(2, this.validActions.length)
+    },
+    namedValidActions() {
+      const actions = {}
+      for (const action of this.validActions) {
+        if (!action || !action.hasOwnProperty('name')) {
+          continue
+        }
+        actions[action.name] = action
+      }
+      return actions
     }
   },
   methods: {
     handleActionClick(item) {
-      this.emit('actionClick', item, this.row, this.col, this.cellValue)
+      const action = this.namedValidActions[item]
+      if (action && action.callback) {
+        console.log(this.setting)
+        action.callback(this.row, this.col, this.cellValue)
+      }
+    },
+    checkItem(item, attr) {
+      let ok = item[attr]
+      if (typeof ok === 'function') {
+        ok = ok(this.row, this.cellValue)
+      } else if (ok == null) {
+        ok = true
+      }
+      return ok
     }
   }
 }

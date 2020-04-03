@@ -98,19 +98,16 @@
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             v-bind="{align: columnsAlign, ...col}"
           >
-            <template slot-scope="{row}">
+            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row}">
               <div
                 :is="col.formatter"
-                v-if="col.formatter && typeof col.formatter !== 'function'"
                 :key="row.id"
+                :setting="data"
                 :row="row"
                 :col="col"
                 :cell-value="row[col.prop]"
               >
               </div>
-              <template v-else>
-                {{ row[col.prop] }}
-              </template>
             </template>
           </el-data-table-column>
         </template>

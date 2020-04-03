@@ -1,7 +1,7 @@
 <template>
   <div>
     <TableAction v-bind="headerActions" @clickAction="handleActionClick"></TableAction>
-    <el-card class="table-content">
+    <el-card class="table-content" shadow="never">
       <DataTable :config="tableConfig" @selection-change="handleSelectionChange">
         <template v-slot:actions="row">
           {{ row.id }}
@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    actionColumn () {
+    actionColumn() {
       const actions = []
       let tc = this.tableConfig
       if (tc.hasEdit !== false) {
@@ -55,12 +55,6 @@ export default {
           title: this.$tc('Delete')
         })
       }
-
-
-    },
-    totalConfig() {
-      let tableConfig = this.tableConfig
-
     }
   },
   methods: {

@@ -16,6 +16,10 @@ export default {
         url: '/api/v1/users/groups/',
         columns: [
           {
+            label: 'ID',
+            type: 'index'
+          },
+          {
             prop: 'name',
             label: this.$tc('Name'),
             formatter: DetailFormatter,
@@ -25,7 +29,7 @@ export default {
           {
             prop: 'users_amount',
             label: this.$t('users.User'),
-            key: 'users_amount'
+            key: 'users_amount',
           },
           {
             prop: 'comment',
@@ -38,24 +42,41 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             actions: {
-              hasDelete: true,
               hasUpdate: (row, cellValue) => {
                 return true
               },
-              canDelete: (row, cellValue) => {
-                return false
+              canUpdate: (row, cellValue) => {
+                console.log('On table update')
+                return true
               },
-              canUpdate: (row, cellValue) => {},
+              hasDelete: true,
+              canDelete: (row, cellValue) => {
+                return true
+              },
+              onDelete: (row, cellValue) => {
+                this.$confirm('你好啊', '提示', {
+                  type: 'warning',
+                  confirmButtonClass: 'el-button--danger',
+                  beforeClose: async(action, instance, done) => {
+                  }
+                }).catch(() => {
+                  /* 取消*/
+                })
+              },
               extraActions: [
                 {
                   name: 'run',
-                  title: this.$tc('Run')
+                  title: this.$tc('Run'),
+                  callback: (row, cellValue) => {
+                    console.log('On run')
+                  }
                 },
                 {
                   name: 'monitor',
                   title: this.$tc('Monitor')
                 }
-              ]
+              ],
+              order: []
             }
           }
         ],
@@ -67,7 +88,6 @@ export default {
       headerActions: {
         createRoute: 'UserGroupCreate'
       }
-
     }
   }
 }

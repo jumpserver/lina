@@ -1,5 +1,4 @@
 <template>
-
 </template>
 
 <script>
@@ -17,6 +16,10 @@ export default {
     cellValue: {
       type: [String, Boolean, Number, Object],
       default: null
+    },
+    setting: {
+      type: Array,
+      default: () => ({})
     }
   }
 }
