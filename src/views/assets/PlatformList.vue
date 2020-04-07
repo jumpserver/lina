@@ -37,7 +37,14 @@ export default {
             label: this.$tc('Action'),
             align: 'center',
             formatter: ActionsFormatter,
-            width: '200px'
+            width: '200px',
+            actions: {
+              performDelete: ({row, col})=> {
+                const id = row.id
+                const url = `/api/v1/assets/platforms/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
           }
         ]
       },

@@ -76,7 +76,14 @@ export default {
             width: '200px',
             actions: {
               hasEdit: false,
-              hasDelete: false
+              hasDelete: false,
+              extraActions: [
+                {
+                  name: 'terminate',
+                  title: this.$t('sessions.terminate'),
+                  type: 'primary'
+                }
+              ]
             }
           }
         ]

@@ -41,6 +41,13 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
+            actions: {
+              performDelete: ({row, col})=> {
+                const id = row.id
+                const url = `/api/v1/applications/remote-apps/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
           }
         ]
       },

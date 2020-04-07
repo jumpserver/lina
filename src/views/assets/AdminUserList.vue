@@ -42,6 +42,13 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
+            actions: {
+              performDelete: ({row, col})=> {
+                const id = row.id
+                const url = `/api/v1/assets/admin-users/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
           }
         ]
       },

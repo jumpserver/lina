@@ -76,7 +76,19 @@ export default {
             width: '200px',
             actions: {
               hasEdit: false,
-              hasDelete: false
+              hasDelete: false,
+              extraActions: [
+                {
+                  name: 'replay',
+                  title: this.$t('sessions.replay'),
+                  type: 'primary'
+                },
+                {
+                  name: 'replay',
+                  title: this.$t('sessions.download'),
+                  type: 'warning'
+                }
+              ]
             }
           }
         ]

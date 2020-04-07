@@ -137,8 +137,9 @@ export const constantRoutes = [
       {
         path: 'domains/:id/gateway',
         name: 'GatewayList',
+        hidden: true,
         component: () => import('@/views/assets/GatewayList'),
-        // meta: { title: 'GatewayList' }
+        meta: { title: 'GatewayList' }
       },
       {
         path: 'admin-users',

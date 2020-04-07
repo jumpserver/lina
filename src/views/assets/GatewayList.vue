@@ -55,6 +55,11 @@ export default {
               updateRoute: 'UserUpdate',
               extraActions: [
                 {
+                  performDelete: ({row, col})=> {
+                    const id = row.id
+                    const url = `/api/v1/assets/gateways/${id}/`
+                    return this.$axios.delete(url)
+                  },
                   name: 'TestConnection',
                   title: this.$t('assets.TestConnection')
                 }

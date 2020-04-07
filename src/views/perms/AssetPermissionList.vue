@@ -56,6 +56,11 @@ export default {
             formatter: ActionsFormatter,
             width: '200px',
             actions: {
+              performDelete: ({row, col})=> {
+                const id = row.id
+                const url = `/api/v1/perms/asset-permissions/${id}/`
+                return this.$axios.delete(url)
+              }
             }
           }
         ],
