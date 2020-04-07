@@ -358,6 +358,14 @@ const cn = {
     'active': '激活中',
     'alive': '在线'
   },
+  jobcenter: {
+    'RunTimes': '执行次数',
+    'hosts': '主机',
+    'success': '成功',
+    'date': '日期',
+    'time': '时间',
+    'run': '执行'
+  },
   setting: {
     'setting': '系统设置',
     'basicsetting': '基本设置'

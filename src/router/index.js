@@ -269,7 +269,7 @@ export const constantRoutes = [
       {
         path: 'task',
         name: 'TaskList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/jobcenter/TaskList'),
         meta: { title: 'TaskList' }
       },
       {
