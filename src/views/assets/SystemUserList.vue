@@ -1,72 +1,77 @@
 <template>
-  <Page>
-    <template slot="content">
-      <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card>
-        <tables v-bind="tableConfig" />
-      </el-card>
-    </template>
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
+
 <script>
-import { Page } from '@/layout/components'
-import Tables from '@/components/ListTable/index'
-import { getSystemUserList } from '@/api/asset'
+import { GenericListPage } from '@/layout/components'
+import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    Page,
-    Tables
+    GenericListPage
   },
   data() {
     return {
       tableConfig: {
-        getData: getSystemUserList,
-        hasSelect: true,
+        url: '/api/v1/assets/system-users/',
         columns: [
           {
             prop: 'name',
             label: this.$t('common.name'),
-            key: 'name',
-            link: 'DomainDetail',
-            sortable: true
+            formatter: DetailFormatter,
+            sortable: true,
+            route: 'SystemUserDetail'
           },
           {
             prop: 'username',
             label: this.$t('common.username'),
-            key: 'assets_amount'
+            sortable: 'custom'
           },
           {
             prop: 'protocol',
             label: this.$t('assets.protocol'),
-            key: 'protocol'
+            sortable: 'custom'
           },
           {
-            prop: 'loginMode',
+            prop: 'login_mode_display',
             label: this.$t('assets.loginMode'),
-            key: 'login_mode_display'
+            sortable: 'custom'
           },
           {
-            prop: 'asset',
+            prop: 'assets_amount',
             label: this.$t('assets.asset'),
-            key: 'assets_amount'
+            sortable: 'custom'
           },
           {
             prop: 'comment',
             label: this.$t('assets.comment'),
-            key: 'comment'
+            sortable: 'custom'
+          },
+          {
+            prop: 'id',
+            label: this.$tc('Action'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            width: '200px',
+            actions: {
+              performDelete: ({row, col})=> {
+                const id = row.id
+                const url = `/api/v1/assets/system-users/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
           }
-        ],
-        action: {
-          hasEdit: 'SystemUserEdit',
-          newClick: 'SystemUserEdit'
-        }
+        ]
+      },
+      headerActions: {
+        // hasBulkDelete: false,
+        createRoute: 'SystemUserCreate'
       }
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style>
 
 </style>

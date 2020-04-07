@@ -1,62 +1,61 @@
 <template>
-  <Page>
-    <template slot="content">
-      <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card>
-        <tables v-bind="tableConfig" />
-      </el-card>
-    </template>
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { Page } from '@/layout/components'
-import Tables from '@/components/ListTable/index'
-import { getLabelList } from '@/api/asset'
+import { GenericListPage } from '@/layout/components'
+import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+
 export default {
   components: {
-    Page,
-    Tables
+    GenericListPage
   },
   data() {
     return {
       tableConfig: {
-        getData: getLabelList,
-        hasSelect: true,
+        url: '/api/v1/assets/labels/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('common.name'),
-            key: 'name',
-            link: 'LabelDetail',
-            sortable: true
+            label: this.$t('assets.name'),
+            formatter: DetailFormatter,
+            sortable: true,
+            route: 'LabelDetail'
           },
           {
             prop: 'value',
             label: this.$t('assets.value'),
-            key: 'value'
+            sortable: 'custom'
           },
           {
-            prop: 'asset',
-            label: this.$t('assets.asset'),
-            key: 'asset_count'
+            prop: 'asset_count',
+            label: this.$t('assets.asset')
           },
           {
-            prop: 'comment',
-            label: this.$t('assets.comment'),
-            key: 'comment'
+            prop: 'id',
+            label: this.$tc('Action'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            width: '200px',
+            actions: {
+              performDelete: ({row, col})=> {
+                const id = row.id
+                const url = `/api/v1/assets/labels/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
           }
-        ],
-        action: {
-          hasEdit: 'LabelEdit',
-          newClick: 'LabelEdit'
-        }
+        ]
+      },
+      headerActions: {
+        hasBulkDelete: false,
+        createRoute: 'LabelCreate'
       }
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style>
 
 </style>

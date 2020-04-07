@@ -13,22 +13,19 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/assets/platforms/',
         columns: [
           {
             prop: 'name',
             label: this.$t('assets.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'PlatformDetail'
           },
           {
-            prop: 'rules.length',
-            label: this.$t('assets.rules')
-          },
-          {
-            prop: 'system_users.length',
-            label: this.$t('assets.systemUser')
+            prop: 'base',
+            label: this.$t('assets.BasePlatform'),
+            sortable: 'custom'
           },
           {
             prop: 'comment',
@@ -44,7 +41,7 @@ export default {
             actions: {
               performDelete: ({row, col})=> {
                 const id = row.id
-                const url = `/api/v1/assets/cmd-filters/${id}/`
+                const url = `/api/v1/assets/platforms/${id}/`
                 return this.$axios.delete(url)
               }
             }
@@ -53,7 +50,7 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'PlatformCreate'
       }
     }
   }

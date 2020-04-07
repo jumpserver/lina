@@ -8,32 +8,40 @@ import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/format
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/ops/tasks/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$tc('Name'),
             formatter: DetailFormatter,
-            sortable: true,
-            route: 'CommandFilterDetail'
+            sortable: 'custom',
+            route: 'UserDetail'
           },
           {
-            prop: 'rules.length',
-            label: this.$t('assets.rules')
+            prop: 'latest_execution',
+            label: this.$t('jobcenter.RunTimes')
           },
           {
-            prop: 'system_users.length',
-            label: this.$t('assets.systemUser')
+            prop: 'latest_execution.hosts_amount',
+            label: this.$t('jobcenter.hosts')
           },
           {
-            prop: 'comment',
-            label: this.$t('assets.comment'),
+            prop: 'latest_execution.is_success',
+            label: this.$t('jobcenter.success')
+          },
+          {
+            prop: 'latest_execution.date_start',
+            label: this.$t('jobcenter.date'),
             sortable: 'custom'
+          },
+          {
+            prop: 'latest_execution.timedelta',
+            label: this.$t('jobcenter.time')
           },
           {
             prop: 'id',
@@ -41,25 +49,22 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
-            actions: {
-              performDelete: ({row, col})=> {
-                const id = row.id
-                const url = `/api/v1/assets/cmd-filters/${id}/`
-                return this.$axios.delete(url)
-              }
-            }
+            actions: [
+            ]
           }
-        ]
+        ],
+        hasEdit: false,
+        hasDelete: false
       },
       headerActions: {
+        hasCreate: false,
         hasBulkDelete: false,
-        createRoute: 'CommandFilterCreate'
       }
     }
   }
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 
 </style>

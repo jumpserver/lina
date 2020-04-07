@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -13,27 +13,37 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/perms/database-app-permissions/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('perms.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'DatabaseAppPermissionDetail'
           },
           {
-            prop: 'rules.length',
-            label: this.$t('assets.rules')
+            prop: 'users.length',
+            label: this.$t('perms.user')
+          },
+          {
+            prop: 'user_groups.length',
+            label: this.$t('perms.userGroup')
+          },
+          {
+            prop: 'database_apps.length',
+            label: this.$t('perms.DatabaseApp')
           },
           {
             prop: 'system_users.length',
-            label: this.$t('assets.systemUser')
+            label: this.$t('perms.systemUser')
           },
           {
-            prop: 'comment',
-            label: this.$t('assets.comment'),
-            sortable: 'custom'
+            prop: 'is_valid',
+            label: this.$t('perms.validity'),
+            formatter: ChoicesFormatter,
+            align: 'center',
+            width: '80px'
           },
           {
             prop: 'id',
@@ -44,7 +54,7 @@ export default {
             actions: {
               performDelete: ({row, col})=> {
                 const id = row.id
-                const url = `/api/v1/assets/cmd-filters/${id}/`
+                const url = `/api/v1/perms/database-app-permissions/${id}/`
                 return this.$axios.delete(url)
               }
             }
@@ -53,7 +63,7 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'DatabaseAppPermissionCreate'
       }
     }
   }

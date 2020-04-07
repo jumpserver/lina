@@ -91,7 +91,7 @@
 
         <!--非树-->
         <template v-else>
-          <el-data-table-column v-if="hasSelection" type="selection" :align="columnsAlign"></el-data-table-column>
+          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign"></el-data-table-column>
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
@@ -689,6 +689,10 @@ export default {
     * 设置默认对齐方式
     */
     defaultAlign: {
+      type: String,
+      default: 'center'
+    },
+    selectionAlign: {
       type: String,
       default: 'center'
     },

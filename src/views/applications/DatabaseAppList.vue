@@ -13,26 +13,38 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/applications/database-apps/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('applications.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'DatabaseAppDetail'
           },
           {
-            prop: 'rules.length',
-            label: this.$t('assets.rules')
+            prop: 'get_type_display',
+            label: this.$t('applications.appType'),
+            sortable: 'custom'
           },
           {
-            prop: 'system_users.length',
-            label: this.$t('assets.systemUser')
+            prop: 'host',
+            label: this.$t('applications.host'),
+            sortable: 'custom'
+          },
+          {
+            prop: 'port',
+            label: this.$t('applications.port'),
+            sortable: 'custom'
+          },
+          {
+            prop: 'database',
+            label: this.$t('applications.database'),
+            sortable: 'custom'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
+            label: this.$t('applications.comment'),
             sortable: 'custom'
           },
           {
@@ -44,16 +56,20 @@ export default {
             actions: {
               performDelete: ({row, col})=> {
                 const id = row.id
-                const url = `/api/v1/assets/cmd-filters/${id}/`
+                const url = `/api/v1/applications/database-apps/${id}/`
                 return this.$axios.delete(url)
               }
             }
           }
-        ]
+        ],
+        tableActions: {
+          hasEdit: true,
+          editRoute: '404'
+        }
       },
       headerActions: {
         hasBulkDelete: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'DatabaseAppCreate'
       }
     }
   }
