@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getUserGroup } from '@/api/user'
+import { getUserGroupDetail, getUserGroupMembers } from '@/api/user'
 import { BaseDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard'
 import Select2 from '@/components/Select2'
@@ -36,15 +36,12 @@ export default {
   data() {
     return {
       activeSubMenu: 'info',
+      groupMembers: [],
       group: { name: '' },
       submenu: [
         {
           title: this.$tc('baseInfo'),
           name: 'info'
-        },
-        {
-          title: this.$t('users.Group members'),
-          name: 'members'
         },
         {
           title: this.$t('perms.Asset permissions'),
@@ -54,21 +51,9 @@ export default {
       cardTitle: '基本信息',
       select2: {
         url: '/api/v1/users/users/',
-        initial: [
-          {
-            name: 'hello',
-            id: '1a775bbf-6861-4acb-8ae4-2f684794c8cc'
-          },
-          {
-            name: 'test',
-            id: '4dccdf84-7728-4de0-a507-67c905b3091b'
-          },
-          {
-            name: 'whold',
-            id: 'c5ec4b91-1fb2-478e-89bc-5a4abc0f9c6c'
-          }
-        ]
-      },
+        initial: this.groupMembers,
+        value: []
+      }
     }
   },
   computed: {
@@ -97,14 +82,22 @@ export default {
     }
   },
   mounted() {
-    this.getGroupDetail()
+    getUserGroupDetail(this.$route.params.id).then(data => {
+      this.group = data
+    })
+
+    getUserGroupMembers(this.$route.params.id).then(data => {
+      this.groupMembers = data.map(v => {
+        const member = {}
+        member.id = v.user
+        member.name = v.user_display
+        return member
+      })
+      this.select2.initial = this.groupMembers
+      console.log(this.groupMembers)
+    })
   },
   methods: {
-    getGroupDetail() {
-      getUserGroup(this.$route.params.id).then(response => {
-        this.group = response
-      })
-    }
   }
 }
 </script>

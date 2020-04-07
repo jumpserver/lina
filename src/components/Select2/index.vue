@@ -106,6 +106,9 @@ export default {
       },
       defaultProcessSelected: data => {
         return data.map(item => {
+          if (item.label && item.value) {
+            return item
+          }
           return { label: item.name, value: item.id }
         })
       },
@@ -135,7 +138,7 @@ export default {
     }
   },
   watch: {
-    initialOptions: (newValue) => {
+    initialOptions: function(newValue) {
       const notInclude = newValue.filter(v => {
         return this.optionsValues.indexOf(v.value) === -1
       })
@@ -155,7 +158,6 @@ export default {
   },
   methods: {
     loadMore() {
-      console.log('Load more ...', this.params.hasMore)
       if (!this.params.hasMore) {
         return
       }
@@ -190,6 +192,7 @@ export default {
           }
         })
       }).catch(err => {
+        this.$message.error(err)
         console.log(err)
       }).then(() => {
         this.loading = false
