@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-group-header">
     <div v-if="line" class="hr-line-dashed" />
     <h3>{{ title }}</h3>
   </div>

@@ -48,7 +48,8 @@ const cn = {
     'Info': '提示',
     'More': '更多',
     'Submit': '提交',
-    'Reset': '重置'
+    'Reset': '重置',
+    'This field is required': '这个字段是必填项'
   },
   route: {
     'dashboard': '仪表盘',

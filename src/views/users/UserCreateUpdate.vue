@@ -1,11 +1,11 @@
 <template>
   <Page>
     <IBox>
-      <DataForm :form="form" :fields="fields" label-position="left" label-width="140px">
-        <FormGroupHeader slot="id:name" title="账户" :line="false" style="margin:0 50px;" />
-        <FormGroupHeader slot="id:passwordrule" title="认证" :line="true" style="margin:0 50px;" />
-        <FormGroupHeader slot="id:role" title="角色安全" :line="true" style="margin:0 50px;" />
-        <FormGroupHeader slot="id:phone" title="认证" :line="true" style="margin:0 50px;" />
+      <DataForm :form="form" :fields="fields">
+        <FormGroupHeader slot="id:name" title="账户" :line="false" />
+        <FormGroupHeader slot="id:passwordrule" title="认证" :line="true" />
+        <FormGroupHeader slot="id:role" title="角色安全" :line="true" />
+        <FormGroupHeader slot="id:phone" title="认证" :line="true" />
       </DataForm>
     </IBox>
   </page>
@@ -16,6 +16,7 @@
 import FormGroupHeader from '@/components/formGroupHeader'
 import { Page, IBox } from '@/layout/components'
 import DataForm from '@/components/DataForm'
+import rules from '@/components/DataForm/rules'
 import select2 from '@/components/Select2'
 export default {
   components: {
@@ -40,11 +41,9 @@ export default {
           id: 'name',
           label: this.$t('users.name'),
           el: {
-            size: 'small',
-            placeholder: 'hello',
           },
           rules: [
-            { required: true, message: 'miss name', trigger: 'blur' }
+            rules.Required
           ]
         },
         {
@@ -52,10 +51,9 @@ export default {
           id: 'username',
           label: this.$t('users.username'),
           el: {
-            size: 'small'
           },
           rules: [
-            { required: true, message: 'miss name', trigger: 'blur' }
+            rules.Required
           ]
         },
         {
@@ -63,17 +61,15 @@ export default {
           id: 'email',
           label: this.$t('users.email'),
           el: {
-            size: 'small'
           },
           rules: [
-            { required: true, message: 'miss name', trigger: 'blur' }
+            rules.Required
           ]
         },
         {
           id: 'users',
           label: '用户组',
           el: {
-            size: 'small',
             placeholder: '添加到用户组',
             value: [
               {
@@ -101,7 +97,6 @@ export default {
           id: 'passwordrule',
           label: '密码策略',
           el: {
-            size: 'small'
           },
           hidden: (formValue, item) => {
             return this.$route.params.id
@@ -128,7 +123,6 @@ export default {
             }
           },
           el: {
-            size: 'small',
             type: 'password'
           }
         },
@@ -150,7 +144,6 @@ export default {
           id: 'mfa_level',
           label: '多因子认证',
           el: {
-            size: 'small'
           },
           size: 0,
           options: [{
@@ -164,14 +157,13 @@ export default {
             value: 2
           }],
           rules: [
-            { required: true, message: 'miss resource', trigger: 'change' }
+            rules.Required
           ]
         }, {
           type: 'select',
           id: 'source',
           label: '来源',
           el: {
-            size: 'small'
           },
           default: '数据库',
           options: [{
@@ -179,7 +171,7 @@ export default {
             value: 'local'
           }],
           rules: [
-            { required: true, message: 'miss resource', trigger: 'change' }
+            rules.Required
           ]
         },
         {
@@ -187,7 +179,6 @@ export default {
           id: 'role',
           label: '角色',
           el: {
-            size: 'small'
           },
           default: 'User',
           options: [{
@@ -201,7 +192,7 @@ export default {
             value: 'Auditor'
           }],
           rules: [
-            { required: true, message: 'miss resource', trigger: 'change' }
+            rules.Required
           ]
         },
         {
@@ -210,11 +201,10 @@ export default {
           label: '过期时间',
           el: {
             type: 'datetime',
-            size: 'small',
             placeholder: 'select date'
           },
           rules: [
-            { type: 'date', required: true, message: 'miss date', trigger: 'change' }
+            rules.Required
           ]
         },
         {
@@ -222,14 +212,12 @@ export default {
           id: 'phone',
           label: '手机',
           el: {
-            size: 'small'
           }
         }, {
           type: 'input',
           id: 'wechat',
           label: '微信',
           el: {
-            size: 'small'
           }
         }, {
           type: 'input',
@@ -247,6 +235,11 @@ export default {
     debug() {
       console.log(this)
     }
+  },
+  mounted() {
+    console.log('>>>>>>>>>>')
+    console.log(rules)
+    console.log(rules.Required)
   }
 }
 </script>

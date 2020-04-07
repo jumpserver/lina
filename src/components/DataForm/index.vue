@@ -1,5 +1,5 @@
 <template>
-  <elFormRender
+  <ElFormRender
     ref="dataForm"
     :content="fields"
     v-bind="$attrs"
@@ -17,14 +17,14 @@
       <el-button size="small" type="primary" @click="submitForm('dataForm')">{{ $tc('Submit') }}</el-button>
     </el-form-item>
     <slot name="Actions" />
-  </elFormRender>
+  </ElFormRender>
 </template>
 
 <script>
-import elFormRender from './components/el-form-renderer'
+import ElFormRender from './components/el-form-renderer'
 export default {
   components: {
-    elFormRender
+    ElFormRender
   },
   props: {
     defaultButton: {
@@ -79,5 +79,13 @@ export default {
 
   .el-form /deep/ .el-form-item__label {
     padding: 0 30px 0 0;
+  }
+
+  .el-form /deep/ .el-form-item__error {
+     position: inherit;
+  }
+
+  .el-form /deep/ .form-group-header {
+    margin-left: 50px;
   }
 </style>

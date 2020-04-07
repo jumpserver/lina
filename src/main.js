@@ -41,9 +41,6 @@ import service from '@/utils/request'
 // if the table component cannot access `this.$axios`, it cannot send request
 Vue.prototype.$axios = service
 
-import _ from 'lodash'
-Vue.use(_)
-
 new Vue({
   el: '#app',
   i18n,
