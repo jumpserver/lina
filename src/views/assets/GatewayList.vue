@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/DataTable/formatters/index'
+import { ActionsFormatter } from '@/components/DataTable/formatters/index'
 
 export default {
   components: {
@@ -13,28 +13,37 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/domains/',
+        url: '/api/v1/assets/gateways/?domain=' + this.$route.params.id,
         columns: [
           {
             prop: 'name',
             label: this.$t('assets.name'),
-            formatter: DetailFormatter,
-            sortable: true,
-            route: 'DomainDetail'
+            sortable: true
           },
           {
-            prop: 'asset_count',
-            label: this.$t('assets.asset')
+            prop: 'ip',
+            label: this.$t('assets.ip'),
+            sortable: true
           },
           {
-            prop: 'gateway_count',
-            label: this.$t('assets.gateway'),
-            formatter: DetailFormatter,
-            route: 'GatewayList'
+            prop: 'port',
+            label: this.$t('assets.port'),
+            sortable: true
+          },
+          {
+            prop: 'protocol',
+            label: this.$t('assets.protocol'),
+            sortable: true
+          },
+          {
+            prop: 'username',
+            label: this.$t('assets.username'),
+            sortable: true
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment')
+            label: this.$t('assets.comment'),
+            sortable: true
           },
           {
             prop: 'id',
@@ -78,6 +87,10 @@ export default {
         createRoute: 'DomainCreate'
       }
     }
+  },
+  created() {
+    console.log('111111')
+    console.log('/api/v1/assets/gateways/?domain=' + this.$route.params.id)
   }
 }
 </script>

@@ -128,6 +128,12 @@ export const constantRoutes = [
         meta: { title: 'DomainList' }
       },
       {
+        path: 'domains/:id/gateway',
+        name: 'GatewayList',
+        component: () => import('@/views/assets/GatewayList'),
+        // meta: { title: 'GatewayList' }
+      },
+      {
         path: 'admin-users',
         name: 'AdminUserList',
         component: () => import('@/views/assets/AdminUserList'),

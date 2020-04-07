@@ -221,6 +221,7 @@ const cn = {
     'asset': '资产',
     'gateway': '网关',
     'date_created': '创建日期',
+    'port': '端口',
     // 管理用户
     'AdminUserList': '管理用户列表',
     'AdminUserDetail': '管理用户详情',
