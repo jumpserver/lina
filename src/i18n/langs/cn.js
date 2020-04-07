@@ -46,7 +46,9 @@ const cn = {
     'Run': '执行',
     'Are you sure to delete': '你确定要删除',
     'Info': '提示',
-    'More': '更多'
+    'More': '更多',
+    'Submit': '提交',
+    'Reset': '重置'
   },
   route: {
     'dashboard': '仪表盘',
@@ -87,6 +89,7 @@ const cn = {
     'OperateLog': '操作日志',
     'PasswordChangeLog': '改密日志',
     'Settings': '系统设置',
+    'UserCreate': '创建用户'
   },
   // 用户模块翻译
   users: {

@@ -2,7 +2,7 @@
   <Page>
     <template>
       <el-card>
-        <dataform :content="content" label-position="right" label-width="100px" :form="form" />
+        <dataform fields="content" label-position="right" label-width="100px" :form="form" />
       </el-card>
     </template>
   </page>
@@ -11,7 +11,7 @@
 <script>
 /* eslint-disable vue/no-unused-components */
 import { Page } from '@/layout/components'
-import dataform from '@/components/DataForm'
+import DataForm from '@/components/DataForm'
 import select2 from '@/components/Select2'
 export default {
   components: {

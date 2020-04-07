@@ -1,49 +1,47 @@
 <template>
   <Page>
-    <template>
-      <el-card>
-        <dataform :form="form" :content="content" label-position="left" label-width="140px">
-          <formgroupheader slot="id:name" title="账户" :line="false" style="margin:0 50px;" />
-          <formgroupheader slot="id:passwordrule" title="认证" :line="true" style="margin:0 50px;" />
-          <formgroupheader slot="id:role" title="角色安全" :line="true" style="margin:0 50px;" />
-          <formgroupheader slot="id:phone" title="认证" :line="true" style="margin:0 50px;" />
-        </dataform>
-      </el-card>
-    </template>
-    <el-button @click="debug" />
+    <IBox>
+      <DataForm :form="form" :fields="fields" label-position="left" label-width="140px">
+        <FormGroupHeader slot="id:name" title="账户" :line="false" style="margin:0 50px;" />
+        <FormGroupHeader slot="id:passwordrule" title="认证" :line="true" style="margin:0 50px;" />
+        <FormGroupHeader slot="id:role" title="角色安全" :line="true" style="margin:0 50px;" />
+        <FormGroupHeader slot="id:phone" title="认证" :line="true" style="margin:0 50px;" />
+      </DataForm>
+    </IBox>
   </page>
 </template>
 
 <script>
 /* eslint-disable vue/no-unused-components */
-import formgroupheader from '@/components/formGroupHeader'
-import { Page } from '@/layout/components'
-import dataform from '@/components/DataForm'
+import FormGroupHeader from '@/components/formGroupHeader'
+import { Page, IBox } from '@/layout/components'
+import DataForm from '@/components/DataForm'
 import select2 from '@/components/Select2'
 export default {
   components: {
     Page,
-    dataform,
+    IBox,
+    DataForm,
     select2,
-    formgroupheader
+    FormGroupHeader
   },
   data() {
     return {
       form: {
-        name: '姓名',
         passwordrule: '1',
         mfa_level: 0,
         source: 'local',
         role: 'Admin',
         date_expired: '2099-12-31 00:00:00 +0800'
       },
-      content: [
+      fields: [
         {
           type: 'input',
           id: 'name',
           label: this.$t('users.name'),
           el: {
-            size: 'small'
+            size: 'small',
+            placeholder: 'hello',
           },
           rules: [
             { required: true, message: 'miss name', trigger: 'blur' }
