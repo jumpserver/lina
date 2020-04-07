@@ -17,13 +17,14 @@ import FormGroupHeader from '@/components/formGroupHeader'
 import { Page, IBox } from '@/layout/components'
 import DataForm from '@/components/DataForm'
 import rules from '@/components/DataForm/rules'
-import select2 from '@/components/Select2'
+import Select2 from '@/components/Select2'
+import { optionUrlMeta } from '@/api/common'
 export default {
   components: {
     Page,
     IBox,
     DataForm,
-    select2,
+    Select2,
     FormGroupHeader
   },
   data() {
@@ -57,8 +58,8 @@ export default {
           ]
         },
         {
-          type: 'input',
           id: 'email',
+          type: 'input',
           label: this.$t('users.email'),
           el: {
           },
@@ -67,35 +68,21 @@ export default {
           ]
         },
         {
-          id: 'users',
+          id: 'groups',
           label: '用户组',
           el: {
             placeholder: '添加到用户组',
-            value: [
-              {
-                label: 'hello',
-                value: '1a775bbf-6861-4acb-8ae4-2f684794c8cc'
-              },
-              {
-                label: 'test',
-                value: '4dccdf84-7728-4de0-a507-67c905b3091b'
-              },
-              {
-                label: 'whold',
-                value: 'c5ec4b91-1fb2-478e-89bc-5a4abc0f9c6c'
-              }
-            ],
-            url: '/api/v1/users/users/'
+            value: [],
+            url: '/api/v1/users/groups/'
           },
           // 自定义组件
           // 可以取到自定义组件的值
           // https://femessage.github.io/el-form-renderer/#/Guide?id=guide-custom-component
-
-          component: select2
+          component: Select2
         }, {
           type: 'radio-group',
-          id: 'passwordrule',
-          label: '密码策略',
+          id: 'password_strategy',
+          label: this.$t('users.Password strategy'),
           el: {
           },
           hidden: (formValue, item) => {
@@ -103,10 +90,10 @@ export default {
           },
           options: [{
             label: '生成重置密码链接，通过邮件发送给用户',
-            value: '1'
+            value: '0'
           }, {
             label: '设置密码',
-            value: '2'
+            value: '1'
           }],
           rules: [
             { required: true, message: 'miss resource', trigger: 'change' }
@@ -146,58 +133,69 @@ export default {
           el: {
           },
           size: 0,
-          options: [{
-            label: '禁用',
-            value: 0
-          }, {
-            label: '启用',
-            value: 1
-          }, {
-            label: '强制启用',
-            value: 2
-          }],
+          options: [
+            {
+              label: '禁用',
+              value: 0
+            },
+            {
+              label: '启用',
+              value: 1
+            },
+            {
+              label: '强制启用',
+              value: 2
+            }
+          ],
           rules: [
             rules.Required
           ]
-        }, {
+        },
+        {
           type: 'select',
           id: 'source',
           label: '来源',
           el: {
           },
           default: '数据库',
-          options: [{
-            label: '数据库',
-            value: 'local'
-          }],
+          options: [
+            {
+              label: '数据库',
+              value: 'local'
+            }
+          ],
           rules: [
             rules.Required
           ]
         },
         {
-          type: 'select',
           id: 'role',
+          type: 'select',
           label: '角色',
           el: {
           },
           default: 'User',
-          options: [{
-            label: '管理员',
-            value: 'Admin'
-          }, {
-            label: '用户',
-            value: 'User'
-          }, {
-            label: '审计员',
-            value: 'Auditor'
-          }],
+          options: [
+            {
+              label: '管理员',
+              value: 'Admin'
+            },
+            {
+              label: '用户',
+              value: 'User'
+            },
+            {
+              label: '审计员',
+              value: 'Auditor'
+            }
+          ],
           rules: [
             rules.Required
           ]
         },
         {
-          type: 'date-picker',
           id: 'date_expired',
+          type: 'date-picker',
           label: '过期时间',
           el: {
             type: 'datetime',
@@ -208,20 +206,22 @@ export default {
           ]
         },
         {
-          type: 'input',
           id: 'phone',
+          type: 'input',
           label: '手机',
           el: {
           }
-        }, {
-          type: 'input',
+        },
+        {
           id: 'wechat',
+          type: 'input',
           label: '微信',
           el: {
           }
-        }, {
-          type: 'input',
+        },
+        {
           id: 'comment',
+          type: 'input',
           label: '备注',
           el: {
             type: 'textarea',
@@ -231,15 +231,17 @@ export default {
       ]
     }
   },
+  mounted() {
+    optionUrlMeta('/api/v1/users/users/').then(
+      meta => {
+        console.log(meta)
+      }
+    )
+  },
   methods: {
     debug() {
       console.log(this)
     }
-  },
-  mounted() {
-    console.log('>>>>>>>>>>')
-    console.log(rules)
-    console.log(rules.Required)
   }
 }
 </script>
