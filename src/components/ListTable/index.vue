@@ -1,11 +1,8 @@
 <template>
   <div>
-    <TableAction v-bind="headerActions" @clickAction="handleActionClick"></TableAction>
+    <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable"></TableAction>
     <el-card class="table-content" shadow="never">
-      <DataTable :config="tableConfig" @selection-change="handleSelectionChange">
-        <template v-slot:actions="row">
-          {{ row.id }}
-        </template>
+      <DataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange">
       </DataTable>
     </el-card>
   </div>
@@ -15,6 +12,7 @@
 /* eslint-disable no-unused-vars */
 import DataTable from '../DataTable'
 import TableAction from './TableAction'
+
 export default {
   name: 'ListTable',
   components: {
@@ -35,56 +33,24 @@ export default {
   },
   data() {
     return {
-      selectRows: [],
+      selectedRows: []
     }
   },
   computed: {
-    actionColumn() {
-      const actions = []
-      let tc = this.tableConfig
-      if (tc.hasEdit !== false) {
-        actions.push({
-          name: 'update',
-          title: this.$tc('Update')
-        })
-      }
-
-      if (tc.hasDelete !== false) {
-        actions.push({
-          name: 'delete',
-          title: this.$tc('Delete')
-        })
-      }
+    hasSelected() {
+      return this.selectedRows.length > 0
     }
   },
   methods: {
     handleSelectionChange(val) {
-      this.selectRows = val
-      this.multipleSelection = val;
-      (val.length > 0) ? (this.selectDisable = false) : (this.selectDisable = true)
+      this.selectedRows = val
+      console.log(this.selectedRows)
     },
-    handleActionClick(item) {
-      const handler = this.getActionHandler(item)
-      handler(this.selectRows)
+    reloadTable() {
+      this.$refs.dataTable.getList()
     },
-    handleActionCreate() {
-      const routeName = this.headerActions.createRoute || ''
-      this.$router.push({ name: routeName })
-      console.log('handle create')
-    },
-    getActionHandler(item) {
-      let handler = this.headerActions.item
-      const defaultHandlerName = 'handle' + item[0].toUpperCase() + item.slice(1, item.length)
-      if (!handler) {
-        handler = this[defaultHandlerName]
-      }
-      if (!handler) {
-        handler = () => {
-          console.log('No handler found for ', item)
-        }
-      }
-      console.log(handler)
-      return handler
+    search(attrs) {
+      return this.$refs.dataTable.search(attrs)
     }
   }
 }

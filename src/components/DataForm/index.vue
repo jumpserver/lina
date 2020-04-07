@@ -1,62 +1,91 @@
 <template>
-  <elFormRender ref="dataForm" :content="content" v-bind="$attrs" v-on="$listeners">
+  <ElFormRender
+    ref="dataForm"
+    :content="fields"
+    v-bind="$attrs"
+    :form="basicForm"
+    label-position="right"
+    label-width="17%"
+    v-on="$listeners"
+  >
     <!-- slot 透传 -->
-    <slot v-for="item in content" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
-    <slot v-for="item in content" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
+    <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
+    <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
     <el-form-item v-if="defaultButton">
-      <el-button size="small" type="primary" @click="submitForm('dataForm')">submit</el-button>
-      <el-button size="small" @click="resetForm('dataForm')">reset</el-button>
+      <el-button size="small" @click="resetForm('dataForm')">{{ $tc('Reset') }}</el-button>
+      <el-button size="small" type="primary" @click="submitForm('dataForm')">{{ $tc('Submit') }}</el-button>
     </el-form-item>
     <slot name="Actions" />
-  </elFormRender>
+  </ElFormRender>
 </template>
 
 <script>
-import elFormRender from './components/el-form-renderer'
+import ElFormRender from './components/el-form-renderer'
 export default {
   components: {
-    elFormRender
+    ElFormRender
   },
   props: {
     defaultButton: {
       type: Boolean,
       default: true
     },
-    content: {
+    fields: {
       type: Array,
       default: () => []
+    },
+    // 初始值
+    form: {
+      type: Object,
+      default: () => { return {} }
     }
   },
+  data() {
+    return {
+      basicForm: {}
+    }
+  },
+  mounted() {
+    this.basicForm = this.form
+  },
   methods: {
+    // 获取表单数据
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('submit')
+          this.$emit('submit', this.$refs[formName].getFormValue())
         } else {
-          console.log('error submit!!')
           return false
         }
       })
     },
+    // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    getBasic() {
-      if (this.url) {
-        console.log('has Url')
-      }
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.el-form /deep/ .el-form-item {
+  .el-form /deep/ .el-form-item {
     margin-bottom: 12px;
+  }
 
-    margin-left:12%;
-    width:73%;
-}
+  .el-form /deep/ .el-form-item__content {
+    width: 75%;
+  }
 
+  .el-form /deep/ .el-form-item__label {
+    padding: 0 30px 0 0;
+  }
+
+  .el-form /deep/ .el-form-item__error {
+     position: inherit;
+  }
+
+  .el-form /deep/ .form-group-header {
+    margin-left: 50px;
+  }
 </style>

@@ -1,96 +1,237 @@
 <template>
   <div class="table-header">
     <slot name="header">
-      <!--TODO: 事件交互 -->
       <div class="table-header-left-side">
         <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick"></ActionsGroup>
       </div>
-      <!-- TODO: 事件交互 -->
       <div class="table-action-right-side">
         <el-input v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch"></el-input>
-        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick"></ActionsGroup>
+        <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick"></ActionsGroup>
       </div>
+      <Dialog :title="$t('Export')">
+        <el-form>
+          <el-form-item label="导出范围" :label-width="'100px'">
+            <el-radio v-model="exportValue" class="export-item" label="1">导出全部</el-radio>
+            <el-radio v-model="exportValue" class="export-item" label="2">仅导出选中项</el-radio>
+            <el-radio v-model="exportValue" class="export-item" label="3">仅导出搜索项</el-radio>
+          </el-form-item>
+        </el-form>
+      </Dialog>
     </slot>
   </div>
 </template>
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
+import { Dialog } from '../Dialog'
+import _ from 'lodash'
+import { createSourceIdCache } from '@/api/common'
+
 const defaultTrue = { type: Boolean, default: true }
+const defaultFalse = { type: Boolean, default: false }
+
 export default {
   name: 'TableAction',
   components: {
-    ActionsGroup
+    ActionsGroup,
+    Dialog
   },
   props: {
     hasExport: defaultTrue,
     hasImport: defaultTrue,
     hasRefresh: defaultTrue,
     hasCreate: defaultTrue,
-    hasDelete: defaultTrue,
-    hasUpdate: defaultTrue,
+    hasBulkDelete: defaultTrue,
+    hasBulkUpdate: defaultFalse,
     hasLeftActions: defaultTrue,
     hasSearch: defaultTrue,
-    hasRightActions: defaultTrue
+    hasRightActions: defaultTrue,
+    tableUrl: {
+      type: String,
+      default: ''
+    },
+    createRoute: {
+      type: String,
+      default: '404'
+    },
+    reloadTable: {
+      type: Function,
+      default: () => {}
+    },
+    performBulkDelete: {
+      type: Function,
+      default: () => {}
+    },
+    searchTable: {
+      type: Function,
+      default: () => {}
+    },
+    selectedRows: {
+      type: Array,
+      default: () => ([])
+    },
+    extraActions: {
+      type: Array,
+      default: () => ([])
+    },
+    extraMoreActions: {
+      type: Array,
+      default: () => ([])
+    },
+    extraRightSideActions: {
+      type: Array,
+      default: () => ([])
+    }
   },
   data() {
     return {
-      defaultRightSideActions: {
-        Export: { name: 'actionExport', fa: 'fa-download' },
-        Import: { name: 'actionImport', fa: 'fa-upload' },
-        Refresh: { name: 'actionRefresh', fa: 'fa-refresh' }
-      },
-      defaultCreateAction: {
-        name: 'actionCreate',
-        title: this.$tc('Create'),
-        type: 'primary'
-      },
       keyword: '',
-      defaultMoreActions: {
-        Delete: {
-          title: this.$tc('Delete selected'),
-          name: 'actionDeleteSelected'
-        },
-        Update: {
-          title: this.$tc('Update selected'),
-          name: 'actionUpdateSelected'
+      defaultRightSideActions: [
+        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport },
+        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport },
+        { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
+      ],
+      defaultActions: [
+        {
+          name: 'actionCreate',
+          title: this.$tc('Create'),
+          type: 'primary',
+          has: this.hasCreate,
+          can: true,
+          callback: this.handleCreate
         }
-      }
+      ],
+      defaultMoreActions: [
+        {
+          title: this.$tc('Delete selected'),
+          name: 'actionDeleteSelected',
+          can: (rows) => rows.length > 0,
+          has: this.hasBulkDelete,
+          callback: this.defaultBulkDeleteCallback
+        },
+        {
+          title: this.$tc('Update selected'),
+          name: 'actionUpdateSelected',
+          can: (rows) => rows.length > 0,
+          has: this.hasBulkUpdate,
+          callback: this.handleBulkUpdate
+        }
+      ],
+      dialogExportVisible: false,
+      exportValue: 2
     }
   },
   computed: {
     rightSideActions() {
-      const actions = []
-      for (const k in this.defaultRightSideActions) {
-        if (this['has' + k]) {
-          actions.push(this.defaultRightSideActions[k])
-        }
-      }
-      return actions
+      const actions = [...this.defaultRightSideActions, ...this.extraRightSideActions]
+      return this.cleanActions(actions)
     },
     actions() {
-      const actions = []
-      if (this.hasCreate) {
-        actions.push(this.defaultCreateAction)
-      }
-      return actions
+      const actions = [...this.defaultActions, ...this.extraActions]
+      return this.cleanActions(actions)
     },
     moreActions() {
-      const actions = []
-      for (const k in this.defaultMoreActions) {
-        if (this['has' + k]) {
-          actions.push(this.defaultMoreActions[k])
+      const actions = [...this.defaultMoreActions, ...this.extraMoreActions]
+      return this.cleanActions(actions)
+    },
+
+    namedActions() {
+      const totalActions = [...this.actions, ...this.moreActions, ...this.rightSideActions]
+      const actions = {}
+      for (const action of totalActions) {
+        if (!action || !action.hasOwnProperty('name')) {
+          continue
         }
+        actions[action.name] = action
       }
       return actions
     }
   },
   methods: {
-    handleSearch(keyword) {
-      console.log('Search: ', keyword)
-    },
+    handleSearch: _.debounce(function() {
+      this.searchTable({search: this.keyword})
+    }, 500),
     handleActionClick(item) {
-      this.$emit('clickAction', item)
+      console.log('name cations', this.namedActions)
+      let handler = this.namedActions[item] ? this.namedActions[item].callback : null
+      if (!handler) {
+        handler = () => {
+          console.log('No handler found for ', item)
+        }
+      }
+      handler(this.selectedRows)
+    },
+    handleCreate() {
+      const routeName = this.createRoute
+      this.$router.push({ name: routeName })
+      console.log('handle create')
+    },
+    defaultBulkDeleteCallback(rows) {
+      const msg = this.$tc('Are you sure to delete') + ' ' + rows.length + ' ' + this.$tc('rows')
+      const title = this.$tc('Info')
+      const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
+      this.$alert(msg, title, {
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger',
+        showCancelButton: true,
+        beforeClose: async(action, instance, done) => {
+          if (action !== 'confirm') return done()
+          instance.confirmButtonLoading = true
+          try {
+            await performDelete(rows)
+            done()
+            this.reloadTable()
+            this.$message.success(this.$tc('Delete success'))
+          } catch (error) {
+            this.$message.error(this.$tc('Delete failed'))
+            console.warn(error)
+          } finally {
+            instance.confirmButtonLoading = false
+          }
+        }
+      }).catch(() => {
+        /* 取消*/
+      })
+    },
+    async defaultPerformBulkDelete(rows) {
+      const ids = rows.map((v) => {
+        return v.id
+      })
+      const data = await createSourceIdCache(ids)
+      const url = `${this.tableUrl}?spm=` + data.spm
+      return this.$axios.delete(url)
+    },
+    handleBulkUpdate(rows) {
+    },
+    handleExport() {
+      this.dialogExportVisible = true
+    },
+    handleImport() {
+    },
+    handleRefresh() {
+      this.reloadTable()
+    },
+    cleanActions(actions) {
+      const validActions = []
+      for (const action of actions) {
+        let ok = this.checkItem(action, 'has')
+        if (!ok) {
+          continue
+        }
+        ok = this.checkItem(action, 'can')
+        action.disabled = !ok
+        validActions.push(action)
+      }
+      return validActions
+    },
+    checkItem(item, attr) {
+      let ok = item[attr]
+      if (typeof ok === 'function') {
+        ok = ok(this.selectedRows)
+      } else if (ok == null) {
+        ok = true
+      }
+      return ok
     }
   }
 }
@@ -139,6 +280,11 @@ export default {
   .table-action-right-side {
     display: flex;
     justify-content:center;
+  }
+
+  .export-item {
+    display: block;
+    padding: 5px 20px;
   }
 
 </style>

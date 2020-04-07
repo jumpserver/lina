@@ -5,6 +5,10 @@
 export default {
   name: 'BaseFormatter',
   props: {
+    reload: {
+      type: Function,
+      default: ({reloading}) => ({})
+    },
     row: {
       type: Object,
       default: () => ({})
@@ -17,7 +21,7 @@ export default {
       type: [String, Boolean, Number, Object],
       default: null
     },
-    setting: {
+    tableData: {
       type: Array,
       default: () => ({})
     }

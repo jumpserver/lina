@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/DataTable/formatters/index'
+import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -16,20 +16,16 @@ export default {
         url: '/api/v1/users/groups/',
         columns: [
           {
-            label: 'ID',
-            type: 'index'
-          },
-          {
             prop: 'name',
             label: this.$tc('Name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'UserDetail'
+            route: 'UserGroupDetail'
           },
           {
             prop: 'users_amount',
             label: this.$t('users.User'),
-            key: 'users_amount',
+            key: 'users_amount'
           },
           {
             prop: 'comment',
@@ -38,55 +34,27 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$tc('Action'),
+            label: this.$tc('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
+            width: '200px',
             actions: {
-              hasUpdate: (row, cellValue) => {
-                return true
-              },
-              canUpdate: (row, cellValue) => {
-                console.log('On table update')
-                return true
-              },
-              hasDelete: true,
-              canDelete: (row, cellValue) => {
-                return true
-              },
-              onDelete: (row, cellValue) => {
-                this.$confirm('你好啊', '提示', {
-                  type: 'warning',
-                  confirmButtonClass: 'el-button--danger',
-                  beforeClose: async(action, instance, done) => {
-                  }
-                }).catch(() => {
-                  /* 取消*/
-                })
-              },
+              updateRoute: 'UserGroupUpdate',
               extraActions: [
                 {
                   name: 'run',
-                  title: this.$tc('Run'),
-                  callback: (row, cellValue) => {
-                    console.log('On run')
-                  }
-                },
-                {
-                  name: 'monitor',
-                  title: this.$tc('Monitor')
+                  title: this.$tc('Run')
                 }
-              ],
-              order: []
+              ]
             }
           }
-        ],
-        // 写路由名字，table组件会自动传作为参数
-        tableActions: {
-          editRoute: '404'
-        }
+        ]
       },
       headerActions: {
-        createRoute: 'UserGroupCreate'
+        createRoute: 'UserGroupCreate',
+        performBulkDelete: function(rows) {
+          console.log('hello')
+        }
       }
     }
   }

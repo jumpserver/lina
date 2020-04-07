@@ -162,7 +162,15 @@ td .el-button.el-button--mini {
   width: 100%;
   font-size: 14px;
   line-height: 1.5;
-  height: 35px;
+  height: 34px;
+}
+
+.el-input--small .el-input__inner {
+  height: 34px;
+}
+
+.el-input--small .el-input__icon {
+  line-height: 34px;
 }
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
@@ -222,4 +230,8 @@ td .el-button.el-button--mini {
 
 .text-success {
   color: $--color-success;
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+  color: inherit;
 }

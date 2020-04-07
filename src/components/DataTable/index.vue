@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
+  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
 </template>
 
 <script>
@@ -36,16 +36,12 @@ export default {
         hasDelete: userTableActions.hasDelete !== false,
         hasNew: false,
         // editText: this.$t('action.update'), // 编辑按钮文案
-        operationAttrs: {
-          align: 'center',
-          width: '150px'
-        },
-        operationButtonType: 'button',
         buttonSize: 'mini',
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
-          fit: true // 宽度自适应
+          fit: true, // 宽度自适应,
+          tooltipEffect: 'dark'
         },
         extraButtons: userTableActions.extraButtons,
         onEdit: (row) => {
@@ -90,6 +86,15 @@ export default {
       const config = Object.assign(this.defaultConfig, this.config)
       return config
     }
+  },
+  methods: {
+    getList() {
+      this.$refs.table.clearSelection()
+      return this.$refs.table.getList()
+    },
+    search(attrs) {
+      return this.$refs.table.search(attrs)
+    }
   }
 }
 </script>
@@ -102,7 +107,6 @@ export default {
   }
   .el-table /deep/ .el-table__row > td> div > span {
     text-overflow: ellipsis;
-    -moz-text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }

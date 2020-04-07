@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, DisplayFormatter, ChoicesFormatter } from '@/components/DataTable/formatters/index'
+import { DetailFormatter, DisplayFormatter, ChoicesFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -49,6 +49,22 @@ export default {
             formatter: ChoicesFormatter,
             align: 'center',
             width: '80px'
+          },
+          {
+            prop: 'id',
+            label: this.$tc('Actions'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            width: '200px',
+            actions: {
+              updateRoute: 'UserUpdate',
+              extraActions: [
+                {
+                  name: 'run',
+                  title: this.$tc('Run')
+                }
+              ]
+            }
           }
         ],
         // 写路由名字，table组件会自动传作为参数
@@ -57,7 +73,17 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'UserGroupCreate'
+        createRoute: 'UserCreate',
+        extraMoreActions: [
+          {
+            name: 'deactiveSelected',
+            title: this.$tc('Deactive selected')
+          },
+          {
+            name: 'activeSelected',
+            title: this.$tc('Active selected')
+          }
+        ]
       }
     }
   }
