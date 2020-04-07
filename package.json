@@ -44,7 +44,6 @@
     "vuex": "3.1.0"
   },
   "devDependencies": {
-    "husky": "^4.2.3",
     "@babel/core": "7.0.0",
     "@babel/register": "7.0.0",
     "@vue/cli-plugin-babel": "3.6.0",
@@ -61,7 +60,9 @@
     "eslint": "5.15.3",
     "eslint-plugin-vue": "5.2.2",
     "html-webpack-plugin": "3.2.0",
+    "husky": "^4.2.3",
     "less-loader": "^5.0.0",
+    "lint-staged": "^10.1.2",
     "mockjs": "1.0.1-beta3",
     "node-sass": "^4.9.0",
     "runjs": "^4.3.2",
@@ -83,13 +84,13 @@
   ],
   "husky": {
     "hooks": {
-        "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-      "src/**/*.{js,vue}": [
-          "eslint --fix",
-          "git add"
-      ]
+    "src/**/*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }
