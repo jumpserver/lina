@@ -1,9 +1,9 @@
 <template>
   <Page>
     <IBox>
-      <AutoDataForm v-bind="$attrs" v-on="$listeners">
-        <slot v-for="item in $attrs.fields" :slot="`id:${item}`" :name="`id:${item}`" />
-        <slot v-for="item in $attrs.fields" :slot="`$id:${item}`" :name="`$id:${item}`" />
+      <AutoDataForm :form="form" :fields="fields" :url="url" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit">
+        <slot v-for="item in fields" :slot="`id:${item}`" :name="`id:${item}`" />
+        <slot v-for="item in fields" :slot="`$id:${item}`" :name="`$id:${item}`" />
       </AutoDataForm>
     </IBox>
   </Page>
@@ -16,9 +16,33 @@ export default {
   components: {
     Page, IBox, AutoDataForm
   },
+  props: {
+    url: {
+      type: String,
+      required: true,
+    },
+    method: {
+      type: String,
+      default: 'post'
+    },
+    fields: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    form: {
+      type: Object,
+      default: () => { return {} }
+    }
+  },
+  methods: {
+    handleSubmit(values) {
+      console.log('submit', values)
+    }
+  },
   mounted() {
     console.log('generic', this.$attrs)
-    console.log(this.$data)
     console.log(this.fields)
   }
 }
