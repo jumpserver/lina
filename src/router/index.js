@@ -70,7 +70,7 @@ export const constantRoutes = [
         component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserCreate',
         hidden: true,
-        meta: { title: 'UserCreate', activeMenu: '/users/users'}
+        meta: { title: 'UserCreate', activeMenu: '/users/users' }
       },
       {
         path: 'users/update/:id',

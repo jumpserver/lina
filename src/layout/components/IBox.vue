@@ -1,6 +1,6 @@
 <template>
   <el-card class="ibox" shadow="never">
-    <div slot="header" class="clearfix ibox-title" v-if="title">
+    <div v-if="title" slot="header" class="clearfix ibox-title">
       <h5>{{ title }}</h5>
       <div class="ibox-tools">
         <a class="collapse-link">

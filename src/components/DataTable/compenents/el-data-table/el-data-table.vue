@@ -52,8 +52,7 @@
               v-for="col in columns.filter((c, i) => i !== 0 && i !== 1)"
               :key="col.prop"
               v-bind="{align: columnsAlign, ...col}"
-            >
-            </el-data-table-column>
+            />
           </template>
 
           <!--无选择-->
@@ -75,7 +74,7 @@
                   class="tree-ctrl"
                   @click="toggleExpanded(scope.$index)"
                 >
-                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`"/>
+                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
                 </span>
                 {{ scope.row[columns[0].prop] }}
               </template>
@@ -91,7 +90,7 @@
 
         <!--非树-->
         <template v-else>
-          <el-data-table-column v-if="hasSelection" type="selection" :align="columnsAlign"></el-data-table-column>
+          <el-data-table-column v-if="hasSelection" type="selection" :align="columnsAlign" />
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
@@ -107,8 +106,7 @@
                 :reload="getList"
                 :col="col"
                 :cell-value="row[col.prop]"
-              >
-              </div>
+              />
             </template>
           </el-data-table-column>
         </template>
@@ -126,7 +124,7 @@
         v-bind="extraPaginationAttrs"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      ></el-pagination>
+      />
 
       <the-dialog
         ref="dialog"

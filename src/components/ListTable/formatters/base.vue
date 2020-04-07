@@ -1,4 +1,5 @@
 <template>
+  <div />
 </template>
 
 <script>
@@ -7,7 +8,7 @@ export default {
   props: {
     reload: {
       type: Function,
-      default: ({reloading}) => ({})
+      default: ({ reloading }) => ({})
     },
     row: {
       type: Object,

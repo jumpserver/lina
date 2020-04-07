@@ -231,15 +231,15 @@ export default {
       ]
     }
   },
-  methods: {
-    debug() {
-      console.log(this)
-    }
-  },
   mounted() {
     console.log('>>>>>>>>>>')
     console.log(rules)
     console.log(rules.Required)
+  },
+  methods: {
+    debug() {
+      console.log(this)
+    }
   }
 }
 </script>

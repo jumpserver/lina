@@ -8,7 +8,7 @@ import { DetailFormatter, DisplayFormatter, ChoicesFormatter, ActionsFormatter }
 
 export default {
   components: {
-    GenericListPage,
+    GenericListPage
   },
   data() {
     return {
@@ -25,13 +25,13 @@ export default {
           {
             prop: 'username',
             label: this.$t('users.Username'),
-            sortable: 'custom',
+            sortable: 'custom'
           },
           {
             prop: 'role',
             label: this.$t('users.Role'),
             formatter: DisplayFormatter,
-            sortable: 'custom',
+            sortable: 'custom'
           },
           {
             prop: 'groups_display',

@@ -2,28 +2,18 @@
   <div class="table-header">
     <slot name="header">
       <div class="table-header-left-side">
-        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick"></ActionsGroup>
+        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick" />
       </div>
       <div class="table-action-right-side">
-        <el-input v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch"></el-input>
-        <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick"></ActionsGroup>
+        <el-input v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />
+        <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick" />
       </div>
-      <Dialog :title="$t('Export')">
-        <el-form>
-          <el-form-item label="导出范围" :label-width="'100px'">
-            <el-radio v-model="exportValue" class="export-item" label="1">导出全部</el-radio>
-            <el-radio v-model="exportValue" class="export-item" label="2">仅导出选中项</el-radio>
-            <el-radio v-model="exportValue" class="export-item" label="3">仅导出搜索项</el-radio>
-          </el-form-item>
-        </el-form>
-      </Dialog>
     </slot>
   </div>
 </template>
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
-import { Dialog } from '../Dialog'
 import _ from 'lodash'
 import { createSourceIdCache } from '@/api/common'
 
@@ -33,8 +23,7 @@ const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
-    ActionsGroup,
-    Dialog
+    ActionsGroup
   },
   props: {
     hasExport: defaultTrue,
@@ -149,10 +138,10 @@ export default {
   },
   methods: {
     handleSearch: _.debounce(function() {
-      this.searchTable({search: this.keyword})
+      this.searchTable({ search: this.keyword })
     }, 500),
     handleActionClick(item) {
-      console.log('name cations', this.namedActions)
+      console.log('name cations')
       let handler = this.namedActions[item] ? this.namedActions[item].callback : null
       if (!handler) {
         handler = () => {
@@ -203,10 +192,13 @@ export default {
     },
     handleBulkUpdate(rows) {
     },
-    handleExport() {
-      this.dialogExportVisible = true
+    handleExport(row) {
+      console.log(row)
+      this.$eventBus.$emit('showExportDialog', row)
     },
-    handleImport() {
+    handleImport(row) {
+      console.log(row)
+      this.$eventBus.$emit('showImportDialog', row)
     },
     handleRefresh() {
       this.reloadTable()
@@ -274,6 +266,7 @@ export default {
   .right-side-actions {
     display: flex;
     padding-left: 10px;
+    align-items: center;
     justify-content:center;
   }
 

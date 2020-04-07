@@ -1,23 +1,23 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" @actionClick="handleActionClick"></ActionsGroup>
+  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" @actionClick="handleActionClick" />
 </template>
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup/index'
 import BaseFormatter from './base'
 
-const defaultPerformDelete = function({row, col}) {
+const defaultPerformDelete = function({ row, col }) {
   const id = row.id
   const url = `/api/v1/users/groups/${id}/`
   return this.$axios.delete(url)
 }
-const defaultUpdateCallback = function({row, col}) {
+const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
   const routeName = col.actions.updateRoute || '404'
-  this.$router.push({name: routeName, params: {id: id}})
+  this.$router.push({ name: routeName, params: { id: id }})
 }
 
-const defaultDeleteCallback = function({row, col, cellValue, reload}) {
+const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   const msg = this.$tc('Are you sure to delete') + ' "' + row.name + '"'
   const title = this.$tc('Info')
   const performDelete = col.actions.performDelete || defaultPerformDelete.bind(this)
@@ -29,7 +29,7 @@ const defaultDeleteCallback = function({row, col, cellValue, reload}) {
       if (action !== 'confirm') return done()
       instance.confirmButtonLoading = true
       try {
-        await performDelete({row: row, col: col})
+        await performDelete({ row: row, col: col })
         done()
         reload()
         this.$message.success(this.$tc('Delete success'))

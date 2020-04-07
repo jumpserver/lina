@@ -1,11 +1,15 @@
 <template>
-  <el-dialog :title="title" v-bind="$attrs" v-on="$listeners">
-    <slot></slot>
+  <el-dialog
+    :title="title"
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
+    <slot />
     <div slot="footer" class="dialog-footer">
-      <slog name="footer">
+      <slot name="footer">
         <el-button size="small" @click="onCancel">{{ $t('Cancel') }}</el-button>
         <el-button type="primary" size="small" @click="onConfirm">{{ $tc('Ok') }}</el-button>
-      </slog>
+      </slot>
     </div>
   </el-dialog>
 </template>
@@ -16,20 +20,20 @@ export default {
   props: {
     title: {
       type: String,
-      default: ''
+      default: 'Title'
     }
   },
   data() {
     return {
-      visible: false
+
     }
   },
   methods: {
     onCancel() {
-
+      this.$emit('cancel')
     },
     onConfirm() {
-
+      this.$emit('comfirm')
     }
   }
 }
