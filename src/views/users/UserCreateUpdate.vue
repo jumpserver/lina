@@ -8,7 +8,7 @@
         <FormGroupHeader slot="id:phone" title="认证" :line="true" />
       </DataForm>
     </IBox>
-  </page>
+  </Page>
 </template>
 
 <script>

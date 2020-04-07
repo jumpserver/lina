@@ -12,7 +12,7 @@
               <span>组下用户</span>
             </div>
             <div>
-              <Select2 v-model="value" :url="url" />
+              <Select2 v-model="select2.value" v-bind="select2" />
             </div>
           </el-card>
         </el-col>
@@ -52,23 +52,23 @@ export default {
         }
       ],
       cardTitle: '基本信息',
-      placeholder: '请选择',
-      url: '/api/v1/users/users/',
-      value: [
-        {
-          label: 'hello',
-          value: '1a775bbf-6861-4acb-8ae4-2f684794c8cc'
-        },
-        {
-          label: 'test',
-          value: '4dccdf84-7728-4de0-a507-67c905b3091b'
-        },
-        {
-          label: 'whold',
-          value: 'c5ec4b91-1fb2-478e-89bc-5a4abc0f9c6c'
-        }
-      ],
-      options: []
+      select2: {
+        url: '/api/v1/users/users/',
+        initial: [
+          {
+            name: 'hello',
+            id: '1a775bbf-6861-4acb-8ae4-2f684794c8cc'
+          },
+          {
+            name: 'test',
+            id: '4dccdf84-7728-4de0-a507-67c905b3091b'
+          },
+          {
+            name: 'whold',
+            id: 'c5ec4b91-1fb2-478e-89bc-5a4abc0f9c6c'
+          }
+        ]
+      },
     }
   },
   computed: {
