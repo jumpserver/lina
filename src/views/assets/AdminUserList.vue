@@ -24,7 +24,8 @@ export default {
           },
           {
             prop: 'username',
-            label: this.$t('common.username')
+            label: this.$t('common.username'),
+            sortable: 'custom'
           },
           {
             prop: 'assets_amount',
@@ -32,7 +33,8 @@ export default {
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment')
+            label: this.$t('assets.comment'),
+            sortable: 'custom'
           },
           {
             prop: 'id',

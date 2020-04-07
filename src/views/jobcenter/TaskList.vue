@@ -41,8 +41,7 @@ export default {
           },
           {
             prop: 'latest_execution.timedelta',
-            label: this.$t('jobcenter.time'),
-            sortable: 'custom'
+            label: this.$t('jobcenter.time')
           },
           {
             prop: 'id',

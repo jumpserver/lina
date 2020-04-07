@@ -24,7 +24,8 @@ export default {
           },
           {
             prop: 'ip',
-            label: this.$t('assets.ip')
+            label: this.$t('assets.ip'),
+            sortable: 'custom'
           },
           {
             prop: 'hardware_info',

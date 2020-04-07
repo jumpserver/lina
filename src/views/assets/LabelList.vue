@@ -24,7 +24,8 @@ export default {
           },
           {
             prop: 'value',
-            label: this.$t('assets.value')
+            label: this.$t('assets.value'),
+            sortable: 'custom'
           },
           {
             prop: 'asset_count',

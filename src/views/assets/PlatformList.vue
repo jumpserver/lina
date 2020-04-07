@@ -24,11 +24,13 @@ export default {
           },
           {
             prop: 'base',
-            label: this.$t('assets.BasePlatform')
+            label: this.$t('assets.BasePlatform'),
+            sortable: 'custom'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment')
+            label: this.$t('assets.comment'),
+            sortable: 'custom'
           },
           {
             prop: 'id',

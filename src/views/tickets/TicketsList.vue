@@ -39,15 +39,18 @@ export default {
           },
           {
             prop: 'user_display',
-            label: this.$t('tickets.user')
+            label: this.$t('tickets.user'),
+            sortable: 'custom'
           },
           {
             prop: 'type_display',
-            label: this.$t('tickets.type')
+            label: this.$t('tickets.type'),
+            sortable: 'custom'
           },
           {
             prop: 'status',
-            label: this.$t('tickets.status')
+            label: this.$t('tickets.status'),
+            sortable: 'custom'
           },
           {
             prop: 'date_created',

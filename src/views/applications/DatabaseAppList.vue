@@ -24,23 +24,28 @@ export default {
           },
           {
             prop: 'get_type_display',
-            label: this.$t('applications.appType')
+            label: this.$t('applications.appType'),
+            sortable: 'custom'
           },
           {
             prop: 'host',
-            label: this.$t('applications.host')
+            label: this.$t('applications.host'),
+            sortable: 'custom'
           },
           {
             prop: 'port',
-            label: this.$t('applications.port')
+            label: this.$t('applications.port'),
+            sortable: 'custom'
           },
           {
             prop: 'database',
-            label: this.$t('applications.database')
+            label: this.$t('applications.database'),
+            sortable: 'custom'
           },
           {
             prop: 'comment',
-            label: this.$t('applications.comment')
+            label: this.$t('applications.comment'),
+            sortable: 'custom'
           },
           {
             prop: 'id',

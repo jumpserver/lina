@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-// import DetailFormatter from '@/components/DataTable/formatters/DetailFormatter'
+import { DetailFormatter } from '@/components/DataTable/formatters/index'
 
 export default {
   components: {
@@ -29,23 +29,27 @@ export default {
           {
             prop: 'user',
             label: this.$t('sessions.user'),
-            sortable: true
+            sortable: 'custom'
           },
           {
             prop: 'asset',
-            label: this.$t('sessions.asset')
+            label: this.$t('sessions.asset'),
+            sortable: 'custom'
           },
           {
             prop: 'system_user',
-            label: this.$t('sessions.systemUser')
+            label: this.$t('sessions.systemUser'),
+            sortable: 'custom'
           },
           {
             prop: 'remote_addr',
-            label: this.$t('sessions.remoteAddr')
+            label: this.$t('sessions.remoteAddr'),
+            sortable: 'custom'
           },
           {
             prop: 'protocol',
-            label: this.$t('sessions.protocol')
+            label: this.$t('sessions.protocol'),
+            sortable: 'custom'
           },
           {
             prop: 'login_from_display',
@@ -57,7 +61,8 @@ export default {
           },
           {
             prop: 'date_start',
-            label: this.$t('sessions.dateStart')
+            label: this.$t('sessions.dateStart'),
+            sortable: 'custom'
           },
           {
             prop: 'duration',

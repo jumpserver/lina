@@ -24,23 +24,28 @@ export default {
           },
           {
             prop: 'username',
-            label: this.$t('common.username')
+            label: this.$t('common.username'),
+            sortable: 'custom'
           },
           {
             prop: 'protocol',
-            label: this.$t('assets.protocol')
+            label: this.$t('assets.protocol'),
+            sortable: 'custom'
           },
           {
             prop: 'login_mode_display',
-            label: this.$t('assets.loginMode')
+            label: this.$t('assets.loginMode'),
+            sortable: 'custom'
           },
           {
             prop: 'assets_amount',
-            label: this.$t('assets.asset')
+            label: this.$t('assets.asset'),
+            sortable: 'custom'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment')
+            label: this.$t('assets.comment'),
+            sortable: 'custom'
           },
           {
             prop: 'id',

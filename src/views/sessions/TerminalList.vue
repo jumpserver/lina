@@ -32,7 +32,8 @@ export default {
           },
           {
             prop: 'remote_addr',
-            label: this.$t('sessions.addr')
+            label: this.$t('sessions.addr'),
+            sortable: 'custom'
           },
           {
             prop: 'session_online',
@@ -45,7 +46,8 @@ export default {
           },
           {
             prop: 'is_alive',
-            label: this.$t('sessions.alive')
+            label: this.$t('sessions.alive'),
+            sortable: 'custom'
           }
         ],
         tableActions: {

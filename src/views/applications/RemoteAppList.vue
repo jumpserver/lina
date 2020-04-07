@@ -32,7 +32,8 @@ export default {
           },
           {
             prop: 'comment',
-            label: this.$t('applications.comment')
+            label: this.$t('applications.comment'),
+            sortable: 'custom'
           },
           {
             prop: 'id',

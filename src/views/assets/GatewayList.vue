@@ -18,17 +18,17 @@ export default {
           {
             prop: 'name',
             label: this.$t('assets.name'),
-            sortable: true
+            sortable: 'custom'
           },
           {
             prop: 'ip',
             label: this.$t('assets.ip'),
-            sortable: true
+            sortable: 'custom'
           },
           {
             prop: 'port',
             label: this.$t('assets.port'),
-            sortable: true
+            sortable: 'custom'
           },
           {
             prop: 'protocol',
@@ -38,12 +38,12 @@ export default {
           {
             prop: 'username',
             label: this.$t('assets.username'),
-            sortable: true
+            sortable: 'custom'
           },
           {
             prop: 'comment',
             label: this.$t('assets.comment'),
-            sortable: true
+            sortable: 'custom'
           },
           {
             prop: 'id',
