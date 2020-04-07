@@ -11,7 +11,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/DataTable/formatters/index'
+import { DetailFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {

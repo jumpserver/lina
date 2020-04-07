@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-// import DetailFormatter from '@/components/DataTable/formatters/DetailFormatter'
 
 export default {
   components: {
