@@ -367,6 +367,15 @@ const cn = {
     'time': '时间',
     'run': '执行'
   },
+  tickets: {
+    'title': '标题',
+    'user': '用户',
+    'type': '类型',
+    'status': '状态',
+    'date': '日期',
+    'MyTickets': '我的工单',
+    'AssignedMe': '待处理'
+  },
   setting: {
     'setting': '系统设置',
     'basicsetting': '基本设置'

@@ -298,8 +298,8 @@ export const constantRoutes = [
     redirect: '/tickets/tickets/',
     children: [{
       path: 'tickets',
-      name: 'Tickets',
-      component: () => import('@/views/tree/index'),
+      name: 'TicketsList',
+      component: () => import('@/views/tickets/TicketsList'),
       meta: { title: 'Tickets', icon: 'check-square-o' }
     }]
   },
