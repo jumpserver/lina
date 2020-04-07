@@ -1,7 +1,7 @@
 <template>
   <DataForm v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
-    <slot v-for="item in totalFields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
-    <slot v-for="item in totalFields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
+    <slot v-for="item in fields" :slot="`id:${item}`" :name="`id:${item}`" />
+    <slot v-for="item in fields" :slot="`$id:${item}`" :name="`$id:${item}`" />
   </DataForm>
 </template>
 
@@ -18,8 +18,7 @@ export default {
   props: {
     url: {
       type: String,
-      // required: true,
-      default: '/api/v1/users/users/'
+      required: true,
     },
     method: {
       type: String,
@@ -47,6 +46,7 @@ export default {
   },
   mounted() {
     this.optionUrlMeta()
+    console.log('auto data form', this.$attrs)
   },
   methods: {
     optionUrlMeta() {

@@ -1,31 +1,19 @@
 <template>
-  <Page>
-    <IBox>
-      <AutoDataForm :form="form" :fields="fields" :fields-meta="fieldsMeta">
-        <FormGroupHeader slot="id:name" title="账户" :line="false" />
-        <FormGroupHeader slot="id:password_strategy" title="认证" :line="true" />
-        <FormGroupHeader slot="id:role" title="角色安全" :line="true" />
-        <FormGroupHeader slot="id:phone" title="认证" :line="true" />
-      </AutoDataForm>
-    </IBox>
-  </Page>
+  <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url">
+    <FormGroupHeader slot="id:name" title="账户" :line="false" />
+    <FormGroupHeader slot="id:password_strategy" title="认证" :line="true" />
+    <FormGroupHeader slot="id:role" title="角色安全" :line="true" />
+    <FormGroupHeader slot="id:phone" title="认证" :line="true" />
+  </GenericCreateUpdatePage>
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
 import FormGroupHeader from '@/components/formGroupHeader'
-import { Page, IBox } from '@/layout/components'
-import DataForm from '@/components/DataForm'
-import AutoDataForm from '@/components/AutoDataForm'
-import Select2 from '@/components/Select2'
+import { GenericCreateUpdatePage } from '@/layout/components'
 export default {
   components: {
-    Page,
-    IBox,
-    DataForm,
-    Select2,
-    FormGroupHeader,
-    AutoDataForm
+    GenericCreateUpdatePage,
+    FormGroupHeader
   },
   data() {
     return {
@@ -40,6 +28,7 @@ export default {
         'name', 'username', 'email', 'groups', 'password_strategy', 'password', 'mfa_level',
         'source', 'role', 'date_expired', 'phone', 'wechat', 'comment'
       ],
+      url: '/api/v1/users/users/',
       fieldsMeta: {
         password: {
           el: {
