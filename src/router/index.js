@@ -100,18 +100,18 @@ export const constantRoutes = [
         meta: { title: 'UserGroupUpdate' }
       },
       {
-        path: 'groups/:id',
-        component: () => import('@/views/users/UserGroupDetail/index.vue'), // Parent router-view
-        name: 'UserGroupDetail',
-        hidden: true,
-        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' }
-      },
-      {
         path: 'groups/create',
         component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserGroupCreate',
         hidden: true,
         meta: { title: 'UserGroupCreate' }
+      },
+      {
+        path: 'groups/:id',
+        component: () => import('@/views/users/UserGroupDetail/index.vue'), // Parent router-view
+        name: 'UserGroupDetail',
+        hidden: true,
+        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' }
       }
     ]
   },

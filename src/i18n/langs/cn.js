@@ -90,7 +90,8 @@ const cn = {
     'OperateLog': '操作日志',
     'PasswordChangeLog': '改密日志',
     'Settings': '系统设置',
-    'UserCreate': '创建用户'
+    'UserCreate': '创建用户',
+    'UserGroupCreate': '创建用户组'
   },
   // 用户模块翻译
   users: {
