@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners"></ElDatableTable>
+  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners" />
 </template>
 
 <script>
@@ -91,6 +91,9 @@ export default {
     getList() {
       this.$refs.table.clearSelection()
       return this.$refs.table.getList()
+    },
+    getData() {
+      return this.$refs.table.data
     },
     search(attrs) {
       return this.$refs.table.search(attrs)

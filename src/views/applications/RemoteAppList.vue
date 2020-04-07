@@ -13,26 +13,26 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/cmd-filters/',
+        url: '/api/v1/applications/remote-apps/',
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('applications.name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            route: 'RemoteAppDetail'
           },
           {
-            prop: 'rules.length',
-            label: this.$t('assets.rules')
+            prop: 'get_type_display',
+            label: this.$t('applications.appType')
           },
           {
-            prop: 'system_users.length',
-            label: this.$t('assets.systemUser')
+            prop: 'asset_info.hostname',
+            label: this.$t('applications.asset')
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
+            label: this.$t('applications.comment'),
             sortable: 'custom'
           },
           {
@@ -44,7 +44,7 @@ export default {
             actions: {
               performDelete: ({ row, col }) => {
                 const id = row.id
-                const url = `/api/v1/assets/cmd-filters/${id}/`
+                const url = `/api/v1/applications/remote-apps/${id}/`
                 return this.$axios.delete(url)
               }
             }
@@ -53,7 +53,7 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'RemoteAppCreate'
       }
     }
   }

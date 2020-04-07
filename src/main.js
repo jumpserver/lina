@@ -40,7 +40,8 @@ import service from '@/utils/request'
 
 // if the table component cannot access `this.$axios`, it cannot send request
 Vue.prototype.$axios = service
-
+// 注册全局事件总线
+Vue.prototype.$eventBus = new Vue()
 new Vue({
   el: '#app',
   i18n,

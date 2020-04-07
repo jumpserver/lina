@@ -7,7 +7,7 @@
       </span>
     </PageHeading>
     <PageContent>
-      <slot name="default"/>
+      <slot name="default" />
     </PageContent>
   </div>
 </template>

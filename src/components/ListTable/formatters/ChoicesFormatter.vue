@@ -1,6 +1,6 @@
 <template>
   <div>
-    <i :class="'fa ' + iconClass"></i>
+    <i :class="'fa ' + iconClass" />
   </div>
 </template>
 
