@@ -23,14 +23,12 @@ export default {
             route: 'CommandFilterDetail'
           },
           {
-            prop: 'rules',
-            label: this.$t('assets.rules'),
-            formatter: row => (<span>{row.rules.length}</span>)
+            prop: 'rules.length',
+            label: this.$t('assets.rules')
           },
           {
-            prop: 'system_users',
-            label: this.$t('assets.systemUser'),
-            formatter: row => (<span>{row.system_users.length}</span>)
+            prop: 'system_users.length',
+            label: this.$t('assets.systemUser')
           },
           {
             prop: 'comment',

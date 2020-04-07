@@ -23,24 +23,20 @@ export default {
             route: 'RemoteAppPermissionDetail'
           },
           {
-            prop: 'users',
-            label: this.$t('perms.user'),
-            formatter: row => (<span>{row.users.length}</span>)
+            prop: 'users.length',
+            label: this.$t('perms.user')
           },
           {
-            prop: 'user_groups',
-            label: this.$t('perms.userGroup'),
-            formatter: row => (<span>{row.user_groups.length}</span>)
+            prop: 'user_groups.length',
+            label: this.$t('perms.userGroup')
           },
           {
-            prop: 'remote_apps',
-            label: this.$t('perms.RemoteApp'),
-            formatter: row => (<span>{row.remote_apps.length}</span>)
+            prop: 'remote_apps.length',
+            label: this.$t('perms.RemoteApp')
           },
           {
-            prop: 'system_users',
-            label: this.$t('perms.systemUser'),
-            formatter: row => (<span>{row.system_users.length}</span>)
+            prop: 'system_users.length',
+            label: this.$t('perms.systemUser')
           },
           {
             prop: 'is_valid',

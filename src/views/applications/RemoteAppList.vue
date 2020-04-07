@@ -27,9 +27,8 @@ export default {
             label: this.$t('applications.appType')
           },
           {
-            prop: 'asset_info',
-            label: this.$t('applications.asset'),
-            formatter: row => (<span>{row.asset_info.hostname}</span>)
+            prop: 'asset_info.hostname',
+            label: this.$t('applications.asset')
           },
           {
             prop: 'comment',

@@ -23,29 +23,24 @@ export default {
             route: 'AssetPermissionDetail'
           },
           {
-            prop: 'users',
-            label: this.$t('perms.user'),
-            formatter: row => (<span>{row.users.length}</span>)
+            prop: 'users.length',
+            label: this.$t('perms.user')
           },
           {
-            prop: 'user_groups',
-            label: this.$t('perms.userGroup'),
-            formatter: row => (<span>{row.user_groups.length}</span>)
+            prop: 'user_groups.length',
+            label: this.$t('perms.userGroup')
           },
           {
-            prop: 'assets',
-            label: this.$t('perms.asset'),
-            formatter: row => (<span>{row.assets.length}</span>)
+            prop: 'assets.length',
+            label: this.$t('perms.asset')
           },
           {
-            prop: 'nodes',
-            label: this.$t('perms.node'),
-            formatter: row => (<span>{row.nodes.length}</span>)
+            prop: 'nodes.length',
+            label: this.$t('perms.node')
           },
           {
-            prop: 'system_users',
-            label: this.$t('perms.systemUser'),
-            formatter: row => (<span>{row.system_users.length}</span>)
+            prop: 'system_users.length',
+            label: this.$t('perms.systemUser')
           },
           {
             prop: 'is_active',
