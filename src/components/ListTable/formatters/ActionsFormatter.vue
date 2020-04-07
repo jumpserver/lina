@@ -6,9 +6,9 @@
 import ActionsGroup from '@/components/ActionsGroup/index'
 import BaseFormatter from './base'
 
-const defaultPerformDelete = function({row, col}) {
+const defaultPerformDelete = function({ row, col }) {
   const id = row.id
-  const url = `/api/v1/users/groups/${id}/`
+  const url = `${this.url}${id}/`
   return this.$axios.delete(url)
 }
 const defaultUpdateCallback = function({row, col}) {
@@ -56,16 +56,16 @@ export default {
         name: 'update',
         title: this.$tc('Update'),
         type: 'primary',
-        has: colActions.hasUpdate || true,
-        can: colActions.canUpdate || true,
+        has: colActions.hasUpdate !== false,
+        can: colActions.canUpdate !== false,
         callback: colActions.onUpdate || defaultUpdateCallback.bind(this)
       },
       {
         name: 'delete',
         title: this.$tc('Delete'),
         type: 'danger',
-        has: colActions.hasDelete || true,
-        can: colActions.canDelete || true,
+        has: colActions.hasDelete !== false,
+        can: colActions.canDelete !== false,
         callback: colActions.onDelete || defaultDeleteCallback.bind(this)
       }
     ]
