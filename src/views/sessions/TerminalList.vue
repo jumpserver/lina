@@ -49,10 +49,7 @@ export default {
             label: this.$t('sessions.alive'),
             sortable: 'custom'
           }
-        ],
-        tableActions: {
-          editRoute: '404'
-        }
+        ]
       },
       headerActions: {
         hasCreate: false,

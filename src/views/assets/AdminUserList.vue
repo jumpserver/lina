@@ -40,7 +40,8 @@ export default {
             prop: 'id',
             label: this.$tc('Action'),
             align: 'center',
-            formatter: ActionsFormatter
+            formatter: ActionsFormatter,
+            width: '200px',
           }
         ]
       },

@@ -50,6 +50,7 @@ export default {
             label: this.$tc('Action'),
             align: 'center',
             formatter: ActionsFormatter,
+            width: '200px',
             actions: {
               updateRoute: 'UserUpdate',
               extraActions: [
