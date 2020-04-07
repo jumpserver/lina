@@ -1,57 +1,60 @@
 <template>
-  <Page>
-    <template slot="content">
-      <el-alert type="success"> 这里是一个成功的文案 </el-alert>
-      <el-card>
-        <tables v-bind="tableConfig" />
-      </el-card>
-    </template>
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { Page } from '@/layout/components'
-import Tables from '@/components/ListTable/index'
-import { getAdminUserList } from '@/api/asset'
+import { GenericListPage } from '@/layout/components'
+import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    Page,
-    Tables
+    GenericListPage
   },
   data() {
     return {
       tableConfig: {
-        getData: getAdminUserList,
-        hasSelect: true,
+        url: '/api/v1/assets/admin-users/',
         columns: [
           {
             prop: 'name',
             label: this.$t('common.name'),
-            key: 'name',
-            link: 'AdminUserDetail',
-            sortable: true
+            formatter: DetailFormatter,
+            sortable: true,
+            route: 'AdminUserDetail'
           },
           {
             prop: 'username',
             label: this.$t('common.username'),
-            key: 'username'
+            sortable: 'custom'
           },
           {
-            prop: 'assets',
-            label: this.$t('assets.asset'),
-            key: 'assets_amount'
+            prop: 'assets_amount',
+            label: this.$t('assets.asset')
           },
           {
             prop: 'comment',
             label: this.$t('assets.comment'),
-            key: 'comment'
+            sortable: 'custom'
+          },
+          {
+            prop: 'id',
+            label: this.$tc('Action'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            width: '200px',
+            actions: {
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/assets/admin-users/${id}/`
+                return this.$axios.delete(url)
+              }
+            }
           }
-        ],
-        action: {
-          hasEdit: 'AdminUserEdit',
-          newClick: 'AdminUserEdit'
-        }
+        ]
+      },
+      headerActions: {
+        hasBulkDelete: false,
+        createRoute: 'AdminUserCreate'
       }
     }
   }

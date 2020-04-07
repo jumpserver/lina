@@ -100,18 +100,18 @@ export const constantRoutes = [
         meta: { title: 'UserGroupUpdate' }
       },
       {
-        path: 'groups/:id',
-        component: () => import('@/views/users/UserGroupDetail/index.vue'), // Parent router-view
-        name: 'UserGroupDetail',
-        hidden: true,
-        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' }
-      },
-      {
         path: 'groups/create',
         component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserGroupCreate',
         hidden: true,
         meta: { title: 'UserGroupCreate' }
+      },
+      {
+        path: 'groups/:id',
+        component: () => import('@/views/users/UserGroupDetail/index.vue'), // Parent router-view
+        name: 'UserGroupDetail',
+        hidden: true,
+        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' }
       }
     ]
   },
@@ -133,6 +133,13 @@ export const constantRoutes = [
         name: 'DomainList',
         component: () => import('@/views/assets/DomainList.vue'),
         meta: { title: 'DomainList' }
+      },
+      {
+        path: 'domains/:id/gateway',
+        name: 'GatewayList',
+        hidden: true,
+        component: () => import('@/views/assets/GatewayList'),
+        meta: { title: 'GatewayList' }
       },
       {
         path: 'admin-users',
@@ -168,7 +175,7 @@ export const constantRoutes = [
       {
         path: 'platforms',
         name: 'PlatformList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/assets/PlatformList'),
         meta: { title: 'PlatformList' }
       }
     ]
@@ -182,14 +189,14 @@ export const constantRoutes = [
     children: [
       {
         path: 'remote-apps',
-        name: 'remoteAppList',
-        component: () => import('@/views/tree/index'),
+        name: 'RemoteAppList',
+        component: () => import('@/views/applications/RemoteAppList'),
         meta: { title: 'RemoteApp' }
       },
       {
         path: 'database-apps',
         name: 'DatabaseAppList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/applications/DatabaseAppList'),
         meta: { title: 'DatabaseApp' }
       }
     ]
@@ -197,26 +204,26 @@ export const constantRoutes = [
   {
     path: '/perms/',
     component: Layout,
-    redirect: '/perms/asset-permission/',
+    redirect: '/perms/asset-permissions/',
     name: 'Perms',
     meta: { title: 'Perms', icon: 'edit' },
     children: [
       {
         path: 'asset-permissions',
         name: 'AssetPermissionList',
-        component: import('@/views/tree/index'),
+        component: () => import('@/views/perms/AssetPermissionList'),
         meta: { title: 'AssetPermission' }
       },
       {
         path: 'remote-app-permissions',
         name: 'RemoteAppPermissionList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/perms/RemoteAppPermissionList'),
         meta: { title: 'RemoteAppPermission' }
       },
       {
         path: 'database-app-permissions',
         name: 'DatabaseAppPermissionList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/perms/DatabaseAppPermissionList'),
         meta: { title: 'DatabaseAppPermission' }
       }
     ]
@@ -231,19 +238,19 @@ export const constantRoutes = [
       {
         path: 'session-online',
         name: 'SessionOnlineList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/SessionOnlineList'),
         meta: { title: 'SessionOnline' }
       },
       {
         path: 'session-offline',
         name: 'SessionOfflineList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/SessionOfflineList'),
         meta: { title: 'SessionOffline' }
       },
       {
         path: 'command',
-        name: 'CommandsList',
-        component: () => import('@/views/tree/index'),
+        name: 'CommandList',
+        component: () => import('@/views/sessions/CommandList'),
         meta: { title: 'Commands' }
       },
       {
@@ -261,7 +268,7 @@ export const constantRoutes = [
       {
         path: 'terminal',
         name: 'TerminalList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/TerminalList'),
         meta: { title: 'Terminal' }
       }
     ]
@@ -276,7 +283,7 @@ export const constantRoutes = [
       {
         path: 'task',
         name: 'TaskList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/jobcenter/TaskList'),
         meta: { title: 'TaskList' }
       },
       {
@@ -299,8 +306,8 @@ export const constantRoutes = [
     redirect: '/tickets/tickets/',
     children: [{
       path: 'tickets',
-      name: 'Tickets',
-      component: () => import('@/views/tree/index'),
+      name: 'TicketsList',
+      component: () => import('@/views/tickets/TicketsList'),
       meta: { title: 'Tickets', icon: 'check-square-o' }
     }]
   },

@@ -7,3 +7,10 @@ export function createSourceIdCache(ids) {
     data: { resources: ids }
   })
 }
+
+export function optionUrlMeta(url) {
+  return request({
+    url: url,
+    method: 'options'
+  })
+}
