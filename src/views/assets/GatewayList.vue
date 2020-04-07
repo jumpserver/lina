@@ -51,46 +51,22 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             actions: {
-              hasUpdate: (row, cellValue) => {
-                return true
-              },
-              canUpdate: (row, cellValue) => {
-                console.log('On table update')
-                return true
-              },
-              hasDelete: true,
-              canDelete: (row, cellValue) => {
-                return true
-              },
-              onDelete: (row, cellValue) => {
-                this.$confirm('你好啊', '提示', {
-                  type: 'warning',
-                  confirmButtonClass: 'el-button--danger',
-                  beforeClose: async(action, instance, done) => {
-                  }
-                }).catch(() => {
-                  /* 取消*/
-                })
-              },
-              order: []
+              updateRoute: 'UserUpdate',
+              extraActions: [
+                {
+                  name: 'TestConnection',
+                  title: this.$t('assets.TestConnection')
+                }
+              ]
             }
           }
-        ],
-        tableActions: {
-          hasEdit: true,
-          editRoute: '404'
-        }
+        ]
       },
       headerActions: {
-        hasDelete: false,
-        hasUpdate: false,
-        createRoute: 'DomainCreate'
+        hasBulkDelete: false,
+        createRoute: 'GatewayCreate'
       }
     }
-  },
-  created() {
-    console.log('111111')
-    console.log('/api/v1/assets/gateways/?domain=' + this.$route.params.id)
   }
 }
 </script>

@@ -55,10 +55,24 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: true,
-        hasDelete: false,
-        hasUpdate: false
+        hasCreate: false,
+        hasBulkDelete: false,
+        extraActions: [
+          {
+            name: 'StorageConfiguration',
+            title: this.$t('sessions.StorageConfiguration'),
+            type: 'primary',
+            has: true,
+            can: true,
+            callback: this.handleStorageConfiguration
+          }
+        ]
       }
+    }
+  },
+  methods: {
+    handleStorageConfiguration() {
+      console.log('handleStorageConfiguration')
     }
   }
 }

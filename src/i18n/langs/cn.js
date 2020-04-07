@@ -233,6 +233,7 @@ const cn = {
     'gateway': '网关',
     'date_created': '创建日期',
     'port': '端口',
+    'TestConnection': '测试连接',
     // 管理用户
     'AdminUserList': '管理用户列表',
     'AdminUserDetail': '管理用户详情',
@@ -368,7 +369,8 @@ const cn = {
     'date': '日期',
     'addr': '地址',
     'active': '激活中',
-    'alive': '在线'
+    'alive': '在线',
+    'StorageConfiguration': '存储配置'
   },
   jobcenter: {
     'RunTimes': '执行次数',

@@ -57,16 +57,11 @@ export default {
             label: this.$t('tickets.date'),
             sortable: 'custom'
           }
-        ],
-        // 写路由名字，table组件会自动传作为参数
-        tableActions: {
-          editRoute: '404'
-        }
+        ]
       },
       headerActions: {
-        hasDelete: false,
-        hasUpdate: false,
-        hasCreate: false
+        hasCreate: false,
+        hasBulkDelete: false,
       }
     }
   }

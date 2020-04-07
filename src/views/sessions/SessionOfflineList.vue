@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -66,34 +67,22 @@ export default {
           {
             prop: 'duration',
             label: this.$t('sessions.duration')
-          }
-        ],
-        tableActions: {
-          hasEdit: false,
-          hasDelete: false
-        },
-        extraButtons: [
-          {
-            type: 'warning',
-            text: this.$t('sessions.replay'),
-            // 必须使用箭头函数
-            atClick: (row) => {
-              this.$router.push({ name: '404' })
-            }
           },
           {
-            type: 'primary',
-            text: this.$t('sessions.download'),
-            atClick: (row) => {
-              this.$router.push({ name: '404' })
+            prop: 'id',
+            label: this.$tc('Action'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            actions: {
+              hasEdit: false,
+              hasDelete: false
             }
           }
         ]
       },
       headerActions: {
         hasCreate: false,
-        hasDelete: false,
-        hasUpdate: false
+        hasBulkDelete: false
       }
     }
   }
