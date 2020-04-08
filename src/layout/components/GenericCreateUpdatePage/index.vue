@@ -56,17 +56,13 @@ export default {
       const fields = form.$refs.elForm.fields
       console.log('submit', values)
       console.log('form.fields', fields)
-      const field = fields[0]
-      field.error = '滴滴滴滴滴多滴滴滴'
       return handler(values, form)
     },
     defaultOnSubmit(validValues, form) {
       this.$axios.post(this.url, validValues).then(() => {
         const msg = this.$tc('Create success')
         this.$message.success(msg)
-        setTimeout(() => {
-          this.$router.push({ name: 'UserList' })
-        }, 500)
+        this.$router.push({ name: 'UserList' })
       }).catch(error => {
         console.log(form)
         const response = error.response

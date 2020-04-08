@@ -1,5 +1,8 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url" />
+  <div>
+    <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url" />
+    <el-button @click="debug">Debug</el-button>
+  </div>
 </template>
 
 <script>
@@ -9,6 +12,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const errors = { name: [] }
     return {
       form: {
         password_strategy: 0,
@@ -23,6 +27,7 @@ export default {
         [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
         [this.$tc('Other'), ['phone', 'wechat', 'comment']]
       ],
+      errors: errors,
       url: '/api/v1/users/users/',
       fieldsMeta: {
         password: {
@@ -35,14 +40,16 @@ export default {
             }
           }
         },
+        name: {
+          el: {
+            error: errors.name
+          }
+        },
         groups: {
           el: {
             value: [],
             url: '/api/v1/users/groups/'
-          },
-          rules: [
-            this.serverErrorRule
-          ]
+          }
         }
       }
     }
@@ -50,11 +57,7 @@ export default {
   methods: {
     debug() {
       console.log(this)
-    },
-    serverErrorRule(rule, value, callback) {
-      console.log('Server error rule')
-      console.log(rule)
-      console.log(value)
+      this.errors.name.push('world')
     }
   }
 }

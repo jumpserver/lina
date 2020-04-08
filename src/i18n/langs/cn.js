@@ -58,7 +58,8 @@ const cn = {
     'cancel': '取消',
     'Import': '导入',
     'Export': '导出',
-    'Other': '其它'
+    'Other': '其它',
+    'Create success': '创建成功'
   },
   route: {
     'dashboard': '仪表盘',
