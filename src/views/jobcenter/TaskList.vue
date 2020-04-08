@@ -18,15 +18,18 @@ export default {
         columns: ['name', 'runtimes', 'host_amount', 'is_success', 'date_start', 'time', 'actions'],
         columnsMeta: {
           name: {
-            label: this.$tc('Name')
+            label: this.$tc('Name'),
+            showOverflowTooltip: true
           },
           runtimes: {
             label: this.$t('jobcenter.RunTimes'),
             formatter: function(row) {
-              const successTime = row.summary.success
-              const failedTime = row.summary.failed
-              const total = row.summary.total
-              return (successTime + '/' + failedTime + '/' + total)
+              const summary = <div>
+                <span class='text-primary'>{row.summary.success}</span>/
+                <span class='text-danger'>{row.summary.failed}</span>/
+                <span>{row.summary.total}</span>
+              </div>
+              return summary
             }
           },
           host_amount: {
@@ -37,8 +40,11 @@ export default {
           },
           is_success: {
             label: this.$t('jobcenter.Success'),
-            formatter: function(row) {
-              return row.latest_execution.is_success
+            formatter: row => {
+              if (row.latest_execution.is_success) {
+                return <i class='fa fa-check text-primary'/>
+              }
+              return <i class='fa fa-times text-danger'/>
             }
           },
           date_start: {
