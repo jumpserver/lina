@@ -382,7 +382,8 @@ const cn = {
     'addr': '地址',
     'active': '激活中',
     'alive': '在线',
-    'StorageConfiguration': '存储配置'
+    'StorageConfiguration': '存储配置',
+    'join': '加入'
   },
   jobcenter: {
     'RunTimes': '执行次数',

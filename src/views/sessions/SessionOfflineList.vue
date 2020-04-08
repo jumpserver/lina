@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
 import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 
@@ -10,83 +11,75 @@ export default {
   components: {
     GenericListPage
   },
-  data() {
+  data: function() {
     return {
       tableConfig: {
-        axiosConfig: {
-          raw: 1,
-          params: {
-            display: 1,
-            is_finished: 1
-          }
-        },
-        url: '/api/v1/terminal/sessions/',
+        hasSelection: false,
+        url: '/api/v1/terminal/sessions/?is_finished=1',
         columns: [
-          {
-            label: this.$t('sessions.id'),
-            type: 'index'
+          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+          'command_amount', 'date_start', 'duration', 'actions'
+        ],
+        columnsMeta: {
+          index: {
+            type: 'index',
+            label: this.$t('sessions.id')
           },
-          {
-            prop: 'user',
-            label: this.$t('sessions.user'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'asset',
-            label: this.$t('sessions.asset'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'system_user',
-            label: this.$t('sessions.systemUser'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'remote_addr',
-            label: this.$t('sessions.remoteAddr'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'protocol',
-            label: this.$t('sessions.protocol'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'login_from_display',
-            label: this.$t('sessions.loginForm')
-          },
-          {
-            prop: 'command',
+          command_amount: {
             label: this.$t('sessions.command')
           },
-          {
-            prop: 'date_start',
-            label: this.$t('sessions.dateStart'),
-            sortable: 'custom'
+          login_from: {
+            label: this.$t('sessions.loginForm')
           },
-          {
-            prop: 'duration',
-            label: this.$t('sessions.duration')
+          protocol: {
+            label: this.$t('sessions.protocol'),
+            formatter: null
           },
-          {
+          date_start: {
+            formatter: function(row) {
+              return toSafeLocalDateStr(row.date_start)
+            }
+          },
+          duration: {
+            label: this.$t('sessions.duration'),
+            formatter: function(row) {
+              return timeOffset(row.date_start, row.date_end)
+            }
+          },
+          actions: {
             prop: 'id',
             label: this.$tc('Action'),
-            align: 'center',
             formatter: ActionsFormatter,
-            width: '200px',
             actions: {
               hasEdit: false,
               hasDelete: false,
+              hasUpdate: false,
               extraActions: [
                 {
-                  name: 'terminate',
-                  title: this.$t('sessions.terminate'),
-                  type: 'primary'
+                  name: 'replay',
+                  title: this.$t('sessions.replay'),
+                  type: 'warning',
+                  callback: function({ cellValue, tableData }) {
+                    // 跳转到luna页面
+                    const replayUrl = '/luna/replay/' + cellValue
+                    window.open(replayUrl)
+                  }
+                },
+                {
+                  name: 'download',
+                  title: this.$t('sessions.download'),
+                  type: 'primary',
+                  callback: function({ cellValue, tableData }) {
+                    // 跳转下载页面
+                    const downloadUrl = 'terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
+                      .replace('00000000-0000-0000-0000-000000000000', cellValue)
+                    window.open(downloadUrl)
+                  }
                 }
               ]
             }
           }
-        ]
+        }
       },
       headerActions: {
         hasCreate: false,
