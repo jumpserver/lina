@@ -11,7 +11,7 @@ export default {
   components: {
     GenericListPage
   },
-  data: function() {
+  data() {
     return {
       tableConfig: {
         url: '/api/v1/terminal/sessions/?is_finished=0',

@@ -11,7 +11,7 @@ export default {
   components: {
     GenericListPage
   },
-  data: function() {
+  data() {
     return {
       tableConfig: {
         hasSelection: false,
