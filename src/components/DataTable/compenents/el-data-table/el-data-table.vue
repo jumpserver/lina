@@ -910,7 +910,6 @@ export default {
           }
 
           this.data = data
-          console.log(this.data)
 
           // 树形结构逻辑
           if (this.isTree) {
