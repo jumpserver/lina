@@ -1,19 +1,17 @@
 <template>
   <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url">
-    <FormGroupHeader slot="id:name" title="账户" :line="false" />
-    <FormGroupHeader slot="id:password_strategy" title="认证" :line="true" />
-    <FormGroupHeader slot="id:role" title="角色安全" :line="true" />
-    <FormGroupHeader slot="id:phone" title="认证" :line="true" />
+    <!--    <FormGroupHeader slot="id:name" title="账户" :line="false" />-->
+    <!--    <FormGroupHeader slot="id:password_strategy" title="认证" :line="true" />-->
+    <!--    <FormGroupHeader slot="id:role" title="角色安全" :line="true" />-->
+    <!--    <FormGroupHeader slot="id:phone" title="认证" :line="true" />-->
   </GenericCreateUpdatePage>
 </template>
 
 <script>
-import FormGroupHeader from '@/components/formGroupHeader'
 import { GenericCreateUpdatePage } from '@/layout/components'
 export default {
   components: {
-    GenericCreateUpdatePage,
-    FormGroupHeader
+    GenericCreateUpdatePage
   },
   data() {
     return {
@@ -25,15 +23,14 @@ export default {
         date_expired: '2099-12-31 00:00:00 +0800'
       },
       fields: [
-        'name', 'username', 'email', 'groups', 'password_strategy', 'password', 'mfa_level',
-        'source', 'role', 'date_expired', 'phone', 'wechat', 'comment'
+        [this.$t('users.' + 'Account'), ['name', 'username', 'email', 'groups']],
+        [this.$t('users.' + 'Authentication'), ['password_strategy', 'password', 'mfa_level', 'source']],
+        [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
+        [this.$tc('Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
         password: {
-          el: {
-            type: 'password'
-          },
           hidden: (formValue, item) => {
             console.log('hidden password', formValue.password_strategy)
             if (this.$route.params.id === undefined) {
@@ -43,20 +40,10 @@ export default {
             }
           }
         },
-        email: {
-          el: {
-            type: 'email'
-          }
-        },
         groups: {
           el: {
             value: [],
             url: '/api/v1/users/groups/'
-          }
-        },
-        comment: {
-          el: {
-            type: 'textarea'
           }
         }
       }

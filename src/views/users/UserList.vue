@@ -14,7 +14,7 @@ export default {
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
-          'name', 'username', 'role', 'groups_display', 'source', 'is_valid', 'actions'
+          'name', 'username', 'role', 'groups_display', 'source', 'is_active', 'actions'
         ],
         detailRoute: 'UserDetail'
       },
