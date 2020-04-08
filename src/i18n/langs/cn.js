@@ -51,7 +51,8 @@ const cn = {
     'Submit': '提交',
     'Reset': '重置',
     'This field is required': '这个字段是必填项',
-    'Validity': '有效性'
+    'Validity': '有效性',
+    'Other': '其它'
   },
   route: {
     'dashboard': '仪表盘',
@@ -154,7 +155,10 @@ const cn = {
     'remote_app_granted': '授权的远程应用',
     'remote_app_permission': '远程应用授权',
     'database_app_granted': '授权的数据库应用',
-    'database_app_permission': '数据库应用授权'
+    'database_app_permission': '数据库应用授权',
+    'Account': '账户',
+    'Authentication': '认证',
+    'Secure': '安全'
   },
   // 用户组
   usergroup: {

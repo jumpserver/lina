@@ -104,7 +104,7 @@ export const constantRoutes = [
         component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserGroupCreate',
         hidden: true,
-        meta: { title: 'UserGroupCreate' }
+        meta: { title: 'UserGroupCreate', activeMenu: '/users/groups' }
       },
       {
         path: 'groups/:id',
