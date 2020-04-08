@@ -19,7 +19,7 @@ export default {
   props: {
     url: {
       type: String,
-      required: true,
+      required: true
     },
     method: {
       type: String,
@@ -34,16 +34,34 @@ export default {
     form: {
       type: Object,
       default: () => { return {} }
-    }
-  },
-  methods: {
-    handleSubmit(values) {
-      console.log('submit', values)
+    },
+    onSubmit: {
+      type: Function,
+      default: null
     }
   },
   mounted() {
     console.log('generic', this.$attrs)
     console.log(this.fields)
+  },
+  methods: {
+    handleSubmit(values) {
+      let handler = this.onSubmit || this.defaultOnSubmit
+      handler = handler.bind(this)
+      console.log('submit', values)
+      return handler(values)
+    },
+    defaultOnSubmit(validValues) {
+      this.$axios.post(this.url, validValues).then(
+        () => {
+          const msg = this.$tc('Create success')
+          this.$message.success(msg)
+          setTimeout(() => {
+            this.$router.push({ name: 'UserList' })
+          }, 500)
+        }
+      )
+    }
   }
 }
 </script>

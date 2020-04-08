@@ -26,14 +26,11 @@ export default {
       },
       fields: [
         'name', 'username', 'email', 'groups', 'password_strategy', 'password', 'mfa_level',
-        'source', 'role', 'date_expired', 'phone', 'wechat', 'comment',
+        'source', 'role', 'date_expired', 'phone', 'wechat', 'comment'
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
         password: {
-          el: {
-            type: 'password'
-          },
           hidden: (formValue, item) => {
             console.log('hidden password', formValue.password_strategy)
             if (this.$route.params.id === undefined) {
@@ -43,20 +40,10 @@ export default {
             }
           }
         },
-        email: {
-          el: {
-            type: 'email'
-          }
-        },
         groups: {
           el: {
             value: [],
             url: '/api/v1/users/groups/'
-          }
-        },
-        comment: {
-          el: {
-            type: 'textarea'
           }
         }
       }

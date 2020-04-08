@@ -56,14 +56,8 @@ export default {
         this.loading = false
       })
     },
-    generateField(name) {
-      let field = {}
-      const fieldMeta = this.meta[name] || {}
-      field.id = name
-      field.label = fieldMeta.label
-
-      let type = 'input'
-      switch (fieldMeta.type) {
+    generateFieldByType(type, field, fieldMeta) {
+      switch (type) {
         case 'choice':
           type = 'radio-group'
           field.options = fieldMeta.choices.map(v => {
@@ -85,13 +79,41 @@ export default {
           break
       }
       field.type = type
+      return field
+    },
+    generateFieldByName(name, field) {
+      switch (name) {
+        case 'email':
+          field.el = { type: 'email' }
+          break
+        case 'password':
+          field.el = { type: 'password' }
+          break
+        case 'comment':
+          field.el = { type: 'textarea' }
+          break
+      }
+      return field
+    },
+    generateFieldByOther(field, fieldMeta) {
       if (fieldMeta.required) {
-        if (type === 'input') {
+        if (field.type === 'input') {
           field.rules = [rules.Required]
         } else {
           field.rules = [rules.RequiredChange]
         }
       }
+      return field
+    },
+    generateField(name) {
+      let field = {}
+      const fieldMeta = this.meta[name] || {}
+      field.id = name
+      field.label = fieldMeta.label
+      field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
+      field = this.generateFieldByName(name, field)
+      field = this.generateFieldByOther(field, fieldMeta)
+
       field = Object.assign(field, this.fieldsMeta[name] || {})
       return field
     },

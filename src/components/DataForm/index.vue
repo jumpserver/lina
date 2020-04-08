@@ -56,6 +56,7 @@ export default {
         if (valid) {
           this.$emit('submit', this.$refs[formName].getFormValue())
         } else {
+          this.$emit('invalid', valid)
           return false
         }
       })
