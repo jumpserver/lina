@@ -5,6 +5,8 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { toSafeLocalDateStr } from '@/utils/common'
+import { terminateSession } from '@/api/sessions'
 
 export default {
   components: {
@@ -13,85 +15,73 @@ export default {
   data() {
     return {
       tableConfig: {
-        axiosConfig: {
-          raw: 1,
-          params: {
-            display: 1,
-            is_finished: 0
-          }
-        },
-        url: '/api/v1/terminal/sessions/',
+        url: '/api/v1/terminal/sessions/?is_finished=0',
         columns: [
-          {
-            label: this.$t('sessions.id'),
-            type: 'index'
+          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+          'command_amount', 'date_start', 'duration', 'actions'
+        ],
+        columnsMeta: {
+          index: {
+            type: 'index',
+            label: this.$t('sessions.id')
           },
-          {
-            prop: 'user',
-            label: this.$t('sessions.user'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'asset',
-            label: this.$t('sessions.asset'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'system_user',
-            label: this.$t('sessions.systemUser'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'remote_addr',
-            label: this.$t('sessions.remoteAddr'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'protocol',
-            label: this.$t('sessions.protocol'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'login_from_display',
-            label: this.$t('sessions.loginForm')
-          },
-          {
-            prop: 'command',
+          command_amount: {
             label: this.$t('sessions.command')
           },
-          {
-            prop: 'date_start',
-            label: this.$t('sessions.dateStart'),
-            sortable: 'custom'
+          login_from: {
+            label: this.$t('sessions.loginForm')
           },
-          {
-            prop: 'duration',
-            label: this.$t('sessions.duration')
+          protocol: {
+            label: this.$t('sessions.protocol'),
+            formatter: null
           },
-          {
+          date_start: {
+            formatter: function(row) {
+              return toSafeLocalDateStr(row.date_start)
+            }
+          },
+          duration: {
+            label: this.$t('sessions.duration'),
+            formatter: null
+          },
+          actions: {
             prop: 'id',
             label: this.$tc('Action'),
-            align: 'center',
             formatter: ActionsFormatter,
-            width: '200px',
             actions: {
               hasEdit: false,
               hasDelete: false,
+              hasUpdate: false,
               extraActions: [
                 {
-                  name: 'replay',
-                  title: this.$t('sessions.replay'),
-                  type: 'primary'
+                  name: 'terminate',
+                  title: this.$t('sessions.terminate'),
+                  type: 'danger',
+                  callback: function({ reload, cellValue, tableData }) {
+                    // 终断 session reload
+                    const data = [cellValue]
+                    terminateSession(data).then(res => {
+                      window.setTimeout(function() {
+                        reload()
+                      }, 50000)
+                    }
+                    )
+                  }
                 },
                 {
-                  name: 'replay',
-                  title: this.$t('sessions.download'),
-                  type: 'warning'
+                  name: 'join',
+                  title: this.$t('sessions.join'),
+                  type: 'primary',
+                  callback: function({ cellValue, tableData }) {
+                    // 跳转到luna页面
+                    const joinUrl = '/luna/join/?shareroom=' + cellValue
+                    window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+                  }
                 }
               ]
             }
           }
-        ]
+        }
       },
       headerActions: {
         hasCreate: false,

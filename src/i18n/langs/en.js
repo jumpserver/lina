@@ -288,7 +288,8 @@ const en = {
     'quick_modify': 'Quick modify',
     'terminate_session': 'Terminate session',
     'confirm': 'Confirm',
-    'commands': 'Commands'
+    'commands': 'Commands',
+    'join': 'join'
   },
   setting: {
     'setting': 'System Setting',
