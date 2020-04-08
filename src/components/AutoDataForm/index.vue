@@ -1,19 +1,20 @@
 <template>
   <DataForm v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
-    <slot v-for="item in fields" :slot="`id:${item}`" :name="`id:${item}`" />
-    <slot v-for="item in fields" :slot="`$id:${item}`" :name="`$id:${item}`" />
+    <FormGroupHeader v-for="(group, i) in groups" :slot="'id:'+group.name" :key="'group-'+group.name" :title="group.title" :line="i != 0" />
   </DataForm>
 </template>
 
 <script>
 import DataForm from '../DataForm'
+import FormGroupHeader from '@/components/formGroupHeader'
 import { optionUrlMeta } from '@/api/common'
 import rules from '@/components/DataForm/rules'
 import Select2 from '@/components/Select2'
 export default {
   name: 'AutoDataForm',
   components: {
-    DataForm
+    DataForm,
+    FormGroupHeader
   },
   props: {
     url: {
@@ -39,7 +40,8 @@ export default {
     return {
       meta: {},
       totalFields: [],
-      loading: true
+      loading: true,
+      groups: []
     }
   },
   computed: {
@@ -52,7 +54,7 @@ export default {
     optionUrlMeta() {
       optionUrlMeta(this.url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
-        this.generateFields()
+        this.generateColumns()
         this.loading = false
       })
     },
@@ -109,24 +111,44 @@ export default {
       let field = {}
       const fieldMeta = this.meta[name] || {}
       field.id = name
+      field.prop = name
       field.label = fieldMeta.label
       field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
-
       field = Object.assign(field, this.fieldsMeta[name] || {})
       return field
     },
-    generateFields() {
-      const fields = []
-      for (let field of this.fields) {
-        if (typeof field === 'object') {
-          fields.push(field)
+    generateFieldGroup(data) {
+      const [groupTitle, fields] = data
+      this.groups.push({
+        id: groupTitle,
+        title: groupTitle,
+        name: fields[0]
+      })
+      const items = this.generateFields(fields)
+      return items
+    },
+    generateFields(data) {
+      let fields = []
+      for (let field of data) {
+        console.log('is array', field instanceof Array)
+        console.log('is string', typeof field === 'string')
+        console.log('is object', field instanceof Object)
+        if (field instanceof Array) {
+          const items = this.generateFieldGroup(field)
+          fields = [...fields, ...items]
         } else if (typeof field === 'string') {
           field = this.generateField(field)
           fields.push(field)
+        } else if (field instanceof Object) {
+          fields.push(field)
         }
       }
+      return fields
+    },
+    generateColumns() {
+      const fields = this.generateFields(this.fields)
       this.totalFields = fields
     }
   }

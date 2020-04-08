@@ -13,6 +13,7 @@
     <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
     <el-form-item v-if="defaultButton">
+      <slot name="button-start" />
       <el-button size="small" @click="resetForm('dataForm')">{{ $tc('Reset') }}</el-button>
       <el-button size="small" type="primary" @click="submitForm('dataForm')">{{ $tc('Submit') }}</el-button>
     </el-form-item>
