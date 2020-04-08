@@ -16,14 +16,19 @@ export default {
         columns: [
           'name', 'username', 'role', 'groups_display', 'source', 'is_valid', 'actions'
         ],
-        detailRoute: 'UserDetail',
+        detailRoute: 'UserDetail'
       },
       headerActions: {
         createRoute: 'UserCreate',
+        onCreate: () => {
+        },
         extraMoreActions: [
           {
             name: 'deactiveSelected',
-            title: this.$tc('Deactive selected')
+            title: this.$tc('Deactive selected'),
+            callback: () => {
+              console.log('deactiveSelected')
+            }
           },
           {
             name: 'activeSelected',

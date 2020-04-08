@@ -36,6 +36,10 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+// cookie
+import VueCookie from 'vue-cookie'
+Vue.use(VueCookie)
+
 import service from '@/utils/request'
 
 // if the table component cannot access `this.$axios`, it cannot send request
