@@ -26,7 +26,7 @@ export default {
       },
       fields: [
         'name', 'username', 'email', 'groups', 'password_strategy', 'password', 'mfa_level',
-        'source', 'role', 'date_expired', 'phone', 'wechat', 'comment',
+        'source', 'role', 'date_expired', 'phone', 'wechat', 'comment'
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {

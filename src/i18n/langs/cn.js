@@ -51,7 +51,13 @@ const cn = {
     'Submit': '提交',
     'Reset': '重置',
     'This field is required': '这个字段是必填项',
-    'Validity': '有效性'
+    'Validity': '有效性',
+    'confirm': '确认',
+    'Confirm': '确认',
+    'Cancel': '取消',
+    'cancel': '取消',
+    'Import': '导入',
+    'Export': '导出'
   },
   route: {
     'dashboard': '仪表盘',

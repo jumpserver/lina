@@ -3,35 +3,35 @@
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <el-card class="table-content" shadow="never">
       <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
-      <Dialog :title="$t('Export')" :visible.sync="showExportDialog" @comfirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
+      <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @comfirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
           <el-form-item label="导出范围" :label-width="'100px'">
-            <p>{{ $d(new Date(), 'short') }}</p>
             <el-radio v-model="exportOption" class="export-item" label="1">导出全部</el-radio>
             <el-radio v-model="exportOption" class="export-item" label="2">仅导出选中项</el-radio>
-            <el-radio v-model="exportOption" class="export-item" label="3">仅导出搜索项</el-radio>
+            <!-- <el-radio v-model="exportOption" class="export-item" label="3">仅导出搜索项</el-radio> -->
           </el-form-item>
         </el-form>
       </Dialog>
-      <Dialog :title="$t('Import')" :visible.sync="showImportDialog" @comfirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
+      <Dialog :title="importtitle" :visible.sync="showImportDialog" center @comfirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
         <el-form>
-          <el-form-item label="导入/更新" :label-width="'100px'">
-            <el-radio v-model="importOption" class="export-item" label="1">导出全部</el-radio>
-            <el-radio v-model="importOption" class="export-item" label="2">仅导出选中项</el-radio>
-            <el-radio v-model="importOption" class="export-item" label="3">仅导出搜索项</el-radio>
+          <el-form-item :label="importtitle" :label-width="'100px'">
+            <el-radio v-model="importOption" class="export-item" label="1">导入新资产</el-radio>
+            <el-radio v-model="importOption" class="export-item" label="2">更新资产</el-radio>
           </el-form-item>
         </el-form>
-        <div>
+        <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">下载导入的模板或使用导出的csv格式 <a style="color: #428bca;" :href="downloadImportTempUrl">下载导入模板</a></div>
+        <div v-else style="margin-bottom:20px;margin-left: 55px;">下载更新的模板或使用导出的csv格式 <a style="color: #428bca;" @click="downloadUpdateTempUrl">下载更新模板</a></div>
+
+        <div style="margin-left:55px;">
           <el-upload
             class="upload-card"
-            :action="upLoadUrl"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :on-exceed="handleExceed"
+            action="string"
+            :http-request="upload"
+            list-type="text/csv"
+            :limit="1"
           >
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传CSV文件</div>
           </el-upload>
         </div>
       </Dialog>
@@ -81,7 +81,13 @@ export default {
       return this.selectedRows.length > 0
     },
     upLoadUrl() {
-      return process.env.VUE_APP_BASE_API + this.tableConfig.url
+      return this.tableConfig.url
+    },
+    importtitle() {
+      if (this.importOption === '1') { return this.$tc('Import') } else { return this.$tc('Update') }
+    },
+    downloadImportTempUrl() {
+      return process.env.VUE_APP_BASE_API + this.tableConfig.url + '?format=csv&template=import&limit=1'
     }
   },
   mounted() {
@@ -93,6 +99,15 @@ export default {
     })
   },
   methods: {
+    upload(item) {
+      console.log(item)
+      this.$axios.put(
+        this.upLoadUrl,
+        item.file
+      ).then((res) =>
+        console.log(res)
+      )
+    },
     downloadCsv(url) {
       const a = document.createElement('a')
       a.href = url
@@ -103,16 +118,16 @@ export default {
       this.selectedRows = val
     },
     reloadTable() {
-      this.$refs.dataTable.getList()
+      this.$refs.dataTable.$refs.dataTable.getList()
     },
     search(attrs) {
-      return this.$refs.dataTable.search(attrs)
+      return this.$refs.dataTable.$refs.dataTable.search(attrs)
     },
     async handleExport() {
       let data
       var resources = []
       if (this.exportOption === '1') {
-        data = this.$refs.dataTable.getData()
+        data = this.$refs.dataTable.$refs.dataTable.getData()
       } else if (this.exportOption === '2') {
         data = this.selectedRows
       } else {
@@ -127,6 +142,16 @@ export default {
     },
     handleImport() {
 
+    },
+    async downloadUpdateTempUrl() {
+      var resources = []
+      const data = this.$refs.dataTable.$refs.dataTable.getData()
+      for (let index = 0; index < data.length; index++) {
+        resources.push(data[index].id)
+      }
+      const spm = await createSourceIdCache(resources)
+      const url = process.env.VUE_APP_BASE_API + `${this.tableConfig.url}?format=csv&template=update&spm=` + spm.spm
+      return this.downloadCsv(url)
     },
     async handleDialogConfirm(val) {
       switch (val) {
