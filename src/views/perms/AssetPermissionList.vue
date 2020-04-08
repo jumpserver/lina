@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -45,7 +45,7 @@ export default {
           {
             prop: 'is_active',
             label: this.$t('perms.validity'),
-            formatter: ChoicesFormatter,
+            formatter: BooleanFormatter,
             align: 'center',
             width: '80px'
           },

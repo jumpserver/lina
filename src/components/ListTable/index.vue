@@ -2,7 +2,7 @@
   <div>
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <el-card class="table-content" shadow="never">
-      <DataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
+      <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
       <Dialog :title="$t('Export')" :visible.sync="showExportDialog" @comfirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
           <el-form-item label="导出范围" :label-width="'100px'">
@@ -27,14 +27,14 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import DataTable from '../DataTable'
+import AutoDataTable from '../AutoDataTable'
 import Dialog from '../Dialog'
 import TableAction from './TableAction'
 
 export default {
   name: 'ListTable',
   components: {
-    DataTable,
+    AutoDataTable,
     TableAction,
     Dialog
   },
@@ -56,7 +56,8 @@ export default {
       showExportDialog: false,
       showImportDialog: false,
       importOption: '1',
-      exportOption: '1'
+      exportOption: '1',
+      meta: {}
     }
   },
   computed: {

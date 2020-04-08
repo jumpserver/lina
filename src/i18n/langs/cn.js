@@ -50,7 +50,8 @@ const cn = {
     'More': '更多',
     'Submit': '提交',
     'Reset': '重置',
-    'This field is required': '这个字段是必填项'
+    'This field is required': '这个字段是必填项',
+    'Validity': '有效性'
   },
   route: {
     'dashboard': '仪表盘',
