@@ -6,6 +6,7 @@
 import { GenericListPage } from '@/layout/components'
 import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { terminateSession } from '@/api/sessions'
 
 export default {
   components: {
@@ -56,9 +57,15 @@ export default {
                   name: 'terminate',
                   title: this.$t('sessions.terminate'),
                   type: 'danger',
-                  callback: function({ cellValue, tableData }) {
-                    // 跳转到luna页面
-                    console.log(cellValue, tableData)
+                  callback: function({ reload, cellValue, tableData }) {
+                    // 终断 session reload
+                    const data = [cellValue]
+                    terminateSession(data).then(res => {
+                      window.setTimeout(function() {
+                        reload()
+                      }, 50000)
+                    }
+                    )
                   }
                 },
                 {
@@ -66,6 +73,7 @@ export default {
                   title: this.$t('sessions.join'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
+                    // 跳转到luna页面
                     const joinUrl = '/luna/join/?shareroom=' + cellValue
                     window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
                   }
