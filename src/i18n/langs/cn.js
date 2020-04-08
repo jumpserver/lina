@@ -384,10 +384,10 @@ const cn = {
   },
   jobcenter: {
     'RunTimes': '执行次数',
-    'hosts': '主机',
-    'success': '成功',
-    'date': '日期',
-    'time': '时间',
+    'Hosts': '主机',
+    'Success': '成功',
+    'Date': '日期',
+    'Time': '时间',
     'run': '执行'
   },
   tickets: {

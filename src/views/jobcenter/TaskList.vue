@@ -3,8 +3,9 @@
 </template>
 
 <script>
+import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -14,47 +15,65 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
-        columns: [
-          {
-            prop: 'name',
-            label: this.$tc('Name'),
-            formatter: DetailFormatter,
-            sortable: 'custom',
-            route: 'UserDetail'
+        columns: ['name', 'runtimes', 'host_amount', 'is_success', 'date_start', 'time', 'actions'],
+        columnsMeta: {
+          name: {
+            label: this.$tc('Name')
           },
-          {
-            prop: 'latest_execution',
-            label: this.$t('jobcenter.RunTimes')
+          runtimes: {
+            label: this.$t('jobcenter.RunTimes'),
+            formatter: function(row) {
+              const successTime = row.summary.success
+              const failedTime = row.summary.failed
+              const total = row.summary.total
+              return (successTime + '/' + failedTime + '/' + total)
+            }
           },
-          {
-            prop: 'latest_execution.hosts_amount',
-            label: this.$t('jobcenter.hosts')
+          host_amount: {
+            label: this.$t('jobcenter.Hosts'),
+            formatter: function(row) {
+              return row.latest_execution.hosts_amount
+            }
           },
-          {
-            prop: 'latest_execution.is_success',
-            label: this.$t('jobcenter.success')
+          is_success: {
+            label: this.$t('jobcenter.Success'),
+            formatter: function(row) {
+              return row.latest_execution.is_success
+            }
           },
-          {
-            prop: 'latest_execution.date_start',
-            label: this.$t('jobcenter.date'),
-            sortable: 'custom'
+          date_start: {
+            label: this.$t('jobcenter.Date'),
+            formatter: function(row) {
+              return toSafeLocalDateStr(row.latest_execution.date_start)
+            }
           },
-          {
-            prop: 'latest_execution.timedelta',
-            label: this.$t('jobcenter.time')
+          time: {
+            label: this.$t('jobcenter.Time'),
+            formatter: function(row) {
+              return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
+            }
           },
-          {
+          actions: {
             prop: 'id',
             label: this.$tc('Action'),
-            align: 'center',
             formatter: ActionsFormatter,
-            width: '200px',
-            actions: [
-            ]
+            actions: {
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'run',
+                  title: this.$t('jobcenter.run'),
+                  type: 'primary',
+                  callback: function({ cellValue, tableData }) {
+                    // 跳转页面
+                    const replayUrl = '/ops/celery/task/' + cellValue
+                    window.open(replayUrl)
+                  }
+                }
+              ]
+            }
           }
-        ],
-        hasEdit: false,
-        hasDelete: false
+        }
       },
       headerActions: {
         hasCreate: false,
