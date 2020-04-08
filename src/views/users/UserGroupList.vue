@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { ExpandPreFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -17,6 +18,10 @@ export default {
         columnsMeta: {
           users_amount: {
             label: this.$t('users.Users')
+          },
+          name: {
+            type: 'expand',
+            formatter: ExpandPreFormatter
           }
         },
         detailRoute: 'UserGroupDetail'
@@ -26,7 +31,8 @@ export default {
         performBulkDelete: function(rows) {
           console.log('hello')
         }
-      }
+      },
+      helpMessage: '用户列表'
     }
   }
 }

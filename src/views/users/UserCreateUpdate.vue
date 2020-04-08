@@ -1,10 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url">
-    <!--    <FormGroupHeader slot="id:name" title="账户" :line="false" />-->
-    <!--    <FormGroupHeader slot="id:password_strategy" title="认证" :line="true" />-->
-    <!--    <FormGroupHeader slot="id:role" title="角色安全" :line="true" />-->
-    <!--    <FormGroupHeader slot="id:phone" title="认证" :line="true" />-->
-  </GenericCreateUpdatePage>
+  <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url" />
 </template>
 
 <script>
@@ -18,7 +13,7 @@ export default {
       form: {
         password_strategy: 0,
         mfa_level: 0,
-        source: 'ldap',
+        source: 'local',
         role: 'Admin',
         date_expired: '2099-12-31 00:00:00 +0800'
       },
@@ -44,7 +39,10 @@ export default {
           el: {
             value: [],
             url: '/api/v1/users/groups/'
-          }
+          },
+          rules: [
+            this.serverErrorRule
+          ]
         }
       }
     }
@@ -52,6 +50,11 @@ export default {
   methods: {
     debug() {
       console.log(this)
+    },
+    serverErrorRule(rule, value, callback) {
+      console.log('Server error rule')
+      console.log(rule)
+      console.log(value)
     }
   }
 }

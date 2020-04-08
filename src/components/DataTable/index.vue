@@ -1,5 +1,7 @@
 <template>
-  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners" />
+  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners">
+    <slot />
+  </ElDatableTable>
 </template>
 
 <script>

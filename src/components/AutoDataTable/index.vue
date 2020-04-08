@@ -25,6 +25,11 @@ export default {
       meta: {}
     }
   },
+  computed: {
+    expandField() {
+      return true
+    }
+  },
   mounted() {
     this.optionUrlMeta()
   },
@@ -54,7 +59,7 @@ export default {
             label: this.$tc('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
-            width: '200px'
+            width: '150px'
           }
           break
         case 'is_valid':
