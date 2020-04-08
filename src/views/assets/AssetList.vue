@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -34,7 +34,7 @@ export default {
           {
             prop: 'reachable',
             label: this.$t('assets.reachable'),
-            formatter: ChoicesFormatter
+            formatter: BooleanFormatter
           },
           {
             prop: 'id',

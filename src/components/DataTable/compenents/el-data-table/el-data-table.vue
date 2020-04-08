@@ -103,6 +103,7 @@
                 :key="row.id"
                 :table-data="data"
                 :row="row"
+                :url="url"
                 :reload="getList"
                 :col="col"
                 :cell-value="row[col.prop]"

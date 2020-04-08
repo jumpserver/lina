@@ -25,6 +25,10 @@ export default {
     tableData: {
       type: Array,
       default: () => ({})
+    },
+    url: {
+      type: String,
+      default: ''
     }
   }
 }
