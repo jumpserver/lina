@@ -1,5 +1,5 @@
 <template>
-  <DataTable ref="dataTable" v-loading="loading" :config="totalConfig" v-bind="$attrs" v-on="$listeners"></DataTable>
+  <DataTable ref="dataTable" v-loading="loading" :config="totalConfig" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script>
@@ -27,11 +27,9 @@ export default {
   },
   mounted() {
     this.optionUrlMeta()
-    console.log('auto data form', this.$attrs)
   },
   methods: {
     optionUrlMeta() {
-      console.log(this.config.url)
       const url = `${this.config.url}?draw=1&display=1`
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
@@ -39,14 +37,11 @@ export default {
         this.loading = false
       }).catch(error => {
         console.log(error)
+        this.totalConfig = this.config
         this.loading = false
       })
     },
-    generateColumn(name) {
-      const colMeta = this.meta[name] || {}
-      const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-      let col = { prop: name, label: colMeta.label }
-
+    generateColumnByName(name, col) {
       switch (name) {
         case 'name':
           col.formatter = DetailFormatter
@@ -71,8 +66,10 @@ export default {
         case 'comment':
           col.showOverflowTooltip = true
       }
-
-      switch (colMeta.type) {
+      return col
+    },
+    generateColumnByType(type, col) {
+      switch (type) {
         case 'choice':
           col.sortable = 'custom'
           col.formatter = DisplayFormatter
@@ -83,11 +80,15 @@ export default {
           col.width = '80px'
           break
       }
-      if (colMeta.type === 'choice') {
-        col.sortable = 'custom'
-        col.formatter = DisplayFormatter
-      }
+      return col
+    },
+    generateColumn(name) {
+      const colMeta = this.meta[name] || {}
+      const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
+      let col = { prop: name, label: colMeta.label }
 
+      col = this.generateColumnByName(name, col)
+      col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
       return col
     },
