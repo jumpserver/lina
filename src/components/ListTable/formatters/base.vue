@@ -19,7 +19,7 @@ export default {
       default: () => ({})
     },
     cellValue: {
-      type: [String, Boolean, Number, Object],
+      type: [String, Boolean, Number, Object, Array],
       default: null
     },
     tableData: {
