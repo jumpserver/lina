@@ -26,7 +26,8 @@ export default {
         performBulkDelete: function(rows) {
           console.log('hello')
         }
-      }
+      },
+      helpMessage: '用户列表'
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <DataForm v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
+  <DataForm ref="form" v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
     <FormGroupHeader v-for="(group, i) in groups" :slot="'id:'+group.name" :key="'group-'+group.name" :title="group.title" :line="i != 0" />
   </DataForm>
 </template>
@@ -48,7 +48,6 @@ export default {
   },
   mounted() {
     this.optionUrlMeta()
-    console.log('auto data form', this.$attrs)
   },
   methods: {
     optionUrlMeta() {
@@ -98,13 +97,15 @@ export default {
       return field
     },
     generateFieldByOther(field, fieldMeta) {
+      const filedRules = field.rules || []
       if (fieldMeta.required) {
         if (field.type === 'input') {
-          field.rules = [rules.Required]
+          filedRules.push(rules.Required)
         } else {
-          field.rules = [rules.RequiredChange]
+          filedRules.push(rules.RequiredChange)
         }
       }
+      field.rules = filedRules
       return field
     },
     generateField(name) {
@@ -132,9 +133,6 @@ export default {
     generateFields(data) {
       let fields = []
       for (let field of data) {
-        console.log('is array', field instanceof Array)
-        console.log('is string', typeof field === 'string')
-        console.log('is object', field instanceof Object)
         if (field instanceof Array) {
           const items = this.generateFieldGroup(field)
           fields = [...fields, ...items]

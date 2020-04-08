@@ -1,6 +1,6 @@
 <template>
   <ElFormRender
-    ref="dataForm"
+    ref="form"
     :content="fields"
     v-bind="$attrs"
     :form="basicForm"
@@ -14,8 +14,8 @@
 
     <el-form-item v-if="defaultButton">
       <slot name="button-start" />
-      <el-button size="small" @click="resetForm('dataForm')">{{ $tc('Reset') }}</el-button>
-      <el-button size="small" type="primary" @click="submitForm('dataForm')">{{ $tc('Submit') }}</el-button>
+      <el-button size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
+      <el-button size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
     </el-form-item>
     <slot name="Actions" />
   </ElFormRender>
@@ -53,9 +53,10 @@ export default {
   methods: {
     // 获取表单数据
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      const form = this.$refs[formName]
+      form.validate((valid) => {
         if (valid) {
-          this.$emit('submit', this.$refs[formName].getFormValue())
+          this.$emit('submit', form.getFormValue(), form)
         } else {
           this.$emit('invalid', valid)
           return false

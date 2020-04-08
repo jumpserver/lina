@@ -1,10 +1,7 @@
 <template>
   <Page>
     <IBox>
-      <AutoDataForm :form="form" :fields="fields" :url="url" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit">
-        <slot v-for="item in fields" :slot="`id:${item}`" :name="`id:${item}`" />
-        <slot v-for="item in fields" :slot="`$id:${item}`" :name="`$id:${item}`" />
-      </AutoDataForm>
+      <AutoDataForm ref="form" :form="form" :fields="fields" :url="url" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit" />
     </IBox>
   </Page>
 </template>
@@ -40,27 +37,45 @@ export default {
       default: null
     }
   },
-  mounted() {
-    console.log('generic', this.$attrs)
-    console.log(this.fields)
+  data() {
+    return {
+    }
+  },
+  computed: {
   },
   methods: {
-    handleSubmit(values) {
+    getFormRef(comp) {
+      if (comp.$refs.form) {
+        return this.getFormRef(comp.$refs.form)
+      }
+      return comp
+    },
+    handleSubmit(values, form) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
+      const fields = form.$refs.elForm.fields
       console.log('submit', values)
-      return handler(values)
+      console.log('form.fields', fields)
+      const field = fields[0]
+      field.error = '滴滴滴滴滴多滴滴滴'
+      return handler(values, form)
     },
-    defaultOnSubmit(validValues) {
-      this.$axios.post(this.url, validValues).then(
-        () => {
-          const msg = this.$tc('Create success')
-          this.$message.success(msg)
-          setTimeout(() => {
-            this.$router.push({ name: 'UserList' })
-          }, 500)
+    defaultOnSubmit(validValues, form) {
+      this.$axios.post(this.url, validValues).then(() => {
+        const msg = this.$tc('Create success')
+        this.$message.success(msg)
+        setTimeout(() => {
+          this.$router.push({ name: 'UserList' })
+        }, 500)
+      }).catch(error => {
+        console.log(form)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          this.errors.name = '你报错了滴滴滴'
+          console.log(data)
         }
-      )
+      })
     }
   }
 }
