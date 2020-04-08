@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters/index'
+import { LengthFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -14,52 +14,21 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/perms/remote-app-permissions/',
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('perms.name'),
-            formatter: DetailFormatter,
-            sortable: true,
-            route: 'RemoteAppPermissionDetail'
+        columns: ['name', 'users', 'user_groups', 'remote_apps', 'system_users', 'is_valid', 'actions'],
+        columnsMeta: {
+          users: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'users.length',
-            label: this.$t('perms.user')
+          user_groups: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'user_groups.length',
-            label: this.$t('perms.userGroup')
+          remote_apps: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'remote_apps.length',
-            label: this.$t('perms.RemoteApp')
-          },
-          {
-            prop: 'system_users.length',
-            label: this.$t('perms.systemUser')
-          },
-          {
-            prop: 'is_valid',
-            label: this.$t('perms.validity'),
-            formatter: BooleanFormatter,
-            align: 'center',
-            width: '80px'
-          },
-          {
-            prop: 'id',
-            label: this.$tc('Action'),
-            align: 'center',
-            formatter: ActionsFormatter,
-            width: '200px',
-            actions: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/perms/database-app-permissions/${id}/`
-                return this.$axios.delete(url)
-              }
-            }
+          system_users: {
+            formatter: LengthFormatter
           }
-        ]
+        }
       },
       headerActions: {
         hasBulkDelete: false,

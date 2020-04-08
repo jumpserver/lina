@@ -215,16 +215,37 @@ export const constantRoutes = [
         meta: { title: 'AssetPermission' }
       },
       {
+        path: 'asset-permissions/create',
+        component: () => import('@/views/perms/AssetPermissionCreateUpdate'), // Parent router-view
+        name: 'AssetPermissionCreate',
+        hidden: true,
+        meta: { title: 'AssetPermissionCreate', activeMenu: '/perms/asset-permissions' }
+      },
+      {
         path: 'remote-app-permissions',
         name: 'RemoteAppPermissionList',
         component: () => import('@/views/perms/RemoteAppPermissionList'),
         meta: { title: 'RemoteAppPermission' }
       },
       {
+        path: 'remote-app-permissions/create',
+        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'), // Parent router-view
+        name: 'RemoteAppPermissionCreate',
+        hidden: true,
+        meta: { title: 'RemoteAppPermissionCreate', activeMenu: '/perms/remote-app-permissions' }
+      },
+      {
         path: 'database-app-permissions',
         name: 'DatabaseAppPermissionList',
         component: () => import('@/views/perms/DatabaseAppPermissionList'),
         meta: { title: 'DatabaseAppPermission' }
+      },
+      {
+        path: 'database-app-permissions/create',
+        component: () => import('@/views/perms/DatabaseAppPermissionCreateUpdate'), // Parent router-view
+        name: 'DatabaseAppPermissionCreate',
+        hidden: true,
+        meta: { title: 'DatabaseAppPermissionCreate', activeMenu: '/perms/database-app-permissions' }
       }
     ]
   },

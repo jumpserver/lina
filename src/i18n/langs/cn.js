@@ -79,8 +79,11 @@ const cn = {
     'DatabaseApp': '数据库应用',
     'Perms': '权限管理',
     'AssetPermission': '资产授权',
+    'AssetPermissionCreate': '创建资产授权规则',
     'RemoteAppPermission': '远程应用授权',
+    'RemoteAppPermissionCreate': '创建远程应用授权规则',
     'DatabaseAppPermission': '数据库应用授权',
+    'DatabaseAppPermissionCreate': '创建数据库应用授权规则',
     'Sessions': '会话管理',
     'SessionOnline': '在线会话',
     'SessionOffline': '历史会话',
@@ -345,20 +348,14 @@ const cn = {
     'active': '激活中',
     'users_and_user_groups': '用户或用户组',
     'assets_and_node': '资产或节点',
+    'Basic': '基本',
+    'User': '用户',
+    'Asset': '资产',
+    'Actions': '动作',
     //
     'RemoteApp': '远程应用',
-    'remote_app_permission_list': '远程应用授权列表',
-    'remote_app_permission_detail': '远程应用授权详情',
-    'create_remote_app_permission': '创建远程应用授权规则',
-    'update_remote_app_permission': '更新远程应用授权规则',
-    'remote_app_count': '远程应用数量',
     //
-    'DatabaseApp': '数据库应用',
-    'database_app_permission_list': '数据库应用授权列表',
-    'database_app_permission_detail': '数据库应用授权详情',
-    'create_database_app_permission': '创建数据库应用授权规则',
-    'update_database_app_permission': '更新数据库应用授权规则',
-    'database_app_count': '数据库应用数量'
+    'DatabaseApp': '数据库应用'
   },
   sessions: {
     'id': 'ID',

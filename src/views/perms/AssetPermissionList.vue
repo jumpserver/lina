@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters/index'
+import { LengthFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -14,59 +14,23 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('common.name'),
-            formatter: DetailFormatter,
-            sortable: true,
-            route: 'AssetPermissionDetail'
+        columns: ['name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
+        columnsMeta: {
+          users: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'users.length',
-            label: this.$t('perms.user')
+          user_groups: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'user_groups.length',
-            label: this.$t('perms.userGroup')
+          assets: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'assets.length',
-            label: this.$t('perms.asset')
+          nodes: {
+            formatter: LengthFormatter
           },
-          {
-            prop: 'nodes.length',
-            label: this.$t('perms.node')
-          },
-          {
-            prop: 'system_users.length',
-            label: this.$t('perms.systemUser')
-          },
-          {
-            prop: 'is_active',
-            label: this.$t('perms.validity'),
-            formatter: BooleanFormatter,
-            align: 'center',
-            width: '80px'
-          },
-          {
-            prop: 'id',
-            label: this.$tc('Action'),
-            align: 'center',
-            formatter: ActionsFormatter,
-            width: '200px',
-            actions: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/perms/asset-permissions/${id}/`
-                return this.$axios.delete(url)
-              }
-            }
+          system_users: {
+            formatter: LengthFormatter
           }
-        ],
-        tableActions: {
-          hasEdit: true,
-          editRoute: '404'
         }
       },
       headerActions: {
