@@ -14,8 +14,12 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
-        columns: ['name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
+        hasSelection: false,
+        columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
         columnsMeta: {
+          expand: {
+            type: 'expand'
+          },
           users: {
             formatter: LengthFormatter
           },
@@ -36,7 +40,20 @@ export default {
       headerActions: {
         hasDelete: false,
         hasUpdate: false,
-        createRoute: 'AssetPermissionCreate'
+        hasBulkDelete: false,
+        createRoute: 'AssetPermissionCreate',
+        extraActions: [
+          {
+            name: 'RefreshPermissionCache',
+            title: this.$t('perms.RefreshPermissionCache'),
+            type: 'primary',
+            has: true,
+            callback: function() {
+              const url = '/api/v1/perms/asset-permissions/cache/refresh/'
+              console.log('刷新请求：', url)
+            }
+          }
+        ]
       }
     }
   }
