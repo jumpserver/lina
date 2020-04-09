@@ -319,6 +319,8 @@ const cn = {
   perms: {
     'Asset permissions': '资产授权',
     'RefreshPermissionCache': '刷新授权缓存',
+    'ReFreshSuccess': '刷新成功',
+    'ReFreshFail': '刷新失败',
     'All': '全部',
     'Connect': '连接',
     'UpDownload': '上传下载',

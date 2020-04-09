@@ -48,13 +48,20 @@ export default {
             title: this.$t('perms.RefreshPermissionCache'),
             type: 'primary',
             has: true,
-            callback: function() {
-              const url = '/api/v1/perms/asset-permissions/cache/refresh/'
-              console.log('刷新请求：', url)
-            }
+            callback: this.HandleRefreshPermissionCache
           }
         ]
       }
+    }
+  },
+  methods: {
+    HandleRefreshPermissionCache() {
+      const url = '/api/v1/perms/asset-permissions/cache/refresh/'
+      this.$axios.get(url).then(res => {
+        this.$message.success(this.$t('perms.ReFreshSuccess'))
+      }).catch(err => {
+        this.$message.error(this.$t('perms.ReFreshFail') + ':' + err)
+      })
     }
   }
 }
