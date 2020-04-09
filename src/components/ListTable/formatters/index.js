@@ -4,6 +4,9 @@ import BooleanFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
 import ExpandPreFormatter from './ExpandPreFormatter'
 import LengthFormatter from './LengthFormatter'
+import RouterFormatter from './RouterFormatter'
+import OutputExpandFormatter from './OutputExpandFormatter'
+import ExpandAssetPermissionFormatter from './ExpandAssetPermissionFormatter'
 
 export default {
   DetailFormatter,
@@ -11,7 +14,10 @@ export default {
   BooleanFormatter,
   ActionsFormatter,
   ExpandPreFormatter,
-  LengthFormatter
+  LengthFormatter,
+  RouterFormatter,
+  OutputExpandFormatter,
+  ExpandAssetPermissionFormatter
 }
 
 export {
@@ -20,5 +26,8 @@ export {
   BooleanFormatter,
   ActionsFormatter,
   ExpandPreFormatter,
-  LengthFormatter
+  LengthFormatter,
+  RouterFormatter,
+  OutputExpandFormatter,
+  ExpandAssetPermissionFormatter
 }
