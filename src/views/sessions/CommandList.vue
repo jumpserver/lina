@@ -5,7 +5,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { toSafeLocalDateStr } from '@/utils/common'
-import OutputExpandFormatter from '@/components/ListTable/formatters/OutputExpandFormatter'
+import { RouterFormatter, OutputExpandFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -42,7 +42,10 @@ export default {
             label: this.$t('sessions.systemUser')
           },
           session: {
-            label: this.$t('sessions.session')
+            label: this.$t('sessions.session'),
+            formatter: RouterFormatter,
+            route: 'SessionDetail',
+            linkName: this.$t('sessions.goto')
           },
           timestamp: {
             label: this.$t('sessions.date'),
