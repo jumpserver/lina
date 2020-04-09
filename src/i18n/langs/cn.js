@@ -331,6 +331,9 @@ const cn = {
     'User': '用户',
     'Asset': '资产',
     'Actions': '动作',
+    'UserGroups': '用户组',
+    'Node': '节点',
+    'SystemUser': '系统用户',
     //
     'RemoteApp': '远程应用',
     //

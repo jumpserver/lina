@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { LengthFormatter } from '@/components/ListTable/formatters/index'
+import { LengthFormatter, ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -18,7 +18,8 @@ export default {
         columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
         columnsMeta: {
           expand: {
-            type: 'expand'
+            type: 'expand',
+            formatter: ExpandAssetPermissionFormatter
           },
           users: {
             formatter: LengthFormatter
