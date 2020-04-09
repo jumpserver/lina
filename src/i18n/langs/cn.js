@@ -319,6 +319,11 @@ const cn = {
   perms: {
     'Asset permissions': '资产授权',
     'RefreshPermissionCache': '刷新授权缓存',
+    'All': '全部',
+    'Connect': '连接',
+    'UpDownload': '上传下载',
+    'UploadFile': '上传文件',
+    'DownloadFile': '下载文件',
     'Basic': '基本',
     'User': '用户',
     'Asset': '资产',

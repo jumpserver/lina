@@ -11,6 +11,7 @@ export default {
   data() {
     return {
       form: {
+        is_active: true,
         date_expired: '2099-12-31 00:00:00 +0800'
       },
       fields: [
@@ -53,7 +54,16 @@ export default {
           }
         },
         actions: {
-          label: this.$t('perms.Actions')
+          label: this.$t('perms.Actions'),
+          type: 'checkbox-group',
+          default: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
+          options: [
+            { label: 'all' },
+            { label: 'connect' },
+            { label: 'updownload' },
+            { label: 'upload_file' },
+            { label: 'download_file' }
+          ]
         },
         is_active: {
           type: 'checkbox'
