@@ -59,7 +59,9 @@ const cn = {
     'Import': '导入',
     'Export': '导出',
     'Other': '其它',
-    'Create success': '创建成功'
+    'Create success': '创建成功',
+    'Deactive selected': '禁用所选',
+    'Active selected': '激活所选'
   },
   route: {
     'dashboard': '仪表盘',

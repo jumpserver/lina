@@ -4,7 +4,7 @@
 
 <script>
 import DataTable from '../DataTable'
-import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import { optionUrlMeta } from '@/api/common'
 export default {
   name: 'AutoDataTable',

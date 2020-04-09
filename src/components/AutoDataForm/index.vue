@@ -75,9 +75,24 @@ export default {
           type = ''
           field.component = Select2
           break
+        case 'string':
+          type = 'input'
+          if (!fieldMeta.max_length) {
+            field.el.type = 'textarea'
+          }
+          break
         default:
           type = 'input'
           break
+      }
+      if (type === 'radio-group') {
+        const options = fieldMeta.choices.map(v => {
+          return { label: v.display_name, value: v.value }
+        })
+        if (options.length > 4) {
+          type = 'select'
+          field.el.filterable = true
+        }
       }
       field.type = type
       return field
@@ -85,13 +100,13 @@ export default {
     generateFieldByName(name, field) {
       switch (name) {
         case 'email':
-          field.el = { type: 'email' }
+          field.el.type = 'email'
           break
         case 'password':
-          field.el = { type: 'password' }
+          field.el.type = 'password'
           break
         case 'comment':
-          field.el = { type: 'textarea' }
+          field.el.type = 'textarea'
           break
       }
       return field
@@ -109,15 +124,16 @@ export default {
       return field
     },
     generateField(name) {
-      let field = {}
+      let field = { id: name, prop: name, el: {}}
       const fieldMeta = this.meta[name] || {}
-      field.id = name
-      field.prop = name
       field.label = fieldMeta.label
       field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
       field = Object.assign(field, this.fieldsMeta[name] || {})
+      if (name === 'name') {
+        console.log(field)
+      }
       return field
     },
     generateFieldGroup(data) {

@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <GenericCreateUpdatePage :fields="fields" :form="form" :fields-meta="fieldsMeta" :url="url" />
-    <el-button @click="debug">Debug</el-button>
-  </div>
+  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
 </template>
 
 <script>
@@ -12,9 +9,9 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const errors = { name: [] }
+    const errors = { name: '' }
     return {
-      form: {
+      initial: {
         password_strategy: 0,
         mfa_level: 0,
         source: 'local',
@@ -23,26 +20,35 @@ export default {
       },
       fields: [
         [this.$t('users.' + 'Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.' + 'Authentication'), ['password_strategy', 'password', 'mfa_level', 'source']],
+        [this.$t('users.' + 'Authentication'), ['password_strategy', 'password', 'public_key', 'mfa_level', 'source']],
         [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
         [this.$tc('Other'), ['phone', 'wechat', 'comment']]
       ],
       errors: errors,
       url: '/api/v1/users/users/',
       fieldsMeta: {
+        name: {
+          el: {
+            error: '无措'
+          }
+        },
+        password_strategy: {
+          hidden: () => {
+            return this.$route.params.id
+          }
+        },
         password: {
           hidden: (formValue, item) => {
             console.log('hidden password', formValue.password_strategy)
-            if (this.$route.params.id === undefined) {
-              return formValue.password_strategy !== 1
-            } else {
-              return true
+            if (this.$route.meta.action === 'update') {
+              return false
             }
+            return formValue.password_strategy !== 1
           }
         },
-        name: {
-          el: {
-            error: errors.name
+        public_key: {
+          hidden: (formValue, item) => {
+            return this.$route.meta.action !== 'update'
           }
         },
         groups: {
@@ -54,20 +60,18 @@ export default {
       }
     }
   },
+  mounted() {
+    setTimeout(() => {
+      this.errors.name = 'dididi'
+    }, 3000)
+  },
   methods: {
     debug() {
       console.log(this)
-      this.errors.name.push('world')
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.el-form /deep/ .el-select{
-  width:100%;
-}
-.el-form /deep/ .el-form-item__content > .el-date-editor{
-  width:100%;
-}
 </style>

@@ -1,7 +1,17 @@
 <template>
-  <Page>
+  <Page v-loading="loadding">
     <IBox>
-      <AutoDataForm ref="form" :method="method" :form="form" :fields="fields" :url="totalUrl" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit" />
+      <AutoDataForm
+        v-if="!loadding"
+        ref="form"
+        :method="method"
+        :form="form"
+        :fields="fields"
+        :url="totalUrl"
+        v-bind="$attrs"
+        v-on="$listeners"
+        @submit="handleSubmit"
+      />
     </IBox>
   </Page>
 </template>
@@ -24,9 +34,13 @@ export default {
         return []
       }
     },
-    form: {
+    object: {
       type: Object,
-      default: () => { return {} }
+      default: () => ({})
+    },
+    initial: {
+      type: Object,
+      default: () => ({})
     },
     onSubmit: {
       type: Function,
@@ -57,14 +71,25 @@ export default {
   },
   data() {
     return {
+      form: {},
+      loadding: true
     }
   },
   computed: {
     method() {
-      return this.getMethod()
+      const method = this.getMethod(this)
+      return method
     },
     totalUrl() {
       return this.getUrl()
+    }
+  },
+  mounted() {
+    if (this.method === 'put') {
+      this.getObjectDetail()
+    } else {
+      this.form = Object.assign(this.form, this.initial)
+      this.loadding = false
     }
   },
   methods: {
@@ -92,6 +117,15 @@ export default {
           this.errors.name = '你报错了滴滴滴'
           console.log(data)
         }
+      })
+    },
+    getObjectDetail() {
+      this.$axios.get(this.totalUrl).then(data => {
+        this.form = data
+      }).catch(error => {
+        console.log(error)
+      }).finally(() => {
+        this.loadding = false
       })
     }
   }

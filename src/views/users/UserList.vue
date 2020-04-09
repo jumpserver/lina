@@ -16,6 +16,9 @@ export default {
         columns: [
           'name', 'username', 'role', 'groups_display', 'source', 'is_valid', 'actions'
         ],
+        columnsMeta: {
+
+        },
         detailRoute: 'UserDetail',
         actions: {
           updateRoute: 'UserUpdate'
