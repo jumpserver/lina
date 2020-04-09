@@ -8,6 +8,9 @@ import date from './date'
 Vue.use(VueI18n)
 const i18n = new VueI18n({
   locale: localStorage.lang || 'cn',
+  fallbackLocale: 'en',
+  silentFallbackWarn: true,
+  silentTranslationWarn: true,
   dateTimeFormats: date,
   messages
 })
