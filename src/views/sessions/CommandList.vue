@@ -4,6 +4,8 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { toSafeLocalDateStr } from '@/utils/common'
+import { RouterFormatter, OutputExpandFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -12,55 +14,47 @@ export default {
   data() {
     return {
       tableConfig: {
-        axiosConfig: {
-          raw: 1,
-          params: {
-            display: 1,
-            is_finished: 0
-          }
-        },
         hasSelection: false,
-        hasOperation: false,
         url: '/api/v1/terminal/commands/',
         columns: [
-          {
-            type: 'expand'
+          'expandCol', 'input', 'risk_level', 'user',
+          'asset', 'system_user', 'session', 'timestamp'
+        ],
+        columnsMeta: {
+          expandCol: {
+            type: 'expand',
+            prop: 'output',
+            formatter: OutputExpandFormatter
           },
-          {
-            prop: 'input',
+          input: {
             label: this.$t('sessions.command')
           },
-          {
-            prop: 'output',
-            label: '命令输出结果 (怎么放到隐藏内容 ？？)',
-            expand: true
-          },
-          {
-            prop: 'risk_level',
+          risk_level: {
             label: this.$t('sessions.RiskLevel')
           },
-          {
-            prop: 'user',
-            label: this.$t('sessions.user'),
-            sortable: true
+          user: {
+            label: this.$t('sessions.user')
           },
-          {
-            prop: 'asset',
+          asset: {
             label: this.$t('sessions.asset')
           },
-          {
-            prop: 'system_user',
+          system_user: {
             label: this.$t('sessions.systemUser')
           },
-          {
-            prop: 'session',
-            label: this.$t('sessions.session')
+          session: {
+            label: this.$t('sessions.session'),
+            formatter: RouterFormatter,
+            route: 'SessionDetail',
+            linkName: this.$t('sessions.goto')
           },
-          {
-            prop: 'timestamp',
-            label: this.$t('sessions.date')
+          timestamp: {
+            label: this.$t('sessions.date'),
+            formatter: function(row) {
+              return toSafeLocalDateStr(row.timestamp * 1000)
+            }
           }
-        ],
+
+        },
         tableActions: {
           hasEdit: false,
           hasDelete: false

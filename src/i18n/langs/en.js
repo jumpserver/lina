@@ -18,7 +18,11 @@ const en = {
     'assets': 'Assets',
     'applications': 'Applications',
     'perms': 'Perms',
-    'sessions': 'Sessions',
+    'Sessions': 'Sessions',
+    'SessionOnline': 'Session Online',
+    'SessionOffline': 'Session Offline',
+    'SessionDetail': 'Session Detail',
+    'Goto': 'Goto',
     'jobcenter': 'Job Center'
   },
   users: {
@@ -289,7 +293,8 @@ const en = {
     'terminate_session': 'Terminate session',
     'confirm': 'Confirm',
     'commands': 'Commands',
-    'join': 'join'
+    'join': 'join',
+    'goto': 'Goto'
   },
   setting: {
     'setting': 'System Setting',
