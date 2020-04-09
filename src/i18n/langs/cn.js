@@ -58,7 +58,10 @@ const cn = {
     'cancel': '取消',
     'Import': '导入',
     'Export': '导出',
-    'Other': '其它'
+    'Other': '其它',
+    'Create success': '创建成功',
+    'Deactive selected': '禁用所选',
+    'Active selected': '激活所选'
   },
   route: {
     'dashboard': '仪表盘',
@@ -104,7 +107,8 @@ const cn = {
     'PasswordChangeLog': '改密日志',
     'Settings': '系统设置',
     'UserCreate': '创建用户',
-    'UserGroupCreate': '创建用户组'
+    'UserGroupCreate': '创建用户组',
+    'UserUpdate': '更新用户'
   },
   // 用户模块翻译
   users: {

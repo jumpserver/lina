@@ -235,3 +235,29 @@ td .el-button.el-button--mini {
 .el-radio__input.is-checked+.el-radio__label {
   color: inherit;
 }
+
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #409EFF;
+  background-color: #409EFF;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  border-color: #409EFF;
+  background-color: #409EFF;
+}
+
+.el-radio__inner:hover {
+  border-color: #409EFF;
+}
+
+.el-textarea__inner {
+  border-radius: 0;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  border-color: #409EFF;
+  background-color: #409EFF;
+}
+.el-checkbox__inner:hover {
+  border-color: #409EFF;
+}

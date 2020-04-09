@@ -1,5 +1,5 @@
 <template>
-  <BaseDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
     <div slot="info">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -18,18 +18,18 @@
         </el-col>
       </el-row>
     </div>
-  </BaseDetailPage>
+  </GenericDetailPage>
 </template>
 
 <script>
 import { getUserGroupDetail, getUserGroupMembers } from '@/api/user'
-import { BaseDetailPage } from '@/layout/components'
+import { GenericDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard'
 import Select2 from '@/components/Select2'
 
 export default {
   components: {
-    BaseDetailPage,
+    GenericDetailPage,
     DetailCard,
     Select2
   },
