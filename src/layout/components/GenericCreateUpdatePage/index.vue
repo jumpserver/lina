@@ -94,11 +94,12 @@ export default {
   },
   methods: {
     handleSubmit(values, form) {
+      const f = this.$refs.form
+      f.setFieldError('name', '怎么了')
+      console.log(f.setFieldError)
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
-      const fields = form.$refs.elForm.fields
       console.log('submit', values)
-      console.log('form.fields', fields)
       return handler(values, form)
     },
     defaultPerformSubmit(validValues) {

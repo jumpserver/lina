@@ -1,5 +1,5 @@
 <template>
-  <DataForm ref="form" v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
+  <DataForm ref="dataForm" v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
     <FormGroupHeader v-for="(group, i) in groups" :slot="'id:'+group.name" :key="'group-'+group.name" :title="group.title" :line="i != 0" />
   </DataForm>
 </template>
@@ -10,6 +10,7 @@ import FormGroupHeader from '@/components/formGroupHeader'
 import { optionUrlMeta } from '@/api/common'
 import rules from '@/components/DataForm/rules'
 import Select2 from '@/components/Select2'
+import _ from 'lodash'
 export default {
   name: 'AutoDataForm',
   components: {
@@ -41,7 +42,8 @@ export default {
       meta: {},
       totalFields: [],
       loading: true,
-      groups: []
+      groups: [],
+      errors: { name: '怎么了' }
     }
   },
   computed: {
@@ -131,6 +133,8 @@ export default {
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
       field = Object.assign(field, this.fieldsMeta[name] || {})
+      // field.attrs = { error: this.errors[field.prop]}
+      _.set(field, 'attrs.error', this.errors[field.prop])
       if (name === 'name') {
         console.log(field)
       }
@@ -156,6 +160,8 @@ export default {
           field = this.generateField(field)
           fields.push(field)
         } else if (field instanceof Object) {
+          this.errors[field.prop] = ''
+          _.set(field, 'attrs.error', this.errors[field.prop])
           fields.push(field)
         }
       }
@@ -164,6 +170,13 @@ export default {
     generateColumns() {
       const fields = this.generateFields(this.fields)
       this.totalFields = fields
+    },
+    setFieldError(name, error) {
+      console.log('errors')
+      console.log(this.errors)
+      // this.errors[name] = error
+      this.$set(this.errors, name, error)
+      console.log(this.errors)
     }
   }
 }

@@ -27,11 +27,6 @@ export default {
       errors: errors,
       url: '/api/v1/users/users/',
       fieldsMeta: {
-        name: {
-          el: {
-            error: '无措'
-          }
-        },
         password_strategy: {
           hidden: () => {
             return this.$route.params.id
