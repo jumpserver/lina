@@ -275,6 +275,13 @@ export const constantRoutes = [
         meta: { title: 'Commands' }
       },
       {
+        path: 'sessions/:id',
+        name: 'SessionDetail',
+        component: () => import('@/views/sessions/SessionDetail'),
+        meta: { title: 'SessionDetail' },
+        hidden: true
+      },
+      {
         path: 'luna',
         name: 'WebTerminal',
         component: () => import('@/views/tree/index'),
