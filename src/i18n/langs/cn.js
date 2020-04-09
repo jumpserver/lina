@@ -87,6 +87,7 @@ const cn = {
     'Sessions': '会话管理',
     'SessionOnline': '在线会话',
     'SessionOffline': '历史会话',
+    'SessionDetail': '会话详情',
     'Commands': '命令记录',
     'WebTerminal': 'Web终端',
     'FileManager': '文件管理',
@@ -358,7 +359,8 @@ const cn = {
     'active': '激活中',
     'alive': '在线',
     'StorageConfiguration': '存储配置',
-    'join': '加入'
+    'join': '加入',
+    'goto': '转到'
   },
   jobcenter: {
     'RunTimes': '执行次数',
