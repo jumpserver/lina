@@ -1,7 +1,7 @@
 <template>
   <Page>
     <IBox>
-      <AutoDataForm ref="form" :form="form" :fields="fields" :url="url" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit" />
+      <AutoDataForm ref="form" :method="method" :form="form" :fields="fields" :url="totalUrl" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit" />
     </IBox>
   </Page>
 </template>
@@ -18,10 +18,6 @@ export default {
       type: String,
       required: true
     },
-    method: {
-      type: String,
-      default: 'post'
-    },
     fields: {
       type: Array,
       default: () => {
@@ -35,6 +31,28 @@ export default {
     onSubmit: {
       type: Function,
       default: null
+    },
+    getMethod: {
+      type: Function,
+      default: function() {
+        const params = this.$route.params
+        if (params.id) {
+          return 'put'
+        } else {
+          return 'post'
+        }
+      }
+    },
+    getUrl: {
+      type: Function,
+      default: function() {
+        const params = this.$route.params
+        let url = this.url
+        if (params.id) {
+          url = `${url}/${params.id}/`
+        }
+        return url
+      }
     }
   },
   data() {
@@ -42,14 +60,14 @@ export default {
     }
   },
   computed: {
+    method() {
+      return this.getMethod()
+    },
+    totalUrl() {
+      return this.getUrl()
+    }
   },
   methods: {
-    getFormRef(comp) {
-      if (comp.$refs.form) {
-        return this.getFormRef(comp.$refs.form)
-      }
-      return comp
-    },
     handleSubmit(values, form) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
@@ -58,8 +76,11 @@ export default {
       console.log('form.fields', fields)
       return handler(values, form)
     },
+    defaultPerformSubmit(validValues) {
+      return this.$axios[this.method](this.totalUrl, validValues)
+    },
     defaultOnSubmit(validValues, form) {
-      this.$axios.post(this.url, validValues).then(() => {
+      this.defaultPerformSubmit(validValues).then(() => {
         const msg = this.$tc('Create success')
         this.$message.success(msg)
         this.$router.push({ name: 'UserList' })

@@ -59,7 +59,8 @@ export default {
             label: this.$tc('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
-            width: '150px'
+            width: '150px',
+            actions: this.config.actions || {}
           }
           break
         case 'is_valid':

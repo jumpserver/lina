@@ -16,7 +16,10 @@ export default {
         columns: [
           'name', 'username', 'role', 'groups_display', 'source', 'is_valid', 'actions'
         ],
-        detailRoute: 'UserDetail'
+        detailRoute: 'UserDetail',
+        actions: {
+          updateRoute: 'UserUpdate'
+        }
       },
       headerActions: {
         createRoute: 'UserCreate',

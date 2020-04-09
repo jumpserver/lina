@@ -104,7 +104,8 @@ const cn = {
     'PasswordChangeLog': '改密日志',
     'Settings': '系统设置',
     'UserCreate': '创建用户',
-    'UserGroupCreate': '创建用户组'
+    'UserGroupCreate': '创建用户组',
+    'UserUpdate': '更新用户'
   },
   // 用户模块翻译
   users: {
