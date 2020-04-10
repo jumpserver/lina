@@ -23,7 +23,8 @@ const en = {
     'SessionOffline': 'Session Offline',
     'SessionDetail': 'Session Detail',
     'Goto': 'Goto',
-    'jobcenter': 'Job Center'
+    'jobcenter': 'Job Center',
+    'Terminal': 'Terminal'
   },
   users: {
     'createuser': 'Cerate User',

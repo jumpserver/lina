@@ -423,7 +423,8 @@ const cn = {
     'sshPort': 'SSH端口:',
     'httpPort': 'HTTP端口:',
     'comment': '备注:',
-    'dateCreated': '创建日期:'
+    'dateCreated': '创建日期:',
+    'info': '信息'
   },
   jobcenter: {
     'RunTimes': '执行次数',
