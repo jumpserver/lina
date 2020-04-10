@@ -25,24 +25,18 @@ export default {
       meta: {}
     }
   },
-  computed: {
-    expandField() {
-      return true
-    }
-  },
   mounted() {
     this.optionUrlMeta()
   },
   methods: {
     optionUrlMeta() {
-      const url = (this.config.treeurl) ? (`${this.config.url}?draw=1&display=1`) : (`${this.config.url}draw=1&display=1`)
+      const url = `${this.config.url}?draw=1&display=1`
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
-        this.loading = false
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
         this.totalConfig = this.config
+      }).finally(() => {
         this.loading = false
       })
     },
