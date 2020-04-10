@@ -9,7 +9,6 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const errors = { name: '' }
     return {
       initial: {
         password_strategy: 0,
@@ -24,22 +23,15 @@ export default {
         [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
         [this.$tc('Other'), ['phone', 'wechat', 'comment']]
       ],
-      errors: errors,
       url: '/api/v1/users/users/',
       fieldsMeta: {
-        name: {
-          el: {
-            error: '无措'
-          }
-        },
         password_strategy: {
           hidden: () => {
             return this.$route.params.id
           }
         },
         password: {
-          hidden: (formValue, item) => {
-            console.log('hidden password', formValue.password_strategy)
+          hidden: (formValue) => {
             if (this.$route.meta.action === 'update') {
               return false
             }
@@ -58,16 +50,6 @@ export default {
           }
         }
       }
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.errors.name = 'dididi'
-    }, 3000)
-  },
-  methods: {
-    debug() {
-      console.log(this)
     }
   }
 }

@@ -2,10 +2,10 @@
   <ElFormRender
     ref="form"
     :content="fields"
-    v-bind="$attrs"
     :form="basicForm"
     label-position="right"
     label-width="17%"
+    v-bind="$attrs"
     v-on="$listeners"
   >
     <!-- slot 透传 -->

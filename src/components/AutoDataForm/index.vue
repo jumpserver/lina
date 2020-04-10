@@ -1,5 +1,5 @@
 <template>
-  <DataForm ref="form" v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
+  <DataForm ref="dataForm" v-loading="loading" :fields="totalFields" v-bind="$attrs" v-on="$listeners">
     <FormGroupHeader v-for="(group, i) in groups" :slot="'id:'+group.name" :key="'group-'+group.name" :title="group.title" :line="i != 0" />
   </DataForm>
 </template>
@@ -10,6 +10,7 @@ import FormGroupHeader from '@/components/formGroupHeader'
 import { optionUrlMeta } from '@/api/common'
 import rules from '@/components/DataForm/rules'
 import Select2 from '@/components/Select2'
+import _ from 'lodash'
 export default {
   name: 'AutoDataForm',
   components: {
@@ -44,8 +45,6 @@ export default {
       groups: []
     }
   },
-  computed: {
-  },
   mounted() {
     this.optionUrlMeta()
   },
@@ -54,6 +53,7 @@ export default {
       optionUrlMeta(this.url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
+      }).finally(() => {
         this.loading = false
       })
     },
@@ -124,16 +124,14 @@ export default {
       return field
     },
     generateField(name) {
-      let field = { id: name, prop: name, el: {}}
+      let field = { id: name, prop: name, el: {}, attrs: {}}
       const fieldMeta = this.meta[name] || {}
       field.label = fieldMeta.label
       field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
       field = Object.assign(field, this.fieldsMeta[name] || {})
-      if (name === 'name') {
-        console.log(field)
-      }
+      _.set(field, 'attrs.error', '')
       return field
     },
     generateFieldGroup(data) {
@@ -143,8 +141,7 @@ export default {
         title: groupTitle,
         name: fields[0]
       })
-      const items = this.generateFields(fields)
-      return items
+      return this.generateFields(fields)
     },
     generateFields(data) {
       let fields = []
@@ -156,14 +153,25 @@ export default {
           field = this.generateField(field)
           fields.push(field)
         } else if (field instanceof Object) {
+          this.errors[field.prop] = ''
+          _.set(field, 'attrs.error', '')
           fields.push(field)
         }
       }
       return fields
     },
     generateColumns() {
-      const fields = this.generateFields(this.fields)
-      this.totalFields = fields
+      this.totalFields = this.generateFields(this.fields)
+    },
+    setFieldError(name, error) {
+      const field = this.totalFields.find((v) => v.prop === name)
+      if (!field) {
+        return
+      }
+      if (field.attrs.error === error) {
+        error += '.'
+      }
+      field.attrs.error = error
     }
   }
 }
