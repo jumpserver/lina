@@ -30,7 +30,7 @@ export default {
             label: this.$t('sessions.command')
           },
           risk_level: {
-            label: this.$t('sessions.RiskLevel')
+            label: this.$t('sessions.riskLevel')
           },
           user: {
             label: this.$t('sessions.user')
