@@ -1,11 +1,11 @@
 <template>
   <div class="table-header">
     <slot name="header">
-      <div class="table-header-left-side">
+      <div v-if="hasLeftActions" class="table-header-left-side">
         <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick" />
       </div>
       <div class="table-action-right-side">
-        <el-input v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />
+        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />
         <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick" />
       </div>
     </slot>
