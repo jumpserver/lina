@@ -35,7 +35,6 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         this.$message.success(this.$tc('Delete success'))
       } catch (error) {
         this.$message.error(this.$tc('Delete failed'))
-        console.warn(error)
       } finally {
         instance.confirmButtonLoading = false
       }
