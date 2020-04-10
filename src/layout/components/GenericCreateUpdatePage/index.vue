@@ -1,10 +1,17 @@
 <template>
-  <Page>
+  <Page v-loading="loadding">
     <IBox>
-      <AutoDataForm :form="form" :fields="fields" :url="url" v-bind="$attrs" v-on="$listeners" @submit="handleSubmit">
-        <slot v-for="item in fields" :slot="`id:${item}`" :name="`id:${item}`" />
-        <slot v-for="item in fields" :slot="`$id:${item}`" :name="`$id:${item}`" />
-      </AutoDataForm>
+      <AutoDataForm
+        v-if="!loadding"
+        ref="form"
+        :method="method"
+        :form="form"
+        :fields="fields"
+        :url="totalUrl"
+        v-bind="$attrs"
+        v-on="$listeners"
+        @submit="handleSubmit"
+      />
     </IBox>
   </Page>
 </template>
@@ -21,46 +28,105 @@ export default {
       type: String,
       required: true
     },
-    method: {
-      type: String,
-      default: 'post'
-    },
     fields: {
       type: Array,
       default: () => {
         return []
       }
     },
-    form: {
+    object: {
       type: Object,
-      default: () => { return {} }
+      default: () => ({})
+    },
+    initial: {
+      type: Object,
+      default: () => ({})
     },
     onSubmit: {
       type: Function,
       default: null
+    },
+    getMethod: {
+      type: Function,
+      default: function() {
+        const params = this.$route.params
+        if (params.id) {
+          return 'put'
+        } else {
+          return 'post'
+        }
+      }
+    },
+    getUrl: {
+      type: Function,
+      default: function() {
+        const params = this.$route.params
+        let url = this.url
+        if (params.id) {
+          url = `${url}/${params.id}/`
+        }
+        return url
+      }
+    }
+  },
+  data() {
+    return {
+      form: {},
+      loadding: true
+    }
+  },
+  computed: {
+    method() {
+      const method = this.getMethod(this)
+      return method
+    },
+    totalUrl() {
+      return this.getUrl()
     }
   },
   mounted() {
-    console.log('generic', this.$attrs)
-    console.log(this.fields)
+    if (this.method === 'put') {
+      this.getObjectDetail()
+    } else {
+      this.form = Object.assign(this.form, this.initial)
+      this.loadding = false
+    }
   },
   methods: {
-    handleSubmit(values) {
+    handleSubmit(values, form) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
+      const fields = form.$refs.elForm.fields
       console.log('submit', values)
-      return handler(values)
+      console.log('form.fields', fields)
+      return handler(values, form)
     },
-    defaultOnSubmit(validValues) {
-      this.$axios.post(this.url, validValues).then(
-        () => {
-          const msg = this.$tc('Create success')
-          this.$message.success(msg)
-          setTimeout(() => {
-            this.$router.push({ name: 'UserList' })
-          }, 500)
+    defaultPerformSubmit(validValues) {
+      return this.$axios[this.method](this.totalUrl, validValues)
+    },
+    defaultOnSubmit(validValues, form) {
+      this.defaultPerformSubmit(validValues).then(() => {
+        const msg = this.$tc('Create success')
+        this.$message.success(msg)
+        this.$router.push({ name: 'UserList' })
+      }).catch(error => {
+        console.log(form)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          this.errors.name = '你报错了滴滴滴'
+          console.log(data)
         }
-      )
+      })
+    },
+    getObjectDetail() {
+      this.$axios.get(this.totalUrl).then(data => {
+        this.form = data
+      }).catch(error => {
+        console.log(error)
+      }).finally(() => {
+        this.loadding = false
+      })
     }
   }
 }

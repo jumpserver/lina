@@ -4,7 +4,7 @@
 
 <script>
 import DataTable from '../DataTable'
-import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import { optionUrlMeta } from '@/api/common'
 export default {
   name: 'AutoDataTable',
@@ -23,6 +23,11 @@ export default {
       method: 'get',
       totalConfig: {},
       meta: {}
+    }
+  },
+  computed: {
+    expandField() {
+      return true
     }
   },
   mounted() {
@@ -54,7 +59,8 @@ export default {
             label: this.$tc('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
-            width: '200px'
+            width: '150px',
+            actions: this.config.actions || {}
           }
           break
         case 'is_valid':

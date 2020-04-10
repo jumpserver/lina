@@ -1,6 +1,33 @@
-export { default as DetailFormatter } from './DetailFormatter'
-export { default as DisplayFormatter } from './DisplayFormatter'
-export { default as BooleanFormatter } from './ChoicesFormatter'
-export { default as ActionsFormatter } from './ActionsFormatter'
-export { default as LengthFormatter } from './LengthFormatter'
+import DetailFormatter from './DetailFormatter'
+import DisplayFormatter from './DisplayFormatter'
+import BooleanFormatter from './ChoicesFormatter'
+import ActionsFormatter from './ActionsFormatter'
+import ExpandPreFormatter from './ExpandPreFormatter'
+import LengthFormatter from './LengthFormatter'
+import RouterFormatter from './RouterFormatter'
+import OutputExpandFormatter from './OutputExpandFormatter'
+import ExpandAssetPermissionFormatter from './ExpandAssetPermissionFormatter'
 
+export default {
+  DetailFormatter,
+  DisplayFormatter,
+  BooleanFormatter,
+  ActionsFormatter,
+  ExpandPreFormatter,
+  LengthFormatter,
+  RouterFormatter,
+  OutputExpandFormatter,
+  ExpandAssetPermissionFormatter
+}
+
+export {
+  DetailFormatter,
+  DisplayFormatter,
+  BooleanFormatter,
+  ActionsFormatter,
+  ExpandPreFormatter,
+  LengthFormatter,
+  RouterFormatter,
+  OutputExpandFormatter,
+  ExpandAssetPermissionFormatter
+}

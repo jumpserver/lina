@@ -22,14 +22,16 @@ export default {
         ],
         columnsMeta: {
           index: {
-            type: 'index',
-            label: this.$t('sessions.id')
+            label: this.$t('sessions.id'),
+            formatter: function(row, column, cellValue, index) {
+              return <a class='detail el-link el-link--success is-underline' href= { '/terminal/sessions/' + row.id }>{ index + 1}</a>
+            }
           },
           command_amount: {
             label: this.$t('sessions.command')
           },
           login_from: {
-            label: this.$t('sessions.loginForm')
+            label: this.$t('sessions.loginFrom')
           },
           protocol: {
             label: this.$t('sessions.protocol'),
