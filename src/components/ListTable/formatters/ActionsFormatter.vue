@@ -13,14 +13,14 @@ const defaultPerformDelete = function({ row, col }) {
 }
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-  const routeName = col.actions.updateRoute
+  const routeName = this.colActions.updateRoute
   this.$router.push({ name: routeName, params: { id: id }})
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   const msg = this.$tc('Are you sure to delete') + ' "' + row.name + '"'
   const title = this.$tc('Info')
-  const performDelete = col.actions.performDelete || defaultPerformDelete
+  const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
     type: 'warning',
     confirmButtonClass: 'el-button--danger',
@@ -58,7 +58,7 @@ export default {
           hasDelete: true, // can set function(row, value)
           canDelete: true,
           updateRoute: this.$route.name.replace('List', 'Update'),
-          performDelete: () => {},
+          performDelete: defaultPerformDelete,
           onUpdate: defaultUpdateCallback,
           onDelete: defaultDeleteCallback,
           extraActions: [] // format see defaultActions
@@ -87,6 +87,7 @@ export default {
       }
     ]
     return {
+      colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions
     }
