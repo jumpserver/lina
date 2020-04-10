@@ -12,7 +12,16 @@ const cn = {
   },
   action: {
     'update': '更新',
-    'delete': '删除'
+    'delete': '删除',
+    'ExportRange': '导出范围',
+    'ExportAll': '导出全部',
+    'ExportOnlySelectedItems': '仅导出选中项',
+    'DownloadTheImportedTemplateOrUseTheExportedCSVFormat': '下载导入的模板或使用导出的csv格式',
+    'DownloadImportTemplate': '下载导入模板',
+    'DownloadTheUpdatedTemplateOrUsTheExportedCSVFormat': '下载更新的模板或使用导出的csv格式',
+    'DownloadUpdateTemplate': '下载更新模板',
+    'Upload': '点击上传',
+    'OnlyCSVFilesCanBeUploaded': '只能上传CSV文件'
   },
   common: {
     'name': '名称',
