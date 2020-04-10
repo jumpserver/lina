@@ -94,7 +94,7 @@ const actions = {
           role,
           name,
           avatar_url,
-          admin_orgs
+          admin_or_audit_orgs
         } = response
         const rules = [role]
         // roles must be a non-empty array
@@ -105,7 +105,7 @@ const actions = {
         commit('SET_ROLES', rules)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar_url)
-        commit('SET_ORGS', admin_orgs)
+        commit('SET_ORGS', admin_or_audit_orgs)
         resolve(response)
       }).catch(error => {
         reject(error)
