@@ -1,7 +1,7 @@
 <template>
   <div :class="grouped ? 'el-button-group' : ''">
     <el-button v-for="item in actions" :key="item.name" :size="size" v-bind="item" @click="handleClick(item.name)">
-      <i v-if="item.fa" :class="'fa ' + item.fa" />
+      <i v-if="item.has" :class="'fa ' + item.fa" />
       {{ item.title }}
     </el-button>
     <el-dropdown v-if="moreActions.length > 0" trigger="click" @command="handleClick">
