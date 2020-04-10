@@ -9,7 +9,6 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const errors = { name: '' }
     return {
       initial: {
         password_strategy: 0,
@@ -24,7 +23,6 @@ export default {
         [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
         [this.$tc('Other'), ['phone', 'wechat', 'comment']]
       ],
-      errors: errors,
       url: '/api/v1/users/users/',
       fieldsMeta: {
         password_strategy: {
@@ -52,16 +50,6 @@ export default {
           }
         }
       }
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.errors.name = 'dididi'
-    }, 3000)
-  },
-  methods: {
-    debug() {
-      console.log(this)
     }
   }
 }
