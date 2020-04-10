@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/ListTable/formatters/index'
+import { ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -13,47 +13,39 @@ export default {
   data() {
     return {
       tableConfig: {
-        axiosConfig: {
-          raw: 1,
-          params: {
-            display: 1,
-            is_finished: 0
-          }
-        },
         url: '/api/v1/terminal/terminals/',
-        columns: [
-          {
-            prop: 'name',
-            label: this.$tc('Name'),
-            key: 'name',
-            formatter: DetailFormatter,
-            sortable: true,
-            route: 'TerminalDetail'
-          },
-          {
-            prop: 'remote_addr',
-            label: this.$t('sessions.addr'),
+        columns: ['name', 'remote_addr', 'session_online', 'is_active', 'is_alive', 'actions'],
+        columnsMeta: {
+          name: {
             sortable: 'custom'
           },
-          {
-            prop: 'session_online',
-            label: this.$t('sessions.session'),
-            sortable: true
-          },
-          {
-            prop: 'is_active',
-            label: this.$t('sessions.active')
-          },
-          {
-            prop: 'is_alive',
-            label: this.$t('sessions.alive'),
+          remote_addr: {
             sortable: 'custom'
+          },
+          is_active: {
+            label: this.$t('sessions.active'),
+            formatter: BooleanFormatter
+          },
+          is_alive: {
+            label: this.$t('sessions.alive')
+          },
+          session_online: {
+            label: this.$t('sessions.session')
+          },
+          actions: {
+            prop: 'id',
+            formatter: ActionsFormatter
           }
-        ]
+        }
       },
       headerActions: {
         hasCreate: false,
         hasBulkDelete: false,
+        hasUpload: false,
+        hasExport: false,
+        hasImport: false,
+        hasUpdate: false,
+        hasRefresh: false,
         extraActions: [
           {
             name: 'StorageConfiguration',

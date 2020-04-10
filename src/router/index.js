@@ -346,6 +346,20 @@ export const constantRoutes = [
         name: 'TerminalList',
         component: () => import('@/views/sessions/TerminalList'),
         meta: { title: 'Terminal' }
+      },
+      {
+        path: 'terminal/:id',
+        name: 'TerminalDetail',
+        component: () => import('@/views/sessions/TerminalDetail'),
+        meta: { title: 'TerminalDetail' },
+        hidden: true
+      },
+      {
+        path: 'terminal/:id/update',
+        name: 'TerminalUpdate',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'TerminalUpdate' },
+        hidden: true
       }
     ]
   },
