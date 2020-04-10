@@ -67,7 +67,6 @@ export default {
     loadSubNode: function(node, resolve) {
       if (node.level === 0) {
         this.$axios.get(this.url, { params: { assets: 1 }}).then(res => {
-          console.log(res)
           resolve([{
             label: res[0].name,
             id: res[0].meta.node.id,
@@ -89,7 +88,6 @@ export default {
           id: node.data.id
         }}
         ).then(res => {
-          console.log(res)
           for (let index = 0; index < res.length; index++) {
             var child = {}
             child.type = res[index].meta.type

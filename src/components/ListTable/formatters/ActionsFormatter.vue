@@ -13,15 +13,14 @@ const defaultPerformDelete = function({ row, col }) {
 }
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-  const defaultRoute = this.$route.name.replace('List', 'Update')
-  const routeName = col.actions.updateRoute || defaultRoute
+  const routeName = col.actions.updateRoute
   this.$router.push({ name: routeName, params: { id: id }})
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   const msg = this.$tc('Are you sure to delete') + ' "' + row.name + '"'
   const title = this.$tc('Info')
-  const performDelete = col.actions.performDelete || defaultPerformDelete.bind(this)
+  const performDelete = col.actions.performDelete || defaultPerformDelete
   this.$alert(msg, title, {
     type: 'warning',
     confirmButtonClass: 'el-button--danger',
@@ -30,12 +29,12 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
       if (action !== 'confirm') return done()
       instance.confirmButtonLoading = true
       try {
-        await performDelete({ row: row, col: col })
+        await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
         this.$message.success(this.$tc('Delete success'))
       } catch (error) {
-        this.$message.error(this.$tc('Delete failed'))
+        this.$message.error(this.$tc('Delete failed' + ' ' + error))
       } finally {
         instance.confirmButtonLoading = false
       }
@@ -49,30 +48,47 @@ export default {
   name: 'ActionsFormatter',
   components: { ActionsGroup },
   extends: BaseFormatter,
+  props: {
+    actionsExample: {
+      type: Object,
+      default: function() {
+        return {
+          hasUpdate: true, // can set function(row, value)
+          canUpdate: true, // can set function(row, value)
+          hasDelete: true, // can set function(row, value)
+          canDelete: true,
+          updateRoute: this.$route.name.replace('List', 'Update'),
+          performDelete: () => {},
+          onUpdate: defaultUpdateCallback,
+          onDelete: defaultDeleteCallback,
+          extraActions: [] // format see defaultActions
+        }
+      }
+    }
+  },
   data() {
-    const colActions = this.col.actions || {}
+    const colActions = Object.assign(this.actionsExample, this.col.actions)
     const defaultActions = [
       {
         name: 'update',
         title: this.$tc('Update'),
         type: 'primary',
-        has: colActions.hasUpdate !== false,
-        can: colActions.canUpdate !== false,
-        callback: colActions.onUpdate || defaultUpdateCallback.bind(this)
+        has: colActions.hasUpdate,
+        can: colActions.canUpdate,
+        callback: colActions.onUpdate
       },
       {
         name: 'delete',
         title: this.$tc('Delete'),
         type: 'danger',
-        has: colActions.hasDelete !== false,
-        can: colActions.canDelete !== false,
-        callback: colActions.onDelete || defaultDeleteCallback.bind(this)
+        has: colActions.hasDelete,
+        can: colActions.canDelete,
+        callback: colActions.onDelete
       }
     ]
-    const extraActions = colActions.extraActions || []
     return {
       defaultActions: defaultActions,
-      extraActions: extraActions
+      extraActions: colActions.extraActions
     }
   },
   computed: {
@@ -118,7 +134,7 @@ export default {
           cellValue: this.cellValue,
           tableData: this.tableData
         }
-        action.callback(attrs)
+        action.callback.bind(this)(attrs)
       }
     },
     checkItem(item, attr) {
