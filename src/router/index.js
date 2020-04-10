@@ -284,13 +284,13 @@ export const constantRoutes = [
       {
         path: 'luna',
         name: 'WebTerminal',
-        component: () => import('@/views/tree/index'),
+        component: () => window.open(`/luna/?_=${Date.now()}`),
         meta: { title: 'WebTerminal' }
       },
       {
         path: 'sftp',
         name: 'FileManager',
-        component: () => import('@/views/tree/index'),
+        component: () => window.open(`/koko/elfinder/sftp/?`),
         meta: { title: 'FileManager' }
       },
       {
