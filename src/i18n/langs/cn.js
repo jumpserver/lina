@@ -379,7 +379,10 @@ const cn = {
     'join': '加入',
     'goto': '转到',
     'sessionDetail': '会话详情',
-    'quickModify': '快速修改'
+    'quickModify': '快速修改',
+    'replaySession': '回放会话:',
+    'downloadReplay': '下载录像:',
+    'go': '执行'
   },
   jobcenter: {
     'RunTimes': '执行次数',

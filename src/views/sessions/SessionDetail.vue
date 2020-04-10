@@ -8,9 +8,19 @@
         <el-col :span="10">
           <el-card class="box-card primary">
             <div slot="header" class="clearfix">
-              <i class="fa fa-user" />
+              <i class="fa fa-info" />
               <span>{{ cardActions }}</span>
             </div>
+            <el-table class="el-table" :data="cardActionData" :show-header="false">
+              <el-table-column prop="name" />
+              <el-table-column prop="button" align="right">
+                <template slot-scope="scope">
+                  <el-button type="primary" size="mini" @click="handleButtonAction(scope.$index, scope.row)">
+                    {{ scope.row.button }}
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-card>
         </el-col>
       </el-row>
@@ -19,14 +29,6 @@
       <el-row :gutter="20">
         <el-col :span="14">
           <ListTable :table-config="tableConfig" :header-actions="headerActions" />
-        </el-col>
-        <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-user" />
-              <span>{{ cardActions }}</span>
-            </div>
-          </el-card>
         </el-col>
       </el-row>
     </div>
@@ -101,14 +103,15 @@ export default {
           name: 'command'
         }
       ]
-
     }
   },
   computed: {
     title() {
       return this.$t('sessions.sessionDetail')
     },
-    cardTitle() { return this.sessionData.id },
+    cardTitle() {
+      return this.sessionData.id
+    },
     cardActions() {
       return this.$t('sessions.quickModify')
     },
@@ -147,6 +150,20 @@ export default {
           value: this.sessionData.date_end
         }
       ]
+    },
+    cardActionData() {
+      return [
+        {
+          name: this.$t('sessions.replaySession'),
+          button: this.$t('sessions.go'),
+          value: 'replay'
+        },
+        {
+          name: this.$t('sessions.downloadReplay'),
+          button: this.$t('sessions.download'),
+          value: 'download'
+        }
+      ]
     }
   },
   mounted() {
@@ -159,10 +176,49 @@ export default {
     })
   },
   methods: {
+    handleButtonAction: function(index, row) {
+      switch (row.value) {
+        case 'replay':
+          this.openReplaySession(this.sessionData.id)
+          break
+        case 'download':
+          this.openReplayDownload(this.sessionData.id)
+          break
+        default:
+          console.log('No Match button action: ' + row.value)
+      }
+    },
+
+    openReplaySession: function(id) {
+      const replayUrl = '/luna/replay/' + id
+      window.open(replayUrl)
+    },
+    openReplayDownload: function(id) {
+      const downloadUrl = '/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
+        .replace('00000000-0000-0000-0000-000000000000', id)
+      window.open(downloadUrl)
+    }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+  .el-table /deep/ .el-table__row > td {
+    line-height: 1.5;
+    padding: 8px 0;
+  }
+  .el-table /deep/ .el-table__row > td> div > span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .el-table /deep/ .el-table__header > thead > tr >th {
+    padding: 8px 0;
+    background-color: #F5F5F6;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .table{
+    margin-top: 15px;
+  }
 </style>
