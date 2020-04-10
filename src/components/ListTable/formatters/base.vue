@@ -29,6 +29,14 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    column: {
+      type: Object,
+      default: null
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   }
 }

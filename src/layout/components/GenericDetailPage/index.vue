@@ -3,7 +3,7 @@
     <span slot="title">
       {{ title }}
     </span>
-    <span slot="headingRightSide">
+    <span v-if="hasRightSide" slot="headingRightSide">
       <ActionsGroup slot="headingRightSide" :actions="pageActions" />
     </span>
 
@@ -42,6 +42,10 @@ export default {
     activeMenu: {
       type: String,
       default: () => ''
+    },
+    hasRightSide: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

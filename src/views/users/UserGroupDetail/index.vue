@@ -1,23 +1,26 @@
 <template>
   <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
-    <div slot="info">
-      <el-row :gutter="20">
-        <el-col :span="14">
-          <DetailCard :title="cardTitle" :items="detailItems" />
-        </el-col>
-        <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-user" />
-              <span>组下用户</span>
-            </div>
-            <div>
-              <Select2 v-model="select2.value" v-bind="select2" />
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
+    <template v-slot:info>
+      <div>
+        <el-row :gutter="20">
+          <el-col :span="14">
+            <DetailCard :title="cardTitle" :items="detailItems" />
+          </el-col>
+          <el-col :span="10">
+            <el-card class="box-card primary">
+              <div slot="header" class="clearfix">
+                <i class="fa fa-user" />
+                <span>组下用户</span>
+              </div>
+              <div>
+                <Select2 v-model="select2.value" v-bind="select2" />
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
+    </template>
+
   </GenericDetailPage>
 </template>
 

@@ -14,10 +14,18 @@ export default {
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
-          'name', 'username', 'role', 'groups_display', 'source', 'is_valid', 'actions'
+          'name', 'username', 'groups_display', 'role', 'source', 'is_valid', 'actions'
         ],
         columnsMeta: {
-          actions: {
+          source: {
+            width: '100px'
+          },
+          role: {
+            width: '100px'
+          },
+          groups_display: {
+            width: '200px',
+            showOverflowTooltip: true
           }
         }
       },
