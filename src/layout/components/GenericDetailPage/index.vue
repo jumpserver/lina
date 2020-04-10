@@ -25,7 +25,7 @@
 import Page from '../Page/'
 import ActionsGroup from '@/components/ActionsGroup'
 export default {
-  name: 'BaseDetailPage',
+  name: 'GenericDetailPage',
   components: {
     Page,
     ActionsGroup

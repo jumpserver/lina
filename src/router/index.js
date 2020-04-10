@@ -67,17 +67,24 @@ export const constantRoutes = [
       },
       {
         path: 'users/create',
-        component: () => import('@/views/users/UserCreate.vue'), // Parent router-view
+        component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserCreate',
-        meta: { title: 'UserCreate' },
-        hidden: true
+        hidden: true,
+        meta: { title: 'UserCreate', activeMenu: '/users/users', action: 'create' }
       },
       {
-        path: 'users/:id',
+        path: 'users/:id/update',
+        component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
+        name: 'UserUpdate',
+        hidden: true,
+        meta: { title: 'UserUpdate', activeMenu: '/users/users', action: 'update' }
+      },
+      {
+        path: 'users/detail/:id',
         component: () => import('@/views/users/UserDetail.vue'), // Parent router-view
         name: 'UserDetail',
-        meta: { title: 'UserDetail', activeMenu: '/users/users' },
-        hidden: true
+        hidden: true,
+        meta: { title: 'UserDetail', activeMenu: '/users/users' }
       },
       {
         path: 'groups',
@@ -86,25 +93,25 @@ export const constantRoutes = [
         meta: { title: 'UserGroupList' }
       },
       {
-        path: 'groups/create',
-        component: () => import('@/views/users/UserGroupEdit.vue'), // Parent router-view
-        name: 'UserGroupEdit',
-        meta: { title: 'UserGroupEdit' },
-        hidden: true
+        path: 'groups/:id/update',
+        component: () => import('@/views/users/UserGroupUpdate.vue'), // Parent router-view
+        name: 'UserGroupUpdate',
+        hidden: true,
+        meta: { title: 'UserGroupUpdate' }
       },
       {
-        path: 'groups/:id/update',
-        component: () => import('@/views/users/UserGroupEdit.vue'), // Parent router-view
-        name: 'UserGroupEdit',
-        meta: { title: 'UserGroupEdit' },
-        hidden: true
+        path: 'groups/create',
+        component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
+        name: 'UserGroupCreate',
+        hidden: true,
+        meta: { title: 'UserGroupCreate', activeMenu: '/users/groups' }
       },
       {
         path: 'groups/:id',
         component: () => import('@/views/users/UserGroupDetail/index.vue'), // Parent router-view
         name: 'UserGroupDetail',
-        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' },
-        hidden: true
+        hidden: true,
+        meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' }
       }
     ]
   },
@@ -126,6 +133,13 @@ export const constantRoutes = [
         name: 'DomainList',
         component: () => import('@/views/assets/DomainList.vue'),
         meta: { title: 'DomainList' }
+      },
+      {
+        path: 'domains/:id/gateway',
+        name: 'GatewayList',
+        hidden: true,
+        component: () => import('@/views/assets/GatewayList'),
+        meta: { title: 'GatewayList' }
       },
       {
         path: 'admin-users',
@@ -161,7 +175,7 @@ export const constantRoutes = [
       {
         path: 'platforms',
         name: 'PlatformList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/assets/PlatformList'),
         meta: { title: 'PlatformList' }
       }
     ]
@@ -175,14 +189,14 @@ export const constantRoutes = [
     children: [
       {
         path: 'remote-apps',
-        name: 'remoteAppList',
-        component: () => import('@/views/tree/index'),
+        name: 'RemoteAppList',
+        component: () => import('@/views/applications/RemoteAppList'),
         meta: { title: 'RemoteApp' }
       },
       {
         path: 'database-apps',
         name: 'DatabaseAppList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/applications/DatabaseAppList'),
         meta: { title: 'DatabaseApp' }
       }
     ]
@@ -190,27 +204,48 @@ export const constantRoutes = [
   {
     path: '/perms/',
     component: Layout,
-    redirect: '/perms/asset-permission/',
+    redirect: '/perms/asset-permissions/',
     name: 'Perms',
     meta: { title: 'Perms', icon: 'edit' },
     children: [
       {
         path: 'asset-permissions',
         name: 'AssetPermissionList',
-        component: import('@/views/tree/index'),
+        component: () => import('@/views/perms/AssetPermissionList'),
         meta: { title: 'AssetPermission' }
+      },
+      {
+        path: 'asset-permissions/create',
+        component: () => import('@/views/perms/AssetPermissionCreateUpdate'), // Parent router-view
+        name: 'AssetPermissionCreate',
+        hidden: true,
+        meta: { title: 'AssetPermissionCreate', activeMenu: '/perms/asset-permissions' }
       },
       {
         path: 'remote-app-permissions',
         name: 'RemoteAppPermissionList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/perms/RemoteAppPermissionList'),
         meta: { title: 'RemoteAppPermission' }
+      },
+      {
+        path: 'remote-app-permissions/create',
+        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'), // Parent router-view
+        name: 'RemoteAppPermissionCreate',
+        hidden: true,
+        meta: { title: 'RemoteAppPermissionCreate', activeMenu: '/perms/remote-app-permissions' }
       },
       {
         path: 'database-app-permissions',
         name: 'DatabaseAppPermissionList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/perms/DatabaseAppPermissionList'),
         meta: { title: 'DatabaseAppPermission' }
+      },
+      {
+        path: 'database-app-permissions/create',
+        component: () => import('@/views/perms/DatabaseAppPermissionCreateUpdate'), // Parent router-view
+        name: 'DatabaseAppPermissionCreate',
+        hidden: true,
+        meta: { title: 'DatabaseAppPermissionCreate', activeMenu: '/perms/database-app-permissions' }
       }
     ]
   },
@@ -224,37 +259,44 @@ export const constantRoutes = [
       {
         path: 'session-online',
         name: 'SessionOnlineList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/SessionOnlineList'),
         meta: { title: 'SessionOnline' }
       },
       {
         path: 'session-offline',
         name: 'SessionOfflineList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/SessionOfflineList'),
         meta: { title: 'SessionOffline' }
       },
       {
         path: 'command',
-        name: 'CommandsList',
-        component: () => import('@/views/tree/index'),
+        name: 'CommandList',
+        component: () => import('@/views/sessions/CommandList'),
         meta: { title: 'Commands' }
+      },
+      {
+        path: 'sessions/:id',
+        name: 'SessionDetail',
+        component: () => import('@/views/sessions/SessionDetail'),
+        meta: { title: 'SessionDetail' },
+        hidden: true
       },
       {
         path: 'luna',
         name: 'WebTerminal',
-        component: () => import('@/views/tree/index'),
+        component: () => window.open(`/luna/?_=${Date.now()}`),
         meta: { title: 'WebTerminal' }
       },
       {
         path: 'sftp',
         name: 'FileManager',
-        component: () => import('@/views/tree/index'),
+        component: () => window.open(`/koko/elfinder/sftp/?`),
         meta: { title: 'FileManager' }
       },
       {
         path: 'terminal',
         name: 'TerminalList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/sessions/TerminalList'),
         meta: { title: 'Terminal' }
       }
     ]
@@ -269,7 +311,7 @@ export const constantRoutes = [
       {
         path: 'task',
         name: 'TaskList',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/jobcenter/TaskList'),
         meta: { title: 'TaskList' }
       },
       {
@@ -292,8 +334,8 @@ export const constantRoutes = [
     redirect: '/tickets/tickets/',
     children: [{
       path: 'tickets',
-      name: 'Tickets',
-      component: () => import('@/views/tree/index'),
+      name: 'TicketsList',
+      component: () => import('@/views/tickets/TicketsList'),
       meta: { title: 'Tickets', icon: 'check-square-o' }
     }]
   },

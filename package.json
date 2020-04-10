@@ -22,6 +22,7 @@
     "js-cookie": "2.2.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "lodash": "^4.17.15",
     "lodash.clonedeep": "^4.5.0",
     "lodash.frompairs": "^4.0.1",
     "lodash.get": "^4.4.2",
@@ -37,6 +38,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "vue": "2.6.10",
+    "vue-cookie": "^1.1.4",
     "vue-i18n": "^8.15.5",
     "vue-router": "3.0.6",
     "vue-select": "^3.9.5",
@@ -59,7 +61,9 @@
     "eslint": "5.15.3",
     "eslint-plugin-vue": "5.2.2",
     "html-webpack-plugin": "3.2.0",
+    "husky": "^4.2.3",
     "less-loader": "^5.0.0",
+    "lint-staged": "^10.1.2",
     "mockjs": "1.0.1-beta3",
     "node-sass": "^4.9.0",
     "runjs": "^4.3.2",
@@ -78,5 +82,15 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue}": [
+      "eslint --fix"
+    ]
+  }
 }

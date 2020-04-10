@@ -162,7 +162,15 @@ td .el-button.el-button--mini {
   width: 100%;
   font-size: 14px;
   line-height: 1.5;
-  height: 35px;
+  height: 34px;
+}
+
+.el-input--small .el-input__inner {
+  height: 34px;
+}
+
+.el-input--small .el-input__icon {
+  line-height: 34px;
 }
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
@@ -194,4 +202,62 @@ td .el-button.el-button--mini {
   color: #000000;
   font-weight: 600;
   background-color: inherit;
+}
+
+.el-table .ascending .sort-caret.ascending {
+  border-bottom-color: #676a6c;
+}
+
+.el-table .descending .sort-caret.descending {
+  border-top-color: #676a6c;
+}
+
+.text-danger {
+  color: $--color-danger;
+}
+
+.text-primary {
+  color: $--color-primary;
+}
+
+.text-info {
+  color: $--color-info;
+}
+
+.text-warning {
+  color: $--color-warning;
+}
+
+.text-success {
+  color: $--color-success;
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+  color: inherit;
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #409EFF;
+  background-color: #409EFF;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  border-color: #409EFF;
+  background-color: #409EFF;
+}
+
+.el-radio__inner:hover {
+  border-color: #409EFF;
+}
+
+.el-textarea__inner {
+  border-radius: 0;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  border-color: #409EFF;
+  background-color: #409EFF;
+}
+.el-checkbox__inner:hover {
+  border-color: #409EFF;
 }

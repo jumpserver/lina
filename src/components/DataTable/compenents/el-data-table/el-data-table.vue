@@ -14,6 +14,7 @@
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
         @select-all="selectStrategy.onSelectAll($event, selectable)"
+        @sort-change="onSortChange"
       >
         <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
         <template v-if="isTree">
@@ -51,8 +52,7 @@
               v-for="col in columns.filter((c, i) => i !== 0 && i !== 1)"
               :key="col.prop"
               v-bind="{align: columnsAlign, ...col}"
-            >
-            </el-data-table-column>
+            />
           </template>
 
           <!--无选择-->
@@ -74,9 +74,7 @@
                   class="tree-ctrl"
                   @click="toggleExpanded(scope.$index)"
                 >
-                  <i
-                    :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`"
-                  />
+                  <i :class="`el-icon-${scope.row._expanded ? 'minus' : 'plus'}`" />
                 </span>
                 {{ scope.row[columns[0].prop] }}
               </template>
@@ -92,79 +90,27 @@
 
         <!--非树-->
         <template v-else>
+          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign" />
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
+            :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             v-bind="{align: columnsAlign, ...col}"
           >
+            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row}">
+              <div
+                :is="col.formatter"
+                :key="row.id"
+                :table-data="data"
+                :row="row"
+                :url="url"
+                :reload="getList"
+                :col="col"
+                :cell-value="row[col.prop]"
+              />
+            </template>
           </el-data-table-column>
         </template>
-
-        <!--默认操作列-->
-        <el-data-table-column
-          v-if="hasOperation"
-          :label="$tc('action')"
-          v-bind="{align: columnsAlign, ...operationAttrs}"
-        >
-          <template slot-scope="scope">
-            <self-loading-button
-              v-if="isTree && hasNew"
-              type="primary"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultNew(scope.row)"
-            >
-              {{ newText }}
-            </self-loading-button>
-            <self-loading-button
-              v-if="hasEdit"
-              type="primary"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultEdit(scope.row)"
-            >
-              {{ editText }}
-            </self-loading-button>
-            <self-loading-button
-              v-if="hasView"
-              type="primary"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultView(scope.row)"
-            >
-              {{ viewText }}
-            </self-loading-button>
-            <template v-for="(btn, i) in extraButtons">
-              <self-loading-button
-                v-if="'show' in btn ? btn.show(scope.row) : true"
-                :key="i"
-                :is-text="operationButtonType === 'text'"
-                v-bind="btn"
-                :params="scope.row"
-                :callback="getList"
-                :disabled="'disabled' in btn ? btn.disabled(scope.row) : false"
-                :click="btn.atClick"
-              >
-                {{
-                  typeof btn.text === 'function'
-                    ? btn.text(scope.row)
-                    : btn.text
-                }}
-              </self-loading-button>
-            </template>
-            <self-loading-button
-              v-if="!hasSelect && hasDelete && canDelete(scope.row)"
-              type="danger"
-              :size="operationButtonType === 'text' ? '' : buttonSize"
-              :is-text="operationButtonType === 'text'"
-              @click="onDefaultDelete(scope.row)"
-            >
-              {{ deleteText }}
-            </self-loading-button>
-          </template>
-        </el-data-table-column>
-
-        <!--@slot 自定义操作列, 当extraButtons不满足需求时可以使用 -->
         <slot />
       </el-table>
 
@@ -179,7 +125,7 @@
         v-bind="extraPaginationAttrs"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      ></el-pagination>
+      />
 
       <the-dialog
         ref="dialog"
@@ -450,6 +396,12 @@ export default {
         return true
       }
     },
+    canEdit: {
+      type: Function,
+      default() {
+        return true
+      }
+    },
     /**
      * 点击新增按钮时的方法, 当默认新增方法不满足需求时使用, 需要返回promise
      * 参数(data, row) data 是form表单的数据, row 是当前行的数据, 只有isTree为true时, 点击操作列的新增按钮才会有值
@@ -466,12 +418,8 @@ export default {
      */
     onEdit: {
       type: Function,
-      default(data) {
-        return this.$axios.put(
-          `${this.url}/${this.row[this.id]}`,
-          data,
-          this.axiosConfig
-        )
+      default(row) {
+        console.log('On delete row')
       }
     },
     /**
@@ -484,7 +432,7 @@ export default {
         const ids = Array.isArray(data)
           ? data.map(v => v[this.id]).join(',')
           : data[this.id]
-        return this.$axios.delete(this.url + '/' + ids, this.axiosConfig)
+        return this.$axios.delete(this.url + '/' + ids + '/', this.axiosConfig)
       }
     },
     /**
@@ -701,7 +649,7 @@ export default {
     extraQuery: {
       type: Object,
       default() {
-        return undefined
+        return {}
       }
     },
     /**
@@ -743,6 +691,10 @@ export default {
       type: String,
       default: 'center'
     },
+    selectionAlign: {
+      type: String,
+      default: 'center'
+    },
     paginationBackground: {
       type: Boolean,
       default: true
@@ -750,6 +702,14 @@ export default {
     extraPaginationAttrs: {
       type: Object,
       default: () => {}
+    },
+    hasSelection: {
+      type: Boolean,
+      default: true
+    },
+    hasDetail: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -770,11 +730,13 @@ export default {
       // JSON.stringify是为了后面深拷贝作准备
       initExtraQuery: JSON.stringify(this.extraQuery || this.customQuery || {}),
       isSearchCollapse: false,
-      showNoData: false
+      showNoData: false,
+      innerQuery: {}
     }
   },
   computed: {
     hasSelect() {
+      console.log(this.columns.length && this.columns[0].type === 'selection')
       return this.columns.length && this.columns[0].type === 'selection'
     },
     selectable() {
@@ -854,8 +816,6 @@ export default {
        * @property {array} rows - 已选中的行数据的数组
        */
       this.$emit('selection-change', val)
-      console.log('Selected', this.selected)
-      console.log('Val', val)
     }
   },
   mounted() {
@@ -893,6 +853,7 @@ export default {
         formValue = this.$refs.searchForm.getFormValue()
         Object.assign(query, formValue)
       }
+      Object.assign(query, this.innerQuery)
       Object.assign(query, this._extraQuery)
 
       query[this.pageSizeKey] = this.hasPagination
@@ -983,18 +944,9 @@ export default {
           this.loading = false
         })
     },
-    async search() {
-      const form = this.$refs.searchForm
-      const valid = await new Promise(r => form.validate(r))
-      if (!valid) return
-
-      try {
-        await this.beforeSearch(form.getFormValue())
-        this.page = defaultFirstPage
-        this.getList()
-      } catch (err) {
-        this.$emit('error', err)
-      }
+    search(attrs) {
+      this.innerQuery = Object.assign(this.innerQuery, attrs)
+      return this.getList()
     },
     /**
      * 重置查询，相当于点击「重置」按钮
@@ -1067,7 +1019,7 @@ export default {
     },
     onDefaultEdit(row) {
       this.row = row
-      this.$refs.dialog.show(dialogModes.edit, row)
+      this.onEdit(row)
     },
     async onConfirm(isNew, formValue, done) {
       const data = {
@@ -1207,6 +1159,16 @@ export default {
     iconShow(index, record) {
       //      return index ===0 && record.children && record.children.length > 0;
       return record[this.treeChildKey] && record[this.treeChildKey].length > 0
+    },
+    onSortChange({ column, prop, order }) {
+      if (!order) {
+        delete this.innerQuery['sort']
+        delete this.innerQuery['direction']
+      } else {
+        this.innerQuery['sort'] = prop
+        this.innerQuery['direction'] = order
+      }
+      this.getList()
     }
   }
 }

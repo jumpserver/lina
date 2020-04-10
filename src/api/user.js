@@ -23,16 +23,23 @@ export function getUserList(data) {
     params: data
   })
 }
-export function getUserGroupList(data) {
+export function getUserGroupList(params) {
   return request({
     url: '/api/v1/users/groups/',
     method: 'get',
-    params: data
+    params: params
   })
 }
-export function getUserGroup(data) {
+export function getUserGroupDetail(id) {
   return request({
-    url: '/api/v1/users/groups/' + data + '/',
+    url: `/api/v1/users/groups/${id}/`,
+    method: 'get'
+  })
+}
+
+export function getUserGroupMembers(id) {
+  return request({
+    url: `/api/v1/users/users-groups-relations/?usergroup=${id}`,
     method: 'get'
   })
 }

@@ -1,91 +1,42 @@
 <template>
-  <Page>
-    <IBox>
-      <DataTable :config="tableConfig" />
-    </IBox>
-  </Page>
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { IBox, Page } from '@/layout/components'
-import DataTable from '@/components/DataTable'
+import { GenericListPage } from '@/layout/components'
 
 export default {
   components: {
-    IBox,
-    Page,
-    DataTable
+    GenericListPage
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/users/users/',
-        defaultAlign: 'left',
-        operationAttrs: {
-          label: 'Operation',
-          prop: 'operation',
-          key: 'prop',
-          align: 'center'
-        },
-        extraPaginationAttrs: {
-          background: true,
-          pagerCount: 5,
-          pageSizes: [10, 100]
-        },
-        extraButtons: [
-          {
-            type: 'primary',
-            // disabled: row => row.date === '2016-05-04',
-            text: this.$t('users.update'),
-            // 必须使用箭头函数
-            atClick: (row) => {
-              this.$router.push({ name: '404' })
-            }
-          },
-          {
-            type: 'warning',
-            // disabled: row => row.date === '2016-05-04',
-            text: this.$t('users.delete'),
-            atClick: (row) => {
-
-            }
-          }
-        ],
         columns: [
-          { type: 'selection' },
-          // Bug
-          // 应该让我插入Slot,使这个用户名可点击
+          'name', 'username', 'role', 'groups_display', 'source', 'is_valid', 'actions'
+        ],
+        columnsMeta: {
+
+        },
+        detailRoute: 'UserDetail',
+        actions: {
+          updateRoute: 'UserUpdate'
+        }
+      },
+      headerActions: {
+        createRoute: 'UserCreate',
+        extraMoreActions: [
           {
-            prop: 'name',
-            label: this.$t('users.name'),
-            sortable: true, // 可排序
-            type: 'link',
-            // url: 'UserDetail' // 第一个函数指定 路由Template
-          },
-          {
-            prop: 'username',
-            label: this.$t('users.username'),
-            sortable: true,
-          },
-          {
-            prop: 'role',
-            label: this.$t('users.role'),
-            sortable: true
-          },
-          // Bug API没有返回组织名称
-          {
-            prop: 'group',
-            label: this.$t('users.usergroup'),
-            sortable: true,
-            align: 'left',
-            formatter: row => {
-              return <a href='http://qq.com' target='_blank'>hello</a>
+            name: 'deactiveSelected',
+            title: this.$tc('Deactive selected'),
+            callback: () => {
+              console.log('deactiveSelected')
             }
           },
           {
-            prop: 'source',
-            label: this.$t('users.source'),
-            sortable: true
+            name: 'activeSelected',
+            title: this.$tc('Active selected')
           }
         ]
       }

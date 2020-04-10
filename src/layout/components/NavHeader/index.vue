@@ -50,6 +50,11 @@ export default {
       'avatar'
     ])
   },
+  data() {
+    return {
+      LANG_COOKIE_NAME: 'django_language'
+    }
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -60,9 +65,11 @@ export default {
     },
     changeLangToZH() {
       this.$i18n.locale = 'cn'
+      this.$cookie.set(this.LANG_COOKIE_NAME, 'zh-hans')
     },
     changeLangToEnglish() {
       this.$i18n.locale = 'en'
+      this.$cookie.set(this.LANG_COOKIE_NAME, 'en')
     }
   }
 }

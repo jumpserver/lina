@@ -42,7 +42,9 @@
           v-else-if="data.type === 'checkbox-group'"
           :key="opt.label"
           v-bind="opt"
-        />
+        >
+          {{ opt.value }}
+        </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
         <el-radio

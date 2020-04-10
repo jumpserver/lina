@@ -1,11 +1,11 @@
 <template>
   <el-select
-    v-model="vaultOrDefault"
+    v-model="valueSafe"
     v-loadmore="loadMore"
-    :options="options"
+    :options="optionsSafe"
     :remote-method="filterOptions"
     :loading="loading"
-    multiple
+    :multiple="multiple"
     filterable
     remote
     v-bind="$attrs"
@@ -13,7 +13,7 @@
     v-on="$listeners"
   >
     <el-option
-      v-for="item in options"
+      v-for="item in optionsSafe"
       :key="item.value"
       :label="item.label"
       :value="item.value"
@@ -37,7 +37,7 @@ export default {
            * 如果元素滚动到底, 下面等式返回true, 没有则返回false:
            * ele.scrollHeight - ele.scrollTop === ele.clientHeight;
            */
-          const condition = this.scrollHeight - this.scrollTop <= this.clientHeight
+          const condition = this.scrollHeight - this.scrollTop - 30 <= this.clientHeight
           if (condition) {
             binding.value()
           }
@@ -58,13 +58,25 @@ export default {
       type: Function,
       default: null
     },
+    processSelected: {
+      type: Function,
+      default: null
+    },
     options: {
       type: Array,
-      default: () => []
+      default: () => ([])
     },
     value: {
       type: [Array, String, Number, Boolean],
-      default: () => []
+      default: () => ([])
+    },
+    initial: {
+      type: Array,
+      default: () => ([])
+    },
+    multiple: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -91,7 +103,16 @@ export default {
         const more = !!data.next
         return { results: results, pagination: more }
       },
-      vaultOrDefault: this.value || []
+      defaultProcessSelected: data => {
+        return data.map(item => {
+          if (item.label && item.value) {
+            return item
+          }
+          return { label: item.name, value: item.id }
+        })
+      },
+      valueSafe: [...this.value],
+      optionsSafe: this.options || []
     }
   },
   computed: {
@@ -101,18 +122,41 @@ export default {
     processResultsOrDefault() {
       return this.processResults || this.defaultProcessResults
     },
-    optionsOrDefault() {
-      return this.options || []
+    processSelectedOrDefault() {
+      return this.processSelected || this.defaultProcessSelected
+    },
+    initialOptions() {
+      const options = this.processSelectedOrDefault(this.initial)
+      return options
+    },
+    optionsValues() {
+      return this.optionsSafe.map((v) => v.value)
+    },
+    initialValues() {
+      return this.initialOptions.map(v => v.value)
+    }
+  },
+  watch: {
+    initialOptions: function(newValue) {
+      const notInclude = newValue.filter(v => {
+        return this.optionsValues.indexOf(v.value) === -1
+      })
+      this.optionsSafe = [...notInclude, ...this.optionsSafe]
+      const notIncludeValues = notInclude.map(v => v.value)
+      this.valueSafe = [...notIncludeValues, ...this.valueSafe]
     }
   },
   mounted() {
+    if (this.initialOptions) {
+      this.valueSafe = [...this.initialValues, ...this.valueSafe]
+      this.optionsSafe = [...this.initialOptions, ...this.optionsSafe]
+    }
     if (this.url) {
       this.getOptions()
     }
   },
   methods: {
     loadMore() {
-      console.log('Load more ...', this.params.hasMore)
       if (!this.params.hasMore) {
         return
       }
@@ -128,14 +172,13 @@ export default {
     },
     filterOptions(query) {
       this.resetParams()
-      this.options = []
+      this.optionsSafe = []
       this.params.search = query
       this.getOptions()
     },
     getOptions() {
       this.loading = true
       const params = this.makeParamsOrDefault(this.params)
-      console.log(params)
       this.$axios.get(this.url, { params: params }).then(resp => {
         this.loading = false
         const data = this.processResultsOrDefault(resp)
@@ -143,12 +186,13 @@ export default {
           this.params.hasMore = false
         }
         data.results.forEach((v) => {
-          this.options.push(v)
-          console.log(v)
+          if (this.optionsValues.indexOf(v.value) === -1) {
+            this.optionsSafe.push(v)
+          }
         })
       }).catch(err => {
+        this.$message.error(err)
         console.log(err)
-        this.options = []
       }).then(() => {
         this.loading = false
       })
