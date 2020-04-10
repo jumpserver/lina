@@ -41,7 +41,9 @@ export default {
     },
     createRoute: {
       type: String,
-      default: '404'
+      default: () => {
+        return this.$route.name.replace('List', 'Create')
+      }
     },
     reloadTable: {
       type: Function,

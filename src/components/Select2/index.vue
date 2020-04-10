@@ -2,18 +2,18 @@
   <el-select
     v-model="valueSafe"
     v-loadmore="loadMore"
-    :options="optionsSafe"
+    :options="totalOptions"
     :remote-method="filterOptions"
     :loading="loading"
     :multiple="multiple"
     filterable
     remote
-    v-bind="$attrs"
     class="select2"
+    v-bind="$attrs"
     v-on="$listeners"
   >
     <el-option
-      v-for="item in optionsSafe"
+      v-for="item in totalOptions"
       :key="item.value"
       :label="item.label"
       :value="item.value"
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { createSourceIdCache } from '@/api/common'
 export default {
   name: 'Select2',
   directives: {
@@ -58,20 +59,12 @@ export default {
       type: Function,
       default: null
     },
-    processSelected: {
-      type: Function,
-      default: null
-    },
     options: {
       type: Array,
       default: () => ([])
     },
     value: {
       type: [Array, String, Number, Boolean],
-      default: () => ([])
-    },
-    initial: {
-      type: Array,
       default: () => ([])
     },
     multiple: {
@@ -103,16 +96,8 @@ export default {
         const more = !!data.next
         return { results: results, pagination: more }
       },
-      defaultProcessSelected: data => {
-        return data.map(item => {
-          if (item.label && item.value) {
-            return item
-          }
-          return { label: item.name, value: item.id }
-        })
-      },
       valueSafe: [...this.value],
-      optionsSafe: this.options || []
+      totalOptions: this.options || []
     }
   },
   computed: {
@@ -122,46 +107,24 @@ export default {
     processResultsOrDefault() {
       return this.processResults || this.defaultProcessResults
     },
-    processSelectedOrDefault() {
-      return this.processSelected || this.defaultProcessSelected
-    },
-    initialOptions() {
-      const options = this.processSelectedOrDefault(this.initial)
-      return options
-    },
     optionsValues() {
-      return this.optionsSafe.map((v) => v.value)
-    },
-    initialValues() {
-      return this.initialOptions.map(v => v.value)
-    }
-  },
-  watch: {
-    initialOptions: function(newValue) {
-      const notInclude = newValue.filter(v => {
-        return this.optionsValues.indexOf(v.value) === -1
-      })
-      this.optionsSafe = [...notInclude, ...this.optionsSafe]
-      const notIncludeValues = notInclude.map(v => v.value)
-      this.valueSafe = [...notIncludeValues, ...this.valueSafe]
+      return this.totalOptions.map((v) => v.value)
     }
   },
   mounted() {
-    if (this.initialOptions) {
-      this.valueSafe = [...this.initialValues, ...this.valueSafe]
-      this.optionsSafe = [...this.initialOptions, ...this.optionsSafe]
-    }
-    if (this.url) {
-      this.getOptions()
-    }
+    this.initialSelect()
   },
   methods: {
-    loadMore() {
+    loadMore(load) {
       if (!this.params.hasMore) {
         return
       }
       this.params.page = this.params.page ? this.params.page + 1 : 1
-      this.getOptions()
+      const defaultLoad = this.getOptions
+      if (!load) {
+        load = defaultLoad
+      }
+      load()
     },
     resetParams() {
       this.params = {
@@ -172,30 +135,48 @@ export default {
     },
     filterOptions(query) {
       this.resetParams()
-      this.optionsSafe = []
+      this.totalOptions = []
       this.params.search = query
       this.getOptions()
     },
-    getOptions() {
-      this.loading = true
+    async getInitialOptions() {
+      let data = await createSourceIdCache(this.value)
       const params = this.makeParamsOrDefault(this.params)
-      this.$axios.get(this.url, { params: params }).then(resp => {
-        this.loading = false
-        const data = this.processResultsOrDefault(resp)
-        if (!data.pagination) {
-          this.params.hasMore = false
+      params.spm = data.spm
+      data = await this.$axios.get(this.url, { params: params })
+      data = this.processResultsOrDefault(data)
+      data.results.forEach((v) => {
+        if (this.optionsValues.indexOf(v.value) === -1) {
+          this.totalOptions.push(v)
         }
-        data.results.forEach((v) => {
-          if (this.optionsValues.indexOf(v.value) === -1) {
-            this.optionsSafe.push(v)
-          }
-        })
-      }).catch(err => {
-        this.$message.error(err)
-        console.log(err)
-      }).then(() => {
-        this.loading = false
       })
+      if (!data.pagination) {
+        this.params.hasMore = false
+        this.resetParams()
+      } else {
+        this.loadMore(this.getInitialOptions)
+      }
+    },
+    async getOptions() {
+      const params = this.makeParamsOrDefault(this.params)
+      const resp = await this.$axios.get(this.url, { params: params })
+      const data = this.processResultsOrDefault(resp)
+      if (!data.pagination) {
+        this.params.hasMore = false
+      }
+      data.results.forEach((v) => {
+        if (this.optionsValues.indexOf(v.value) === -1) {
+          this.totalOptions.push(v)
+        }
+      })
+    },
+    async initialSelect() {
+      if (this.url) {
+        if (this.value) {
+          await this.getInitialOptions()
+        }
+        await this.getOptions()
+      }
     }
   }
 }

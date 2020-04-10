@@ -25,11 +25,6 @@ export default {
       meta: {}
     }
   },
-  computed: {
-    expandField() {
-      return true
-    }
-  },
   mounted() {
     this.optionUrlMeta()
   },
@@ -39,10 +34,9 @@ export default {
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
-        this.loading = false
-      }).catch(error => {
-        console.log(error)
+      }).catch(() => {
         this.totalConfig = this.config
+      }).finally(() => {
         this.loading = false
       })
     },

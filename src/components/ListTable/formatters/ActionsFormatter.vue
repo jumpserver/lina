@@ -13,7 +13,8 @@ const defaultPerformDelete = function({ row, col }) {
 }
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-  const routeName = col.actions.updateRoute || '404'
+  const defaultRoute = this.$route.name.replace('List', 'Update')
+  const routeName = col.actions.updateRoute || defaultRoute
   this.$router.push({ name: routeName, params: { id: id }})
 }
 
@@ -35,7 +36,6 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         this.$message.success(this.$tc('Delete success'))
       } catch (error) {
         this.$message.error(this.$tc('Delete failed'))
-        console.warn(error)
       } finally {
         instance.confirmButtonLoading = false
       }

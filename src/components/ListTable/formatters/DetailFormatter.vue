@@ -9,7 +9,8 @@ export default {
   extends: BaseFormatter,
   methods: {
     goDetail() {
-      const routeName = this.col.route || ''
+      const defaultRoute = this.$route.name.replace('List', 'Detail')
+      const routeName = this.col.route || defaultRoute
       this.$router.push({ name: routeName, params: { id: this.row.id }})
     }
   }

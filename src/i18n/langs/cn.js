@@ -71,7 +71,8 @@ const cn = {
     'Create success': '创建成功',
     'Update success': '更新成功',
     'Deactive selected': '禁用所选',
-    'Active selected': '激活所选'
+    'Active selected': '激活所选',
+    'rows': '行'
   },
   route: {
     'dashboard': '仪表盘',
