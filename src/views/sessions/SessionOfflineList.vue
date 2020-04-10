@@ -73,7 +73,7 @@ export default {
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
                     // 跳转下载页面
-                    const downloadUrl = 'terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
+                    const downloadUrl = '/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
                       .replace('00000000-0000-0000-0000-000000000000', cellValue)
                     window.open(downloadUrl)
                   }
