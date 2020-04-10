@@ -1,8 +1,7 @@
 <template>
-  <Page v-loading="loadding">
-    <IBox>
+  <Page v-loading="loading">
+    <IBox v-if="!loading">
       <AutoDataForm
-        v-if="!loadding"
         ref="form"
         :method="method"
         :form="form"
@@ -46,6 +45,36 @@ export default {
       type: Function,
       default: null
     },
+    performSubmit: {
+      type: Function,
+      default: null
+    },
+    createSuccessMsg: {
+      type: String,
+      default: function() {
+        return this.$tc('Create success')
+      }
+    },
+    updateSuccessMsg: {
+      type: String,
+      default: function() {
+        return this.$tc('Update success')
+      }
+    },
+    createSuccessNextRoute: {
+      type: Object,
+      default: function() {
+        const routeName = this.$route.name.replace('Create', 'List')
+        return { name: routeName }
+      }
+    },
+    updateSuccessNextRoute: {
+      type: Object,
+      default: function() {
+        const routeName = this.$route.name.replace('Update', 'List')
+        return { name: routeName }
+      }
+    },
     getMethod: {
       type: Function,
       default: function() {
@@ -72,13 +101,12 @@ export default {
   data() {
     return {
       form: {},
-      loadding: true
+      loading: true
     }
   },
   computed: {
     method() {
-      const method = this.getMethod(this)
-      return method
+      return this.getMethod(this)
     },
     totalUrl() {
       return this.getUrl()
@@ -89,34 +117,37 @@ export default {
       this.getObjectDetail()
     } else {
       this.form = Object.assign(this.form, this.initial)
-      this.loadding = false
+      this.loading = false
     }
   },
   methods: {
-    handleSubmit(values, form) {
-      const f = this.$refs.form
-      f.setFieldError('name', '怎么了')
-      console.log(f.setFieldError)
+    handleSubmit(values) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
-      console.log('submit', values)
-      return handler(values, form)
+      return handler(values)
     },
     defaultPerformSubmit(validValues) {
       return this.$axios[this.method](this.totalUrl, validValues)
     },
-    defaultOnSubmit(validValues, form) {
-      this.defaultPerformSubmit(validValues).then(() => {
-        const msg = this.$tc('Create success')
+    defaultOnSubmit(validValues) {
+      const performSubmit = this.performSubmit || this.defaultPerformSubmit
+      const msg = this.method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
+      const route = this.method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      performSubmit(validValues).then(() => {
         this.$message.success(msg)
-        this.$router.push({ name: 'UserList' })
+        console.log(route)
+        this.$router.push(route)
       }).catch(error => {
-        console.log(form)
         const response = error.response
         const data = response.data
         if (response.status === 400) {
-          this.errors.name = '你报错了滴滴滴'
-          console.log(data)
+          for (const key of Object.keys(data)) {
+            let value = data[key]
+            if (value instanceof Array) {
+              value = value.join(';')
+            }
+            this.$refs.form.setFieldError(key, value)
+          }
         }
       })
     },
@@ -126,7 +157,7 @@ export default {
       }).catch(error => {
         console.log(error)
       }).finally(() => {
-        this.loadding = false
+        this.loading = false
       })
     }
   }

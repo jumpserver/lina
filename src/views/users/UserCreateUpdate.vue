@@ -33,8 +33,7 @@ export default {
           }
         },
         password: {
-          hidden: (formValue, item) => {
-            console.log('hidden password', formValue.password_strategy)
+          hidden: (formValue) => {
             if (this.$route.meta.action === 'update') {
               return false
             }

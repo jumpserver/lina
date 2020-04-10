@@ -42,11 +42,8 @@ export default {
       meta: {},
       totalFields: [],
       loading: true,
-      groups: [],
-      errors: { name: '怎么了' }
+      groups: []
     }
-  },
-  computed: {
   },
   mounted() {
     this.optionUrlMeta()
@@ -56,6 +53,7 @@ export default {
       optionUrlMeta(this.url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
+      }).finally(() => {
         this.loading = false
       })
     },
@@ -126,18 +124,14 @@ export default {
       return field
     },
     generateField(name) {
-      let field = { id: name, prop: name, el: {}}
+      let field = { id: name, prop: name, el: {}, attrs: {}}
       const fieldMeta = this.meta[name] || {}
       field.label = fieldMeta.label
       field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
       field = Object.assign(field, this.fieldsMeta[name] || {})
-      // field.attrs = { error: this.errors[field.prop]}
-      _.set(field, 'attrs.error', this.errors[field.prop])
-      if (name === 'name') {
-        console.log(field)
-      }
+      _.set(field, 'attrs.error', '')
       return field
     },
     generateFieldGroup(data) {
@@ -147,8 +141,7 @@ export default {
         title: groupTitle,
         name: fields[0]
       })
-      const items = this.generateFields(fields)
-      return items
+      return this.generateFields(fields)
     },
     generateFields(data) {
       let fields = []
@@ -161,22 +154,24 @@ export default {
           fields.push(field)
         } else if (field instanceof Object) {
           this.errors[field.prop] = ''
-          _.set(field, 'attrs.error', this.errors[field.prop])
+          _.set(field, 'attrs.error', '')
           fields.push(field)
         }
       }
       return fields
     },
     generateColumns() {
-      const fields = this.generateFields(this.fields)
-      this.totalFields = fields
+      this.totalFields = this.generateFields(this.fields)
     },
     setFieldError(name, error) {
-      console.log('errors')
-      console.log(this.errors)
-      // this.errors[name] = error
-      this.$set(this.errors, name, error)
-      console.log(this.errors)
+      const field = this.totalFields.find((v) => v.prop === name)
+      if (!field) {
+        return
+      }
+      if (field.attrs.error === error) {
+        error += '.'
+      }
+      field.attrs.error = error
     }
   }
 }

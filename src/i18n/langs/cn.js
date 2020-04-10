@@ -60,6 +60,7 @@ const cn = {
     'Export': '导出',
     'Other': '其它',
     'Create success': '创建成功',
+    'Update success': '更新成功',
     'Deactive selected': '禁用所选',
     'Active selected': '激活所选'
   },
