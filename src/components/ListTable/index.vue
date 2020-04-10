@@ -5,9 +5,9 @@
       <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
       <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @comfirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
-          <el-form-item label="导出范围" :label-width="'100px'">
-            <el-radio v-model="exportOption" class="export-item" label="1">导出全部</el-radio>
-            <el-radio v-model="exportOption" class="export-item" label="2">仅导出选中项</el-radio>
+          <el-form-item :label="this.$t('action.ExportRange')" :label-width="'100px'">
+            <el-radio v-model="exportOption" class="export-item" label="1">{{ this.$t('action.ExportAll') }}</el-radio>
+            <el-radio v-model="exportOption" class="export-item" label="2">{{ this.$t('action.ExportOnlySelectedItems') }}</el-radio>
             <!-- <el-radio v-model="exportOption" class="export-item" label="3">仅导出搜索项</el-radio> -->
           </el-form-item>
         </el-form>
@@ -15,12 +15,12 @@
       <Dialog :title="importtitle" :visible.sync="showImportDialog" center @comfirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
         <el-form>
           <el-form-item :label="importtitle" :label-width="'100px'">
-            <el-radio v-model="importOption" class="export-item" label="1">导入新资产</el-radio>
-            <el-radio v-model="importOption" class="export-item" label="2">更新资产</el-radio>
+            <el-radio v-model="importOption" class="export-item" label="1">{{ this.$tc('Import') }}</el-radio>
+            <el-radio v-model="importOption" class="export-item" label="2">{{ this.$tc('Update') }}</el-radio>
           </el-form-item>
         </el-form>
-        <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">下载导入的模板或使用导出的csv格式 <a style="color: #428bca;" :href="downloadImportTempUrl">下载导入模板</a></div>
-        <div v-else style="margin-bottom:20px;margin-left: 55px;">下载更新的模板或使用导出的csv格式 <a style="color: #428bca;" @click="downloadUpdateTempUrl">下载更新模板</a></div>
+        <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.DownloadTheImportedTemplateOrUseTheExportedCSVFormat') }} <a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('action.DownloadImportTemplate') }}</a></div>
+        <div v-else style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.DownloadTheUpdatedTemplateOrUsTheExportedCSVFormat') }} <a style="color: #428bca;" @click="downloadUpdateTempUrl">{{ this.$t('action.DownloadUpdateTemplate') }}</a></div>
 
         <div style="margin-left:55px;">
           <el-upload
@@ -30,8 +30,8 @@
             list-type="text/csv"
             :limit="1"
           >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传CSV文件</div>
+            <el-button size="small" type="primary">{{ this.$t('action.Upload') }}</el-button>
+            <div slot="tip" class="el-upload__tip">{{ this.$t('action.OnlyCSVFilesCanBeUploaded') }}</div>
           </el-upload>
         </div>
       </Dialog>

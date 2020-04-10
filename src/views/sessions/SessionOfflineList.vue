@@ -31,7 +31,7 @@ export default {
             label: this.$t('sessions.command')
           },
           login_from: {
-            label: this.$t('sessions.loginForm')
+            label: this.$t('sessions.loginFrom')
           },
           protocol: {
             label: this.$t('sessions.protocol'),

@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     optionUrlMeta() {
-      const url = `${this.config.url}?draw=1&display=1`
+      const url = (this.config.treeurl) ? (`${this.config.url}?draw=1&display=1`) : (`${this.config.url}draw=1&display=1`)
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
