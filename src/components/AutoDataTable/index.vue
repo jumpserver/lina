@@ -90,6 +90,9 @@ export default {
       col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
+      if (name === 'actions') {
+        console.log(col)
+      }
       return col
     },
     generateColumns() {

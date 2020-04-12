@@ -100,13 +100,12 @@ export default {
   },
   methods: {
     upload(item) {
-      console.log(item)
       this.$axios.put(
         this.upLoadUrl,
         item.file
-      ).then((res) =>
-        console.log(res)
-      )
+      ).then((res) => {
+        console.log('')
+      })
     },
     downloadCsv(url) {
       const a = document.createElement('a')
