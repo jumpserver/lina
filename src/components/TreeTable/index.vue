@@ -2,15 +2,21 @@
   <Page>
     <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
     <el-collapse-transition>
-      <el-row>
-        <el-col v-show="ShowTree" :span="4" class="transition-box">
-          <TreeNode :url="tableConfig.treeurl" @urlChanged="handleUrlChange" />
-        </el-col>
-        <el-col :span="1" class="mini"><div style="display:block" class="mini-button" @click="ShowTree=!ShowTree"><i v-show="ShowTree" id="toggle-icon" class="fa fa-angle-left fa-x" /><i v-show="!ShowTree" id="toggle-icon" class="fa fa-angle-right fa-x" /></div></el-col>
-        <el-col :span="ShowTree?19:23" class="transition-box">
-          <ListTable :table-config="tableConfig" :header-actions="headerActions" />
-        </el-col>
-      </el-row>
+      <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
+        <div v-show="ShowTree" :style="ShowTree?('width:250px;'):('width:0;')" class="transition-box">
+          <TreeNode :tree-url="tableConfig.treeurl" :url="tableConfig.url" @urlChanged="handleUrlChange" />
+        </div>
+        <div :style="ShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+          <div class="mini">
+            <div style="display:block" class="mini-button" @click="ShowTree=!ShowTree">
+              <i v-show="ShowTree" class="fa fa-angle-left fa-x" /><i v-show="!ShowTree" class="fa fa-angle-right fa-x" />
+            </div>
+          </div>
+          <div class="transition-box" style="width: calc(100% - 17px);">
+            <TreeListTable :table-config="internalTableConfig" :header-actions="headerActions" />
+          </div>
+        </div>
+      </div>
     </el-collapse-transition>
   </Page>
 </template>
@@ -18,16 +24,16 @@
 <script>
 import { Page } from '@/layout/components'
 import TreeNode from '../TreeNode'
-import ListTable from '@/components/ListTable'
+import TreeListTable from './components/TreeListTable'
 export default {
-  name: 'GenericListPage',
+  name: 'TreeTable',
   components: {
     Page,
-    ListTable,
+    TreeListTable,
     TreeNode
   },
   props: {
-    ...ListTable.props,
+    ...TreeListTable.props,
     helpMessage: {
       type: String,
       default: null
@@ -35,15 +41,18 @@ export default {
   },
   data() {
     return {
-      ShowTree: true
+      ShowTree: true,
+      internalTableConfig: this.tableConfig
     }
+  },
+  computed: {
+
   },
   methods: {
     handleUrlChange(_url) {
-      // TODO 解决URL跳转的问题
+      this.$set(this.internalTableConfig, 'url', _url)
     }
   }
-
 }
 </script>
 

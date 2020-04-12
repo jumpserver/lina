@@ -6,12 +6,16 @@
     :load="loadSubNode"
     :expand-on-click-node="false"
     :highlight-current="true"
+    class="tree"
     @node-click="nodeClick"
   >
     <span slot-scope="{ node, data }">
-      <span v-if="data.type==='node'"><i class="el-icon-folder" /></span>
+      <span v-if="(data.type==='node')"><i class="el-icon-folder" /></span>
       <span v-if="data.type==='asset'"><i class="el-icon-coin" /></span>
       <span style="margin-left: 3px;">{{ node.label }}</span>
+      <span v-if="(data.type==='node')&(node.level === 1)">
+        <i class="fa fa-refresh" @click="reloadtree" />
+      </span>
     </span>
   </el-tree>
 </template>
@@ -20,6 +24,10 @@
 export default {
   props: {
     url: {
+      type: String,
+      default: () => ''
+    },
+    treeUrl: {
       type: String,
       default: () => ''
     }
@@ -32,10 +40,17 @@ export default {
         isLeaf: 'leaf'
       },
       treeData: [],
-      tableData: []
+      tableData: [],
+      internalUrl: ''
     }
   },
+  mounted() {
+    this.internalUrl = this.url
+  },
   methods: {
+    reloadtree: function() {
+
+    },
     nodeClick: function(node) {
       // const data = {}
       // if (node.type === 'node') {
@@ -43,16 +58,12 @@ export default {
       // } else {
       //   Object.assign(data, { node_id: '', asset_id: node.id })
       // }
-      var node_id, asset_id
       if (node.type === 'node') {
-        node_id = node.id
-        asset_id = ''
+        console.log(this.url)
+        this.$emit('urlChanged', this.internalUrl + '?node_id=' + node.id)
       } else {
-        node_id = ''
-        asset_id = node.id
+        this.$emit('urlChanged', this.internalUrl + '?asset_id=' + node.id)
       }
-      const emitUrl = this.url + '?node_id=' + node_id + '&asset_id=' + asset_id
-      this.$emit('urlChanged', emitUrl)
 
       // this.$axios.get(this.url, { params: data }).then(res => {
       //   this.tableData = res
@@ -66,7 +77,7 @@ export default {
     },
     loadSubNode: function(node, resolve) {
       if (node.level === 0) {
-        this.$axios.get(this.url, { params: { assets: 1 }}).then(res => {
+        this.$axios.get(this.treeUrl, { params: { assets: 1 }}).then(res => {
           console.log(res)
           resolve([{
             label: res[0].name,
@@ -83,7 +94,7 @@ export default {
       } else {
         // /rpc/api/v1/assets/nodes/children/tree/?assets=1&key=1&id=' + id,
         const subtree = []
-        this.$axios.get(this.url, { params: {
+        this.$axios.get(this.treeUrl, { params: {
           assets: 1,
           key: 1,
           id: node.data.id
@@ -117,5 +128,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.tree{
+  font-size: 14px;
+}
 </style>
