@@ -2,7 +2,7 @@
   <div>
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <el-card class="table-content" shadow="never">
-      <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
+      <TreeAutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
       <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
           <el-form-item :label="this.$t('action.ExportRange')" :label-width="'100px'">
@@ -41,15 +41,15 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import AutoDataTable from '../AutoDataTable'
-import Dialog from '../Dialog'
+import TreeAutoDataTable from '../TreeAutoDataTable'
+import Dialog from '@/components/Dialog'
 import TableAction from './TableAction'
 import { createSourceIdCache } from '@/api/common'
 
 export default {
-  name: 'ListTable',
+  name: 'TreeListTable',
   components: {
-    AutoDataTable,
+    TreeAutoDataTable,
     TableAction,
     Dialog
   },
@@ -90,6 +90,11 @@ export default {
       return process.env.VUE_APP_BASE_API + this.tableConfig.url + '?format=csv&template=import&limit=1'
     }
   },
+  watch: {
+    tableConfig: function(val) {
+      // 空函数, 方便组件刷新
+    }
+  },
   mounted() {
     this.$eventBus.$on('showExportDialog', (row) => {
       this.showExportDialog = true
@@ -100,12 +105,13 @@ export default {
   },
   methods: {
     upload(item) {
+      console.log(item)
       this.$axios.put(
         this.upLoadUrl,
         item.file
-      ).then((res) => {
-        console.log('')
-      })
+      ).then((res) =>
+        console.log(res)
+      )
     },
     downloadCsv(url) {
       const a = document.createElement('a')

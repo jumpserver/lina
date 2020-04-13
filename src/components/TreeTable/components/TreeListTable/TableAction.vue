@@ -41,7 +41,7 @@ export default {
     },
     createRoute: {
       type: String,
-      default: function() {
+      default: () => {
         return this.$route.name.replace('List', 'Create')
       }
     },

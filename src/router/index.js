@@ -194,6 +194,12 @@ export const constantRoutes = [
         meta: { title: 'RemoteApp' }
       },
       {
+        path: 'remote-apps/:id',
+        name: 'RemoteAppDetail',
+        component: () => import('@/views/applications/RemoteAppList'),
+        meta: { title: 'RemoteApp' }
+      },
+      {
         path: 'database-apps',
         name: 'DatabaseAppList',
         component: () => import('@/views/applications/DatabaseAppList'),
@@ -284,13 +290,13 @@ export const constantRoutes = [
       {
         path: 'luna',
         name: 'WebTerminal',
-        component: () => import('@/views/tree/index'),
+        component: () => window.open(`/luna/?_=${Date.now()}`),
         meta: { title: 'WebTerminal' }
       },
       {
         path: 'sftp',
         name: 'FileManager',
-        component: () => import('@/views/tree/index'),
+        component: () => window.open(`/koko/elfinder/sftp/?`),
         meta: { title: 'FileManager' }
       },
       {

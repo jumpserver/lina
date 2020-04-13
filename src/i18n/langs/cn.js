@@ -48,6 +48,7 @@ const cn = {
     'Delete selected': '删除所选',
     'Update selected': '更新所选',
     'Delete success': '删除成功',
+    'Delete failed': '删除失败',
     'Search': '搜索',
     'Source': '来源',
     'Status': '状态',
@@ -71,7 +72,8 @@ const cn = {
     'Create success': '创建成功',
     'Update success': '更新成功',
     'Deactive selected': '禁用所选',
-    'Active selected': '激活所选'
+    'Active selected': '激活所选',
+    'rows': '行'
   },
   route: {
     'dashboard': '仪表盘',
@@ -379,7 +381,10 @@ const cn = {
     'join': '加入',
     'goto': '转到',
     'sessionDetail': '会话详情',
-    'quickModify': '快速修改'
+    'quickModify': '快速修改',
+    'replaySession': '回放会话:',
+    'downloadReplay': '下载录像:',
+    'go': '执行'
   },
   jobcenter: {
     'RunTimes': '执行次数',

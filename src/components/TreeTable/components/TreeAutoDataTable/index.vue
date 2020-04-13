@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import DataTable from '../DataTable'
+import DataTable from '@/components/DataTable'
 import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import { optionUrlMeta } from '@/api/common'
 export default {
-  name: 'AutoDataTable',
+  name: 'TreeAutoDataTable',
   components: {
     DataTable
   },
@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     optionUrlMeta() {
-      const url = `${this.config.url}?draw=1&display=1`
+      const url = `${this.config.url}draw=1&display=1`
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
@@ -90,9 +90,6 @@ export default {
       col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
-      if (name === 'actions') {
-        console.log(col)
-      }
       return col
     },
     generateColumns() {
