@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -15,44 +14,24 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/remote-apps/',
         columns: [
-          {
-            prop: 'name',
-            label: this.$t('applications.name'),
-            formatter: DetailFormatter,
-            sortable: true,
-            route: 'RemoteAppDetail'
+          'name', 'type', 'asset', 'comment', 'actions'
+        ],
+        columnsMeta: {
+          type: {
+            displayKey: 'get_type_display'
           },
-          {
-            prop: 'get_type_display',
-            label: this.$t('applications.appType')
-          },
-          {
-            prop: 'asset_info.hostname',
-            label: this.$t('applications.asset')
-          },
-          {
-            prop: 'comment',
-            label: this.$t('applications.comment'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'id',
-            label: this.$tc('Action'),
-            align: 'center',
-            formatter: ActionsFormatter,
-            width: '200px',
-            actions: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/applications/remote-apps/${id}/`
-                return this.$axios.delete(url)
-              }
+          asset: {
+            formatter: function(row, column, cellValue, index) {
+              return <a class='detail el-link el-link--success is-underline' href={ `/assets/assets/${cellValue}` }>{ row.asset_info.hostname }</a>
             }
           }
-        ]
+        },
+        detailRoute: 'RemoteAppDetail',
+        actions: {
+          updateRoute: 'RemoteAppUpdate'
+        }
       },
       headerActions: {
-        hasBulkDelete: false,
         createRoute: 'RemoteAppCreate'
       }
     }
@@ -60,6 +39,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 
 </style>
