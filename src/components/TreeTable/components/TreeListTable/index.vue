@@ -3,7 +3,7 @@
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <el-card class="table-content" shadow="never">
       <TreeAutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
-      <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @comfirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
+      <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
           <el-form-item :label="this.$t('action.ExportRange')" :label-width="'100px'">
             <el-radio v-model="exportOption" class="export-item" label="1">{{ this.$t('action.ExportAll') }}</el-radio>
@@ -12,7 +12,7 @@
           </el-form-item>
         </el-form>
       </Dialog>
-      <Dialog :title="importtitle" :visible.sync="showImportDialog" center @comfirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
+      <Dialog :title="importtitle" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
         <el-form>
           <el-form-item :label="importtitle" :label-width="'100px'">
             <el-radio v-model="importOption" class="export-item" label="1">{{ this.$tc('Import') }}</el-radio>

@@ -33,7 +33,7 @@ export default {
       this.$emit('cancel')
     },
     onConfirm() {
-      this.$emit('comfirm')
+      this.$emit('confirm')
     }
   }
 }
