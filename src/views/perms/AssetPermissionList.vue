@@ -1,19 +1,20 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <TreeTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import TreeTable from '@/components/TreeTable'
 import { LengthFormatter, ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    GenericListPage
+    TreeTable
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
+        treeurl: '/api/v1/assets/nodes/children/tree/',
         hasSelection: false,
         columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
         columnsMeta: {

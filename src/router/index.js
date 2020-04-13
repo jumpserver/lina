@@ -317,7 +317,7 @@ export const constantRoutes = [
       {
         path: 'command-executions/create',
         name: 'BatchCommand',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/jobcenter/CommandExecution'),
         meta: { title: 'BatchCommand' }
       },
       {
