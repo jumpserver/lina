@@ -59,10 +59,9 @@ export default {
       //   Object.assign(data, { node_id: '', asset_id: node.id })
       // }
       if (node.type === 'node') {
-        console.log(this.url)
-        this.$emit('urlChanged', this.internalUrl + '?node_id=' + node.id)
+        this.$emit('nodeClicked', this.internalUrl + '?node_id=' + node.id)
       } else {
-        this.$emit('urlChanged', this.internalUrl + '?asset_id=' + node.id)
+        this.$emit('assetClicked', this.internalUrl + '?asset_id=' + node.id)
       }
 
       // this.$axios.get(this.url, { params: data }).then(res => {
