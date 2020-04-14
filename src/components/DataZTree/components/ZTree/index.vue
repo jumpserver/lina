@@ -36,10 +36,7 @@ export default {
   data() {
     return {
       defaultSetting: {
-        callback: {
-          onRightClick: this.setting.customCallback.onRightClick || this.defaultOnRightClick,
-          onRename: this.setting.customCallback.onRename || this.defaultCallback('Rename')
-        }
+
       },
       zTree: '',
       rMenu: ''
@@ -99,34 +96,6 @@ export default {
         callback()
       })
     },
-    showRMenu: function(type, x, y) {
-      var offset = $('#ztree').offset()
-      var scrollTop = document.querySelector('.treebox').scrollTop
-      x -= offset.left
-      y -= offset.top + scrollTop
-      x += document.body.scrollLeft
-      y += document.body.scrollTop + document.documentElement.scrollTop
-      this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
-      $('#rMenu ul').show()
-      $('body').bind('mousedown', this.onBodyMouseDown)
-    },
-    defaultOnRightClick: function(event, treeId, treeNode) {
-      if (!this.treeSetting.showMenu) {
-        return
-      }
-      if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
-        this.zTree.cancelSelectedNode()
-        this.showRMenu('root', event.clientX, event.clientY)
-      } else if (treeNode && !treeNode.noR) {
-        this.zTree.selectNode(treeNode)
-        this.showRMenu('node', event.clientX, event.clientY)
-      }
-    },
-    onBodyMouseDown: function(event) {
-      if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
-        this.rMenu.css({ 'visibility': 'hidden' })
-      }
-    },
     setUrlParam: function(url, name, value) {
       var urlArray = url.split('?')
       if (urlArray.length === 1) {
@@ -147,9 +116,6 @@ export default {
         url += newParam.join('&')
       }
       return url
-    },
-    defaultCallback: function(action) {
-      console.log(action)
     }
   }
 

@@ -4,6 +4,7 @@
       <li id="m_create" class="rmenu" tabindex="-1"><a><i class="fa fa-plus-square-o" /> 添加资产到节点 </a></li>
       <li id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode"><a><i class="fa fa-pencil-square-o" /> 重命名节点 </a></li>
       <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode"><a><i class="fa fa-minus-square" /> 删除节点 </a></li>
+      <slot name="rMenu" />
     </slot>
   </DataZTree>
 </template>
@@ -32,9 +33,10 @@ export default {
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get'
         },
-        customCallback: {
+        callback: {
           onRightClick: this.onRightClick.bind(this),
           onRename: this.onRename.bind(this)
+
         }
       }
     }
@@ -105,8 +107,33 @@ export default {
     onRename: function(event, treeId, treeNode, isCancel) {
       console.log(event, treeId, treeNode, isCancel)
     },
+    onBodyMouseDown: function(event) {
+      if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
+        this.rMenu.css({ 'visibility': 'hidden' })
+      }
+    },
+    showRMenu: function(type, x, y) {
+      var offset = $('#ztree').offset()
+      var scrollTop = document.querySelector('.treebox').scrollTop
+      x -= offset.left
+      y -= offset.top + scrollTop
+      x += document.body.scrollLeft
+      y += document.body.scrollTop + document.documentElement.scrollTop
+      this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
+      $('#rMenu ul').show()
+      $('body').bind('mousedown', this.onBodyMouseDown)
+    },
     onRightClick: function(event, treeId, treeNode) {
-      console.log(event, treeId, treeNode)
+      if (!this.setting.showMenu) {
+        return
+      }
+      if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
+        this.zTree.cancelSelectedNode()
+        this.showRMenu('root', event.clientX, event.clientY)
+      } else if (treeNode && !treeNode.noR) {
+        this.zTree.selectNode(treeNode)
+        this.showRMenu('node', event.clientX, event.clientY)
+      }
     }
   }
 }

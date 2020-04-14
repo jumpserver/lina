@@ -41,6 +41,17 @@ export default {
             isCopy: true,
             isMove: true
           }
+        },
+        callback: {
+          onRightClick: this.defaultCallback('onRightClick'),
+          onRename: this.defaultCallback('Rename'),
+          beforeClick: this.defaultCallback('beforeClick'),
+          onSelected: this.defaultCallback('onSelected'),
+          beforeDrag: this.defaultCallback('beforeDrag'),
+          onDrag: this.defaultCallback('onDrag'),
+          beforeDrop: this.defaultCallback('beforeDrop'),
+          onDrop: this.defaultCallback('onDrop'),
+          beforeAsync: this.defaultCallback('beforeAsync')
         }
       }
     }
@@ -58,7 +69,9 @@ export default {
     }
   },
   methods: {
-
+    defaultCallback: function(action) {
+      console.log(action)
+    }
   }
 }
 </script>
