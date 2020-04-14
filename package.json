@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "axios": "0.18.1",
+    "deepmerge": "^4.2.2",
     "element-ui": "2.13.0",
     "eslint-plugin-html": "^6.0.0",
     "jquery": "^3.5.0",

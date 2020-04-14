@@ -4,7 +4,7 @@
     <el-collapse-transition>
       <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
         <div v-show="ShowTree" :style="ShowTree?('width:250px;'):('width:0;')" class="transition-box">
-          <ZTree :tree-url="tableConfig.treeurl" :url="tableConfig.url" @nodeClicked="handleUrlChange" @assetClicked="handleUrlChange" />
+          <AutoDataZTree :setting="treeSetting" />
         </div>
         <div :style="ShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
           <div class="mini">
@@ -24,14 +24,15 @@
 <script>
 import { Page } from '@/layout/components'
 // import TreeNode from '../TreeNode'
-import ZTree from '../ZTree'
+// import ZTree from '../ZTree'
+import AutoDataZTree from '../AutoDataZTree'
 import TreeListTable from './components/TreeListTable'
 export default {
   name: 'TreeTable',
   components: {
     Page,
     TreeListTable,
-    ZTree
+    AutoDataZTree
   },
   props: {
     ...TreeListTable.props,
@@ -47,7 +48,9 @@ export default {
     }
   },
   computed: {
-
+    treeSetting() {
+      return this.tableConfig.treeSetting
+    }
   },
   methods: {
     handleUrlChange(_url) {
