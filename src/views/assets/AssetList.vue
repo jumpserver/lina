@@ -14,7 +14,13 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/assets/',
-        treeurl: '/api/v1/assets/nodes/children/tree/?assets=0',
+        treeSetting: {
+          showMenu: true,
+          showRefresh: true,
+          nodeUrl: '/api/v1/assets/nodes/',
+          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+
+        },
         columns: [
           {
             prop: 'hostname',
