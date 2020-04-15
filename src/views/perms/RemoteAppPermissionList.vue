@@ -17,22 +17,25 @@ export default {
         columns: ['name', 'users', 'user_groups', 'remote_apps', 'system_users', 'is_valid', 'actions'],
         columnsMeta: {
           users: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.User')
           },
           user_groups: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.UserGroups')
           },
           remote_apps: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.RemoteApp')
           },
           system_users: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.SystemUser')
           }
         }
       },
       headerActions: {
-        hasBulkDelete: false,
-        createRoute: 'RemoteAppPermissionCreate'
+        hasBulkDelete: false
       }
     }
   }
