@@ -39,6 +39,9 @@
               <i class="fa fa-info" />
               <span>{{ userCardActions }}</span>
             </div>
+            <div>
+              <Select2 v-model="selectUser.value" v-bind="selectUser" />
+            </div>
           </el-card>
         </el-col>
         <el-col :span="10">
@@ -46,6 +49,9 @@
             <div slot="header" class="clearfix">
               <i class="fa fa-info" />
               <span>{{ userGroupCardActions }}</span>
+            </div>
+            <div>
+              <Select2 v-model="selectUserGroup.value" v-bind="selectUserGroup" />
             </div>
           </el-card>
         </el-col>
@@ -62,6 +68,9 @@
               <i class="fa fa-info" />
               <span>{{ databaseAppCardActions }}</span>
             </div>
+            <div>
+              <Select2 v-model="selectDatabaseApp.value" v-bind="selectDatabaseApp" />
+            </div>
           </el-card>
         </el-col>
         <el-col :span="10">
@@ -69,6 +78,9 @@
             <div slot="header" class="clearfix">
               <i class="fa fa-info" />
               <span>{{ systemUserCardActions }}</span>
+            </div>
+            <div>
+              <Select2 v-model="selectSystemUser.value" v-bind="selectSystemUser" />
             </div>
           </el-card>
         </el-col>
@@ -82,13 +94,15 @@ import { GenericDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard/index'
 import ListTable from '@/components/ListTable'
 import { getDatabaseAppPermissionDetail } from '@/api/perms'
+import Select2 from '@/components/Select2'
 
 export default {
   name: 'DatabaseAppPermissionDetail',
   components: {
     GenericDetailPage,
     DetailCard,
-    ListTable
+    ListTable,
+    Select2
   },
   data() {
     return {
@@ -142,7 +156,31 @@ export default {
           title: this.$t('perms.DatabaseApp'),
           name: 'databaseApp'
         }
-      ]
+      ],
+      databaseAppPermissionUser: [],
+      databaseAppPermissionUserGroup: [],
+      databaseAppPermissionDatabaseApp: [],
+      databaseAppPermissionSystemUser: [],
+      selectUser: {
+        url: '/api/v1/users/users/',
+        initial: this.databaseAppPermissionUser,
+        value: []
+      },
+      selectUserGroup: {
+        url: '/api/v1/users/groups/',
+        initial: this.databaseAppPermissionUserGroup,
+        value: []
+      },
+      selectDatabaseApp: {
+        url: '/api/v1/applications/database-apps/',
+        initial: this.databaseAppPermissionDatabaseApp,
+        value: []
+      },
+      selectSystemUser: {
+        url: '/api/v1/assets/system-users/',
+        initial: this.databaseAppPermissionSystemUser,
+        value: []
+      }
     }
   },
   computed: {

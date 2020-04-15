@@ -27,30 +27,32 @@ export default {
             formatter: ExpandAssetPermissionFormatter
           },
           users: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.User')
           },
           user_groups: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.UserGroups')
           },
           assets: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.Asset')
           },
           nodes: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.Node')
           },
           system_users: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.SystemUser')
           }
         },
         actions: {
-          updateRoute: 'RemoteAppPermissionUpdate'
+          updateRoute: 'AssetPermissionUpdate'
         }
       },
       headerActions: {
-        hasDelete: false,
-        hasUpdate: false,
         hasBulkDelete: false,
-        createRoute: 'AssetPermissionCreate',
         extraActions: [
           {
             name: 'RefreshPermissionCache',

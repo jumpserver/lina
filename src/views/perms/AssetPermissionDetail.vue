@@ -39,6 +39,9 @@
               <i class="fa fa-info" />
               <span>{{ userCardActions }}</span>
             </div>
+            <div>
+              <Select2 v-model="selectUser.value" v-bind="selectUser" />
+            </div>
           </el-card>
         </el-col>
         <el-col :span="10">
@@ -46,6 +49,9 @@
             <div slot="header" class="clearfix">
               <i class="fa fa-info" />
               <span>{{ userGroupCardActions }}</span>
+            </div>
+            <div>
+              <Select2 v-model="selectUserGroup.value" v-bind="selectUserGroup" />
             </div>
           </el-card>
         </el-col>
@@ -62,6 +68,9 @@
               <i class="fa fa-info" />
               <span>{{ assetCardActions }}</span>
             </div>
+            <div>
+              <Select2 v-model="selectAsset.value" v-bind="selectAsset" />
+            </div>
           </el-card>
         </el-col>
         <el-col :span="10">
@@ -70,6 +79,9 @@
               <i class="fa fa-info" />
               <span>{{ nodeCardActions }}</span>
             </div>
+            <div>
+              <Select2 v-model="selectNode.value" v-bind="selectNode" />
+            </div>
           </el-card>
         </el-col>
         <el-col :span="10">
@@ -77,6 +89,9 @@
             <div slot="header" class="clearfix">
               <i class="fa fa-info" />
               <span>{{ systemUserCardActions }}</span>
+            </div>
+            <div>
+              <Select2 v-model="selectSystemUser.value" v-bind="selectSystemUser" />
             </div>
           </el-card>
         </el-col>
@@ -90,13 +105,15 @@ import { GenericDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard/index'
 import ListTable from '@/components/ListTable'
 import { getAssetPermissionDetail } from '@/api/perms'
+import Select2 from '@/components/Select2'
 
 export default {
   name: 'AssetPermissionDetail',
   components: {
     GenericDetailPage,
     DetailCard,
-    ListTable
+    ListTable,
+    Select2
   },
   data() {
     return {
@@ -150,7 +167,37 @@ export default {
           title: this.$t('perms.AssetAndNode'),
           name: 'assetAndNode'
         }
-      ]
+      ],
+      assetPermissionUser: [],
+      assetPermissionUserGroup: [],
+      assetPermissionAsset: [],
+      assetPermissionNode: [],
+      assetPermissionSystemUser: [],
+      selectUser: {
+        url: '/api/v1/users/users/',
+        initial: this.assetPermissionUser,
+        value: []
+      },
+      selectUserGroup: {
+        url: '/api/v1/users/groups/',
+        initial: this.assetPermissionUserGroup,
+        value: []
+      },
+      selectAsset: {
+        url: '/api/v1/assets/assets/',
+        initial: this.assetPermissionAsset,
+        value: []
+      },
+      selectNode: {
+        url: '/api/v1/assets/nodes/',
+        initial: this.assetPermissionNode,
+        value: []
+      },
+      selectSystemUser: {
+        url: '/api/v1/assets/system-users/',
+        initial: this.assetPermissionSystemUser,
+        value: []
+      }
     }
   },
   computed: {
