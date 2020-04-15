@@ -17,9 +17,9 @@ export default {
         treeSetting: {
           showMenu: true,
           showRefresh: true,
+          showAssets: false,
           nodeUrl: '/api/v1/assets/nodes/',
           treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
-
         },
         columns: [
           {

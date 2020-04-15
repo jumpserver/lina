@@ -55,6 +55,7 @@ export default {
   },
   methods: {
     initTree: function() {
+      console.log(this.treeSetting)
       this.$axios.get(this.treeSetting.treeUrl).then(res => {
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {

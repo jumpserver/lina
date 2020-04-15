@@ -403,6 +403,11 @@ const cn = {
     'MyTickets': '我的工单',
     'AssignedMe': '待处理'
   },
+  tree: {
+    'AddNode': '添加资产到节点',
+    'RenameNode': '重命名节点',
+    'DeleteNode': '删除节点'
+  },
   setting: {
     'setting': '系统设置',
     'basicsetting': '基本设置'
