@@ -1,14 +1,18 @@
 <template>
-  <TreeTable :table-config="tableConfig" :header-actions="headerActions" />
+  <!--  <TreeTable :table-config="tableConfig" :header-actions="headerActions" />-->
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+
 </template>
 
 <script>
-import TreeTable from '@/components/TreeTable'
+// import TreeTable from '@/components/TreeTable'
+import { GenericListPage } from '@/layout/components'
 import { LengthFormatter, ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    TreeTable
+    // TreeTable
+    GenericListPage
   },
   data() {
     return {
@@ -37,6 +41,9 @@ export default {
           system_users: {
             formatter: LengthFormatter
           }
+        },
+        actions: {
+          updateRoute: 'RemoteAppPermissionUpdate'
         }
       },
       headerActions: {

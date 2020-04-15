@@ -350,10 +350,30 @@ const cn = {
     'UserGroups': '用户组',
     'Node': '节点',
     'SystemUser': '系统用户',
+    'UserCount': '用户数量',
+    'UserGroupCount': '用户组数量',
+    'AssetCount': '资产数量',
+    'NodeCount': '节点数量',
+    'SystemUserCount': '系统用户数量',
+    'DateStart': '开始日期',
+    'DateExpired': '失效日期',
+    'DateCreated': '创建日期',
+    'CreatedBy': '创建者',
+    'Comment': '备注',
+    'QuickModify': '快速修改',
+    'AssetPermissionDetail': '资产授权详情',
+    'UsersAndUserGroups': '用户或用户组',
+    'AssetAndNode': '资产或节点',
+    'Active': '激活中',
     //
     'RemoteApp': '远程应用',
+    'RemoteAppCount': '远程应用数量',
+    'RemoteAppPermissionDetail': '远程应用授权详情',
+    'Add RemoteApp to this permission': '添加远程应用',
     //
-    'DatabaseApp': '数据库应用'
+    'DatabaseApp': '数据库应用',
+    'DatabaseAppPermissionDetail': '数据库应用授权详情',
+    'Add DatabaseApp to this permission': '添加数据库应用'
   },
   sessions: {
     'id': 'ID',
