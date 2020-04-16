@@ -17,7 +17,7 @@
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
 import 'ztree'
-import 'ztree/css/metroStyle/metroStyle.css'
+import '@/styles/ztree.css'
 const merge = require('deepmerge')
 
 const defaultObject = {
