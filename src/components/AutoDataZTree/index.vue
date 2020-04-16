@@ -173,6 +173,7 @@ export default {
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
       var treeNodesIds = []
       $.each(treeNodes, function(index, value) {
+        console.log(value)
         treeNodesIds.push(value.meta.node.id)
       })
       var the_url = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
@@ -185,7 +186,29 @@ export default {
       })
     },
     addTreeNode: function() {
-      alert('添加资产到节点')
+      this.hideRMenu()
+      var parentNode = this.zTree.getSelectedNodes()[0]
+      if (!parentNode) {
+        return
+      }
+      // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
+      var url = `${this.treeSetting.nodeUrl}${parentNode.meta.node.id}/children/`
+      this.$axios.post(
+        url, {}
+      ).then(data => {
+        var newNode = {
+          id: data['key'],
+          name: data['value'],
+          pId: parentNode.id,
+          meta: {
+            'node': data
+          }
+        }
+        newNode.checked = this.zTree.getSelectedNodes()[0].checked
+        this.zTree.addNodes(parentNode, 0, newNode)
+        var node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
+        this.zTree.editName(node)
+      })
     }
   }
 }

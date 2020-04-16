@@ -427,7 +427,7 @@ const cn = {
     'AssignedMe': '待处理'
   },
   tree: {
-    'AddNode': '添加资产到节点',
+    'AddNode': '添加节点',
     'RenameNode': '重命名节点',
     'DeleteNode': '删除节点'
   },
