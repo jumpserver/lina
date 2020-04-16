@@ -4,7 +4,7 @@
     <el-collapse-transition>
       <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
         <div v-show="ShowTree" :style="ShowTree?('width:250px;'):('width:0;')" class="transition-box">
-          <AutoDataZTree :setting="treeSetting" />
+          <AutoDataZTree :setting="treeSetting" @urlChange="handleUrlChange" />
         </div>
         <div :style="ShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
           <div class="mini">

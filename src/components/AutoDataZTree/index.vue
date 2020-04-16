@@ -99,9 +99,12 @@ export default {
       if (this.rMenu) this.rMenu.css({ 'visibility': 'hidden' })
       $('body').unbind('mousedown', this.onBodyMouseDown)
     },
+    // Request URL: http://localhost/api/v1/assets/assets/?node_id=d8212328-538d-41a6-bcfd-1e8cc7e3aed4&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
+
     onSelected: function(event, treeNode) {
       this.current_node = treeNode
       this.current_node_id = treeNode.meta.node.id
+      this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=null`)
     },
     removeTreeNode: function() {
       this.hideRMenu()
