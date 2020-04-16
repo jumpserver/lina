@@ -69,6 +69,10 @@ export default {
         ]
       },
       headerActions: {
+        hasRightActions: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
         hasBulkDelete: false,
         createRoute: 'GatewayCreate'
       }
