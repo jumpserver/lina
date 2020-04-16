@@ -29,9 +29,7 @@ export default {
       defaultSetting: {
         async: {
           enable: true,
-          url: this.treeSetting.showAssets
-            ? `${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`
-            : `${process.env.VUE_APP_BASE_API}${this.setUrlParam(this.setting.treeUrl, 'assets', '0')}`,
+          url: `${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`,
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get'
         },
