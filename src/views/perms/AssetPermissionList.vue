@@ -1,19 +1,24 @@
 <template>
+  <!--  <TreeTable :table-config="tableConfig" :header-actions="headerActions" />-->
   <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+
 </template>
 
 <script>
+// import TreeTable from '@/components/TreeTable'
 import { GenericListPage } from '@/layout/components'
 import { LengthFormatter, ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
+    // TreeTable
     GenericListPage
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
+        treeurl: '/api/v1/assets/nodes/children/tree/',
         hasSelection: false,
         columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
         columnsMeta: {
@@ -22,27 +27,32 @@ export default {
             formatter: ExpandAssetPermissionFormatter
           },
           users: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.User')
           },
           user_groups: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.UserGroups')
           },
           assets: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.Asset')
           },
           nodes: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.Node')
           },
           system_users: {
-            formatter: LengthFormatter
+            formatter: LengthFormatter,
+            label: this.$t('perms.SystemUser')
           }
+        },
+        actions: {
+          updateRoute: 'AssetPermissionUpdate'
         }
       },
       headerActions: {
-        hasDelete: false,
-        hasUpdate: false,
         hasBulkDelete: false,
-        createRoute: 'AssetPermissionCreate',
         extraActions: [
           {
             name: 'RefreshPermissionCache',

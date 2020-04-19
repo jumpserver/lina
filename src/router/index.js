@@ -194,6 +194,12 @@ export const constantRoutes = [
         meta: { title: 'RemoteApp' }
       },
       {
+        path: 'remote-apps/:id',
+        name: 'RemoteAppDetail',
+        component: () => import('@/views/applications/RemoteAppList'),
+        meta: { title: 'RemoteApp' }
+      },
+      {
         path: 'database-apps',
         name: 'DatabaseAppList',
         component: () => import('@/views/applications/DatabaseAppList'),
@@ -216,10 +222,24 @@ export const constantRoutes = [
       },
       {
         path: 'asset-permissions/create',
-        component: () => import('@/views/perms/AssetPermissionCreateUpdate'), // Parent router-view
+        component: () => import('@/views/perms/AssetPermissionCreateUpdate'),
         name: 'AssetPermissionCreate',
         hidden: true,
-        meta: { title: 'AssetPermissionCreate', activeMenu: '/perms/asset-permissions' }
+        meta: { title: 'AssetPermissionCreate', activeMenu: '/perms/asset-permissions', action: 'create' }
+      },
+      {
+        path: 'users/:id/update',
+        component: () => import('@/views/perms/AssetPermissionCreateUpdate.vue'), // Parent router-view
+        name: 'AssetPermissionUpdate',
+        hidden: true,
+        meta: { title: 'AssetPermissionUpdate', activeMenu: '/perms/asset-permissions', action: 'update' }
+      },
+      {
+        path: 'asset-permissions/:id',
+        component: () => import('@/views/perms/AssetPermissionDetail'),
+        name: 'AssetPermissionDetail',
+        hidden: true,
+        meta: { title: 'AssetPermissionDetail', activeMenu: '/perms/asset-permissions' }
       },
       {
         path: 'remote-app-permissions',
@@ -229,10 +249,24 @@ export const constantRoutes = [
       },
       {
         path: 'remote-app-permissions/create',
-        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'), // Parent router-view
+        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'),
         name: 'RemoteAppPermissionCreate',
         hidden: true,
-        meta: { title: 'RemoteAppPermissionCreate', activeMenu: '/perms/remote-app-permissions' }
+        meta: { title: 'RemoteAppPermissionCreate', activeMenu: '/perms/remote-app-permissions', action: 'create' }
+      },
+      {
+        path: 'remote-app-permissions/update',
+        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'),
+        name: 'RemoteAppPermissionUpdate',
+        hidden: true,
+        meta: { title: 'RemoteAppPermissionUpdate', activeMenu: '/perms/remote-app-permissions', action: 'update' }
+      },
+      {
+        path: 'remote-app-permissions/:id',
+        component: () => import('@/views/perms/RemoteAppPermissionDetail'),
+        name: 'RemoteAppPermissionDetail',
+        hidden: true,
+        meta: { title: 'RemoteAppPermissionDetail', activeMenu: '/perms/remote-app-permissions' }
       },
       {
         path: 'database-app-permissions',
@@ -246,6 +280,20 @@ export const constantRoutes = [
         name: 'DatabaseAppPermissionCreate',
         hidden: true,
         meta: { title: 'DatabaseAppPermissionCreate', activeMenu: '/perms/database-app-permissions' }
+      },
+      {
+        path: 'database-app-permissions/update',
+        component: () => import('@/views/perms/DatabaseAppPermissionCreateUpdate'), // Parent router-view
+        name: 'DatabaseAppPermissionUpdate',
+        hidden: true,
+        meta: { title: 'DatabaseAppPermissionUpdate', activeMenu: '/perms/database-app-permissions', action: 'update' }
+      },
+      {
+        path: 'database-app-permissions/:id',
+        component: () => import('@/views/perms/DatabaseAppPermissionDetail'),
+        name: 'DatabaseAppPermissionDetail',
+        hidden: true,
+        meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/asset-permissions' }
       }
     ]
   },
@@ -317,7 +365,7 @@ export const constantRoutes = [
       {
         path: 'command-executions/create',
         name: 'BatchCommand',
-        component: () => import('@/views/tree/index'),
+        component: () => import('@/views/jobcenter/CommandExecution'),
         meta: { title: 'BatchCommand' }
       },
       {
