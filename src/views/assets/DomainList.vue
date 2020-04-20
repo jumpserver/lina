@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="notice" />
 </template>
 
 <script>
@@ -54,9 +54,15 @@ export default {
         ]
       },
       headerActions: {
+        hasRightActions: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
         hasBulkDelete: false,
+        hasSearch: false,
         createRoute: 'DomainCreate'
-      }
+      },
+      notice: this.$t('网域功能是为了解决部分环境（如：混合云）无法直接连接而新增的功能，原理是通过网关服务器进行跳转登录。JMS => 网域网关 => 目标资产')
     }
   }
 }

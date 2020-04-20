@@ -21,6 +21,7 @@ export default {
             sortable: 'custom'
           },
           {
+
             prop: 'ip',
             label: this.$t('assets.ip'),
             sortable: 'custom'
@@ -67,14 +68,6 @@ export default {
             }
           }
         ]
-      },
-      headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasBulkDelete: false,
-        createRoute: 'GatewayCreate'
       }
     }
   }

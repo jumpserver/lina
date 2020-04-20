@@ -39,6 +39,12 @@ export default {
             formatter: ActionsFormatter,
             width: '200px',
             actions: {
+              canDelete: (row, vaule) => {
+                return !row.internal
+              },
+              canUpdate: (row, vaule) => {
+                return !row.internal
+              },
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/platforms/${id}/`
@@ -49,7 +55,12 @@ export default {
         ]
       },
       headerActions: {
+        hasRightActions: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
         hasBulkDelete: false,
+        hasSearch: false,
         createRoute: 'PlatformCreate'
       }
     }
