@@ -42,6 +42,11 @@ Vue.use(VueCookie)
 
 import service from '@/utils/request'
 
+// lodash
+// import _ from 'lodash'
+window._ = require('lodash')
+// Vue.set(Vue.prototype, '_', _)
+
 // if the table component cannot access `this.$axios`, it cannot send request
 Vue.prototype.$axios = service
 // 注册全局事件总线

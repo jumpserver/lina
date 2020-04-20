@@ -3,9 +3,12 @@
     <span slot="title">
       {{ title }}
     </span>
-    <span v-if="hasRightSide" slot="headingRightSide">
-      <ActionsGroup slot="headingRightSide" :actions="pageActions" />
-    </span>
+
+    <template #headingRightSide>
+      <span v-if="hasRightSide">
+        <ActionsGroup slot="headingRightSide" :actions="pageActions" />
+      </span>
+    </template>
 
     <div>
       <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="activeName" class="page-submenu">

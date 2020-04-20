@@ -107,11 +107,22 @@ export default {
       }
       return validActions
     },
+    cleanedActions() {
+      const actions = []
+      for (const v of [...this.validActions]) {
+        const action = _.cloneDeep(v)
+        delete action['has']
+        delete action['can']
+        delete action['callback']
+        actions.push(action)
+      }
+      return actions
+    },
     actions() {
-      return this.validActions.slice(0, 2)
+      return this.cleanedActions.slice(0, 2)
     },
     moreActions() {
-      return this.validActions.slice(2, this.validActions.length)
+      return this.cleanedActions.slice(2, this.cleanedActions.length)
     },
     namedValidActions() {
       const actions = {}
@@ -127,6 +138,7 @@ export default {
   methods: {
     handleActionClick(item) {
       const action = this.namedValidActions[item]
+      console.log(this.validActions)
       if (action && action.callback) {
         const attrs = {
           reload: this.reload,
