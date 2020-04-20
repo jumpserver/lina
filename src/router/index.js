@@ -293,7 +293,7 @@ export const constantRoutes = [
         component: () => import('@/views/perms/DatabaseAppPermissionDetail'),
         name: 'DatabaseAppPermissionDetail',
         hidden: true,
-        meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/asset-permissions' }
+        meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/database-app-permissions' }
       }
     ]
   },
@@ -360,7 +360,28 @@ export const constantRoutes = [
         path: 'task',
         name: 'TaskList',
         component: () => import('@/views/jobcenter/TaskList'),
-        meta: { title: 'TaskList' }
+        meta: { title: 'TaskList', activeMenu: '/ops/task' }
+      },
+      {
+        path: 'task/:id',
+        component: () => import('@/views/jobcenter/TaskDetail'),
+        name: 'TaskDetail',
+        hidden: true,
+        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
+      },
+      {
+        path: 'adhoc/:id',
+        component: () => import('@/views/jobcenter/AdhocDetail'),
+        name: 'AdhocDetail',
+        hidden: true,
+        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/jobcenter/HistoryExecutionDetail'),
+        name: 'HistoryExecutionDetail',
+        hidden: true,
+        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
       },
       {
         path: 'command-executions/create',
