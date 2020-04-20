@@ -407,7 +407,13 @@ const cn = {
     'quickModify': '快速修改',
     'replaySession': '回放会话:',
     'downloadReplay': '下载录像:',
-    'go': '执行'
+    'go': '执行',
+    'terminalDetail': '终端详情',
+    'name': '名称:',
+    'sshPort': 'SSH端口:',
+    'httpPort': 'HTTP端口:',
+    'comment': '备注:',
+    'dateCreated': '创建日期:'
   },
   jobcenter: {
     'RunTimes': '执行次数',
