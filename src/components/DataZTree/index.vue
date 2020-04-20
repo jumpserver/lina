@@ -43,15 +43,15 @@ export default {
           }
         },
         callback: {
-          onRightClick: this.defaultCallback('onRightClick'),
-          onRename: this.defaultCallback('Rename'),
-          beforeClick: this.defaultCallback('beforeClick'),
-          onSelected: this.defaultCallback('onSelected'),
-          beforeDrag: this.defaultCallback('beforeDrag'),
-          onDrag: this.defaultCallback('onDrag'),
-          beforeDrop: this.defaultCallback('beforeDrop'),
-          onDrop: this.defaultCallback('onDrop'),
-          beforeAsync: this.defaultCallback('beforeAsync')
+          onRightClick: this.defaultCallback.bind(this, 'onRightClick'),
+          onRename: this.defaultCallback.bind(this, 'onRename'),
+          beforeClick: this.defaultCallback.bind(this, 'beforeClick'),
+          onSelected: this.defaultCallback.bind(this, 'onSelected'),
+          beforeDrag: this.defaultCallback.bind(this, 'beforeDrag'),
+          onDrag: this.defaultCallback.bind(this, 'onDrag'),
+          beforeDrop: this.defaultCallback.bind(this, 'beforeDrop'),
+          onDrop: this.defaultCallback.bind(this, 'onDrop'),
+          beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
         }
       }
     }

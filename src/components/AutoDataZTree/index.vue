@@ -1,9 +1,9 @@
 <template>
   <DataZTree ref="dataztree" :setting="treeSetting">
     <slot slot="rMenu">
-      <li id="m_create" class="rmenu" tabindex="-1"><a><i class="fa fa-plus-square-o" /> 添加资产到节点 </a></li>
-      <li id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode"><a><i class="fa fa-pencil-square-o" /> 重命名节点 </a></li>
-      <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode"><a><i class="fa fa-minus-square" /> 删除节点 </a></li>
+      <li id="m_create" class="rmenu" tabindex="-1" @click="addTreeNode"><a><i class="fa fa-plus-square-o" /> {{ this.$t('tree.AddNode') }} </a></li>
+      <li id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode"><a><i class="fa fa-pencil-square-o" /> {{ this.$t('tree.RenameNode') }} </a></li>
+      <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode"><a><i class="fa fa-minus-square" /> {{ this.$t('tree.DeleteNode') }} </a></li>
       <slot name="rMenu" />
     </slot>
   </DataZTree>
@@ -29,22 +29,30 @@ export default {
       defaultSetting: {
         async: {
           enable: true,
-          url: this.setting.showAssets ? process.env.VUE_APP_BASE_API + this.setting.treeUrl : process.env.VUE_APP_BASE_API + this.setUrlParam(this.setting.treeUrl, 'assets', '1'),
+          url: `${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`,
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get'
         },
         callback: {
           onRightClick: this.onRightClick.bind(this),
-          onRename: this.onRename.bind(this)
-
+          onRename: this.onRename.bind(this),
+          onSelected: this.onSelected.bind(this),
+          beforeDrop: this.beforeDrop.bind(this),
+          onDrop: this.onDrop.bind(this)
+          // 尚未定义的函数
+          // beforeClick
+          // beforeDrag
+          // onDrag
+          // beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
         }
-      }
+      },
+      current_node: '',
+      current_node_id: ''
     }
   },
   computed: {
     treeSetting() {
       const treeSetting = merge(this.defaultSetting, this.setting)
-      console.log(treeSetting)
       return treeSetting
     },
     zTree() {
@@ -91,21 +99,41 @@ export default {
       if (this.rMenu) this.rMenu.css({ 'visibility': 'hidden' })
       $('body').unbind('mousedown', this.onBodyMouseDown)
     },
+    // Request URL: http://localhost/api/v1/assets/assets/?node_id=d8212328-538d-41a6-bcfd-1e8cc7e3aed4&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
+
+    onSelected: function(event, treeNode) {
+      this.current_node = treeNode
+      this.current_node_id = treeNode.meta.node.id
+      this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=null`)
+    },
     removeTreeNode: function() {
       this.hideRMenu()
       var currentNode = this.zTree.getSelectedNodes()[0]
-      console.log(currentNode)
       if (!currentNode) {
         return
       }
       this.$axios.delete(
-        `${this.nodeUrl}${currentNode.meta.node.id}/`,
+        `${this.treeSetting.nodeUrl}${currentNode.meta.node.id}/`,
       ).then(
         this.zTree.removeNode(currentNode)
       )
     },
     onRename: function(event, treeId, treeNode, isCancel) {
-      console.log(event, treeId, treeNode, isCancel)
+      var url = `${this.treeSetting.nodeUrl}${this.current_node_id}/`
+      if (isCancel) {
+        return
+      }
+      this.$axios.patch(
+        url,
+        { 'value': treeNode.name }
+      ).then(res => {
+        var assets_amount = treeNode.meta.node.assets_amount
+        if (!assets_amount) {
+          assets_amount = 0
+        }
+        treeNode.name = treeNode.name + ' (' + assets_amount + ')'
+        this.zTree.updateNode(treeNode)
+      })
     },
     onBodyMouseDown: function(event) {
       if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
@@ -134,6 +162,56 @@ export default {
         this.zTree.selectNode(treeNode)
         this.showRMenu('node', event.clientX, event.clientY)
       }
+    },
+    beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
+      var treeNodesNames = []
+      $.each(treeNodes, function(index, value) {
+        treeNodesNames.push(value.name)
+      })
+
+      // TODO 修改默认确认框
+      var msg = '你想移动节点: `' + treeNodesNames.join(',') + '` 到 `' + targetNode.name + '` 下吗?'
+      return confirm(msg)
+    },
+    onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
+      var treeNodesIds = []
+      $.each(treeNodes, function(index, value) {
+        console.log(value)
+        treeNodesIds.push(value.meta.node.id)
+      })
+      var the_url = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
+      this.$axios.put(
+        the_url, {
+          nodes: treeNodesIds
+        }
+      ).then((res) => {
+        console.log(res)
+      })
+    },
+    addTreeNode: function() {
+      this.hideRMenu()
+      var parentNode = this.zTree.getSelectedNodes()[0]
+      if (!parentNode) {
+        return
+      }
+      // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
+      var url = `${this.treeSetting.nodeUrl}${parentNode.meta.node.id}/children/`
+      this.$axios.post(
+        url, {}
+      ).then(data => {
+        var newNode = {
+          id: data['key'],
+          name: data['value'],
+          pId: parentNode.id,
+          meta: {
+            'node': data
+          }
+        }
+        newNode.checked = this.zTree.getSelectedNodes()[0].checked
+        this.zTree.addNodes(parentNode, 0, newNode)
+        var node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
+        this.zTree.editName(node)
+      })
     }
   }
 }

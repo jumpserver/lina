@@ -17,7 +17,7 @@
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
 import 'ztree'
-import 'ztree/css/metroStyle/metroStyle.css'
+import '@/styles/ztree.css'
 const merge = require('deepmerge')
 
 const defaultObject = {
@@ -55,6 +55,7 @@ export default {
   },
   methods: {
     initTree: function() {
+      console.log(this.treeSetting)
       this.$axios.get(this.treeSetting.treeUrl).then(res => {
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {

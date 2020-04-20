@@ -17,9 +17,11 @@ export default {
         treeSetting: {
           showMenu: true,
           showRefresh: true,
+          showAssets: false,
+          url: '/api/v1/assets/assets/',
           nodeUrl: '/api/v1/assets/nodes/',
+          // ?assets=0不显示资产. =1显示资产
           treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
-
         },
         columns: [
           {

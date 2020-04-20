@@ -301,7 +301,13 @@ const en = {
     'quickModify': 'Quick Modify',
     'replaySession': 'Replay session:',
     'downloadReplay': 'Download replay:',
-    'go': 'Go'
+    'go': 'Go',
+    'terminalDetail': 'terminalDetail',
+    'name': 'Name:',
+    'sshPort': 'SSH port:',
+    'httpPort': 'Http port:',
+    'comment': 'Comment:',
+    'dateCreated': 'Date created:'
   },
   setting: {
     'setting': 'System Setting',

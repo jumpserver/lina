@@ -21,3 +21,10 @@ export function getSessionCommands(id) {
     method: 'get'
   })
 }
+
+export function getTerminalDetail(id) {
+  return request({
+    url: `/api/v1/terminal/terminals/${id}/`,
+    method: 'get'
+  })
+}
