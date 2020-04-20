@@ -3328,6 +3328,11 @@ elegant-spinner@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/elegant-spinner/-/elegant-spinner-1.0.1.tgz#db043521c95d7e303fd8f345bedc3349cfb0729e"
 
+element-theme-chalk@^2.13.1:
+  version "2.13.1"
+  resolved "https://registry.npm.taobao.org/element-theme-chalk/download/element-theme-chalk-2.13.1.tgz?cache=0&sync_timestamp=1586760865928&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felement-theme-chalk%2Fdownload%2Felement-theme-chalk-2.13.1.tgz#9a022717a154ef0ca46f54665b485444b45c0671"
+  integrity sha1-mgInF6FU7wykb1RmW0hURLRcBnE=
+
 element-ui@2.13.0:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.13.0.tgz#f6bb04e5b0a76ea5f62466044b774407ba4ebd2d"
