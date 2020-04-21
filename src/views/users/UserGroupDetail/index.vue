@@ -37,13 +37,12 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      group: { name: '' },
+      group: { name: '', comment: '' },
       config: {
         activeMenu: 'info',
         submenu: [
           {
-            title: this.$tc('baseInfo'),
+            title: this.$tc('Basic Info'),
             name: 'info'
           },
           {
@@ -51,11 +50,13 @@ export default {
             name: 'assetPermissions'
           }
         ],
-        canDelete: true,
-        canUpdate: true
+        actions: {
+          canDelete: true,
+          canUpdate: true
+        }
       },
       groupMembers: [],
-      cardTitle: '基本信息',
+      cardTitle: this.$tc('Basic Info'),
       select2: {
         url: '/api/v1/users/users/',
         initial: this.groupMembers,
@@ -64,9 +65,6 @@ export default {
     }
   },
   computed: {
-    // title() {
-    //   return this.$t('users.userGroup') + ': ' + this.group.name
-    // },
     detailItems() {
       return [
         {
@@ -100,9 +98,6 @@ export default {
     })
   },
   methods: {
-    canDelete() {
-      return this.group.name === 'Amanda Perry'
-    }
   }
 }
 </script>
