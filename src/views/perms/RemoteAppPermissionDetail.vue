@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="remoteAppPermission" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -56,22 +56,25 @@ export default {
   data() {
     return {
       flag: false,
-      activeSubMenu: 'detail',
+      remoteAppPermission: { name: '' },
+      config: {
+        activeMenu: 'detail',
+        submenu: [
+          {
+            title: this.$t('perms.RemoteAppPermissionDetail'),
+            name: 'detail'
+          },
+          {
+            title: this.$t('perms.UsersAndUserGroups'),
+            name: 'userAndUserGroups'
+          },
+          {
+            title: this.$t('perms.RemoteApp'),
+            name: 'remoteApp'
+          }
+        ]
+      },
       remoteAppData: {},
-      submenu: [
-        {
-          title: this.$t('perms.RemoteAppPermissionDetail'),
-          name: 'detail'
-        },
-        {
-          title: this.$t('perms.UsersAndUserGroups'),
-          name: 'userAndUserGroups'
-        },
-        {
-          title: this.$t('perms.RemoteApp'),
-          name: 'remoteApp'
-        }
-      ],
       remoteAppPermissionRemoteApp: [],
       remoteAppPermissionSystemUser: [],
       selectRemoteApp: {
@@ -87,9 +90,6 @@ export default {
     }
   },
   computed: {
-    title() {
-      return this.$t('perms.RemoteAppPermissionDetail')
-    },
     cardTitle() {
       return this.remoteAppData.id
     },

@@ -1,39 +1,45 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
-    <div slot="detail">
-      <el-row :gutter="20">
-        <el-col :span="14">
-          <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
-        </el-col>
-        <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-info" />
-              <span>{{ detailCardActions }}</span>
-            </div>
-            <el-table class="el-table" :data="detailCardActionData" :show-header="false">
-              <el-table-column prop="name" />
-              <el-table-column prop="is_active" align="right">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.is_active"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    @change="HandleChangeAction(scope.$index, scope.row)"
-                  />
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-    <div slot="userAndUserGroups">
-      <AssetPermissionUser />
-    </div>
-    <div slot="assetAndNode">
-      <AssetPermissionAsset />
-    </div>
+  <GenericDetailPage :object.sync="assetPermission" v-bind="config">
+    <template #detail>
+      <div>
+        <el-row :gutter="20">
+          <el-col :span="14">
+            <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
+          </el-col>
+          <el-col :span="10">
+            <el-card class="box-card primary">
+              <div slot="header" class="clearfix">
+                <i class="fa fa-info" />
+                <span>{{ detailCardActions }}</span>
+              </div>
+              <el-table class="el-table" :data="detailCardActionData" :show-header="false">
+                <el-table-column prop="name" />
+                <el-table-column prop="is_active" align="right">
+                  <template slot-scope="scope">
+                    <el-switch
+                      v-model="scope.row.is_active"
+                      active-color="#13ce66"
+                      inactive-color="#ff4949"
+                      @change="HandleChangeAction(scope.$index, scope.row)"
+                    />
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
+    </template>
+    <template #userAndUserGroups>
+      <div>
+        <AssetPermissionUser />
+      </div>
+    </template>
+    <template #assetAndNode>
+      <div>
+        <AssetPermissionAsset />
+      </div>
+    </template>
   </GenericDetailPage>
 </template>
 
@@ -56,28 +62,28 @@ export default {
   data() {
     return {
       flag: false,
-      activeSubMenu: 'detail',
-      assetPermissionData: {},
-      submenu: [
-        {
-          title: this.$t('perms.AssetPermissionDetail'),
-          name: 'detail'
-        },
-        {
-          title: this.$t('perms.UsersAndUserGroups'),
-          name: 'userAndUserGroups'
-        },
-        {
-          title: this.$t('perms.AssetAndNode'),
-          name: 'assetAndNode'
-        }
-      ]
+      assetPermission: { name: '' },
+      config: {
+        activeMenu: 'detail',
+        submenu: [
+          {
+            title: this.$t('perms.AssetPermissionDetail'),
+            name: 'detail'
+          },
+          {
+            title: this.$t('perms.UsersAndUserGroups'),
+            name: 'userAndUserGroups'
+          },
+          {
+            title: this.$t('perms.AssetAndNode'),
+            name: 'assetAndNode'
+          }
+        ]
+      },
+      assetPermissionData: {}
     }
   },
   computed: {
-    title() {
-      return this.$t('perms.AssetPermissionDetail')
-    },
     cardTitle() {
       return this.assetPermissionData.id
     },

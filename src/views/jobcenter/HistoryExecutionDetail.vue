@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="historyExecutionDetail" v-bind="config">
     <div slot="executionDetail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -48,25 +48,33 @@ export default {
   data() {
     return {
       flag: false,
-      defaultValue: '',
-      historyExecutionDetailData: {},
-      activeSubMenu: 'executionDetail',
-      submenu: [
-        {
-          title: this.$t('jobcenter.ExecutionDetail'),
-          name: 'executionDetail'
-        },
-        {
-          title: this.$t('jobcenter.Output'),
-          name: 'outPut'
+      historyExecutionDetail: { name: '' },
+      config: {
+        activeMenu: 'executionDetail',
+        title: this.$t('jobcenter.ExecutionDetail'),
+        submenu: [
+          {
+            title: this.$t('jobcenter.ExecutionDetail'),
+            name: 'executionDetail'
+          },
+          {
+            title: this.$t('jobcenter.Output'),
+            name: 'outPut'
+          }
+        ],
+        actions: {
+          canDelete: false,
+          canUpdate: false,
+          hasDelete: false,
+          hasUpdate: false,
+          detailApiUrl: `/api/v1/ops/adhoc-executions/${this.$route.params.id}/`
         }
-      ]
+      },
+      defaultValue: '',
+      historyExecutionDetailData: {}
     }
   },
   computed: {
-    title() {
-      return this.$t('jobcenter.TaskDetail')
-    },
     cardTitle() {
       return `${this.historyExecutionDetailData.task_display}:${this.historyExecutionDetailData.adhoc_short_id}`
     },

@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="databaseAppPermission" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -56,28 +56,28 @@ export default {
   data() {
     return {
       flag: false,
-      activeSubMenu: 'detail',
-      databaseAppData: {},
-      submenu: [
-        {
-          title: this.$t('perms.DatabaseAppPermissionDetail'),
-          name: 'detail'
-        },
-        {
-          title: this.$t('perms.UsersAndUserGroups'),
-          name: 'userAndUserGroups'
-        },
-        {
-          title: this.$t('perms.DatabaseApp'),
-          name: 'databaseApp'
-        }
-      ]
+      databaseAppPermission: { name: '' },
+      config: {
+        activeMenu: 'detail',
+        submenu: [
+          {
+            title: this.$t('perms.DatabaseAppPermissionDetail'),
+            name: 'detail'
+          },
+          {
+            title: this.$t('perms.UsersAndUserGroups'),
+            name: 'userAndUserGroups'
+          },
+          {
+            title: this.$t('perms.DatabaseApp'),
+            name: 'databaseApp'
+          }
+        ]
+      },
+      databaseAppData: {}
     }
   },
   computed: {
-    title() {
-      return this.$t('perms.DatabaseAppPermissionDetail')
-    },
     cardTitle() {
       return this.databaseAppData.id
     },

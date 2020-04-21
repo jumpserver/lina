@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="taskDetail" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -58,32 +58,38 @@ export default {
   data() {
     return {
       flag: false,
-      taskData: {},
-      activeSubMenu: 'detail',
-      submenu: [
-        {
-          title: this.$t('jobcenter.TaskDetail'),
-          name: 'detail'
-        },
-        {
-          title: this.$t('jobcenter.TaskVersions'),
-          name: 'taskVersions'
-        },
-        {
-          title: this.$t('jobcenter.Execution'),
-          name: 'execution'
-        },
-        {
-          title: this.$t('jobcenter.LaskExecutionOutput'),
-          name: 'laskExecutionOutput'
+      taskDetail: { name: '' },
+      config: {
+        activeMenu: 'detail',
+        submenu: [
+          {
+            title: this.$t('jobcenter.TaskDetail'),
+            name: 'detail'
+          },
+          {
+            title: this.$t('jobcenter.TaskVersions'),
+            name: 'taskVersions'
+          },
+          {
+            title: this.$t('jobcenter.Execution'),
+            name: 'execution'
+          },
+          {
+            title: this.$t('jobcenter.LaskExecutionOutput'),
+            name: 'laskExecutionOutput'
+          }
+        ],
+        actions: {
+          canDelete: false,
+          canUpdate: false,
+          hasDelete: false,
+          hasUpdate: false
         }
-      ]
+      },
+      taskData: {}
     }
   },
   computed: {
-    title() {
-      return this.$t('jobcenter.TaskDetail')
-    },
     cardTitle() {
       return this.taskData.name
     },
