@@ -74,7 +74,8 @@ const cn = {
     'Deactive selected': '禁用所选',
     'Active selected': '激活所选',
     'rows': '行',
-    'Basic Info': '基本信息'
+    'Basic Info': '基本信息',
+    'Add': '添加'
   },
   route: {
     'dashboard': '仪表盘',

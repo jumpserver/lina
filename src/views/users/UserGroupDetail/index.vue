@@ -7,15 +7,7 @@
             <DetailCard :title="cardTitle" :items="detailItems" />
           </el-col>
           <el-col :md="10" :sm="24">
-            <el-card class="box-card primary">
-              <div slot="header" class="clearfix">
-                <i class="fa fa-user" />
-                <span>组下用户</span>
-              </div>
-              <div>
-                <Select2 v-model="select2.value" v-bind="select2" />
-              </div>
-            </el-card>
+            <RelationCard v-if="!relationConfig.loading" v-bind="relationConfig" />
           </el-col>
         </el-row>
       </div>
@@ -26,14 +18,13 @@
 <script>
 import { getUserGroupMembers } from '@/api/user'
 import { GenericDetailPage } from '@/layout/components'
-import DetailCard from '@/components/DetailCard'
-import Select2 from '@/components/Select2'
+import { DetailCard, RelationCard } from '@/components'
 
 export default {
   components: {
     GenericDetailPage,
     DetailCard,
-    Select2
+    RelationCard
   },
   data() {
     return {
@@ -56,12 +47,14 @@ export default {
         }
       },
       groupMembers: [],
-      cardTitle: this.$tc('Basic Info'),
-      select2: {
+      relationConfig: {
+        icon: 'fa-user',
+        title: this.$tc('Members'),
         url: '/api/v1/users/users/',
-        initial: this.groupMembers,
-        value: []
-      }
+        value: [],
+        loading: true
+      },
+      cardTitle: this.$tc('Basic Info')
     }
   },
   computed: {
@@ -88,13 +81,12 @@ export default {
   },
   mounted() {
     getUserGroupMembers(this.$route.params.id).then(data => {
-      this.groupMembers = data.map(v => {
-        const member = {}
-        member.id = v.user
-        member.name = v.user_display
-        return member
-      })
-      this.select2.initial = this.groupMembers
+      for (const i of data) {
+        this.relationConfig.value.push(i.user)
+      }
+      console.log(this.relationConfig.value)
+    }).finally(() => {
+      this.relationConfig.loading = false
     })
   },
   methods: {
