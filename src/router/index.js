@@ -135,6 +135,12 @@ export const constantRoutes = [
         meta: { title: 'DomainList' }
       },
       {
+        path: 'domains/create',
+        name: 'DomainCreate',
+        component: () => import('@/views/assets/DomainCreateUpdate.vue'),
+        meta: { title: 'DomainList' }
+      },
+      {
         path: 'domains/:id/gateway',
         name: 'GatewayList',
         hidden: true,
@@ -148,12 +154,55 @@ export const constantRoutes = [
         meta: { title: 'AdminUserList' }
       },
       {
+        path: 'admin-users/create',
+        component: () => import('@/views/assets/AdminUserCreateUpdate.vue'), // Parent router-view
+        name: 'AdminUserCreateUpdate',
+        meta: { title: 'AdminUserCreate' },
+        hidden: true
+      },
+      {
+        path: 'platform/update/:id',
+        component: () => import('@/views/assets/PlatformCreateUpdate.vue'), // Parent router-view
+        name: 'PlatformUpdate',
+        meta: { title: 'PlatformUpdate' },
+        hidden: true
+      },
+      {
+        path: 'platform/create',
+        component: () => import('@/views/assets/PlatformCreateUpdate.vue'), // Parent router-view
+        name: 'PlatformCreate',
+        meta: { title: 'PlatformCreate' },
+        hidden: true
+      },
+      {
+        path: 'cmd-filters/update/:id',
+        component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
+        name: 'PlatformUpdate',
+        meta: { title: 'PlatformUpdate' },
+        hidden: true
+      },
+      {
+        path: 'cmd-filters/create',
+        component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
+        name: 'PlatformCreate',
+        meta: { title: 'PlatformCreate' },
+        hidden: true
+      },
+      {
+        path: 'platform/:id',
+        component: () => import('@/views/assets/PlatformDetail.vue'), // Parent router-view
+        name: 'PlatformDetail',
+        meta: { title: 'PlatformDetail' },
+        hidden: true
+      },
+      {
         path: 'admin-users/:id',
         component: () => import('@/views/assets/AdminUserDetail.vue'), // Parent router-view
         name: 'AdminUserDetail',
         meta: { title: 'AdminUserDetail' },
         hidden: true
       },
+
       {
         path: 'system-users',
         name: 'SystemUserList',

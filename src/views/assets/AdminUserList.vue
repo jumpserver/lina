@@ -54,7 +54,7 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
-        createRoute: 'AdminUserCreate'
+        createRoute: 'AdminUserCreateUpdate'
       }
     }
   }

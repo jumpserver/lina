@@ -124,7 +124,10 @@ const cn = {
     'Settings': '系统设置',
     'UserCreate': '创建用户',
     'UserGroupCreate': '创建用户组',
-    'UserUpdate': '更新用户'
+    'UserUpdate': '更新用户',
+    'AdminUserCreate': '创建管理用户',
+    'PlatformCreate': '创建系统平台',
+    'PlatformUpdate': '更新系统平台'
   },
   // 用户模块翻译
   users: {
