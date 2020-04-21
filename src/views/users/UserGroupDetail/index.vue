@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage v-loading="loading" :title="title" v-bind="config">
     <template v-slot:info>
       <div>
         <el-row :gutter="20">
@@ -20,7 +20,6 @@
         </el-row>
       </div>
     </template>
-
   </GenericDetailPage>
 </template>
 
@@ -38,19 +37,24 @@ export default {
   },
   data() {
     return {
-      activeSubMenu: 'info',
-      groupMembers: [],
+      loading: true,
       group: { name: '' },
-      submenu: [
-        {
-          title: this.$tc('baseInfo'),
-          name: 'info'
-        },
-        {
-          title: this.$t('perms.Asset permissions'),
-          name: 'assetPermissions'
-        }
-      ],
+      config: {
+        activeMenu: 'info',
+        submenu: [
+          {
+            title: this.$tc('baseInfo'),
+            name: 'info'
+          },
+          {
+            title: this.$t('perms.Asset permissions'),
+            name: 'assetPermissions'
+          }
+        ],
+        canDelete: this.canDelete,
+        canUpdate: true
+      },
+      groupMembers: [],
       cardTitle: '基本信息',
       select2: {
         url: '/api/v1/users/users/',
@@ -87,6 +91,8 @@ export default {
   mounted() {
     getUserGroupDetail(this.$route.params.id).then(data => {
       this.group = data
+    }).finally(() => {
+      this.loading = false
     })
 
     getUserGroupMembers(this.$route.params.id).then(data => {
@@ -97,10 +103,12 @@ export default {
         return member
       })
       this.select2.initial = this.groupMembers
-      console.log(this.groupMembers)
     })
   },
   methods: {
+    canDelete() {
+      return this.group.name === 'Amanda Perry'
+    }
   }
 }
 </script>

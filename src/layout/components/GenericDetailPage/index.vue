@@ -49,6 +49,34 @@ export default {
     hasRightSide: {
       type: Boolean,
       default: true
+    },
+    canDelete: {
+      type: [Boolean, Function],
+      default: true
+    },
+    deleteCallback: {
+      type: Function,
+      default: function(item) {
+        return this.defaultDelete(item)
+      }
+    },
+    deleteRoute: {
+      type: String,
+      default: null
+    },
+    canUpdate: {
+      type: [Boolean, Function],
+      default: true
+    },
+    updateCallback: {
+      type: Function,
+      default: function(item) {
+        return this.defaultUpdate(item)
+      }
+    },
+    updateRoute: {
+      type: String,
+      default: null
     }
   },
   data() {
@@ -56,14 +84,29 @@ export default {
       activeName: this.activeMenu || null,
       pageActions: [
         {
-          name: 'Update',
-          title: this.$tc('Update')
+          name: 'update',
+          title: this.$tc('Update'),
+          can: this.canUpdate,
+          callback: this.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$tc('Delete')
+          title: this.$tc('Delete'),
+          can: this.canDelete,
+          callback: this.deleteCallback.bind(this)
         }
       ]
+    }
+  },
+  methods: {
+    defaultDelete() {
+
+    },
+    defaultUpdate() {
+      const id = this.$route.params.id
+      const defaultUpdateRoute = this.$route.name.replace('Detail', 'Update')
+      const routeName = this.updateRoute || defaultUpdateRoute
+      this.$router.push({ name: routeName, params: { id: id }})
     }
   }
 }

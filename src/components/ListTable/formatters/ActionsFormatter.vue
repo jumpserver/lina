@@ -138,7 +138,6 @@ export default {
   methods: {
     handleActionClick(item) {
       const action = this.namedValidActions[item]
-      console.log(this.validActions)
       if (action && action.callback) {
         const attrs = {
           reload: this.reload,

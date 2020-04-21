@@ -92,7 +92,7 @@ td .el-button.el-button--mini {
   font-weight: 600;
 }
 
-.el-button.el-button--default:focus, .el-button.el-button--default:hover {
+.el-button.el-button--default:focus:not(.is-disabled), .el-button.el-button--default:hover:not(.is-disabled) {
   color: #606266;
   border-color: #d2d2d2;
   background-color: #e6e6e6;

@@ -40,6 +40,11 @@ Vue.config.productionTip = false
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 
+// logger
+import VueLogger from 'vuejs-logger'
+import loggerOptions from './utils/logger'
+Vue.use(VueLogger, loggerOptions)
+
 import service from '@/utils/request'
 
 // lodash
