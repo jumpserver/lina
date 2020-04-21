@@ -1,8 +1,10 @@
 <template>
-  <Page>
-    <span slot="title">
-      {{ title }}
-    </span>
+  <Page v-loading="loading">
+    <template #title>
+      <span>
+        {{ validTitle }}
+      </span>
+    </template>
 
     <template #headingRightSide>
       <span v-if="hasRightSide">
@@ -35,6 +37,10 @@ export default {
     ActionsGroup
   },
   props: {
+    object: {
+      type: Object,
+      required: true
+    },
     title: {
       type: String,
       default: ''
@@ -51,71 +57,77 @@ export default {
       type: Boolean,
       default: true
     },
-    canDelete: {
-      type: [Boolean, Function],
-      default: true
+    actions: {
+      type: Object, // 查看defaultActions设置
+      default: () => ({})
     },
-    deleteCallback: {
+    getObjectName: {
       type: Function,
-      default: function(item) {
-        return this.defaultDelete(item)
+      default: function(obj) {
+        return obj.name
       }
     },
-    deleteUrl: {
-      type: String,
-      default: function() {
-        return getApiPath(this)
-      }
-    },
-    deleteSuccessRoute: {
-      type: String,
-      default: function() {
-        return this.$route.name.replace('Detail', 'List')
-      }
-    },
-    canUpdate: {
-      type: [Boolean, Function],
-      default: true
-    },
-    updateCallback: {
+    getTitle: {
       type: Function,
-      default: function(item) {
-        return this.defaultUpdate(item)
-      }
-    },
-    updateRoute: {
-      type: String,
-      default: function() {
-        return this.$route.name.replace('Detail', 'Update')
+      default: function(obj) {
+        const objectType = this.$tr(this.$route.meta.title)
+          .replace('Detail', '')
+          .replace('详情', '')
+        console.log('Object is: ', this.obj)
+        const objectName = this.getObjectName(obj)
+        return `${objectType}: ${objectName}`
       }
     }
   },
   data() {
+    const defaultActions = {
+      canDelete: true,
+      deleteCallback: function(item) { this.defaultDelete(item) },
+      deleteApiUrl: getApiPath(this),
+      deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
+      canUpdate: true,
+      updateCallback: function(item) { this.defaultUpdate(item) },
+      updateRoute: this.$route.name.replace('Detail', 'Update'),
+      detailApiUrl: getApiPath(this)
+    }
     return {
-      activeName: this.activeMenu || null,
-      pageActions: [
+      loading: false,
+      activeName: this.activeMenu || 'info',
+      validActions: Object.assign(defaultActions, this.actions)
+    }
+  },
+  computed: {
+    pageActions() {
+      return [
         {
           name: 'update',
           title: this.$tc('Update'),
-          can: this.canUpdate,
-          callback: this.updateCallback.bind(this)
+          can: this.validActions.canUpdate,
+          callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
           title: this.$tc('Delete'),
-          can: this.canDelete,
-          callback: this.deleteCallback.bind(this)
+          can: this.validActions.canDelete,
+          callback: this.validActions.deleteCallback.bind(this)
         }
       ]
+    },
+    validTitle() {
+      return this.title || this.getTitle(this.object)
     }
+  },
+  mounted() {
+    this.getObject()
   },
   methods: {
     defaultDelete() {
       const msg = this.$tc('Are you sure to delete') + ' ?'
       const title = this.$tc('Info')
       const performDelete = async function() {
-        this.$log.debug('Start perform delete: ', this.deleteUrl)
-        return this.$axios.delete(this.deleteUrl)
+        const url = this.validActions.deleteApiUrl
+        this.$log.debug('Start perform delete: ', url)
+        return this.$axios.delete(url)
       }
       this.$alert(msg, title, {
         type: 'warning',
@@ -128,7 +140,7 @@ export default {
             await performDelete.bind(this)()
             done()
             this.$message.success(this.$tc('Delete success'))
-            this.$router.push({ name: this.deleteSuccessRoute })
+            this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
             this.$message.error(this.$tc('Delete failed' + ' ' + error))
           } finally {
@@ -141,9 +153,17 @@ export default {
     },
     defaultUpdate() {
       const id = this.$route.params.id
-      this.$router.push({ name: this.updateRoute, params: { id: id }})
+      const routeName = this.validActions.updateRoute
+      this.$router.push({ name: routeName, params: { id: id }})
     },
     getObject() {
+      this.loading = true
+      const url = this.validActions.detailApiUrl
+      this.$axios.get(url).then(data => {
+        this.$emit('update:object', data)
+      }).finally(() => {
+        this.loading = false
+      })
     }
   }
 }

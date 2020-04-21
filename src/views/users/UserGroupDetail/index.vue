@@ -1,6 +1,6 @@
 <template>
-  <GenericDetailPage v-loading="loading" :title="title" v-bind="config">
-    <template v-slot:info>
+  <GenericDetailPage :object.sync="group" v-bind="config">
+    <template #info>
       <div>
         <el-row :gutter="20">
           <el-col :span="14">
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getUserGroupDetail, getUserGroupMembers } from '@/api/user'
+import { getUserGroupMembers } from '@/api/user'
 import { GenericDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard'
 import Select2 from '@/components/Select2'
@@ -64,9 +64,9 @@ export default {
     }
   },
   computed: {
-    title() {
-      return this.$t('users.userGroup') + ': ' + this.group.name
-    },
+    // title() {
+    //   return this.$t('users.userGroup') + ': ' + this.group.name
+    // },
     detailItems() {
       return [
         {
@@ -89,12 +89,6 @@ export default {
     }
   },
   mounted() {
-    getUserGroupDetail(this.$route.params.id).then(data => {
-      this.group = data
-    }).finally(() => {
-      this.loading = false
-    })
-
     getUserGroupMembers(this.$route.params.id).then(data => {
       this.groupMembers = data.map(v => {
         const member = {}
