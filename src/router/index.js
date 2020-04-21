@@ -177,22 +177,22 @@ export const constantRoutes = [
       {
         path: 'cmd-filters/update/:id',
         component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformUpdate',
-        meta: { title: 'PlatformUpdate' },
+        name: 'CommandFilterUpdate',
+        meta: { title: 'CommandFilterUpdate' },
         hidden: true
       },
       {
         path: 'cmd-filters/create',
         component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformCreate',
-        meta: { title: 'PlatformCreate' },
+        name: 'CommandFilterCreate',
+        meta: { title: 'CommandFilterCreate' },
         hidden: true
       },
       {
-        path: 'platform/:id',
-        component: () => import('@/views/assets/PlatformDetail.vue'), // Parent router-view
-        name: 'PlatformDetail',
-        meta: { title: 'PlatformDetail' },
+        path: 'cmd-filters/:id',
+        component: () => import('@/views/assets/CommandFilterDetail.vue'), // Parent router-view
+        name: 'CommandFilterDetail',
+        meta: { title: 'CommandFilterDetail' },
         hidden: true
       },
       {

@@ -126,7 +126,9 @@ const cn = {
     'UserUpdate': '更新用户',
     'AdminUserCreate': '创建管理用户',
     'PlatformCreate': '创建系统平台',
-    'PlatformUpdate': '更新系统平台'
+    'PlatformUpdate': '更新系统平台',
+    'CommandFilterCreate': '创建命令过滤器',
+    'CommandFilterUpdate': '更新命令过滤器'
   },
   // 用户模块翻译
   users: {
