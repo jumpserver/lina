@@ -94,14 +94,14 @@ export const constantRoutes = [
       },
       {
         path: 'groups/:id/update',
-        component: () => import('@/views/users/UserGroupUpdate.vue'), // Parent router-view
+        component: () => import('@/views/users/UserGroupCreateUpdate.vue'), // Parent router-view
         name: 'UserGroupUpdate',
         hidden: true,
-        meta: { title: 'UserGroupUpdate' }
+        meta: { title: 'UserGroupUpdate', activeMenu: '/users/groups' }
       },
       {
         path: 'groups/create',
-        component: () => import('@/views/users/UserCreateUpdate.vue'), // Parent router-view
+        component: () => import('@/views/users/UserGroupCreateUpdate.vue'), // Parent router-view
         name: 'UserGroupCreate',
         hidden: true,
         meta: { title: 'UserGroupCreate', activeMenu: '/users/groups' }
@@ -342,7 +342,7 @@ export const constantRoutes = [
         component: () => import('@/views/perms/DatabaseAppPermissionDetail'),
         name: 'DatabaseAppPermissionDetail',
         hidden: true,
-        meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/asset-permissions' }
+        meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/database-app-permissions' }
       }
     ]
   },
@@ -395,6 +395,20 @@ export const constantRoutes = [
         name: 'TerminalList',
         component: () => import('@/views/sessions/TerminalList'),
         meta: { title: 'Terminal' }
+      },
+      {
+        path: 'terminal/:id',
+        name: 'TerminalDetail',
+        component: () => import('@/views/sessions/TerminalDetail'),
+        meta: { title: 'TerminalDetail' },
+        hidden: true
+      },
+      {
+        path: 'terminal/:id/update',
+        name: 'TerminalUpdate',
+        component: () => import('@/views/tree/index'),
+        meta: { title: 'TerminalUpdate' },
+        hidden: true
       }
     ]
   },
@@ -409,7 +423,28 @@ export const constantRoutes = [
         path: 'task',
         name: 'TaskList',
         component: () => import('@/views/jobcenter/TaskList'),
-        meta: { title: 'TaskList' }
+        meta: { title: 'TaskList', activeMenu: '/ops/task' }
+      },
+      {
+        path: 'task/:id',
+        component: () => import('@/views/jobcenter/TaskDetail'),
+        name: 'TaskDetail',
+        hidden: true,
+        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
+      },
+      {
+        path: 'adhoc/:id',
+        component: () => import('@/views/jobcenter/AdhocDetail'),
+        name: 'AdhocDetail',
+        hidden: true,
+        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/jobcenter/HistoryExecutionDetail'),
+        name: 'HistoryExecutionDetail',
+        hidden: true,
+        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
       },
       {
         path: 'command-executions/create',

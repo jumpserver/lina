@@ -76,3 +76,8 @@ export function toSafeLocalDateStr(d) {
   const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
   return date_s.split('/').join('-')
 }
+
+export function getApiPath(that) {
+  const pagePath = that.$route.path
+  return `/api/v1${pagePath}/`
+}

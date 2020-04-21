@@ -97,12 +97,14 @@
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             v-bind="{align: columnsAlign, ...col}"
           >
-            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row}">
+            <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
               <div
                 :is="col.formatter"
                 :key="row.id"
                 :table-data="data"
                 :row="row"
+                :column="column"
+                :index="index"
                 :url="url"
                 :reload="getList"
                 :col="col"

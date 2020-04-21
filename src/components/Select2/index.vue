@@ -140,6 +140,9 @@ export default {
       this.getOptions()
     },
     async getInitialOptions() {
+      if (!this.value || this.value.length === 0) {
+        return
+      }
       let data = await createSourceIdCache(this.value)
       const params = this.makeParamsOrDefault(this.params)
       params.spm = data.spm
@@ -173,8 +176,10 @@ export default {
     async initialSelect() {
       if (this.url) {
         if (this.value) {
+          this.$log.debug('Start init select2 value')
           await this.getInitialOptions()
         }
+        this.$log.debug('Start get select2 options')
         await this.getOptions()
       }
     }

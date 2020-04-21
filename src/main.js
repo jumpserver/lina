@@ -40,7 +40,17 @@ Vue.config.productionTip = false
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 
+// logger
+import VueLogger from 'vuejs-logger'
+import loggerOptions from './utils/logger'
+Vue.use(VueLogger, loggerOptions)
+
 import service from '@/utils/request'
+
+// lodash
+// import _ from 'lodash'
+window._ = require('lodash')
+// Vue.set(Vue.prototype, '_', _)
 
 // if the table component cannot access `this.$axios`, it cannot send request
 Vue.prototype.$axios = service

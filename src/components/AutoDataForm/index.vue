@@ -10,7 +10,6 @@ import FormGroupHeader from '@/components/formGroupHeader'
 import { optionUrlMeta } from '@/api/common'
 import rules from '@/components/DataForm/rules'
 import Select2 from '@/components/Select2'
-import _ from 'lodash'
 export default {
   name: 'AutoDataForm',
   components: {
@@ -79,6 +78,7 @@ export default {
           type = 'input'
           if (!fieldMeta.max_length) {
             field.el.type = 'textarea'
+            field.el.rows = 3
           }
           break
         default:

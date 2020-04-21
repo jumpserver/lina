@@ -1,11 +1,13 @@
 @import './variables.scss';
 @import './mixin.scss';
 @import './transition.scss';
-@import './element-ui.scss';
 @import './sidebar.scss';
-@import './element-index.css';
+//@import './element-index.css';
+@import './element-variables.scss';
+@import './element-ui.scss';
+@import './theme/index.css';
 @import './menu.scss';
-@import "./font-awesome/font-awesome.min.css";
+@import './font-awesome/font-awesome.min.css';
 
 body {
   height: 100%;
