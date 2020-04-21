@@ -138,7 +138,8 @@ export const constantRoutes = [
         path: 'domains/create',
         name: 'DomainCreate',
         component: () => import('@/views/assets/DomainCreateUpdate.vue'),
-        meta: { title: 'DomainList' }
+        meta: { title: 'DomainList' },
+        hidden: true
       },
       {
         path: 'domains/:id/gateway',

@@ -1,19 +1,20 @@
 <template>
-  <TreeTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import TreeTable from '@/components/TreeTable'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    TreeTable
+    GenericTreeListPage
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/assets/assets/',
+        hasTree: true,
         treeSetting: {
           showMenu: true,
           showRefresh: true,
