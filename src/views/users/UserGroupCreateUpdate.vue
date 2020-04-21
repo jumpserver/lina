@@ -12,11 +12,6 @@ export default {
     return {
       config: {
         initial: {
-          password_strategy: 0,
-          mfa_level: 0,
-          source: 'local',
-          role: 'Admin',
-          date_expired: '2099-12-31 00:00:00 +0800'
         },
         url: '/api/v1/users/groups/',
         fields: ['name', 'users', 'comment'],

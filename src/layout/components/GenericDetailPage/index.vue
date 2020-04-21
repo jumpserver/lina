@@ -26,6 +26,7 @@
 
 <script>
 import Page from '../Page/'
+import { getApiPath } from '@/utils/common'
 import ActionsGroup from '@/components/ActionsGroup'
 export default {
   name: 'GenericDetailPage',
@@ -60,9 +61,17 @@ export default {
         return this.defaultDelete(item)
       }
     },
-    deleteRoute: {
+    deleteUrl: {
       type: String,
-      default: null
+      default: function() {
+        return getApiPath(this)
+      }
+    },
+    deleteSuccessRoute: {
+      type: String,
+      default: function() {
+        return this.$route.name.replace('Detail', 'List')
+      }
     },
     canUpdate: {
       type: [Boolean, Function],
@@ -76,7 +85,9 @@ export default {
     },
     updateRoute: {
       type: String,
-      default: null
+      default: function() {
+        return this.$route.name.replace('Detail', 'Update')
+      }
     }
   },
   data() {
@@ -100,13 +111,39 @@ export default {
   },
   methods: {
     defaultDelete() {
-
+      const msg = this.$tc('Are you sure to delete') + ' ?'
+      const title = this.$tc('Info')
+      const performDelete = async function() {
+        this.$log.debug('Start perform delete: ', this.deleteUrl)
+        return this.$axios.delete(this.deleteUrl)
+      }
+      this.$alert(msg, title, {
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger',
+        showCancelButton: true,
+        beforeClose: async(action, instance, done) => {
+          if (action !== 'confirm') return done()
+          instance.confirmButtonLoading = true
+          try {
+            await performDelete.bind(this)()
+            done()
+            this.$message.success(this.$tc('Delete success'))
+            this.$router.push({ name: this.deleteSuccessRoute })
+          } catch (error) {
+            this.$message.error(this.$tc('Delete failed' + ' ' + error))
+          } finally {
+            instance.confirmButtonLoading = false
+          }
+        }
+      }).catch(() => {
+        /* 取消*/
+      })
     },
     defaultUpdate() {
       const id = this.$route.params.id
-      const defaultUpdateRoute = this.$route.name.replace('Detail', 'Update')
-      const routeName = this.updateRoute || defaultUpdateRoute
-      this.$router.push({ name: routeName, params: { id: id }})
+      this.$router.push({ name: this.updateRoute, params: { id: id }})
+    },
+    getObject() {
     }
   }
 }

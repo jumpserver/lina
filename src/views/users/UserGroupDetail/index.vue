@@ -51,7 +51,7 @@ export default {
             name: 'assetPermissions'
           }
         ],
-        canDelete: this.canDelete,
+        canDelete: true,
         canUpdate: true
       },
       groupMembers: [],
