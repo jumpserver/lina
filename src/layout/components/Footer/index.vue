@@ -23,9 +23,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar'
+      'sidebar',
+      'device'
     ]),
     style() {
+      if (this.device === 'mobile') {
+        return ''
+      }
       return this.sidebar.opened ? ('margin-left: 210px;') : ('margin-left: 54px')
     }
 
