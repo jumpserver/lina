@@ -1,45 +1,34 @@
 <template>
-  <Page>
-    <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <el-collapse-transition>
-      <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-        <div v-show="ShowTree" :style="ShowTree?('width:250px;'):('width:0;')" class="transition-box">
-          <AutoDataZTree :setting="treeSetting" @urlChange="handleUrlChange" />
+  <el-collapse-transition>
+    <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
+      <div v-show="ShowTree" :style="ShowTree?('width:250px;'):('width:0;')" class="transition-box">
+        <AutoDataZTree :setting="treeSetting" @urlChange="handleUrlChange" />
+      </div>
+      <div :style="ShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+        <div class="mini">
+          <div style="display:block" class="mini-button" @click="ShowTree=!ShowTree">
+            <i v-show="ShowTree" class="fa fa-angle-left fa-x" /><i v-show="!ShowTree" class="fa fa-angle-right fa-x" />
+          </div>
         </div>
-        <div :style="ShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
-          <div class="mini">
-            <div style="display:block" class="mini-button" @click="ShowTree=!ShowTree">
-              <i v-show="ShowTree" class="fa fa-angle-left fa-x" /><i v-show="!ShowTree" class="fa fa-angle-right fa-x" />
-            </div>
-          </div>
-          <div class="transition-box" style="width: calc(100% - 17px);">
-            <TreeListTable :table-config="internalTableConfig" :header-actions="headerActions" />
-          </div>
+        <div class="transition-box" style="width: calc(100% - 17px);">
+          <ListTable :table-config="internalTableConfig" :header-actions="headerActions" />
         </div>
       </div>
-    </el-collapse-transition>
-  </Page>
+    </div>
+  </el-collapse-transition>
 </template>
 
 <script>
-import { Page } from '@/layout/components'
-// import TreeNode from '../TreeNode'
-// import ZTree from '../ZTree'
 import AutoDataZTree from '../AutoDataZTree'
-import TreeListTable from './components/TreeListTable'
+import ListTable from '../ListTable'
 export default {
   name: 'TreeTable',
   components: {
-    Page,
-    TreeListTable,
+    ListTable,
     AutoDataZTree
   },
   props: {
-    ...TreeListTable.props,
-    helpMessage: {
-      type: String,
-      default: null
-    }
+    ...ListTable.props
   },
   data() {
     return {
@@ -55,6 +44,7 @@ export default {
   methods: {
     handleUrlChange(_url) {
       this.$set(this.internalTableConfig, 'url', _url)
+      console.log(this.internalTableConfig)
     }
   }
 }
