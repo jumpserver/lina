@@ -124,16 +124,24 @@ export default {
     this.initialSelect()
   },
   methods: {
-    loadMore(load) {
+    async loadMore(load) {
+      if (this.loading) {
+        return
+      }
       if (!this.params.hasMore) {
         return
       }
+      this.loading = true
       this.params.page = this.params.page ? this.params.page + 1 : 1
       const defaultLoad = this.getOptions
       if (!load) {
         load = defaultLoad
       }
-      load()
+      try {
+        await load()
+      } finally {
+        this.loading = false
+      }
     },
     resetParams() {
       this.params = _.cloneDeep(this.defaultParams)
@@ -166,7 +174,7 @@ export default {
         this.params.hasMore = false
         this.resetParams()
       } else {
-        this.loadMore(this.getInitialOptions)
+        await this.loadMore(this.getInitialOptions)
       }
     },
     async getOptions() {

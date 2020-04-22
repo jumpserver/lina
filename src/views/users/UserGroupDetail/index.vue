@@ -50,7 +50,7 @@ export default {
       relationConfig: {
         icon: 'fa-user',
         title: this.$tc('Members'),
-        url: '/api/v1/users/users/',
+        url: '/api/v1/users/users/?draw=1',
         objectsId: [],
         loading: true
       },

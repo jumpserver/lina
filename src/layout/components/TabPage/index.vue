@@ -24,7 +24,7 @@
 <script>
 import Page from '../Page/'
 export default {
-  name: 'SubMenuPage',
+  name: 'TabPage',
   components: {
     Page
   },
