@@ -416,18 +416,18 @@ export const constantRoutes = [
   {
     path: '/ops/',
     component: Layout,
-    redirect: '/ops/task/',
+    redirect: '/ops/tasks/',
     name: 'JobCenter',
     meta: { title: 'JobCenter', icon: 'coffee' },
     children: [
       {
-        path: 'task',
+        path: 'tasks',
         name: 'TaskList',
         component: () => import('@/views/jobcenter/TaskList'),
         meta: { title: 'TaskList', activeMenu: '/ops/task' }
       },
       {
-        path: 'task/:id',
+        path: 'tasks/:id',
         component: () => import('@/views/jobcenter/TaskDetail'),
         name: 'TaskDetail',
         hidden: true,

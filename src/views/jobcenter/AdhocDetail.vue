@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="adhocDetail" v-bind="config">
     <div slot="adhocDetail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -52,25 +52,27 @@ export default {
   data() {
     return {
       flag: false,
+      adhocDetail: { name: '' },
+      config: {
+        activeMenu: 'adhocDetail',
+        title: this.$t('jobcenter.TaskDetail'),
+        submenu: [
+          {
+            title: this.$t('jobcenter.versionDetail'),
+            name: 'adhocDetail'
+          },
+          {
+            title: this.$t('jobcenter.VersionRunExecution'),
+            name: 'versionRunExecution'
+          }
+        ],
+        hasRightSide: false
+      },
       adhocData: '',
-      versionDetailData: {},
-      activeSubMenu: 'adhocDetail',
-      submenu: [
-        {
-          title: this.$t('jobcenter.versionDetail'),
-          name: 'adhocDetail'
-        },
-        {
-          title: this.$t('jobcenter.VersionRunExecution'),
-          name: 'versionRunExecution'
-        }
-      ]
+      versionDetailData: {}
     }
   },
   computed: {
-    title() {
-      return this.$t('jobcenter.TaskDetail')
-    },
     cardTitle() {
       return 'api 没有该数据'
     },

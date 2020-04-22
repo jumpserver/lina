@@ -1,30 +1,12 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="remoteAppPermission" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">
           <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
         </el-col>
         <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-info" />
-              <span>{{ detailCardActions }}</span>
-            </div>
-            <el-table class="el-table" :data="detailCardActionData" :show-header="false">
-              <el-table-column prop="name" />
-              <el-table-column prop="is_active" align="right">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.is_active"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    @change="HandleChangeAction(scope.$index, scope.row)"
-                  />
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
+          <ActiveCard v-bind="activeConfig" />
         </el-col>
       </el-row>
     </div>
@@ -39,7 +21,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import DetailCard from '@/components/DetailCard/index'
+import { DetailCard, ActiveCard } from '@/components'
 import { getRemoteAppPermissionDetail } from '@/api/perms'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RemoteAppPermissionUser from './RemoteAppPermissionUser'
@@ -51,27 +33,42 @@ export default {
     RemoteAppPermissionUser,
     RemoteAppPermissionRemoteApp,
     GenericDetailPage,
-    DetailCard
+    DetailCard,
+    ActiveCard
   },
   data() {
     return {
       flag: false,
-      activeSubMenu: 'detail',
+      remoteAppPermission: { name: '' },
+      config: {
+        activeMenu: 'detail',
+        submenu: [
+          {
+            title: this.$t('perms.RemoteAppPermissionDetail'),
+            name: 'detail'
+          },
+          {
+            title: this.$t('perms.UsersAndUserGroups'),
+            name: 'userAndUserGroups'
+          },
+          {
+            title: this.$t('perms.RemoteApp'),
+            name: 'remoteApp'
+          }
+        ]
+      },
+      activeConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.QuickModify'),
+        content: [
+          {
+            name: this.$t('perms.Active'),
+            is_active: true
+          }
+        ],
+        url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/`
+      },
       remoteAppData: {},
-      submenu: [
-        {
-          title: this.$t('perms.RemoteAppPermissionDetail'),
-          name: 'detail'
-        },
-        {
-          title: this.$t('perms.UsersAndUserGroups'),
-          name: 'userAndUserGroups'
-        },
-        {
-          title: this.$t('perms.RemoteApp'),
-          name: 'remoteApp'
-        }
-      ],
       remoteAppPermissionRemoteApp: [],
       remoteAppPermissionSystemUser: [],
       selectRemoteApp: {
@@ -87,14 +84,8 @@ export default {
     }
   },
   computed: {
-    title() {
-      return this.$t('perms.RemoteAppPermissionDetail')
-    },
     cardTitle() {
       return this.remoteAppData.id
-    },
-    detailCardActions() {
-      return this.$t('perms.QuickModify')
     },
     detailCardItems() {
       return [
@@ -139,20 +130,6 @@ export default {
           value: this.remoteAppData.comment
         }
       ]
-    },
-    detailCardActionData() {
-      return [
-        {
-          name: this.$t('perms.Active'),
-          is_active: true
-        }
-      ]
-    },
-    remoteAppCardActions() {
-      return this.$t('perms.RemoteApp')
-    },
-    systemUserCardActions() {
-      return this.$t('perms.SystemUser')
     }
   },
   mounted() {
@@ -161,15 +138,10 @@ export default {
   methods: {
     getRemoteAppPermissionDetailData() {
       getRemoteAppPermissionDetail(this.$route.params.id).then(data => {
-        console.log('详情数据==>', data)
         this.remoteAppData = data
+        this.activeConfig.content[0].is_active = data.is_active
         this.flag = true
       })
-    },
-    HandleChangeAction: function(index, row) {
-      const url = `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/`
-      console.log('点击激活的url==>', url)
-      console.log('激活的数据==>', row)
     },
     getDataLength(data) {
       if (data instanceof Array) {
