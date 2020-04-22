@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card primary">
+  <el-card class="box-card primary box-margin">
     <div slot="header" class="clearfix">
       <i v-if="icon" :class="'fa ' + icon" />
       <span>{{ title }}</span>
@@ -99,5 +99,8 @@ export default {
 
   tr.item td {
     border-top: 1px solid #e7eaec;
+  }
+  .box-margin {
+    margin-bottom: 20px;
   }
 </style>

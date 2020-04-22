@@ -7,10 +7,10 @@
       <el-card class="box-card primary">
         <div slot="header" class="clearfix">
           <i class="fa fa-info" />
-          <span>{{ userCardActions }}</span>
+          <span>{{ assetCardActions }}</span>
         </div>
         <div>
-          <Select2 v-model="selectUser.value" v-bind="selectUser" />
+          <Select2 v-model="selectAsset.value" v-bind="selectAsset" />
         </div>
       </el-card>
     </el-col>
@@ -18,10 +18,21 @@
       <el-card class="box-card success">
         <div slot="header" class="clearfix">
           <i class="fa fa-info" />
-          <span>{{ userGroupCardActions }}</span>
+          <span>{{ nodeCardActions }}</span>
         </div>
         <div>
-          <Select2 v-model="selectUserGroup.value" v-bind="selectUserGroup" />
+          <Select2 v-model="selectNode.value" v-bind="selectNode" />
+        </div>
+      </el-card>
+    </el-col>
+    <el-col :span="10">
+      <el-card class="box-card warning">
+        <div slot="header" class="clearfix">
+          <i class="fa fa-info" />
+          <span>{{ systemUserCardActions }}</span>
+        </div>
+        <div>
+          <Select2 v-model="selectSystemUser.value" v-bind="selectSystemUser" />
         </div>
       </el-card>
     </el-col>
@@ -33,7 +44,7 @@ import ListTable from '@/components/ListTable'
 import Select2 from '@/components/Select2'
 
 export default {
-  name: 'AssetPermissionUser',
+  name: 'AssetPermissionAsset',
   components: {
     ListTable,
     Select2
@@ -41,13 +52,13 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/users/all/`,
+        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/assets/all/`,
         columns: [
-          'user_display'
+          'asset_display'
         ],
         columnsMeta: {
-          user_display: {
-            label: this.$t('perms.User')
+          asset_display: {
+            label: this.$t('perms.Asset')
           }
         }
       },
@@ -62,26 +73,35 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      assetPermissionUser: [],
-      assetPermissionUserGroup: [],
-      selectUser: {
-        url: '/api/v1/users/users/',
-        initial: this.assetPermissionUser,
+      assetPermissionAsset: [],
+      assetPermissionNode: [],
+      assetPermissionSystemUser: [],
+      selectAsset: {
+        url: '/api/v1/assets/assets/',
+        initial: this.assetPermissionAsset,
         value: []
       },
-      selectUserGroup: {
-        url: '/api/v1/users/groups/',
-        initial: this.assetPermissionUserGroup,
+      selectNode: {
+        url: '/api/v1/assets/nodes/',
+        initial: this.assetPermissionNode,
+        value: []
+      },
+      selectSystemUser: {
+        url: '/api/v1/assets/system-users/',
+        initial: this.assetPermissionSystemUser,
         value: []
       }
     }
   },
   computed: {
-    userCardActions() {
-      return this.$t('perms.User')
+    assetCardActions() {
+      return this.$t('perms.Asset')
     },
-    userGroupCardActions() {
-      return this.$t('perms.UserGroups')
+    nodeCardActions() {
+      return this.$t('perms.Node')
+    },
+    systemUserCardActions() {
+      return this.$t('perms.SystemUser')
     }
   }
 }

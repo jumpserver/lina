@@ -138,7 +138,8 @@ export const constantRoutes = [
         path: 'domains/create',
         name: 'DomainCreate',
         component: () => import('@/views/assets/DomainCreateUpdate.vue'),
-        meta: { title: 'DomainList' }
+        meta: { title: 'DomainList' },
+        hidden: true
       },
       {
         path: 'domains/:id/gateway',
@@ -177,22 +178,22 @@ export const constantRoutes = [
       {
         path: 'cmd-filters/update/:id',
         component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformUpdate',
-        meta: { title: 'PlatformUpdate' },
+        name: 'CommandFilterUpdate',
+        meta: { title: 'CommandFilterUpdate' },
         hidden: true
       },
       {
         path: 'cmd-filters/create',
         component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformCreate',
-        meta: { title: 'PlatformCreate' },
+        name: 'CommandFilterCreate',
+        meta: { title: 'CommandFilterCreate' },
         hidden: true
       },
       {
-        path: 'platform/:id',
-        component: () => import('@/views/assets/PlatformDetail.vue'), // Parent router-view
-        name: 'PlatformDetail',
-        meta: { title: 'PlatformDetail' },
+        path: 'cmd-filters/:id',
+        component: () => import('@/views/assets/CommandFilterDetail.vue'), // Parent router-view
+        name: 'CommandFilterDetail',
+        meta: { title: 'CommandFilterDetail' },
         hidden: true
       },
       {
@@ -415,18 +416,18 @@ export const constantRoutes = [
   {
     path: '/ops/',
     component: Layout,
-    redirect: '/ops/task/',
+    redirect: '/ops/tasks/',
     name: 'JobCenter',
     meta: { title: 'JobCenter', icon: 'coffee' },
     children: [
       {
-        path: 'task',
+        path: 'tasks',
         name: 'TaskList',
         component: () => import('@/views/jobcenter/TaskList'),
         meta: { title: 'TaskList', activeMenu: '/ops/task' }
       },
       {
-        path: 'task/:id',
+        path: 'tasks/:id',
         component: () => import('@/views/jobcenter/TaskDetail'),
         name: 'TaskDetail',
         hidden: true,

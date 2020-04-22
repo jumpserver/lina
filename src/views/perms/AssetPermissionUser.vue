@@ -1,64 +1,35 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
-    <el-col :span="10">
-      <el-card class="box-card primary">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ assetCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectAsset.value" v-bind="selectAsset" />
-        </div>
-      </el-card>
-    </el-col>
-    <el-col :span="10">
-      <el-card class="box-card success">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ nodeCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectNode.value" v-bind="selectNode" />
-        </div>
-      </el-card>
-    </el-col>
-    <el-col :span="10">
-      <el-card class="box-card warning">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ systemUserCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectSystemUser.value" v-bind="selectSystemUser" />
-        </div>
-      </el-card>
+    <el-col :md="10" :sm="24">
+      <RelationCard v-if="!userReletionConfig.loading" v-bind="userReletionConfig" />
+      <RelationCard v-if="!groupReletionConfig.loading" v-bind="groupReletionConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
-import Select2 from '@/components/Select2'
+import { RelationCard } from '@/components'
 
 export default {
-  name: 'AssetPermissionAsset',
+  name: 'AssetPermissionUser',
   components: {
     ListTable,
-    Select2
+    RelationCard
   },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/assets/all/`,
+        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/users/all/`,
         columns: [
-          'asset_display'
+          'user_display'
         ],
         columnsMeta: {
-          asset_display: {
-            label: this.$t('perms.Asset')
+          user_display: {
+            label: this.$t('perms.User')
           }
         }
       },
@@ -73,36 +44,26 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      assetPermissionAsset: [],
-      assetPermissionNode: [],
-      assetPermissionSystemUser: [],
-      selectAsset: {
-        url: '/api/v1/assets/assets/',
-        initial: this.assetPermissionAsset,
-        value: []
+      assetPermissionUser: [],
+      assetPermissionUserGroup: [],
+      userReletionConfig: {
+        icon: 'fa-user',
+        title: this.$t('perms.AddUserToAssetPermission'),
+        url: '/api/v1/users/users/',
+        value: [],
+        loading: false
       },
-      selectNode: {
-        url: '/api/v1/assets/nodes/',
-        initial: this.assetPermissionNode,
-        value: []
-      },
-      selectSystemUser: {
-        url: '/api/v1/assets/system-users/',
-        initial: this.assetPermissionSystemUser,
-        value: []
+      groupReletionConfig: {
+        icon: 'fa-group',
+        title: this.$t('perms.AddGroupToAssetPermission'),
+        url: '/api/v1/users/groups/',
+        value: [],
+        loading: false
       }
     }
   },
-  computed: {
-    assetCardActions() {
-      return this.$t('perms.Asset')
-    },
-    nodeCardActions() {
-      return this.$t('perms.Node')
-    },
-    systemUserCardActions() {
-      return this.$t('perms.SystemUser')
-    }
+  mounted() {
+    // 获取用户组成员
   }
 }
 </script>

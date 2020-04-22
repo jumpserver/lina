@@ -129,7 +129,9 @@ const cn = {
     'UserUpdate': '更新用户',
     'AdminUserCreate': '创建管理用户',
     'PlatformCreate': '创建系统平台',
-    'PlatformUpdate': '更新系统平台'
+    'PlatformUpdate': '更新系统平台',
+    'CommandFilterCreate': '创建命令过滤器',
+    'CommandFilterUpdate': '更新命令过滤器'
   },
   // 用户模块翻译
   users: {
@@ -374,6 +376,8 @@ const cn = {
     'UsersAndUserGroups': '用户或用户组',
     'AssetAndNode': '资产或节点',
     'Active': '激活中',
+    'AddUserToAssetPermission': '添加用户',
+    'AddGroupToAssetPermission': '添加用户组',
     //
     'RemoteApp': '远程应用',
     'RemoteAppCount': '远程应用数量',
