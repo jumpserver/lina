@@ -1,5 +1,5 @@
 <template>
-  <Page v-loading="loading">
+  <Page v-if="!loading">
     <template #title>
       <span>
         {{ validTitle }}
@@ -13,7 +13,7 @@
     </template>
 
     <div>
-      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="activeName" class="page-submenu">
+      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="activeName" class="page-submenu" @tab-click="handleTabClick">
         <el-tab-pane v-for="item in submenu" :key="item.name" :label="item.title" :name="item.name">
           <slot :name="item.name">
             <pre>
@@ -73,7 +73,7 @@ export default {
         const objectType = this.$tr(this.$route.meta.title)
           .replace('Detail', '')
           .replace('详情', '')
-        console.log('Object is: ', this.obj)
+        this.$log.debug('Object is: ', obj)
         const objectName = this.getObjectName(obj)
         return `${objectType}: ${objectName}`
       }
@@ -164,6 +164,9 @@ export default {
       }).finally(() => {
         this.loading = false
       })
+    },
+    handleTabClick(tab) {
+      this.$emit('tab-click', tab)
     }
   }
 }

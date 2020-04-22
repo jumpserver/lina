@@ -1,6 +1,6 @@
 <template>
   <el-select
-    v-model="valueSafe"
+    v-model="validValue"
     v-loadmore="loadMore"
     :options="totalOptions"
     :remote-method="filterOptions"
@@ -47,66 +47,83 @@ export default {
     }
   },
   props: {
-    url: {
-      type: String,
-      required: true
-    },
-    makeParams: {
-      type: Function,
-      default: null
-    },
-    processResults: {
-      type: Function,
-      default: null
-    },
     options: {
       type: Array,
       default: () => ([])
     },
-    value: {
-      type: [Array, String, Number, Boolean],
-      default: () => ([])
+    // 去这个地址获取options
+    url: {
+      type: String,
+      required: true
     },
-    multiple: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data() {
-    return {
-      loading: false,
-      params: {
-        search: '',
-        page: 1,
-        hasMore: true
-      },
-      defaultMakeParams: params => {
-        const page = params.page || 1
-        return {
-          search: params.search,
-          offset: (page - 1) * 10,
-          limit: 10
+    // 可以将请求的参数进行转换，同jquery select2 makeParams
+    makeParams: {
+      type: Function,
+      default: prams => {
+        const page = prams.page || 1
+        const p = {
+          offset: (page - 1) * prams.pageSize,
+          limit: prams.pageSize
         }
-      },
-      defaultProcessResults: data => {
+        prams = Object.assign(prams, p)
+        delete prams['page']
+        delete prams['pageSize']
+        return prams
+      }
+    },
+    // 对返回的数据进行处理, 同jquery select2 processResults
+    processResults: {
+      type: Function,
+      default: data => {
         let results = data.results
         results = results.map((item) => {
           return { label: item.name, value: item.id }
         })
         const more = !!data.next
         return { results: results, pagination: more }
-      },
-      valueSafe: [...this.value],
-      totalOptions: this.options || []
+      }
+    },
+    // 初始化值，也就是选中的值
+    value: {
+      type: [Array, String, Number, Boolean],
+      default: () => ([])
+    },
+    // 是否是多选
+    multiple: {
+      type: Boolean,
+      default: true
+    },
+    // 是否将选中的作为默认选择的, 如果是，则会把选择的数据放入到 options中，并且框中会选中
+    isSelectedValue: {
+      type: Boolean,
+      default: true
+    },
+    pageSize: {
+      type: Number,
+      default: 20
+    }
+  },
+  data() {
+    const defaultParams = {
+      search: '',
+      page: 1,
+      hasMore: true,
+      pageSize: this.pageSize
+    }
+    let validValue = this.value
+    if (this.multiple) {
+      validValue = this.isSelectedValue ? [...this.value] : []
+    }
+    return {
+      loading: false,
+      defaultParams: defaultParams,
+      params: Object.assign({}, defaultParams),
+      validValue: validValue,
+      totalOptions: this.options || [],
+      initialOptions: []
     }
   },
   computed: {
-    makeParamsOrDefault() {
-      return this.makeParams || this.defaultMakeParams
-    },
-    processResultsOrDefault() {
-      return this.processResults || this.defaultProcessResults
-    },
     optionsValues() {
       return this.totalOptions.map((v) => v.value)
     }
@@ -127,11 +144,11 @@ export default {
       load()
     },
     resetParams() {
-      this.params = {
-        search: '',
-        page: 1,
-        hasMore: false
-      }
+      this.params = _.cloneDeep(this.defaultParams)
+    },
+    safeMakeParams(params) {
+      params = _.cloneDeep(params)
+      return this.makeParams.bind(this)(params)
     },
     filterOptions(query) {
       this.resetParams()
@@ -140,20 +157,18 @@ export default {
       this.getOptions()
     },
     async getInitialOptions() {
-      if (!this.value || this.value.length === 0) {
-        return
-      }
-      let data = await createSourceIdCache(this.value)
-      const params = this.makeParamsOrDefault(this.params)
-      params.spm = data.spm
-      data = await this.$axios.get(this.url, { params: params })
-      data = this.processResultsOrDefault(data)
+      const params = this.safeMakeParams(this.params)
+      this.$log.debug('Get initial options: ', params)
+      let data = await this.$axios.get(this.url, { params: params })
+      data = this.processResults.bind(this)(data)
       data.results.forEach((v) => {
-        if (this.optionsValues.indexOf(v.value) === -1) {
+        this.initialOptions.push(v)
+        if (this.isSelectedValue && this.optionsValues.indexOf(v.value) === -1) {
           this.totalOptions.push(v)
         }
       })
       if (!data.pagination) {
+        this.$emit('loadInitialOptionsDone', this.initialOptions)
         this.params.hasMore = false
         this.resetParams()
       } else {
@@ -161,9 +176,10 @@ export default {
       }
     },
     async getOptions() {
-      const params = this.makeParamsOrDefault(this.params)
+      const params = this.safeMakeParams(this.params)
       const resp = await this.$axios.get(this.url, { params: params })
-      const data = this.processResultsOrDefault(resp)
+      const data = this.processResults.bind(this)(resp)
+      console.log(data)
       if (!data.pagination) {
         this.params.hasMore = false
       }
@@ -175,8 +191,10 @@ export default {
     },
     async initialSelect() {
       if (this.url) {
-        if (this.value) {
+        if (this.value && this.value.length !== 0) {
           this.$log.debug('Start init select2 value')
+          const data = await createSourceIdCache(this.value)
+          this.params.spm = data.spm
           await this.getInitialOptions()
         }
         this.$log.debug('Start get select2 options')

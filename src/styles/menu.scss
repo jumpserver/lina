@@ -44,6 +44,22 @@ li.is-opened, li.is-active {
   border-left: 4px solid #19aa8d;
 }
 
+.el-submenu.is-opened {
+  background-color: #1f2d3d !important;
+  & .el-submenu__title {
+    background-color: #1f2d3d !important;
+  }
+  & .nest-menu {
+    background-color: #1f2d3d !important;
+  }
+}
+
+.nest-menu:last-child {
+  padding-bottom: 10px;
+}
+
+
+
 //
 //.el-menu {
 //  border: 0px !important;
