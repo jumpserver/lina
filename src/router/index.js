@@ -410,6 +410,12 @@ export const constantRoutes = [
         component: () => import('@/views/sessions/TerminalUpdate'),
         meta: { title: 'Terminal' },
         hidden: true
+      },
+      {
+        path: 'storages',
+        name: 'Storage',
+        component: () => import('@/views/sessions/Storage'),
+        hidden: true
       }
     ]
   },

@@ -33,6 +33,7 @@ export default {
             name: 'detail'
           }
         ],
+        hasDelete: false,
         actions: {
           hasDelete: false,
           canDelete: false
