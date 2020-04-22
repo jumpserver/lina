@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     handleStorageConfiguration() {
-      console.log('handleStorageConfiguration')
+      this.$router.push('/terminal/storages')
     }
   }
 }

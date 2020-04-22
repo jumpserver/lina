@@ -23,7 +23,8 @@ const en = {
     'SessionOffline': 'Session Offline',
     'SessionDetail': 'Session Detail',
     'Goto': 'Goto',
-    'jobcenter': 'Job Center'
+    'jobcenter': 'Job Center',
+    'Terminal': 'Terminal'
   },
   users: {
     'createuser': 'Cerate User',
@@ -307,7 +308,12 @@ const en = {
     'sshPort': 'SSH port:',
     'httpPort': 'Http port:',
     'comment': 'Comment:',
-    'dateCreated': 'Date created:'
+    'dateCreated': 'Date created:',
+    'createCommand': 'Create command storage',
+    'createReplay': 'Create replay storage',
+    'commandStorage': 'Command storage',
+    'replayStorage': 'Replay Storage',
+    'storage': 'Storage'
   },
   setting: {
     'setting': 'System Setting',
