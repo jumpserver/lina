@@ -2,7 +2,7 @@
   <div>
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <el-card class="table-content" shadow="never">
-      <AutoDataTable ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
+      <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
       <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
           <el-form-item :label="this.$t('action.ExportRange')" :label-width="'100px'">

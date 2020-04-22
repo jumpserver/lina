@@ -5,7 +5,7 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 export default {
-  name: 'PlatformDetail',
+  name: 'CommandFilterDetail',
   components: {
     GenericDetailPage
   },
@@ -16,6 +16,10 @@ export default {
         {
           title: this.$t('perms.AssetPermissionDetail'),
           name: 'detail'
+        },
+        {
+          title: this.$t('perms.AssetPermissionDetail'),
+          name: 'rule'
         }
       ],
       activeSubMenu: 'detail'
@@ -26,7 +30,6 @@ export default {
       return this.$t('perms.AssetPermissionDetail')
     }
   }
-
 }
 </script>
 
