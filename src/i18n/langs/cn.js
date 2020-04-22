@@ -75,7 +75,8 @@ const cn = {
     'Active selected': '激活所选',
     'rows': '行',
     'Basic Info': '基本信息',
-    'Add': '添加'
+    'Add': '添加',
+    'Members': '成员'
   },
   route: {
     'dashboard': '仪表盘',

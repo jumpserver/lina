@@ -51,7 +51,7 @@ export default {
         icon: 'fa-user',
         title: this.$tc('Members'),
         url: '/api/v1/users/users/',
-        value: [],
+        objectsId: [],
         loading: true
       },
       cardTitle: this.$tc('Basic Info')
@@ -82,9 +82,9 @@ export default {
   mounted() {
     getUserGroupMembers(this.$route.params.id).then(data => {
       for (const i of data) {
-        this.relationConfig.value.push(i.user)
+        this.relationConfig.objectsId.push(i.user)
       }
-      console.log(this.relationConfig.value)
+      console.log(this.relationConfig.objectsId)
     }).finally(() => {
       this.relationConfig.loading = false
     })

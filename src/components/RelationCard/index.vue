@@ -17,7 +17,7 @@
           </td>
         </tr>
         <tr v-for="obj of validObjects" :key="obj.id" style="width: 100%" class="item">
-          <td><b>{{ obj.value }}</b></td>
+          <td><b>{{ obj.label }}</b></td>
           <td>
             <el-button size="mini" type="danger" style="float: right">
               <i class="fa fa-minus" />
@@ -57,7 +57,7 @@ export default {
       default: () => []
     },
     objects: {
-      type: Array,
+      type: [Array, null],
       default: null
     },
     value: {

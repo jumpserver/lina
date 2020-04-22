@@ -8,6 +8,7 @@
     :multiple="multiple"
     filterable
     remote
+    popper-append-to-body
     class="select2"
     v-bind="$attrs"
     v-on="$listeners"
@@ -54,27 +55,27 @@ export default {
     // 去这个地址获取options
     url: {
       type: String,
-      required: true
+      default: null
     },
     // 可以将请求的参数进行转换，同jquery select2 makeParams
     makeParams: {
       type: Function,
-      default: prams => {
-        const page = prams.page || 1
+      default: (params) => {
+        const page = params.page || 1
         const p = {
-          offset: (page - 1) * prams.pageSize,
-          limit: prams.pageSize
+          offset: (page - 1) * params.pageSize,
+          limit: params.pageSize
         }
-        prams = Object.assign(prams, p)
-        delete prams['page']
-        delete prams['pageSize']
-        return prams
+        params = Object.assign(params, p)
+        delete params['page']
+        delete params['pageSize']
+        return params
       }
     },
     // 对返回的数据进行处理, 同jquery select2 processResults
     processResults: {
       type: Function,
-      default: data => {
+      default(data) {
         let results = data.results
         results = results.map((item) => {
           return { label: item.name, value: item.id }
@@ -93,11 +94,6 @@ export default {
       type: Boolean,
       default: true
     },
-    // 是否将选中的作为默认选择的, 如果是，则会把选择的数据放入到 options中，并且框中会选中
-    isSelectedValue: {
-      type: Boolean,
-      default: true
-    },
     pageSize: {
       type: Number,
       default: 20
@@ -110,15 +106,11 @@ export default {
       hasMore: true,
       pageSize: this.pageSize
     }
-    let validValue = this.value
-    if (this.multiple) {
-      validValue = this.isSelectedValue ? [...this.value] : []
-    }
     return {
       loading: false,
+      validValue: this.multiple ? [] : '',
       defaultParams: defaultParams,
       params: Object.assign({}, defaultParams),
-      validValue: validValue,
       totalOptions: this.options || [],
       initialOptions: []
     }
@@ -148,7 +140,8 @@ export default {
     },
     safeMakeParams(params) {
       params = _.cloneDeep(params)
-      return this.makeParams.bind(this)(params)
+      delete params['hasMore']
+      return this.makeParams(params)
     },
     filterOptions(query) {
       this.resetParams()
@@ -163,10 +156,11 @@ export default {
       data = this.processResults.bind(this)(data)
       data.results.forEach((v) => {
         this.initialOptions.push(v)
-        if (this.isSelectedValue && this.optionsValues.indexOf(v.value) === -1) {
+        if (this.optionsValues.indexOf(v.value) === -1) {
           this.totalOptions.push(v)
         }
       })
+      // 如果还有其它页，继续获取, 如果没有就停止
       if (!data.pagination) {
         this.$emit('loadInitialOptionsDone', this.initialOptions)
         this.params.hasMore = false
@@ -179,7 +173,6 @@ export default {
       const params = this.safeMakeParams(this.params)
       const resp = await this.$axios.get(this.url, { params: params })
       const data = this.processResults.bind(this)(resp)
-      console.log(data)
       if (!data.pagination) {
         this.params.hasMore = false
       }
@@ -200,6 +193,7 @@ export default {
         this.$log.debug('Start get select2 options')
         await this.getOptions()
       }
+      this.validValue = this.value
     }
   }
 }
