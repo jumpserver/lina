@@ -3,29 +3,11 @@
     <template #detail>
       <div>
         <el-row :gutter="20">
-          <el-col :span="14">
+          <el-col :md="14" :sm="24">
             <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
           </el-col>
-          <el-col :span="10">
-            <el-card class="box-card primary">
-              <div slot="header" class="clearfix">
-                <i class="fa fa-info" />
-                <span>{{ detailCardActions }}</span>
-              </div>
-              <el-table class="el-table" :data="detailCardActionData" :show-header="false">
-                <el-table-column prop="name" />
-                <el-table-column prop="is_active" align="right">
-                  <template slot-scope="scope">
-                    <el-switch
-                      v-model="scope.row.is_active"
-                      active-color="#13ce66"
-                      inactive-color="#ff4949"
-                      @change="HandleChangeAction(scope.$index, scope.row)"
-                    />
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-card>
+          <el-col :md="10" :sm="24">
+            <ActiveCard v-bind="activeConfig" />
           </el-col>
         </el-row>
       </div>
@@ -45,7 +27,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import DetailCard from '@/components/DetailCard/index'
+import { DetailCard, ActiveCard } from '@/components'
 import { getAssetPermissionDetail } from '@/api/perms'
 import { toSafeLocalDateStr } from '@/utils/common'
 import AssetPermissionUser from './AssetPermissionUser'
@@ -56,6 +38,7 @@ export default {
   components: {
     GenericDetailPage,
     DetailCard,
+    ActiveCard,
     AssetPermissionUser,
     AssetPermissionAsset
   },
@@ -80,15 +63,23 @@ export default {
           }
         ]
       },
+      activeConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.QuickModify'),
+        content: [
+          {
+            name: this.$t('perms.Active'),
+            is_active: true
+          }
+        ],
+        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/`
+      },
       assetPermissionData: {}
     }
   },
   computed: {
     cardTitle() {
       return this.assetPermissionData.id
-    },
-    detailCardActions() {
-      return this.$t('perms.QuickModify')
     },
     detailCardItems() {
       return [
@@ -138,14 +129,6 @@ export default {
           value: this.assetPermissionData.comment
         }
       ]
-    },
-    detailCardActionData() {
-      return [
-        {
-          name: this.$t('perms.Active'),
-          is_active: true
-        }
-      ]
     }
   },
   mounted() {
@@ -155,12 +138,9 @@ export default {
     getAssetPermissionDetailData() {
       getAssetPermissionDetail(this.$route.params.id).then(data => {
         this.assetPermissionData = data
+        this.activeConfig.content[0].is_active = data.is_active
         this.flag = true
       })
-    },
-    HandleChangeAction: function(index, row) {
-      const url = `/api/v1/perms/asset-permissions/${this.$route.params.id}/`
-      console.log(url)
     },
     getDataLength(data) {
       if (data instanceof Array) {

@@ -66,12 +66,7 @@ export default {
             name: 'versionRunExecution'
           }
         ],
-        actions: {
-          canDelete: false,
-          canUpdate: false,
-          hasDelete: false,
-          hasUpdate: false
-        }
+        hasRightSide: false
       },
       adhocData: '',
       versionDetailData: {}

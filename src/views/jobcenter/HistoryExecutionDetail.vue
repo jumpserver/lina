@@ -62,11 +62,8 @@ export default {
             name: 'outPut'
           }
         ],
+        hasRightSide: false,
         actions: {
-          canDelete: false,
-          canUpdate: false,
-          hasDelete: false,
-          hasUpdate: false,
           detailApiUrl: `/api/v1/ops/adhoc-executions/${this.$route.params.id}/`
         }
       },

@@ -79,12 +79,7 @@ export default {
             name: 'laskExecutionOutput'
           }
         ],
-        actions: {
-          canDelete: false,
-          canUpdate: false,
-          hasDelete: false,
-          hasUpdate: false
-        }
+        hasRightSide: false
       },
       taskData: {}
     }
