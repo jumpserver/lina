@@ -15,6 +15,7 @@
 <script>
 import { TabPage } from '@/layout/components'
 import { ListTable } from '@/components'
+import { TestCommandStorage, TestReplayStorage } from '@/api/sessions'
 
 export default {
   name: 'Storage',
@@ -42,26 +43,94 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasCreate: false,
-        extraActions: [
+        extraMoreActions: [
           {
-            name: 'createReplay',
-            title: this.$t('sessions.createReplay'),
+            name: 'S3',
+            title: 'S3',
             type: 'primary',
             callback: function() {
-              console.log('createReplay===')
+              console.log('S3===')
+            }
+          },
+          {
+            name: 'Ceph',
+            title: 'Ceph',
+            type: 'primary',
+            callback: function() {
+              console.log('Ceph===')
+            }
+          },
+          {
+            name: 'Swift',
+            title: 'Swift',
+            type: 'primary',
+            callback: function() {
+              console.log('Swift===')
+            }
+          },
+          {
+            name: 'OSS',
+            title: 'OSS',
+            type: 'primary',
+            callback: function() {
+              console.log('OSS===')
+            }
+          },
+          {
+            name: 'Azure',
+            title: 'Azure',
+            type: 'primary',
+            callback: function() {
+              console.log('Azure===')
             }
           }
+
         ]
       },
       replayTableConfig: {
         url: '/api/v1/terminal/replay-storages/',
         columns: ['name', 'type', 'comment', 'actions'],
         columnsMeta: {
+          name: {
+            formatter: function(row) {
+              return row.name
+            }
+          },
           type: {
             formatter: function(row) {
               return row.type
             }
-
+          },
+          comment: {
+            sortable: 'custom'
+          },
+          actions: {
+            prop: 'id',
+            actions: {
+              canUpdate: function(row, value) {
+                return row.name !== 'null' && row.name !== 'default'
+              },
+              extraActions: [
+                {
+                  name: 'test',
+                  title: 'test',
+                  type: 'primary',
+                  callback: function({ row, col, cellValue, reload }) {
+                    TestReplayStorage(cellValue).then(data => {
+                      let success = 'success'
+                      if (!data.is_valid) {
+                        success = 'error'
+                      }
+                      this.$notify({
+                        message: data.msg,
+                        type: success,
+                        duration: 4500
+                      })
+                    })
+                  }
+                }
+              ]
+            }
           }
         }
       },
@@ -72,32 +141,65 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasCreate: false,
-        extraActions: [
+        extraMoreActions: [
           {
-            name: 'createCommand',
-            title: this.$t('sessions.createCommand'),
+            name: 'Elasticsearch',
+            title: 'Elasticsearch',
             type: 'primary',
             callback: function() {
-              console.log('createCommand====')
+              console.log('Elasticsearch====')
             }
           }
         ]
-
       },
       commandTableConfig: {
         title: 'command',
         url: '/api/v1/terminal/command-storages/',
         columns: ['name', 'type', 'comment', 'actions'],
         columnsMeta: {
+          comment: {
+            sortable: 'custom'
+          },
+          name: {
+            formatter: function(row) {
+              return row.name
+            }
+          },
           type: {
             formatter: function(row) {
               return row.type
             }
-
+          },
+          actions: {
+            prop: 'id',
+            actions: {
+              canUpdate: function(row, value) {
+                return row.name !== 'null' && row.name !== 'default'
+              },
+              extraActions: [
+                {
+                  name: 'test',
+                  title: 'test',
+                  type: 'primary',
+                  callback: function({ row, col, cellValue, reload }) {
+                    TestCommandStorage(cellValue).then(data => {
+                      let success = 'success'
+                      if (!data.is_valid) {
+                        success = 'error'
+                      }
+                      this.$notify({
+                        message: data.msg,
+                        type: success,
+                        duration: 4500
+                      })
+                    })
+                  }
+                }
+              ]
+            }
           }
         }
       }
-
     }
   },
   computed: {
