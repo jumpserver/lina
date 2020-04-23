@@ -7,7 +7,7 @@
       <div class="table-action-right-side">
         <!--        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />-->
         <TagSearch v-if="hasSearch" class="right-side-item action-search" :tag-search="tagSearch" @tagSearch="handleTagSearch" />
-        <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" />
+        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
       </div>
     </slot>
   </div>
@@ -187,11 +187,9 @@ export default {
     handleBulkUpdate(rows) {
     },
     handleExport(row) {
-      console.log(row)
       this.$eventBus.$emit('showExportDialog', row)
     },
     handleImport(row) {
-      console.log(row)
       this.$eventBus.$emit('showImportDialog', row)
     },
     handleRefresh() {
