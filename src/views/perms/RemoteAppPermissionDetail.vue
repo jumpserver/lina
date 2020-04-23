@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="remoteAppPermission" v-bind="config">
+  <GenericDetailPage :object.sync="remoteAppData" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -22,7 +22,6 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import { DetailCard, ActiveCard } from '@/components'
-import { getRemoteAppPermissionDetail } from '@/api/perms'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RemoteAppPermissionUser from './RemoteAppPermissionUser'
 import RemoteAppPermissionRemoteApp from './RemoteAppPermissionRemoteApp'
@@ -39,7 +38,6 @@ export default {
   data() {
     return {
       flag: false,
-      remoteAppPermission: { name: '' },
       config: {
         activeMenu: 'detail',
         submenu: [
@@ -68,19 +66,7 @@ export default {
         ],
         url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/`
       },
-      remoteAppData: {},
-      remoteAppPermissionRemoteApp: [],
-      remoteAppPermissionSystemUser: [],
-      selectRemoteApp: {
-        url: '/api/v1/applications/remote-apps/',
-        initial: this.remoteAppPermissionRemoteApp,
-        value: []
-      },
-      selectSystemUser: {
-        url: '/api/v1/assets/system-users/',
-        initial: this.remoteAppPermissionSystemUser,
-        value: []
-      }
+      remoteAppData: {}
     }
   },
   computed: {
@@ -132,17 +118,13 @@ export default {
       ]
     }
   },
-  mounted() {
-    this.getRemoteAppPermissionDetailData()
+  watch: {
+    remoteAppData: function(newRemoteAppData, oldRemoteAppData) {
+      this.activeConfig.content[0].is_active = newRemoteAppData.is_active
+      this.flag = true
+    }
   },
   methods: {
-    getRemoteAppPermissionDetailData() {
-      getRemoteAppPermissionDetail(this.$route.params.id).then(data => {
-        this.remoteAppData = data
-        this.activeConfig.content[0].is_active = data.is_active
-        this.flag = true
-      })
-    },
     getDataLength(data) {
       if (data instanceof Array) {
         return data.length
@@ -154,22 +136,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-table /deep/ .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table /deep/ .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
-  }
+
 </style>
