@@ -110,10 +110,6 @@ export default {
       return this.cleanedActions.slice(2, this.cleanedActions.length)
     }
   },
-  mounted() {
-    this.$log.debug('actions', this.actions)
-    this.$log.debug('moreActions', this.moreActions)
-  },
   methods: {
     cleanAction(item, attr) {
       const ok = item[attr]
