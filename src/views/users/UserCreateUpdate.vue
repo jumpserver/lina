@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>

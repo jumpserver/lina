@@ -211,9 +211,8 @@ export default {
       if (typeof v === 'function') {
         v = () => { return v(this.selectedRows) }
       } else {
-        return true
+        return v
       }
-      return true
     },
     cleanCallback(action) {
       const v = action.callback
