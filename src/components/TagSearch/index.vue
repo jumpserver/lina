@@ -5,7 +5,7 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="option in filterFields" :key="option.key" :command="option.key" :value="option.label" :name="option.key">{{ option.label }}</el-dropdown-item>
+        <el-dropdown-item v-for="option in tagSearch" :key="option.key" :command="option.key" :value="option.label" :name="option.key">{{ option.label }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="fieldtag" type="info" @close="handleTagClose(k)">
@@ -20,7 +20,7 @@
 export default {
   name: 'TagSearch',
   props: {
-    filterFields: {
+    tagSearch: {
       type: Array,
       default() {
         return [
@@ -48,7 +48,7 @@ export default {
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
     filterLabel() {
-      for (const field of this.filterFields) {
+      for (const field of this.tagSearch) {
         if (field.key === this.filterKey) {
           return field.label
         }
