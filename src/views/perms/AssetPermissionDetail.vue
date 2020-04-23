@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="assetPermission" v-bind="config">
+  <GenericDetailPage :object.sync="assetPermissionData" v-bind="config">
     <template #detail>
       <div>
         <el-row :gutter="20">
@@ -28,7 +28,6 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import { DetailCard, ActiveCard } from '@/components'
-import { getAssetPermissionDetail } from '@/api/perms'
 import { toSafeLocalDateStr } from '@/utils/common'
 import AssetPermissionUser from './AssetPermissionUser'
 import AssetPermissionAsset from './AssetPermissionAsset'
@@ -45,7 +44,6 @@ export default {
   data() {
     return {
       flag: false,
-      assetPermission: { name: '' },
       config: {
         activeMenu: 'detail',
         submenu: [
@@ -131,17 +129,13 @@ export default {
       ]
     }
   },
-  mounted() {
-    this.getAssetPermissionDetailData()
+  watch: {
+    assetPermissionData: function(newAssetPermissionData, oldAssetPermissionData) {
+      this.activeConfig.content[0].is_active = newAssetPermissionData.is_active
+      this.flag = true
+    }
   },
   methods: {
-    getAssetPermissionDetailData() {
-      getAssetPermissionDetail(this.$route.params.id).then(data => {
-        this.assetPermissionData = data
-        this.activeConfig.content[0].is_active = data.is_active
-        this.flag = true
-      })
-    },
     getDataLength(data) {
       if (data instanceof Array) {
         return data.length
@@ -153,22 +147,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-table /deep/ .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table /deep/ .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
-  }
+
 </style>
