@@ -29,6 +29,7 @@ export default {
     TagSearch
   },
   props: {
+    ...TagSearch.props,
     hasExport: defaultTrue,
     hasImport: defaultTrue,
     hasRefresh: defaultTrue,
@@ -41,21 +42,6 @@ export default {
     tableUrl: {
       type: String,
       default: ''
-    },
-    tagSearch: {
-      type: Array,
-      default() {
-        return [
-          {
-            label: '用户名',
-            key: 'username'
-          },
-          {
-            label: 'ID',
-            key: 'id'
-          }
-        ]
-      }
     },
     createRoute: {
       type: String,
