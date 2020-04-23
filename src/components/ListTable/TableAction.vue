@@ -6,7 +6,7 @@
       </div>
       <div class="table-action-right-side">
         <!--        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />-->
-        <TagSearch v-if="hasSearch" class="right-side-item action-search" :filter-fields="tagSearch" @tagSearch="handleTagSearch" />
+        <TagSearch v-if="hasSearch" class="right-side-item action-search" :tag-search="tagSearch" @tagSearch="handleTagSearch" />
         <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick" />
       </div>
     </slot>
