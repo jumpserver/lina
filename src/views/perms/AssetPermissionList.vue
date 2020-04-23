@@ -1,25 +1,29 @@
 <template>
-  <!--  <TreeTable :table-config="tableConfig" :header-actions="headerActions" />-->
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
-
+  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-// import TreeTable from '@/components/TreeTable'
-import { GenericListPage } from '@/layout/components'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { LengthFormatter, ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    // TreeTable
-    GenericListPage
+    GenericTreeListPage
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
-        treeurl: '/api/v1/assets/nodes/children/tree/',
         hasSelection: false,
+        hasTree: true,
+        treeSetting: {
+          showMenu: false,
+          showRefresh: true,
+          showAssets: true,
+          url: '/api/v1/perms/asset-permissions/',
+          nodeUrl: '/api/v1/perms/asset-permissions/',
+          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+        },
         columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
         columnsMeta: {
           expand: {
@@ -69,9 +73,9 @@ export default {
     HandleRefreshPermissionCache() {
       const url = '/api/v1/perms/asset-permissions/cache/refresh/'
       this.$axios.get(url).then(res => {
-        this.$message.success(this.$t('perms.ReFreshSuccess'))
+        this.$message(this.$t('perms.ReFreshSuccess'))
       }).catch(err => {
-        this.$message.error(this.$t('perms.ReFreshFail') + ':' + err)
+        this.$message(this.$t('perms.ReFreshFail') + ':' + err)
       })
     }
   }
