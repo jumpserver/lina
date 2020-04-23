@@ -1,42 +1,24 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
-    <el-col :span="10">
-      <el-card class="box-card primary">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ databaseAppCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectDatabaseApp.value" v-bind="selectDatabaseApp" />
-        </div>
-      </el-card>
-    </el-col>
-    <el-col :span="10">
-      <el-card class="box-card success">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ systemUserCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectSystemUser.value" v-bind="selectSystemUser" />
-        </div>
-      </el-card>
+    <el-col :md="10" :sm="24">
+      <RelationCard v-if="!databaseAppReletionConfig.loading" v-bind="databaseAppReletionConfig" />
+      <RelationCard v-if="!systemUserReletionConfig.loading" v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
-import Select2 from '@/components/Select2'
+import { RelationCard } from '@/components'
 
 export default {
   name: 'DatabaseAppPermissionDatabaseApp',
   components: {
     ListTable,
-    Select2
+    RelationCard
   },
   data() {
     return {
@@ -64,24 +46,20 @@ export default {
       },
       databaseAppPermissionDatabaseApp: [],
       databaseAppPermissionSystemUser: [],
-      selectDatabaseApp: {
+      databaseAppReletionConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.Add DatabaseApp to this permission'),
         url: '/api/v1/applications/database-apps/',
-        initial: this.databaseAppPermissionDatabaseApp,
-        value: []
+        value: [],
+        loading: false
       },
-      selectSystemUser: {
+      systemUserReletionConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.Add System User to this permission'),
         url: '/api/v1/assets/system-users/',
-        initial: this.databaseAppPermissionSystemUser,
-        value: []
+        value: [],
+        loading: false
       }
-    }
-  },
-  computed: {
-    databaseAppCardActions() {
-      return this.$t('perms.Add DatabaseApp to this permission')
-    },
-    systemUserCardActions() {
-      return this.$t('perms.SystemUser')
     }
   }
 }

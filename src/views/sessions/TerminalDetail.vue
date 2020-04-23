@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :object.sync="terminalData" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -14,7 +14,6 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard/index'
-import { getTerminalDetail } from '@/api/sessions'
 
 export default {
   name: 'TerminalDetail',
@@ -25,19 +24,24 @@ export default {
   data() {
     return {
       terminalData: {},
-      activeSubMenu: 'detail',
-      submenu: [
-        {
-          title: this.$t('sessions.terminalDetail'),
-          name: 'detail'
+      loading: true,
+      config: {
+        activeMenu: 'detail',
+        submenu: [
+          {
+            title: this.$t('sessions.terminalDetail'),
+            name: 'detail'
+          }
+        ],
+        hasDelete: false,
+        actions: {
+          hasDelete: false,
+          canDelete: false
         }
-      ]
+      }
     }
   },
   computed: {
-    title() {
-      return this.$t('sessions.terminalDetail')
-    },
     cardTitle() {
       return this.terminalData.name
     },
@@ -69,11 +73,6 @@ export default {
         }
       ]
     }
-  },
-  mounted() {
-    getTerminalDetail(this.$route.params.id).then(data => {
-      this.terminalData = data
-    })
   }
 }
 </script>

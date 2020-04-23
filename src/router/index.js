@@ -398,17 +398,23 @@ export const constantRoutes = [
         meta: { title: 'Terminal' }
       },
       {
-        path: 'terminal/:id',
+        path: 'terminals/:id',
         name: 'TerminalDetail',
         component: () => import('@/views/sessions/TerminalDetail'),
-        meta: { title: 'TerminalDetail' },
+        meta: { title: 'Terminal' },
         hidden: true
       },
       {
-        path: 'terminal/:id/update',
+        path: 'terminals/:id/update',
         name: 'TerminalUpdate',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'TerminalUpdate' },
+        component: () => import('@/views/sessions/TerminalUpdate'),
+        meta: { title: 'Terminal' },
+        hidden: true
+      },
+      {
+        path: 'storages',
+        name: 'Storage',
+        component: () => import('@/views/sessions/Storage'),
         hidden: true
       }
     ]

@@ -48,22 +48,19 @@ export default {
       assetPermissionUserGroup: [],
       userReletionConfig: {
         icon: 'fa-user',
-        title: this.$t('perms.AddUserToAssetPermission'),
+        title: this.$t('perms.Add user to asset permission'),
         url: '/api/v1/users/users/',
         value: [],
         loading: false
       },
       groupReletionConfig: {
         icon: 'fa-group',
-        title: this.$t('perms.AddGroupToAssetPermission'),
+        title: this.$t('perms.Add user group to asset permission'),
         url: '/api/v1/users/groups/',
         value: [],
         loading: false
       }
     }
-  },
-  mounted() {
-    // 获取用户组成员
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :submenu="submenu" :active-menu="activeSubMenu" :title="title">
+  <GenericDetailPage :submenu="submenu" :object.sync="sessionData" :active-menu="activeSubMenu" :title="title">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :span="14">

@@ -24,6 +24,16 @@ export default {
           // ?assets=0不显示资产. =1显示资产
           treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
         },
+        tagSearch: [
+          {
+            label: this.$t('assets.hostname'),
+            key: 'hostname'
+          }, {
+            label: this.$t('assets.ip'),
+            key: 'ip'
+
+          }
+        ],
         columns: [
           {
             prop: 'hostname',

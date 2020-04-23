@@ -57,5 +57,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .box-margin {
+    margin-bottom: 20px;
+  }
 </style>

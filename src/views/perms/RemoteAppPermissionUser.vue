@@ -1,42 +1,24 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
-    <el-col :span="10">
-      <el-card class="box-card primary">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ userCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectUser.value" v-bind="selectUser" />
-        </div>
-      </el-card>
-    </el-col>
-    <el-col :span="10">
-      <el-card class="box-card success">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ userGroupCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectUserGroup.value" v-bind="selectUserGroup" />
-        </div>
-      </el-card>
+    <el-col :md="10" :sm="24">
+      <RelationCard v-if="!userReletionConfig.loading" v-bind="userReletionConfig" />
+      <RelationCard v-if="!groupReletionConfig.loading" v-bind="groupReletionConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
-import Select2 from '@/components/Select2'
+import { RelationCard } from '@/components'
 
 export default {
   name: 'RemoteAppPermissionUser',
   components: {
     ListTable,
-    Select2
+    RelationCard
   },
   data() {
     return {
@@ -64,24 +46,20 @@ export default {
       },
       remoteAppPermissionUser: [],
       remoteAppPermissionUserGroup: [],
-      selectUser: {
+      userReletionConfig: {
+        icon: 'fa-user',
+        title: this.$t('perms.Add user to asset permission'),
         url: '/api/v1/users/users/',
-        initial: this.remoteAppPermissionUser,
-        value: []
+        value: [],
+        loading: false
       },
-      selectUserGroup: {
+      groupReletionConfig: {
+        icon: 'fa-group',
+        title: this.$t('perms.Add user group to asset permission'),
         url: '/api/v1/users/groups/',
-        initial: this.remoteAppPermissionUserGroup,
-        value: []
+        value: [],
+        loading: false
       }
-    }
-  },
-  computed: {
-    userCardActions() {
-      return this.$t('perms.User')
-    },
-    userGroupCardActions() {
-      return this.$t('perms.UserGroups')
     }
   }
 }

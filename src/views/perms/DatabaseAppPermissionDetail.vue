@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="databaseAppPermission" v-bind="config">
+  <GenericDetailPage :object.sync="databaseAppData" v-bind="config">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :md="14" :sm="24">
@@ -22,7 +22,6 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import { DetailCard, ActiveCard } from '@/components'
-import { getDatabaseAppPermissionDetail } from '@/api/perms'
 import { toSafeLocalDateStr } from '@/utils/common'
 import DatabaseAppPermissionUser from './DatabaseAppPermissionUser'
 import DatabaseAppPermissionDatabaseApp from './DatabaseAppPermissionDatabaseApp'
@@ -39,7 +38,6 @@ export default {
   data() {
     return {
       flag: false,
-      databaseAppPermission: { name: '' },
       config: {
         activeMenu: 'detail',
         submenu: [
@@ -120,17 +118,13 @@ export default {
       ]
     }
   },
-  mounted() {
-    this.getDatabaseAppPermissionDetailData()
+  watch: {
+    databaseAppData: function(newDatabaseAppData, oldDatabaseAppData) {
+      this.activeConfig.content[0].is_active = newDatabaseAppData.is_active
+      this.flag = true
+    }
   },
   methods: {
-    getDatabaseAppPermissionDetailData() {
-      getDatabaseAppPermissionDetail(this.$route.params.id).then(data => {
-        this.databaseAppData = data
-        this.activeConfig.content[0].is_active = data.is_active
-        this.flag = true
-      })
-    },
     getDataLength(data) {
       if (data instanceof Array) {
         return data.length
@@ -142,22 +136,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-table /deep/ .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table /deep/ .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
-  }
+
 </style>
