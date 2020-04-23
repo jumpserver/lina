@@ -5,7 +5,8 @@
         <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick" />
       </div>
       <div class="table-action-right-side">
-        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />
+        <!--        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />-->
+        <TagSearch v-if="hasSearch" class="right-side-item action-search" :filter-fields="tagSearch" @tagSearch="handleTagSearch" />
         <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick" />
       </div>
     </slot>
@@ -13,6 +14,7 @@
 </template>
 
 <script>
+import TagSearch from '@/components/TagSearch'
 import ActionsGroup from '@/components/ActionsGroup'
 import _ from 'lodash'
 import { createSourceIdCache } from '@/api/common'
@@ -23,9 +25,11 @@ const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
-    ActionsGroup
+    ActionsGroup,
+    TagSearch
   },
   props: {
+    ...TagSearch.props,
     hasExport: defaultTrue,
     hasImport: defaultTrue,
     hasRefresh: defaultTrue,
@@ -72,6 +76,12 @@ export default {
     extraRightSideActions: {
       type: Array,
       default: () => ([])
+    },
+    testFields: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   data() {
@@ -142,6 +152,10 @@ export default {
     handleSearch: _.debounce(function() {
       this.searchTable({ search: this.keyword })
     }, 500),
+    handleTagSearch(val) {
+      console.log(val)
+      this.searchTable(val)
+    },
     handleActionClick(item) {
       console.log('name cations')
       let handler = this.namedActions[item] ? this.namedActions[item].callback : null
