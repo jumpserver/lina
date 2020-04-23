@@ -376,8 +376,11 @@ const cn = {
     'UsersAndUserGroups': '用户或用户组',
     'AssetAndNode': '资产或节点',
     'Active': '激活中',
-    'AddUserToAssetPermission': '添加用户',
-    'AddGroupToAssetPermission': '添加用户组',
+    'Add user to asset permission': '添加用户',
+    'Add user group to asset permission': '添加用户组',
+    'Add asset to this permission': '添加资产',
+    'Add node to this permission': '添加节点',
+    'Add System User to this permission': '添加系统用户',
     //
     'RemoteApp': '远程应用',
     'RemoteAppCount': '远程应用数量',

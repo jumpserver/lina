@@ -1,53 +1,25 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
-    <el-col :span="10">
-      <el-card class="box-card primary">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ assetCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectAsset.value" v-bind="selectAsset" />
-        </div>
-      </el-card>
-    </el-col>
-    <el-col :span="10">
-      <el-card class="box-card success">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ nodeCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectNode.value" v-bind="selectNode" />
-        </div>
-      </el-card>
-    </el-col>
-    <el-col :span="10">
-      <el-card class="box-card warning">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ systemUserCardActions }}</span>
-        </div>
-        <div>
-          <Select2 v-model="selectSystemUser.value" v-bind="selectSystemUser" />
-        </div>
-      </el-card>
+    <el-col :md="10" :sm="24">
+      <RelationCard v-if="!assetReletionConfig.loading" v-bind="assetReletionConfig" />
+      <RelationCard v-if="!nodeReletionConfig.loading" v-bind="nodeReletionConfig" />
+      <RelationCard v-if="!systemUserReletionConfig.loading" v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
-import Select2 from '@/components/Select2'
+import { RelationCard } from '@/components'
 
 export default {
   name: 'AssetPermissionAsset',
   components: {
     ListTable,
-    Select2
+    RelationCard
   },
   data() {
     return {
@@ -76,32 +48,27 @@ export default {
       assetPermissionAsset: [],
       assetPermissionNode: [],
       assetPermissionSystemUser: [],
-      selectAsset: {
+      assetReletionConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.Add asset to this permission'),
         url: '/api/v1/assets/assets/',
-        initial: this.assetPermissionAsset,
-        value: []
+        value: [],
+        loading: false
       },
-      selectNode: {
+      nodeReletionConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.Add node to this permission'),
         url: '/api/v1/assets/nodes/',
-        initial: this.assetPermissionNode,
-        value: []
+        value: [],
+        loading: false
       },
-      selectSystemUser: {
+      systemUserReletionConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.Add System User to this permission'),
         url: '/api/v1/assets/system-users/',
-        initial: this.assetPermissionSystemUser,
-        value: []
+        value: [],
+        loading: false
       }
-    }
-  },
-  computed: {
-    assetCardActions() {
-      return this.$t('perms.Asset')
-    },
-    nodeCardActions() {
-      return this.$t('perms.Node')
-    },
-    systemUserCardActions() {
-      return this.$t('perms.SystemUser')
     }
   }
 }
