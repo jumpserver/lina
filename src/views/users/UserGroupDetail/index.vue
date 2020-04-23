@@ -50,8 +50,22 @@ export default {
       relationConfig: {
         icon: 'fa-user',
         title: this.$tc('Members'),
-        url: '/api/v1/users/users/?draw=1',
+        url: '/api/v1/users/users/?fields_size=mini',
         objectsId: [],
+        objects: [
+          {
+            id: '1',
+            name: '周杰伦'
+          },
+          {
+            id: '2',
+            name: '昆凌'
+          },
+          {
+            id: '3',
+            name: '周杰伦'
+          }
+        ],
         loading: true
       },
       cardTitle: this.$tc('Basic Info')

@@ -17,7 +17,7 @@
           </td>
         </tr>
         <tr v-for="obj of validObjects" :key="obj.id" style="width: 100%" class="item">
-          <td><b>{{ obj.label }}</b></td>
+          <td><b>{{ obj.name }}</b></td>
           <td>
             <el-button size="mini" type="danger" style="float: right">
               <i class="fa fa-minus" />
@@ -46,17 +46,21 @@ export default {
       type: String,
       default: ''
     },
-    // 地址，发送给select2的，查询所有可以关联的对象
-    url: {
-      type: String,
-      default: ''
+    // 地址，发送给select2的，查询所有的objects
+    objectsAjax: {
+      type: Object,
+      default: () => ({})
+    },
+    objects: {
+      type: [Array, null],
+      default: null
     },
     // 已选择的objects Id, 会转换成select2的value, 作为默认选择项
-    objectsId: {
+    hasObjectsId: {
       type: Array,
       default: () => []
     },
-    objects: {
+    hasObjects: {
       type: [Array, null],
       default: null
     },
@@ -69,7 +73,7 @@ export default {
     return {
       validObjects: this.objects ? this.objects : [],
       select2: {
-        url: this.url,
+        ajax: { url: '/api/v1/users/users/' },
         value: this.value,
         isSelectedValue: false
       }
