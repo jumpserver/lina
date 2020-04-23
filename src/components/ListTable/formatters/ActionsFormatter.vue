@@ -96,8 +96,8 @@ export default {
     cleanedActions() {
       let actions = [...this.defaultActions, ...this.extraActions]
       actions = actions.map((v) => {
-        v.has = this.cleanAction(v, 'has')
-        v.can = this.cleanAction(v, 'can')
+        v.has = this.cleanBoolean(v, 'has')
+        v.can = this.cleanBoolean(v, 'can')
         v.callback = this.cleanCallback(v)
         return v
       })
@@ -111,12 +111,12 @@ export default {
     }
   },
   methods: {
-    cleanAction(item, attr) {
+    cleanBoolean(item, attr) {
       const ok = item[attr]
       if (!ok || typeof ok !== 'function') {
         return item
       }
-      item.ok = function() {
+      item[attr] = function() {
         return ok(this.row, this.cellValue)
       }
       return item
