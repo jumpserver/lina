@@ -183,4 +183,8 @@ export default {
     /*margin: 0;*/
     /*background-color: #f3f3f4;*/
   }
+
+  .page-submenu >>> .el-tabs__nav-wrap {
+    position: static;
+  }
 </style>
