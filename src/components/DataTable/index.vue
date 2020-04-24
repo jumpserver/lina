@@ -59,6 +59,7 @@ export default {
         paginationLayout: 'total, sizes, prev, pager, next',
         paginationSizes: [15, 30, 50, 100],
         paginationSize: 15,
+        paginationBackground: true,
         transformQuery: query => {
           if (query.page && query.size) {
             const page = query.page > 0 ? query.page : 1
