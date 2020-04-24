@@ -8,7 +8,7 @@
         {{ this.$tc('More actions') }}<i class="el-icon-arrow-down el-icon--right" />
       </el-button>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="item in moreActions" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
+        <el-dropdown-item v-for="item in iMoreActions" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
