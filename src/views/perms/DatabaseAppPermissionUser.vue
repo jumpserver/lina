@@ -14,6 +14,8 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { RelationCard } from '@/components'
+import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
+
 export default {
   name: 'DatabaseAppPermissionUser',
   components: {
@@ -25,11 +27,20 @@ export default {
       tableConfig: {
         url: `/api/v1/perms/database-app-permissions/${this.$route.params.id}/users/all/`,
         columns: [
-          'user_display'
+          'user_display', 'delete_action'
         ],
         columnsMeta: {
           user_display: {
-            label: this.$t('perms.User')
+            label: this.$t('perms.User'),
+            align: 'center'
+          },
+          delete_action: {
+            prop: 'user',
+            label: this.$tc('Action'),
+            align: 'center',
+            width: 150,
+            formatter: DeleteActionFormatter,
+            deleteUrl: `/api/v1/perms/database-app-permissions-users-relations/?databaseapppermission=${this.$route.params.id}&user=`
           }
         }
       },

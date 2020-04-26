@@ -13,6 +13,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { RelationCard } from '@/components'
+import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   name: 'DatabaseAppPermissionDatabaseApp',
@@ -25,11 +26,20 @@ export default {
       tableConfig: {
         url: `/api/v1/perms/database-app-permissions/${this.$route.params.id}/database-apps/all/`,
         columns: [
-          'databaseapp_display'
+          'databaseapp_display', 'delete_action'
         ],
         columnsMeta: {
           databaseapp_display: {
-            label: this.$t('perms.DatabaseApp')
+            label: this.$t('perms.DatabaseApp'),
+            align: 'center'
+          },
+          delete_action: {
+            prop: 'databaseapp',
+            label: this.$tc('Action'),
+            align: 'center',
+            width: 150,
+            formatter: DeleteActionFormatter,
+            deleteUrl: `/api/v1/perms/database-app-permissions-database-apps-relations/?databaseapppermission=${this.$route.params.id}&databaseapp=`
           }
         }
       },

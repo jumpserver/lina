@@ -14,6 +14,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { RelationCard } from '@/components'
+import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   name: 'AssetPermissionAsset',
@@ -26,12 +27,24 @@ export default {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/assets/all/`,
         columns: [
-          'asset_display'
+          'asset_display', 'delete_action'
         ],
         columnsMeta: {
           asset_display: {
-            label: this.$t('perms.Asset')
+            label: this.$t('perms.Asset'),
+            align: 'center'
+          },
+          delete_action: {
+            prop: 'asset',
+            label: this.$tc('Action'),
+            align: 'center',
+            width: 150,
+            formatter: DeleteActionFormatter,
+            deleteUrl: `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.$route.params.id}&asset=`
           }
+        },
+        tableAttrs: {
+          border: false
         }
       },
       headerActions: {

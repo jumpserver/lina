@@ -16,6 +16,17 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasSelection: false,
         hasTree: true,
+        tagSearch: [
+          { label: this.$tc('Name'), key: 'name' },
+          { label: this.$t('perms.IsValid'), key: 'is_valid' },
+          { label: this.$tc('username'), key: 'username' },
+          { label: this.$t('perms.UserGroups'), key: 'user_group' },
+          { label: this.$t('perms.IP'), key: 'ip' },
+          { label: this.$t('perms.Hostname'), key: 'hostname' },
+          { label: this.$t('perms.Node'), key: 'node' },
+          { label: this.$t('perms.SystemUser'), key: 'system_user' },
+          { label: '继承(先占位)', key: 'all=0' }
+        ],
         treeSetting: {
           showMenu: false,
           showRefresh: true,
@@ -56,8 +67,12 @@ export default {
         }
       },
       headerActions: {
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
         hasBulkDelete: false,
-        extraActions: [
+        hasBulkUpdate: false,
+        extraMoreActions: [
           {
             name: 'RefreshPermissionCache',
             title: this.$t('perms.RefreshPermissionCache'),
@@ -73,9 +88,9 @@ export default {
     HandleRefreshPermissionCache() {
       const url = '/api/v1/perms/asset-permissions/cache/refresh/'
       this.$axios.get(url).then(res => {
-        this.$message(this.$t('perms.ReFreshSuccess'))
+        this.$message.success(this.$t('perms.ReFreshSuccess'))
       }).catch(err => {
-        this.$message(this.$t('perms.ReFreshFail') + ':' + err)
+        this.$message.error(this.$t('perms.ReFreshFail') + ':' + err)
       })
     }
   }

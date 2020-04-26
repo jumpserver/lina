@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="assetPermissionData" v-bind="config">
+  <GenericDetailPage :object.sync="assetPermissionData" v-bind="config" @tab-click="TabClick">
     <template #detail>
       <div>
         <el-row :gutter="20">
@@ -111,7 +111,6 @@ export default {
         },
         {
           key: this.$t('perms.DateExpired'),
-          // value: toSafeLocalDateStr(this.assetData.date_expired),
           value: toSafeLocalDateStr(this.assetPermissionData.date_expired)
         },
         {
@@ -141,6 +140,13 @@ export default {
         return data.length
       }
       return data
+    },
+    TabClick(tab) {
+      if (tab.name !== 'detail') {
+        this.$set(this.config, 'hasRightSide', false)
+      } else {
+        this.$set(this.config, 'hasRightSide', true)
+      }
     }
   }
 }
