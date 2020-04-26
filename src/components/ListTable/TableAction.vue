@@ -5,8 +5,7 @@
         <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" />
       </div>
       <div class="table-action-right-side">
-        <!--        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />-->
-        <TagSearch v-if="hasSearch" class="right-side-item action-search" :tag-search="tagSearch" @tagSearch="handleTagSearch" />
+        <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
         <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
       </div>
     </slot>
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-import TagSearch from '@/components/TagSearch'
+import AutoDataSearch from '@/components/AutoDataSearch'
 import ActionsGroup from '@/components/ActionsGroup'
 import { createSourceIdCache } from '@/api/common'
 import _ from 'lodash'
@@ -26,10 +25,9 @@ export default {
   name: 'TableAction',
   components: {
     ActionsGroup,
-    TagSearch
+    AutoDataSearch
   },
   props: {
-    ...TagSearch.props,
     hasExport: defaultTrue,
     hasImport: defaultTrue,
     hasRefresh: defaultTrue,
@@ -39,6 +37,10 @@ export default {
     hasLeftActions: defaultTrue,
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
+    searchConfig: {
+      type: Object,
+      default: () => {}
+    },
     tableUrl: {
       type: String,
       default: ''
@@ -141,7 +143,6 @@ export default {
       this.searchTable({ search: this.keyword })
     }, 500),
     handleTagSearch(val) {
-      console.log(val)
       this.searchTable(val)
     },
     handleCreate() {

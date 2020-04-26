@@ -1,55 +1,47 @@
 <template>
   <div class="filter-field">
-    <el-dropdown placement="bottom-start" @command="handleMenuItemClick">
+    <el-dropdown ref="Dropdown" placement="bottom-start">
       <span class="el-dropdown-link">
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="option in tagSearch" :key="option.key" :command="option.key" :value="option.label" :name="option.key">{{ option.label }}</el-dropdown-item>
+        <el-cascader-panel ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
       </el-dropdown-menu>
     </el-dropdown>
     <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="fieldtag" type="info" @close="handleTagClose(k)">
       <strong v-if="v.label">{{ v.label + ':' }}</strong> {{ v.value }}
     </el-tag>
     <span v-if="filterLabel" slot="prefix" class="filterTitle">{{ filterLabel + ':' }}</span>
-    <el-input ref="SearchInput" v-model="filterValue" placeholder="添加筛选条件" style="max-width: 100px; border: none;" @change="handleConfirm" />
+    <el-input ref="SearchInput" v-model="filterValue" :placeholder="this.$t('添加筛选条件')" style="max-width: 100px; border: none;" @change="handleConfirm" />
   </div>
 
 </template>
+
 <script>
 export default {
   name: 'TagSearch',
   props: {
-    tagSearch: {
+    config: {
+      type: Object,
+      default: () => {}
+    },
+    options: {
       type: Array,
-      default() {
-        return [
-          {
-            label: '用户名',
-            key: 'username'
-          },
-          {
-            label: 'ID',
-            key: 'id'
-          }
-        ]
-      }
+      default: () => []
     }
   },
   data() {
     return {
       filterKey: '',
       filterValue: '',
-      filterTags: {
-
-      }
+      filterTags: {}
     }
   },
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
     filterLabel() {
-      for (const field of this.tagSearch) {
-        if (field.key === this.filterKey) {
+      for (const field of this.options) {
+        if (field.value === this.filterKey) {
           return field.label
         }
       }
@@ -74,9 +66,14 @@ export default {
     }
   },
   methods: {
-    handleMenuItemClick(key) {
-      this.filterKey = key
+    handleMenuItemChange(keys) {
+      this.$refs.Dropdown.hide()
       this.$refs.SearchInput.focus()
+      if (keys.length !== 0) {
+        this.filterKey = keys[0]
+        this.$refs.Cascade.clearCheckedNodes()
+      }
+      console.log(this.filterKey)
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
@@ -127,5 +124,17 @@ export default {
   }
   a {
     color: #000;
+  }
+  // 去掉边框
+  .el-dropdown-menu{
+    border: none !important;
+  }
+  .el-cascader-panel{
+    border: none !important;
+  }
+
+  // 重置表格高度
+  .el-cascader-panel /deep/ .el-cascader-menu__wrap{
+    height: inherit;
   }
 </style>
