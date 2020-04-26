@@ -416,6 +416,20 @@ export const constantRoutes = [
         name: 'Storage',
         component: () => import('@/views/sessions/Storage'),
         hidden: true
+      },
+      {
+        path: 'replay-storage/create',
+        name: 'CreateReplyStorage',
+        component: () => import('@/views/sessions/ReplyStorageCreate'),
+        meta: { title: 'CreateReplyStorage' },
+        hidden: true
+      },
+      {
+        path: 'command-storage/create',
+        name: 'CreateCommandStorage',
+        component: () => import('@/views/sessions/CommandStorageCreate'),
+        meta: { title: 'CreateCommandStorage' },
+        hidden: true
       }
     ]
   },

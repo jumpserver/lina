@@ -16,7 +16,6 @@
 import { TabPage } from '@/layout/components'
 import { ListTable } from '@/components'
 import { TestCommandStorage, TestReplayStorage } from '@/api/sessions'
-import { CustomActionsFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'Storage',
@@ -49,48 +48,38 @@ export default {
             name: 'S3',
             title: 'S3',
             type: 'primary',
-            callback: function() {
-              console.log('S3===')
-            }
+            callback: this.createS3.bind(this)
           },
           {
             name: 'Ceph',
             title: 'Ceph',
             type: 'primary',
-            callback: function() {
-              console.log('Ceph===')
-            }
+            callback: this.createCeph.bind(this)
           },
           {
             name: 'Swift',
             title: 'Swift',
             type: 'primary',
-            callback: function() {
-              console.log('Swift===')
-            }
+            callback: this.createSwift.bind(this)
           },
           {
             name: 'OSS',
             title: 'OSS',
             type: 'primary',
-            callback: function() {
-              console.log('OSS===')
-            }
+            callback: this.createOSS.bind(this)
           },
           {
             name: 'Azure',
             title: 'Azure',
             type: 'primary',
-            callback: function() {
-              console.log('Azure===')
-            }
+            callback: this.createAzure.bind(this)
           }
 
         ]
       },
       replayTableConfig: {
         url: '/api/v1/terminal/replay-storages/',
-        columns: ['name', 'type', 'comment', 'cusActions'],
+        columns: ['name', 'type', 'comment', 'actions'],
         columnsMeta: {
           name: {
             formatter: function(row) {
@@ -105,36 +94,16 @@ export default {
           comment: {
             sortable: 'custom'
           },
-          cusActions: {
+          actions: {
             prop: 'id',
-            formatter: CustomActionsFormatter,
             actions: {
-              actions: [
-                {
-                  name: 'update',
-                  title: this.$tc('Update'),
-                  type: 'primary',
-                  can: function(row, cellValue,) {
-                    return row.name !== 'null' && row.name !== 'default'
-                  },
-                  callback: function({ row, col, cellValue, reload }) {
-                  }
-                },
-                {
-                  name: 'delete',
-                  title: this.$tc('Delete'),
-                  type: 'danger',
-                  can: function(row, cellValue) {
-                    return row.name !== 'null' && row.name !== 'default'
-                  },
-                  callback: function({ row, col, cellValue, reload }) {
-                    const id = row.id
-                    const url = `${this.url}${id}/`
-                    this.$axios.delete(url).then(data => {
-                      reload()
-                    })
-                  }
-                },
+              canUpdate: function(row, cellValue) {
+                return (row.name !== 'default' && row.name !== 'null')
+              },
+              canDelete: function(row, cellValue) {
+                return (row.name !== 'default' && row.name !== 'null')
+              },
+              extraActions: [
                 {
                   name: 'test',
                   title: this.$t('sessions.test'),
@@ -170,16 +139,14 @@ export default {
             name: 'Elasticsearch',
             title: 'Elasticsearch',
             type: 'primary',
-            callback: function() {
-              console.log('Elasticsearch====')
-            }
+            callback: this.createEs.bind(this)
           }
         ]
       },
       commandTableConfig: {
         title: 'command',
         url: '/api/v1/terminal/command-storages/',
-        columns: ['name', 'type', 'comment', 'cusActions'],
+        columns: ['name', 'type', 'comment', 'actions'],
         columnsMeta: {
           comment: {
             sortable: 'custom'
@@ -194,36 +161,15 @@ export default {
               return row.type
             }
           },
-          cusActions: {
-            prop: 'id',
-            formatter: CustomActionsFormatter,
+          actions: {
             actions: {
-              actions: [
-                {
-                  name: 'update',
-                  title: this.$tc('Update'),
-                  type: 'primary',
-                  can: function(row, cellValue,) {
-                    return row.name !== 'null' && row.name !== 'default'
-                  },
-                  callback: function({ row, col, cellValue, reload }) {
-                  }
-                },
-                {
-                  name: 'delete',
-                  title: this.$tc('Delete'),
-                  type: 'danger',
-                  can: function(row, cellValue) {
-                    return row.name !== 'null' && row.name !== 'default'
-                  },
-                  callback: function({ row, col, cellValue, reload }) {
-                    const id = row.id
-                    const url = `${this.url}${id}/`
-                    this.$axios.delete(url).then(data => {
-                      reload()
-                    })
-                  }
-                },
+              canUpdate: function(row, cellValue) {
+                return (row.name !== 'default' && row.name !== 'null')
+              },
+              canDelete: function(row, cellValue) {
+                return (row.name !== 'default' && row.name !== 'null')
+              },
+              extraActions: [
                 {
                   name: 'test',
                   title: this.$t('sessions.test'),
@@ -252,6 +198,26 @@ export default {
   computed: {
     Title() {
       return this.$t('sessions.storage')
+    }
+  },
+  methods: {
+    createS3() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 's3' }})
+    },
+    createCeph() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'ceph' }})
+    },
+    createSwift() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'swift' }})
+    },
+    createOSS() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'oss' }})
+    },
+    createAzure() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'azure' }})
+    },
+    createEs() {
+      this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
     }
   }
 }

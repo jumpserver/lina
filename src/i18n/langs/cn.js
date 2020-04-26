@@ -131,7 +131,8 @@ const cn = {
     'PlatformCreate': '创建系统平台',
     'PlatformUpdate': '更新系统平台',
     'CommandFilterCreate': '创建命令过滤器',
-    'CommandFilterUpdate': '更新命令过滤器'
+    'CommandFilterUpdate': '更新命令过滤器',
+    'CreateReplyStorage': '创建录像存储'
   },
   // 用户模块翻译
   users: {
@@ -349,6 +350,9 @@ const cn = {
     'RefreshPermissionCache': '刷新授权缓存',
     'ReFreshSuccess': '刷新成功',
     'ReFreshFail': '刷新失败',
+    'IsValid': '有效',
+    'IP': 'IP',
+    'Hostname': '主机名',
     'All': '全部',
     'Connect': '连接',
     'UpDownload': '上传下载',
@@ -433,7 +437,18 @@ const cn = {
     'commandStorage': '命令存储',
     'replayStorage': '录像存储',
     'storage': '存储',
-    'test': '测试'
+    'test': '测试',
+    'createReplyStorage': '创建录像存储',
+    'endPoint': '端点',
+    'bucket': '桶名称',
+    'type': '类型',
+    'containerName': '容器名称',
+    'accountName': '账户名称',
+    'accountKey': '账户密钥',
+    'endpointSuffix': '端点后缀',
+    'docType': '文档类型',
+    'index': '索引',
+    'hosts': '主机'
   },
   jobcenter: {
     'RunTimes': '执行次数',

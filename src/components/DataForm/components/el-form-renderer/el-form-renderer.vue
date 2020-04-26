@@ -2,7 +2,6 @@
   <el-form ref="elForm" v-bind="$attrs" :model="value" class="el-form-renderer">
     <template v-for="item in innerContent">
       <slot :name="`id:${item.id}`" />
-      <slot :name="`$id:${item.id}`" />
       <component
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
         :key="item.id"
@@ -14,6 +13,7 @@
         :options="options[item.id]"
         @updateValue="updateValue"
       />
+      <slot :name="`$id:${item.id}`" />
     </template>
     <slot />
   </el-form>

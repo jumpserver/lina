@@ -24,6 +24,14 @@
             </el-button>
           </td>
         </tr>
+        <tr v-if="params.hasMore" class="item">
+          <td colspan="2">
+            <el-button type="primary" size="small" style="width: 100%" @click="loadMore">
+              <i class="fa fa-arrow-down" />
+              {{ $tc('More') }} ( {{ hasObjectLeftLength }} )
+            </el-button>
+          </td>
+        </tr>
       </table>
     </div>
   </el-card>
@@ -73,6 +81,7 @@ export default {
   data() {
     return {
       iHasObjects: this.hasObjects || [],
+      totalHasObjectsLength: 0,
       params: {
         page: 1,
         hasMore: false,
@@ -88,22 +97,25 @@ export default {
   },
   computed: {
     iAjax() {
-      this.$log.debug('iAjax', this.$refs.select2)
       return this.$refs.select2.iAjax
+    },
+    safeMakeParams() {
+      return this.$refs.select2.safeMakeParams
+    },
+    hasObjectLeftLength() {
+      this.$log.debug('Total', this.totalHasObjectsLength)
+      this.$log.debug(this.iHasObjects.length)
+      return this.totalHasObjectsLength - this.iHasObjects.length
     }
   },
   mounted() {
     if (this.hasObjectsId.length !== 0) {
       setTimeout(() => {
         this.getHasObjectsByIds()
-      }, 500)
+      }, 50)
     }
   },
   methods: {
-    safeMakeParams(params) {
-      this.$log.debug('safeMakeParams', this.$refs.select2)
-      return this.$refs.select2.safeMakeParams(params)
-    },
     async loadMore() {
       if (this.loading) {
         return
@@ -125,14 +137,18 @@ export default {
       let data = await this.$axios.get(this.iAjax.url, { params: params })
       data = this.iAjax.processResults.bind(this)(data)
       data.results.forEach((v) => {
-        this.hasObjects.push(v)
+        if (!this.hasObjects.find((item) => item.value === v.value)) {
+          this.hasObjects.push(v)
+        }
       })
       // 如果还有其它页，继续获取, 如果没有就停止
-      if (!data.pagination) {
-        this.params.hasMore = false
-      }
+      this.params.hasMore = !!data.pagination
+      this.totalHasObjectsLength = data.total
     },
     async getHasObjectsByIds() {
+      if (!this.$refs.select2 || !this.iAjax || !this.safeMakeParams) {
+        return
+      }
       const resp = await createSourceIdCache(this.hasObjectsId)
       this.params.spm = resp.spm
       await this.loadHasObjects()

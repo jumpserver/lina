@@ -7,9 +7,12 @@
     :multiple="multiple"
     filterable
     remote
+    :reserve-keyword="true"
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
+    @change="onChange"
+    @visible-change="onVisibleChange"
     v-on="$listeners"
   >
     <el-option
@@ -17,6 +20,7 @@
       :key="item.value"
       :label="item.label"
       :value="item.value"
+      :disabled="item.disabled === undefined ? false : item.disabled"
     />
   </el-select>
 </template>
@@ -42,7 +46,8 @@ const defaultProcessResults = (data) => {
     return { label: item.name, value: item.id }
   })
   const more = !!data.next
-  return { results: results, pagination: more }
+  const total = data.count
+  return { results: results, pagination: more, total: total }
 }
 
 export const defaultAjax = {
@@ -86,7 +91,7 @@ export default {
     },
     ajax: {
       type: Object,
-      default: () => { return defaultAjax }
+      default: () => ({})
     },
     // 是否是多选
     multiple: {
@@ -99,6 +104,10 @@ export default {
       default() {
         return this.multiple ? [] : ''
       }
+    },
+    disabledValues: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -110,10 +119,11 @@ export default {
     }
     return {
       loading: false,
-      iAjax: Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {}),
+      initialized: false,
+      iAjax: Object.assign(_.cloneDeep(defaultAjax), this.ajax, this.url ? { url: this.url } : {}),
       iValue: this.multiple ? [] : '',
-      defaultParams: defaultParams,
-      params: Object.assign({}, defaultParams),
+      defaultParams: _.cloneDeep(defaultParams),
+      params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
       initialOptions: []
     }
@@ -124,7 +134,13 @@ export default {
     }
   },
   mounted() {
-    this.initialSelect()
+    this.$log.debug('Select is: ', this.iAjax.url)
+    this.$log.debug('Select url: ', this.url)
+    this.$log.debug('Default ajax: ', defaultAjax)
+    if (!this.initialized) {
+      this.initialSelect()
+      this.initialized = true
+    }
   },
   methods: {
     async loadMore(load) {
@@ -160,7 +176,17 @@ export default {
       this.params.search = query
       this.getOptions()
     },
-
+    reFresh() {
+      this.resetParams()
+      this.iOptions = []
+      this.getOptions()
+    },
+    addOption(option) {
+      if (this.disabledValues.indexOf(option.value) !== -1) {
+        option.disabled = true
+      }
+      this.iOptions.push(option)
+    },
     async getInitialOptions() {
       const params = this.safeMakeParams(this.params)
       this.$log.debug('Get initial options: ', params)
@@ -169,7 +195,7 @@ export default {
       data.results.forEach((v) => {
         this.initialOptions.push(v)
         if (this.optionsValues.indexOf(v.value) === -1) {
-          this.iOptions.push(v)
+          this.addOption(v)
         }
       })
       // 如果还有其它页，继续获取, 如果没有就停止
@@ -190,7 +216,7 @@ export default {
       }
       data.results.forEach((v) => {
         if (this.optionsValues.indexOf(v.value) === -1) {
-          this.iOptions.push(v)
+          this.addOption(v)
         }
       })
     },
@@ -207,6 +233,28 @@ export default {
         await this.getOptions()
       }
       this.iValue = this.value
+    },
+    getOptionsByValues(values) {
+      return this.iOptions.filter((v) => {
+        return values.indexOf(v.value) !== -1
+      })
+    },
+    getSelectedOptions() {
+      const values = this.iValue
+      return this.iOptions.filter((v) => {
+        return values.indexOf(v.value) !== -1
+      })
+    },
+    onChange(values) {
+      const options = this.getSelectedOptions()
+      this.$log.debug('Current select options: ', options)
+      this.$emit('changeOptions', options)
+    },
+    onVisibleChange(visible) {
+      if (!visible && this.params.search) {
+        this.reFresh()
+        this.$log.debug('Visible change, refresh select2')
+      }
     }
   }
 }

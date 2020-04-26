@@ -6,6 +6,15 @@
     :rules="_show && Array.isArray(data.rules) ? data.rules : []"
     v-bind="data.attrs"
   >
+    <template v-if="data.helpTips" #label>
+      <el-tooltip placement="top">
+        <div slot="content" v-html="data.helpTips" />
+        <el-button style="padding: 0">
+          <i class="fa fa-info-circle" />
+        </el-button>
+      </el-tooltip>
+      {{ data.label }}
+    </template>
     <template v-if="readonly && hasReadonlyContent">
       <div
         v-if="data.type === 'input'"
@@ -55,6 +64,7 @@
         >{{ opt.label }}</el-radio>
       </template>
     </custom-component>
+    <div v-if="data.helpText" class="help-block" v-html="data.helpText" />
   </el-form-item>
 </template>
 <script>

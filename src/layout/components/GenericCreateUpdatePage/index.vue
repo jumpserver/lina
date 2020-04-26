@@ -41,6 +41,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    cleanFormValue: {
+      type: Function,
+      default: (value) => value
+    },
     onSubmit: {
       type: Function,
       default: null
@@ -124,6 +128,7 @@ export default {
     handleSubmit(values) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
+      values = this.cleanFormValue(values)
       return handler(values)
     },
     defaultPerformSubmit(validValues) {
@@ -135,7 +140,6 @@ export default {
       const route = this.method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
       performSubmit(validValues).then(() => {
         this.$message.success(msg)
-        console.log(route)
         this.$router.push(route)
       }).catch(error => {
         const response = error.response
