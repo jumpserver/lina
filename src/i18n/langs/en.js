@@ -314,7 +314,18 @@ const en = {
     'commandStorage': 'Command storage',
     'replayStorage': 'Replay Storage',
     'storage': 'Storage',
-    'test': 'Test'
+    'test': 'Test',
+    'createReplyStorage': 'Create replay storage',
+    'endPoint': 'Endpoint',
+    'bucket': 'Bucket',
+    'type': 'Type',
+    'containerName': 'Container name',
+    'accountName': 'Account name',
+    'accountKey': 'Account key',
+    'endpointSuffix': 'Endpoint suffix',
+    'docType': 'Doc type',
+    'index': 'Index',
+    'hosts': 'Hosts'
   },
   setting: {
     'setting': 'System Setting',

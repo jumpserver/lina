@@ -48,41 +48,31 @@ export default {
             name: 'S3',
             title: 'S3',
             type: 'primary',
-            callback: function() {
-              console.log('S3===')
-            }
+            callback: this.createS3.bind(this)
           },
           {
             name: 'Ceph',
             title: 'Ceph',
             type: 'primary',
-            callback: function() {
-              console.log('Ceph===')
-            }
+            callback: this.createCeph.bind(this)
           },
           {
             name: 'Swift',
             title: 'Swift',
             type: 'primary',
-            callback: function() {
-              console.log('Swift===')
-            }
+            callback: this.createSwift.bind(this)
           },
           {
             name: 'OSS',
             title: 'OSS',
             type: 'primary',
-            callback: function() {
-              console.log('OSS===')
-            }
+            callback: this.createOSS.bind(this)
           },
           {
             name: 'Azure',
             title: 'Azure',
             type: 'primary',
-            callback: function() {
-              console.log('Azure===')
-            }
+            callback: this.createAzure.bind(this)
           }
 
         ]
@@ -149,9 +139,7 @@ export default {
             name: 'Elasticsearch',
             title: 'Elasticsearch',
             type: 'primary',
-            callback: function() {
-              console.log('Elasticsearch====')
-            }
+            callback: this.createEs.bind(this)
           }
         ]
       },
@@ -210,6 +198,26 @@ export default {
   computed: {
     Title() {
       return this.$t('sessions.storage')
+    }
+  },
+  methods: {
+    createS3() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 's3' }})
+    },
+    createCeph() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'ceph' }})
+    },
+    createSwift() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'swift' }})
+    },
+    createOSS() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'oss' }})
+    },
+    createAzure() {
+      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'azure' }})
+    },
+    createEs() {
+      this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
     }
   }
 }
