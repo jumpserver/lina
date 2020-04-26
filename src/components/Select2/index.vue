@@ -160,6 +160,7 @@ export default {
       this.params.search = query
       this.getOptions()
     },
+
     async getInitialOptions() {
       const params = this.safeMakeParams(this.params)
       this.$log.debug('Get initial options: ', params)

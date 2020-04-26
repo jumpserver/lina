@@ -7,7 +7,7 @@
             <DetailCard :title="cardTitle" :items="detailItems" />
           </el-col>
           <el-col :md="10" :sm="24">
-            <RelationCard v-if="!relationConfig.loading" v-bind="relationConfig" />
+            <RelationCard v-bind="relationConfig" />
           </el-col>
         </el-row>
       </div>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { getUserGroupMembers } from '@/api/user'
 import { GenericDetailPage } from '@/layout/components'
 import { DetailCard, RelationCard } from '@/components'
 
@@ -50,21 +49,23 @@ export default {
       relationConfig: {
         icon: 'fa-user',
         title: this.$tc('Members'),
-        url: '/api/v1/users/users/?fields_size=mini',
-        objectsId: [],
-        objects: [
-          {
-            id: '1',
-            name: '周杰伦'
-          },
-          {
-            id: '2',
-            name: '昆凌'
-          },
-          {
-            id: '3',
-            name: '周杰伦'
-          }
+        objectsAjax: {
+          url: '/api/v1/users/users/?fields_size=mini'
+        },
+        hasObjectsId: ['938b47a3-db34-40be-b732-ee0125a4857c', '3e3b75a9-11fd-4b97-ad04-17a50a72507c'],
+        hasObjects: [
+          // {
+          //   id: '1',
+          //   name: '周杰伦'
+          // },
+          // {
+          //   id: '2',
+          //   name: '昆凌'
+          // },
+          // {
+          //   id: '3',
+          //   name: '周杰伦'
+          // }
         ],
         loading: true
       },
@@ -94,14 +95,14 @@ export default {
     }
   },
   mounted() {
-    getUserGroupMembers(this.$route.params.id).then(data => {
-      for (const i of data) {
-        this.relationConfig.objectsId.push(i.user)
-      }
-      console.log(this.relationConfig.objectsId)
-    }).finally(() => {
-      this.relationConfig.loading = false
-    })
+    // getUserGroupMembers(this.$route.params.id).then(data => {
+    //   for (const i of data) {
+    //     this.relationConfig.objectsId.push(i.user)
+    //   }
+    //   console.log(this.relationConfig.objectsId)
+    // }).finally(() => {
+    //   this.relationConfig.loading = false
+    // })
   },
   methods: {
   }
