@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="databaseAppData" v-bind="config">
+  <GenericDetailPage :object.sync="databaseAppData" v-bind="config" @tab-click="TabClick">
     <div slot="detail">
       <el-row :gutter="20">
         <el-col :md="14" :sm="24">
@@ -130,6 +130,13 @@ export default {
         return data.length
       }
       return data
+    },
+    TabClick(tab) {
+      if (tab.name !== 'detail') {
+        this.$set(this.config, 'hasRightSide', false)
+      } else {
+        this.$set(this.config, 'hasRightSide', true)
+      }
     }
   }
 }
