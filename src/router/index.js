@@ -131,13 +131,13 @@ export const constantRoutes = [
       {
         path: 'domains',
         name: 'DomainList',
-        component: () => import('@/views/assets/DomainList.vue'),
+        component: () => import('@/views/assets/Domain/DomainList.vue'),
         meta: { title: 'DomainList' }
       },
       {
         path: 'domains/create',
         name: 'DomainCreate',
-        component: () => import('@/views/assets/DomainCreateUpdate.vue'),
+        component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
         meta: { title: 'DomainList' },
         hidden: true
       },
@@ -151,54 +151,61 @@ export const constantRoutes = [
       {
         path: 'admin-users',
         name: 'AdminUserList',
-        component: () => import('@/views/assets/AdminUserList'),
+        component: () => import('@/views/assets/AdminUser/AdminUserList'),
         meta: { title: 'AdminUserList' }
       },
       {
         path: 'admin-users/create',
-        component: () => import('@/views/assets/AdminUserCreateUpdate.vue'), // Parent router-view
+        component: () => import('@/views/assets/AdminUser/AdminUserCreateUpdate.vue'), // Parent router-view
         name: 'AdminUserCreateUpdate',
         meta: { title: 'AdminUserCreate' },
         hidden: true
       },
       {
         path: 'platform/update/:id',
-        component: () => import('@/views/assets/PlatformCreateUpdate.vue'), // Parent router-view
+        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
         name: 'PlatformUpdate',
         meta: { title: 'PlatformUpdate' },
         hidden: true
       },
       {
+        path: 'platform/detail/:id',
+        component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
+        name: 'PlatformDetail',
+        meta: { title: 'PlatformDetail' },
+        hidden: true
+      },
+      {
         path: 'platform/create',
-        component: () => import('@/views/assets/PlatformCreateUpdate.vue'), // Parent router-view
+        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
         name: 'PlatformCreate',
         meta: { title: 'PlatformCreate' },
         hidden: true
       },
       {
         path: 'cmd-filters/update/:id',
-        component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
+        component: () => import('@/views/assets/CommandFilter/CommandFilterCreateUpdate.vue'), // Parent router-view
         name: 'CommandFilterUpdate',
         meta: { title: 'CommandFilterUpdate' },
         hidden: true
       },
       {
         path: 'cmd-filters/create',
-        component: () => import('@/views/assets/CommandFilterCreateUpdate.vue'), // Parent router-view
+        component: () => import('@/views/assets/CommandFilter/CommandFilterCreateUpdate.vue'), // Parent router-view
         name: 'CommandFilterCreate',
         meta: { title: 'CommandFilterCreate' },
         hidden: true
       },
       {
         path: 'cmd-filters/:id',
-        component: () => import('@/views/assets/CommandFilterDetail.vue'), // Parent router-view
+        component: () => import('@/views/assets/CommandFilter/CommandFilterDetail.vue'), // Parent router-view
         name: 'CommandFilterDetail',
         meta: { title: 'CommandFilterDetail' },
         hidden: true
       },
       {
         path: 'admin-users/:id',
-        component: () => import('@/views/assets/AdminUserDetail.vue'), // Parent router-view
+        component: () => import('@/views/assets/AdminUser/AdminUserDetail.vue'), // Parent router-view
         name: 'AdminUserDetail',
         meta: { title: 'AdminUserDetail' },
         hidden: true
@@ -213,19 +220,19 @@ export const constantRoutes = [
       {
         path: 'labels',
         name: 'LabelList',
-        component: () => import('@/views/assets/LabelList.vue'),
+        component: () => import('@/views/assets//LabelList.vue'),
         meta: { title: 'LabelList' }
       },
       {
         path: 'cmd-filters',
         name: 'CommandFilterList',
-        component: () => import('@/views/assets/CommandFilterList.vue'),
+        component: () => import('@/views/assets/CommandFilter/CommandFilterList.vue'),
         meta: { title: 'CommandFilterList' }
       },
       {
         path: 'platforms',
         name: 'PlatformList',
-        component: () => import('@/views/assets/PlatformList'),
+        component: () => import('@/views/assets/Platform/PlatformList'),
         meta: { title: 'PlatformList' }
       }
     ]
@@ -415,20 +422,6 @@ export const constantRoutes = [
         path: 'storages',
         name: 'Storage',
         component: () => import('@/views/sessions/Storage'),
-        hidden: true
-      },
-      {
-        path: 'replay-storage/create',
-        name: 'CreateReplyStorage',
-        component: () => import('@/views/sessions/ReplyStorageCreate'),
-        meta: { title: 'CreateReplyStorage' },
-        hidden: true
-      },
-      {
-        path: 'command-storage/create',
-        name: 'CreateCommandStorage',
-        component: () => import('@/views/sessions/CommandStorageCreate'),
-        meta: { title: 'CreateCommandStorage' },
         hidden: true
       }
     ]
