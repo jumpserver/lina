@@ -132,4 +132,9 @@ export default {
   .el-cascader-panel{
     border: none !important;
   }
+
+  // 重置表格高度
+  .el-cascader-panel /deep/ .el-cascader-menu__wrap{
+    height: inherit;
+  }
 </style>
