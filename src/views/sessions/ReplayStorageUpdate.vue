@@ -1,21 +1,29 @@
 <template>
-  <GenericCreateUpdatePage :create-success-next-route="createSuccessUrl" :clean-form-value="cleanFormValue" :fields="selectFields" :initial="selectInitial" :fields-meta="selectFieldsMeta" :url="url" />
+  <div v-if="!loading">
+    <GenericCreateUpdatePage :fields="selectFields" :url="url" :update-success-next-route="updateSuccessUrl" :clean-form-value="cleanFormValue" :object="formData" :fields-meta="selectedFieldsMeta" />
+  </div>
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { getReplayStorage } from '@/api/sessions'
 export default {
-  name: 'ReplyStorageCreate',
+  name: 'ReplayStorageUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
     return {
-      createSuccessUrl: { name: 'Storage' },
+      loading: true,
+      updateSuccessUrl: { name: 'Storage' },
+      replayData: {},
+      formData: {
+        type: '',
+        name: '',
+        comment: ''
+      },
+      url: '/api/v1/terminal/replay-storages/',
       s3: {
-        initial: {
-          type: 's3'
-        },
         fields: [
           ['', ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]
         ],
@@ -48,9 +56,6 @@ export default {
         }
       },
       ceph: {
-        initial: {
-          type: 'ceph'
-        },
         fields: [
           ['', ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]
         ],
@@ -83,10 +88,6 @@ export default {
         }
       },
       swift: {
-        initial: {
-          type: 'swift',
-          protocol: 'http'
-        },
         fields: [
           ['', ['name', 'type', 'bucket', 'access_key', 'secret_key', 'region', 'endpoint', 'protocol', 'comment']]
         ],
@@ -133,9 +134,6 @@ export default {
         }
       },
       oss: {
-        initial: {
-          type: 'oss'
-        },
         fields: [
           ['', ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]
         ],
@@ -173,8 +171,7 @@ export default {
           endpoint_suffix: 'core.chinacloudapi.cn'
         },
         fields: [
-          [this.$t('sessions.createReplyStorage'),
-            ['name', 'type', 'container_name', 'account_name', 'account_key', 'endpoint_suffix', 'comment']]
+          ['', ['name', 'type', 'container_name', 'account_name', 'account_key', 'endpoint_suffix', 'comment']]
         ],
         fieldsMeta: {
           name: {
@@ -208,29 +205,18 @@ export default {
             ]
           }
         }
-      },
-      url: '/api/v1/terminal/replay-storages/'
+      }
     }
   },
   computed: {
-    postUrl() {
-      return this.url
-    },
-    selectInitial() {
-      return this.renderFieldObject.initial
-    },
     selectFields() {
-      return this.renderFieldObject.fields
+      return this.renderReplayStorage.fields
     },
-    selectFieldsMeta() {
-      return this.renderFieldObject.fieldsMeta
+    selectedFieldsMeta() {
+      return this.renderReplayStorage.fieldsMeta
     },
-    renderFieldObject() {
-      const storageType = this.$route.query.type
-      if (typeof storageType !== 'string') {
-        return this.s3
-      }
-      switch (storageType.toLowerCase()) {
+    renderReplayStorage() {
+      switch (this.formData.type.toLowerCase()) {
         case 's3':
           return this.s3
         case 'ceph':
@@ -246,7 +232,79 @@ export default {
       }
     }
   },
+  mounted() {
+    getReplayStorage(this.$route.params.id).then(data => {
+      this.replayData = data
+      console.log(data)
+      this.formData = this.convertMataToForm(this.replayData)
+      this.loading = false
+    })
+  },
   methods: {
+    convertMataToForm(replayData) {
+      switch (replayData.type.toLowerCase()) {
+        case 's3':
+          return this.s3MetaToForm(replayData)
+        case 'ceph':
+          return this.cephMetaToForm(replayData)
+        case 'swift':
+          return this.swiftMetaToForm(replayData)
+        case 'oss':
+          return this.ossMetaForm(replayData)
+        case 'azure':
+          return this.azureMetaForm(replayData)
+        default:
+          return {}
+      }
+    },
+    s3MetaToForm(replayData) {
+      return {
+        name: replayData.name,
+        type: 's3',
+        comment: replayData.comment,
+        bucket: replayData.meta.BUCKET,
+        endpoint: replayData.meta.ENDPOINT
+      }
+    },
+    cephMetaToForm(replayData) {
+      return {
+        name: replayData.name,
+        type: 'ceph',
+        comment: replayData.comment,
+        bucket: replayData.meta.BUCKET,
+        endpoint: replayData.meta.ENDPOINT
+      }
+    },
+    swiftMetaToForm(replayData) {
+      return {
+        name: replayData.name,
+        type: 'swift',
+        comment: replayData.comment,
+        bucket: replayData.meta.BUCKET,
+        region: replayData.meta.REGION,
+        endpoint: replayData.meta.ENDPOINT,
+        protocol: replayData.meta.PROTOCOL
+      }
+    },
+    ossMetaForm(replayData) {
+      return {
+        name: replayData.name,
+        type: 'oss',
+        comment: replayData.comment,
+        bucket: replayData.meta.BUCKET,
+        endpoint: replayData.meta.ENDPOINT
+      }
+    },
+    azureMetaForm(replayData) {
+      return {
+        name: replayData.name,
+        type: 'azure',
+        comment: replayData.comment,
+        container_name: replayData.meta.CONTAINER_NAME,
+        account_name: replayData.meta.ACCOUNT_NAME,
+        endpoint_suffix: replayData.meta.ENDPOINT_SUFFIX
+      }
+    },
     cleanFormValue(value) {
       switch (value.type.toLowerCase()) {
         case 's3':

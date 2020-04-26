@@ -315,7 +315,7 @@ const en = {
     'replayStorage': 'Replay Storage',
     'storage': 'Storage',
     'test': 'Test',
-    'createReplyStorage': 'Create replay storage',
+    'createReplayStorage': 'Create replay storage',
     'endPoint': 'Endpoint',
     'bucket': 'Bucket',
     'type': 'Type',
