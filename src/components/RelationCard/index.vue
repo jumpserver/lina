@@ -8,7 +8,7 @@
       <table style="width: 100%">
         <tr>
           <td colspan="2">
-            <Select2 v-model="select2.value" v-bind="select2" @loadInitialOptionsDone="handleLoadInitialDone" />
+            <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
           </td>
         </tr>
         <tr>
@@ -16,7 +16,7 @@
             <el-button type="primary" size="small">{{ $tc('Add') }}</el-button>
           </td>
         </tr>
-        <tr v-for="obj of validObjects" :key="obj.id" style="width: 100%" class="item">
+        <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
           <td><b>{{ obj.label }}</b></td>
           <td>
             <el-button size="mini" type="danger" style="float: right">
@@ -31,6 +31,7 @@
 
 <script>
 import Select2 from '@/components/Select2'
+import { createSourceIdCache } from '@/api/common'
 
 export default {
   name: 'RelationCard',
@@ -46,40 +47,95 @@ export default {
       type: String,
       default: ''
     },
-    // 地址，发送给select2的，查询所有可以关联的对象
-    url: {
-      type: String,
-      default: ''
-    },
-    // 已选择的objects Id, 会转换成select2的value, 作为默认选择项
-    objectsId: {
-      type: Array,
-      default: () => []
+    // 地址，发送给select2的，查询所有的objects, 和select2 ajax一样
+    objectsAjax: {
+      type: Object,
+      default: () => ({})
     },
     objects: {
       type: [Array, null],
       default: null
     },
+    // 已选择的objects Id, 会转换成select2的value, 作为默认选择项, 和objectsAjax类似
+    hasObjectsId: {
+      type: Array,
+      default: () => []
+    },
+    hasObjects: {
+      type: Array,
+      default: () => []
+    },
     value: {
       type: [Array, Number, String],
-      default: ''
+      default: () => []
     }
   },
   data() {
     return {
-      validObjects: this.objects ? this.objects : [],
+      iHasObjects: this.hasObjects || [],
+      params: {
+        page: 1,
+        hasMore: false,
+        pageSize: 10
+      },
       select2: {
-        url: this.url,
+        ajax: this.objectsAjax,
+        options: this.objects,
         value: this.value,
         isSelectedValue: false
       }
     }
   },
+  computed: {
+    iAjax() {
+      this.$log.debug('iAjax', this.$refs.select2)
+      return this.$refs.select2.iAjax
+    }
+  },
+  mounted() {
+    if (this.hasObjectsId.length !== 0) {
+      setTimeout(() => {
+        this.getHasObjectsByIds()
+      }, 500)
+    }
+  },
   methods: {
-    handleLoadInitialDone(initialOptions) {
-      if (this.objects === null) {
-        this.validObjects = initialOptions
+    safeMakeParams(params) {
+      this.$log.debug('safeMakeParams', this.$refs.select2)
+      return this.$refs.select2.safeMakeParams(params)
+    },
+    async loadMore() {
+      if (this.loading) {
+        return
       }
+      if (!this.params.hasMore) {
+        return
+      }
+      this.params.page = this.params.page ? this.params.page + 1 : 1
+      try {
+        this.loading = true
+        await this.loadHasObjects()
+      } finally {
+        this.loading = false
+      }
+    },
+    async loadHasObjects() {
+      this.$log.debug('Start loadHasObject: ', this.params)
+      const params = this.safeMakeParams(this.params)
+      let data = await this.$axios.get(this.iAjax.url, { params: params })
+      data = this.iAjax.processResults.bind(this)(data)
+      data.results.forEach((v) => {
+        this.hasObjects.push(v)
+      })
+      // 如果还有其它页，继续获取, 如果没有就停止
+      if (!data.pagination) {
+        this.params.hasMore = false
+      }
+    },
+    async getHasObjectsByIds() {
+      const resp = await createSourceIdCache(this.hasObjectsId)
+      this.params.spm = resp.spm
+      await this.loadHasObjects()
     }
   }
 }

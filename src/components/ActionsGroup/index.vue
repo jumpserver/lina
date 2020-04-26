@@ -1,14 +1,14 @@
 <template>
   <div :class="grouped ? 'el-button-group' : ''">
-    <el-button v-for="item in validActions" :key="item.name" :size="size" v-bind="item" @click="handleClick(item.name)">
+    <el-button v-for="item in iActions" :key="item.name" :size="size" v-bind="item" @click="handleClick(item.name)">
       <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
     </el-button>
-    <el-dropdown v-if="validMoreActions.length > 0" trigger="click" @command="handleClick">
+    <el-dropdown v-if="iMoreActions.length > 0" trigger="click" @command="handleClick">
       <el-button :size="size" class="btn-more-actions">
         {{ this.$tc('More actions') }}<i class="el-icon-arrow-down el-icon--right" />
       </el-button>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="item in moreActions" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
+        <el-dropdown-item v-for="item in iMoreActions" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -40,10 +40,10 @@ export default {
     }
   },
   computed: {
-    validActions() {
+    iActions() {
       return this.cleanActions(this.actions)
     },
-    validMoreActions() {
+    iMoreActions() {
       return this.cleanActions(this.moreActions)
     },
     totalActions() {
@@ -69,8 +69,12 @@ export default {
       this.$emit('actionClick', item)
     },
     checkItem(item, attr, defaults) {
+      if (!item) {
+        return true
+      }
+      // this.$log.debug('Item is: ', item)
       let ok = item[attr]
-      if (typeof ok === 'function') {
+      if (ok && typeof ok === 'function') {
         ok = ok(item)
       } else if (ok == null) {
         ok = defaults === undefined ? true : defaults
@@ -79,7 +83,11 @@ export default {
     },
     cleanActions(actions) {
       const cleanedActions = []
+      // this.$log.debug('Start clean actions: ', actions)
       for (const v of actions) {
+        if (!v) {
+          continue
+        }
         const action = _.cloneDeep(v)
         // 是否拥有这个action
         const has = this.checkItem(action, 'has')

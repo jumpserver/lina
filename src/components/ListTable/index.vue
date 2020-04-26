@@ -12,9 +12,9 @@
           </el-form-item>
         </el-form>
       </Dialog>
-      <Dialog :title="importtitle" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
+      <Dialog :title="importTitle" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
         <el-form>
-          <el-form-item :label="importtitle" :label-width="'100px'">
+          <el-form-item :label="importTitle" :label-width="'100px'">
             <el-radio v-model="importOption" class="export-item" label="1">{{ this.$tc('Import') }}</el-radio>
             <el-radio v-model="importOption" class="export-item" label="2">{{ this.$tc('Update') }}</el-radio>
           </el-form-item>
@@ -83,7 +83,7 @@ export default {
     upLoadUrl() {
       return this.tableConfig.url
     },
-    importtitle() {
+    importTitle() {
       if (this.importOption === '1') { return this.$tc('Import') } else { return this.$tc('Update') }
     },
     downloadImportTempUrl() {
@@ -182,11 +182,28 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
   .table-content {
     margin-top: 10px;
+
+    & >>> .el-card__body {
+      padding: 0;
+    }
+    & >>> .el-table__header thead > tr > th {
+      background-color: white;
+    }
+
+    /*& >>> .el-table--striped .el-table__body tr.el-table__row--striped td {*/
+      /*background: white;*/
+    /*}*/
+
+    /*& >>> .el-table th, .el-table tr  {*/
+      /*background-color: red;*/
+      /*!*background-color: #FAFAFA;*!*/
+    /*}*/
   }
+
   //修改颜色
   // .el-button--text{
   //   color: #409EFF;

@@ -2,12 +2,12 @@
   <div class="table-header">
     <slot name="header">
       <div v-if="hasLeftActions" class="table-header-left-side">
-        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" @actionClick="handleActionClick" />
+        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" />
       </div>
       <div class="table-action-right-side">
         <!--        <el-input v-if="hasSearch" v-model="keyword" suffix-icon="el-icon-search" :placeholder="$tc('Search')" class="right-side-item action-search" size="small" clearable @change="handleSearch" @input="handleSearch" />-->
         <TagSearch v-if="hasSearch" class="right-side-item action-search" :tag-search="tagSearch" @tagSearch="handleTagSearch" />
-        <ActionsGroup :is-fa="true" :actions="defaultRightSideActions" class="right-side-actions right-side-item" @actionClick="handleActionClick" />
+        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
       </div>
     </slot>
   </div>
@@ -16,8 +16,8 @@
 <script>
 import TagSearch from '@/components/TagSearch'
 import ActionsGroup from '@/components/ActionsGroup'
-import _ from 'lodash'
 import { createSourceIdCache } from '@/api/common'
+import _ from 'lodash'
 
 const defaultTrue = { type: Boolean, default: true }
 const defaultFalse = { type: Boolean, default: false }
@@ -87,11 +87,6 @@ export default {
   data() {
     return {
       keyword: '',
-      defaultRightSideActions: [
-        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport },
-        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport },
-        { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
-      ],
       defaultActions: [
         {
           name: 'actionCreate',
@@ -118,6 +113,11 @@ export default {
           callback: this.handleBulkUpdate
         }
       ],
+      defaultRightSideActions: [
+        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport },
+        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport },
+        { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
+      ],
       dialogExportVisible: false,
       exportValue: 2
     }
@@ -134,18 +134,6 @@ export default {
     moreActions() {
       const actions = [...this.defaultMoreActions, ...this.extraMoreActions]
       return this.cleanActions(actions)
-    },
-
-    namedActions() {
-      const totalActions = [...this.actions, ...this.moreActions, ...this.rightSideActions]
-      const actions = {}
-      for (const action of totalActions) {
-        if (!action || !action.hasOwnProperty('name')) {
-          continue
-        }
-        actions[action.name] = action
-      }
-      return actions
     }
   },
   methods: {
@@ -156,20 +144,10 @@ export default {
       console.log(val)
       this.searchTable(val)
     },
-    handleActionClick(item) {
-      console.log('name cations')
-      let handler = this.namedActions[item] ? this.namedActions[item].callback : null
-      if (!handler) {
-        handler = () => {
-          console.log('No handler found for ', item)
-        }
-      }
-      handler(this.selectedRows)
-    },
     handleCreate() {
       const routeName = this.createRoute
       this.$router.push({ name: routeName })
-      console.log('handle create')
+      this.$log.debug('handle create')
     },
     defaultBulkDeleteCallback(rows) {
       const msg = this.$tc('Are you sure to delete') + ' ' + rows.length + ' ' + this.$tc('rows')
@@ -209,37 +187,39 @@ export default {
     handleBulkUpdate(rows) {
     },
     handleExport(row) {
-      console.log(row)
       this.$eventBus.$emit('showExportDialog', row)
     },
     handleImport(row) {
-      console.log(row)
       this.$eventBus.$emit('showImportDialog', row)
     },
     handleRefresh() {
       this.reloadTable()
     },
     cleanActions(actions) {
-      const validActions = []
-      for (const action of actions) {
-        let ok = this.checkItem(action, 'has')
-        if (!ok) {
-          continue
-        }
-        ok = this.checkItem(action, 'can')
-        action.disabled = !ok
-        validActions.push(action)
-      }
-      return validActions
+      this.$log.debug('Start clean actions: ', actions)
+      actions = actions.map((action) => {
+        action.has = this.cleanBoolean(action, 'has')
+        action.can = this.cleanBoolean(action, 'can')
+        action.callback = this.cleanCallback(action)
+        return action
+      })
+      return actions
     },
-    checkItem(item, attr) {
-      let ok = item[attr]
-      if (typeof ok === 'function') {
-        ok = ok(this.selectedRows)
-      } else if (ok == null) {
-        ok = true
+    cleanBoolean(action, attr) {
+      // this.$log.debug('Clean boolean', action)
+      let v = action[attr]
+      if (typeof v === 'function') {
+        v = () => { return v(this.selectedRows) }
+      } else {
+        return v
       }
-      return ok
+    },
+    cleanCallback(action) {
+      const v = action.callback
+      if (!v && typeof callback !== 'function') {
+        return null
+      }
+      return () => { v(this.selectedRows) }
     }
   }
 }

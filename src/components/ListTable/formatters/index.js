@@ -7,6 +7,7 @@ import LengthFormatter from './LengthFormatter'
 import RouterFormatter from './RouterFormatter'
 import OutputExpandFormatter from './OutputExpandFormatter'
 import ExpandAssetPermissionFormatter from './ExpandAssetPermissionFormatter'
+import CustomActionsFormatter from './CustomActionsFormatter'
 
 export default {
   DetailFormatter,
@@ -17,7 +18,8 @@ export default {
   LengthFormatter,
   RouterFormatter,
   OutputExpandFormatter,
-  ExpandAssetPermissionFormatter
+  ExpandAssetPermissionFormatter,
+  CustomActionsFormatter
 }
 
 export {
@@ -29,5 +31,6 @@ export {
   LengthFormatter,
   RouterFormatter,
   OutputExpandFormatter,
-  ExpandAssetPermissionFormatter
+  ExpandAssetPermissionFormatter,
+  CustomActionsFormatter
 }

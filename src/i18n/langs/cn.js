@@ -435,7 +435,8 @@ const cn = {
     'createReplay': '创建录像存储',
     'commandStorage': '命令存储',
     'replayStorage': '录像存储',
-    'storage': '存储'
+    'storage': '存储',
+    'test': '测试'
   },
   jobcenter: {
     'RunTimes': '执行次数',

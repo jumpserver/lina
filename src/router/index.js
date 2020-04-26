@@ -458,12 +458,6 @@ export const constantRoutes = [
         name: 'BatchCommand',
         component: () => import('@/views/jobcenter/CommandExecution'),
         meta: { title: 'BatchCommand' }
-      },
-      {
-        path: 'flower',
-        name: 'TaskMonitor',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'TaskMonitor' }
       }
     ]
   },

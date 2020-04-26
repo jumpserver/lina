@@ -313,7 +313,8 @@ const en = {
     'createReplay': 'Create replay storage',
     'commandStorage': 'Command storage',
     'replayStorage': 'Replay Storage',
-    'storage': 'Storage'
+    'storage': 'Storage',
+    'test': 'Test'
   },
   setting: {
     'setting': 'System Setting',

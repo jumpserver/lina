@@ -38,7 +38,7 @@ export default {
         // editText: this.$t('action.update'), // 编辑按钮文案
         buttonSize: 'mini',
         tableAttrs: {
-          stripe: true, // 斑马纹表格
+          stripe: false, // 斑马纹表格
           border: true, // 表格边框
           fit: true, // 宽度自适应,
           tooltipEffect: 'dark'
@@ -59,6 +59,7 @@ export default {
         paginationLayout: 'total, sizes, prev, pager, next',
         paginationSizes: [15, 30, 50, 100],
         paginationSize: 15,
+        paginationBackground: true,
         transformQuery: query => {
           if (query.page && query.size) {
             const page = query.page > 0 ? query.page : 1

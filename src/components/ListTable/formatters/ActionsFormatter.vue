@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" @actionClick="handleActionClick" />
+  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" />
 </template>
 
 <script>
@@ -49,7 +49,7 @@ export default {
   components: { ActionsGroup },
   extends: BaseFormatter,
   props: {
-    actionsExample: {
+    actionsDefault: {
       type: Object,
       default: function() {
         return {
@@ -67,7 +67,7 @@ export default {
     }
   },
   data() {
-    const colActions = Object.assign(this.actionsExample, this.col.actions)
+    const colActions = Object.assign(this.actionsDefault, this.col.actions)
     const defaultActions = [
       {
         name: 'update',
@@ -93,70 +93,49 @@ export default {
     }
   },
   computed: {
-    validActions() {
-      const actions = [...this.defaultActions, ...this.extraActions]
-      const validActions = []
-      for (const v of actions) {
-        const has = this.checkItem(v, 'has')
-        if (!has) {
-          continue
-        }
-        const can = this.checkItem(v, 'can')
-        v.disabled = !can
-        validActions.push(v)
-      }
-      return validActions
-    },
     cleanedActions() {
-      const actions = []
-      for (const v of [...this.validActions]) {
-        const action = _.cloneDeep(v)
-        delete action['has']
-        delete action['can']
-        delete action['callback']
-        actions.push(action)
-      }
+      let actions = [...this.defaultActions, ...this.extraActions]
+      actions = _.cloneDeep(actions)
+      actions = actions.map((v) => {
+        v.has = this.cleanBoolean(v, 'has')
+        v.can = this.cleanBoolean(v, 'can')
+        v.callback = this.cleanCallback(v)
+        return v
+      })
+      actions = actions.filter((v) => v.has)
       return actions
     },
     actions() {
+      if (this.cleanedActions.length <= 3) {
+        return this.cleanedActions
+      }
       return this.cleanedActions.slice(0, 2)
     },
     moreActions() {
-      return this.cleanedActions.slice(2, this.cleanedActions.length)
-    },
-    namedValidActions() {
-      const actions = {}
-      for (const action of this.validActions) {
-        if (!action || !action.hasOwnProperty('name')) {
-          continue
-        }
-        actions[action.name] = action
+      if (this.cleanedActions.length <= 3) {
+        return []
       }
-      return actions
+      return this.cleanedActions.slice(2, this.cleanedActions.length)
     }
   },
   methods: {
-    handleActionClick(item) {
-      const action = this.namedValidActions[item]
-      if (action && action.callback) {
-        const attrs = {
-          reload: this.reload,
-          row: this.row,
-          col: this.col,
-          cellValue: this.cellValue,
-          tableData: this.tableData
-        }
-        action.callback.bind(this)(attrs)
+    cleanBoolean(item, attr) {
+      const ok = item[attr]
+      if (typeof ok !== 'function') {
+        return ok === undefined ? true : ok
       }
+      return ok(this.row, this.cellValue)
     },
-    checkItem(item, attr) {
-      let ok = item[attr]
-      if (typeof ok === 'function') {
-        ok = ok(this.row, this.cellValue)
-      } else if (ok == null) {
-        ok = true
+    cleanCallback(item) {
+      const callback = item.callback
+      const attrs = {
+        reload: this.reload,
+        row: this.row,
+        col: this.col,
+        cellValue: this.cellValue,
+        tableData: this.tableData
       }
-      return ok
+      return () => { return callback.bind(this)(attrs) }
     }
   }
 }

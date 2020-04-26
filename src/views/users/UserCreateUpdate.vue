@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -45,8 +45,9 @@ export default {
         },
         groups: {
           el: {
-            value: [],
-            url: '/api/v1/users/groups/'
+            multiple: true,
+            url: '/api/v1/users/groups/',
+            value: []
           }
         }
       }
