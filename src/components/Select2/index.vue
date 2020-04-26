@@ -42,7 +42,8 @@ const defaultProcessResults = (data) => {
     return { label: item.name, value: item.id }
   })
   const more = !!data.next
-  return { results: results, pagination: more }
+  const total = data.count
+  return { results: results, pagination: more, total: total }
 }
 
 export const defaultAjax = {
@@ -110,6 +111,7 @@ export default {
     }
     return {
       loading: false,
+      initialized: false,
       iAjax: Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {}),
       iValue: this.multiple ? [] : '',
       defaultParams: defaultParams,
@@ -124,7 +126,10 @@ export default {
     }
   },
   mounted() {
-    this.initialSelect()
+    if (!this.initialized) {
+      this.initialSelect()
+      this.initialized = true
+    }
   },
   methods: {
     async loadMore(load) {

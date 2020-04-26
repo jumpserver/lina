@@ -95,6 +95,7 @@ export default {
   computed: {
     cleanedActions() {
       let actions = [...this.defaultActions, ...this.extraActions]
+      actions = _.cloneDeep(actions)
       actions = actions.map((v) => {
         v.has = this.cleanBoolean(v, 'has')
         v.can = this.cleanBoolean(v, 'can')

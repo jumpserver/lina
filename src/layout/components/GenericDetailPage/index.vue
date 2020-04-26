@@ -91,7 +91,7 @@ export default {
       detailApiUrl: getApiPath(this)
     }
     return {
-      loading: false,
+      loading: true,
       activeName: this.activeMenu || 'info',
       validActions: Object.assign(defaultActions, this.actions)
     }
@@ -117,8 +117,13 @@ export default {
       return this.title || this.getTitle(this.object)
     }
   },
-  mounted() {
-    this.getObject()
+  async mounted() {
+    try {
+      this.loading = true
+      await this.getObject()
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
     defaultDelete() {
@@ -157,12 +162,9 @@ export default {
       this.$router.push({ name: routeName, params: { id: id }})
     },
     getObject() {
-      this.loading = true
       const url = this.validActions.detailApiUrl
-      this.$axios.get(url).then(data => {
+      return this.$axios.get(url).then(data => {
         this.$emit('update:object', data)
-      }).finally(() => {
-        this.loading = false
       })
     },
     handleTabClick(tab) {
