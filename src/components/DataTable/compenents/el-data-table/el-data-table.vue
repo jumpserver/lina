@@ -122,6 +122,7 @@
         :page-sizes="paginationSizes"
         :page-size="size"
         :total="total"
+        :background="paginationBackground"
         style="text-align: right; padding: 10px 0;"
         :layout="paginationLayout"
         v-bind="extraPaginationAttrs"

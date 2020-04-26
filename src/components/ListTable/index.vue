@@ -182,11 +182,28 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
   .table-content {
     margin-top: 10px;
+
+    & >>> .el-card__body {
+      padding: 0;
+    }
+    & >>> .el-table__header thead > tr > th {
+      background-color: white;
+    }
+
+    /*& >>> .el-table--striped .el-table__body tr.el-table__row--striped td {*/
+      /*background: white;*/
+    /*}*/
+
+    /*& >>> .el-table th, .el-table tr  {*/
+      /*background-color: red;*/
+      /*!*background-color: #FAFAFA;*!*/
+    /*}*/
   }
+
   //修改颜色
   // .el-button--text{
   //   color: #409EFF;
