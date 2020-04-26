@@ -67,8 +67,12 @@ export default {
         }
       },
       headerActions: {
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
         hasBulkDelete: false,
-        extraActions: [
+        hasBulkUpdate: false,
+        extraMoreActions: [
           {
             name: 'RefreshPermissionCache',
             title: this.$t('perms.RefreshPermissionCache'),
@@ -84,9 +88,9 @@ export default {
     HandleRefreshPermissionCache() {
       const url = '/api/v1/perms/asset-permissions/cache/refresh/'
       this.$axios.get(url).then(res => {
-        this.$message(this.$t('perms.ReFreshSuccess'))
+        this.$message.success(this.$t('perms.ReFreshSuccess'))
       }).catch(err => {
-        this.$message(this.$t('perms.ReFreshFail') + ':' + err)
+        this.$message.error(this.$t('perms.ReFreshFail') + ':' + err)
       })
     }
   }
