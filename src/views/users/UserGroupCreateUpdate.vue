@@ -19,8 +19,10 @@ export default {
           users: {
             el: {
               value: [],
-              url: '/api/v1/users/users/'
-            }
+              url: '/api/v1/users/users/',
+              helpMessage: 'hello'
+            },
+            helpText: '请输入用户 <a href="">更多</a>'
           }
         }
       }

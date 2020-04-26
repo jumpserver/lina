@@ -28,35 +28,6 @@
 <script>
 import { createSourceIdCache } from '@/api/common'
 
-const defaultPageSize = 10
-const defaultMakeParams = (params) => {
-  const page = params.page || 1
-  const p = {
-    offset: (page - 1) * params.pageSize,
-    limit: params.pageSize
-  }
-  params = Object.assign(params, p)
-  delete params['page']
-  delete params['pageSize']
-  return params
-}
-const defaultProcessResults = (data) => {
-  let results = data.results
-  results = results.map((item) => {
-    return { label: item.name, value: item.id }
-  })
-  const more = !!data.next
-  const total = data.count
-  return { results: results, pagination: more, total: total }
-}
-
-export const defaultAjax = {
-  url: '',
-  pageSize: defaultPageSize,
-  makeParams: defaultMakeParams,
-  processResults: defaultProcessResults
-}
-
 export default {
   name: 'Select2',
   directives: {
@@ -111,16 +82,44 @@ export default {
     }
   },
   data() {
+    const defaultPageSize = 10
     const defaultParams = {
       search: '',
       page: 1,
       hasMore: true,
       pageSize: defaultPageSize
     }
+    const defaultMakeParams = (params) => {
+      const page = params.page || 1
+      const offset = (page - 1) * params.pageSize
+      const p = {
+        offset: offset,
+        limit: params.pageSize
+      }
+      params = Object.assign(params, p)
+      delete params['page']
+      delete params['pageSize']
+      return params
+    }
+    const defaultProcessResults = (data) => {
+      let results = data.results
+      results = results.map((item) => {
+        return { label: item.name, value: item.id }
+      })
+      const more = !!data.next
+      const total = data.count
+      return { results: results, pagination: more, total: total }
+    }
+    const defaultAjax = {
+      url: '',
+      pageSize: defaultPageSize,
+      makeParams: defaultMakeParams,
+      processResults: defaultProcessResults
+    }
     return {
       loading: false,
       initialized: false,
-      iAjax: Object.assign(_.cloneDeep(defaultAjax), this.ajax, this.url ? { url: this.url } : {}),
+      iAjax: Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {}),
       iValue: this.multiple ? [] : '',
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
@@ -136,7 +135,6 @@ export default {
   mounted() {
     this.$log.debug('Select is: ', this.iAjax.url)
     this.$log.debug('Select url: ', this.url)
-    this.$log.debug('Default ajax: ', defaultAjax)
     if (!this.initialized) {
       this.initialSelect()
       this.initialized = true

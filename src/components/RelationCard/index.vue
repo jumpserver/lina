@@ -13,13 +13,13 @@
         </tr>
         <tr>
           <td colspan="2">
-            <el-button type="primary" size="small">{{ $tc('Add') }}</el-button>
+            <el-button type="primary" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
           </td>
         </tr>
         <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
           <td><b>{{ obj.label }}</b></td>
           <td>
-            <el-button size="mini" type="danger" style="float: right">
+            <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
               <i class="fa fa-minus" />
             </el-button>
           </td>
@@ -28,7 +28,7 @@
           <td colspan="2">
             <el-button type="primary" size="small" style="width: 100%" @click="loadMore">
               <i class="fa fa-arrow-down" />
-              {{ $tc('More') }} ( {{ hasObjectLeftLength }} )
+              {{ $tc('More') }} ({{ iHasObjects.length }}/{{ totalHasObjectsLength }})
             </el-button>
           </td>
         </tr>
@@ -76,12 +76,36 @@ export default {
     value: {
       type: [Array, Number, String],
       default: () => []
+    },
+    performDelete: {
+      type: Function,
+      default: (obj, that) => {}
+    },
+    onDeleteSuccess: {
+      type: Function,
+      default(obj, that) {
+        const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
+        that.iHasObjects.splice(theRemoveIndex, 1)
+      }
+    },
+    performAdd: {
+      type: Function,
+      default: (objects, that) => {}
+    },
+    onAddSuccess: {
+      type: Function,
+      default(objects, that) {
+        for (const obj of objects) {
+          that.iHasObjects.push(obj)
+        }
+      }
     }
   },
   data() {
     return {
       iHasObjects: this.hasObjects || [],
       totalHasObjectsLength: 0,
+      submitLoading: false,
       params: {
         page: 1,
         hasMore: false,
@@ -91,7 +115,7 @@ export default {
         ajax: this.objectsAjax,
         options: this.objects,
         value: this.value,
-        isSelectedValue: false
+        disabledValues: []
       }
     }
   },
@@ -103,9 +127,18 @@ export default {
       return this.$refs.select2.safeMakeParams
     },
     hasObjectLeftLength() {
-      this.$log.debug('Total', this.totalHasObjectsLength)
-      this.$log.debug(this.iHasObjects.length)
       return this.totalHasObjectsLength - this.iHasObjects.length
+    }
+  },
+  watch: {
+    hasObjectsId(iNew, iOld) {
+      this.$log.debug('hasObject id change')
+      this.select2.disabledValues = iNew
+      if (iNew.length !== 0) {
+        setTimeout(() => {
+          this.getHasObjectsByIds()
+        }, 50)
+      }
     }
   },
   mounted() {
@@ -149,9 +182,22 @@ export default {
       if (!this.$refs.select2 || !this.iAjax || !this.safeMakeParams) {
         return
       }
+      this.select2.disabledValues = this.hasObjectsId
       const resp = await createSourceIdCache(this.hasObjectsId)
       this.params.spm = resp.spm
       await this.loadHasObjects()
+    },
+    removeObject(obj) {
+      this.performDelete(obj, this).then(
+        () => this.onDeleteSuccess(obj, this)
+      )
+    },
+    addObjects() {
+      const objects = this.$refs.select2.getOptionsByValues(this.select2.value)
+      this.$log.debug('Object is: ', objects)
+      this.performAdd(objects, this).then(
+        () => this.onAddSuccess(objects, this)
+      )
     }
   }
 }
