@@ -91,4 +91,16 @@ export default {
   .el-form /deep/ .form-group-header {
     margin-left: 50px;
   }
+
+  .el-form /deep/ .help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #999;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .el-form /deep/ .help-block a {
+    color: #1c84c6;
+  }
 </style>
