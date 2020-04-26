@@ -101,6 +101,7 @@ export default {
         v.callback = this.cleanCallback(v)
         return v
       })
+      actions = actions.filter((v) => v.has)
       return actions
     },
     actions() {
