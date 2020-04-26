@@ -104,22 +104,25 @@ export default {
       return actions
     },
     actions() {
+      if (this.cleanedActions.length <= 3) {
+        return this.cleanedActions
+      }
       return this.cleanedActions.slice(0, 2)
     },
     moreActions() {
+      if (this.cleanedActions.length <= 3) {
+        return []
+      }
       return this.cleanedActions.slice(2, this.cleanedActions.length)
     }
   },
   methods: {
     cleanBoolean(item, attr) {
       const ok = item[attr]
-      if (!ok || typeof ok !== 'function') {
-        return item
+      if (typeof ok !== 'function') {
+        return ok === undefined ? true : ok
       }
-      item[attr] = function() {
-        return ok(this.row, this.cellValue)
-      }
-      return item
+      return ok(this.row, this.cellValue)
     },
     cleanCallback(item) {
       const callback = item.callback
