@@ -100,7 +100,7 @@ export default {
       return value
     },
     createEsMeta(value) {
-      const host_array = value.hosts.split(',')
+      const host_array = value.hosts.split(',').map(item => (item.trim()))
       return {
         name: value.name,
         type: 'es',

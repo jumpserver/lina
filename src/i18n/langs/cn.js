@@ -133,7 +133,7 @@ const cn = {
     'PlatformUpdate': '更新系统平台',
     'CommandFilterCreate': '创建命令过滤器',
     'CommandFilterUpdate': '更新命令过滤器',
-    'CreateReplyStorage': '创建录像存储'
+    'CreateReplayStorage': '创建录像存储'
   },
   // 用户模块翻译
   users: {

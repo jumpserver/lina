@@ -97,6 +97,9 @@ export default {
           actions: {
             prop: 'id',
             actions: {
+              onUpdate: function({ row, col }) {
+                this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }})
+              },
               canUpdate: function(row, cellValue) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
@@ -202,19 +205,19 @@ export default {
   },
   methods: {
     createS3() {
-      this.$router.push({ name: 'CreateReplyStorage', query: { type: 's3' }})
+      this.$router.push({ name: 'CreateReplayStorage', query: { type: 's3' }})
     },
     createCeph() {
-      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'ceph' }})
+      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'ceph' }})
     },
     createSwift() {
-      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'swift' }})
+      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'swift' }})
     },
     createOSS() {
-      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'oss' }})
+      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'oss' }})
     },
     createAzure() {
-      this.$router.push({ name: 'CreateReplyStorage', query: { type: 'azure' }})
+      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'azure' }})
     },
     createEs() {
       this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
