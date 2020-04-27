@@ -7,7 +7,6 @@
     :multiple="multiple"
     filterable
     remote
-    :reserve-keyword="true"
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
@@ -20,7 +19,7 @@
       :key="item.value"
       :label="item.label"
       :value="item.value"
-      :disabled="item.disabled === undefined ? false : item.disabled"
+      :disabled="checkDisabled(item)"
     />
   </el-select>
 </template>
@@ -116,11 +115,12 @@ export default {
       makeParams: defaultMakeParams,
       processResults: defaultProcessResults
     }
+    const iAjax = Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {})
     return {
       loading: false,
       initialized: false,
-      iAjax: Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {}),
-      iValue: this.multiple ? [] : '',
+      iAjax: iAjax,
+      iValue: this.value ? this.value : [],
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
@@ -133,8 +133,7 @@ export default {
     }
   },
   mounted() {
-    this.$log.debug('Select is: ', this.iAjax.url)
-    this.$log.debug('Select url: ', this.url)
+    this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
       this.initialSelect()
       this.initialized = true
@@ -173,17 +172,6 @@ export default {
       this.iOptions = []
       this.params.search = query
       this.getOptions()
-    },
-    reFresh() {
-      this.resetParams()
-      this.iOptions = []
-      this.getOptions()
-    },
-    addOption(option) {
-      if (this.disabledValues.indexOf(option.value) !== -1) {
-        option.disabled = true
-      }
-      this.iOptions.push(option)
     },
     async getInitialOptions() {
       const params = this.safeMakeParams(this.params)
@@ -232,6 +220,14 @@ export default {
       }
       this.iValue = this.value
     },
+    refresh() {
+      this.resetParams()
+      this.iOptions = []
+      this.getOptions()
+    },
+    addOption(option) {
+      this.iOptions.push(option)
+    },
     getOptionsByValues(values) {
       return this.iOptions.filter((v) => {
         return values.indexOf(v.value) !== -1
@@ -243,6 +239,12 @@ export default {
         return values.indexOf(v.value) !== -1
       })
     },
+    clearSelected() {
+      this.iValue = []
+    },
+    checkDisabled(item) {
+      return item.disabled === undefined ? this.disabledValues.indexOf(item.value) !== -1 : item.disabled
+    },
     onChange(values) {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options)
@@ -250,7 +252,7 @@ export default {
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {
-        this.reFresh()
+        this.refresh()
         this.$log.debug('Visible change, refresh select2')
       }
     }

@@ -28,7 +28,7 @@
           <td colspan="2">
             <el-button type="primary" size="small" style="width: 100%" @click="loadMore">
               <i class="fa fa-arrow-down" />
-              {{ $tc('More') }} ({{ iHasObjects.length }}/{{ totalHasObjectsLength }})
+              {{ $tc('More') }}
             </el-button>
           </td>
         </tr>
@@ -84,8 +84,15 @@ export default {
     onDeleteSuccess: {
       type: Function,
       default(obj, that) {
+        // 从hasObjects中移除这个object
         const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
         that.iHasObjects.splice(theRemoveIndex, 1)
+        // 从disabled values中移除这个value
+        while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
+          const i = that.select2.disabledValues.indexOf(obj.value)
+          this.$log.debug('disabled values remove index: ', i)
+          that.select2.disabledValues.splice(i, 1)
+        }
       }
     },
     performAdd: {
@@ -95,9 +102,9 @@ export default {
     onAddSuccess: {
       type: Function,
       default(objects, that) {
-        for (const obj of objects) {
-          that.iHasObjects.push(obj)
-        }
+        this.$log.debug('Select value', that.select2.value)
+        that.iHasObjects = [...that.iHasObjects, ...objects]
+        that.$refs.select2.clearSelected()
       }
     }
   },
@@ -134,11 +141,23 @@ export default {
     hasObjectsId(iNew, iOld) {
       this.$log.debug('hasObject id change')
       this.select2.disabledValues = iNew
-      if (iNew.length !== 0) {
-        setTimeout(() => {
-          this.getHasObjectsByIds()
-        }, 50)
+    },
+    iHasObjects(iNew, iOld) {
+      const newValues = iNew.map(v => v.value)
+      const oldValues = iOld.map(v => v.value)
+      const addValues = _.difference(newValues, oldValues)
+      const removeValues = _.difference(oldValues, newValues)
+      this.$log.debug('hasObjects change, add ', addValues, 'remove ', removeValues)
+      let disabledValues = this.select2.disabledValues
+      if (removeValues.length > 0) {
+        disabledValues = disabledValues.filter((v) => {
+          return removeValues.indexOf(v) === -1
+        })
       }
+      if (addValues.length > 0) {
+        disabledValues = [...disabledValues, ...addValues]
+      }
+      this.select2.disabledValues = disabledValues
     }
   },
   mounted() {
