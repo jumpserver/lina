@@ -120,7 +120,7 @@ export default {
   async mounted() {
     this.loading = true
     try {
-      this.form = await this.getFormValues()
+      this.form = await this.getFormValue()
     } finally {
       this.loading = false
     }
@@ -156,7 +156,7 @@ export default {
         }
       })
     },
-    async getFormValues() {
+    async getFormValue() {
       if (this.method !== 'put') {
         return Object.assign(this.form, this.initial)
       }
