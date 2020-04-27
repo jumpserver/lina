@@ -19,7 +19,7 @@ export default {
   },
   data() {
     return {
-      createSuccessUrl: { name: 'Storage' },
+      createSuccessUrl: { name: 'Storage', params: { activeMenu: 'command' }},
       es: {
         initial: {
           type: 'es'
