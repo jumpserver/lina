@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     genericOptions(data) {
-      console.log(data)
       const _this = this // 透传This
       Object.keys(data).forEach(function(key) {
         if (data[key].filter) {
