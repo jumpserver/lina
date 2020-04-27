@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-if="!databaseAppReletionConfig.loading" v-bind="databaseAppReletionConfig" />
-      <RelationCard v-if="!systemUserReletionConfig.loading" v-bind="systemUserReletionConfig" />
+      <RelationCard v-bind="databaseAppReletionConfig" />
+      <RelationCard v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -41,6 +41,9 @@ export default {
             formatter: DeleteActionFormatter,
             deleteUrl: `/api/v1/perms/database-app-permissions-database-apps-relations/?databaseapppermission=${this.$route.params.id}&databaseapp=`
           }
+        },
+        tableAttrs: {
+          border: false
         }
       },
       headerActions: {
@@ -59,16 +62,24 @@ export default {
       databaseAppReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add DatabaseApp to this permission'),
-        url: '/api/v1/applications/database-apps/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/applications/database-apps/'
+        }
       },
       systemUserReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add System User to this permission'),
-        url: '/api/v1/assets/system-users/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/assets/system-users/',
+          processResults(data) {
+            let results = data.results
+            results = results.map((item) => {
+              return { label: item.name + '(' + item.username + ')', value: item.id }
+            })
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
+        }
       }
     }
   }

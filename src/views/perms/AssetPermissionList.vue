@@ -16,6 +16,14 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasSelection: false,
         hasTree: true,
+        treeSetting: {
+          showMenu: false,
+          showRefresh: true,
+          showAssets: true,
+          url: '/api/v1/perms/asset-permissions/',
+          nodeUrl: '/api/v1/perms/asset-permissions/',
+          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+        },
         tagSearch: [
           { label: this.$tc('Name'), key: 'name' },
           { label: this.$t('perms.IsValid'), key: 'is_valid' },
@@ -27,14 +35,6 @@ export default {
           { label: this.$t('perms.SystemUser'), key: 'system_user' },
           { label: '继承(先占位)', key: 'all=0' }
         ],
-        treeSetting: {
-          showMenu: false,
-          showRefresh: true,
-          showAssets: true,
-          url: '/api/v1/perms/asset-permissions/',
-          nodeUrl: '/api/v1/perms/asset-permissions/',
-          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
-        },
         columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
         columnsMeta: {
           expand: {

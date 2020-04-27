@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-if="!userReletionConfig.loading" v-bind="userReletionConfig" />
-      <RelationCard v-if="!groupReletionConfig.loading" v-bind="groupReletionConfig" />
+      <RelationCard v-bind="userReletionConfig" />
+      <RelationCard v-bind="groupReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -61,17 +61,38 @@ export default {
       assetPermissionUserGroup: [],
       userReletionConfig: {
         icon: 'fa-user',
-        title: this.$t('perms.Add user to asset permission'),
-        url: '/api/v1/users/users/',
-        value: [],
-        loading: false
+        title: this.$t('perms.Add user to this permission'),
+        objectsAjax: {
+          url: '/api/v1/users/users/',
+          processResults(data) {
+            let results = data.results
+            results = results.map((item) => {
+              return { label: item.name + '(' + item.username + ')', value: item.id }
+            })
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
+        },
+        performAdd: (items) => {
+          console.log('item=====', items)
+          const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
+          const objectId = this.$route.params.id
+          console.log('objectId====', objectId)
+          const data = items.map(v => {
+            return {
+              user: v.value,
+              assetpermission: objectId
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        }
       },
       groupReletionConfig: {
         icon: 'fa-group',
-        title: this.$t('perms.Add user group to asset permission'),
-        url: '/api/v1/users/groups/',
-        value: [],
-        loading: false
+        title: this.$t('perms.Add user group to this permission'),
+        objectsAjax: {
+          url: '/api/v1/users/groups/'
+        }
       }
     }
   }
