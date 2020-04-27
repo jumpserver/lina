@@ -121,10 +121,9 @@ export default {
     this.loading = true
     if (this.method === 'put') {
       if (this.object === null) {
-        await this.getObjectDetail()
-      } else {
-        this.form = this.object
+        this.object = await this.getObjectDetail()
       }
+      this.form = this.object
     } else {
       this.form = Object.assign(this.form, this.initial)
     }
@@ -162,9 +161,7 @@ export default {
       })
     },
     async getObjectDetail() {
-      return this.$axios.get(this.totalUrl).then(data => {
-        this.form = data
-      })
+      return this.$axios.get(this.totalUrl)
     }
   }
 }
