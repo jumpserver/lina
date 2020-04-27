@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      activeSubMenu: 'replay',
       submenu: [
         {
           title: this.$t('sessions.replayStorage'),
@@ -165,9 +164,13 @@ export default {
             }
           },
           actions: {
+            prop: 'id',
             actions: {
               canUpdate: function(row, cellValue) {
                 return (row.name !== 'default' && row.name !== 'null')
+              },
+              onUpdate: function({ row, col }) {
+                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
               },
               canDelete: function(row, cellValue) {
                 return (row.name !== 'default' && row.name !== 'null')
@@ -201,6 +204,14 @@ export default {
   computed: {
     Title() {
       return this.$t('sessions.storage')
+    },
+    activeSubMenu() {
+      switch (this.$route.params.activeMenu) {
+        case 'command':
+          return 'command'
+        default:
+          return 'replay'
+      }
     }
   },
   methods: {

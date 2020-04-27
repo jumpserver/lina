@@ -63,3 +63,10 @@ export function getReplayStorage(id) {
     method: 'get'
   })
 }
+
+export function getCommandStorage(id) {
+  return request({
+    url: `/api/v1/terminal/command-storages/${id}/`,
+    method: 'get'
+  })
+}
