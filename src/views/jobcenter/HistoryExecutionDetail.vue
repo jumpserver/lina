@@ -6,24 +6,8 @@
           <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
         </el-col>
         <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-info" />
-              <span>{{ SuccessHosts }}</span>
-            </div>
-            <div>
-              运行成功的主机，请求的api里没有该数据
-            </div>
-          </el-card>
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-info" />
-              <span>{{ FailedHosts }}</span>
-            </div>
-            <div>
-              运行失败的主机，请求的api里没有该数据
-            </div>
-          </el-card>
+          <RunInfoCard v-bind="RunSuccessConfig" />
+          <RunInfoCard v-bind="RunFailedConfig" />
         </el-col>
       </el-row>
     </div>
@@ -38,12 +22,14 @@ import { GenericDetailPage } from '@/layout/components'
 import DetailCard from '@/components/DetailCard/index'
 import { getHistoryExecutionDetail } from '@/api/ops'
 import { toSafeLocalDateStr } from '@/utils/common'
+import RunInfoCard from './runinfocard/RunInfoCard'
 
 export default {
   name: 'HistoryExecutionDetail',
   components: {
     GenericDetailPage,
-    DetailCard
+    DetailCard,
+    RunInfoCard
   },
   data() {
     return {
@@ -67,6 +53,27 @@ export default {
           detailApiUrl: `/api/v1/ops/adhoc-executions/${this.$route.params.id}/`
         }
       },
+      RunSuccessConfig: {
+        icon: 'fa-info',
+        title: this.$t('jobcenter.Last run success hosts'),
+        content: [
+          {
+            hostname: 'linux',
+            result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
+          }
+        ]
+      },
+      RunFailedConfig: {
+        icon: 'fa-info',
+        title: this.$t('jobcenter.Last run failed hosts'),
+        headerColor: 'danger',
+        content: [
+          {
+            hostname: 'window',
+            result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+          }
+        ]
+      },
       defaultValue: '',
       historyExecutionDetailData: {}
     }
@@ -74,12 +81,6 @@ export default {
   computed: {
     cardTitle() {
       return `${this.historyExecutionDetailData.task_display}:${this.historyExecutionDetailData.adhoc_short_id}`
-    },
-    SuccessHosts() {
-      return this.$t('jobcenter.SuccessHosts')
-    },
-    FailedHosts() {
-      return this.$t('jobcenter.FailedHosts')
     },
     detailCardItems() {
       return [
@@ -135,22 +136,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-table /deep/ .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table /deep/ .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
-  }
+
 </style>

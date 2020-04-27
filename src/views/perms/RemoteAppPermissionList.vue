@@ -35,6 +35,9 @@ export default {
         }
       },
       headerActions: {
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
         hasBulkDelete: false
       }
     }

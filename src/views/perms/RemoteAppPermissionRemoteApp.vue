@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-if="!remoteAppReletionConfig.loading" v-bind="remoteAppReletionConfig" />
-      <RelationCard v-if="!systemUserReletionConfig.loading" v-bind="systemUserReletionConfig" />
+      <RelationCard v-bind="remoteAppReletionConfig" />
+      <RelationCard v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -31,6 +31,9 @@ export default {
           // asset_display: {
           //   label: this.$t('perms.RemoteApp')
           // }
+        },
+        tableAttrs: {
+          border: false
         }
       },
       headerActions: {
@@ -49,16 +52,24 @@ export default {
       remoteAppReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add RemoteApp to this permission'),
-        url: '/api/v1/applications/remote-apps/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/applications/remote-apps/'
+        }
       },
       systemUserReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add System User to this permission'),
-        url: '/api/v1/assets/system-users/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/assets/system-users/',
+          processResults(data) {
+            let results = data.results
+            results = results.map((item) => {
+              return { label: item.name + '(' + item.username + ')', value: item.id }
+            })
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
+        }
       }
     }
   }

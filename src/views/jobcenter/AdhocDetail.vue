@@ -6,26 +6,8 @@
           <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
         </el-col>
         <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-info" />
-              <span>{{ LastRunSuccessHosts }}</span>
-            </div>
-            <div>
-              运行成功的主机，请求的api里没有该数据
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :span="10">
-          <el-card class="box-card primary">
-            <div slot="header" class="clearfix">
-              <i class="fa fa-info" />
-              <span>{{ LastRunFailedHosts }}</span>
-            </div>
-            <div>
-              运行失败的主机，请求的api里没有该数据
-            </div>
-          </el-card>
+          <RunInfoCard v-bind="RunSuccessConfig" />
+          <RunInfoCard v-bind="RunFailedConfig" />
         </el-col>
       </el-row>
     </div>
@@ -41,13 +23,15 @@ import DetailCard from '@/components/DetailCard/index'
 import { getAdhocDetail } from '@/api/ops'
 import AdhocExecutionHistory from './AdhocExecutionHistory'
 import { toSafeLocalDateStr } from '@/utils/common'
+import RunInfoCard from './runinfocard/RunInfoCard'
 
 export default {
   name: 'AdhocDetail',
   components: {
     GenericDetailPage,
     DetailCard,
-    AdhocExecutionHistory
+    AdhocExecutionHistory,
+    RunInfoCard
   },
   data() {
     return {
@@ -68,6 +52,27 @@ export default {
         ],
         hasRightSide: false
       },
+      RunSuccessConfig: {
+        icon: 'fa-info',
+        title: this.$t('jobcenter.Last run success hosts'),
+        content: [
+          {
+            hostname: 'linux',
+            result: 'api没有该数据，api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+          }
+        ]
+      },
+      RunFailedConfig: {
+        icon: 'fa-info',
+        title: this.$t('jobcenter.Last run failed hosts'),
+        headerColor: 'danger',
+        content: [
+          {
+            hostname: 'window',
+            result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+          }
+        ]
+      },
       adhocData: '',
       versionDetailData: {}
     }
@@ -75,12 +80,6 @@ export default {
   computed: {
     cardTitle() {
       return 'api 没有该数据'
-    },
-    LastRunSuccessHosts() {
-      return this.$t('jobcenter.Last run success hosts')
-    },
-    LastRunFailedHosts() {
-      return this.$t('jobcenter.Last run failed hosts')
     },
     detailCardItems() {
       return [
@@ -166,22 +165,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-table /deep/ .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table /deep/ .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table /deep/ .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
-  }
+
 </style>
