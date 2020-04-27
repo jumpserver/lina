@@ -437,6 +437,13 @@ export const constantRoutes = [
         component: () => import('@/views/sessions/ReplayStorageUpdate'),
         meta: { title: 'ReplayStorageUpdate' },
         hidden: true
+      },
+      {
+        path: 'command-storage/:id/update',
+        name: 'CommandStorageUpdate',
+        component: () => import('@/views/sessions/CommandStorageUpdate'),
+        meta: { title: 'CommandStorageUpdate' },
+        hidden: true
       }
     ]
   },

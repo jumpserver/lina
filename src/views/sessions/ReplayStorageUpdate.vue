@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       loading: true,
-      updateSuccessUrl: { name: 'Storage' },
+      updateSuccessUrl: { name: 'Storage', params: { activeMenu: 'replay' }},
       replayData: {},
       formData: {
         type: '',
