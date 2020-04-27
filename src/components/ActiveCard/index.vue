@@ -45,11 +45,11 @@ export default {
   },
   methods: {
     HandleChangeAction(index, row) {
-      this.$axios.patch(
-        this.url,
-        { is_active: row.is_active }
+      this.$axios.patch(this.url, { is_active: row.is_active }
       ).then(res => {
-        this.$message(this.$tc('Update success'))
+        this.$message.success(this.$tc('Update success'))
+      }).catch(err => {
+        this.$message.error(this.$tc('Update failed' + ' ' + err))
       })
     }
   }
