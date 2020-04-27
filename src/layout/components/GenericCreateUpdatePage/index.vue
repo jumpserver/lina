@@ -119,15 +119,11 @@ export default {
   },
   async mounted() {
     this.loading = true
-    if (this.method === 'put') {
-      if (this.object === null) {
-        this.object = await this.getObjectDetail()
-      }
-      this.form = this.object
-    } else {
-      this.form = Object.assign(this.form, this.initial)
+    try {
+      this.form = await this.getFormValues()
+    } finally {
+      this.loading = false
     }
-    this.loading = false
   },
   methods: {
     handleSubmit(values) {
@@ -159,6 +155,15 @@ export default {
           }
         }
       })
+    },
+    async getFormValues() {
+      if (this.method !== 'put') {
+        return Object.assign(this.form, this.initial)
+      }
+      if (this.object === null) {
+        this.object = await this.getObjectDetail()
+      }
+      return this.object
     },
     async getObjectDetail() {
       return this.$axios.get(this.totalUrl)
