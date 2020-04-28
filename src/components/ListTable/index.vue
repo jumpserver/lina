@@ -45,6 +45,7 @@ import AutoDataTable from '../AutoDataTable'
 import Dialog from '../Dialog'
 import TableAction from './TableAction'
 import { createSourceIdCache } from '@/api/common'
+import Emitter from '@/mixins/emitter'
 
 export default {
   name: 'ListTable',
@@ -53,6 +54,7 @@ export default {
     TableAction,
     Dialog
   },
+  mixins: [Emitter],
   props: {
     // 定义 table 的配置
     tableConfig: {
@@ -115,6 +117,10 @@ export default {
     },
     handleSelectionChange(val) {
       this.selectedRows = val
+      var obj = {}
+      val.forEach((item, index) => { obj[index] = item })
+      // 已知Bug，必须避免数组扁平化
+      this.dispatch('AssetSelect', 'SelectionChange', obj)
     },
     reloadTable() {
       this.$refs.dataTable.$refs.dataTable.getList()

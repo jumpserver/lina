@@ -14,6 +14,7 @@ export { default as ListTable } from './ListTable'
 export { default as RelationCard } from './RelationCard'
 export { default as ActiveCard } from './ActiveCard'
 export { default as Select2 } from './Select2'
+export { default as AssetSelect } from './AssetSelect'
 export { default as SvgIcon } from './SvgIcon'
 export { default as TreeTable } from './TreeTable'
 

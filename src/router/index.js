@@ -218,9 +218,22 @@ export const constantRoutes = [
         meta: { title: 'SystemUserList' }
       },
       {
+        path: 'labels/create',
+        name: 'LabelCreate',
+        component: () => import('@/views/assets/Label/LabelCreateUpdate.vue'),
+        meta: { title: 'LabelCreate' },
+        hidden: true
+      },
+      {
+        path: 'labels/update/:id',
+        name: 'LabelUpdate',
+        component: () => import('@/views/assets/Label/LabelCreateUpdate.vue'),
+        meta: { title: 'LabelUpdate' }, hidden: true
+      },
+      {
         path: 'labels',
         name: 'LabelList',
-        component: () => import('@/views/assets//LabelList.vue'),
+        component: () => import('@/views/assets/Label/LabelList.vue'),
         meta: { title: 'LabelList' }
       },
       {

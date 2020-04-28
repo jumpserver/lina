@@ -3,9 +3,10 @@
 </template>
 
 <script>
+import { AssetSelect } from '@/components'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 export default {
-  name: 'GatewayCreateUpdate',
+  name: 'LabelCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -14,13 +15,20 @@ export default {
       initial: {
 
       },
-      fields: {
-
-      },
+      fields: [
+        ['', ['name', 'value', 'assets']]
+      ],
       fieldsMeta: {
-
+        assets: {
+          type: 'assetSelect',
+          component: AssetSelect,
+          label: '资产',
+          rules: [{
+            required: false
+          }]
+        }
       },
-      url: ''
+      url: '/api/v1/assets/labels/'
     }
   }
 }
