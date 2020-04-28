@@ -5,7 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 export default {
-  name: 'GatewayCreate',
+  name: 'GatewayCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },

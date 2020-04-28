@@ -131,6 +131,7 @@ export default {
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
       field = Object.assign(field, this.fieldsMeta[name] || {})
+      console.log(field)
       _.set(field, 'attrs.error', '')
       return field
     },
