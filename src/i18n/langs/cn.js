@@ -71,6 +71,7 @@ const cn = {
     'Other': '其它',
     'Create success': '创建成功',
     'Update success': '更新成功',
+    'Update failed': '更新失败',
     'Deactive selected': '禁用所选',
     'Active selected': '激活所选',
     'rows': '行',
@@ -132,7 +133,10 @@ const cn = {
     'PlatformUpdate': '更新系统平台',
     'CommandFilterCreate': '创建命令过滤器',
     'CommandFilterUpdate': '更新命令过滤器',
-    'CreateReplyStorage': '创建录像存储'
+    'CreateReplayStorage': '创建录像存储',
+    'ReplayStorageUpdate': '更新录像存储',
+    'CreateCommandStorage': '创建命令存储',
+    'CommandStorageUpdate': '更新命令存储'
   },
   // 用户模块翻译
   users: {
@@ -380,8 +384,8 @@ const cn = {
     'UsersAndUserGroups': '用户或用户组',
     'AssetAndNode': '资产或节点',
     'Active': '激活中',
-    'Add user to asset permission': '添加用户',
-    'Add user group to asset permission': '添加用户组',
+    'Add user to this permission': '添加用户',
+    'Add user group to this permission': '添加用户组',
     'Add asset to this permission': '添加资产',
     'Add node to this permission': '添加节点',
     'Add System User to this permission': '添加系统用户',

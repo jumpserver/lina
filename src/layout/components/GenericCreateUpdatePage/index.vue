@@ -15,7 +15,8 @@
   </Page>
 </template>
 <script>
-import { Page, IBox } from '@/layout/components'
+import { IBox } from '@/components'
+import { Page } from '@/layout/components'
 import AutoDataForm from '@/components/AutoDataForm'
 export default {
   name: 'GenericCreateUpdatePage',
@@ -35,7 +36,7 @@ export default {
     },
     object: {
       type: Object,
-      default: () => ({})
+      default: null
     },
     initial: {
       type: Object,
@@ -116,11 +117,11 @@ export default {
       return this.getUrl()
     }
   },
-  mounted() {
-    if (this.method === 'put') {
-      this.getObjectDetail()
-    } else {
-      this.form = Object.assign(this.form, this.initial)
+  async mounted() {
+    this.loading = true
+    try {
+      this.form = await this.getFormValue()
+    } finally {
       this.loading = false
     }
   },
@@ -155,14 +156,17 @@ export default {
         }
       })
     },
-    getObjectDetail() {
-      this.$axios.get(this.totalUrl).then(data => {
-        this.form = data
-      }).catch(error => {
-        console.log(error)
-      }).finally(() => {
-        this.loading = false
-      })
+    async getFormValue() {
+      if (this.method !== 'put') {
+        return Object.assign(this.form, this.initial)
+      }
+      if (this.object === null) {
+        this.object = await this.getObjectDetail()
+      }
+      return this.object
+    },
+    async getObjectDetail() {
+      return this.$axios.get(this.totalUrl)
     }
   }
 }

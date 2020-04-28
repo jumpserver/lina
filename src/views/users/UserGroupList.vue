@@ -22,12 +22,8 @@ export default {
         detailRoute: 'UserGroupDetail'
       },
       headerActions: {
-        createRoute: 'UserGroupCreate',
-        performBulkDelete: function(rows) {
-          console.log('hello')
-        }
-      },
-      helpMessage: '用户列表'
+        createRoute: 'UserGroupCreate'
+      }
     }
   }
 }

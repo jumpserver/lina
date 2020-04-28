@@ -436,6 +436,34 @@ export const constantRoutes = [
         name: 'Storage',
         component: () => import('@/views/sessions/Storage'),
         hidden: true
+      },
+      {
+        path: 'replay-storage/create',
+        name: 'CreateReplayStorage',
+        component: () => import('@/views/sessions/ReplayStorageCreate'),
+        meta: { title: 'CreateReplayStorage' },
+        hidden: true
+      },
+      {
+        path: 'command-storage/create',
+        name: 'CreateCommandStorage',
+        component: () => import('@/views/sessions/CommandStorageCreate'),
+        meta: { title: 'CreateCommandStorage' },
+        hidden: true
+      },
+      {
+        path: 'replay-storage/:id/update',
+        name: 'ReplayStorageUpdate',
+        component: () => import('@/views/sessions/ReplayStorageUpdate'),
+        meta: { title: 'ReplayStorageUpdate' },
+        hidden: true
+      },
+      {
+        path: 'command-storage/:id/update',
+        name: 'CommandStorageUpdate',
+        component: () => import('@/views/sessions/CommandStorageUpdate'),
+        meta: { title: 'CommandStorageUpdate' },
+        hidden: true
       }
     ]
   },

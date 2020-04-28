@@ -42,8 +42,7 @@ export default {
             name: 'activeSelected',
             title: this.$tc('Active selected')
           }
-        ],
-        hasCreate: false
+        ]
       }
     }
   }

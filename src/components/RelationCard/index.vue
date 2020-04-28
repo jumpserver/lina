@@ -13,13 +13,13 @@
         </tr>
         <tr>
           <td colspan="2">
-            <el-button type="primary" size="small">{{ $tc('Add') }}</el-button>
+            <el-button type="primary" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
           </td>
         </tr>
         <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
           <td><b>{{ obj.label }}</b></td>
           <td>
-            <el-button size="mini" type="danger" style="float: right">
+            <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
               <i class="fa fa-minus" />
             </el-button>
           </td>
@@ -28,7 +28,7 @@
           <td colspan="2">
             <el-button type="primary" size="small" style="width: 100%" @click="loadMore">
               <i class="fa fa-arrow-down" />
-              {{ $tc('More') }} ( {{ hasObjectLeftLength }} )
+              {{ $tc('More') }}
             </el-button>
           </td>
         </tr>
@@ -76,12 +76,43 @@ export default {
     value: {
       type: [Array, Number, String],
       default: () => []
+    },
+    performDelete: {
+      type: Function,
+      default: (obj, that) => {}
+    },
+    onDeleteSuccess: {
+      type: Function,
+      default(obj, that) {
+        // 从hasObjects中移除这个object
+        const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
+        that.iHasObjects.splice(theRemoveIndex, 1)
+        // 从disabled values中移除这个value
+        while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
+          const i = that.select2.disabledValues.indexOf(obj.value)
+          this.$log.debug('disabled values remove index: ', i)
+          that.select2.disabledValues.splice(i, 1)
+        }
+      }
+    },
+    performAdd: {
+      type: Function,
+      default: (objects, that) => {}
+    },
+    onAddSuccess: {
+      type: Function,
+      default(objects, that) {
+        this.$log.debug('Select value', that.select2.value)
+        that.iHasObjects = [...that.iHasObjects, ...objects]
+        that.$refs.select2.clearSelected()
+      }
     }
   },
   data() {
     return {
       iHasObjects: this.hasObjects || [],
       totalHasObjectsLength: 0,
+      submitLoading: false,
       params: {
         page: 1,
         hasMore: false,
@@ -91,7 +122,7 @@ export default {
         ajax: this.objectsAjax,
         options: this.objects,
         value: this.value,
-        isSelectedValue: false
+        disabledValues: []
       }
     }
   },
@@ -103,9 +134,30 @@ export default {
       return this.$refs.select2.safeMakeParams
     },
     hasObjectLeftLength() {
-      this.$log.debug('Total', this.totalHasObjectsLength)
-      this.$log.debug(this.iHasObjects.length)
       return this.totalHasObjectsLength - this.iHasObjects.length
+    }
+  },
+  watch: {
+    hasObjectsId(iNew, iOld) {
+      this.$log.debug('hasObject id change')
+      this.select2.disabledValues = iNew
+    },
+    iHasObjects(iNew, iOld) {
+      const newValues = iNew.map(v => v.value)
+      const oldValues = iOld.map(v => v.value)
+      const addValues = _.difference(newValues, oldValues)
+      const removeValues = _.difference(oldValues, newValues)
+      this.$log.debug('hasObjects change, add ', addValues, 'remove ', removeValues)
+      let disabledValues = this.select2.disabledValues
+      if (removeValues.length > 0) {
+        disabledValues = disabledValues.filter((v) => {
+          return removeValues.indexOf(v) === -1
+        })
+      }
+      if (addValues.length > 0) {
+        disabledValues = [...disabledValues, ...addValues]
+      }
+      this.select2.disabledValues = disabledValues
     }
   },
   mounted() {
@@ -149,9 +201,22 @@ export default {
       if (!this.$refs.select2 || !this.iAjax || !this.safeMakeParams) {
         return
       }
+      this.select2.disabledValues = this.hasObjectsId
       const resp = await createSourceIdCache(this.hasObjectsId)
       this.params.spm = resp.spm
       await this.loadHasObjects()
+    },
+    removeObject(obj) {
+      this.performDelete(obj, this).then(
+        () => this.onDeleteSuccess(obj, this)
+      )
+    },
+    addObjects() {
+      const objects = this.$refs.select2.getOptionsByValues(this.select2.value)
+      this.$log.debug('Object is: ', objects)
+      this.performAdd(objects, this).then(
+        () => this.onAddSuccess(objects, this)
+      )
     }
   }
 }

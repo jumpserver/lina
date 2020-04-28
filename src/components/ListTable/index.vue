@@ -1,7 +1,7 @@
 <template>
   <div>
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
-    <el-card class="table-content" shadow="never">
+    <IBox class="table-content">
       <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
       <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
         <el-form>
@@ -35,14 +35,14 @@
           </el-upload>
         </div>
       </Dialog>
-    </el-card>
+    </IBox>
   </div>
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
 import AutoDataTable from '../AutoDataTable'
 import Dialog from '../Dialog'
+import IBox from '../IBox'
 import TableAction from './TableAction'
 import { createSourceIdCache } from '@/api/common'
 import Emitter from '@/mixins/emitter'
@@ -52,7 +52,8 @@ export default {
   components: {
     AutoDataTable,
     TableAction,
-    Dialog
+    Dialog,
+    IBox
   },
   mixins: [Emitter],
   props: {
@@ -146,7 +147,6 @@ export default {
       return this.downloadCsv(url)
     },
     handleImport() {
-
     },
     async downloadUpdateTempUrl() {
       var resources = []

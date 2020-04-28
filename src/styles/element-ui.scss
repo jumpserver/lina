@@ -258,6 +258,11 @@ td .el-button.el-button--mini {
   border-color: #409EFF;
   background-color: #409EFF;
 }
+
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #606266;
+}
+
 .el-checkbox__inner:hover {
   border-color: #409EFF;
 }
