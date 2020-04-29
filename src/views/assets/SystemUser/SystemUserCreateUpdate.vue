@@ -4,6 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import select2 from '@/components/Select2'
 export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -31,19 +32,33 @@ export default {
         login_mode: {
           helpText: '如果选择手动登录模式，用户名和密码可以不填写'
         },
+        username: {
+          el: {
+            disabled: false
+          }
+        },
         username_same_with_user: {
           type: 'switch',
-          helpText: '用户名是动态的，登录资产时使用当前用户的用户名登录'
+          helpText: '用户名是动态的，登录资产时使用当前用户的用户名登录',
+          hidden: (form) => {
+            this.fieldsMeta.username.el.disabled = form.username_same_with_user
+            return false
+          }
         },
         auto_generate_key: {
-          type: 'switch'
+          type: 'switch',
+          hidden: form => form.login_mode !== 'auto'
         },
         protocol: {
           rules: [
             { required: true }
-          ]
+          ],
+          el: {
+            style: 'width:100%'
+          }
         },
         cmd_filters: {
+          component: select2,
           el: {
             placeholder: '命令过滤器'
           }
@@ -55,7 +70,8 @@ export default {
           helpText: '1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户'
         },
         auto_push: {
-          type: 'switch'
+          type: 'switch',
+          hidden: form => form.login_mode !== 'auto'
         },
         sftp_root: {
           rules: [
@@ -71,7 +87,7 @@ export default {
         },
         password: {
           helpText: '密码或密钥密码',
-          hidden: form => form.auto_generate_key === true
+          hidden: form => form.auto_generate_key === true || form.login_mode !== 'auto'
         },
         shell: {
           rules: [
@@ -79,8 +95,12 @@ export default {
           ]
         }
       },
-      url: '/api/v1/assets/system-users/'
+      url: '/api/v1/assets/system-users/',
+      authHiden: false
     }
+  },
+  computed: {
+
   }
 }
 </script>
