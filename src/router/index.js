@@ -157,8 +157,15 @@ export const constantRoutes = [
       {
         path: 'admin-users/create',
         component: () => import('@/views/assets/AdminUser/AdminUserCreateUpdate.vue'), // Parent router-view
-        name: 'AdminUserCreateUpdate',
+        name: 'AdminUserCreate',
         meta: { title: 'AdminUserCreate' },
+        hidden: true
+      },
+      {
+        path: 'admin-users/update/:id',
+        component: () => import('@/views/assets/AdminUser/AdminUserCreateUpdate.vue'), // Parent router-view
+        name: 'AdminUserUpdate',
+        meta: { title: 'AdminUserUpdate' },
         hidden: true
       },
       {
@@ -215,6 +222,13 @@ export const constantRoutes = [
         name: 'SystemUserCreate',
         component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
         meta: { title: 'SystemUserCreate' },
+        hidden: true
+      },
+      {
+        path: 'system-users/update/:id',
+        name: 'SystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
+        meta: { title: 'SystemUserUpdate' },
         hidden: true
       },
       {

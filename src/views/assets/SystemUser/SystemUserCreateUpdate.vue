@@ -47,7 +47,9 @@ export default {
         },
         auto_generate_key: {
           type: 'switch',
-          hidden: form => form.login_mode !== 'auto'
+          hidden: form => {
+            this.$router.params || form.login_mode !== 'auto'
+          }
         },
         protocol: {
           rules: [
