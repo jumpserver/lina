@@ -7,7 +7,7 @@ import { TreeTable } from '@/components'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
-  name: 'TabAssetPerm',
+  name: 'GroupAssetPermission',
   components: {
     TreeTable
   },

@@ -12,7 +12,7 @@
 <script>
 import { DetailCard, RelationCard } from '@/components'
 export default {
-  name: 'TabDetail',
+  name: 'GroupInfo',
   components: {
     DetailCard,
     RelationCard

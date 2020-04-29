@@ -8,29 +8,29 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import UserGroupPerm from './perms'
-import TabDetail from './detail'
+import GroupAssetPermission from './GroupAssetPermission'
+import GroupInfo from './GroupInfo'
 
 export default {
   components: {
     GenericDetailPage,
-    UserGroupPerm,
-    TabDetail,
+    GroupAssetPermission,
+    GroupInfo,
     TabPage
   },
   data() {
     return {
       group: { name: '', comment: '', users: [] },
       config: {
-        activeMenu: 'TabDetail',
+        activeMenu: 'GroupInfo',
         submenu: [
           {
             title: this.$tc('Basic Info'),
-            name: 'TabDetail'
+            name: 'GroupInfo'
           },
           {
             title: this.$t('perms.Asset permissions'),
-            name: 'UserGroupPerm'
+            name: 'GroupAssetPermission'
           }
         ],
         actions: {
