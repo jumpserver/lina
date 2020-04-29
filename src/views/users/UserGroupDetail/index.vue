@@ -1,116 +1,49 @@
 <template>
-  <GenericDetailPage :object.sync="group" v-bind="config">
-    <template #info>
-      <div>
-        <el-row :gutter="20">
-          <el-col :md="14" :sm="24">
-            <DetailCard :title="cardTitle" :items="detailItems" />
-          </el-col>
-          <el-col :md="10" :sm="24">
-            <RelationCard v-bind="relationConfig" />
-          </el-col>
-        </el-row>
-      </div>
-    </template>
+  <GenericDetailPage :object.sync="group" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+    <keep-alive>
+      <component :is="config.activeMenu" :object="group" />
+    </keep-alive>
   </GenericDetailPage>
 </template>
 
 <script>
-import { GenericDetailPage } from '@/layout/components'
-import { DetailCard, RelationCard } from '@/components'
+import { GenericDetailPage, TabPage } from '@/layout/components'
+import UserGroupPerm from './perms'
+import TabDetail from './detail'
 
 export default {
   components: {
     GenericDetailPage,
-    DetailCard,
-    RelationCard
+    UserGroupPerm,
+    TabDetail,
+    TabPage
   },
   data() {
     return {
       group: { name: '', comment: '', users: [] },
       config: {
-        activeMenu: 'info',
+        activeMenu: 'TabDetail',
         submenu: [
           {
             title: this.$tc('Basic Info'),
-            name: 'info'
+            name: 'TabDetail'
           },
           {
             title: this.$t('perms.Asset permissions'),
-            name: 'assetPermissions'
+            name: 'UserGroupPerm'
           }
         ],
         actions: {
           canDelete: true,
           canUpdate: true
         }
-      },
-      groupMembers: [],
-      relationConfig: {
-        icon: 'fa-user',
-        title: this.$tc('Members'),
-        objectsAjax: {
-          url: '/api/v1/users/users/?fields_size=mini&order=name',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.name + '(' + item.username + ')', value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
-          }
-        },
-        hasObjectsId: [],
-        hasObjects: [],
-        performDelete: (item) => {
-          const itemId = item.value
-          const objectId = this.group.id
-          const relationUrl = `/api/v1/users/users-groups-relations/?usergroup=${objectId}&user=${itemId}`
-          return this.$axios.delete(relationUrl)
-        },
-        performAdd: (items) => {
-          const relationUrl = `/api/v1/users/users-groups-relations/`
-          const objectId = this.group.id
-          const data = items.map(v => {
-            return {
-              user: v.value,
-              usergroup: objectId
-            }
-          })
-          return this.$axios.post(relationUrl, data)
-        }
-      },
-      cardTitle: this.$tc('Basic Info')
-    }
-  },
-  computed: {
-    detailItems() {
-      return [
-        {
-          key: this.$tc('Name'),
-          value: this.group.name
-        },
-        {
-          key: this.$tc('Created by'),
-          value: this.group.created_by
-        },
-        {
-          key: this.$tc('Date Created'),
-          value: this.group.date_created
-        },
-        {
-          key: this.$tc('Comment'),
-          value: this.group.comment
-        }
-      ]
-    }
-  },
-  watch: {
-    group(iNew, iOld) {
-      this.relationConfig.hasObjectsId = iNew.users
+      }
     }
   },
   methods: {
+    handleTabClick(tab) {
+      this.$log.debug('Current nav is: ', this.config.activeMenu)
+    }
   }
 }
 </script>

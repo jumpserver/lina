@@ -1,12 +1,12 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu="activeSubMenu">
+  <TabPage :submenu="submenu" :active-menu.sync="activeSubMenu">
     <div slot="title">
       {{ Title }}
     </div>
-    <div slot="replay">
+    <div v-if="activeSubMenu === 'replay'">
       <ListTable :table-config="replayTableConfig" :header-actions="replayActions" />
     </div>
-    <div slot="command">
+    <div v-if="activeSubMenu === 'command'">
       <ListTable :table-config="commandTableConfig" :header-actions="commandActions" />
     </div>
   </TabPage>
@@ -25,6 +25,7 @@ export default {
   },
   data() {
     return {
+      activeSubMenu: 'replay',
       submenu: [
         {
           title: this.$t('sessions.replayStorage'),
@@ -204,14 +205,6 @@ export default {
   computed: {
     Title() {
       return this.$t('sessions.storage')
-    },
-    activeSubMenu() {
-      switch (this.$route.params.activeMenu) {
-        case 'command':
-          return 'command'
-        default:
-          return 'replay'
-      }
     }
   },
   methods: {
