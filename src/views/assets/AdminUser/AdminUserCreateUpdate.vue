@@ -16,10 +16,27 @@ export default {
 
       },
       fields: [
-        [this.$t('perms.' + 'Basic'), ['name', 'username', 'password', 'private_key', 'comment']]
+        ['', ['name', 'username', 'password', 'private_key', 'comment']]
       ],
       fieldsMeta: {
+        name: {
+          el: {
+            placeholder: this.$t('名称')
+          }
+        },
+        username: {
+          el: {
+            placeholder: this.$t('用户名')
+          }
+        },
+        password: {
+          helpText: this.$t('密码或密钥密码')
+        },
         private_key: {
+          type: 'upload',
+          el: {
+            url: 'http://baiddu.com'
+          }
         }
       },
       url: '/api/v1/assets/admin-users/'

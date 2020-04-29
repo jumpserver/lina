@@ -52,9 +52,10 @@ export default {
           }
         ]
       },
+      updateRoute: 'AdminUserUpdate',
       headerActions: {
         hasBulkDelete: false,
-        createRoute: 'AdminUserCreateUpdate'
+        createRoute: 'AdminUserCreate'
       }
     }
   }

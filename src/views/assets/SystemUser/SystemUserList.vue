@@ -53,6 +53,7 @@ export default {
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
+            updateRoute: 'SystemUserUpdate',
             actions: {
               performDelete: ({ row, col }) => {
                 const id = row.id

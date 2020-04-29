@@ -32,6 +32,7 @@ import SessionsRoute from '@/views/sessions'
 import OpsRoutes from '@/views/jobcenter'
 import TicketsRoutes from '@/views/tickets'
 import AuditsRoutes from '@/views/audits'
+
 /**
  * constantRoutes
  * a base page that does not have permission requirements

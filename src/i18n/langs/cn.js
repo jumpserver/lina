@@ -76,7 +76,10 @@ const cn = {
     'Active selected': '激活所选',
     'rows': '行',
     'Basic Info': '基本信息',
+    'Command filter': '命令过滤器',
     'Add': '添加',
+    'Auth': '认证',
+    'Others': '其他',
     'Members': '成员'
   },
   route: {
