@@ -1,25 +1,34 @@
 <template>
-  <GenericCreateUpdatePage
-    :create-success-next-route="createSuccessUrl"
-    :clean-form-value="cleanFormValue"
-    :fields="selectFields"
-    :initial="selectInitial"
-    :fields-meta="selectFieldsMeta"
-    :url="url"
-  />
+  <div v-if="!loading">
+    <GenericCreateUpdatePage
+      :fields="selectFields"
+      :url="url"
+      :update-success-next-route="updateSuccessUrl"
+      :clean-form-value="cleanFormValue"
+      :object="formData"
+      :fields-meta="selectedFieldsMeta"
+    />
+  </div>
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-
+import { getCommandStorage } from '@/api/sessions'
 export default {
-  name: 'CommandStorageCreate',
+  name: 'CommandStorageUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
     return {
-      createSuccessUrl: { name: 'Storage' },
+      loading: true,
+      formData: {
+        type: '',
+        name: '',
+        comment: ''
+      },
+      commandStorageData: {},
+      updateSuccessUrl: { name: 'Storage', params: { activeMenu: 'command' }},
       es: {
         initial: {
           type: 'es'
@@ -66,32 +75,49 @@ export default {
     }
   },
   computed: {
-    postUrl() {
-      return this.url
-    },
-    selectInitial() {
-      return this.renderFieldObject.initial
-    },
     selectFields() {
-      return this.renderFieldObject.fields
+      return this.renderCommandStorage.fields
     },
-    selectFieldsMeta() {
-      return this.renderFieldObject.fieldsMeta
+    selectedFieldsMeta() {
+      return this.renderCommandStorage.fieldsMeta
     },
-    renderFieldObject() {
-      const storageType = this.$route.query.type
-      if (typeof storageType !== 'string') {
-        return this.es
-      }
-      switch (storageType.toLowerCase()) {
+    renderCommandStorage() {
+      switch (this.formData.type.toLowerCase()) {
         case 'es':
           return this.es
         default:
-          return this.es
+          return {}
       }
     }
   },
+  mounted() {
+    getCommandStorage(this.$route.params.id).then(data => {
+      this.commandStorageData = data
+      console.log(data)
+      this.formData = this.convertMataToForm(this.commandStorageData)
+      this.loading = false
+    })
+  },
   methods: {
+    convertMataToForm(commandStorageData) {
+      switch (commandStorageData.type.toLowerCase()) {
+        case 'es':
+          return this.esMetaToForm(commandStorageData)
+        default:
+          return {}
+      }
+    },
+    esMetaToForm(commandStorageData) {
+      const hosts = commandStorageData.meta.HOSTS.join(',')
+      return {
+        name: commandStorageData.name,
+        type: commandStorageData.type,
+        comment: commandStorageData.comment,
+        hosts: hosts,
+        index: commandStorageData.meta.INDEX,
+        doc_type: commandStorageData.meta.DOC_TYPE
+      }
+    },
     cleanFormValue(value) {
       switch (value.type.toLowerCase()) {
         case 'es':

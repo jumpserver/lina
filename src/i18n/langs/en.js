@@ -24,7 +24,11 @@ const en = {
     'SessionDetail': 'Session Detail',
     'Goto': 'Goto',
     'jobcenter': 'Job Center',
-    'Terminal': 'Terminal'
+    'Terminal': 'Terminal',
+    'CreateReplayStorage': 'Create replay storage',
+    'ReplayStorageUpdate': 'Update replay storage',
+    'CreateCommandStorage': 'Create command storage',
+    'CommandStorageUpdate': 'Update command storage'
   },
   users: {
     'createuser': 'Cerate User',
@@ -315,7 +319,7 @@ const en = {
     'replayStorage': 'Replay Storage',
     'storage': 'Storage',
     'test': 'Test',
-    'createReplyStorage': 'Create replay storage',
+    'createReplayStorage': 'Create replay storage',
     'endPoint': 'Endpoint',
     'bucket': 'Bucket',
     'type': 'Type',

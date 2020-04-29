@@ -56,3 +56,17 @@ export function TestReplayStorage(id) {
     method: 'get'
   })
 }
+
+export function getReplayStorage(id) {
+  return request({
+    url: `/api/v1/terminal/replay-storages/${id}/`,
+    method: 'get'
+  })
+}
+
+export function getCommandStorage(id) {
+  return request({
+    url: `/api/v1/terminal/command-storages/${id}/`,
+    method: 'get'
+  })
+}

@@ -4,9 +4,9 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-if="!assetReletionConfig.loading" v-bind="assetReletionConfig" />
-      <RelationCard v-if="!nodeReletionConfig.loading" v-bind="nodeReletionConfig" />
-      <RelationCard v-if="!systemUserReletionConfig.loading" v-bind="systemUserReletionConfig" />
+      <RelationCard v-bind="assetReletionConfig" />
+      <RelationCard v-bind="nodeReletionConfig" />
+      <RelationCard v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -64,23 +64,39 @@ export default {
       assetReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add asset to this permission'),
-        url: '/api/v1/assets/assets/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/assets/assets/'
+        }
       },
       nodeReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add node to this permission'),
-        url: '/api/v1/assets/nodes/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/assets/nodes/',
+          processResults(data) {
+            let results = data.results
+            results = results.map((item) => {
+              return { label: item.full_value, value: item.id }
+            })
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
+        }
       },
       systemUserReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add System User to this permission'),
-        url: '/api/v1/assets/system-users/',
-        value: [],
-        loading: false
+        objectsAjax: {
+          url: '/api/v1/assets/system-users/',
+          processResults(data) {
+            let results = data.results
+            results = results.map((item) => {
+              return { label: item.name + '(' + item.username + ')', value: item.id }
+            })
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
+        }
       }
     }
   }
