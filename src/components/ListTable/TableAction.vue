@@ -7,13 +7,16 @@
       <div class="table-action-right-side">
         <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
         <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
+        <DialogAction :selected-rows="selectedRows" :url="tableUrl" />
       </div>
+
     </slot>
   </div>
 </template>
 
 <script>
 import AutoDataSearch from '@/components/AutoDataSearch'
+import DialogAction from '@/components/DialogAction'
 import ActionsGroup from '@/components/ActionsGroup'
 import { createSourceIdCache } from '@/api/common'
 import _ from 'lodash'
@@ -25,6 +28,7 @@ export default {
   name: 'TableAction',
   components: {
     ActionsGroup,
+    DialogAction,
     AutoDataSearch
   },
   props: {

@@ -210,11 +210,17 @@ export const constantRoutes = [
         meta: { title: 'AdminUserDetail' },
         hidden: true
       },
-
+      {
+        path: 'system-users/create',
+        name: 'SystemUserCreate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
+        meta: { title: 'SystemUserCreate' },
+        hidden: true
+      },
       {
         path: 'system-users',
         name: 'SystemUserList',
-        component: () => import('@/views/assets/SystemUserList.vue'),
+        component: () => import('@/views/assets/SystemUser/SystemUserList.vue'),
         meta: { title: 'SystemUserList' }
       },
       {

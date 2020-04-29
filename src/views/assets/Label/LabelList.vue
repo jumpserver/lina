@@ -49,6 +49,11 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
+        hasRightActions: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: true,
+        hasSearch: true,
         createRoute: 'LabelCreate'
       }
     }
