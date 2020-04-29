@@ -267,6 +267,11 @@ td .el-button.el-button--mini {
   border-color: #409EFF;
 }
 
+.el-checkbox__input.is-focus .el-checkbox__inner {
+  border-color: #409EFF;
+}
+
+
 .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
   margin: 0 5px;
   background-color: white;
