@@ -1,4 +1,6 @@
 import axios from 'axios'
+import i18n from '@/i18n/i18n'
+
 import {
   MessageBox,
   Message
@@ -52,35 +54,24 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    // if the custom code is not 20000, it is judged as an error.
-    if (response.status >= 200 && response.status < 400) {
-      if (response.config.raw === 1) {
-        return response
-      }
-      return res
-    } else if (response.status === 50008 || response.status === 50012 || response.status === 50014) {
-      MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-        confirmButtonText: 'Re-Login',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        store.dispatch('user/resetToken').then(() => {
-          location.reload()
-        })
-      })
-    } else if (response.status === 400) {
-      console.log('status is 400')
-      return Promise.reject(res || 'Error')
-    } else {
-      Message({
-        message: res.message || res.error || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-      return Promise.reject(new Error(res.message || 'Error'))
+    if (response.config.raw === 1) {
+      return response
     }
+    return res
   },
   error => {
+    const response = error.response
+    if (response.status === 401) {
+      const title = ''
+      const msg = i18n.t('You have been logged out, you can cancel to stay on this page, or log in again')
+      MessageBox.confirm(msg, title, {
+        confirmButtonText: i18n.t('auth.Re-Login'),
+        cancelButtonText: i18n.t('common.Cancel'),
+        type: 'warning'
+      }).then(() => {
+        window.location = '/auth/login/'
+      })
+    }
     Message({
       message: error.message,
       type: 'error',
