@@ -16,9 +16,7 @@ export default {
         initial: {
           type: 's3'
         },
-        fields: [
-          ['', ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]
-        ],
+        fields: ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment'],
         fieldsMeta: {
           name: {
             label: this.$t('sessions.name')
@@ -43,7 +41,9 @@ export default {
             label: 'Secret key'
           },
           endpoint: {
-            label: this.$t('sessions.endPoint')
+            label: this.$t('sessions.endPoint'),
+            helpText: '比如应该这么输入',
+            helpTips: '是的应该这么做'
           }
         }
       },
