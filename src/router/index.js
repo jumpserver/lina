@@ -24,8 +24,14 @@ import Layout from '@/layout'
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-import UserRoute from '@/views/users'
-import AssetRoute from '@/views/assets'
+import UsersRoute from '@/views/users'
+import AssetsRoute from '@/views/assets'
+import ApplicationsRoute from '@/views/applications'
+import PermsRoute from '@/views/perms'
+import SessionsRoute from '@/views/sessions'
+import OpsRoutes from '@/views/jobcenter'
+import TicketsRoutes from '@/views/tickets'
+import AuditsRoutes from '@/views/audits'
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -52,34 +58,32 @@ export const constantRoutes = [
       }
     ]
   },
-  UserRoute,
-  AssetRoute,
+  {
+    path: '/users',
+    component: Layout,
+    redirect: '/users/users/',
+    name: 'Users',
+    meta: {
+      title: 'Users',
+      icon: 'users'
+    },
+    children: UsersRoute
+  },
+  {
+    path: '/assets',
+    component: Layout,
+    redirect: '/assets/assets/',
+    name: 'assets',
+    meta: { title: 'Assets', icon: 'inbox' },
+    children: AssetsRoute
+  },
   {
     path: '/applications/',
     component: Layout,
     redirect: '/applications/remote-apps/',
     name: 'applications',
     meta: { title: 'Applications', icon: 'th' },
-    children: [
-      {
-        path: 'remote-apps',
-        name: 'RemoteAppList',
-        component: () => import('@/views/applications/RemoteAppList'),
-        meta: { title: 'RemoteApp' }
-      },
-      {
-        path: 'remote-apps/:id',
-        name: 'RemoteAppDetail',
-        component: () => import('@/views/applications/RemoteAppList'),
-        meta: { title: 'RemoteApp' }
-      },
-      {
-        path: 'database-apps',
-        name: 'DatabaseAppList',
-        component: () => import('@/views/applications/DatabaseAppList'),
-        meta: { title: 'DatabaseApp' }
-      }
-    ]
+    children: ApplicationsRoute
   },
   {
     path: '/perms/',
@@ -87,89 +91,7 @@ export const constantRoutes = [
     redirect: '/perms/asset-permissions/',
     name: 'Perms',
     meta: { title: 'Perms', icon: 'edit' },
-    children: [
-      {
-        path: 'asset-permissions',
-        name: 'AssetPermissionList',
-        component: () => import('@/views/perms/AssetPermissionList'),
-        meta: { title: 'AssetPermission' }
-      },
-      {
-        path: 'asset-permissions/create',
-        component: () => import('@/views/perms/AssetPermissionCreateUpdate'),
-        name: 'AssetPermissionCreate',
-        hidden: true,
-        meta: { title: 'AssetPermissionCreate', activeMenu: '/perms/asset-permissions', action: 'create' }
-      },
-      {
-        path: 'users/:id/update',
-        component: () => import('@/views/perms/AssetPermissionCreateUpdate.vue'), // Parent router-view
-        name: 'AssetPermissionUpdate',
-        hidden: true,
-        meta: { title: 'AssetPermissionUpdate', activeMenu: '/perms/asset-permissions', action: 'update' }
-      },
-      {
-        path: 'asset-permissions/:id',
-        component: () => import('@/views/perms/AssetPermissionDetail'),
-        name: 'AssetPermissionDetail',
-        hidden: true,
-        meta: { title: 'AssetPermissionDetail', activeMenu: '/perms/asset-permissions' }
-      },
-      {
-        path: 'remote-app-permissions',
-        name: 'RemoteAppPermissionList',
-        component: () => import('@/views/perms/RemoteAppPermissionList'),
-        meta: { title: 'RemoteAppPermission' }
-      },
-      {
-        path: 'remote-app-permissions/create',
-        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'),
-        name: 'RemoteAppPermissionCreate',
-        hidden: true,
-        meta: { title: 'RemoteAppPermissionCreate', activeMenu: '/perms/remote-app-permissions', action: 'create' }
-      },
-      {
-        path: 'remote-app-permissions/update',
-        component: () => import('@/views/perms/RemoteAppPermissionCreateUpdate'),
-        name: 'RemoteAppPermissionUpdate',
-        hidden: true,
-        meta: { title: 'RemoteAppPermissionUpdate', activeMenu: '/perms/remote-app-permissions', action: 'update' }
-      },
-      {
-        path: 'remote-app-permissions/:id',
-        component: () => import('@/views/perms/RemoteAppPermissionDetail'),
-        name: 'RemoteAppPermissionDetail',
-        hidden: true,
-        meta: { title: 'RemoteAppPermissionDetail', activeMenu: '/perms/remote-app-permissions' }
-      },
-      {
-        path: 'database-app-permissions',
-        name: 'DatabaseAppPermissionList',
-        component: () => import('@/views/perms/DatabaseAppPermissionList'),
-        meta: { title: 'DatabaseAppPermission' }
-      },
-      {
-        path: 'database-app-permissions/create',
-        component: () => import('@/views/perms/DatabaseAppPermissionCreateUpdate'), // Parent router-view
-        name: 'DatabaseAppPermissionCreate',
-        hidden: true,
-        meta: { title: 'DatabaseAppPermissionCreate', activeMenu: '/perms/database-app-permissions' }
-      },
-      {
-        path: 'database-app-permissions/update',
-        component: () => import('@/views/perms/DatabaseAppPermissionCreateUpdate'), // Parent router-view
-        name: 'DatabaseAppPermissionUpdate',
-        hidden: true,
-        meta: { title: 'DatabaseAppPermissionUpdate', activeMenu: '/perms/database-app-permissions', action: 'update' }
-      },
-      {
-        path: 'database-app-permissions/:id',
-        component: () => import('@/views/perms/DatabaseAppPermissionDetail'),
-        name: 'DatabaseAppPermissionDetail',
-        hidden: true,
-        meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/database-app-permissions' }
-      }
-    ]
+    children: PermsRoute
   },
   {
     path: '/terminal/',
@@ -177,99 +99,7 @@ export const constantRoutes = [
     redirect: '/terminal/session-online/',
     name: 'Sessions',
     meta: { title: 'Sessions', icon: 'rocket' },
-    children: [
-      {
-        path: 'session-online',
-        name: 'SessionOnlineList',
-        component: () => import('@/views/sessions/SessionOnlineList'),
-        meta: { title: 'SessionOnline' }
-      },
-      {
-        path: 'session-offline',
-        name: 'SessionOfflineList',
-        component: () => import('@/views/sessions/SessionOfflineList'),
-        meta: { title: 'SessionOffline' }
-      },
-      {
-        path: 'command',
-        name: 'CommandList',
-        component: () => import('@/views/sessions/CommandList'),
-        meta: { title: 'Commands' }
-      },
-      {
-        path: 'sessions/:id',
-        name: 'SessionDetail',
-        component: () => import('@/views/sessions/SessionDetail'),
-        meta: { title: 'SessionDetail' },
-        hidden: true
-      },
-      {
-        path: 'luna',
-        name: 'WebTerminal',
-        component: () => window.open(`/luna/?_=${Date.now()}`),
-        meta: { title: 'WebTerminal' }
-      },
-      {
-        path: 'sftp',
-        name: 'FileManager',
-        component: () => window.open(`/koko/elfinder/sftp/?`),
-        meta: { title: 'FileManager' }
-      },
-      {
-        path: 'terminal',
-        name: 'TerminalList',
-        component: () => import('@/views/sessions/TerminalList'),
-        meta: { title: 'Terminal' }
-      },
-      {
-        path: 'terminals/:id',
-        name: 'TerminalDetail',
-        component: () => import('@/views/sessions/TerminalDetail'),
-        meta: { title: 'Terminal' },
-        hidden: true
-      },
-      {
-        path: 'terminals/:id/update',
-        name: 'TerminalUpdate',
-        component: () => import('@/views/sessions/TerminalUpdate'),
-        meta: { title: 'Terminal' },
-        hidden: true
-      },
-      {
-        path: 'storages',
-        name: 'Storage',
-        component: () => import('@/views/sessions/Storage'),
-        hidden: true
-      },
-      {
-        path: 'replay-storage/create',
-        name: 'CreateReplayStorage',
-        component: () => import('@/views/sessions/ReplayStorageCreate'),
-        meta: { title: 'CreateReplayStorage' },
-        hidden: true
-      },
-      {
-        path: 'command-storage/create',
-        name: 'CreateCommandStorage',
-        component: () => import('@/views/sessions/CommandStorageCreate'),
-        meta: { title: 'CreateCommandStorage' },
-        hidden: true
-      },
-      {
-        path: 'replay-storage/:id/update',
-        name: 'ReplayStorageUpdate',
-        component: () => import('@/views/sessions/ReplayStorageUpdate'),
-        meta: { title: 'ReplayStorageUpdate' },
-        hidden: true
-      },
-      {
-        path: 'command-storage/:id/update',
-        name: 'CommandStorageUpdate',
-        component: () => import('@/views/sessions/CommandStorageUpdate'),
-        meta: { title: 'CommandStorageUpdate' },
-        hidden: true
-      }
-    ]
+    children: SessionsRoute
   },
   {
     path: '/ops/',
@@ -277,52 +107,13 @@ export const constantRoutes = [
     redirect: '/ops/tasks/',
     name: 'JobCenter',
     meta: { title: 'JobCenter', icon: 'coffee' },
-    children: [
-      {
-        path: 'tasks',
-        name: 'TaskList',
-        component: () => import('@/views/jobcenter/TaskList'),
-        meta: { title: 'TaskList', activeMenu: '/ops/task' }
-      },
-      {
-        path: 'tasks/:id',
-        component: () => import('@/views/jobcenter/TaskDetail'),
-        name: 'TaskDetail',
-        hidden: true,
-        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
-      },
-      {
-        path: 'adhoc/:id',
-        component: () => import('@/views/jobcenter/AdhocDetail'),
-        name: 'AdhocDetail',
-        hidden: true,
-        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
-      },
-      {
-        path: 'executions/:id',
-        component: () => import('@/views/jobcenter/HistoryExecutionDetail'),
-        name: 'HistoryExecutionDetail',
-        hidden: true,
-        meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
-      },
-      {
-        path: 'command-executions/create',
-        name: 'BatchCommand',
-        component: () => import('@/views/jobcenter/CommandExecution'),
-        meta: { title: 'BatchCommand' }
-      }
-    ]
+    children: OpsRoutes
   },
   {
     path: '/tickets/',
     component: Layout,
     redirect: '/tickets/tickets/',
-    children: [{
-      path: 'tickets',
-      name: 'TicketsList',
-      component: () => import('@/views/tickets/TicketsList'),
-      meta: { title: 'Tickets', icon: 'check-square-o' }
-    }]
+    children: TicketsRoutes
   },
   {
     path: '/audits/',
@@ -330,38 +121,7 @@ export const constantRoutes = [
     redirect: '/audits/login-log/',
     name: 'Audits',
     meta: { title: 'Audits', icon: 'history' },
-    children: [
-      {
-        path: 'login-log',
-        name: 'LoginLog',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'LoginLog' }
-      },
-      {
-        path: 'ftp-log',
-        name: 'FtpLog',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'FtpLog' }
-      },
-      {
-        path: 'operate-log',
-        name: 'OperateLog',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'OperateLog' }
-      },
-      {
-        path: 'password-change-log',
-        name: 'PasswordChangeLog',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'PasswordChangeLog' }
-      },
-      {
-        path: 'command-execution-log',
-        name: 'BatchCommand',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'BatchCommand' }
-      }
-    ]
+    children: AuditsRoutes
   },
   {
     path: '/settings',
