@@ -1,13 +1,13 @@
 <template>
   <el-collapse-transition>
     <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <div v-show="ShowTree" :style="ShowTree?('width:250px;'):('width:0;')" class="transition-box">
+      <div v-show="showTree" :style="showTree?('width:250px;'):('width:0;')" class="transition-box">
         <AutoDataZTree :setting="treeSetting" @urlChange="handleUrlChange" />
       </div>
-      <div :style="ShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+      <div :style="showTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
         <div class="mini">
-          <div style="display:block" class="mini-button" @click="ShowTree=!ShowTree">
-            <i v-show="ShowTree" class="fa fa-angle-left fa-x" /><i v-show="!ShowTree" class="fa fa-angle-right fa-x" />
+          <div style="display:block" class="mini-button" @click="showTree=!showTree">
+            <i v-show="showTree" class="fa fa-angle-left fa-x" /><i v-show="!showTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      ShowTree: true,
+      showTree: true,
       internalTableConfig: this.tableConfig
     }
   },

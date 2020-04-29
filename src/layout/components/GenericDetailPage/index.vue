@@ -1,5 +1,5 @@
 <template>
-  <Page v-if="!loading">
+  <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="activeName" @tab-click="handleTabClick">
     <template #title>
       <span>
         {{ validTitle }}
@@ -11,29 +11,19 @@
         <ActionsGroup slot="headingRightSide" :actions="pageActions" />
       </span>
     </template>
-
-    <div>
-      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="activeName" class="page-submenu" @tab-click="handleTabClick">
-        <el-tab-pane v-for="item in submenu" :key="item.name" :label="item.title" :name="item.name">
-          <slot :name="item.name">
-            <pre>
-              使用 slot 为我填充
-            </pre>
-          </slot>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
-  </Page>
+    <slot />
+  </TabPage>
 </template>
 
 <script>
-import Page from '../Page/'
+import TabPage from '../TabPage'
 import { getApiPath } from '@/utils/common'
 import ActionsGroup from '@/components/ActionsGroup'
+
 export default {
   name: 'GenericDetailPage',
   components: {
-    Page,
+    TabPage,
     ActionsGroup
   },
   props: {
@@ -92,7 +82,7 @@ export default {
     }
     return {
       loading: true,
-      activeName: this.activeMenu || 'info',
+      activeName: this.activeMenu,
       validActions: Object.assign(defaultActions, this.actions)
     }
   },
@@ -169,6 +159,8 @@ export default {
     },
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
+      this.$emit('update:activeMenu', tab.name)
+      this.$log.debug('Current tab is: ', this.activeMenu)
     }
   }
 }

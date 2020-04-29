@@ -18,7 +18,7 @@ export default {
     RelationCard
   },
   props: {
-    group: {
+    object: {
       type: Object,
       default: () => ({})
     }
@@ -39,16 +39,16 @@ export default {
             return { results: results, pagination: more, total: data.count }
           }
         },
-        hasObjectsId: this.group.users,
+        hasObjectsId: this.object.users,
         performDelete: (item) => {
           const itemId = item.value
-          const objectId = this.group.id
+          const objectId = this.object.id
           const relationUrl = `/api/v1/users/users-groups-relations/?usergroup=${objectId}&user=${itemId}`
           return this.$axios.delete(relationUrl)
         },
         performAdd: (items) => {
           const relationUrl = `/api/v1/users/users-groups-relations/`
-          const objectId = this.group.id
+          const objectId = this.object.id
           const data = items.map(v => {
             return {
               user: v.value,
@@ -66,19 +66,19 @@ export default {
       return [
         {
           key: this.$tc('Name'),
-          value: this.group.name
+          value: this.object.name
         },
         {
           key: this.$tc('Created by'),
-          value: this.group.created_by
+          value: this.object.created_by
         },
         {
           key: this.$tc('Date Created'),
-          value: this.group.date_created
+          value: this.object.date_created
         },
         {
           key: this.$tc('Comment'),
-          value: this.group.comment
+          value: this.object.comment
         }
       ]
     }

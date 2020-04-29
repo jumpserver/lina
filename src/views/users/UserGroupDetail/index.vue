@@ -1,16 +1,13 @@
 <template>
-  <GenericDetailPage :object.sync="group" v-bind="config">
-    <template #info>
-      <div is="TabDetail" :group="group" />
-    </template>
-    <template #assetPermissions>
-      <div is="UserGroupPerm" :group="group" />
-    </template>
+  <GenericDetailPage :object.sync="group" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+    <keep-alive>
+      <component :is="config.activeMenu" :object="group" />
+    </keep-alive>
   </GenericDetailPage>
 </template>
 
 <script>
-import { GenericDetailPage } from '@/layout/components'
+import { GenericDetailPage, TabPage } from '@/layout/components'
 import UserGroupPerm from './perms'
 import TabDetail from './detail'
 
@@ -18,21 +15,22 @@ export default {
   components: {
     GenericDetailPage,
     UserGroupPerm,
-    TabDetail
+    TabDetail,
+    TabPage
   },
   data() {
     return {
       group: { name: '', comment: '', users: [] },
       config: {
-        activeMenu: 'info',
+        activeMenu: 'TabDetail',
         submenu: [
           {
             title: this.$tc('Basic Info'),
-            name: 'info'
+            name: 'TabDetail'
           },
           {
             title: this.$t('perms.Asset permissions'),
-            name: 'assetPermissions'
+            name: 'UserGroupPerm'
           }
         ],
         actions: {
@@ -42,7 +40,11 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    handleTabClick(tab) {
+      this.$log.debug('Current nav is: ', this.config.activeMenu)
+    }
+  }
 }
 </script>
 
