@@ -35,9 +35,14 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      activeName: this.activeMenu
+  computed: {
+    activeName: {
+      get() {
+        return this.activeMenu
+      },
+      set(item) {
+        this.activeName = item
+      }
     }
   },
   methods: {

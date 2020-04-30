@@ -82,7 +82,6 @@ export default {
     }
     return {
       loading: true,
-      activeName: this.activeMenu,
       validActions: Object.assign(defaultActions, this.actions)
     }
   },
@@ -105,6 +104,14 @@ export default {
     },
     validTitle() {
       return this.title || this.getTitle(this.object)
+    },
+    activeName: {
+      get() {
+        return this.activeMenu
+      },
+      set(item) {
+        this.activeName = item
+      }
     }
   },
   async mounted() {
