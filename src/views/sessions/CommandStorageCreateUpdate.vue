@@ -3,10 +3,12 @@
     <GenericCreateUpdatePage
       :fields="selectFields"
       :url="url"
-      :update-success-next-route="updateSuccessUrl"
+      :initial="initial"
+      :update-success-next-route="successUrl"
+      :create-success-next-route="successUrl"
       :clean-form-value="cleanFormValue"
       :object="formData"
-      :fields-meta="selectedFieldsMeta"
+      :fields-meta="fieldsMeta"
     />
   </div>
 </template>
@@ -28,75 +30,79 @@ export default {
         comment: ''
       },
       commandStorageData: {},
-      updateSuccessUrl: { name: 'Storage', params: { activeMenu: 'command' }},
-      es: {
-        initial: {
-          type: 'es'
+      successUrl: { name: 'Storage', params: { activeMenu: 'command' }},
+
+      fieldsMeta: {
+        name: {
+          label: this.$t('sessions.name')
         },
-        fields: [
-          ['', ['name', 'type', 'hosts', 'index', 'doc_type', 'comment']]
-        ],
-        fieldsMeta: {
-          name: {
-            label: this.$t('sessions.name')
-          },
-          comment: {
-            label: this.$t('sessions.comment')
-          },
-          type: {
-            type: 'select',
-            label: this.$t('sessions.type'),
-            disabled: true,
-            rules: [
-              { required: true }
-            ]
-          },
-          hosts: {
-            label: this.$t('sessions.hosts'),
-            rules: [
-              { required: true }
-            ]
-          },
-          index: {
-            label: this.$t('sessions.index'),
-            rules: [
-              { required: true }
-            ]
-          },
-          doc_type: {
-            label: this.$t('sessions.docType'),
-            rules: [
-              { required: true }
-            ]
-          }
+        comment: {
+          label: this.$t('sessions.comment')
+        },
+        type: {
+          type: 'select',
+          label: this.$t('sessions.type'),
+          disabled: true,
+          rules: [
+            { required: true }
+          ]
+        },
+        hosts: {
+          label: this.$t('sessions.hosts'),
+          rules: [
+            { required: true }
+          ]
+        },
+        index: {
+          label: this.$t('sessions.index'),
+          rules: [
+            { required: true }
+          ]
+        },
+        doc_type: {
+          label: this.$t('sessions.docType'),
+          rules: [
+            { required: true }
+          ]
         }
+      },
+      fieldsMap: {
+        es: ['name', 'type', 'hosts', 'index', 'doc_type', 'comment']
       },
       url: '/api/v1/terminal/command-storages/'
     }
   },
   computed: {
     selectFields() {
-      return this.renderCommandStorage.fields
+      return this.fieldsMap[this.currentType]
     },
-    selectedFieldsMeta() {
-      return this.renderCommandStorage.fieldsMeta
+    initial() {
+      return { type: this.currentType }
     },
-    renderCommandStorage() {
-      switch (this.formData.type.toLowerCase()) {
-        case 'es':
-          return this.es
-        default:
-          return {}
+    currentType() {
+      const params = this.$route.params
+      const query = this.$route.query
+      if (params.id) {
+        return this.formData.type
+      } else if (query.type) {
+        return query.type
       }
+      return 'es'
     }
   },
   mounted() {
-    getCommandStorage(this.$route.params.id).then(data => {
-      this.commandStorageData = data
-      console.log(data)
-      this.formData = this.convertMataToForm(this.commandStorageData)
+    const params = this.$route.params
+    const query = this.$route.query
+    if (params.id) {
+      getCommandStorage(this.$route.params.id).then(data => {
+        this.commandStorageData = data
+        this.formData = this.convertMataToForm(this.commandStorageData)
+        this.loading = false
+      })
+    }
+    if (query.type) {
       this.loading = false
-    })
+    }
   },
   methods: {
     convertMataToForm(commandStorageData) {
