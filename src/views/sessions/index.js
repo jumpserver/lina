@@ -66,28 +66,28 @@ export default [
   {
     path: 'replay-storage/create',
     name: 'CreateReplayStorage',
-    component: () => import('@/views/sessions/ReplayStorageCreate'),
+    component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
     meta: { title: 'CreateReplayStorage' },
     hidden: true
   },
   {
     path: 'command-storage/create',
     name: 'CreateCommandStorage',
-    component: () => import('@/views/sessions/CommandStorageCreate'),
+    component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
     meta: { title: 'CreateCommandStorage' },
     hidden: true
   },
   {
     path: 'replay-storage/:id/update',
     name: 'ReplayStorageUpdate',
-    component: () => import('@/views/sessions/ReplayStorageUpdate'),
+    component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
     meta: { title: 'ReplayStorageUpdate' },
     hidden: true
   },
   {
     path: 'command-storage/:id/update',
     name: 'CommandStorageUpdate',
-    component: () => import('@/views/sessions/CommandStorageUpdate'),
+    component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
     meta: { title: 'CommandStorageUpdate' },
     hidden: true
   }
