@@ -12,7 +12,6 @@
 <script>
 import DataZTree from '../DataZTree'
 import $ from '@/utils/jquery-vendor'
-const merge = require('deepmerge')
 export default {
   name: 'AutoDataZTree',
   components: {
@@ -46,14 +45,13 @@ export default {
           // beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
         }
       },
-      current_node: '',
-      current_node_id: ''
+      currentNode: '',
+      currentNodeId: ''
     }
   },
   computed: {
     treeSetting() {
-      const treeSetting = merge(this.defaultSetting, this.setting)
-      return treeSetting
+      return _.merge(this.defaultSetting, this.setting)
     },
     zTree() {
       return this.$refs.dataztree.zTree
@@ -86,14 +84,14 @@ export default {
     },
     editTreeNode: function() {
       this.hideRMenu()
-      var current_node = this.zTree.getSelectedNodes()[0]
-      if (!current_node) {
+      var currentNode = this.zTree.getSelectedNodes()[0]
+      if (!currentNode) {
         return
       }
-      if (current_node) {
-        current_node.name = current_node.meta.node.value
+      if (currentNode) {
+        currentNode.name = currentNode.meta.node.value
       }
-      this.zTree.editName(current_node)
+      this.zTree.editName(currentNode)
     },
     hideRMenu: function() {
       if (this.rMenu) this.rMenu.css({ 'visibility': 'hidden' })
@@ -103,8 +101,8 @@ export default {
 
     onSelected: function(event, treeNode) {
       if (treeNode.meta.type === 'node') {
-        this.current_node = treeNode
-        this.current_node_id = treeNode.meta.node.id
+        this.currentNode = treeNode
+        this.currentNodeId = treeNode.meta.node.id
         this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=null`)
       } else if (treeNode.meta.type === 'asset') {
         this.$emit('urlChange', `${this.setting.url}?asset_id=${treeNode.meta.asset.id}&show_current_asset=null`)
@@ -123,7 +121,7 @@ export default {
       )
     },
     onRename: function(event, treeId, treeNode, isCancel) {
-      var url = `${this.treeSetting.nodeUrl}${this.current_node_id}/`
+      var url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`
       if (isCancel) {
         return
       }

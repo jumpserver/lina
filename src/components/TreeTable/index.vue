@@ -1,18 +1,18 @@
 <template>
   <el-collapse-transition>
     <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <div v-show="showTree" :style="showTree?('width:250px;'):('width:0;')" class="transition-box">
-        <AutoDataZTree :setting="treeSetting" @urlChange="handleUrlChange" />
+      <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
+        <AutoDataZTree :setting="treeSetting" class="auto-data-ztree" @urlChange="handleUrlChange" />
       </div>
-      <div :style="showTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+      <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
         <div class="mini">
-          <div style="display:block" class="mini-button" @click="showTree=!showTree">
-            <i v-show="showTree" class="fa fa-angle-left fa-x" /><i v-show="!showTree" class="fa fa-angle-right fa-x" />
+          <div style="display:block" class="mini-button" @click="iShowTree=!showTree">
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
-        <div class="transition-box" style="width: calc(100% - 17px);">
-          <ListTable :table-config="internalTableConfig" :header-actions="headerActions" />
-        </div>
+        <IBox class="transition-box" style="width: calc(100% - 17px);">
+          <ListTable :table-config="iTableConfig" :header-actions="headerActions" />
+        </IBox>
       </div>
     </div>
   </el-collapse-transition>
@@ -21,30 +21,35 @@
 <script>
 import AutoDataZTree from '../AutoDataZTree'
 import ListTable from '../ListTable'
+import IBox from '../IBox'
 export default {
   name: 'TreeTable',
   components: {
     ListTable,
-    AutoDataZTree
+    AutoDataZTree,
+    IBox
   },
   props: {
-    ...ListTable.props
+    ...ListTable.props,
+    treeSetting: {
+      type: Object,
+      default: () => AutoDataZTree.props.setting.default()
+    },
+    showTree: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
-      showTree: true,
-      internalTableConfig: this.tableConfig
-    }
-  },
-  computed: {
-    treeSetting() {
-      return this.tableConfig.treeSetting
+      iTableConfig: this.tableConfig,
+      iShowTree: this.showTree
     }
   },
   methods: {
     handleUrlChange(_url) {
-      this.$set(this.internalTableConfig, 'url', _url)
-      console.log(this.internalTableConfig)
+      this.$set(this.iTableConfig, 'url', _url)
+      console.log(this.iTableConfig)
     }
   }
 }
@@ -67,5 +72,10 @@ export default {
   .mini{
     margin-right: 5px;
     width: 12px !important;
+  }
+
+  .auto-data-ztree {
+    overflow: auto;
+    /*border-right: solid 1px red;*/
   }
 </style>

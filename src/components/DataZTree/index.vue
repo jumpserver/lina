@@ -9,7 +9,6 @@
 
 <script>
 import ZTree from './components/ZTree'
-const merge = require('deepmerge')
 export default {
   name: 'DataZTree',
   components: {
@@ -58,8 +57,7 @@ export default {
   },
   computed: {
     treeSetting() {
-      const treeSetting = merge(this.defaultSetting, this.setting)
-      return treeSetting
+      return _.merge(this.defaultSetting, this.setting)
     },
     zTree() {
       return this.$refs.ztree.zTree

@@ -1,15 +1,14 @@
 <template>
   <div class="table-header">
     <slot name="header">
-      <div v-if="hasLeftActions" class="table-header-left-side">
-        <ActionsGroup :actions="actions" :more-actions="moreActions" class="header-action" />
+      <div class="table-header-left-side">
+        <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" class="header-action" />
       </div>
       <div class="table-action-right-side">
         <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
         <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
         <DialogAction :selected-rows="selectedRows" :url="tableUrl" />
       </div>
-
     </slot>
   </div>
 </template>
