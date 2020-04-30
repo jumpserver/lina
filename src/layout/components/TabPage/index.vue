@@ -41,7 +41,7 @@ export default {
         return this.activeMenu
       },
       set(item) {
-        this.activeName = item
+        this.$emit('update:activeMenu', item)
       }
     }
   },

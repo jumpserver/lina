@@ -32,7 +32,8 @@ export default {
             type: 'primary',
             callback: this.createEs.bind(this)
           }
-        ]
+        ],
+        moreActionsTitle: '创建'
       },
       commandTableConfig: {
         title: 'command',

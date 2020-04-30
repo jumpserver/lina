@@ -6,7 +6,7 @@
       </div>
       <div class="table-action-right-side">
         <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
-        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
+        <ActionsGroup :is-fa="true" :actions="rightSideActions" :more-actions-title="moreActionsTitle" class="right-side-actions right-side-item" />
         <DialogAction :selected-rows="selectedRows" :url="tableUrl" />
       </div>
     </slot>
@@ -42,7 +42,7 @@ export default {
     hasRightActions: defaultTrue,
     searchConfig: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     tableUrl: {
       type: String,
@@ -81,6 +81,10 @@ export default {
     extraRightSideActions: {
       type: Array,
       default: () => ([])
+    },
+    moreActionsTitle: {
+      type: String,
+      default: null
     },
     testFields: {
       type: Array,
