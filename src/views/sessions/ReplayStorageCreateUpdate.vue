@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       loading: true,
-      successUrl: { name: 'Storage', params: { activeMenu: 'replay' }},
+      successUrl: { name: 'Storage', params: { activeMenu: 'RelayStorage' }},
       replayData: {},
       formData: {
         type: '',

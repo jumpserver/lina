@@ -60,7 +60,7 @@ export default [
   {
     path: 'storages',
     name: 'Storage',
-    component: () => import('@/views/sessions/Storage'),
+    component: () => import('@/views/sessions/Storage/index'),
     hidden: true
   },
   {
