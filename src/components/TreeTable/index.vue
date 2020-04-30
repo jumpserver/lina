@@ -6,7 +6,7 @@
       </div>
       <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
         <div class="mini">
-          <div style="display:block" class="mini-button" @click="iShowTree=!showTree">
+          <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
             <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
