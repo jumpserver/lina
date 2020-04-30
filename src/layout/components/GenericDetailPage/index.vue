@@ -1,8 +1,8 @@
 <template>
-  <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="activeName" @tab-click="handleTabClick">
+  <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="iActiveMenu" @tab-click="handleTabClick">
     <template #title>
       <span>
-        {{ validTitle }}
+        {{ iTitle }}
       </span>
     </template>
 
@@ -102,10 +102,10 @@ export default {
         }
       ]
     },
-    validTitle() {
+    iTitle() {
       return this.title || this.getTitle(this.object)
     },
-    activeName: {
+    iActiveMenu: {
       get() {
         return this.activeMenu
       },

@@ -8,7 +8,7 @@
     </template>
 
     <div>
-      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="activeName" class="page-submenu" @tab-click="handleTabClick">
+      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="iActiveMenu" class="page-submenu" @tab-click="handleTabClick">
         <el-tab-pane v-for="item in submenu" :key="item.name" :label="item.title" :name="item.name" />
       </el-tabs>
       <transition name="fade-transform" mode="out-in">
@@ -36,7 +36,7 @@ export default {
     }
   },
   computed: {
-    activeName: {
+    iActiveMenu: {
       get() {
         return this.activeMenu
       },

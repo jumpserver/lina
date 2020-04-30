@@ -5,7 +5,7 @@
     </el-button>
     <el-dropdown v-if="iMoreActions.length > 0" trigger="click" @command="handleClick">
       <el-button :size="size" class="btn-more-actions">
-        {{ moreActionsTitle }}<i class="el-icon-arrow-down el-icon--right" />
+        {{ iMoreActionsTitle }}<i class="el-icon-arrow-down el-icon--right" />
       </el-button>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item v-for="item in iMoreActions" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
@@ -64,6 +64,9 @@ export default {
         actions[action.name] = action
       }
       return actions
+    },
+    iMoreActionsTitle() {
+      return this.moreActionsTitle || this.$tc('More actions')
     }
   },
   mounted() {

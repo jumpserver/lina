@@ -2,11 +2,11 @@
   <div class="table-header">
     <slot name="header">
       <div class="table-header-left-side">
-        <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" class="header-action" />
+        <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" class="header-action" />
       </div>
       <div class="table-action-right-side">
         <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
-        <ActionsGroup :is-fa="true" :actions="rightSideActions" :more-actions-title="moreActionsTitle" class="right-side-actions right-side-item" />
+        <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
         <DialogAction :selected-rows="selectedRows" :url="tableUrl" />
       </div>
     </slot>
