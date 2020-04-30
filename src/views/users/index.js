@@ -20,8 +20,8 @@ export default [
     meta: { title: 'UserUpdate', activeMenu: '/users/users', action: 'update' }
   },
   {
-    path: 'users/detail/:id',
-    component: () => import('@/views/users/users/UserDetail.vue'), // Parent router-view
+    path: 'users/:id',
+    component: () => import('@/views/users/users/UserDetail/index.vue'), // Parent router-view
     name: 'UserDetail',
     hidden: true,
     meta: { title: 'UserDetail', activeMenu: '/users/users' }

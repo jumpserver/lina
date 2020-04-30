@@ -30,7 +30,6 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
         extraMoreActions: [
           {
             name: 'deactiveSelected',

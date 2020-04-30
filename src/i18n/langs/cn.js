@@ -80,12 +80,17 @@ const cn = {
     'Add': '添加',
     'Auth': '认证',
     'Others': '其他',
-    'Members': '成员'
+    'Members': '成员',
+    'Username': '用户名',
+    'Email': '邮件',
+    'Role': '角色',
+    'Date expired': '失效日期'
   },
   route: {
     'dashboard': '仪表盘',
     'Users': '用户管理',
     'UserList': '用户列表',
+    'UserDetail': '用户详情',
     'UserGroupList': '用户组',
     'UserGroupDetail': '用户组详情',
     'Assets': '资产管理',
@@ -150,7 +155,7 @@ const cn = {
     'username': '用户名',
     'Username': '用户名',
     'Role': '角色',
-    'User Groups': '用户组',
+    'User groups': '用户组',
     'email': '邮箱',
     'userGroup': '用户组',
     'role': '角色',
@@ -203,26 +208,13 @@ const cn = {
     'database_app_permission': '数据库应用授权',
     'Account': '账户',
     'Authentication': '认证',
-    'Secure': '安全'
+    'Secure': '安全',
+    'Date last login': '最后登录日期',
+    'Date password updated': '更新密码日期',
+    'MFA': '多因子认证',
+    'Source': '用户来源'
   },
   // 用户组
-  usergroup: {
-    'user_group_list': '用户组列表',
-    'user_group_detail': '用户组详情',
-    'create_user_group': '创建用户组',
-    'update_user_group': '更新用户组',
-    'name': '名称',
-    'user': '用户',
-    'comment': '备注',
-    'action': '操作',
-    'update': '更新',
-    'delete': '删除',
-    'created_by': '创建者',
-    'date_created': '创建日期',
-    'asset_granted': '授权的资产',
-    'add_user': '添加用户',
-    'add': '添加'
-  },
   assets: {
     // asset
     'asset_list': '资产列表',
