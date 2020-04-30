@@ -30,7 +30,7 @@ export default {
         comment: ''
       },
       commandStorageData: {},
-      successUrl: { name: 'Storage', params: { activeMenu: 'command' }},
+      successUrl: { name: 'Storage', params: { activeMenu: 'CommandStorage' }},
 
       fieldsMeta: {
         name: {

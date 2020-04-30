@@ -1,41 +1,16 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu.sync="activeSubMenu">
-    <div slot="title">
-      {{ Title }}
-    </div>
-    <div v-if="activeSubMenu === 'replay'">
-      <ListTable :table-config="replayTableConfig" :header-actions="replayActions" />
-    </div>
-    <div v-if="activeSubMenu === 'command'">
-      <ListTable :table-config="commandTableConfig" :header-actions="commandActions" />
-    </div>
-  </TabPage>
+  <ListTable :table-config="replayTableConfig" :header-actions="replayActions" />
 </template>
-
 <script>
-import { TabPage } from '@/layout/components'
 import { ListTable } from '@/components'
-import { TestCommandStorage, TestReplayStorage } from '@/api/sessions'
-
+import { TestReplayStorage } from '@/api/sessions'
 export default {
-  name: 'Storage',
+  name: 'ReplayStorage',
   components: {
-    TabPage,
     ListTable
   },
   data() {
     return {
-      activeSubMenu: 'replay',
-      submenu: [
-        {
-          title: this.$t('sessions.replayStorage'),
-          name: 'replay'
-        },
-        {
-          title: this.$t('sessions.commandStorage'),
-          name: 'command'
-        }
-      ],
       replayActions: {
         hasExport: false,
         hasImport: false,
@@ -129,82 +104,7 @@ export default {
             }
           }
         }
-      },
-      commandActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasCreate: false,
-        extraMoreActions: [
-          {
-            name: 'Elasticsearch',
-            title: 'Elasticsearch',
-            type: 'primary',
-            callback: this.createEs.bind(this)
-          }
-        ]
-      },
-      commandTableConfig: {
-        title: 'command',
-        url: '/api/v1/terminal/command-storages/',
-        columns: ['name', 'type', 'comment', 'actions'],
-        columnsMeta: {
-          comment: {
-            sortable: 'custom'
-          },
-          name: {
-            formatter: function(row) {
-              return row.name
-            }
-          },
-          type: {
-            formatter: function(row) {
-              return row.type
-            }
-          },
-          actions: {
-            prop: 'id',
-            actions: {
-              canUpdate: function(row, cellValue) {
-                return (row.name !== 'default' && row.name !== 'null')
-              },
-              onUpdate: function({ row, col }) {
-                this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
-              },
-              canDelete: function(row, cellValue) {
-                return (row.name !== 'default' && row.name !== 'null')
-              },
-              extraActions: [
-                {
-                  name: 'test',
-                  title: this.$t('sessions.test'),
-                  type: 'primary',
-                  callback: function({ row, col, cellValue, reload }) {
-                    TestCommandStorage(cellValue).then(data => {
-                      let success = 'success'
-                      if (!data.is_valid) {
-                        success = 'error'
-                      }
-                      this.$notify({
-                        message: data.msg,
-                        type: success,
-                        duration: 4500
-                      })
-                    })
-                  }
-                }
-              ]
-            }
-          }
-        }
       }
-    }
-  },
-  computed: {
-    Title() {
-      return this.$t('sessions.storage')
     }
   },
   methods: {
@@ -222,9 +122,6 @@ export default {
     },
     createAzure() {
       this.$router.push({ name: 'CreateReplayStorage', query: { type: 'azure' }})
-    },
-    createEs() {
-      this.$router.push({ name: 'CreateCommandStorage', query: { type: 'es' }})
     }
   }
 }
