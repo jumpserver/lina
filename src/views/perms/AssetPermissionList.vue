@@ -1,5 +1,5 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
 <script>
@@ -12,18 +12,18 @@ export default {
   },
   data() {
     return {
+      treeSetting: {
+        showMenu: false,
+        showRefresh: true,
+        showAssets: true,
+        url: '/api/v1/perms/asset-permissions/',
+        nodeUrl: '/api/v1/perms/asset-permissions/',
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+      },
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasSelection: false,
         hasTree: true,
-        treeSetting: {
-          showMenu: false,
-          showRefresh: true,
-          showAssets: true,
-          url: '/api/v1/perms/asset-permissions/',
-          nodeUrl: '/api/v1/perms/asset-permissions/',
-          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
-        },
         tagSearch: [
           { label: this.$tc('Name'), key: 'name' },
           { label: this.$t('perms.IsValid'), key: 'is_valid' },

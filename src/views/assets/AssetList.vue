@@ -1,5 +1,5 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
 <script>
@@ -12,18 +12,18 @@ export default {
   },
   data() {
     return {
+      treeSetting: {
+        showMenu: true,
+        showRefresh: true,
+        showAssets: false,
+        url: '/api/v1/assets/assets/',
+        nodeUrl: '/api/v1/assets/nodes/',
+        // ?assets=0不显示资产. =1显示资产
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+      },
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
-        treeSetting: {
-          showMenu: true,
-          showRefresh: true,
-          showAssets: false,
-          url: '/api/v1/assets/assets/',
-          nodeUrl: '/api/v1/assets/nodes/',
-          // ?assets=0不显示资产. =1显示资产
-          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
-        },
         tagSearch: [
           {
             label: this.$t('assets.hostname'),
