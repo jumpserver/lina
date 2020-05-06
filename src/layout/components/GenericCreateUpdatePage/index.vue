@@ -1,7 +1,14 @@
 <template>
   <Page>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$attrs" v-on="$listeners" />
+      <GenericCreateUpdateForm v-bind="$attrs" v-on="$listeners">
+        <template #button-start>
+          <slot name="button-start" />
+        </template>
+        <template #button-end>
+          <slot name="button-end" />
+        </template>
+      </GenericCreateUpdateForm>
     </IBox>
   </Page>
 </template>

@@ -46,7 +46,7 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: this.$t('helpText.terminalHeartbeatInterval')
+          helpText: this.$t('setting.helpText.terminalHeartbeatInterval')
         },
         TERMINAL_ASSET_LIST_SORT_BY: {
           label: this.$t('setting.terminalAssetListSortBy'),
@@ -84,11 +84,11 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: this.$t('helpText.terminalSessionKeepDuration')
+          helpText: this.$t('setting.helpText.terminalSessionKeepDuration')
         },
         TERMINAL_TELNET_REGEX: {
           label: this.$t('setting.terminalTelnetRegex'),
-          helpText: this.$t('helpText.terminalTelnetRegex')
+          helpText: this.$t('setting.helpText.terminalTelnetRegex')
         }
       },
       url: '/api/v1/settings/setting/'

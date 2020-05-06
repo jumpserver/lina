@@ -384,41 +384,41 @@ const en = {
     'securityPasswordLowerCase': 'Must contain lowercase letters',
     'securityPasswordNumber': 'Must contain numeric characters',
     'securityPasswordSpecialChar': 'Must contain special characters',
-    'Hostname': 'Hostname'
-  },
-  helpText: {
-    'siteUrl': 'eg: http://jumpserver.abc.com:8080',
-    'userGuideUrl': 'User first login update profile done redirect to it',
-    'emailSubjectPrefix': 'Tips: Some word will be intercept by mail provider',
-    'emailHostPassword': 'Tips: Some provider use token except password',
-    'emailEmailFrom': 'Tips: Send mail account, default SMTP account as the send account',
-    'emailRecipient': 'Tips: Used only as a test mail recipient',
-    'emailCustomUserCreatedSubject': 'Tips: When creating a user, send the subject of the email (eg:Create account successfully)',
-    'emailCustomUserCreatedHonorific': 'Tips: When creating a user, send the honorific of the email (eg:Hello)',
-    'emailCustomUserCreatedBody': 'Tips:When creating a user, send the content of the email',
-    'emailCustomUserCreatedSignature': 'Tips: Email signature (eg:jumpserver)',
-    'authLdapSearchOu': 'Use | split User OUs',
-    'authLdapSearchFilter': 'Choice may be (cn|uid|sAMAccountName)=%(user)s)',
-    'authLdapUserAttrMap': 'User attr map present how to map LDAP user attr to jumpserver, username,name,email is jumpserver attr',
-    'terminalHeartbeatInterval': 'Units: seconds',
-    'terminalSessionKeepDuration': 'Units: days, Session, record, command will be delete if more than duration, only in database',
-    'terminalTelnetRegex': 'ex: Last\\s*login|success|成功',
-    'securityLoginLimitTime': 'Tip: (unit/minute) if the user has failed to log in for a limited number of times, no login is allowed during this time interval.',
-    'securityMaxIdleTime': 'If idle time more than it, disconnect connection Unit: minute',
-    'securityPasswordExpirationTime': 'Tip: (unit: day) If the user does not update the password during the time, ' +
+    'Hostname': 'Hostname',
+    helpText: {
+      'siteUrl': 'eg: http://jumpserver.abc.com:8080',
+      'userGuideUrl': 'User first login update profile done redirect to it',
+      'emailSubjectPrefix': 'Tips: Some word will be intercept by mail provider',
+      'emailHostPassword': 'Tips: Some provider use token except password',
+      'emailEmailFrom': 'Tips: Send mail account, default SMTP account as the send account',
+      'emailRecipient': 'Tips: Used only as a test mail recipient',
+      'emailCustomUserCreatedSubject': 'Tips: When creating a user, send the subject of the email (eg:Create account successfully)',
+      'emailCustomUserCreatedHonorific': 'Tips: When creating a user, send the honorific of the email (eg:Hello)',
+      'emailCustomUserCreatedBody': 'Tips:When creating a user, send the content of the email',
+      'emailCustomUserCreatedSignature': 'Tips: Email signature (eg:jumpserver)',
+      'authLdapSearchOu': 'Use | split User OUs',
+      'authLdapSearchFilter': 'Choice may be (cn|uid|sAMAccountName)=%(user)s)',
+      'authLdapUserAttrMap': 'User attr map present how to map LDAP user attr to jumpserver, username,name,email is jumpserver attr',
+      'terminalHeartbeatInterval': 'Units: seconds',
+      'terminalSessionKeepDuration': 'Units: days, Session, record, command will be delete if more than duration, only in database',
+      'terminalTelnetRegex': 'ex: Last\\s*login|success|成功',
+      'securityLoginLimitTime': 'Tip: (unit/minute) if the user has failed to log in for a limited number of times, no login is allowed during this time interval.',
+      'securityMaxIdleTime': 'If idle time more than it, disconnect connection Unit: minute',
+      'securityPasswordExpirationTime': 'Tip: (unit: day) If the user does not update the password during the time, ' +
         'the user password will expire failure;The password expiration reminder' +
         ' mail will be automatic sent to the user by system within 5 days (daily) before the password expires'
-  },
-  helpTip: {
-    'emailUserSSL': 'If SMTP port is 465, may be select',
-    'emailUserTLS': 'If SMTP port is 587, may be select',
-    'securityMfaAuth': 'After opening, all user login must use MFA(valid for all users, including administrators)',
-    'securityCommandExecution': 'Allow user batch execute commands',
-    'securityServiceAccountRegistration': 'Allow using bootstrap token register service account, when terminal setup, can disable it',
-    'securityPasswordUpperCase': '开启后，用户密码修改、重置必须包含大写字母',
-    'securityPasswordLowerCase': '开启后，用户密码修改、重置必须包含小写字母',
-    'securityPasswordNumber': '开启后，用户密码修改、重置必须包含数字字符',
-    'securityPasswordSpecialChar': '开启后，用户密码修改、重置必须包含特殊字符'
+    },
+    helpTip: {
+      'emailUserSSL': 'If SMTP port is 465, may be select',
+      'emailUserTLS': 'If SMTP port is 587, may be select',
+      'securityMfaAuth': 'After opening, all user login must use MFA(valid for all users, including administrators)',
+      'securityCommandExecution': 'Allow user batch execute commands',
+      'securityServiceAccountRegistration': 'Allow using bootstrap token register service account, when terminal setup, can disable it',
+      'securityPasswordUpperCase': '开启后，用户密码修改、重置必须包含大写字母',
+      'securityPasswordLowerCase': '开启后，用户密码修改、重置必须包含小写字母',
+      'securityPasswordNumber': '开启后，用户密码修改、重置必须包含数字字符',
+      'securityPasswordSpecialChar': '开启后，用户密码修改、重置必须包含特殊字符'
+    }
   },
   ...enLocale
 }

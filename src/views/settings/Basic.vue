@@ -37,18 +37,18 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: this.$t('helpText.siteUrl')
+          helpText: this.$t('setting.helpText.siteUrl')
         },
         USER_GUIDE_URL: {
           label: this.$t('setting.userGuideUrl'),
-          helpText: this.$t('helpText.userGuideUrl')
+          helpText: this.$t('setting.helpText.userGuideUrl')
         },
         EMAIL_SUBJECT_PREFIX: {
           label: this.$t('setting.emailSubjectPrefix'),
           rules: [
             { required: true }
           ],
-          helpText: this.$t('helpText.emailSubjectPrefix')
+          helpText: this.$t('setting.helpText.emailSubjectPrefix')
         }
       },
       url: '/api/v1/settings/setting/'

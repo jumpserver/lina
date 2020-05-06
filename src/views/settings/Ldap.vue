@@ -44,14 +44,14 @@ export default {
         },
         AUTH_LDAP_SEARCH_OU: {
           label: this.$t('setting.authLdapSearchOu'),
-          helpText: this.$t('helpText.authLdapSearchOu')
+          helpText: this.$t('setting.helpText.authLdapSearchOu')
         },
         AUTH_LDAP_SEARCH_FILTER: {
           label: this.$t('setting.authLdapSearchFilter'),
           rules: [
             { required: true }
           ],
-          helpText: this.$t('helpText.authLdapSearchFilter')
+          helpText: this.$t('setting.helpText.authLdapSearchFilter')
         },
         AUTH_LDAP_USER_ATTR_MAP: {
           label: this.$t('setting.authLdapUserAttrMap'),
@@ -61,7 +61,7 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: this.$t('helpText.authLdapUserAttrMap')
+          helpText: this.$t('setting.helpText.authLdapUserAttrMap')
         },
         AUTH_LDAP: {
           label: this.$t('setting.authLdap'),

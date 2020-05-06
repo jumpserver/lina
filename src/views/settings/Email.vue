@@ -51,25 +51,25 @@ export default {
         },
         EMAIL_HOST_PASSWORD: {
           label: this.$t('setting.emailHostPassword'),
-          helpText: this.$t('helpText.emailHostPassword')
+          helpText: this.$t('setting.helpText.emailHostPassword')
         },
         EMAIL_FROM: {
           label: this.$t('setting.emailEmailFrom'),
-          helpText: this.$t('helpText.emailEmailFrom')
+          helpText: this.$t('setting.helpText.emailEmailFrom')
         },
         EMAIL_RECIPIENT: {
           label: this.$t('setting.emailRecipient'),
-          helpText: this.$t('helpText.emailRecipient')
+          helpText: this.$t('setting.helpText.emailRecipient')
         },
         EMAIL_USE_SSL: {
           label: this.$t('setting.emailUserSSL'),
           type: 'checkbox',
-          helpTips: this.$t('helpTip.emailUserSSL')
+          helpTips: this.$t('setting.helpTip.emailUserSSL')
         },
         EMAIL_USE_TLS: {
           label: this.$t('setting.emailUserTLS'),
           type: 'checkbox',
-          helpTips: this.$t('helpTip.emailUserTLS')
+          helpTips: this.$t('setting.helpTip.emailUserTLS')
         }
       },
       url: '/api/v1/settings/setting/'
