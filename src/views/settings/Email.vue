@@ -5,7 +5,7 @@
     :initial="object"
     :update-success-next-route="successUrl"
     :clean-form-value="cleanFormValue"
-    :object="object"
+    :object.sync="object"
     :fields-meta="fieldsMeta"
     :get-method="getMethod"
   />
