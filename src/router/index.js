@@ -131,7 +131,7 @@ export const constantRoutes = [
     children: [{
       path: 'settings',
       name: 'Settings',
-      component: () => import('@/views/tree/index'),
+      component: () => import('@/views/settings/index'),
       meta: { title: 'Settings', icon: 'gears' }
     }]
   }
