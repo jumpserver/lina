@@ -1,5 +1,5 @@
 <template>
-  <IBox :fa="icon" :title="title" v-bind="$attrs">
+  <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
     <table style="width: 100%">
       <tr>
         <td colspan="2">
@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button type="primary" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
+          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
         </td>
       </tr>
       <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
@@ -21,7 +21,7 @@
       </tr>
       <tr v-if="params.hasMore" class="item">
         <td colspan="2">
-          <el-button type="primary" size="small" style="width: 100%" @click="loadMore">
+          <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
             {{ $tc('More') }}
           </el-button>
@@ -50,6 +50,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'primary'
     },
     // 地址，发送给select2的，查询所有的objects, 和select2 ajax一样
     objectsAjax: {

@@ -1,7 +1,7 @@
 <template>
   <el-card :class="'ibox ' + type" shadow="never" v-bind="$attrs">
     <div v-if="title" slot="header" class="clearfix ibox-title">
-      <h5><i v-if="fa" :class="'fa ' + fa" /> {{ title }}</h5>
+      <i v-if="fa" :class="'fa ' + fa" /> {{ title }}
     </div>
     <slot />
   </el-card>
@@ -21,7 +21,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'primary'
+      default: 'default'
     }
   },
   computed: {
@@ -44,14 +44,16 @@ export default {
     border-color: #e7eaec;
     border-image: none;
     margin-bottom: 0;
-    padding: 14px 15px 7px;
-    min-height: 48px;
+    padding: 10px 15px;
+    min-height: 30px;
+    line-height: 1.32;
+    font-weight: normal;
   }
 
   .ibox-title h5 {
     display: inline-block;
     font-size: 14px;
-    margin: 0 0 7px;
+    margin: 0;
     padding: 0;
     text-overflow: ellipsis;
     float: left;

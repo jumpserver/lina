@@ -84,7 +84,8 @@ const cn = {
     'Username': '用户名',
     'Email': '邮件',
     'Role': '角色',
-    'Date expired': '失效日期'
+    'Date expired': '失效日期',
+    'Quick update': '快速更新'
   },
   route: {
     'dashboard': '仪表盘',

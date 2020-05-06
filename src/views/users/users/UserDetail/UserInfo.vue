@@ -4,21 +4,82 @@
       <DetailCard :title="cardTitle" :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions :type="'success'" />
-      <RelationCard v-bind="relationConfig" />
+      <QuickActions type="primary">
+        <table>
+          <tr>
+            <td>激活中:</td>
+            <td>
+              <span>
+                <Switcher v-model="value" />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>多因子认证:</td>
+            <td>
+              <span>
+                <el-slider
+                  v-model="value2"
+                  :min="0"
+                  :max="2"
+                  :step="1"
+                  format-tooltip=""
+                  show-stops
+                  style="width: 50px"
+                />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>重置多因子认证:</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">重置</el-button>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>发送重置密码邮件:</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">发送</el-button>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>发送重置密钥邮件:</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">发送</el-button>
+              </span>
+            </td>
+          </tr>
+
+          <tr style="display:none">
+            <td>解除登录限制</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">解除</el-button>
+              </span>
+            </td>
+          </tr>
+        </table>
+      </QuickActions>
+      <RelationCard type="info" style="margin-top: 15px" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, RelationCard, QuickActions } from '@/components'
+import { DetailCard, RelationCard, QuickActions, Switcher } from '@/components'
 
 export default {
   name: 'UserInfo',
   components: {
     DetailCard,
     RelationCard,
-    QuickActions
+    QuickActions,
+    Switcher
   },
   props: {
     object: {
@@ -28,6 +89,8 @@ export default {
   },
   data() {
     return {
+      value: false,
+      value2: 0,
       relationConfig: {
         icon: 'fa-user',
         title: this.$t('users.User groups'),
@@ -116,8 +179,7 @@ export default {
       this.relationConfig.hasObjectsId = iNew.users
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
