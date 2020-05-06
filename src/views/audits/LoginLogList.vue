@@ -1,19 +1,20 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import GenericListPage from '@/layout/components/GenericListPage'
 
 export default {
   components: {
-    GenericTreeListPage
+    GenericListPage
   },
   data() {
     return {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
-        columns: [
+        columns: ['username', 'type', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
+        columnsMeta: [
           {
             prop: 'username',
             label: this.$t('audits.username')
