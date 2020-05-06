@@ -22,6 +22,12 @@ export default {
     ListTable,
     RelationCard
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
@@ -58,9 +64,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      assetPermissionAsset: [],
-      assetPermissionNode: [],
-      assetPermissionSystemUser: [],
       assetReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add asset to this permission'),
@@ -81,6 +84,24 @@ export default {
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }
+        },
+        hasObjectsId: this.object.nodes,
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              assetpermission: objectId,
+              node: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/?assetpermission=${objectId}&node=${itemId}`
+          return this.$axios.delete(relationUrl)
         }
       },
       systemUserReletionConfig: {
@@ -90,12 +111,30 @@ export default {
           url: '/api/v1/assets/system-users/',
           processResults(data) {
             let results = data.results
-            results = results.map((item) => {
+            results = results.filter((item) => item.protocol !== 'mysql').map((item) => {
               return { label: item.name + '(' + item.username + ')', value: item.id }
             })
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }
+        },
+        hasObjectsId: this.object.system_users,
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/asset-permissions-system-users-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              assetpermission: objectId,
+              systemuser: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/asset-permissions-system-users-relations/?assetpermission=${objectId}&systemuser=${itemId}`
+          return this.$axios.delete(relationUrl)
         }
       }
     }
