@@ -420,6 +420,17 @@ const en = {
       'securityPasswordSpecialChar': '开启后，用户密码修改、重置必须包含特殊字符'
     }
   },
+  audits: {
+    'username': 'Username',
+    'type': 'Type',
+    'ip': 'IP',
+    'city': 'City',
+    'user_agent': 'UA',
+    'mfa': 'MFA',
+    'reason': 'Reason',
+    'status': 'Status',
+    'datetime': 'Date'
+  },
   ...enLocale
 }
 

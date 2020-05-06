@@ -606,6 +606,17 @@ const cn = {
       'securityPasswordSpecialChar': '开启后，用户密码修改、重置必须包含特殊字符'
     }
   },
+  audits: {
+    'username': '用户名',
+    'type': '类型',
+    'ip': 'IP',
+    'city': '城市',
+    'user_agent': 'Agent',
+    'mfa': '多因子认证',
+    'reason': '原因',
+    'status': '状态',
+    'datetime': '日期'
+  },
   ...zhLocale
 }
 
