@@ -146,6 +146,10 @@ const cn = {
     'CreateCommandStorage': '创建命令存储',
     'CommandStorageUpdate': '更新命令存储'
   },
+  auth: {
+    'You have been logged out, Please log in again': '账号已退出，请重新登录',
+    'Re-Login': '重新登录'
+  },
   // 用户模块翻译
   users: {
     'createUser': '创建用户',

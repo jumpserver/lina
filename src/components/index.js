@@ -18,4 +18,4 @@ export { default as AssetSelect } from './AssetSelect'
 export { default as SvgIcon } from './SvgIcon'
 export { default as TreeTable } from './TreeTable'
 export { default as IBox } from './IBox'
-
+export { default as QuickActions } from './QuickActions'

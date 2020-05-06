@@ -1,18 +1,7 @@
 <template>
-  <el-card class="ibox" shadow="never">
+  <el-card :class="'ibox ' + type" shadow="never" v-bind="$attrs">
     <div v-if="title" slot="header" class="clearfix ibox-title">
-      <h5>{{ title }}</h5>
-      <div class="ibox-tools">
-        <a class="collapse-link">
-          <i class="fa fa-chevron-up" />
-        </a>
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          <i class="fa fa-wrench" />
-        </a>
-        <a class="close-link">
-          <i class="fa fa-times" />
-        </a>
-      </div>
+      <h5><i v-if="fa" :class="'fa ' + fa" /> {{ title }}</h5>
     </div>
     <slot />
   </el-card>
@@ -25,6 +14,19 @@ export default {
     title: {
       type: String,
       default: () => null
+    },
+    fa: {
+      type: String,
+      default: ''
+    },
+    type: {
+      type: String,
+      default: 'primary'
+    }
+  },
+  computed: {
+    iClass() {
+      return this.type
     }
   }
 }
@@ -38,12 +40,9 @@ export default {
     background-color: #ffffff;
   }
 
-  .ibox >>> .el-card__header{
-    background-color: #ffffff;
+  .ibox >>> .el-card__header {
     border-color: #e7eaec;
     border-image: none;
-    /*border-style: solid solid none;*/
-    color: rgb(103, 106, 108);
     margin-bottom: 0;
     padding: 14px 15px 7px;
     min-height: 48px;

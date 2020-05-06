@@ -4,18 +4,21 @@
       <DetailCard :title="cardTitle" :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
+      <QuickActions :type="'success'" />
       <RelationCard v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, RelationCard } from '@/components'
+import { DetailCard, RelationCard, QuickActions } from '@/components'
+
 export default {
   name: 'UserInfo',
   components: {
     DetailCard,
-    RelationCard
+    RelationCard,
+    QuickActions
   },
   props: {
     object: {

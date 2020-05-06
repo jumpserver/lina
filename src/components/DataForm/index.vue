@@ -12,12 +12,14 @@
     <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
     <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
-    <el-form-item v-if="defaultButton">
+    <el-form-item>
       <slot name="button-start" />
-      <el-button size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
-      <el-button size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
+      <div v-if="defaultButton">
+        <el-button size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
+        <el-button size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
+      </div>
+      <slot name="button-end" />
     </el-form-item>
-    <slot name="Actions" />
   </ElFormRender>
 </template>
 

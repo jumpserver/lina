@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     defaultDelete() {
-      const msg = this.$tc('Are you sure to delete') + ' ?'
+      const msg = this.$tc('Are you sure to delete') + ' ' + this.iTitle + ' ?'
       const title = this.$tc('Info')
       const performDelete = async function() {
         const url = this.validActions.deleteApiUrl
