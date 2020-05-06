@@ -1,65 +1,56 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :title="cardTitle" :items="detailItems" />
+      <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary">
         <table>
           <tr>
-            <td>激活中:</td>
+            <td>{{ $tc('Active') }}:</td>
             <td>
               <span>
-                <Switcher v-model="value" />
+                <Switcher v-model="isActive" :width="50" />
               </span>
             </td>
           </tr>
           <tr>
-            <td>多因子认证:</td>
+            <td>{{ $t('users.Force enabled MFA') }}:</td>
             <td>
               <span>
-                <el-slider
-                  v-model="value2"
-                  :min="0"
-                  :max="2"
-                  :step="1"
-                  format-tooltip=""
-                  show-stops
-                  style="width: 50px"
-                />
+                <Switcher v-model="isForceEnableMFA" :width="50" />
               </span>
             </td>
           </tr>
           <tr>
-            <td>重置多因子认证:</td>
+            <td>{{ $t('users.Reset MFA') }}:</td>
             <td>
               <span>
-                <el-button type="primary" size="mini">重置</el-button>
+                <el-button type="primary" size="mini">{{ $tc('Reset') }}</el-button>
               </span>
             </td>
           </tr>
           <tr>
-            <td>发送重置密码邮件:</td>
+            <td>{{ $t('users.Send reset password mail') }}:</td>
             <td>
               <span>
-                <el-button type="primary" size="mini">发送</el-button>
+                <el-button type="primary" size="mini">{{ $tc('Send') }}</el-button>
               </span>
             </td>
           </tr>
           <tr>
-            <td>发送重置密钥邮件:</td>
+            <td>{{ $t('users.Send reset ssh key mail') }}:</td>
             <td>
               <span>
-                <el-button type="primary" size="mini">发送</el-button>
+                <el-button type="primary" size="mini">{{ $tc('Send') }}</el-button>
               </span>
             </td>
           </tr>
-
-          <tr style="display:none">
-            <td>解除登录限制</td>
+          <tr>
+            <td>{{ $t('users.Unblock user') }}</td>
             <td>
               <span>
-                <el-button type="primary" size="mini">解除</el-button>
+                <el-button type="primary" size="mini">{{ $tc('Unblock') }}</el-button>
               </span>
             </td>
           </tr>
@@ -89,8 +80,8 @@ export default {
   },
   data() {
     return {
-      value: false,
-      value2: 0,
+      isActive: this.object.is_active,
+      isForceEnableMFA: this.object.mfa_level === 2,
       relationConfig: {
         icon: 'fa-user',
         title: this.$t('users.User groups'),
@@ -115,8 +106,7 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         }
-      },
-      cardTitle: this.$tc('Basic Info')
+      }
     }
   },
   computed: {
@@ -179,10 +169,15 @@ export default {
       this.relationConfig.hasObjectsId = iNew.users
     }
   },
-  methods: {}
+  methods: {
+  }
 }
 </script>
 
 <style scoped>
+  .mfa-setting >>> .el-slider__runway {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
 </style>

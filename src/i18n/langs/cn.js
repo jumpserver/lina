@@ -75,7 +75,7 @@ const cn = {
     'Deactive selected': '禁用所选',
     'Active selected': '激活所选',
     'rows': '行',
-    'Basic Info': '基本信息',
+    'basic info': '基本信息',
     'Command filter': '命令过滤器',
     'Add': '添加',
     'Auth': '认证',
@@ -85,7 +85,10 @@ const cn = {
     'Email': '邮件',
     'Role': '角色',
     'Date expired': '失效日期',
-    'Quick update': '快速更新'
+    'Quick update': '快速更新',
+    'Send': '发送',
+    'Unblock': '解锁',
+    'Active': '激活中'
   },
   route: {
     'dashboard': '仪表盘',
@@ -217,7 +220,12 @@ const cn = {
     'Date last login': '最后登录日期',
     'Date password updated': '更新密码日期',
     'MFA': '多因子认证',
-    'Source': '用户来源'
+    'Source': '用户来源',
+    'Reset MFA': '重置多因子认证',
+    'Send reset password mail': '发送重置密码邮件',
+    'Send reset ssh key mail': '发送重置密钥邮件',
+    'Unblock user': '解除登录限制',
+    'Force enabled MFA': '强制启用多因子认证'
   },
   // 用户组
   assets: {

@@ -18,7 +18,9 @@ export default {
   props: {
     title: {
       type: String,
-      default: ''
+      default() {
+        return this.$tic('Basic info')
+      }
     },
     items: {
       type: Array,
