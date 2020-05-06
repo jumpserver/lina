@@ -21,10 +21,16 @@ export default {
     ListTable,
     RelationCard
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/database-app-permissions/${this.$route.params.id}/database-apps/all/`,
+        url: `/api/v1/perms/database-app-permissions/${this.object.id}/database-apps/all/`,
         columns: [
           'databaseapp_display', 'delete_action'
         ],
@@ -66,19 +72,39 @@ export default {
           url: '/api/v1/applications/database-apps/'
         }
       },
+      hasObjectsId: this.object.system_users,
       systemUserReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add System User to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           processResults(data) {
+            console.log('data====', data)
             let results = data.results
-            results = results.map((item) => {
+            results = results.filter((item) => item.protocol === 'mysql').map((item) => {
               return { label: item.name + '(' + item.username + ')', value: item.id }
             })
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }
+        },
+        hasObjectsId: this.object.system_users,
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/database-app-permissions-system-users-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              databaseapppermission: objectId,
+              systemuser: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/database-app-permissions-system-users-relations/?databaseapppermission=${objectId}&systemuser=${itemId}`
+          return this.$axios.delete(relationUrl)
         }
       }
     }

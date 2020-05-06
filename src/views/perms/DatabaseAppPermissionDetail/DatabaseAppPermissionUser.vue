@@ -22,10 +22,16 @@ export default {
     ListTable,
     RelationCard
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/database-app-permissions/${this.$route.params.id}/users/all/`,
+        url: `/api/v1/perms/database-app-permissions/${this.object.id}/users/all/`,
         columns: [
           'user_display', 'delete_action'
         ],
@@ -40,7 +46,7 @@ export default {
             align: 'center',
             width: 150,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/database-app-permissions-users-relations/?databaseapppermission=${this.$route.params.id}&user=`
+            deleteUrl: `/api/v1/perms/database-app-permissions-users-relations/?databaseapppermission=${this.object.id}&user=`
           }
         },
         tableAttrs: {
@@ -73,6 +79,17 @@ export default {
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }
+        },
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/database-app-permissions-users-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              databaseapppermission: objectId,
+              user: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
         }
       },
       groupReletionConfig: {
@@ -80,6 +97,24 @@ export default {
         title: this.$t('perms.Add user group to this permission'),
         objectsAjax: {
           url: '/api/v1/users/groups/'
+        },
+        hasObjectsId: this.object.user_groups,
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              databaseapppermission: objectId,
+              usergroup: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          // const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}`
+          return this.$axios.delete(relationUrl)
         }
       }
     }
