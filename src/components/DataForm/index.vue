@@ -46,11 +46,8 @@ export default {
   },
   data() {
     return {
-      basicForm: {}
+      basicForm: this.form
     }
-  },
-  mounted() {
-    this.basicForm = this.form
   },
   methods: {
     // 获取表单数据

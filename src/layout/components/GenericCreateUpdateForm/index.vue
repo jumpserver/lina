@@ -1,5 +1,6 @@
 <template>
   <AutoDataForm
+    v-if="!loading"
     ref="form"
     :method="method"
     :form="form"
@@ -114,7 +115,8 @@ export default {
   async mounted() {
     this.loading = true
     try {
-      this.form = await this.getFormValue()
+      const values = await this.getFormValue()
+      this.form = Object.assign(this.form, values)
     } finally {
       this.loading = false
     }
@@ -154,10 +156,11 @@ export default {
       if (this.method !== 'put') {
         return Object.assign(this.form, this.initial)
       }
-      if (this.object === null) {
-        this.object = await this.getObjectDetail()
+      let object = this.object
+      if (object === null) {
+        object = await this.getObjectDetail()
       }
-      return this.object
+      return object
     },
     async getObjectDetail() {
       return this.$axios.get(this.totalUrl)
