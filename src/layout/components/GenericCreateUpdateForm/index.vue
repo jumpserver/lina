@@ -9,14 +9,7 @@
     v-bind="$attrs"
     v-on="$listeners"
     @submit="handleSubmit"
-  >
-    <template #button-start>
-      <slot name="button-start" />
-    </template>
-    <template #button-end>
-      <slot name="button-end" />
-    </template>
-  </AutoDataForm>
+  />
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'

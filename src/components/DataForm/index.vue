@@ -13,12 +13,9 @@
     <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
     <el-form-item>
-      <slot name="button-start" />
-      <div v-if="defaultButton">
-        <el-button size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
-        <el-button size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
-      </div>
-      <slot name="button-end" />
+      <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" @click="button.callback">{{ button.title }}</el-button>
+      <el-button v-if="defaultButton" size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
+      <el-button v-if="defaultButton" size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
     </el-form-item>
   </ElFormRender>
 </template>
@@ -42,6 +39,10 @@ export default {
     form: {
       type: Object,
       default: () => { return {} }
+    },
+    moreButtons: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
