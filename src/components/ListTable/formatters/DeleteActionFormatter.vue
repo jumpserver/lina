@@ -1,5 +1,5 @@
 <template>
-  <el-button size="mini" type="danger" @click="handleDelete(col, row, cellValue, reload)">
+  <el-button size="mini" type="danger" :disabled="canDelete" @click="handleDelete(col, row, cellValue, reload)">
     <i class="fa fa-minus" />
   </el-button>
 </template>
@@ -10,6 +10,12 @@ import BaseFormatter from './base'
 export default {
   name: 'DeleteActionFormatter',
   extends: BaseFormatter,
+  props: {
+    canDelete: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     handleDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
