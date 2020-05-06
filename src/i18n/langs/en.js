@@ -335,6 +335,17 @@ const en = {
     'setting': 'System Setting',
     'basicsetting': 'Basic Setting'
   },
+  audits: {
+    'username': 'Username',
+    'type': 'Type',
+    'ip': 'IP',
+    'city': 'City',
+    'user_agent': 'UA',
+    'mfa': 'MFA',
+    'reason': 'Reason',
+    'status': 'Status',
+    'datetime': 'Date'
+  },
   ...enLocale
 }
 

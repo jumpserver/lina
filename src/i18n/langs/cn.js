@@ -515,6 +515,17 @@ const cn = {
     'setting': '系统设置',
     'basicsetting': '基本设置'
   },
+  audits: {
+    'username': '用户名',
+    'type': '类型',
+    'ip': 'IP',
+    'city': '城市',
+    'user_agent': 'Agent',
+    'mfa': '多因子认证',
+    'reason': '原因',
+    'status': '状态',
+    'datetime': '日期'
+  },
   ...zhLocale
 }
 
