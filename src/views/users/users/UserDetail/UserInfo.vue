@@ -4,73 +4,21 @@
       <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary">
-        <table>
-          <tr>
-            <td>{{ $tc('Active') }}:</td>
-            <td>
-              <span>
-                <Switcher v-model="isActive" :width="50" />
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t('users.Force enabled MFA') }}:</td>
-            <td>
-              <span>
-                <Switcher v-model="isForceEnableMFA" :width="50" />
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t('users.Reset MFA') }}:</td>
-            <td>
-              <span>
-                <el-button type="primary" size="mini">{{ $tc('Reset') }}</el-button>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t('users.Send reset password mail') }}:</td>
-            <td>
-              <span>
-                <el-button type="primary" size="mini">{{ $tc('Send') }}</el-button>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t('users.Send reset ssh key mail') }}:</td>
-            <td>
-              <span>
-                <el-button type="primary" size="mini">{{ $tc('Send') }}</el-button>
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t('users.Unblock user') }}</td>
-            <td>
-              <span>
-                <el-button type="primary" size="mini">{{ $tc('Unblock') }}</el-button>
-              </span>
-            </td>
-          </tr>
-        </table>
-      </QuickActions>
+      <QuickActions type="primary" :actions="quickActions" />
       <RelationCard type="info" style="margin-top: 15px" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, RelationCard, QuickActions, Switcher } from '@/components'
+import { DetailCard, RelationCard, QuickActions } from '@/components'
 
 export default {
   name: 'UserInfo',
   components: {
     DetailCard,
     RelationCard,
-    QuickActions,
-    Switcher
+    QuickActions
   },
   props: {
     object: {
@@ -79,9 +27,112 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      isActive: this.object.is_active,
-      isForceEnableMFA: this.object.mfa_level === 2,
+      quickActions: [
+        {
+          title: this.$tc('Active'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.is_active
+          },
+          callbacks: {
+            change: function(v, item) {
+              const url = `/api/v1/users/users/${vm.object.id}/`
+              const data = { is_active: v }
+              vm.$axios.patch(url, data).catch(() => {
+                item.attrs.model = !v
+              })
+            }
+          }
+        },
+        {
+          title: this.$t('users.resetMFATitle'),
+          attrs: {
+            type: 'primary',
+            label: this.$tc('Reset')
+          },
+          callbacks: {
+            click: function() {
+              console.log('click')
+            }
+          }
+        },
+        {
+          title: this.$t('users.resetPasswordTitle'),
+          attrs: {
+            type: 'primary',
+            label: this.$tc('Send')
+          },
+          callbacks: {
+            click: function() {
+              const warnMsg = vm.$t('users.resetPasswordWarningMsg')
+              const warnTitle = vm.$tc('Info')
+              const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
+              const successMsg = vm.$t('users.resetPasswordSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.patch(url, {})
+                    done()
+                    vm.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
+            }
+          }
+        },
+        {
+          title: this.$t('users.resetPublicKeyTitle'),
+          attrs: {
+            type: 'primary',
+            label: this.$tc('Send')
+          },
+          callbacks: {
+            click: function() {
+              const warnMsg = vm.$t('users.resetPublicKeyWarningMsg')
+              const warnTitle = vm.$tc('Info')
+              const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
+              const successMsg = vm.$t('users.resetPasswordSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.patch(url, {})
+                    done()
+                    vm.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
+            }
+          }
+        },
+        {
+          title: this.$t('users.Unblock user'),
+          attrs: {
+            type: 'primary',
+            label: this.$tc('Unblock')
+          },
+          callbacks: {
+            click: function() {
+              console.log('click')
+            }
+          }
+        }
+      ],
       relationConfig: {
         icon: 'fa-user',
         title: this.$t('users.User groups'),

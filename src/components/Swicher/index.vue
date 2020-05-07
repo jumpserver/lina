@@ -4,6 +4,7 @@
     :active-color="activeColor"
     inactive-color="#dcdfe6"
     v-bind="$attrs"
+    v-on="$listeners"
   />
 </template>
 

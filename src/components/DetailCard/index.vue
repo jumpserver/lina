@@ -3,7 +3,9 @@
     <div class="content">
       <el-row v-for="item in items" :key="'card-' + item.key" class="item" :gutter="10">
         <el-col :span="6"><div class="item-label" :style="{ 'text-align': align}"><label>{{ item.key }}: </label></div></el-col>
-        <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
+        <el-col :span="18"><div class="item-text">
+          <ItemValue :value="item.value" :item="item" />
+        </div></el-col>
       </el-row>
     </div>
   </IBox>
@@ -11,10 +13,11 @@
 
 <script>
 import IBox from '../IBox'
+import ItemValue from './value'
 
 export default {
   name: 'DetailCard',
-  components: { IBox },
+  components: { IBox, ItemValue },
   props: {
     title: {
       type: String,

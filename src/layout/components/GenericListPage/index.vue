@@ -1,7 +1,6 @@
 <template>
-  <Page>
-    <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <Page v-bind="$attrs">
+    <ListTable v-bind="$attrs" />
   </Page>
 </template>
 
@@ -12,15 +11,7 @@ export default {
   name: 'GenericListPage',
   components: {
     Page, ListTable
-  },
-  props: {
-    ...ListTable.props,
-    helpMessage: {
-      type: String,
-      default: null
-    }
   }
-
 }
 </script>
 
