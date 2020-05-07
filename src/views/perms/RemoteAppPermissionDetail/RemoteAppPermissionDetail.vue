@@ -92,7 +92,7 @@ export default {
   methods: {
     getDataLength(data) {
       if (data instanceof Array) {
-        return data.length
+        return JSON.stringify(data.length)
       }
       return data
     }

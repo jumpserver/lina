@@ -9,11 +9,15 @@ export default {
     item: {
       type: Object,
       default: () => ({})
+    },
+    callback: {
+      type: Function
     }
+
   },
   render(h) {
-    if (typeof this.value === 'function') {
-      return this.value(this.item)
+    if (typeof this.callback === 'function') {
+      return this.callback(this.item, this.value)
     }
     return <span>{this.value}</span>
   }

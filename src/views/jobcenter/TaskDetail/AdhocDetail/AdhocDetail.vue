@@ -65,7 +65,7 @@ export default {
         },
         {
           key: this.$t('jobcenter.Hosts'),
-          value: this.object.hosts.length
+          value: JSON.stringify(this.object.hosts.length)
         },
         {
           key: this.$t('jobcenter.Pattern'),
