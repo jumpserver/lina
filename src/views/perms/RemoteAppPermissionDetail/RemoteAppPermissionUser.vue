@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="userReletionConfig" />
-      <RelationCard v-bind="groupReletionConfig" />
+      <RelationCard type="primary" v-bind="userReletionConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="groupReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -20,10 +20,16 @@ export default {
     ListTable,
     RelationCard
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/users/all/`,
+        url: `/api/v1/perms/remote-app-permissions/${this.object.id}/users/all/`,
         columns: [
           // 'user_display'
         ],
@@ -60,6 +66,20 @@ export default {
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }
+        },
+        hasObjectsId: this.object.users,
+        performAdd: (items) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/users/add/`
+          const usersId = items.map(v => v.value)
+          const data = { users: usersId }
+          return this.$axios.patch(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/users/remove/`
+          const data = { users: [item.value] }
+          return this.$axios.patch(relationUrl, data)
         }
       },
       groupReletionConfig: {
@@ -67,6 +87,23 @@ export default {
         title: this.$t('perms.Add user group to this permission'),
         objectsAjax: {
           url: '/api/v1/users/groups/'
+        },
+        hasObjectsId: this.object.user_groups,
+        performAdd: (items) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
+          const objectRelationUserGroups = this.object.user_groups
+          items.map(v => objectRelationUserGroups.push(v.value))
+          const data = { user_groups: objectRelationUserGroups }
+          return this.$axios.patch(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
+          const objectOldRelationUserGroups = this.object.user_groups
+          const objectNewRelationUserGroups = objectOldRelationUserGroups.filter(v => v !== item.value)
+          const data = { user_groups: objectNewRelationUserGroups }
+          return this.$axios.patch(relationUrl, data)
         }
       }
     }
