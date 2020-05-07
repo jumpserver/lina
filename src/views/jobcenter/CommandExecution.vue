@@ -1,39 +1,84 @@
 <template>
-  <Page>
-    <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <el-collapse-transition>
-      <el-row>
-        <el-col v-show="ShowTree" :span="4" class="transition-box">
-          <!--          <TreeNode :url="treeurl" @urlChanged="handleUrlChange" />-->
-          这里放资产树
-        </el-col>
-        <el-col :span="1" class="mini"><div style="display:block" class="mini-button" @click="ShowTree=!ShowTree"><i v-show="ShowTree" id="toggle-icon" class="fa fa-angle-left fa-x" /><i v-show="!ShowTree" id="toggle-icon" class="fa fa-angle-right fa-x" /></div></el-col>
-        <el-col :span="ShowTree?19:23" class="transition-box">
-          这里其它东西
-        </el-col>
-      </el-row>
-    </el-collapse-transition>
-  </Page>
+  <el-collapse-transition>
+    <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
+      <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
+        <!--        <AutoDataZTree :setting="treeSetting" class="auto-data-ztree" @urlChange="handleUrlChange" />-->
+        <component
+          :is="component"
+          :setting="treeSetting"
+          class="auto-data-ztree"
+          @urlChange="handleUrlChange"
+        />
+      </div>
+      <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+        <div class="mini">
+          <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+          </div>
+        </div>
+        <IBox class="transition-box" style="width: calc(100% - 17px);">
+          <Term />
+          <div style="display: flex">
+            <div>
+              <CodeMirror @change="handleActionChange" />
+            </div>
+            <div>
+              <Select2 />
+            </div>
+          </div>
+        </IBox>
+      </div>
+    </div>
+  </el-collapse-transition>
 </template>
 
 <script>
-import { Page } from '@/layout/components'
-// import TreeNode from '@/components/TreeNode'
+import AutoDataZTree from '@/components/AutoDataZTree'
+import Term from '@/components/Term'
+import ListTable from '@/components/ListTable'
+import IBox from '@/components/IBox'
+import Select2 from '@/components/Select2'
+import CodeMirror from '@/components/CodeMirror'
 export default {
+  name: 'TreeTable',
   components: {
-    Page
-    // TreeNode
+    ListTable,
+    Term,
+    AutoDataZTree,
+    IBox,
+    Select2,
+    CodeMirror
+  },
+  props: {
+    ...ListTable.props,
+    treeSetting: {
+      type: Object,
+      default: () => AutoDataZTree.props.setting.default()
+    },
+    showTree: {
+      type: Boolean,
+      default: true
+    },
+    // 默认引用的Tree组件
+    component: {
+      type: String,
+      default: () => 'AutoDataZTree'
+    }
   },
   data() {
     return {
-      helpMessage: '',
-      ShowTree: true,
-      treeurl: '/api/v1/assets/nodes/children/tree/'
+      iTableConfig: this.tableConfig,
+      iShowTree: this.showTree,
+      actions: ''
     }
   },
   methods: {
     handleUrlChange(_url) {
-      console.log(_url)
+      this.$set(this.iTableConfig, 'url', _url)
+      console.log(this.iTableConfig)
+    },
+    handleActionChange(val) {
+      this.actions = val
     }
   }
 }
@@ -58,4 +103,8 @@ export default {
     width: 12px !important;
   }
 
+  .auto-data-ztree {
+    overflow: auto;
+    /*border-right: solid 1px red;*/
+  }
 </style>
