@@ -83,7 +83,12 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasBulkDelete: false
+        hasBulkDelete: false,
+        hasBulkUpdate: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false
+
       }
     }
   }
