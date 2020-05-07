@@ -66,7 +66,26 @@ export default {
           },
           callbacks: {
             click: function() {
-              console.log('click')
+              const warnMsg = vm.$t('users.resetPasswordWarningMsg')
+              const warnTitle = vm.$tc('Info')
+              const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
+              const successMsg = vm.$t('users.resetPasswordSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.patch(url, {})
+                    done()
+                    this.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
             }
           }
         },

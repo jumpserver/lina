@@ -225,7 +225,9 @@ const cn = {
     'Send reset password mail': '发送重置密码邮件',
     'Send reset ssh key mail': '发送重置密钥邮件',
     'Unblock user': '解除登录限制',
-    'Force enabled MFA': '强制启用多因子认证'
+    'Force enabled MFA': '强制启用多因子认证',
+    'resetPasswordWarningMsg': '将失效用户当前密码，并发送重设密码邮件到用户邮箱',
+    'resetPublicKeyWarningMsg': '将会失效用户当前密钥，并发送重置邮件到用户邮箱'
   },
   // 用户组
   assets: {

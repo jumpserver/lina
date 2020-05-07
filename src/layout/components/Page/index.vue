@@ -1,13 +1,14 @@
 <template>
   <div class="page">
     <PageHeading>
-      <slot name="title">{{ pageTitle }}</slot>
-      <span slot="rightSide">
+      <slot name="title">{{ iTitle }}</slot>
+      <template #rightSide>
         <slot name="headingRightSide" />
-      </span>
+      </template>
     </PageHeading>
     <PageContent>
-      <slot name="default" />
+      <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
+      <slot />
     </PageContent>
   </div>
 </template>
@@ -15,7 +16,6 @@
 <script>
 import PageHeading from './PageHeading'
 import PageContent from './PageContent'
-// import PageSubMenu from './PageSubMenu'
 export default {
   name: 'Page',
   components: {
@@ -27,17 +27,13 @@ export default {
       type: String,
       default: ''
     },
-    submenu: {
-      type: Array,
-      default: () => []
-    },
-    activeMenu: {
+    helpMessage: {
       type: String,
-      default: () => ''
+      default: ''
     }
   },
   computed: {
-    pageTitle() {
+    iTitle() {
       // return ''
       return this.title || this.$tr(this.$route.meta.title)
     }

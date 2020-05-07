@@ -83,7 +83,9 @@ const en = {
     'remote_app_granted': 'RemoteApp granted',
     'remote_app_permission': 'RemoteApp permission',
     'database_app_granted': 'DatabaseApp granted',
-    'database_app_permission': 'DatabaseApp permission'
+    'database_app_permission': 'DatabaseApp permission',
+    'resetPasswordWarningMsg': 'This will reset the user password and send a reset mail',
+    'resetPublicKeyWarningMsg': 'This will reset the user public key and send a reset mail'
   },
   usergroup: {
     'user_group_list': 'User group list',
