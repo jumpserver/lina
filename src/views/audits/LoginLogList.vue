@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" />
 </template>
 
 <script>
@@ -16,14 +16,14 @@ export default {
         columns: ['id', 'username', 'type', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
         columnsMeta: {
           id: {
-            type: 'index',
-            index: (v) => v * 2
+            type: 'index'
+          },
+          user_agent: {
+            formatter: (row, column, cellValue) => cellValue.slice(0, 20),
+            width: '150px'
           }
         },
         hasSelection: false
-      },
-      headerActions: {
-        createRoute: 'AssetCreate'
       }
     }
   }

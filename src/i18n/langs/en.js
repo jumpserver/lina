@@ -387,6 +387,7 @@ const en = {
     'securityPasswordNumber': 'Must contain numeric characters',
     'securityPasswordSpecialChar': 'Must contain special characters',
     'Hostname': 'Hostname',
+    'emailTest': 'Test connection',
     helpText: {
       'siteUrl': 'eg: http://jumpserver.abc.com:8080',
       'userGuideUrl': 'User first login update profile done redirect to it',

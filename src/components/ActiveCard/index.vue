@@ -1,30 +1,28 @@
 <template>
-  <el-card class="box-card primary box-margin">
-    <div slot="header" class="clearfix">
-      <i v-if="icon" :class="'fa ' + icon" />
-      <span>{{ title }}</span>
-    </div>
-    <div>
-      <el-table class="el-table" :data="content" :show-header="false">
-        <el-table-column prop="name" />
-        <el-table-column prop="is_active" align="right">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.is_active"
-              active-color="#1ab394"
-              inactive-color="#ff4949"
-              @change="HandleChangeAction(scope.$index, scope.row)"
-            />
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-  </el-card>
+  <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
+    <el-table class="el-table" :data="content" :show-header="false">
+      <el-table-column prop="name" />
+      <el-table-column prop="is_active" align="right">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.is_active"
+            active-color="#1ab394"
+            inactive-color="#ff4949"
+            @change="HandleChangeAction(scope.$index, scope.row)"
+          />
+        </template>
+      </el-table-column>
+    </el-table>
+  </IBox>
 </template>
 
 <script>
+import IBox from '@/components/IBox'
 export default {
   name: 'ActiveCard',
+  components: {
+    IBox
+  },
   props: {
     title: {
       type: String,
@@ -41,6 +39,10 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'primary'
     }
   },
   methods: {
@@ -57,7 +59,5 @@ export default {
 </script>
 
 <style scoped>
-  .box-margin {
-    margin-bottom: 20px;
-  }
+
 </style>
