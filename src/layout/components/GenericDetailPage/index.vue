@@ -1,8 +1,8 @@
 <template>
-  <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="activeName" @tab-click="handleTabClick">
+  <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="iActiveMenu" @tab-click="handleTabClick">
     <template #title>
       <span>
-        {{ validTitle }}
+        {{ iTitle }}
       </span>
     </template>
 
@@ -102,15 +102,15 @@ export default {
         }
       ]
     },
-    validTitle() {
+    iTitle() {
       return this.title || this.getTitle(this.object)
     },
-    activeName: {
+    iActiveMenu: {
       get() {
         return this.activeMenu
       },
       set(item) {
-        this.activeName = item
+        this.$emit('update:activeMenu', item)
       }
     }
   },
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     defaultDelete() {
-      const msg = this.$tc('Are you sure to delete') + ' ?'
+      const msg = this.$tc('Are you sure to delete') + ' ' + this.iTitle + ' ?'
       const title = this.$tc('Info')
       const performDelete = async function() {
         const url = this.validActions.deleteApiUrl

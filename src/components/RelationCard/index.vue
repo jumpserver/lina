@@ -1,50 +1,46 @@
 <template>
-  <el-card class="box-card primary box-margin">
-    <div slot="header" class="clearfix">
-      <i v-if="icon" :class="'fa ' + icon" />
-      <span>{{ title }}</span>
-    </div>
-    <div>
-      <table style="width: 100%">
-        <tr>
-          <td colspan="2">
-            <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <el-button type="primary" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
-          </td>
-        </tr>
-        <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
-          <td><b>{{ obj.label }}</b></td>
-          <td>
-            <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
-              <i class="fa fa-minus" />
-            </el-button>
-          </td>
-        </tr>
-        <tr v-if="params.hasMore" class="item">
-          <td colspan="2">
-            <el-button type="primary" size="small" style="width: 100%" @click="loadMore">
-              <i class="fa fa-arrow-down" />
-              {{ $tc('More') }}
-            </el-button>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </el-card>
+  <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
+    <table style="width: 100%">
+      <tr>
+        <td colspan="2">
+          <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
+        </td>
+      </tr>
+      <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
+        <td><b>{{ obj.label }}</b></td>
+        <td>
+          <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
+            <i class="fa fa-minus" />
+          </el-button>
+        </td>
+      </tr>
+      <tr v-if="params.hasMore" class="item">
+        <td colspan="2">
+          <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
+            <i class="fa fa-arrow-down" />
+            {{ $tc('More') }}
+          </el-button>
+        </td>
+      </tr>
+    </table>
+  </IBox>
 </template>
 
 <script>
-import Select2 from '@/components/Select2'
+import Select2 from '../Select2'
+import IBox from '../IBox'
 import { createSourceIdCache } from '@/api/common'
 
 export default {
   name: 'RelationCard',
   components: {
-    Select2
+    Select2,
+    IBox
   },
   props: {
     title: {
@@ -54,6 +50,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'primary'
     },
     // 地址，发送给select2的，查询所有的objects, 和select2 ajax一样
     objectsAjax: {

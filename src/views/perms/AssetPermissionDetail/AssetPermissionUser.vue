@@ -21,10 +21,16 @@ export default {
     ListTable,
     RelationCard
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/users/all/`,
+        url: `/api/v1/perms/asset-permissions/${this.object.id}/users/all/`,
         columns: [
           'user_display', 'delete_action'
         ],
@@ -39,7 +45,7 @@ export default {
             align: 'center',
             width: 150,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.$route.params.id}&user=`
+            deleteUrl: `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=`
           }
         },
         tableAttrs: {
@@ -57,13 +63,11 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      assetPermissionUser: [],
-      assetPermissionUserGroup: [],
       userReletionConfig: {
         icon: 'fa-user',
         title: this.$t('perms.Add user to this permission'),
         objectsAjax: {
-          url: '/api/v1/users/users/',
+          url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {
             let results = data.results
             results = results.map((item) => {
@@ -76,7 +80,7 @@ export default {
         performAdd: (items) => {
           console.log('item=====', items)
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
-          const objectId = this.$route.params.id
+          const objectId = this.object.id
           console.log('objectId====', objectId)
           const data = items.map(v => {
             return {
@@ -92,6 +96,25 @@ export default {
         title: this.$t('perms.Add user group to this permission'),
         objectsAjax: {
           url: '/api/v1/users/groups/'
+        },
+        hasObjectsId: this.object.user_groups,
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              assetpermission: objectId,
+              usergroup: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          console.log('item-group-==', item)
+          // const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/?assetpermission=${objectId}`
+          return this.$axios.delete(relationUrl)
         }
       }
     }

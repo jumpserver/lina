@@ -1,21 +1,76 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :title="cardTitle" :items="detailItems" />
+      <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="relationConfig" />
+      <QuickActions type="primary">
+        <table>
+          <tr>
+            <td>{{ $tc('Active') }}:</td>
+            <td>
+              <span>
+                <Switcher v-model="isActive" :width="50" />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('users.Force enabled MFA') }}:</td>
+            <td>
+              <span>
+                <Switcher v-model="isForceEnableMFA" :width="50" />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('users.Reset MFA') }}:</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">{{ $tc('Reset') }}</el-button>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('users.Send reset password mail') }}:</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">{{ $tc('Send') }}</el-button>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('users.Send reset ssh key mail') }}:</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">{{ $tc('Send') }}</el-button>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t('users.Unblock user') }}</td>
+            <td>
+              <span>
+                <el-button type="primary" size="mini">{{ $tc('Unblock') }}</el-button>
+              </span>
+            </td>
+          </tr>
+        </table>
+      </QuickActions>
+      <RelationCard type="info" style="margin-top: 15px" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, RelationCard } from '@/components'
+import { DetailCard, RelationCard, QuickActions, Switcher } from '@/components'
+
 export default {
   name: 'UserInfo',
   components: {
     DetailCard,
-    RelationCard
+    RelationCard,
+    QuickActions,
+    Switcher
   },
   props: {
     object: {
@@ -25,6 +80,8 @@ export default {
   },
   data() {
     return {
+      isActive: this.object.is_active,
+      isForceEnableMFA: this.object.mfa_level === 2,
       relationConfig: {
         icon: 'fa-user',
         title: this.$t('users.User groups'),
@@ -49,8 +106,7 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         }
-      },
-      cardTitle: this.$tc('Basic Info')
+      }
     }
   },
   computed: {
@@ -119,5 +175,9 @@ export default {
 </script>
 
 <style scoped>
+  .mfa-setting >>> .el-slider__runway {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
 </style>

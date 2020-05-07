@@ -23,7 +23,7 @@ export default {
 
       },
       fields: [
-        [this.$tc('Basic Info'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$tic('Basic info'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
         [this.$tc('Auth'), ['auto_generate_key', 'password', 'auto_push']],
         [this.$tc('Command filter'), ['cmd_filters']],
         [this.$tc('Others'), ['sftp_root', 'sudo', 'shell', 'comment']]

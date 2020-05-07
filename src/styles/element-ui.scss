@@ -271,7 +271,6 @@ td .el-button.el-button--mini {
   border-color: #409EFF;
 }
 
-
 .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
   margin: 0 5px;
   background-color: white;
@@ -291,4 +290,38 @@ td .el-button.el-button--mini {
 
 .el-pagination.is-background .number {
   padding: 0;
+}
+
+.el-message-box__headerbtn .el-message-box__close {
+  color: #606266;
+}
+
+.el-card.primary {
+  .el-card__header {
+    background-color: $--color-primary;
+  }
+}
+
+.el-card.success {
+  .el-card__header {
+    background-color: $--color-success;
+  }
+}
+
+.el-card.info {
+  .el-card__header {
+    background-color: $--color-info;
+  }
+}
+
+.el-card.warning {
+  .el-card__header {
+    background-color: $--color-warning;
+  }
+}
+
+.el-card.danger {
+  .el-card__header {
+    background-color: $--color-danger;
+  }
 }

@@ -20,10 +20,16 @@ export default {
     ListTable,
     RelationCard
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/remote-apps/all/`,
+        url: `/api/v1/perms/remote-app-permissions/${this.object.id}/remote-apps/all/`,
         columns: [
           // 'remote_app_display'
         ],
@@ -47,8 +53,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      remoteAppPermissionRemoteApp: [],
-      remoteAppPermissionSystemUser: [],
       remoteAppReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add RemoteApp to this permission'),
@@ -63,12 +67,30 @@ export default {
           url: '/api/v1/assets/system-users/',
           processResults(data) {
             let results = data.results
-            results = results.map((item) => {
+            results = results.filter((item) => item.protocol === 'rdp').map((item) => {
               return { label: item.name + '(' + item.username + ')', value: item.id }
             })
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }
+        },
+        hasObjectsId: this.object.system_users,
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/perms/remote-app-permissions-system-users-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              remoteapppermission: objectId,
+              systemuser: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/remote-app-permissions-system-users-relations/?remoteapppermission=${objectId}&systemuser=${itemId}`
+          return this.$axios.delete(relationUrl)
         }
       }
     }

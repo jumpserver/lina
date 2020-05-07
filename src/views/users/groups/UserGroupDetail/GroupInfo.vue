@@ -57,8 +57,7 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         }
-      },
-      cardTitle: this.$tc('Basic Info')
+      }
     }
   },
   computed: {

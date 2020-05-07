@@ -1,39 +1,29 @@
 <template>
-  <GenericDetailPage :object.sync="remoteAppData" v-bind="config" @tab-click="TabClick">
-    <div slot="detail">
-      <el-row :gutter="20">
-        <el-col :span="14">
-          <DetailCard v-if="flag" :title="cardTitle" :items="detailCardItems" />
-        </el-col>
-        <el-col :span="10">
-          <ActiveCard v-bind="activeConfig" />
-        </el-col>
-      </el-row>
-    </div>
-    <div slot="userAndUserGroups">
-      <RemoteAppPermissionUser />
-    </div>
-    <div slot="remoteApp">
-      <RemoteAppPermissionRemoteApp />
-    </div>
-  </GenericDetailPage>
+  <el-row :gutter="20">
+    <el-col :span="14">
+      <DetailCard :title="cardTitle" :items="detailCardItems" />
+    </el-col>
+    <el-col :span="10">
+      <ActiveCard v-bind="activeConfig" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-import { GenericDetailPage } from '@/layout/components'
 import { DetailCard, ActiveCard } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
-import RemoteAppPermissionUser from './RemoteAppPermissionUser'
-import RemoteAppPermissionRemoteApp from './RemoteAppPermissionRemoteApp'
 
 export default {
   name: 'RemoteAppPermissionDetail',
   components: {
-    RemoteAppPermissionUser,
-    RemoteAppPermissionRemoteApp,
-    GenericDetailPage,
     DetailCard,
     ActiveCard
+  },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -65,63 +55,56 @@ export default {
           }
         ],
         url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/`
-      },
-      remoteAppData: {}
+      }
     }
   },
   computed: {
     cardTitle() {
-      return this.remoteAppData.id
+      return this.object.id
     },
     detailCardItems() {
       return [
         {
           key: this.$t('common.Name'),
-          value: this.remoteAppData.name
+          value: this.object.name
         },
         {
           key: this.$t('perms.UserCount'),
-          value: this.getDataLength(this.remoteAppData.users)
+          value: this.getDataLength(this.object.users)
         },
         {
           key: this.$t('perms.UserGroupCount'),
-          value: this.getDataLength(this.remoteAppData.user_groups)
+          value: this.getDataLength(this.object.user_groups)
         },
         {
           key: this.$t('perms.RemoteAppCount'),
-          value: this.getDataLength(this.remoteAppData.remote_apps)
+          value: this.getDataLength(this.object.remote_apps)
         },
         {
           key: this.$t('perms.SystemUserCount'),
-          value: this.getDataLength(this.remoteAppData.system_users)
+          value: this.getDataLength(this.object.system_users)
         },
         {
           key: this.$t('perms.DateStart'),
-          value: toSafeLocalDateStr(this.remoteAppData.date_start)
+          value: toSafeLocalDateStr(this.object.date_start)
         },
         {
           key: this.$t('perms.DateExpired'),
-          value: toSafeLocalDateStr(this.remoteAppData.date_expired)
+          value: toSafeLocalDateStr(this.object.date_expired)
         },
         {
           key: this.$t('perms.DateCreated'),
-          value: toSafeLocalDateStr(this.remoteAppData.date_created)
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('perms.CreatedBy'),
-          value: this.remoteAppData.created_by
+          value: this.object.created_by
         },
         {
           key: this.$t('common.Comment'),
-          value: this.remoteAppData.comment
+          value: this.object.comment
         }
       ]
-    }
-  },
-  watch: {
-    remoteAppData: function(newRemoteAppData, oldRemoteAppData) {
-      this.activeConfig.content[0].is_active = newRemoteAppData.is_active
-      this.flag = true
     }
   },
   methods: {
@@ -130,13 +113,6 @@ export default {
         return data.length
       }
       return data
-    },
-    TabClick(tab) {
-      if (tab.name !== 'detail') {
-        this.$set(this.config, 'hasRightSide', false)
-      } else {
-        this.$set(this.config, 'hasRightSide', true)
-      }
     }
   }
 }

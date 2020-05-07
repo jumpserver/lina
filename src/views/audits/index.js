@@ -2,7 +2,7 @@ export default [
   {
     path: 'login-log',
     name: 'LoginLog',
-    component: () => import('@/views/tree/index'),
+    component: () => import('@/views/audits/LoginLogList.vue'),
     meta: { title: 'LoginLog' }
   },
   {

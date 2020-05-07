@@ -12,12 +12,11 @@
     <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
     <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
-    <el-form-item v-if="defaultButton">
-      <slot name="button-start" />
-      <el-button size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
-      <el-button size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
+    <el-form-item>
+      <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" @click="handleClick(button)">{{ button.title }}</el-button>
+      <el-button v-if="defaultButton" size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
+      <el-button v-if="defaultButton" size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
     </el-form-item>
-    <slot name="Actions" />
   </ElFormRender>
 </template>
 
@@ -40,15 +39,16 @@ export default {
     form: {
       type: Object,
       default: () => { return {} }
+    },
+    moreButtons: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      basicForm: {}
+      basicForm: this.form
     }
-  },
-  mounted() {
-    this.basicForm = this.form
   },
   methods: {
     // 获取表单数据
@@ -66,6 +66,14 @@ export default {
     // 重置表单
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+    handleClick(button) {
+      const callback = button.callback || function(values, form) {
+        console.log('Click ', button.title, ': ', values)
+      }
+      const form = this.$refs['form']
+      const values = form.getFormValue()
+      callback(values, form)
     }
   }
 }

@@ -15,14 +15,14 @@ export default [
   },
   {
     path: 'users/:id/update',
-    component: () => import('@/views/perms/AssetPermissionCreateUpdate.vue'), // Parent router-view
+    component: () => import('@/views/perms/AssetPermissionCreateUpdate.vue'),
     name: 'AssetPermissionUpdate',
     hidden: true,
     meta: { title: 'AssetPermissionUpdate', activeMenu: '/perms/asset-permissions', action: 'update' }
   },
   {
     path: 'asset-permissions/:id',
-    component: () => import('@/views/perms/AssetPermissionDetail'),
+    component: () => import('@/views/perms/AssetPermissionDetail/index'),
     name: 'AssetPermissionDetail',
     hidden: true,
     meta: { title: 'AssetPermissionDetail', activeMenu: '/perms/asset-permissions' }
@@ -49,7 +49,7 @@ export default [
   },
   {
     path: 'remote-app-permissions/:id',
-    component: () => import('@/views/perms/RemoteAppPermissionDetail'),
+    component: () => import('@/views/perms/RemoteAppPermissionDetail/index'),
     name: 'RemoteAppPermissionDetail',
     hidden: true,
     meta: { title: 'RemoteAppPermissionDetail', activeMenu: '/perms/remote-app-permissions' }
@@ -76,7 +76,7 @@ export default [
   },
   {
     path: 'database-app-permissions/:id',
-    component: () => import('@/views/perms/DatabaseAppPermissionDetail'),
+    component: () => import('@/views/perms/DatabaseAppPermissionDetail/index'),
     name: 'DatabaseAppPermissionDetail',
     hidden: true,
     meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/database-app-permissions' }

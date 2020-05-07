@@ -12,10 +12,16 @@ export default {
   components: {
     ListTable
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/ops/adhoc-executions/?task=${this.$route.params.id}`,
+        url: `/api/v1/ops/adhoc-executions/?task=${this.object.id}`,
         columns: [
           'date_start', 'stat', 'ratio', 'is_finished', 'is_success', 'timedelta', 'adhoc_short_id', 'actions'
         ],

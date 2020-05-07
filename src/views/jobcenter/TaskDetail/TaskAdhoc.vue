@@ -11,10 +11,16 @@ export default {
   components: {
     ListTable
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/ops/adhoc/?task=${this.$route.params.id}`,
+        url: `/api/v1/ops/adhoc/?task=${this.object.id}`,
         columns: [
           'short_id', 'hosts', 'pattern', 'run_as', 'become_display', 'date_created', 'actions'
         ],
@@ -52,7 +58,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            abel: this.$tc('Action'),
+            label: this.$tc('Action'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,

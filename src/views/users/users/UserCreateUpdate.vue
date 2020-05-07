@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" @validate="console.log('hello')" />
 </template>
 
 <script>
@@ -9,6 +9,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     return {
       initial: {
         password_strategy: 0,
@@ -50,7 +51,15 @@ export default {
             value: []
           }
         }
-      }
+      },
+      moreButtons: [
+        {
+          title: 'Test',
+          callback: function(values) {
+            vm.$log.debug('hello: ', values)
+          }
+        }
+      ]
     }
   }
 }

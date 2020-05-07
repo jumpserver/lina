@@ -17,7 +17,7 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('common.name'),
+            label: this.$t('common.Name'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'AdminUserDetail'
