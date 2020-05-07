@@ -47,7 +47,7 @@ export default {
           }
         },
         {
-          title: this.$t('users.Reset MFA'),
+          title: this.$t('users.resetMFATitle'),
           attrs: {
             type: 'primary',
             label: this.$tc('Reset')
@@ -59,7 +59,7 @@ export default {
           }
         },
         {
-          title: this.$t('users.Send reset password mail'),
+          title: this.$t('users.resetPasswordTitle'),
           attrs: {
             type: 'primary',
             label: this.$tc('Send')
@@ -80,7 +80,7 @@ export default {
                   try {
                     await vm.$axios.patch(url, {})
                     done()
-                    this.$message.success(successMsg)
+                    vm.$message.success(successMsg)
                   } finally {
                     instance.confirmButtonLoading = false
                   }
@@ -90,14 +90,33 @@ export default {
           }
         },
         {
-          title: this.$t('users.Send reset ssh key mail'),
+          title: this.$t('users.resetPublicKeyTitle'),
           attrs: {
             type: 'primary',
             label: this.$tc('Send')
           },
           callbacks: {
             click: function() {
-              console.log('click')
+              const warnMsg = vm.$t('users.resetPublicKeyWarningMsg')
+              const warnTitle = vm.$tc('Info')
+              const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
+              const successMsg = vm.$t('users.resetPasswordSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.patch(url, {})
+                    done()
+                    vm.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
             }
           }
         },

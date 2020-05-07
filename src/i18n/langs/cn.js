@@ -225,13 +225,16 @@ const cn = {
     'Date password updated': '更新密码日期',
     'MFA': '多因子认证',
     'Source': '用户来源',
-    'Reset MFA': '重置多因子认证',
+    'resetMFATitle': '重置多因子认证',
     'Send reset password mail': '发送重置密码邮件',
-    'Send reset ssh key mail': '发送重置密钥邮件',
+    'resetPublicKeyTitle': '发送重置密钥邮件',
+    'resetPasswordTitle': '发送重置密码邮件',
     'Unblock user': '解除登录限制',
     'Force enabled MFA': '强制启用多因子认证',
     'resetPasswordWarningMsg': '将失效用户当前密码，并发送重设密码邮件到用户邮箱',
-    'resetPublicKeyWarningMsg': '将会失效用户当前密钥，并发送重置邮件到用户邮箱'
+    'resetPasswordSuccessMsg': '已发送邮件到用户邮箱',
+    'resetPublicKeyWarningMsg': '将会失效用户当前密钥，并发送重置邮件到用户邮箱',
+    'resetPublicKeySuccessMsg': '已发送邮件到用户邮箱'
   },
   // 用户组
   assets: {
