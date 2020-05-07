@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="remoteAppReletionConfig" />
-      <RelationCard v-bind="systemUserReletionConfig" />
+      <RelationCard type="primary" v-bind="remoteAppReletionConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -58,6 +58,21 @@ export default {
         title: this.$t('perms.Add RemoteApp to this permission'),
         objectsAjax: {
           url: '/api/v1/applications/remote-apps/'
+        },
+        hasObjectsId: this.object.remote_apps,
+        performAdd: (items) => {
+          const objectId = this.object.id
+          console.log('this.object===', this.object)
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/add/`
+          const remoteAppId = items.map(v => v.value)
+          const data = { remote_apps: remoteAppId }
+          return this.$axios.patch(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/remove/`
+          const data = { remote_apps: [item.value] }
+          return this.$axios.patch(relationUrl, data)
         }
       },
       systemUserReletionConfig: {
@@ -76,21 +91,20 @@ export default {
         },
         hasObjectsId: this.object.system_users,
         performAdd: (items) => {
-          const relationUrl = `/api/v1/perms/remote-app-permissions-system-users-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
-            return {
-              remoteapppermission: objectId,
-              systemuser: v.value
-            }
-          })
-          return this.$axios.post(relationUrl, data)
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
+          const objectRelationSystemUsers = this.object.system_users
+          items.map(v => objectRelationSystemUsers.push(v.value))
+          const data = { system_users: objectRelationSystemUsers }
+          return this.$axios.patch(relationUrl, data)
         },
         performDelete: (item) => {
-          const itemId = item.value
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/remote-app-permissions-system-users-relations/?remoteapppermission=${objectId}&systemuser=${itemId}`
-          return this.$axios.delete(relationUrl)
+          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
+          const objectOldRelationSystemUsers = this.object.system_users
+          const objectNewRelationSystemUsers = objectOldRelationSystemUsers.filter(v => v !== item.value)
+          const data = { system_users: objectNewRelationSystemUsers }
+          return this.$axios.patch(relationUrl, data)
         }
       }
     }

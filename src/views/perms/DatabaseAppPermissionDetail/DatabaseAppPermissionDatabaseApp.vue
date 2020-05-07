@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="databaseAppReletionConfig" />
-      <RelationCard v-bind="systemUserReletionConfig" />
+      <RelationCard type="primary" v-bind="databaseAppReletionConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -63,13 +63,24 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      databaseAppPermissionDatabaseApp: [],
-      databaseAppPermissionSystemUser: [],
       databaseAppReletionConfig: {
         icon: 'fa-info',
         title: this.$t('perms.Add DatabaseApp to this permission'),
         objectsAjax: {
           url: '/api/v1/applications/database-apps/'
+        },
+        hasObjectsId: this.object.databaseapp,
+        performAdd: (items) => {
+          console.log('this.object===', this.object)
+          const relationUrl = `/api/v1/perms/database-app-permissions-database-apps-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              databaseapppermission: objectId,
+              databaseapp: v.value
+            }
+          })
+          return this.$axios.post(relationUrl, data)
         }
       },
       hasObjectsId: this.object.system_users,
@@ -79,7 +90,6 @@ export default {
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           processResults(data) {
-            console.log('data====', data)
             let results = data.results
             results = results.filter((item) => item.protocol === 'mysql').map((item) => {
               return { label: item.name + '(' + item.username + ')', value: item.id }

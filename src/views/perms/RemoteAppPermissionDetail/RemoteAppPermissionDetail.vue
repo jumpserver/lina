@@ -27,24 +27,6 @@ export default {
   },
   data() {
     return {
-      flag: false,
-      config: {
-        activeMenu: 'detail',
-        submenu: [
-          {
-            title: this.$t('perms.RemoteAppPermissionDetail'),
-            name: 'detail'
-          },
-          {
-            title: this.$t('perms.UsersAndUserGroups'),
-            name: 'userAndUserGroups'
-          },
-          {
-            title: this.$t('perms.RemoteApp'),
-            name: 'remoteApp'
-          }
-        ]
-      },
       activeConfig: {
         icon: 'fa-info',
         title: this.$t('perms.QuickModify'),
@@ -54,7 +36,7 @@ export default {
             is_active: true
           }
         ],
-        url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/`
+        url: `/api/v1/perms/remote-app-permissions/${this.object.id}/`
       }
     }
   },

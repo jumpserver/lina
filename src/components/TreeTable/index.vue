@@ -2,7 +2,13 @@
   <el-collapse-transition>
     <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
       <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
-        <AutoDataZTree :setting="treeSetting" class="auto-data-ztree" @urlChange="handleUrlChange" />
+        <!--        <AutoDataZTree :setting="treeSetting" class="auto-data-ztree" @urlChange="handleUrlChange" />-->
+        <component
+          :is="component"
+          :setting="treeSetting"
+          class="auto-data-ztree"
+          @urlChange="handleUrlChange"
+        />
       </div>
       <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
         <div class="mini">
@@ -38,6 +44,11 @@ export default {
     showTree: {
       type: Boolean,
       default: true
+    },
+    // 默认引用的Tree组件
+    component: {
+      type: String,
+      default: () => 'AutoDataZTree'
     }
   },
   data() {

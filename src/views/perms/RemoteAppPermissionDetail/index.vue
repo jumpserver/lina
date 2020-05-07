@@ -39,17 +39,6 @@ export default {
             name: 'RemoteAppPermissionRemoteApp'
           }
         ]
-      },
-      activeConfig: {
-        icon: 'fa-info',
-        title: this.$t('perms.QuickModify'),
-        content: [
-          {
-            name: this.$t('perms.Active'),
-            is_active: true
-          }
-        ],
-        url: `/api/v1/perms/remote-app-permissions/${this.$route.params.id}/`
       }
     }
   },

@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="userReletionConfig" />
-      <RelationCard v-bind="groupReletionConfig" />
+      <RelationCard type="primary" v-bind="userReletionConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="groupReletionConfig" />
     </el-col>
   </el-row>
 </template>
@@ -78,10 +78,8 @@ export default {
           }
         },
         performAdd: (items) => {
-          console.log('item=====', items)
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
           const objectId = this.object.id
-          console.log('objectId====', objectId)
           const data = items.map(v => {
             return {
               user: v.value,
@@ -110,7 +108,6 @@ export default {
           return this.$axios.post(relationUrl, data)
         },
         performDelete: (item) => {
-          console.log('item-group-==', item)
           // const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/?assetpermission=${objectId}`

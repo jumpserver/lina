@@ -4,9 +4,9 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="assetReletionConfig" />
-      <RelationCard v-bind="nodeReletionConfig" />
-      <RelationCard v-bind="systemUserReletionConfig" />
+      <RelationCard type="primary" v-bind="assetReletionConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
+      <RelationCard type="warning" style="margin-top: 15px" v-bind="systemUserReletionConfig" />
     </el-col>
   </el-row>
 </template>

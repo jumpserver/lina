@@ -7,21 +7,21 @@ export default [
   },
   {
     path: 'tasks/:id',
-    component: () => import('@/views/jobcenter/TaskDetail'),
+    component: () => import('@/views/jobcenter/TaskDetail/index'),
     name: 'TaskDetail',
     hidden: true,
     meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
   },
   {
     path: 'adhoc/:id',
-    component: () => import('@/views/jobcenter/AdhocDetail'),
+    component: () => import('@/views/jobcenter/TaskDetail/AdhocDetail/index'),
     name: 'AdhocDetail',
     hidden: true,
     meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
   },
   {
     path: 'executions/:id',
-    component: () => import('@/views/jobcenter/HistoryExecutionDetail'),
+    component: () => import('@/views/jobcenter/TaskDetail/HistoryExecutionDetail/index'),
     name: 'HistoryExecutionDetail',
     hidden: true,
     meta: { title: 'TaskDetail', activeMenu: '/ops/task' }
