@@ -6,3 +6,11 @@ export function getSettings() {
     method: 'get'
   })
 }
+
+export function testEmailSetting(data) {
+  return request({
+    url: '/api/v1/settings/mail/testing/',
+    method: 'post',
+    data: data
+  })
+}

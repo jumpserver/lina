@@ -8,11 +8,13 @@
     :object.sync="object"
     :fields-meta="fieldsMeta"
     :get-method="getMethod"
+    :more-buttons="moreButtons"
   />
 </template>
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { testEmailSetting } from '@/api/settings'
 
 export default {
   name: 'Email',
@@ -72,11 +74,27 @@ export default {
           helpTips: this.$t('setting.helpTip.emailUserTLS')
         }
       },
-      url: '/api/v1/settings/setting/'
+      url: '/api/v1/settings/setting/',
+      moreButtons: [
+        {
+          title: this.$t('setting.emailTest'),
+          callback: function(value, form) {
+            if (value['EMAIL_HOST_PASSWORD'] === undefined) {
+              value['EMAIL_HOST_PASSWORD'] = ''
+            }
+            testEmailSetting(value).then(res => {
+              console.log(res)
+            })
+          }
+        }
+      ]
     }
   },
   methods: {
     cleanFormValue(data) {
+      if (data['EMAIL_HOST_PASSWORD'] === '') {
+        delete data['EMAIL_HOST_PASSWORD']
+      }
       return {
         email: data
       }

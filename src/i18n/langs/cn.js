@@ -573,6 +573,7 @@ const cn = {
     'securityPasswordNumber': '必须包含数字字符',
     'securityPasswordSpecialChar': '必须包含特殊字符',
     'Hostname': '主机名',
+    'emailTest': '测试连接',
     helpText: {
       'siteUrl': 'eg: http://jumpserver.abc.com:8080',
       'userGuideUrl': '用户第一次登录，修改profile后重定向到地址',
