@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" @validate="console.log('hello')" />
 </template>
 
 <script>
@@ -55,8 +55,8 @@ export default {
       moreButtons: [
         {
           title: 'Test',
-          callback: function() {
-            vm.$log.debug('hello')
+          callback: function(values) {
+            vm.$log.debug('hello: ', values)
           }
         }
       ]
