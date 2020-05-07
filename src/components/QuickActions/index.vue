@@ -12,6 +12,7 @@
 import { IBox } from '@/components'
 import ActionItem from './action'
 
+// 查看 views/users/users/UserDetail/UserInfo.vue 使用样例
 export default {
   name: 'QuickActions',
   components: {

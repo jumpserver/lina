@@ -40,18 +40,10 @@ export default {
             change: function(v, item) {
               const url = `/api/v1/users/users/${vm.object.id}/`
               const data = { is_active: v }
-              // vm.$axios.patch(url, data).then(() => {
-              // })
-              console.log('Current is: ', url, data)
-              console.log(item)
+              vm.$axios.patch(url, data).catch(() => {
+                item.attrs.model = !v
+              })
             }
-          }
-        },
-        {
-          title: this.$t('users.Force enabled MFA'),
-          type: 'switcher',
-          attrs: {
-            model: this.object.mfa_level === 2
           }
         },
         {
