@@ -1,25 +1,24 @@
 <template>
-  <el-card class="box-card primary box-margin">
-    <div slot="header" class="clearfix">
-      <i v-if="icon" :class="'fa ' + icon" />
-      <span>{{ title }}</span>
-    </div>
-    <div>
-      <el-table class="el-table" style="width: 100%" :data="content" :show-header="false">
-        <el-table-column width="150px" prop="hostname" />
-        <el-table-column prop="result">
-          <template slot-scope="scope">
-            <span>{{ scope.row.result }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-  </el-card>
+  <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
+    <el-table class="el-table" style="width: 100%" :data="content" :show-header="false">
+      <el-table-column width="150px" prop="hostname" />
+      <el-table-column prop="result">
+        <template slot-scope="scope">
+          <span>{{ scope.row.result }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+  </IBox>
 </template>
 
 <script>
+import IBox from '@/components/IBox'
+
 export default {
   name: 'RunInfoCard',
+  components: {
+    IBox
+  },
   props: {
     title: {
       type: String,
@@ -36,13 +35,15 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'primary'
     }
   }
 }
 </script>
 
 <style scoped>
-  .box-margin {
-    margin-bottom: 20px;
-  }
+
 </style>

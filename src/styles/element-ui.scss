@@ -150,6 +150,12 @@ td .el-button.el-button--mini {
   color: #ffffff;
 }
 
+.el-card.warning > .el-card__header {
+  background-color: $--color-warning;
+  border-color: $--color-warning;
+  color: #ffffff;
+}
+
 .el-input__inner {
   background-color: #FFFFFF;
   background-image: none;

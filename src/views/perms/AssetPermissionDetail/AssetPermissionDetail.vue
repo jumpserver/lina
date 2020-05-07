@@ -4,7 +4,7 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <ActiveCard v-bind="activeConfig" />
+      <ActiveCard type="primary" v-bind="activeConfig" />
     </el-col>
   </el-row>
 </template>

@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard v-bind="RunSuccessConfig" />
-      <RunInfoCard v-bind="RunFailedConfig" />
+      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
+      <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
 </template>
@@ -102,16 +102,7 @@ export default {
       ]
     }
   },
-  mounted() {
-    // this.getTaskDetailData()
-  },
   methods: {
-    // getTaskDetailData() {
-    //   getTaskDetail(this.$route.params.id).then(data => {
-    //     this.taskData = data
-    //     this.flag = true
-    //   })
-    // },
     toChoicesDisplay(c) {
       if (!c) {
         return this.$t('jobcenter.No')
