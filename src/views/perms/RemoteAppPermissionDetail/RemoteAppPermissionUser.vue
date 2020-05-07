@@ -47,8 +47,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      remoteAppPermissionUser: [],
-      remoteAppPermissionUserGroup: [],
       userReletionConfig: {
         icon: 'fa-user',
         title: this.$t('perms.Add user to this permission'),

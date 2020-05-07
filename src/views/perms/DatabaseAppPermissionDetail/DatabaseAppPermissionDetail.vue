@@ -36,7 +36,7 @@ export default {
             is_active: this.object.is_active
           }
         ],
-        url: `/api/v1/perms/database-app-permissions/${this.$route.params.id}/`
+        url: `/api/v1/perms/database-app-permissions/${this.object.id}/`
       }
     }
   },
