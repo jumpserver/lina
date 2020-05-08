@@ -120,12 +120,10 @@ export default {
           this.loading = true
           const that = this
           const res = this.$axios.post(relationUrl, data)
-          console.log('1111111.==================================================================', this)
           setTimeout(function() {
             that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
             that.loading = false
           }, 500)
-          console.log('222222.==================================================================', this)
           return res
         },
         performDelete: (item) => {

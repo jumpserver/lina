@@ -26,10 +26,6 @@ export default {
       })
     },
     iCanDelete() {
-      // console.log('this.col===', this.col)
-      // console.log('this.row===', this.row)
-      // console.log('this===', this)
-      // console.log('objects===', this.col.objects)
       return this.col.objects.indexOf(this.cellValue) === -1
     }
   }
