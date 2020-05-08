@@ -25,7 +25,17 @@ export default {
         users: {
           el: {
             value: [],
-            url: '/api/v1/users/users/'
+            ajax: {
+              url: '/api/v1/users/users/',
+              processResults(data) {
+                let results = data.results
+                results = results.map((item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
           }
         },
         user_groups: {
@@ -43,7 +53,17 @@ export default {
         system_users: {
           el: {
             value: [],
-            url: '/api/v1/assets/system-users/'
+            ajax: {
+              url: '/api/v1/assets/system-users/',
+              processResults(data) {
+                let results = data.results
+                results = results.filter((item) => item.protocol === 'mysql').map((item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
           }
         },
         actions: {

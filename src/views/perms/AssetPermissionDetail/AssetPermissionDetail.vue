@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       activeConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.QuickModify'),
         content: [
           {
@@ -96,7 +96,7 @@ export default {
   methods: {
     getDataLength(data) {
       if (data instanceof Array) {
-        return data.length
+        return JSON.stringify(data.length)
       }
       return data
     }

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="databaseAppReletionConfig" />
@@ -44,6 +44,7 @@ export default {
             label: this.$tc('Action'),
             align: 'center',
             width: 150,
+            objects: this.object.database_apps,
             formatter: DeleteActionFormatter,
             deleteUrl: `/api/v1/perms/database-app-permissions-database-apps-relations/?databaseapppermission=${this.$route.params.id}&databaseapp=`
           }
@@ -64,14 +65,14 @@ export default {
         hasRightActions: false
       },
       databaseAppReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add DatabaseApp to this permission'),
         objectsAjax: {
           url: '/api/v1/applications/database-apps/'
         },
-        hasObjectsId: this.object.databaseapp,
+        hasObjectsId: this.object.database_apps,
+        showHasObjects: false,
         performAdd: (items) => {
-          console.log('this.object===', this.object)
           const relationUrl = `/api/v1/perms/database-app-permissions-database-apps-relations/`
           const objectId = this.object.id
           const data = items.map(v => {
@@ -80,12 +81,13 @@ export default {
               databaseapp: v.value
             }
           })
-          return this.$axios.post(relationUrl, data)
+          const res = this.$axios.post(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         }
       },
-      hasObjectsId: this.object.system_users,
       systemUserReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add System User to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',

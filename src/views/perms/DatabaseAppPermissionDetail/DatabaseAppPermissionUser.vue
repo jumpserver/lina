@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userReletionConfig" />
@@ -45,6 +45,7 @@ export default {
             label: this.$tc('Action'),
             align: 'center',
             width: 150,
+            objects: this.object.users,
             formatter: DeleteActionFormatter,
             deleteUrl: `/api/v1/perms/database-app-permissions-users-relations/?databaseapppermission=${this.object.id}&user=`
           }
@@ -64,8 +65,6 @@ export default {
         hasSearch: false,
         hasRightActions: false
       },
-      databaseAppPermissionUser: [],
-      databaseAppPermissionUserGroup: [],
       userReletionConfig: {
         icon: 'fa-user',
         title: this.$t('perms.Add user to this permission'),
@@ -80,6 +79,8 @@ export default {
             return { results: results, pagination: more, total: data.count }
           }
         },
+        hasObjectsId: this.object.users,
+        showHasObjects: false,
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/database-app-permissions-users-relations/`
           const objectId = this.object.id
@@ -89,7 +90,9 @@ export default {
               user: v.value
             }
           })
-          return this.$axios.post(relationUrl, data)
+          const res = this.$axios.post(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         }
       },
       groupReletionConfig: {
@@ -108,7 +111,9 @@ export default {
               usergroup: v.value
             }
           })
-          return this.$axios.post(relationUrl, data)
+          const res = this.$axios.post(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         },
         performDelete: (item) => {
           // const itemId = item.value

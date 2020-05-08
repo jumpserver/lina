@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="remoteAppReletionConfig" />
@@ -54,29 +54,26 @@ export default {
         hasRightActions: false
       },
       remoteAppReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add RemoteApp to this permission'),
         objectsAjax: {
           url: '/api/v1/applications/remote-apps/'
         },
         hasObjectsId: this.object.remote_apps,
+        showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
           console.log('this.object===', this.object)
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/add/`
           const remoteAppId = items.map(v => v.value)
           const data = { remote_apps: remoteAppId }
-          return this.$axios.patch(relationUrl, data)
-        },
-        performDelete: (item) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/remove/`
-          const data = { remote_apps: [item.value] }
-          return this.$axios.patch(relationUrl, data)
+          const res = this.$axios.patch(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         }
       },
       systemUserReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add System User to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',

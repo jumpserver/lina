@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -18,9 +18,7 @@ export default {
           {
             prop: 'name',
             label: this.$t('assets.name'),
-            formatter: DetailFormatter,
-            sortable: true,
-            route: 'LabelDetail'
+            sortable: true
           },
           {
             prop: 'value',

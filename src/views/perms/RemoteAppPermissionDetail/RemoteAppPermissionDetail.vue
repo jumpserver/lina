@@ -28,12 +28,12 @@ export default {
   data() {
     return {
       activeConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.QuickModify'),
         content: [
           {
             name: this.$t('perms.Active'),
-            is_active: true
+            is_active: this.object.is_active
           }
         ],
         url: `/api/v1/perms/remote-app-permissions/${this.object.id}/`
@@ -92,7 +92,7 @@ export default {
   methods: {
     getDataLength(data) {
       if (data instanceof Array) {
-        return data.length
+        return JSON.stringify(data.length)
       }
       return data
     }

@@ -152,7 +152,8 @@ const cn = {
     'CreateReplayStorage': '创建录像存储',
     'ReplayStorageUpdate': '更新录像存储',
     'CreateCommandStorage': '创建命令存储',
-    'CommandStorageUpdate': '更新命令存储'
+    'CommandStorageUpdate': '更新命令存储',
+    'CommandFilterRulesCreate': ' 创建命令过滤器规则'
   },
   auth: {
     'You have been logged out, Please log in again': '账号已退出，请重新登录',
@@ -281,7 +282,6 @@ const cn = {
     'is_active': '激活',
     'serial_number': '序列号',
     'asset_number': '资产编号',
-    'created_by': '创建者',
     'date_joined': '创建日期',
     'quick_modify': '快速修改',
     'active': '激活中',
@@ -308,6 +308,7 @@ const cn = {
     'AdminUserCreate': '创建管理用户',
     'AdminUserUpdate': '更新管理用户',
     'username': '用户名',
+    'login_mode_display': '登录模式',
     'replace_node_assets_admin_user_with_this': '替换资产的管理员',
     'select_nodes': '选择节点',
     // 系统用户
@@ -316,6 +317,7 @@ const cn = {
     'SystemUserCreate': '创建系统用户',
     'SystemUserUpdate': '更新系统用户',
     'protocol': '协议',
+    'assetlist': '资产列表',
     'loginMode': '登录模式',
     'quick_update': '快速更新',
     'auto_push': '自动更新',
@@ -329,11 +331,17 @@ const cn = {
     'command_filter_list': '命令过滤器列表',
     'create_command_filter': '创建命令过滤器',
     'update_command_filter': '更新命令过滤器',
-    'command_filter_detail': '命令过滤器详情',
+    'commandFilterDetail': '命令过滤器详情',
     'rules': '规则',
     'systemUser': '系统用户',
     'date_updated': '更新日期',
+    'detail': '详情',
+    'type': '类型',
+    'content': '内容',
+    'priority': '优先级',
+    'ruleaction': '策略',
     'binding_to_system_user': '绑定到系统用户',
+    'created_by': '创建者',
     // 系统平台
     'platform_list': '平台列表',
     'create_platform': '创建系统平台',
@@ -342,6 +350,7 @@ const cn = {
     'BasePlatform': '基础平台',
     'charset': '编码',
     'meta': '元数据'
+
   },
   applications: {
     'applications': '应用管理',

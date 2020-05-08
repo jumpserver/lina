@@ -4,6 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { AssetSelect } from '@/components'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -27,7 +29,17 @@ export default {
         users: {
           el: {
             value: [],
-            url: '/api/v1/users/users/'
+            ajax: {
+              url: '/api/v1/users/users/',
+              processResults(data) {
+                let results = data.results
+                results = results.map((item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
           }
         },
         user_groups: {
@@ -37,21 +49,43 @@ export default {
           }
         },
         assets: {
-          el: {
-            value: [],
-            url: '/api/v1/assets/nodes/children/tree/'
-          }
+          type: 'assetSelect',
+          component: AssetSelect,
+          label: this.$t('perms.Asset'),
+          rules: [{
+            required: false
+          }]
         },
         nodes: {
           el: {
             value: [],
-            url: '/api/v1/assets/nodes/'
+            ajax: {
+              url: '/api/v1/assets/nodes/',
+              processResults(data) {
+                let results = data.results
+                results = results.map((item) => {
+                  return { label: item.full_value, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
           }
         },
         system_users: {
           el: {
             value: [],
-            url: '/api/v1/assets/system-users/'
+            ajax: {
+              url: '/api/v1/assets/system-users/',
+              processResults(data) {
+                let results = data.results
+                results = results.map((item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
           }
         },
         actions: {
