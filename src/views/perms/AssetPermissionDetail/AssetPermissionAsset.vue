@@ -65,14 +65,14 @@ export default {
         hasRightActions: false
       },
       assetReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add asset to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/assets/'
         }
       },
       nodeReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add node to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
@@ -105,7 +105,7 @@ export default {
         }
       },
       systemUserReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add System User to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',

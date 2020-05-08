@@ -64,14 +64,13 @@ export default {
         hasRightActions: false
       },
       databaseAppReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add DatabaseApp to this permission'),
         objectsAjax: {
           url: '/api/v1/applications/database-apps/'
         },
         hasObjectsId: this.object.databaseapp,
         performAdd: (items) => {
-          console.log('this.object===', this.object)
           const relationUrl = `/api/v1/perms/database-app-permissions-database-apps-relations/`
           const objectId = this.object.id
           const data = items.map(v => {
@@ -85,7 +84,7 @@ export default {
       },
       hasObjectsId: this.object.system_users,
       systemUserReletionConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.Add System User to this permission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',

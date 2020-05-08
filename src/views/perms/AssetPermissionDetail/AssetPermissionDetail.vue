@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       activeConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.QuickModify'),
         content: [
           {
