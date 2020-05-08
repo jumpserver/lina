@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" v-loading="loading" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userReletionConfig" />
@@ -30,6 +30,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       tableConfig: {
         url: `/api/v1/perms/database-app-permissions/${this.object.id}/users/all/`,
         columns: [
@@ -90,8 +91,13 @@ export default {
               user: v.value
             }
           })
+          this.loading = true
+          const that = this
           const res = this.$axios.post(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         }
       },
@@ -111,16 +117,26 @@ export default {
               usergroup: v.value
             }
           })
+          this.loading = true
+          const that = this
           const res = this.$axios.post(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         },
         performDelete: (item) => {
-          // const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}`
-          // const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}&usergroups=${itemId}`
-          return this.$axios.delete(relationUrl)
+          this.loading = true
+          const that = this
+          const res = this.$axios.delete(relationUrl)
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
+          return res
         }
       }
     }
