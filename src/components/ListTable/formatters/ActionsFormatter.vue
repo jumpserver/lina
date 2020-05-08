@@ -18,7 +18,7 @@ const defaultUpdateCallback = function({ row, col }) {
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  const msg = this.$tco('Are you sure to delete') + ' "' + row.name + '"'
+  const msg = this.$ttc('deleteWarningMsg') + ' "' + row.name + '"'
   const title = this.$ttc('info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
@@ -71,7 +71,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$tco('Update'),
+        title: this.$ttc('update'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -79,7 +79,7 @@ export default {
       },
       {
         name: 'delete',
-        title: this.$tco('Delete'),
+        title: this.$ttc('delete'),
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,

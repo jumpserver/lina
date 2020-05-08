@@ -25,7 +25,7 @@
         <td colspan="2">
           <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
-            {{ $tco('More') }}
+            {{ $ttc('more') }}
           </el-button>
         </td>
       </tr>

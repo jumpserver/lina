@@ -11,8 +11,6 @@ const cn = {
     'commercialSupport': '商业支持'
   },
   action: {
-    'update': '更新',
-    'delete': '删除',
     'exportRange': '导出范围',
     'exportAll': '导出全部',
     'exportOnlySelectedItems': '仅导出选中项',
@@ -54,7 +52,7 @@ const cn = {
     'info': '提示',
     'submit': '提交',
     'reset': '重置',
-    'this field is required': '这个字段是必填项',
+    'requiredErrorMsg': '这个字段是必填项',
     'validity': '有效性',
     'confirm': '确认',
     'cancel': '取消',
@@ -66,6 +64,7 @@ const cn = {
     'updateFailedMsg': '更新失败',
     'disableSelected': '禁用所选',
     'activeSelected': '激活所选',
+    'deleteWarningMsg': '你确定要删除',
     'rows': '行',
     'basicInfo': '基本信息',
     'commandFilter': '命令过滤器',

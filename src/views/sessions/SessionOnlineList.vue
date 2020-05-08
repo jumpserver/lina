@@ -48,7 +48,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$tco('Action'),
+            label: this.$ttc('action'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,
