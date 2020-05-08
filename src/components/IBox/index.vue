@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
   .ibox {
-    height: 100%;
+    /*height: 100%;*/
     clear: both;
     padding: 0;
     background-color: #ffffff;

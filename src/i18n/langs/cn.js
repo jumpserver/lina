@@ -83,7 +83,8 @@ const cn = {
     'profile': '个人信息',
     'userPage': '用户页面',
     'apiKey': 'API Key',
-    'logout': '退出'
+    'logout': '退出',
+    'show': '显示'
   },
   route: {
     'dashboard': '仪表盘',
@@ -227,7 +228,8 @@ const cn = {
     'resetPublicKeySuccessMsg': '已发送邮件到用户邮箱',
     'unblockSuccessMsg': '该用户账号已解锁',
     'resetMFAWarningMsg': '将重置用户的MFA配置，用户需要再次设置',
-    'resetMFAdSuccessMsg': '用户的MFA已重置成功'
+    'resetMFAdSuccessMsg': '用户的MFA已重置成功',
+    'users': '用户'
   },
   // 用户组
   assets: {
@@ -236,6 +238,7 @@ const cn = {
     'asset_detail': '资产详情',
     'create_asset': '创建资产',
     'update_asset': '更新资产',
+    'systemUsers': '系统用户',
     'hostname': '主机名',
     'ip': 'IP',
     'hardware': '硬件',

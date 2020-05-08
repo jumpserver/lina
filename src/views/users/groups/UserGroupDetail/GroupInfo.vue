@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :title="cardTitle" :items="detailItems" />
+      <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard v-bind="relationConfig" />
@@ -27,7 +27,7 @@ export default {
     return {
       relationConfig: {
         icon: 'fa-user',
-        title: this.$tco('Members'),
+        title: this.$ttc('members'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {
@@ -64,19 +64,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$tco('Name'),
+          key: this.$ttc('name'),
           value: this.object.name
         },
         {
-          key: this.$tco('Created by'),
+          key: this.$ttc('createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$tco('Date Created'),
+          key: this.$ttc('dateCreated'),
           value: this.object.date_created
         },
         {
-          key: this.$tco('Comment'),
+          key: this.$ttc('comment'),
           value: this.object.comment
         }
       ]
