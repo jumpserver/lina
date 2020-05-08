@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userReletionConfig" />
@@ -44,6 +44,7 @@ export default {
             label: this.$tc('Action'),
             align: 'center',
             width: 150,
+            objects: this.object.users,
             formatter: DeleteActionFormatter,
             deleteUrl: `/api/v1/perms/asset-permissions-users-relations/?assetpermission=${this.object.id}&user=`
           }
@@ -77,6 +78,8 @@ export default {
             return { results: results, pagination: more, total: data.count }
           }
         },
+        hasObjectsId: this.object.users,
+        showHasObjects: false,
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-users-relations/`
           const objectId = this.object.id
@@ -86,7 +89,10 @@ export default {
               assetpermission: objectId
             }
           })
-          return this.$axios.post(relationUrl, data)
+          const res = this.$axios.post(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
+          // return this.$axios.post(relationUrl, data)
         }
       },
       groupReletionConfig: {
@@ -105,13 +111,19 @@ export default {
               usergroup: v.value
             }
           })
-          return this.$axios.post(relationUrl, data)
+          const res = this.$axios.post(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
+          // return this.$axios.post(relationUrl, data)
         },
         performDelete: (item) => {
           // const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/?assetpermission=${objectId}`
-          return this.$axios.delete(relationUrl)
+          const res = this.$axios.delete(relationUrl)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
+          // return this.$axios.delete(relationUrl)
         }
       }
     }

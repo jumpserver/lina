@@ -4,6 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { AssetSelect } from '@/components'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -47,10 +49,12 @@ export default {
           }
         },
         assets: {
-          el: {
-            value: [],
-            url: '/api/v1/assets/nodes/children/tree/'
-          }
+          type: 'assetSelect',
+          component: AssetSelect,
+          label: this.$t('perms.Asset'),
+          rules: [{
+            required: false
+          }]
         },
         nodes: {
           el: {

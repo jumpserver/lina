@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="assetReletionConfig" />
@@ -45,6 +45,7 @@ export default {
             label: this.$tc('Action'),
             align: 'center',
             width: 150,
+            objects: this.object.assets,
             formatter: DeleteActionFormatter,
             deleteUrl: `/api/v1/perms/asset-permissions-assets-relations/?assetpermission=${this.$route.params.id}&asset=`
           }
@@ -95,13 +96,17 @@ export default {
               node: v.value
             }
           })
-          return this.$axios.post(relationUrl, data)
+          const res = this.$axios.post(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         },
         performDelete: (item) => {
           const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/?assetpermission=${objectId}&node=${itemId}`
-          return this.$axios.delete(relationUrl)
+          const res = this.$axios.delete(relationUrl)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         }
       },
       systemUserReletionConfig: {

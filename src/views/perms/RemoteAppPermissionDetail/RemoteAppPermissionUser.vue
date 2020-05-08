@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userReletionConfig" />
@@ -68,18 +68,15 @@ export default {
           }
         },
         hasObjectsId: this.object.users,
+        showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/users/add/`
           const usersId = items.map(v => v.value)
           const data = { users: usersId }
-          return this.$axios.patch(relationUrl, data)
-        },
-        performDelete: (item) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/users/remove/`
-          const data = { users: [item.value] }
-          return this.$axios.patch(relationUrl, data)
+          const res = this.$axios.patch(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         }
       },
       groupReletionConfig: {
@@ -95,7 +92,9 @@ export default {
           const objectRelationUserGroups = this.object.user_groups
           items.map(v => objectRelationUserGroups.push(v.value))
           const data = { user_groups: objectRelationUserGroups }
-          return this.$axios.patch(relationUrl, data)
+          const res = this.$axios.patch(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         },
         performDelete: (item) => {
           const objectId = this.object.id
@@ -103,7 +102,9 @@ export default {
           const objectOldRelationUserGroups = this.object.user_groups
           const objectNewRelationUserGroups = objectOldRelationUserGroups.filter(v => v !== item.value)
           const data = { user_groups: objectNewRelationUserGroups }
-          return this.$axios.patch(relationUrl, data)
+          const res = this.$axios.patch(relationUrl, data)
+          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          return res
         }
       }
     }
