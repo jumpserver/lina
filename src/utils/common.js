@@ -81,3 +81,24 @@ export function getApiPath(that) {
   const pagePath = that.$route.path
   return `/api/v1${pagePath}/`
 }
+
+export function confirm({ msg, title, perform, success, failed, type = 'warning' }) {
+  this.$alert(msg, title, {
+    type: type,
+    confirmButtonClass: 'el-button--info',
+    showCancelButton: true,
+    beforeClose: async(action, instance, done) => {
+      if (action !== 'confirm') return done()
+      instance.confirmButtonLoading = true
+      try {
+        await perform()
+        done()
+        if (typeof success === 'string') {
+          this.$message.success(success)
+        }
+      } finally {
+        instance.confirmButtonLoading = false
+      }
+    }
+  })
+}

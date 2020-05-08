@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard v-bind="RunSuccessConfig" />
-      <RunInfoCard v-bind="RunFailedConfig" />
+      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
+      <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
 </template>
@@ -65,7 +65,7 @@ export default {
         },
         {
           key: this.$t('jobcenter.Hosts'),
-          value: this.object.hosts.length
+          value: JSON.stringify(this.object.hosts.length)
         },
         {
           key: this.$t('jobcenter.Pattern'),
@@ -73,7 +73,8 @@ export default {
         },
         {
           key: this.$t('jobcenter.Options'),
-          value: this.object.options
+          value: this.disPlayOptions(this.object.options)
+          // value: this.object.options
         },
         {
           key: this.$t('jobcenter.RunAs'),
@@ -124,6 +125,9 @@ export default {
         return 'Admin'
       }
       return run_as
+    },
+    disPlayOptions(options) {
+      return options.replace(/:/g, '=').replace(/'/g, '').replace('{', '').replace('}', '')
     }
   }
 }

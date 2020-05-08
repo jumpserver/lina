@@ -1,18 +1,23 @@
 <template>
   <IBox fa="fa-edit" :title="title" v-bind="$attrs">
     <div class="quick-actions">
-      <slot />
+      <table>
+        <ActionItem v-for="action of actions" :key="action.title" :action="action" />
+      </table>
     </div>
   </IBox>
 </template>
 
 <script>
 import { IBox } from '@/components'
+import ActionItem from './action'
 
+// 查看 views/users/users/UserDetail/UserInfo.vue 使用样例
 export default {
   name: 'QuickActions',
   components: {
-    IBox
+    IBox,
+    ActionItem
   },
   props: {
     title: {
@@ -20,6 +25,10 @@ export default {
       default() {
         return this.$tc('Quick update')
       }
+    },
+    actions: {
+      type: Array,
+      default: () => []
     }
   }
 }
@@ -42,6 +51,7 @@ export default {
   }
 
   .quick-actions >>> button {
-    padding: 1px 13px;
+    padding: 2px 10px;
+    font-size: 13px;
   }
 </style>

@@ -92,11 +92,11 @@ td .el-button.el-button--mini {
   font-weight: 600;
 }
 
-.el-button.el-button--default:focus:not(.is-disabled), .el-button.el-button--default:hover:not(.is-disabled) {
-  color: #606266;
-  border-color: #d2d2d2;
-  background-color: #e6e6e6;
-}
+//.el-button.el-button--default:focus:not(.is-disabled), .el-button.el-button--default:hover:not(.is-disabled) {
+//  color: #606266;
+//  border-color: #d2d2d2;
+//  background-color: #e6e6e6;
+//}
 
 .el-button-group>.el-dropdown>.el-button {
   border-top-left-radius: 0;
@@ -147,6 +147,12 @@ td .el-button.el-button--mini {
 .el-card.info > .el-card__header {
   background-color: $--color-info;
   border-color: $--color-info;
+  color: #ffffff;
+}
+
+.el-card.warning > .el-card__header {
+  background-color: $--color-warning;
+  border-color: $--color-warning;
   color: #ffffff;
 }
 

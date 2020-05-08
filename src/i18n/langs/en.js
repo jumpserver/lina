@@ -83,7 +83,14 @@ const en = {
     'remote_app_granted': 'RemoteApp granted',
     'remote_app_permission': 'RemoteApp permission',
     'database_app_granted': 'DatabaseApp granted',
-    'database_app_permission': 'DatabaseApp permission'
+    'database_app_permission': 'DatabaseApp permission',
+    'resetPublicKeyTitle': 'Send reset ssh key mail',
+    'resetPasswordTitle': 'Send reset password mail',
+    'resetPasswordWarningMsg': 'This will reset the user password and send a reset mail',
+    'resetPasswordSuccessMsg': 'An e-mail has been sent to the user`s mailbox',
+    'resetPublicKeyWarningMsg': 'This will reset the user public key and send a reset mail',
+    'resetPublicKeySuccessMsg': 'An e-mail has been sent to the user`s mailbox',
+    'resetMFATitle': 'Reset MFA'
   },
   usergroup: {
     'user_group_list': 'User group list',
@@ -385,6 +392,7 @@ const en = {
     'securityPasswordNumber': 'Must contain numeric characters',
     'securityPasswordSpecialChar': 'Must contain special characters',
     'Hostname': 'Hostname',
+    'emailTest': 'Test connection',
     helpText: {
       'siteUrl': 'eg: http://jumpserver.abc.com:8080',
       'userGuideUrl': 'User first login update profile done redirect to it',

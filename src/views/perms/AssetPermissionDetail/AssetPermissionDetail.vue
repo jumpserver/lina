@@ -4,7 +4,7 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <ActiveCard v-bind="activeConfig" />
+      <ActiveCard type="primary" v-bind="activeConfig" />
     </el-col>
   </el-row>
 </template>
@@ -96,7 +96,7 @@ export default {
   methods: {
     getDataLength(data) {
       if (data instanceof Array) {
-        return data.length
+        return JSON.stringify(data.length)
       }
       return data
     }

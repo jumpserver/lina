@@ -4,8 +4,8 @@
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="userReletionConfig" />
-      <RelationCard v-bind="groupReletionConfig" />
+      <RelationCard type="primary" v-bind="userReletionConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="groupReletionConfig" />
     </el-col>
   </el-row>
 
@@ -114,6 +114,7 @@ export default {
           // const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}`
+          // const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}&usergroups=${itemId}`
           return this.$axios.delete(relationUrl)
         }
       }

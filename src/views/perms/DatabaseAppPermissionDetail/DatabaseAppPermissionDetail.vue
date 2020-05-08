@@ -4,7 +4,7 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <ActiveCard v-bind="activeConfig" />
+      <ActiveCard type="primary" v-bind="activeConfig" />
     </el-col>
   </el-row>
 </template>
@@ -36,7 +36,7 @@ export default {
             is_active: this.object.is_active
           }
         ],
-        url: `/api/v1/perms/database-app-permissions/${this.$route.params.id}/`
+        url: `/api/v1/perms/database-app-permissions/${this.object.id}/`
       }
     }
   },
@@ -92,7 +92,7 @@ export default {
   methods: {
     getDataLength(data) {
       if (data instanceof Array) {
-        return data.length
+        return JSON.stringify(data.length)
       }
       return data
     }

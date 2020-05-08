@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard v-bind="RunSuccessConfig" />
-      <RunInfoCard v-bind="RunFailedConfig" />
+      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
+      <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
 </template>
@@ -73,11 +73,14 @@ export default {
         },
         {
           key: this.$t('jobcenter.TotalVersions'),
-          value: this.object.summary.total
+          value: JSON.stringify(this.object.summary.total)
         },
         {
           key: this.$t('jobcenter.LatestVersion'),
-          value: this.object.latest_execution.adhoc_short_id
+          value: this.object.latest_execution.adhoc_short_id,
+          callback: function(row, data) {
+            return <a href=''>{ data }</a>
+          }
         },
         {
           key: this.$t('jobcenter.LastRun'),
@@ -102,16 +105,7 @@ export default {
       ]
     }
   },
-  mounted() {
-    // this.getTaskDetailData()
-  },
   methods: {
-    // getTaskDetailData() {
-    //   getTaskDetail(this.$route.params.id).then(data => {
-    //     this.taskData = data
-    //     this.flag = true
-    //   })
-    // },
     toChoicesDisplay(c) {
       if (!c) {
         return this.$t('jobcenter.No')
