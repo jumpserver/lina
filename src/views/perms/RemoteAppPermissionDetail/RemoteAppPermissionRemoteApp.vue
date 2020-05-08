@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" v-loading="loading" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="remoteAppReletionConfig" />
@@ -28,6 +28,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       tableConfig: {
         url: `/api/v1/perms/remote-app-permissions/${this.object.id}/remote-apps/all/`,
         columns: [
@@ -67,8 +68,13 @@ export default {
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/add/`
           const remoteAppId = items.map(v => v.value)
           const data = { remote_apps: remoteAppId }
+          this.loading = true
+          const that = this
           const res = this.$axios.patch(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         }
       },

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" v-loading="loading" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userReletionConfig" />
@@ -28,6 +28,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       tableConfig: {
         url: `/api/v1/perms/remote-app-permissions/${this.object.id}/users/all/`,
         columns: [
@@ -74,8 +75,13 @@ export default {
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/users/add/`
           const usersId = items.map(v => v.value)
           const data = { users: usersId }
+          this.loading = true
+          const that = this
           const res = this.$axios.patch(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         }
       },
@@ -92,8 +98,13 @@ export default {
           const objectRelationUserGroups = this.object.user_groups
           items.map(v => objectRelationUserGroups.push(v.value))
           const data = { user_groups: objectRelationUserGroups }
+          this.loading = true
+          const that = this
           const res = this.$axios.patch(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         },
         performDelete: (item) => {
@@ -102,8 +113,13 @@ export default {
           const objectOldRelationUserGroups = this.object.user_groups
           const objectNewRelationUserGroups = objectOldRelationUserGroups.filter(v => v !== item.value)
           const data = { user_groups: objectNewRelationUserGroups }
+          this.loading = true
+          const that = this
           const res = this.$axios.patch(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         }
       }

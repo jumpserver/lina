@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" v-loading="loading" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="assetReletionConfig" />
@@ -30,6 +30,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/assets/all/`,
         columns: [
@@ -96,16 +97,26 @@ export default {
               node: v.value
             }
           })
+          this.loading = true
+          const that = this
           const res = this.$axios.post(relationUrl, data)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         },
         performDelete: (item) => {
           const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/asset-permissions-nodes-relations/?assetpermission=${objectId}&node=${itemId}`
+          this.loading = true
+          const that = this
           const res = this.$axios.delete(relationUrl)
-          this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+          setTimeout(function() {
+            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
+            that.loading = false
+          }, 500)
           return res
         }
       },
