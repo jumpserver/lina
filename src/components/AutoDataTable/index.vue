@@ -4,7 +4,7 @@
 
 <script>
 import DataTable from '../DataTable'
-import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
+import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import { optionUrlMeta } from '@/api/common'
 export default {
   name: 'AutoDataTable',
@@ -62,6 +62,10 @@ export default {
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'
+          break
+        case 'datetime':
+        case 'date_start':
+          col.formatter = DateFormatter
           break
         case 'comment':
           col.showOverflowTooltip = true
