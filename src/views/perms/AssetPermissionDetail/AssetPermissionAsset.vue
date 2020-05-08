@@ -42,7 +42,7 @@ export default {
           },
           delete_action: {
             prop: 'asset',
-            label: this.$tc('Action'),
+            label: this.$tco('Action'),
             align: 'center',
             width: 150,
             objects: this.object.assets,

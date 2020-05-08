@@ -60,7 +60,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            abel: this.$tc('Action'),
+            abel: this.$tco('Action'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,

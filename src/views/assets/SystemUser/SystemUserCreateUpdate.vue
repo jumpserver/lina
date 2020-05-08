@@ -23,10 +23,10 @@ export default {
 
       },
       fields: [
-        [this.$tic('Basic info'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$tc('Auth'), ['auto_generate_key', 'password', 'auto_push']],
-        [this.$tc('Command filter'), ['cmd_filters']],
-        [this.$tc('Others'), ['sftp_root', 'sudo', 'shell', 'comment']]
+        [this.$tic('basicInfoTitle'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$tco('Auth'), ['auto_generate_key', 'password', 'auto_push']],
+        [this.$tco('Command filter'), ['cmd_filters']],
+        [this.$tco('Others'), ['sftp_root', 'sudo', 'shell', 'comment']]
       ],
       fieldsMeta: {
         login_mode: {

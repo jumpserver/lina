@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$tc('Active'),
+          title: this.$tco('Active'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -50,12 +50,12 @@ export default {
           title: this.$t('users.resetMFATitle'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Reset')
+            label: this.$tco('Reset')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.resetMFAWarningMsg')
-              const warnTitle = vm.$tc('Info')
+              const warnTitle = vm.$tco('Info')
               const url = `/api/v1/users/users/${vm.object.id}/otp/reset/`
               const successMsg = vm.$t('users.resetMFAdSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -81,12 +81,12 @@ export default {
           title: this.$t('users.resetPasswordTitle'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Send')
+            label: this.$tco('Send')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.resetPasswordWarningMsg')
-              const warnTitle = vm.$tc('Info')
+              const warnTitle = vm.$tco('Info')
               const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -112,12 +112,12 @@ export default {
           title: this.$t('users.resetPublicKeyTitle'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Send')
+            label: this.$tco('Send')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.resetPublicKeyWarningMsg')
-              const warnTitle = vm.$tc('Info')
+              const warnTitle = vm.$tco('Info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -143,7 +143,7 @@ export default {
           title: this.$t('users.Unblock user'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Unblock'),
+            label: this.$tco('Unblock'),
             disabled: !this.object.login_blocked
           },
           callbacks: {
@@ -189,19 +189,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$tc('Name'),
+          key: this.$tco('Name'),
           value: this.object.name
         },
         {
-          key: this.$tc('Username'),
+          key: this.$tco('Username'),
           value: this.object.username
         },
         {
-          key: this.$tc('Email'),
+          key: this.$tco('Email'),
           value: this.object.email
         },
         {
-          key: this.$tc('Role'),
+          key: this.$tco('Role'),
           value: this.object.role_display
         },
         {
@@ -213,15 +213,15 @@ export default {
           value: this.object.source_display
         },
         {
-          key: this.$tc('Date expired'),
+          key: this.$tco('Date expired'),
           value: this.object.date_expired
         },
         {
-          key: this.$tc('Created by'),
+          key: this.$tco('Created by'),
           value: this.object.created_by
         },
         {
-          key: this.$tc('Date Created'),
+          key: this.$tco('Date Created'),
           value: this.object.date_joined
         },
         {
@@ -233,7 +233,7 @@ export default {
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$tc('Comment'),
+          key: this.$tco('Comment'),
           value: this.object.comment
         }
       ]

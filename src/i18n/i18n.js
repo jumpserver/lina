@@ -23,7 +23,17 @@ Vue.prototype.$tr = (key) => {
   return i18n.t('route.' + key)
 }
 
-Vue.prototype.$tc = (key) => {
+Vue.prototype.$tcap = (key) => {
+  // Cap case
+  return _.capitalize(i18n.t(key))
+}
+
+Vue.prototype.$tt = (key) => {
+  // Title Case
+  return _.startCase(_.camelCase(i18n.t(key)))
+}
+
+Vue.prototype.$tco = (key) => {
   return i18n.t('common.' + key)
 }
 
@@ -33,7 +43,7 @@ Vue.prototype.$tic = (key) => {
 }
 
 Vue.prototype.$ti = (key) => {
-  i18n.t(key.toLowerCase)
+  i18n.t(key.toLowerCase())
 }
 
 export default i18n

@@ -25,7 +25,7 @@ export default {
         activeMenu: 'GroupInfo',
         submenu: [
           {
-            title: this.$tic('Basic Info'),
+            title: this.$tic('basicInfoTitle'),
             name: 'GroupInfo'
           },
           {

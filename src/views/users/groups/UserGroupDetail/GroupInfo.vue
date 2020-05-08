@@ -27,7 +27,7 @@ export default {
     return {
       relationConfig: {
         icon: 'fa-user',
-        title: this.$tc('Members'),
+        title: this.$tco('Members'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {
@@ -64,19 +64,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$tc('Name'),
+          key: this.$tco('Name'),
           value: this.object.name
         },
         {
-          key: this.$tc('Created by'),
+          key: this.$tco('Created by'),
           value: this.object.created_by
         },
         {
-          key: this.$tc('Date Created'),
+          key: this.$tco('Date Created'),
           value: this.object.date_created
         },
         {
-          key: this.$tc('Comment'),
+          key: this.$tco('Comment'),
           value: this.object.comment
         }
       ]

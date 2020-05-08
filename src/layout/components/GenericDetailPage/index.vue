@@ -90,13 +90,13 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$tc('Update'),
+          title: this.$tco('Update'),
           can: this.validActions.canUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$tc('Delete'),
+          title: this.$tco('Delete'),
           can: this.validActions.canDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
@@ -124,8 +124,8 @@ export default {
   },
   methods: {
     defaultDelete() {
-      const msg = this.$tc('Are you sure to delete') + ' ' + this.iTitle + ' ?'
-      const title = this.$tc('Info')
+      const msg = this.$tco('Are you sure to delete') + ' ' + this.iTitle + ' ?'
+      const title = this.$tco('Info')
       const performDelete = async function() {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
@@ -141,10 +141,10 @@ export default {
           try {
             await performDelete.bind(this)()
             done()
-            this.$message.success(this.$tc('Delete success'))
+            this.$message.success(this.$tco('Delete success'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
-            this.$message.error(this.$tc('Delete failed' + ' ' + error))
+            this.$message.error(this.$tco('Delete failed' + ' ' + error))
           } finally {
             instance.confirmButtonLoading = false
           }

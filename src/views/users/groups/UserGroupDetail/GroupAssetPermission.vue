@@ -56,7 +56,7 @@ export default {
             label: this.$t('assets.System users'),
             align: 'center',
             formatter: () => {
-              const title = this.$tc('Show')
+              const title = this.$tco('Show')
               return <a> {title} </a>
             },
             width: '200px'

@@ -75,7 +75,7 @@ const cn = {
     'Deactive selected': '禁用所选',
     'Active selected': '激活所选',
     'rows': '行',
-    'basic info': '基本信息',
+    'basicInfoTitle': '基本信息',
     'Command filter': '命令过滤器',
     'Add': '添加',
     'Auth': '认证',

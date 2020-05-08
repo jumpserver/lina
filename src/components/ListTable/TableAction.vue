@@ -99,7 +99,7 @@ export default {
       defaultActions: [
         {
           name: 'actionCreate',
-          title: this.$tc('Create'),
+          title: this.$tco('Create'),
           type: 'primary',
           has: this.hasCreate,
           can: true,
@@ -108,7 +108,7 @@ export default {
       ],
       defaultMoreActions: [
         {
-          title: this.$tc('Delete selected'),
+          title: this.$tco('Delete selected'),
           name: 'actionDeleteSelected',
           can: (rows) => rows.length > 0,
           has: this.hasBulkDelete,

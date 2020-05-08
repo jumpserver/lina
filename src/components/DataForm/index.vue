@@ -14,8 +14,8 @@
 
     <el-form-item>
       <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" @click="handleClick(button)">{{ button.title }}</el-button>
-      <el-button v-if="defaultButton" size="small" @click="resetForm('form')">{{ $tc('Reset') }}</el-button>
-      <el-button v-if="defaultButton" size="small" type="primary" @click="submitForm('form')">{{ $tc('Submit') }}</el-button>
+      <el-button v-if="defaultButton" size="small" @click="resetForm('form')">{{ $tco('Reset') }}</el-button>
+      <el-button v-if="defaultButton" size="small" type="primary" @click="submitForm('form')">{{ $tco('Submit') }}</el-button>
     </el-form-item>
   </ElFormRender>
 </template>

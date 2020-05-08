@@ -33,14 +33,14 @@ export default {
         extraMoreActions: [
           {
             name: 'deactiveSelected',
-            title: this.$tc('Deactive selected'),
+            title: this.$tco('Deactive selected'),
             callback: () => {
               console.log('deactiveSelected')
             }
           },
           {
             name: 'activeSelected',
-            title: this.$tc('Active selected')
+            title: this.$tco('Active selected')
           }
         ]
       }

@@ -50,7 +50,7 @@ export default {
         case 'actions':
           col = {
             prop: 'id',
-            label: this.$tc('Actions'),
+            label: this.$tco('Actions'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '150px',
@@ -58,7 +58,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = this.$tc('Validity')
+          col.label = this.$tco('Validity')
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'

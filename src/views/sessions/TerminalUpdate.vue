@@ -16,7 +16,7 @@ export default {
       url: '/api/v1/terminal/terminals/',
       fields: [
         [this.$t('sessions.info'), ['name', 'remote_addr', 'command_storage', 'replay_storage']],
-        [this.$tc('Other'), ['comment']]
+        [this.$tco('Other'), ['comment']]
       ],
       fieldsMeta: {
         command_storage: {
