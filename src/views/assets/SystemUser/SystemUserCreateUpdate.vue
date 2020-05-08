@@ -48,7 +48,11 @@ export default {
         auto_generate_key: {
           type: 'switch',
           hidden: form => {
-            this.$router.params || form.login_mode !== 'auto'
+            if (JSON.stringify(this.$route.params) !== '{}') {
+              return true
+            } else {
+              return form.login_mode !== 'auto'
+            }
           }
         },
         protocol: {
