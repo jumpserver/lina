@@ -35,7 +35,7 @@ export default {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
       }).catch(() => {
-        this.totalConfig = this.config
+        // this.totalConfig = this.config
       }).finally(() => {
         this.loading = false
       })
@@ -50,7 +50,7 @@ export default {
         case 'actions':
           col = {
             prop: 'id',
-            label: this.$tco('Actions'),
+            label: this.$ttc('actions'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '150px',
@@ -58,7 +58,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = this.$tco('Validity')
+          col.label = this.$ttc('validity')
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'

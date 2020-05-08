@@ -23,7 +23,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$tco('Quick update')
+        return this.$tco('quickUpdate')
       }
     },
     actions: {

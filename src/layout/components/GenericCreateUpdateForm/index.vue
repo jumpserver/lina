@@ -58,7 +58,7 @@ export default {
     updateSuccessMsg: {
       type: String,
       default: function() {
-        return this.$tco('Update success')
+        return this.$ttc('updateSuccessMsg')
       }
     },
     createSuccessNextRoute: {

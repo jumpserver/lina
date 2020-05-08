@@ -15,9 +15,6 @@ const i18n = new VueI18n({
   messages
 })
 locale.i18n((key, value) => i18n.t(key, value)) // 重点: 为了实现element插件的多语言切换
-Vue.prototype.$ti = (key) => {
-  return i18n.t(key.toLowerCase())
-}
 
 Vue.prototype.$tr = (key) => {
   return i18n.t('route.' + key)
@@ -37,13 +34,8 @@ Vue.prototype.$tco = (key) => {
   return i18n.t('common.' + key)
 }
 
-Vue.prototype.$tic = (key) => {
-  key = 'common.' + key
-  return i18n.t(key.toLowerCase())
-}
-
-Vue.prototype.$ti = (key) => {
-  i18n.t(key.toLowerCase())
+Vue.prototype.$ttc = (key) => {
+  return _.startCase(_.camelCase(i18n.t('common.' + key)))
 }
 
 export default i18n

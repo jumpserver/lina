@@ -115,7 +115,7 @@ export default {
           callback: this.defaultBulkDeleteCallback
         },
         {
-          title: this.$tc('Update selected'),
+          title: this.$tc('updateSelected'),
           name: 'actionUpdateSelected',
           can: (rows) => rows.length > 0,
           has: this.hasBulkUpdate,
@@ -159,7 +159,7 @@ export default {
     },
     defaultBulkDeleteCallback(rows) {
       const msg = this.$tc('Are you sure to delete') + ' ' + rows.length + ' ' + this.$tc('rows')
-      const title = this.$tc('Info')
+      const title = this.$ttc('info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
         type: 'warning',

@@ -25,11 +25,11 @@ export default {
         activeMenu: 'UserInfo',
         submenu: [
           {
-            title: this.$tt('common.basicInfoTitle'),
+            title: this.$ttc('basicInfo'),
             name: 'UserInfo'
           },
           {
-            title: this.$tt('perms.grantedAssetsTitle'),
+            title: this.$tt('perms.grantedAssets'),
             name: 'UserAssetPermission'
           }
         ],

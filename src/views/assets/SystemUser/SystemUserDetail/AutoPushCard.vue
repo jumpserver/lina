@@ -47,9 +47,9 @@ export default {
     HandleChangeAction(index, row) {
       this.$axios.patch(this.url, { auto_push: row.auto_push }
       ).then(res => {
-        this.$message.success(this.$tco('Update success'))
+        this.$message.success(this.$ttc('updateSuccessMsg'))
       }).catch(err => {
-        this.$message.error(this.$tco('Update failed' + ' ' + err))
+        this.$message.error(this.$ttc('updateFailedMsg' + ' ' + err))
       })
     }
   }

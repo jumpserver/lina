@@ -90,13 +90,13 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$tco('Update'),
+          title: this.$ttc('update'),
           can: this.validActions.canUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$tco('Delete'),
+          title: this.$ttc('delete'),
           can: this.validActions.canDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
@@ -125,7 +125,7 @@ export default {
   methods: {
     defaultDelete() {
       const msg = this.$tco('Are you sure to delete') + ' ' + this.iTitle + ' ?'
-      const title = this.$tco('Info')
+      const title = this.$ttc('info')
       const performDelete = async function() {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)

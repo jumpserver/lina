@@ -126,7 +126,7 @@ const en = {
     'delete': 'Delete',
     'search': 'Search',
     'delete_selected': 'Delete selected',
-    'update_selected': 'Update selected',
+    'update_selected': 'updateSelected',
     'remove_from_this_node': 'Remove from this node',
     'deactive_selected': 'Deactive selected',
     'active_selected': 'Active selected',

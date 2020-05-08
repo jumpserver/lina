@@ -19,7 +19,7 @@ const defaultUpdateCallback = function({ row, col }) {
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   const msg = this.$tco('Are you sure to delete') + ' "' + row.name + '"'
-  const title = this.$tco('Info')
+  const title = this.$ttc('info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
     type: 'warning',
