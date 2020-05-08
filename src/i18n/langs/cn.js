@@ -234,7 +234,10 @@ const cn = {
     'resetPasswordWarningMsg': '将失效用户当前密码，并发送重设密码邮件到用户邮箱',
     'resetPasswordSuccessMsg': '已发送邮件到用户邮箱',
     'resetPublicKeyWarningMsg': '将会失效用户当前密钥，并发送重置邮件到用户邮箱',
-    'resetPublicKeySuccessMsg': '已发送邮件到用户邮箱'
+    'resetPublicKeySuccessMsg': '已发送邮件到用户邮箱',
+    'unblockSuccessMsg': '该用户账号已解锁',
+    'resetMFAWarningMsg': '将重置用户的MFA配置，用户需要再次设置',
+    'resetMFAdSuccessMsg': '用户的MFA已重置成功'
   },
   // 用户组
   assets: {

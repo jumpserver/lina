@@ -90,7 +90,10 @@ const en = {
     'resetPasswordSuccessMsg': 'An e-mail has been sent to the user`s mailbox',
     'resetPublicKeyWarningMsg': 'This will reset the user public key and send a reset mail',
     'resetPublicKeySuccessMsg': 'An e-mail has been sent to the user`s mailbox',
-    'resetMFATitle': 'Reset MFA'
+    'resetMFATitle': 'Reset MFA',
+    'unblockSuccessMsg': 'Account has unblocked',
+    'resetMFAWarningMsg': 'This will reset user MFA setting and user need config again',
+    'resetMFAdSuccessMsg': 'User MFA setting reset success'
   },
   usergroup: {
     'user_group_list': 'User group list',

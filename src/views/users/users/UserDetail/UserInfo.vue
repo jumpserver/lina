@@ -54,7 +54,26 @@ export default {
           },
           callbacks: {
             click: function() {
-              console.log('click')
+              const warnMsg = vm.$t('users.resetMFAWarningMsg')
+              const warnTitle = vm.$tc('Info')
+              const url = `/api/v1/users/users/${vm.object.id}/otp/reset/`
+              const successMsg = vm.$t('users.resetMFAdSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.get(url)
+                    done()
+                    vm.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
             }
           }
         },
@@ -124,11 +143,17 @@ export default {
           title: this.$t('users.Unblock user'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Unblock')
+            label: this.$tc('Unblock'),
+            disabled: !this.object.login_blocked
           },
           callbacks: {
-            click: function() {
-              console.log('click')
+            click: function(v, item) {
+              const url = `/api/v1/users/users/${vm.object.id}/unblock/`
+              const unblockSuccessMsg = vm.$t('users.unblockSuccessMsg')
+              vm.$axios.patch(url).then(() => {
+                item.attrs.disabled = !item.attrs.disabled
+                vm.$message.success(unblockSuccessMsg)
+              })
             }
           }
         }
