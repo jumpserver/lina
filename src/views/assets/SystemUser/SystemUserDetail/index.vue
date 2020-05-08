@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :actions="actions" :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -9,25 +9,29 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
+
+import AssetList from './AssetList.vue'
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    AssetList
   },
   data() {
     return {
       TaskDetail: {},
-      actions: {
-        detailApiUrl: 'api/v1/assets/platform/details/1/'
-      },
       config: {
-        title: this.$t('assets.commandFilterDetail'),
+        title: this.$t('assets.SystemUserDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
             title: this.$t('assets.detail'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('assets.assetlist'),
+            name: 'AssetList'
           }
         ],
         hasRightSide: false

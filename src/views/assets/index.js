@@ -81,8 +81,22 @@ export default [
     hidden: true
   },
   {
+    path: 'cmd-filters/:ruleid/rule/create',
+    component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpate.vue'), // Parent router-view
+    name: 'CommandFilterRulesCreate',
+    meta: { title: 'CommandFilterRulesCreate' },
+    hidden: true
+  },
+  {
+    path: 'cmd-filters/:ruleid/rule/:id/update',
+    component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpate.vue'), // Parent router-view
+    name: 'CommandFilterRulesUpdate',
+    meta: { title: 'CommandFilterRulesUpdate' },
+    hidden: true
+  },
+  {
     path: 'cmd-filters/:id',
-    component: () => import('@/views/assets/CommandFilter/CommandFilterDetail.vue'), // Parent router-view
+    component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/index.vue'), // Parent router-view
     name: 'CommandFilterDetail',
     meta: { title: 'CommandFilterDetail' },
     hidden: true
@@ -106,6 +120,13 @@ export default [
     name: 'SystemUserUpdate',
     component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
     meta: { title: 'SystemUserUpdate' },
+    hidden: true
+  },
+  {
+    path: 'system-users/:id',
+    name: 'SystemUserDetail',
+    component: () => import('@/views/assets/SystemUser/SystemUserDetail/index.vue'),
+    meta: { title: 'SystemUserDetail' },
     hidden: true
   },
   {

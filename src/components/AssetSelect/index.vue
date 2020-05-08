@@ -4,10 +4,15 @@
     <el-dialog
       :title="this.$t('资产列表')"
       :visible.sync="dialogVisible"
-      width="45%"
+      width="50%"
       :before-close="handleClose"
     >
-      <GenericTreeListPage ref="ListPage" :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericTreeListPage
+        ref="ListPage"
+        :tree-setting="treeSetting"
+        :table-config="tableConfig"
+        :header-actions="headerActions"
+      />
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleConfirm">确 定</el-button>
@@ -33,18 +38,18 @@ export default {
       internalValue: [],
       showValue: [],
       dialogVisible: false,
+      treeSetting: {
+        showMenu: true,
+        showRefresh: true,
+        showAssets: false,
+        url: '/api/v1/assets/assets/',
+        nodeUrl: '/api/v1/assets/nodes/',
+        // ?assets=0不显示资产. =1显示资产
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+      },
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
-        treeSetting: {
-          showMenu: true,
-          showRefresh: true,
-          showAssets: false,
-          url: '/api/v1/assets/assets/',
-          nodeUrl: '/api/v1/assets/nodes/',
-          // ?assets=0不显示资产. =1显示资产
-          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
-        },
         columns: [
           {
             prop: 'hostname',
