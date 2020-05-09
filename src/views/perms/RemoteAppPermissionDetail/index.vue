@@ -1,8 +1,6 @@
 <template>
   <GenericDetailPage :object.sync="RemoteAppPermission" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
-    <keep-alive>
-      <component :is="config.activeMenu" :object="RemoteAppPermission" />
-    </keep-alive>
+    <component :is="config.activeMenu" :object="RemoteAppPermission" />
   </GenericDetailPage>
 </template>
 

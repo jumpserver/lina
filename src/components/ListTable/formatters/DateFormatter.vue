@@ -1,27 +1,26 @@
 <template>
-  <div>
-    {{ this.date(this.cellValue) }}
-  </div>
+  <span>{{ value }}</span>
 </template>
 
 <script>
 import BaseFormatter from './base'
-import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'DateFormatter',
-  components: {},
   extends: BaseFormatter,
   data() {
-    return {}
-  },
-  methods: {
-    date(val) {
-      return toSafeLocalDateStr(val)
+    const dt = new Date(this.cellValue)
+    const year = dt.getFullYear()
+    const month = dt.getMonth() + 1
+    const date = dt.getDate()
+    const hour = dt.getHours()
+    const minutes = dt.getMinutes()
+    const seconds = dt.getSeconds()
+    return {
+      value: `${year}-${month}-${date} ${hour}:${minutes}:${seconds}`
     }
   }
 }
 </script>
-
-<style lang='less' scoped>
+<style scoped>
 
 </style>

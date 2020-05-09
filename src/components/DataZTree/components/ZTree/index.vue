@@ -48,6 +48,14 @@ export default {
   methods: {
     initTree: function() {
       this.$axios.get(this.treeSetting.treeUrl).then(res => {
+        if (!res) {
+          res = []
+        }
+        if (res.length === 0) {
+          res.push({
+            name: this.$tco('empty')
+          })
+        }
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(

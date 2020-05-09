@@ -4,17 +4,33 @@
 
 <script>
 import { DetailFormatter } from '@/components/ListTable/formatters'
-import { TreeTable } from '@/components'
+import TreeTable from '../TreeTable'
 
 export default {
-  name: 'GroupAssetPermission',
+  name: 'GrantedAssets',
   components: {
     TreeTable
   },
   props: {
-    object: {
-      type: Object,
+    treeUrl: {
+      type: String,
       required: true
+    },
+    tableUrl: {
+      type: String,
+      required: true
+    },
+    onSelected: {
+      type: Function,
+      default(node, vm) {
+        if (!vm.tableConfig.initialUrl) {
+          vm.tableConfig.initialUrl = vm.tableConfig.url
+        }
+        const initialUrl = vm.tableConfig.initialUrl
+        const nodeId = node.meta.node.id
+        const url = initialUrl.replace('/assets/', `/nodes/${nodeId}/assets/`)
+        vm.tableConfig.url = url
+      }
     }
   },
   data() {
@@ -24,19 +40,15 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: `/api/v1/perms/user-groups/${this.object.id}/assets/?cache_policy=1`,
+        url: this.tableUrl,
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: `/api/v1/perms/user-groups/${this.object.id}/nodes/children/tree/?cache_policy=1`,
+        treeUrl: this.treeUrl,
         callback: {
-          onSelected(event, node) {
-            const url = `/api/v1/perms/user-groups/${vm.object.id}/nodes/${node.meta.node.id}/assets/?cache_policy=1&all=1`
-            vm.tableConfig.url = url
-            vm.$log.debug('Current node: ', url)
-          }
+          onSelected: (event, node) => vm.onSelected(node, vm)
         }
       },
       tableConfig: {
-        url: `/api/v1/perms/user-groups/${this.object.id}/assets/?cache_policy=1`,
+        url: this.tableUrl,
         hasTree: true,
         columns: [
           {
@@ -53,11 +65,15 @@ export default {
           },
           {
             prop: 'systemUsers',
-            label: this.$t('assets.System users'),
+            label: this.$t('assets.systemUsers'),
             align: 'center',
-            formatter: () => {
-              const title = this.$tc('Show')
-              return <a> {title} </a>
+            formatter: (row, col, value) => {
+              const title = this.$ttc('show')
+              // Todo: 显示真正的系统用户
+              const show = function() {
+                console.log('hello: ', value)
+              }
+              return <el-link type='success' onClick={show}> {title} </el-link>
             },
             width: '200px'
           }
@@ -67,10 +83,12 @@ export default {
         hasLeftActions: false
       }
     }
+  },
+  methods: {
+
   }
 }
 </script>
 
 <style scoped>
-
 </style>

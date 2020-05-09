@@ -8,22 +8,24 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $tc('Add') }}</el-button>
+          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $ttc('add') }}</el-button>
         </td>
       </tr>
-      <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
-        <td><b>{{ obj.label }}</b></td>
-        <td>
-          <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
-            <i class="fa fa-minus" />
-          </el-button>
-        </td>
-      </tr>
+      <template v-if="showHasObjects">
+        <tr v-for="obj of iHasObjects" :key="obj.value" style="width: 100%" class="item">
+          <td><b>{{ obj.label }}</b></td>
+          <td>
+            <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
+              <i class="fa fa-minus" />
+            </el-button>
+          </td>
+        </tr>
+      </template>
       <tr v-if="params.hasMore" class="item">
         <td colspan="2">
           <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
-            {{ $tc('More') }}
+            {{ $ttc('more') }}
           </el-button>
         </td>
       </tr>
@@ -72,6 +74,10 @@ export default {
     hasObjects: {
       type: Array,
       default: () => []
+    },
+    showHasObjects: {
+      type: Boolean,
+      default: true
     },
     value: {
       type: [Array, Number, String],

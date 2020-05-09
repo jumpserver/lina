@@ -4,7 +4,7 @@
 
 <script>
 import DataTable from '../DataTable'
-import { DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
+import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import { optionUrlMeta } from '@/api/common'
 export default {
   name: 'AutoDataTable',
@@ -35,7 +35,7 @@ export default {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
       }).catch(() => {
-        this.totalConfig = this.config
+        // this.totalConfig = this.config
       }).finally(() => {
         this.loading = false
       })
@@ -46,11 +46,14 @@ export default {
           col.formatter = DetailFormatter
           col.sortable = 'custom'
           col.route = this.config.detailRoute
+          if (col.route) {
+            col.route = this.config.actions ? this.config.actions.detailRoute : ''
+          }
           break
         case 'actions':
           col = {
             prop: 'id',
-            label: this.$tc('Actions'),
+            label: this.$ttc('actions'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '150px',
@@ -58,10 +61,14 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = this.$tc('Validity')
+          col.label = this.$ttc('validity')
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'
+          break
+        case 'datetime':
+        case 'date_start':
+          col.formatter = DateFormatter
           break
         case 'comment':
           col.showOverflowTooltip = true

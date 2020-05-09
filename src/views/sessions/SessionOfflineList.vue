@@ -50,7 +50,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$tc('Action'),
+            label: this.$ttc('action'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,

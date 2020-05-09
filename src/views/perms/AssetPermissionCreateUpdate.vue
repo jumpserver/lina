@@ -4,6 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { AssetSelect } from '@/components'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -19,8 +21,8 @@ export default {
         [this.$t('perms.' + 'Basic'), ['name']],
         [this.$t('perms.' + 'User'), ['users', 'user_groups']],
         [this.$t('perms.' + 'Asset'), ['assets', 'nodes', 'system_users']],
-        [this.$tc('Action'), ['actions']],
-        [this.$tc('Other'), ['is_active', 'date_expired', 'comment']]
+        [this.$ttc('action'), ['actions']],
+        [this.$tco('Other'), ['is_active', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       fieldsMeta: {
@@ -47,10 +49,12 @@ export default {
           }
         },
         assets: {
-          el: {
-            value: [],
-            url: '/api/v1/assets/nodes/children/tree/'
-          }
+          type: 'assetSelect',
+          component: AssetSelect,
+          label: this.$t('perms.Asset'),
+          rules: [{
+            required: false
+          }]
         },
         nodes: {
           el: {

@@ -1,0 +1,30 @@
+<template>
+  <GrantedAssets :tree-url="treeUrl" :table-url="tableUrl" />
+</template>
+
+<script>
+import GrantedAssets from '@/components/GrantedAssets'
+
+export default {
+  name: 'GroupGrantedAssets',
+  components: {
+    GrantedAssets
+  },
+  props: {
+    object: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      treeUrl: `/api/v1/perms/user-groups/${this.object.id}/nodes/children/tree/?cache_policy=1`,
+      tableUrl: `/api/v1/perms/user-groups/${this.object.id}/assets/?cache_policy=1&all=1`
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

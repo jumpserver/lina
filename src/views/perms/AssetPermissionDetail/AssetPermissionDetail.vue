@@ -11,7 +11,7 @@
 
 <script>
 import { DetailCard, ActiveCard } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+// import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'AssetPermissionDetail',
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       activeConfig: {
-        icon: 'fa-info',
+        icon: 'fa-edit',
         title: this.$t('perms.QuickModify'),
         content: [
           {
@@ -52,43 +52,44 @@ export default {
         },
         {
           key: this.$t('perms.UserCount'),
-          value: this.getDataLength(this.object.users)
+          // value: this.getDataLength(this.object.users)
+          value: JSON.stringify(this.object.users_amount)
         },
         {
           key: this.$t('perms.UserGroupCount'),
-          value: this.getDataLength(this.object.user_groups)
+          value: JSON.stringify(this.object.assets_amount)
         },
         {
           key: this.$t('perms.AssetCount'),
-          value: this.getDataLength(this.object.assets)
+          value: JSON.stringify(this.object.users_amount)
         },
         {
           key: this.$t('perms.NodeCount'),
-          value: this.getDataLength(this.object.nodes)
+          value: JSON.stringify(this.object.nodes_amount)
         },
         {
           key: this.$t('perms.SystemUserCount'),
-          value: this.getDataLength(this.object.system_users)
+          value: JSON.stringify(this.object.system_users_amount)
         },
         {
           key: this.$t('perms.DateStart'),
-          value: toSafeLocalDateStr(this.object.date_start)
+          value: 'api没有这个字段'
         },
         {
           key: this.$t('perms.DateExpired'),
-          value: toSafeLocalDateStr(this.object.date_expired)
+          value: 'api没有这个字段'
         },
         {
           key: this.$t('perms.DateCreated'),
-          value: '没有这个字段'
+          value: this.object.date_created
         },
         {
           key: this.$t('perms.CreatedBy'),
-          value: '没有这个字段'
+          value: this.object.created_by
         },
         {
           key: this.$t('common.Comment'),
-          value: this.object.comment
+          value: 'api没有这个字段'
         }
       ]
     }

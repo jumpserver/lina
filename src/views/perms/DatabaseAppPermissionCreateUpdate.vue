@@ -18,7 +18,7 @@ export default {
         [this.$t('perms.' + 'Basic'), ['name']],
         [this.$t('perms.' + 'User'), ['users', 'user_groups']],
         [this.$t('perms.' + 'DatabaseApp'), ['database_apps', 'system_users']],
-        [this.$tc('Other'), ['is_active', 'date_expired', 'comment']]
+        [this.$tco('Other'), ['is_active', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/database-app-permissions/',
       fieldsMeta: {
@@ -57,7 +57,7 @@ export default {
               url: '/api/v1/assets/system-users/',
               processResults(data) {
                 let results = data.results
-                results = results.map((item) => {
+                results = results.filter((item) => item.protocol === 'mysql').map((item) => {
                   return { label: item.name + '(' + item.username + ')', value: item.id }
                 })
                 const more = !!data.next

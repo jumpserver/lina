@@ -32,6 +32,7 @@ export default {
             name: 'OutPut'
           }
         ],
+        hasRightSide: false,
         actions: {
           detailApiUrl: `/api/v1/ops/adhoc-executions/${this.$route.params.id}/`
         }

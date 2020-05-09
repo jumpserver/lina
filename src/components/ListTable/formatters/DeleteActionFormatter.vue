@@ -1,5 +1,5 @@
 <template>
-  <el-button size="mini" type="danger" :disabled="canDelete" @click="handleDelete(col, row, cellValue, reload)">
+  <el-button ref="deleteButton" size="mini" type="danger" :disabled="canDelete" @click="onDelete(col, row, cellValue, reload)">
     <i class="fa fa-minus" />
   </el-button>
 </template>
@@ -10,21 +10,23 @@ import BaseFormatter from './base'
 export default {
   name: 'DeleteActionFormatter',
   extends: BaseFormatter,
-  props: {
-    canDelete: {
-      type: Boolean,
-      default: false
+  computed: {
+    canDelete() {
+      return this.iCanDelete()
     }
   },
   methods: {
-    handleDelete(col, row, cellValue, reload) {
+    onDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
       this.$axios.delete(url).then(res => {
-        this.$message.success(this.$tc('Delete success'))
+        this.$message.success(this.$tco('Delete success'))
         reload()
       }).catch(error => {
-        this.$message.error(this.$tc('Delete failed' + ' ' + error))
+        this.$message.error(this.$tco('Delete failed' + ' ' + error))
       })
+    },
+    iCanDelete() {
+      return this.col.objects.indexOf(this.cellValue) === -1
     }
   }
 }

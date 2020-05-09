@@ -33,7 +33,8 @@ export default {
             title: this.$t('jobcenter.VersionRunExecution'),
             name: 'AdhocExecutionHistory'
           }
-        ]
+        ],
+        hasRightSide: false
       }
     }
   }

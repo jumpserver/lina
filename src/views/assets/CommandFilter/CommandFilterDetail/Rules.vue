@@ -44,7 +44,7 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$tc('Action'),
+            label: this.$ttc('action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
@@ -79,7 +79,7 @@ export default {
         extraActions: [
           {
             name: 'actionCreate',
-            title: this.$tc('Create'),
+            title: this.$tco('Create'),
             type: 'primary',
             has: this.hasCreate,
             can: true,

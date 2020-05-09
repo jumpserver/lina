@@ -99,7 +99,7 @@ export default {
       defaultActions: [
         {
           name: 'actionCreate',
-          title: this.$tc('Create'),
+          title: this.$ttc('create'),
           type: 'primary',
           has: this.hasCreate,
           can: true,
@@ -108,14 +108,14 @@ export default {
       ],
       defaultMoreActions: [
         {
-          title: this.$tc('Delete selected'),
+          title: this.$ttc('deleteSelected'),
           name: 'actionDeleteSelected',
           can: (rows) => rows.length > 0,
           has: this.hasBulkDelete,
           callback: this.defaultBulkDeleteCallback
         },
         {
-          title: this.$tc('Update selected'),
+          title: this.$ttc('updateSelected'),
           name: 'actionUpdateSelected',
           can: (rows) => rows.length > 0,
           has: this.hasBulkUpdate,
@@ -159,7 +159,7 @@ export default {
     },
     defaultBulkDeleteCallback(rows) {
       const msg = this.$tc('Are you sure to delete') + ' ' + rows.length + ' ' + this.$tc('rows')
-      const title = this.$tc('Info')
+      const title = this.$ttc('info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
         type: 'warning',

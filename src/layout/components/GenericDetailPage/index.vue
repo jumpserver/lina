@@ -1,9 +1,8 @@
 <template>
   <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="iActiveMenu" @tab-click="handleTabClick">
     <template #title>
-      <span>
-        {{ iTitle }}
-      </span>
+      <el-button class="go-back" icon="el-icon-back" @click="handleGoBack" />
+      <span style="padding-left: 10px">{{ iTitle }}</span>
     </template>
 
     <template #headingRightSide>
@@ -67,6 +66,12 @@ export default {
         const objectName = this.getObjectName(obj)
         return `${objectType}: ${objectName}`
       }
+    },
+    goBack: {
+      type: Function,
+      default: function(obj) {
+        return this.$router.back()
+      }
     }
   },
   data() {
@@ -90,13 +95,13 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$tc('Update'),
+          title: this.$ttc('update'),
           can: this.validActions.canUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$tc('Delete'),
+          title: this.$ttc('delete'),
           can: this.validActions.canDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
@@ -124,8 +129,8 @@ export default {
   },
   methods: {
     defaultDelete() {
-      const msg = this.$tc('Are you sure to delete') + ' ' + this.iTitle + ' ?'
-      const title = this.$tc('Info')
+      const msg = this.$ttc('deleteWarningMsg') + ' ' + this.iTitle + ' ?'
+      const title = this.$ttc('info')
       const performDelete = async function() {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
@@ -141,10 +146,10 @@ export default {
           try {
             await performDelete.bind(this)()
             done()
-            this.$message.success(this.$tc('Delete success'))
+            this.$message.success(this.$tco('Delete success'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
-            this.$message.error(this.$tc('Delete failed' + ' ' + error))
+            this.$message.error(this.$tco('Delete failed' + ' ' + error))
           } finally {
             instance.confirmButtonLoading = false
           }
@@ -168,6 +173,9 @@ export default {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$log.debug('Current tab is: ', this.activeMenu)
+    },
+    handleGoBack() {
+      return this.goBack.bind(this)(this.object)
     }
   }
 }
@@ -187,5 +195,15 @@ export default {
 
   .page-submenu >>> .el-tabs__nav-wrap {
     position: static;
+  }
+
+  .go-back {
+    border: none;
+    padding: 2px 2px;
+  }
+
+  .go-back >>> i {
+    font-size: 18px;
+    font-weight: 600;
   }
 </style>

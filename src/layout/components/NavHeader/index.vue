@@ -7,18 +7,18 @@
       <div class="header-item">
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ $t('common.Help') }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ $ttc('help') }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-plus">{{ $t('Docs') }}</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus">{{ $t('Support') }}</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-plus">{{ $ttc('docs') }}</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-circle-plus">{{ $ttc('support') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
       <div class="header-item">
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ $t('common.Language') }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ $ttc('language') }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="changeLangToZH">中文(简体)</el-dropdown-item>
