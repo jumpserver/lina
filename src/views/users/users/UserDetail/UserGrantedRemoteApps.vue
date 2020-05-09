@@ -1,16 +1,13 @@
 <template>
-  <IBox>
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
-  </IBox>
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { IBox, ListTable } from '@/components'
+import { ListTable } from '@/components'
 
 export default {
   name: 'UserGrantedRemoteApps',
   components: {
-    IBox,
     ListTable
   },
   props: {

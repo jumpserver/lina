@@ -59,7 +59,7 @@ export default {
             name: 'UserGrantedDatabases'
           },
           {
-            title: this.$tt('perms.databasesPermissionRules'),
+            title: this.$tt('perms.databasePermissionRules'),
             name: 'UserDatabasePermissionRules'
           }
         ],

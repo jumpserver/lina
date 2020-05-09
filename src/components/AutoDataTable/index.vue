@@ -45,7 +45,10 @@ export default {
         case 'name':
           col.formatter = DetailFormatter
           col.sortable = 'custom'
-          col.route = this.config.detailRoute || this.config.actions.detailRoute
+          col.route = this.config.detailRoute
+          if (col.route) {
+            col.route = this.config.actions ? this.config.actions.detailRoute : ''
+          }
           break
         case 'actions':
           col = {
