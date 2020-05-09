@@ -11,6 +11,7 @@ import CustomActionsFormatter from './CustomActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 
+
 export default {
   DetailFormatter,
   DisplayFormatter,

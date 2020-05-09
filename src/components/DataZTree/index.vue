@@ -50,7 +50,8 @@ export default {
           onDrag: this.defaultCallback.bind(this, 'onDrag'),
           beforeDrop: this.defaultCallback.bind(this, 'beforeDrop'),
           onDrop: this.defaultCallback.bind(this, 'onDrop'),
-          beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
+          beforeAsync: this.defaultCallback.bind(this, 'beforeAsync'),
+          refresh: this.defaultCallback.bind(this, 'refresh')
         }
       }
     }

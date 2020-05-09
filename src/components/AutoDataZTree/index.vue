@@ -37,7 +37,8 @@ export default {
           onRename: this.onRename.bind(this),
           onSelected: this.onSelected.bind(this),
           beforeDrop: this.beforeDrop.bind(this),
-          onDrop: this.onDrop.bind(this)
+          onDrop: this.onDrop.bind(this),
+          refresh: this.refresh.bind(this)
           // 尚未定义的函数
           // beforeClick
           // beforeDrag
@@ -214,6 +215,12 @@ export default {
         var node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
         this.zTree.editName(node)
       })
+    },
+    refresh: function() {
+      this.$axios.post(
+        '/api/v1/assets/nodes/00000000-0000-0000-0000-000000000000/tasks/',
+        { action: 'refresh_cache' }
+      )
     }
   }
 }
