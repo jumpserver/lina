@@ -8,13 +8,13 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import GroupAssetPermission from './GroupAssetPermission'
+import GroupGrantedAssets from './GroupGrantedAssets'
 import GroupInfo from './GroupInfo'
 
 export default {
   components: {
     GenericDetailPage,
-    GroupAssetPermission,
+    GroupGrantedAssets,
     GroupInfo,
     TabPage
   },
@@ -29,8 +29,8 @@ export default {
             name: 'GroupInfo'
           },
           {
-            title: this.$t('perms.Asset permissions'),
-            name: 'GroupAssetPermission'
+            title: this.$tt('users.grantedAssets'),
+            name: 'GroupGrantedAssets'
           }
         ],
         actions: {

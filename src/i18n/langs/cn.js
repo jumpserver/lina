@@ -84,7 +84,8 @@ const cn = {
     'userPage': '用户页面',
     'apiKey': 'API Key',
     'logout': '退出',
-    'show': '显示'
+    'show': '显示',
+    'empty': '空'
   },
   route: {
     'dashboard': '仪表盘',
@@ -229,7 +230,8 @@ const cn = {
     'unblockSuccessMsg': '该用户账号已解锁',
     'resetMFAWarningMsg': '将重置用户的MFA配置，用户需要再次设置',
     'resetMFAdSuccessMsg': '用户的MFA已重置成功',
-    'users': '用户'
+    'users': '用户',
+    'grantedAssets': '授权的资产'
   },
   // 用户组
   assets: {
@@ -418,7 +420,13 @@ const cn = {
     //
     'DatabaseApp': '数据库应用',
     'DatabaseAppPermissionDetail': '数据库应用授权详情',
-    'Add DatabaseApp to this permission': '添加数据库应用'
+    'Add DatabaseApp to this permission': '添加数据库应用',
+    'grantedAssets': '授权的资产',
+    'assetPermissionRules': '资产授权规则',
+    'grantedRemoteApps': '授权的远程应用',
+    'remoteAppsPermissionRules': '远程应用授权规则',
+    'grantedDatabases': '授权的数据库',
+    'databasesPermissionRules': '数据库授权规则'
   },
   sessions: {
     'id': 'ID',

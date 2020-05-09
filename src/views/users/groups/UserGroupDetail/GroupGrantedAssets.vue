@@ -6,7 +6,7 @@
 import GrantedAssets from '@/components/GrantedAssets'
 
 export default {
-  name: 'GroupAssetPermission',
+  name: 'GroupGrantedAssets',
   components: {
     GrantedAssets
   },

@@ -67,9 +67,13 @@ export default {
             prop: 'systemUsers',
             label: this.$t('assets.systemUsers'),
             align: 'center',
-            formatter: () => {
+            formatter: (row, col, value) => {
               const title = this.$ttc('show')
-              return <a> {title} </a>
+              // Todo: 显示真正的系统用户
+              const show = function() {
+                console.log('hello: ', value)
+              }
+              return <el-link type='success' onClick={show}> {title} </el-link>
             },
             width: '200px'
           }
@@ -79,6 +83,9 @@ export default {
         hasLeftActions: false
       }
     }
+  },
+  methods: {
+
   }
 }
 </script>

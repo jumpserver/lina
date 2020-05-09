@@ -8,14 +8,24 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import UserAssetPermission from './UserAssetPermission'
+import UserAssetPermissionRules from './UserAssetPermissionRules'
+import UserGrantedAssets from './UserGrantedAssets'
+import UserGrantedRemoteApps from './UserGrantedRemoteApps'
+import UserRemoteAppPermissionRules from './UserRemoteAppPermissionRules'
+import UserGrantedDatabases from './UserGrantedDatabases'
+import UserDatabasePermissionRules from './UserDatabasePermissionRules'
 import UserInfo from './UserInfo'
 
 export default {
   components: {
     GenericDetailPage,
-    UserAssetPermission,
     UserInfo,
+    UserGrantedAssets,
+    UserAssetPermissionRules,
+    UserGrantedRemoteApps,
+    UserRemoteAppPermissionRules,
+    UserGrantedDatabases,
+    UserDatabasePermissionRules,
     TabPage
   },
   data() {
@@ -30,7 +40,27 @@ export default {
           },
           {
             title: this.$tt('perms.grantedAssets'),
-            name: 'UserAssetPermission'
+            name: 'UserGrantedAssets'
+          },
+          {
+            title: this.$tt('perms.assetPermissionRules'),
+            name: 'UserAssetPermissionRules'
+          },
+          {
+            title: this.$tt('perms.grantedRemoteApps'),
+            name: 'UserGrantedRemoteApps'
+          },
+          {
+            title: this.$tt('perms.remoteAppsPermissionRules'),
+            name: 'UserRemoteAppPermissionRules'
+          },
+          {
+            title: this.$tt('perms.grantedDatabases'),
+            name: 'UserGrantedDatabases'
+          },
+          {
+            title: this.$tt('perms.databasesPermissionRules'),
+            name: 'UserDatabasePermissionRules'
           }
         ],
         actions: {
