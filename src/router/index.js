@@ -134,6 +134,13 @@ export const constantRoutes = [
       component: () => import('@/views/settings/index'),
       meta: { title: 'Settings', icon: 'gears' }
     }]
+  },
+  {
+    path: '/ops/celery/task/:id',
+    component: () => import('@/views/jobcenter/CeleryTaskLog'),
+    name: 'CeleryTaskLog',
+    hidden: true,
+    meta: { title: 'CeleryTaskLog' }
   }
 ]
 

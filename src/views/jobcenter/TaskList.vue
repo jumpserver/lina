@@ -71,9 +71,13 @@ export default {
                   title: this.$t('jobcenter.run'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
-                    // 跳转页面
-                    const replayUrl = '/ops/celery/task/' + cellValue
-                    window.open(replayUrl)
+                    const newPage = this.$router.resolve({
+                      name: 'CeleryTaskLog',
+                      query: {
+                        id: 12345678
+                      }
+                    })
+                    window.open(newPage.href, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 }
               ]

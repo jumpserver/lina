@@ -1,9 +1,8 @@
 <template>
   <TabPage v-if="!loading" :submenu="submenu" :active-menu.sync="iActiveMenu" @tab-click="handleTabClick">
     <template #title>
-      <span>
-        {{ iTitle }}
-      </span>
+      <el-button class="go-back" icon="el-icon-back" @click="handleGoBack" />
+      <span style="padding-left: 10px">{{ iTitle }}</span>
     </template>
 
     <template #headingRightSide>
@@ -66,6 +65,12 @@ export default {
         this.$log.debug('Object is: ', obj)
         const objectName = this.getObjectName(obj)
         return `${objectType}: ${objectName}`
+      }
+    },
+    goBack: {
+      type: Function,
+      default: function(obj) {
+        return this.$router.back()
       }
     }
   },
@@ -168,6 +173,9 @@ export default {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$log.debug('Current tab is: ', this.activeMenu)
+    },
+    handleGoBack() {
+      return this.goBack.bind(this)(this.object)
     }
   }
 }
@@ -187,5 +195,15 @@ export default {
 
   .page-submenu >>> .el-tabs__nav-wrap {
     position: static;
+  }
+
+  .go-back {
+    border: none;
+    padding: 2px 2px;
+  }
+
+  .go-back >>> i {
+    font-size: 18px;
+    font-weight: 600;
   }
 </style>

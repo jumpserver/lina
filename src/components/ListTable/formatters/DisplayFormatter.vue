@@ -8,12 +8,21 @@ export default {
   name: 'DisplayFormatter',
   extends: BaseFormatter,
   data() {
-    let displayKey = this.col.displayKey
-    if (!displayKey) {
-      displayKey = this.col.prop + '_display'
-    }
     return {
-      display: this.row[displayKey]
+      display: this.getValue()
+    }
+  },
+  methods: {
+    getValue() {
+      let displayKey = this.col.displayKey
+      if (!displayKey) {
+        displayKey = this.col.prop + '_display'
+      }
+      let value = this.row[displayKey]
+      if (value === undefined) {
+        value = this.row[this.col.prop]
+      }
+      return value
     }
   }
 }

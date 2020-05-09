@@ -92,9 +92,14 @@ export default {
       }
 
       this.$emit('input', this.showValue)
+      this.$emit('getAsset', this.showValue)
     })
   },
   methods: {
+    clearSelected() {
+      this.internalValue = []
+      this.showValue = []
+    },
     handleFocus() {
       this.$refs.select.blur()
       this.dialogVisible = true
