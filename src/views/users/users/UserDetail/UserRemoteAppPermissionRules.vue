@@ -22,6 +22,9 @@ export default {
         url: `/api/v1/perms/remote-app-permissions/?user_id=${this.object.id}&draw=1`,
         columns: ['name', 'users', 'user_groups', 'remote_apps', 'system_users', 'is_valid', 'actions'],
         columnsMeta: {
+          name: {
+            route: 'RemoteAppPermissionDetail'
+          },
           users: {
             label: this.$tt('users.users'),
             formatter(row, col, colValue) {
@@ -43,11 +46,11 @@ export default {
             formatter(row, col, colValue) {
               return colValue.length
             }
+          },
+          actions: {
+            detailRoute: 'RemoteAppPermissionDetail',
+            updateRoute: 'RemoteAppPermissionUpdate'
           }
-        },
-        actions: {
-          detailRoute: 'RemoteAppDetail',
-          updateRoute: 'RemoteAppUpdate'
         }
       },
       headerActions: {

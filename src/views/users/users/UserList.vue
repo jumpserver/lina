@@ -40,7 +40,10 @@ export default {
           },
           {
             name: 'activeSelected',
-            title: this.$ttc('activeSelected')
+            title: this.$ttc('activeSelected'),
+            callback: () => {
+              console.log('activeSelected')
+            }
           }
         ]
       }

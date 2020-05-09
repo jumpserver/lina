@@ -26,15 +26,16 @@ export default {
     }
   },
   mounted() {
-    this.optionUrlMeta()
+    this.optionUrlMetaAndGenCols()
   },
   methods: {
-    optionUrlMeta() {
+    optionUrlMetaAndGenCols() {
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
-      }).catch(() => {
+      }).catch((err) => {
+        this.$log.error('Error occur: ', err)
         // this.totalConfig = this.config
       }).finally(() => {
         this.loading = false
@@ -45,10 +46,6 @@ export default {
         case 'name':
           col.formatter = DetailFormatter
           col.sortable = 'custom'
-          col.route = this.config.detailRoute
-          if (col.route) {
-            col.route = this.config.actions ? this.config.actions.detailRoute : ''
-          }
           break
         case 'actions':
           col = {

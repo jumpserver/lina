@@ -11,6 +11,7 @@ export default {
     goDetail() {
       const defaultRoute = this.$route.name.replace('List', 'Detail')
       const routeName = this.col.route || defaultRoute
+      this.$log.debug('Will go to detail route: ', routeName)
       this.$router.push({ name: routeName, params: { id: this.row.id }})
     }
   }

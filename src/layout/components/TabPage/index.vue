@@ -43,12 +43,39 @@ export default {
       set(item) {
         this.$emit('update:activeMenu', item)
       }
+    },
+    tabIndices() {
+      const map = {}
+      this.submenu.forEach((v, i) => {
+        map[v.name] = i
+      })
+      return map
     }
+  },
+  mounted() {
+    // 尝试从cookie中取活跃的tab
+    this.iActiveMenu = this.getPropActiveTab()
   },
   methods: {
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
+      this.$cookie.set('activeTab', tab.name, 1)
+    },
+    getPropActiveTab() {
+      const tabActive = this.$cookie.get('activeTab')
+      let tabIndex = this.tabIndices[tabActive]
+      let activeMenu = ''
+      if (tabIndex !== undefined) {
+        activeMenu = tabActive
+      } else {
+        activeMenu = this.activeMenu
+      }
+      tabIndex = this.tabIndices[activeMenu]
+      if (tabIndex === undefined) {
+        activeMenu = this.submenu[0].name
+      }
+      return activeMenu
     }
   }
 }
