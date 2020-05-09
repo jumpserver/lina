@@ -27,9 +27,6 @@ export default {
               return row.asset_info.hostname
             }
           }
-        },
-        actions: {
-          detailRoute: 'RemoteAppDetail'
         }
       },
       headerActions: {

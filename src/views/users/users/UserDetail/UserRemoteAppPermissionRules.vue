@@ -46,7 +46,8 @@ export default {
           }
         },
         actions: {
-          detailRoute: 'RemoteAppDetail'
+          detailRoute: 'RemoteAppDetail',
+          updateRoute: 'RemoteAppUpdate'
         }
       },
       headerActions: {

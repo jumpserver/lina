@@ -3,9 +3,12 @@
     <slot name="header">
       <div class="table-header-left-side">
         <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" class="header-action" />
+        <span v-else>
+          <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+        </span>
       </div>
       <div class="table-action-right-side">
-        <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+        <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
         <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
         <DialogAction :selected-rows="selectedRows" :url="tableUrl" />
       </div>
@@ -110,14 +113,12 @@ export default {
         {
           title: this.$ttc('deleteSelected'),
           name: 'actionDeleteSelected',
-          can: (rows) => rows.length > 0,
           has: this.hasBulkDelete,
           callback: this.defaultBulkDeleteCallback
         },
         {
           title: this.$ttc('updateSelected'),
           name: 'actionUpdateSelected',
-          can: (rows) => rows.length > 0,
           has: this.hasBulkUpdate,
           callback: this.handleBulkUpdate
         }
@@ -142,7 +143,11 @@ export default {
     },
     moreActions() {
       const actions = [...this.defaultMoreActions, ...this.extraMoreActions]
-      return this.cleanActions(actions)
+      const canDefaults = function(rows) { return rows.length > 0 }
+      return this.cleanActions(actions, canDefaults)
+    },
+    hasSelectedRows() {
+      return this.selectedRows.length > 0
     }
   },
   methods: {
@@ -203,21 +208,32 @@ export default {
     handleRefresh() {
       this.reloadTable()
     },
-    cleanActions(actions) {
-      this.$log.debug('Start clean actions: ', actions)
+    cleanActions(actions, canDefaults) {
+      // this.$log.debug('Start clean actions: ', canDefaults)
       actions = actions.map((action) => {
         action.has = this.cleanBoolean(action, 'has')
-        action.can = this.cleanBoolean(action, 'can')
+        action.can = this.cleanBoolean(action, 'can', canDefaults)
         action.callback = this.cleanCallback(action)
         return action
       })
       return actions
     },
-    cleanBoolean(action, attr) {
-      // this.$log.debug('Clean boolean', action)
+    cleanBoolean(action, attr, defaults) {
+      // this.$log.debug('Clean boolean', action, attr)
+      const vm = this
       let v = action[attr]
+
+      if (defaults === undefined) {
+        defaults = true
+      }
+      if (v === undefined) {
+        // console.log('Defaults is: ', attr, defaults)
+        v = defaults
+      }
       if (typeof v === 'function') {
-        v = () => { return v(this.selectedRows) }
+        return function() {
+          return v(vm.selectedRows)
+        }
       } else {
         return v
       }

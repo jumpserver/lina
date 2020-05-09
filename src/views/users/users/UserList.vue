@@ -32,15 +32,15 @@ export default {
       headerActions: {
         extraMoreActions: [
           {
-            name: 'deactiveSelected',
-            title: this.$tco('Deactive selected'),
+            name: 'disableSelected',
+            title: this.$ttc('disableSelected'),
             callback: () => {
-              console.log('deactiveSelected')
+              console.log('disableSelected')
             }
           },
           {
             name: 'activeSelected',
-            title: this.$tco('Active selected')
+            title: this.$ttc('activeSelected')
           }
         ]
       }

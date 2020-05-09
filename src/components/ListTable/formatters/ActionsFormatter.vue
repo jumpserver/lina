@@ -67,7 +67,7 @@ export default {
     }
   },
   data() {
-    const colActions = Object.assign(this.actionsDefault, this.col.actions)
+    const colActions = Object.assign(this.actionsDefault, this.col, this.col.actions)
     const defaultActions = [
       {
         name: 'update',
