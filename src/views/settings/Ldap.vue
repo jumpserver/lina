@@ -43,7 +43,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="dialogVisible = false">{{ $tco('cancel') }}</el-button>
-        <el-button type="primary" @click="testUerLogin">{{ $tco('confirm') }}</el-button>
+        <el-button type="primary" @click="testUerLoginClick">{{ $tco('confirm') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogLdapUserImport" center>
@@ -55,7 +55,7 @@
         ref="listTable"
         :table-config="tableConfig"
         :header-actions="headerActions"
-        @error="handlerError($event)"
+        @error="handlerListTableXHRError($event)"
       />
       <div slot="footer">
         <el-button @click="dialogLdapUserImport = false">{{ $tco('cancel') }}</el-button>
@@ -145,8 +145,9 @@ export default {
                 duration: 4500
               })
             }).catch(err => {
+              const response = err.response
               this.$notify({
-                message: err,
+                message: response.data,
                 type: 'error',
                 duration: 4500
               })
@@ -163,6 +164,7 @@ export default {
           title: this.$t('setting.ldapBulkImport'),
           callback: function(value, form) {
             this.dialogLdapUserImport = true
+            this.$refs.listTable.reloadTable()
           }.bind(this)
         }
       ],
@@ -226,7 +228,7 @@ export default {
     getMethod() {
       return 'put'
     },
-    testUerLogin() {
+    testUerLoginClick() {
       testLdapUserLogin(this.userLoginForm).then(res => {
         this.$notify({
           message: res,
@@ -234,8 +236,9 @@ export default {
           duration: 4500
         })
       }).catch(err => {
+        const response = err.response
         this.$notify({
-          message: err,
+          message: response.data,
           type: 'error',
           duration: 4500
         })
@@ -255,8 +258,16 @@ export default {
         })
       })
     },
-    handlerError(errMsg) {
-      setTimeout(this.$refs.listTable.reloadTable, 500)
+    handlerListTableXHRError(errMsg) {
+      const response = errMsg.response
+      if (this.dialogLdapUserImport) {
+        this.$notify({
+          message: response.data.msg,
+          type: 'error',
+          duration: 4500
+        })
+        setTimeout(this.$refs.listTable.reloadTable, 1000)
+      }
     }
   }
 }
