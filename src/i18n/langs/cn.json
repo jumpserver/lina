@@ -79,7 +79,9 @@
     "Quick update":"快速更新",
     "Send":"发送",
     "Unblock":"解锁",
-    "Active":"激活中"
+    "Active":"激活中",
+    "Test": "测试",
+    "Push": "推送"
   },
   "route":{
     "dashboard":"仪表盘",
