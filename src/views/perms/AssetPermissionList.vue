@@ -25,9 +25,9 @@ export default {
         hasSelection: false,
         hasTree: true,
         tagSearch: [
-          { label: this.$tc('Name'), key: 'name' },
+          { label: this.$tco('Name'), key: 'name' },
           { label: this.$t('perms.IsValid'), key: 'is_valid' },
-          { label: this.$tc('username'), key: 'username' },
+          { label: this.$tco('username'), key: 'username' },
           { label: this.$t('perms.UserGroups'), key: 'user_group' },
           { label: this.$t('perms.IP'), key: 'ip' },
           { label: this.$t('perms.Hostname'), key: 'hostname' },

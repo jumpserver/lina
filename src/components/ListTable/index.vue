@@ -2,7 +2,7 @@
   <div>
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <IBox class="table-content">
-      <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" />
+      <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
     </IBox>
   </div>
 </template>

@@ -52,6 +52,8 @@ export default {
       optionUrlMeta(this.url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
+      }).catch(err => {
+        console.log(err)
       }).finally(() => {
         this.loading = false
       })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog :title="$tc('Export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
+    <Dialog :title="$ttc('export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
       <el-form>
         <el-form-item :label="this.$t('action.ExportRange')" :label-width="'100px'">
           <el-radio v-model="exportOption" class="export-item" label="1">{{ this.$t('action.ExportAll') }}</el-radio>
@@ -12,12 +12,12 @@
     <Dialog :title="importTitle" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
       <el-form>
         <el-form-item :label="importTitle" :label-width="'100px'">
-          <el-radio v-model="importOption" class="export-item" label="1">{{ this.$tc('Import') }}</el-radio>
-          <el-radio v-model="importOption" class="export-item" label="2">{{ this.$tc('Update') }}</el-radio>
+          <el-radio v-model="importOption" class="export-item" label="1">{{ this.$ttc('import') }}</el-radio>
+          <el-radio v-model="importOption" class="export-item" label="2">{{ this.$ttc('update') }}</el-radio>
         </el-form-item>
       </el-form>
-      <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.DownloadTheImportedTemplateOrUseTheExportedCSVFormat') }} <a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('action.DownloadImportTemplate') }}</a></div>
-      <div v-else style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.DownloadTheUpdatedTemplateOrUsTheExportedCSVFormat') }} <a style="color: #428bca;" @click="downloadUpdateTempUrl">{{ this.$t('action.DownloadUpdateTemplate') }}</a></div>
+      <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.downloadTheImportedTemplateOrUseTheExportedCSVFormat') }} <a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('action.DownloadImportTemplate') }}</a></div>
+      <div v-else style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.downloadTheUpdatedTemplateOrUsTheExportedCSVFormat') }} <a style="color: #428bca;" @click="downloadUpdateTempUrl">{{ this.$t('action.DownloadUpdateTemplate') }}</a></div>
 
       <div style="margin-left:55px;">
         <el-upload
@@ -27,8 +27,8 @@
           list-type="text/csv"
           :limit="1"
         >
-          <el-button size="small" type="primary">{{ this.$t('action.Upload') }}</el-button>
-          <div slot="tip" class="el-upload__tip">{{ this.$t('action.OnlyCSVFilesCanBeUploaded') }}</div>
+          <el-button size="small" type="primary">{{ this.$t('action.upload') }}</el-button>
+          <div slot="tip" class="el-upload__tip">{{ this.$t('action.onlyCSVFilesCanBeUploaded') }}</div>
         </el-upload>
       </div>
     </Dialog>
@@ -69,9 +69,9 @@ export default {
     },
     importTitle() {
       if (this.importOption === '1') {
-        return this.$tc('Import')
+        return this.$ttc('import')
       } else {
-        return this.$tc('Update')
+        return this.$ttc('update')
       }
     },
     upLoadUrl() {

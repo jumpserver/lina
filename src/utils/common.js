@@ -102,3 +102,4 @@ export function confirm({ msg, title, perform, success, failed, type = 'warning'
     }
   })
 }
+

@@ -18,7 +18,7 @@ export default {
         columns: ['name', 'runtimes', 'host_amount', 'is_success', 'date_start', 'time', 'actions'],
         columnsMeta: {
           name: {
-            label: this.$tc('Name'),
+            label: this.$tco('Name'),
             showOverflowTooltip: true
           },
           runtimes: {
@@ -61,7 +61,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$tc('Action'),
+            label: this.$ttc('action'),
             formatter: ActionsFormatter,
             actions: {
               hasUpdate: false,

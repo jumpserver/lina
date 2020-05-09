@@ -16,7 +16,7 @@ export default {
         columns: ['name', 'users_amount', 'comment', 'actions'],
         columnsMeta: {
           users_amount: {
-            label: this.$t('users.Users')
+            label: this.$t('users.users')
           }
         },
         detailRoute: 'UserGroupDetail'
