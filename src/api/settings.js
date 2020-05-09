@@ -14,3 +14,34 @@ export function testEmailSetting(data) {
     data: data
   })
 }
+
+export function testLdapSetting(data) {
+  return request({
+    url: '/api/v1/settings/ldap/testing/config/',
+    method: 'post',
+    data: data
+  })
+}
+
+export function testLdapUserLogin(data) {
+  return request({
+    url: '/api/v1/settings/ldap/testing/login/',
+    method: 'post',
+    data: data
+  })
+}
+
+export function refreshLdapUserCache() {
+  return request({
+    url: '/api/v1/settings/ldap/cache/refresh/',
+    method: 'get'
+  })
+}
+
+export function importLdapUser(data) {
+  return request({
+    url: '/api/v1/settings/ldap/users/import/',
+    method: 'post',
+    data: data
+  })
+}
