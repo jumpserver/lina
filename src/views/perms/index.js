@@ -3,7 +3,8 @@ export default [
   {
     path: 'asset-permissions',
     name: 'AssetPermissionList',
-    component: () => import('@/views/perms/AssetPermissionList'),
+    // component: () => import('@/views/perms/AssetPermissionList'),
+    component: () => import('@/views/perms/AssetPermissionList/index'),
     meta: { title: 'AssetPermission' }
   },
   {
