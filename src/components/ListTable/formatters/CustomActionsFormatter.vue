@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="cleanedActions" :more-actions="cleanMoreActions" />
+  <ActionsGroup :size="'mini'" :actions="cleanedActions" :more-actions="cleanMoreActions" v-bind="$attrs" />
 </template>
 
 <script>

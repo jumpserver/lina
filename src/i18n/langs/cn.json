@@ -333,7 +333,11 @@
     "platform_detail":"平台详情",
     "BasePlatform":"基础平台",
     "charset":"编码",
-    "meta":"元数据"
+    "meta":"元数据",
+    "TestAssetsConnective": "测试资产可连接性",
+    "PushSystemUserNow": "立刻推送系统",
+    "Replace node assets admin user with this":"替换资产节点的管理员"
+
   },
   "applications":{
     "applications":"应用管理",

@@ -190,7 +190,7 @@ export default {
       data = this.iAjax.processResults.bind(this)(data)
       data.results.forEach((v) => {
         if (!this.hasObjects.find((item) => item.value === v.value)) {
-          this.hasObjects.push(v)
+          this.HasObjects.push(v)
         }
       })
       // 如果还有其它页，继续获取, 如果没有就停止

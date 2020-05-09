@@ -9,8 +9,7 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-
-import AssetList from './AssetList.vue'
+import AssetList from './AssetsList.vue'
 export default {
   components: {
     GenericDetailPage,
@@ -22,7 +21,7 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.SystemUserDetail'),
+        title: this.$t('assets.AdminUserDetail'),
         activeMenu: 'Detail',
         submenu: [
           {

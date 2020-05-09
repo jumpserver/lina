@@ -9,6 +9,7 @@ import OutputExpandFormatter from './OutputExpandFormatter'
 import ExpandAssetPermissionFormatter from './ExpandAssetPermissionFormatter'
 import CustomActionsFormatter from './CustomActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
+import DateFormatter from '@/components/ListTable/formatters/DateFormatter'
 
 export default {
   DetailFormatter,
@@ -21,7 +22,8 @@ export default {
   OutputExpandFormatter,
   ExpandAssetPermissionFormatter,
   CustomActionsFormatter,
-  DeleteActionFormatter
+  DeleteActionFormatter,
+  DateFormatter
 }
 
 export {
@@ -35,5 +37,6 @@ export {
   OutputExpandFormatter,
   ExpandAssetPermissionFormatter,
   CustomActionsFormatter,
-  DeleteActionFormatter
+  DeleteActionFormatter,
+  DateFormatter
 }
