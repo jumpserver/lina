@@ -103,7 +103,7 @@ export default [
   },
   {
     path: 'admin-users/:id',
-    component: () => import('@/views/assets/AdminUser/AdminUserDetail.vue'), // Parent router-view
+    component: () => import('@/views/assets/AdminUser/AdminUserDetail/index.vue'), // Parent router-view
     name: 'AdminUserDetail',
     meta: { title: 'AdminUserDetail' },
     hidden: true

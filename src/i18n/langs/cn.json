@@ -140,7 +140,9 @@
     "ReplayStorageUpdate":"更新录像存储",
     "CreateCommandStorage":"创建命令存储",
     "CommandStorageUpdate":"更新命令存储",
-    "CommandFilterRulesCreate":" 创建命令过滤器规则"
+    "CommandFilterRulesCreate":" 创建命令过滤器规则",
+    "LabelCreate":"创建标签",
+    "LabelUpdate":"更新标签"
   },
   "auth":{"authExpireMsg":"账号已退出，请重新登录","Re-Login":"重新登录"},
   "users":{
@@ -149,12 +151,14 @@
     "userDetail":"用户详情",
     "name":"姓名",
     "username":"用户名",
-    "role":"角色",
-    "userGroups":"用户组",
+    "Username":"用户名",
+    "Role":"角色",
+    "User groups":"用户组",
     "email":"邮箱",
     "userGroup":"用户组",
-    "groupMembers":"组下成员",
-    "MFAAuth":"MFA 认证",
+    "role":"角色",
+    "Group members":"组下成员",
+    "MFAcertification":"MFA 认证",
     "source":"来源",
     "validity":"有效",
     "action":"操作",
@@ -276,6 +280,7 @@
     "gateway":"网关",
     "date_created":"创建日期",
     "port":"端口",
+    "version":"版本",
     "TestConnection":"测试连接",
     "AdminUserList":"管理用户列表",
     "AdminUserDetail":"管理用户详情",
@@ -293,7 +298,7 @@
     "assetlist":"资产列表",
     "loginMode":"登录模式",
     "quick_update":"快速更新",
-    "auto_push":"自动更新",
+    "auto_push":"自动推送",
     "label_list":"标签列表",
     "label_detail":"标签详情",
     "create_label":"创建标签",
@@ -319,7 +324,10 @@
     "platform_detail":"平台详情",
     "BasePlatform":"基础平台",
     "charset":"编码",
-    "meta":"元数据"
+    "meta":"元数据",
+    "TestAssetsConnective": "测试资产可连接性",
+    "PushSystemUserNow": "立刻推送系统",
+    "Replace node assets admin user with this":"替换资产节点的管理员"
   },
   "applications":{
     "applications":"应用管理",

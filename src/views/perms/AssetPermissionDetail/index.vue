@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       AssetPermission: {
-        name: '', users: '', user_groups: '', assets: '', nodes: '', system_users: '',
+        name: '', users_amount: 0, user_groups_amount: 0, assets_amount: 0, nodes_amount: 0, system_users_amount: 0,
         date_start: '', date_expired: ''
       },
       config: {

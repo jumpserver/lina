@@ -7,7 +7,7 @@
 <script>
 import AssetPermissionTree from './AssetPermissionTree'
 import AssetPermissionList from './AssetPermissionList'
-import { LengthFormatter, ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
+import { ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -39,35 +39,31 @@ export default {
           { label: this.$t('perms.SystemUser'), key: 'system_user' },
           { label: '继承(先占位)', key: 'all=0' }
         ],
-        columns: ['expand', 'name', 'users', 'user_groups', 'assets', 'nodes', 'system_users', 'is_active', 'actions'],
+        columns: ['expand', 'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_active', 'actions'],
         columnsMeta: {
           expand: {
             type: 'expand',
             formatter: ExpandAssetPermissionFormatter
           },
-          users: {
-            formatter: LengthFormatter,
+          users_amount: {
             label: this.$t('perms.User')
           },
-          user_groups: {
-            formatter: LengthFormatter,
+          user_groups_amount: {
             label: this.$t('perms.UserGroups')
           },
-          assets: {
-            formatter: LengthFormatter,
+          assets_amount: {
             label: this.$t('perms.Asset')
           },
-          nodes: {
-            formatter: LengthFormatter,
+          nodes_amount: {
             label: this.$t('perms.Node')
           },
-          system_users: {
-            formatter: LengthFormatter,
+          system_users_amount: {
             label: this.$t('perms.SystemUser')
           }
         },
         actions: {
-          updateRoute: 'AssetPermissionUpdate'
+          updateRoute: 'AssetPermissionUpdate',
+          detailRoute: 'AssetPermissionDetail'
         }
       },
       headerActions: {
