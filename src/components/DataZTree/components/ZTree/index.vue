@@ -18,13 +18,10 @@
 import $ from '@/utils/jquery-vendor.js'
 import 'ztree'
 import '@/styles/ztree.css'
-const merge = require('deepmerge')
 
 const defaultObject = {
   type: Object,
-  default: () => {
-
-  }
+  default: () => {}
 }
 export default {
   name: 'ZTree',
@@ -35,18 +32,13 @@ export default {
   },
   data() {
     return {
-      defaultSetting: {
-
-      },
       zTree: '',
       rMenu: ''
     }
   },
   computed: {
     treeSetting() {
-      const treeSetting = merge(this.defaultSetting, this.setting)
-
-      return treeSetting
+      return this.setting
     }
   },
   mounted() {
@@ -60,15 +52,7 @@ export default {
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(
             this.zTree,
-            () => {
-              this.$axios.post(
-                '/api/v1/assets/nodes/00000000-0000-0000-0000-000000000000/tasks/',
-                { action: 'refresh_cache' }
-              ).then(res => {
-                this.initTree()
-              }
-              )
-            }
+            this.treeSetting.callback.refresh
           )
         }
 
@@ -81,6 +65,7 @@ export default {
       })
     },
     rootNodeAddDom: function(ztree, callback) {
+      const vm = this
       var refreshIcon = "<a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
       var rootNode = ztree.getNodes()[0]
       if (rootNode) {
@@ -94,28 +79,8 @@ export default {
       refreshIconRef.bind('click', function() {
         ztree.destroy()
         callback()
+        vm.initTree()
       })
-    },
-    setUrlParam: function(url, name, value) {
-      var urlArray = url.split('?')
-      if (urlArray.length === 1) {
-        url += '?' + name + '=' + value
-      } else {
-        var oriParam = urlArray[1].split('&')
-        var oriParamMap = {}
-        $.each(oriParam, function(index, value) {
-          var v = value.split('=')
-          oriParamMap[v[0]] = v[1]
-        })
-        oriParamMap[name] = value
-        url = urlArray[0] + '?'
-        var newParam = []
-        $.each(oriParamMap, function(index, value) {
-          newParam.push(index + '=' + value)
-        })
-        url += newParam.join('&')
-      }
-      return url
     }
   }
 
