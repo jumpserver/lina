@@ -1,4 +1,5 @@
-export default [
+import Layout from '@/layout'
+const AuditsRoutes = [
   {
     path: 'login-log',
     name: 'LoginLog',
@@ -30,3 +31,12 @@ export default [
     meta: { title: 'BatchCommand' }
   }
 ]
+
+export default {
+  path: '/audits/',
+  component: Layout,
+  redirect: '/audits/login-log/',
+  name: 'Audits',
+  meta: { title: 'Audits', icon: 'history' },
+  children: AuditsRoutes
+}
