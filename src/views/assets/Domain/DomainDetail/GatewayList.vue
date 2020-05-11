@@ -1,19 +1,25 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
 import { ActionsFormatter } from '@/components/ListTable/formatters/index'
+import ListTable from '@/components/ListTable/index'
 
 export default {
   components: {
-    GenericListPage
+    ListTable
+  },
+  props: {
+    object: {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/gateways/?domain=' + this.$route.params.id,
+        url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
         columns: [
           {
             prop: 'name',
@@ -53,14 +59,14 @@ export default {
             formatter: ActionsFormatter,
             width: '200px',
             actions: {
-              updateRoute: 'UserUpdate',
+              updateRoute: 'GatewayUpdate',
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/assets/gateways/${id}/`
+                return this.$axios.delete(url)
+              },
               extraActions: [
                 {
-                  performDelete: ({ row, col }) => {
-                    const id = row.id
-                    const url = `/api/v1/assets/gateways/${id}/`
-                    return this.$axios.delete(url)
-                  },
                   name: 'TestConnection',
                   title: this.$t('assets.TestConnection')
                 }
@@ -68,7 +74,36 @@ export default {
             }
           }
         ]
+      },
+      headerActions: {
+        hasRightActions: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
+        hasBulkDelete: false,
+        hasSearch: true,
+        extraActions: [
+          {
+            name: 'actionCreate',
+            title: this.$t('common.Create'),
+            type: 'primary',
+            has: true,
+            can: true,
+            callback: this.createRoute.bind(this)
+          }
+        ],
+        hasCreate: false
       }
+    }
+  },
+  methods: {
+    createRoute(val) {
+      this.$router.push({
+        name: 'GatewayCreate',
+        params: {
+          domainid: this.object.id
+        }
+      })
     }
   }
 }
