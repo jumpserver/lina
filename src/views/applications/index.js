@@ -21,7 +21,7 @@ export default [
   },
   {
     path: 'database-apps',
-    name: 'DatabaseApp',
+    name: 'DatabaseAppList',
     component: () => import('@/views/applications/DatabaseApp/DatabaseAppList'),
     meta: { title: 'DatabaseApp' }
   },
@@ -37,6 +37,13 @@ export default [
     name: 'DatabaseAppUpdate',
     component: () => import('@/views/applications/DatabaseApp/DatabaseAppCreateUpdate'),
     meta: { title: 'DatabaseAppUpdate', activeMenu: '/applications/DatabaseApp', action: 'update' },
+    hidden: true
+  },
+  {
+    path: 'database-apps/:id',
+    name: 'DatabaseAppDetail',
+    component: () => import('@/views/applications/DatabaseApp/DatabaseAppDetail/index'),
+    meta: { title: 'DatabaseAppDetail', activeMenu: '/applications/DatabaseApp', action: 'update' },
     hidden: true
   }
 ]

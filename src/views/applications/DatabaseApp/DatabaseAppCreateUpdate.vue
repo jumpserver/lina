@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @validate="console.log('hello')" />
+  <GenericCreateUpdatePage :initial="initial" v-bind="$data" />
 </template>
 
 <script>
@@ -13,7 +13,22 @@ export default {
       fields: [
         [this.$t('route.DatabaseApp'), ['name', 'type', 'host', 'port', 'database', 'comment']]
       ],
+      fieldsMeta: {
+        type: {
+          type: 'select',
+          options: [{
+            label: 'MySQL',
+            value: 'mysql'
+          }],
+          disabled: true
+        }
+      },
       url: '/api/v1/applications/database-apps/'
+    }
+  },
+  computed: {
+    initial() {
+      return this.$route.query
     }
   }
 }

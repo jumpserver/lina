@@ -95,6 +95,8 @@
     "Applications":"应用管理",
     "RemoteApp":"远程应用",
     "DatabaseApp":"数据库应用",
+    "DatabaseAppDetail": "数据应用详情",
+    "DatabaseAppCreate": "创建数据库应用",
     "DatabaseAppUpdate":"更新数据库应用",
     "Perms":"权限管理",
     "AssetPermission":"资产授权",

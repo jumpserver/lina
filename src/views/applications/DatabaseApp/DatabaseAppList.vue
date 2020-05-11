@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -15,28 +14,34 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/database-apps/',
         columns: [
-          'name', 'type', 'host', 'port', 'database', 'comment',
-          {
-            prop: 'id',
-            label: this.$ttc('action'),
-            align: 'center',
-            formatter: ActionsFormatter,
-            width: '200px',
-            actions: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/applications/database-apps/${id}/`
-                return this.$axios.delete(url)
-              },
-              updateRoute: 'DatabaseAppUpdate'
-            }
+          'name', 'get_type_display', 'host', 'port', 'database', 'comment', 'actions'
+        ],
+        columnsMeta: {
+          get_type_display: {
+            label: this.$t('applications.type')
           }
-        ]
+        }
       },
       headerActions: {
+        hasCreate: false,
         hasBulkDelete: false,
-        createRoute: 'DatabaseAppCreate'
+        createRoute: 'DatabaseAppCreate',
+        moreActionsTitle: '创建',
+        extraMoreActions: [
+          {
+            name: 'MySQL',
+            title: 'MySQL',
+            type: 'primary',
+            can: true,
+            callback: this.createMysql.bind(this)
+          }
+        ]
       }
+    }
+  },
+  methods: {
+    createMysql() {
+      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mysql' }})
     }
   }
 }
