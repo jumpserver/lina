@@ -4,20 +4,20 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <ActiveCard type="primary" v-bind="activeConfig" />
+      <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, ActiveCard } from '@/components'
+import { DetailCard, QuickActions } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'RemoteAppPermissionDetail',
   components: {
     DetailCard,
-    ActiveCard
+    QuickActions
   },
   props: {
     object: {
@@ -26,18 +26,26 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      activeConfig: {
-        icon: 'fa-edit',
-        title: this.$t('perms.QuickModify'),
-        content: [
-          {
-            name: this.$t('perms.Active'),
-            is_active: this.object.is_active
+      quickActions: [
+        {
+          title: this.$ttc('active'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.is_active
+          },
+          callbacks: {
+            change: function(v, item) {
+              const url = `/api/v1/perms/remote-app-permissions/${vm.object.id}/`
+              const data = { is_active: v }
+              vm.$axios.patch(url, data).catch(() => {
+                item.attrs.model = !v
+              })
+            }
           }
-        ],
-        url: `/api/v1/perms/remote-app-permissions/${this.object.id}/`
-      }
+        }
+      ]
     }
   },
   computed: {
