@@ -65,10 +65,12 @@ export default {
     },
     changeLangToZH() {
       this.$i18n.locale = 'cn'
+      localStorage.setItem('lang', 'cn')
       this.$cookie.set(this.LANG_COOKIE_NAME, 'zh-hans')
     },
     changeLangToEnglish() {
       this.$i18n.locale = 'en'
+      localStorage.setItem('lang', 'en')
       this.$cookie.set(this.LANG_COOKIE_NAME, 'en')
     }
   }
