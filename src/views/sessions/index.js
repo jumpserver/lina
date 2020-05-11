@@ -1,5 +1,5 @@
-
-export default [
+import Layout from '@/layout'
+const SessionsRoute = [
   {
     path: 'session-online',
     name: 'SessionOnlineList',
@@ -92,3 +92,11 @@ export default [
     hidden: true
   }
 ]
+export default {
+  path: '/terminal/',
+  component: Layout,
+  redirect: '/terminal/session-online/',
+  name: 'Sessions',
+  meta: { title: 'Sessions', icon: 'rocket' },
+  children: SessionsRoute
+}

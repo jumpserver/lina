@@ -1,4 +1,5 @@
-export default [
+import Layout from '@/layout'
+const OpsRoutes = [
   {
     path: 'tasks',
     name: 'TaskList',
@@ -33,3 +34,11 @@ export default [
     meta: { title: 'BatchCommand' }
   }
 ]
+export default {
+  path: '/ops/',
+  component: Layout,
+  redirect: '/ops/tasks/',
+  name: 'JobCenter',
+  meta: { title: 'JobCenter', icon: 'coffee' },
+  children: OpsRoutes
+}

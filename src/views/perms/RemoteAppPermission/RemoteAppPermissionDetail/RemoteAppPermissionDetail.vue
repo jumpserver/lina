@@ -1,23 +1,23 @@
 <template>
   <el-row :gutter="20">
-    <el-col :md="14" :sm="24">
+    <el-col :span="14">
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
-    <el-col :md="10" :sm="24">
-      <ActiveCard type="primary" v-bind="activeConfig" />
+    <el-col :span="10">
+      <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, ActiveCard } from '@/components'
-// import { toSafeLocalDateStr } from '@/utils/common'
+import { DetailCard, QuickActions } from '@/components'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'AssetPermissionDetail',
+  name: 'RemoteAppPermissionDetail',
   components: {
     DetailCard,
-    ActiveCard
+    QuickActions
   },
   props: {
     object: {
@@ -26,18 +26,26 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      activeConfig: {
-        icon: 'fa-edit',
-        title: this.$t('perms.QuickModify'),
-        content: [
-          {
-            name: this.$t('perms.Active'),
-            is_active: this.object.is_active
+      quickActions: [
+        {
+          title: this.$ttc('active'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.is_active
+          },
+          callbacks: {
+            change: function(v, item) {
+              const url = `/api/v1/perms/remote-app-permissions/${vm.object.id}/`
+              const data = { is_active: v }
+              vm.$axios.patch(url, data).catch(() => {
+                item.attrs.model = !v
+              })
+            }
           }
-        ],
-        url: `/api/v1/perms/asset-permissions/${this.$route.params.id}/`
-      }
+        }
+      ]
     }
   },
   computed: {
@@ -52,36 +60,31 @@ export default {
         },
         {
           key: this.$t('perms.UserCount'),
-          // value: this.getDataLength(this.object.users)
-          value: JSON.stringify(this.object.users_amount)
+          value: this.getDataLength(this.object.users)
         },
         {
           key: this.$t('perms.UserGroupCount'),
-          value: JSON.stringify(this.object.assets_amount)
+          value: this.getDataLength(this.object.user_groups)
         },
         {
-          key: this.$t('perms.AssetCount'),
-          value: JSON.stringify(this.object.users_amount)
-        },
-        {
-          key: this.$t('perms.NodeCount'),
-          value: JSON.stringify(this.object.nodes_amount)
+          key: this.$t('perms.RemoteAppCount'),
+          value: this.getDataLength(this.object.remote_apps)
         },
         {
           key: this.$t('perms.SystemUserCount'),
-          value: JSON.stringify(this.object.system_users_amount)
+          value: this.getDataLength(this.object.system_users)
         },
         {
           key: this.$t('perms.DateStart'),
-          value: 'api没有这个字段'
+          value: toSafeLocalDateStr(this.object.date_start)
         },
         {
           key: this.$t('perms.DateExpired'),
-          value: 'api没有这个字段'
+          value: toSafeLocalDateStr(this.object.date_expired)
         },
         {
           key: this.$t('perms.DateCreated'),
-          value: this.object.date_created
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('perms.CreatedBy'),
@@ -89,7 +92,7 @@ export default {
         },
         {
           key: this.$t('common.Comment'),
-          value: 'api没有这个字段'
+          value: this.object.comment
         }
       ]
     }

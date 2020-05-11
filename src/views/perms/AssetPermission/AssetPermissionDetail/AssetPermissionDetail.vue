@@ -4,20 +4,20 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <ActiveCard type="primary" v-bind="activeConfig" />
+      <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { DetailCard, ActiveCard } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { DetailCard, QuickActions } from '@/components'
+// import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'DatabaseAppPermissionDetail',
+  name: 'AssetPermissionDetail',
   components: {
     DetailCard,
-    ActiveCard
+    QuickActions
   },
   props: {
     object: {
@@ -26,18 +26,26 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      activeConfig: {
-        icon: 'fa-edit',
-        title: this.$t('perms.QuickModify'),
-        content: [
-          {
-            name: this.$t('perms.Active'),
-            is_active: this.object.is_active
+      quickActions: [
+        {
+          title: this.$ttc('active'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.is_active
+          },
+          callbacks: {
+            change: function(v, item) {
+              const url = `/api/v1/perms/asset-permissions/${vm.object.id}/`
+              const data = { is_active: v }
+              vm.$axios.patch(url, data).catch(() => {
+                item.attrs.model = !v
+              })
+            }
           }
-        ],
-        url: `/api/v1/perms/database-app-permissions/${this.object.id}/`
-      }
+        }
+      ]
     }
   },
   computed: {
@@ -52,31 +60,36 @@ export default {
         },
         {
           key: this.$t('perms.UserCount'),
-          value: this.getDataLength(this.object.users)
+          // value: this.getDataLength(this.object.users)
+          value: JSON.stringify(this.object.users_amount)
         },
         {
           key: this.$t('perms.UserGroupCount'),
-          value: this.getDataLength(this.object.user_groups)
+          value: JSON.stringify(this.object.assets_amount)
         },
         {
-          key: this.$t('perms.RemoteAppCount'),
-          value: this.getDataLength(this.object.database_apps)
+          key: this.$t('perms.AssetCount'),
+          value: JSON.stringify(this.object.users_amount)
+        },
+        {
+          key: this.$t('perms.NodeCount'),
+          value: JSON.stringify(this.object.nodes_amount)
         },
         {
           key: this.$t('perms.SystemUserCount'),
-          value: this.getDataLength(this.object.system_users)
+          value: JSON.stringify(this.object.system_users_amount)
         },
         {
           key: this.$t('perms.DateStart'),
-          value: toSafeLocalDateStr(this.object.date_start)
+          value: 'api没有这个字段'
         },
         {
           key: this.$t('perms.DateExpired'),
-          value: toSafeLocalDateStr(this.object.date_expired)
+          value: 'api没有这个字段'
         },
         {
           key: this.$t('perms.DateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          value: this.object.date_created
         },
         {
           key: this.$t('perms.CreatedBy'),
@@ -84,7 +97,7 @@ export default {
         },
         {
           key: this.$t('common.Comment'),
-          value: this.object.comment
+          value: 'api没有这个字段'
         }
       ]
     }

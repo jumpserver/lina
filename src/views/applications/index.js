@@ -1,4 +1,6 @@
-export default [
+import Layout from '@/layout'
+
+const ApplicationsRoute = [
   {
     path: 'remote-apps',
     name: 'RemoteAppList',
@@ -18,3 +20,12 @@ export default [
     meta: { title: 'DatabaseApp' }
   }
 ]
+
+export default {
+  path: '/applications/',
+  component: Layout,
+  redirect: '/applications/remote-apps/',
+  name: 'applications',
+  meta: { title: 'Applications', icon: 'th' },
+  children: ApplicationsRoute
+}
