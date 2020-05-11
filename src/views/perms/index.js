@@ -1,5 +1,5 @@
-import Layout from '@/layout'
-const PermsRoute = [
+
+export default [
   {
     path: 'asset-permissions',
     name: 'AssetPermissionList',
@@ -82,12 +82,3 @@ const PermsRoute = [
     meta: { title: 'DatabaseAppPermissionDetail', activeMenu: '/perms/database-app-permissions' }
   }
 ]
-export default {
-  path: '/perms/',
-  component: Layout,
-  redirect: '/perms/asset-permissions/',
-  name: 'Perms',
-  meta: { title: 'Perms', icon: 'edit' },
-  children: PermsRoute
-}
-

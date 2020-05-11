@@ -1,5 +1,4 @@
-import Layout from '@/layout'
-const UsersRoute = [
+export default [
   {
     path: 'users',
     component: () => import('./users/UserList.vue'), // Parent router-view
@@ -55,16 +54,3 @@ const UsersRoute = [
     meta: { title: 'UserGroupDetail', activeMenu: '/users/groups' }
   }
 ]
-
-export default {
-  path: '/users',
-  component: Layout,
-  redirect: '/users/users/',
-  name: 'Users',
-  meta: {
-    title: 'Users',
-    icon: 'users'
-  },
-  children: UsersRoute
-}
-

@@ -1,6 +1,4 @@
-import Layout from '@/layout'
-
-const AssetsRoute = [
+export default [
   {
     path: 'assets',
     name: 'AssetList',
@@ -169,11 +167,3 @@ const AssetsRoute = [
     meta: { title: 'PlatformList' }
   }
 ]
-export default {
-  path: '/assets',
-  component: Layout,
-  redirect: '/assets/assets/',
-  name: 'assets',
-  meta: { title: 'Assets', icon: 'inbox' },
-  children: AssetsRoute
-}

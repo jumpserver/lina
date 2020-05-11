@@ -1,5 +1,4 @@
-import Layout from '@/layout'
-const TicketsRoutes = [
+export default [
   {
     path: 'tickets',
     name: 'TicketsList',
@@ -7,10 +6,3 @@ const TicketsRoutes = [
     meta: { title: 'Tickets', icon: 'check-square-o' }
   }
 ]
-export default {
-  path: '/tickets/',
-  component: Layout,
-  redirect: '/tickets/tickets/',
-  children: TicketsRoutes
-}
-

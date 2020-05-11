@@ -1,5 +1,5 @@
-import Layout from '@/layout'
-const SessionsRoute = [
+
+export default [
   {
     path: 'session-online',
     name: 'SessionOnlineList',
@@ -92,11 +92,3 @@ const SessionsRoute = [
     hidden: true
   }
 ]
-export default {
-  path: '/terminal/',
-  component: Layout,
-  redirect: '/terminal/session-online/',
-  name: 'Sessions',
-  meta: { title: 'Sessions', icon: 'rocket' },
-  children: SessionsRoute
-}
