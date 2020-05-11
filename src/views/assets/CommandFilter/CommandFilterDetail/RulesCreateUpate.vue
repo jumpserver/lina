@@ -1,5 +1,12 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :update-success-next-route="updateSuccessNextRoute" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+    :create-success-next-route="createSuccessNextRoute"
+    :update-success-next-route="updateSuccessNextRoute"
+  />
 </template>
 
 <script>

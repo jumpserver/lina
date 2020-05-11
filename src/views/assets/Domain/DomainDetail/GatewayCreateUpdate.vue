@@ -1,5 +1,12 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :update-success-next-route="updateSuccessNextRoute" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+    :create-success-next-route="createSuccessNextRoute"
+    :update-success-next-route="updateSuccessNextRoute"
+  />
 </template>
 
 <script>
@@ -13,7 +20,6 @@ export default {
         protocol: 'ssh',
         domain: this.$route.params.domainid
       },
-
       fields: [
         [this.$t('basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
         [this.$t('认证'), ['username', 'password']],
