@@ -4,10 +4,10 @@
       <DetailCard :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RelationCard v-bind="systemUserRelationConfig" />
+      <RelationCard ref="systemUserRelation" v-bind="systemUserRelationConfig" />
     </el-col>
   </el-row>
-</template>a
+</template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
@@ -31,27 +31,51 @@ export default {
         icon: 'fa-info',
         title: this.$t('perms.Add System User to this permission'),
         objectsAjax: {
-          url: '/api/v1/assets/system-users/'
+          url: '/api/v1/assets/system-users/',
+          processResults: (data) => {
+            let results = data.results
+            const notUndefined = anyValue => typeof anyValue !== 'undefined'
+            results = results.map((item) => {
+              if (item.protocol === 'ssh' || item.protocol === 'telnet') {
+                return { label: `${item.name}(${item.username})`, value: item.id }
+              }
+            }).filter(notUndefined)
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
         },
         hasObjectsId: this.object.system_users,
         performAdd: (items) => {
-          // TODO: Orange API 待修复
-          const relationUrl = `/api/v1/assets/cmd-filters/`
-          const objectId = this.object.id
-          const data = items.map(v => {
-            return {
-              cmd_filter: objectId,
-              systemuser: v.value
-            }
+          const newData = []
+          const value = this.$refs.systemUserRelation.iHasObjects
+          value.map(v => {
+            newData.push(v.value)
           })
-          return this.$axios.post(relationUrl, data)
+          const relationUrl = `/api/v1/assets/cmd-filters/${this.object.id}/`
+          items.map(v => {
+            newData.push(v.value)
+          })
+          return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
+            this.$message.success(this.$tc('Update success'))
+          }).catch(err => {
+            this.$message.error(this.$tc('Update failed' + ' ' + err))
+          })
         },
         performDelete: (item) => {
           const itemId = item.value
-          const objectId = this.object.id
-          // TODO: Orange API 待修复
-          const relationUrl = `/api/v1/assets/cmd-filters/?cmd-filters=${objectId}&systemuser=${itemId}`
-          return this.$axios.delete(relationUrl)
+          const newData = []
+          const value = this.$refs.systemUserRelation.iHasObjects
+          value.map(v => {
+            if (v.value !== itemId) {
+              newData.push(v.value)
+            }
+          })
+          const relationUrl = `/api/v1/assets/cmd-filters/${this.object.id}/`
+          return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
+            this.$message.success(this.$tc('Update success'))
+          }).catch(err => {
+            this.$message.error(this.$tc('Update failed' + ' ' + err))
+          })
         }
       }
     }

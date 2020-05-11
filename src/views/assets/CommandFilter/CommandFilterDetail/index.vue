@@ -25,11 +25,11 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.detail'),
+            title: this.$t('assets.commandFilterDetail'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.rules'),
+            title: this.$t('assets.commandFilterRules'),
             name: 'rules'
           }
         ],

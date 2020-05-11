@@ -24,7 +24,10 @@ export default {
           },
           {
             prop: 'rules.length',
-            label: this.$t('assets.rules')
+            label: this.$t('assets.rules'),
+            formatter: DetailFormatter,
+            sortable: true,
+            route: 'CommandFilterDetail'
           },
           {
             prop: 'system_users.length',
