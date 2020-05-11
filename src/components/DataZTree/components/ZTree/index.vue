@@ -43,7 +43,7 @@ export default {
   },
   mounted() {
     this.initTree()
-    $('.treebox').css('height', window.innerHeight - 60)
+    // $('.treebox').css('height', window.innerHeight - 60)
   },
   methods: {
     initTree: function() {
