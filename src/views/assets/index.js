@@ -15,7 +15,14 @@ export default [
     path: 'domains/create',
     name: 'DomainCreate',
     component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
-    meta: { title: 'DomainList', activeMenu: '/assets/domains' },
+    meta: { title: 'DomainCreate', activeMenu: '/assets/domains' },
+    hidden: true
+  },
+  {
+    path: 'domains/:id/update',
+    name: 'DomainUpdate',
+    component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
+    meta: { title: 'DomainUpdate', activeMenu: '/assets/domains' },
     hidden: true
   },
   {

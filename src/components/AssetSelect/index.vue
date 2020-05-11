@@ -4,7 +4,7 @@
     <el-dialog
       :title="this.$t('资产列表')"
       :visible.sync="dialogVisible"
-      width="50%"
+      width="60%"
       :before-close="handleClose"
     >
       <GenericTreeListPage
