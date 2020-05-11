@@ -31,6 +31,7 @@ Vue.prototype.$tt = (key) => {
 }
 
 Vue.prototype.$tco = (key) => {
+  // Translate Common
   return i18n.t('common.' + key)
 }
 

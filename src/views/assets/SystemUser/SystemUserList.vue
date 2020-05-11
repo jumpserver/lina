@@ -17,34 +17,34 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('common.Name'),
+            label: this.$tt('common.name'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'SystemUserDetail'
           },
           {
             prop: 'username',
-            label: this.$t('common.username'),
+            label: this.$tt('common.username'),
             sortable: 'custom'
           },
           {
             prop: 'protocol',
-            label: this.$t('assets.protocol'),
+            label: this.$tt('assets.protocol'),
             sortable: 'custom'
           },
           {
             prop: 'login_mode_display',
-            label: this.$t('assets.loginMode'),
+            label: this.$tt('assets.loginMode'),
             sortable: 'custom'
           },
           {
             prop: 'assets_amount',
-            label: this.$t('assets.asset'),
+            label: this.$tt('assets.assets'),
             sortable: 'custom'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
+            label: this.$tt('common.comment'),
             sortable: 'custom'
           },
           {

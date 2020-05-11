@@ -52,13 +52,13 @@ export default {
     createSuccessMsg: {
       type: String,
       default: function() {
-        return this.$tco('Create success')
+        return this.$tcap('common.createSuccessMsg')
       }
     },
     updateSuccessMsg: {
       type: String,
       default: function() {
-        return this.$ttc('updateSuccessMsg')
+        return this.$tcap('common.updateSuccessMsg')
       }
     },
     createSuccessNextRoute: {

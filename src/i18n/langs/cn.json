@@ -142,7 +142,10 @@
     "CommandStorageUpdate":"更新命令存储",
     "CommandFilterRulesCreate":" 创建命令过滤器规则",
     "LabelCreate":"创建标签",
-    "LabelUpdate":"更新标签"
+    "LabelUpdate":"更新标签",
+    "SystemUserDetail":"系统用户详情",
+    "SystemUserCreate":"创建系统用户",
+    "SystemUserUpdate":"更新系统用户"
   },
   "auth":{"authExpireMsg":"账号已退出，请重新登录","Re-Login":"重新登录"},
   "users":{
@@ -290,10 +293,7 @@
     "login_mode_display":"登录模式",
     "replace_node_assets_admin_user_with_this":"替换资产的管理员",
     "select_nodes":"选择节点",
-    "SystemUserList":"系统用户列表",
-    "SystemUserDetail":"系统用户详情",
-    "SystemUserCreate":"创建系统用户",
-    "SystemUserUpdate":"更新系统用户",
+
     "protocol":"协议",
     "assetlist":"资产列表",
     "loginMode":"登录模式",

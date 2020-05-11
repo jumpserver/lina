@@ -18,35 +18,41 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasCreate: false,
+        moreActionsTitle: '创建',
         extraMoreActions: [
           {
             name: 'S3',
             title: 'S3',
             type: 'primary',
+            can: true,
             callback: this.createS3.bind(this)
           },
           {
             name: 'Ceph',
             title: 'Ceph',
             type: 'primary',
+            can: true,
             callback: this.createCeph.bind(this)
           },
           {
             name: 'Swift',
             title: 'Swift',
             type: 'primary',
+            can: true,
             callback: this.createSwift.bind(this)
           },
           {
             name: 'OSS',
             title: 'OSS',
             type: 'primary',
+            can: true,
             callback: this.createOSS.bind(this)
           },
           {
             name: 'Azure',
             title: 'Azure',
             type: 'primary',
+            can: true,
             callback: this.createAzure.bind(this)
           }
 

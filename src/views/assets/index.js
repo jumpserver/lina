@@ -112,14 +112,14 @@ export default [
     path: 'system-users/create',
     name: 'SystemUserCreate',
     component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
-    meta: { title: 'SystemUserCreate' },
+    meta: { title: 'SystemUserCreate', activeMenu: '/assets/system-users' },
     hidden: true
   },
   {
     path: 'system-users/update/:id',
     name: 'SystemUserUpdate',
     component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
-    meta: { title: 'SystemUserUpdate' },
+    meta: { title: 'SystemUserUpdate', activeMenu: '/assets/system-users' },
     hidden: true
   },
   {
