@@ -9,14 +9,21 @@ export default [
     path: 'remote-apps/create',
     name: 'RemoteAppCreate',
     component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
-    meta: { title: 'RemoteApp' },
+    meta: { title: 'RemoteApp', activeMenu: '/applications/remote-apps', action: 'create' },
+    hidden: true
+  },
+  {
+    path: 'remote-apps/:id/update',
+    name: 'RemoteAppUpdate',
+    component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
+    meta: { title: 'RemoteAppUpdate', activeMenu: '/applications/remote-apps', action: 'update' },
     hidden: true
   },
   {
     path: 'remote-apps/:id',
     name: 'RemoteAppDetail',
-    component: () => import('@/views/applications/RemoteApp/RemoteAppList'),
-    meta: { title: 'RemoteApp' },
+    component: () => import('@/views/applications/RemoteApp/RemoteAppDetail/index'),
+    meta: { title: 'RemoteAppDetail', activeMenu: '/applications/remote-apps' },
     hidden: true
   },
   {
@@ -43,7 +50,7 @@ export default [
     path: 'database-apps/:id',
     name: 'DatabaseAppDetail',
     component: () => import('@/views/applications/DatabaseApp/DatabaseAppDetail/index'),
-    meta: { title: 'DatabaseAppDetail', activeMenu: '/applications/database-apps', action: 'update' },
+    meta: { title: 'DatabaseAppDetail', activeMenu: '/applications/database-apps' },
     hidden: true
   }
 ]
