@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="treebox">
-      <ul id="ztree" class="ztree" />
+      <ul id="ztree" class="ztree">
+        <div>
+          {{ this.$t('common.loading') }}...
+        </div>
+      </ul>
     </div>
     <div id="rMenu">
       <ul class="dropdown-menu menu-actions">
