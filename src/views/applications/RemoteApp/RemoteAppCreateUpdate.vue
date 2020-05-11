@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" @validate="console.log('hello')" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>

@@ -32,8 +32,55 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'RemoteAppCreate'
+        hasCreate: false,
+        hasBulkDelete: false,
+        // createRoute: 'RemoteAppCreate',
+        moreActionsTitle: '创建',
+        extraMoreActions: [
+          {
+            name: 'Chrome',
+            title: 'Chrome',
+            type: 'primary',
+            can: true,
+            callback: this.createChrome.bind(this)
+          },
+          {
+            name: 'MySQL Workbench',
+            title: 'MySQL Workbench',
+            type: 'primary',
+            can: true,
+            callback: this.createMysqlWorkbench.bind(this)
+          },
+          {
+            name: 'vSphere Client',
+            title: 'vSphere Client',
+            type: 'primary',
+            can: true,
+            callback: this.createVSphereClient.bind(this)
+          },
+          {
+            name: '自定义',
+            title: '自定义',
+            type: 'primary',
+            can: true,
+            callback: this.createCustom.bind(this)
+          }
+        ]
       }
+    }
+  },
+  methods: {
+    createChrome() {
+      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'chrome' }})
+    },
+    createMysqlWorkbench() {
+      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'mysql_workbench' }})
+    },
+    createVSphereClient() {
+      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'vmware_client' }})
+    },
+    createCustom() {
+      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'custom' }})
     }
   }
 }
