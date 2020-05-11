@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $ttc('add') }}</el-button>
+          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $t('common.add') }}</el-button>
         </td>
       </tr>
       <template v-if="showHasObjects">
@@ -25,7 +25,7 @@
         <td colspan="2">
           <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
-            {{ $ttc('more') }}
+            {{ $t('common.more') }}
           </el-button>
         </td>
       </tr>

@@ -133,7 +133,7 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$ttc('action'),
+            label: this.$t('common.action'),
             align: 'center',
             formatter: CustomActionsFormatter,
             actions: {

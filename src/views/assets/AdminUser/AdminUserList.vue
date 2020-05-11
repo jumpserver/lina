@@ -17,28 +17,28 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$tt('common.name'),
+            label: this.$t('common.name'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'AdminUserDetail'
           },
           {
             prop: 'username',
-            label: this.$tt('common.username'),
+            label: this.$t('common.username'),
             sortable: 'custom'
           },
           {
             prop: 'assets_amount',
-            label: this.$tt('assets.assets')
+            label: this.$t('assets.assets')
           },
           {
             prop: 'comment',
-            label: this.$tt('common.comment'),
+            label: this.$t('common.comment'),
             sortable: 'custom'
           },
           {
             prop: 'id',
-            label: this.$ttc('action'),
+            label: this.$t('common.action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',

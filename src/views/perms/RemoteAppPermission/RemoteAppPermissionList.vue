@@ -21,10 +21,10 @@ export default {
         ],
         columnsMeta: {
           users_amount: {
-            label: this.$tt('users.users')
+            label: this.$t('users.users')
           },
           user_groups_amount: {
-            label: this.$tt('users.userGroups')
+            label: this.$t('users.userGroups')
           },
           remote_apps_amount: {
             label: this.$t('assets.remoteApps')

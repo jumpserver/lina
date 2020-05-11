@@ -22,7 +22,7 @@ export default {
         [this.$t('users.' + 'Account'), ['name', 'username', 'email', 'groups']],
         [this.$t('users.' + 'Authentication'), ['password_strategy', 'password', 'public_key', 'mfa_level', 'source']],
         [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
-        [this.$tco('Other'), ['phone', 'wechat', 'comment']]
+        [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {

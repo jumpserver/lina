@@ -35,31 +35,31 @@ export default {
         activeMenu: 'UserInfo',
         submenu: [
           {
-            title: this.$ttc('basicInfo'),
+            title: this.$t('common.basicInfo'),
             name: 'UserInfo'
           },
           {
-            title: this.$tt('perms.grantedAssets'),
+            title: this.$t('perms.grantedAssets'),
             name: 'UserGrantedAssets'
           },
           {
-            title: this.$tt('perms.assetPermissionRules'),
+            title: this.$t('perms.assetPermissionRules'),
             name: 'UserAssetPermissionRules'
           },
           {
-            title: this.$tt('perms.grantedRemoteApps'),
+            title: this.$t('perms.grantedRemoteApps'),
             name: 'UserGrantedRemoteApps'
           },
           {
-            title: this.$tt('perms.remoteAppsPermissionRules'),
+            title: this.$t('perms.remoteAppsPermissionRules'),
             name: 'UserRemoteAppPermissionRules'
           },
           {
-            title: this.$tt('perms.grantedDatabases'),
+            title: this.$t('perms.grantedDatabases'),
             name: 'UserGrantedDatabases'
           },
           {
-            title: this.$tt('perms.databasePermissionRules'),
+            title: this.$t('perms.databasePermissionRules'),
             name: 'UserDatabasePermissionRules'
           }
         ],
