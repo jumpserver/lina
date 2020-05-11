@@ -20,23 +20,4 @@ Vue.prototype.$tr = (key) => {
   return i18n.t('route.' + key)
 }
 
-Vue.prototype.$tcap = (key) => {
-  // Cap case
-  return _.capitalize(i18n.t(key))
-}
-
-Vue.prototype.$tt = (key) => {
-  // Title Case
-  return _.startCase(_.camelCase(i18n.t(key)))
-}
-
-Vue.prototype.$tco = (key) => {
-  // Translate Common
-  return i18n.t('common.' + key)
-}
-
-Vue.prototype.$ttc = (key) => {
-  return _.startCase(_.camelCase(i18n.t('common.' + key)))
-}
-
 export default i18n

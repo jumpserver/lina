@@ -3,18 +3,28 @@ export default {
     short: {
       year: 'numeric', month: 'short', day: 'numeric'
     },
+    medium: {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hourCycle: 'h23', hour12: false
+    },
     long: {
       year: 'numeric', month: 'short', day: 'numeric',
-      weekday: 'short', hour: 'numeric', minute: 'numeric'
+      hour: 'numeric', minute: 'numeric'
     }
   },
   'cn': {
     short: {
       year: 'numeric', month: 'short', day: 'numeric'
     },
+    medium: {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hourCycle: 'h23', hour12: false
+    },
     long: {
       year: 'numeric', month: 'short', day: 'numeric',
-      weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: true
+      hour: 'numeric', minute: 'numeric', hour12: true
     }
   }
 }

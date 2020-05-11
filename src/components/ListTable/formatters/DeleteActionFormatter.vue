@@ -19,10 +19,10 @@ export default {
     onDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
       this.$axios.delete(url).then(res => {
-        this.$message.success(this.$tco('Delete success'))
+        this.$message.success(this.$t('common.Delete success'))
         reload()
       }).catch(error => {
-        this.$message.error(this.$tco('Delete failed' + ' ' + error))
+        this.$message.error(this.$t('common.Delete failed' + ' ' + error))
       })
     },
     iCanDelete() {

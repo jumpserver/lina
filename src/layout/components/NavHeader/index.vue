@@ -7,18 +7,18 @@
       <div class="header-item">
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ $ttc('help') }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ $t('common.help') }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-plus">{{ $ttc('docs') }}</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus">{{ $ttc('support') }}</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-plus">{{ $t('common.docs') }}</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-circle-plus">{{ $t('common.support') }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
       <div class="header-item">
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ $ttc('language') }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ $t('common.language') }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="changeLangToZH">中文(简体)</el-dropdown-item>
@@ -44,16 +44,16 @@ export default {
     Hamburger,
     AccountDropdown
   },
+  data() {
+    return {
+      LANG_COOKIE_NAME: 'django_language'
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar'
     ])
-  },
-  data() {
-    return {
-      LANG_COOKIE_NAME: 'django_language'
-    }
   },
   methods: {
     toggleSideBar() {

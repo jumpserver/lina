@@ -26,13 +26,13 @@ export default {
             route: 'RemoteAppPermissionDetail'
           },
           users: {
-            label: this.$tt('users.users'),
+            label: this.$t('users.users'),
             formatter(row, col, colValue) {
               return colValue.length
             }
           },
           user_groups: {
-            label: this.$tt('users.userGroups'),
+            label: this.$t('users.userGroups'),
             formatter(row, col, colValue) {
               return colValue.length
             }

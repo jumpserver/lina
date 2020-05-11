@@ -22,7 +22,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$ttc('basicInfo')
+        return this.$t('common.basicInfo')
       }
     },
     items: {

@@ -53,7 +53,7 @@ export default {
         }
         if (res.length === 0) {
           res.push({
-            name: this.$tco('empty')
+            name: this.$t('common.empty')
           })
         }
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
