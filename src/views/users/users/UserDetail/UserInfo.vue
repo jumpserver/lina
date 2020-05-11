@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.active'),
+          title: this.$t('common.Active'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -47,7 +47,7 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetMFATitle'),
+          title: this.$t('users.quickUpdate.ResetMFA'),
           attrs: {
             type: 'primary',
             label: this.$t('common.reset')
@@ -78,7 +78,7 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetPasswordTitle'),
+          title: this.$t('users.quickUpdate.ResetPassword'),
           attrs: {
             type: 'primary',
             label: this.$t('common.send')
@@ -189,19 +189,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('users.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('common.username'),
+          key: this.$t('users.Username'),
           value: this.object.username
         },
         {
-          key: this.$t('common.email'),
+          key: this.$t('users.Email'),
           value: this.object.email
         },
         {
-          key: this.$t('common.role'),
+          key: this.$t('users.Role'),
           value: this.object.role_display
         },
         {
@@ -209,31 +209,31 @@ export default {
           value: this.object.mfa_level_display
         },
         {
-          key: this.$t('users.source'),
+          key: this.$t('users.Source'),
           value: this.object.source_display
         },
         {
-          key: this.$t('common.dateExpired'),
+          key: this.$t('users.DateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.createdBy'),
+          key: this.$t('common.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('users.DateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.dateLastLogin'),
+          key: this.$t('users.DateLastLogin'),
           value: this.object.last_login
         },
         {
-          key: this.$t('users.datePasswordUpdated'),
+          key: this.$t('users.DatePasswordUpdated'),
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$t('common.comment'),
+          key: this.$t('common.Comment'),
           value: this.object.comment
         }
       ]

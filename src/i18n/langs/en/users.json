@@ -1,0 +1,27 @@
+{
+  "create": {
+    "Account": "Account",
+    "Authentication": "Account",
+    "Secure": "Secure"
+  },
+  "DateLastLogin": "最后登录日期",
+  "MFA": "MFA",
+  "Source": "来源",
+  "DatePasswordUpdated": "改密日期",
+  "Name": "姓名",
+  "Username": "用户名",
+  "Email": "Email",
+  "Role": "角色",
+  "DateExpired": "过期时间",
+  "DateJoined": "创建日期",
+  "Users": "用户",
+  "quickUpdate": {
+    "ResetMFA": "重置MFA",
+    "ResetPasswordMail": "重置密码",
+    "RestSSHKeyMail": "重置密钥",
+    "UnblockLogin": "解除登录限制",
+    "Messages": {
+      "resetPasswordWarningMsg": ""
+    }
+  }
+}
