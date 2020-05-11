@@ -44,16 +44,16 @@ export default {
     Hamburger,
     AccountDropdown
   },
+  data() {
+    return {
+      LANG_COOKIE_NAME: 'django_language'
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar'
     ])
-  },
-  data() {
-    return {
-      LANG_COOKIE_NAME: 'django_language'
-    }
   },
   methods: {
     toggleSideBar() {

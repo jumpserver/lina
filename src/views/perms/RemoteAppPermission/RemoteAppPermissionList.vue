@@ -14,23 +14,24 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/perms/remote-app-permissions/',
-        columns: ['name', 'users', 'user_groups', 'remote_apps', 'system_users', 'is_valid', 'actions'],
+        columns: [
+          'name', 'users_amount', 'user_groups_amount',
+          'remote_apps_amount', 'system_users_amount',
+          'is_valid', 'actions'
+        ],
         columnsMeta: {
-          users: {
-            formatter: LengthFormatter,
-            label: this.$t('perms.User')
+          users_amount: {
+            label: this.$tt('users.users')
           },
-          user_groups: {
-            formatter: LengthFormatter,
-            label: this.$t('perms.UserGroups')
+          user_groups_amount: {
+            label: this.$tt('users.userGroups')
           },
-          remote_apps: {
-            formatter: LengthFormatter,
-            label: this.$t('perms.RemoteApp')
+          remote_apps_amount: {
+            label: this.$t('assets.remoteApps')
           },
-          system_users: {
+          system_users_amount: {
             formatter: LengthFormatter,
-            label: this.$t('perms.SystemUser')
+            label: this.$t('assets.systemUsers')
           }
         }
       },
