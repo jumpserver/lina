@@ -315,6 +315,7 @@
     "create_command_filter":"创建命令过滤器",
     "update_command_filter":"更新命令过滤器",
     "commandFilterDetail":"命令过滤器详情",
+    "commandFilterRules": "命令过滤器规则",
     "rules":"规则",
     "systemUser":"系统用户",
     "date_updated":"更新日期",

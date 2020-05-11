@@ -1,4 +1,5 @@
 import DetailFormatter from './DetailFormatter'
+import DetailLengthFormatter from './DetailLengthFormatter'
 import DisplayFormatter from './DisplayFormatter'
 import BooleanFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
@@ -13,6 +14,7 @@ import DateFormatter from './DateFormatter'
 
 export default {
   DetailFormatter,
+  DetailLengthFormatter,
   DisplayFormatter,
   BooleanFormatter,
   ActionsFormatter,
@@ -27,6 +29,7 @@ export default {
 }
 
 export {
+  DetailLengthFormatter,
   DetailFormatter,
   DisplayFormatter,
   BooleanFormatter,
