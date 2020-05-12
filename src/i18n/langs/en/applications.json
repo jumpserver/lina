@@ -1,3 +1,25 @@
 {
-
+  "applications": "Applications",
+  "remote_app_list": "RemoteApp list",
+  "create_remote_app": "Create RemoteApp",
+  "remote_app_detail": "RemoteApp detail",
+  "update_remote_app": "Update RemoteApp",
+  "name": "Name",
+  "app_type": "App type",
+  "action": "Action",
+  "update": "Update",
+  "delete": "Detele",
+  "comment": "Comment",
+  "database_app_list": "DatabaseApp list",
+  "database_app_detail": "DatabaseApp detail",
+  "create_database_app": "Create DatabaseApp",
+  "update_database_app": "Update DatabaseApp",
+  "type": "Type",
+  "host": "Host",
+  "port": "Port",
+  "database": "Database",
+  "search": "Search",
+  "date_created": "Date created",
+  "created_by": "Created by",
+  "app_path": "App path"
 }

@@ -38,5 +38,12 @@
   },
   "Members": "Members",
   "More": "More",
-  "QuickUpdate": "Quick update"
+  "QuickUpdate": "Quick update",
+  "tree": {
+    "AddNode": "Add",
+    "RenameNode": "Rename",
+    "DeleteNode": "Delete",
+    "Empty": "Empty",
+    "Loading": "Loading"
+  }
 }

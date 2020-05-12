@@ -3,7 +3,7 @@
     <div class="treebox">
       <ul id="ztree" class="ztree">
         <div>
-          {{ this.$t('common.loading') }}...
+          {{ this.$t('common.tree.Loading') }}...
         </div>
       </ul>
     </div>
@@ -57,7 +57,7 @@ export default {
         }
         if (res.length === 0) {
           res.push({
-            name: this.$t('common.empty')
+            name: this.$t('common.tree.Empty')
           })
         }
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)

@@ -23,7 +23,6 @@
   "search": "搜索",
   "source": "来源",
   "status": "状态",
-  "actions": "动作",
   "monitor": "监控",
   "run": "执行",
   "deleteConfirmMsg": "你确定要删除",
@@ -62,5 +61,22 @@
   "userPage": "用户页面",
   "apiKey": "API Key",
   "logout": "退出",
-  "show": "显示"
+  "show": "显示",
+  "actions": {
+    "exportRange": "导出范围",
+    "exportAll": "导出全部",
+    "exportOnlySelectedItems": "仅导出选中项",
+    "downloadTheImportedTemplateOrUseTheExportedCSVFormat": "下载导入的模板或使用导出的csv格式",
+    "downloadImportTemplate": "下载导入模板",
+    "downloadTheUpdatedTemplateOrUsTheExportedCSVFormat": "下载更新的模板或使用导出的csv格式",
+    "downloadUpdateTemplate": "下载更新模板",
+    "upload": "点击上传",
+    "onlyCSVFilesCanBeUploaded": "只能上传CSV文件"
+  },
+  "tree": {
+    "AddNode": "添加节点",
+    "RenameNode": "重命名节点",
+    "DeleteNode": "删除节点",
+    "Empty": "空"
+  }
 }
