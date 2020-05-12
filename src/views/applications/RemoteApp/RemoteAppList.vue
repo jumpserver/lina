@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { REMOTE_APP_TYPE_META_MAP, ALL_TYPES } from './const'
 
 export default {
   components: {
@@ -36,51 +37,24 @@ export default {
         hasBulkDelete: false,
         // createRoute: 'RemoteAppCreate',
         moreActionsTitle: '创建',
-        extraMoreActions: [
-          {
-            name: 'Chrome',
-            title: 'Chrome',
-            type: 'primary',
-            can: true,
-            callback: this.createChrome.bind(this)
-          },
-          {
-            name: 'MySQL Workbench',
-            title: 'MySQL Workbench',
-            type: 'primary',
-            can: true,
-            callback: this.createMysqlWorkbench.bind(this)
-          },
-          {
-            name: 'vSphere Client',
-            title: 'vSphere Client',
-            type: 'primary',
-            can: true,
-            callback: this.createVSphereClient.bind(this)
-          },
-          {
-            name: '自定义',
-            title: '自定义',
-            type: 'primary',
-            can: true,
-            callback: this.createCustom.bind(this)
-          }
-        ]
+        extraMoreActions: this.genExtraMoreActions()
       }
     }
   },
   methods: {
-    createChrome() {
-      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'chrome' }})
+    onCallback(type) {
+      this.$router.push({ name: 'RemoteAppCreate', query: { type: type }})
     },
-    createMysqlWorkbench() {
-      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'mysql_workbench' }})
-    },
-    createVSphereClient() {
-      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'vmware_client' }})
-    },
-    createCustom() {
-      this.$router.push({ name: 'RemoteAppCreate', query: { type: 'custom' }})
+    genExtraMoreActions() {
+      const extra_more_actions = []
+      for (const value of ALL_TYPES) {
+        const item = { ...REMOTE_APP_TYPE_META_MAP[value] }
+        item.type = 'primary'
+        item.can = true
+        item.callback = this.onCallback.bind(this, value)
+        extra_more_actions.push(item)
+      }
+      return extra_more_actions
     }
   }
 }
