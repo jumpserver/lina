@@ -25,7 +25,7 @@ export default {
         activeMenu: 'GroupInfo',
         submenu: [
           {
-            title: this.$t('common.basicInfo'),
+            title: this.$t('common.tabs.BasicInfo'),
             name: 'GroupInfo'
           },
           {

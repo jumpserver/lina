@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
-import { ActionsFormatter, LengthFormatter } from '@/components/ListTable/formatters/index'
+import { ListTable } from '@/components'
+import { LengthFormatter } from '@/components/ListTable/formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'TaskAdhoc',
@@ -58,8 +58,6 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$t('common.action'),
-            formatter: ActionsFormatter,
             actions: {
               hasEdit: false,
               hasDelete: false,

@@ -7,7 +7,7 @@
     <slot />
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
-        <el-button size="small" @click="onCancel">{{ $t('common.cancel') }}</el-button>
+        <el-button size="small" @click="onCancel">{{ $t('common.actions.Cancel') }}</el-button>
         <el-button type="primary" size="small" @click="onConfirm">{{ $t('common.confirm') }}</el-button>
       </slot>
     </div>

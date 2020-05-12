@@ -30,7 +30,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.active'),
+          title: this.$t('common.actions.Activate'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -55,7 +55,7 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.table.Name'),
           value: this.object.name
         },
         {
@@ -96,7 +96,7 @@ export default {
           value: this.object.created_by
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('common.table.Comment'),
           value: 'api没有这个字段'
         }
       ]

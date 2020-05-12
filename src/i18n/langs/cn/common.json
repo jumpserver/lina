@@ -41,7 +41,7 @@
   "updateSuccessMsg": "更新成功",
   "updateFailedMsg": "更新失败",
   "disableSelected": "禁用所选",
-  "activeSelected": "激活所选",
+  "activateSelected": "激活所选",
   "deleteWarningMsg": "你确定要删除",
   "rows": "行",
   "basicInfo": "基本信息",

@@ -13,7 +13,7 @@
       <el-form>
         <el-form-item :label="importTitle" :label-width="'100px'">
           <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.import') }}</el-radio>
-          <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.update') }}</el-radio>
+          <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.actions.Update') }}</el-radio>
         </el-form-item>
       </el-form>
       <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.downloadTheImportedTemplateOrUseTheExportedCSVFormat') }} <a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('action.DownloadImportTemplate') }}</a></div>
@@ -71,7 +71,7 @@ export default {
       if (this.importOption === '1') {
         return this.$t('common.import')
       } else {
-        return this.$t('common.update')
+        return this.$t('common.actions.Update')
       }
     },
     upLoadUrl() {

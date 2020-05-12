@@ -44,7 +44,6 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$t('common.action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
@@ -79,7 +78,7 @@ export default {
         extraActions: [
           {
             name: 'actionCreate',
-            title: this.$t('common.Create'),
+            title: this.$t('common.actions.Create'),
             type: 'primary',
             has: this.hasCreate,
             can: true,

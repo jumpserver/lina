@@ -95,13 +95,13 @@ export default {
       return [
         {
           name: 'update',
-          title: this.$t('common.update'),
+          title: this.$t('common.actions.Update'),
           can: this.validActions.canUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
           name: 'delete',
-          title: this.$t('common.delete'),
+          title: this.$t('common.actions.Delete'),
           can: this.validActions.canDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }

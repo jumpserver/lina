@@ -41,7 +41,7 @@ export default {
     moreActionsTitle: {
       type: String,
       default() {
-        return this.$t('common.moreActions')
+        return this.$t('common.actions.MoreActions')
       }
     }
   },
@@ -66,7 +66,7 @@ export default {
       return actions
     },
     iMoreActionsTitle() {
-      return this.moreActionsTitle || this.$t('common.moreActions')
+      return this.moreActionsTitle || this.$t('common.actions.MoreActions')
     }
   },
   mounted() {

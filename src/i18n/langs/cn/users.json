@@ -14,9 +14,9 @@
   "DateJoined": "创建日期",
   "Users": "用户",
   "quickUpdate": {
-    "ResetMFA": "重置MFA",
-    "ResetPasswordMail": "重置密码",
-    "RestSSHKeyMail": "重置密钥",
+    "resetMFA": "重置MFA",
+    "resetPassword": "重置密码",
+    "restSSHKey": "重置密钥",
     "UnblockLogin": "解除登录限制",
     "Messages": {
       "resetPasswordWarningMsg": ""

@@ -27,7 +27,7 @@ export default {
     return {
       relationConfig: {
         icon: 'fa-user',
-        title: this.$t('common.members'),
+        title: this.$t('common.Members'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {
@@ -64,19 +64,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.table.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('common.createdBy'),
+          key: this.$t('common.table.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.table.DateCreated'),
           value: this.object.date_created
         },
         {
-          key: this.$t('common.comment'),
+          key: this.$t('common.table.Comment'),
           value: this.object.comment
         }
       ]

@@ -102,7 +102,7 @@ export default {
       defaultActions: [
         {
           name: 'actionCreate',
-          title: this.$t('common.create'),
+          title: this.$t('common.actions.Create'),
           type: 'primary',
           has: this.hasCreate,
           can: true,
@@ -111,7 +111,7 @@ export default {
       ],
       defaultMoreActions: [
         {
-          title: this.$t('common.deleteSelected'),
+          title: this.$t('common.actions.deleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           callback: this.defaultBulkDeleteCallback

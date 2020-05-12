@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.Active'),
+          title: this.$t('common.actions.Activate'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -47,10 +47,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.quickUpdate.ResetMFA'),
+          title: this.$t('users.actions.resetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.reset')
+            label: this.$t('common.actions.Reset')
           },
           callbacks: {
             click: function() {
@@ -78,10 +78,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.quickUpdate.ResetPassword'),
+          title: this.$t('users.actions.resetPassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.send')
+            label: this.$t('users.actions.Send')
           },
           callbacks: {
             click: function() {
@@ -109,14 +109,14 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetPublicKeyTitle'),
+          title: this.$t('users.actions.resetSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.send')
+            label: this.$t('users.actions.Send')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.resetPublicKeyWarningMsg')
+              const warnMsg = vm.$t('users.resetSSHKeyWarningMsg')
               const warnTitle = vm.$t('common.info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
@@ -140,10 +140,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.unblockUser'),
+          title: this.$t('users.actions.unblockUser'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.unblock'),
+            label: this.$t('users.actions.Unblock'),
             disabled: !this.object.login_blocked
           },
           callbacks: {
@@ -160,7 +160,7 @@ export default {
       ],
       relationConfig: {
         icon: 'fa-user',
-        title: this.$t('users.userGroups'),
+        title: this.$t('users.UserGroups'),
         objectsAjax: {
           url: '/api/v1/users/groups/?fields_size=mini&order=name'
         },
@@ -217,7 +217,7 @@ export default {
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.CreatedBy'),
+          key: this.$t('common.table.CreatedBy'),
           value: this.object.created_by
         },
         {
@@ -233,7 +233,7 @@ export default {
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('common.table.Comment'),
           value: this.object.comment
         }
       ]
