@@ -13,6 +13,7 @@
     "onlyCSVFilesCanBeUploaded":"只能上传CSV文件"
   },
   "common":{
+    "loading":"加载中",
     "name":"名称",
     "action":"动作",
     "Active": "激活中",

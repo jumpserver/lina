@@ -12,22 +12,27 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 export default {
-  name: 'RulesCreateUpate',
+  name: 'GatewayCreateUpate',
   components: { GenericCreateUpdatePage },
   data() {
     return {
       initial: {
-        filter: this.$route.params.ruleid,
-        type: 'regex',
-        priority: 50,
-        action: 0
+        protocol: 'ssh',
+        domain: this.$route.params.domainid
       },
-
       fields: [
-        ['', ['filter', 'type', 'content', 'priority', 'action', 'comment']]
+        [this.$t('basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
+        [this.$t('认证'), ['username', 'password']],
+        [this.$t('other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        filter: {
+        ip: {
+          type: 'input',
+          el: {
+            type: 'input'
+          }
+        },
+        domain: {
           type: 'input',
           el: {
             disabled: true,
@@ -35,25 +40,25 @@ export default {
             value: this.$route.params.ruleid
           }
         },
-        content: {
-          type: 'input',
+        username: {
           el: {
-            type: 'textarea',
-            placeholder: 'rm.*|reboot|shutdown'
-          },
-          helpText: '每行一个命令'
+            placeholder: '用户名'
+          }
         },
-        priority: {
-          helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
+        password: {
+          helpText: '不能包含特殊字符'
+        },
+        is_active: {
+          type: 'switch'
         }
       },
       updateSuccessNextRoute: {
-        name: 'CommandFilterList'
+        name: 'DomainList'
       },
       createSuccessNextRoute: {
-        name: 'CommandFilterList'
+        name: 'DomainList'
       },
-      url: `/api/v1/assets/cmd-filters/${this.$route.params.ruleid}/rules/`
+      url: `/api/v1/assets/gateways/`
     }
   },
   computed: {

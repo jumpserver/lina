@@ -80,7 +80,7 @@ export default {
             name: 'actionCreate',
             title: this.$t('common.actions.Create'),
             type: 'primary',
-            has: this.hasCreate,
+            has: true,
             can: true,
             callback: this.createRoute.bind(this)
           }
@@ -91,7 +91,6 @@ export default {
   },
   methods: {
     createRoute(val) {
-      console.log(this)
       this.$router.push({
         name: 'CommandFilterRulesCreate',
         params: {

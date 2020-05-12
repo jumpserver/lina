@@ -28,9 +28,7 @@ export default {
           },
           {
             prop: 'gateway_count',
-            label: this.$t('assets.gateway'),
-            formatter: DetailFormatter,
-            route: 'GatewayList'
+            label: this.$t('assets.gateway')
           },
           {
             prop: 'comment',

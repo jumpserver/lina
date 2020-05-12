@@ -15,15 +15,36 @@ export default [
     path: 'domains/create',
     name: 'DomainCreate',
     component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
-    meta: { title: 'DomainList', activeMenu: '/assets/domains' },
+    meta: { title: 'DomainCreate', activeMenu: '/assets/domains' },
     hidden: true
   },
   {
-    path: 'domains/:id/gateway',
-    name: 'GatewayList',
-    hidden: true,
-    component: () => import('@/views/assets/GatewayList'),
-    meta: { title: 'GatewayList', activeMenu: '/assets/domains' }
+    path: 'domains/:id/update',
+    name: 'DomainUpdate',
+    component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
+    meta: { title: 'DomainUpdate', activeMenu: '/assets/domains' },
+    hidden: true
+  },
+  {
+    path: 'domains/:id',
+    name: 'DomainDetail',
+    component: () => import('@/views/assets/Domain/DomainDetail/index.vue'),
+    meta: { title: 'DomainDetail', activeMenu: '/assets/domains' },
+    hidden: true
+  },
+  {
+    path: 'domains/:domainid/gateway/create',
+    name: 'GatewayCreate',
+    component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+    meta: { title: 'GatewayCreate', activeMenu: '/assets/domains' },
+    hidden: true
+  },
+  {
+    path: 'domains/gateway/:id/create',
+    name: 'GatewayUpdate',
+    component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
+    meta: { title: 'GatewayUpdate', activeMenu: '/assets/domains' },
+    hidden: true
   },
   {
     path: 'admin-users',
