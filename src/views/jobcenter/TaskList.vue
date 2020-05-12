@@ -5,7 +5,6 @@
 <script>
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -61,8 +60,6 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$t('common.action'),
-            formatter: ActionsFormatter,
             actions: {
               hasUpdate: false,
               extraActions: [

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import i18n from '@/i18n/langs'
 import { GenericCreateUpdatePage } from '@/layout/components'
 export default {
   components: {
@@ -19,9 +20,9 @@ export default {
         date_expired: '2099-12-31 00:00:00 +0800'
       },
       fields: [
-        [this.$t('users.' + 'Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.' + 'Authentication'), ['password_strategy', 'password', 'public_key', 'mfa_level', 'source']],
-        [this.$t('users.' + 'Secure'), ['role', 'date_expired']],
+        [this.$t('users.create.Account'), ['name', 'username', 'email', 'groups']],
+        [this.$t('users.create.Authentication'), ['password_strategy', 'password', 'public_key', 'mfa_level', 'source']],
+        [this.$t('users.create.Secure'), ['role', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
@@ -61,6 +62,9 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    console.log('I18n: ', i18n)
   }
 }
 </script>

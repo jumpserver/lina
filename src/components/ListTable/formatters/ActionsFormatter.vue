@@ -71,7 +71,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$t('common.update'),
+        title: this.$t('common.actions.Update'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -79,7 +79,7 @@ export default {
       },
       {
         name: 'delete',
-        title: this.$t('common.delete'),
+        title: this.$t('common.actions.Delete'),
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,

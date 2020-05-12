@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.active'),
+          title: this.$t('common.actions.Activate'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -47,10 +47,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetMFATitle'),
+          title: this.$t('users.actions.resetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.reset')
+            label: this.$t('common.actions.Reset')
           },
           callbacks: {
             click: function() {
@@ -78,10 +78,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetPasswordTitle'),
+          title: this.$t('users.actions.resetPassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.send')
+            label: this.$t('users.actions.Send')
           },
           callbacks: {
             click: function() {
@@ -109,14 +109,14 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetPublicKeyTitle'),
+          title: this.$t('users.actions.resetSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.send')
+            label: this.$t('users.actions.Send')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.resetPublicKeyWarningMsg')
+              const warnMsg = vm.$t('users.resetSSHKeyWarningMsg')
               const warnTitle = vm.$t('common.info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
@@ -140,10 +140,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.unblockUser'),
+          title: this.$t('users.actions.unblockUser'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.unblock'),
+            label: this.$t('users.actions.Unblock'),
             disabled: !this.object.login_blocked
           },
           callbacks: {
@@ -160,7 +160,7 @@ export default {
       ],
       relationConfig: {
         icon: 'fa-user',
-        title: this.$t('users.userGroups'),
+        title: this.$t('users.UserGroups'),
         objectsAjax: {
           url: '/api/v1/users/groups/?fields_size=mini&order=name'
         },
@@ -189,19 +189,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('users.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('common.username'),
+          key: this.$t('users.Username'),
           value: this.object.username
         },
         {
-          key: this.$t('common.email'),
+          key: this.$t('users.Email'),
           value: this.object.email
         },
         {
-          key: this.$t('common.role'),
+          key: this.$t('users.Role'),
           value: this.object.role_display
         },
         {
@@ -209,31 +209,31 @@ export default {
           value: this.object.mfa_level_display
         },
         {
-          key: this.$t('users.source'),
+          key: this.$t('users.Source'),
           value: this.object.source_display
         },
         {
-          key: this.$t('common.dateExpired'),
+          key: this.$t('users.DateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.createdBy'),
+          key: this.$t('common.table.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('users.DateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.dateLastLogin'),
+          key: this.$t('users.DateLastLogin'),
           value: this.object.last_login
         },
         {
-          key: this.$t('users.datePasswordUpdated'),
+          key: this.$t('users.DatePasswordUpdated'),
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$t('common.comment'),
+          key: this.$t('common.table.Comment'),
           value: this.object.comment
         }
       ]

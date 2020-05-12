@@ -37,7 +37,6 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$t('common.action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',

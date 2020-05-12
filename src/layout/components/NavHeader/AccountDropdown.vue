@@ -7,10 +7,10 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.profile') }}</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-guide" command="changePage">{{ $t('common.userPage') }}</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.apiKey') }}</el-dropdown-item>
-        <el-dropdown-item divided command="logout">{{ $t('common.logout') }}</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-guide" command="changePage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
+        <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>

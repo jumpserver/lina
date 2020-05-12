@@ -1,11 +1,11 @@
 import i18n from '@/i18n/i18n'
 
 export const Required = {
-  required: true, message: i18n.t('common.' + 'This field is required'), trigger: 'blur'
+  required: true, message: i18n.t('common.fieldRequiredError'), trigger: 'blur'
 }
 
 export const RequiredChange = {
-  required: true, message: i18n.t('common.' + 'This field is required'), trigger: 'change'
+  required: true, message: i18n.t('common.fieldRequiredError'), trigger: 'change'
 }
 
 export default {
