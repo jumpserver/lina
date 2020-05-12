@@ -33,7 +33,7 @@ export default {
           },
           {
             prop: 'comment',
-            label: this.$t('common.table.Comment'),
+            label: this.$t('common.comment'),
             sortable: 'custom'
           },
           {

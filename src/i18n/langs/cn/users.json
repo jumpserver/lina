@@ -1,25 +1,25 @@
 {
-  "Account": "账户",
-  "Authentication": "认证",
-  "Secure": "安全",
-  "DateLastLogin": "最后登录日期",
+  "account": "账户",
+  "authentication": "认证",
+  "secure": "安全",
+  "dateLastLogin": "最后登录日期",
   "MFA": "MFA",
-  "Source": "来源",
-  "DatePasswordUpdated": "改密日期",
-  "Name": "姓名",
-  "Username": "用户名",
-  "Email": "Email",
-  "Role": "角色",
-  "DateExpired": "过期时间",
-  "DateJoined": "创建日期",
-  "Users": "用户",
+  "source": "来源",
+  "datePasswordUpdated": "改密日期",
+  "name": "姓名",
+  "username": "用户名",
+  "email": "Email",
+  "role": "角色",
+  "dateExpired": "过期时间",
+  "dateJoined": "创建日期",
+  "users": "用户",
   "quickUpdate": {
     "resetMFA": "重置MFA",
     "resetPassword": "重置密码",
     "restSSHKey": "重置密钥",
-    "UnblockLogin": "解除登录限制",
-    "Messages": {
-      "resetPasswordWarningMsg": ""
+    "unblockLogin": "解除登录限制",
+    "messages": {
+      "resetPasswordWarning": ""
     }
   }
 }

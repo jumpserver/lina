@@ -47,7 +47,7 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.resetMFA'),
+          title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
             label: this.$t('common.actions.Reset')
@@ -78,10 +78,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.resetPassword'),
+          title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.actions.Send')
+            label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
             click: function() {
@@ -109,10 +109,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.resetSSHKey'),
+          title: this.$t('users.quickUpdate.resetSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.actions.Send')
+            label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
             click: function() {
@@ -140,10 +140,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.unblockUser'),
+          title: this.$t('users.quickUpdate.unblockUser'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.actions.Unblock'),
+            label: this.$t('users.quickUpdate.unblock'),
             disabled: !this.object.login_blocked
           },
           callbacks: {
@@ -189,19 +189,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('users.Name'),
+          key: this.$t('users.name'),
           value: this.object.name
         },
         {
-          key: this.$t('users.Username'),
+          key: this.$t('users.username'),
           value: this.object.username
         },
         {
-          key: this.$t('users.Email'),
+          key: this.$t('users.email'),
           value: this.object.email
         },
         {
-          key: this.$t('users.Role'),
+          key: this.$t('users.role'),
           value: this.object.role_display
         },
         {
@@ -209,31 +209,31 @@ export default {
           value: this.object.mfa_level_display
         },
         {
-          key: this.$t('users.Source'),
+          key: this.$t('users.source'),
           value: this.object.source_display
         },
         {
-          key: this.$t('users.DateExpired'),
+          key: this.$t('users.dateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.table.CreatedBy'),
+          key: this.$t('common.table.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('users.DateJoined'),
+          key: this.$t('users.dateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.DateLastLogin'),
+          key: this.$t('users.dateLastLogin'),
           value: this.object.last_login
         },
         {
-          key: this.$t('users.DatePasswordUpdated'),
+          key: this.$t('users.datePasswordUpdated'),
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$t('common.table.Comment'),
+          key: this.$t('common.comment'),
           value: this.object.comment
         }
       ]

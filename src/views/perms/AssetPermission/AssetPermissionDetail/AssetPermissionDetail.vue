@@ -96,7 +96,7 @@ export default {
           value: this.object.created_by
         },
         {
-          key: this.$t('common.table.Comment'),
+          key: this.$t('common.comment'),
           value: 'api没有这个字段'
         }
       ]

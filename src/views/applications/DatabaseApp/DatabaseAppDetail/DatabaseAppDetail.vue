@@ -52,11 +52,11 @@ export default {
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('common.table.CreatedBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.table.Comment'),
+          key: this.$t('common.comment'),
           value: this.object.comment
         }
       ]

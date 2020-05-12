@@ -29,7 +29,7 @@ export default {
             name: 'GroupInfo'
           },
           {
-            title: this.$t('users.grantedAssets'),
+            title: this.$t('users.tabs.grantedAssets'),
             name: 'GroupGrantedAssets'
           }
         ],

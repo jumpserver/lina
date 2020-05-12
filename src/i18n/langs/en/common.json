@@ -1,6 +1,9 @@
 {
   "Other": "Other",
   "fieldRequiredError": "This field is required",
+  "comment": "Comment",
+  "createdBy": "Created by",
+  "validity": "Validity",
   "nav": {
     "Help": "Help",
     "Docs": "Docs",
@@ -12,7 +15,6 @@
     "UserPage": "User page"
   },
   "table": {
-    "Validity": "Validity",
     "Actions": "Actions",
     "Name": "Name",
     "CreatedBy": "Created by",
