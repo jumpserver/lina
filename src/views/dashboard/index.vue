@@ -2,11 +2,6 @@
   <Page>
     <el-row :gutter="30">
       <SummaryCard v-for="card of summaryCards" :key="card.title" :card="card" />
-
-      <!--      <SummaryCard :title="title" :label="label" :total-count="totalCount" :describe="describe" />-->
-      <!--      <SummaryCard :title="title" :label="label" :total-count="totalCount" :describe="describe" />-->
-      <!--      <SummaryCard :title="title" :label="label" :total-count="totalCount" :describe="describe" />-->
-      <!--      <SummaryCard :title="title" :label="label" :total-count="totalCount" :describe="describe" />-->
     </el-row>
   </Page>
 </template>
@@ -31,9 +26,11 @@ export default {
             'type': 'success',
             'title': 'Users'
           },
-          totalCount: '333',
-          totalCountUrl: '/users/users/',
-          totalCountDescribe: 'All users'
+          totalCount: {
+            count: '1',
+            url: '/users/users/',
+            describe: 'All users'
+          }
         },
         {
           title: 'Total assets',
@@ -41,9 +38,11 @@ export default {
             'type': 'info',
             'title': 'Assets'
           },
-          totalCount: '444',
-          totalCountUrl: '/assets/assets/',
-          totalCountDescribe: 'All assets'
+          totalCount: {
+            count: '333',
+            url: '/assets/assets/',
+            describe: 'All assets'
+          }
         },
         {
           title: 'Online users',
@@ -51,9 +50,11 @@ export default {
             'type': 'primary',
             'title': 'Online'
           },
-          totalCount: '444',
-          totalCountUrl: '/terminal/session-online/',
-          totalCountDescribe: 'Online users'
+          totalCount: {
+            count: '333',
+            url: '/terminal/session-online/',
+            describe: 'Online users'
+          }
         },
         {
           title: 'Online sessions',
@@ -61,9 +62,11 @@ export default {
             'type': 'danger',
             'title': 'Connected'
           },
-          totalCount: '444',
-          totalCountUrl: '/terminal/session-online/',
-          totalCountDescribe: 'Online sessions'
+          totalCount: {
+            count: '333',
+            url: '/terminal/session-online/',
+            describe: 'Online sessions'
+          }
         }
       ]
     }

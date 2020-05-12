@@ -3,9 +3,9 @@
     <IBox v-bind="$attrs" :title="card.title" :label="card.label">
       <div class="ibox-content">
         <h1 class="no-margins">
-          <a href="card.totalCountUrl"><span>{{ card.totalCount }}</span></a>
+          <el-link class="total-count" type="success" :href="card.totalCount.url">{{ card.totalCount.count }}</el-link>
         </h1>
-        <small>{{ card.totalCountDescribe }}</small>
+        <small>{{ card.totalCount.describe }}</small>
       </div>
     </IBox>
   </el-col>
@@ -29,9 +29,11 @@ export default {
             type: '',
             title: ''
           },
-          totalCount: '',
-          totalCountUrl: '',
-          totalCountDescribe: ''
+          totalCount: {
+            count: '',
+            url: '',
+            describe: ''
+          }
         }
       }
     }
@@ -40,7 +42,7 @@ export default {
 </script>
 
 <style scoped>
-  a {
+ .total-count {
     color: #428bca;
     text-decoration: none;
     font-weight: 100;
