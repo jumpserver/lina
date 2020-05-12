@@ -8,7 +8,8 @@ export default [
   {
     path: 'tickets/:id',
     name: 'TicketDetail',
-    component: () => import('@/views/tickets/TicketDetail'),
-    meta: { title: 'TicketDetail', icon: 'check-square-o' }
+    component: () => import('@/views/tickets/TicketDetail/index'),
+    meta: { title: 'TicketDetail' },
+    hidden: true
   }
 ]
