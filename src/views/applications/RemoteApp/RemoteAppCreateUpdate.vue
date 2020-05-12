@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" :clean-form-value="cleanFormValue" />
 </template>
 
 <script>
@@ -19,12 +19,29 @@ export default {
     const app_type_meta = REMOTE_APP_TYPE_META_MAP[app_type]
 
     return {
+      specific_fields: specific_fields,
       fields: [
         [this.$t('route.RemoteApp'), ['name', 'asset', 'type', 'path', 'comment']],
         [this.$t('applications.' + app_type), [...specific_fields]]
       ],
       url: '/api/v1/applications/remote-apps/',
       fieldsMeta: {
+        asset: {
+          el: {
+            multiple: false,
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/assets/?platform__base=Windows',
+              processResults(data) {
+                const results = data.results.map((item) => {
+                  return { label: item.hostname, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
+          }
+        },
         type: {
           type: 'select',
           options: [
@@ -38,8 +55,21 @@ export default {
         ...fields_map
       }
     }
+  },
+  methods: {
+    cleanFormValue(data) {
+      const params = {}
+      for (const field of this.specific_fields) {
+        params[field] = data[field]
+        delete data[field]
+      }
+      data.params = params
+
+      return data
+    }
   }
 }
+
 </script>
 
 <style lang="less" scoped>

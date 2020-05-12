@@ -11,7 +11,7 @@ function gen_type_fields_config(fields) {
   const config = {}
   fields.forEach((item, index, array) => {
     config[item] = {
-      prop: 'params.' + item,
+      prop: item,
       label: i18n.t('applications.' + item)
     }
   })
