@@ -58,7 +58,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = this.$t('common.table.Validity')
+          col.label = this.$t('common.validity')
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'

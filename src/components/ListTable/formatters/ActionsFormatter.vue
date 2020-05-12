@@ -18,7 +18,7 @@ const defaultUpdateCallback = function({ row, col }) {
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  const msg = this.$t('common.deleteWarningMsg') + ' "' + row.name + '"'
+  const msg = this.$t('common.message.deleteWarning') + ' "' + row.name + '"'
   const title = this.$t('common.info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {

@@ -59,11 +59,11 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser')
+          },
+          actions: {
+            updateRoute: 'AssetPermissionUpdate',
+            detailRoute: 'AssetPermissionDetail'
           }
-        },
-        actions: {
-          updateRoute: 'AssetPermissionUpdate',
-          detailRoute: 'AssetPermissionDetail'
         }
       },
       headerActions: {

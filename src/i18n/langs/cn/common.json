@@ -78,5 +78,8 @@
     "RenameNode": "重命名节点",
     "DeleteNode": "删除节点",
     "Empty": "空"
+  },
+  "message": {
+    "deleteWarning": "Are you sure to delete "
   }
 }

@@ -4,6 +4,10 @@
   "comment": "Comment",
   "createdBy": "Created by",
   "validity": "Validity",
+  "info": "Info",
+  "Members": "Members",
+  "More": "More",
+  "QuickUpdate": "Quick update",
   "nav": {
     "Help": "Help",
     "Docs": "Docs",
@@ -38,14 +42,14 @@
   "tabs": {
     "BasicInfo": "Basic info"
   },
-  "Members": "Members",
-  "More": "More",
-  "QuickUpdate": "Quick update",
   "tree": {
     "AddNode": "Add",
     "RenameNode": "Rename",
     "DeleteNode": "Delete",
     "Empty": "Empty",
     "Loading": "Loading"
+  },
+  "message": {
+    "deleteWarning": "Are you sure to delete "
   }
 }
