@@ -663,6 +663,13 @@
     "Close": "关闭",
     "Comment": "备注"
   },
+  "dashboard": {
+    "totalUser": "用户总数",
+    "totalAsset": "资产总数",
+    "onlineUser": "在线用户",
+    "onlineSession": "在线会话",
+    "timesPerWeek": "次/周"
+  },
   "users": {
     "Account": "账户",
     "Authentication": "认证",

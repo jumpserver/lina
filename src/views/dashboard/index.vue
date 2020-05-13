@@ -1,15 +1,19 @@
 <template>
   <Page>
-    <el-row :gutter="30">
-      <SummaryCard v-for="card in summaryCards" :key="card.title" :title="card.title" :label="card.label" :total-count="card.totalCount" />
+    <SummaryCards :items="summaryCardList" />
+    <el-row>
+      <el-col :span="4">
+        <RecordCard title="一周Top5登录用户" />
+      </el-col>
     </el-row>
     <el-row>
-      <el-col :span="6">
+      <el-col :span="4">
         <IBox title="一周Top5登录用户">
+          <el-row>-------------------</el-row>
           <el-row v-for="(item, index) in top5LoginUser" :key="item.user">
             <span class="label label-success">{{ index }}</span>
             <span>{{ item.user }}</span>
-            <span class="pull-right">{{ item.total }}</span>
+            <span class="pull-right">{{ item.total }} {{ unitTimesPerWeek }}</span>
           </el-row>
         </IBox>
       </el-col>
@@ -26,19 +30,22 @@
 
 <script>
 import { Page } from '@/layout/components'
-import { IBox, SummaryCard } from '@/components'
+import { IBox, RecordCard } from '@/components'
+import SummaryCards from './SummaryCards/index'
 
 export default {
   name: 'Dashboard',
   components: {
-    Page, SummaryCard, IBox
+    Page, SummaryCards, IBox, RecordCard
   },
   data() {
     return {
+      unitTimesPerWeek: this.$t('dashboard.timesPerWeek'),
       top5LoginUser: [
-        { 'user': 'Admin', 'total': 12 }
+        { 'user': 'Admin', 'total': 12 },
+        { 'user': 'Admin0', 'total': 12 }
       ],
-      summaryCards: [
+      summaryCardList: [
         {
           title: this.$t('dashboard.totalUser'),
           label: { 'type': 'success', 'title': 'Users' },
