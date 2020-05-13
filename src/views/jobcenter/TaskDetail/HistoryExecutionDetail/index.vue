@@ -21,14 +21,14 @@ export default {
       HistoryExecutionDetail: {},
       config: {
         activeMenu: 'HistoryExecutionDetail',
-        title: this.$t('jobcenter.ExecutionDetail'),
+        title: this.$t('jobcenter.executionDetail'),
         submenu: [
           {
-            title: this.$t('jobcenter.ExecutionDetail'),
+            title: this.$t('jobcenter.executionDetail'),
             name: 'HistoryExecutionDetail'
           },
           {
-            title: this.$t('jobcenter.Output'),
+            title: this.$t('jobcenter.output'),
             name: 'OutPut'
           }
         ],

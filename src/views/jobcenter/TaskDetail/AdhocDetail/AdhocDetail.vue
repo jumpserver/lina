@@ -31,7 +31,7 @@ export default {
     return {
       RunSuccessConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.Last run success hosts'),
+        title: this.$t('jobcenter.lastRunSuccessHosts'),
         content: [
           {
             hostname: 'linux',
@@ -41,7 +41,7 @@ export default {
       },
       RunFailedConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.Last run failed hosts'),
+        title: this.$t('jobcenter.lastRunFailedHosts'),
         headerColor: 'danger',
         content: [
           {
@@ -64,56 +64,56 @@ export default {
           value: this.object.id
         },
         {
-          key: this.$t('jobcenter.Hosts'),
+          key: this.$t('jobcenter.hosts'),
           value: JSON.stringify(this.object.hosts.length)
         },
         {
-          key: this.$t('jobcenter.Pattern'),
+          key: this.$t('jobcenter.pattern'),
           value: this.object.pattern
         },
         {
-          key: this.$t('jobcenter.Options'),
+          key: this.$t('jobcenter.options'),
           value: this.disPlayOptions(this.object.options)
           // value: this.object.options
         },
         {
-          key: this.$t('jobcenter.RunAs'),
+          key: this.$t('jobcenter.runAs'),
           value: this.disPlayRunAs(this.object.run_as_admin, this.object.run_as)
         },
         {
-          key: this.$t('jobcenter.Become'),
+          key: this.$t('jobcenter.become'),
           value: this.object.become_display
         },
         {
-          key: this.$t('jobcenter.CreatedBy'),
+          key: this.$t('common.createBy'),
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('jobcenter.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('jobcenter.RunTimes'),
+          key: this.$t('jobcenter.runTimes'),
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('jobcenter.LastRun'),
+          key: this.$t('jobcenter.lastRun'),
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('jobcenter.TimeDelta'),
+          key: this.$t('jobcenter.timeDelta'),
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('jobcenter.IsFinished'),
+          key: this.$t('jobcenter.isFinished'),
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('jobcenter.IsSuccess'),
+          key: this.$t('jobcenter.isSuccess'),
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('jobcenter.Tasks'),
+          key: this.$t('jobcenter.tasks'),
           value: 'api 没有该数据'
         }
       ]

@@ -28,15 +28,15 @@ export default {
         activeMenu: 'AssetPermissionDetail',
         submenu: [
           {
-            title: this.$t('perms.AssetPermissionDetail'),
+            title: this.$t('perms.assetPermissionDetail'),
             name: 'AssetPermissionDetail'
           },
           {
-            title: this.$t('perms.UsersAndUserGroups'),
+            title: this.$t('perms.usersAndUserGroups'),
             name: 'AssetPermissionUser'
           },
           {
-            title: this.$t('perms.AssetAndNode'),
+            title: this.$t('perms.assetAndNode'),
             name: 'AssetPermissionAsset'
           }
         ]

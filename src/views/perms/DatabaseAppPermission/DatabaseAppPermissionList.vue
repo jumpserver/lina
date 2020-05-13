@@ -25,7 +25,7 @@ export default {
           },
           database_apps: {
             formatter: LengthFormatter,
-            label: this.$t('perms.DatabaseApp')
+            label: this.$t('perms.databaseApp')
           },
           system_users: {
             formatter: LengthFormatter,

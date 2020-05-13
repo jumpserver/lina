@@ -26,19 +26,19 @@ export default {
         activeMenu: 'TaskDetail',
         submenu: [
           {
-            title: this.$t('jobcenter.TaskDetail'),
+            title: this.$t('jobcenter.taskDetail'),
             name: 'TaskDetail'
           },
           {
-            title: this.$t('jobcenter.TaskVersions'),
+            title: this.$t('jobcenter.taskVersions'),
             name: 'TaskAdhoc'
           },
           {
-            title: this.$t('jobcenter.Execution'),
+            title: this.$t('jobcenter.execution'),
             name: 'TaskHistory'
           },
           {
-            title: this.$t('jobcenter.LaskExecutionOutput'),
+            title: this.$t('jobcenter.laskExecutionOutput'),
             name: 'laskExecutionOutput'
           }
         ],
