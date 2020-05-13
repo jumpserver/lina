@@ -117,7 +117,7 @@ export default {
           }
         },
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         }
       ]
@@ -214,5 +214,8 @@ export default {
   }
   .text-muted {
     color: #888888;
+  }
+  .el-button--mini {
+    padding: 4px 6px;
   }
 </style>

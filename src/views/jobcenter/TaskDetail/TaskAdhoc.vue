@@ -26,18 +26,18 @@ export default {
         ],
         columnsMeta: {
           short_id: {
-            label: this.$t('jobcenter.Version')
+            label: this.$t('jobcenter.version')
           },
           hosts: {
-            label: this.$t('jobcenter.Hosts'),
+            label: this.$t('jobcenter.hosts'),
             formatter: LengthFormatter,
             showOverflowTooltip: true
           },
           pattern: {
-            label: this.$t('jobcenter.Pattern')
+            label: this.$t('jobcenter.pattern')
           },
           run_as: {
-            label: this.$t('jobcenter.RunAs'),
+            label: this.$t('jobcenter.runAs'),
             formatter: function(row) {
               if (row.run_as_admin) {
                 return 'Admin'
@@ -48,10 +48,10 @@ export default {
             }
           },
           become_display: {
-            label: this.$t('jobcenter.Become')
+            label: this.$t('jobcenter.become')
           },
           date_created: {
-            label: this.$t('jobcenter.Datetime'),
+            label: this.$t('jobcenter.datetime'),
             formatter: function(row) {
               return toSafeLocalDateStr(row.date_created)
             }

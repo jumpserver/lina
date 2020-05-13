@@ -28,7 +28,7 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('common.table.Name'),
+          key: this.$t('common.Name'),
           value: this.object.name
         },
         {
@@ -48,7 +48,7 @@ export default {
           value: this.object.database
         },
         {
-          key: this.$t('common.table.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {

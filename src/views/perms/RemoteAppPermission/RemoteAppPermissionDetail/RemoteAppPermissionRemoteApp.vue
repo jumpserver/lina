@@ -56,7 +56,7 @@ export default {
       },
       remoteAppReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add RemoteApp to this permission'),
+        title: this.$t('perms.addRemoteAppToThisPermission'),
         objectsAjax: {
           url: '/api/v1/applications/remote-apps/'
         },
@@ -80,7 +80,7 @@ export default {
       },
       systemUserReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add System User to this permission'),
+        title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           processResults(data) {

@@ -68,7 +68,7 @@ export default {
       },
       userReletionConfig: {
         icon: 'fa-user',
-        title: this.$t('perms.Add user to this permission'),
+        title: this.$t('perms.addUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/users/',
           processResults(data) {
@@ -103,7 +103,7 @@ export default {
       },
       groupReletionConfig: {
         icon: 'fa-group',
-        title: this.$t('perms.Add user group to this permission'),
+        title: this.$t('perms.addUserGroupToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },
