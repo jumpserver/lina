@@ -9,7 +9,7 @@ export default [
     path: 'tickets/:id',
     name: 'TicketDetail',
     component: () => import('@/views/tickets/TicketDetail/index'),
-    meta: { title: 'TicketDetail' },
+    meta: { title: 'TicketDetail', activeMenu: '/tickets/tickets' },
     hidden: true
   }
 ]
