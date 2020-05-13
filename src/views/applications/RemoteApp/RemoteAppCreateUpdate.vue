@@ -18,8 +18,12 @@ export default {
     const app_type_meta = REMOTE_APP_TYPE_META_MAP[app_type]
 
     return {
+      initial: {
+        type: app_type_meta.name
+      },
       fields: [
-        [this.$t('route.RemoteApp'), ['name', 'asset', 'type', 'path', 'comment', 'params']]
+        [this.$t('route.RemoteApp'), ['name', 'asset', 'type', 'path', 'comment']],
+        [this.$t('applications.' + app_type), ['params']]
       ],
       url: '/api/v1/applications/remote-apps/',
       fieldsMeta: {
@@ -28,7 +32,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/assets/?platform__base=Linux',
+              url: '/api/v1/assets/assets/?platform__base=Windows',
               processResults(data) {
                 const results = data.results.map((item) => {
                   return { label: item.hostname, value: item.id }
@@ -44,7 +48,7 @@ export default {
           options: [
             {
               label: app_type_meta.title,
-              value: app_type_meta.value
+              value: app_type_meta.name
             }
           ],
           disabled: true
