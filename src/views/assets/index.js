@@ -13,6 +13,13 @@ export default [
     hidden: true
   },
   {
+    path: 'assets/:id',
+    name: 'AssetDetail',
+    component: () => import('@/views/assets/AssetList/AssetListDetail/index.vue'),
+    meta: { title: 'AssetDetail', activeMenu: '/assets' },
+    hidden: true
+  },
+  {
     path: 'assets/:id/update',
     name: 'AssetUpdate',
     component: () => import('@/views/assets/AssetList/AssetCreateUpdate.vue'),
