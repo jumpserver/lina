@@ -23,7 +23,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('common.tabs.BasicInfo')
+        return this.$t('common.BasicInfo')
       }
     },
     items: {

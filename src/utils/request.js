@@ -60,6 +60,9 @@ service.interceptors.response.use(
     return res
   },
   error => {
+    if (!error.response) {
+      return Promise.reject(error)
+    }
     const response = error.response
     if (response.status === 401) {
       const title = ''

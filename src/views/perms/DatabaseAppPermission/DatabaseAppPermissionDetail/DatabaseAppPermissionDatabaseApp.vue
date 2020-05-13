@@ -42,7 +42,7 @@ export default {
           },
           delete_action: {
             prop: 'databaseapp',
-            label: this.$t('common.table.Actions'),
+            label: this.$t('common.Actions'),
             align: 'center',
             width: 150,
             objects: this.object.database_apps,

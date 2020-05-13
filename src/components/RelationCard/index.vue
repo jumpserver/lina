@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $t('common.actions.Add') }}</el-button>
+          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $t('common.Add') }}</el-button>
         </td>
       </tr>
       <template v-if="showHasObjects">

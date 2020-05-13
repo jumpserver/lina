@@ -64,19 +64,19 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('common.table.Name'),
+          key: this.$t('common.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('common.table.CreatedBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.table.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: this.object.date_created
         },
         {
-          key: this.$t('common.table.Comment'),
+          key: this.$t('common.Comment'),
           value: this.object.comment
         }
       ]
