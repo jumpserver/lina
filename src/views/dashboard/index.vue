@@ -3,22 +3,41 @@
     <el-row :gutter="30">
       <SummaryCard v-for="card in summaryCards" :key="card.title" :title="card.title" :label="card.label" :total-count="card.totalCount" />
     </el-row>
+    <el-row>
+      <el-col :span="6">
+        <IBox title="一周Top5登录用户">
+          <el-row v-for="(item, index) in top5LoginUser" :key="item.user">
+            <span class="label label-success">{{ index }}</span>
+            <span>{{ item.user }}</span>
+            <span class="pull-right">{{ item.total }}</span>
+          </el-row>
+        </IBox>
+      </el-col>
+      <el-col :span="12">月数据总览</el-col>
+      <el-col :span="6">活跃资产比</el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">Top10资产</el-col>
+      <el-col :span="8">Top10登录</el-col>
+      <el-col :span="8">Top10用户</el-col>
+    </el-row>
   </Page>
 </template>
 
 <script>
 import { Page } from '@/layout/components'
-import { SummaryCard } from '@/components'
+import { IBox, SummaryCard } from '@/components'
 
 export default {
   name: 'Dashboard',
   components: {
-    Page, SummaryCard
-  },
-  props: {
+    Page, SummaryCard, IBox
   },
   data() {
     return {
+      top5LoginUser: [
+        { 'user': 'Admin', 'total': 12 }
+      ],
       summaryCards: [
         {
           title: this.$t('dashboard.totalUser'),
@@ -67,4 +86,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .label-success {
+    background-color: #1c84c6;
+    color: #FFFFFF;
+  }
+
+  .label {
+    margin-right: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    font-size: 75%;
+    border-radius: .25em;
+  }
 </style>

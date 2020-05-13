@@ -52,12 +52,6 @@ export default {
     font-weight: normal;
   }
 
-  .ibox-tools a {
-    cursor: pointer;
-    margin-left: 5px;
-    color: #c4c4c4;
-  }
-
   .ibox-title h5 {
     display: inline-block;
     font-size: 14px;
