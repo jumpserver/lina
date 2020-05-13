@@ -7,6 +7,7 @@
           <ItemValue :value="item.value" :item="item" :callback="item.callback" />
         </div></el-col>
       </el-row>
+      <slot />
     </div>
   </IBox>
 </template>

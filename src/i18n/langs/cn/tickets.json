@@ -5,5 +5,7 @@
   "status": "状态",
   "date": "日期",
   "MyTickets": "我的工单",
-  "AssignedMe": "待处理"
+  "AssignedMe": "待处理",
+  "Assignees": "待处理人",
+  "Assignee": "处理人"
 }

@@ -2,8 +2,22 @@ export default [
   {
     path: 'assets',
     name: 'AssetList',
-    component: () => import('@/views/assets/AssetList.vue'),
+    component: () => import('@/views/assets/AssetList/AssetList.vue'),
     meta: { title: 'AssetList' }
+  },
+  {
+    path: 'assets/create',
+    name: 'AssetCreate',
+    component: () => import('@/views/assets/AssetList/AssetCreateUpdate.vue'),
+    meta: { title: 'AssetCreate', activeMenu: '/assets' },
+    hidden: true
+  },
+  {
+    path: 'assets/:id/update',
+    name: 'AssetUpdate',
+    component: () => import('@/views/assets/AssetList/AssetCreateUpdate.vue'),
+    meta: { title: 'AssetUpdate', activeMenu: '/assets' },
+    hidden: true
   },
   {
     path: 'domains',
