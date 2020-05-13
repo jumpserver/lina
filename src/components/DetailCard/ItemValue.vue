@@ -11,9 +11,9 @@ export default {
       default: () => ({})
     },
     callback: {
-      type: Function
+      type: Function,
+      default: null
     }
-
   },
   render(h) {
     if (typeof this.callback === 'function') {

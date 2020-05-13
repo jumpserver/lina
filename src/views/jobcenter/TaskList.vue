@@ -17,11 +17,10 @@ export default {
         columns: ['name', 'runtimes', 'host_amount', 'is_success', 'date_start', 'time', 'actions'],
         columnsMeta: {
           name: {
-            label: this.$t('common.Name'),
             showOverflowTooltip: true
           },
           runtimes: {
-            label: this.$t('jobcenter.RunTimes'),
+            label: this.$t('jobcenter.runTimes'),
             formatter: function(row) {
               const summary = <div>
                 <span class='text-primary'>{row.summary.success}</span>/
@@ -32,13 +31,13 @@ export default {
             }
           },
           host_amount: {
-            label: this.$t('jobcenter.Hosts'),
+            label: this.$t('jobcenter.hosts'),
             formatter: function(row) {
               return row.latest_execution.hosts_amount
             }
           },
           is_success: {
-            label: this.$t('jobcenter.Success'),
+            label: this.$t('jobcenter.success'),
             formatter: row => {
               if (row.latest_execution.is_success) {
                 return <i class='fa fa-check text-primary'/>
@@ -47,13 +46,13 @@ export default {
             }
           },
           date_start: {
-            label: this.$t('jobcenter.Date'),
+            label: this.$t('jobcenter.date'),
             formatter: function(row) {
               return toSafeLocalDateStr(row.latest_execution.date_start)
             }
           },
           time: {
-            label: this.$t('jobcenter.Time'),
+            label: this.$t('jobcenter.time'),
             formatter: function(row) {
               return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
             }

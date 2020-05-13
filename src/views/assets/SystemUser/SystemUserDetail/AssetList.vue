@@ -176,7 +176,7 @@ export default {
       },
       nodeReletionConfig: {
         icon: 'fa-info',
-        title: this.$t('perms.Add node to this permission'),
+        title: this.$t('perms.addNodeToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           processResults(data) {

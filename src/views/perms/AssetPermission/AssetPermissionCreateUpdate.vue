@@ -92,11 +92,11 @@ export default {
           label: this.$t('perms.Actions'),
           type: 'checkbox-group',
           options: [
-            { label: 'all', value: this.$t('perms.All') },
-            { label: 'connect', value: this.$t('perms.Connect') },
-            { label: 'updownload', value: this.$t('perms.UpDownload') },
-            { label: 'upload_file', value: this.$t('perms.UploadFile') },
-            { label: 'download_file', value: this.$t('perms.DownloadFile') }
+            { label: 'all', value: this.$t('perms.all') },
+            { label: 'connect', value: this.$t('perms.connect') },
+            { label: 'updownload', value: this.$t('perms.upDownload') },
+            { label: 'upload_file', value: this.$t('perms.uploadFile') },
+            { label: 'download_file', value: this.$t('perms.downloadFile') }
           ]
         },
         is_active: {

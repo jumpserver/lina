@@ -70,7 +70,7 @@ export default {
       },
       assetReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add asset to this permission'),
+        title: this.$t('perms.addAssetToThisPermission'),
         performAdd: (items) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
           const objectId = this.object.id
@@ -92,7 +92,7 @@ export default {
       },
       nodeReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add node to this permission'),
+        title: this.$t('perms.addNodeToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           processResults(data) {
@@ -139,7 +139,7 @@ export default {
       },
       systemUserReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add System User to this permission'),
+        title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           processResults(data) {

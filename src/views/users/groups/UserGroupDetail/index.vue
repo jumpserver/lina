@@ -1,22 +1,23 @@
 <template>
   <GenericDetailPage :object.sync="group" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="group" />
+      <component v-bind:is="config.activeMenu" :object="group" />
     </keep-alive>
   </GenericDetailPage>
 </template>
 
 <script>
-import { GenericDetailPage, TabPage } from '@/layout/components'
+import { GenericDetailPage } from '@/layout/components'
 import GroupGrantedAssets from './GroupGrantedAssets'
 import GroupInfo from './GroupInfo'
 
 export default {
   components: {
     GenericDetailPage,
+    // eslint-disable-next-line vue/no-unused-components
     GroupGrantedAssets,
-    GroupInfo,
-    TabPage
+    // eslint-disable-next-line vue/no-unused-components
+    GroupInfo
   },
   data() {
     return {

@@ -37,7 +37,7 @@ export default {
         ],
         columnsMeta: {
           databaseapp_display: {
-            label: this.$t('perms.DatabaseApp'),
+            label: this.$t('perms.databaseApp'),
             align: 'center'
           },
           delete_action: {
@@ -67,7 +67,7 @@ export default {
       },
       databaseAppReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add DatabaseApp to this permission'),
+        title: this.$t('perms.addDatabaseAppToThisPermission'),
         objectsAjax: {
           url: '/api/v1/applications/database-apps/'
         },
@@ -94,7 +94,7 @@ export default {
       },
       systemUserReletionConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.Add System User to this permission'),
+        title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           processResults(data) {

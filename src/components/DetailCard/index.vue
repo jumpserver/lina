@@ -1,8 +1,8 @@
 <template>
   <IBox :title="title" fa="fa-info-circle">
     <div class="content">
-      <el-row v-for="item in items" :key="'card-' + item.key" class="item" :gutter="10">
-        <el-col :span="6"><div class="item-label" :style="{ 'text-align': align }"><label>{{ item.key }}: </label></div></el-col>
+      <el-row v-for="item in items" :key="'card-' + item.key" :gutter="10" class="item">
+        <el-col :span="6"><div :style="{ 'text-align': align }" class="item-label"><label>{{ item.key }}: </label></div></el-col>
         <el-col :span="18"><div class="item-text">
           <ItemValue :value="item.value" :item="item" :callback="item.callback" />
         </div></el-col>

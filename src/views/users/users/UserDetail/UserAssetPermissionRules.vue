@@ -24,7 +24,7 @@ export default {
         hasTree: true,
         tagSearch: [
           { label: this.$t('common.Name'), key: 'name' },
-          { label: this.$t('common.IsValid'), key: 'is_valid' },
+          { label: this.$t('common.isValid'), key: 'is_valid' },
           { label: this.$t('users.Username'), key: 'username' },
           { label: this.$t('users.UserGroups'), key: 'user_group' },
           { label: this.$t('assets.IP'), key: 'ip' },

@@ -17,7 +17,7 @@ export default {
       fields: [
         [this.$t('perms.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
-        [this.$t('perms.RemoteApp'), ['remote_apps', 'system_users']],
+        [this.$t('perms.remoteApp'), ['remote_apps', 'system_users']],
         [this.$t('common.Other'), ['is_active', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/remote-app-permissions/',
