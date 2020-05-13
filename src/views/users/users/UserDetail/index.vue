@@ -1,13 +1,13 @@
 <template>
   <GenericDetailPage :object.sync="user" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" />
+      <component v-bind:is="config.activeMenu" :object="user" />
     </keep-alive>
   </GenericDetailPage>
 </template>
 
 <script>
-import { GenericDetailPage, TabPage } from '@/layout/components'
+import { GenericDetailPage } from '@/layout/components'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserGrantedRemoteApps from './UserGrantedRemoteApps'
@@ -25,8 +25,7 @@ export default {
     UserGrantedRemoteApps,
     UserRemoteAppPermissionRules,
     UserGrantedDatabases,
-    UserDatabasePermissionRules,
-    TabPage
+    UserDatabasePermissionRules
   },
   data() {
     return {

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-select ref="select" v-model="internalValue" multiple placeholder="请选择资产" @focus="handleFocus" />
+    <el-select ref="select" v-model="internalValue" @focus="handleFocus" multiple placeholder="请选择资产" />
     <el-dialog
-      :title="this.$t('资产列表')"
+      :title="this.$t('Assets')"
       :visible.sync="dialogVisible"
-      width="60%"
       :before-close="handleClose"
+      width="60%"
     >
       <GenericTreeListPage
         ref="ListPage"
@@ -15,7 +15,7 @@
       />
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleConfirm">确 定</el-button>
+        <el-button @click="handleConfirm" type="primary">确 定</el-button>
       </span>
     </el-dialog>
   </div>

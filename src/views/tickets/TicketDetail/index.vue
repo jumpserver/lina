@@ -1,6 +1,6 @@
 <template>
   <GenericDetailPage :object.sync="ticket" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
-    <component :is="config.activeMenu" :object="ticket" />
+    <component v-bind:is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
 </template>
 

@@ -34,15 +34,15 @@
         </template>
         <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
           <el-form-item label="回复">
-            <el-input v-model="form.comments" type="textarea" :autosize="{ minRows: 4 }" />
+            <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
           </el-form-item>
           <el-form-item style="float: right">
             <template v-if="hasActionPerm">
-              <el-button type="primary" size="small" :disabled="object.status === 'closed'" @click="handleApprove"><i class="fa fa-check" />同意</el-button>
-              <el-button type="warning" size="small" :disabled="object.status === 'closed'" @click="handleReject"><i class="fa fa-ban" />拒绝</el-button>
+              <el-button :disabled="object.status === 'closed'" @click="handleApprove" type="primary" size="small"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" @click="handleReject" type="warning" size="small"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
             </template>
-            <el-button type="danger" size="small" :disabled="object.status === 'closed'" @click="handleClosed"><i class="fa fa-times" />关闭</el-button>
-            <el-button type="info" size="small" :disabled="object.status === 'closed'" @click="handleComment"><i class="fa fa-pencil" />备注</el-button>
+            <el-button :disabled="object.status === 'closed'" @click="handleClosed" type="danger" size="small"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" @click="handleComment" type="info" size="small"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -80,6 +80,7 @@ export default {
       return this.object.title
     },
     detailCardItems() {
+      const vm = this
       return [
         {
           key: this.$t('tickets.user'),
@@ -93,10 +94,12 @@ export default {
           key: this.$t('tickets.status'),
           value: this.object.status,
           callback: function(row, data) {
+            const open = vm.$t('common.Open')
+            const close = vm.$t('common.Close')
             if (data === 'open') {
-              return <el-button type='primary' size='mini'>开启</el-button>
+              return <el-button type='primary' size='mini'>{open}</el-button>
             }
-            return <el-button type='danger' size='mini'>关闭</el-button>
+            return <el-button type='danger' size='mini'>{close}</el-button>
           }
         },
         {
@@ -127,7 +130,9 @@ export default {
     const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
     this.$axios.get(url).then(res => {
       this.comments = res
-    }).catch(err => this.$message.error(this.$t(err)))
+    }).catch(err => {
+      this.$message.error(err)
+    })
   },
   methods: {
     formatTime(dateStr) {
