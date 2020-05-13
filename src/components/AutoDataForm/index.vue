@@ -7,7 +7,7 @@
 <script>
 import DataForm from '../DataForm'
 import FormGroupHeader from '@/components/FormGroupHeader'
-import { optionUrlMeta } from '@/api/common'
+// import { optionUrlMeta } from '@/api/common'
 import rules from '@/components/DataForm/rules'
 import { Select2 } from '@/components'
 export default {
@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     optionUrlMeta() {
-      optionUrlMeta(this.url).then(data => {
+      this.$store.dispatch('common/getUrlMeta', { url: this.url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
       }).catch(err => {

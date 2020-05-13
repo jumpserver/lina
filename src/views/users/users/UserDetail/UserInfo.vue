@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.actions.Activate'),
+          title: this.$t('common.Activate'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -47,17 +47,17 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.resetMFA'),
+          title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.actions.Reset')
+            label: this.$t('common.Reset')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.resetMFAWarningMsg')
-              const warnTitle = vm.$t('common.info')
+              const warnMsg = vm.$t('users.quickUpdate.resetMFAWarningMsg')
+              const warnTitle = vm.$t('common.Info')
               const url = `/api/v1/users/users/${vm.object.id}/otp/reset/`
-              const successMsg = vm.$t('users.resetMFAdSuccessMsg')
+              const successMsg = vm.$t('users.quickUpdate.resetMFAdSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
                 confirmButtonClass: 'el-button--warning',
@@ -78,10 +78,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.resetPassword'),
+          title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.actions.Send')
+            label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
             click: function() {
@@ -109,15 +109,15 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.resetSSHKey'),
+          title: this.$t('users.quickUpdate.resetSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.actions.Send')
+            label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.resetSSHKeyWarningMsg')
-              const warnTitle = vm.$t('common.info')
+              const warnTitle = vm.$t('common.Info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -140,10 +140,10 @@ export default {
           }
         },
         {
-          title: this.$t('users.actions.unblockUser'),
+          title: this.$t('users.quickUpdate.unblockUser'),
           attrs: {
             type: 'primary',
-            label: this.$t('users.actions.Unblock'),
+            label: this.$t('users.quickUpdate.unblock'),
             disabled: !this.object.login_blocked
           },
           callbacks: {
@@ -213,27 +213,27 @@ export default {
           value: this.object.source_display
         },
         {
-          key: this.$t('users.DateExpired'),
+          key: this.$t('users.dateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.table.CreatedBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('users.DateJoined'),
+          key: this.$t('users.dateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.DateLastLogin'),
+          key: this.$t('users.dateLastLogin'),
           value: this.object.last_login
         },
         {
-          key: this.$t('users.DatePasswordUpdated'),
+          key: this.$t('users.datePasswordUpdated'),
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$t('common.table.Comment'),
+          key: this.$t('common.Comment'),
           value: this.object.comment
         }
       ]

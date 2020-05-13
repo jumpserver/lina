@@ -19,7 +19,7 @@ const defaultUpdateCallback = function({ row, col }) {
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   const msg = this.$t('common.deleteWarningMsg') + ' "' + row.name + '"'
-  const title = this.$t('common.info')
+  const title = this.$t('common.Info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
     type: 'warning',
@@ -32,9 +32,9 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
-        this.$message.success(this.$t('common.Delete success'))
+        this.$message.success(this.$t('common.deleteSuccessMsg'))
       } catch (error) {
-        this.$message.error(this.$t('common.Delete failed' + ' ' + error))
+        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
       } finally {
         instance.confirmButtonLoading = false
       }
@@ -71,7 +71,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$t('common.actions.Update'),
+        title: this.$t('common.Update'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -79,7 +79,7 @@ export default {
       },
       {
         name: 'delete',
-        title: this.$t('common.actions.Delete'),
+        title: this.$t('common.Delete'),
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
@@ -117,6 +117,9 @@ export default {
       }
       return this.cleanedActions.slice(2, this.cleanedActions.length)
     }
+  },
+  mounted() {
+    console.log(this.actions)
   },
   methods: {
     cleanBoolean(item, attr) {

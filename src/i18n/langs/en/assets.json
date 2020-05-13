@@ -1,4 +1,8 @@
 {
+  "SystemUsers": "System users",
+  "RemoteApps": "Remote apps",
+  "Assets": "Assets",
+  "Nodes": "Nodes",
   "asset_list": "Asset list",
   "asset_detail": "Asset detail",
   "create_asset": "Create asset",

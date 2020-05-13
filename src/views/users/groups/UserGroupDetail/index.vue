@@ -25,11 +25,11 @@ export default {
         activeMenu: 'GroupInfo',
         submenu: [
           {
-            title: this.$t('common.tabs.BasicInfo'),
+            title: this.$t('common.BasicInfo'),
             name: 'GroupInfo'
           },
           {
-            title: this.$t('users.grantedAssets'),
+            title: this.$t('users.tabs.grantedAssets'),
             name: 'GroupGrantedAssets'
           }
         ],

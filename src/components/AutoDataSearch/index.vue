@@ -4,7 +4,7 @@
 
 <script>
 const merge = require('deepmerge')
-import { optionUrlMeta } from '@/api/common'
+// import { optionUrlMeta } from '@/api/common'
 import TagSearch from '@/components/TagSearch'
 export default {
   name: 'AutoDataSearch',
@@ -28,7 +28,7 @@ export default {
     }
   },
   computed: {
-    internalConfig() {
+    iConfig() {
       return this.config ? merge(this.defaultConfig, this.config) : this.defaultConfig
     }
   },
@@ -58,7 +58,7 @@ export default {
     },
     optionUrlMeta() {
       const url = (this.url.indexOf('?') === -1) ? `${this.url}?draw=1&display=1` : `${this.url}&draw=1&display=1`
-      optionUrlMeta(url).then(data => {
+      this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.genericOptions(data.actions['GET'] || {})
       })
     }

@@ -6,7 +6,7 @@
 import { ListTable } from '@/components'
 
 export default {
-  name: 'UserGrantedRemoteApps',
+  name: 'UserRemoteAppPermissionRules',
   components: {
     ListTable
   },
@@ -26,23 +26,25 @@ export default {
             route: 'RemoteAppPermissionDetail'
           },
           users: {
-            label: this.$t('users.users'),
+            label: this.$t('users.Users'),
             formatter(row, col, colValue) {
               return colValue.length
             }
           },
           user_groups: {
-            label: this.$t('users.userGroups'),
+            label: this.$t('users.UserGroups'),
             formatter(row, col, colValue) {
               return colValue.length
             }
           },
           remote_apps: {
+            label: this.$t('assets.RemoteApps'),
             formatter(row, col, colValue) {
               return colValue.length
             }
           },
           system_users: {
+            label: this.$t('assets.SystemUsers'),
             formatter(row, col, colValue) {
               return colValue.length
             }
