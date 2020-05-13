@@ -160,7 +160,7 @@ export default {
       ],
       relationConfig: {
         icon: 'fa-user',
-        title: this.$t('users.UserGroups'),
+        title: this.$t('users.userGroups'),
         objectsAjax: {
           url: '/api/v1/users/groups/?fields_size=mini&order=name'
         },
@@ -217,7 +217,7 @@ export default {
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.table.createdBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {

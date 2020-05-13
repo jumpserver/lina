@@ -69,9 +69,6 @@ export default {
       return this.moreActionsTitle || this.$t('common.actions.MoreActions')
     }
   },
-  mounted() {
-    this.$log.debug('More action title: ', this.moreActionsTitle)
-  },
   methods: {
     handleClick(item) {
       const action = this.totalNamedActions[item]

@@ -8,7 +8,7 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getProfile(token) {
   return request({
     url: '/api/v1/users/profile/',
     method: 'get'

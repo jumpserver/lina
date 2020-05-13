@@ -1,5 +1,6 @@
 import {
-  asyncRoutes,
+  adminRoutes,
+  userRoutes,
   constantRoutes
 } from '@/router'
 
@@ -58,9 +59,9 @@ const actions = {
     return new Promise(resolve => {
       let accessedRoutes
       if (roles.includes('Admin')) {
-        accessedRoutes = asyncRoutes || []
+        accessedRoutes = adminRoutes || []
       } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        accessedRoutes = filterAsyncRoutes(userRoutes, roles)
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)

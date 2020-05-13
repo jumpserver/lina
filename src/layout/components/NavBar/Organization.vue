@@ -26,25 +26,39 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
 export default {
   props: {
     isCollapse: {
       type: Boolean,
-      default: () => { return true }
+      default: () => {
+        return true
+      }
     }
   },
   computed: {
     ...mapGetters([
       'currentOrg',
       'userAdminOrgList'
-    ])
+    ]),
+    orgIdMapper() {
+      const mapper = {}
+      this.userAdminOrgList.forEach((v) => {
+        mapper[v.id] = v
+      })
+      return mapper
+    }
+  },
+  mounted() {
+    this.$log.debug('Admin orgs: ', this.userAdminOrgList)
   },
   methods: {
     changeOrg(orgId) {
-      console.log('Change to org: ', orgId)
-      this.$store.dispatch('user/setCurrentOrg', {
-        id: orgId
-      })
+      const org = this.orgIdMapper[orgId]
+      if (!org) {
+        this.$log.debug('Error: org not found')
+      }
+      this.$store.dispatch('users/setCurrentOrg', org)
     }
   }
 }
@@ -56,17 +70,17 @@ export default {
     transition: opacity 0s;
   }
 
-  .org-didi >>> input.el-input__inner {
+  .org-didi > > > input.el-input__inner {
     background: none;
     border: none;
     color: #8095a8;
   }
 
-  .org-didi >>> input.el-input__inner::placeholder {
+  .org-didi > > > input.el-input__inner::placeholder {
     opacity: 0.2;
   }
 
-  .org-didi >>> .el-input__prefix {
+  .org-didi > > > .el-input__prefix {
     line-height: 40px;
     /*margin: auto 5px;*/
   }

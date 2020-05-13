@@ -1,29 +1,17 @@
-/* eslint-disable no-unused-vars */
-import {
-  login,
-  logout,
-  getInfo
-} from '@/api/user'
+import { logout, getProfile } from '@/api/users'
 import {
   getToken,
   getCurrentOrg,
-  setCurrentOrg,
-  setToken,
-  removeToken
+  setCurrentOrg
 } from '@/utils/auth'
-import {
-  resetRouter
-} from '@/router'
+import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    name: '',
-    avatar: '',
-    roles: [],
+    profile: {},
     currentOrg: getCurrentOrg(),
-    orgs: [],
-    user: {}
+    orgs: []
   }
 }
 
@@ -36,31 +24,21 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_PROFILE: (state, profile) => {
+    state.profile = profile
   },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  },
-  SET_ROLES: (state, roles) => {
-    state.roles = roles
-  },
-  SET_ORGS: (state, roles) => {
+  SET_ORGS: (state, orgs) => {
     // API BUG FIX
-    for (let index = 0; index < roles.length; index++) {
-      if (roles[index].id === 'DEFAULT') {
-        roles[index].id = ''
+    for (let index = 0; index < orgs.length; index++) {
+      if (orgs[index].id === 'DEFAULT') {
+        orgs[index].id = ''
       }
     }
-    state.orgs = roles
+    state.orgs = orgs
   },
-  SET_CURRENT_ORG(state, z) {
-    state.currentOrg = z
-    console.log(z)
-    setCurrentOrg(z)
-  },
-  SET_USER(state, user) {
-    state.user = user
+  SET_CURRENT_ORG(state, org) {
+    state.currentOrg = org
+    setCurrentOrg(org)
   }
 }
 
@@ -80,31 +58,20 @@ const actions = {
   //   })
   // },
 
-  // get user info
-  getInfo({
-    commit,
-    state
-  }) {
+  // get user Profile
+  getProfile({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo().then(response => {
+      getProfile().then(response => {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
-        const {
-          role,
-          name,
-          avatar_url,
-          admin_or_audit_orgs
-        } = response
-        const rules = [role]
+        const { admin_or_audit_orgs } = response
+        // const rules = [role]
         // roles must be a non-empty array
-        if (!rules || rules.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-        commit('SET_USER', response)
-        commit('SET_ROLES', rules)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar_url)
+        // if (!rules || rules.length <= 0) {
+        //   reject('getProfile: roles must be a non-null array!')
+        // }
+        commit('SET_PROFILE', response)
         commit('SET_ORGS', admin_or_audit_orgs)
         resolve(response)
       }).catch(error => {
@@ -114,10 +81,7 @@ const actions = {
   },
 
   // user logout
-  logout({
-    commit,
-    state
-  }) {
+  logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         // removeToken() // must remove  token  first
@@ -131,9 +95,7 @@ const actions = {
   },
 
   // remove token
-  resetToken({
-    commit
-  }) {
+  resetToken({ commit }) {
     return new Promise(resolve => {
       // removeToken() // must remove  token  first
       commit('RESET_STATE')

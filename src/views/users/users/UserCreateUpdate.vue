@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n/langs'
 import { GenericCreateUpdatePage } from '@/layout/components'
 export default {
   components: {
@@ -62,9 +61,6 @@ export default {
         }
       ]
     }
-  },
-  mounted() {
-    console.log('I18n: ', i18n)
   }
 }
 </script>
