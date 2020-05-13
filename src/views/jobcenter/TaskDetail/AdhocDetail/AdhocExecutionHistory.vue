@@ -54,7 +54,6 @@ export default {
           },
           actions: {
             prop: 'id',
-            abel: this.$ttc('action'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,

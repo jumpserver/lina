@@ -50,7 +50,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$ttc('action'),
+            label: this.$t('common.table.Actions'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,

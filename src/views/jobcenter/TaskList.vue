@@ -5,7 +5,6 @@
 <script>
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -18,7 +17,7 @@ export default {
         columns: ['name', 'runtimes', 'host_amount', 'is_success', 'date_start', 'time', 'actions'],
         columnsMeta: {
           name: {
-            label: this.$tco('Name'),
+            label: this.$t('common.Name'),
             showOverflowTooltip: true
           },
           runtimes: {
@@ -61,8 +60,6 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$ttc('action'),
-            formatter: ActionsFormatter,
             actions: {
               hasUpdate: false,
               extraActions: [

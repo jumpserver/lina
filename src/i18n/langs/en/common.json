@@ -1,0 +1,55 @@
+{
+  "Other": "Other",
+  "fieldRequiredError": "This field is required",
+  "comment": "Comment",
+  "createdBy": "Created by",
+  "validity": "Validity",
+  "info": "Info",
+  "Members": "Members",
+  "More": "More",
+  "QuickUpdate": "Quick update",
+  "nav": {
+    "Help": "Help",
+    "Docs": "Docs",
+    "Language": "Language",
+    "Support": "Support",
+    "Profile": "Profile",
+    "APIKey": "API Key",
+    "Logout": "Logout",
+    "UserPage": "User page"
+  },
+  "table": {
+    "Actions": "Actions",
+    "Name": "Name",
+    "CreatedBy": "Created by",
+    "DateCreated": "Date created",
+    "Comment": "Comment"
+  },
+  "actions": {
+    "Update": "Update",
+    "Delete": "Delete",
+    "Reset": "Reset",
+    "Submit": "Submit",
+    "Create": "Create",
+    "MoreActions": "Actions",
+    "deleteSelected": "Delete selected",
+    "disableSelected": "Disable selected",
+    "activateSelected": "Activate selected",
+    "Cancel": "Cancel",
+    "Add": "Add",
+    "Activate": "Activate"
+  },
+  "tabs": {
+    "BasicInfo": "Basic info"
+  },
+  "tree": {
+    "AddNode": "Add",
+    "RenameNode": "Rename",
+    "DeleteNode": "Delete",
+    "Empty": "Empty",
+    "Loading": "Loading"
+  },
+  "message": {
+    "deleteWarning": "Are you sure to delete "
+  }
+}

@@ -44,7 +44,6 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$ttc('action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
@@ -79,9 +78,9 @@ export default {
         extraActions: [
           {
             name: 'actionCreate',
-            title: this.$tco('Create'),
+            title: this.$t('common.actions.Create'),
             type: 'primary',
-            has: this.hasCreate,
+            has: true,
             can: true,
             callback: this.createRoute.bind(this)
           }
@@ -92,7 +91,6 @@ export default {
   },
   methods: {
     createRoute(val) {
-      console.log(this)
       this.$router.push({
         name: 'CommandFilterRulesCreate',
         params: {

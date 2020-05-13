@@ -18,8 +18,8 @@ const defaultUpdateCallback = function({ row, col }) {
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  const msg = this.$ttc('deleteWarningMsg') + ' "' + row.name + '"'
-  const title = this.$ttc('info')
+  const msg = this.$t('common.message.deleteWarning') + ' "' + row.name + '"'
+  const title = this.$t('common.info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
     type: 'warning',
@@ -32,9 +32,9 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
-        this.$message.success(this.$tco('Delete success'))
+        this.$message.success(this.$t('common.Delete success'))
       } catch (error) {
-        this.$message.error(this.$tco('Delete failed' + ' ' + error))
+        this.$message.error(this.$t('common.Delete failed' + ' ' + error))
       } finally {
         instance.confirmButtonLoading = false
       }
@@ -71,7 +71,7 @@ export default {
     const defaultActions = [
       {
         name: 'update',
-        title: this.$ttc('update'),
+        title: this.$t('common.actions.Update'),
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
@@ -79,7 +79,7 @@ export default {
       },
       {
         name: 'delete',
-        title: this.$ttc('delete'),
+        title: this.$t('common.actions.Delete'),
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,

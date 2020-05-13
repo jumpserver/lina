@@ -1,0 +1,25 @@
+{
+  "account": "账户",
+  "authentication": "认证",
+  "secure": "安全",
+  "dateLastLogin": "最后登录日期",
+  "MFA": "MFA",
+  "source": "来源",
+  "datePasswordUpdated": "改密日期",
+  "name": "姓名",
+  "username": "用户名",
+  "email": "Email",
+  "role": "角色",
+  "dateExpired": "过期时间",
+  "dateJoined": "创建日期",
+  "users": "用户",
+  "quickUpdate": {
+    "resetMFA": "重置MFA",
+    "resetPassword": "重置密码",
+    "restSSHKey": "重置密钥",
+    "unblockLogin": "解除登录限制",
+    "messages": {
+      "resetPasswordWarning": ""
+    }
+  }
+}

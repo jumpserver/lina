@@ -31,7 +31,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$ttc('active'),
+          title: this.$t('common.actions.Activate'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -47,15 +47,15 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetMFATitle'),
+          title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$ttc('reset')
+            label: this.$t('common.actions.Reset')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.resetMFAWarningMsg')
-              const warnTitle = vm.$ttc('info')
+              const warnTitle = vm.$t('common.info')
               const url = `/api/v1/users/users/${vm.object.id}/otp/reset/`
               const successMsg = vm.$t('users.resetMFAdSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -78,15 +78,15 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetPasswordTitle'),
+          title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
-            label: this.$ttc('send')
+            label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.resetPasswordWarningMsg')
-              const warnTitle = vm.$ttc('Info')
+              const warnTitle = vm.$t('common.Info')
               const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -109,15 +109,15 @@ export default {
           }
         },
         {
-          title: this.$t('users.resetPublicKeyTitle'),
+          title: this.$t('users.quickUpdate.resetSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$ttc('send')
+            label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.resetPublicKeyWarningMsg')
-              const warnTitle = vm.$ttc('info')
+              const warnMsg = vm.$t('users.resetSSHKeyWarningMsg')
+              const warnTitle = vm.$t('common.info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
               const successMsg = vm.$t('users.resetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
@@ -140,10 +140,10 @@ export default {
           }
         },
         {
-          title: this.$tt('users.unblockUser'),
+          title: this.$t('users.quickUpdate.unblockUser'),
           attrs: {
             type: 'primary',
-            label: this.$ttc('unblock'),
+            label: this.$t('users.quickUpdate.unblock'),
             disabled: !this.object.login_blocked
           },
           callbacks: {
@@ -160,7 +160,7 @@ export default {
       ],
       relationConfig: {
         icon: 'fa-user',
-        title: this.$tt('users.userGroups'),
+        title: this.$t('users.userGroups'),
         objectsAjax: {
           url: '/api/v1/users/groups/?fields_size=mini&order=name'
         },
@@ -189,51 +189,51 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$ttc('name'),
+          key: this.$t('users.name'),
           value: this.object.name
         },
         {
-          key: this.$ttc('username'),
+          key: this.$t('users.username'),
           value: this.object.username
         },
         {
-          key: this.$ttc('email'),
+          key: this.$t('users.email'),
           value: this.object.email
         },
         {
-          key: this.$ttc('role'),
+          key: this.$t('users.role'),
           value: this.object.role_display
         },
         {
-          key: this.$tt('users.MFA'),
+          key: this.$t('users.MFA'),
           value: this.object.mfa_level_display
         },
         {
-          key: this.$tt('users.source'),
+          key: this.$t('users.source'),
           value: this.object.source_display
         },
         {
-          key: this.$ttc('dateExpired'),
+          key: this.$t('users.dateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$ttc('createdBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$ttc('dateCreated'),
+          key: this.$t('users.dateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$tt('users.dateLastLogin'),
+          key: this.$t('users.dateLastLogin'),
           value: this.object.last_login
         },
         {
-          key: this.$tt('users.datePasswordUpdated'),
+          key: this.$t('users.datePasswordUpdated'),
           value: this.object.date_password_last_updated
         },
         {
-          key: this.$ttc('comment'),
+          key: this.$t('common.comment'),
           value: this.object.comment
         }
       ]

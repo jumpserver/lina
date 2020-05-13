@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="treebox">
-      <ul id="ztree" class="ztree" />
+      <ul id="ztree" class="ztree">
+        <div>
+          {{ this.$t('common.tree.Loading') }}...
+        </div>
+      </ul>
     </div>
     <div id="rMenu">
       <ul class="dropdown-menu menu-actions">
@@ -43,7 +47,7 @@ export default {
   },
   mounted() {
     this.initTree()
-    $('.treebox').css('height', window.innerHeight - 60)
+    // $('.treebox').css('height', window.innerHeight - 60)
   },
   methods: {
     initTree: function() {
@@ -53,7 +57,7 @@ export default {
         }
         if (res.length === 0) {
           res.push({
-            name: this.$tco('empty')
+            name: this.$t('common.tree.Empty')
           })
         }
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)

@@ -4,7 +4,6 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
@@ -60,8 +59,6 @@ export default {
           },
           actions: {
             prop: 'id',
-            abel: this.$ttc('action'),
-            formatter: ActionsFormatter,
             actions: {
               hasEdit: false,
               hasDelete: false,

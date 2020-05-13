@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters/index'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -58,7 +58,6 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$ttc('action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',

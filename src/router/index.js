@@ -45,7 +45,10 @@ export const constantRoutes = [
     name: '404',
     component: () => import('@/views/404'),
     hidden: true
-  },
+  }
+]
+
+export const adminRoutes = [
   {
     path: '/',
     component: Layout,
@@ -55,7 +58,7 @@ export const constantRoutes = [
         path: 'dashboard',
         name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: 'dashboard', icon: 'dashboard' }
+        meta: { title: 'Dashboard', icon: 'dashboard' }
       }
     ]
   },
@@ -141,109 +144,29 @@ export const constantRoutes = [
     name: 'CeleryTaskLog',
     hidden: true,
     meta: { title: 'CeleryTaskLog' }
-  }
+  },
+  { path: '*', redirect: '/404', hidden: true }
 ]
-
 /**
- * asyncRoutes
+ * user routes
  * the routes that need to be dynamically loaded based on user roles
  */
 // 权限路由
-export const asyncRoutes = [
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/users',
-  //   component: Layout,
-  //   redirect: '/users/list',
-  //   name: 'Users',
-  //   meta: {
-  //     title: 'Users',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'user/list',
-  //       component: () => import('@/views/users/UserList.vue'), // Parent router-view
-  //       name: 'UserList',
-  //       meta: { title: 'List' }
-  //     },
-  //     {
-  //       path: 'user/:id',
-  //       component: () => import('@/views/users/UserCreate.vue'), // Parent router-view
-  //       name: 'UserEdit',
-  //       meta: { title: 'Edit' },
-  //       hidden: true
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
+export const userRoutes = [
   // 404 page must be placed at the end !!!
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: 'Dashboard', icon: 'dashboard' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

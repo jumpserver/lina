@@ -68,7 +68,7 @@ export default {
             label: this.$t('assets.systemUsers'),
             align: 'center',
             formatter: (row, col, value) => {
-              const title = this.$ttc('show')
+              const title = this.$t('common.show')
               // Todo: 显示真正的系统用户
               const show = function() {
                 console.log('hello: ', value)

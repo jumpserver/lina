@@ -34,7 +34,6 @@ export default {
           },
           {
             prop: 'id',
-            label: this.$ttc('action'),
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',

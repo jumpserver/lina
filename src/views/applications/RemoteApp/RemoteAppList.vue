@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { REMOTE_APP_TYPE_META_MAP, ALL_TYPES } from './const'
 
 export default {
   components: {
@@ -32,8 +33,28 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'RemoteAppCreate'
+        hasCreate: false,
+        hasBulkDelete: false,
+        // createRoute: 'RemoteAppCreate',
+        moreActionsTitle: '创建',
+        extraMoreActions: this.genExtraMoreActions()
       }
+    }
+  },
+  methods: {
+    onCallback(type) {
+      this.$router.push({ name: 'RemoteAppCreate', query: { type: type }})
+    },
+    genExtraMoreActions() {
+      const extra_more_actions = []
+      for (const value of ALL_TYPES) {
+        const item = { ...REMOTE_APP_TYPE_META_MAP[value] }
+        item.type = 'primary'
+        item.can = true
+        item.callback = this.onCallback.bind(this, value)
+        extra_more_actions.push(item)
+      }
+      return extra_more_actions
     }
   }
 }

@@ -4,6 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { AssetSelect } from '@/components'
 export default {
   name: 'GatewayCreateUpdate',
   components: {
@@ -14,13 +15,21 @@ export default {
       initial: {
 
       },
-      fields: {
-
-      },
+      fields: [
+        ['', ['name', 'assets', 'comment']]
+      ],
       fieldsMeta: {
-
+        assets: {
+          type: 'assetSelect',
+          component: AssetSelect,
+          label: '资产',
+          rules: [{
+            required: false
+          }]
+        }
       },
-      url: ''
+
+      url: '/api/v1/assets/domains/'
     }
   }
 }

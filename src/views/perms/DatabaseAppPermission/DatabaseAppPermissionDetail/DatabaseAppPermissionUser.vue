@@ -43,7 +43,7 @@ export default {
           },
           delete_action: {
             prop: 'user',
-            label: this.$ttc('action'),
+            label: this.$t('common.table.Actions'),
             align: 'center',
             width: 150,
             objects: this.object.users,

@@ -21,8 +21,8 @@ export default {
         [this.$t('perms.' + 'Basic'), ['name']],
         [this.$t('perms.' + 'User'), ['users', 'user_groups']],
         [this.$t('perms.' + 'Asset'), ['assets', 'nodes', 'system_users']],
-        [this.$ttc('action'), ['actions']],
-        [this.$tco('Other'), ['is_active', 'date_expired', 'comment']]
+        [this.$t('common.table.Actions'), ['actions']],
+        [this.$t('common.Other'), ['is_active', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       fieldsMeta: {

@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $ttc('add') }}</el-button>
+          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $t('common.actions.Add') }}</el-button>
         </td>
       </tr>
       <template v-if="showHasObjects">
@@ -25,7 +25,7 @@
         <td colspan="2">
           <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
-            {{ $ttc('more') }}
+            {{ $t('common.More') }}
           </el-button>
         </td>
       </tr>
@@ -196,7 +196,7 @@ export default {
       data = this.iAjax.processResults.bind(this)(data)
       data.results.forEach((v) => {
         if (!this.hasObjects.find((item) => item.value === v.value)) {
-          this.HasObjects.push(v)
+          this.iHasObjects.push(v)
         }
       })
       // 如果还有其它页，继续获取, 如果没有就停止
