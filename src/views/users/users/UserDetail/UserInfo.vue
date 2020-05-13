@@ -246,7 +246,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.object)
+    console.log('Object is', this.object)
   },
   methods: {
   }

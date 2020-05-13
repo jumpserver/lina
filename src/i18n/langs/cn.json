@@ -702,10 +702,10 @@
       },
       "resetMFAWarningMsg": "",
       "resetMFAdSuccessMsg": "",
-      "send": "",
-      "resetSSHKey": "",
-      "unblockUser": "",
-      "unblock": ""
+      "send": "发送",
+      "resetSSHKey": "重置SSH密钥",
+      "unblockUser": "解锁用户",
+      "unblock": "解锁"
     },
     "tabs": {
       "grantedAssets": "授权的资产",
@@ -715,13 +715,13 @@
       "grantedDatabases": "授权的数据库",
       "databasePermissionRules": "数据库授权规则"
     },
-    "resetPasswordWarningMsg": "",
-    "resetPasswordSuccessMsg": "",
-    "resetSSHKeyWarningMsg": "",
-    "unblockSuccessMsg": "",
-    "removeWarningMsg": "",
-    "removeSuccessMsg": "",
-    "removeErrorMsg": ""
+    "resetPasswordWarningMsg": "你确定要发送重置用户密码的邮件吗",
+    "resetPasswordSuccessMsg": "发送邮件任务已提交",
+    "resetSSHKeyWarningMsg": "你确定要发送重置用户的SSH Key的邮件吗?",
+    "unblockSuccessMsg": "解锁成功",
+    "removeWarningMsg": "你确定移除 ",
+    "removeSuccessMsg": "移除成功",
+    "removeErrorMsg": "移除失败"
   },
   "tree": {
     "AddNode": "",
@@ -750,9 +750,9 @@
   "Test": "",
   "Action": "",
   "delete": "",
-  "Update success": "",
-  "Update failed": "",
-  "basic": "",
+  "Update success": "更新重构",
+  "Update failed": "更新失败",
+  "basic": "基本",
   "协议组": "",
   "认证": "",
   "节点": "",
