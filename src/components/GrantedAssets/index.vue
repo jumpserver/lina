@@ -65,10 +65,10 @@ export default {
           },
           {
             prop: 'systemUsers',
-            label: this.$t('assets.systemUsers'),
+            label: this.$t('assets.SystemUsers'),
             align: 'center',
             formatter: (row, col, value) => {
-              const title = this.$t('common.show')
+              const title = this.$t('common.Show')
               // Todo: 显示真正的系统用户
               const show = function() {
                 console.log('hello: ', value)

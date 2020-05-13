@@ -41,7 +41,7 @@ export default {
     moreActionsTitle: {
       type: String,
       default() {
-        return this.$t('common.actions.MoreActions')
+        return this.$t('common.MoreActions')
       }
     }
   },
@@ -66,7 +66,7 @@ export default {
       return actions
     },
     iMoreActionsTitle() {
-      return this.moreActionsTitle || this.$t('common.actions.MoreActions')
+      return this.moreActionsTitle || this.$t('common.MoreActions')
     }
   },
   methods: {
@@ -74,6 +74,8 @@ export default {
       const action = this.totalNamedActions[item]
       if (action && action.callback) {
         action.callback(action)
+      } else {
+        this.$log.debug('No callback found')
       }
       this.$emit('actionClick', item)
     },

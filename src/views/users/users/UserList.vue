@@ -29,12 +29,14 @@ export default {
             showOverflowTooltip: true
           },
           actions: {
-            hasDelete: this.currentOrgIsDefault(),
+            hasDelete: () => this.currentOrgIsDefault,
             extraActions: [
               {
-                title: 'Remove',
+                title: this.$t('users.Remove'),
+                name: 'remove',
                 type: 'warning',
-                has: !this.currentOrgIsDefault()
+                has: () => !this.currentOrgIsDefault,
+                callback: this.removeUserFromOrg
               }
             ]
           }
@@ -44,14 +46,14 @@ export default {
         extraMoreActions: [
           {
             name: 'disableSelected',
-            title: this.$t('common.actions.disableSelected'),
+            title: this.$t('common.disableSelected'),
             callback: () => {
               console.log('disableSelected')
             }
           },
           {
             name: 'activateSelected',
-            title: this.$t('common.actions.activateSelected'),
+            title: this.$t('common.activateSelected'),
             callback: () => {
               console.log('activateSelected')
             }
@@ -62,14 +64,42 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentOrg'
-    ])
+      'currentOrg',
+      'currentUser',
+      'device'
+    ]),
+    currentOrgIsDefault() {
+      console.log('Current org is default: ', this.currentOrg.id === 'DEFAULT')
+      return this.currentOrg.id === 'DEFAULT'
+    }
   },
   methods: {
-    currentOrgIsDefault() {
-      console.log(this.currentOrg)
-      return false
-      // return this.currentOrg.id === 'DEFAULT'
+    removeUserFromOrg({ row, col, reload }) {
+      const msg = this.$t('users.removeWarningMsg') + ' "' + row.name + '"'
+      const title = this.$t('common.Info')
+      const performDelete = function() {
+        const url = `/api/v1/users/users/${row.id}/`
+        return this.$axios.delete(url)
+      }
+      this.$alert(msg, title, {
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger',
+        showCancelButton: true,
+        beforeClose: async(action, instance, done) => {
+          if (action !== 'confirm') return done()
+          instance.confirmButtonLoading = true
+          try {
+            await performDelete.bind(this)({ row: row, col: col })
+            done()
+            reload()
+            this.$message.success(this.$t('users.removeSuccessMsg'))
+          } catch (error) {
+            this.$message.error(this.$t('users.removeErrorMsg' + ' ' + error))
+          } finally {
+            instance.confirmButtonLoading = false
+          }
+        }
+      })
     }
   }
 }

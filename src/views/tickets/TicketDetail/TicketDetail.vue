@@ -99,7 +99,7 @@ export default {
           value: '需要处理'
         },
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: this.object.date_created
         }
       ]

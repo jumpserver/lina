@@ -1,13 +1,34 @@
 {
   "Other": "Other",
   "fieldRequiredError": "This field is required",
-  "comment": "Comment",
-  "createdBy": "Created by",
-  "validity": "Validity",
-  "info": "Info",
+  "Comment": "Comment",
+  "CreatedBy": "Created by",
+  "Validity": "Validity",
+  "Info": "Info",
   "Members": "Members",
   "More": "More",
-  "QuickUpdate": "Quick update",
+  "Activate": "Activate",
+  "Actions": "Actions",
+  "Name": "Name",
+  "dateCreated": "Date created",
+  "createdBy": "Created by",
+  "deleteWarningMsg": "Are you sure to delete ",
+  "Update": "Update",
+  "Delete": "Delete",
+  "moreActions": "Actions",
+  "Submit": "Submit",
+  "Reset": "Reset",
+  "Confirm": "Confirm",
+  "Cancel": "Cancel",
+  "Create": "Create",
+  "Show": "Show",
+  "deleteSelected": "Delete selected",
+  "disableSelected": "Disable selected",
+  "activateSelected": "Activate selected",
+  "Add": "Add",
+  "BasicInfo": "Basic info",
+  "quickUpdate": "Quick update",
+  "MoreActions": "Actions",
   "nav": {
     "Help": "Help",
     "Docs": "Docs",
@@ -18,38 +39,11 @@
     "Logout": "Logout",
     "UserPage": "User page"
   },
-  "table": {
-    "Actions": "Actions",
-    "Name": "Name",
-    "CreatedBy": "Created by",
-    "DateCreated": "Date created",
-    "Comment": "Comment"
-  },
-  "actions": {
-    "Update": "Update",
-    "Delete": "Delete",
-    "Reset": "Reset",
-    "Submit": "Submit",
-    "Create": "Create",
-    "MoreActions": "Actions",
-    "deleteSelected": "Delete selected",
-    "disableSelected": "Disable selected",
-    "activateSelected": "Activate selected",
-    "Cancel": "Cancel",
-    "Add": "Add",
-    "Activate": "Activate"
-  },
-  "tabs": {
-    "BasicInfo": "Basic info"
-  },
   "tree": {
-    "AddNode": "Add",
-    "RenameNode": "Rename",
-    "DeleteNode": "Delete",
+    "addNode": "Add",
+    "renameNode": "Rename",
+    "deleteNode": "Delete",
     "Empty": "Empty",
     "Loading": "Loading"
-  },
-  "message": {
-    "deleteWarning": "Are you sure to delete "
   }
 }
