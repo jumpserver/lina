@@ -120,7 +120,7 @@ export default {
       ]
     },
     hasActionPerm() {
-      return this.object.assignees.indexOf(this.$store.state.user.user.id) !== -1
+      return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
     }
   },
   mounted() {
