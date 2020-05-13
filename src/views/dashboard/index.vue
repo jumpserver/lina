@@ -1,7 +1,7 @@
 <template>
   <Page>
     <el-row :gutter="30">
-      <SummaryCard v-for="card of summaryCards" :key="card.title" :card="card" />
+      <SummaryCard v-for="card in summaryCards" :key="card.title" :title="card.title" :label="card.label" :total-count="card.totalCount" />
     </el-row>
   </Page>
 </template>
@@ -21,51 +21,43 @@ export default {
     return {
       summaryCards: [
         {
-          title: 'Total users',
-          label: {
-            'type': 'success',
-            'title': 'Users'
-          },
+          title: this.$t('dashboard.totalUser'),
+          label: { 'type': 'success', 'title': 'Users' },
           totalCount: {
-            count: '1',
-            url: '/users/users/',
-            describe: 'All users'
+            url: '/api/v1/index/?total_count_users=1',
+            key: 'total_count_users',
+            describe: 'All users',
+            redirect: '/users/users/'
           }
         },
         {
-          title: 'Total assets',
-          label: {
-            'type': 'info',
-            'title': 'Assets'
-          },
+          title: this.$t('dashboard.totalAsset'),
+          label: { 'type': 'primary', 'title': 'Assets' },
           totalCount: {
-            count: '333',
-            url: '/assets/assets/',
-            describe: 'All assets'
+            url: '/api/v1/index/?total_count_assets=1',
+            key: 'total_count_assets',
+            describe: 'All assets',
+            redirect: '/assets/assets/'
           }
         },
         {
-          title: 'Online users',
-          label: {
-            'type': 'primary',
-            'title': 'Online'
-          },
+          title: this.$t('dashboard.onlineUser'),
+          label: { 'type': 'info', 'title': 'Online' },
           totalCount: {
-            count: '333',
-            url: '/terminal/session-online/',
-            describe: 'Online users'
+            url: '/api/v1/index/?total_count_online_users=1',
+            key: 'total_count_online_users',
+            describe: 'Online users',
+            redirect: '/terminal/session-online/'
           }
         },
         {
-          title: 'Online sessions',
-          label: {
-            'type': 'danger',
-            'title': 'Connected'
-          },
+          title: this.$t('dashboard.onlineSession'),
+          label: { 'type': 'danger', 'title': 'Connected' },
           totalCount: {
-            count: '333',
-            url: '/terminal/session-online/',
-            describe: 'Online sessions'
+            url: '/api/v1/index/?total_count_online_sessions=1',
+            key: 'total_count_online_sessions',
+            describe: 'Online sessions',
+            redirect: '/terminal/session-online/'
           }
         }
       ]

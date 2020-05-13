@@ -148,6 +148,12 @@
     "SystemUserUpdate":"更新系统用户"
   },
   "auth":{"authExpireMsg":"账号已退出，请重新登录","Re-Login":"重新登录"},
+  "dashboard":{
+    "totalUser":"用户总数",
+    "totalAsset":"资产总数",
+    "onlineUser":"在线用户",
+    "onlineSession":"在线会话"
+  },
   "users":{
     "createUser":"创建用户",
     "updateUser":"更新用户",
