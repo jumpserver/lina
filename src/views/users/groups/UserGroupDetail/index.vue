@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage :object.sync="group" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component v-bind:is="config.activeMenu" :object="group" />
+      <component :is="config.activeMenu" :object="group" />
     </keep-alive>
   </GenericDetailPage>
 </template>

@@ -38,11 +38,11 @@
           </el-form-item>
           <el-form-item style="float: right">
             <template v-if="hasActionPerm">
-              <el-button :disabled="object.status === 'closed'" @click="handleApprove" type="primary" size="small"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
-              <el-button :disabled="object.status === 'closed'" @click="handleReject" type="warning" size="small"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
             </template>
-            <el-button :disabled="object.status === 'closed'" @click="handleClosed" type="danger" size="small"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
-            <el-button :disabled="object.status === 'closed'" @click="handleComment" type="info" size="small"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
