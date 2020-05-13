@@ -9,15 +9,24 @@ module.exports = {
     node: true,
     es6: true
   },
-  extends: ['plugin:vue/recommended', 'eslint:recommended'],
+  extends: ['plugin:vue/recommended', 'eslint:recommended', 'plugin:vue-i18n/recommended'],
   globals: {
     window: true,
     _: true
   },
-
+  settings: {
+    'vue-i18n': {
+      localeDir: './src/i18n/langs/*/*.json' // extention is glob formatting!
+    }
+  },
   // add your custom rules here
   // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    // Optional.
+    'vue-i18n/no-dynamic-keys': 'error',
+    'vue-i18n/no-unused-keys': ['error', {
+      extensions: ['.js', '.vue']
+    }],
     'vue/max-attributes-per-line': [2, {
       'singleline': 10,
       'multiline': {
