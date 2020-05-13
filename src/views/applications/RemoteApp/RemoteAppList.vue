@@ -11,6 +11,7 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/applications/remote-apps/',
@@ -29,7 +30,9 @@ export default {
         },
         detailRoute: 'RemoteAppDetail',
         actions: {
-          updateRoute: 'RemoteAppUpdate'
+          onUpdate: ({ row }) => {
+            vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
+          }
         }
       },
       headerActions: {

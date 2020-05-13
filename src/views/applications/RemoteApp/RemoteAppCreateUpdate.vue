@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :clean-form-value="cleanFormValue" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -14,15 +14,12 @@ export default {
     const app_type = this.$route.query.type
 
     const fields_map = REMOTE_APP_TYPE_FIELDS_MAP[app_type]
-    const specific_fields = Object.keys(fields_map)
 
     const app_type_meta = REMOTE_APP_TYPE_META_MAP[app_type]
 
     return {
-      specific_fields: specific_fields,
       fields: [
-        [this.$t('route.RemoteApp'), ['name', 'asset', 'type', 'path', 'comment']],
-        [this.$t('applications.' + app_type), [...specific_fields]]
+        [this.$t('route.RemoteApp'), ['name', 'asset', 'type', 'path', 'comment', 'params']]
       ],
       url: '/api/v1/applications/remote-apps/',
       fieldsMeta: {
@@ -31,7 +28,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/assets/?platform__base=Windows',
+              url: '/api/v1/assets/assets/?platform__base=Linux',
               processResults(data) {
                 const results = data.results.map((item) => {
                   return { label: item.hostname, value: item.id }
@@ -52,20 +49,11 @@ export default {
           ],
           disabled: true
         },
-        ...fields_map
+        params: {
+          type: 'group',
+          items: fields_map
+        }
       }
-    }
-  },
-  methods: {
-    cleanFormValue(data) {
-      const params = {}
-      for (const field of this.specific_fields) {
-        params[field] = data[field]
-        delete data[field]
-      }
-      data.params = params
-
-      return data
     }
   }
 }

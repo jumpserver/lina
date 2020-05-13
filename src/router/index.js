@@ -6,6 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+const requireContext = require.context('@/views/', true, /router\.js$/)
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -127,6 +128,7 @@ export const adminRoutes = [
     meta: { title: 'Audits', icon: 'history' },
     children: AuditsRoutes
   },
+  ...requireContext.keys().map(key => requireContext(key).default),
   {
     path: '/settings',
     component: Layout,
@@ -146,6 +148,7 @@ export const adminRoutes = [
     meta: { title: 'CeleryTaskLog' }
   },
   { path: '*', redirect: '/404', hidden: true }
+
 ]
 /**
  * user routes
