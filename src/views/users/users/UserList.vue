@@ -11,6 +11,7 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/users/users/',
@@ -47,15 +48,38 @@ export default {
           {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
-            callback: () => {
-              console.log('disableSelected')
+            can: ({ selectedRows }) => {
+              console.log('can select rows lenght: ', selectedRows.length)
+              return selectedRows.length > 0
+            },
+            callback({ selectedRows, reloadTable }) {
+              const url = '/api/v1/users/users/'
+              const data = selectedRows.map(row => {
+                return { id: row.id, is_active: false }
+              })
+              if (data.length === 0) {
+                return
+              }
+              vm.$axios.patch(url, data).then(() => {
+                reloadTable()
+              })
             }
           },
           {
             name: 'activateSelected',
             title: this.$t('common.activateSelected'),
-            callback: () => {
-              console.log('activateSelected')
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: ({ selectedRows, reloadTable }) => {
+              const url = '/api/v1/users/users/'
+              const data = selectedRows.map(row => {
+                return { id: row.id, is_active: true }
+              })
+              if (data.length === 0) {
+                return
+              }
+              vm.$axios.patch(url, data).then(() => {
+                reloadTable()
+              })
             }
           }
         ]

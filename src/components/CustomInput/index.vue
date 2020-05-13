@@ -20,8 +20,14 @@
 <script>
 export default {
   props: {
-    value: Array,
-    title: String,
+    value: {
+      type: Array,
+      default: () => []
+    },
+    title: {
+      type: String,
+      default: ''
+    },
     placeholder: {
       type: String,
       default: () => ''
@@ -81,14 +87,17 @@ export default {
   .el-select .el-input {
     width: 130px;
   }
-  .input-with-select{
+
+  .input-with-select {
     flex-shrink: 1;
     width: 80% !important;
   }
+
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
   }
-  .el-select /deep/ .el-input__inner{
+
+  .el-select /deep/ .el-input__inner {
     width: 100px;
   }
 </style>

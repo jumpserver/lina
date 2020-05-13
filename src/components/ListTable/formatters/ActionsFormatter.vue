@@ -118,9 +118,6 @@ export default {
       return this.cleanedActions.slice(2, this.cleanedActions.length)
     }
   },
-  mounted() {
-    console.log(this.actions)
-  },
   methods: {
     cleanBoolean(item, attr) {
       const ok = item[attr]
