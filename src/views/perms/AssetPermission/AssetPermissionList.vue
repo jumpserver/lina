@@ -1,18 +1,14 @@
 <template>
-  <AssetPermissionTree :tree-setting="treeSetting" :table-config="tableConfig">
-    <AssetPermissionList :table-config="tableConfig" :header-actions="headerActions" />
-  </AssetPermissionTree>
+  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
 <script>
-import AssetPermissionTree from './AssetPermissionTree'
-import AssetPermissionList from './AssetPermissionList'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    AssetPermissionTree,
-    AssetPermissionList
+    GenericTreeListPage
   },
   data() {
     return {
@@ -59,11 +55,11 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser')
-          },
-          actions: {
-            updateRoute: 'AssetPermissionUpdate',
-            detailRoute: 'AssetPermissionDetail'
           }
+        },
+        actions: {
+          updateRoute: 'AssetPermissionUpdate',
+          detailRoute: 'AssetPermissionDetail'
         }
       },
       headerActions: {
@@ -97,6 +93,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>

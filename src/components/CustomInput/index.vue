@@ -20,7 +20,7 @@
 <script>
 export default {
   props: {
-    value: String,
+    value: Array,
     title: String,
     placeholder: {
       type: String,
