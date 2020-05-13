@@ -58,6 +58,15 @@ export default {
     color: #c4c4c4;
   }
 
+  .ibox-title h5 {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    text-overflow: ellipsis;
+    float: left;
+  }
+
   .ibox-tools {
     display: block;
     float: none;
