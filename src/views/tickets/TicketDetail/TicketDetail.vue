@@ -7,24 +7,24 @@
             <el-avatar :src="imageUrl" class="header-avatar" />
           </a>
           <div class="media-body ">
-            <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ object.date_created }}</small>
+            <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
             <br>
-            <small class="text-muted">{{ object.date_created }} </small>
+            <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
             <div style="padding-top: 10px">
               <span v-html="object.body" />
             </div>
           </div>
         </div>
-        <template v-if="object.status === 'closed'">
+        <template v-if="comments">
           <div v-for="item in comments" :key="item.user_display + item.body">
             <div class="feed-element">
               <a href="#" class="pull-left">
                 <el-avatar :src="imageUrl" class="header-avatar" />
               </a>
               <div class="media-body ">
-                <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ item.date_created }}</small>
+                <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
                 <br>
-                <small class="text-muted">{{ item.date_created }}</small>
+                <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
                 <div style="padding-top: 10px">
                   {{ item.body }}
                 </div>
@@ -32,15 +32,17 @@
             </div>
           </div>
         </template>
-        <el-form ref="comments" :model="form" label-width="80px" style="padding-top: 20px">
-          <el-form-item label="审批备注">
-            <el-input v-model="form.comments" type="textarea" :autosize="{ minRows: 4 }" />
+        <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
+          <el-form-item label="回复">
+            <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
           </el-form-item>
           <el-form-item style="float: right">
-            <el-button type="primary" size="small" :disabled="object.status === 'closed'" @click="handleApprove"><i class="fa fa-check" />同意</el-button>
-            <el-button type="warning" size="small" :disabled="object.status === 'closed'" @click="handleReject"><i class="fa fa-ban" />拒绝</el-button>
-            <el-button type="danger" size="small" :disabled="object.status === 'closed'" @click="handleClosed"><i class="fa fa-times" />关闭</el-button>
-            <el-button type="info" size="small" :disabled="object.status === 'closed'" @click="handleComment"><i class="fa fa-pencil" />备注</el-button>
+            <template v-if="hasActionPerm">
+              <el-button :disabled="object.status === 'closed'" @click="handleApprove" type="primary" size="small"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" @click="handleReject" type="warning" size="small"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
+            </template>
+            <el-button :disabled="object.status === 'closed'" @click="handleClosed" type="danger" size="small"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" @click="handleComment" type="info" size="small"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -50,6 +52,8 @@
 
 <script>
 import { DetailCard } from '@/components'
+import { formatTime, getDateTimeStamp } from '@/utils/index'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'TicketDetail',
@@ -64,12 +68,11 @@ export default {
   },
   data() {
     return {
-      title: '登录复核a-2(a-2)',
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
       },
-      comments: []
+      comments: ''
     }
   },
   computed: {
@@ -77,6 +80,7 @@ export default {
       return this.object.title
     },
     detailCardItems() {
+      const vm = this
       return [
         {
           key: this.$t('tickets.user'),
@@ -88,7 +92,15 @@ export default {
         },
         {
           key: this.$t('tickets.status'),
-          value: this.object.status
+          value: this.object.status,
+          callback: function(row, data) {
+            const open = vm.$t('common.Open')
+            const close = vm.$t('common.Close')
+            if (data === 'open') {
+              return <el-button type='primary' size='mini'>{open}</el-button>
+            }
+            return <el-button type='danger' size='mini'>{close}</el-button>
+          }
         },
         {
           key: this.$t('tickets.Assignees'),
@@ -96,33 +108,78 @@ export default {
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: '需要处理'
+          value: this.comments,
+          callback: function(row, data) {
+            if (data.length !== 0) {
+              return <span>{data[0].user_display}</span>
+            }
+            return <span></span>
+          }
         },
         {
-          key: this.$t('common.dateCreated'),
-          value: this.object.date_created
+          key: this.$t('common.DateCreated'),
+          value: toSafeLocalDateStr(this.object.date_created)
         }
       ]
+    },
+    hasActionPerm() {
+      return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
     }
   },
   mounted() {
     const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
     this.$axios.get(url).then(res => {
       this.comments = res
-    }).catch(err => this.$message.error(this.$t(err)))
+    }).catch(err => {
+      this.$message.error(err)
+    })
   },
   methods: {
+    formatTime(dateStr) {
+      return formatTime(getDateTimeStamp(dateStr))
+    },
+    toSafeLocalDateStr(dataStr) {
+      return toSafeLocalDateStr(dataStr)
+    },
+    reloadPage() {
+      window.location.reload()
+    },
+    createComment(successCallback) {
+      const commentText = this.form.comments
+      const ticketId = this.object.id
+      const commentUrl = `/api/v1/tickets/tickets/${ticketId}/comments/`
+      if (!commentText) { return }
+      const body = {
+        body: commentText,
+        ticket: ticketId
+      }
+      this.$axios.post(commentUrl, body).then(res => {
+        if (successCallback) {
+          successCallback()
+        } else {
+          this.reloadPage()
+        }
+      })
+    },
     handleApprove() {
-      console.log('点击同意=====================')
+      this.createComment(function() {})
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { action: 'approve' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleReject() {
-      console.log('点击拒绝=====================')
+      this.createComment(function() {})
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { action: 'reject' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleClosed() {
-      console.log('点击关闭=====================')
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { status: 'closed' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleComment() {
-      console.log('点击备注=====================')
+      this.createComment()
     }
   }
 }
@@ -131,6 +188,7 @@ export default {
 <style scoped>
   .feed-activity-list {
     padding-top: 20px;
+    line-height: 1.5;
   }
   .feed-activity-list .feed-element {
     border-bottom: 1px solid #e7eaec;
@@ -142,10 +200,7 @@ export default {
     padding-top: 15px;
     padding-bottom: 15px;
   }
-  .feed-element,
-  .feed-element .media {
-    margin-top: 15px;
-  }
+
   .feed-element,
   .media-body {
     overflow: hidden;
@@ -156,21 +211,6 @@ export default {
   .feed-element .header-avatar {
     width: 38px;
     height: 38px;
-  }
-  .feed-element .well {
-    border: 1px solid #e7eaec;
-    box-shadow: none;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    padding: 10px 20px;
-    font-size: 11px;
-    line-height: 16px;
-  }
-  .feed-element .actions {
-    margin-top: 10px;
-  }
-  .feed-element .photos {
-    margin: 10px 0;
   }
   .text-muted {
     color: #888888;

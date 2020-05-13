@@ -69,10 +69,10 @@
     "SystemUserCreate": "创建系统用户",
     "SystemUserUpdate": "更新系统用户",
     "": "",
-    "DatabaseApp": "",
-    "DatabaseAppDetail": "",
-    "RemoteApp": "",
-    "RemoteAppDetail": ""
+    "DatabaseApp": "Database apps",
+    "DatabaseAppDetail": "Database app detail",
+    "RemoteApp": "Remote apps",
+    "RemoteAppDetail": "Remote app detail"
   },
   "common": {
     "Other": "Other",
@@ -105,6 +105,7 @@
     "BasicInfo": "Basic info",
     "quickUpdate": "Quick update",
     "MoreActions": "Actions",
+    "DateCreated": "Date created",
     "nav": {
       "Help": "Help",
       "Docs": "Docs",
@@ -144,12 +145,14 @@
       "cancel": ""
     },
     "Auth": "",
-    "Command filter": "",
+    "Command filter": "Command filter",
     "Others": "",
     "updateFailedMsg": "",
-    "confirm": "",
-    "import": "",
-    "IsValid": ""
+    "confirm": "Confirm",
+    "import": "Import",
+    "IsValid": "Is valid",
+    "Open": "Open",
+    "Close": "Close"
   },
   "applications": {
     "applications": "Applications",
@@ -737,6 +740,10 @@
     "MyTickets": "",
     "AssignedMe": "",
     "title": "",
-    "date": ""
+    "date": "",
+    "Accept": "",
+    "Reject": "",
+    "Close": "",
+    "Comment": ""
   }
 }

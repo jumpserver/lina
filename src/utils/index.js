@@ -105,3 +105,8 @@ export function param2Obj(url) {
       '"}'
   )
 }
+
+// 将标准时间转换成时间戳
+export function getDateTimeStamp(dateStr) {
+  return Date.parse(dateStr.replace(/-/gi, '/'))
+}

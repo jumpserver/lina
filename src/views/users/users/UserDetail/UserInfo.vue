@@ -4,8 +4,8 @@
       <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="relationConfig" />
+      <QuickActions :actions="quickActions" type="primary" />
+      <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
@@ -244,6 +244,9 @@ export default {
       this.$log.debug('Group has changed')
       this.relationConfig.hasObjectsId = iNew.users
     }
+  },
+  mounted() {
+    console.log(this.object)
   },
   methods: {
   }
