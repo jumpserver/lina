@@ -8,12 +8,12 @@ export const CUSTOM = 'custom'
 export const ALL_TYPES = [CHROME, MYSQL_WORKBENCH, VMWARE_CLIENT, CUSTOM]
 
 function gen_type_fields_config(fields) {
-  const config = {}
+  const config = []
   fields.forEach((item, index, array) => {
-    config[item] = {
-      prop: item,
+    config.push({
+      id: item, el: {}, attrs: {}, type: 'input', prop: item,
       label: i18n.t('applications.' + item)
-    }
+    })
   })
   return config
 }
