@@ -29,7 +29,7 @@ export default {
     return {
       systemUserRelationConfig: {
         icon: 'fa-info',
-        title: this.$t('perms.Add System User to this permission'),
+        title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           processResults: (data) => {

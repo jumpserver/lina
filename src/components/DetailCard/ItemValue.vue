@@ -3,7 +3,7 @@ export default {
   name: 'ItemValue',
   props: {
     value: {
-      type: [String, Function],
+      type: [String, Function, Array],
       default: ''
     },
     item: {
@@ -11,9 +11,9 @@ export default {
       default: () => ({})
     },
     callback: {
-      type: Function
+      type: Function,
+      default: null
     }
-
   },
   render(h) {
     if (typeof this.callback === 'function') {

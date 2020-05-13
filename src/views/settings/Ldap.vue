@@ -42,7 +42,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button @click="dialogVisible = false">{{ $t('common.actions.Cancel') }}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('common.actions.cancel') }}</el-button>
         <el-button type="primary" @click="testUerLoginClick">{{ $t('common.confirm') }}</el-button>
       </div>
     </el-dialog>
@@ -58,7 +58,7 @@
         @error="handlerListTableXHRError($event)"
       />
       <div slot="footer">
-        <el-button @click="dialogLdapUserImport = false">{{ $t('common.actions.Cancel') }}</el-button>
+        <el-button @click="dialogLdapUserImport = false">{{ $t('common.actions.cancel') }}</el-button>
         <el-button type="primary" @click="importUserClick">{{ $t('common.import') }}</el-button>
       </div>
     </el-dialog>

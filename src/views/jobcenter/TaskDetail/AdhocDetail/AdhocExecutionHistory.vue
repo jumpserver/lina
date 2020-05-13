@@ -26,31 +26,31 @@ export default {
             }
           },
           stat: {
-            label: this.$t('jobcenter.Stat'),
+            label: this.$t('jobcenter.stat'),
             formatter: function(row) {
               return '请求的api里没有该数据'
             }
           },
           ratio: {
-            label: this.$t('jobcenter.Ratio'),
+            label: this.$t('jobcenter.ratio'),
             formatter: function(row) {
               return '请求的api里没有该数据'
             }
           },
           is_finished: {
-            label: this.$t('jobcenter.IsFinished')
+            label: this.$t('jobcenter.isFinished')
           },
           is_success: {
-            label: this.$t('jobcenter.IsSuccess')
+            label: this.$t('jobcenter.isSuccess')
           },
           timedelta: {
-            label: this.$t('jobcenter.Time'),
+            label: this.$t('jobcenter.time'),
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
           },
           adhoc_short_id: {
-            label: this.$t('jobcenter.Version')
+            label: this.$t('jobcenter.version')
           },
           actions: {
             prop: 'id',

@@ -31,7 +31,7 @@ export default {
     return {
       RunSuccessConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.Last run success hosts'),
+        title: this.$t('jobcenter.lastRunSuccessHosts'),
         content: [
           {
             hostname: 'linux',
@@ -41,7 +41,7 @@ export default {
       },
       RunFailedConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.Last run failed hosts'),
+        title: this.$t('jobcenter.lastRunFailedHosts'),
         headerColor: 'danger',
         content: [
           {
@@ -63,27 +63,27 @@ export default {
           value: this.object.id
         },
         {
-          key: this.$t('jobcenter.TaskName'),
+          key: this.$t('jobcenter.taskName'),
           value: this.object.task_display.replace('@', '')
         },
         {
-          key: this.$t('jobcenter.Version'),
+          key: this.$t('jobcenter.version'),
           value: this.object.adhoc_short_id
         },
         {
-          key: this.$t('jobcenter.DateStart'),
+          key: this.$t('jobcenter.dateStart'),
           value: toSafeLocalDateStr(this.object.date_start)
         },
         {
-          key: this.$t('jobcenter.TimeDelta'),
+          key: this.$t('jobcenter.timeDelta'),
           value: this.object.timedelta.toFixed(2) + 's'
         },
         {
-          key: this.$t('jobcenter.IsFinished'),
+          key: this.$t('jobcenter.isFinished'),
           value: this.toChoicesDisplay(this.object.is_finished)
         },
         {
-          key: this.$t('jobcenter.IsSuccess'),
+          key: this.$t('jobcenter.isSuccess'),
           value: this.toChoicesDisplay(this.object.is_success)
         }
       ]

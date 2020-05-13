@@ -31,7 +31,7 @@ export default {
     return {
       RunSuccessConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.Last run success hosts'),
+        title: this.$t('jobcenter.lastRunSuccessHosts'),
         content: [
           {
             hostname: 'linux',
@@ -41,7 +41,7 @@ export default {
       },
       RunFailedConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.Last run failed hosts'),
+        title: this.$t('jobcenter.lastRunFailedHosts'),
         headerColor: 'danger',
         content: [
           {
@@ -64,42 +64,42 @@ export default {
           value: this.object.id
         },
         {
-          key: this.$t('common.table.Name'),
+          key: this.$t('common.name'),
           value: this.object.name
         },
         {
-          key: this.$t('jobcenter.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('jobcenter.TotalVersions'),
+          key: this.$t('jobcenter.totalVersions'),
           value: JSON.stringify(this.object.summary.total)
         },
         {
-          key: this.$t('jobcenter.LatestVersion'),
+          key: this.$t('jobcenter.latestVersion'),
           value: this.object.latest_execution.adhoc_short_id,
           callback: function(row, data) {
             return <a href=''>{ data }</a>
           }
         },
         {
-          key: this.$t('jobcenter.LastRun'),
+          key: this.$t('jobcenter.lastRun'),
           value: toSafeLocalDateStr(this.object.latest_execution.date_finished)
         },
         {
-          key: this.$t('jobcenter.TimeDelta'),
+          key: this.$t('jobcenter.timeDelta'),
           value: this.object.latest_execution.timedelta.toFixed(2) + 's'
         },
         {
-          key: this.$t('jobcenter.IsFinished'),
+          key: this.$t('jobcenter.isFinished'),
           value: this.toChoicesDisplay(this.object.latest_execution.is_finished)
         },
         {
-          key: this.$t('jobcenter.IsSuccess'),
+          key: this.$t('jobcenter.isSuccess'),
           value: this.toChoicesDisplay(this.object.latest_execution.is_success)
         },
         {
-          key: this.$t('jobcenter.Contents'),
+          key: this.$t('jobcenter.contents'),
           value: 'api 没有该数据'
         }
       ]

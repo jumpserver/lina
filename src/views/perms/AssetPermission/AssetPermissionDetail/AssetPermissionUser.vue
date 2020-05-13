@@ -42,7 +42,7 @@ export default {
           },
           delete_action: {
             prop: 'user',
-            label: this.$t('common.table.Actions'),
+            label: this.$t('common.Actions'),
             align: 'center',
             width: 150,
             objects: this.object.users,
@@ -67,7 +67,7 @@ export default {
       },
       userReletionConfig: {
         icon: 'fa-user',
-        title: this.$t('perms.Add user to this permission'),
+        title: this.$t('perms.addUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {
@@ -102,7 +102,7 @@ export default {
       },
       groupReletionConfig: {
         icon: 'fa-group',
-        title: this.$t('perms.Add user group to this permission'),
+        title: this.$t('perms.addUserGroupToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/groups/'
         },

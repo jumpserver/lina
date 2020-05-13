@@ -7,16 +7,17 @@
 </template>
 
 <script>
-import { GenericDetailPage, TabPage } from '@/layout/components'
+import { GenericDetailPage } from '@/layout/components'
 import GroupGrantedAssets from './GroupGrantedAssets'
 import GroupInfo from './GroupInfo'
 
 export default {
   components: {
     GenericDetailPage,
+    // eslint-disable-next-line vue/no-unused-components
     GroupGrantedAssets,
-    GroupInfo,
-    TabPage
+    // eslint-disable-next-line vue/no-unused-components
+    GroupInfo
   },
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
         activeMenu: 'GroupInfo',
         submenu: [
           {
-            title: this.$t('common.tabs.BasicInfo'),
+            title: this.$t('common.BasicInfo'),
             name: 'GroupInfo'
           },
           {

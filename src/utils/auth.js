@@ -14,15 +14,19 @@ export function setToken(token) {
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
+
 export function getCurrentOrg() {
-  if (!Cookies.getJSON(CurrentOrg)) {
-    setCurrentOrg({ id: '', name: 'DEFAULT' })
+  let org = Cookies.getJSON(CurrentOrg)
+  if (!org) {
+    org = { id: '', name: 'DEFAULT' }
+    setCurrentOrg(org)
+    return org
   }
-  return Cookies.getJSON(CurrentOrg)
+  return org
 }
 
-export function setCurrentOrg(token) {
-  Cookies.set(CurrentOrg, token)
+export function setCurrentOrg(org) {
+  Cookies.set(CurrentOrg, org)
   // 切换组织后重新刷新页面
   window.location.reload(true)
 }

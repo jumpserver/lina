@@ -25,15 +25,15 @@ export default {
         activeMenu: 'DatabaseAppPermissionDetail',
         submenu: [
           {
-            title: this.$t('perms.DatabaseAppPermissionDetail'),
+            title: this.$t('perms.databaseAppPermissionDetail'),
             name: 'DatabaseAppPermissionDetail'
           },
           {
-            title: this.$t('perms.UsersAndUserGroups'),
+            title: this.$t('perms.usersAndUserGroups'),
             name: 'DatabaseAppPermissionUser'
           },
           {
-            title: this.$t('perms.DatabaseApp'),
+            title: this.$t('perms.databaseApp'),
             name: 'DatabaseAppPermissionDatabaseApp'
           }
         ]

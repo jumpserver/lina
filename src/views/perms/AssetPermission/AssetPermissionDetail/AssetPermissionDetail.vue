@@ -30,7 +30,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.actions.Activate'),
+          title: this.$t('common.Active'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -55,48 +55,48 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.table.Name'),
+          key: this.$t('common.name'),
           value: this.object.name
         },
         {
-          key: this.$t('perms.UserCount'),
+          key: this.$t('perms.userCount'),
           // value: this.getDataLength(this.object.users)
           value: JSON.stringify(this.object.users_amount)
         },
         {
-          key: this.$t('perms.UserGroupCount'),
+          key: this.$t('perms.userGroupCount'),
           value: JSON.stringify(this.object.assets_amount)
         },
         {
-          key: this.$t('perms.AssetCount'),
+          key: this.$t('perms.assetCount'),
           value: JSON.stringify(this.object.users_amount)
         },
         {
-          key: this.$t('perms.NodeCount'),
+          key: this.$t('perms.nodeCount'),
           value: JSON.stringify(this.object.nodes_amount)
         },
         {
-          key: this.$t('perms.SystemUserCount'),
+          key: this.$t('perms.systemUserCount'),
           value: JSON.stringify(this.object.system_users_amount)
         },
         {
-          key: this.$t('perms.DateStart'),
+          key: this.$t('perms.dateStart'),
           value: 'api没有这个字段'
         },
         {
-          key: this.$t('perms.DateExpired'),
+          key: this.$t('common.dateExpired'),
           value: 'api没有这个字段'
         },
         {
-          key: this.$t('perms.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: this.object.date_created
         },
         {
-          key: this.$t('perms.CreatedBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.comment'),
+          key: this.$t('common.Comment'),
           value: 'api没有这个字段'
         }
       ]

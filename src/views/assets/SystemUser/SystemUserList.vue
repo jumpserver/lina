@@ -17,14 +17,14 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('common.table.Name'),
+            label: this.$t('common.Name'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'SystemUserDetail'
           },
           {
             prop: 'username',
-            label: this.$t('common.username'),
+            label: this.$t('common.Username'),
             sortable: 'custom'
           },
           {
@@ -44,7 +44,7 @@ export default {
           },
           {
             prop: 'comment',
-            label: this.$t('common.comment'),
+            label: this.$t('common.Comment'),
             sortable: 'custom'
           },
           {

@@ -1,18 +1,14 @@
 <template>
-  <AssetPermissionTree :tree-setting="treeSetting" :table-config="tableConfig">
-    <AssetPermissionList :table-config="tableConfig" :header-actions="headerActions" />
-  </AssetPermissionTree>
+  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
 <script>
-import AssetPermissionTree from './AssetPermissionTree'
-import AssetPermissionList from './AssetPermissionList'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
-    AssetPermissionTree,
-    AssetPermissionList
+    GenericTreeListPage
   },
   data() {
     return {
@@ -30,11 +26,11 @@ export default {
         hasTree: true,
         tagSearch: [
           { label: this.$t('common.Name'), key: 'name' },
-          { label: this.$t('perms.IsValid'), key: 'is_valid' },
-          { label: this.$t('common.username'), key: 'username' },
+          { label: this.$t('perms.isValid'), key: 'is_valid' },
+          { label: this.$t('common.Username'), key: 'username' },
           { label: this.$t('perms.UserGroups'), key: 'user_group' },
           { label: this.$t('perms.IP'), key: 'ip' },
-          { label: this.$t('perms.Hostname'), key: 'hostname' },
+          { label: this.$t('perms.hostName'), key: 'hostname' },
           { label: this.$t('perms.Node'), key: 'node' },
           { label: this.$t('perms.SystemUser'), key: 'system_user' },
           { label: '继承(先占位)', key: 'all=0' }
@@ -59,11 +55,11 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser')
-          },
-          actions: {
-            updateRoute: 'AssetPermissionUpdate',
-            detailRoute: 'AssetPermissionDetail'
           }
+        },
+        actions: {
+          updateRoute: 'AssetPermissionUpdate',
+          detailRoute: 'AssetPermissionDetail'
         }
       },
       headerActions: {
@@ -75,7 +71,7 @@ export default {
         extraMoreActions: [
           {
             name: 'RefreshPermissionCache',
-            title: this.$t('perms.RefreshPermissionCache'),
+            title: this.$t('perms.refreshPermissionCache'),
             type: 'primary',
             has: true,
             callback: this.HandleRefreshPermissionCache
@@ -88,15 +84,15 @@ export default {
     HandleRefreshPermissionCache() {
       const url = '/api/v1/perms/asset-permissions/cache/refresh/'
       this.$axios.get(url).then(res => {
-        this.$message.success(this.$t('perms.ReFreshSuccess'))
+        this.$message.success(this.$t('perms.refreshSuccess'))
       }).catch(err => {
-        this.$message.error(this.$t('perms.ReFreshFail') + ':' + err)
+        this.$message.error(this.$t('perms.refreshFail') + ':' + err)
       })
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>

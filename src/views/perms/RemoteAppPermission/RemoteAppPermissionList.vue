@@ -21,17 +21,17 @@ export default {
         ],
         columnsMeta: {
           users_amount: {
-            label: this.$t('users.users')
+            label: this.$t('users.Users')
           },
           user_groups_amount: {
-            label: this.$t('users.userGroups')
+            label: this.$t('users.UserGroups')
           },
           remote_apps_amount: {
-            label: this.$t('assets.remoteApps')
+            label: this.$t('assets.RemoteApps')
           },
           system_users_amount: {
             formatter: LengthFormatter,
-            label: this.$t('assets.systemUsers')
+            label: this.$t('assets.SystemUsers')
           }
         }
       },

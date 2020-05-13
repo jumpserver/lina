@@ -23,14 +23,14 @@ export default {
         hasSelection: false,
         hasTree: true,
         tagSearch: [
-          { label: this.$t('common.name'), key: 'name' },
+          { label: this.$t('common.Name'), key: 'name' },
           { label: this.$t('common.isValid'), key: 'is_valid' },
-          { label: this.$t('users.username'), key: 'username' },
-          { label: this.$t('users.userGroups'), key: 'user_group' },
+          { label: this.$t('users.Username'), key: 'username' },
+          { label: this.$t('users.UserGroups'), key: 'user_group' },
           { label: this.$t('assets.IP'), key: 'ip' },
-          { label: this.$t('assets.hostname'), key: 'hostname' },
-          { label: this.$t('assets.node'), key: 'node' },
-          { label: this.$t('assets.systemUser'), key: 'system_user' },
+          { label: this.$t('assets.Hostname'), key: 'hostname' },
+          { label: this.$t('assets.Node'), key: 'node' },
+          { label: this.$t('assets.SystemUser'), key: 'system_user' },
           { label: '继承(先占位)', key: 'all=0' }
         ],
         columns: [
@@ -43,19 +43,19 @@ export default {
             formatter: ExpandAssetPermissionFormatter
           },
           users_amount: {
-            label: this.$t('users.users')
+            label: this.$t('users.Users')
           },
           user_groups_amount: {
-            label: this.$t('users.userGroups')
+            label: this.$t('users.UserGroups')
           },
           assets_amount: {
-            label: this.$t('users.assets')
+            label: this.$t('assets.Assets')
           },
           nodes_amount: {
-            label: this.$t('assets.nodes')
+            label: this.$t('assets.Nodes')
           },
           system_users_amount: {
-            label: this.$t('assets.systemUsers')
+            label: this.$t('assets.SystemUsers')
           },
           actions: {
             updateRoute: 'AssetPermissionUpdate',

@@ -30,7 +30,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('common.actions.Activate'),
+          title: this.$t('common.Active'),
           type: 'switcher',
           attrs: {
             model: this.object.is_active
@@ -55,43 +55,43 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.table.Name'),
+          key: this.$t('common.name'),
           value: this.object.name
         },
         {
-          key: this.$t('perms.UserCount'),
+          key: this.$t('perms.userCount'),
           value: this.getDataLength(this.object.users)
         },
         {
-          key: this.$t('perms.UserGroupCount'),
+          key: this.$t('perms.userGroupCount'),
           value: this.getDataLength(this.object.user_groups)
         },
         {
-          key: this.$t('perms.RemoteAppCount'),
+          key: this.$t('perms.remoteAppCount'),
           value: this.getDataLength(this.object.database_apps)
         },
         {
-          key: this.$t('perms.SystemUserCount'),
+          key: this.$t('perms.systemUserCount'),
           value: this.getDataLength(this.object.system_users)
         },
         {
-          key: this.$t('perms.DateStart'),
+          key: this.$t('perms.dateStart'),
           value: toSafeLocalDateStr(this.object.date_start)
         },
         {
-          key: this.$t('perms.DateExpired'),
+          key: this.$t('common.dateExpired'),
           value: toSafeLocalDateStr(this.object.date_expired)
         },
         {
-          key: this.$t('perms.DateCreated'),
+          key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('perms.CreatedBy'),
+          key: this.$t('common.createdBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.comment'),
+          key: this.$t('common.Comment'),
           value: this.object.comment
         }
       ]

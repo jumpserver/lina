@@ -14,7 +14,6 @@ module.exports = {
     window: true,
     _: true
   },
-
   // add your custom rules here
   // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {

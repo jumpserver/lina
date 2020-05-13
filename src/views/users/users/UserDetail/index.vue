@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { GenericDetailPage, TabPage } from '@/layout/components'
+import { GenericDetailPage } from '@/layout/components'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserGrantedRemoteApps from './UserGrantedRemoteApps'
@@ -25,8 +25,7 @@ export default {
     UserGrantedRemoteApps,
     UserRemoteAppPermissionRules,
     UserGrantedDatabases,
-    UserDatabasePermissionRules,
-    TabPage
+    UserDatabasePermissionRules
   },
   data() {
     return {
@@ -35,7 +34,7 @@ export default {
         activeMenu: 'UserInfo',
         submenu: [
           {
-            title: this.$t('common.tabs.BasicInfo'),
+            title: this.$t('common.BasicInfo'),
             name: 'UserInfo'
           },
           {
