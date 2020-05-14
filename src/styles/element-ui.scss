@@ -375,3 +375,7 @@ td .el-button.el-button--mini {
   color: #000;
   opacity: .2;
 }
+
+.el-table__header thead tr th {
+  border-bottom: 1.5px solid #e7e7e7 !important;
+}
