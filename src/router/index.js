@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import i18n from '@/i18n/i18n'
 
 Vue.use(Router)
 
@@ -59,7 +60,7 @@ export const adminRoutes = [
         path: 'dashboard',
         name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard', icon: 'dashboard' }
+        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
       }
     ]
   },
@@ -69,7 +70,7 @@ export const adminRoutes = [
     redirect: '/users/users/',
     name: 'Users',
     meta: {
-      title: 'Users',
+      title: i18n.t('route.Users'),
       icon: 'users'
     },
     children: UsersRoute
@@ -79,7 +80,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/assets/assets/',
     name: 'assets',
-    meta: { title: 'Assets', icon: 'inbox' },
+    meta: { title: i18n.t('route.Assets'), icon: 'inbox' },
     children: AssetsRoute
   },
   {
@@ -87,7 +88,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/applications/remote-apps/',
     name: 'applications',
-    meta: { title: 'Applications', icon: 'th' },
+    meta: { title: i18n.t('route.Applications'), icon: 'th' },
     children: ApplicationsRoute
   },
   {
@@ -95,7 +96,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/perms/asset-permissions/',
     name: 'Perms',
-    meta: { title: 'Perms', icon: 'edit' },
+    meta: { title: i18n.t('route.Perms'), icon: 'edit' },
     children: PermsRoute
   },
   {
@@ -103,7 +104,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/terminal/session-online/',
     name: 'Sessions',
-    meta: { title: 'Sessions', icon: 'rocket' },
+    meta: { title: i18n.t('route.Sessions'), icon: 'rocket' },
     children: SessionsRoute
   },
   {
@@ -111,7 +112,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/ops/tasks/',
     name: 'JobCenter',
-    meta: { title: 'JobCenter', icon: 'coffee' },
+    meta: { title: i18n.t('route.JobCenter'), icon: 'coffee' },
     children: OpsRoutes
   },
   {
@@ -125,7 +126,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/audits/login-log/',
     name: 'Audits',
-    meta: { title: 'Audits', icon: 'history' },
+    meta: { title: i18n.t('route.Audits'), icon: 'history' },
     children: AuditsRoutes
   },
   ...requireContext.keys().map(key => requireContext(key).default),
@@ -137,7 +138,7 @@ export const adminRoutes = [
       path: 'settings',
       name: 'Settings',
       component: () => import('@/views/settings/index'),
-      meta: { title: 'Settings', icon: 'gears' }
+      meta: { title: i18n.t('route.Settings'), icon: 'gears' }
     }]
   },
   { path: '*', redirect: '/404', hidden: true }
@@ -158,7 +159,7 @@ export const userRoutes = [
         path: 'dashboard',
         name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard', icon: 'dashboard' }
+        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
       }
     ]
   },

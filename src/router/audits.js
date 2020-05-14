@@ -1,32 +1,34 @@
+import i18n from '@/i18n/i18n'
+
 export default [
   {
     path: 'login-log',
     name: 'LoginLog',
     component: () => import('@/views/audits/LoginLogList'),
-    meta: { title: 'LoginLog' }
+    meta: { title: i18n.t('route.LoginLog') }
   },
   {
     path: 'ftp-log',
     name: 'FtpLog',
     component: () => import('@/views/audits/FTPLogList'),
-    meta: { title: 'FtpLog' }
+    meta: { title: i18n.t('route.FtpLog') }
   },
   {
     path: 'operate-log',
     name: 'OperateLog',
     component: () => import('@/views/audits/OperateLogList'),
-    meta: { title: 'OperateLog' }
+    meta: { title: i18n.t('route.OperateLog') }
   },
   {
     path: 'password-change-log',
     name: 'PasswordChangeLog',
     component: () => import('@/views/audits/PasswordChangeLogList'),
-    meta: { title: 'PasswordChangeLog' }
+    meta: { title: i18n.t('route.PasswordChangeLog') }
   },
   {
     path: 'command-execution-log',
     name: 'BatchCommand',
     component: () => import('@/views/audits/CommandExecutionList'),
-    meta: { title: 'BatchCommand' }
+    meta: { title: i18n.t('route.BatchCommand') }
   }
 ]
