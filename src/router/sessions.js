@@ -1,16 +1,10 @@
 import i18n from '@/i18n/i18n'
 export default [
   {
-    path: 'session-online',
-    name: 'SessionOnlineList',
-    component: () => import('@/views/sessions/SessionOnlineList'),
-    meta: { title: i18n.t('route.SessionOnline') }
-  },
-  {
-    path: 'session-offline',
-    name: 'SessionOfflineList',
-    component: () => import('@/views/sessions/SessionOfflineList'),
-    meta: { title: i18n.t('route.SessionOffline') }
+    path: 'session',
+    name: 'SessionList',
+    component: () => import('@/views/sessions/SessionList/index'),
+    meta: { title: i18n.t('route.Sessions') }
   },
   {
     path: 'command',
