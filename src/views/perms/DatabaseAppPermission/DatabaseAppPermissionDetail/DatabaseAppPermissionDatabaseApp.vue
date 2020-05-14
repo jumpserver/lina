@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" v-loading="loading" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="databaseAppReletionConfig" />
@@ -29,7 +29,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       tableConfig: {
         url: `/api/v1/perms/database-app-permissions/${this.object.id}/database-apps/all/`,
         columns: [
@@ -82,14 +81,13 @@ export default {
               databaseapp: v.value
             }
           })
-          this.loading = true
-          const that = this
-          const res = this.$axios.post(relationUrl, data)
-          setTimeout(function() {
-            that.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.getList()
-            that.loading = false
-          }, 500)
-          return res
+          return this.$axios.post(relationUrl, data)
+        },
+        onAddSuccess: (objects, that) => {
+          this.$log.debug('Select value', that.select2.value)
+          that.iHasObjects = [...that.iHasObjects, ...objects]
+          that.$refs.select2.clearSelected()
+          window.location.reload()
         }
       },
       systemUserReletionConfig: {
@@ -118,11 +116,29 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         },
+        onAddSuccess: (objects, that) => {
+          this.$log.debug('Select value', that.select2.value)
+          that.iHasObjects = [...that.iHasObjects, ...objects]
+          that.$refs.select2.clearSelected()
+          window.location.reload()
+        },
         performDelete: (item) => {
           const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/database-app-permissions-system-users-relations/?databaseapppermission=${objectId}&systemuser=${itemId}`
           return this.$axios.delete(relationUrl)
+        },
+        onDeleteSuccess: (obj, that) => {
+          // 从hasObjects中移除这个object
+          const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
+          that.iHasObjects.splice(theRemoveIndex, 1)
+          // 从disabled values中移除这个value
+          while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
+            const i = that.select2.disabledValues.indexOf(obj.value)
+            this.$log.debug('disabled values remove index: ', i)
+            that.select2.disabledValues.splice(i, 1)
+          }
+          window.location.reload()
         }
       }
     }
