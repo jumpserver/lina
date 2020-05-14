@@ -1,7 +1,7 @@
 export default [
   {
     path: 'users',
-    component: () => import('./users/UserList.vue'), // Parent router-view
+    component: () => import('@/views/users/users/UserList.vue'), // Parent router-view
     name: 'UserList',
     meta: { title: 'UserList' }
   },

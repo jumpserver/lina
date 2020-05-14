@@ -140,15 +140,7 @@ export const adminRoutes = [
       meta: { title: 'Settings', icon: 'gears' }
     }]
   },
-  {
-    path: '/ops/celery/task/:id',
-    component: () => import('@/views/jobcenter/CeleryTaskLog'),
-    name: 'CeleryTaskLog',
-    hidden: true,
-    meta: { title: 'CeleryTaskLog' }
-  },
   { path: '*', redirect: '/404', hidden: true }
-
 ]
 /**
  * user routes
