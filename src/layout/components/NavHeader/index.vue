@@ -16,14 +16,7 @@
         </el-dropdown>
       </div>
       <div class="header-item">
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="item of supportLanguages" :key="item.code" @click.native="changeLangTo(item)">{{ item.title }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <Language />
       </div>
       <div class="header-item header-profile">
         <AccountDropdown />
@@ -36,12 +29,14 @@
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
+import Language from './Language'
 
 export default {
   components: {
     // Breadcrumb,
     Hamburger,
-    AccountDropdown
+    AccountDropdown,
+    Language
   },
   data() {
     return {
@@ -63,16 +58,7 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar'
-    ]),
-    currentLang() {
-      const cookieCode = this.$cookie.get(this.LANG_COOKIE_NAME)
-      let lang = this.supportLanguages.find((v) => v.cookieCode === cookieCode)
-      if (!lang) {
-        lang = this.supportLanguages[0]
-        this.changeLangTo(lang)
-      }
-      return lang
-    }
+    ])
   },
   methods: {
     toggleSideBar() {
@@ -81,12 +67,6 @@ export default {
     async logout() {
       await this.$store.dispatch('users/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    },
-    changeLangTo(item) {
-      this.$i18n.locale = item.code
-      localStorage.setItem('lang', item.code)
-      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode)
-      window.location.reload()
     }
   }
 }
