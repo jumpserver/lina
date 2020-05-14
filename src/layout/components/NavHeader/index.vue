@@ -18,11 +18,10 @@
       <div class="header-item">
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ $t('common.nav.Language') }}<i class="el-icon-arrow-down el-icon--right" />
+            {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="changeLangToZH">中文(简体)</el-dropdown-item>
-            <el-dropdown-item @click.native="changeLangToEnglish">English</el-dropdown-item>
+            <el-dropdown-item v-for="item of supportLanguages" :key="item.code" @click.native="changeLangTo(item)">{{ item.title }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -46,13 +45,34 @@ export default {
   },
   data() {
     return {
-      LANG_COOKIE_NAME: 'django_language'
+      LANG_COOKIE_NAME: 'django_language',
+      supportLanguages: [
+        {
+          title: '中文(简体)',
+          code: 'cn',
+          cookieCode: 'zh-hans'
+        },
+        {
+          title: 'English',
+          code: 'en',
+          cookieCode: 'en'
+        }
+      ]
     }
   },
   computed: {
     ...mapGetters([
       'sidebar'
-    ])
+    ]),
+    currentLang() {
+      const cookieCode = this.$cookie.get(this.LANG_COOKIE_NAME)
+      let lang = this.supportLanguages.find((v) => v.cookieCode === cookieCode)
+      if (!lang) {
+        lang = this.supportLanguages[0]
+        this.changeLangTo(lang)
+      }
+      return lang
+    }
   },
   methods: {
     toggleSideBar() {
@@ -62,15 +82,11 @@ export default {
       await this.$store.dispatch('users/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
-    changeLangToZH() {
-      this.$i18n.locale = 'cn'
-      localStorage.setItem('lang', 'cn')
-      this.$cookie.set(this.LANG_COOKIE_NAME, 'zh-hans')
-    },
-    changeLangToEnglish() {
-      this.$i18n.locale = 'en'
-      localStorage.setItem('lang', 'en')
-      this.$cookie.set(this.LANG_COOKIE_NAME, 'en')
+    changeLangTo(item) {
+      this.$i18n.locale = item.code
+      localStorage.setItem('lang', item.code)
+      this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode)
+      window.location.reload()
     }
   }
 }
