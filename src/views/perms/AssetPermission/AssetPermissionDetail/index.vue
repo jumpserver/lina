@@ -1,6 +1,8 @@
 <template>
   <GenericDetailPage :object.sync="AssetPermission" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
-    <component :is="config.activeMenu" :object="AssetPermission" />
+    <keep-alive>
+      <component :is="config.activeMenu" :object="AssetPermission" />
+    </keep-alive>
   </GenericDetailPage>
 </template>
 

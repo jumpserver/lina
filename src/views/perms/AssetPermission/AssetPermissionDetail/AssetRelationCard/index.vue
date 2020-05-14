@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <el-button :type="type" size="small" @click="addObjects">{{ $tc('Add') }}</el-button>
+          <el-button :type="type" size="small" @click="addObjects">{{ $t('common.Add') }}</el-button>
         </td>
       </tr>
     </table>
@@ -49,8 +49,7 @@ export default {
       type: Function,
       default(that) {
         this.$log.debug('AssetSelect value', that.assets)
-        // 清空资产选项
-        // that.$refs.assetSelect.$refs.select.clearSelected()
+        window.location.reload()
       }
     }
   },
