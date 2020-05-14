@@ -2,13 +2,12 @@
   <transition name="sidebarLogoFade">
     <el-select
       v-if="!isCollapse && userAdminOrgList.length>1"
-      class="org-didi"
       :value="currentOrg.id"
+      class="org-select"
       filterable
       placeholder="请选择"
       @change="changeOrg"
     >
-
       <template slot="prefix">
         <i class="fa fa-bookmark" />
       </template>
@@ -65,23 +64,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .org-didi {
-    padding: 0 10px 0 18px;
+  .org-select {
+    padding: 0 10px 7px 18px;
     transition: opacity 0s;
   }
 
-  .org-didi > > > input.el-input__inner {
+  .org-select >>> input.el-input__inner {
     background: none;
     border: none;
     color: #8095a8;
+    font-size: 13px;
   }
 
-  .org-didi > > > input.el-input__inner::placeholder {
+  .org-select >>> input.el-input__inner::placeholder {
     opacity: 0.2;
   }
 
-  .org-didi > > > .el-input__prefix {
-    line-height: 40px;
+  .org-select >>> .el-input__prefix {
+    line-height: 34px;
     /*margin: auto 5px;*/
   }
 

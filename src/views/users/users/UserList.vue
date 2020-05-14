@@ -93,8 +93,7 @@ export default {
       'device'
     ]),
     currentOrgIsDefault() {
-      console.log('Current org is default: ', this.currentOrg.id === 'DEFAULT')
-      return this.currentOrg.id === 'DEFAULT'
+      return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
     }
   },
   methods: {

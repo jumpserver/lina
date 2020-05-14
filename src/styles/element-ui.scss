@@ -185,14 +185,38 @@ td .el-button.el-button--mini {
   line-height: 34px;
 }
 
+
+.el-select-dropdown__item.selected {
+  color: white;
+  font-weight: 400;
+  background-color: $--color-primary;
+}
+
+
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #606266;
   background-color: #ddd;
   font-weight: 400;
 }
 
+//.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
+//  color: #606266;
+//  background-color: #ddd;
+//  font-weight: 400;
+//}
+
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+  background-color: $--color-primary;
+  color: white;
+}
+
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after {
   color: $--color-primary;
+}
+
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
+  color: white;
+  background-color: $--color-primary;
 }
 
 .el-tag.el-tag--info {
@@ -345,4 +369,9 @@ td .el-button.el-button--mini {
 
 .el-tooltip__popper.is-light .popper__arrow {
   border-bottom-color: #e7eaec !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  color: #000;
+  opacity: .2;
 }
