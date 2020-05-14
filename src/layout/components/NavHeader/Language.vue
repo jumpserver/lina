@@ -15,12 +15,12 @@ export default {
   name: 'Language',
   data() {
     return {
-      LANG_COOKIE_NAME: 'django_language',
+      LANG_COOKIE_NAME: 'django_language', // 后端Django需要的COOKIE KEY
       supportLanguages: [
         {
           title: '中文(简体)',
           code: 'cn',
-          cookieCode: 'zh-hans'
+          cookieCode: 'zh-hans' // cookie code是为了让后端知道当前语言
         },
         {
           title: 'English',

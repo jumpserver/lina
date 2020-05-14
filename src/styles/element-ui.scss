@@ -92,11 +92,11 @@ td .el-button.el-button--mini {
   font-weight: 600;
 }
 
-//.el-button.el-button--default:focus:not(.is-disabled), .el-button.el-button--default:hover:not(.is-disabled) {
-//  color: #606266;
-//  border-color: #d2d2d2;
-//  background-color: #e6e6e6;
-//}
+.el-button.el-button--default:focus:not(.is-disabled), .el-button.el-button--default:hover:not(.is-disabled) {
+  color: #606266;
+  border-color: #d2d2d2;
+  background-color: #e6e6e6;
+}
 
 .el-button-group>.el-dropdown>.el-button {
   border-top-left-radius: 0;
@@ -336,4 +336,13 @@ td .el-button.el-button--mini {
   .el-card__header {
     background-color: $--color-danger;
   }
+}
+
+.el-tooltip__popper.is-light {
+  background: #FFF;
+  border: 1px solid #e7eaec;
+}
+
+.el-tooltip__popper.is-light .popper__arrow {
+  border-bottom-color: #e7eaec !important;
 }

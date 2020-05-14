@@ -72,7 +72,29 @@
     "DatabaseApp": "Database apps",
     "DatabaseAppDetail": "Database app detail",
     "RemoteApp": "Remote apps",
-    "RemoteAppDetail": "Remote app detail"
+    "RemoteAppDetail": "Remote app detail",
+    "RemoteAppUpdate": "",
+    "DatabaseAppCreate": "",
+    "DatabaseAppUpdate": "",
+    "AssetCreate": "",
+    "AssetDetail": "",
+    "AssetUpdate": "",
+    "DomainCreate": "",
+    "DomainUpdate": "",
+    "DomainDetail": "",
+    "GatewayCreate": "",
+    "GatewayUpdate": "",
+    "AdminUserUpdate": "",
+    "PlatformDetail": "",
+    "CommandFilterRulesUpdate": "",
+    "CommandFilterDetail": "",
+    "AdminUserDetail": "",
+    "CeleryTaskLog": "",
+    "TicketDetail": "",
+    "UserGroupUpdate": "",
+    "Xpack": "",
+    "InterfaceSetting": "",
+    "License": ""
   },
   "common": {
     "Other": "Other",
@@ -165,7 +187,8 @@
     "name": "",
     "Active": "",
     "dateExpired": "",
-    "isValid": ""
+    "isValid": "",
+    "action": ""
   },
   "applications": {
     "applications": "Applications",

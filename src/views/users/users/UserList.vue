@@ -20,7 +20,7 @@ export default {
         ],
         columnsMeta: {
           source: {
-            width: '100px'
+            width: '120px'
           },
           role: {
             width: '100px'
