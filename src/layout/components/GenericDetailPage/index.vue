@@ -59,7 +59,7 @@ export default {
     getTitle: {
       type: Function,
       default: function(obj) {
-        const objectType = this.$tr(this.$route.meta.title)
+        const objectType = this.$route.meta.title
           .replace('Detail', '')
           .replace('详情', '')
         this.$log.debug('Object is: ', obj)
