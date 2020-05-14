@@ -31,5 +31,12 @@ export default [
     name: 'BatchCommand',
     component: () => import('@/views/jobcenter/CommandExecution'),
     meta: { title: 'BatchCommand' }
+  },
+  {
+    path: 'celery/task/:id',
+    component: () => import('@/views/jobcenter/CeleryTaskLog'),
+    name: 'CeleryTaskLog',
+    hidden: true,
+    meta: { title: 'CeleryTaskLog' }
   }
 ]

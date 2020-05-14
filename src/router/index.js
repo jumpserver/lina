@@ -25,14 +25,14 @@ const requireContext = require.context('@/views/', true, /router\.js$/)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-import UsersRoute from '@/views/users'
-import AssetsRoute from '@/views/assets'
-import ApplicationsRoute from '@/views/applications'
-import PermsRoute from '@/views/perms'
-import SessionsRoute from '@/views/sessions'
-import OpsRoutes from '@/views/jobcenter'
-import TicketsRoutes from '@/views/tickets'
-import AuditsRoutes from '@/views/audits'
+import UsersRoute from './users'
+import AssetsRoute from './assets'
+import ApplicationsRoute from './applications'
+import PermsRoute from './perms'
+import SessionsRoute from './sessions'
+import OpsRoutes from './jobcenter'
+import TicketsRoutes from './tickets'
+import AuditsRoutes from './audits'
 
 /**
  * constantRoutes
@@ -140,15 +140,7 @@ export const adminRoutes = [
       meta: { title: 'Settings', icon: 'gears' }
     }]
   },
-  {
-    path: '/ops/celery/task/:id',
-    component: () => import('@/views/jobcenter/CeleryTaskLog'),
-    name: 'CeleryTaskLog',
-    hidden: true,
-    meta: { title: 'CeleryTaskLog' }
-  },
   { path: '*', redirect: '/404', hidden: true }
-
 ]
 /**
  * user routes

@@ -1,3 +1,3 @@
-[submodule "src/views/xpack"]
-	path = src/views/xpack
+[submodule "src/views/Xpack"]
+	path = src/views/Xpack
 	url = git@github.com:fit2cloudrd/js-xpack-web.git
