@@ -63,7 +63,7 @@ export default {
     },
     performBulkDelete: {
       type: Function,
-      default: () => {}
+      default: null
     },
     searchTable: {
       type: Function,
@@ -114,12 +114,17 @@ export default {
           title: this.$t('common.deleteSelected'),
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
+          can({ selectedRows }) {
+            console.log('Select rows lenght: ', selectedRows.length)
+            return selectedRows.length > 0
+          },
           callback: this.defaultBulkDeleteCallback
         },
         {
           title: this.$t('common.updateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
+          can: ({ selectedRows }) => selectedRows.length > 0,
           callback: this.handleBulkUpdate
         }
       ],
@@ -143,8 +148,7 @@ export default {
     },
     moreActions() {
       const actions = [...this.defaultMoreActions, ...this.extraMoreActions]
-      const canDefaults = function(rows) { return rows.length > 0 }
-      return this.cleanActions(actions, canDefaults)
+      return this.cleanActions(actions, true)
     },
     hasSelectedRows() {
       return this.selectedRows.length > 0
@@ -162,8 +166,8 @@ export default {
       this.$router.push({ name: routeName })
       this.$log.debug('handle create')
     },
-    defaultBulkDeleteCallback(rows) {
-      const msg = this.$tc('deleteWarningMsg') + ' ' + rows.length + ' ' + this.$t('common.rows')
+    defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
+      const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
       const title = this.$t('common.Info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
@@ -174,13 +178,12 @@ export default {
           if (action !== 'confirm') return done()
           instance.confirmButtonLoading = true
           try {
-            await performDelete(rows)
+            await performDelete(selectedRows)
             done()
-            this.reloadTable()
-            this.$message.success(this.$tc('Delete success'))
+            reloadTable()
+            this.$message.success(this.$t('common.bulkDeleteSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$tc('Delete failed'))
-            console.warn(error)
+            this.$message.error(this.$t('common.bulkDeleteErrorMsg'))
           } finally {
             instance.confirmButtonLoading = false
           }
@@ -189,21 +192,21 @@ export default {
         /* 取消*/
       })
     },
-    async defaultPerformBulkDelete(rows) {
-      const ids = rows.map((v) => {
+    async defaultPerformBulkDelete({ selectedRows }) {
+      const ids = selectedRows.map((v) => {
         return v.id
       })
       const data = await createSourceIdCache(ids)
       const url = `${this.tableUrl}?spm=` + data.spm
       return this.$axios.delete(url)
     },
-    handleBulkUpdate(rows) {
+    handleBulkUpdate({ selectedRows }) {
     },
-    handleExport(row) {
-      this.$eventBus.$emit('showExportDialog', row)
+    handleExport({ selectedRows }) {
+      this.$eventBus.$emit('showExportDialog', { selectedRows })
     },
-    handleImport(row) {
-      this.$eventBus.$emit('showImportDialog', row)
+    handleImport({ selectedRows }) {
+      this.$eventBus.$emit('showImportDialog', { selectedRows })
     },
     handleRefresh() {
       this.reloadTable()
@@ -220,7 +223,6 @@ export default {
     },
     cleanBoolean(action, attr, defaults) {
       // this.$log.debug('Clean boolean', action, attr)
-      const vm = this
       let v = action[attr]
 
       if (defaults === undefined) {
@@ -230,10 +232,12 @@ export default {
         // console.log('Defaults is: ', attr, defaults)
         v = defaults
       }
+
       if (typeof v === 'function') {
-        return function() {
-          return v(vm.selectedRows)
-        }
+        return () => v({
+          selectedRows: this.selectedRows,
+          reloadTable: this.reloadTable
+        })
       } else {
         return v
       }
@@ -243,7 +247,10 @@ export default {
       if (!v && typeof callback !== 'function') {
         return null
       }
-      return () => { v(this.selectedRows) }
+      return () => v({
+        selectedRows: this.selectedRows,
+        reloadTable: this.reloadTable
+      })
     }
   }
 }

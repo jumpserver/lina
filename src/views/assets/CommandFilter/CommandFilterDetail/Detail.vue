@@ -56,9 +56,9 @@ export default {
             newData.push(v.value)
           })
           return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
-            this.$message.success(this.$tc('Update success'))
+            this.$message.success(this.$t('common.Update success'))
           }).catch(err => {
-            this.$message.error(this.$tc('Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.Update failed' + ' ' + err))
           })
         },
         performDelete: (item) => {
@@ -72,9 +72,9 @@ export default {
           })
           const relationUrl = `/api/v1/assets/cmd-filters/${this.object.id}/`
           return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
-            this.$message.success(this.$tc('Update success'))
+            this.$message.success(this.$t('common.Update success'))
           }).catch(err => {
-            this.$message.error(this.$tc('Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.Update failed' + ' ' + err))
           })
         }
       }

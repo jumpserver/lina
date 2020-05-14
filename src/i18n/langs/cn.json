@@ -191,7 +191,16 @@
     "IsValid": "合法",
     "Open": "打开",
     "Close": "关闭",
-    "DateCreated": "创建日期"
+    "DateCreated": "创建日期",
+    "bulkDeleteSuccessMsg": "",
+    "bulkDeleteErrorMsg": "",
+    "Test": "",
+    "Action": "",
+    "Update success": "",
+    "Update failed": "",
+    "Push": "",
+    "createBy": "",
+    "isValid": ""
   },
   "applications": {
     "applications": "应用管理",
@@ -384,7 +393,21 @@
     "SystemUserDetail": "",
     "loginMode": "",
     "IP": "",
-    "SystemUser": ""
+    "SystemUser": "",
+    "is_active": "",
+    "protocols": "",
+    "public_ip": "",
+    "admin_user": "",
+    "domain": "",
+    "vendor": "",
+    "model": "",
+    "cpu_model": "",
+    "memory": "",
+    "disk_info": "",
+    "platform": "",
+    "os_arch": "",
+    "sn": "",
+    "number": ""
   },
   "audits": {
     "username": "用户名",
@@ -440,7 +463,8 @@
     "tasks": "任务",
     "options": "选项",
     "taskName": "任务名称",
-    "dateStart": "开始日期"
+    "dateStart": "开始日期",
+    "versionDetail": ""
   },
   "perms": {
     "assetPermissions": "资产授权",
@@ -488,7 +512,10 @@
     "grantedRemoteApps": "授权的远程应用",
     "remoteAppsPermissionRules": "远程应用授权规则",
     "grantedDatabases": "授权的数据库",
-    "databasePermissionRules": "数据库授权规则"
+    "databasePermissionRules": "数据库授权规则",
+    "Add node to this permission": "",
+    "": "",
+    "RemoteApp": ""
   },
   "sessions": {
     "id": "ID",
@@ -680,12 +707,11 @@
     "Users": "用户",
     "Remove": "移除",
     "UserGroups": "用户组",
-    "RemoveApps": "远程应用",
     "SystemUsers": "系统用户",
     "quickUpdate": {
       "resetMFA": "重置MFA",
       "resetPassword": "重置密码",
-      "restSSHKey": "重置密钥",
+      "resetSSHKey": "重置SSH密钥",
       "unblockLogin": "解除登录限制",
       "messages": {
         "resetPasswordWarning": ""
@@ -693,7 +719,6 @@
       "resetMFAWarningMsg": "",
       "resetMFAdSuccessMsg": "",
       "send": "发送",
-      "resetSSHKey": "重置SSH密钥",
       "unblockUser": "解锁用户",
       "unblock": "解锁"
     },

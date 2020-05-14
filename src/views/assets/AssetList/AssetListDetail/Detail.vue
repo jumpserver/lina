@@ -36,7 +36,7 @@ export default {
           title: this.$t('assets.is_active'),
           type: 'switcher',
           attrs: {
-            label: this.$tc('Test'),
+            label: this.$t('common.Test'),
             model: this.object.is_active
           },
           callbacks: {
@@ -55,7 +55,7 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Test')
+            label: this.$t('common.Test')
           },
           callbacks: {
             click: function() {
@@ -73,7 +73,7 @@ export default {
           title: this.$t('assets.PushSystemUserNow'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Push')
+            label: this.$t('common.Push')
           },
           callbacks: {
             click: function() {
@@ -114,9 +114,9 @@ export default {
             newData.push(v.value)
           })
           return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$tc('Update success'))
+            this.$message.success(this.$t('common.Update success'))
           }).catch(err => {
-            this.$message.error(this.$tc('Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.Update failed' + ' ' + err))
           })
         },
         performDelete: (item) => {
@@ -130,9 +130,9 @@ export default {
           })
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$tc('Update success'))
+            this.$message.success(this.$t('common.Update success'))
           }).catch(err => {
-            this.$message.error(this.$tc('Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.Update failed' + ' ' + err))
           })
         }
       }

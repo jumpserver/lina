@@ -33,7 +33,7 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$tc('Test')
+            label: this.$t('common.Test')
           },
           callbacks: {
             click: function() {
@@ -79,8 +79,8 @@ export default {
             actions: {
               extraActions: [
                 {
-                  name: this.$tc('delete'),
-                  title: this.$tc('delete'),
+                  name: this.$t('common.delete'),
+                  title: this.$t('common.delete'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
                       this.$refs.ListTable.reloadTable()
@@ -88,15 +88,15 @@ export default {
                   }
                 },
                 {
-                  name: this.$tc('Test'),
-                  title: this.$tc('Test'),
+                  name: this.$t('common.Test'),
+                  title: this.$t('common.Test'),
                   callback: (val) => {
                     console.log('Test')
                   }
                 },
                 {
-                  name: this.$tc('Push'),
-                  title: this.$tc('Push'),
+                  name: this.$t('common.Push'),
+                  title: this.$t('common.Push'),
                   callback: (val) => {
                     console.log('Push')
                   }
