@@ -174,8 +174,8 @@
     "Open": "打开",
     "Close": "关闭",
     "DateCreated": "创建日期",
-    "bulkDeleteSuccessMsg": "",
-    "bulkDeleteErrorMsg": "",
+    "bulkDeleteSuccessMsg": "批量删除成功",
+    "bulkDeleteErrorMsg": "批量删除失败: ",
     "Test": "",
     "Action": "动作",
     "Update success": "",
@@ -183,10 +183,23 @@
     "Push": "",
     "createBy": "创建者",
     "isValid": "",
-    "Update": "更新"
+    "Update": "更新",
+    "comment": "",
+    "delete": "",
+    "actions": {
+      "Create": "",
+      "cancel": ""
+    }
   },
   "applications": {
-
+    "type": "",
+    "host": "",
+    "port": "",
+    "database": "",
+    "": "",
+    "asset": "",
+    "appType": "",
+    "appPath": ""
   },
   "assets": {
     "Assets": "资产",

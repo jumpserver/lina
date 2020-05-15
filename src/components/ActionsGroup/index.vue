@@ -83,7 +83,6 @@ export default {
       if (!item) {
         return true
       }
-      // this.$log.debug('Item is: ', item)
       let ok = item[attr]
       if (ok && typeof ok === 'function') {
         ok = ok(item)
@@ -94,12 +93,12 @@ export default {
     },
     cleanActions(actions) {
       const cleanedActions = []
-      // this.$log.debug('Start clean actions: ', actions)
-      for (const v of actions) {
+      const cloneActions = _.cloneDeep(actions)
+      for (const v of cloneActions) {
         if (!v) {
           continue
         }
-        const action = _.cloneDeep(v)
+        const action = Object.assign({}, v)
         // 是否拥有这个action
         const has = this.checkItem(action, 'has')
         delete action['has']
@@ -111,7 +110,6 @@ export default {
         delete action['can']
         action.disabled = !can
         cleanedActions.push(action)
-
         // 删掉callback，避免前台看到
         delete action['callback']
       }
