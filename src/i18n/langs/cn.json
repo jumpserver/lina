@@ -106,6 +106,17 @@
       "Logout": "退出",
       "Support": "支持"
     },
+    "imExport": {
+      "ExportOnlySelectedItems": "仅导出选择项",
+      "ExportAll": "导出所有",
+      "ExportOnlyFiltered": "仅导出搜索结果",
+      "ExportRange": "导出范围",
+      "downloadImportTemplateMsg": "下载导入模板",
+      "downloadUpdateTemplateMsg": "下载更新模板",
+      "onlyCSVFilesTips": "仅支持csv文件导入"
+    },
+    "Download": "下载",
+    "Upload": "上传",
     "Search": "搜索",
     "Reset": "重置",
     "Submit": "提交",
