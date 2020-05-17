@@ -8,11 +8,11 @@
         <el-cascader-panel ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
       </el-dropdown-menu>
     </el-dropdown>
-    <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="fieldtag" type="info" @close="handleTagClose(k)">
+    <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)">
       <strong v-if="v.label">{{ v.label + ':' }}</strong> {{ v.value }}
     </el-tag>
     <span v-if="filterLabel" slot="prefix" class="filterTitle">{{ filterLabel + ':' }}</span>
-    <el-input ref="SearchInput" v-model="filterValue" :placeholder="this.$t('添加筛选条件')" style="max-width: 100px; border: none;" @change="handleConfirm" />
+    <el-input ref="SearchInput" v-model="filterValue" :placeholder="this.$t('common.Search')" style="max-width: 100px; border: none" @change="handleConfirm" />
   </div>
 
 </template>
@@ -88,7 +88,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
   .filter-field {
     display: flex;
     align-items:  center;
@@ -99,7 +99,7 @@ export default {
   .el-input{
     max-width:inherit !important;
   }
-  .el-input /deep/ .el-input__inner{
+  .el-input >>> .el-input__inner{
     border: none !important;
   }
   .filterTitle{
@@ -115,7 +115,7 @@ export default {
     font-size:14px;
     height:auto;
   }
-  .fieldtag{
+  .filter-tag{
     margin: 2px 4px 2px 0;
   }
   .el-icon--right{
@@ -125,7 +125,7 @@ export default {
   a {
     color: #000;
   }
-  // 去掉边框
+  /*// 去掉边框*/
   .el-dropdown-menu{
     border: none !important;
   }
@@ -133,8 +133,12 @@ export default {
     border: none !important;
   }
 
-  // 重置表格高度
+  /*// 重置表格高度*/
   .el-cascader-panel /deep/ .el-cascader-menu__wrap{
     height: inherit;
+  }
+
+  .filter-field >>> .el-input__inner {
+    height: 30px;
   }
 </style>

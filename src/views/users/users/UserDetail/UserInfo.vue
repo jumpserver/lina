@@ -85,10 +85,10 @@ export default {
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.resetPasswordWarningMsg')
+              const warnMsg = vm.$t('users.quickUpdate.resetPasswordWarningMsg')
               const warnTitle = vm.$t('common.Info')
               const url = `/api/v1/users/users/${vm.object.id}/password/reset/`
-              const successMsg = vm.$t('users.resetPasswordSuccessMsg')
+              const successMsg = vm.$t('users.quickUpdate.resetPasswordSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
                 confirmButtonClass: 'el-button--warning',
@@ -116,10 +116,10 @@ export default {
           },
           callbacks: {
             click: function() {
-              const warnMsg = vm.$t('users.resetSSHKeyWarningMsg')
+              const warnMsg = vm.$t('users.quickUpdate.resetSSHKeyWarningMsg')
               const warnTitle = vm.$t('common.Info')
               const url = `/api/v1/users/users/${vm.object.id}/pubkey/reset/`
-              const successMsg = vm.$t('users.resetPasswordSuccessMsg')
+              const successMsg = vm.$t('users.quickUpdate.resetSSHKeySuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
                 confirmButtonClass: 'el-button--warning',
@@ -149,7 +149,7 @@ export default {
           callbacks: {
             click: function(v, item) {
               const url = `/api/v1/users/users/${vm.object.id}/unblock/`
-              const unblockSuccessMsg = vm.$t('users.unblockSuccessMsg')
+              const unblockSuccessMsg = vm.$t('users.quickUpdate.unblockSuccessMsg')
               vm.$axios.patch(url).then(() => {
                 item.attrs.disabled = !item.attrs.disabled
                 vm.$message.success(unblockSuccessMsg)

@@ -22,7 +22,6 @@ export default {
   },
   data() {
     return {
-      // activeMenu: 'ReplayStorage',
       config: {
         activeMenu: 'ReplayStorage',
         submenu: [
@@ -42,14 +41,6 @@ export default {
     Title() {
       return this.$t('sessions.storage')
     }
-    // activeMenu: {
-    //   get: function() {
-    //     return this.config.activeMenu
-    //   },
-    //   set: function(newValue) {
-    //     this.config.activeMenu = newValue
-    //   }
-    // }
   },
   mounted() {
     const params = this.$route.params

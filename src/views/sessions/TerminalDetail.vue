@@ -1,6 +1,6 @@
 <template>
   <GenericDetailPage :object.sync="terminalData" v-bind="config">
-    <div slot="detail">
+    <div>
       <el-row :gutter="20">
         <el-col :span="14">
           <DetailCard :title="cardTitle" :items="detailItems" />
@@ -26,7 +26,6 @@ export default {
       terminalData: {},
       loading: true,
       config: {
-        activeMenu: 'detail',
         submenu: [
           {
             title: this.$t('sessions.terminalDetail'),

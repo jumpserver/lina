@@ -1,21 +1,31 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
+import ListTable from '@/components/ListTable'
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
-import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
-
+import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
+  name: 'BaseList',
   components: {
-    GenericListPage
+    ListTable
+  },
+  props: {
+    url: {
+      type: String,
+      default: () => '/api/v1/terminal/sessions/'
+    },
+    extraActions: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
       tableConfig: {
         hasSelection: false,
-        url: '/api/v1/terminal/sessions/?is_finished=1',
+        url: this.url,
         columns: [
           'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
           'command_amount', 'date_start', 'duration', 'actions'
@@ -85,13 +95,17 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasBulkDelete: false
+        hasBulkDelete: false,
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
+        hasBulkUpdate: false
       }
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

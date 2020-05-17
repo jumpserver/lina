@@ -19,12 +19,12 @@ export default {
           'name', 'username', 'groups_display', 'role', 'source', 'is_valid', 'actions'
         ],
         columnsMeta: {
-          source: {
-            width: '100px'
-          },
-          role: {
-            width: '100px'
-          },
+          // source: {
+          //   width: '120px'
+          // },
+          // role: {
+          //   width: '100px'
+          // },
           groups_display: {
             width: '200px',
             showOverflowTooltip: true
@@ -48,8 +48,8 @@ export default {
           {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
-            can: ({ selectedRows }) => {
-              console.log('can select rows lenght: ', selectedRows.length)
+            can({ selectedRows }) {
+              console.log('disableSelected Select rows length: ', selectedRows.length)
               return selectedRows.length > 0
             },
             callback({ selectedRows, reloadTable }) {
@@ -93,8 +93,7 @@ export default {
       'device'
     ]),
     currentOrgIsDefault() {
-      console.log('Current org is default: ', this.currentOrg.id === 'DEFAULT')
-      return this.currentOrg.id === 'DEFAULT'
+      return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
     }
   },
   methods: {

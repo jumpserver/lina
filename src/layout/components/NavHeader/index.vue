@@ -16,15 +16,7 @@
         </el-dropdown>
       </div>
       <div class="header-item">
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            {{ $t('common.nav.Language') }}<i class="el-icon-arrow-down el-icon--right" />
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="changeLangToZH">中文(简体)</el-dropdown-item>
-            <el-dropdown-item @click.native="changeLangToEnglish">English</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <Language />
       </div>
       <div class="header-item header-profile">
         <AccountDropdown />
@@ -37,16 +29,30 @@
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
+import Language from './Language'
 
 export default {
   components: {
     // Breadcrumb,
     Hamburger,
-    AccountDropdown
+    AccountDropdown,
+    Language
   },
   data() {
     return {
-      LANG_COOKIE_NAME: 'django_language'
+      LANG_COOKIE_NAME: 'django_language',
+      supportLanguages: [
+        {
+          title: '中文(简体)',
+          code: 'cn',
+          cookieCode: 'zh-hans'
+        },
+        {
+          title: 'English',
+          code: 'en',
+          cookieCode: 'en'
+        }
+      ]
     }
   },
   computed: {
@@ -61,16 +67,6 @@ export default {
     async logout() {
       await this.$store.dispatch('users/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    },
-    changeLangToZH() {
-      this.$i18n.locale = 'cn'
-      localStorage.setItem('lang', 'cn')
-      this.$cookie.set(this.LANG_COOKIE_NAME, 'zh-hans')
-    },
-    changeLangToEnglish() {
-      this.$i18n.locale = 'en'
-      localStorage.setItem('lang', 'en')
-      this.$cookie.set(this.LANG_COOKIE_NAME, 'en')
     }
   }
 }

@@ -86,6 +86,25 @@ export default {
       }
       return col
     },
+    addHelpTipsIfNeed(col) {
+      const helpTips = col.helpTips
+      if (!helpTips) {
+        return col
+      }
+      col.renderHeader = (h, { column, $index }) => {
+        return (
+          <span>{column.label}
+            <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
+              <div slot='content' domPropsInnerHTML={helpTips} />
+              <el-button style='padding: 0'>
+                <i class='fa fa-info-circle' />
+              </el-button>
+            </el-tooltip>
+          </span>
+        )
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
@@ -94,6 +113,7 @@ export default {
       col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
+      col = this.addHelpTipsIfNeed(col)
       return col
     },
     generateColumns() {

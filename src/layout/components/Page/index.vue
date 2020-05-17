@@ -35,7 +35,7 @@ export default {
   computed: {
     iTitle() {
       // return ''
-      return this.title || this.$tr(this.$route.meta.title)
+      return this.title || this.$route.meta.title
     }
   }
 }

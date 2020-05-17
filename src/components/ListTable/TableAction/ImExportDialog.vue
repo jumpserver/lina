@@ -1,42 +1,46 @@
 <template>
   <div>
     <Dialog :title="$t('common.Export')" :visible.sync="showExportDialog" center @confirm="handleDialogConfirm('export')" @cancel="handleDialogCancel('export')">
-      <el-form>
-        <el-form-item :label="this.$t('action.ExportRange')" :label-width="'100px'">
-          <el-radio v-model="exportOption" class="export-item" label="1">{{ this.$t('action.ExportAll') }}</el-radio>
-          <el-radio v-model="exportOption" class="export-item" label="2">{{ this.$t('action.ExportOnlySelectedItems') }}</el-radio>
-          <!-- <el-radio v-model="exportOption" class="export-item" label="3">仅导出搜索项</el-radio> -->
+      <el-form label-position="left" style="padding-left: 50px">
+        <el-form-item :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+          <el-radio v-model="exportOption" class="export-item" label="1">{{ this.$t('common.imExport.ExportAll') }}</el-radio>
+          <br>
+          <el-radio v-model="exportOption" class="export-item" label="2">{{ this.$t('common.imExport.ExportOnlySelectedItems') }}</el-radio>
+          <br>
+          <el-radio v-model="exportOption" class="export-item" label="3">{{ this.$t('common.imExport.ExportOnlyFiltered') }}</el-radio>
         </el-form-item>
       </el-form>
     </Dialog>
-    <Dialog :title="importTitle" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
-      <el-form>
-        <el-form-item :label="importTitle" :label-width="'100px'">
-          <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Import') }}</el-radio>
+    <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
+      <el-form label-position="left" style="padding-left: 50px">
+        <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
+          <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
+          <br>
           <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.Update') }}</el-radio>
+          <div>
+            <span v-if="importOption==='1'">{{ this.$t('common.imExport.downloadImportTemplateMsg') }}<a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('common.Download') }}</a></span>
+            <span v-else>{{ this.$t('common.imExport.downloadUpdateTemplateMsg') }} <a style="color: #428bca;" @click="downloadUpdateTempUrl">{{ this.$t('common.Download') }}</a></span>
+          </div>
+        </el-form-item>
+        <el-form-item :label="$t('common.Upload' )" :label-width="'100px'">
+          <el-upload
+            class="upload-card"
+            action="string"
+            :http-request="upload"
+            list-type="text/csv"
+            :limit="1"
+          >
+            <el-button size="mini" type="primary">{{ this.$t('common.Upload') }}</el-button>
+            <div slot="tip" class="el-upload__tip">{{ this.$t('common.imExport.onlyCSVFilesTips') }}</div>
+          </el-upload>
         </el-form-item>
       </el-form>
-      <div v-if="importOption==='1'" style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.downloadTheImportedTemplateOrUseTheExportedCSVFormat') }} <a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('action.DownloadImportTemplate') }}</a></div>
-      <div v-else style="margin-bottom:20px;margin-left: 55px;">{{ this.$t('action.downloadTheUpdatedTemplateOrUsTheExportedCSVFormat') }} <a style="color: #428bca;" @click="downloadUpdateTempUrl">{{ this.$t('action.DownloadUpdateTemplate') }}</a></div>
-
-      <div style="margin-left:55px;">
-        <el-upload
-          class="upload-card"
-          action="string"
-          :http-request="upload"
-          list-type="text/csv"
-          :limit="1"
-        >
-          <el-button size="small" type="primary">{{ this.$t('action.upload') }}</el-button>
-          <div slot="tip" class="el-upload__tip">{{ this.$t('action.onlyCSVFilesCanBeUploaded') }}</div>
-        </el-upload>
-      </div>
     </Dialog>
   </div>
 </template>
 
 <script>
-import Dialog from '../Dialog'
+import Dialog from '@/components/Dialog'
 import { createSourceIdCache } from '@/api/common'
 
 export default {
