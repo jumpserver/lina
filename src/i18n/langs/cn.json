@@ -70,6 +70,11 @@
     "SystemUserCreate": "创建系统用户",
     "SystemUserUpdate": "更新系统用户",
     "": "",
+    "UserProfile": "个人信息",
+    "MyApplications":"我的应用",
+    "WebSftp": "文件管理",
+    "Database":"数据库应用",
+    "CommandExecutions":"命令执行",
     "DatabaseAppDetail": "数据库详情",
     "RemoteAppDetail": "远程应用详情"
   },
@@ -85,6 +90,7 @@
       "Help": "帮助",
       "Profile": "个人信息",
       "UserPage": "用户页面",
+      "AdminPage": "管理员界面",
       "APIKey": "API Key",
       "Logout": "退出",
       "Support": "支持"

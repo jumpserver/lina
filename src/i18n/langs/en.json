@@ -114,7 +114,8 @@
       "Profile": "Profile",
       "APIKey": "API Key",
       "Logout": "Logout",
-      "UserPage": "User page"
+      "UserPage": "User page",
+      "AdminPage": "Admin page"
     },
     "tree": {
       "addNode": "Add",

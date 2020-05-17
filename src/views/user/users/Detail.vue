@@ -3,10 +3,7 @@
     <el-col :span="14">
       <DetailCard :items="detailCardItems" />
     </el-col>
-    <el-col :span="10">
-      <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
-    </el-col>
+    <el-col :span="10" />
   </el-row>
 </template>a
 
@@ -19,9 +16,7 @@ import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
-    QuickActions,
-    RelationCard
+    DetailCard
   },
   props: {
     object: {
@@ -142,84 +137,39 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.hostname'),
-          value: this.object.hostname
+          value: this.object.username,
+          key: this.$t('asset.username')
         },
         {
-          key: this.$t('assets.ip'),
-          value: this.object.ip
+          value: this.object.name,
+          key: this.$t('asset.name')
         },
         {
-          key: this.$t('assets.protocols'),
-          value: this.object.protocols
+          value: this.object.role_display,
+          key: this.$t('asset.role')
         },
         {
-          key: this.$t('assets.public_ip'),
-          value: this.object.public_ip
+          value: this.object.email,
+          key: this.$t('asset.email')
         },
         {
-          key: this.$t('assets.admin_user'),
-          value: this.object.admin_user
+          value: `${this.object.is_active}`,
+          key: this.$t('asset.is_active')
         },
         {
-          key: this.$t('assets.domain'),
-          value: this.object.domain
+          value: `没有这个API`,
+          key: this.$t('asset.sshkey')
         },
         {
-          key: this.$t('assets.vendor'),
-          value: this.object.vendor
-        },
-        {
-          key: this.$t('assets.model'),
-          value: this.object.model
-        },
-        {
-          key: this.$t('assets.cpu_model'),
-          value: this.object.cpu_model
-        },
-        {
-          key: this.$t('assets.memory'),
-          value: this.object.memory
-        },
-        {
-          key: this.$t('assets.disk_info'),
-          value: this.object.disk_info
-        },
-        {
-          key: this.$t('assets.platform'),
-          value: this.object.platform
-        },
-        {
-          key: this.$t('assets.os_arch'),
-          value: this.object.os_arch
-        },
-        {
-          key: this.$t('assets.is_active'),
-          value: `this.object.is_active`
-        },
-        {
-          key: this.$t('assets.sn'),
-          value: this.object.sn
-        },
-        {
-          key: this.$t('assets.number'),
-          value: this.object.number
-        },
-        {
-          key: this.$t('assets.date_created'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('assets.created_by'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('assets.comment'),
-          value: this.object.comment
+          value: this.object.mfa_level_display,
+          key: this.$t('asset.mfa_level_display')
         }
       ]
     }
 
+  },
+  mounted() {
+    console.log(this.object)
   },
   methods: {
 

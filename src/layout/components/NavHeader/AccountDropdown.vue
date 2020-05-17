@@ -1,6 +1,6 @@
 <template>
   <div class="header-tools header-profile">
-    <el-dropdown>
+    <el-dropdown @command="handleClick">
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}
@@ -8,7 +8,8 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-guide" command="changePage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
+        <el-dropdown-item v-if="CheckPermission && CheckRules " icon="el-icon-guide" command="UserPage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
+        <el-dropdown-item v-if="!CheckPermission && CheckRules " icon="el-icon-guide" command="AdminPage">{{ $t('common.nav.AdminPage') }}</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
@@ -18,6 +19,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getPermission, setPermission } from '@/utils/auth'
+
 export default {
   name: 'AccountDropdown',
   data() {
@@ -25,10 +28,33 @@ export default {
       avatarUrl: require('@/assets/img/admin.png')
     }
   },
+  mounted() {
+  },
   computed: {
+    CheckPermission() {
+      return getPermission() === 'Admin'
+    },
+    CheckRules() {
+      return this.getCurrentOrgRoles.includes('Admin')
+    },
     ...mapGetters([
-      'currentUser'
+      'currentUser',
+      'getCurrentOrgRoles'
     ])
+  },
+  methods: {
+    handleClick(val) {
+      switch (val) {
+        case 'AdminPage':
+          setPermission('Admin')
+          location.reload()
+          break
+        case 'UserPage':
+          setPermission('User')
+          location.reload()
+          break
+      }
+    }
   }
 }
 </script>

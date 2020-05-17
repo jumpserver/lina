@@ -25,14 +25,14 @@ const requireContext = require.context('@/views/', true, /router\.js$/)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-import UsersRoute from './users'
-import AssetsRoute from './assets'
-import ApplicationsRoute from './applications'
-import PermsRoute from './perms'
-import SessionsRoute from './sessions'
-import OpsRoutes from './jobcenter'
-import TicketsRoutes from './tickets'
-import AuditsRoutes from './audits'
+import UsersRoute from './admin/users'
+import AssetsRoute from './admin/assets'
+import ApplicationsRoute from './admin/applications'
+import PermsRoute from './admin/perms'
+import SessionsRoute from './admin/sessions'
+import OpsRoutes from './admin/jobcenter'
+import TicketsRoutes from './admin/tickets'
+import AuditsRoutes from './admin/audits'
 
 /**
  * constantRoutes
@@ -150,15 +150,79 @@ export const adminRoutes = [
 export const userRoutes = [
   // 404 page must be placed at the end !!!
   {
-    path: '/',
+    path: '/assets',
     component: Layout,
-    redirect: '/dashboard',
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        meta: { title: 'Dashboard', icon: 'dashboard' }
+        path: 'assets',
+        name: 'AssetList',
+        component: () => import('@/views/user/asset/index.vue'),
+        meta: { title: 'AssetList', icon: 'files-o' }
+      }
+    ]
+  },
+  {
+    path: '/applications',
+    component: Layout,
+    children: [
+      {
+        path: '/remoteapp',
+        name: 'RemoteApp',
+        component: () => import('@/views/user/users/index.vue'),
+        meta: { title: 'RemoteApp' }
+      },
+      {
+        path: '/database',
+        name: 'UserProfile',
+        component: () => import('@/views/user/users/index.vue'),
+        meta: { title: 'Database' }
+      }
+    ],
+    meta: { title: 'MyApplications', icon: 'th' }
+  },
+  {
+    path: '/',
+    component: Layout,
+    children: [
+      {
+        path: '/users/profile',
+        name: 'UserProfile',
+        component: () => import('@/views/user/users/index.vue'),
+        meta: { title: 'UserProfile', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/command-executions',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'CommandExecutions',
+        component: () => import('@/views/user/users/index.vue'),
+        meta: { title: 'CommandExecutions', icon: 'terminal' }
+      }
+    ]
+  },
+  {
+    path: 'webterminal',
+    component: Layout,
+    children: [
+      {
+        path: 'webterminal',
+        name: 'Terminal',
+        meta: { title: 'Terminal', icon: 'window-maximize' }
+      }
+    ]
+  },
+  {
+    path: 'web-sftp',
+    component: Layout,
+    children: [
+      {
+        path: 'web-sftp',
+        name: 'WebSftp',
+        meta: { title: 'WebSftp', icon: 'file' }
       }
     ]
   },

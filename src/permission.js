@@ -4,7 +4,7 @@ import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken, getPermission, setPermission } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({
@@ -51,12 +51,13 @@ router.beforeEach(async(to, from, next) => {
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-    const { current_org_roles } = await store.dispatch('users/getProfile')
-
+    let { current_org_roles } = await store.dispatch('users/getProfile')
+    current_org_roles = checkRoules(current_org_roles)
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
 
     // dynamically add accessible routes
+
     router.addRoutes(accessRoutes)
 
     // hack method to ensure that addRoutes is complete
@@ -79,3 +80,19 @@ router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
+
+function checkRoules(val) {
+  let currentRule = getPermission()
+  if (currentRule) {
+    if (!val.includes(currentRule)) {
+      // TODO 异常注入处理
+      currentRule = val[0]
+      setPermission(currentRule)
+    }
+  } else {
+    // 设置默认路由
+    currentRule = val[0]
+    setPermission(currentRule)
+  }
+  return [currentRule]
+}
