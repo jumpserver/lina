@@ -41,6 +41,12 @@ router.beforeEach(async(to, from, next) => {
     NProgress.done()
     return
   }
+
+  // 获取Public settings
+  const publicSettings = store.getters.publicSettings
+  if (!publicSettings) {
+    await store.dispatch('settings/getPublicSettings')
+  }
   // determine whether the user has obtained his permission roles through getProfile
   const currentUser = store.getters.currentUser
   const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0

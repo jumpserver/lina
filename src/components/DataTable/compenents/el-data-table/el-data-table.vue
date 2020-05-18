@@ -837,18 +837,7 @@ export default {
     }
   },
   methods: {
-    /**
-     * 手动刷新列表数据，选项的默认值为: { loading: true }
-     * @public
-     * @param {object} options 方法选项
-     */
-    getList({ loading = true } = {}) {
-      const { url } = this
-      if (!url) {
-        console.warn('DataTable: url 为空, 不发送请求')
-        return
-      }
-
+    getQuery() {
       // 构造query对象
       let query = {}
       let formValue = {}
@@ -878,7 +867,27 @@ export default {
       if (this.transformQuery) {
         query = this.transformQuery(query)
       }
+      return query
+    },
+    /**
+     * 手动刷新列表数据，选项的默认值为: { loading: true }
+     * @public
+     * @param {object} options 方法选项
+     */
+    getList({ loading = true } = {}) {
+      const { url } = this
+      if (!url) {
+        console.warn('DataTable: url 为空, 不发送请求')
+        return
+      }
 
+      const query = this.getQuery()
+
+      let formValue = {}
+      if (this.$refs.searchForm) {
+        formValue = this.$refs.searchForm.getFormValue()
+        Object.assign(query, formValue)
+      }
       const queryStr =
         (url.indexOf('?') > -1 ? '&' : '?') +
         queryUtil.stringify(query, '=', '&')
@@ -951,7 +960,6 @@ export default {
       // Orange 重置查询对象
       // this.innerQuery = Object.assign(this.innerQuery, attrs)
       this.innerQuery = attrs
-      console.log(this.innerQuery)
       return this.getList()
     },
     /**

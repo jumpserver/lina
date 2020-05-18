@@ -14,15 +14,15 @@ export default {
         initial: {
         },
         url: '/api/v1/users/groups/',
-        fields: ['name', 'users', 'comment'],
+        fields: [
+          [this.$t('common.Basic'), ['name', 'users', 'comment']]
+        ],
         fieldsMeta: {
           users: {
             el: {
               value: [],
-              url: '/api/v1/users/users/',
-              helpMessage: 'hello'
-            },
-            helpText: '请输入用户 <a href="">更多</a>'
+              url: '/api/v1/users/users/'
+            }
           }
         }
       }

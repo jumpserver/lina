@@ -45,3 +45,10 @@ export function importLdapUser(data) {
     data: data
   })
 }
+
+export function getPublicSettings() {
+  return request({
+    url: '/api/v1/settings/public/',
+    method: 'get'
+  })
+}

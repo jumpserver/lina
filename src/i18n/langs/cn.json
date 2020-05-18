@@ -97,6 +97,8 @@
     "name": "名称",
     "action": "动作",
     "Active": "激活中",
+    "Basic": "基本",
+    "SelectFile": "选择文件",
     "nav": {
       "Docs": "文档",
       "Help": "帮助",
@@ -113,7 +115,9 @@
       "ExportRange": "导出范围",
       "downloadImportTemplateMsg": "下载导入模板",
       "downloadUpdateTemplateMsg": "下载更新模板",
-      "onlyCSVFilesTips": "仅支持csv文件导入"
+      "onlyCSVFilesTips": "仅支持csv文件导入",
+      "updateSuccessMsg": "导入更新成功，总共：{count}",
+      "createSuccessMsg": "导入创建成功，总共：{count}"
     },
     "Download": "下载",
     "Upload": "上传",
@@ -374,7 +378,8 @@
   },
   "auth": {
     "authExpireMsg": "账号已退出，请重新登录",
-    "Re-Login": "重新登录",
+    "ReLogin": "重新登录",
+    "LoginRequiredMsg": "账号已退出，请重新登录",
     "You have been logged out, Please log in again": ""
   },
   "jobcenter": {

@@ -98,6 +98,9 @@ export default {
     },
     search(attrs) {
       return this.$refs.table.search(attrs)
+    },
+    getQuery() {
+      return this.$refs.table.getQuery()
     }
   }
 }

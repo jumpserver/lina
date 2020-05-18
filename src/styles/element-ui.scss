@@ -379,3 +379,8 @@ td .el-button.el-button--mini {
 .el-table__header thead tr th {
   border-bottom: 1.5px solid #e7e7e7 !important;
 }
+
+.el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
+  padding-left: 10px;
+  padding-right: 14px;
+}

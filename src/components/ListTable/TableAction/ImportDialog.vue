@@ -1,24 +1,29 @@
 <template>
-  <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" center @confirm="handleDialogConfirm('import')" @cancel="handleDialogCancel('import')">
+  <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" center @confirm="handleImportConfirm()" @cancel="handleImportCancel('import')">
     <el-form label-position="left" style="padding-left: 50px">
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
         <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
-        <br>
         <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.Update') }}</el-radio>
         <div>
-          <span v-if="importOption==='1'">{{ this.$t('common.imExport.downloadImportTemplateMsg') }}<a style="color: #428bca;" :href="downloadImportTempUrl">{{ this.$t('common.Download') }}</a></span>
-          <span v-else>{{ this.$t('common.imExport.downloadUpdateTemplateMsg') }} <a style="color: #428bca;" @click="downloadUpdateTempUrl">{{ this.$t('common.Download') }}</a></span>
+          <span v-if="importOption==='1'" class="el-upload__tip">
+            {{ this.$t('common.imExport.downloadImportTemplateMsg') }}
+            <el-link type="success" :underline="false" :href="downloadImportTempUrl">{{ this.$t('common.Download') }}</el-link>
+          </span>
+          <span v-else class="el-upload__tip">
+            {{ this.$t('common.imExport.downloadUpdateTemplateMsg') }}
+            <el-link type="success" :underline="false" @click="downloadUpdateTempUrl">{{ this.$t('common.Download') }}</el-link>
+          </span>
         </div>
       </el-form-item>
       <el-form-item :label="$t('common.Upload' )" :label-width="'100px'">
         <el-upload
-          class="upload-card"
+          ref="upload"
           action="string"
-          :http-request="upload"
+          :http-request="handleImport"
           list-type="text/csv"
           :limit="1"
         >
-          <el-button size="mini" type="primary">{{ this.$t('common.Upload') }}</el-button>
+          <el-button size="mini" type="default">{{ this.$t('common.SelectFile') }}</el-button>
           <div slot="tip" class="el-upload__tip">{{ this.$t('common.imExport.onlyCSVFilesTips') }}</div>
         </el-upload>
       </el-form-item>
@@ -48,21 +53,12 @@ export default {
   data() {
     return {
       showImportDialog: false,
-      importOption: '1',
-      exportOption: '1',
-      meta: {}
+      importOption: '1'
     }
   },
   computed: {
     hasSelected() {
       return this.selectedRows.length > 0
-    },
-    importTitle() {
-      if (this.importOption === '1') {
-        return this.$t('common.Import')
-      } else {
-        return this.$t('common.Update')
-      }
     },
     upLoadUrl() {
       return this.url
@@ -72,20 +68,29 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showExportDialog', (row) => {
-      this.showExportDialog = true
-    })
     this.$eventBus.$on('showImportDialog', (row) => {
       this.showImportDialog = true
     })
   },
   methods: {
-    upload(item) {
+    performUpdate(item) {
       this.$axios.put(
         this.upLoadUrl,
-        item.file
-      ).then((res) => {
-        console.log('')
+        item.file,
+        { headers: { 'Content-Type': 'text/csv' }}
+      ).then((data) => {
+        const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
+        this.$message.success(msg)
+      })
+    },
+    performCreate(item) {
+      this.$axios.post(
+        this.upLoadUrl,
+        item.file,
+        { headers: { 'Content-Type': 'text/csv' }}
+      ).then((data) => {
+        const msg = this.$t('common.imExport.createSuccessMsg', { count: data.length })
+        this.$message.success(msg)
       })
     },
     downloadCsv(url) {
@@ -94,28 +99,16 @@ export default {
       a.click()
       window.URL.revokeObjectURL(url)
     },
-    async handleExport() {
-      let data
-      var resources = []
-      if (this.exportOption === '1') {
-        data = this.$parent.$parent.$refs.dataTable.$refs.dataTable.getData()
-      } else if (this.exportOption === '2') {
-        data = this.selectedRows
+    handleImport(item) {
+      if (this.importOption === '1') {
+        this.performCreate(item)
       } else {
-        data = []
+        this.performUpdate(item)
       }
-      for (let index = 0; index < data.length; index++) {
-        resources.push(data[index].id)
-      }
-      const spm = await createSourceIdCache(resources)
-      const url = process.env.VUE_APP_BASE_API + `${this.url}?format=csv&?spm=` + spm.spm
-      return this.downloadCsv(url)
-    },
-    handleImport() {
     },
     async downloadUpdateTempUrl() {
       var resources = []
-      const data = this.$parent.$parent.$refs.dataTable.$refs.dataTable.getData()
+      const data = this.selectedRows
       for (let index = 0; index < data.length; index++) {
         resources.push(data[index].id)
       }
@@ -123,31 +116,11 @@ export default {
       const url = process.env.VUE_APP_BASE_API + `${this.url}?format=csv&template=update&spm=` + spm.spm
       return this.downloadCsv(url)
     },
-    async handleDialogConfirm(val) {
-      switch (val) {
-        case 'export':
-          await this.handleExport()
-          this.showExportDialog = false
-          break
-        case 'import':
-          await this.handleImport()
-          this.showImportDialog = false
-          break
-        default:
-          break
-      }
+    async handleImportConfirm() {
+      this.$refs.upload.submit()
     },
-    handleDialogCancel(val) {
-      switch (val) {
-        case 'export':
-          this.showExportDialog = false
-          break
-        case 'import':
-          this.showImportDialog = false
-          break
-        default:
-          break
-      }
+    handleImportCancel() {
+      this.showImportDialog = false
     }
   }
 }

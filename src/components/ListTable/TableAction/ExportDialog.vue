@@ -15,6 +15,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { createSourceIdCache } from '@/api/common'
+import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 
 export default {
   name: 'ExportDialog',
@@ -58,21 +59,29 @@ export default {
       window.URL.revokeObjectURL(url)
     },
     async handleExport() {
-      let data
-      var resources = []
-      if (this.exportOption === '1') {
-        data = this.$parent.$parent.$refs.dataTable.$refs.dataTable.getData()
-      } else if (this.exportOption === '2') {
-        data = this.selectedRows
-      } else {
-        data = []
+      const url = process.env.VUE_APP_BASE_API + `${this.url}`
+      let query = {}
+      if (this.exportOption === '2') {
+        const resources = []
+        const data = this.selectedRows
+        for (let index = 0; index < data.length; index++) {
+          resources.push(data[index].id)
+        }
+        const spm = await createSourceIdCache(resources)
+        query['spm'] = spm.spm
+      } else if (this.exportOption === '3') {
+        const listTableRef = this.$parent.$parent.$parent.$parent
+        console.log(listTableRef)
+        console.log(listTableRef.dataTable)
+        query = listTableRef.dataTable.getQuery()
+        delete query['limit']
+        delete query['offset']
       }
-      for (let index = 0; index < data.length; index++) {
-        resources.push(data[index].id)
-      }
-      const spm = await createSourceIdCache(resources)
-      const url = process.env.VUE_APP_BASE_API + `${this.url}?format=csv&?spm=` + spm.spm
-      return this.downloadCsv(url)
+      query['format'] = 'csv'
+      const queryStr =
+        (url.indexOf('?') > -1 ? '&' : '?') +
+        queryUtil.stringify(query, '=', '&')
+      return this.downloadCsv(url + queryStr)
     },
     async handleExportConfirm() {
       await this.handleExport()

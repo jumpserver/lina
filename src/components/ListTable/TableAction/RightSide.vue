@@ -31,6 +31,10 @@ export default {
       type: Array,
       default: () => []
     },
+    reloadTable: {
+      type: Function,
+      default: () => {}
+    },
     extraRightSideActions: {
       type: Array,
       default: () => []

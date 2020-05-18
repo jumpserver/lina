@@ -73,7 +73,7 @@ export default {
         this.filterKey = keys[0]
         this.$refs.Cascade.clearCheckedNodes()
       }
-      console.log(this.filterKey)
+      this.$log.debug(this.filterKey)
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)

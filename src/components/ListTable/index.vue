@@ -38,19 +38,24 @@ export default {
       selectedRows: []
     }
   },
+  computed: {
+    dataTable() {
+      return this.$refs.dataTable.$refs.dataTable
+    }
+  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val
-      var obj = {}
+      const obj = {}
       val.forEach((item, index) => { obj[index] = item })
       // 已知Bug，必须避免数组扁平化
       this.dispatch('AssetSelect', 'SelectionChange', obj)
     },
     reloadTable() {
-      this.$refs.dataTable.$refs.dataTable.getList()
+      this.dataTable.getList()
     },
     search(attrs) {
-      return this.$refs.dataTable.$refs.dataTable.search(attrs)
+      return this.dataTable.search(attrs)
     }
   }
 }

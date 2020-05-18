@@ -66,9 +66,9 @@ service.interceptors.response.use(
     const response = error.response
     if (response.status === 401) {
       const title = ''
-      const msg = i18n.t('auth.You have been logged out, Please log in again')
+      const msg = i18n.t('auth.LoginRequiredMsg')
       MessageBox.confirm(msg, title, {
-        confirmButtonText: i18n.t('auth.Re-Login'),
+        confirmButtonText: i18n.t('auth.ReLogin'),
         cancelButtonText: i18n.t('common.Cancel'),
         type: 'warning'
       }).then(() => {

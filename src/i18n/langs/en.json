@@ -733,8 +733,8 @@
   "Delete failed": "",
   "添加筛选条件": "",
   "auth": {
-    "You have been logged out, Please log in again": "",
-    "Re-Login": ""
+    "LoginRequireMsg": "You have been logged out, Please log in again",
+    "ReLogin": "Re-Login"
   },
   "名称": "",
   "用户名": "",
