@@ -43,7 +43,6 @@ export default {
       this.xterm.write(val)
     },
     changeSelectedAssets() {
-
     }
   }
 
