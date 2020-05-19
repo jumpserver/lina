@@ -36,6 +36,9 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+import VCharts from 'v-charts'
+Vue.use(VCharts)
+
 // cookie
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)

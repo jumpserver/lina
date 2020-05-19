@@ -732,5 +732,11 @@
   "Assets": "",
   "settings": {
     "setting": ""
+  },
+  "dashboard": {
+    "UsersTotal": "用户总数",
+    "AssetsTotal": "资产总数",
+    "OnlineUsers": "在线用户",
+    "OnlineSessions": "在线会话"
   }
 }

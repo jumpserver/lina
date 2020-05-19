@@ -384,3 +384,20 @@ td .el-button.el-button--mini {
   padding-left: 10px;
   padding-right: 14px;
 }
+
+.el-tag--dark.el-tag--info {
+  background-color: #23c6c8;
+  border-color: #23c6c8;
+  color: #fff;
+}
+
+a {
+  color: #428bca !important;
+  text-decoration: none;
+}
+
+.el-tag--default.el-tag--dark {
+  background-color: #d1dade;
+  color: #5e5e5e;
+  border: none;
+}
