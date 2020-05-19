@@ -48,7 +48,7 @@ import Term from '@/components/Term'
 import IBox from '@/components/IBox'
 import Select2 from '@/components/Select2'
 import CodeMirror from '@/components/CodeMirror'
-import { Page } from '@/layout/components'
+import Page from '@/layout/components/Page'
 export default {
   name: 'CommandExecution',
   components: {

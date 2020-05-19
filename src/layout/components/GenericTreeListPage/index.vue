@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { Page } from '@/layout/components'
+import Page from '@/layout/components/Page'
 import TreeTable from '@/components/TreeTable'
 export default {
   name: 'GenericTreeListPage',

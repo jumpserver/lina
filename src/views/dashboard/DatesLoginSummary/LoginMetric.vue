@@ -1,5 +1,5 @@
 <template>
-  <echarts :options="polar" :autoresize="true" theme="light" />
+  <echarts :options="options" :autoresize="true" theme="light" />
 </template>
 
 <script>
@@ -11,7 +11,7 @@ export default {
   components: { 'echarts': ECharts },
   data: function() {
     return {
-      polar: {
+      options: {
         title: {
           show: false
         },

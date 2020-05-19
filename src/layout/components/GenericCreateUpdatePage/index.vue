@@ -7,7 +7,7 @@
 </template>
 <script>
 import { IBox } from '@/components'
-import { Page } from '@/layout/components'
+import Page from '@/layout/components/Page'
 import GenericCreateUpdateForm from '../GenericCreateUpdateForm'
 export default {
   name: 'GenericCreateUpdatePage',
