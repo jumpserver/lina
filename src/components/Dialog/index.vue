@@ -7,8 +7,8 @@
     <slot />
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
-        <el-button size="small" @click="onCancel">{{ $t('common.Cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="onConfirm">{{ $t('common.Confirm') }}</el-button>
+        <el-button v-if="showCancel" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
+        <el-button v-if="showConfirm" type="primary" size="small" @click="onConfirm">{{ confirmTitle }}</el-button>
       </slot>
     </div>
   </el-dialog>
@@ -21,6 +21,26 @@ export default {
     title: {
       type: String,
       default: 'Title'
+    },
+    showCancel: {
+      type: Boolean,
+      default: true
+    },
+    cancelTitle: {
+      type: String,
+      default() {
+        return this.$t('common.Cancel')
+      }
+    },
+    showConfirm: {
+      type: Boolean,
+      default: true
+    },
+    confirmTitle: {
+      type: String,
+      default() {
+        return this.$t('common.Confirm')
+      }
     }
   },
   data() {
