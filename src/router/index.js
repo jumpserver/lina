@@ -7,6 +7,10 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+const scheme = document.location.protocol
+const port = document.location.port ? ':' + document.location.port : ''
+const URL = scheme + '//' + document.location.hostname + port
+
 const requireContext = require.context('@/views/', true, /router\.js$/)
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -159,7 +163,7 @@ export const userRoutes = [
         path: 'assets',
         name: 'assets',
         component: () => import('@/userviews/assets/index'),
-        meta: { title: i18n.t('route.assets'), icon: 'assets' }
+        meta: { title: i18n.t('route.MyAssets'), icon: 'files-o' }
       }
     ]
   },
@@ -171,7 +175,39 @@ export const userRoutes = [
         path: '/users/profile',
         name: 'profile',
         component: () => import('@/userviews/users/index'),
-        meta: { title: i18n.t('route.assets'), icon: 'assets' }
+        meta: { title: i18n.t('route.UserProfile'), icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/command-executions',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'CommandExecutions',
+        component: () => import('@/views/jobcenter/CommandExecution'),
+        meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal' }
+      }
+    ]
+  },
+  {
+    path: 'external-link1',
+    component: Layout,
+    children: [
+      {
+        path: `${URL}/luna/`,
+        meta: { title: i18n.t('route.WebTerminal'), icon: 'window-maximize' }
+      }
+    ]
+  },
+  {
+    path: 'external-link2',
+    component: Layout,
+    children: [
+      {
+        path: `${URL}/terminal/web-sftp/`,
+        meta: { title: i18n.t('route.WebFTP'), icon: 'file' }
       }
     ]
   },

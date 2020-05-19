@@ -91,7 +91,11 @@
     "UserGroupUpdate": "",
     "Xpack": "XPack",
     "InterfaceSetting": "界面设置",
-    "License": "许可证"
+    "License": "许可证",
+    "MyAssets": "我的资产",
+    "UserProfile":"个人信息",
+    "WebFTP": "文件管理",
+    "CommandExecutions": "命令执行"
   },
   "common": {
     "name": "名称",
