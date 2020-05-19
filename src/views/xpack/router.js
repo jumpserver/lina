@@ -18,6 +18,12 @@ export default {
       component: () => import('@/views/xpack/License.vue'),
       name: 'License',
       meta: { title: 'License' }
+    },
+    {
+      path: 'gathered-users',
+      component: () => import('@/views/xpack/GatherUser'),
+      name: 'GatherUser',
+      meta: { title: 'GatherUser' }
     }
   ]
 }
