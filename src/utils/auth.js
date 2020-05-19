@@ -2,9 +2,22 @@ import Cookies from 'js-cookie'
 
 const TokenKey = 'csrftoken'
 const CurrentOrg = 'currentOrg'
+const Permission = 'currentRole'
 
 export function getToken() {
   return Cookies.get(TokenKey)
+}
+
+export function getPermission() {
+  return Cookies.get(Permission)
+}
+
+export function setPermission(token) {
+  return Cookies.set(Permission, token)
+}
+
+export function removePermission() {
+  return Cookies.remove(Permission)
 }
 
 export function setToken(token) {

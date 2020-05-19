@@ -153,13 +153,25 @@ export const userRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/assets',
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
+        path: 'assets',
+        name: 'assets',
+        component: () => import('@/userviews/assets/index'),
+        meta: { title: i18n.t('route.assets'), icon: 'assets' }
+      }
+    ]
+  },
+  {
+    path: '/users',
+    component: Layout,
+    children: [
+      {
+        path: '/users/profile',
+        name: 'profile',
+        component: () => import('@/userviews/users/index'),
+        meta: { title: i18n.t('route.assets'), icon: 'assets' }
       }
     ]
   },
