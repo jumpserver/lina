@@ -15,6 +15,7 @@
 <script>
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/pie'
+import 'echarts/lib/component/tooltip'
 export default {
   name: 'LoginActivePin',
   components: { 'echarts': ECharts },
@@ -25,6 +26,10 @@ export default {
           show: false
         },
         color: ['#1ab394', '#1C84C6', '#9CC3DA'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
         series: [
           {
             name: '访问来源',
