@@ -2,44 +2,55 @@
   <div class="statistic-box">
     <small>活跃用户资产占比</small>
     <el-row :gutter="10">
-      <el-col :span="12">
-        <ve-pie :data="userData" :legend="legend" :grid="grid" :extend="chartExtend" :height="'200px'" />
+      <el-col :md="12" :sm="24">
+        <echarts :options="option" />
       </el-col>
-      <el-col :span="12">
-        <ve-pie :data="userData" :legend="legend" :extend="chartExtend" />
+      <el-col :md="12" :sm="24">
+        <echarts :options="option" />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/pie'
 export default {
   name: 'LoginActivePin',
+  components: { 'echarts': ECharts },
   data() {
     return {
-      legend: {
-        show: false
-      },
-      grid: {
-        x: 0,
-        y: 20,
-        x2: 20,
-        y2: 30
-      },
-      chartExtend: {
-        series(v) {
-          v.forEach(i => {
-            i.radius = ['50%', '70%']
-          })
-          return v
-        }
-      },
-      userData: {
-        columns: ['日期', '访问用户'],
-        rows: [
-          { '日期': '1/1', '访问用户': 1393 },
-          { '日期': '1/2', '访问用户': 3530 },
-          { '日期': '1/6', '访问用户': 4593 }
+      option: {
+        legend: {
+          show: false
+        },
+        color: ['#1ab394', '#1C84C6', '#9CC3DA'],
+        series: [
+          {
+            name: '访问来源',
+            type: 'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '18',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 335, name: '直接访问' },
+              { value: 310, name: '邮件营销' },
+              { value: 234, name: '联盟广告' }
+            ]
+          }
         ]
       }
     }
@@ -48,5 +59,8 @@ export default {
 </script>
 
 <style scoped>
-
+  .echarts {
+    width: 150px;
+    height: 250px;
+  }
 </style>

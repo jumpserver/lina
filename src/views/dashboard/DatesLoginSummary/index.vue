@@ -16,7 +16,7 @@
         <LoginTop />
       </el-col>
       <el-col :md="12" :sm="24">
-        <LoginMetric style="margin-top: -40px" />
+        <LoginMetric style="margin-top: -30px" heigth="300px" />
       </el-col>
       <el-col :md="6" :sm="24">
         <LoginActivePin />

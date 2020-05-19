@@ -1,134 +1,166 @@
 <template>
-  <ve-line :data="chartData" :settings="chartSettings" :title="title" height="350px" />
+  <echarts :options="polar" :autoresize="true" theme="light" />
 </template>
 
 <script>
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/line'
 export default {
   name: 'LoginMetric',
+  components: { 'echarts': ECharts },
   data: function() {
     return {
-      legend: {
-        y: 'bottom'
-      },
-      title: {
-        show: false
-      },
-      chartSettings: {
-        metrics: ['LoginCount', 'ActiveUser', 'ActiveAsset'],
-        area: true,
-        dimension: ['Date'],
-        labelMap: {
-          'LoginCount': '登录数量',
-          'ActiveUser': '活跃用户',
-          'ActiveAsset': '活跃资产'
-        }
-      },
-      chartData: {
-        columns: ['Date', 'LoginCount', 'ActiveUser', 'ActiveAsset'],
-        rows: [
+      polar: {
+        title: {
+          show: false
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['LoginCount', 'ActiveUser', 'ActiveAsset'],
+          formatter: function(name) {
+            const map = { LoginCount: '登录数量', ActiveUser: '用户', ActiveAsset: '资产' }
+            return map[name]
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        color: ['#1ab394', '#1C84C6', '#9CC3DA'],
+        xAxis: [
           {
-            'Date': '04-19',
-            'LoginCount': 20316,
-            'ActiveUser': 5079,
-            'ActiveAsset': 4323
+            type: 'category',
+            boundaryGap: false,
+            data: [
+              '04-19', '04-20',
+              '04-21',
+              '04-22',
+              '04-23',
+              '04-24',
+              '04-25',
+              '04-26',
+              '04-27',
+              '04-28',
+              '04-29',
+              '04-30',
+              '05-01',
+              '05-02',
+              '05-03',
+              '05-04',
+              '05-05',
+              '05-06',
+              '05-07',
+              '05-09',
+              '05-11']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: 'LoginCount',
+            type: 'line',
+            areaStyle: {},
+            smooth: true,
+            data: [20316,
+              35218,
+              12864,
+              37508,
+              11787,
+              37749,
+              28591,
+              28571,
+              8789,
+              11434,
+              2100,
+              35305,
+              27371,
+              5433,
+              59824,
+              69371,
+              11388,
+              101993,
+              26256,
+              0,
+              0]
           },
           {
-            'Date': '04-20',
-            'LoginCount': 35218,
-            'ActiveUser': 8804,
-            'ActiveAsset': 2079
+            name: 'ActiveUser',
+            type: 'line',
+            areaStyle: {},
+            smooth: true,
+            data: [5079,
+              8804,
+              3216,
+              9377,
+              2946,
+              9437,
+              7147,
+              7143,
+              2197,
+              2857,
+              525,
+              8826,
+              6842,
+              905,
+              9970,
+              11562,
+              1898,
+              16999,
+              4376,
+              0,
+              0]
           },
           {
-            'Date': '04-21',
-            'LoginCount': 12864,
-            'ActiveUser': 3216,
-            'ActiveAsset': 1666
-          },
-          {
-            'Date': '04-22',
-            'LoginCount': 37508,
-            'ActiveUser': 9377,
-            'ActiveAsset': 8837
-          },
-          {
-            'Date': '04-23',
-            'LoginCount': 11787,
-            'ActiveUser': 2946,
-            'ActiveAsset': 1417
-          },
-          {
-            'Date': '04-24',
-            'LoginCount': 37749,
-            'ActiveUser': 9437,
-            'ActiveAsset': 8567
-          },
-          {
-            'Date': '04-25',
-            'LoginCount': 28591,
-            'ActiveUser': 7147,
-            'ActiveAsset': 1492
-          },
-          {
-            'Date': '04-26',
-            'LoginCount': 28571,
-            'ActiveUser': 7143,
-            'ActiveAsset': 2969
-          },
-          { 'Date': '04-27', 'LoginCount': 8789, 'ActiveUser': 2197, 'ActiveAsset': 852 },
-          {
-            'Date': '04-28',
-            'LoginCount': 11434,
-            'ActiveUser': 2857,
-            'ActiveAsset': 690
-          },
-          { 'Date': '04-29', 'LoginCount': 2100, 'ActiveUser': 525, 'ActiveAsset': 193 },
-          {
-            'Date': '04-30',
-            'LoginCount': 35305,
-            'ActiveUser': 8826,
-            'ActiveAsset': 2125
-          },
-          {
-            'Date': '05-01',
-            'LoginCount': 27371,
-            'ActiveUser': 6842,
-            'ActiveAsset': 5670
-          },
-          { 'Date': '05-02', 'LoginCount': 5433, 'ActiveUser': 905, 'ActiveAsset': 127 },
-          {
-            'Date': '05-03',
-            'LoginCount': 59824,
-            'ActiveUser': 9970,
-            'ActiveAsset': 9148
-          },
-          {
-            'Date': '05-04',
-            'LoginCount': 69371,
-            'ActiveUser': 11562,
-            'ActiveAsset': 2237
-          },
-          {
-            'Date': '05-05',
-            'LoginCount': 11388,
-            'ActiveUser': 1898,
-            'ActiveAsset': 1685
-          },
-          {
-            'Date': '05-06',
-            'LoginCount': 101993,
-            'ActiveUser': 16999,
-            'ActiveAsset': 13882
-          },
-          {
-            'Date': '05-07',
-            'LoginCount': 26256,
-            'ActiveUser': 4376,
-            'ActiveAsset': 829
-          },
-          { 'Date': '05-09', 'LoginCount': 0, 'ActiveUser': 0, 'ActiveAsset': 0 },
-          { 'Date': '05-11', 'LoginCount': 0, 'ActiveUser': 0, 'ActiveAsset': 0 }]
+            name: 'ActiveAsset',
+            type: 'line',
+            areaStyle: {},
+            smooth: true,
+            data: [4323,
+              2079,
+              1666,
+              8837,
+              1417,
+              8567,
+              1492,
+              2969,
+              852,
+              690,
+              193,
+              2125,
+              5670,
+              127,
+              9148,
+              2237,
+              1685,
+              13882,
+              829,
+              0,
+              0]
+          }
+        ]
       }
     }
   }
 }
 </script>
+
+<style scoped>
+  .echarts {
+    width: 100%;
+    height: 300px;
+  }
+</style>
