@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { Page } from '@/layout/components'
+import Page from '@/layout/components/Page'
 import { SummaryCard } from '@/components'
 
 export default {
