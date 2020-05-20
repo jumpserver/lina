@@ -13,13 +13,13 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :md="6" :sm="24">
-        <LoginTop />
+        <LoginTop class="card-item" />
       </el-col>
       <el-col :md="12" :sm="24">
-        <LoginMetric style="margin-top: -30px" heigth="300px" />
+        <LoginMetric class="card-item" style="margin-top: -30px" heigth="300px" />
       </el-col>
       <el-col :md="6" :sm="24">
-        <LoginActivePin />
+        <LoginActivePin class="card-item" />
       </el-col>
     </el-row>
   </div>
@@ -69,4 +69,5 @@ export default {
     border: 1px solid #d2d2d2;
     -webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
   }
+
 </style>
