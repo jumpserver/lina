@@ -3,22 +3,20 @@
     <small>活跃用户资产占比</small>
     <el-row :gutter="10">
       <el-col :md="12" :sm="24">
-        <echarts :options="option" />
+        <echarts :options="option" :autoresize="true" />
       </el-col>
       <el-col :md="12" :sm="24">
-        <echarts :options="option" />
+        <echarts :options="option" :autoresize="true" />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 export default {
   name: 'LoginActivePin',
-  components: { 'echarts': ECharts },
   data() {
     return {
       option: {
@@ -65,7 +63,7 @@ export default {
 
 <style scoped>
   .echarts {
-    width: 150px;
+    width: 100%;
     height: 250px;
   }
 </style>

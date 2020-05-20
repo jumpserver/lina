@@ -3,12 +3,10 @@
 </template>
 
 <script>
-import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
-import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/legend'
 export default {
   name: 'LoginMetric',
-  components: { 'echarts': ECharts },
   data: function() {
     return {
       options: {
@@ -25,11 +23,7 @@ export default {
           }
         },
         legend: {
-          data: ['LoginCount', 'ActiveUser', 'ActiveAsset'],
-          formatter: function(name) {
-            const map = { LoginCount: '登录数量', ActiveUser: '用户', ActiveAsset: '资产' }
-            return map[name]
-          }
+          data: ['LoginCount', 'ActiveUser', 'ActiveAsset']
         },
         grid: {
           left: '3%',
@@ -70,6 +64,7 @@ export default {
             type: 'value'
           }
         ],
+        animationDuration: 1000,
         series: [
           {
             name: 'LoginCount',

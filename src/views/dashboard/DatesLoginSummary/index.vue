@@ -12,13 +12,10 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :md="6" :sm="24">
-        <LoginTop class="card-item" />
-      </el-col>
-      <el-col :md="12" :sm="24">
+      <el-col :lg="18" :sm="24">
         <LoginMetric class="card-item" style="margin-top: -30px" heigth="300px" />
       </el-col>
-      <el-col :md="6" :sm="24">
+      <el-col :lg="6" :sm="24">
         <LoginActivePin class="card-item" />
       </el-col>
     </el-row>
@@ -26,13 +23,12 @@
 </template>
 
 <script>
-import LoginTop from './LoginTop'
 import LoginMetric from './LoginMetric'
 import LoginActivePin from './LoginActivePin'
 
 export default {
   name: 'DatesLoginSummary',
-  components: { LoginTop, LoginMetric, LoginActivePin },
+  components: { LoginMetric, LoginActivePin },
   data() {
     return {
       active: 'weekly'
