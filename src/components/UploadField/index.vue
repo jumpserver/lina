@@ -1,12 +1,11 @@
 <template>
-  <el-upload
-    v-bind="$attrs"
-    @input="onInput"
-    v-on="$listeners"
-  >
-    <el-button size="small" type="primary">点击上传</el-button>
-    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-  </el-upload>
+  <div>
+    <input type="file" @change="Onchange">
+    <div v-if="tip !== ''">{{ tip }}</div>
+    <div>
+      <img :src="src" v-bind="$attrs">
+    </div>
+  </div>
 </template>
 
 <script>
@@ -15,16 +14,28 @@ export default {
     value: {
       type: String,
       default: () => ''
+    },
+    tip: {
+      type: String,
+      default: () => ''
+    }
+  },
+  computed: {
+    src() {
+      return `${process.env.VUE_APP_BASE_API}${this.value}`
     }
   },
   watch: {
     value(value) {
-      this.$emit('customEvent', value, 'message')
+      this.$emit('customEvent', value)
     }
   },
   methods: {
     onInput(val) {
-      this.$emit('input', 'my-input: ' + val)
+      this.$emit('input', 'upload-field: ' + val)
+    },
+    Onchange(e) {
+      this.$emit('fileChange', e.target.files[0])
     }
   }
 }
