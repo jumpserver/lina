@@ -1,42 +1,27 @@
 <template>
   <Page>
-    <el-row :gutter="20">
-      <el-col :span="6"><SummaryCard /></el-col>
-      <el-col :span="6"><SummaryCard /></el-col>
-      <el-col :span="6"><SummaryCard /></el-col>
-      <el-col :span="6"><SummaryCard /></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="4"><SummaryCard /></el-col>
-      <el-col :span="16"><SummaryCard /></el-col>
-      <el-col :span="4"><SummaryCard /></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="8"><SummaryCard /></el-col>
-      <el-col :span="8"><SummaryCard /></el-col>
-      <el-col :span="8"><SummaryCard /></el-col>
-    </el-row>
+    <ResourceSummary />
+    <DatesLoginSummary />
   </Page>
 </template>
 
 <script>
-import Page from '@/layout/components/Page'
-import { SummaryCard } from '@/components'
+import { Page } from '@/layout/components'
+import ResourceSummary from './ResourceSummary'
+import DatesLoginSummary from './DatesLoginSummary'
 
 export default {
   name: 'Dashboard',
   components: {
-    Page, SummaryCard
+    Page, DatesLoginSummary, ResourceSummary
+  },
+  data() {
+    return {
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .el-row {
-    margin-bottom: 25px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
 
 </style>

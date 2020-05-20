@@ -1,5 +1,5 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :tree-setting="treeSetting" />
+  <GenericTreeListPage :table-config="tableConfig" :tree-setting="treeSetting" :header-actions="headerActions" />
 </template>
 
 <script>
@@ -28,7 +28,28 @@ export default {
         ],
         columnsMeta: {
         }
+      },
+      headerActions: {
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasImport: false,
+        hasRefresh: false,
+        extraActions: [
+          {
+            name: 'gather-user-tasks',
+            title: '收集用户任务',
+            type: 'primary',
+            has: true,
+            can: true,
+            callback: this.onGatherUserTasks
+          }
+        ]
       }
+    }
+  },
+  methods: {
+    onGatherUserTasks() {
+      this.$router.push({ name: 'GatherUserTaskList' })
     }
   }
 }

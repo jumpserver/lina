@@ -737,5 +737,20 @@
   "Assets": "",
   "settings": {
     "setting": ""
+  },
+  "dashboard": {
+    "UsersTotal": "用户总数",
+    "AssetsTotal": "资产总数",
+    "OnlineUsers": "在线用户",
+    "OnlineSessions": "在线会话"
+  },
+  "xpack": {
+    "InterfaceSettings": "界面设置",
+    "loginTitle": "登录页面标题",
+    "loginImage": "登录页面图片",
+    "favicon": "网站图标",
+    "logoIndex": "管理页面logo",
+    "logoLogout": "退出页面logo",
+    "RestoreButton": "恢复默认"
   }
 }

@@ -8,7 +8,7 @@ const getDefaultState = () => {
 const state = getDefaultState()
 
 const mutations = {
-  setUrlMeta: (state, { url, meta }) => {
+  SET_URL_META: (state, { url, meta }) => {
     state.metaMap[url] = meta
   }
 }
@@ -24,7 +24,7 @@ const actions = {
     }
     return new Promise((resolve, reject) => {
       optionUrlMeta(url).then(meta => {
-        commit('setUrlMeta', { url, meta })
+        commit('SET_URL_META', { url, meta })
         resolve(meta)
       }).catch(error => {
         reject(error)

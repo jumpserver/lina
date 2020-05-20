@@ -1,8 +1,12 @@
 <template>
   <el-card :class="'ibox ' + type" shadow="never" v-bind="$attrs">
-    <div v-if="title" slot="header" class="clearfix ibox-title">
-      <i v-if="fa" :class="'fa ' + fa" /> {{ title }}
-    </div>
+    <template #header>
+      <slot name="header">
+        <div v-if="title" slot="header" class="clearfix ibox-title">
+          <i v-if="fa" :class="'fa ' + fa" /> {{ title }}
+        </div>
+      </slot>
+    </template>
     <slot />
   </el-card>
 </template>
