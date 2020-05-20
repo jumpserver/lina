@@ -2,7 +2,7 @@
   <div class="white-bg dashboard-header">
     <el-row>
       <el-col :span="12">
-        <h2>登录汇总</h2>
+        <h2>{{ $t('dashboard.LoginOverview') }}</h2>
       </el-col>
       <el-col :span="12">
         <el-button-group style="float: right; padding: 0">
@@ -13,10 +13,10 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :lg="18" :sm="24">
-        <LoginMetric class="card-item" style="margin-top: -30px" heigth="300px" />
+        <LoginMetric :range="active" class="card-item" style="margin-top: -30px" heigth="300px" />
       </el-col>
       <el-col :lg="6" :sm="24">
-        <LoginActivePin class="card-item" />
+        <LoginActivePin :range="active" class="card-item" />
       </el-col>
     </el-row>
   </div>

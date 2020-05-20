@@ -15,6 +15,7 @@
 <script>
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
 export default {
   name: 'LoginActivePin',
   data() {
@@ -22,6 +23,9 @@ export default {
       option: {
         legend: {
           show: false
+        },
+        title: {
+          subtext: '资产'
         },
         color: ['#1ab394', '#1C84C6', '#9CC3DA'],
         tooltip: {
