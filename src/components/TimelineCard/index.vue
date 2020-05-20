@@ -22,7 +22,7 @@
 <script>
 import HeadingIBox from '../IBox/HeadingIBox'
 export default {
-  name: 'TimeLineCard',
+  name: 'TimelineCard',
   components: { HeadingIBox },
   data() {
     return {
