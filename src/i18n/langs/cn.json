@@ -95,7 +95,8 @@
     "MyAssets": "我的资产",
     "UserProfile":"个人信息",
     "WebFTP": "文件管理",
-    "CommandExecutions": "命令执行"
+    "CommandExecutions": "命令执行",
+    "MyApps":"我的应用"
   },
   "common": {
     "name": "名称",
@@ -281,6 +282,8 @@
     "AdminUserUpdate": "更新管理用户",
     "Username": "用户名",
     "LoginmodeDisplay": "登录模式",
+    "Database": "数据库",
+    "RemoteType":"应用类型",
     "ReplaceNodeAssetsAdminUserWithThis": "替换资产节点的管理员",
     "SelectNodes": "选择节点",
     "Protocol": "协议",
