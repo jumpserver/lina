@@ -1,4 +1,5 @@
 import Layout from '@/layout/index'
+import i18n from '@/i18n/i18n'
 
 export default {
   path: '/xpack',
@@ -11,7 +12,7 @@ export default {
       path: 'interface-setting',
       component: () => import('@/views/xpack/InterfaceSettings.vue'),
       name: 'InterfaceSetting',
-      meta: { title: 'InterfaceSetting' }
+      meta: { title: i18n.t('xpack.InterfaceSettings') }
     },
     {
       path: 'license',
