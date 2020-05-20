@@ -2,8 +2,8 @@
   <IBox v-bind="$attrs">
     <div class="ibox-heading">
       <slot name="content-heading">
-        <h3><i class="fa fa-envelope-o" /> New messages</h3>
-        <small><i class="fa fa-tim" /> You have 22 new messages and 16 waiting in draft folder.</small>
+        <h3 v-if="contentHeading.title"><i v-if="contentHeading.fa" :class="'fa ' + contentHeading.fa" /> {{ contentHeading.title }}</h3>
+        <small v-if="contentHeading.content"><i class="fa fa-tim" /> {{ contentHeading.content }}</small>
       </slot>
     </div>
     <slot />
@@ -14,7 +14,13 @@
 import IBox from './index'
 export default {
   name: 'HeadingIBox',
-  components: { IBox }
+  components: { IBox },
+  props: {
+    contentHeading: {
+      type: Object,
+      default: () => ({})
+    }
+  }
 }
 </script>
 
@@ -22,10 +28,7 @@ export default {
   .ibox-heading {
     background-color: #f3f6fb;
     border-bottom: none;
-    margin-left: -20px;
-    margin-right: -20px;
-    margin-top: -20px;
-    margin-bottom: 20px;
+    margin: -15px -20px 20px -20px;
     padding: 20px
   }
   .ibox-heading h3 {

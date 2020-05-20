@@ -759,7 +759,12 @@
     "DisabledUser": "禁用的",
     "InActiveAsset": "近期未被登录",
     "ActiveAsset": "近期被登录过",
-    "DisabledAsset": "禁用的"
+    "DisabledAsset": "禁用的",
+    "AssetsOfWeekSummary": "周资产登录统计",
+    "UsersOfWeekSummary": "周用户登录统计",
+    "TopAssetsOfWeek": "周资产 TOP10",
+    "TopUsersOfWeek": "周用户 TOP10",
+    "timesWeekUnit": "次/周"
   },
   "xpack": {
     "InterfaceSettings": "界面设置",
