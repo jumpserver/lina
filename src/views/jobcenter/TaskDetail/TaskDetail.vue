@@ -32,23 +32,18 @@ export default {
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('jobcenter.lastRunSuccessHosts'),
-        content: [
-          {
-            hostname: 'linux',
-            result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
-          }
-        ]
+        content: {
+          hostname: 'linux',
+          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
+        }
       },
       RunFailedConfig: {
         icon: 'fa-info',
         title: this.$t('jobcenter.lastRunFailedHosts'),
-        headerColor: 'danger',
-        content: [
-          {
-            hostname: 'window',
-            result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
-          }
-        ]
+        content: {
+          hostname: 'window',
+          result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+        }
       },
       taskData: {}
     }

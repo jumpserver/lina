@@ -5,7 +5,7 @@
     </el-col>
     <el-col :span="10">
       <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
-      <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
 </template>
@@ -32,23 +32,18 @@ export default {
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('jobcenter.lastRunSuccessHosts'),
-        content: [
-          {
-            hostname: 'linux',
-            result: 'api没有该数据，api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
-          }
-        ]
+        content: {
+          hostname: 'linux',
+          result: 'api没有该数据，api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+        }
       },
       RunFailedConfig: {
         icon: 'fa-info',
         title: this.$t('jobcenter.lastRunFailedHosts'),
-        headerColor: 'danger',
-        content: [
-          {
-            hostname: 'window',
-            result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
-          }
-        ]
+        content: {
+          hostname: 'window',
+          result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+        }
       }
     }
   },
