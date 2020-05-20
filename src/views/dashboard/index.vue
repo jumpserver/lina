@@ -2,18 +2,30 @@
   <Page>
     <ResourceSummary />
     <DatesLoginSummary />
+    <el-row :gutter="20" style="margin: 20px 0">
+      <el-col :md="8" :sm="12">
+        <TimelineCard class="card-item" />
+      </el-col>
+      <el-col :md="8" :sm="12">
+        <TimelineCard class="card-item" />
+      </el-col>
+      <el-col :md="8" :sm="12">
+        <TimelineCard class="card-item" />
+      </el-col>
+    </el-row>
   </Page>
 </template>
 
 <script>
 import { Page } from '@/layout/components'
+import TimelineCard from '@/components/TimelineCard'
 import ResourceSummary from './ResourceSummary'
 import DatesLoginSummary from './DatesLoginSummary'
 
 export default {
   name: 'Dashboard',
   components: {
-    Page, DatesLoginSummary, ResourceSummary
+    Page, DatesLoginSummary, ResourceSummary, TimelineCard
   },
   data() {
     return {

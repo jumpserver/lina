@@ -14,7 +14,17 @@ export default {
   components: { SummaryCard },
   data() {
     return {
-      summaryItems: [
+      counter: {
+        total_count_assets: '.',
+        total_count_users: '.',
+        total_count_online_users: '.',
+        total_count_online_sessions: '.'
+      }
+    }
+  },
+  computed: {
+    summaryItems() {
+      return [
         {
           title: this.$t('dashboard.UsersTotal'),
           rightSideLabel: {
@@ -22,8 +32,8 @@ export default {
             type: 'success'
           },
           body: {
-            link: '',
-            count: 10,
+            link: '/users/users',
+            count: this.counter.total_count_users,
             comment: 'All users'
           }
         },
@@ -34,8 +44,8 @@ export default {
             type: 'info'
           },
           body: {
-            link: '',
-            count: 10,
+            link: '/users/assets',
+            count: this.counter.total_count_assets,
             comment: 'All assets'
           }
         },
@@ -46,8 +56,8 @@ export default {
             type: 'primary'
           },
           body: {
-            link: '',
-            count: 10,
+            link: '/terminal/sessions',
+            count: this.counter.total_count_online_users,
             comment: 'Online users'
           }
         },
@@ -58,12 +68,20 @@ export default {
             type: 'danger'
           },
           body: {
-            link: '',
-            count: 10,
+            link: '/terminal/sessions',
+            count: this.counter.total_count_online_sessions,
             comment: 'Online sessions'
           }
         }
       ]
+    }
+  },
+  async mounted() {
+    this.counter = await this.getResourcesCount()
+  },
+  methods: {
+    async getResourcesCount() {
+      return this.$axios.get('/api/v1/index/?total_count=1')
     }
   }
 }

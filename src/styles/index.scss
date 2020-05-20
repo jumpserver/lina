@@ -12,8 +12,12 @@ body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
-  text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  //text-rendering: optimizeLegibility;
+  color: #676a6c;
+  //font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.428;
 }
 
 label {
@@ -78,4 +82,41 @@ div:focus {
 
 .small, small {
   font-size: 85%;
+}
+
+.text-navy {
+  color: $--color-primary;
+}
+
+b, strong {
+  font-weight: 700;
+}
+
+.m-b-xs {
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+}
+
+.h4, .h5, .h6, h4, h5, h6 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+h3, h4, h5 {
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 14px;
 }
