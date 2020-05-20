@@ -1,4 +1,5 @@
 import Layout from '@/layout/index'
+import i18n from '@/i18n/i18n'
 
 export default {
   path: '/xpack',
@@ -11,7 +12,7 @@ export default {
       path: 'interface-setting',
       component: () => import('@/views/xpack/InterfaceSettings.vue'),
       name: 'InterfaceSetting',
-      meta: { title: 'InterfaceSetting' }
+      meta: { title: i18n.t('xpack.InterfaceSettings') }
     },
     {
       path: 'license',
@@ -21,9 +22,30 @@ export default {
     },
     {
       path: 'gathered-users',
-      component: () => import('@/views/xpack/GatherUser'),
-      name: 'GatherUser',
-      meta: { title: 'GatherUser' }
+      component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),
+      name: 'GatherUserList',
+      meta: { title: i18n.t('xpack.GatherUserList') }
+    },
+    {
+      path: 'gathered-users/tasks',
+      component: () => import('@/views/xpack/GatheredUser/TaskList'),
+      name: 'GatherUserTaskList',
+      meta: { title: i18n.t('xpack.GatherUserTaskList') },
+      hidden: true
+    },
+    {
+      path: 'gathered-users/tasks/create',
+      component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
+      name: 'GatherUserTaskCreate',
+      meta: { title: i18n.t('xpack.GatherUserTaskCreate') },
+      hidden: true
+    },
+    {
+      path: 'gathered-users/tasks/update',
+      component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
+      name: 'GatherUserTaskUpdate',
+      meta: { title: i18n.t('xpack.GatherUserTaskUpdate'), action: 'update' },
+      hidden: true
     }
   ]
 }

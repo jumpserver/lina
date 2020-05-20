@@ -11,6 +11,8 @@ import ExpandAssetPermissionFormatter from './ExpandAssetPermissionFormatter'
 import CustomActionsFormatter from './CustomActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
+import ConnectFormatter from './ConnectFormatter'
+import SystemUserFormatter from './SystemUserFormatter'
 
 export default {
   DetailFormatter,
@@ -25,7 +27,9 @@ export default {
   ExpandAssetPermissionFormatter,
   CustomActionsFormatter,
   DeleteActionFormatter,
-  DateFormatter
+  DateFormatter,
+  ConnectFormatter,
+  SystemUserFormatter
 }
 
 export {
@@ -41,5 +45,7 @@ export {
   ExpandAssetPermissionFormatter,
   CustomActionsFormatter,
   DeleteActionFormatter,
-  DateFormatter
+  DateFormatter,
+  ConnectFormatter,
+  SystemUserFormatter
 }

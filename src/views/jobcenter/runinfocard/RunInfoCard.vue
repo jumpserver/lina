@@ -1,13 +1,11 @@
 <template>
   <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
-    <el-table class="el-table" style="width: 100%" :data="content" :show-header="false">
-      <el-table-column width="150px" prop="hostname" />
-      <el-table-column prop="result">
-        <template slot-scope="scope">
-          <span>{{ scope.row.result }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <table class="run-info">
+      <tr>
+        <td>{{ content.hostname }}</td>
+        <td>{{ content.result }}</td>
+      </tr>
+    </table>
   </IBox>
 </template>
 
@@ -29,8 +27,8 @@ export default {
       default: ''
     },
     content: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => ({})
     },
     url: {
       type: String,
@@ -45,5 +43,13 @@ export default {
 </script>
 
 <style scoped>
-
+.run-info {
+  line-height: 1.43;
+  padding: 8px;
+  vertical-align: top;
+  font-size: 13px;
+}
+.run-info > tr:first-child > td:first-child {
+  width: 150px;
+}
 </style>

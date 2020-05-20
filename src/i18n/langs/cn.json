@@ -760,5 +760,19 @@
     "InActiveAsset": "近期未被登录",
     "ActiveAsset": "近期被登录过",
     "DisabledAsset": "禁用的"
+  },
+  "xpack": {
+    "InterfaceSettings": "界面设置",
+    "loginTitle": "登录页面标题",
+    "loginImage": "登录页面图片",
+    "favicon": "网站图标",
+    "logoIndex": "管理页面logo",
+    "logoLogout": "退出页面logo",
+    "RestoreButton": "恢复默认",
+    "GatherUserList": "收集用户",
+    "GatherUserTaskList": "任务列表",
+    "GatherUserTaskCreate": "创建任务",
+    "Timer": "定时执行",
+    "GatherUserTaskUpdate": "更新任务"
   }
 }
