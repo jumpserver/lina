@@ -30,6 +30,11 @@ service.interceptors.request.use(
       config.headers['X-CSRFToken'] = getToken()
       if (getCurrentOrg().id !== '') { config.headers['X-JMS-ORG'] = getCurrentOrg().id }
     }
+    try {
+      config.headers['X-TZ'] = Intl.DateTimeFormat().resolvedOptions().timeZone
+    } catch (e) {
+      console.log('Current browser not support Intl tools')
+    }
     return config
   },
   error => {

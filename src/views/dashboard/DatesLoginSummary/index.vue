@@ -6,8 +6,8 @@
       </el-col>
       <el-col :span="12">
         <el-button-group style="float: right; padding: 0">
-          <el-button type="default" size="mini" :class="{ 'active': active === 'weekly'}" @click="changeDates('weekly')">Weekly</el-button>
-          <el-button type="default" size="mini" :class="{ 'active': active === 'monthly'}" @click="changeDates('monthly')">Monthly</el-button>
+          <el-button type="default" size="mini" :class="{ 'active': active === 'weekly'}" @click="changeDates('weekly')">{{ $t('dashboard.Weekly') }}</el-button>
+          <el-button type="default" size="mini" :class="{ 'active': active === 'monthly'}" @click="changeDates('monthly')">{{ $t('dashboard.Monthly') }}</el-button>
         </el-button-group>
       </el-col>
     </el-row>

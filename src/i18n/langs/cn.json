@@ -739,6 +739,8 @@
     "setting": ""
   },
   "dashboard": {
+    "Weekly": "按周",
+    "Monthly": "按月",
     "UsersTotal": "用户总数",
     "AssetsTotal": "资产总数",
     "OnlineUsers": "在线用户",
@@ -746,6 +748,17 @@
     "LoginOverview": "会话统计",
     "LoginCount": "登录次数",
     "LoginUsers": "活跃用户",
-    "LoginAssets": "活跃资产"
+    "LoginAssets": "活跃资产",
+    "ActiveUserAssetsRatioTitle": "占比统计",
+    "User": "用户",
+    "Asset": "资产",
+    "UserRadio": "用户占比统计",
+    "AssetRadio": "资产占比统计",
+    "InActiveUser": "近期未登录过",
+    "ActiveUser": "近期登录过",
+    "DisabledUser": "禁用的",
+    "InActiveAsset": "近期未被登录",
+    "ActiveAsset": "近期被登录过",
+    "DisabledAsset": "禁用的"
   }
 }

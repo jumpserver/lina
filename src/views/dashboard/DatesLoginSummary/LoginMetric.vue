@@ -16,10 +16,10 @@ export default {
   data: function() {
     return {
       metricsData: {
-        month_metrics_date: [],
-        month_metrics_total_count_active_assets: [],
-        month_metrics_total_count_active_users: [],
-        month_metrics_total_count_login: []
+        dates_metrics_date: [],
+        dates_metrics_total_count_active_assets: [],
+        dates_metrics_total_count_active_users: [],
+        dates_metrics_total_count_login: []
       }
     }
   },
@@ -56,7 +56,7 @@ export default {
           {
             type: 'category',
             boundaryGap: false,
-            data: this.metricsData.month_metrics_date
+            data: this.metricsData.dates_metrics_date
           }
         ],
         yAxis: [
@@ -71,32 +71,41 @@ export default {
             type: 'line',
             areaStyle: {},
             smooth: true,
-            data: this.metricsData.month_metrics_total_count_login
+            data: this.metricsData.dates_metrics_total_count_login
           },
           {
             name: this.$t('dashboard.LoginUsers'),
             type: 'line',
             areaStyle: {},
             smooth: true,
-            data: this.metricsData.month_metrics_total_count_active_users
+            data: this.metricsData.dates_metrics_total_count_active_users
           },
           {
             name: this.$t('dashboard.LoginAssets'),
             type: 'line',
             areaStyle: {},
             smooth: true,
-            data: this.metricsData.month_metrics_total_count_active_assets
+            data: this.metricsData.dates_metrics_total_count_active_assets
           }
         ]
       }
     }
   },
-  async mounted() {
-    this.metricsData = await this.getMetricData()
+  watch: {
+    range() {
+      this.getMetricData()
+    }
+  },
+  mounted() {
+    this.getMetricData()
   },
   methods: {
-    getMetricData() {
-      return this.$axios.get('/api/v1/index/?month_metrics=1')
+    async getMetricData() {
+      let url = '/api/v1/index/?dates_metrics=1&'
+      if (this.range === 'monthly') {
+        url = `${url}&monthly=1`
+      }
+      this.metricsData = await this.$axios.get(url)
     }
   }
 }
