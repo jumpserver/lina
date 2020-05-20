@@ -751,6 +751,11 @@
     "favicon": "网站图标",
     "logoIndex": "管理页面logo",
     "logoLogout": "退出页面logo",
-    "RestoreButton": "恢复默认"
+    "RestoreButton": "恢复默认",
+    "GatherUserList": "收集用户",
+    "GatherUserTaskList": "任务列表",
+    "GatherUserTaskCreate": "创建任务",
+    "Timer": "定时执行",
+    "GatherUserTaskUpdate": "更新任务"
   }
 }

@@ -24,27 +24,27 @@ export default {
       path: 'gathered-users',
       component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),
       name: 'GatherUserList',
-      meta: { title: 'GatherUserList' }
+      meta: { title: i18n.t('xpack.GatherUserList') }
     },
     {
       path: 'gathered-users/tasks',
       component: () => import('@/views/xpack/GatheredUser/TaskList'),
       name: 'GatherUserTaskList',
-      meta: { title: 'GatherUserTask' },
+      meta: { title: i18n.t('xpack.GatherUserTaskList') },
       hidden: true
     },
     {
       path: 'gathered-users/tasks/create',
       component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
       name: 'GatherUserTaskCreate',
-      meta: { title: 'GatherUserTaskCreate', action: 'create' },
+      meta: { title: i18n.t('xpack.GatherUserTaskCreate') },
       hidden: true
     },
     {
       path: 'gathered-users/tasks/update',
       component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
       name: 'GatherUserTaskUpdate',
-      meta: { title: 'GatherUserTaskUpdate', action: 'update' },
+      meta: { title: i18n.t('xpack.GatherUserTaskUpdate'), action: 'update' },
       hidden: true
     }
   ]

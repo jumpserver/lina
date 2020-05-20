@@ -12,7 +12,9 @@ export default {
   data() {
     return {
       fields: [
-        ['收集用户任务', ['name', 'nodes', 'is_periodic', 'crontab', 'interval', 'comment']]
+        [this.$t('common.Basic'), ['name', 'nodes']],
+        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('common.Others'), ['comment']]
       ],
       url: '/api/v1/xpack/gathered-user/tasks/',
       fieldsMeta: {
