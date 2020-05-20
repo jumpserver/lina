@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, ConnectFormatter, SystemUserFormatter } from '@/components/ListTable/formatters'
 export default {
   components: {
     GenericTreeListPage
@@ -20,7 +20,13 @@ export default {
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/perms/users/nodes/children/tree/?cache_policy=2',
         callback: {
-          refresh: () => {}
+          refresh: () => {},
+          onSelected: function(event, treeNode) {
+            if (treeNode.meta.type === 'node') {
+              const currentNodeId = treeNode.meta.node.id
+              this.tableConfig.url = `/api/v1/perms/users/nodes/${currentNodeId}/assets/?cache_policy=1`
+            }
+          }.bind(this)
         }
       },
       tableConfig: {
@@ -41,8 +47,9 @@ export default {
             sortable: 'custom'
           },
           {
-            prop: 'hardware_info',
+            prop: 'SystemUsers',
             align: 'center',
+            formatter: SystemUserFormatter,
             label: this.$t('assets.SystemUsers')
           },
           {
@@ -53,14 +60,15 @@ export default {
           {
             prop: 'id',
             align: 'center',
-            formatter: ActionsFormatter,
+            formatter: ConnectFormatter,
             width: '200px',
             label: this.$t('common.action'),
             actions: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/assets/assets/${id}/`
-                return this.$axios.delete(url)
+              onDelete: function({ row, col, cellValue, reload }) {
+                alert('接口错误：获取不到对应的资产状态')
+              },
+              onUpdate: function({ row, col, cellValue, reload }) {
+                window.open(`/luna/?login_to=${cellValue}`, '_blank')
               }
             }
           }
