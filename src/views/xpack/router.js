@@ -18,7 +18,7 @@ export default {
       path: 'license',
       component: () => import('@/views/xpack/License.vue'),
       name: 'License',
-      meta: { title: 'License' }
+      meta: { title: i18n.t('xpack.License') }
     },
     {
       path: 'gathered-users',

@@ -822,6 +822,7 @@
     "Edition": "版本",
     "LicenseDetail": "许可证详情",
     "ImportLicense": "导入许可证",
-    "LicenseFile": "许可证文件"
+    "LicenseFile": "许可证文件",
+    "ImportLicenseTip": "请导入许可证"
   }
 }
