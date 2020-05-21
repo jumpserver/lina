@@ -72,9 +72,10 @@ export default {
         },
         {
           key: this.$t('jobcenter.latestVersion'),
-          value: this.object.latest_execution.adhoc_short_id,
+          value: this.object.latest_execution,
           callback: function(row, data) {
-            return <a href=''>{ data }</a>
+            const url = `/ops/adhoc/${data.adhoc}`
+            return <a href={ url }>{ data.adhoc_short_id }</a>
           }
         },
         {
