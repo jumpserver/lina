@@ -812,7 +812,16 @@
     "Domain": "网域",
     "AdminUser": "管理用户",
     "SystemUser": "系统用户",
-    "Label": "标签"
-
+    "Label": "标签",
+    "License": "许可证",
+    "NoLicense": "暂无许可证",
+    "SubscriptionID": "订阅授权ID",
+    "Corporation": "公司",
+    "Expired": "过期时间",
+    "AssetCount": "资产数量",
+    "Edition": "版本",
+    "LicenseDetail": "许可证详情",
+    "ImportLicense": "导入许可证",
+    "LicenseFile": "许可证文件"
   }
 }
