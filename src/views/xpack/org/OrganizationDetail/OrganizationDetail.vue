@@ -11,8 +11,7 @@
 </template>
 
 <script>
-import { DetailCard } from '@/components'
-import { RelationCard } from '@/components'
+import { DetailCard, RelationCard } from '@/components'
 
 export default {
   name: 'OrganizationDetail',
@@ -30,7 +29,7 @@ export default {
     return {
       userReletionConfig: {
         icon: 'fa-user',
-        title: '用户',
+        title: this.$t('xpack.User'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {
@@ -61,7 +60,7 @@ export default {
       },
       adminReletionConfig: {
         icon: 'fa-user',
-        title: '管理员',
+        title: this.$t('xpack.Admin'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           processResults(data) {

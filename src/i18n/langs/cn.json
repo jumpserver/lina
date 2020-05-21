@@ -799,6 +799,20 @@
     "GatherUserTaskList": "任务列表",
     "GatherUserTaskCreate": "创建任务",
     "Timer": "定时执行",
-    "GatherUserTaskUpdate": "更新任务"
+    "GatherUserTaskUpdate": "更新任务",
+    "OrganizationList": "组织管理",
+    "OrganizationCreate": "创建组织",
+    "OrganizationUpdate": "更新组织",
+    "OrganizationDetail": "组织详情",
+    "Admin": "管理员",
+    "Auditor": "审计员",
+    "User": "用户",
+    "UserGroup": "用户组",
+    "Asset": "资产",
+    "Domain": "网域",
+    "AdminUser": "管理用户",
+    "SystemUser": "系统用户",
+    "Label": "标签"
+
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="Organization" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
+  <GenericDetailPage :object.sync="Organization" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="Organization" />
     </keep-alive>
@@ -23,7 +23,7 @@ export default {
         activeMenu: 'OrganizationDetail',
         submenu: [
           {
-            title: this.$t('org.OrganizationDetail'),
+            title: this.$t('xpack.OrganizationDetail'),
             name: 'OrganizationDetail'
           }
         ]

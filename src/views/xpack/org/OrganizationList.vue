@@ -20,43 +20,43 @@ export default {
         ],
         columnsMeta: {
           admins: {
-            label: '管理员',
+            label: this.$t('xpack.Admin'),
             formatter: OrgFieldsFormatter
           },
           auditors: {
-            label: '审计员',
+            label: this.$t('xpack.Auditor'),
             formatter: OrgFieldsFormatter
           },
           users: {
-            label: '用户',
+            label: this.$t('xpack.User'),
             formatter: OrgFieldsFormatter
           },
           user_groups: {
-            label: '用户组',
+            label: this.$t('xpack.UserGroup'),
             formatter: OrgFieldsFormatter
           },
           assets: {
-            label: '资产',
+            label: this.$t('xpack.Asset'),
             formatter: OrgFieldsFormatter
           },
           domains: {
-            label: '网域',
+            label: this.$t('xpack.Domain'),
             formatter: OrgFieldsFormatter
           },
           admin_users: {
-            label: '管理用户',
+            label: this.$t('xpack.AdminUser'),
             formatter: OrgFieldsFormatter
           },
           system_users: {
-            label: '系统用户',
+            label: this.$t('xpack.SystemUser'),
             formatter: OrgFieldsFormatter
           },
           labels: {
-            label: '标签',
+            label: this.$t('xpack.Admin'),
             formatter: OrgFieldsFormatter
           },
           perms: {
-            label: '权限管理',
+            label: this.$t('xpack.Label'),
             formatter: OrgFieldsFormatter
           }
         },
