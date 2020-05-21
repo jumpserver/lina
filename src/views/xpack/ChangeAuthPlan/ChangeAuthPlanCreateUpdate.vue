@@ -1,10 +1,10 @@
 <template>
-  <h1>hello</h1>
+  <div>change auth plan create update</div>
 </template>
 
 <script>
 export default {
-  name: 'ChangeAuthPlan'
+  name: 'ChangeAuthPlanCreateUpdate'
 }
 </script>
 
