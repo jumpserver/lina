@@ -106,16 +106,16 @@ export default {
       return actions
     },
     actions() {
-      if (this.cleanedActions.length <= 3) {
+      if (this.cleanedActions.length <= 2) {
         return this.cleanedActions
       }
-      return this.cleanedActions.slice(0, 2)
+      return this.cleanedActions.slice(0, 1)
     },
     moreActions() {
-      if (this.cleanedActions.length <= 3) {
+      if (this.cleanedActions.length <= 2) {
         return []
       }
-      return this.cleanedActions.slice(2, this.cleanedActions.length)
+      return this.cleanedActions.slice(1, this.cleanedActions.length)
     }
   },
   methods: {
