@@ -336,7 +336,8 @@
     "TestAssetsConnective": "测试资产可连接性",
     "PushSystemUserNow": "推送系统用户",
     "Push": "推送",
-    "Node": "节点"
+    "Node": "节点",
+    "TestConnection": "测试连接"
   },
   "audits": {
     "username": "用户名",

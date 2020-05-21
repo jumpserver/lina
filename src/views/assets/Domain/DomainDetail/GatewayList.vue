@@ -29,13 +29,11 @@ export default {
           {
 
             prop: 'ip',
-            label: this.$t('assets.ip'),
-            sortable: 'custom'
+            label: this.$t('assets.ip')
           },
           {
             prop: 'port',
-            label: this.$t('assets.Port'),
-            sortable: 'custom'
+            label: this.$t('assets.Port')
           },
           {
             prop: 'protocol',
@@ -44,13 +42,11 @@ export default {
           },
           {
             prop: 'username',
-            label: this.$t('assets.Username'),
-            sortable: 'custom'
+            label: this.$t('assets.Username')
           },
           {
             prop: 'comment',
-            label: this.$t('assets.Comment'),
-            sortable: 'custom'
+            label: this.$t('assets.Comment')
           },
           {
             prop: 'id',
@@ -68,7 +64,10 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
-                  title: this.$t('assets.TestConnection')
+                  title: this.$t('assets.TestConnection'),
+                  callback: function(val) {
+                    console.log(val)
+                  }
                 }
               ]
             }
