@@ -6,7 +6,7 @@ export default {
   component: Layout,
   redirect: '/applications/remote-apps/',
   name: 'Xpack',
-  meta: { title: 'Xpack', icon: 'th' },
+  meta: { title: 'Xpack', icon: 'sitemap' },
   children: [
     {
       path: 'interface-setting',

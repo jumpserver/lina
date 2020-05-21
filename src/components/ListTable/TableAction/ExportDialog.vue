@@ -35,8 +35,6 @@ export default {
   data() {
     return {
       showExportDialog: false,
-      showImportDialog: false,
-      importOption: '1',
       exportOption: '1',
       meta: {}
     }
