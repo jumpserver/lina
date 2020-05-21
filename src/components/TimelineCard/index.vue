@@ -1,9 +1,10 @@
 <template>
-  <HeadingIBox title="hello">
+  <HeadingIBox v-bind="$attrs">
     <div class="ibox-content inspinia-timeline">
       <div v-for="(item, index) in items" :key="item.title + index" class="timeline-item">
         <el-row :gutter="20">
           <el-col :sm="6" class="date">
+            <i v-if="item.fa" :class="'fa ' + item.fa" />
             <span v-if="item.date">{{ item.date }}</span>
             <br>
             <small v-if="item.timeSince" class="text-navy">{{ item.timeSince }}</small>
@@ -16,7 +17,6 @@
       </div>
     </div>
   </HeadingIBox>
-
 </template>
 
 <script>
@@ -24,24 +24,10 @@ import HeadingIBox from '../IBox/HeadingIBox'
 export default {
   name: 'TimelineCard',
   components: { HeadingIBox },
-  data() {
-    return {
-      items: [
-        {
-          fa: 'fa-briefcase',
-          date: '6:00 am',
-          timeSince: '2 hour ago',
-          title: 'Meeting',
-          content: 'Conference on the sales results for the previous year. Monica please examine sales trends in marketing and products. Below please find the current status of the sale.'
-        },
-        {
-          fa: 'fa-copy',
-          date: '6:00 am',
-          timeSince: '3 hour ago',
-          title: 'Send documents to Mike',
-          content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since."
-        }
-      ]
+  props: {
+    items: {
+      type: Array,
+      default: () => []
     }
   }
 }

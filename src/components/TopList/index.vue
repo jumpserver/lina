@@ -1,13 +1,13 @@
 <template>
   <div>
-    <small>过去一周, 共有 2 位用户登录 31 次资产.</small>
+    <small v-if="msg">{{ msg }}</small>
     <ul class="list-group clear-list m-t">
-      <li v-for="(item, index) of summaryItems" :key="item.username" class="list-group-item fist-item">
+      <li v-for="(item, index) of items" :key="item.name" class="list-group-item">
         <span class="pull-right">
-          {{ item.count }} 次/周
+          {{ item.count }} {{ unit }}
         </span>
         <el-tag effect="dark" size="small" :type="getLabelType(index)">{{ index + 1 }}</el-tag>
-        {{ item.username }}
+        {{ item.name }}
       </li>
     </ul>
   </div>
@@ -15,37 +15,35 @@
 
 <script>
 export default {
-  name: 'LoginTop',
+  name: 'LoginList',
+  props: {
+    items: {
+      type: Array,
+      default: () => []
+    },
+    unit: {
+      type: String,
+      default: 'times'
+    },
+    msg: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      summaryItems: [
-        {
-          username: '周杰伦',
-          count: 42
-        },
-        {
-          username: '林俊杰',
-          count: 30
-        },
-        {
-          username: '蔡依林',
-          count: 28
-        },
-        {
-          username: '梁静茹',
-          count: 26
-        },
-        {
-          username: '孙燕姿',
-          count: 22
-        }
-      ],
       tabsType: ['success', 'info', 'primary', 'default', 'info']
     }
   },
+  mounted() {
+    console.log(this.items)
+  },
   methods: {
     getLabelType(index) {
-      return this.tabsType[index] || 'primary'
+      const i = Math.floor(Math.random() * 4)
+      // const i = index % 5
+      return this.tabsType[i] || 'primary'
+      // return this.tabsType[index] || 'primary'
     }
   }
 }
