@@ -10,26 +10,7 @@
             <DetailCard :title="cardTitle" :items="detailItems" />
           </el-col>
           <el-col :span="10">
-            <el-card class="box-card primary">
-              <div slot="header" class="clearfix">
-                <i class="fa fa-info" />
-                <span>{{ cardActions }}</span>
-              </div>
-              <el-table class="el-table" :data="cardActionData" :show-header="false">
-                <el-table-column prop="name" />
-                <el-table-column prop="button" align="right">
-                  <template slot-scope="scope">
-                    <el-button
-                      type="primary"
-                      size="mini"
-                      @click="handleButtonAction(scope.$index, scope.row)"
-                    >
-                      {{ scope.row.button }}
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-card>
+            <QuickActions type="primary" :actions="quickActions" />
           </el-col>
         </el-row>
       </div>
@@ -51,6 +32,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
+import { QuickActions } from '@/components'
 import DetailCard from '@/components/DetailCard/index'
 import { importLicense } from '@/views/xpack/api'
 import { mapGetters } from 'vuex'
@@ -59,7 +41,8 @@ export default {
   name: 'License',
   components: {
     GenericDetailPage,
-    DetailCard
+    DetailCard,
+    QuickActions
   },
   data() {
     return {
@@ -79,7 +62,30 @@ export default {
         actions: {
           detailApiUrl: '/api/v1/xpack/license/detail'
         }
-      }
+      },
+      quickActions: [
+        {
+          title: this.$t('xpack.ImportLicense'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('xpack.import')
+          },
+          callbacks: {
+            click: this.importAction
+
+          }
+        },
+        {
+          title: this.$t('xpack.technologyConsult'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('xpack.consult')
+          },
+          callbacks: {
+            click: this.consultAction
+          }
+        }
+      ]
     }
   },
   computed: {
@@ -91,23 +97,6 @@ export default {
     },
     cardTitle() {
       return ''
-    },
-    cardActions() {
-      return this.$t('sessions.quickModify')
-    },
-    cardActionData() {
-      return [
-        {
-          name: '导入许可证',
-          button: '导入',
-          value: 'import'
-        },
-        {
-          name: '技术咨询',
-          button: '咨询',
-          value: 'consult'
-        }
-      ]
     },
     detailItems() {
       if (!this.publicSettings.XPACK_LICENSE_IS_VALID) {
@@ -143,18 +132,6 @@ export default {
     }
   },
   methods: {
-    handleButtonAction: function(index, row) {
-      switch (row.value) {
-        case 'import':
-          this.importAction()
-          break
-        case 'consult':
-          this.consultAction()
-          break
-        default:
-          console.log('No Match button action: ' + row.value)
-      }
-    },
     importAction: function() {
       this.dialogLicenseImport = true
     },
