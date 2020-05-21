@@ -28,13 +28,22 @@ export default {
           stat: {
             label: this.$t('jobcenter.stat'),
             formatter: function(row) {
-              return '请求的api里没有该数据'
+              const summary = <div>
+                <span class='text-primary'>{row.stat.success}</span>/
+                <span class='text-danger'>{row.stat.failed}</span>/
+                <span>{row.stat.total}</span>
+              </div>
+              return summary
             }
           },
           ratio: {
             label: this.$t('jobcenter.ratio'),
             formatter: function(row) {
-              return '请求的api里没有该数据'
+              const ratio = (row.stat.success / row.stat.total) * 100
+              if (ratio === 100) {
+                return <span class='text-navy'>{ratio + '%'}</span>
+              }
+              return <span class='text-danger'>{ratio + '%'}</span>
             }
           },
           is_finished: {
