@@ -72,6 +72,7 @@ export default {
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           can({ selectedRows }) {
+            // vm.$log.debug('Delete select rows length: ', selectedRows.length)
             return selectedRows.length > 0
           },
           callback: this.defaultBulkDeleteCallback

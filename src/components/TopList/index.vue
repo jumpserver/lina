@@ -36,9 +36,6 @@ export default {
       indexLabels: []
     }
   },
-  mounted() {
-    console.log(this.items)
-  },
   methods: {
     getLabelType(index) {
       const i = Math.floor(Math.random() * 4)
