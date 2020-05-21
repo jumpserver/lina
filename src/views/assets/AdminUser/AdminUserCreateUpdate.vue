@@ -5,6 +5,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import Uploadkey from '@/components/UploadKey'
 export default {
   name: 'AdminUserCreateUpdate',
   components: {
@@ -33,10 +34,7 @@ export default {
           helpText: this.$t('密码或密钥密码')
         },
         private_key: {
-          type: 'upload',
-          el: {
-            url: 'http://baiddu.com'
-          }
+          component: Uploadkey
         }
       },
       url: '/api/v1/assets/admin-users/'

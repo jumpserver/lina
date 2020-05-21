@@ -29,29 +29,27 @@ export default {
           },
           {
             prop: 'protocol',
-            label: this.$t('assets.protocol'),
+            label: this.$t('assets.Protocol'),
             sortable: 'custom'
           },
           {
             prop: 'login_mode_display',
-            label: this.$t('assets.loginMode'),
-            sortable: 'custom'
+            label: this.$t('assets.LoginModel')
           },
           {
             prop: 'assets_amount',
-            label: this.$t('assets.assets'),
-            sortable: 'custom'
+            label: this.$t('assets.Assets')
           },
           {
             prop: 'comment',
-            label: this.$t('common.Comment'),
-            sortable: 'custom'
+            label: this.$t('common.Comment')
           },
           {
             prop: 'id',
             align: 'center',
             formatter: ActionsFormatter,
             width: '200px',
+            label: this.$t('common.Action'),
             updateRoute: 'SystemUserUpdate',
             actions: {
               performDelete: ({ row, col }) => {

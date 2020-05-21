@@ -33,11 +33,11 @@ export default {
     return {
       AutoPushConfig: {
         icon: 'fa-info',
-        title: this.$t('assets.quick_update'),
+        title: this.$t('assets.QuickUpdate'),
         url: `/api/v1/assets/system-users/${this.object.id}/`,
         content: [
           {
-            name: this.$t('assets.auto_push'),
+            name: this.$t('assets.AutoPush'),
             auto_push: this.object.auto_push
           }
         ]
@@ -92,7 +92,7 @@ export default {
           title: this.$t('assets.PushSystemUserNow'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Push')
+            label: this.$t('assets.Push')
           },
           callbacks: {
             click: function() {
@@ -112,7 +112,7 @@ export default {
         columns: [
           {
             prop: 'hostname',
-            label: this.$t('assets.hostname')
+            label: this.$t('assets.Hostname')
           },
           {
             prop: 'ip',
@@ -120,20 +120,21 @@ export default {
           },
           {
             prop: 'username',
-            label: this.$t('assets.username')
+            label: this.$t('assets.Username')
           },
           {
             prop: 'version',
-            label: this.$t('assets.version')
+            label: this.$t('assets.Version')
           },
           {
             prop: 'date_created',
-            label: this.$t('assets.date_created'),
+            label: this.$t('assets.date_joined'),
             formatter: DateFormatter
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: CustomActionsFormatter,
             actions: {
               extraActions: [
@@ -199,13 +200,21 @@ export default {
               node: v.value
             }
           })
-          return this.$axios.post(relationUrl, data)
+          return this.$axios.post(relationUrl, data).then(res => {
+            this.$message.success(this.$t('common.updateSuccessMsg'))
+          }).catch(err => {
+            this.$message.error(this.$t('common.updateFailedMsg' + ' ' + err))
+          })
         },
         performDelete: (item) => {
           const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
-          return this.$axios.delete(relationUrl)
+          return this.$axios.delete(relationUrl).then(res => {
+            this.$message.success(this.$t('common.updateSuccessMsg'))
+          }).catch(err => {
+            this.$message.error(this.$t('common.updateFailedMsg' + ' ' + err))
+          })
         }
       }
     }

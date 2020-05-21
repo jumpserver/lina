@@ -11,8 +11,9 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import Uploadkey from '@/components/UploadKey/'
 export default {
-  name: 'GatewayCreateUpate',
+  name: 'GatewayCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
     return {
@@ -23,7 +24,7 @@ export default {
       },
       fields: [
         [this.$t('assets.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
-        [this.$t('assets.Auth'), ['username', 'password']],
+        [this.$t('assets.Auth'), ['username', 'password', 'private_key']],
         [this.$t('assets.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
@@ -51,6 +52,9 @@ export default {
         },
         is_active: {
           type: 'switch'
+        },
+        private_key: {
+          component: Uploadkey
         }
       },
       updateSuccessNextRoute: {
