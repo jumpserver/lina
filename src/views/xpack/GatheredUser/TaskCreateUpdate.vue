@@ -18,6 +18,16 @@ export default {
       ],
       url: '/api/v1/xpack/gathered-user/tasks/',
       fieldsMeta: {
+        crontab: {
+          helpTips: `eg: Every Sunday 03:05 run <5 3 * * 0> <br>
+                    Tips:
+                    Using 5 digits linux crontab expressions
+                    <min hour day month week>
+                    (<a href='https://tool.lu/crontab/' target='_blank'>Online tools</a>) <br>
+                    Note:
+                    If both Regularly perform and Cycle perform are set,
+                    give priority to Regularly perform`
+        },
         nodes: {
           el: {
             multiple: true,
