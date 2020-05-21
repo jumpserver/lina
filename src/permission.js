@@ -59,7 +59,7 @@ router.beforeEach(async(to, from, next) => {
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     let { current_org_roles } = await store.dispatch('users/getProfile')
 
-    current_org_roles = checkRoules(current_org_roles)
+    current_org_roles = checkRoles(current_org_roles)
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
@@ -79,6 +79,7 @@ router.beforeEach(async(to, from, next) => {
     // Message.error(error || 'Has Error')
     // next(`/login?redirect=${to.path}`)
     // NProgress.done()
+    console.log(error)
     next()
   }
 })
@@ -88,7 +89,7 @@ router.afterEach(() => {
   NProgress.done()
 })
 
-function checkRoules(val) {
+function checkRoles(val) {
   let currentRule = getPermission()
   if (currentRule) {
     if (!val.includes(currentRule)) {

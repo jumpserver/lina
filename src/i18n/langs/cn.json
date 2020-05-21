@@ -83,7 +83,7 @@
     "GatewayCreate": "",
     "GatewayUpdate": "",
     "AdminUserUpdate": "",
-    "PlatformDetail": "",
+    "PlatformDetail": "平台详情",
     "CommandFilterRulesUpdate": "",
     "CommandFilterDetail": "命令过滤器详情",
     "AdminUserDetail": "管理用户详情",
