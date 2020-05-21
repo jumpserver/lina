@@ -1,6 +1,7 @@
 <template>
   <IBox :title="title">
-    <TopList :items="assetsItems" :unit="unit" class="top-assets" />
+    <TopList v-if="assetsItems.length > 0" :items="assetsItems" :unit="unit" class="top-assets" />
+    <span v-else>{{ $t('common.NoData') }}</span>
   </IBox>
 </template>
 
@@ -14,11 +15,7 @@ export default {
     return {
       title: this.$t('dashboard.TopAssetsOfWeek'),
       unit: this.$t('dashboard.timesWeekUnit'),
-      dates_login_times_top10_assets: [{
-        'asset': 'jump_10.1.240.70',
-        'total': 44,
-        'last': '2020-05-19 08:43:51.180220+00:00'
-      }]
+      dates_login_times_top10_assets: []
     }
   },
   computed: {
@@ -26,6 +23,15 @@ export default {
       return this.dates_login_times_top10_assets.map((v) => {
         return { name: v.asset, count: v.total }
       })
+    }
+  },
+  mounted() {
+    this.getTopLoginAssets()
+  },
+  methods: {
+    async getTopLoginAssets() {
+      const data = await this.$axios.get('/api/v1/index/?dates_login_times_top10_assets=1')
+      this.dates_login_times_top10_assets = data.dates_login_times_top10_assets
     }
   }
 }
