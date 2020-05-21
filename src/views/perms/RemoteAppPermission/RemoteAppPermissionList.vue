@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { LengthFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -30,7 +29,6 @@ export default {
             label: this.$t('assets.RemoteApps')
           },
           system_users_amount: {
-            formatter: LengthFormatter,
             label: this.$t('assets.SystemUsers')
           }
         }
