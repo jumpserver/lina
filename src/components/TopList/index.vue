@@ -61,7 +61,7 @@ export default {
 
   .list-group {
     padding-left: 0;
-    margin-bottom: 20px;
+    margin-bottom: 0;
   }
 
   .list-group.clear-list .list-group-item {

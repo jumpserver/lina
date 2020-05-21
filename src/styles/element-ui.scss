@@ -377,7 +377,7 @@ td .el-button.el-button--mini {
 }
 
 .el-table__header thead tr th {
-  border-bottom: 1.5px solid #e7e7e7 !important;
+  border-bottom: 1px solid #e7e7e7 !important;
 }
 
 .el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
@@ -404,4 +404,9 @@ a {
 
 .el-card {
   color: #676a6c;
+}
+
+
+.el-table__empty-block {
+ width: 100% !important;
 }

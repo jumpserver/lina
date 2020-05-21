@@ -15,9 +15,9 @@
             <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
-        <IBox class="transition-box" style="width: calc(100% - 17px);">
+        <div class="transition-box" style="width: calc(100% - 17px);">
           <ListTable :table-config="iTableConfig" :header-actions="headerActions" />
-        </IBox>
+        </div>
       </div>
     </div>
   </el-collapse-transition>

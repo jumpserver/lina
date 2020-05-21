@@ -686,7 +686,7 @@
     "Users": "用户",
     "Remove": "移除",
     "UserGroups": "用户组",
-    "removeWarningMsg": "你确定移除 ",
+    "removeWarningMsg": "你确定从组织移除 ",
     "removeSuccessMsg": "移除成功",
     "removeErrorMsg": "移除失败",
     "quickUpdate": {
