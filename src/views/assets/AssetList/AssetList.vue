@@ -24,20 +24,10 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
-        tagSearch: [
-          {
-            label: this.$t('assets.hostname'),
-            key: 'hostname'
-          }, {
-            label: this.$t('assets.ip'),
-            key: 'ip'
-
-          }
-        ],
         columns: [
           {
             prop: 'hostname',
-            label: this.$t('assets.hostname'),
+            label: this.$t('assets.Hostname'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'AssetDetail'
@@ -49,17 +39,18 @@ export default {
           },
           {
             prop: 'hardware_info',
-            label: this.$t('assets.hardware')
+            label: this.$t('assets.Hardware')
           },
           {
             prop: 'reachable',
-            label: this.$t('assets.reachable'),
+            label: this.$t('assets.Reachable'),
             formatter: BooleanFormatter
           },
           {
             prop: 'id',
             align: 'center',
             formatter: ActionsFormatter,
+            label: this.$t('assets.Action'),
             width: '200px',
             actions: {
               performDelete: ({ row, col }) => {

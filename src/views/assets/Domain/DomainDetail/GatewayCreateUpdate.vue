@@ -18,12 +18,13 @@ export default {
     return {
       initial: {
         protocol: 'ssh',
-        domain: this.$route.params.domainid
+        domain: this.$route.params.domainid,
+        is_active: true
       },
       fields: [
-        [this.$t('basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
-        [this.$t('认证'), ['username', 'password']],
-        [this.$t('other'), ['is_active', 'comment']]
+        [this.$t('assets.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
+        [this.$t('assets.Auth'), ['username', 'password']],
+        [this.$t('assets.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         ip: {

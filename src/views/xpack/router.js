@@ -18,7 +18,7 @@ export default {
       path: 'license',
       component: () => import('@/views/xpack/License.vue'),
       name: 'License',
-      meta: { title: 'License' }
+      meta: { title: i18n.t('xpack.License') }
     },
     {
       path: 'gathered-users',
@@ -46,6 +46,33 @@ export default {
       name: 'GatherUserTaskUpdate',
       meta: { title: i18n.t('xpack.GatherUserTaskUpdate'), action: 'update' },
       hidden: true
+    },
+    {
+      path: 'orgs',
+      component: () => import('@/views/xpack/org/OrganizationList'),
+      name: 'OrganizationList',
+      meta: { title: i18n.t('xpack.OrganizationList') }
+    },
+    {
+      path: 'orgs/create',
+      component: () => import('@/views/xpack/org/OrganizationCreateUpdate'),
+      name: 'OrganizationCreate',
+      hidden: true,
+      meta: { title: i18n.t('xpack.OrganizationCreate'), activeMenu: '/xpack/orgs', action: 'create' }
+    },
+    {
+      path: 'orgs/:id/update',
+      component: () => import('@/views/xpack/org/OrganizationCreateUpdate'),
+      name: 'OrganizationUpdate',
+      hidden: true,
+      meta: { title: i18n.t('xpack.OrganizationUpdate'), activeMenu: '/xpack/orgs', action: 'update' }
+    },
+    {
+      path: 'orgs/:id',
+      component: () => import('@/views/xpack/org/OrganizationDetail/index'),
+      name: 'OrganizationDetail',
+      hidden: true,
+      meta: { title: i18n.t('xpack.OrganizationDetail'), activeMenu: '/xpack/orgs' }
     }
   ]
 }

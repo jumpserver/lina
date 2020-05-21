@@ -33,7 +33,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('assets.is_active'),
+          title: this.$t('assets.IsActive'),
           type: 'switcher',
           attrs: {
             label: this.$t('common.Test'),
@@ -55,7 +55,7 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Test')
+            label: this.$t('assets.Test')
           },
           callbacks: {
             click: function() {
@@ -73,7 +73,7 @@ export default {
           title: this.$t('assets.PushSystemUserNow'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Push')
+            label: this.$t('assets.Push')
           },
           callbacks: {
             click: function() {
@@ -90,7 +90,7 @@ export default {
       ],
       nodeReletionConfig: {
         icon: 'fa-info',
-        title: this.$t('perms.Add node to this permission'),
+        title: this.$t('assets.Node'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           processResults(data) {
@@ -142,7 +142,7 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.hostname'),
+          key: this.$t('assets.Hostname'),
           value: this.object.hostname
         },
         {
@@ -150,71 +150,71 @@ export default {
           value: this.object.ip
         },
         {
-          key: this.$t('assets.protocols'),
+          key: this.$t('assets.Protocols'),
           value: this.object.protocols
         },
         {
-          key: this.$t('assets.public_ip'),
+          key: this.$t('assets.PublicIp'),
           value: this.object.public_ip
         },
         {
-          key: this.$t('assets.admin_user'),
+          key: this.$t('assets.AdminUser'),
           value: this.object.admin_user
         },
         {
-          key: this.$t('assets.domain'),
+          key: this.$t('assets.Domain'),
           value: this.object.domain
         },
         {
-          key: this.$t('assets.vendor'),
+          key: this.$t('assets.Vendor'),
           value: this.object.vendor
         },
         {
-          key: this.$t('assets.model'),
+          key: this.$t('assets.Model'),
           value: this.object.model
         },
         {
-          key: this.$t('assets.cpu_model'),
+          key: this.$t('assets.Cpu'),
           value: this.object.cpu_model
         },
         {
-          key: this.$t('assets.memory'),
+          key: this.$t('assets.Memory'),
           value: this.object.memory
         },
         {
-          key: this.$t('assets.disk_info'),
+          key: this.$t('assets.Disk'),
           value: this.object.disk_info
         },
         {
-          key: this.$t('assets.platform'),
+          key: this.$t('assets.Platform'),
           value: this.object.platform
         },
         {
-          key: this.$t('assets.os_arch'),
+          key: this.$t('assets.Os'),
           value: this.object.os_arch
         },
         {
-          key: this.$t('assets.is_active'),
-          value: `this.object.is_active`
+          key: this.$t('assets.IsActive'),
+          value: this.object.is_active.toString()
         },
         {
-          key: this.$t('assets.sn'),
+          key: this.$t('assets.SerialNumber'),
           value: this.object.sn
         },
         {
-          key: this.$t('assets.number'),
+          key: this.$t('assets.AssetNumber'),
           value: this.object.number
         },
         {
-          key: this.$t('assets.date_created'),
+          key: this.$t('assets.DateJoined'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('assets.created_by'),
+          key: this.$t('assets.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('assets.comment'),
+          key: this.$t('assets.Comment'),
           value: this.object.comment
         }
       ]
@@ -222,7 +222,7 @@ export default {
 
   },
   mounted() {
-    console.log(this.object)
+
   },
   methods: {
 
