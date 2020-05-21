@@ -45,8 +45,9 @@ export default {
         performAdd: (items) => {
           const objectId = this.object.id
           const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const usersId = items.map(v => v.value)
-          const data = { users: usersId }
+          const objectRelationUsers = this.object.users
+          items.map(v => objectRelationUsers.push(v.value))
+          const data = { users: objectRelationUsers }
           return this.$axios.patch(relationUrl, data)
         },
         performDelete: (item) => {
@@ -72,20 +73,21 @@ export default {
             return { results: results, pagination: more, total: data.count }
           }
         },
-        hasObjectsId: this.object.admin_users,
+        hasObjectsId: this.object.admins,
         performAdd: (items) => {
           const objectId = this.object.id
           const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const adminUsersId = items.map(v => v.value)
-          const data = { admin_users: adminUsersId }
+          const objectRelationAdmin = this.object.admins
+          items.map(v => objectRelationAdmin.push(v.value))
+          const data = { admins: objectRelationAdmin }
           return this.$axios.patch(relationUrl, data)
         },
         performDelete: (item) => {
           const objectId = this.object.id
           const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const objectOldRelationAdminUsers = this.object.admin_users
-          const objectNewRelationAdminUsers = objectOldRelationAdminUsers.filter(v => v !== item.value)
-          const data = { system_users: objectNewRelationAdminUsers }
+          const objectOldRelationAdmin = this.object.admins
+          const objectNewRelationAdmin = objectOldRelationAdmin.filter(v => v !== item.value)
+          const data = { admins: objectNewRelationAdmin }
           return this.$axios.patch(relationUrl, data)
         }
       }
