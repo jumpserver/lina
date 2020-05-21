@@ -23,3 +23,14 @@ export function restoreInterface() {
     method: 'get'
   })
 }
+
+export function importLicense(formData) {
+  return request({
+    url: '/api/v1/xpack/license/import',
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: formData
+  })
+}
