@@ -43,15 +43,15 @@ export default {
         },
         hasObjectsId: this.object.users,
         performAdd: (items) => {
-          // const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${this.$route.params.id}/`
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
           const usersId = items.map(v => v.value)
           const data = { users: usersId }
           return this.$axios.patch(relationUrl, data)
         },
         performDelete: (item) => {
-          // const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${this.$route.params.id}/`
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
           const objectOldRelationUsers = this.object.users
           const objectNewRelationUsers = objectOldRelationUsers.filter(v => v !== item.value)
           const data = { users: objectNewRelationUsers }
@@ -74,15 +74,15 @@ export default {
         },
         hasObjectsId: this.object.admin_users,
         performAdd: (items) => {
-          // const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${this.$route.params.id}/`
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
           const adminUsersId = items.map(v => v.value)
           const data = { admin_users: adminUsersId }
           return this.$axios.patch(relationUrl, data)
         },
         performDelete: (item) => {
-          // const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${this.$route.params.id}/`
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
           const objectOldRelationAdminUsers = this.object.admin_users
           const objectNewRelationAdminUsers = objectOldRelationAdminUsers.filter(v => v !== item.value)
           const data = { system_users: objectNewRelationAdminUsers }
@@ -110,7 +110,7 @@ export default {
           value: this.object.date_created
         },
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.Comment'),
           value: this.object.comment
         }
       ]

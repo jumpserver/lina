@@ -79,6 +79,10 @@ export function toSafeLocalDateStr(d) {
 
 export function getApiPath(that) {
   const pagePath = that.$route.path
+  const isOrgPath = pagePath.split('/').indexOf('orgs') !== -1
+  if (isOrgPath) {
+    return `/api/v1/orgs/orgs/${pagePath.split('/').pop()}/`
+  }
   return `/api/v1${pagePath}/`
 }
 
