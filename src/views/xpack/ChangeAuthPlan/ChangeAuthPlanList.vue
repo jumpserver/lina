@@ -55,7 +55,8 @@ export default {
         hasImport: false,
         hasRefresh: false,
         hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasBulkUpdate: false,
+        createRoute: 'ChangeAuthPlanCreate'
       }
     }
   }
