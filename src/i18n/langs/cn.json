@@ -426,7 +426,7 @@
     "options": "选项",
     "taskName": "任务名称",
     "dateStart": "开始日期",
-    "versionDetail": ""
+    "versionDetail": "版本详情"
   },
   "perms": {
     "assetPermissions": "资产授权",
