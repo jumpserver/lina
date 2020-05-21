@@ -50,7 +50,7 @@ export default {
       fieldsMeta: {
         login_title: {
           label: this.$t('xpack.loginTitle'),
-          helpText: '提示：将会显示在企业版用户登录页面（eg: 欢迎使用JumpServer开源堡垒机)'
+          helpText: this.$t('xpack.loginTitleTip')
         },
         login_image: {
           component: UploadField,
@@ -58,7 +58,7 @@ export default {
           el: {
             width: '10%',
             height: '10%',
-            tip: '提示：将会显示在企业版用户登录页面（建议图片大小为: 492*472px）'
+            tip: this.$t('xpack.loginImageTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -73,7 +73,7 @@ export default {
           el: {
             width: '5%',
             height: '5%',
-            tip: '提示：网站图标（建议图片大小为: 16px*16px）'
+            tip: this.$t('xpack.faviconTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -87,7 +87,7 @@ export default {
           el: {
             width: '10%',
             height: '10%',
-            tip: '提示：将会显示在管理页面左上方（建议图片大小为: 185px*55px）'
+            tip: this.$t('xpack.logoIndexTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -101,7 +101,7 @@ export default {
           el: {
             width: '5%',
             height: '5%',
-            tip: '提示：将会显示在企业版用户退出页面（建议图片大小为：82px*82px）'
+            tip: this.$t('xpack.logoLogoutTip')
           },
           on: {
             fileChange: ([value], updateForm) => {
@@ -115,11 +115,12 @@ export default {
         {
           title: this.$t('xpack.RestoreButton'),
           callback: function(value, form) {
-            this.$confirm('您确定要恢复默认初始化吗？', '你确认吗?', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
+            this.$confirm(this.$t('xpack.restoreDialogMessage'),
+              this.$t('xpack.restoreDialogTitle'), {
+                confirmButtonText: this.$t('common.Confirm'),
+                cancelButtonText: this.$t('common.Cancel'),
+                type: 'warning'
+              }).then(() => {
               restoreInterface().then(res => {
                 this.$message.success(res.success)
                 location.reload()
