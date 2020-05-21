@@ -104,6 +104,7 @@
     "Active": "激活中",
     "Basic": "基本",
     "SelectFile": "选择文件",
+    "NoData": "暂无数据",
     "nav": {
       "Docs": "文档",
       "Help": "帮助",
@@ -780,7 +781,11 @@
     "UsersOfWeekSummary": "周用户登录统计",
     "TopAssetsOfWeek": "周资产 TOP10",
     "TopUsersOfWeek": "周用户 TOP10",
-    "timesWeekUnit": "次/周"
+    "timesWeekUnit": "次/周",
+    "LatestSessions10": "最近10次登录",
+    "LatestSessions": "最近登录记录",
+    "LatestTop10": "TOP 10",
+    "LoginTo": "登录了"
   },
   "xpack": {
     "InterfaceSettings": "界面设置",

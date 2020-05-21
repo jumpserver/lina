@@ -1,6 +1,7 @@
 <template>
   <IBox :title="title">
-    <TopList :items="assetsItems" :unit="unit" class="top-assets" />
+    <TopList v-if="userItems.length > 0" :items="userItems" :unit="unit" class="top-users" />
+    <span v-else>{{ $t('common.NoData') }}</span>
   </IBox>
 </template>
 
@@ -14,29 +15,30 @@ export default {
     return {
       title: this.$t('dashboard.TopUsersOfWeek'),
       unit: this.$t('dashboard.timesWeekUnit'),
-      dates_login_times_top10_users: [{
-        'user': 'Administrator (admin)',
-        'total': 37,
-        'last': '2020-05-19 08:43:51.180220+00:00'
-      }, {
-        'user': 'li (lisi)',
-        'total': 5,
-        'last': '2020-05-19 08:43:51.180220+00:00'
-      }, { 'user': 'zhang (zhangsan)', 'total': 2, 'last': '2020-05-18 08:43:51.180220+00:00' }]
+      dates_login_times_top10_users: []
     }
   },
   computed: {
-    assetsItems() {
+    userItems() {
       return this.dates_login_times_top10_users.map((v) => {
         return { name: v.user, count: v.total }
       })
+    }
+  },
+  mounted() {
+    this.getTopLoginUser()
+  },
+  methods: {
+    async getTopLoginUser() {
+      const data = await this.$axios.get('/api/v1/index/?dates_login_times_top10_users=1')
+      this.dates_login_times_top10_users = data.dates_login_times_top10_users
     }
   }
 }
 </script>
 
 <style scoped>
-  .top-assets >>> .list-group {
+  .top-users >>> .list-group {
     margin-top: 0;
   }
 </style>

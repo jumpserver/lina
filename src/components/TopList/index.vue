@@ -32,7 +32,8 @@ export default {
   },
   data() {
     return {
-      tabsType: ['success', 'info', 'primary', 'default', 'info']
+      tabsType: ['success', 'info', 'primary', 'default', 'info'],
+      indexLabels: []
     }
   },
   mounted() {
@@ -42,8 +43,12 @@ export default {
     getLabelType(index) {
       const i = Math.floor(Math.random() * 4)
       // const i = index % 5
-      return this.tabsType[i] || 'primary'
-      // return this.tabsType[index] || 'primary'
+      const type = this.tabsType[i] || 'primary'
+      if (this.indexLabels[index - 1] === type) {
+        return this.getLabelType(index)
+      }
+      this.indexLabels[index] = type
+      return type
     }
   }
 }
