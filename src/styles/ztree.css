@@ -42,7 +42,7 @@ website:    http://code.google.com/p/jquerytree/
   margin: 0;
   cursor: pointer;
   height: 20px;
-  color: #676a6c;
+  color: #676a6c !important;
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;

@@ -1,7 +1,7 @@
 <template>
   <transition name="sidebarLogoFade">
     <el-select
-      v-if="!isCollapse && userAdminOrgList.length>1"
+      v-if="!isCollapse && userAdminOrgList.length>1 && checkPermission "
       :value="currentOrg.id"
       class="org-select"
       filterable
@@ -25,7 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { getPermission } from '@/utils/auth'
 export default {
   props: {
     isCollapse: {
@@ -36,6 +36,9 @@ export default {
     }
   },
   computed: {
+    checkPermission() {
+      return getPermission() === 'Admin'
+    },
     ...mapGetters([
       'currentOrg',
       'userAdminOrgList'

@@ -3,19 +3,21 @@
     <el-col :span="14">
       <DetailCard :items="detailCardItems" />
     </el-col>
-    <el-col :span="10" />
+    <el-col :span="10">
+      <QuickActions type="primary" :actions="quickActions" />
+    </el-col>
   </el-row>
 </template>a
 
 <script>
 import DetailCard from '@/components/DetailCard'
-import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'Detail',
   components: {
-    DetailCard
+    DetailCard,
+    QuickActions
   },
   props: {
     object: {
@@ -27,109 +29,48 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('assets.is_active'),
-          type: 'switcher',
+          title: this.$t('assets.SetMFA'),
           attrs: {
-            label: this.$t('common.Test'),
-            model: this.object.is_active
+            type: 'primary',
+            label: this.$t('common.Reset')
           },
           callbacks: {
-            click: function() {
-              this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
-                { action: 'test' }
-              ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-              }
-              )
-            }.bind(this)
+            click: function() {}
           }
         },
         {
-          title: this.$t('assets.TestAssetsConnective'),
+          title: this.$t('assets.UpdatePassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Test')
+            label: this.$t('common.Update')
           },
           callbacks: {
             click: function() {
-              this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
-                { action: 'test' }
-              ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-              }
-              )
-            }.bind(this)
-          }
-        },
-        {
-          title: this.$t('assets.PushSystemUserNow'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Push')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
-                { action: 'push' }
-              ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-              }
-              )
-            }.bind(this)
-          }
-        }
-      ],
-      nodeReletionConfig: {
-        icon: 'fa-info',
-        title: this.$t('perms.Add node to this permission'),
-        objectsAjax: {
-          url: '/api/v1/assets/nodes/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
-          }
-        },
-        hasObjectsId: this.object.nodes,
-        performAdd: (items) => {
-          const newData = []
-          const value = this.$refs.NodeRelation.iHasObjects
-          value.map(v => {
-            newData.push(v.value)
-          })
-          const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          items.map(v => {
-            newData.push(v.value)
-          })
-          return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
-          })
-        },
-        performDelete: (item) => {
-          const itemId = item.value
-          const newData = []
-          const value = this.$refs.NodeRelation.iHasObjects
-          value.map(v => {
-            if (v.value !== itemId) {
-              newData.push(v.value)
+
             }
-          })
-          const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
-          })
+          }
+        },
+        {
+          title: this.$t('assets.UpdateSSHPublicKey'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Update')
+          },
+          callbacks: {
+            click: function() {}
+          }
+        },
+        {
+          title: this.$t('assets.ResetPublicKeyAndDownload'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Reset')
+          },
+          callbacks: {
+            click: function() {}
+          }
         }
-      }
+      ]
     }
   },
   computed: {
@@ -137,31 +78,59 @@ export default {
       return [
         {
           value: this.object.username,
-          key: this.$t('asset.username')
+          key: this.$t('assets.Username')
         },
         {
           value: this.object.name,
-          key: this.$t('asset.name')
+          key: this.$t('assets.Name')
         },
         {
           value: this.object.role_display,
-          key: this.$t('asset.role')
+          key: this.$t('assets.Role')
         },
         {
           value: this.object.email,
-          key: this.$t('asset.email')
+          key: this.$t('assets.Email')
         },
         {
           value: `${this.object.is_active}`,
-          key: this.$t('asset.is_active')
+          key: this.$t('assets.IsActive')
         },
         {
           value: `没有这个API`,
-          key: this.$t('asset.sshkey')
+          key: this.$t('assets.sshkey')
         },
         {
           value: this.object.mfa_level_display,
-          key: this.$t('asset.mfa_level_display')
+          key: this.$t('assets.MfaLevel')
+        },
+        {
+          value: this.object.source_display,
+          key: this.$t('assets.Source')
+        },
+        {
+          value: toSafeLocalDateStr(this.object.date_joined),
+          key: (this.$t('assets.date_joined'))
+        },
+        {
+          value: toSafeLocalDateStr(this.object.last_login),
+          key: this.$t('assets.last_login')
+        },
+        {
+          value: toSafeLocalDateStr(this.object.date_password_last_updated),
+          key: this.$t('assets.date_password_last_updated')
+        },
+        {
+          value: toSafeLocalDateStr(this.object.date_expired),
+          key: this.$t('assets.date_expired')
+        },
+        {
+          value: this.object.groups_display,
+          key: this.$t('perms.UserGroups')
+        },
+        {
+          value: this.object.comment,
+          key: this.$t('assets.Comment')
         }
       ]
     }

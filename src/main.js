@@ -45,6 +45,9 @@ import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 Vue.use(VueLogger, loggerOptions)
 
+import ECharts from 'vue-echarts'
+Vue.component('echarts', ECharts)
+
 import service from '@/utils/request'
 
 // lodash

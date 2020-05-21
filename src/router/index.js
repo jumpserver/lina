@@ -168,6 +168,26 @@ export const userRoutes = [
     ]
   },
   {
+    path: '/apps',
+    component: Layout,
+    redirect: '/apps/remoteapp',
+    meta: { title: i18n.t('route.MyApps'), icon: 'th' },
+    children: [
+      {
+        path: '/apps/remoteapp',
+        name: 'remoteapp',
+        component: () => import('@/userviews/apps/RemoteApp'),
+        meta: { title: i18n.t('route.RemoteApp') }
+      },
+      {
+        path: '/apps/database',
+        name: 'assets',
+        component: () => import('@/userviews/apps/DatabaseApp'),
+        meta: { title: i18n.t('route.DatabaseApp') }
+      }
+    ]
+  },
+  {
     path: '/users',
     component: Layout,
     children: [

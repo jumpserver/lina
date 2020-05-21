@@ -2,6 +2,7 @@
   <Page>
     <ResourceSummary />
     <DatesLoginSummary />
+    <TopAndLatestSummary />
   </Page>
 </template>
 
@@ -9,11 +10,12 @@
 import { Page } from '@/layout/components'
 import ResourceSummary from './ResourceSummary'
 import DatesLoginSummary from './DatesLoginSummary'
+import TopAndLatestSummary from './TopAndLatestSummary'
 
 export default {
   name: 'Dashboard',
   components: {
-    Page, DatesLoginSummary, ResourceSummary
+    Page, DatesLoginSummary, ResourceSummary, TopAndLatestSummary
   },
   data() {
     return {
