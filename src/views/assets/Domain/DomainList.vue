@@ -17,27 +17,28 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('assets.Name'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'DomainDetail'
           },
           {
             prop: 'asset_count',
-            label: this.$t('assets.asset')
+            label: this.$t('assets.Assets')
           },
           {
             prop: 'gateway_count',
-            label: this.$t('assets.gateway')
+            label: this.$t('assets.Gateway')
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
+            label: this.$t('assets.Comment'),
             sortable: 'custom'
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
             actions: {

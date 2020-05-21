@@ -23,7 +23,7 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('assets.Name'),
             sortable: 'custom'
           },
           {
@@ -34,27 +34,28 @@ export default {
           },
           {
             prop: 'port',
-            label: this.$t('assets.port'),
+            label: this.$t('assets.Port'),
             sortable: 'custom'
           },
           {
             prop: 'protocol',
-            label: this.$t('assets.protocol'),
+            label: this.$t('assets.Protocol'),
             sortable: true
           },
           {
             prop: 'username',
-            label: this.$t('assets.username'),
+            label: this.$t('assets.Username'),
             sortable: 'custom'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
+            label: this.$t('assets.Comment'),
             sortable: 'custom'
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
             actions: {

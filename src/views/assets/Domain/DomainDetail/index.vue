@@ -21,15 +21,15 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.commandFilterDetail'),
+        title: this.$t('assets.DomainDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.commandFilterDetail'),
+            title: this.$t('assets.DomainDetail'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.commandFilterRules'),
+            title: this.$t('assets.Gateway'),
             name: 'GatewayList'
           }
         ],
