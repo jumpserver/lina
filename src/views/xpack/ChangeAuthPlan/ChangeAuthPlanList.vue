@@ -16,8 +16,8 @@ export default {
       tableConfig: {
         url: '/api/v1/xpack/change-auth-plan/plan/',
         columns: [
-          'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display', 'periodic_display', 'run_times',
-          'comment', 'actions'
+          'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
+          'periodic_display', 'run_times', 'comment', 'actions'
         ],
         columnsMeta: {
           password_strategy_display: {
@@ -30,10 +30,32 @@ export default {
           nodes_amount: {
             label: vm.$t('xpack.Node')
           }
+        },
+        actions: {
+          extraActions: [
+            {
+              title: vm.$t('xpack.Run'),
+              name: 'run',
+              type: 'info',
+              callback: function({ cellValue, tableData }) {
+                const newPage = vm.$router.resolve({
+                  name: 'CeleryTaskLog',
+                  query: {
+                    id: 12345678
+                  }
+                })
+                window.open(newPage.href, '_blank', 'toolbar=yes, width=900, height=600')
+              }
+            }
+          ]
         }
       },
       headerActions: {
-
+        hasExport: false,
+        hasImport: false,
+        hasRefresh: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false
       }
     }
   }
