@@ -24,34 +24,39 @@ export default {
         columns: [
           {
             prop: 'type.display',
-            label: this.$t('assets.type')
+            label: this.$t('assets.Type')
           },
           {
             prop: 'content',
-            label: this.$t('assets.content')
+            label: this.$t('assets.Content')
           },
           {
             prop: 'priority',
-            label: this.$t('assets.priority')
+            label: this.$t('assets.Priority')
           },
           {
             prop: 'action.display',
-            label: this.$t('assets.ruleaction')
+            label: this.$t('assets.RuleAction')
           },
           {
             prop: 'action.comment',
-            label: this.$t('assets.comment')
+            label: this.$t('assets.Comment')
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
             actions: {
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/cmd-filters/${this.object.id}/rules/${id}/`
-                return this.$axios.delete(url)
+                return this.$axios.delete(url).then(res => {
+                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                }).catch(err => {
+                  this.$message.error(this.$t('common.deleteFailedMsg' + ' ' + err))
+                })
               },
               onUpdate: ({ row, col }) => {
                 console.log(this)
@@ -78,7 +83,7 @@ export default {
         extraActions: [
           {
             name: 'actionCreate',
-            title: this.$t('common.actions.Create'),
+            title: this.$t('assets.CreateRules'),
             type: 'primary',
             has: true,
             can: true,

@@ -17,22 +17,23 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('assets.Name'),
             sortable: true
           },
           {
             prop: 'value',
-            label: this.$t('assets.value'),
+            label: this.$t('assets.Value'),
             sortable: 'custom'
           },
           {
             prop: 'asset_count',
-            label: this.$t('assets.asset')
+            label: this.$t('assets.Assets')
           },
           {
             prop: 'id',
             align: 'center',
             formatter: ActionsFormatter,
+            label: this.$t('assets.Action'),
             width: '200px',
             actions: {
               performDelete: ({ row, col }) => {
