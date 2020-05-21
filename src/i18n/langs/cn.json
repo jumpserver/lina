@@ -225,6 +225,7 @@
   },
   "assets": {
     "Assets": "资产",
+    "SystemUserDetail": "系统用户详情",
     "Nodes": "节点",
     "AssetList": "资产列表",
     "SystemUsers": "系统用户",
@@ -276,6 +277,7 @@
     "CreateDomain": "创建网域",
     "UpdateDomain": "更新网域",
     "Name": "名称",
+    "LoginModel": "登录模式",
     "Asset": "资产",
     "Gateway": "网关",
     "DateCreated": "创建日期",

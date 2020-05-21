@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import select2 from '@/components/Select2'
+import UploadKey from '@/components/UploadKey'
 export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -24,7 +25,7 @@ export default {
       },
       fields: [
         [this.$t('common.BasicInfo'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'auto_push']],
+        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key', 'auto_push']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Others'), ['sftp_root', 'sudo', 'shell', 'comment']]
       ],
@@ -35,6 +36,12 @@ export default {
         username: {
           el: {
             disabled: false
+          }
+        },
+        private_key: {
+          component: UploadKey,
+          hidden: (form) => {
+            return form.login_mode !== 'auto'
           }
         },
         username_same_with_user: {

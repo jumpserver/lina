@@ -29,11 +29,11 @@ export default {
     return {
       AutoPushConfig: {
         icon: 'fa-info',
-        title: this.$t('assets.quick_update'),
+        title: this.$t('assets.QuickUpdate'),
         url: `/api/v1/assets/system-users/${this.object.id}/`,
         content: [
           {
-            name: this.$t('assets.auto_push'),
+            name: this.$t('assets.AutoPush'),
             auto_push: this.object.auto_push
           }
         ]
@@ -44,15 +44,15 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.name'),
+          key: this.$t('assets.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('assets.username'),
+          key: this.$t('assets.Username'),
           value: this.object.username
         },
         {
-          key: this.$t('assets.login_mode_display'),
+          key: this.$t('assets.LoginModel'),
           value: this.object.login_mode_display
         },
         {
@@ -64,11 +64,11 @@ export default {
           value: this.object.shell
         },
         {
-          key: this.$t('assets.date_created'),
+          key: this.$t('assets.date_joined'),
           value: '暂时没有这个API'
         },
         {
-          key: this.$t('assets.created_by'),
+          key: this.$t('assets.CreatedBy'),
           value: '暂时没有这个API'
         }
       ]
