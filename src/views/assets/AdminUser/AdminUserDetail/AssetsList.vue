@@ -33,13 +33,12 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Test')
+            label: this.$t('assets.Test')
           },
           callbacks: {
             click: function() {
-              this.$axios.post(
-                `api/v1/assets/admin-users/${this.object.id}/tasks/`,
-                { action: 'test' }
+              this.$axios.get(
+                `api/v1/assets/admin-users/${this.object.id}/connective/`
               ).then(res => {
                 window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
@@ -53,7 +52,7 @@ export default {
         columns: [
           {
             prop: 'hostname',
-            label: this.$t('assets.hostname')
+            label: this.$t('assets.Hostname')
           },
           {
             prop: 'ip',
@@ -61,15 +60,15 @@ export default {
           },
           {
             prop: 'username',
-            label: this.$t('assets.username')
+            label: this.$t('assets.Username')
           },
           {
             prop: 'version',
-            label: this.$t('assets.version')
+            label: this.$t('assets.Version')
           },
           {
             prop: 'date_created',
-            label: this.$t('assets.date_created'),
+            label: this.$t('assets.date_joined'),
             formatter: DateFormatter
           },
           {
@@ -80,8 +79,8 @@ export default {
             actions: {
               extraActions: [
                 {
-                  name: this.$t('common.delete'),
-                  title: this.$t('common.delete'),
+                  name: this.$t('common.Delete'),
+                  title: this.$t('common.Delete'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
                       this.$refs.ListTable.reloadTable()

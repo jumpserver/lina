@@ -29,7 +29,7 @@ export default {
           },
           {
             prop: 'assets_amount',
-            label: this.$t('assets.assets')
+            label: this.$t('assets.Assets')
           },
           {
             prop: 'comment',
@@ -39,6 +39,7 @@ export default {
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('common.Action'),
             formatter: ActionsFormatter,
             width: '200px',
             actions: {
