@@ -760,6 +760,7 @@
     "User": "用户",
     "UserGroup": "用户组",
     "Asset": "资产",
+    "Node": "节点",
     "Domain": "网域",
     "AdminUser": "管理用户",
     "SystemUser": "系统用户",
