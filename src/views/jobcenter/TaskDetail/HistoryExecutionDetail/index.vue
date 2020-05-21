@@ -9,11 +9,13 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import HistoryExecutionDetail from './HistoryExecutionDetail'
+import CeleryTaskLog from '../../CeleryTaskLog'
 
 export default {
   components: {
     HistoryExecutionDetail,
     GenericDetailPage,
+    CeleryTaskLog,
     TabPage
   },
   data() {
@@ -29,7 +31,7 @@ export default {
           },
           {
             title: this.$t('jobcenter.output'),
-            name: 'OutPut'
+            name: 'CeleryTaskLog'
           }
         ],
         hasRightSide: false,

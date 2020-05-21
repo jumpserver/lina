@@ -11,9 +11,11 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import TaskDetail from './TaskDetail'
 import TaskHistory from './TaskHistory'
 import TaskAdhoc from './TaskAdhoc'
+import CeleryTaskLog from '../CeleryTaskLog'
 export default {
   components: {
     GenericDetailPage,
+    CeleryTaskLog,
     TaskHistory,
     TaskDetail,
     TaskAdhoc,
@@ -39,7 +41,7 @@ export default {
           },
           {
             title: this.$t('jobcenter.laskExecutionOutput'),
-            name: 'laskExecutionOutput'
+            name: 'CeleryTaskLog'
           }
         ],
         hasRightSide: false

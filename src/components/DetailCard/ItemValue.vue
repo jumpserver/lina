@@ -3,7 +3,7 @@ export default {
   name: 'ItemValue',
   props: {
     value: {
-      type: [String, Function, Array],
+      type: [String, Function, Array, Object],
       default: ''
     },
     item: {
