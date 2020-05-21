@@ -107,6 +107,36 @@ export default {
       name: 'ChangeAuthPlanExecutionTask',
       meta: { title: i18n.t('xpack.ChangeAuthPlanExecutionTask'), activeMenu: '/xpack/change-auth-plan' },
       hidden: true
+    },
+    {
+      path: '/cloud',
+      component: () => import('@/views/xpack/menu/Account'),
+      redirect: '/cloud/account',
+      name: 'Cloud',
+      meta: { title: i18n.t('test') },
+      children: [
+        {
+          path: 'account',
+          component: () => import('@/views/xpack/Cloud/Account/AccountList'),
+          name: 'AccountList',
+          meta: { title: i18n.t('xpack.Cloud.AccountList'), activeMenu: '/xpack/cloud/account' }
+        },
+        {
+          path: 'account/create',
+          component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
+          name: 'AccountCreate',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create' }
+        },
+        {
+          path: 'account/:id/update',
+          component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
+          name: 'AccountUpdate',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update' }
+        }
+      ]
     }
+
   ]
 }

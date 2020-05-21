@@ -682,6 +682,11 @@
     "ChangeAuthPlanCreate": "",
     "ChangeAuthPlanUpdate": "",
     "ChangeAuthPlanDetail": "",
-    "ChangeAuthPlanExecutionTask": ""
+    "ChangeAuthPlanExecutionTask": "",
+    "Cloud": {
+      "AccountList": "账户列表",
+      "AccountCreate": "创建账户",
+      "AccountUpdate": "更新账户"
+    }
   }
 }
