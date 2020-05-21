@@ -30,7 +30,7 @@ export default {
     return {
       nodeReletionConfig: {
         icon: 'fa-info',
-        title: this.$t('assets.Replace node assets admin user with this'),
+        title: this.$t('assets.ReplaceNodeAssetsAdminUserWithThis'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           processResults(data) {
@@ -49,9 +49,9 @@ export default {
             data.push(v.value)
           })
           return this.$axios.patch(relationUrl, { nodes: data }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
+            this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.updateFailedMsg' + ' ' + err))
           })
         },
         onAddSuccess: () => {
@@ -65,19 +65,19 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.name'),
+          key: this.$t('assets.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('assets.username'),
+          key: this.$t('assets.Username'),
           value: this.object.username
         },
         {
-          key: this.$t('assets.date_created'),
+          key: this.$t('assets.date_joined'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('assets.created_by'),
+          key: this.$t('assets.CreatedBy'),
           value: this.object.created_by
         }
       ]

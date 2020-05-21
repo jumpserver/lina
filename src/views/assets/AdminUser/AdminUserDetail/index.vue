@@ -21,15 +21,14 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.AdminUserDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.detail'),
+            title: this.$t('assets.AdminUserDetail'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.assetlist'),
+            title: this.$t('assets.AssetList'),
             name: 'AssetList'
           }
         ],
