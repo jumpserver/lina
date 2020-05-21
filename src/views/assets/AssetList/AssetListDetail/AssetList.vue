@@ -33,14 +33,15 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Test')
+            label: this.$t('assets.Test')
           },
           callbacks: {
             click: function() {
               this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
+                `api/v1/assets/asset-users/tasks/?asset_id=${this.object.id}&latest=1`,
                 { action: 'test' }
               ).then(res => {
+                console.log(`/ops/celery/task/${res.task}/log/`)
                 window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
@@ -53,7 +54,7 @@ export default {
         columns: [
           {
             prop: 'hostname',
-            label: this.$t('assets.hostname')
+            label: this.$t('assets.Hostname')
           },
           {
             prop: 'ip',
@@ -61,44 +62,31 @@ export default {
           },
           {
             prop: 'username',
-            label: this.$t('assets.username')
+            label: this.$t('assets.Username')
           },
           {
             prop: 'version',
-            label: this.$t('assets.version')
+            label: this.$t('assets.Version')
           },
           {
             prop: 'date_created',
-            label: this.$t('assets.date_created'),
+            label: this.$t('assets.DateJoined'),
             formatter: DateFormatter
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: CustomActionsFormatter,
             actions: {
               extraActions: [
                 {
-                  name: this.$t('common.delete'),
-                  title: this.$t('common.delete'),
+                  name: this.$t('common.Delete'),
+                  title: this.$t('common.Delete'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
                       this.$refs.ListTable.reloadTable()
                     )
-                  }
-                },
-                {
-                  name: this.$t('common.Test'),
-                  title: this.$t('common.Test'),
-                  callback: (val) => {
-                    console.log('Test')
-                  }
-                },
-                {
-                  name: this.$t('common.Push'),
-                  title: this.$t('common.Push'),
-                  callback: (val) => {
-                    console.log('Push')
                   }
                 }
               ]

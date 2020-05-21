@@ -9,7 +9,6 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-
 import AssetList from './AssetList.vue'
 export default {
   name: 'AssetListDetail',
@@ -27,15 +26,18 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.detail'),
+            title: this.$t('assets.AssetDetail'),
             name: 'Detail'
           },
           {
-            title: this.$t('assets.assetlist'),
+            title: this.$t('assets.AssetList'),
             name: 'AssetList'
           }
         ],
-        hasRightSide: true
+        hasRightSide: true,
+        getObjectName: function(obj) {
+          return obj.hostname
+        }
       }
     }
   }

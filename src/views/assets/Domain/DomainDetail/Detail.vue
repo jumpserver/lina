@@ -30,22 +30,22 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.name'),
+          key: this.$t('assets.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('assets.资产'),
+          key: this.$t('assets.Assets'),
           value: `${this.object.asset_count}`
         },
         {
-          key: this.$t('assets.网关'),
+          key: this.$t('assets.Gateway'),
           value: `${this.object.gateway_count}`
         },
         {
-          key: this.$t('assets.date_created'),
+          key: this.$t('assets.date_joined'),
           value: toSafeLocalDateStr(this.object.date_created)
         }, {
-          key: this.$t('assets.comment'),
+          key: this.$t('assets.Comment'),
           value: this.object.comment
         }
       ]

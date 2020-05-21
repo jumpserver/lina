@@ -17,12 +17,12 @@ export default {
         platform: 'linux'
       },
       fields: [
-        [this.$t('basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
-        [this.$t('协议组'), ['protocol']],
-        [this.$t('认证'), ['admin_user']],
-        [this.$t('节点'), ['nodes']],
-        [this.$t('标签'), ['labels']],
-        [this.$t('others'), ['is_active', 'comment']]
+        [this.$t('assets.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
+        [this.$t('assets.Protocols'), ['protocol']],
+        [this.$t('assets.Auth'), ['admin_user']],
+        [this.$t('assets.Node'), ['nodes']],
+        [this.$t('assets.Label'), ['labels']],
+        [this.$t('assets.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         protocol: {

@@ -23,38 +23,35 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('assets.Name'),
             sortable: 'custom'
           },
           {
 
             prop: 'ip',
-            label: this.$t('assets.ip'),
-            sortable: 'custom'
+            label: this.$t('assets.ip')
           },
           {
             prop: 'port',
-            label: this.$t('assets.port'),
-            sortable: 'custom'
+            label: this.$t('assets.Port')
           },
           {
             prop: 'protocol',
-            label: this.$t('assets.protocol'),
+            label: this.$t('assets.Protocol'),
             sortable: true
           },
           {
             prop: 'username',
-            label: this.$t('assets.username'),
-            sortable: 'custom'
+            label: this.$t('assets.Username')
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
-            sortable: 'custom'
+            label: this.$t('assets.Comment')
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
             actions: {
@@ -67,7 +64,10 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
-                  title: this.$t('assets.TestConnection')
+                  title: this.$t('assets.TestConnection'),
+                  callback: function(val) {
+                    console.log(val)
+                  }
                 }
               ]
             }
