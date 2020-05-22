@@ -12,9 +12,10 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/xpack/gathered-user/tasks/',
+        url: '/api/v1/xpack/cloud/sync-instance-tasks/',
         columns: [
-          'name', 'nodes', 'periodic_display', 'executed_times', 'actions'
+          'name', 'account_name', 'history_count', 'instance_count', 'periodic_display',
+          'date_last_sync', 'comment', 'actions'
         ],
         columnsMeta: {}
       },
@@ -23,7 +24,7 @@ export default {
         hasImport: false,
         hasRefresh: false,
         hasExport: false,
-        createRoute: 'GatherUserTaskCreate'
+        createRoute: 'SyncInstanceTaskCreate'
       }
     }
   }

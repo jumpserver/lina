@@ -1,0 +1,110 @@
+<template>
+  <GenericCreateUpdatePage v-bind="$data" />
+</template>
+
+<script>
+import { GenericCreateUpdatePage } from '@/layout/components'
+import { Select2 } from '@/components'
+
+export default {
+  components: {
+    GenericCreateUpdatePage
+  },
+  data() {
+    const vm = this
+    return {
+      fields: [
+        [
+          this.$t(''), [
+            'name', 'account', 'regions', 'node', 'admin_user', 'covered_always',
+            'is_periodic', 'crontab', 'interval', 'comment'
+          ]
+        ]
+      ],
+      url: '/api/v1/xpack/cloud/sync-instance-tasks/',
+      fieldsMeta: {
+        account: {
+          on: {
+            change: ([event], updateForm) => {
+              vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event}`
+            }
+          },
+          el: {
+            multiple: false,
+            value: [],
+            ajax: {
+              url: '/api/v1/xpack/cloud/accounts/',
+              processResults(data) {
+                const results = data.results.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
+          }
+        },
+        node: {
+          el: {
+            multiple: false,
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/nodes/',
+              processResults(data) {
+                const results = data.results.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
+          }
+        },
+        admin_user: {
+          el: {
+            multiple: false,
+            value: [],
+            ajax: {
+              url: '/api/v1/users/users/?role=Admin',
+              processResults(data) {
+                const results = data.results.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
+          }
+        },
+        covered_always: {
+          type: 'switch'
+        },
+        is_periodic: {
+          type: 'switch'
+        },
+        regions: {
+          component: Select2,
+          el: {
+            multiple: true,
+            value: [],
+            ajax: {
+              url: '/api/v1/xpack/cloud/regions/',
+              processResults(data) {
+                const results = data.results.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+</script>
+
+<style lang="less" scoped>
+</style>

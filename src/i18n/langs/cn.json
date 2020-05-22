@@ -686,7 +686,10 @@
     "Cloud": {
       "AccountList": "账户列表",
       "AccountCreate": "创建账户",
-      "AccountUpdate": "更新账户"
+      "AccountUpdate": "更新账户",
+      "SyncInstanceTaskList": "同步实例任务列表",
+      "SyncInstanceTaskCreate": "创建同步实例任务",
+      "SyncInstanceTaskUpdate": "更新同步实例任务"
     }
   }
 }

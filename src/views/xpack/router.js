@@ -110,7 +110,7 @@ export default {
     },
     {
       path: '/cloud',
-      component: () => import('@/views/xpack/menu/Account'),
+      component: Layout,
       redirect: '/cloud/account',
       name: 'Cloud',
       meta: { title: i18n.t('test') },
@@ -119,7 +119,7 @@ export default {
           path: 'account',
           component: () => import('@/views/xpack/Cloud/Account/AccountList'),
           name: 'AccountList',
-          meta: { title: i18n.t('xpack.Cloud.AccountList'), activeMenu: '/xpack/cloud/account' }
+          meta: { title: i18n.t('xpack.Cloud.AccountList') }
         },
         {
           path: 'account/create',
@@ -134,6 +134,26 @@ export default {
           name: 'AccountUpdate',
           hidden: true,
           meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update' }
+        },
+        {
+          path: 'sync-instance-tasks',
+          component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
+          name: 'SyncInstanceTaskList',
+          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList') }
+        },
+        {
+          path: 'sync-instance-tasks/create',
+          component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
+          name: 'SyncInstanceTaskCreate',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate') }
+        },
+        {
+          path: 'sync-instance-tasks/:id/update',
+          component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
+          name: 'SyncInstanceTaskUpdate',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate') }
         }
       ]
     }
