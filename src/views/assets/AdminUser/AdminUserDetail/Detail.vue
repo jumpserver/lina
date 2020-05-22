@@ -51,7 +51,7 @@ export default {
           return this.$axios.patch(relationUrl, { nodes: data }).then(res => {
             this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.updateFailedMsg' + ' ' + err))
+            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         },
         onAddSuccess: () => {

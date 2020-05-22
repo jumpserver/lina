@@ -42,8 +42,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button @click="dialogVisible = false">{{ $t('common.actions.cancel') }}</el-button>
-        <el-button type="primary" @click="testUerLoginClick">{{ $t('common.confirm') }}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('common.Cancel') }}</el-button>
+        <el-button type="primary" @click="testUerLoginClick">{{ $t('common.Confirm') }}</el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogLdapUserImport" center>

@@ -1,17 +1,12 @@
 {
   "applications": {
-    "": "",
     "appPath": "",
     "appType": "",
     "asset": "",
     "database": "",
     "host": "",
     "port": "",
-    "type": "",
-    "chrome": "Chrome",
-    "mysql_workbench": "MySQL Workbench",
-    "vmware_client": "VMware Client",
-    "custom": "自定义"
+    "type": ""
   },
   "assets": {
     "Action": "动作",
@@ -24,6 +19,7 @@
     "Assets": "资产",
     "Auth": "认证",
     "AutoPush": "自动推送",
+    "BasePlatform": "",
     "Basic": "基本",
     "CommandFilterHelpMessage": "系统用户可以绑定一些命令过滤器，一个过滤器可以定义一些规则 当用户使用这个系统用户登录资产，然后执行一个命令 这个命令需要被绑定过滤器的所有规则匹配，高优先级先被匹配， 当一个规则匹配到了，如果规则的动作是允许，这个命令会被放行， 如果规则的动作是禁止，命令将会被禁止执行， 否则就匹配下一个规则，如果最后没有匹配到规则，则允许执行",
     "Comment": "备注",
@@ -39,6 +35,7 @@
     "Gateway": "网关",
     "Hardware": "硬件",
     "Hostname": "主机名",
+    "IP": "",
     "IsActive": "激活",
     "Label": "标签",
     "LoginModel": "登录模式",
@@ -67,6 +64,7 @@
     "SerialNumber": "序列号",
     "SetMFA": "设置多因子认证",
     "Source": "来源",
+    "SystemUser": "",
     "SystemUserDetail": "系统用户详情",
     "SystemUsers": "系统用户",
     "Test": "测试",
@@ -78,33 +76,16 @@
     "Username": "用户名",
     "Vendor": "制造商",
     "Version": "版本",
+    "commandFilterDetail": "",
+    "command_filter_list": "",
     "date_expired": "失效日期",
     "date_joined": "创建日期",
     "date_password_last_updated": "最后更新密码",
+    "detail": "",
+    "hostname": "",
     "ip": "IP",
     "last_login": "最后登录日期",
-    "hostname": "",
-    "IP": "",
-    "sshkey": "",
-    "detail": "",
-    "name": "",
-    "comment": "",
-    "date_created": "",
-    "date_updated": "",
-    "created_by": "",
-    "commandFilterDetail": "",
-    "commandFilterRules": "",
-    "type": "",
-    "content": "",
-    "priority": "",
-    "ruleaction": "",
-    "rules": "",
-    "systemUser": "",
-    "value": "",
-    "asset": "",
-    "BasePlatform": "",
-    "command_filter_list": "",
-    "SystemUser": ""
+    "sshkey": ""
   },
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
@@ -153,21 +134,14 @@
     "Username": "用户名",
     "Validity": "有效",
     "action": "动作",
-    "actions": {
-      "Create": "",
-      "cancel": ""
-    },
     "activateSelected": "激活所选",
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
-    "comment": "",
-    "confirm": "确认",
     "createBy": "创建者",
     "createSuccessMsg": "创建成功",
     "createdBy": "创建人",
     "dateCreated": "创建日期",
     "dateExpired": "失效日期",
-    "delete": "",
     "deleteErrorMsg": "删除失败",
     "deleteSelected": "删除所选",
     "deleteSuccessMsg": "删除成功",
@@ -186,8 +160,7 @@
       "updateSuccessMsg": "导入更新成功，总共：{count}"
     },
     "import": "导入",
-    "isValid": "",
-    "name": "名称",
+    "isValid": "有效",
     "nav": {
       "APIKey": "API Key",
       "AdminPage": "管理员页面",
@@ -198,6 +171,7 @@
       "Support": "支持",
       "UserPage": "用户页面"
     },
+    "passwordOrPassphrase": "密码或密钥密码",
     "rows": "行",
     "table": {
       "Actions": "动作"
@@ -206,7 +180,7 @@
       "Empty": "空",
       "Loading": "加载中"
     },
-    "updateFailedMsg": "更新失败",
+    "updateErrorMsg": "更新失败",
     "updateSelected": "更新所选",
     "updateSuccessMsg": "更新成功"
   },
@@ -215,7 +189,7 @@
     "ActiveUser": "近期登录过",
     "ActiveUserAssetsRatioTitle": "占比统计",
     "Asset": "资产",
-    "AssetRadio": "资产占比统计",
+    "AssetRatio": "资产占比统计",
     "AssetsTotal": "资产总数",
     "DisabledAsset": "禁用的",
     "DisabledUser": "禁用的",
@@ -235,7 +209,7 @@
     "TopAssetsOfWeek": "周资产 TOP10",
     "TopUsersOfWeek": "周用户 TOP10",
     "User": "用户",
-    "UserRadio": "用户占比统计",
+    "UserRatio": "用户占比统计",
     "UsersTotal": "用户总数",
     "Weekly": "按周",
     "timesWeekUnit": "次/周"
@@ -249,6 +223,7 @@
     "date": "日期",
     "dateStart": "开始日期",
     "datetime": "日期",
+    "detail": "详情",
     "execution": "执行历史",
     "executionDetail": "执行历史详情",
     "hosts": "主机",
@@ -277,8 +252,7 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史",
-    "detail": "详情"
+    "versionRunExecution": "执行历史"
   },
   "perms": {
     "Actions": "动作",
@@ -414,8 +388,7 @@
     "UserUpdate": "更新用户",
     "Users": "用户管理",
     "WebFTP": "文件管理",
-    "WebTerminal": "Web终端",
-    "": ""
+    "WebTerminal": "Web终端"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -427,38 +400,38 @@
     "bucket": "桶名称",
     "command": "命令",
     "commandStorage": "命令存储",
-    "comment": "备注:",
+    "comment": "备注",
     "containerName": "容器名称",
     "date": "日期",
-    "dateCreated": "创建日期:",
+    "dateCreated": "创建日期",
     "dateEnd": "结束日期",
     "dateStart": "开始日期",
     "docType": "文档类型",
     "download": "下载",
-    "downloadReplay": "下载录像:",
+    "downloadReplay": "下载录像",
     "duration": "时长",
     "endPoint": "端点",
     "endpointSuffix": "端点后缀",
     "go": "执行",
     "goto": "转到",
     "hosts": "主机",
-    "httpPort": "HTTP端口:",
+    "httpPort": "HTTP端口",
     "id": "ID",
     "index": "索引",
     "info": "信息",
     "join": "加入",
     "loginFrom": "登录来源",
-    "name": "名称:",
+    "name": "名称",
     "protocol": "协议",
     "quickModify": "快速修改",
-    "region": "",
+    "region": "地域",
     "remoteAddr": "远端地址",
     "replay": "回放",
-    "replaySession": "回放会话:",
+    "replaySession": "回放会话",
     "replayStorage": "录像存储",
     "riskLevel": "风险等级",
     "session": "会话",
-    "sshPort": "SSH端口:",
+    "sshPort": "SSH端口",
     "storage": "存储",
     "systemUser": "系统用户",
     "terminalDetail": "终端详情",
@@ -466,9 +439,7 @@
     "terminate": "终断",
     "test": "测试",
     "type": "类型",
-    "user": "用户",
-    "createReplayStorage": "创建录像存储",
-    "createCommandStorage": "创建命令存储"
+    "user": "用户"
   },
   "setting": {
     "Basic": "基本设置",
@@ -634,14 +605,17 @@
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
-    },
-    "passwordOrPassphrase": ""
+    }
   },
   "xpack": {
     "Admin": "管理员",
-    "Auditor": "审计员",
     "AssetCount": "资产数量",
+    "Auditor": "审计员",
     "ChangeAuthPlan": "改密计划",
+    "ChangeAuthPlanCreate": "",
+    "ChangeAuthPlanDetail": "",
+    "ChangeAuthPlanExecutionTask": "",
+    "ChangeAuthPlanUpdate": "",
     "Corporation": "公司",
     "Edition": "版本",
     "Expired": "过期时间",
@@ -679,9 +653,14 @@
     "restoreDialogMessage": "您确定要恢复默认初始化吗？",
     "restoreDialogTitle": "你确认吗",
     "technologyConsult": "技术咨询",
-    "ChangeAuthPlanCreate": "",
-    "ChangeAuthPlanUpdate": "",
-    "ChangeAuthPlanDetail": "",
-    "ChangeAuthPlanExecutionTask": ""
+    "Cloud": {
+      "Cloud": "运管中心",
+      "AccountList": "账户列表",
+      "AccountCreate": "创建账户",
+      "AccountUpdate": "更新账户",
+      "SyncInstanceTaskList": "同步实例任务列表",
+      "SyncInstanceTaskCreate": "创建同步实例任务",
+      "SyncInstanceTaskUpdate": "更新同步实例任务"
+    }
   }
 }

@@ -31,7 +31,7 @@ export default {
           }
         },
         password: {
-          helpText: this.$t('users.passwordOrPassphrase')
+          helpText: this.$t('common.passwordOrPassphrase')
         },
         private_key: {
           component: Uploadkey
