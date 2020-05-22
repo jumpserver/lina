@@ -273,16 +273,15 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史"
+    "versionRunExecution": "执行历史",
+    "detail": "详情"
   },
   "perms": {
-    "": "",
     "Actions": "动作",
     "Asset": "资产",
     "Basic": "基本",
     "IP": "IP",
     "Node": "节点",
-    "RemoteApp": "",
     "SystemUser": "系统用户",
     "User": "用户",
     "UserGroups": "用户组",

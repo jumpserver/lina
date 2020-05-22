@@ -75,7 +75,7 @@ export default {
               extraActions: [
                 {
                   name: 'detail',
-                  title: '详情',
+                  title: this.$t('jobcenter.detail'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
                     return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: cellValue }})

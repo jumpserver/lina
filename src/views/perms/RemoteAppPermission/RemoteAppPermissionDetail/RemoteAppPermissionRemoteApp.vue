@@ -114,10 +114,8 @@ export default {
           return this.$axios.patch(relationUrl, data)
         },
         onDeleteSuccess: (obj, that) => {
-          // 从hasObjects中移除这个object
           const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
           that.iHasObjects.splice(theRemoveIndex, 1)
-          // 从disabled values中移除这个value
           while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
             const i = that.select2.disabledValues.indexOf(obj.value)
             this.$log.debug('disabled values remove index: ', i)
