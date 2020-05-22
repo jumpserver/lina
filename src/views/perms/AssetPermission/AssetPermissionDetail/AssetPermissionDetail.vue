@@ -55,7 +55,7 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.Name'),
           value: this.object.name
         },
         {
@@ -64,11 +64,11 @@ export default {
         },
         {
           key: this.$t('perms.userGroupCount'),
-          value: this.object.assets_amount
+          value: this.object.user_groups_amount
         },
         {
           key: this.$t('perms.assetCount'),
-          value: this.object.users_amount
+          value: this.object.assets_amount
         },
         {
           key: this.$t('perms.nodeCount'),

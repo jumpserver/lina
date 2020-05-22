@@ -102,6 +102,8 @@ export default {
         {
           name: 'delete',
           title: this.$t('common.Delete'),
+          type: 'danger',
+          plain: true,
           can: this.validActions.canDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
@@ -170,7 +172,7 @@ export default {
       })
     },
     handleTabClick(tab) {
-      this.$emit('tab-click', tab)
+      this.$emit('tab-click', tab, this.iActiveMenu)
       this.$emit('update:activeMenu', tab.name)
       this.$log.debug('Current tab is: ', this.activeMenu)
     },

@@ -48,12 +48,6 @@ export default {
     selectedRows: {
       type: Array,
       default: () => []
-    },
-    testFields: {
-      type: Array,
-      default() {
-        return []
-      }
     }
   },
   data() {

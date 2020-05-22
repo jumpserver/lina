@@ -67,13 +67,11 @@ export default {
                   title: this.$t('jobcenter.run'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
-                    const newPage = this.$router.resolve({
-                      name: 'CeleryTaskLog',
-                      query: {
-                        id: 12345678
-                      }
+                    this.$axios.get(
+                      `/api/v1/ops/tasks/${cellValue}/run/`
+                    ).then(res => {
+                      window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })
-                    window.open(newPage.href, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 }
               ]

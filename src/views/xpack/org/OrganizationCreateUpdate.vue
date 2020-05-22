@@ -18,7 +18,7 @@ export default {
         fields: ['name', 'admins', 'auditors', 'users', 'comment'],
         fieldsMeta: {
           admins: {
-            label: '管理员',
+            label: this.$t('xpack.Admin'),
             el: {
               value: [],
               ajax: {
@@ -35,7 +35,7 @@ export default {
             }
           },
           auditors: {
-            label: '审计员',
+            label: this.$t('xpack.Auditor'),
             el: {
               value: [],
               ajax: {
@@ -52,7 +52,7 @@ export default {
             }
           },
           users: {
-            label: '用户',
+            label: this.$t('xpack.User'),
             el: {
               value: [],
               ajax: {

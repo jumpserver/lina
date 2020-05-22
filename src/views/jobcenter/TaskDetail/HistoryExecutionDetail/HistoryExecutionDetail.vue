@@ -4,14 +4,15 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
+      <QuickActions type="primary" :actions="quickActions" />
+      <RunInfoCard type="primary" style="margin-top: 15px" v-bind="RunSuccessConfig" />
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard/index'
+import { DetailCard, QuickActions } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../runinfocard/RunInfoCard'
 
@@ -19,7 +20,8 @@ export default {
   name: 'HistoryExecutionDetail',
   components: {
     DetailCard,
-    RunInfoCard
+    RunInfoCard,
+    QuickActions
   },
   props: {
     object: {
@@ -28,7 +30,23 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
+      quickActions: [
+        {
+          title: this.$t('jobcenter.output'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('jobcenter.run')
+          },
+          callbacks: {
+            click: function() {
+              const taskId = vm.object.id
+              window.open(`/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
+            }
+          }
+        }
+      ],
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('jobcenter.lastRunSuccessHosts'),

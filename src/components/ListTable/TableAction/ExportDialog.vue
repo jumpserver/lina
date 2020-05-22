@@ -35,8 +35,6 @@ export default {
   data() {
     return {
       showExportDialog: false,
-      showImportDialog: false,
-      importOption: '1',
       exportOption: '1',
       meta: {}
     }
@@ -71,8 +69,8 @@ export default {
         query['spm'] = spm.spm
       } else if (this.exportOption === '3') {
         const listTableRef = this.$parent.$parent.$parent.$parent
-        console.log(listTableRef)
-        console.log(listTableRef.dataTable)
+        // console.log(listTableRef)
+        // console.log(listTableRef.dataTable)
         query = listTableRef.dataTable.getQuery()
         delete query['limit']
         delete query['offset']

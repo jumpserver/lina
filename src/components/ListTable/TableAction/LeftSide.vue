@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" class="header-action" />
+  <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" v-bind="$attrs" class="header-action" />
 </template>
 
 <script>
@@ -52,6 +52,10 @@ export default {
     moreActionsTitle: {
       type: String,
       default: null
+    },
+    moreActionsButton: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -72,6 +76,7 @@ export default {
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           can({ selectedRows }) {
+            // vm.$log.debug('Delete select rows length: ', selectedRows.length)
             return selectedRows.length > 0
           },
           callback: this.defaultBulkDeleteCallback

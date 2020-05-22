@@ -22,16 +22,16 @@ export default {
       fieldsMeta: {
         name: {
           el: {
-            placeholder: this.$t('名称')
+            placeholder: this.$t('common.Name')
           }
         },
         username: {
           el: {
-            placeholder: this.$t('用户名')
+            placeholder: this.$t('common.Username')
           }
         },
         password: {
-          helpText: this.$t('密码或密钥密码')
+          helpText: this.$t('common.passwordOrPassphrase')
         },
         private_key: {
           component: Uploadkey

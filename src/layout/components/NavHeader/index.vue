@@ -5,15 +5,7 @@
     </div>
     <div class="navbar-right">
       <div class="header-item">
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            {{ $t('common.nav.Help') }}<i class="el-icon-arrow-down el-icon--right" />
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-plus">{{ $t('common.nav.Docs') }}</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus">{{ $t('common.nav.Support') }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <Help />
       </div>
       <div class="header-item">
         <Language />
@@ -29,6 +21,7 @@
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
+import Help from './Help'
 import Language from './Language'
 
 export default {
@@ -36,7 +29,8 @@ export default {
     // Breadcrumb,
     Hamburger,
     AccountDropdown,
-    Language
+    Language,
+    Help
   },
   data() {
     return {
@@ -63,11 +57,8 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
-    },
-    async logout() {
-      await this.$store.dispatch('users/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
+
   }
 }
 </script>

@@ -28,10 +28,15 @@ export default {
     UserDatabasePermissionRules
   },
   data() {
+    const vm = this
     return {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
         activeMenu: 'UserInfo',
+        actions: {
+          canUpdate: () => vm.user.can_update,
+          canDelete: () => vm.user.can_delete
+        },
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
@@ -61,11 +66,7 @@ export default {
             title: this.$t('users.tabs.databasePermissionRules'),
             name: 'UserDatabasePermissionRules'
           }
-        ],
-        actions: {
-          canDelete: true,
-          canUpdate: true
-        }
+        ]
       }
     }
   },

@@ -60,7 +60,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            label: this.$t('common.table.Actions'),
+            label: this.$t('common.Actions'),
             formatter: ActionsFormatter,
             actions: {
               hasEdit: false,

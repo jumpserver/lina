@@ -34,8 +34,8 @@ export default {
       optionUrlMeta(url).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
-      }).catch((err) => {
-        this.$log.error('Error occur: ', err)
+      }).catch(() => {
+        this.$log.error('Error occur: ')
         // this.totalConfig = this.config
       }).finally(() => {
         this.loading = false

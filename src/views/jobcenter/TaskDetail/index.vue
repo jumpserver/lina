@@ -38,10 +38,6 @@ export default {
           {
             title: this.$t('jobcenter.execution'),
             name: 'TaskHistory'
-          },
-          {
-            title: this.$t('jobcenter.laskExecutionOutput'),
-            name: 'CeleryTaskLog'
           }
         ],
         hasRightSide: false

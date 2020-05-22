@@ -14,7 +14,6 @@ export default {
       type: String,
       default: '/api/v1/tickets/tickets/'
     }
-
   },
   data() {
     return {
@@ -51,11 +50,8 @@ export default {
         ]
       },
       ticketActions: {
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false
+        hasLeftActions: false,
+        hasRightActions: false
       }
     }
   }

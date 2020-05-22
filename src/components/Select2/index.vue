@@ -88,38 +88,9 @@ export default {
       hasMore: true,
       pageSize: defaultPageSize
     }
-    const defaultMakeParams = (params) => {
-      const page = params.page || 1
-      const offset = (page - 1) * params.pageSize
-      const p = {
-        offset: offset,
-        limit: params.pageSize
-      }
-      params = Object.assign(params, p)
-      delete params['page']
-      delete params['pageSize']
-      return params
-    }
-    const defaultProcessResults = (data) => {
-      let results = data.results
-      results = results.map((item) => {
-        return { label: item.name, value: item.id }
-      })
-      const more = !!data.next
-      const total = data.count
-      return { results: results, pagination: more, total: total }
-    }
-    const defaultAjax = {
-      url: '',
-      pageSize: defaultPageSize,
-      makeParams: defaultMakeParams,
-      processResults: defaultProcessResults
-    }
-    const iAjax = Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {})
     return {
       loading: false,
       initialized: false,
-      iAjax: iAjax,
       iValue: this.value ? this.value : [],
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
@@ -130,6 +101,48 @@ export default {
   computed: {
     optionsValues() {
       return this.iOptions.map((v) => v.value)
+    },
+    iAjax() {
+      const defaultPageSize = 10
+      const defaultMakeParams = (params) => {
+        const page = params.page || 1
+        const offset = (page - 1) * params.pageSize
+        const p = {
+          offset: offset,
+          limit: params.pageSize
+        }
+        params = Object.assign(params, p)
+        delete params['page']
+        delete params['pageSize']
+        return params
+      }
+      const defaultProcessResults = (data) => {
+        let results = data.results
+        results = results.map((item) => {
+          return { label: item.name, value: item.id }
+        })
+        const more = !!data.next
+        const total = data.count
+        return { results: results, pagination: more, total: total }
+      }
+      const defaultAjax = {
+        url: '',
+        pageSize: defaultPageSize,
+        makeParams: defaultMakeParams,
+        processResults: defaultProcessResults
+      }
+      return Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {})
+    }
+  },
+  watch: {
+    // url(newValue, oldValue) {
+    //   this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
+    //   this.iAjax.url = newValue
+    //   this.refresh()
+    // },
+    iAjax(newValue, oldValue) {
+      this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
+      this.refresh()
     }
   },
   mounted() {

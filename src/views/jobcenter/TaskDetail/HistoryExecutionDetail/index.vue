@@ -28,10 +28,6 @@ export default {
           {
             title: this.$t('jobcenter.executionDetail'),
             name: 'HistoryExecutionDetail'
-          },
-          {
-            title: this.$t('jobcenter.output'),
-            name: 'CeleryTaskLog'
           }
         ],
         hasRightSide: false,

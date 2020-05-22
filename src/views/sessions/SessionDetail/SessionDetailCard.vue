@@ -4,33 +4,19 @@
       <DetailCard :items="detailItems" />
     </el-col>
     <el-col :span="10">
-      <el-card class="box-card primary">
-        <div slot="header" class="clearfix">
-          <i class="fa fa-info" />
-          <span>{{ cardActions }}</span>
-        </div>
-        <el-table class="el-table" :data="cardActionData" :show-header="false">
-          <el-table-column prop="name" />
-          <el-table-column prop="button" align="right">
-            <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleButtonAction(scope.$index, scope.row)">
-                {{ scope.row.button }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+      <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import DetailCard from '@/components/DetailCard/index'
-
+import { QuickActions } from '@/components'
 export default {
   name: 'SessionDetailCard',
   components: {
-    DetailCard
+    DetailCard,
+    QuickActions
   },
   props: {
     object: {
@@ -80,38 +66,37 @@ export default {
         }
       ]
     },
-    cardActions() {
-      return this.$t('sessions.quickModify')
-    },
-    cardActionData() {
+    quickActions() {
       return [
         {
-          name: this.$t('sessions.replaySession'),
-          button: this.$t('sessions.go'),
-          value: 'replay'
+          title: this.$t('sessions.replaySession'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('sessions.go')
+          },
+          callbacks: {
+            click: function() {
+              this.openReplaySession(this.sessionData.id)
+            }
+
+          }
         },
         {
-          name: this.$t('sessions.downloadReplay'),
-          button: this.$t('sessions.download'),
-          value: 'download'
+          title: this.$t('sessions.downloadReplay'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('sessions.download')
+          },
+          callbacks: {
+            click: function() {
+              this.openReplayDownload(this.sessionData.id)
+            }
+          }
         }
       ]
     }
   },
   methods: {
-    handleButtonAction: function(index, row) {
-      switch (row.value) {
-        case 'replay':
-          this.openReplaySession(this.sessionData.id)
-          break
-        case 'download':
-          this.openReplayDownload(this.sessionData.id)
-          break
-        default:
-          console.log('No Match button action: ' + row.value)
-      }
-    },
-
     openReplaySession: function(id) {
       const replayUrl = '/luna/replay/' + id
       window.open(replayUrl)

@@ -377,7 +377,7 @@ td .el-button.el-button--mini {
 }
 
 .el-table__header thead tr th {
-  border-bottom: 1.5px solid #e7e7e7 !important;
+  border-bottom: 1px solid #e7e7e7 !important;
 }
 
 .el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
@@ -404,4 +404,29 @@ a {
 
 .el-card {
   color: #676a6c;
+}
+
+
+.el-table__empty-block {
+ width: 100% !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  font-size: 21px;
+  font-weight: 700;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close {
+  color: #000;
+  font-size: 22px;
+  font-weight: 800;
+  //color: red;
+}
+
+.el-button--danger.is-plain {
+  color: $--color-danger;
+  background: white;
+  border-color: $--color-danger;
 }

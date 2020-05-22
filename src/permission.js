@@ -28,7 +28,7 @@ router.beforeEach(async(to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-    //   // other pages that do not have permission to access are redirected to the login page.
+    // other pages that do not have permission to access are redirected to the login page.
       next(`/auth/login/`)
       NProgress.done()
       return
@@ -76,11 +76,11 @@ router.beforeEach(async(to, from, next) => {
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
-    // Message.error(error || 'Has Error')
+    Message.error(error || 'Has Error')
     // next(`/login?redirect=${to.path}`)
-    // NProgress.done()
     console.log(error)
-    next()
+    NProgress.done()
+    // next()
   }
 })
 
@@ -92,7 +92,7 @@ router.afterEach(() => {
 function checkRoles(val) {
   let currentRule = getPermission()
   if (currentRule) {
-    if (!val.includes(currentRule)) {
+    if (val && !val.includes(currentRule)) {
       // TODO 异常注入处理
       currentRule = val[0]
       setPermission(currentRule)
