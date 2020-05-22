@@ -17,31 +17,32 @@ export default {
         columns: [
           {
             prop: 'name',
-            label: this.$t('assets.name'),
+            label: this.$t('assets.Name'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'CommandFilterDetail'
           },
           {
             prop: 'rules',
-            label: this.$t('assets.rules'),
+            label: this.$t('assets.Rules'),
             formatter: DetailLengthFormatter,
             route: 'CommandFilterDetail'
           },
           {
             prop: 'system_users',
-            label: this.$t('assets.systemUser'),
+            label: this.$t('assets.SystemUser'),
             formatter: DetailLengthFormatter,
             route: 'CommandFilterDetail'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.comment'),
+            label: this.$t('assets.Comment'),
             sortable: 'custom'
           },
           {
             prop: 'id',
             align: 'center',
+            label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
             actions: {

@@ -19,20 +19,23 @@ export default {
     return {
       TaskDetail: {},
       actions: {
-        detailApiUrl: 'api/v1/assets/platform/details/1/'
+        detailApiUrl: `/api/v1/assets/platforms/${this.$route.params.id}/`
       },
       config: {
         title: this.$t('assets.commandFilterDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.detail'),
+            title: this.$t('assets.PlatformDetail'),
             name: 'Detail'
           }
         ],
         hasRightSide: false
       }
     }
+  },
+  computed: {
+
   }
 }
 </script>
