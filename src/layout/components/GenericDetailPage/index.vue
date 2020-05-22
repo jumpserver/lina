@@ -102,6 +102,8 @@ export default {
         {
           name: 'delete',
           title: this.$t('common.Delete'),
+          type: 'danger',
+          plain: true,
           can: this.validActions.canDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }

@@ -61,11 +61,7 @@ export default {
             title: this.$t('users.tabs.databasePermissionRules'),
             name: 'UserDatabasePermissionRules'
           }
-        ],
-        actions: {
-          canDelete: true,
-          canUpdate: true
-        }
+        ]
       }
     }
   },
