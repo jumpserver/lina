@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'SessionOnline',
+        activeMenu: 'OfflineList',
         submenu: [
           {
             title: this.$t('route.SessionOnline'),
