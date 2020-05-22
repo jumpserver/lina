@@ -1,4 +1,5 @@
 import Layout from '@/layout/index'
+import empty from '@/layout/empty'
 import i18n from '@/i18n/i18n'
 
 export default {
@@ -110,7 +111,7 @@ export default {
     },
     {
       path: '/cloud',
-      component: Layout,
+      component: empty,
       redirect: '/cloud/account',
       name: 'Cloud',
       meta: { title: i18n.t('xpack.Cloud.Cloud') },
