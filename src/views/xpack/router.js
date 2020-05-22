@@ -113,7 +113,7 @@ export default {
       component: Layout,
       redirect: '/cloud/account',
       name: 'Cloud',
-      meta: { title: i18n.t('test') },
+      meta: { title: i18n.t('xpack.Cloud.Cloud') },
       children: [
         {
           path: 'account',

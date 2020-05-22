@@ -65,7 +65,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/users/users/?role=Admin',
+              url: '/api/v1/assets/admin-users/',
               processResults(data) {
                 const results = data.results.map((item) => {
                   return { label: item.name, value: item.id }
@@ -90,7 +90,7 @@ export default {
             ajax: {
               url: '/api/v1/xpack/cloud/regions/',
               processResults(data) {
-                const results = data.results.map((item) => {
+                const results = data.regions.map((item) => {
                   return { label: item.name, value: item.id }
                 })
                 const more = !!data.next
