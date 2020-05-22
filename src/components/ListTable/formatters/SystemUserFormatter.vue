@@ -1,5 +1,5 @@
 <template>
-  <span v-if="systemuser.length===0"><a style="color: #1c84c6;" @click="showSystemUser">{{ this.$t('显示') }}</a></span>
+  <span v-if="systemuser.length===0"><a style="color: #1c84c6;" @click="showSystemUser">{{ this.$t('common.Show') }}</a></span>
   <span v-else>{{ this.systemuser.toString() }}</span>
 </template>
 

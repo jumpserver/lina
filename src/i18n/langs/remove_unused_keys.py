@@ -1,3 +1,4 @@
+# -- coding: utf-8 --
 import json
 
 i18n_report_path = '/tmp/abc.json'

@@ -35,7 +35,6 @@ export default {
         hasEdit: userTableActions.hasEdit !== false, // 有编辑按钮
         hasDelete: userTableActions.hasDelete !== false,
         hasNew: false,
-        // editText: this.$t('action.update'), // 编辑按钮文案
         buttonSize: 'mini',
         tableAttrs: {
           stripe: false, // 斑马纹表格

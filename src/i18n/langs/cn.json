@@ -1,8 +1,4 @@
 {
-  "Assets": "",
-  "action": {
-    "update": ""
-  },
   "applications": {
     "": "",
     "appPath": "",
@@ -82,9 +78,30 @@
     "date_joined": "创建日期",
     "date_password_last_updated": "最后更新密码",
     "ip": "IP",
-    "last_login": "最后登录日期"
+    "last_login": "最后登录日期",
+    "hostname": "",
+    "IP": "",
+    "sshkey": "",
+    "detail": "",
+    "name": "",
+    "comment": "",
+    "date_created": "",
+    "date_updated": "",
+    "created_by": "",
+    "commandFilterDetail": "",
+    "commandFilterRules": "",
+    "type": "",
+    "content": "",
+    "priority": "",
+    "ruleaction": "",
+    "rules": "",
+    "systemUser": "",
+    "value": "",
+    "asset": "",
+    "BasePlatform": "",
+    "command_filter_list": "",
+    "SystemUser": ""
   },
-  "audits": {},
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
     "ReLogin": "重新登录"
@@ -166,7 +183,6 @@
     },
     "import": "导入",
     "isValid": "",
-    "message": {},
     "name": "名称",
     "nav": {
       "APIKey": "API Key",
@@ -395,7 +411,8 @@
     "UserUpdate": "更新用户",
     "Users": "用户管理",
     "WebFTP": "文件管理",
-    "WebTerminal": "Web终端"
+    "WebTerminal": "Web终端",
+    "": ""
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -612,7 +629,8 @@
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
-    }
+    },
+    "passwordOrPassphrase": ""
   },
   "xpack": {
     "Admin": "管理员",
@@ -654,6 +672,10 @@
     "logoLogoutTip": "提示：将会显示在企业版用户退出页面（建议图片大小为：82px*82px）",
     "restoreDialogMessage": "您确定要恢复默认初始化吗？",
     "restoreDialogTitle": "你确认吗",
-    "technologyConsult": "技术咨询"
+    "technologyConsult": "技术咨询",
+    "ChangeAuthPlanCreate": "",
+    "ChangeAuthPlanUpdate": "",
+    "ChangeAuthPlanDetail": "",
+    "ChangeAuthPlanExecutionTask": ""
   }
 }

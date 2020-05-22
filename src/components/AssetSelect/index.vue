@@ -2,7 +2,7 @@
   <div>
     <el-select ref="select" v-model="internalValue" multiple placeholder="请选择资产" @focus="handleFocus" />
     <el-dialog
-      :title="this.$t('Assets')"
+      :title="this.$t('assets.Assets')"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
       width="60%"
