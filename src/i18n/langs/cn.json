@@ -462,7 +462,9 @@
     "terminate": "终断",
     "test": "测试",
     "type": "类型",
-    "user": "用户"
+    "user": "用户",
+    "createReplayStorage": "创建录像存储",
+    "createCommandStorage": "创建命令存储"
   },
   "setting": {
     "Basic": "基本设置",

@@ -50,7 +50,7 @@
     "Type": "",
     "Database": "",
     "Comment": "",
-    "Action": "",
+    "Action": "Action",
     "RemoteType": "",
     "Asset": "",
     "SetMFA": "",
@@ -107,7 +107,7 @@
     "LoginRequiredMsg": ""
   },
   "common": {
-    "Action": "",
+    "Action": "Action",
     "Actions": "Actions",
     "Activate": "Activate",
     "Active": "",
@@ -143,7 +143,7 @@
     "Update success": "",
     "Username": "",
     "Validity": "Validity",
-    "action": "",
+    "action": "Action",
     "actions": {
       "Create": "",
       "cancel": ""
@@ -180,7 +180,7 @@
     },
     "rows": "",
     "table": {
-      "Actions": ""
+      "Actions": "Action"
     },
     "tree": {
       "Empty": "Empty",
@@ -344,18 +344,18 @@
     "WebFTP": ""
   },
   "sessions": {
-    "StorageConfiguration": "",
+    "StorageConfiguration": "Storage configuration",
     "accountKey": "Account key",
     "accountName": "Account name",
-    "active": "",
-    "alive": "",
+    "active": "active",
+    "alive": "alive",
     "asset": "Asset",
     "bucket": "Bucket",
     "command": "Command",
     "commandStorage": "Command storage",
     "comment": "Comment:",
     "containerName": "Container name",
-    "date": "",
+    "date": "Datetime",
     "dateCreated": "Date created:",
     "dateEnd": "Date end",
     "dateStart": "Date start",
@@ -369,7 +369,7 @@
     "goto": "Goto",
     "hosts": "Hosts",
     "httpPort": "Http port:",
-    "id": "",
+    "id": "ID",
     "index": "Index",
     "info": "",
     "join": "join",
@@ -377,7 +377,7 @@
     "name": "Name:",
     "protocol": "Protocol",
     "quickModify": "Quick Modify",
-    "region": "",
+    "region": "Region",
     "remoteAddr": "Remote addr",
     "replay": "replay",
     "replaySession": "Replay session:",
@@ -392,7 +392,9 @@
     "terminate": "Terminate",
     "test": "Test",
     "type": "Type",
-    "user": "Use"
+    "user": "Use",
+    "createReplayStorage": "Create replay storage",
+    "createCommandStorage": "Create command storage"
   },
   "setting": {
     "Basic": "Basic setting",

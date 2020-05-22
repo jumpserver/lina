@@ -18,7 +18,7 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasCreate: false,
-        moreActionsTitle: '创建',
+        moreActionsTitle: this.$t('sessions.createReplayStorage'),
         extraMoreActions: [
           {
             name: 'S3',

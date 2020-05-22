@@ -33,7 +33,7 @@ export default {
             callback: this.createEs.bind(this)
           }
         ],
-        moreActionsTitle: '创建'
+        moreActionsTitle: this.$t('sessions.createCommandStorage')
       },
       commandTableConfig: {
         title: 'command',
