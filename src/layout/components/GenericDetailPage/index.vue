@@ -170,7 +170,7 @@ export default {
       })
     },
     handleTabClick(tab) {
-      this.$emit('tab-click', tab)
+      this.$emit('tab-click', tab, this.iActiveMenu)
       this.$emit('update:activeMenu', tab.name)
       this.$log.debug('Current tab is: ', this.activeMenu)
     },
