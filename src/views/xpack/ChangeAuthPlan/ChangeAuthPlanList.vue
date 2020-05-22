@@ -6,7 +6,7 @@
 import { GenericListPage } from '@/layout/components'
 
 export default {
-  name: 'ChangeAuthPlan',
+  name: 'ChangeAuthPlanList',
   components: {
     GenericListPage
   },
@@ -55,8 +55,7 @@ export default {
         hasImport: false,
         hasRefresh: false,
         hasBulkDelete: false,
-        hasBulkUpdate: false,
-        createRoute: 'ChangeAuthPlanCreate'
+        hasBulkUpdate: false
       }
     }
   }
