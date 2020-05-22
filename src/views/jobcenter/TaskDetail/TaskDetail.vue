@@ -59,7 +59,7 @@ export default {
           value: this.object.id
         },
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.Name'),
           value: this.object.name
         },
         {

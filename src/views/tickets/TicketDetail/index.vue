@@ -21,7 +21,7 @@ export default {
         activeMenu: 'TicketDetail',
         submenu: [
           {
-            title: '工单详情',
+            title: this.$t('route.TicketDetail'),
             name: 'TicketDetail'
           }
         ],
