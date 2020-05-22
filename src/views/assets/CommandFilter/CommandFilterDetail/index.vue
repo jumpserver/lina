@@ -21,7 +21,6 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.CommandFilterDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
@@ -33,7 +32,7 @@ export default {
             name: 'rules'
           }
         ],
-        hasRightSide: false
+        hasRightSide: true
       }
     }
   }

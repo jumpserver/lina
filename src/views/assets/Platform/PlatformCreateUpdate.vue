@@ -76,7 +76,7 @@ export default {
           )
         }
       },
-      url: '/api/v1/assets/platforms/'
+      url: '/api/v1/assets/platforms'
     }
   }
 }
