@@ -55,7 +55,7 @@ export default {
         },
         series: [
           {
-            name: this.$t('dashboard.UserRadio'),
+            name: this.$t('dashboard.UserRatio'),
             type: 'pie',
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,
@@ -97,7 +97,7 @@ export default {
         },
         series: [
           {
-            name: this.$t('dashboard.AssetRadio'),
+            name: this.$t('dashboard.AssetRatio'),
             type: 'pie',
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,

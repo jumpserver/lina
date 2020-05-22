@@ -139,8 +139,8 @@ export default {
             actions: {
               extraActions: [
                 {
-                  name: this.$t('common.delete'),
-                  title: this.$t('common.delete'),
+                  name: 'delete',
+                  title: this.$t('common.Delete'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
                       this.$refs.ListTable.reloadTable()
@@ -148,14 +148,14 @@ export default {
                   }
                 },
                 {
-                  name: this.$t('common.Test'),
+                  name: 'Test',
                   title: this.$t('common.Test'),
                   callback: (val) => {
                     console.log('Test')
                   }
                 },
                 {
-                  name: this.$t('common.Push'),
+                  name: 'Push',
                   title: this.$t('common.Push'),
                   callback: (val) => {
                     console.log('Push')
@@ -203,7 +203,7 @@ export default {
           return this.$axios.post(relationUrl, data).then(res => {
             this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.updateFailedMsg' + ' ' + err))
+            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         },
         performDelete: (item) => {
@@ -213,7 +213,7 @@ export default {
           return this.$axios.delete(relationUrl).then(res => {
             this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.updateFailedMsg' + ' ' + err))
+            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         }
       }

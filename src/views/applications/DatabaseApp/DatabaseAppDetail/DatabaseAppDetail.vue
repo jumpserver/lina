@@ -56,7 +56,7 @@ export default {
           value: this.object.created_by
         },
         {
-          key: this.$t('common.comment'),
+          key: this.$t('common.Comment'),
           value: this.object.comment
         }
       ]
