@@ -1,4 +1,5 @@
 import Layout from '@/layout/index'
+import empty from '@/layout/empty'
 import i18n from '@/i18n/i18n'
 
 export default {
@@ -77,21 +78,21 @@ export default {
     {
       path: 'change-auth-plan',
       component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanList.vue'),
-      name: 'ChangeAuthPlan',
-      meta: { title: i18n.t('xpack.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan' }
+      name: 'ChangeAuthPlanList',
+      meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan' }
     },
     {
       path: 'change-auth-plan/create',
       component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
       name: 'ChangeAuthPlanCreate',
-      meta: { title: i18n.t('xpack.ChangeAuthPlanCreate'), activeMenu: '/xpack/change-auth-plan', action: 'create' },
+      meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanCreate'), activeMenu: '/xpack/change-auth-plan', action: 'create' },
       hidden: true
     },
     {
       path: 'change-auth-plan/:id/update',
       component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
       name: 'ChangeAuthPlanUpdate',
-      meta: { title: i18n.t('xpack.ChangeAuthPlanUpdate'), activeMenu: '/xpack/change-auth-plan', action: 'update' },
+      meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanUpdate'), activeMenu: '/xpack/change-auth-plan', action: 'update' },
       hidden: true
     },
     {
@@ -105,12 +106,12 @@ export default {
       path: 'change-auth-plan/:id/execution/task',
       component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/ChangeAuthPlanExecutionTaskList.vue'),
       name: 'ChangeAuthPlanExecutionTask',
-      meta: { title: i18n.t('xpack.ChangeAuthPlanExecutionTask'), activeMenu: '/xpack/change-auth-plan' },
+      meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanExecutionTask'), activeMenu: '/xpack/change-auth-plan' },
       hidden: true
     },
     {
       path: '/cloud',
-      component: Layout,
+      component: empty,
       redirect: '/cloud/account',
       name: 'Cloud',
       meta: { title: i18n.t('xpack.Cloud.Cloud') },
