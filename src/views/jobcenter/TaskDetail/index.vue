@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -41,10 +41,20 @@ export default {
           },
           {
             title: this.$t('jobcenter.laskExecutionOutput'),
-            name: 'CeleryTaskLog'
+            name: 'CeleryTaskLog',
+            update: false
           }
         ],
         hasRightSide: false
+      }
+    }
+  },
+  methods: {
+    TabClick(currentTab, previousTab) {
+      if (currentTab.name === 'CeleryTaskLog') {
+        this.$set(this.config, 'activeMenu', previousTab)
+        const taskId = this.TaskDetail.latest_execution.id
+        window.open(`/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
       }
     }
   }

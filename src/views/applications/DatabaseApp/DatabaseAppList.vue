@@ -26,7 +26,8 @@ export default {
         hasCreate: false,
         hasBulkDelete: false,
         createRoute: 'DatabaseAppCreate',
-        moreActionsTitle: '创建',
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
         extraMoreActions: [
           {
             name: 'MySQL',

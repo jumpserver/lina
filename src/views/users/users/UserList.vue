@@ -49,7 +49,6 @@ export default {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
             can({ selectedRows }) {
-              console.log('disableSelected Select rows length: ', selectedRows.length)
               return selectedRows.length > 0
             },
             callback({ selectedRows, reloadTable }) {

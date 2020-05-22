@@ -11,7 +11,7 @@
 
 <script>
 import { DetailCard, QuickActions } from '@/components'
-// import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'AssetPermissionDetail',
@@ -55,29 +55,28 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.Name'),
           value: this.object.name
         },
         {
           key: this.$t('perms.userCount'),
-          // value: this.getDataLength(this.object.users)
-          value: JSON.stringify(this.object.users_amount)
+          value: this.object.users_amount
         },
         {
           key: this.$t('perms.userGroupCount'),
-          value: JSON.stringify(this.object.assets_amount)
+          value: this.object.user_groups_amount
         },
         {
           key: this.$t('perms.assetCount'),
-          value: JSON.stringify(this.object.users_amount)
+          value: this.object.assets_amount
         },
         {
           key: this.$t('perms.nodeCount'),
-          value: JSON.stringify(this.object.nodes_amount)
+          value: this.object.nodes_amount
         },
         {
           key: this.$t('perms.systemUserCount'),
-          value: JSON.stringify(this.object.system_users_amount)
+          value: this.object.system_users_amount
         },
         {
           key: this.$t('perms.dateStart'),
@@ -89,7 +88,7 @@ export default {
         },
         {
           key: this.$t('common.dateCreated'),
-          value: this.object.date_created
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('common.createdBy'),
@@ -100,14 +99,6 @@ export default {
           value: 'api没有这个字段'
         }
       ]
-    }
-  },
-  methods: {
-    getDataLength(data) {
-      if (data instanceof Array) {
-        return JSON.stringify(data.length)
-      }
-      return data
     }
   }
 }

@@ -100,7 +100,7 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.name'),
+          key: this.$t('common.Name'),
           value: this.object.name
         },
         {

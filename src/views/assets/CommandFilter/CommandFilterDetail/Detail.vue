@@ -56,9 +56,9 @@ export default {
             newData.push(v.value)
           })
           return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
+            this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         },
         performDelete: (item) => {
@@ -72,9 +72,9 @@ export default {
           })
           const relationUrl = `/api/v1/assets/cmd-filters/${this.object.id}/`
           return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
+            this.$message.success(this.$t('common.deleteSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.deleteFailedMsg' + ' ' + err))
           })
         }
       }
@@ -84,23 +84,23 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.name'),
+          key: this.$t('assets.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('assets.comment'),
+          key: this.$t('assets.Comment'),
           value: this.object.comment
         },
         {
-          key: this.$t('assets.date_created'),
+          key: this.$t('assets.date_joined'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('assets.date_updated'),
+          key: this.$t('assets.DateUpdated'),
           value: toSafeLocalDateStr(this.object.date_updated)
         },
         {
-          key: this.$t('assets.created_by'),
+          key: this.$t('assets.CreatedBy'),
           value: this.object.created_by
         }
       ]

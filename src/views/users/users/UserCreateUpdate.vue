@@ -46,7 +46,9 @@ export default {
         groups: {
           el: {
             multiple: true,
-            url: '/api/v1/users/groups/',
+            ajax: {
+              url: '/api/v1/users/groups/'
+            },
             value: []
           }
         }

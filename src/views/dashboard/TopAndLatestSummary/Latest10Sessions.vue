@@ -3,7 +3,7 @@
     <div v-if="dates_login_record_top10_sessions.length > 0" class="feed-activity-list">
       <div v-for="(item, index ) of dates_login_record_top10_sessions" :key="item.user + index" class="feed-element">
         <a href="#" class="pull-left">
-          <img alt="image" class="img-circle" src="/static/img/avatar/user.png">
+          <img alt="image" class="img-circle" :src="avatarUrl">
         </a>
         <div class="media-body ">
           <small class="pull-right">{{ item.timesince }}</small>
@@ -25,6 +25,7 @@ export default {
   data() {
     return {
       title: this.$t('dashboard.LatestSessions10'),
+      avatarUrl: require('@/assets/img/admin.png'),
       contentHeading: {
         title: this.$t('dashboard.LatestTop10'),
         content: this.$t('dashboard.LatestSessions')

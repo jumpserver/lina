@@ -16,9 +16,9 @@ export default {
         hasImport: false,
         hasRefresh: false,
         hasBulkDelete: false,
-        hasBulkUpdate: false,
         hasCreate: false,
-        moreActionsTitle: '创建',
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
         extraMoreActions: [
           {
             name: 'S3',
