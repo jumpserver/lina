@@ -132,6 +132,13 @@ export default {
       return this.iOptions.map((v) => v.value)
     }
   },
+  watch: {
+    url(newValue, oldValue) {
+      this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
+      this.iAjax.url = newValue
+      this.refresh()
+    }
+  },
   mounted() {
     this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
