@@ -171,6 +171,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasRefresh: false,
+        hasLeftActions: false,
         hasBulkDelete: false,
         hasSearch: true,
         hasCreate: false
