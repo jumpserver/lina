@@ -29,7 +29,8 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasImport: false
+        hasImport: false,
+        hasExport: false
       }
     }
   }

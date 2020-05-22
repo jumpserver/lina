@@ -35,7 +35,7 @@
     "Gateway": "网关",
     "Hardware": "硬件",
     "Hostname": "主机名",
-    "IP": "",
+    "IP": "IP",
     "IsActive": "激活",
     "Label": "标签",
     "LoginModel": "登录模式",
@@ -82,7 +82,7 @@
     "date_joined": "创建日期",
     "date_password_last_updated": "最后更新密码",
     "detail": "",
-    "hostname": "",
+    "hostname": "hostname",
     "ip": "IP",
     "last_login": "最后登录日期",
     "sshkey": ""

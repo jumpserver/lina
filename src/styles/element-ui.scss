@@ -410,3 +410,23 @@ a {
 .el-table__empty-block {
  width: 100% !important;
 }
+
+.el-dialog__headerbtn .el-dialog__close {
+  font-size: 21px;
+  font-weight: 700;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close {
+  color: #000;
+  font-size: 22px;
+  font-weight: 800;
+  //color: red;
+}
+
+.el-button--danger.is-plain {
+  color: $--color-danger;
+  background: white;
+  border-color: $--color-danger;
+}

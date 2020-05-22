@@ -55,7 +55,9 @@ export default {
         }
       },
       headerActions: {
-        hasLeftActions: false
+        hasLeftActions: false,
+        hasImport: false,
+        hasExport: false
       }
     }
   }

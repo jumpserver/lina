@@ -46,7 +46,7 @@ export default {
     },
     moreActionsType: {
       type: String,
-      default: ''
+      default: 'default'
     }
   },
   computed: {

@@ -80,7 +80,9 @@ export default {
         ]
       },
       headerActions: {
-        hasLeftActions: false
+        hasLeftActions: false,
+        hasExport: false,
+        hasImport: false
       }
     }
   },
