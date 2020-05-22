@@ -7,7 +7,11 @@
     "database": "",
     "host": "",
     "port": "",
-    "type": ""
+    "type": "",
+    "chrome": "Chrome",
+    "mysql_workbench": "MySQL Workbench",
+    "vmware_client": "VMware Client",
+    "custom": "自定义"
   },
   "assets": {
     "Action": "动作",
