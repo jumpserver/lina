@@ -394,7 +394,9 @@
     "terminate": "Terminate",
     "test": "Test",
     "type": "Type",
-    "user": "Use"
+    "user": "Use",
+    "createReplayStorage": "Create replay storage",
+    "createCommandStorage": "Create command storage"
   },
   "setting": {
     "Basic": "Basic setting",
