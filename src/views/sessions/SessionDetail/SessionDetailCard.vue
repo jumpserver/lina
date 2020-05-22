@@ -75,7 +75,9 @@ export default {
             label: this.$t('sessions.go')
           },
           callbacks: {
-            click: this.openReplaySession(this.sessionData.id)
+            click: function() {
+              this.openReplaySession(this.sessionData.id)
+            }
 
           }
         },
@@ -86,7 +88,9 @@ export default {
             label: this.$t('sessions.download')
           },
           callbacks: {
-            click: this.openReplayDownload(this.sessionData.id)
+            click: function() {
+              this.openReplayDownload(this.sessionData.id)
+            }
           }
         }
       ]
