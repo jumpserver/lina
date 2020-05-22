@@ -451,7 +451,7 @@
     "name": "名称",
     "protocol": "协议",
     "quickModify": "快速修改",
-    "region": "",
+    "region": "地域",
     "remoteAddr": "远端地址",
     "replay": "回放",
     "replaySession": "回放会话",
