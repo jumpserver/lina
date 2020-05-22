@@ -277,16 +277,15 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史"
+    "versionRunExecution": "执行历史",
+    "detail": "详情"
   },
   "perms": {
-    "": "",
     "Actions": "动作",
     "Asset": "资产",
     "Basic": "基本",
     "IP": "IP",
     "Node": "节点",
-    "RemoteApp": "",
     "SystemUser": "系统用户",
     "User": "用户",
     "UserGroups": "用户组",
@@ -467,7 +466,9 @@
     "terminate": "终断",
     "test": "测试",
     "type": "类型",
-    "user": "用户"
+    "user": "用户",
+    "createReplayStorage": "创建录像存储",
+    "createCommandStorage": "创建命令存储"
   },
   "setting": {
     "Basic": "基本设置",
@@ -638,6 +639,7 @@
   },
   "xpack": {
     "Admin": "管理员",
+    "Auditor": "审计员",
     "AssetCount": "资产数量",
     "ChangeAuthPlan": "改密计划",
     "Corporation": "公司",
