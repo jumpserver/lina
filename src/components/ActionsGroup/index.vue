@@ -4,7 +4,7 @@
       <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
     </el-button>
     <el-dropdown v-if="iMoreActions.length > 0" trigger="click" @command="handleClick">
-      <el-button :size="size" class="btn-more-actions">
+      <el-button :size="size" :type="moreActionsType" class="btn-more-actions">
         {{ iMoreActionsTitle }}<i class="el-icon-arrow-down el-icon--right" />
       </el-button>
       <el-dropdown-menu slot="dropdown">
@@ -43,6 +43,10 @@ export default {
       default() {
         return this.$t('common.MoreActions')
       }
+    },
+    moreActionsType: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -68,6 +72,9 @@ export default {
     iMoreActionsTitle() {
       return this.moreActionsTitle || this.$t('common.MoreActions')
     }
+  },
+  mounted() {
+    console.log(this.moreActionsType)
   },
   methods: {
     handleClick(item) {

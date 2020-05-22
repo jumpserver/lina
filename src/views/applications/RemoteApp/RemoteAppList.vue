@@ -37,9 +37,11 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        hasMoreActions: false,
         hasBulkDelete: false,
         // createRoute: 'RemoteAppCreate',
-        moreActionsTitle: '创建',
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
         extraMoreActions: this.genExtraMoreActions()
       }
     }
@@ -49,15 +51,15 @@ export default {
       this.$router.push({ name: 'RemoteAppCreate', query: { type: type }})
     },
     genExtraMoreActions() {
-      const extra_more_actions = []
+      const extraMoreActions = []
       for (const value of ALL_TYPES) {
         const item = { ...REMOTE_APP_TYPE_META_MAP[value] }
         item.type = 'primary'
         item.can = true
         item.callback = this.onCallback.bind(this, value)
-        extra_more_actions.push(item)
+        extraMoreActions.push(item)
       }
-      return extra_more_actions
+      return extraMoreActions
     }
   }
 }
