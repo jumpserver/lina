@@ -68,7 +68,7 @@
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testLdapSetting, testLdapUserLogin,
   importLdapUser, refreshLdapUserCache } from '@/api/settings'
-import { ListTable } from '@/components'
+import ListTable from '@/components/ListTable'
 
 export default {
   name: 'Ldap',

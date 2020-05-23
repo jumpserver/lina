@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import ListTable from '@/components/ListTable'
 import { LengthFormatter } from '@/components/ListTable/formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {

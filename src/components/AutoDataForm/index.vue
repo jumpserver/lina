@@ -9,7 +9,7 @@ import DataForm from '../DataForm'
 import FormGroupHeader from '@/components/FormGroupHeader'
 // import { optionUrlMeta } from '@/api/common'
 import rules from '@/components/DataForm/rules'
-import { Select2 } from '@/components'
+import Select2 from '@/components/Select2'
 export default {
   name: 'AutoDataForm',
   components: {

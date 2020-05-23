@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import ListTable from '@/components/ListTable'
 import { ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'UserAssetPermission',

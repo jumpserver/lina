@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { AssetSelect } from '@/components'
+import AssetSelect from '@/components/AssetSelect'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 export default {
   name: 'LabelCreateUpdate',

@@ -11,8 +11,9 @@
 </template>
 
 <script>
-import { DetailCard, RelationCard, QuickActions } from '@/components'
-
+import DetailCard from '@/components/DetailCard'
+import QuickActions from '@/components/QuickActions'
+import RelationCard from '@/components/RelationCard'
 export default {
   name: 'UserInfo',
   components: {

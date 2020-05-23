@@ -12,7 +12,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { RelationCard } from '@/components'
+import RelationCard from '@/components/RelationCard'
 
 export default {
   name: 'RemoteAppPermissionUser',

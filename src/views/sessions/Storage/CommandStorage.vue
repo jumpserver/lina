@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import ListTable from '@/components/ListTable'
 import { TestCommandStorage } from '@/api/sessions'
 export default {
   name: 'CommandStorage',

@@ -3,8 +3,7 @@
 </template>
 
 <script>
-import { ListTable } from '@/components'
-
+import ListTable from '@/components/ListTable'
 export default {
   name: 'UserRemoteAppPermissionRules',
   components: {
