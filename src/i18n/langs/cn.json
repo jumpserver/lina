@@ -336,7 +336,7 @@
     "DomainCreate": "创建域名",
     "DomainDetail": "域名详情",
     "DomainList": "网关列表",
-    "DomainUpdate": "更新域名",
+    "DomainUpdate": "更新网关",
     "FileManager": "文件管理",
     "FtpLog": "FTP日志",
     "GatewayCreate": "",
