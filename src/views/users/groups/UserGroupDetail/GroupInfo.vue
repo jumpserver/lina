@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import { DetailCard, RelationCard } from '@/components'
+import DetailCard from '@/components/DetailCard'
+import RelationCard from '@/components/RelationCard'
 export default {
   name: 'GroupInfo',
   components: {
