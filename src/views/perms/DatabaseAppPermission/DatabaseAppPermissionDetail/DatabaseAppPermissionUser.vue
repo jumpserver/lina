@@ -55,14 +55,8 @@ export default {
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
         hasSearch: false,
+        hasLeftActions: false,
         hasRightActions: false
       },
       userReletionConfig: {
@@ -97,7 +91,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         }
       },
       groupReletionConfig: {
@@ -123,11 +117,12 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}`
+          const itemId = item.value
+          const relationUrl = `/api/v1/perms/database-app-permissions-user-groups-relations/?databaseapppermission=${objectId}&usergroup=${itemId}`
           return this.$axios.delete(relationUrl)
         },
         onDeleteSuccess: (obj, that) => {
@@ -139,7 +134,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         }
       }
     }

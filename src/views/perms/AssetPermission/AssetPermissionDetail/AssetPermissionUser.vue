@@ -54,14 +54,8 @@ export default {
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
         hasSearch: false,
+        hasLeftActions: false,
         hasRightActions: false
       },
       userReletionConfig: {
@@ -96,7 +90,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         }
       },
       groupReletionConfig: {
@@ -119,7 +113,8 @@ export default {
         },
         performDelete: (item) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/?assetpermission=${objectId}`
+          const itemId = item.value
+          const relationUrl = `/api/v1/perms/asset-permissions-user-groups-relations/?assetpermission=${objectId}&usergroup=${itemId}`
           return this.$axios.delete(relationUrl)
         },
         onAddSuccess: (objects, that) => {
@@ -127,7 +122,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         },
         onDeleteSuccess: (obj, that) => {
           const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
@@ -138,7 +133,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         }
       }
     }

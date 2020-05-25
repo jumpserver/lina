@@ -103,12 +103,6 @@ export default {
       ]
     }
   },
-  watch: {
-    object(iNew, iOld) {
-      console.log('iNew====', iNew)
-      console.log('iOld====', iOld)
-    }
-  },
   methods: {
     toChoicesDisplay(c) {
       if (!c) {
