@@ -645,7 +645,9 @@
       "DateJoined": "创建日期",
       "DateUpdated": "更新日期",
       "ManualRunPlan": "手动执行计划",
-      "Run": "执行"
+      "Run": "执行",
+      "addAsset": "添加资产",
+      "addNode": "添加节点"
     },
     "Corporation": "公司",
     "Edition": "版本",
