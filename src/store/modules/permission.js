@@ -3,7 +3,6 @@ import {
   userRoutes,
   constantRoutes
 } from '@/router'
-
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -40,6 +39,25 @@ export function filterAsyncRoutes(routes, roles) {
   return res
 }
 
+export function filterNoneXpackRoutes(routes) {
+  const accessedRoutes = []
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (tmp.name === 'Xpack') {
+      tmp.children = []
+      route.children.forEach(childRoute => {
+        if (childRoute.path === 'license') {
+          tmp.children.push(childRoute)
+        }
+      })
+    }
+    accessedRoutes.push(tmp)
+  })
+  return accessedRoutes
+}
+
 const state = {
   routes: [],
   addRoutes: []
@@ -53,15 +71,18 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes(store, roles) {
     return new Promise(resolve => {
       let accessedRoutes
       if (roles.includes('Admin')) {
         accessedRoutes = adminRoutes || []
+        if (!store.rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID) {
+          accessedRoutes = filterNoneXpackRoutes(adminRoutes)
+        }
       } else {
         accessedRoutes = filterAsyncRoutes(userRoutes, roles)
       }
-      commit('SET_ROUTES', accessedRoutes)
+      store.commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
   }
