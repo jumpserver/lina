@@ -49,7 +49,8 @@ export default {
       type: Function,
       default(that) {
         this.$log.debug('AssetSelect value', that.assets)
-        window.location.reload()
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+        setTimeout(() => location.reload(), 500)
       }
     }
   },

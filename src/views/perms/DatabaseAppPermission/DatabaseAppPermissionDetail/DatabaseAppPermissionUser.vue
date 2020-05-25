@@ -96,7 +96,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          setTimeout(() => location.reload(), 500)
         }
       },
       groupReletionConfig: {
@@ -121,7 +122,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          setTimeout(() => location.reload(), 500)
         },
         performDelete: (item) => {
           const objectId = this.object.id
@@ -136,7 +138,8 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          window.location.reload()
+          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          setTimeout(() => location.reload(), 500)
         }
       }
     }
