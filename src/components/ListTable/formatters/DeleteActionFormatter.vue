@@ -20,7 +20,7 @@ export default {
       const url = col.deleteUrl + cellValue
       this.$axios.delete(url).then(res => {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
-        window.location.reload()
+        setTimeout(() => location.reload(), 500)
       }).catch(error => {
         this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
       })

@@ -25,7 +25,8 @@ export default {
             name: 'TicketDetail'
           }
         ],
-        getObjectName: this.getObjectName
+        getObjectName: this.getObjectName,
+        hasRightSide: false
       }
     }
   },

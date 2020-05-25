@@ -441,7 +441,6 @@
     "loginFrom": "登录来源",
     "name": "名称",
     "protocol": "协议",
-    "quickModify": "快速修改",
     "region": "地域",
     "remoteAddr": "远端地址",
     "replay": "回放",
@@ -581,7 +580,8 @@
     "status": "状态",
     "title": "标题",
     "type": "类型",
-    "user": "用户"
+    "user": "用户",
+    "reply": "回复"
   },
   "tree": {
     "AddNode": "",
@@ -633,13 +633,8 @@
     }
   },
   "xpack": {
-    "PasswordStrategy": "密码策略",
-    "PasswordLength": "密码长度",
-    "CyclePerform": "周期执行",
-    "RegularlyPerform": "定期执行",
     "Basic": "基本",
     "Other": "其他",
-    "Run": "执行",
     "Admin": "管理员",
     "AssetCount": "资产数量",
     "Auditor": "审计员",
@@ -650,11 +645,23 @@
     "AdminUser": "管理用户",
     "SystemUser": "系统用户",
     "Label": "标签",
+    "assetAndNode": "资产或节点",
     "ChangeAuthPlan": {
       "ChangeAuthPlan": "改密计划",
       "ChangeAuthPlanCreate": "创建改密计划",
       "ChangeAuthPlanUpdate": "更新改密计划",
-      "ChangeAuthPlanDetail": "改密计划详情"
+      "ChangeAuthPlanDetail": "改密计划详情",
+      "ExecutionList": "执行列表",
+      "Name": "名称",
+      "Username": "用户名",
+      "PasswordStrategy": "密码策略",
+      "PasswordLength": "密码长度",
+      "CyclePerform": "周期执行",
+      "RegularlyPerform": "定期执行",
+      "DateJoined": "创建日期",
+      "DateUpdated": "更新日期",
+      "ManualRunPlan": "手动执行计划",
+      "Run": "执行"
     },
     "Corporation": "公司",
     "Edition": "版本",
