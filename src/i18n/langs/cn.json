@@ -647,7 +647,11 @@
       "ManualRunPlan": "手动执行计划",
       "Run": "执行",
       "addAsset": "添加资产",
-      "addNode": "添加节点"
+      "addNode": "添加节点",
+      "Result": "结果",
+      "timeDelta": "运行时间",
+      "Detail": "详情",
+      "Log": "日志"
     },
     "Corporation": "公司",
     "Edition": "版本",
