@@ -12,6 +12,7 @@
 
 <script>
 import { DetailCard, RelationCard } from '@/components'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'OrganizationDetail',
@@ -109,7 +110,7 @@ export default {
         },
         {
           key: this.$t('common.dateCreated'),
-          value: this.object.date_created
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('common.Comment'),
