@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import { TabPage } from '@/layout/components'
-import { AutoDataForm } from '@/components'
-import { IBox } from '@/components'
+import TabPage from '@/layout/components/TabPage'
+import AutoDataForm from '@/components/AutoDataForm'
+import IBox from '@/components/IBox'
 import Basic from './Basic'
 import Email from './Email'
 import EmailContent from './EmailContent'

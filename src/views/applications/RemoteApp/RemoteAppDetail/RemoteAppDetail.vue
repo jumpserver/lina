@@ -7,7 +7,8 @@
 </template>
 
 <script>
-import { DetailCard } from '@/components'
+import DetailCard from '@/components/DetailCard'
+
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {

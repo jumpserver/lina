@@ -53,7 +53,7 @@ export default {
         columns: [
           {
             prop: 'hostname',
-            label: this.$t('assets.hostname'),
+            label: this.$t('assets.Hostname'),
             formatter: DetailFormatter,
             sortable: true,
             route: 'AssetDetail'

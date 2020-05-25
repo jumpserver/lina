@@ -226,7 +226,7 @@ export const userRoutes = [
     component: Layout,
     children: [
       {
-        path: `${URL}/terminal/web-sftp/`,
+        path: `${URL}/koko/elfinder/sftp/`,
         meta: { title: i18n.t('route.WebFTP'), icon: 'file' }
       }
     ]

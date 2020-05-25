@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { DetailCard, QuickActions } from '@/components'
+import DetailCard from '@/components/DetailCard'
+import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../runinfocard/RunInfoCard'
 

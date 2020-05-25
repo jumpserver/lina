@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { SummaryCard } from '@/components'
+import SummaryCard from '@/components/SummaryCard'
 
 export default {
   name: 'ResourceSummary',

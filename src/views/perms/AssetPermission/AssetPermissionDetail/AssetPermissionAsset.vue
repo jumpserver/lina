@@ -13,7 +13,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { RelationCard } from '@/components'
+import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
 import AssetRelationCard from './AssetRelationCard/index'
 

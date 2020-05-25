@@ -40,10 +40,29 @@ export default {
             model: this.object.is_active
           },
           callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `api/v1/assets/assets/${this.object.id}/`,
+                { is_active: val }
+              ).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('assets.RefreshHardware'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('assets.Refresh')
+          },
+          callbacks: {
             click: function() {
               this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
-                { action: 'test' }
+                `/api/v1/assets/assets/${this.object.id}/tasks/`,
+                { action: 'refresh' }
               ).then(res => {
                 window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
@@ -60,7 +79,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
+                `/api/v1/assets/assets/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
                 window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
@@ -68,25 +87,25 @@ export default {
               )
             }.bind(this)
           }
-        },
-        {
-          title: this.$t('assets.PushSystemUserNow'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('assets.Push')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
-                { action: 'push' }
-              ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-              }
-              )
-            }.bind(this)
-          }
         }
+        // {
+        //   title: this.$t('assets.PushSystemUserNow'),
+        //   attrs: {
+        //     type: 'primary',
+        //     label: this.$t('assets.Push')
+        //   },
+        //   callbacks: {
+        //     click: function() {
+        //       this.$axios.post(
+        //         `api/v1/assets/system-users/${this.object.id}/tasks/`,
+        //         { action: 'push' }
+        //       ).then(res => {
+        //         window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+        //       }
+        //       )
+        //     }.bind(this)
+        //   }
+        // }
       ],
       nodeReletionConfig: {
         icon: 'fa-info',
@@ -130,9 +149,9 @@ export default {
           })
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
+            this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         }
       }

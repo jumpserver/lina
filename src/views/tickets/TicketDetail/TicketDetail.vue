@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { DetailCard } from '@/components'
+import DetailCard from '@/components/DetailCard'
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 

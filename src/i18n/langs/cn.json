@@ -10,8 +10,10 @@
   },
   "assets": {
     "Action": "动作",
+    "RefreshHardware": "更新硬件信息",
     "AdminUser": "管理用户",
     "AdminUserDetail": "管理用户详情",
+    "Refresh": "刷新",
     "Asset": "资产",
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
@@ -19,8 +21,9 @@
     "Assets": "资产",
     "Auth": "认证",
     "AutoPush": "自动推送",
-    "BasePlatform": "",
+    "BasePlatform": "基础平台",
     "Basic": "基本",
+    "Rules": "规则",
     "CommandFilterHelpMessage": "系统用户可以绑定一些命令过滤器，一个过滤器可以定义一些规则 当用户使用这个系统用户登录资产，然后执行一个命令 这个命令需要被绑定过滤器的所有规则匹配，高优先级先被匹配， 当一个规则匹配到了，如果规则的动作是允许，这个命令会被放行， 如果规则的动作是禁止，命令将会被禁止执行， 否则就匹配下一个规则，如果最后没有匹配到规则，则允许执行",
     "Comment": "备注",
     "Cpu": "CPU",
@@ -64,7 +67,6 @@
     "SerialNumber": "序列号",
     "SetMFA": "设置多因子认证",
     "Source": "来源",
-    "SystemUser": "",
     "SystemUserDetail": "系统用户详情",
     "SystemUsers": "系统用户",
     "Test": "测试",
@@ -85,7 +87,7 @@
     "hostname": "hostname",
     "ip": "IP",
     "last_login": "最后登录日期",
-    "sshkey": ""
+    "sshkey": "sshkey"
   },
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
@@ -336,7 +338,7 @@
     "DomainCreate": "创建域名",
     "DomainDetail": "域名详情",
     "DomainList": "网关列表",
-    "DomainUpdate": "更新域名",
+    "DomainUpdate": "更新网关",
     "FileManager": "文件管理",
     "FtpLog": "FTP日志",
     "GatewayCreate": "",
@@ -442,8 +444,12 @@
     "user": "用户"
   },
   "setting": {
+    "Secret": "密钥",
     "Basic": "基本设置",
     "Email": "邮件设置",
+    "Id": "Id",
+    "Create": "创建",
+    "ApiKeyList": "API Key 列表",
     "EmailContent": "邮件内容设置",
     "Hostname": "主机名",
     "Ldap": "LDAP设置",
@@ -474,7 +480,10 @@
     "emailTest": "测试连接",
     "emailUserSSL": "使用SSL",
     "emailUserTLS": "使用TLS",
+    "IsActive": "激活中",
+    "DateCreated": "创建日期",
     "helpText": {
+      "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",
       "authLdapUserAttrMap": "用户属性映射代表怎样将LDAP中用户属性映射到jumpserver用户上，username, name,email 是jumpserver的属性",
