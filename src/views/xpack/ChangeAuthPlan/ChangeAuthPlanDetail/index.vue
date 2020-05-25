@@ -8,12 +8,16 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ChangeAuthPlanInfo from './ChangeAuthPlanDetail'
+import ChangeAuthPlanInfo from './ChangeAuthPlanInfo'
+import ChangeAuthPlanAsset from './ChangeAuthPlanAsset'
+import ChangeAuthPlanExecutionList from './ChangeAuthPlanExecution/ChangeAuthPlanExecutionList'
 
 export default {
   components: {
     GenericDetailPage,
-    ChangeAuthPlanInfo
+    ChangeAuthPlanInfo,
+    ChangeAuthPlanAsset,
+    ChangeAuthPlanExecutionList
   },
   data() {
     return {
@@ -24,6 +28,14 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'ChangeAuthPlanInfo'
+          },
+          {
+            title: this.$t('xpack.assetAndNode'),
+            name: 'ChangeAuthPlanAsset'
+          },
+          {
+            title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
+            name: 'ChangeAuthPlanExecutionList'
           }
         ]
       }

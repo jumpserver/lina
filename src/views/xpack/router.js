@@ -106,7 +106,7 @@ export default {
           path: 'plan/:id',
           component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
           name: 'ChangeAuthPlanDetail',
-          meta: { title: i18n.t('xpack.ChangeAuthPlanDetail'), activeMenu: '/xpack/change-auth-plan' },
+          meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan' },
           hidden: true
         },
         {
