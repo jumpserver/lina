@@ -1,11 +1,9 @@
 <template>
   <div v-if="!loading">
     <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
-      <IBox>
-        <keep-alive>
-          <component :is="activeMenu" :object="componentData" />
-        </keep-alive>
-      </IBox>
+      <keep-alive>
+        <component :is="activeMenu" :object="componentData" />
+      </keep-alive>
     </TabPage>
   </div>
 </template>
@@ -20,6 +18,7 @@ import EmailContent from './EmailContent'
 import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
+import License from './License'
 import { getSettings } from '@/api/settings'
 export default {
   components: {
@@ -31,7 +30,8 @@ export default {
     EmailContent,
     Ldap,
     Terminal,
-    Security
+    Security,
+    License
   },
   data() {
     return {
@@ -62,6 +62,10 @@ export default {
         {
           title: this.$t('setting.Security'),
           name: 'Security'
+        },
+        {
+          title: this.$t('setting.License'),
+          name: 'License'
         }
       ]
     }
@@ -84,6 +88,8 @@ export default {
           return this.terminalData(this.settingsData)
         case 'Security':
           return this.securityData(this.settingsData)
+        case 'License':
+          return {}
       }
       return this.basicData(this.settingsData)
     }
@@ -117,6 +123,9 @@ export default {
           break
         case 'Security':
           this.activeMenu = 'Security'
+          break
+        case 'License':
+          this.activeMenu = 'License'
           break
       }
     },

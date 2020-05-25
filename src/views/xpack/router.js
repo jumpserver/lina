@@ -15,12 +15,12 @@ export default {
       name: 'InterfaceSetting',
       meta: { title: i18n.t('xpack.InterfaceSettings') }
     },
-    {
-      path: 'license',
-      component: () => import('@/views/xpack/License.vue'),
-      name: 'License',
-      meta: { title: i18n.t('xpack.License') }
-    },
+    // {
+    //   path: 'license',
+    //   component: () => import('@/views/xpack/License.vue'),
+    //   name: 'License',
+    //   meta: { title: i18n.t('xpack.License') }
+    // },
     {
       path: 'gathered-users',
       component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),

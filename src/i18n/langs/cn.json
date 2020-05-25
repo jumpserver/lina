@@ -562,7 +562,20 @@
     "testLdapLoginTitle": "测试LDAP 用户登录",
     "userGuideUrl": "用户向导URL",
     "username": "用户名",
-    "usernamePlaceholder": "请输入用户名"
+    "usernamePlaceholder": "请输入用户名",
+    "SubscriptionID": "订阅授权ID",
+    "Corporation": "公司",
+    "Edition": "版本",
+    "Expired": "过期时间",
+    "License": "许可证",
+    "LicenseDetail": "许可证详情",
+    "LicenseFile": "许可证文件",
+    "communityEdition": "社区版",
+    "import": "导入",
+    "technologyConsult": "技术咨询",
+    "consult": "咨询",
+    "ImportLicense": "导入许可证",
+    "ImportLicenseTip": "请导入许可证"
   },
   "settings": {
     "setting": ""

@@ -1,22 +1,25 @@
 <template>
-  <GenericCreateUpdateForm
-    :fields="selectFields"
-    :url="url"
-    :initial="object"
-    :update-success-next-route="successUrl"
-    :clean-form-value="cleanFormValue"
-    :object="object"
-    :fields-meta="fieldsMeta"
-    :get-method="getMethod"
-  />
+  <IBox>
+    <GenericCreateUpdateForm
+      :fields="selectFields"
+      :url="url"
+      :initial="object"
+      :update-success-next-route="successUrl"
+      :clean-form-value="cleanFormValue"
+      :object="object"
+      :fields-meta="fieldsMeta"
+      :get-method="getMethod"
+    />
+  </IBox>
 </template>
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-
+import { IBox } from '@/components'
 export default {
   name: 'Security',
   components: {
-    GenericCreateUpdateForm
+    GenericCreateUpdateForm,
+    IBox
   },
   props: {
     object: {
