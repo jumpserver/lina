@@ -17,7 +17,7 @@ export default {
       fields: [
         [this.$t('xpack.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
-        [this.$t('xpack.PasswordStrategy'), ['password_strategy', 'password', 'password_rules_length']],
+        [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules_length']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('xpack.Other'), ['comment']]
       ],
@@ -46,7 +46,7 @@ export default {
         },
         password_rules_length: {
           type: 'input',
-          label: this.$t('xpack.PasswordLength'),
+          label: this.$t('xpack.ChangeAuthPlan.PasswordLength'),
           hidden: (formValue) => {
             return ['random_one', 'random_all'].indexOf(formValue.password_strategy) === -1
           }
@@ -72,7 +72,7 @@ export default {
           type: 'switch'
         },
         crontab: {
-          label: this.$t('xpack.RegularlyPerform'),
+          label: this.$t('xpack.ChangeAuthPlan.RegularlyPerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
@@ -86,7 +86,7 @@ export default {
             ''
         },
         interval: {
-          label: this.$t('xpack.CyclePerform'),
+          label: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
