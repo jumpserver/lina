@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import { DetailCard, QuickActions } from '@/components'
+import DetailCard from '@/components/DetailCard'
+import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
@@ -26,7 +27,6 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       quickActions: [
         {
@@ -36,13 +36,16 @@ export default {
             model: this.object.is_active
           },
           callbacks: {
-            change: function(v, item) {
-              const url = `/api/v1/perms/asset-permissions/${vm.object.id}/`
-              const data = { is_active: v }
-              vm.$axios.patch(url, data).catch(() => {
-                item.attrs.model = !v
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/perms/asset-permissions/${this.object.id}/`,
+                { is_active: val }
+              ).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
               })
-            }
+            }.bind(this)
           }
         }
       ]
@@ -80,11 +83,11 @@ export default {
         },
         {
           key: this.$t('perms.dateStart'),
-          value: 'api没有这个字段'
+          value: toSafeLocalDateStr(this.object.date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: 'api没有这个字段'
+          value: toSafeLocalDateStr(this.object.date_expired)
         },
         {
           key: this.$t('common.dateCreated'),
@@ -96,7 +99,7 @@ export default {
         },
         {
           key: this.$t('common.Comment'),
-          value: 'api没有这个字段'
+          value: this.object.comment
         }
       ]
     }

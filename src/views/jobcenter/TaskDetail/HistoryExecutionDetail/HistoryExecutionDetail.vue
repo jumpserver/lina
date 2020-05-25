@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { DetailCard, QuickActions } from '@/components'
+import DetailCard from '@/components/DetailCard'
+import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../runinfocard/RunInfoCard'
 
@@ -100,12 +101,6 @@ export default {
           value: this.toChoicesDisplay(this.object.is_success)
         }
       ]
-    }
-  },
-  watch: {
-    object(iNew, iOld) {
-      console.log('iNew====', iNew)
-      console.log('iOld====', iOld)
     }
   },
   methods: {

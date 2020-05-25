@@ -11,7 +11,7 @@
 
 <script>
 import DetailCard from '@/components/DetailCard/index'
-import { QuickActions } from '@/components'
+import QuickActions from '@/components/QuickActions'
 export default {
   name: 'SessionDetailCard',
   components: {

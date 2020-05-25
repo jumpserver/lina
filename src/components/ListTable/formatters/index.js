@@ -13,6 +13,7 @@ import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 import ConnectFormatter from './ConnectFormatter'
 import SystemUserFormatter from './SystemUserFormatter'
+import ShowKeyFormatter from '@/components/ListTable/formatters/ShowKeyFormatter'
 
 export default {
   DetailFormatter,
@@ -29,7 +30,8 @@ export default {
   DeleteActionFormatter,
   DateFormatter,
   ConnectFormatter,
-  SystemUserFormatter
+  SystemUserFormatter,
+  ShowKeyFormatter
 }
 
 export {
@@ -47,5 +49,6 @@ export {
   DeleteActionFormatter,
   DateFormatter,
   ConnectFormatter,
-  SystemUserFormatter
+  SystemUserFormatter,
+  ShowKeyFormatter
 }

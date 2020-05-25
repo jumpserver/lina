@@ -88,10 +88,6 @@ export default {
           value: this.object.name
         },
         {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        },
-        {
           key: this.$t('assets.date_joined'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
@@ -102,6 +98,10 @@ export default {
         {
           key: this.$t('assets.CreatedBy'),
           value: this.object.created_by
+        },
+        {
+          key: this.$t('assets.Comment'),
+          value: this.object.comment
         }
       ]
     }

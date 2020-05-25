@@ -1,33 +1,31 @@
 <template>
   <span v-if="systemuser.length===0"><a style="color: #1c84c6;" @click="showSystemUser">{{ this.$t('common.Show') }}</a></span>
-  <span v-else>{{ systemuser.toString() }}</span>
+  <span v-else>{{ this.systemuser.toString() }}</span>
 </template>
 
 <script>
 import BaseFormatter from './base'
 export default {
-  name: 'SystemUserFormatter',
+  name: 'ShowKeyFormatter',
   extends: BaseFormatter,
   data() {
     return {
       systemuser: []
     }
   },
+  computed: {
+
+  },
+  mounted() {
+
+  },
   methods: {
     showSystemUser() {
-      const id = (this.row.id)
-      this.$axios.get(
-        `/api/v1/perms/users/assets/${id}/system-users/?cache_policy=1`
-      ).then(res => {
-        res.forEach((v, i) => {
-          this.systemuser.push(v.name)
-        })
-        console.log(this.systemuser)
-      }
-      )
+      this.systemuser.push(this.cellValue)
     }
   }
 }
 </script>
 <style scoped>
+
 </style>

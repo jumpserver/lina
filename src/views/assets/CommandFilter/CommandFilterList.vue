@@ -30,14 +30,13 @@ export default {
           },
           {
             prop: 'system_users',
-            label: this.$t('assets.SystemUser'),
+            label: this.$t('assets.SystemUsers'),
             formatter: DetailLengthFormatter,
             route: 'CommandFilterDetail'
           },
           {
             prop: 'comment',
-            label: this.$t('assets.Comment'),
-            sortable: 'custom'
+            label: this.$t('assets.Comment')
           },
           {
             prop: 'id',
@@ -49,7 +48,12 @@ export default {
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/cmd-filters/${id}/`
-                return this.$axios.delete(url)
+                return this.$axios.delete(url).then(res => {
+                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                  window.location.reload()
+                }).catch(error => {
+                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                })
               }
             }
           }

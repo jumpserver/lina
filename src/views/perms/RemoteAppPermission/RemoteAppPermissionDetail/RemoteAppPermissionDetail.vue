@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import { DetailCard, QuickActions } from '@/components'
+import DetailCard from '@/components/DetailCard'
+import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
@@ -26,7 +27,6 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       quickActions: [
         {
@@ -36,13 +36,16 @@ export default {
             model: this.object.is_active
           },
           callbacks: {
-            change: function(v, item) {
-              const url = `/api/v1/perms/remote-app-permissions/${vm.object.id}/`
-              const data = { is_active: v }
-              vm.$axios.patch(url, data).catch(() => {
-                item.attrs.model = !v
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/perms/remote-app-permissions/${this.object.id}/`,
+                { is_active: val }
+              ).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
               })
-            }
+            }.bind(this)
           }
         }
       ]

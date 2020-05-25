@@ -16,7 +16,7 @@ export default {
         comment: ''
       },
       fields: [
-        [this.$t('perms.' + 'Basic'), ['name', 'base', 'security', 'console', 'comment']]
+        [this.$t('perms.Basic'), ['name', 'base', 'security', 'console', 'comment']]
       ],
       fieldsMeta: {
         security: {
@@ -76,7 +76,7 @@ export default {
           )
         }
       },
-      url: '/api/v1/assets/platforms/'
+      url: '/api/v1/assets/platforms'
     }
   }
 }

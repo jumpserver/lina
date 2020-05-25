@@ -12,7 +12,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { RelationCard } from '@/components'
+import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
@@ -54,14 +54,8 @@ export default {
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
         hasSearch: false,
+        hasLeftActions: false,
         hasRightActions: false
       },
       databaseAppReletionConfig: {
@@ -87,7 +81,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          setTimeout(() => location.reload(), 300)
         }
       },
       systemUserReletionConfig: {
@@ -120,7 +115,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -136,7 +132,8 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          window.location.reload()
+          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          setTimeout(() => location.reload(), 300)
         }
       }
     }

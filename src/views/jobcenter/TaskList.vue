@@ -38,6 +38,8 @@ export default {
           },
           is_success: {
             label: this.$t('jobcenter.success'),
+            align: 'center',
+            width: '80px',
             formatter: row => {
               if (row.latest_execution.is_success) {
                 return <i class='fa fa-check text-primary'/>
@@ -80,13 +82,8 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false
-
+        hasRightActions: false,
+        hasLeftActions: false
       }
     }
   }

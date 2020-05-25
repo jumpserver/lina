@@ -2,7 +2,7 @@
   <ListTable :table-config="ticketTableConfig" :header-actions="ticketActions" />
 </template>
 <script>
-import { ListTable } from '@/components'
+import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'TicketListTable',

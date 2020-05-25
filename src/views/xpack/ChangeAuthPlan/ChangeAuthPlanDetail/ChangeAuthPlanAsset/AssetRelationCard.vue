@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox'
-import AssetSelect from '@/components/AssetSelect'
+import IBox from '@/components/IBox/index'
+import AssetSelect from '@/components/AssetSelect/index'
 export default {
   name: 'AssetRelationCard',
   components: {
@@ -50,7 +50,7 @@ export default {
       default(that) {
         this.$log.debug('AssetSelect value', that.assets)
         this.$message.success(this.$t('common.updateSuccessMsg'))
-        setTimeout(() => location.reload(), 300)
+        setTimeout(() => location.reload(), 500)
       }
     }
   },

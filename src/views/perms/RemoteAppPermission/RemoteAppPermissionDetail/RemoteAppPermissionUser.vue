@@ -12,7 +12,8 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { RelationCard } from '@/components'
+import RelationCard from '@/components/RelationCard'
+import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   name: 'RemoteAppPermissionUser',
@@ -31,26 +32,30 @@ export default {
       tableConfig: {
         url: `/api/v1/perms/remote-app-permissions/${this.object.id}/users/all/`,
         columns: [
-          // 'user_display'
+          'user_display', 'delete_action'
         ],
         columnsMeta: {
-          // user_display: {
-          //   label: this.$t('perms.User')
-          // }
+          user_display: {
+            label: this.$t('perms.User'),
+            align: 'center'
+          },
+          delete_action: {
+            prop: 'user',
+            label: this.$t('common.Actions'),
+            align: 'center',
+            width: 150,
+            objects: this.object.users,
+            formatter: DeleteActionFormatter,
+            deleteUrl: `/api/v1/perms/remote-app-permissions-users-relations/?remoteapppermission=${this.object.id}&user=`
+          }
         },
         tableAttrs: {
           border: false
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
         hasSearch: false,
+        hasLeftActions: false,
         hasRightActions: false
       },
       userReletionConfig: {
@@ -80,7 +85,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          setTimeout(() => location.reload(), 300)
         }
       },
       groupReletionConfig: {
@@ -102,7 +108,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const objectId = this.object.id
@@ -120,7 +127,8 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          window.location.reload()
+          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          setTimeout(() => location.reload(), 300)
         }
       }
     }

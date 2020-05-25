@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { IBox } from '@/components'
+import IBox from '@/components/IBox'
 import ActionItem from './action'
 
 // 查看 views/users/users/UserDetail/UserInfo.vue 使用样例

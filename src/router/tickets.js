@@ -2,7 +2,7 @@ import i18n from '@/i18n/i18n'
 export default [
   {
     path: 'tickets',
-    name: 'TicketsList',
+    name: 'TicketList',
     component: () => import('@/views/tickets/TicketList'),
     meta: { title: i18n.t('route.Tickets'), icon: 'check-square-o' }
   },
