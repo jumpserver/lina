@@ -646,6 +646,7 @@
     "SystemUser": "系统用户",
     "Label": "标签",
     "assetAndNode": "资产或节点",
+    "Success": "成功",
     "ChangeAuthPlan": {
       "ChangeAuthPlan": "改密计划",
       "ChangeAuthPlanCreate": "创建改密计划",
@@ -670,7 +671,8 @@
       "TimeDelta": "运行时间",
       "DateStart": "开始日期",
       "Detail": "详情",
-      "Log": "日志"
+      "Log": "日志",
+      "Retry": "重试"
     },
     "Corporation": "公司",
     "Edition": "版本",
