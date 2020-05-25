@@ -16,9 +16,7 @@ export default {
         columns: ['name', 'comment', 'actions']
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
+        hasRightActions: false,
         hasBulkDelete: false
       }
     }

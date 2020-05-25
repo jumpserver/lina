@@ -77,14 +77,7 @@ export default {
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
         hasLeftActions: false,
-        hasSearch: false,
         hasRightActions: false
       }
     }

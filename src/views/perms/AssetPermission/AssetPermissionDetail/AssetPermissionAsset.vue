@@ -57,14 +57,8 @@ export default {
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
         hasSearch: false,
+        hasLeftActions: false,
         hasRightActions: false
       },
       assetReletionConfig: {
@@ -113,7 +107,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -130,7 +124,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         }
       },
       systemUserReletionConfig: {
@@ -164,7 +158,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -183,7 +177,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          setTimeout(() => location.reload(), 300)
         }
       }
     }

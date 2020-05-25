@@ -32,6 +32,8 @@ export default {
           },
           stat: {
             label: this.$t('jobcenter.stat'),
+            align: 'center',
+            width: '80px',
             formatter: function(row) {
               const summary = <div>
                 <span class='text-primary'>{row.stat.success}</span>/
@@ -43,6 +45,8 @@ export default {
           },
           ratio: {
             label: this.$t('jobcenter.ratio'),
+            align: 'center',
+            width: '80px',
             formatter: function(row) {
               const ratio = (row.stat.success / row.stat.total) * 100
               if (ratio === 100) {
@@ -52,9 +56,13 @@ export default {
             }
           },
           is_finished: {
+            align: 'center',
+            width: '200px',
             label: this.$t('jobcenter.isFinished')
           },
           is_success: {
+            align: 'center',
+            width: '200px',
             label: this.$t('jobcenter.isSuccess')
           },
           timedelta: {
@@ -87,14 +95,7 @@ export default {
         }
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
         hasLeftActions: false,
-        hasSearch: false,
         hasRightActions: false
       }
     }
