@@ -110,10 +110,10 @@ export default {
           hidden: true
         },
         {
-          path: 'plan/:id/execution/task',
-          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/ChangeAuthPlanExecutionTaskList.vue'),
-          name: 'ChangeAuthPlanExecutionTaskList',
-          meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanExecutionTask'), activeMenu: '/xpack/change-auth-plan' },
+          path: 'plan-execution/:id',
+          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
+          name: 'ChangeAuthPlanExecutionDetail',
+          meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/xpack/change-auth-plan' },
           hidden: true
         }
       ]
