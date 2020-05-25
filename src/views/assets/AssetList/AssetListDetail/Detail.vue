@@ -130,9 +130,9 @@ export default {
           })
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
           return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.Update success'))
+            this.$message.success(this.$t('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.Update failed' + ' ' + err))
+            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         }
       }

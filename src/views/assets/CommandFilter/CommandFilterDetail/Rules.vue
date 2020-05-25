@@ -55,7 +55,7 @@ export default {
                 return this.$axios.delete(url).then(res => {
                   this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(err => {
-                  this.$message.error(this.$t('common.deleteFailedMsg' + ' ' + err))
+                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + err))
                 })
               },
               onUpdate: ({ row, col }) => {

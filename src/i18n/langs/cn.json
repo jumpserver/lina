@@ -128,8 +128,6 @@
     "Submit": "提交",
     "Test": "测试",
     "Update": "更新",
-    "Update failed": "",
-    "Update success": "",
     "Upload": "上传",
     "Username": "用户名",
     "Validity": "有效",
@@ -173,9 +171,6 @@
     },
     "passwordOrPassphrase": "密码或密钥密码",
     "rows": "行",
-    "table": {
-      "Actions": "动作"
-    },
     "tree": {
       "Empty": "空",
       "Loading": "加载中"
@@ -656,7 +651,6 @@
     "consult": "咨询",
     "favicon": "网站图标",
     "faviconTip": "提示：网站图标（建议图片大小为: 16px*16px）",
-    "import": "导入",
     "loginImage": "登录页面图片",
     "loginImageTip": "提示：将会显示在企业版用户登录页面（建议图片大小为: 492*472px）",
     "loginTitle": "登录页面标题",

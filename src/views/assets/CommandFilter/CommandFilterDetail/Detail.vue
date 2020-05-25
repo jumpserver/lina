@@ -74,7 +74,7 @@ export default {
           return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
             this.$message.success(this.$t('common.deleteSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.deleteFailedMsg' + ' ' + err))
+            this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + err))
           })
         }
       }
