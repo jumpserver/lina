@@ -9,7 +9,7 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import ChangeAuthPlanInfo from './ChangeAuthPlanInfo'
-import ChangeAuthPlanAsset from './ChangeAuthPlanAsset'
+import ChangeAuthPlanAsset from './ChangeAuthPlanAsset/index'
 import ChangeAuthPlanExecutionList from './ChangeAuthPlanExecution/ChangeAuthPlanExecutionList'
 
 export default {
