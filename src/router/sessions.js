@@ -16,7 +16,7 @@ export default [
     path: 'sessions/:id',
     name: 'SessionDetail',
     component: () => import('@/views/sessions/SessionDetail/index'),
-    meta: { title: i18n.t('route.SessionDetail') },
+    meta: { title: i18n.t('route.SessionDetail'), activeMenu: '/terminal/session' },
     hidden: true
   },
   {
@@ -41,48 +41,49 @@ export default [
     path: 'terminals/:id',
     name: 'TerminalDetail',
     component: () => import('@/views/sessions/TerminalDetail'),
-    meta: { title: i18n.t('route.Terminal') },
+    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
     hidden: true
   },
   {
     path: 'terminals/:id/update',
     name: 'TerminalUpdate',
     component: () => import('@/views/sessions/TerminalUpdate'),
-    meta: { title: i18n.t('route.Terminal') },
+    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
     hidden: true
   },
   {
     path: 'storages',
     name: 'Storage',
     component: () => import('@/views/sessions/Storage/index'),
+    meta: { activeMenu: '/terminal/terminal' },
     hidden: true
   },
   {
     path: 'replay-storage/create',
     name: 'CreateReplayStorage',
     component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
-    meta: { title: i18n.t('route.CreateReplayStorage') },
+    meta: { title: i18n.t('route.CreateReplayStorage'), activeMenu: '/terminal/terminal' },
     hidden: true
   },
   {
     path: 'command-storage/create',
     name: 'CreateCommandStorage',
     component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
-    meta: { title: i18n.t('route.CreateCommandStorage') },
+    meta: { title: i18n.t('route.CreateCommandStorage'), activeMenu: '/terminal/terminal' },
     hidden: true
   },
   {
     path: 'replay-storage/:id/update',
     name: 'ReplayStorageUpdate',
     component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
-    meta: { title: i18n.t('route.ReplayStorageUpdate') },
+    meta: { title: i18n.t('route.ReplayStorageUpdate'), activeMenu: '/terminal/terminal' },
     hidden: true
   },
   {
     path: 'command-storage/:id/update',
     name: 'CommandStorageUpdate',
     component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
-    meta: { title: i18n.t('route.CommandStorageUpdate') },
+    meta: { title: i18n.t('route.CommandStorageUpdate'), activeMenu: '/terminal/terminal' },
     hidden: true
   }
 ]
