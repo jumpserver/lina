@@ -12,9 +12,8 @@
       <strong v-if="v.label">{{ v.label + ':' }}</strong> {{ v.value }}
     </el-tag>
     <span v-if="filterLabel" slot="prefix" class="filterTitle">{{ filterLabel + ':' }}</span>
-    <el-input ref="SearchInput" v-model="filterValue" :placeholder="this.$t('common.Search')" style="max-width: 100px; border: none" @change="handleConfirm" />
+    <el-input ref="SearchInput" v-model="filterValue" :placeholder="placeholder" class="search-input" @blur="focus = false" @focus="focus = true" @change="handleConfirm" />
   </div>
-
 </template>
 
 <script>
@@ -34,7 +33,8 @@ export default {
     return {
       filterKey: '',
       filterValue: '',
-      filterTags: {}
+      filterTags: {},
+      focus: false
     }
   },
   computed: {
@@ -56,6 +56,12 @@ export default {
         data[key] = value
       }
       return data
+    },
+    placeholder() {
+      if (this.focus) {
+        return this.$t('common.EnterForSearch')
+      }
+      return this.$t('common.Search')
     }
   },
   watch: {
@@ -88,7 +94,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .filter-field {
     display: flex;
     align-items:  center;
@@ -96,8 +102,10 @@ export default {
     border-radius: 3px;
     background-color:#fff;
   }
-  .el-input{
-    max-width:inherit !important;
+  .search-input >>> .el-input__inner {
+    /*max-width:inherit !important;*/
+    max-width: 200px;
+    border: none;
   }
   .el-input >>> .el-input__inner{
     border: none !important;

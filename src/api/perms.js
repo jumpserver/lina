@@ -20,3 +20,24 @@ export function getDatabaseAppPermissionDetail(id) {
     method: 'get'
   })
 }
+
+export function getUserAssetGrantedSystemUsers(userId, assetId) {
+  return request({
+    url: `/api/v1/perms/users/${userId}/assets/${assetId}/system-users/?cache_policy=1`,
+    method: 'get'
+  })
+}
+
+export function getMyAssetGrantedSystemUsers(userId, assetId) {
+  return request({
+    url: `/api/v1/perms/users/assets/${assetId}/system-users/?cache_policy=1`,
+    method: 'get'
+  })
+}
+
+export function getUserGroupAssetGrantedSystemUsers(gId, assetId) {
+  return request({
+    url: `/api/v1/perms/user-groups/${gId}/assets/${assetId}/system-users/?cache_policy=1`,
+    method: 'get'
+  })
+}

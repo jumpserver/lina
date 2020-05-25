@@ -2,7 +2,7 @@
   <TreeTable :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
-<script>
+<script type="text/jsx">
 import { DetailFormatter } from '@/components/ListTable/formatters'
 import TreeTable from '../TreeTable'
 
@@ -30,6 +30,12 @@ export default {
         const nodeId = node.meta.node.id
         const url = initialUrl.replace('/assets/', `/nodes/${nodeId}/assets/`)
         vm.tableConfig.url = url
+      }
+    },
+    getShowUrl: {
+      type: Function,
+      default(assetId, vm) {
+        return ''
       }
     }
   },
@@ -68,12 +74,15 @@ export default {
             label: this.$t('assets.SystemUsers'),
             align: 'center',
             formatter: (row, col, value) => {
-              const title = this.$t('common.Show')
+              const data = { title: this.$t('common.Show') }
               // Todo: 显示真正的系统用户
               const show = function() {
+                data.title = 'Hello world'
+                console.log(this)
+                console.log(data)
                 console.log('hello: ', value)
               }
-              return <el-link type='success' onClick={show}> {title} </el-link>
+              return <el-link type='success' onClick={show}> {data.title} </el-link>
             },
             width: '200px'
           }

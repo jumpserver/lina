@@ -2,7 +2,7 @@
   <DataTable ref="dataTable" v-loading="loading" :config="totalConfig" v-bind="$attrs" v-on="$listeners" />
 </template>
 
-<script>
+<script type="text/jsx">
 import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import { optionUrlMeta } from '@/api/common'

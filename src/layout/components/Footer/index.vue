@@ -4,7 +4,7 @@
       Version <strong>1.5.6-228
       </strong> GPLv2.
     </div>
-    <div style="padding-left:20px;">
+    <div v-if="!publicSettings.XPACK_LICENSE_IS_VALID" style="padding-left:20px;">
       <strong>Copyright</strong> FIT2CLOUD 飞致云 © 2014-2020
     </div>
   </div>
@@ -13,18 +13,11 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'Footer',
-  components: {
-
-  },
-  data() {
-    return {
-
-    }
-  },
   computed: {
     ...mapGetters([
       'sidebar',
-      'device'
+      'device',
+      'publicSettings'
     ]),
     style() {
       if (this.device === 'mobile') {
@@ -32,7 +25,6 @@ export default {
       }
       return this.sidebar.opened ? ('margin-left: 210px;') : ('margin-left: 54px')
     }
-
   }
 }
 </script>
