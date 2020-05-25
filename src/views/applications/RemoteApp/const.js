@@ -7,7 +7,7 @@ export const CUSTOM = 'custom'
 
 export const ALL_TYPES = [CHROME, MYSQL_WORKBENCH, VMWARE_CLIENT, CUSTOM]
 
-function gen_type_fields_config(fields) {
+function genTypeFieldsConfig(fields) {
   const config = []
   fields.forEach((item, index, array) => {
     config.push({
@@ -20,16 +20,16 @@ function gen_type_fields_config(fields) {
 
 export const REMOTE_APP_TYPE_FIELDS_MAP = {}
 
-REMOTE_APP_TYPE_FIELDS_MAP[CHROME] = gen_type_fields_config([
+REMOTE_APP_TYPE_FIELDS_MAP[CHROME] = genTypeFieldsConfig([
   'chrome_target', 'chrome_username', 'chrome_password'
 ])
-REMOTE_APP_TYPE_FIELDS_MAP[MYSQL_WORKBENCH] = gen_type_fields_config([
+REMOTE_APP_TYPE_FIELDS_MAP[MYSQL_WORKBENCH] = genTypeFieldsConfig([
   'mysql_workbench_ip', 'mysql_workbench_name', 'mysql_workbench_username', 'mysql_workbench_password'
 ])
-REMOTE_APP_TYPE_FIELDS_MAP[VMWARE_CLIENT] = gen_type_fields_config([
+REMOTE_APP_TYPE_FIELDS_MAP[VMWARE_CLIENT] = genTypeFieldsConfig([
   'vmware_target', 'vmware_username', 'vmware_password'
 ])
-REMOTE_APP_TYPE_FIELDS_MAP[CUSTOM] = gen_type_fields_config([
+REMOTE_APP_TYPE_FIELDS_MAP[CUSTOM] = genTypeFieldsConfig([
   'custom_cmdline', 'custom_target', 'custom_username', 'custom_password'
 ])
 
