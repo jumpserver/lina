@@ -50,7 +50,7 @@ export default {
             label: this.$t('xpack.ChangeAuthPlan.PasswordStrategy')
           },
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.timeDelta'),
+            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
@@ -76,7 +76,7 @@ export default {
                 title: this.$t('xpack.ChangeAuthPlan.Detail'),
                 type: 'info',
                 callback: function({ cellValue, tableData }) {
-                  return this.$router.push({ name: 'ChangeAuthPlanExecutionTaskList', params: { id: cellValue }})
+                  return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
                 }
               }
             ]

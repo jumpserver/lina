@@ -1,10 +1,24 @@
 <template>
-  <div>change auth plan execution task list</div>
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
+import ListTable from '@/components/ListTable'
+
 export default {
-  name: 'ChangeAuthPlanExecutionTaskList'
+  name: 'ChangeAuthPlanExecutionTaskList',
+  components: {
+    ListTable
+  },
+  data() {
+    return {
+      tableConfig: {
+
+      },
+      headerActions: {
+      }
+    }
+  }
 }
 </script>
 

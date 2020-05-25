@@ -652,6 +652,8 @@
       "ChangeAuthPlanUpdate": "更新改密计划",
       "ChangeAuthPlanDetail": "改密计划详情",
       "ExecutionList": "执行列表",
+      "ExecutionDetail": "执行详情",
+      "TaskList": "任务列表",
       "Name": "名称",
       "Username": "用户名",
       "PasswordStrategy": "密码策略",
@@ -665,7 +667,8 @@
       "addAsset": "添加资产",
       "addNode": "添加节点",
       "Result": "结果",
-      "timeDelta": "运行时间",
+      "TimeDelta": "运行时间",
+      "DateStart": "开始日期",
       "Detail": "详情",
       "Log": "日志"
     },

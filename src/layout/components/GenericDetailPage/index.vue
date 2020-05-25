@@ -97,6 +97,7 @@ export default {
           name: 'update',
           title: this.$t('common.Update'),
           can: this.validActions.canUpdate,
+          has: this.validActions.hasUpdate,
           callback: this.validActions.updateCallback.bind(this)
         },
         {
@@ -105,6 +106,7 @@ export default {
           type: 'danger',
           plain: true,
           can: this.validActions.canDelete,
+          has: this.validActions.hasDelete,
           callback: this.validActions.deleteCallback.bind(this)
         }
       ]
