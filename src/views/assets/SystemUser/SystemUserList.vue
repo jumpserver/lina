@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
 </template>
 
 <script>
@@ -64,7 +64,8 @@ export default {
       headerActions: {
         // hasBulkDelete: false,
         createRoute: 'SystemUserCreate'
-      }
+      },
+      helpMessage: this.$t('assets.SystemUserListHelpMessage')
     }
   }
 }

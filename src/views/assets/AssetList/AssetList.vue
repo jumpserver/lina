@@ -1,5 +1,5 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <GenericTreeListPage :table-config="tableConfig" :help-message="helpMessage" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
 <script>
@@ -64,7 +64,8 @@ export default {
       },
       headerActions: {
         createRoute: 'AssetCreate'
-      }
+      },
+      helpMessage: this.$t('assets.AssetListHelpMessage')
     }
   }
 }
