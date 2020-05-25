@@ -16,7 +16,7 @@ export default {
         comment: ''
       },
       fields: [
-        [this.$t('perms.' + 'Basic'), ['name', 'base', 'security', 'console', 'comment']]
+        [this.$t('perms.Basic'), ['name', 'base', 'security', 'console', 'comment']]
       ],
       fieldsMeta: {
         security: {

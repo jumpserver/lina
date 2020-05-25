@@ -24,7 +24,7 @@ export default {
         [this.$t('common.action'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_expired', 'comment']]
       ],
-      url: '/api/v1/perms/asset-permissions/',
+      url: '/api/v1/perms/asset-permissions',
       fieldsMeta: {
         users: {
           el: {
