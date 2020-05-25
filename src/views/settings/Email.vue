@@ -1,25 +1,29 @@
 <template>
-  <GenericCreateUpdateForm
-    :fields="selectFields"
-    :url="url"
-    :initial="object"
-    :update-success-next-route="successUrl"
-    :clean-form-value="cleanFormValue"
-    :object.sync="object"
-    :fields-meta="fieldsMeta"
-    :get-method="getMethod"
-    :more-buttons="moreButtons"
-  />
+  <IBox>
+    <GenericCreateUpdateForm
+      :fields="selectFields"
+      :url="url"
+      :initial="object"
+      :update-success-next-route="successUrl"
+      :clean-form-value="cleanFormValue"
+      :object.sync="object"
+      :fields-meta="fieldsMeta"
+      :get-method="getMethod"
+      :more-buttons="moreButtons"
+    />
+  </IBox>
 </template>
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testEmailSetting } from '@/api/settings'
+import { IBox } from '@/components'
 
 export default {
   name: 'Email',
   components: {
-    GenericCreateUpdateForm
+    GenericCreateUpdateForm,
+    IBox
   },
   props: {
     object: {
