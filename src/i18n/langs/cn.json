@@ -565,7 +565,8 @@
     "status": "状态",
     "title": "标题",
     "type": "类型",
-    "user": "用户"
+    "user": "用户",
+    "reply": "回复"
   },
   "tree": {
     "AddNode": "",

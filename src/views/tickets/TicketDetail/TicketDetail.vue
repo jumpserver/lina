@@ -33,7 +33,7 @@
           </div>
         </template>
         <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-          <el-form-item label="回复">
+          <el-form-item :label="$t('tickets.reply')">
             <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
           </el-form-item>
           <el-form-item style="float: right">

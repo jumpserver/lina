@@ -552,7 +552,8 @@
     "status": "Status",
     "title": "Title",
     "type": "Type",
-    "user": "User"
+    "user": "User",
+    "reply": "Reply"
   },
   "tree": {
     "AddNode": "",
