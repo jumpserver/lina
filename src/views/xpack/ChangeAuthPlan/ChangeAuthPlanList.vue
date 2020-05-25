@@ -34,18 +34,17 @@ export default {
         actions: {
           extraActions: [
             {
-              title: vm.$t('xpack.Run'),
+              title: vm.$t('xpack.ChangeAuthPlan.Run'),
               name: 'run',
               type: 'info',
-              callback: function({ cellValue, tableData }) {
-                const newPage = vm.$router.resolve({
-                  name: 'CeleryTaskLog',
-                  query: {
-                    id: 12345678
-                  }
+              callback: function(data) {
+                this.$axios.post(
+                  `/api/v1/xpack/change-auth-plan/plan-execution/`,
+                  { plan: data.cellValue }
+                ).then(res => {
+                  window.open(`/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                 })
-                window.open(newPage.href, '_blank', 'toolbar=yes, width=900, height=600')
-              }
+              }.bind(this)
             }
           ]
         }
