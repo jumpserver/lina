@@ -1,12 +1,12 @@
 {
   "applications": {
-    "appPath": "",
-    "appType": "",
-    "asset": "",
-    "database": "",
-    "host": "",
-    "port": "",
-    "type": ""
+    "appPath": "应用路径",
+    "appType": "应用类型",
+    "asset": "资产",
+    "database": "数据库",
+    "host": "主机",
+    "port": "端口",
+    "type": "类型"
   },
   "assets": {
     "Action": "动作",

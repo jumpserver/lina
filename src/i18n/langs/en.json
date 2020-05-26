@@ -1,8 +1,8 @@
 {
   "applications": {
-    "appPath": "",
-    "appType": "",
-    "asset": "",
+    "appPath": "App path",
+    "appType": "App type",
+    "asset": "Asset",
     "database": "Database",
     "host": "Host",
     "port": "Port",
