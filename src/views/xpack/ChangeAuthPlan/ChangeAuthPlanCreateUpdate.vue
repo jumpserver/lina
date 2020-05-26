@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/xpack/change-auth-plan/plan/',
+      url: '/api/v1/xpack/change-auth-plan/plan',
       fields: [
         [this.$t('xpack.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
