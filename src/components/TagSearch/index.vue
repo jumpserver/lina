@@ -1,13 +1,6 @@
 <template>
   <div class="filter-field">
-    <el-dropdown ref="Dropdown" placement="bottom-start">
-      <span class="el-dropdown-link">
-        <i class="el-icon-arrow-down el-icon--right" />
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-cascader-panel ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
-      </el-dropdown-menu>
-    </el-dropdown>
+    <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
     <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)">
       <strong v-if="v.label">{{ v.label + ':' }}</strong> {{ v.value }}
     </el-tag>
@@ -38,13 +31,13 @@ export default {
     }
   },
   computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
     filterLabel() {
       for (const field of this.options) {
         if (field.value === this.filterKey) {
           return field.label
         }
       }
+      return ''
     },
     filterMaps() {
       const data = {}
@@ -58,7 +51,7 @@ export default {
       return data
     },
     placeholder() {
-      if (this.focus) {
+      if (this.focus && this.filterKey) {
         return this.$t('common.EnterForSearch')
       }
       return this.$t('common.Search')
@@ -73,19 +66,29 @@ export default {
   },
   methods: {
     handleMenuItemChange(keys) {
-      this.$refs.Dropdown.hide()
-      this.$refs.SearchInput.focus()
-      if (keys.length !== 0) {
-        this.filterKey = keys[0]
-        this.$refs.Cascade.clearCheckedNodes()
+      this.$log.debug('Tag search keys: ', keys)
+      if (keys.length === 0) {
+        return
       }
-      this.$log.debug(this.filterKey)
+      if (keys.length === 1) {
+        this.filterKey = keys[0]
+        this.$refs.SearchInput.focus()
+      } else if (keys.length === 2) {
+        this.filterKey = keys[0]
+        this.filterValue = keys[1]
+        this.handleConfirm()
+      }
+      setTimeout(() => this.$refs.Cascade.handleClear(), 100)
+      this.$log.debug('Tag search key: ', this.filterKey)
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
       return true
     },
     handleConfirm() {
+      if (this.filterValue && !this.filterKey) {
+        this.filterKey = 'search'
+      }
       this.$set(this.filterTags, this.filterKey, { label: this.filterLabel, value: this.filterValue })
       this.filterKey = ''
       this.filterValue = ''
@@ -110,18 +113,21 @@ export default {
   .el-input >>> .el-input__inner{
     border: none !important;
   }
-  .filterTitle{
+  .el-input >>> .el-input__inner {
+    font-size: 13px;
+  }
+
+  .filterTitle {
     padding-right: 2px;
     line-height: 100%;
     text-align: center;
     flex-shrink: 0;
-
-    border-collapse:separate;
-    box-sizing:border-box;
-    color:rgb(96, 98, 102);
-    display:inline;
-    font-size:14px;
-    height:auto;
+    border-collapse: separate;
+    box-sizing: border-box;
+    color: rgb(96, 98, 102);
+    display: inline;
+    font-size: 13px;
+    height: auto;
   }
   .filter-tag{
     margin: 2px 4px 2px 0;
@@ -133,17 +139,14 @@ export default {
   a {
     color: #000;
   }
-  /*// 去掉边框*/
-  .el-dropdown-menu{
-    border: none !important;
-  }
-  .el-cascader-panel{
-    border: none !important;
+
+  .filter-field >>> .el-cascader .el-input--suffix .el-input__inner {
+    padding-right: 20px;
   }
 
-  /*// 重置表格高度*/
-  .el-cascader-panel /deep/ .el-cascader-menu__wrap{
-    height: inherit;
+  .filter-field >>> .el-cascader .el-input input {
+    width: 0;
+    border: none;
   }
 
   .filter-field >>> .el-input__inner {
