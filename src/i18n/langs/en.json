@@ -1,8 +1,8 @@
 {
   "applications": {
-    "appPath": "",
-    "appType": "",
-    "asset": "",
+    "appPath": "App path",
+    "appType": "App type",
+    "asset": "Asset",
     "database": "Database",
     "host": "Host",
     "port": "Port",
@@ -140,6 +140,7 @@
     "QuickUpdate": "Quick update",
     "Reset": "Reset",
     "Search": "Search",
+    "EnterForSearch": "Press enter to search",
     "SelectFile": "Select file",
     "Show": "Show",
     "Submit": "Submit",
@@ -154,7 +155,6 @@
     "activateSelected": "Activate selected",
     "bulkDeleteErrorMsg": "Bulk delete failed: ",
     "bulkDeleteSuccessMsg": "Bulk delete success",
-    "confirm": "Confirm",
     "createBy": "Create by",
     "createSuccessMsg": "Create success",
     "createdBy": "Created by",
@@ -177,7 +177,6 @@
       "onlyCSVFilesTips": "Only csv supported",
       "updateSuccessMsg": "Update success, total: {count}"
     },
-    "import": "Import",
     "isValid": "Is valid",
     "nav": {
       "APIKey": "API Key",
@@ -566,6 +565,7 @@
     "technologyConsult": "Technology Consult",
     "consult": "Consult",
     "ImportLicense": "Import license",
+    "AssetCount": "Asset count",
     "ImportLicenseTip": "Please Import License"
   },
   "settings": {
@@ -671,7 +671,6 @@
     "consult": "Consult",
     "favicon": "Website icon",
     "faviconTip": "Tips: website icon. (suggest image size: 16px*16px)",
-    "import": "Import",
     "loginImage": "Image of login page",
     "loginImageTip": "Tips: This will be displayed on the enterprise user login page. (suggest image size: 492px*472px)",
     "loginTitle": "Title of login page",

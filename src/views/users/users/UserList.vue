@@ -19,9 +19,9 @@ export default {
           'name', 'username', 'groups_display', 'role', 'source', 'is_valid', 'actions'
         ],
         columnsMeta: {
-          // source: {
-          //   width: '120px'
-          // },
+          source: {
+            width: '120px'
+          },
           // role: {
           //   width: '100px'
           // },

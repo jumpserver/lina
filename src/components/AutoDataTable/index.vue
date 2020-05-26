@@ -2,10 +2,9 @@
   <DataTable ref="dataTable" v-loading="loading" :config="totalConfig" v-bind="$attrs" v-on="$listeners" />
 </template>
 
-<script>
+<script type="text/jsx">
 import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
-import { optionUrlMeta } from '@/api/common'
 export default {
   name: 'AutoDataTable',
   components: {
@@ -31,7 +30,7 @@ export default {
   methods: {
     optionUrlMetaAndGenCols() {
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
-      optionUrlMeta(url).then(data => {
+      this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
       }).catch(() => {

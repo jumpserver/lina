@@ -1,20 +1,12 @@
 <template>
   <div class="filter-field">
-    <el-dropdown ref="Dropdown" placement="bottom-start">
-      <span class="el-dropdown-link">
-        <i class="el-icon-arrow-down el-icon--right" />
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-cascader-panel ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
-      </el-dropdown-menu>
-    </el-dropdown>
+    <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
     <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)">
       <strong v-if="v.label">{{ v.label + ':' }}</strong> {{ v.value }}
     </el-tag>
     <span v-if="filterLabel" slot="prefix" class="filterTitle">{{ filterLabel + ':' }}</span>
-    <el-input ref="SearchInput" v-model="filterValue" :placeholder="this.$t('common.Search')" style="max-width: 100px; border: none" @change="handleConfirm" />
+    <el-input ref="SearchInput" v-model="filterValue" :placeholder="placeholder" class="search-input" @blur="focus = false" @focus="focus = true" @change="handleConfirm" />
   </div>
-
 </template>
 
 <script>
@@ -34,17 +26,18 @@ export default {
     return {
       filterKey: '',
       filterValue: '',
-      filterTags: {}
+      filterTags: {},
+      focus: false
     }
   },
   computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
     filterLabel() {
       for (const field of this.options) {
         if (field.value === this.filterKey) {
           return field.label
         }
       }
+      return ''
     },
     filterMaps() {
       const data = {}
@@ -56,30 +49,49 @@ export default {
         data[key] = value
       }
       return data
+    },
+    placeholder() {
+      if (this.focus && this.filterKey) {
+        return this.$t('common.EnterForSearch')
+      }
+      return this.$t('common.Search')
     }
   },
   watch: {
-    filterTags: function(val) {
-      if (val) {
-        this.$emit('tagSearch', this.filterMaps)
-      }
+    filterTags: {
+      handler(val) {
+        if (val) {
+          this.$emit('tagSearch', this.filterMaps)
+        }
+      },
+      deep: true
     }
   },
   methods: {
     handleMenuItemChange(keys) {
-      this.$refs.Dropdown.hide()
-      this.$refs.SearchInput.focus()
-      if (keys.length !== 0) {
-        this.filterKey = keys[0]
-        this.$refs.Cascade.clearCheckedNodes()
+      this.$log.debug('Tag search keys: ', keys)
+      if (keys.length === 0) {
+        return
       }
-      this.$log.debug(this.filterKey)
+      if (keys.length === 1) {
+        this.filterKey = keys[0]
+        this.$refs.SearchInput.focus()
+      } else if (keys.length === 2) {
+        this.filterKey = keys[0]
+        this.filterValue = keys[1]
+        this.handleConfirm()
+      }
+      this.$nextTick(() => this.$refs.Cascade.handleClear())
+      // setTimeout(() => this.$refs.Cascade.handleClear(), 100)
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
       return true
     },
     handleConfirm() {
+      if (this.filterValue && !this.filterKey) {
+        this.filterKey = 'search'
+      }
       this.$set(this.filterTags, this.filterKey, { label: this.filterLabel, value: this.filterValue })
       this.filterKey = ''
       this.filterValue = ''
@@ -88,7 +100,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .filter-field {
     display: flex;
     align-items:  center;
@@ -96,24 +108,28 @@ export default {
     border-radius: 3px;
     background-color:#fff;
   }
-  .el-input{
-    max-width:inherit !important;
+  .search-input >>> .el-input__inner {
+    /*max-width:inherit !important;*/
+    max-width: 200px;
+    border: none;
+    padding-left: 5px;
   }
   .el-input >>> .el-input__inner{
     border: none !important;
+    font-size: 13px;
   }
-  .filterTitle{
+
+  .filterTitle {
     padding-right: 2px;
     line-height: 100%;
     text-align: center;
     flex-shrink: 0;
-
-    border-collapse:separate;
-    box-sizing:border-box;
-    color:rgb(96, 98, 102);
-    display:inline;
-    font-size:14px;
-    height:auto;
+    border-collapse: separate;
+    box-sizing: border-box;
+    color: rgb(96, 98, 102);
+    display: inline;
+    font-size: 13px;
+    height: auto;
   }
   .filter-tag{
     margin: 2px 4px 2px 0;
@@ -125,20 +141,21 @@ export default {
   a {
     color: #000;
   }
-  /*// 去掉边框*/
-  .el-dropdown-menu{
-    border: none !important;
-  }
-  .el-cascader-panel{
-    border: none !important;
+
+  .filter-field >>> .el-cascader .el-input--suffix .el-input__inner {
+    padding-right: 20px;
   }
 
-  /*// 重置表格高度*/
-  .el-cascader-panel /deep/ .el-cascader-menu__wrap{
-    height: inherit;
+  .filter-field >>> .el-cascader .el-input input {
+    width: 0;
+    border: none;
   }
 
   .filter-field >>> .el-input__inner {
     height: 30px;
+  }
+
+  .el-cascader-menu__wrap {
+    height: inherit;
   }
 </style>

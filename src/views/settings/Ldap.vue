@@ -61,7 +61,7 @@
       />
       <div slot="footer">
         <el-button @click="dialogLdapUserImport = false">{{ $t('common.Cancel') }}</el-button>
-        <el-button type="primary" @click="importUserClick">{{ $t('common.import') }}</el-button>
+        <el-button type="primary" @click="importUserClick">{{ $t('common.Import') }}</el-button>
       </div>
     </el-dialog>
   </div>

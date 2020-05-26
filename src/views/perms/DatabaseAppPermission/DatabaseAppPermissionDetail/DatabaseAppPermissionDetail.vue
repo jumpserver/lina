@@ -63,19 +63,19 @@ export default {
         },
         {
           key: this.$t('perms.userCount'),
-          value: this.getDataLength(this.object.users)
+          value: this.object.users_amount
         },
         {
           key: this.$t('perms.userGroupCount'),
-          value: this.getDataLength(this.object.user_groups)
+          value: this.object.user_groups_amount
         },
         {
           key: this.$t('perms.remoteAppCount'),
-          value: this.getDataLength(this.object.database_apps)
+          value: this.object.database_apps_amount
         },
         {
           key: this.$t('perms.systemUserCount'),
-          value: this.getDataLength(this.object.system_users)
+          value: this.object.system_users_amount
         },
         {
           key: this.$t('perms.dateStart'),
@@ -98,14 +98,6 @@ export default {
           value: this.object.comment
         }
       ]
-    }
-  },
-  methods: {
-    getDataLength(data) {
-      if (data instanceof Array) {
-        return JSON.stringify(data.length)
-      }
-      return data
     }
   }
 }

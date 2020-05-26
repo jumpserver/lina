@@ -33,6 +33,8 @@ export default {
         columnsMeta: {
           index: {
             label: this.$t('sessions.id'),
+            align: 'center',
+            width: '60px',
             formatter: function(row, column, cellValue, index) {
               return <a class='detail el-link el-link--success is-underline' href= { '/terminal/sessions/' + row.id }>{ index + 1}</a>
             }
@@ -94,12 +96,10 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
-        hasBulkDelete: false,
+        hasLeftActions: false,
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
-        hasBulkUpdate: false
+        hasRefresh: false
       }
     }
   }

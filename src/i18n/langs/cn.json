@@ -1,12 +1,12 @@
 {
   "applications": {
-    "appPath": "",
-    "appType": "",
-    "asset": "",
-    "database": "",
-    "host": "",
-    "port": "",
-    "type": ""
+    "appPath": "应用路径",
+    "appType": "应用类型",
+    "asset": "资产",
+    "database": "数据库",
+    "host": "主机",
+    "port": "端口",
+    "type": "类型"
   },
   "assets": {
     "Action": "动作",
@@ -139,13 +139,12 @@
     "QuickUpdate": "快速更新",
     "Reset": "重置",
     "Search": "搜索",
+    "EnterForSearch": "按回车进行搜索",
     "SelectFile": "选择文件",
     "Show": "显示",
     "Submit": "提交",
     "Test": "测试",
     "Update": "更新",
-    "Update failed": "",
-    "Update success": "",
     "Upload": "上传",
     "Username": "用户名",
     "Validity": "有效",
@@ -191,9 +190,6 @@
     },
     "passwordOrPassphrase": "密码或密钥密码",
     "rows": "行",
-    "table": {
-      "Actions": "动作"
-    },
     "tree": {
       "Empty": "空",
       "Loading": "加载中"
@@ -575,6 +571,7 @@
     "technologyConsult": "技术咨询",
     "consult": "咨询",
     "ImportLicense": "导入许可证",
+    "AssetCount": "资产数量",
     "ImportLicenseTip": "请导入许可证"
   },
   "settings": {
@@ -712,7 +709,6 @@
     "consult": "咨询",
     "favicon": "网站图标",
     "faviconTip": "提示：网站图标（建议图片大小为: 16px*16px）",
-    "import": "导入",
     "loginImage": "登录页面图片",
     "loginImageTip": "提示：将会显示在企业版用户登录页面（建议图片大小为: 492*472px）",
     "loginTitle": "登录页面标题",
