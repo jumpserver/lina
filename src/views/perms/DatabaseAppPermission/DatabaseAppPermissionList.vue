@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { LengthFormatter } from '@/components/ListTable/formatters/index'
+
 export default {
   components: {
     GenericListPage
@@ -13,22 +13,18 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/perms/database-app-permissions/',
-        columns: ['name', 'users', 'user_groups', 'database_apps', 'system_users', 'is_valid', 'actions'],
+        columns: ['name', 'users_amount', 'user_groups_amount', 'database_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
-          users: {
-            formatter: LengthFormatter,
+          users_amount: {
             label: this.$t('perms.User')
           },
-          user_groups: {
-            formatter: LengthFormatter,
+          user_groups_amount: {
             label: this.$t('perms.UserGroups')
           },
-          database_apps: {
-            formatter: LengthFormatter,
+          database_apps_amount: {
             label: this.$t('perms.databaseApp')
           },
-          system_users: {
-            formatter: LengthFormatter,
+          system_users_amount: {
             label: this.$t('perms.SystemUser')
           }
         }

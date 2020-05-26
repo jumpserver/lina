@@ -32,10 +32,10 @@ export default {
       tableConfig: {
         url: `/api/v1/perms/remote-app-permissions/${this.object.id}/remote-apps/all/`,
         columns: [
-          'remote_app_display', 'delete_action'
+          'remoteapp_display', 'delete_action'
         ],
         columnsMeta: {
-          remote_app_display: {
+          remoteapp_display: {
             label: this.$t('perms.remoteApp'),
             align: 'center'
           },
@@ -46,7 +46,7 @@ export default {
             width: 150,
             objects: this.object.remote_apps,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/remote-app-permissions-database-apps-relations/?remoteapppermission=${this.$route.params.id}&remoteapp=`
+            deleteUrl: `/api/v1/perms/remote-app-permissions-remote-apps-relations/?remoteapppermission=${this.$route.params.id}&remoteapp=`
           }
         },
         tableAttrs: {
@@ -68,7 +68,6 @@ export default {
         showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
-          console.log('this.object===', this.object)
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/add/`
           const remoteAppId = items.map(v => v.value)
           const data = { remote_apps: remoteAppId }

@@ -45,15 +45,9 @@ export function filterNoneXpackRoutes(routes) {
     const tmp = {
       ...route
     }
-    if (tmp.name === 'Xpack') {
-      tmp.children = []
-      route.children.forEach(childRoute => {
-        if (childRoute.path === 'license') {
-          tmp.children.push(childRoute)
-        }
-      })
+    if (tmp.name !== 'Xpack') {
+      accessedRoutes.push(tmp)
     }
-    accessedRoutes.push(tmp)
   })
   return accessedRoutes
 }
@@ -77,6 +71,7 @@ const actions = {
       if (roles.includes('Admin')) {
         accessedRoutes = adminRoutes || []
         if (!store.rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID) {
+          console.log(store.rootState.settings.publicSettings)
           accessedRoutes = filterNoneXpackRoutes(adminRoutes)
         }
       } else {

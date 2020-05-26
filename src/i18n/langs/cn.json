@@ -1,12 +1,12 @@
 {
   "applications": {
-    "appPath": "",
-    "appType": "",
-    "asset": "",
-    "database": "",
-    "host": "",
-    "port": "",
-    "type": ""
+    "appPath": "应用路径",
+    "appType": "应用类型",
+    "asset": "资产",
+    "database": "数据库",
+    "host": "主机",
+    "port": "端口",
+    "type": "类型"
   },
   "assets": {
     "Action": "动作",
@@ -558,7 +558,21 @@
     "testLdapLoginTitle": "测试LDAP 用户登录",
     "userGuideUrl": "用户向导URL",
     "username": "用户名",
-    "usernamePlaceholder": "请输入用户名"
+    "usernamePlaceholder": "请输入用户名",
+    "SubscriptionID": "订阅授权ID",
+    "Corporation": "公司",
+    "Edition": "版本",
+    "Expired": "过期时间",
+    "License": "许可证",
+    "LicenseDetail": "许可证详情",
+    "LicenseFile": "许可证文件",
+    "communityEdition": "社区版",
+    "import": "导入",
+    "technologyConsult": "技术咨询",
+    "consult": "咨询",
+    "ImportLicense": "导入许可证",
+    "AssetCount": "资产数量",
+    "ImportLicenseTip": "请导入许可证"
   },
   "settings": {
     "setting": ""
@@ -642,12 +656,15 @@
     "SystemUser": "系统用户",
     "Label": "标签",
     "assetAndNode": "资产或节点",
+    "Success": "成功",
     "ChangeAuthPlan": {
       "ChangeAuthPlan": "改密计划",
       "ChangeAuthPlanCreate": "创建改密计划",
       "ChangeAuthPlanUpdate": "更新改密计划",
       "ChangeAuthPlanDetail": "改密计划详情",
       "ExecutionList": "执行列表",
+      "ExecutionDetail": "执行详情",
+      "TaskList": "任务列表",
       "Name": "名称",
       "Username": "用户名",
       "PasswordStrategy": "密码策略",
@@ -661,9 +678,11 @@
       "addAsset": "添加资产",
       "addNode": "添加节点",
       "Result": "结果",
-      "timeDelta": "运行时间",
+      "TimeDelta": "运行时间",
+      "DateStart": "开始日期",
       "Detail": "详情",
-      "Log": "日志"
+      "Log": "日志",
+      "Retry": "重试"
     },
     "Corporation": "公司",
     "Edition": "版本",

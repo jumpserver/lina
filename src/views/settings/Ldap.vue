@@ -1,16 +1,18 @@
 <template>
   <div v-if="!loading">
-    <GenericCreateUpdateForm
-      :fields="selectFields"
-      :url="url"
-      :initial="initialData"
-      :update-success-next-route="successUrl"
-      :clean-form-value="cleanFormValue"
-      :object="initialData"
-      :fields-meta="fieldsMeta"
-      :get-method="getMethod"
-      :more-buttons="moreButtons"
-    />
+    <IBox>
+      <GenericCreateUpdateForm
+        :fields="selectFields"
+        :url="url"
+        :initial="initialData"
+        :update-success-next-route="successUrl"
+        :clean-form-value="cleanFormValue"
+        :object="initialData"
+        :fields-meta="fieldsMeta"
+        :get-method="getMethod"
+        :more-buttons="moreButtons"
+      />
+    </IBox>
     <el-dialog :visible.sync="dialogVisible" center>
       <div slot="title">
         {{ $t('setting.testLdapLoginTitle') }}
@@ -69,12 +71,14 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { testLdapSetting, testLdapUserLogin,
   importLdapUser, refreshLdapUserCache } from '@/api/settings'
 import ListTable from '@/components/ListTable'
+import { IBox } from '@/components'
 
 export default {
   name: 'Ldap',
   components: {
     GenericCreateUpdateForm,
-    ListTable
+    ListTable,
+    IBox
   },
   props: {
     object: {

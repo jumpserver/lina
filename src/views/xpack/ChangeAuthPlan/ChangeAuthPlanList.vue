@@ -29,6 +29,9 @@ export default {
           },
           nodes_amount: {
             label: vm.$t('xpack.Node')
+          },
+          periodic_display: {
+            showOverflowTooltip: true
           }
         },
         actions: {

@@ -1,8 +1,8 @@
 {
   "applications": {
-    "appPath": "",
-    "appType": "",
-    "asset": "",
+    "appPath": "App path",
+    "appType": "App type",
+    "asset": "Asset",
     "database": "Database",
     "host": "Host",
     "port": "Port",
@@ -552,7 +552,21 @@
     "testLdapLoginTitle": "Test LDAP user login",
     "userGuideUrl": "User Guide URL",
     "username": "Username",
-    "usernamePlaceholder": "Please input username"
+    "usernamePlaceholder": "Please input username",
+    "SubscriptionID": "Subscription ID",
+    "Corporation": "Corporation",
+    "Edition": "Edition",
+    "Expired": "Expired",
+    "License": "License",
+    "LicenseDetail": "License detail",
+    "LicenseFile": "License file",
+    "communityEdition": "Community edition",
+    "import": "Import",
+    "technologyConsult": "Technology Consult",
+    "consult": "Consult",
+    "ImportLicense": "Import license",
+    "AssetCount": "Asset count",
+    "ImportLicenseTip": "Please Import License"
   },
   "settings": {
     "setting": ""

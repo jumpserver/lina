@@ -4,6 +4,8 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'TicketListTable',
   components: {
@@ -40,12 +42,21 @@ export default {
           {
             prop: 'status',
             label: this.$t('tickets.status'),
-            sortable: 'custom'
+            align: 'center',
+            width: '80px',
+            sortable: 'custom',
+            formatter: row => {
+              if (row.status === 'open') {
+                return <i class='fa fa-check-circle-o text-primary'/>
+              }
+              return <i class='fa fa-times-circle-o text-danger'/>
+            }
           },
           {
             prop: 'date_created',
             label: this.$t('tickets.date'),
-            sortable: 'custom'
+            sortable: 'custom',
+            formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
         ]
       },
