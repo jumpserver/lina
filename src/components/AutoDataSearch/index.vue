@@ -38,29 +38,32 @@ export default {
     }
   },
   mounted() {
-    this.optionUrlMeta()
+    this.genericOptions()
   },
   methods: {
-    genericOptions(data) {
-      const _this = this // 透传This
-      Object.keys(data).forEach(function(key) {
-        if (data[key].filter) {
-          _this.options.push(
-            {
-              label: data[key].label,
-              value: key
-            }
-          )
-        } else if (data[key].choices) {
-          //
+    async genericOptions() {
+      const vm = this // 透传This
+      const data = await this.optionUrlMeta()
+      const meta = data.actions['GET'] || {}
+      for (const [name, field] of Object.entries(meta)) {
+        if (!field.filter) {
+          continue
         }
-      })
+        const option = {
+          label: field.label,
+          value: name
+        }
+        if (field.type === 'choice' && field.choices) {
+          option.children = field.choices.map(item => {
+            return { label: item.display_name, value: item.value }
+          })
+        }
+        vm.options.push(option)
+      }
     },
     optionUrlMeta() {
       const url = (this.url.indexOf('?') === -1) ? `${this.url}?draw=1&display=1` : `${this.url}&draw=1&display=1`
-      this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
-        this.genericOptions(data.actions['GET'] || {})
-      })
+      return this.$store.dispatch('common/getUrlMeta', { url: url })
     }
   }
 }

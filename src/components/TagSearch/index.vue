@@ -58,10 +58,13 @@ export default {
     }
   },
   watch: {
-    filterTags: function(val) {
-      if (val) {
-        this.$emit('tagSearch', this.filterMaps)
-      }
+    filterTags: {
+      handler(val) {
+        if (val) {
+          this.$emit('tagSearch', this.filterMaps)
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -78,8 +81,8 @@ export default {
         this.filterValue = keys[1]
         this.handleConfirm()
       }
-      setTimeout(() => this.$refs.Cascade.handleClear(), 100)
-      this.$log.debug('Tag search key: ', this.filterKey)
+      this.$nextTick(() => this.$refs.Cascade.handleClear())
+      // setTimeout(() => this.$refs.Cascade.handleClear(), 100)
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
@@ -109,11 +112,10 @@ export default {
     /*max-width:inherit !important;*/
     max-width: 200px;
     border: none;
+    padding-left: 5px;
   }
   .el-input >>> .el-input__inner{
     border: none !important;
-  }
-  .el-input >>> .el-input__inner {
     font-size: 13px;
   }
 
@@ -151,5 +153,9 @@ export default {
 
   .filter-field >>> .el-input__inner {
     height: 30px;
+  }
+
+  .el-cascader-menu__wrap {
+    height: inherit;
   }
 </style>
