@@ -17,14 +17,12 @@ const mutations = {
 const actions = {
   // get user info
   getUrlMeta({ commit, state }, { url }) {
-    console.log('Get url meta')
     const meta = state.metaMap[url]
     if (meta) {
       return new Promise((resolve, reject) => {
         resolve(meta)
       })
     }
-    console.log('Commit')
     return new Promise((resolve, reject) => {
       optionUrlMeta(url).then(meta => {
         commit('SET_URL_META', { url, meta })
