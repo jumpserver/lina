@@ -52,3 +52,9 @@ export function getPublicSettings() {
     method: 'get'
   })
 }
+export function getLogo() {
+  return request({
+    url: '/api/v1/xpack/interface/setting',
+    method: 'get'
+  })
+}

@@ -9,6 +9,7 @@ const getters = {
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
   publicSettings: state => state.settings.publicSettings,
+  customSettings: state => state.settings.customSettings,
   getCurrentOrgRoles: state => state.users.profile.current_org_roles
 }
 export default getters
