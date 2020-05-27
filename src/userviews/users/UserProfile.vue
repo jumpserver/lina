@@ -88,7 +88,9 @@ export default {
             label: this.$t('common.Reset')
           },
           callbacks: {
-            click: function() {}
+            click: function() {
+              window.open(`/users/profile/pubkey/generate/`, '_blank')
+            }
           }
         }
       ]
