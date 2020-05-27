@@ -13,18 +13,20 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/xpack/change-auth-plan/plan',
+      url: '/api/v1/xpack/change-auth-plan/plan/',
       fields: [
         [this.$t('xpack.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
-        [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules_length']],
+        [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('xpack.Other'), ['comment']]
       ],
       initial: {
         password_strategy: 'custom',
-        password_rules_length: 20,
         is_periodic: true,
+        password_rules: {
+          length: 20
+        },
         interval: 24
       },
       fieldsMeta: {
@@ -42,14 +44,14 @@ export default {
         password: {
           hidden: (formValue) => {
             return formValue.password_strategy !== 'custom'
-          }
+          },
+          rules: [
+            { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
+          ]
         },
-        password_rules_length: {
-          type: 'input',
-          label: this.$t('xpack.ChangeAuthPlan.PasswordLength'),
-          hidden: (formValue) => {
-            return ['random_one', 'random_all'].indexOf(formValue.password_strategy) === -1
-          }
+        password_rules: {
+          type: 'group',
+          items: this.generatePasswordRulesItemsFields()
         },
         nodes: {
           label: this.$t('xpack.Node'),
@@ -92,21 +94,22 @@ export default {
           },
           helpText: '（单位： 时）'
         }
-      },
-      cleanFormValue(values) {
-        if (['random_one', 'random_all'].indexOf(values.password_strategy) !== -1) {
-          const password_rules = {}
-          const password_rules_prefix = 'password_rules_'
-          for (const key of Object.keys(values)) {
-            if (key.startsWith(password_rules_prefix)) {
-              password_rules[key.slice(password_rules_prefix.length)] = values[key]
-              delete values[key]
-            }
-          }
-          values['password_rules'] = password_rules
-        }
-        return values
       }
+    }
+  },
+  methods: {
+    generatePasswordRulesItemsFields() {
+      const itemsFields = []
+      const items = [
+        { id: 'length', prop: 'length', label: this.$t('xpack.ChangeAuthPlan.PasswordLength') }
+      ]
+      items.forEach((item, index, array) => {
+        itemsFields.push({
+          id: item.id, prop: item.prop, el: {}, attrs: {}, type: 'input', label: item.label, required: true,
+          hidden: (formValue) => { return ['random_one', 'random_all'].indexOf(formValue.password_strategy) === -1 }
+        })
+      })
+      return itemsFields
     }
   }
 }
