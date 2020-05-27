@@ -6,7 +6,8 @@
         <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="logoText" :src="logoText" class="sidebar-logo-text">
+        <img v-if="customSettings.logo_index != '/static/img/logo_text.png' " :src="customSettings.logo_index" class="sidebar-logo">
+        <img v-else-if="logoText" :src="logoText" class="sidebar-logo-text">
         <!--        <h1 class="sidebar-title">{{ title }}</h1>-->
       </router-link>
     </transition>
@@ -14,6 +15,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'SidebarLogo',
   props: {
@@ -26,8 +28,17 @@ export default {
     return {
       title: 'JumpServer',
       logoText: require('@/assets/img/logo-text.png'),
-      logo: require('@/assets/img/logo.png')
+      logo: require('@/assets/img/logo.png'),
+      xpackData: {}
     }
+  },
+  computed: {
+    ...mapGetters([
+      'customSettings'
+    ])
+  },
+  created() {
+    console.log(this.customSettings.logo_index)
   }
 }
 </script>
