@@ -50,27 +50,27 @@ export default {
     },
     {
       path: 'orgs',
-      component: () => import('@/views/xpack/org/OrganizationList'),
+      component: () => import('@/views/xpack/Org/OrganizationList'),
       name: 'OrganizationList',
       meta: { title: i18n.t('xpack.OrganizationList') }
     },
     {
       path: 'orgs/create',
-      component: () => import('@/views/xpack/org/OrganizationCreateUpdate'),
+      component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
       name: 'OrganizationCreate',
       hidden: true,
       meta: { title: i18n.t('xpack.OrganizationCreate'), activeMenu: '/xpack/orgs', action: 'create' }
     },
     {
       path: 'orgs/:id/update',
-      component: () => import('@/views/xpack/org/OrganizationCreateUpdate'),
+      component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
       name: 'OrganizationUpdate',
       hidden: true,
       meta: { title: i18n.t('xpack.OrganizationUpdate'), activeMenu: '/xpack/orgs', action: 'update' }
     },
     {
       path: 'orgs/:id',
-      component: () => import('@/views/xpack/org/OrganizationDetail/index'),
+      component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
       name: 'OrganizationDetail',
       hidden: true,
       meta: { title: i18n.t('xpack.OrganizationDetail'), activeMenu: '/xpack/orgs' }

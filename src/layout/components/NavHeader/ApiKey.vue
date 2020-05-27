@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <Dialog width="70%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
-      <div>
-        <el-alert type="success"> {{ helpMessage }} </el-alert>
-        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-      </div>
-    </Dialog>
-  </div>
+  <Dialog width="70%" class="api-key-dialog" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
+    <div>
+      <el-alert type="success"> {{ helpMessage }} </el-alert>
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    </div>
+  </Dialog>
 </template>
 
 <script>
@@ -103,6 +101,8 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
+<style lang='scss' scoped>
+.api-key-dialog >>> .el-dialog__body {
+  padding-top: 0;
+}
 </style>
