@@ -22,6 +22,9 @@ export default {
   },
   computed: {
     src() {
+      if (process.env.VUE_APP_BASE_API === '/') {
+        return this.value
+      }
       return `${process.env.VUE_APP_BASE_API}${this.value}`
     }
   },
