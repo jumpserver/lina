@@ -32,10 +32,19 @@ export default {
           title: this.$t('assets.SetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Reset')
+            label: this.object.mfa_enabled ? this.$t('common.Disable') : this.$t('common.Enable'),
+            disabled: this.object.mfa_force_enabled
           },
           callbacks: {
-            click: function() {}
+            click: function() {
+              if (this.object.mfa_enabled) {
+                if (!this.object.mfa_force_enabled) {
+                  window.location.href = `/users/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
+                }
+              } else {
+                window.location.href = `/users/profile/otp/enable/start/?next=${this.$route.fullPath}`
+              }
+            }.bind(this)
           }
         },
         {

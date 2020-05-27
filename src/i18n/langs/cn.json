@@ -197,7 +197,9 @@
     },
     "updateErrorMsg": "更新失败",
     "updateSelected": "更新所选",
-    "updateSuccessMsg": "更新成功"
+    "updateSuccessMsg": "更新成功",
+    "Disable": "禁用",
+    "Enable": "启用"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
