@@ -51,10 +51,12 @@ export default {
           title: this.$t('assets.UpdateMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Reset')
+            label: this.$t('common.Update')
           },
           callbacks: {
-            click: function() {}
+            click: function() {
+              window.location.href = `/users/profile/otp/update/?next=${this.$route.fullPath}`
+            }.bind(this)
           }
         },
         {
