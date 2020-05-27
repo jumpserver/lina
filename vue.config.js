@@ -47,7 +47,7 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
-      '^/(auth|static)': {
+      '^/core/': {
         target: `http://localhost:8080`,
         changeOrigin: true
       }

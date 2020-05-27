@@ -10,9 +10,9 @@
     </div>
     <slot>
       <h1 class="no-margins">
-        <a :href="body.link">
+        <router-link :to="body.route">
           <span>{{ body.count }}</span>
-        </a>
+        </router-link>
       </h1>
       <small>{{ body.comment }}</small>
     </slot>

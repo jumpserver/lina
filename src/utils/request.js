@@ -70,7 +70,7 @@ service.interceptors.response.use(
     const response = error.response
     if (response.status === 401) {
       // 未授权重定向到登录页面
-      window.location = '/auth/login/'
+      window.location = process.env.LOGIN_PATH
       // const title = ''
       // const msg = i18n.t('auth.LoginRequiredMsg')
       // MessageBox.confirm(msg, title, {

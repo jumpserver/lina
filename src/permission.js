@@ -11,7 +11,7 @@ NProgress.configure({
   showSpinner: false
 }) // NProgress Configuration
 
-const whiteList = ['/login', '/auth/login/'] // no redirect whitelist
+const whiteList = ['/login'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -29,7 +29,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
     // other pages that do not have permission to access are redirected to the login page.
-      next(`/auth/login/`)
+      next(process.env.LOGIN_PATH)
       NProgress.done()
       return
     }

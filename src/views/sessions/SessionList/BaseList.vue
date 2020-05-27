@@ -2,7 +2,7 @@
   <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
-<script>
+<script type="text/jsx">
 import ListTable from '@/components/ListTable'
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { ActionsFormatter } from '@/components/ListTable/formatters'

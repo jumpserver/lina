@@ -28,7 +28,8 @@ export default {
           asset: {
             label: this.$t('xpack.Asset'),
             formatter: function(row, column, cellValue, index) {
-              return <a class='detail el-link el-link--success is-underline' href={ `/assets/assets/${cellValue}` }>{ row.asset_info.hostname }</a>
+              const url = `/assets/assets/${cellValue}`
+              return <router-link to={ url } >{ row.asset_info.hostname }</router-link>
             }
           },
           is_success: {

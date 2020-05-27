@@ -237,7 +237,7 @@ export const userRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  mode: 'history',
+  // mode: 'history',
   base: '/ui/',
   routes: constantRoutes
 })

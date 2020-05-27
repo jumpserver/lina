@@ -62,7 +62,7 @@ export default {
           window.location.href = `/`
           break
         case 'logout':
-          window.location.href = `/auth/logout/?next=${this.$route.fullPath}`
+          window.location.href = `/core/auth/logout/?next=${this.$route.fullPath}`
           break
         case 'apiKey':
           this.$refs.api.showApi()

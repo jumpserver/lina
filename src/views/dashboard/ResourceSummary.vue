@@ -32,7 +32,7 @@ export default {
             type: 'success'
           },
           body: {
-            link: '/users/users',
+            route: `/users/users`,
             count: this.counter.total_count_users,
             comment: 'All users'
           }
@@ -44,7 +44,7 @@ export default {
             type: 'info'
           },
           body: {
-            link: '/users/assets',
+            route: `/assets/assets`,
             count: this.counter.total_count_assets,
             comment: 'All assets'
           }
@@ -56,7 +56,7 @@ export default {
             type: 'primary'
           },
           body: {
-            link: '/terminal/sessions',
+            route: `/terminal/sessions`,
             count: this.counter.total_count_online_users,
             comment: 'Online users'
           }
@@ -68,7 +68,7 @@ export default {
             type: 'danger'
           },
           body: {
-            link: '/terminal/sessions',
+            route: `/terminal/sessions`,
             count: this.counter.total_count_online_sessions,
             comment: 'Online sessions'
           }
