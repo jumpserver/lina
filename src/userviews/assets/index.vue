@@ -50,21 +50,21 @@ export default {
             prop: 'SystemUsers',
             align: 'center',
             formatter: SystemUserFormatter,
-            label: this.$t('assets.SystemUsers')
-          },
-          {
-            prop: 'comment',
-            align: 'center',
-            label: this.$t('assets.Comment')
+            label: this.$t('assets.SystemUsers'),
+            width: '200px',
+            getUrl: ({ row }) => {
+              return `/api/v1/perms/users/assets/${row.id}/system-users/?cache_policy=1`
+            }
           },
           {
             prop: 'id',
             align: 'center',
             formatter: ConnectFormatter,
-            width: '200px',
+            width: '100px',
             label: this.$t('common.action'),
             actions: {
               onDelete: function({ row, col, cellValue, reload }) {
+                // Todo: 对接api
                 alert('接口错误：获取不到对应的资产状态')
               },
               onUpdate: function({ row, col, cellValue, reload }) {

@@ -19,6 +19,17 @@
   min-width: 200px;
 }
 
+.nest-menu .el-submenu__title {
+  height: 32px;
+  line-height: 2;
+  padding: 0 52px;
+  min-width: 200px;
+}
+
+.nest-menu li.is-opened, .nest-menu li.is-active {
+  border-left: none;
+}
+
 .el-menu-item, .el-submenu__title {
   height: 46px;
   line-height: 46px;
@@ -57,6 +68,7 @@ li.is-opened, li.is-active {
 .nest-menu:last-child {
   padding-bottom: 10px;
 }
+
 
 
 

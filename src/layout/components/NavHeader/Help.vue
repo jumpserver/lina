@@ -1,18 +1,30 @@
 <template>
-  <el-dropdown trigger="click">
+  <el-dropdown trigger="click" @command="handleCommand">
     <span class="el-dropdown-link">
       {{ $t('common.nav.Help') }}<i class="el-icon-arrow-down el-icon--right" />
     </span>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item icon="el-icon-plus">{{ $t('common.nav.Docs') }}</el-dropdown-item>
-      <el-dropdown-item icon="el-icon-circle-plus">{{ $t('common.nav.Support') }}</el-dropdown-item>
+      <el-dropdown-item icon="el-icon-plus" command="docs">{{ $t('common.nav.Docs') }}</el-dropdown-item>
+      <el-dropdown-item icon="el-icon-circle-plus" command="support">{{ $t('common.nav.Support') }}</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
 
 <script>
 export default {
-  name: 'Help'
+  name: 'Help',
+  methods: {
+    handleCommand(command) {
+      switch (command) {
+        case 'support':
+          window.open('https://jinshuju.net/f/sQ91MK', '_blank')
+          break
+        default:
+          window.open('http://docs.jumpserver.org', '_blank')
+          break
+      }
+    }
+  }
 }
 </script>
 

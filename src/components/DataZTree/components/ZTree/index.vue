@@ -2,9 +2,7 @@
   <div>
     <div class="treebox">
       <ul id="ztree" class="ztree">
-        <div>
-          {{ this.$t('common.tree.Loading') }}...
-        </div>
+        {{ this.$t('common.tree.Loading') }}...
       </ul>
     </div>
     <div id="rMenu">
@@ -78,20 +76,27 @@ export default {
     },
     rootNodeAddDom: function(ztree, callback) {
       const vm = this
-      var refreshIcon = "<a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
-      var rootNode = ztree.getNodes()[0]
+      const refreshIcon = "<a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
+      const rootNode = ztree.getNodes()[0]
+      let $rootNodeRef
       if (rootNode) {
-        var $rootNodeRef = $('#' + rootNode.tId + '_a')
+        $rootNodeRef = $('#' + rootNode.tId + '_a')
         $rootNodeRef.after(refreshIcon)
       } else {
         $rootNodeRef = $('#' + ztree.setting.treeId)
         $rootNodeRef.html(refreshIcon)
       }
-      var refreshIconRef = $('#tree-refresh')
+      const refreshIconRef = $('#tree-refresh')
       refreshIconRef.bind('click', function() {
         ztree.destroy()
-        callback()
-        vm.initTree()
+        const result = callback()
+        if (result && result.then) {
+          result.finally(() => {
+            vm.initTree()
+          })
+        } else {
+          vm.initTree()
+        }
       })
     }
   }

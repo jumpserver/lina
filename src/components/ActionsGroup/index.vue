@@ -73,9 +73,6 @@ export default {
       return this.moreActionsTitle || this.$t('common.MoreActions')
     }
   },
-  mounted() {
-    console.log(this.moreActionsType)
-  },
   methods: {
     handleClick(item) {
       const action = this.totalNamedActions[item]

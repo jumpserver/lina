@@ -59,7 +59,6 @@ export default {
   methods: {
     handleUrlChange(_url) {
       this.$set(this.iTableConfig, 'url', _url)
-      console.log(this.iTableConfig)
     }
   }
 }

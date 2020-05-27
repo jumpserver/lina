@@ -12,7 +12,7 @@ import CustomActionsFormatter from './CustomActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 import ConnectFormatter from './ConnectFormatter'
-import SystemUserFormatter from './SystemUserFormatter'
+import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
 import ShowKeyFormatter from '@/components/ListTable/formatters/ShowKeyFormatter'
 
 export default {

@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import { DetailFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, SystemUserFormatter } from '@/components/ListTable/formatters'
 import TreeTable from '../TreeTable'
 
 export default {
@@ -34,8 +34,9 @@ export default {
     },
     getShowUrl: {
       type: Function,
-      default(assetId, vm) {
-        return ''
+      default({ row, col }) {
+        console.log(this.tableUrl)
+        return this.tableUrl.replace('/assets/', `/assets/${row.id}/system-users/?cache_policy=1`)
       }
     }
   },
@@ -50,7 +51,8 @@ export default {
         // ?assets=0不显示资产. =1显示资产
         treeUrl: this.treeUrl,
         callback: {
-          onSelected: (event, node) => vm.onSelected(node, vm)
+          onSelected: (event, node) => vm.onSelected(node, vm),
+          refresh: vm.refreshObjectAssetPermission
         }
       },
       tableConfig: {
@@ -73,17 +75,8 @@ export default {
             prop: 'systemUsers',
             label: this.$t('assets.SystemUsers'),
             align: 'center',
-            formatter: (row, col, value) => {
-              const data = { title: this.$t('common.Show') }
-              // Todo: 显示真正的系统用户
-              const show = function() {
-                data.title = 'Hello world'
-                console.log(this)
-                console.log(data)
-                console.log('hello: ', value)
-              }
-              return <el-link type='success' onClick={show}> {data.title} </el-link>
-            },
+            formatter: SystemUserFormatter,
+            getUrl: this.getShowUrl.bind(this),
             width: '200px'
           }
         ]
@@ -96,7 +89,13 @@ export default {
     }
   },
   methods: {
-
+    refreshObjectAssetPermission() {
+      const url = this.tableUrl.replace('/assets/', '/asset-permissions/cache/')
+      if (url.indexOf('user-groups')) {
+        return false
+      }
+      return this.$axios.delete(url)
+    }
   }
 }
 </script>

@@ -246,9 +246,6 @@ export default {
       this.relationConfig.hasObjectsId = iNew.users
     }
   },
-  mounted() {
-    console.log('Object is', this.object)
-  },
   methods: {
   }
 }
