@@ -14,7 +14,7 @@ import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
-  name: 'Detail',
+  name: 'UserProfile',
   components: {
     DetailCard,
     QuickActions
@@ -30,6 +30,16 @@ export default {
       quickActions: [
         {
           title: this.$t('assets.SetMFA'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Reset')
+          },
+          callbacks: {
+            click: function() {}
+          }
+        },
+        {
+          title: this.$t('assets.UpdateMFA'),
           attrs: {
             type: 'primary',
             label: this.$t('common.Reset')

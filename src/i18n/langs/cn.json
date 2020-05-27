@@ -69,6 +69,7 @@
     "Role": "角色",
     "SerialNumber": "序列号",
     "SetMFA": "设置多因子认证",
+    "UpdateMFA": "更改多因子认证",
     "Source": "来源",
     "SystemUserDetail": "系统用户详情",
     "SystemUsers": "系统用户",
