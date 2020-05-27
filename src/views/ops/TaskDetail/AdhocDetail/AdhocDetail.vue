@@ -13,7 +13,7 @@
 <script>
 import DetailCard from '@/components/DetailCard/index'
 import { toSafeLocalDateStr } from '@/utils/common'
-import RunInfoCard from '../../runinfocard/RunInfoCard'
+import RunInfoCard from '../../RunInfoCard'
 
 export default {
   name: 'AdhocDetail',

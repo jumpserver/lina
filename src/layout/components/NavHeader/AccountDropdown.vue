@@ -24,7 +24,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ApiKey from '@/views/dashboard/ApiKey'
+import ApiKey from './ApiKey'
 import { getPermission, setPermission } from '@/utils/auth'
 
 export default {

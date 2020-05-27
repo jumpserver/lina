@@ -3,27 +3,27 @@ export default [
   {
     path: 'assets',
     name: 'AssetList',
-    component: () => import('@/views/assets/AssetList/AssetList.vue'),
+    component: () => import('@/views/assets/Asset/AssetList.vue'),
     meta: { title: i18n.t('route.AssetList') }
   },
   {
     path: 'assets/create',
     name: 'AssetCreate',
-    component: () => import('@/views/assets/AssetList/AssetCreateUpdate.vue'),
+    component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
     meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/assets/assets' },
     hidden: true
   },
   {
     path: 'assets/:id',
     name: 'AssetDetail',
-    component: () => import('@/views/assets/AssetList/AssetListDetail/index.vue'),
+    component: () => import('@/views/assets/Asset/AssetDetail/index.vue'),
     meta: { title: i18n.t('route.AssetDetail'), activeMenu: '/assets/assets' },
     hidden: true
   },
   {
     path: 'assets/:id/update',
     name: 'AssetUpdate',
-    component: () => import('@/views/assets/AssetList/AssetCreateUpdate.vue'),
+    component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
     meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/assets/assets' },
     hidden: true
   },

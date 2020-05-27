@@ -15,7 +15,7 @@
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
-import RunInfoCard from '../../runinfocard/RunInfoCard'
+import RunInfoCard from '../../RunInfoCard'
 
 export default {
   name: 'HistoryExecutionDetail',
