@@ -1,20 +1,25 @@
 <template>
-  <GenericDetailPage :object.sync="AssetPermission" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
+  <AutoTabDetailPage :object.sync="AssetPermission" :config="config" :active-menu.sync="activeMenu" v-on="$listeners" @tab-click="TabClick">
     <keep-alive>
-      <component :is="config.activeMenu" :object="AssetPermission" />
+      <component :is="activeMenu" :object="AssetPermission" />
     </keep-alive>
-  </GenericDetailPage>
+  </AutoTabDetailPage>
 </template>
 
 <script>
-import { GenericDetailPage, TabPage } from '@/layout/components'
+import { TabPage } from '@/layout/components'
 import AssetPermissionDetail from './AssetPermissionDetail'
 import AssetPermissionUser from './AssetPermissionUser'
 import AssetPermissionAsset from './AssetPermissionAsset'
+import AutoTabDetailPage from './AutoTabDetailPage'
+
+const ASSET_PERMISSION_DETAIL = 'AssetPermissionDetail'
+const ASSET_PERMISSION_USER = 'AssetPermissionUser'
+const ASSET_PERMISSION_ASSET = 'AssetPermissionAsset'
 
 export default {
   components: {
-    GenericDetailPage,
+    AutoTabDetailPage,
     AssetPermissionDetail,
     AssetPermissionUser,
     AssetPermissionAsset,
@@ -26,20 +31,24 @@ export default {
         name: '', users_amount: 0, user_groups_amount: 0, assets_amount: 0, nodes_amount: 0, system_users_amount: 0,
         date_start: '', date_expired: ''
       },
+      activeMenu: '',
       config: {
-        activeMenu: 'AssetPermissionDetail',
+        colMenuMapper: {
+          users_amount: ASSET_PERMISSION_USER,
+          assets_amount: ASSET_PERMISSION_ASSET
+        },
         submenu: [
           {
             title: this.$t('perms.assetPermissionDetail'),
-            name: 'AssetPermissionDetail'
+            name: ASSET_PERMISSION_DETAIL
           },
           {
             title: this.$t('perms.usersAndUserGroups'),
-            name: 'AssetPermissionUser'
+            name: ASSET_PERMISSION_USER
           },
           {
             title: this.$t('perms.assetAndNode'),
-            name: 'AssetPermissionAsset'
+            name: ASSET_PERMISSION_ASSET
           }
         ]
       }

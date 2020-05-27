@@ -12,7 +12,7 @@ export default {
       const defaultRoute = this.$route.name.replace('List', 'Detail')
       const routeName = this.col.route || this.col.detailRoute || defaultRoute
       this.$log.debug('Will go to detail route: ', routeName)
-      this.$router.push({ name: routeName, params: { id: this.row.id }})
+      this.$router.push({ name: routeName, params: { id: this.row.id }, query: { col: this.col.prop }})
     }
   }
 }

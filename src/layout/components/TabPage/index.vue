@@ -54,7 +54,9 @@ export default {
   },
   mounted() {
     // 尝试从cookie中取活跃的tab
-    this.iActiveMenu = this.getPropActiveTab()
+    if (!this.activeMenu) {
+      this.iActiveMenu = this.getPropActiveTab()
+    }
   },
   methods: {
     handleTabClick(tab) {
