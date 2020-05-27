@@ -26,18 +26,18 @@ export default {
         ],
         columnsMeta: {
           short_id: {
-            label: this.$t('jobcenter.version')
+            label: this.$t('ops.version')
           },
           hosts: {
-            label: this.$t('jobcenter.hosts'),
+            label: this.$t('ops.hosts'),
             formatter: LengthFormatter,
             showOverflowTooltip: true
           },
           pattern: {
-            label: this.$t('jobcenter.pattern')
+            label: this.$t('ops.pattern')
           },
           run_as: {
-            label: this.$t('jobcenter.runAs'),
+            label: this.$t('ops.runAs'),
             formatter: function(row) {
               if (row.run_as_admin) {
                 return 'Admin'
@@ -48,10 +48,10 @@ export default {
             }
           },
           become_display: {
-            label: this.$t('jobcenter.become')
+            label: this.$t('ops.become')
           },
           date_created: {
-            label: this.$t('jobcenter.datetime'),
+            label: this.$t('ops.datetime'),
             formatter: function(row) {
               return toSafeLocalDateStr(row.date_created)
             }
@@ -65,7 +65,7 @@ export default {
               extraActions: [
                 {
                   name: 'detail',
-                  title: this.$t('jobcenter.detail'),
+                  title: this.$t('ops.detail'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
                     return this.$router.push({ name: 'AdhocDetail', params: { id: cellValue }})

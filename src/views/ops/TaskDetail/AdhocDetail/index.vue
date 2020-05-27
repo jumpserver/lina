@@ -23,14 +23,14 @@ export default {
       AdhocDetail: {},
       config: {
         activeMenu: 'AdhocDetail',
-        title: this.$t('jobcenter.taskDetail'),
+        title: this.$t('ops.taskDetail'),
         submenu: [
           {
-            title: this.$t('jobcenter.versionDetail'),
+            title: this.$t('ops.versionDetail'),
             name: 'AdhocDetail'
           },
           {
-            title: this.$t('jobcenter.versionRunExecution'),
+            title: this.$t('ops.versionRunExecution'),
             name: 'AdhocExecutionHistory'
           }
         ],

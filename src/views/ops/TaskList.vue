@@ -2,7 +2,7 @@
   <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
-<script>
+<script type="text/jsx">
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
 
@@ -20,7 +20,7 @@ export default {
             showOverflowTooltip: true
           },
           runtimes: {
-            label: this.$t('jobcenter.runTimes'),
+            label: this.$t('ops.runTimes'),
             formatter: function(row) {
               const summary = <div>
                 <span class='text-primary'>{row.summary.success}</span>/
@@ -31,13 +31,13 @@ export default {
             }
           },
           host_amount: {
-            label: this.$t('jobcenter.hosts'),
+            label: this.$t('ops.hosts'),
             formatter: function(row) {
               return row.latest_execution.hosts_amount
             }
           },
           is_success: {
-            label: this.$t('jobcenter.success'),
+            label: this.$t('ops.success'),
             align: 'center',
             width: '80px',
             formatter: row => {
@@ -48,13 +48,13 @@ export default {
             }
           },
           date_start: {
-            label: this.$t('jobcenter.date'),
+            label: this.$t('ops.date'),
             formatter: function(row) {
               return toSafeLocalDateStr(row.latest_execution.date_start)
             }
           },
           time: {
-            label: this.$t('jobcenter.time'),
+            label: this.$t('ops.time'),
             formatter: function(row) {
               return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
             }
@@ -66,7 +66,7 @@ export default {
               extraActions: [
                 {
                   name: 'run',
-                  title: this.$t('jobcenter.run'),
+                  title: this.$t('ops.run'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
                     this.$axios.get(

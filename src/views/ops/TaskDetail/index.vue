@@ -28,15 +28,15 @@ export default {
         activeMenu: 'TaskDetail',
         submenu: [
           {
-            title: this.$t('jobcenter.taskDetail'),
+            title: this.$t('ops.taskDetail'),
             name: 'TaskDetail'
           },
           {
-            title: this.$t('jobcenter.taskVersions'),
+            title: this.$t('ops.taskVersions'),
             name: 'TaskAdhoc'
           },
           {
-            title: this.$t('jobcenter.execution'),
+            title: this.$t('ops.execution'),
             name: 'TaskHistory'
           }
         ],

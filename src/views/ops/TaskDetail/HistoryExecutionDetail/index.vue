@@ -23,10 +23,10 @@ export default {
       HistoryExecutionDetail: {},
       config: {
         activeMenu: 'HistoryExecutionDetail',
-        title: this.$t('jobcenter.executionDetail'),
+        title: this.$t('ops.executionDetail'),
         submenu: [
           {
-            title: this.$t('jobcenter.executionDetail'),
+            title: this.$t('ops.executionDetail'),
             name: 'HistoryExecutionDetail'
           }
         ],

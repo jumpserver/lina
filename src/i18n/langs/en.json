@@ -70,7 +70,6 @@
     "SerialNumber": "Serial number",
     "SetMFA": "Set MFA",
     "Source": "Source",
-    "SystemUser": "System user",
     "SystemUserDetail": "System user detail",
     "SystemUsers": "System users",
     "Test": "Test",
@@ -120,6 +119,8 @@
     "Cancel": "Cancel",
     "Close": "Close",
     "Command filter": "Command filter",
+    "AddSuccessMsg": "Add success",
+    "RemoveSuccessMsg": "Remove success",
     "Comment": "Comment",
     "Confirm": "Confirm",
     "Create": "Create",
@@ -162,7 +163,6 @@
     "dateExpired": "Date expired",
     "deleteErrorMsg": "Delete failed",
     "deleteSelected": "Delete selected",
-    "deleteSuccessMsg": "Delete success",
     "deleteWarningMsg": "Are you sure to delete ",
     "disableSelected": "Disable selected",
     "fieldRequiredError": "This field is required",
@@ -228,7 +228,7 @@
     "Weekly": "Weekly",
     "timesWeekUnit": "times/week"
   },
-  "jobcenter": {
+  "ops": {
     "ID": "ID",
     "No": "No",
     "Yes": "Yes",
@@ -403,7 +403,8 @@
     "UserUpdate": "User update",
     "Users": "Users",
     "WebFTP": "",
-    "WebTerminal": "Web terminal"
+    "WebTerminal": "Web terminal",
+    "BatchCommandLog": "Batch command log"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",

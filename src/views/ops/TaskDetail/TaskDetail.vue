@@ -35,10 +35,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('jobcenter.laskExecutionOutput'),
+          title: this.$t('ops.laskExecutionOutput'),
           attrs: {
             type: 'primary',
-            label: this.$t('jobcenter.run')
+            label: this.$t('ops.run')
           },
           callbacks: {
             click: function() {
@@ -50,7 +50,7 @@ export default {
       ],
       RunSuccessConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.lastRunSuccessHosts'),
+        title: this.$t('ops.lastRunSuccessHosts'),
         content: {
           hostname: 'linux',
           result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
@@ -58,7 +58,7 @@ export default {
       },
       RunFailedConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.lastRunFailedHosts'),
+        title: this.$t('ops.lastRunFailedHosts'),
         content: {
           hostname: 'window',
           result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
@@ -74,7 +74,7 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('jobcenter.ID'),
+          key: this.$t('ops.ID'),
           value: this.object.id
         },
         {
@@ -86,11 +86,11 @@ export default {
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('jobcenter.totalVersions'),
+          key: this.$t('ops.totalVersions'),
           value: JSON.stringify(this.object.summary.total)
         },
         {
-          key: this.$t('jobcenter.latestVersion'),
+          key: this.$t('ops.latestVersion'),
           value: this.object.latest_execution,
           callback: function(row, data) {
             const url = `/ops/adhoc/${data.adhoc}`
@@ -98,23 +98,23 @@ export default {
           }
         },
         {
-          key: this.$t('jobcenter.lastRun'),
+          key: this.$t('ops.lastRun'),
           value: toSafeLocalDateStr(this.object.latest_execution.date_finished)
         },
         {
-          key: this.$t('jobcenter.timeDelta'),
+          key: this.$t('ops.timeDelta'),
           value: this.object.latest_execution.timedelta.toFixed(2) + 's'
         },
         {
-          key: this.$t('jobcenter.isFinished'),
+          key: this.$t('ops.isFinished'),
           value: this.toChoicesDisplay(this.object.latest_execution.is_finished)
         },
         {
-          key: this.$t('jobcenter.isSuccess'),
+          key: this.$t('ops.isSuccess'),
           value: this.toChoicesDisplay(this.object.latest_execution.is_success)
         },
         {
-          key: this.$t('jobcenter.contents'),
+          key: this.$t('ops.contents'),
           value: 'api 没有该数据'
         }
       ]
@@ -123,9 +123,9 @@ export default {
   methods: {
     toChoicesDisplay(c) {
       if (!c) {
-        return this.$t('jobcenter.No')
+        return this.$t('ops.No')
       }
-      return this.$t('jobcenter.Yes')
+      return this.$t('ops.Yes')
     }
   }
 }

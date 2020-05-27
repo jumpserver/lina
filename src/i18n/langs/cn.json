@@ -112,6 +112,8 @@
     "Actions": "操作",
     "Activate": "激活",
     "Active": "激活中",
+    "AddSuccessMsg": "添加成功",
+    "RemoveSuccessMsg": "移除成功",
     "Add": "添加",
     "Auth": "认证",
     "Basic": "基本",
@@ -228,7 +230,7 @@
     "Weekly": "按周",
     "timesWeekUnit": "次/周"
   },
-  "jobcenter": {
+  "ops": {
     "ID": "ID",
     "No": "否",
     "Yes": "是",
@@ -402,7 +404,8 @@
     "UserUpdate": "更新用户",
     "Users": "用户管理",
     "WebFTP": "文件管理",
-    "WebTerminal": "Web终端"
+    "WebTerminal": "Web终端",
+    "BatchCommandLog": "批量命令"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",

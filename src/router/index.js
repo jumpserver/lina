@@ -35,7 +35,7 @@ import AssetsRoute from './assets'
 import ApplicationsRoute from './applications'
 import PermsRoute from './perms'
 import SessionsRoute from './sessions'
-import OpsRoutes from './jobcenter'
+import OpsRoutes from './ops'
 import TicketsRoutes from './tickets'
 import AuditsRoutes from './audits'
 
@@ -206,7 +206,7 @@ export const userRoutes = [
       {
         path: '',
         name: 'CommandExecutions',
-        component: () => import('@/views/jobcenter/CommandExecution'),
+        component: () => import('@/views/ops/CommandExecution'),
         meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal' }
       }
     ]

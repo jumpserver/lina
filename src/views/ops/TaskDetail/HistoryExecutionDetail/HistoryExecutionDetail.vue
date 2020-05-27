@@ -35,10 +35,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('jobcenter.output'),
+          title: this.$t('ops.output'),
           attrs: {
             type: 'primary',
-            label: this.$t('jobcenter.run')
+            label: this.$t('ops.run')
           },
           callbacks: {
             click: function() {
@@ -50,7 +50,7 @@ export default {
       ],
       RunSuccessConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.lastRunSuccessHosts'),
+        title: this.$t('ops.lastRunSuccessHosts'),
         content: {
           hostname: 'linux',
           result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
@@ -58,7 +58,7 @@ export default {
       },
       RunFailedConfig: {
         icon: 'fa-info',
-        title: this.$t('jobcenter.lastRunFailedHosts'),
+        title: this.$t('ops.lastRunFailedHosts'),
         content: {
           hostname: 'linux',
           result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
@@ -73,31 +73,31 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('jobcenter.ID'),
+          key: this.$t('ops.ID'),
           value: this.object.id
         },
         {
-          key: this.$t('jobcenter.taskName'),
+          key: this.$t('ops.taskName'),
           value: this.object.task_display.replace('@', '')
         },
         {
-          key: this.$t('jobcenter.version'),
+          key: this.$t('ops.version'),
           value: this.object.adhoc_short_id
         },
         {
-          key: this.$t('jobcenter.dateStart'),
+          key: this.$t('ops.dateStart'),
           value: toSafeLocalDateStr(this.object.date_start)
         },
         {
-          key: this.$t('jobcenter.timeDelta'),
+          key: this.$t('ops.timeDelta'),
           value: this.object.timedelta.toFixed(2) + 's'
         },
         {
-          key: this.$t('jobcenter.isFinished'),
+          key: this.$t('ops.isFinished'),
           value: this.toChoicesDisplay(this.object.is_finished)
         },
         {
-          key: this.$t('jobcenter.isSuccess'),
+          key: this.$t('ops.isSuccess'),
           value: this.toChoicesDisplay(this.object.is_success)
         }
       ]
@@ -106,9 +106,9 @@ export default {
   methods: {
     toChoicesDisplay(c) {
       if (!c) {
-        return this.$t('jobcenter.No')
+        return this.$t('ops.No')
       }
-      return this.$t('jobcenter.Yes')
+      return this.$t('ops.Yes')
     }
   }
 }

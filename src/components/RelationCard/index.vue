@@ -99,6 +99,7 @@ export default {
           this.$log.debug('disabled values remove index: ', i)
           that.select2.disabledValues.splice(i, 1)
         }
+        that.$message.success(that.$t('common.RemoveSuccessMsg'))
       }
     },
     performAdd: {
@@ -108,9 +109,10 @@ export default {
     onAddSuccess: {
       type: Function,
       default(objects, that) {
-        this.$log.debug('Select value', that.select2.value)
+        that.$log.debug('Select value', that.select2.value)
         that.iHasObjects = [...that.iHasObjects, ...objects]
         that.$refs.select2.clearSelected()
+        that.$message.success(that.$t('common.AddSuccessMsg'))
       }
     }
   },
@@ -219,7 +221,6 @@ export default {
     },
     addObjects() {
       const objects = this.$refs.select2.getOptionsByValues(this.select2.value)
-      this.$log.debug('Object is: ', objects)
       this.performAdd(objects, this).then(
         () => this.onAddSuccess(objects, this)
       )

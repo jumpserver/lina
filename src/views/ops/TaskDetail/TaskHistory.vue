@@ -4,18 +4,23 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'AdhocExecutionHistory',
+  name: 'TaskHistory',
   components: {
     ListTable
+  },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/ops/adhoc-executions/?adhoc=${this.$route.params.id}`,
+        url: `/api/v1/ops/adhoc-executions/?task=${this.object.id}`,
         columns: [
           'date_start', 'stat', 'ratio', 'is_finished', 'is_success', 'timedelta', 'adhoc_short_id', 'actions'
         ],
@@ -26,7 +31,7 @@ export default {
             }
           },
           stat: {
-            label: this.$t('jobcenter.stat'),
+            label: this.$t('ops.stat'),
             align: 'center',
             width: '80px',
             formatter: function(row) {
@@ -39,7 +44,7 @@ export default {
             }
           },
           ratio: {
-            label: this.$t('jobcenter.ratio'),
+            label: this.$t('ops.ratio'),
             align: 'center',
             width: '80px',
             formatter: function(row) {
@@ -53,25 +58,24 @@ export default {
           is_finished: {
             align: 'center',
             width: '200px',
-            label: this.$t('jobcenter.isFinished')
+            label: this.$t('ops.isFinished')
           },
           is_success: {
             align: 'center',
             width: '200px',
-            label: this.$t('jobcenter.isSuccess')
+            label: this.$t('ops.isSuccess')
           },
           timedelta: {
-            label: this.$t('jobcenter.time'),
+            label: this.$t('ops.time'),
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
           },
           adhoc_short_id: {
-            label: this.$t('jobcenter.version')
+            label: this.$t('ops.version')
           },
           actions: {
             prop: 'id',
-            formatter: ActionsFormatter,
             actions: {
               hasEdit: false,
               hasDelete: false,
@@ -79,7 +83,7 @@ export default {
               extraActions: [
                 {
                   name: 'detail',
-                  title: this.$t('jobcenter.detail'),
+                  title: this.$t('ops.detail'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
                     return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: cellValue }})
