@@ -7,6 +7,17 @@ import BaseFormatter from './base'
 export default {
   name: 'DetailFormatter',
   extends: BaseFormatter,
+  props: {
+    formatterArgsDefault: {
+      type: Object,
+      default: () => {
+        return {
+          route: '404',
+          routeQuery: {}
+        }
+      }
+    }
+  },
   methods: {
     goDetail() {
       const defaultRoute = this.$route.name.replace('List', 'Detail')
