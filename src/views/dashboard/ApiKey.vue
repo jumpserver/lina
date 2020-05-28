@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog width="70%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
+    <Dialog width="45%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
       <div>
         <el-alert type="success"> {{ helpMessage }} </el-alert>
         <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
@@ -27,14 +27,23 @@ export default {
       showDialog: false,
       helpMessage: this.$t('setting.helpText.ApiKeyList'),
       tableConfig: {
+        hasSelection: true,
         url: `/api/v1/authentication/access-keys/`,
         columns: [
-          'id', 'secret', 'is_active', 'date_created', 'actions'
+          'id_display', 'secret', 'is_active', 'date_created', 'actions'
         ],
-        hasSelection: false,
         columnsMeta: {
+          id_display: {
+            label: 'ID',
+            width: '315px'
+          },
           secret: {
+            label: '密文',
+            width: '315px',
             formatter: ShowKeyFormatter
+          },
+          is_active: {
+            width: '80px'
           },
           date_created: {
             label: this.$t('setting.DateCreated'),
@@ -67,12 +76,12 @@ export default {
 
       },
       headerActions: {
+        hasSearch: true,
         hasRightActions: false,
         hasExport: false,
         hasImport: false,
         hasRefresh: true,
         hasBulkDelete: false,
-        hasSearch: false,
         hasCreate: false,
         extraActions: [
           {
@@ -80,7 +89,7 @@ export default {
             title: this.$t('setting.Create'),
             type: 'primary',
             can: true,
-            callback: () => {
+            callback: function() {
               this.$axios.post(
                 `/api/v1/authentication/access-keys/`
               ).then(res => {
@@ -88,8 +97,8 @@ export default {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
               }).catch(error => {
                 this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-              }).bind(this)
-            }
+              })
+            }.bind(this)
           }
         ]
       }
