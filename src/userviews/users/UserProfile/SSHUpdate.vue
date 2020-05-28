@@ -31,8 +31,8 @@ export default {
     return {
       url: '/api/v1/users/profile/public-key/',
       fields: [
-        ['原来SSH密钥', ['public_key_comment', 'public_key_hash_md5']],
-        ['更新SSH密码', ['public_key']]
+        ['原来SSH公钥', ['public_key_comment', 'public_key_hash_md5']],
+        ['更新SSH公钥', ['public_key']]
       ],
       fieldsMeta: {
         public_key_comment: {
