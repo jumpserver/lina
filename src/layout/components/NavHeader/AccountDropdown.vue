@@ -53,6 +53,9 @@ export default {
   methods: {
     handleClick(val) {
       switch (val) {
+        case 'profile':
+          this.$router.push({ name: 'userProfile' })
+          break
         case 'AdminPage':
           setPermission('Admin')
           window.location.href = `/`

@@ -22,8 +22,9 @@ export default {
     goDetail() {
       const defaultRoute = this.$route.name.replace('List', 'Detail')
       const routeName = this.col.route || this.col.detailRoute || defaultRoute
+      const routeQuery = this.col.routeQuery || {}
       this.$log.debug('Will go to detail route: ', routeName)
-      this.$router.push({ name: routeName, params: { id: this.row.id }})
+      this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
     }
   }
 }

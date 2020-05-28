@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -35,20 +35,29 @@ export default {
           { label: this.$t('perms.SystemUser'), key: 'system_user' },
           { label: '继承(先占位)', key: 'all=0' }
         ],
-        columns: ['expand', 'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_active', 'actions'],
+        columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_active', 'actions'],
         columnsMeta: {
-          expand: {
-            type: 'expand',
-            formatter: ExpandAssetPermissionFormatter
+          name: {
+            routeQuery: {
+              activeTab: 'AssetPermissionDetail'
+            }
           },
           users_amount: {
-            label: this.$t('perms.User')
+            label: this.$t('perms.User'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'AssetPermissionUser'
+            }
           },
           user_groups_amount: {
             label: this.$t('perms.UserGroups')
           },
           assets_amount: {
-            label: this.$t('perms.Asset')
+            label: this.$t('perms.Asset'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'AssetPermissionAsset'
+            }
           },
           nodes_amount: {
             label: this.$t('perms.Node')

@@ -50,7 +50,31 @@ export const constantRoutes = [
   }
 ]
 
+/**
+ * admin and user routes
+ * the routes that need to be dynamically loaded based on admin or user roles
+ */
+export const commonRoutes = {
+  userProfile: {
+    path: '/users/profile',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'userProfile',
+        component: () => import('@/userviews/users/index'),
+        meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
+      }
+    ]
+  }
+}
+
+/**
+ * admin
+ * the routes that need to be dynamically loaded based on admin roles
+ */
 export const adminRoutes = [
+  Object.assign({}, commonRoutes.userProfile, { hidden: true }),
   {
     path: '/',
     component: Layout,

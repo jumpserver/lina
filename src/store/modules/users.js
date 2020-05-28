@@ -11,7 +11,8 @@ const getDefaultState = () => {
     token: getToken(),
     profile: {},
     currentOrg: getCurrentOrg(),
-    orgs: []
+    orgs: [],
+    internalInit: Boolean
   }
 }
 
@@ -26,6 +27,9 @@ const mutations = {
   },
   SET_PROFILE: (state, profile) => {
     state.profile = profile
+  },
+  SET_STATUS: (state) => {
+    state.internalInit = true
   },
   SET_ORGS: (state, orgs) => {
     // API BUG FIX
@@ -61,18 +65,23 @@ const actions = {
   // get user Profile
   getProfile({ commit, state }) {
     return new Promise((resolve, reject) => {
+      if (!state.internalInit) {
+        reject('Init failed, please Login again.')
+      }
       getProfile().then(response => {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
-        const { admin_or_audit_orgs } = response
-        // const rules = [role]
+        const { admin_or_audit_orgs, rule } = response
+        const rules = [rule]
         // roles must be a non-empty array
-        // if (!rules || rules.length <= 0) {
-        //   reject('getProfile: roles must be a non-null array!')
-        // }
+        if (!rules || rules.length <= 0) {
+          reject('getProfile: roles must be a non-null array!')
+        }
+
         commit('SET_PROFILE', response)
         commit('SET_ORGS', admin_or_audit_orgs)
+        commit('SET_STATUS')
         resolve(response)
       }).catch(error => {
         reject(error)
