@@ -49,7 +49,7 @@ export default {
   components: { ActionsGroup },
   extends: BaseFormatter,
   props: {
-    actionsDefault: {
+    formatterArgsDefault: {
       type: Object,
       default: function() {
         return {
@@ -67,7 +67,7 @@ export default {
     }
   },
   data() {
-    const colActions = Object.assign(this.actionsDefault, this.col, this.col.actions)
+    const colActions = Object.assign(this.formatterArgsDefault, this.col, this.col.formatterArgs)
     const defaultActions = [
       {
         name: 'update',

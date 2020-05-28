@@ -49,8 +49,10 @@ export default {
             }
           },
           actions: {
-            detailRoute: 'RemoteAppPermissionDetail',
-            updateRoute: 'RemoteAppPermissionUpdate'
+            formatterArgs: {
+              detailRoute: 'RemoteAppPermissionDetail',
+              updateRoute: 'RemoteAppPermissionUpdate'
+            }
           }
         }
       },

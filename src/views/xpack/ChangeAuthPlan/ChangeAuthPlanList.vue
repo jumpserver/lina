@@ -35,21 +35,23 @@ export default {
           }
         },
         actions: {
-          extraActions: [
-            {
-              title: vm.$t('xpack.ChangeAuthPlan.Run'),
-              name: 'run',
-              type: 'info',
-              callback: function(data) {
-                this.$axios.post(
-                  `/api/v1/xpack/change-auth-plan/plan-execution/`,
-                  { plan: data.cellValue }
-                ).then(res => {
-                  window.open(`/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                })
-              }.bind(this)
-            }
-          ]
+          formatterArgs: {
+            extraActions: [
+              {
+                title: vm.$t('xpack.ChangeAuthPlan.Run'),
+                name: 'run',
+                type: 'info',
+                callback: function(data) {
+                  this.$axios.post(
+                    `/api/v1/xpack/change-auth-plan/plan-execution/`,
+                    { plan: data.cellValue }
+                  ).then(res => {
+                    window.open(`/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                  })
+                }.bind(this)
+              }
+            ]
+          }
         }
       },
       headerActions: {

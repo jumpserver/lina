@@ -35,8 +35,10 @@ export default {
           }
         ],
         actions: {
-          canDelete: true,
-          canUpdate: true
+          formatterArgs: {
+            canDelete: true,
+            canUpdate: true
+          }
         }
       }
     }

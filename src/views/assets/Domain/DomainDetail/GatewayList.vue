@@ -54,7 +54,7 @@ export default {
             label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
-            actions: {
+            formatterArgs: {
               updateRoute: 'GatewayUpdate',
               performDelete: ({ row, col }) => {
                 const id = row.id

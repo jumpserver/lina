@@ -60,26 +60,28 @@ export default {
           },
           actions: {
             prop: 'id',
-            hasDelete: false,
-            hasUpdate: false,
-            extraActions: [
-              {
-                name: 'log',
-                type: 'primary',
-                title: this.$t('xpack.ChangeAuthPlan.Log'),
-                callback: function({ cellValue, tableData }) {
-                  window.open(`/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+            formatterArgs: {
+              hasDelete: false,
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'log',
+                  type: 'primary',
+                  title: this.$t('xpack.ChangeAuthPlan.Log'),
+                  callback: function({ cellValue, tableData }) {
+                    window.open(`/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                  }
+                },
+                {
+                  name: 'detail',
+                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                  type: 'info',
+                  callback: function({ cellValue, tableData }) {
+                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
+                  }
                 }
-              },
-              {
-                name: 'detail',
-                title: this.$t('xpack.ChangeAuthPlan.Detail'),
-                type: 'info',
-                callback: function({ cellValue, tableData }) {
-                  return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
-                }
-              }
-            ]
+              ]
+            }
           }
         }
       },

@@ -58,8 +58,10 @@ export default {
             label: this.$t('assets.SystemUsers')
           },
           actions: {
-            updateRoute: 'AssetPermissionUpdate',
-            detailRoute: 'AssetPermissionDetail'
+            formatterArgs: {
+              updateRoute: 'AssetPermissionUpdate',
+              detailRoute: 'AssetPermissionDetail'
+            }
           }
         }
       },

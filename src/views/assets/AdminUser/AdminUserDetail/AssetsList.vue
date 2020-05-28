@@ -76,7 +76,7 @@ export default {
             label: this.$t('common.Action'),
             align: 'center',
             formatter: CustomActionsFormatter,
-            actions: {
+            formatterArgs: {
               extraActions: [
                 {
                   name: this.$t('common.Delete'),

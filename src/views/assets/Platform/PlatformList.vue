@@ -38,7 +38,7 @@ export default {
             label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
-            actions: {
+            formatterArgs: {
               canDelete: (row, vaule) => {
                 return !row.internal
               },

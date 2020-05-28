@@ -51,7 +51,7 @@ export default {
             width: '200px',
             label: this.$t('common.Action'),
             updateRoute: 'SystemUserUpdate',
-            actions: {
+            formatterArgs: {
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/system-users/${id}/`

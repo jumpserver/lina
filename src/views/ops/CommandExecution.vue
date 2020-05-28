@@ -3,8 +3,7 @@
     <el-collapse-transition>
       <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
         <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
-          <component
-            :is="component"
+          <AutoDataZTree
             ref="AutoDataZTree"
             :setting="treeSetting"
             class="auto-data-ztree"
@@ -20,14 +19,14 @@
             <Term ref="xterm" />
             <div style="display: flex;margin-top:10px;justify-content: space-between">
               <div>
-                <CodeMirror :options="CodeMirrorOptions" @change="handleActionChange" />
+                <CodeMirror :options="codeMirrorOptions" @change="handleActionChange" />
               </div>
               <div style="display: flex;flex-direction: column ;justify-content: space-between">
-                <el-select v-model="selectedSystemuser" placeholder="请选择" @change="handleSystemUserChange">
+                <el-select v-model="selectedSystemUser" placeholder="请选择" @change="handleSystemUserChange">
                   <el-option
                     v-for="item in options"
                     :key="item.id"
-                    :disabled="item.protocol != 'ssh'"
+                    :disabled="item.protocol !== 'ssh'"
                     :label="`${item.name}(${item.username})`"
                     :value="item.id"
                   />
@@ -46,7 +45,6 @@
 import AutoDataZTree from '@/components/AutoDataZTree'
 import Term from '@/components/Term'
 import IBox from '@/components/IBox'
-import Select2 from '@/components/Select2'
 import CodeMirror from '@/components/CodeMirror'
 import Page from '@/layout/components/Page'
 export default {
@@ -55,14 +53,12 @@ export default {
     Term,
     AutoDataZTree,
     IBox,
-    Select2,
     Page,
     CodeMirror
   },
   data() {
     return {
-      component: 'AutoDataZTree',
-      CodeMirrorOptions: {
+      codeMirrorOptions: {
         lineNumbers: true,
         lineWrapping: true,
         mode: 'shell'
@@ -103,9 +99,10 @@ export default {
       iShowTree: true,
       actions: '',
       options: [],
-      selectedSystemuser: '',
+      selectedSystemUser: '',
       basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=1',
-      ws: ''
+      ws: '',
+      wsConnected: false
     }
   },
   computed: {
@@ -117,7 +114,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('api/v1/assets/system-users/').then(res => {
+    this.$axios.get('/api/v1/assets/system-users/').then(res => {
       this.options = res
     })
     this.xterm.write(`选择左侧资产, 选择运行的系统用户，批量执行命令`)
@@ -138,7 +135,6 @@ export default {
     },
     handleSystemUserChange(id) {
       this.treeSetting.treeUrl = `${this.basicUrl}&system_user=${id}`
-      console.log(this.treeSetting.treeUrl)
       this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.initTree()
     },
     getSelectedAssetsNode() {
@@ -178,14 +174,14 @@ export default {
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
         this.ws = new WebSocket(failOverWsURL)
-        this.ws.onmessage = (e) => {
-          const data = JSON.parse(e.data)
-          this.xterm.write(data.message)
-        }
+        this.setWsCallback()
         this.ws.onerror = (e) => {
-          this.xterm.write('Connect websocket server error')
+          this.xterm.write(this.wrapperError('Connect websocket server error'))
         }
       }
+      this.setWsCallback()
+    },
+    setWsCallback() {
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         this.xterm.write(data.message)
@@ -197,7 +193,7 @@ export default {
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       // const url = '{% url "api-ops:command-execution-list" %}?' + size
-      const run_as = this.selectedSystemuser()
+      const runAs = this.selectedSystemUser
       // const command = editor.getValue()
       const hosts = this.getSelectedAssetsNode().map(function(node) {
         return node.id
@@ -210,7 +206,7 @@ export default {
       //   this.xterm.write(this.wrapperError("{% trans 'No input command' %}"))
       //   return
       // }
-      if (!run_as) {
+      if (!runAs) {
         this.xterm.write(this.wrapperError("{% trans 'No system user was selected' %}"))
         return
       }

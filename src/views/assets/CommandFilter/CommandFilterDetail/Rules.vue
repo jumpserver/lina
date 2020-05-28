@@ -48,7 +48,7 @@ export default {
             label: this.$t('assets.Action'),
             formatter: ActionsFormatter,
             width: '200px',
-            actions: {
+            formatterArgs: {
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/cmd-filters/${this.object.id}/rules/${id}/`

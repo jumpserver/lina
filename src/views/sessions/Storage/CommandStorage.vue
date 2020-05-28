@@ -56,7 +56,7 @@ export default {
           },
           actions: {
             prop: 'id',
-            actions: {
+            formatterArgs: {
               canUpdate: function(row, cellValue) {
                 return (row.name !== 'default' && row.name !== 'null')
               },

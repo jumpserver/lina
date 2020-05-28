@@ -30,16 +30,18 @@ export default {
             showOverflowTooltip: true
           },
           actions: {
-            hasDelete: () => this.currentOrgIsDefault,
-            extraActions: [
-              {
-                title: this.$t('users.Remove'),
-                name: 'remove',
-                type: 'warning',
-                has: () => !this.currentOrgIsDefault,
-                callback: this.removeUserFromOrg
-              }
-            ]
+            formatterArgs: {
+              hasDelete: () => this.currentOrgIsDefault,
+              extraActions: [
+                {
+                  title: this.$t('users.Remove'),
+                  name: 'remove',
+                  type: 'warning',
+                  has: () => !this.currentOrgIsDefault,
+                  callback: this.removeUserFromOrg
+                }
+              ]
+            }
           }
         }
       },

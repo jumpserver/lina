@@ -35,7 +35,7 @@ export default {
             formatter: ActionsFormatter,
             label: this.$t('assets.Action'),
             width: '200px',
-            actions: {
+            formatterArgs: {
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/labels/${id}/`

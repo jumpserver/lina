@@ -11,7 +11,9 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('route.DatabaseApp'), ['name', 'type', 'host', 'port', 'database', 'comment']]
+        [this.$t('common.Basic'), ['name', 'type']],
+        [this.$t('applications.mysql'), ['host', 'port', 'database']],
+        [this.$t('common.Others'), ['comment']]
       ],
       fieldsMeta: {
         type: {

@@ -19,6 +19,9 @@ export default {
           'name', 'type', 'asset', 'comment', 'actions'
         ],
         columnsMeta: {
+          name: {
+            route: 'RemoteAppDetail'
+          },
           type: {
             displayKey: 'get_type_display'
           },
@@ -26,12 +29,13 @@ export default {
             formatter: function(row, column, cellValue, index) {
               return <a class='detail el-link el-link--success is-underline' href={ `/assets/assets/${cellValue}` }>{ row.asset_info.hostname }</a>
             }
-          }
-        },
-        detailRoute: 'RemoteAppDetail',
-        actions: {
-          onUpdate: ({ row }) => {
-            vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
+          },
+          actions: {
+            formatterArgs: {
+              onUpdate: ({ row }) => {
+                vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
+              }
+            }
           }
         }
       },

@@ -11,19 +11,18 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const app_type = this.$route.query.type
-
-    const fields_map = REMOTE_APP_TYPE_FIELDS_MAP[app_type]
-
-    const app_type_meta = REMOTE_APP_TYPE_META_MAP[app_type]
+    const appType = this.$route.query.type
+    const fieldsMap = REMOTE_APP_TYPE_FIELDS_MAP[appType]
+    const appTypeMeta = REMOTE_APP_TYPE_META_MAP[appType]
 
     return {
       initial: {
-        type: app_type_meta.name
+        type: appTypeMeta.name
       },
       fields: [
-        [this.$t('route.RemoteApp'), ['name', 'asset', 'type', 'path', 'comment']],
-        [this.$t('applications.' + app_type), ['params']]
+        [this.$t('common.Basic'), ['name', 'asset', 'type', 'path']],
+        [this.$t('applications.' + appType), ['params']],
+        [this.$t('common.Others'), ['comment']]
       ],
       url: '/api/v1/applications/remote-apps/',
       fieldsMeta: {
@@ -47,15 +46,15 @@ export default {
           type: 'select',
           options: [
             {
-              label: app_type_meta.title,
-              value: app_type_meta.name
+              label: appTypeMeta.title,
+              value: appTypeMeta.name
             }
           ],
           disabled: true
         },
         params: {
           type: 'group',
-          items: fields_map
+          items: fieldsMap
         }
       }
     }

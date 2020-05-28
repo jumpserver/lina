@@ -24,35 +24,27 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
-        columns: [
-          {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+        columnsMeta: {
+          hostname: {
             formatter: DetailFormatter,
-            sortable: true,
             route: 'AssetDetail'
           },
-          {
-            prop: 'ip',
-            label: this.$t('assets.ip'),
-            sortable: 'custom'
+          ip: {
+            sortable: 'custom',
+            width: '120px'
           },
-          {
-            prop: 'hardware_info',
-            label: this.$t('assets.Hardware')
+          hardware_info: {
+            showOverflowTooltip: true
           },
-          {
-            prop: 'reachable',
+          reachable: {
             label: this.$t('assets.Reachable'),
-            formatter: BooleanFormatter
+            formatter: BooleanFormatter,
+            width: '80px',
+            align: 'center'
           },
-          {
-            prop: 'id',
-            align: 'center',
+          actions: {
             formatter: ActionsFormatter,
-            label: this.$t('assets.Action'),
-            width: '200px',
-            actions: {
+            formatterArgs: {
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
@@ -60,6 +52,9 @@ export default {
               }
             }
           }
+        },
+        columns: [
+          'hostname', 'ip', 'hardware_info', 'reachable', 'actions'
         ]
       },
       headerActions: {

@@ -13,14 +13,13 @@ export default {
       xterm: ''
     }
   },
-
   mounted: function() {
     const terminalContainer = this.$refs.terminal
     this.xterm = new Terminal(
       {
         fontFamily: 'monaco, Consolas, "Lucida Console", monospace',
         lineHeight: 1.2,
-        fontSize: 15,
+        fontSize: 13,
         rightClickSelectsWord: true,
         theme: {
           background: '#1f1b1b'

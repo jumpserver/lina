@@ -50,7 +50,9 @@ export default {
             }
           },
           actions: {
-            updateRoute: 'DatabasePermissionUpdate'
+            formatterArgs: {
+              updateRoute: 'DatabasePermissionUpdate'
+            }
           }
         }
       },

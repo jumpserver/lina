@@ -78,7 +78,7 @@ export default {
             align: 'center',
             label: this.$t('assets.Action'),
             formatter: CustomActionsFormatter,
-            actions: {
+            formatterArgs: {
               extraActions: [
                 {
                   name: this.$t('common.Delete'),

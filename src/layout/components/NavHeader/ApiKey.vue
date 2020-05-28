@@ -39,30 +39,31 @@ export default {
             formatter: DateFormatter
           },
           actions: {
-            onDelete: function({ row, col, cellValue, reload }) {
-              this.$axios.delete(
-                `/api/v1/authentication/access-keys/${row.id}/`
-              ).then(res => {
-                this.$refs.ListTable.reloadTable()
-                this.$message.success(this.$t('common.deleteSuccessMsg'))
-              }).catch(error => {
-                this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
-              })
-            }.bind(this),
-            onUpdate: function({ row, col, cellValue, reload }) {
-              this.$axios.patch(
-                `/api/v1/authentication/access-keys/${row.id}/`,
-                { is_active: !row.is_active }
-              ).then(res => {
-                this.$refs.ListTable.reloadTable()
-                this.$message.success(this.$t('common.updateSuccessMsg'))
-              }).catch(error => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-              })
-            }.bind(this)
+            formatterArgs: {
+              onDelete: function({ row, col, cellValue, reload }) {
+                this.$axios.delete(
+                  `/api/v1/authentication/access-keys/${row.id}/`
+                ).then(res => {
+                  this.$refs.ListTable.reloadTable()
+                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                }).catch(error => {
+                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                })
+              }.bind(this),
+              onUpdate: function({ row, col, cellValue, reload }) {
+                this.$axios.patch(
+                  `/api/v1/authentication/access-keys/${row.id}/`,
+                  { is_active: !row.is_active }
+                ).then(res => {
+                  this.$refs.ListTable.reloadTable()
+                  this.$message.success(this.$t('common.updateSuccessMsg'))
+                }).catch(error => {
+                  this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                })
+              }.bind(this)
+            }
           }
         }
-
       },
       headerActions: {
         hasRightActions: false,
