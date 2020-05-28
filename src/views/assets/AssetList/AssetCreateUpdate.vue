@@ -110,7 +110,7 @@ export default {
           type: 'switch'
         }
       },
-      url: '/api/v1/assets/assets'
+      url: '/api/v1/assets/assets/'
     }
   }
 }
