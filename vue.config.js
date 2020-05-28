@@ -47,7 +47,7 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
-      '^/(auth|static)': {
+      '^/(auth|static|dsers/profile/op/|users/profile/pubkey/generate/)': {
         target: `http://localhost:8080`,
         changeOrigin: true
       }

@@ -65,8 +65,8 @@ export const commonRoutes = {
     children: [
       {
         path: '',
-        name: 'userProfile',
-        component: () => import('@/userviews/users/index'),
+        name: 'UserProfile',
+        component: () => import('@/userviews/users/UserProfile/index'),
         meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
       }
     ]
