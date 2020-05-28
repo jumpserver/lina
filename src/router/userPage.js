@@ -41,18 +41,6 @@ export default [
     ]
   },
   {
-    path: '/users',
-    component: Layout,
-    children: [
-      {
-        path: '/users/profile',
-        name: 'profile',
-        component: () => import('@/userviews/users/index'),
-        meta: { title: i18n.t('route.UserProfile'), icon: 'user' }
-      }
-    ]
-  },
-  {
     path: '/command-executions',
     component: Layout,
     children: [

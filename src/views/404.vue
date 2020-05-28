@@ -3,7 +3,7 @@
     <div class="error-404-text">
       <h1 class="error-404-title">404 请求错误</h1>
       <p class="error-404-subtitle">无法访问当前页面</p>
-      <router-link to="dashboard" class="el-button el-button--success error-button">去往首页</router-link>
+      <a href="/ui/" class="el-button el-button--success error-button">去往首页</a>
     </div>
     <div class="error-404-image-container">
       <img class="error-404-error-image" src="@/assets/img/robot.png" alt="page error">
