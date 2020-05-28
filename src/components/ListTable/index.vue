@@ -2,7 +2,7 @@
   <div>
     <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <IBox class="table-content">
-      <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
+      <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" v-on="$listeners" @update="handleDataChange" />
     </IBox>
   </div>
 </template>
@@ -12,7 +12,6 @@ import AutoDataTable from '../AutoDataTable'
 import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
-
 export default {
   name: 'ListTable',
   components: {
@@ -35,7 +34,8 @@ export default {
   },
   data() {
     return {
-      selectedRows: []
+      selectedRows: [],
+      init: false
     }
   },
   computed: {
@@ -56,6 +56,24 @@ export default {
     },
     search(attrs) {
       return this.dataTable.search(attrs)
+    },
+    toggleRowSelection(row, isSelected) {
+      return this.dataTable.toggleRowSelection(row, isSelected)
+    },
+    handleDataChange(val, res) {
+      if (!this.init && this.tableConfig.defaultSelect !== undefined) {
+        const obj = {}
+        const arr = []
+        for (let i = 0, len = val.length; i < len; i++) {
+          if (this.tableConfig.defaultSelect.indexOf(val[i].id) > -1) {
+            this.toggleRowSelection(val[i], true)
+            arr.push(val[i])
+          }
+        }
+        arr.forEach((item, index) => { obj[index] = item })
+        this.dispatch('AssetSelect', 'SelectionChange', obj)
+        this.init = false
+      }
     }
   }
 }

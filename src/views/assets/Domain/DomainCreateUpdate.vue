@@ -29,7 +29,7 @@ export default {
         }
       },
 
-      url: '/api/v1/assets/domains'
+      url: '/api/v1/assets/domains/'
     }
   }
 }

@@ -100,6 +100,9 @@ export default {
     },
     getQuery() {
       return this.$refs.table.getQuery()
+    },
+    toggleRowSelection(row, isSelected) {
+      return this.$refs.table.toggleRowSelection(row, isSelected)
     }
   }
 }

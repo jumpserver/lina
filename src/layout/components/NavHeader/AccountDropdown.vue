@@ -54,7 +54,7 @@ export default {
     handleClick(val) {
       switch (val) {
         case 'profile':
-          this.$router.push({ name: 'userProfile' })
+          this.$router.push({ name: 'UserProfile' })
           break
         case 'AdminPage':
           setPermission('Admin')

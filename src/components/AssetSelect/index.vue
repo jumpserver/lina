@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select ref="select" v-model="internalValue" multiple placeholder="请选择资产" @focus="handleFocus" />
+    <el-select ref="select" v-model="internalValue" multiple :placeholder="placeholder" @focus="handleFocus" />
     <el-dialog
       :title="this.$t('assets.Assets')"
       :visible.sync="dialogVisible"
@@ -50,6 +50,7 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
+        defaultSelect: this.value,
         columns: [
           {
             prop: 'hostname',
@@ -81,7 +82,12 @@ export default {
     }
   },
   computed: {
-
+    placeholder() {
+      if (this.$route.params.id) {
+        return '点击查看已选择的资产'
+      }
+      return '请选择'
+    }
   },
   mounted() {
     this.$on('SelectionChange', (val) => {
