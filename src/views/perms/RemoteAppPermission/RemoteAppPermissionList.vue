@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -20,13 +21,25 @@ export default {
         ],
         columnsMeta: {
           users_amount: {
-            label: this.$t('users.Users')
+            label: this.$t('users.Users'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'RemoteAppPermissionUser'
+            }
           },
           user_groups_amount: {
-            label: this.$t('users.UserGroups')
+            label: this.$t('users.UserGroups'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'RemoteAppPermissionUser'
+            }
           },
           remote_apps_amount: {
-            label: this.$t('assets.RemoteApps')
+            label: this.$t('assets.RemoteApps'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'RemoteAppPermissionRemoteApp'
+            }
           },
           system_users_amount: {
             label: this.$t('assets.SystemUsers')
