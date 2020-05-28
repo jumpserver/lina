@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="asset-select-dialog">
     <el-select ref="select" v-model="internalValue" multiple :placeholder="placeholder" @focus="handleFocus" />
     <el-dialog
       :title="this.$t('assets.Assets')"
       :visible.sync="dialogVisible"
-      :before-close="handleClose"
-      width="60%"
+      custom-class="asset-select-dialog"
+      width="70%"
     >
       <GenericTreeListPage
         ref="ListPage"
@@ -39,7 +39,7 @@ export default {
       showValue: [],
       dialogVisible: false,
       treeSetting: {
-        showMenu: true,
+        showMenu: false,
         showRefresh: true,
         showAssets: false,
         url: '/api/v1/assets/assets/',
@@ -116,18 +116,12 @@ export default {
       this.dialogVisible = false
     },
     handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {
-        })
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
   .el-select{
     width: 100%;
   }
@@ -135,9 +129,17 @@ export default {
     display: none;
   }
   .el-dialog__wrapper /deep/.el-dialog__body{
-    padding: inherit !important;
+    padding: 5px 10px;
   }
   .page /deep/ .treebox{
     height: inherit !important;
   }
+  .asset-select-dialog >>> .transition-box:first-child {
+    background-color: #f3f3f3 ;
+  }
+
+  .el-dialog__wrapper /deep/.el-dialog__body .wrapper-content {
+    padding: 10px;
+  }
+
 </style>

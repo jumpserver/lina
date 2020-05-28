@@ -17,33 +17,47 @@ export default {
         columns: ['name', 'users_amount', 'user_groups_amount', 'database_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
           name: {
-            routeQuery: {
-              activeTab: 'DatabaseAppPermissionDetail'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'DatabaseAppPermissionDetail'
+              }
             }
           },
           users_amount: {
             label: this.$t('perms.User'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'DatabaseAppPermissionUser'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'DatabaseAppPermissionUser'
+              }
             }
           },
           user_groups_amount: {
             label: this.$t('perms.UserGroups'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'DatabaseAppPermissionUser'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'DatabaseAppPermissionUser'
+              }
             }
           },
           database_apps_amount: {
             label: this.$t('perms.databaseApp'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'DatabaseAppPermissionDatabaseApp'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'DatabaseAppPermissionDatabaseApp'
+              }
             }
           },
           system_users_amount: {
-            label: this.$t('perms.SystemUser')
+            label: this.$t('perms.SystemUser'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'DatabaseAppPermissionDatabaseApp'
+              }
+            }
           }
         }
       },

@@ -74,6 +74,7 @@ export default {
     border-color: #1ab394;
     color: #FFFFFF;
     border-radius: 3px;
+    line-height: 1.428;
   }
   .el-tree{
     background-color: inherit !important;

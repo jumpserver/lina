@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 
-export default [
+const assetPermissionRoutes = [
   {
     path: 'asset-permissions',
     name: 'AssetPermissionList',
@@ -15,7 +15,7 @@ export default [
     meta: { title: i18n.t('route.AssetPermissionCreate'), activeMenu: '/perms/asset-permissions', action: 'create' }
   },
   {
-    path: 'users/:id/update',
+    path: 'asset-permission/:id/update',
     component: () => import('@/views/perms/AssetPermission/AssetPermissionCreateUpdate.vue'),
     name: 'AssetPermissionUpdate',
     hidden: true,
@@ -27,7 +27,10 @@ export default [
     name: 'AssetPermissionDetail',
     hidden: true,
     meta: { title: i18n.t('route.AssetPermissionDetail'), activeMenu: '/perms/asset-permissions' }
-  },
+  }
+]
+
+const remoteAppPermissionRoutes = [
   {
     path: 'remote-app-permissions',
     name: 'RemoteAppPermissionList',
@@ -54,7 +57,10 @@ export default [
     name: 'RemoteAppPermissionDetail',
     hidden: true,
     meta: { title: i18n.t('route.RemoteAppPermissionDetail'), activeMenu: '/perms/remote-app-permissions' }
-  },
+  }
+]
+
+const databasePermissionRoutes = [
   {
     path: 'database-app-permissions',
     name: 'DatabaseAppPermissionList',
@@ -82,4 +88,10 @@ export default [
     hidden: true,
     meta: { title: i18n.t('route.DatabaseAppPermissionDetail'), activeMenu: '/perms/database-app-permissions' }
   }
+]
+
+export default [
+  ... assetPermissionRoutes,
+  ... remoteAppPermissionRoutes,
+  ... databasePermissionRoutes
 ]

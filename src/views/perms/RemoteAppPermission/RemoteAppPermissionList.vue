@@ -23,26 +23,38 @@ export default {
           users_amount: {
             label: this.$t('users.Users'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'RemoteAppPermissionUser'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'RemoteAppPermissionUser'
+              }
             }
           },
           user_groups_amount: {
             label: this.$t('users.UserGroups'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'RemoteAppPermissionUser'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'RemoteAppPermissionUser'
+              }
             }
           },
           remote_apps_amount: {
             label: this.$t('assets.RemoteApps'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'RemoteAppPermissionRemoteApp'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'RemoteAppPermissionRemoteApp'
+              }
             }
           },
           system_users_amount: {
-            label: this.$t('assets.SystemUsers')
+            label: this.$t('assets.SystemUsers'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'RemoteAppPermissionRemoteApp'
+              }
+            }
           }
         }
       },
