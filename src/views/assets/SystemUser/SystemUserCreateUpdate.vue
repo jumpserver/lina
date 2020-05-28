@@ -4,8 +4,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import select2 from '@/components/Select2'
 import UploadKey from '@/components/UploadKey'
+import { Select2 } from '@/components'
 export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -71,9 +71,20 @@ export default {
           }
         },
         cmd_filters: {
-          component: select2,
+          component: Select2,
           el: {
-            placeholder: '命令过滤器'
+            multiple: true,
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/cmd-filters/',
+              processResults(data) {
+                const results = data.results.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
           }
         },
         priority: {
