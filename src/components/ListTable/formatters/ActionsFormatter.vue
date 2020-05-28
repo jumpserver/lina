@@ -67,7 +67,7 @@ export default {
     }
   },
   data() {
-    const colActions = Object.assign(this.formatterArgsDefault, this.col, this.col.formatterArgs)
+    const colActions = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     const defaultActions = [
       {
         name: 'update',

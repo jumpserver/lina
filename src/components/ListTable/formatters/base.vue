@@ -37,6 +37,15 @@ export default {
     index: {
       type: Number,
       default: 0
+    },
+    formatterArgsDefault: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data() {
+    return {
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
   }
 }

@@ -4,7 +4,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { ExpandAssetPermissionFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'UserAssetPermission',
   components: {
@@ -34,33 +34,46 @@ export default {
           { label: '继承(先占位)', key: 'all=0' }
         ],
         columns: [
-          'expand', 'name', 'users_amount', 'user_groups_amount', 'assets_amount',
+          'name', 'users_amount', 'user_groups_amount', 'assets_amount',
           'nodes_amount', 'system_users_amount', 'is_active', 'actions'
         ],
         columnsMeta: {
-          expand: {
-            type: 'expand',
-            formatter: ExpandAssetPermissionFormatter
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AssetPermissionDetail'
+            }
           },
           users_amount: {
-            label: this.$t('users.Users')
+            label: this.$t('perms.User'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'AssetPermissionUser'
+              }
+            }
           },
           user_groups_amount: {
-            label: this.$t('users.UserGroups')
+            label: this.$t('perms.UserGroups')
           },
           assets_amount: {
-            label: this.$t('assets.Assets')
+            label: this.$t('perms.Asset'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'AssetPermissionAsset'
+              }
+            }
           },
           nodes_amount: {
-            label: this.$t('assets.Nodes')
+            label: this.$t('perms.Node')
           },
           system_users_amount: {
-            label: this.$t('assets.SystemUsers')
+            label: this.$t('perms.SystemUser')
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AssetPermissionUpdate',
-              detailRoute: 'AssetPermissionDetail'
+              updateRoute: 'AssetPermissionUpdate'
             }
           }
         }

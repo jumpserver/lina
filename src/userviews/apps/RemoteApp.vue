@@ -2,13 +2,12 @@
   <Page>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
   </Page>
-
 </template>
 
 <script>
 import ListTable from '@/components/ListTable/index'
 import Page from '@/layout/components/Page/index'
-import { ConnectFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'RemoteApp',
@@ -48,12 +47,28 @@ export default {
             prop: 'id',
             align: 'center',
             label: this.$t('assets.Action'),
-            formatter: ConnectFormatter,
-            actions: {
+            formatter: ActionsFormatter,
+            formatterArgs: {
               hasDelete: false,
-              onUpdate: function({ row, col, cellValue, reload }) {
-                window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
-              }
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'connect',
+                  fa: 'fa-terminal',
+                  type: 'primary',
+                  callback: function({ row, col, cellValue, reload }) {
+                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
+                  }
+                },
+                {
+                  name: 'favor',
+                  type: 'info',
+                  fa: 'fa-star-o',
+                  callback: function({ row, col, cellValue, reload }) {
+                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
+                  }
+                }
+              ]
             }
           }
         ]

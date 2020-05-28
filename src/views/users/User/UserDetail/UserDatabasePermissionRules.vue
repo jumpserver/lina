@@ -23,7 +23,9 @@ export default {
         columns: ['name', 'users', 'user_groups', 'database_apps', 'system_users', 'is_valid', 'actions'],
         columnsMeta: {
           name: {
-            route: 'DatabasePermissionDetail'
+            formatterArgs: {
+              route: 'DatabasePermissionDetail'
+            }
           },
           users: {
             label: this.$t('users.Users'),

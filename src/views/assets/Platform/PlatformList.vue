@@ -20,7 +20,9 @@ export default {
             label: this.$t('assets.Name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'PlatformDetail'
+            formatterArgs: {
+              route: 'PlatformDetail'
+            }
           },
           {
             prop: 'base',

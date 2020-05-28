@@ -9,9 +9,13 @@ export default {
   name: 'GrantedSystemUsersShowFormatter',
   extends: BaseFormatter,
   props: {
-    getUrl: {
-      type: Function,
-      default: () => this.col.getUrl
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          getUrl: ({ row, col }) => ''
+        }
+      }
     }
   },
   data() {
@@ -21,7 +25,8 @@ export default {
   },
   methods: {
     async showSystemUser() {
-      const url = this.col.getUrl({ row: this.row, col: this.col })
+      const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+      const url = formatterArgs.getUrl({ row: this.row, col: this.col })
       const data = await this.$axios.get(url)
       this.systemUsers = data.map((item) => item.name)
     }

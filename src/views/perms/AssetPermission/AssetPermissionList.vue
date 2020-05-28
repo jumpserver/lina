@@ -38,15 +38,19 @@ export default {
         columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_active', 'actions'],
         columnsMeta: {
           name: {
-            routeQuery: {
-              activeTab: 'AssetPermissionDetail'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'AssetPermissionDetail'
+              }
             }
           },
           users_amount: {
             label: this.$t('perms.User'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'AssetPermissionUser'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'AssetPermissionUser'
+              }
             }
           },
           user_groups_amount: {
@@ -55,8 +59,10 @@ export default {
           assets_amount: {
             label: this.$t('perms.Asset'),
             formatter: DetailFormatter,
-            routeQuery: {
-              activeTab: 'AssetPermissionAsset'
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'AssetPermissionAsset'
+              }
             }
           },
           nodes_amount: {
@@ -64,11 +70,12 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser')
+          },
+          actions: {
+            formatterArgs: {
+              updateRoute: 'AssetPermissionUpdate'
+            }
           }
-        },
-        actions: {
-          updateRoute: 'AssetPermissionUpdate',
-          detailRoute: 'AssetPermissionDetail'
         }
       },
       headerActions: {

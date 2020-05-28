@@ -54,9 +54,11 @@ export default {
           {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
-            formatter: DetailFormatter,
             sortable: true,
-            route: 'AssetDetail'
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AssetDetail'
+            }
           },
           {
             prop: 'ip',

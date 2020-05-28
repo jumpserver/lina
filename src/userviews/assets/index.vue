@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ConnectFormatter, SystemUserFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, ActionsFormatter, SystemUserFormatter } from '@/components/ListTable/formatters'
 export default {
   components: {
     GenericTreeListPage
@@ -49,27 +49,42 @@ export default {
           {
             prop: 'SystemUsers',
             align: 'center',
-            formatter: SystemUserFormatter,
             label: this.$t('assets.SystemUsers'),
             width: '200px',
-            getUrl: ({ row }) => {
-              return `/api/v1/perms/users/assets/${row.id}/system-users/?cache_policy=1`
+            formatter: SystemUserFormatter,
+            formatterArgs: {
+              getUrl: ({ row }) => {
+                return `/api/v1/perms/users/assets/${row.id}/system-users/?cache_policy=1`
+              }
             }
           },
           {
             prop: 'id',
             align: 'center',
-            formatter: ConnectFormatter,
+            formatter: ActionsFormatter,
             width: '100px',
             label: this.$t('common.action'),
-            actions: {
-              onDelete: function({ row, col, cellValue, reload }) {
-                // Todo: 对接api
-                alert('接口错误：获取不到对应的资产状态')
-              },
-              onUpdate: function({ row, col, cellValue, reload }) {
-                window.open(`/luna/?login_to=${cellValue}`, '_blank')
-              }
+            formatterArgs: {
+              hasDelete: false,
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'connect',
+                  fa: 'fa-terminal',
+                  type: 'primary',
+                  callback: function({ row, col, cellValue, reload }) {
+                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
+                  }
+                },
+                {
+                  name: 'favor',
+                  type: 'info',
+                  fa: 'fa-star-o',
+                  callback: function({ row, col, cellValue, reload }) {
+                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
+                  }
+                }
+              ]
             }
           }
         ]

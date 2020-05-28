@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
+import { BooleanFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -24,17 +24,15 @@ export default {
           },
           is_active: {
             label: this.$t('sessions.active'),
-            formatter: BooleanFormatter
+            formatter: BooleanFormatter,
+            width: '80px',
+            align: 'center'
           },
           is_alive: {
             label: this.$t('sessions.alive')
           },
           session_online: {
             label: this.$t('sessions.session')
-          },
-          actions: {
-            prop: 'id',
-            formatter: ActionsFormatter
           }
         }
       },
@@ -45,7 +43,6 @@ export default {
         hasExport: false,
         hasImport: false,
         hasUpdate: false,
-        hasRefresh: false,
         extraActions: [
           {
             name: 'StorageConfiguration',

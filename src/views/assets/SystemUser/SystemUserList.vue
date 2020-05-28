@@ -20,7 +20,9 @@ export default {
             label: this.$t('common.Name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'SystemUserDetail'
+            formatterArgs: {
+              route: 'SystemUserDetail'
+            }
           },
           {
             prop: 'username',

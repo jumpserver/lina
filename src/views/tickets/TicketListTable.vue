@@ -27,7 +27,9 @@ export default {
             label: this.$t('tickets.title'),
             formatter: DetailFormatter,
             sortable: 'custom',
-            route: 'TicketDetail'
+            formatterArgs: {
+              route: 'TicketDetail'
+            }
           },
           {
             prop: 'user_display',

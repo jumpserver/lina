@@ -8,7 +8,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { OutputExpandFormatter } from '@/components/ListTable/formatters'
+import { OutputExpandFormatter } from '../formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'SessionCommandList',

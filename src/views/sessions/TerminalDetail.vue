@@ -34,10 +34,8 @@ export default {
         ],
         hasDelete: false,
         actions: {
-          formatterArgs: {
-            hasDelete: false,
-            canDelete: false
-          }
+          hasDelete: false,
+          canDelete: false
         }
       }
     }

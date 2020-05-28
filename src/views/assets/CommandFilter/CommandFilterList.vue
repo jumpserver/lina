@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter, DetailLengthFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -20,19 +20,27 @@ export default {
             label: this.$t('assets.Name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'CommandFilterDetail'
+            formatterArgs: {
+              route: 'CommandFilterDetail'
+            }
           },
           {
             prop: 'rules',
             label: this.$t('assets.Rules'),
-            formatter: DetailLengthFormatter,
-            route: 'CommandFilterDetail'
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'CommandFilterDetail',
+              getTitle: ({ cellValue }) => cellValue.length
+            }
           },
           {
             prop: 'system_users',
             label: this.$t('assets.SystemUsers'),
-            formatter: DetailLengthFormatter,
-            route: 'CommandFilterDetail'
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'CommandFilterDetail',
+              getTitle: ({ cellValue }) => cellValue.length
+            }
           },
           {
             prop: 'comment',

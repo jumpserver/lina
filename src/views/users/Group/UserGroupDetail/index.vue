@@ -33,13 +33,7 @@ export default {
             title: this.$t('users.tabs.grantedAssets'),
             name: 'GroupGrantedAssets'
           }
-        ],
-        actions: {
-          formatterArgs: {
-            canDelete: true,
-            canUpdate: true
-          }
-        }
+        ]
       }
     }
   },

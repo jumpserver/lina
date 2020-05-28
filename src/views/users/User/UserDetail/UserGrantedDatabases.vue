@@ -22,7 +22,9 @@ export default {
         columns: ['name', 'type', 'host', 'database', 'comment'],
         columnsMeta: {
           name: {
-            route: 'DatabaseAppDetail'
+            formatterArgs: {
+              route: 'DatabaseAppDetail'
+            }
           }
         }
       },

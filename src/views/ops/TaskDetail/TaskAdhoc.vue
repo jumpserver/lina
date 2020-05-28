@@ -4,7 +4,6 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { LengthFormatter } from '@/components/ListTable/formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'TaskAdhoc',
@@ -30,7 +29,12 @@ export default {
           },
           hosts: {
             label: this.$t('ops.hosts'),
-            formatter: LengthFormatter,
+            formatter: (row, column, cellValue) => {
+              if (cellValue instanceof Array) {
+                return cellValue.length
+              }
+              return cellValue
+            },
             showOverflowTooltip: true
           },
           pattern: {

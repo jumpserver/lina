@@ -19,9 +19,6 @@ export default {
           'name', 'type', 'asset', 'comment', 'actions'
         ],
         columnsMeta: {
-          name: {
-            route: 'RemoteAppDetail'
-          },
           type: {
             displayKey: 'get_type_display'
           },

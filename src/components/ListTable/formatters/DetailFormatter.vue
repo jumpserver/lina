@@ -1,5 +1,5 @@
 <template>
-  <el-link class="detail" :type="col.type || 'success'" @click="goDetail">{{ cellValue }}</el-link>
+  <el-link class="detail" :type="col.type || 'success'" @click="goDetail">{{ iTitle }}</el-link>
 </template>
 
 <script>
@@ -10,19 +10,29 @@ export default {
   props: {
     formatterArgsDefault: {
       type: Object,
-      default: () => {
+      default() {
         return {
-          route: '404',
-          routeQuery: {}
+          route: this.$route.name.replace('List', 'Detail'),
+          routeQuery: {},
+          getTitle({ col, row, cellValue }) {
+            return cellValue
+          }
         }
       }
     }
   },
+  data() {
+    const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
+    return {
+      formatterArgs: formatterArgs,
+      iTitle: formatterArgs.getTitle({ col: this.col, row: this.row, cellValue: this.cellValue })
+    }
+  },
   methods: {
     goDetail() {
-      const defaultRoute = this.$route.name.replace('List', 'Detail')
-      const routeName = this.col.route || this.col.detailRoute || defaultRoute
-      const routeQuery = this.col.routeQuery || {}
+      // const defaultRoute = this.$route.name.replace('List', 'Detail')
+      const routeName = this.formatterArgs.route
+      const routeQuery = this.formatterArgs.routeQuery
       this.$log.debug('Will go to detail route: ', routeName)
       this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
     }

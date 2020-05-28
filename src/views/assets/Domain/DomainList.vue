@@ -20,7 +20,9 @@ export default {
             label: this.$t('assets.Name'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'DomainDetail'
+            formatterArgs: {
+              route: 'DomainDetail'
+            }
           },
           {
             prop: 'asset_count',

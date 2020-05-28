@@ -27,7 +27,9 @@ export default {
         columnsMeta: {
           hostname: {
             formatter: DetailFormatter,
-            route: 'AssetDetail'
+            formatterArgs: {
+              route: 'AssetDetail'
+            }
           },
           ip: {
             sortable: 'custom',

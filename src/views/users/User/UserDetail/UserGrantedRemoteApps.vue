@@ -22,7 +22,9 @@ export default {
         columns: ['name', 'type', 'asset', 'comment'],
         columnsMeta: {
           name: {
-            route: 'RemoteAppDetail'
+            formatterArgs: {
+              route: 'RemoteAppDetail'
+            }
           },
           asset: {
             formatter(row) {

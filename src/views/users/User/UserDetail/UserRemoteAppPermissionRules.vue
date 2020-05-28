@@ -22,7 +22,9 @@ export default {
         columns: ['name', 'users', 'user_groups', 'remote_apps', 'system_users', 'is_valid', 'actions'],
         columnsMeta: {
           name: {
-            route: 'RemoteAppPermissionDetail'
+            formatterArgs: {
+              route: 'RemoteAppPermissionDetail'
+            }
           },
           users: {
             label: this.$t('users.Users'),
@@ -50,7 +52,6 @@ export default {
           },
           actions: {
             formatterArgs: {
-              detailRoute: 'RemoteAppPermissionDetail',
               updateRoute: 'RemoteAppPermissionUpdate'
             }
           }

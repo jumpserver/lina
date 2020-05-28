@@ -5,13 +5,15 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { RouterFormatter, OutputExpandFormatter } from '@/components/ListTable/formatters'
+import { OutputExpandFormatter } from './formatters'
+import { DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         hasSelection: false,
@@ -43,9 +45,13 @@ export default {
           },
           session: {
             label: this.$t('sessions.session'),
-            formatter: RouterFormatter,
-            route: 'SessionDetail',
-            linkName: this.$t('sessions.goto')
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'SessionDetail',
+              getTitle() {
+                return vm.$t('sessions.goto')
+              }
+            }
           },
           timestamp: {
             label: this.$t('sessions.date'),
@@ -61,8 +67,7 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
-        hasBulkDelete: false,
+        hasLeftActions: false,
         hasImport: false,
         hasExport: false
       }

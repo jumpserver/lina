@@ -64,7 +64,9 @@ export default {
             label: this.$t('assets.Hostname'),
             formatter: DetailFormatter,
             sortable: true,
-            route: 'AssetDetail'
+            formatterArgs: {
+              route: 'AssetDetail'
+            }
           },
           {
             prop: 'ip',
@@ -75,9 +77,11 @@ export default {
             prop: 'systemUsers',
             label: this.$t('assets.SystemUsers'),
             align: 'center',
+            width: '200px',
             formatter: SystemUserFormatter,
-            getUrl: this.getShowUrl.bind(this),
-            width: '200px'
+            formatterArgs: {
+              getUrl: this.getShowUrl.bind(this)
+            }
           }
         ]
       },
