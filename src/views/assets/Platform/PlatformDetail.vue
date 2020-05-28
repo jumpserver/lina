@@ -22,7 +22,7 @@ export default {
         detailApiUrl: `/api/v1/assets/platforms/${this.$route.params.id}/`
       },
       config: {
-        title: this.$t('assets.commandFilterDetail'),
+        title: this.$t('assets.PlatformDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
@@ -30,12 +30,14 @@ export default {
             name: 'Detail'
           }
         ],
-        hasRightSide: false
+        hasRightSide: this.hasRightSide
       }
     }
   },
   computed: {
-
+    hasRightSide() {
+      return this.$route.params.id > 7
+    }
   }
 }
 </script>

@@ -10,6 +10,8 @@
   },
   "assets": {
     "Action": "Action",
+    "UpdateAssetUserToken": "Update asset user auth",
+    "Password": "Password",
     "RefreshHardware": "Refresh hardware",
     "AdminUser": "Admin user",
     "AdminUserDetail": "Admin user detail",

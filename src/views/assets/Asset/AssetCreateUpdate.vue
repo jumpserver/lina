@@ -36,7 +36,7 @@ export default {
               processResults: (data) => {
                 let results = data.results
                 results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.name }
+                  return { label: item.name, value: item.name }
                 })
                 const more = !!data.next
                 return { results: results, pagination: more, total: data.count }

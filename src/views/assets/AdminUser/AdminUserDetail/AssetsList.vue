@@ -1,4 +1,4 @@
-<template>
+<template><div>
   <el-row :gutter="20">
     <el-col :span="14">
       <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
@@ -7,10 +7,28 @@
       <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
+  <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
+    <el-form label-position="right" label-width="80px" :model="dialogInfo">
+      <el-form-item :label="this.$t('assets.Hostname')">
+        <el-input v-model="dialogInfo.hostname" disabled />
+      </el-form-item>
+      <el-form-item :label="this.$t('assets.Username')">
+        <el-input v-model="dialogInfo.username" disabled />
+      </el-form-item>
+      <el-form-item :label="this.$t('assets.Password')">
+        <el-input v-model="dialogInfo.password" type="password" />
+      </el-form-item>
+      <el-form-item :label="this.$t('assets.sshkey')">
+        <input type="file" @change="Onchange">
+      </el-form-item>
+    </el-form>
+  </Dialog>
+</div>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable/index'
+import Dialog from '@/components/Dialog'
 import { CustomActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 import QuickActions from '@/components/QuickActions/index'
 
@@ -18,7 +36,8 @@ export default {
   name: 'Detail',
   components: {
     QuickActions,
-    ListTable
+    ListTable,
+    Dialog
   },
   props: {
     object: {
@@ -28,6 +47,14 @@ export default {
   },
   data() {
     return {
+      showDialog: false,
+      dialogInfo: {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: '',
+        key: ''
+      },
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
@@ -91,8 +118,25 @@ export default {
                   name: this.$t('common.Test'),
                   title: this.$t('common.Test'),
                   callback: (val) => {
-                    console.log('Test')
+                    console.log(val.cellValue)
+                    this.$axios.post(
+                      `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
+                      { action: 'test' }
+                    ).then(res => {
+                      window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                    })
                   }
+                },
+                {
+                  name: this.$t('common.Update'),
+                  title: this.$t('common.Update'),
+                  callback: function(val) {
+                    console.log(val)
+                    this.showDialog = true
+                    this.dialogInfo.asset = val.row.asset
+                    this.dialogInfo.hostname = val.row.hostname
+                    this.dialogInfo.username = val.row.username
+                  }.bind(this)
                 }
               ]
             }
@@ -112,6 +156,55 @@ export default {
   mounted() {
   },
   methods: {
+    handleCancel() {
+      this.dialogInfo = {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: '',
+        key: ''
+      }
+      this.showDialog = false
+    },
+    Onchange(e) {
+      const vm = this
+      // TODO 校验文件类型
+      const reader = new FileReader()
+      reader.onload = function() {
+        vm.dialogInfo.key = this.result
+      }
+      reader.readAsText(
+        e.target.files[0]
+      )
+    },
+    handleConfirm() {
+      const data = {
+        asset: this.dialogInfo.asset,
+        username: this.dialogInfo.username
+      }
+      if (this.dialogInfo.password !== '') {
+        data.password = this.dialogInfo.password
+      }
+      if (this.dialogInfo.key !== '') {
+        data.key = this.dialogInfo.key
+      }
+      this.$axios.post(
+        `/api/v1/assets/asset-users/`,
+        data
+      ).then(res => {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(err => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+      })
+      this.dialogInfo = {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: '',
+        key: ''
+      }
+      this.showDialog = false
+    }
   }
 }
 </script>
