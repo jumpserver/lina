@@ -42,7 +42,11 @@ export default {
             }
           },
           system_users_amount: {
-            label: this.$t('assets.SystemUsers')
+            label: this.$t('assets.SystemUsers'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'RemoteAppPermissionRemoteApp'
+            }
           }
         }
       },

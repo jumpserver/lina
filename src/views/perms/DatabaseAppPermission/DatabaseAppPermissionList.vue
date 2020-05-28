@@ -43,7 +43,11 @@ export default {
             }
           },
           system_users_amount: {
-            label: this.$t('perms.SystemUser')
+            label: this.$t('perms.SystemUser'),
+            formatter: DetailFormatter,
+            routeQuery: {
+              activeTab: 'DatabaseAppPermissionDatabaseApp'
+            }
           }
         }
       },
