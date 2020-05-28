@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
-      getMethod: () => 'put',
       fields: [
         [this.$t('users.Account'), ['username', 'name', 'email']],
         [this.$t('common.Other'), ['phone', 'wechat']]
@@ -45,7 +44,11 @@ export default {
           disabled: true
         }
       }
-      // successUrl: { name: 'UserProfile', params: { activeMenu: 'ProfileUpdate' }}
+    }
+  },
+  methods: {
+    getMethod() {
+      return 'put'
     }
   }
 }
