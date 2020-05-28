@@ -10,6 +10,8 @@
   },
   "assets": {
     "Action": "动作",
+    "UpdateAssetUserToken": "更新资产用户认证信息",
+    "Password": "密码",
     "RefreshHardware": "更新硬件信息",
     "AdminUser": "管理用户",
     "AdminUserDetail": "管理用户详情",
