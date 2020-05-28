@@ -41,7 +41,7 @@ export default {
         },
         {
           key: this.$t('assets.Meta'),
-          value: this.object.meta
+          value: JSON.stringify(this.object.meta)
         },
         {
           key: this.$t('assets.Comment'),

@@ -89,21 +89,21 @@ export default [
     hidden: true
   },
   {
-    path: 'platform/update/:id',
+    path: 'platforms/update/:id',
     component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
     name: 'PlatformUpdate',
     meta: { title: i18n.t('route.PlatformUpdate'), activeMenu: '/assets/platform' },
     hidden: true
   },
   {
-    path: 'platform/detail/:id',
+    path: 'platforms/detail/:id',
     component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
     name: 'PlatformDetail',
     meta: { title: i18n.t('route.PlatformDetail'), activeMenu: '/assets/platform' },
     hidden: true
   },
   {
-    path: 'platform/create',
+    path: 'platforms/create',
     component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
     name: 'PlatformCreate',
     meta: { title: i18n.t('route.PlatformCreate'), activeMenu: '/assets/platform' },
