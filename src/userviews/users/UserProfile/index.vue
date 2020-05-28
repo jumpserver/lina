@@ -14,7 +14,6 @@ import PasswordUpdate from './PasswordUpdate'
 import SSHUpdate from './SSHUpdate'
 
 export default {
-  name: 'AssetListDetail',
   components: {
     GenericDetailPage,
     ProfileInfo,
@@ -34,15 +33,15 @@ export default {
             name: 'ProfileInfo'
           },
           {
-            title: '设置个人信息',
+            title: '个人信息设置',
             name: 'ProfileUpdate'
           },
           {
-            title: '设置登录密码',
+            title: '登录密码设置',
             name: 'PasswordUpdate'
           },
           {
-            title: '设置SSH公钥',
+            title: 'SSH公钥设置',
             name: 'SSHUpdate'
           }
         ],

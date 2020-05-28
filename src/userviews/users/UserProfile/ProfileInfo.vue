@@ -27,6 +27,7 @@ export default {
   },
   data() {
     return {
+      url: `/api/v1/users/profile/`,
       quickActions: [
         {
           title: this.$t('assets.SetMFA'),
@@ -59,28 +60,6 @@ export default {
             }.bind(this)
           }
         },
-        // {
-        //   title: this.$t('assets.UpdatePassword'),
-        //   attrs: {
-        //     type: 'primary',
-        //     label: this.$t('common.Update')
-        //   },
-        //   callbacks: {
-        //     click: function() {
-        //
-        //     }
-        //   }
-        // },
-        // {
-        //   title: this.$t('assets.UpdateSSHPublicKey'),
-        //   attrs: {
-        //     type: 'primary',
-        //     label: this.$t('common.Update')
-        //   },
-        //   callbacks: {
-        //     click: function() {}
-        //   }
-        // },
         {
           title: this.$t('assets.ResetPublicKeyAndDownload'),
           attrs: {
@@ -120,8 +99,8 @@ export default {
           key: this.$t('assets.IsActive')
         },
         {
-          value: `没有这个API`,
-          key: this.$t('assets.sshkey')
+          value: `${this.object.public_key_comment} ${this.object.public_key_hash_md5}`,
+          key: 'SSHKey'
         },
         {
           value: this.object.mfa_level_display,
