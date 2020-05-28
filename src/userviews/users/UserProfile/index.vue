@@ -8,22 +8,42 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import UserProfile from './UserProfile.vue'
+import ProfileInfo from './ProfileInfo'
+import ProfileUpdate from './ProfileUpdate'
+import PasswordUpdate from './PasswordUpdate'
+import SSHUpdate from './SSHUpdate'
+
 export default {
   name: 'AssetListDetail',
   components: {
     GenericDetailPage,
-    UserProfile
+    ProfileInfo,
+    ProfileUpdate,
+    PasswordUpdate,
+    SSHUpdate
   },
   data() {
     return {
       user: {},
       config: {
         title: this.$t('common.nav.Profile'),
+        activeMenu: 'ProfileInfo',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'UserProfile'
+            name: 'ProfileInfo'
+          },
+          {
+            title: '设置个人信息',
+            name: 'ProfileUpdate'
+          },
+          {
+            title: '设置登录密码',
+            name: 'PasswordUpdate'
+          },
+          {
+            title: '设置SSH公钥',
+            name: 'SSHUpdate'
           }
         ],
         hasRightSide: false

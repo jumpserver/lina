@@ -14,7 +14,7 @@ import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
-  name: 'UserProfile',
+  name: 'ProfileInfo',
   components: {
     DetailCard,
     QuickActions
@@ -59,28 +59,28 @@ export default {
             }.bind(this)
           }
         },
-        {
-          title: this.$t('assets.UpdatePassword'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Update')
-          },
-          callbacks: {
-            click: function() {
-
-            }
-          }
-        },
-        {
-          title: this.$t('assets.UpdateSSHPublicKey'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Update')
-          },
-          callbacks: {
-            click: function() {}
-          }
-        },
+        // {
+        //   title: this.$t('assets.UpdatePassword'),
+        //   attrs: {
+        //     type: 'primary',
+        //     label: this.$t('common.Update')
+        //   },
+        //   callbacks: {
+        //     click: function() {
+        //
+        //     }
+        //   }
+        // },
+        // {
+        //   title: this.$t('assets.UpdateSSHPublicKey'),
+        //   attrs: {
+        //     type: 'primary',
+        //     label: this.$t('common.Update')
+        //   },
+        //   callbacks: {
+        //     click: function() {}
+        //   }
+        // },
         {
           title: this.$t('assets.ResetPublicKeyAndDownload'),
           attrs: {
