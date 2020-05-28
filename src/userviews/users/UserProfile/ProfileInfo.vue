@@ -14,7 +14,7 @@ import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
-  name: 'UserProfile',
+  name: 'ProfileInfo',
   components: {
     DetailCard,
     QuickActions
@@ -27,47 +27,37 @@ export default {
   },
   data() {
     return {
+      url: `/api/v1/users/profile/`,
       quickActions: [
         {
           title: this.$t('assets.SetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Reset')
+            label: this.object.mfa_enabled ? this.$t('common.Disable') : this.$t('common.Enable'),
+            disabled: this.object.mfa_force_enabled
           },
           callbacks: {
-            click: function() {}
+            click: function() {
+              if (this.object.mfa_enabled) {
+                if (!this.object.mfa_force_enabled) {
+                  window.location.href = `/users/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
+                }
+              } else {
+                window.location.href = `/users/profile/otp/enable/start/?next=${this.$route.fullPath}`
+              }
+            }.bind(this)
           }
         },
         {
           title: this.$t('assets.UpdateMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Reset')
-          },
-          callbacks: {
-            click: function() {}
-          }
-        },
-        {
-          title: this.$t('assets.UpdatePassword'),
-          attrs: {
-            type: 'primary',
             label: this.$t('common.Update')
           },
           callbacks: {
             click: function() {
-
-            }
-          }
-        },
-        {
-          title: this.$t('assets.UpdateSSHPublicKey'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Update')
-          },
-          callbacks: {
-            click: function() {}
+              window.location.href = `/users/profile/otp/update/?next=${this.$route.fullPath}`
+            }.bind(this)
           }
         },
         {
@@ -77,7 +67,9 @@ export default {
             label: this.$t('common.Reset')
           },
           callbacks: {
-            click: function() {}
+            click: function() {
+              window.open(`/users/profile/pubkey/generate/`, '_blank')
+            }
           }
         }
       ]
@@ -107,8 +99,8 @@ export default {
           key: this.$t('assets.IsActive')
         },
         {
-          value: `没有这个API`,
-          key: this.$t('assets.sshkey')
+          value: `${this.object.public_key_comment} ${this.object.public_key_hash_md5}`,
+          key: 'SSHKey'
         },
         {
           value: this.object.mfa_level_display,
