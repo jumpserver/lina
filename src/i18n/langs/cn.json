@@ -687,6 +687,8 @@
     "assetAndNode": "资产或节点",
     "Success": "成功",
     "ChangeAuthPlan": {
+      "Asset": "资产",
+      "Success": "成功",
       "AssetAndNode": "资产和节点",
       "AssetAmount": "资产数量",
       "NodeAmount": "节点数量",

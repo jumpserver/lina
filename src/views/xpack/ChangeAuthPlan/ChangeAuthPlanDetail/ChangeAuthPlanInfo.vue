@@ -60,6 +60,14 @@ export default {
           value: this.object.username
         },
         {
+          key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
+          value: this.object.assets_amount
+        },
+        {
+          key: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+          value: this.object.nodes_amount
+        },
+        {
           key: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
           value: this.object.password_strategy_display
         },
