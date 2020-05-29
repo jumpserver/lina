@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
@@ -22,8 +22,14 @@ export default {
             formatter: (row, column, cellValue) => cellValue.slice(0, 20),
             width: '150px'
           }
-        },
-        hasSelection: false
+        }
+      },
+      headerActions: {
+        hasSelection: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasImport: false,
+        hasRefresh: false
       }
     }
   }
