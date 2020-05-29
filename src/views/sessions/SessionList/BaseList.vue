@@ -99,7 +99,8 @@ export default {
         hasLeftActions: false,
         hasExport: false,
         hasImport: false,
-        hasRefresh: false
+        hasRefresh: false,
+        hasDatePicker: true
       }
     }
   }

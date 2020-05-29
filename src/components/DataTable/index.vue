@@ -95,6 +95,9 @@ export default {
     getData() {
       return this.$refs.table.data
     },
+    searchDate(attrs) {
+      return this.$refs.table.searchDate(attrs)
+    },
     search(attrs) {
       return this.$refs.table.search(attrs)
     },

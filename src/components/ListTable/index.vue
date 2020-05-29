@@ -1,8 +1,8 @@
 <template>
   <div>
-    <TableAction :table-url="tableConfig.url" :search-table="search" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
+    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <IBox class="table-content">
-      <AutoDataTable :key="tableConfig.url" ref="dataTable" :config="tableConfig" @selection-change="handleSelectionChange" v-on="$listeners" @update="handleDataChange" />
+      <AutoDataTable :key="iTableConfig.url" ref="dataTable" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" @update="handleDataChange" />
     </IBox>
   </div>
 </template>
@@ -35,7 +35,14 @@ export default {
   data() {
     return {
       selectedRows: [],
-      init: false
+      init: false,
+      iTableConfig: {
+        extraQuery: {
+          date_from: '',
+          date_to: ''
+        },
+        ...this.tableConfig
+      }
     }
   },
   computed: {
@@ -56,6 +63,17 @@ export default {
     },
     search(attrs) {
       return this.dataTable.search(attrs)
+    },
+    handleDateChange(attrs) {
+      console.log(attrs)
+      this.iTableConfig.extraQuery = {
+        date_from: attrs[0],
+        date_to: attrs[1]
+      }
+      return this.dataTable.searchDate({
+        date_from: attrs[0],
+        date_to: attrs[1]
+      })
     },
     toggleRowSelection(row, isSelected) {
       return this.dataTable.toggleRowSelection(row, isSelected)
