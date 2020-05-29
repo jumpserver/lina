@@ -20,7 +20,7 @@ export default {
     return {
       loading: true,
       method: 'get',
-      iConfig: {},
+      totalConfig: {},
       meta: {}
     }
   },
@@ -33,9 +33,8 @@ export default {
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
-      }).catch(() => {
-        this.$log.error('Error occur: ')
-        // this.iConfig = this.config
+      }).catch((error) => {
+        this.$log.error('Error occur: ', error)
       }).finally(() => {
         this.loading = false
       })
@@ -51,9 +50,9 @@ export default {
             prop: 'id',
             label: this.$t('common.Actions'),
             align: 'center',
-            formatter: ActionsFormatter,
             width: '150px',
-            actions: this.config.actions || {}
+            formatter: ActionsFormatter,
+            formatterArgs: {}
           }
           break
         case 'is_valid':

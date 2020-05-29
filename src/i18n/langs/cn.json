@@ -6,7 +6,26 @@
     "database": "数据库",
     "host": "主机",
     "port": "端口",
-    "type": "类型"
+    "type": "类型",
+    "mysql": "Mysql",
+    "chrome": "Chrome",
+    "chrome_target": "目标URL",
+    "chrome_username": "登录账号",
+    "chrome_password": "登录密码",
+    "mysql_workbench": "MySQL Workbench",
+    "mysql_workbench_ip": "数据库IP",
+    "mysql_workbench_name": "数据库名",
+    "mysql_workbench_username": "数据库账号",
+    "mysql_workbench_password": "数据库密码",
+    "vmware_client": "vSphere Client",
+    "vmware_target": "目标地址",
+    "vmware_username": "登录账号",
+    "vmware_password": "登录密码",
+    "custom": "自定义",
+    "custom_cmdline": "运行参数",
+    "custom_target": "目标地址",
+    "custom_username": "登录账号",
+    "custom_password": "登录密码"
   },
   "assets": {
     "Action": "动作",
@@ -112,6 +131,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "CrontabHelpTips": "eg：每周日 03:05 执行 <5 3 * * 0> <br> 提示： 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href='https://tool.lu/crontab/' target='_blank'>在线工具</a>） <br>注意： 如果同时设置了定期执行和周期执行，优先使用定期执行",
     "Action": "动作",
     "Actions": "操作",
     "Activate": "激活",
@@ -135,6 +155,9 @@
     "Info": "提示",
     "Members": "成员",
     "More": "更多",
+    "StartDate": "开始日期",
+    "EndDate": "结束日期",
+    "To": "至",
     "MoreActions": "更多操作",
     "Name": "名称",
     "NoData": "暂无数据",
@@ -608,9 +631,22 @@
     "RenameNode": ""
   },
   "users": {
+    "DateJoined": "创建日期",
+    "MfaLevel": "多因子认证",
+    "IsActive": "激活",
+    "SetMFA": "设置多因子认证",
+    "UpdateMFA": "更改多因子认证",
+    "ResetPublicKeyAndDownload": "重置并下载SSH密钥",
+    "Profile": "个人信息",
+    "ProfileSetting": "个人信息设置",
+    "LoginPasswordSetting": "登录密码设置",
+    "SSHKeySetting": "SSH公钥设置",
     "Account": "账户",
     "Authentication": "认证",
-    "Email": "Email",
+    "OldSSHKey": "原来SSH公钥",
+    "UpdateSSHKey": "更新SSH公钥",
+    "FingerPrint": "指纹",
+    "Email": "邮件",
     "MFA": "MFA",
     "Name": "姓名",
     "Remove": "移除",
@@ -622,8 +658,12 @@
     "Users": "用户",
     "dateExpired": "过期时间",
     "dateJoined": "创建日期",
-    "dateLastLogin": "最后登录日期",
+    "DateLastLogin": "最后登录日期",
+    "DatePasswordLastUpdated": "最后更新密码日期",
+    "Comment": "备注",
+    "DateExpired": "失效日期",
     "datePasswordUpdated": "改密日期",
+    "ResetAndDownloadSSHKey": "重置并下载密钥",
     "quickUpdate": {
       "resetMFA": "重置MFA",
       "resetMFAWarningMsg": "你确定要重置用户的 MFA 吗?",
@@ -638,6 +678,9 @@
       "unblock": "解锁",
       "unblockSuccessMsg": "解锁成功",
       "unblockUser": "解锁用户"
+    },
+    "HelpText": {
+      "SSHKeyOfProfileSSHUpdatePage": "复制你的公钥到这里"
     },
     "removeErrorMsg": "移除失败",
     "removeSuccessMsg": "移除成功",
@@ -667,6 +710,11 @@
     "assetAndNode": "资产或节点",
     "Success": "成功",
     "ChangeAuthPlan": {
+      "Asset": "资产",
+      "Success": "成功",
+      "AssetAndNode": "资产和节点",
+      "AssetAmount": "资产数量",
+      "NodeAmount": "节点数量",
       "ChangeAuthPlan": "改密计划",
       "ChangeAuthPlanCreate": "创建改密计划",
       "ChangeAuthPlanUpdate": "更新改密计划",
@@ -678,12 +726,14 @@
       "Username": "用户名",
       "PasswordStrategy": "密码策略",
       "PasswordLength": "密码长度",
+      "Execute": "执行",
+      "ExecutionTimes": "执行次数",
+      "Timer": "定时执行",
       "CyclePerform": "周期执行",
       "RegularlyPerform": "定期执行",
       "DateJoined": "创建日期",
       "DateUpdated": "更新日期",
-      "ManualRunPlan": "手动执行计划",
-      "Run": "执行",
+      "ManualExecutePlan": "手动执行计划",
       "addAsset": "添加资产",
       "addNode": "添加节点",
       "Result": "结果",
@@ -691,11 +741,17 @@
       "DateStart": "开始日期",
       "Detail": "详情",
       "Log": "日志",
-      "Retry": "重试"
+      "Retry": "重试",
+      "HelpText": {
+        "UsernameOfCreateUpdatePage": "目标主机上用户的用户名；如果已️存在，修改用户密码；如果不存在，添加用户并设置密码；",
+        "CrontabOfCreateUpdatePage": "例如：每周日 03:05 执行 <5 3 * * 0> <br/> 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href=\"https://tool.lu/crontab/\" target=\"_blank\">在线工具</a>） <br/> 如果同时设置了定期执行和周期执行，优先使用定期执行",
+        "IntervalOfCreateUpdatePage": "单位：时"
+      }
     },
     "Corporation": "公司",
     "Edition": "版本",
     "Expired": "过期时间",
+    "GatherUserTask":"收集用户任务",
     "GatherUserList": "收集用户",
     "GatherUserTaskCreate": "创建任务",
     "GatherUserTaskList": "任务列表",
@@ -736,7 +792,8 @@
       "AccountUpdate": "更新账户",
       "SyncInstanceTaskList": "同步实例任务列表",
       "SyncInstanceTaskCreate": "创建同步实例任务",
-      "SyncInstanceTaskUpdate": "更新同步实例任务"
+      "SyncInstanceTaskUpdate": "更新同步实例任务",
+      "CoveredAlwaysHelpTips": "资产信息总是被覆盖"
     }
   }
 }

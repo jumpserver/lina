@@ -37,7 +37,7 @@ export default {
         extraActions: [
           {
             name: 'gather-user-tasks',
-            title: '收集用户任务',
+            title: this.$t('xpack.GatherUserTask'),
             type: 'primary',
             has: true,
             can: true,

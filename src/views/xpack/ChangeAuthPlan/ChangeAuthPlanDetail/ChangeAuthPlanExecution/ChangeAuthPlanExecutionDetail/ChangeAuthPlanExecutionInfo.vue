@@ -32,11 +32,11 @@ export default {
           value: this.object.username
         },
         {
-          key: this.$t('xpack.Asset'),
+          key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
           value: this.object.assets_amount
         },
         {
-          key: this.$t('xpack.Node'),
+          key: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
           value: this.object.nodes_amount
         },
         {

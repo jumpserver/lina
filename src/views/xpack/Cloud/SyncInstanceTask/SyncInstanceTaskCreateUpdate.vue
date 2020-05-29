@@ -23,6 +23,9 @@ export default {
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
+        crontab: {
+          helpTips: this.$t('common.CrontabHelpTips')
+        },
         account: {
           on: {
             change: ([event], updateForm) => {
@@ -77,7 +80,8 @@ export default {
           }
         },
         covered_always: {
-          type: 'switch'
+          type: 'switch',
+          helpTips: this.$t('xpack.Cloud.CoveredAlwaysHelpTips')
         },
         is_periodic: {
           type: 'switch'

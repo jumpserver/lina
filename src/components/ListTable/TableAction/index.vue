@@ -3,11 +3,13 @@
     <slot name="header">
       <div class="table-header-left-side">
         <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
-        <span v-else>
+        <span v-else style="display: flex;flex-direction: row">
+          <DateTimePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
           <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
         </span>
       </div>
       <div class="table-action-right-side">
+        <DateTimePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
         <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
         <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
       </div>
@@ -18,21 +20,24 @@
 <script>
 import AutoDataSearch from '@/components/AutoDataSearch'
 import LeftSide from './LeftSide'
+import DateTimePicker from '@/components/DateTimePicker'
 import RightSide from './RightSide'
 
 const defaultTrue = { type: Boolean, default: true }
-
+const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'TableAction',
   components: {
     AutoDataSearch,
     LeftSide,
+    DateTimePicker,
     RightSide
   },
   props: {
     hasLeftActions: defaultTrue,
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
+    hasDatePicker: defaultFalse,
     searchConfig: {
       type: Object,
       default: () => ({})
@@ -40,6 +45,10 @@ export default {
     tableUrl: {
       type: String,
       default: ''
+    },
+    datePick: {
+      type: Function,
+      default: (val) => {}
     },
     searchTable: {
       type: Function,
@@ -63,6 +72,9 @@ export default {
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
+    },
+    handleDateChange(val) {
+      this.datePick(val)
     }
   }
 }
@@ -117,6 +129,9 @@ export default {
   .export-item {
     display: block;
     padding: 5px 20px;
+  }
+  .datepicker{
+    margin-right: 15px;
   }
 
 </style>

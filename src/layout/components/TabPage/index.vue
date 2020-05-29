@@ -20,6 +20,7 @@
 
 <script>
 import Page from '../Page/'
+import merge from 'webpack-merge'
 
 const ACTIVE_TAB_KEY = 'activeTab'
 
@@ -63,6 +64,12 @@ export default {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TAB_KEY, tab.name, 1)
+
+      if (this.$router.currentRoute.query[ACTIVE_TAB_KEY]) {
+        this.$router.push({
+          query: merge(this.$route.query, { [ACTIVE_TAB_KEY]: '' })
+        })
+      }
     },
     getPropActiveTab() {
       let activeTab = ''
