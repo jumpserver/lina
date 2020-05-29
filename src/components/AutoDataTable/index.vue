@@ -53,7 +53,7 @@ export default {
             align: 'center',
             width: '150px',
             formatter: ActionsFormatter,
-            formatterArgs: {}
+            actions: this.config.actions || {}
           }
           break
         case 'is_valid':
