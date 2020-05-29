@@ -6,7 +6,8 @@
     "database": "Database",
     "host": "Host",
     "port": "Port",
-    "type": "Type"
+    "type": "Type",
+    "mysql": "Mysql"
   },
   "assets": {
     "Action": "Action",
