@@ -68,14 +68,11 @@ service.interceptors.response.use(
     if (response.status === 401) {
       // 未授权重定向到登录页面
       const title = ''
-      response.config.disableFlashMsg = true
       const msg = i18n.t('auth.LoginRequiredMsg')
       MessageBox.confirm(msg, title, {
         confirmButtonText: i18n.t('auth.ReLogin'),
         cancelButtonText: i18n.t('common.Cancel'),
         type: 'warning'
-      }).then(() => {
-        window.location = '/auth/login/'
       })
     }
     if (!response.config.disableFlashMsg) {

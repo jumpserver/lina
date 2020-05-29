@@ -49,7 +49,7 @@ router.beforeEach(async(to, from, next) => {
   }
   // determine whether the user has obtained his permission roles through getProfile
   const currentUser = store.getters.currentUser
-  const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0
+  const hasRoles = currentUser && currentUser.currentOrgRoles && currentUser.currentOrgRoles.length > 0
   if (hasRoles) {
     next()
     return
@@ -57,12 +57,12 @@ router.beforeEach(async(to, from, next) => {
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-    let { current_org_roles } = await store.dispatch('users/getProfile')
+    let { currentOrgRoles } = await store.dispatch('users/getProfile')
 
-    current_org_roles = checkRoles(current_org_roles)
+    currentOrgRoles = checkRoles(currentOrgRoles)
 
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', currentOrgRoles)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
@@ -77,8 +77,7 @@ router.beforeEach(async(to, from, next) => {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
     Message.error(error || 'Has Error')
-    next(`/auth/login/`)
-    console.log(error)
+    next(`/core/auth/login/`)
     NProgress.done()
     // next()
   }

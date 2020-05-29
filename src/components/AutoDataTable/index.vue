@@ -20,7 +20,7 @@ export default {
     return {
       loading: true,
       method: 'get',
-      totalConfig: {},
+      iConfig: {},
       meta: {}
     }
   },
