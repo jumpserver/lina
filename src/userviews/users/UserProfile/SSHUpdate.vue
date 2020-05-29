@@ -31,16 +31,16 @@ export default {
     return {
       url: '/api/v1/users/profile/public-key/',
       fields: [
-        ['原来SSH公钥', ['public_key_comment', 'public_key_hash_md5']],
-        ['更新SSH公钥', ['public_key']]
+        [this.$t('users.OldSSHKey'), ['public_key_comment', 'public_key_hash_md5']],
+        [this.$t('users.UpdateSSHKey'), ['public_key']]
       ],
       fieldsMeta: {
         public_key_comment: {
-          label: '名称',
+          label: this.$t('users.Name'),
           disabled: true
         },
         public_key_hash_md5: {
-          label: '指纹',
+          label: this.$t('users.FingerPrint'),
           disabled: true
         },
         public_key: {
@@ -48,12 +48,12 @@ export default {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...'
           },
-          helpText: '复制你的公钥到这里'
+          helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
         }
       },
       moreButtons: [
         {
-          title: '重置并下载密钥',
+          title: this.$t('users.ResetAndDownloadSSHKey'),
           callback: function() {
             window.open(`/users/profile/pubkey/generate/`, '_blank')
           }

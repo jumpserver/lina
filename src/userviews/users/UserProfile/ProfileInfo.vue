@@ -30,7 +30,7 @@ export default {
       url: `/api/v1/users/profile/`,
       quickActions: [
         {
-          title: this.$t('assets.SetMFA'),
+          title: this.$t('users.SetMFA'),
           attrs: {
             type: 'primary',
             label: this.object.mfa_enabled ? this.$t('common.Disable') : this.$t('common.Enable'),
@@ -40,35 +40,35 @@ export default {
             click: function() {
               if (this.object.mfa_enabled) {
                 if (!this.object.mfa_force_enabled) {
-                  window.location.href = `/users/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
+                  window.location.href = `/core/users/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
                 }
               } else {
-                window.location.href = `/users/profile/otp/enable/start/?next=${this.$route.fullPath}`
+                window.location.href = `/core/users/profile/otp/enable/start/?next=${this.$route.fullPath}`
               }
             }.bind(this)
           }
         },
         {
-          title: this.$t('assets.UpdateMFA'),
+          title: this.$t('users.UpdateMFA'),
           attrs: {
             type: 'primary',
             label: this.$t('common.Update')
           },
           callbacks: {
             click: function() {
-              window.location.href = `/users/profile/otp/update/?next=${this.$route.fullPath}`
+              window.location.href = `/core/users/profile/otp/update/?next=${this.$route.fullPath}`
             }.bind(this)
           }
         },
         {
-          title: this.$t('assets.ResetPublicKeyAndDownload'),
+          title: this.$t('users.ResetPublicKeyAndDownload'),
           attrs: {
             type: 'primary',
             label: this.$t('common.Reset')
           },
           callbacks: {
             click: function() {
-              window.open(`/users/profile/pubkey/generate/`, '_blank')
+              window.open(`/core/users/profile/pubkey/generate/`, '_blank')
             }
           }
         }
@@ -80,23 +80,23 @@ export default {
       return [
         {
           value: this.object.username,
-          key: this.$t('assets.Username')
+          key: this.$t('users.Username')
         },
         {
           value: this.object.name,
-          key: this.$t('assets.Name')
+          key: this.$t('users.Name')
         },
         {
           value: this.object.role_display,
-          key: this.$t('assets.Role')
+          key: this.$t('users.Role')
         },
         {
           value: this.object.email,
-          key: this.$t('assets.Email')
+          key: this.$t('users.Email')
         },
         {
           value: `${this.object.is_active}`,
-          key: this.$t('assets.IsActive')
+          key: this.$t('users.IsActive')
         },
         {
           value: `${this.object.public_key_comment} ${this.object.public_key_hash_md5}`,
@@ -104,35 +104,35 @@ export default {
         },
         {
           value: this.object.mfa_level_display,
-          key: this.$t('assets.MfaLevel')
+          key: this.$t('users.MfaLevel')
         },
         {
           value: this.object.source_display,
-          key: this.$t('assets.Source')
+          key: this.$t('users.Source')
         },
         {
           value: toSafeLocalDateStr(this.object.date_joined),
-          key: (this.$t('assets.date_joined'))
+          key: (this.$t('users.DateJoined'))
         },
         {
           value: toSafeLocalDateStr(this.object.last_login),
-          key: this.$t('assets.last_login')
+          key: this.$t('users.DateLastLogin')
         },
         {
           value: toSafeLocalDateStr(this.object.date_password_last_updated),
-          key: this.$t('assets.date_password_last_updated')
+          key: this.$t('users.DatePasswordLastUpdated')
         },
         {
           value: toSafeLocalDateStr(this.object.date_expired),
-          key: this.$t('assets.date_expired')
+          key: this.$t('users.DateExpired')
         },
         {
           value: this.object.groups_display,
-          key: this.$t('perms.UserGroups')
+          key: this.$t('users.UserGroups')
         },
         {
           value: this.object.comment,
-          key: this.$t('assets.Comment')
+          key: this.$t('users.Comment')
         }
       ]
     }

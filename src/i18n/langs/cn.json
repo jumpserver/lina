@@ -631,9 +631,22 @@
     "RenameNode": ""
   },
   "users": {
+    "DateJoined": "创建日期",
+    "MfaLevel": "多因子认证",
+    "IsActive": "激活",
+    "SetMFA": "设置多因子认证",
+    "UpdateMFA": "更改多因子认证",
+    "ResetPublicKeyAndDownload": "重置并下载SSH密钥",
+    "Profile": "个人信息",
+    "ProfileSetting": "个人信息设置",
+    "LoginPasswordSetting": "登录密码设置",
+    "SSHKeySetting": "SSH公钥设置",
     "Account": "账户",
     "Authentication": "认证",
-    "Email": "Email",
+    "OldSSHKey": "原来SSH公钥",
+    "UpdateSSHKey": "更新SSH公钥",
+    "FingerPrint": "指纹",
+    "Email": "邮件",
     "MFA": "MFA",
     "Name": "姓名",
     "Remove": "移除",
@@ -645,8 +658,12 @@
     "Users": "用户",
     "dateExpired": "过期时间",
     "dateJoined": "创建日期",
-    "dateLastLogin": "最后登录日期",
+    "DateLastLogin": "最后登录日期",
+    "DatePasswordLastUpdated": "最后更新密码日期",
+    "Comment": "备注",
+    "DateExpired": "失效日期",
     "datePasswordUpdated": "改密日期",
+    "ResetAndDownloadSSHKey": "重置并下载密钥",
     "quickUpdate": {
       "resetMFA": "重置MFA",
       "resetMFAWarningMsg": "你确定要重置用户的 MFA 吗?",
@@ -661,6 +678,9 @@
       "unblock": "解锁",
       "unblockSuccessMsg": "解锁成功",
       "unblockUser": "解锁用户"
+    },
+    "HelpText": {
+      "SSHKeyOfProfileSSHUpdatePage": "复制你的公钥到这里"
     },
     "removeErrorMsg": "移除失败",
     "removeSuccessMsg": "移除成功",

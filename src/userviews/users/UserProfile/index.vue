@@ -25,7 +25,7 @@ export default {
     return {
       user: {},
       config: {
-        title: this.$t('common.nav.Profile'),
+        title: this.$t('users.Profile'),
         activeMenu: 'ProfileInfo',
         submenu: [
           {
@@ -33,15 +33,15 @@ export default {
             name: 'ProfileInfo'
           },
           {
-            title: '个人信息设置',
+            title: this.$t('users.ProfileSetting'),
             name: 'ProfileUpdate'
           },
           {
-            title: '登录密码设置',
+            title: this.$t('users.LoginPasswordSetting'),
             name: 'PasswordUpdate'
           },
           {
-            title: 'SSH公钥设置',
+            title: this.$t('users.SSHKeySetting'),
             name: 'SSHUpdate'
           }
         ],
