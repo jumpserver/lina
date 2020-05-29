@@ -669,6 +669,8 @@
     "assetAndNode": "资产或节点",
     "Success": "成功",
     "ChangeAuthPlan": {
+      "AssetAmount": "资产数量",
+      "NodeAmount": "节点数量",
       "ChangeAuthPlan": "改密计划",
       "ChangeAuthPlanCreate": "创建改密计划",
       "ChangeAuthPlanUpdate": "更新改密计划",
@@ -680,6 +682,9 @@
       "Username": "用户名",
       "PasswordStrategy": "密码策略",
       "PasswordLength": "密码长度",
+      "Execute": "执行",
+      "ExecutionTimes": "执行次数",
+      "Timer": "定时执行",
       "CyclePerform": "周期执行",
       "RegularlyPerform": "定期执行",
       "DateJoined": "创建日期",

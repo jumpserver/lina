@@ -20,33 +20,42 @@ export default {
           'periodic_display', 'run_times', 'comment', 'actions'
         ],
         columnsMeta: {
-          password_strategy_display: {
-            width: '200px',
-            showOverflowTooltip: true
-          },
           assets_amount: {
-            label: vm.$t('xpack.Asset')
+            label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
+            width: '80px'
           },
           nodes_amount: {
-            label: vm.$t('xpack.Node')
+            label: vm.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            width: '80px'
+          },
+          password_strategy_display: {
+            label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+            width: '220px',
+            showOverflowTooltip: true
           },
           periodic_display: {
-            showOverflowTooltip: true
+            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            showOverflowTooltip: true,
+            width: '150px'
+          },
+          run_times: {
+            label: vm.$t('xpack.ChangeAuthPlan.ExecutionTimes'),
+            width: '80px'
           }
         },
         actions: {
           formatterArgs: {
             extraActions: [
               {
-                title: vm.$t('xpack.ChangeAuthPlan.Run'),
-                name: 'run',
+                title: vm.$t('xpack.ChangeAuthPlan.Execute'),
+                name: 'execute',
                 type: 'info',
                 callback: function(data) {
                   this.$axios.post(
                     `/api/v1/xpack/change-auth-plan/plan-execution/`,
                     { plan: data.cellValue }
                   ).then(res => {
-                    window.open(`/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                    window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   })
                 }.bind(this)
               }
@@ -55,9 +64,9 @@ export default {
         }
       },
       headerActions: {
+        hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
         hasBulkDelete: false,
         hasBulkUpdate: false
       }
