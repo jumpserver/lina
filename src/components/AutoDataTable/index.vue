@@ -51,9 +51,9 @@ export default {
             prop: 'id',
             label: this.$t('common.Actions'),
             align: 'center',
-            formatter: ActionsFormatter,
             width: '150px',
-            actions: this.config.actions || {}
+            formatter: this.config.actions.formatter || ActionsFormatter,
+            formatterArgs: this.config.actions.formatterArgs || {}
           }
           break
         case 'is_valid':
