@@ -30,13 +30,17 @@ export default {
             label: this.$t('xpack.ChangeAuthPlan.Username')
           },
           assets_amount: {
-            label: this.$t('xpack.Asset')
+            label: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
+            width: '80px'
           },
           nodes_amount: {
-            label: this.$t('xpack.Node')
+            label: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            width: '80px'
           },
           result_summary: {
             label: this.$t('xpack.ChangeAuthPlan.Result'),
+            width: '80px',
+            showOverflowTooltip: true,
             formatter: function(row) {
               const summary = <div>
                 <span class='text-primary'>{row.result_summary.succeed}</span>/
@@ -47,54 +51,56 @@ export default {
             }
           },
           password_strategy_display: {
-            label: this.$t('xpack.ChangeAuthPlan.PasswordStrategy')
+            label: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+            width: '220px',
+            showOverflowTooltip: true
           },
           timedelta: {
             label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            width: '80px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
           },
           date_start: {
             showOverflowTooltip: true
-          },
-          actions: {
-            prop: 'id',
-            formatterArgs: {
-              hasDelete: false,
-              hasUpdate: false,
-              extraActions: [
-                {
-                  name: 'log',
-                  type: 'primary',
-                  title: this.$t('xpack.ChangeAuthPlan.Log'),
-                  callback: function({ cellValue, tableData }) {
-                    window.open(`/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                  }
-                },
-                {
-                  name: 'detail',
-                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
-                  type: 'info',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
-                  }
+          }
+        },
+        actions: {
+          formatterArgs: {
+            hasDelete: false,
+            hasUpdate: false,
+            extraActions: [
+              {
+                name: 'log',
+                type: 'primary',
+                title: this.$t('xpack.ChangeAuthPlan.Log'),
+                callback: function({ cellValue, tableData }) {
+                  window.open(`/core/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                 }
-              ]
-            }
+              },
+              {
+                name: 'detail',
+                title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                type: 'info',
+                callback: function({ cellValue, tableData }) {
+                  return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
+                }
+              }
+            ]
           }
         }
       },
       headerActions: {
+        hasSearch: true,
+        hasRefresh: true,
+        hasRightActions: true,
+        hasLeftActions: true,
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
         hasCreate: false,
         hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
-        hasSearch: false,
-        hasRightActions: false
+        hasBulkUpdate: false
       }
     }
   }

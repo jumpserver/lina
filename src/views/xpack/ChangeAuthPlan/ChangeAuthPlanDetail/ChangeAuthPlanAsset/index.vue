@@ -39,15 +39,15 @@ export default {
         }
       },
       headerActions: {
+        hasSearch: true,
+        hasRefresh: true,
+        hasLeftActions: true,
+        hasRightActions: true,
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
         hasCreate: false,
         hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
-        hasSearch: false,
-        hasRightActions: false
+        hasBulkUpdate: false
       },
       assetRelationConfig: {
         icon: 'fa-edit',
@@ -84,11 +84,10 @@ export default {
           return this.$axios.patch(relationUrl, data)
         },
         onAddSuccess: (objects, that) => {
-          this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          this.$refs.listTable.reloadTable()
         },
         performDelete: (item) => {
           const nodes = this.object.nodes
@@ -105,11 +104,10 @@ export default {
           that.iHasObjects.splice(theRemoveIndex, 1)
           while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
             const i = that.select2.disabledValues.indexOf(obj.value)
-            this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 500)
+          this.$refs.listTable.reloadTable()
         }
       }
     }
