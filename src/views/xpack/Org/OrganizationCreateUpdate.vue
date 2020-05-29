@@ -22,7 +22,7 @@ export default {
             el: {
               value: [],
               ajax: {
-                url: '/api/v1/users/users/',
+                url: '/api/v1/users/users/?fields_size=mini',
                 processResults(data) {
                   let results = data.results
                   results = results.map((item) => {
@@ -39,7 +39,7 @@ export default {
             el: {
               value: [],
               ajax: {
-                url: '/api/v1/users/users/',
+                url: '/api/v1/users/users/?fields_size=mini',
                 processResults(data) {
                   let results = data.results
                   results = results.map((item) => {
@@ -56,7 +56,7 @@ export default {
             el: {
               value: [],
               ajax: {
-                url: '/api/v1/users/users/',
+                url: '/api/v1/users/users/?fields_size=mini',
                 processResults(data) {
                   let results = data.results
                   results = results.map((item) => {

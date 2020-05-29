@@ -21,7 +21,7 @@ export default {
           users: {
             el: {
               value: [],
-              url: '/api/v1/users/users/'
+              url: '/api/v1/users/users/?fields_size=mini'
             }
           }
         }

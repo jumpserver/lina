@@ -1,6 +1,6 @@
 <template>
   <div class="asset-select-dialog">
-    <el-select ref="select" v-model="internalValue" multiple :placeholder="placeholder" @focus="handleFocus" />
+    <Select2 ref="select2" v-model="value" multiple :placeholder="placeholder" v-bind="$attrs" @focus="handleFocus" />
     <el-dialog
       :title="this.$t('assets.Assets')"
       :visible.sync="dialogVisible"
@@ -24,9 +24,11 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import { Select2 } from '@/components'
+
 export default {
   componentName: 'AssetSelect',
-  components: { GenericTreeListPage },
+  components: { GenericTreeListPage, Select2 },
   props: {
     value: {
       type: Array,
@@ -69,13 +71,7 @@ export default {
         ]
       },
       headerActions: {
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasLeftActions: false,
+        hasRightSide: false,
         hasSearch: true,
         hasRightActions: false
       }
@@ -83,25 +79,23 @@ export default {
   },
   computed: {
     placeholder() {
-      if (this.$route.params.id) {
-        return '点击查看已选择的资产'
-      }
       return '请选择'
     }
   },
   mounted() {
-    this.$on('SelectionChange', (val) => {
-      // 对象循环
-      this.internalValue = []
-      this.showValue = []
-      for (const key in val) {
-        this.internalValue.push(`${val[key].hostname}(${val[key].ip})`)
-        this.showValue.push(`${val[key].id}`)
-      }
+    console.log('Initial value', this.value)
+    // this.$on('SelectionChange', (val) => {
+    //   // 对象循环
+    //   this.internalValue = []
+    //   this.showValue = []
+    //   for (const key in val) {
+    //     this.internalValue.push(`${val[key].hostname}(${val[key].ip})`)
+    //     this.showValue.push(`${val[key].id}`)
+    //   }
 
-      this.$emit('input', this.showValue)
-      this.$emit('getAsset', this.showValue)
-    })
+    this.$emit('input', this.showValue)
+    this.$emit('getAsset', this.showValue)
+    // })
   },
   methods: {
     clearSelected() {
@@ -109,7 +103,7 @@ export default {
       this.showValue = []
     },
     handleFocus() {
-      this.$refs.select.blur()
+      this.$refs.select2.selectRef.blur()
       this.dialogVisible = true
     },
     handleConfirm() {

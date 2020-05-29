@@ -1,5 +1,6 @@
 <template>
   <el-select
+    ref="select"
     v-model="iValue"
     v-loadmore="loadMore"
     :options="iOptions"
@@ -99,6 +100,9 @@ export default {
     }
   },
   computed: {
+    selectRef() {
+      return this.$refs.select
+    },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
     },

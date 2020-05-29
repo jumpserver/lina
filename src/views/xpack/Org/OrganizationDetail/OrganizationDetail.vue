@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="adminReletionConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="userReletionConfig" />
+      <RelationCard type="primary" v-bind="adminRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="userRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      userReletionConfig: {
+      userRelationConfig: {
         icon: 'fa-user',
         title: this.$t('xpack.User'),
         objectsAjax: {
@@ -60,7 +60,7 @@ export default {
           return this.$axios.patch(relationUrl, data)
         }
       },
-      adminReletionConfig: {
+      adminRelationConfig: {
         icon: 'fa-user',
         title: this.$t('xpack.Admin'),
         objectsAjax: {
