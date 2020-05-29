@@ -31,7 +31,7 @@ export default {
       },
       fieldsMeta: {
         username: {
-          helpText: '用户名为将要修改的资产上的用户的用户名。如果用户存在，则修改密码；如果用户不存在，则创建用户。'
+          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.UsernameOfCreateUpdatePage')
         },
         assets: {
           type: 'assetSelect',
@@ -78,21 +78,15 @@ export default {
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: '' +
-            'eg：每周日 03:05 执行 <5 3 * * 0>' +
-            '<br/>' +
-            '使用5位 Linux crontab 表达式 <分 时 日 月 星期> ' +
-            '（<a href="https://tool.lu/crontab/" target="_blank">在线工具</a>）' +
-            '<br/>' +
-            '如果同时设置了定期执行和周期执行，优先使用定期执行' +
-            ''
+          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.CrontabOfCreateUpdatePage')
         },
         interval: {
           label: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: '（单位： 时）'
+          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.IntervalOfCreateUpdatePage')
+          // helpText: '（单位： 时）'
         }
       }
     }

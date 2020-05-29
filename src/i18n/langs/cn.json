@@ -690,6 +690,11 @@
     "assetAndNode": "资产或节点",
     "Success": "成功",
     "ChangeAuthPlan": {
+      "Asset": "资产",
+      "Success": "成功",
+      "AssetAndNode": "资产和节点",
+      "AssetAmount": "资产数量",
+      "NodeAmount": "节点数量",
       "ChangeAuthPlan": "改密计划",
       "ChangeAuthPlanCreate": "创建改密计划",
       "ChangeAuthPlanUpdate": "更新改密计划",
@@ -701,12 +706,14 @@
       "Username": "用户名",
       "PasswordStrategy": "密码策略",
       "PasswordLength": "密码长度",
+      "Execute": "执行",
+      "ExecutionTimes": "执行次数",
+      "Timer": "定时执行",
       "CyclePerform": "周期执行",
       "RegularlyPerform": "定期执行",
       "DateJoined": "创建日期",
       "DateUpdated": "更新日期",
-      "ManualRunPlan": "手动执行计划",
-      "Run": "执行",
+      "ManualExecutePlan": "手动执行计划",
       "addAsset": "添加资产",
       "addNode": "添加节点",
       "Result": "结果",
@@ -714,7 +721,12 @@
       "DateStart": "开始日期",
       "Detail": "详情",
       "Log": "日志",
-      "Retry": "重试"
+      "Retry": "重试",
+      "HelpText": {
+        "UsernameOfCreateUpdatePage": "目标主机上用户的用户名；如果已️存在，修改用户密码；如果不存在，添加用户并设置密码；",
+        "CrontabOfCreateUpdatePage": "例如：每周日 03:05 执行 <5 3 * * 0> <br/> 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href=\"https://tool.lu/crontab/\" target=\"_blank\">在线工具</a>） <br/> 如果同时设置了定期执行和周期执行，优先使用定期执行",
+        "IntervalOfCreateUpdatePage": "单位：时"
+      }
     },
     "Corporation": "公司",
     "Edition": "版本",
