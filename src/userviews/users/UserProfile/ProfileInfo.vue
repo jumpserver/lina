@@ -56,7 +56,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.location.href = `/corer/users/profile/otp/update/?next=${this.$route.fullPath}`
+              window.location.href = `/core/users/profile/otp/update/?next=${this.$route.fullPath}`
             }.bind(this)
           }
         },
