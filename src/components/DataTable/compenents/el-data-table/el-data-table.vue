@@ -962,6 +962,11 @@ export default {
       this.innerQuery = attrs
       return this.getList()
     },
+    searchDate(attrs) {
+      this.extraQuery = attrs
+      return this.getList()
+    },
+
     /**
      * 重置查询，相当于点击「重置」按钮
      *

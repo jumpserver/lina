@@ -64,7 +64,8 @@ export default {
         hasCreate: false,
         hasBulkDelete: false,
         hasImport: false,
-        hasExport: false
+        hasExport: false,
+        hasDatePicker: true
       }
     }
   }
