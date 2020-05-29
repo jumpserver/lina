@@ -696,6 +696,7 @@
     "Corporation": "公司",
     "Edition": "版本",
     "Expired": "过期时间",
+    "GatherUserTask":"收集用户任务",
     "GatherUserList": "收集用户",
     "GatherUserTaskCreate": "创建任务",
     "GatherUserTaskList": "任务列表",
