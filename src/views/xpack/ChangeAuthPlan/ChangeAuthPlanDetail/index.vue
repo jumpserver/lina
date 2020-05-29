@@ -30,7 +30,7 @@ export default {
             name: 'ChangeAuthPlanInfo'
           },
           {
-            title: this.$t('xpack.assetAndNode'),
+            title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
             name: 'ChangeAuthPlanAsset'
           },
           {

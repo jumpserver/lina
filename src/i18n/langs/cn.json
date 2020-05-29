@@ -669,6 +669,7 @@
     "assetAndNode": "资产或节点",
     "Success": "成功",
     "ChangeAuthPlan": {
+      "AssetAndNode": "资产和节点",
       "AssetAmount": "资产数量",
       "NodeAmount": "节点数量",
       "ChangeAuthPlan": "改密计划",
@@ -689,8 +690,7 @@
       "RegularlyPerform": "定期执行",
       "DateJoined": "创建日期",
       "DateUpdated": "更新日期",
-      "ManualRunPlan": "手动执行计划",
-      "Run": "执行",
+      "ManualExecutePlan": "手动执行计划",
       "addAsset": "添加资产",
       "addNode": "添加节点",
       "Result": "结果",

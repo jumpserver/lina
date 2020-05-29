@@ -29,10 +29,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('xpack.ChangeAuthPlan.ManualRunPlan'),
+          title: this.$t('xpack.ChangeAuthPlan.ManualExecutePlan'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.ChangeAuthPlan.Run')
+            label: this.$t('xpack.ChangeAuthPlan.Execute')
           },
           callbacks: {
             click: function() {
@@ -40,7 +40,7 @@ export default {
                 `/api/v1/xpack/change-auth-plan/plan-execution/`,
                 { plan: this.object.id }
               ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
               })
             }.bind(this)
           }

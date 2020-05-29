@@ -30,10 +30,10 @@ export default {
             label: this.$t('xpack.ChangeAuthPlan.Username')
           },
           assets_amount: {
-            label: this.$t('xpack.Asset')
+            label: this.$t('xpack.ChangeAuthPlan.AssetAmount')
           },
           nodes_amount: {
-            label: this.$t('xpack.Node')
+            label: this.$t('xpack.ChangeAuthPlan.NodeAmount')
           },
           result_summary: {
             label: this.$t('xpack.ChangeAuthPlan.Result'),
@@ -57,31 +57,30 @@ export default {
           },
           date_start: {
             showOverflowTooltip: true
-          },
-          actions: {
-            prop: 'id',
-            formatterArgs: {
-              hasDelete: false,
-              hasUpdate: false,
-              extraActions: [
-                {
-                  name: 'log',
-                  type: 'primary',
-                  title: this.$t('xpack.ChangeAuthPlan.Log'),
-                  callback: function({ cellValue, tableData }) {
-                    window.open(`/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                  }
-                },
-                {
-                  name: 'detail',
-                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
-                  type: 'info',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
-                  }
+          }
+        },
+        actions: {
+          formatterArgs: {
+            hasDelete: false,
+            hasUpdate: false,
+            extraActions: [
+              {
+                name: 'log',
+                type: 'primary',
+                title: this.$t('xpack.ChangeAuthPlan.Log'),
+                callback: function({ cellValue, tableData }) {
+                  window.open(`/core/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                 }
-              ]
-            }
+              },
+              {
+                name: 'detail',
+                title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                type: 'info',
+                callback: function({ cellValue, tableData }) {
+                  return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
+                }
+              }
+            ]
           }
         }
       },
