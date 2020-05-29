@@ -685,6 +685,15 @@
     "logoLogoutTip": "Tips: This will be displayed on the enterprise user logout page. (suggest image size: 82px*82px)",
     "restoreDialogMessage": "This will restore default Settings of the interface !!!",
     "restoreDialogTitle": "Are you sure?",
-    "technologyConsult": "Technology Consult"
+    "technologyConsult": "Technology Consult",
+    "Cloud": {
+      "Cloud": "Cloud centre",
+      "AccountList": "Account list",
+      "AccountCreate": "Create account",
+      "AccountUpdate": "Update account",
+      "SyncInstanceTaskList": "Sync instance task list",
+      "SyncInstanceTaskCreate": "Create sync instance task",
+      "SyncInstanceTaskUpdate": "Update sync instance task"
+    }
   }
 }
