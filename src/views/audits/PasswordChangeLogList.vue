@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
@@ -17,6 +17,13 @@ export default {
         columnsMeta: {
         },
         hasSelection: false
+      },
+      headerActions: {
+        hasSelection: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasImport: false,
+        hasRefresh: false
       }
     }
   }
