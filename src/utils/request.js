@@ -1,9 +1,7 @@
 import axios from 'axios'
-// import i18n from '@/i18n/i18n'
+import i18n from '@/i18n/i18n'
 
-import {
-  Message
-} from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import {
   getToken,
@@ -69,16 +67,16 @@ service.interceptors.response.use(
     const response = error.response
     if (response.status === 401) {
       // 未授权重定向到登录页面
-      window.location = process.env.LOGIN_PATH
-      // const title = ''
-      // const msg = i18n.t('auth.LoginRequiredMsg')
-      // MessageBox.confirm(msg, title, {
-      //   confirmButtonText: i18n.t('auth.ReLogin'),
-      //   cancelButtonText: i18n.t('common.Cancel'),
-      //   type: 'warning'
-      // }).then(() => {
-      //   window.location = '/auth/login/'
-      // })
+      const title = ''
+      response.config.disableFlashMsg = true
+      const msg = i18n.t('auth.LoginRequiredMsg')
+      MessageBox.confirm(msg, title, {
+        confirmButtonText: i18n.t('auth.ReLogin'),
+        cancelButtonText: i18n.t('common.Cancel'),
+        type: 'warning'
+      }).then(() => {
+        window.location = '/auth/login/'
+      })
     }
     if (!response.config.disableFlashMsg) {
       Message({

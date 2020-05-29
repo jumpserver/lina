@@ -1,11 +1,15 @@
 <template>
   <div class="asset-select-dialog">
-    <Select2 ref="select2" v-model="value" multiple :placeholder="placeholder" v-bind="$attrs" @focus="handleFocus" />
-    <el-dialog
+    <Select2 ref="select2" v-bind="select2Config" @input="onInputChange" @focus.stop="handleFocus" v-on="$listeners" />
+    <Dialog
+      v-if="dialogVisible"
       :title="this.$t('assets.Assets')"
       :visible.sync="dialogVisible"
       custom-class="asset-select-dialog"
       width="70%"
+      top="1vh"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
     >
       <GenericTreeListPage
         ref="ListPage"
@@ -13,22 +17,18 @@
         :table-config="tableConfig"
         :header-actions="headerActions"
       />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{ $t('common.Cancel') }}</el-button>
-        <el-button type="primary" @click="handleConfirm">{{ $t('common.Confirm') }}</el-button>
-      </span>
-    </el-dialog>
+    </Dialog>
   </div>
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { DetailFormatter } from '@/components/ListTable/formatters'
-import { Select2 } from '@/components'
+import { Select2, Dialog } from '@/components'
 
 export default {
   componentName: 'AssetSelect',
-  components: { GenericTreeListPage, Select2 },
+  components: { GenericTreeListPage, Select2, Dialog },
   props: {
     value: {
       type: Array,
@@ -36,23 +36,42 @@ export default {
     }
   },
   data() {
+    const select2Config = {
+      value: this.value,
+      multiple: true,
+      clearable: true,
+      ajax: {
+        url: '/api/v1/assets/assets/?fields_size=mini',
+        processResults(data) {
+          let results = data.results
+          results = results.map((item) => {
+            return { label: item.hostname + '(' + item.ip + ')', value: item.id }
+          })
+          const more = !!data.next
+          return { results: results, pagination: more, total: data.count }
+        }
+      }
+    }
+    const vm = this
     return {
-      internalValue: [],
-      showValue: [],
       dialogVisible: false,
+      initialValue: _.cloneDeep(this.value),
+      rowSelected: [],
+      initSelection: null,
       treeSetting: {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/assets/assets/?fields_size=mini',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
       },
+      select2Config: select2Config,
+      dialogSelect2Config: select2Config,
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
-        defaultSelect: this.value,
         columns: [
           {
             prop: 'hostname',
@@ -68,40 +87,27 @@ export default {
             label: this.$t('assets.ip'),
             sortable: 'custom'
           }
-        ]
+        ],
+        listeners: {
+          'toggle-row-selection': (isSelected, row) => {
+            if (isSelected) {
+              vm.addRowToSelect(row)
+            } else {
+              vm.removeRowFromSelect(row)
+            }
+          }
+        },
+        theRowDefaultIsSelected: (row) => {
+          return this.value.indexOf(row.id) > -1
+        }
       },
       headerActions: {
-        hasRightSide: false,
-        hasSearch: true,
+        hasLeftActions: false,
         hasRightActions: false
       }
     }
   },
-  computed: {
-    placeholder() {
-      return '请选择'
-    }
-  },
-  mounted() {
-    console.log('Initial value', this.value)
-    // this.$on('SelectionChange', (val) => {
-    //   // 对象循环
-    //   this.internalValue = []
-    //   this.showValue = []
-    //   for (const key in val) {
-    //     this.internalValue.push(`${val[key].hostname}(${val[key].ip})`)
-    //     this.showValue.push(`${val[key].id}`)
-    //   }
-
-    this.$emit('input', this.showValue)
-    this.$emit('getAsset', this.showValue)
-    // })
-  },
   methods: {
-    clearSelected() {
-      this.internalValue = []
-      this.showValue = []
-    },
     handleFocus() {
       this.$refs.select2.selectRef.blur()
       this.dialogVisible = true
@@ -109,7 +115,40 @@ export default {
     handleConfirm() {
       this.dialogVisible = false
     },
-    handleClose(done) {
+    handleCancel() {
+      this.$refs.select2.iValue = this.initialValue
+      this.dialogVisible = false
+    },
+    onInputChange(val) {
+      this.$emit('input', val)
+    },
+    addToSelect(options, row) {
+      const selectOptionsHas = options.find(item => item.value === row.id)
+      // 如果select2的options中没有，那么可能无法显示正常的值
+      if (selectOptionsHas === undefined) {
+        const option = {
+          label: `${row.hostname}(${row.ip})`,
+          value: row.id
+        }
+        options.push(option)
+      }
+    },
+    addRowToSelect(row) {
+      const outSelectOptions = this.$refs.select2.options
+      this.addToSelect(outSelectOptions, row)
+
+      const selectValue = this.$refs.select2.iValue
+      const selectValueIndex = selectValue.indexOf(row.id)
+      if (selectValueIndex === -1) {
+        selectValue.push(row.id)
+      }
+    },
+    removeRowFromSelect(row) {
+      const selectValue = this.$refs.select2.iValue
+      const selectValueIndex = selectValue.indexOf(row.id)
+      if (selectValueIndex > -1) {
+        selectValue.splice(selectValueIndex, 1)
+      }
     }
   }
 }

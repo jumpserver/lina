@@ -1,5 +1,5 @@
 <template>
-  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" v-on="$listeners" />
+  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" @update="onUpdate" v-on="iListeners" />
 </template>
 
 <script>
@@ -77,7 +77,8 @@ export default {
             delete query['direction']
           }
           return query
-        }
+        },
+        theRowDefaultIsSelected: (row) => { return false }
       }
     }
   },
@@ -85,6 +86,9 @@ export default {
     tableConfig() {
       const config = Object.assign(this.defaultConfig, this.config)
       return config
+    },
+    iListeners() {
+      return Object.assign({}, this.$listeners, this.tableConfig.listeners)
     }
   },
   methods: {
@@ -103,6 +107,18 @@ export default {
     },
     toggleRowSelection(row, isSelected) {
       return this.$refs.table.toggleRowSelection(row, isSelected)
+    },
+    onUpdate(data, response) {
+      const theRowDefaultIsSelected = this.tableConfig.theRowDefaultIsSelected
+      if (!theRowDefaultIsSelected || typeof theRowDefaultIsSelected !== 'function') {
+        return
+      }
+
+      for (const row of data) {
+        if (theRowDefaultIsSelected(row)) {
+          this.toggleRowSelection(row, true)
+        }
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog width="45%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
+    <Dialog width="60%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
       <div>
         <el-alert type="success"> {{ helpMessage }} </el-alert>
         <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
@@ -30,15 +30,15 @@ export default {
         hasSelection: true,
         url: `/api/v1/authentication/access-keys/`,
         columns: [
-          'id_display', 'secret', 'is_active', 'date_created', 'actions'
+          'id', 'secret', 'is_active', 'date_created', 'actions'
         ],
         columnsMeta: {
-          id_display: {
-            label: 'ID',
+          id: {
+            label: 'AccessKeyID',
             width: '315px'
           },
           secret: {
-            label: '密文',
+            label: 'AccessKeySecret',
             width: '315px',
             formatter: ShowKeyFormatter
           },
@@ -50,6 +50,7 @@ export default {
             formatter: DateFormatter
           },
           actions: {
+            prop: '',
             formatterArgs: {
               onDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(

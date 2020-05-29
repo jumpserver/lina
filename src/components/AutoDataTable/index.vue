@@ -1,5 +1,5 @@
 <template>
-  <DataTable ref="dataTable" v-loading="loading" :config="totalConfig" v-bind="$attrs" v-on="$listeners" />
+  <DataTable ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script type="text/jsx">
@@ -20,7 +20,7 @@ export default {
     return {
       loading: true,
       method: 'get',
-      totalConfig: {},
+      iConfig: {},
       meta: {}
     }
   },
@@ -35,7 +35,7 @@ export default {
         this.generateColumns()
       }).catch(() => {
         this.$log.error('Error occur: ')
-        // this.totalConfig = this.config
+        // this.iConfig = this.config
       }).finally(() => {
         this.loading = false
       })
@@ -126,7 +126,7 @@ export default {
           columns.push(col)
         }
       }
-      this.totalConfig = Object.assign(config, { columns: columns })
+      this.iConfig = Object.assign(config, { columns: columns })
     }
   }
 }

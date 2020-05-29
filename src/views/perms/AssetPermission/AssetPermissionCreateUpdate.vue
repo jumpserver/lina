@@ -56,10 +56,7 @@ export default {
             required: false
           }],
           el: {
-            value: [],
-            ajax: {
-              url: '/api/v1/assets/assets/?fields_size=mini'
-            }
+            value: []
           }
         },
         nodes: {

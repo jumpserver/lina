@@ -120,3 +120,18 @@ h3, h4, h5 {
 h4 {
   font-size: 14px;
 }
+
+// 弹窗里的List table中的搜索框
+
+.el-dialog__body div.table-action-right-side {
+  padding-top: 10px;
+}
+
+.filter-field.right-side-item.action-search {
+  height: 36px;
+}
+
+
+.el-dialog__body {
+  padding-top: 10px;
+}

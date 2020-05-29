@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     :title="title"
+    class="dialog"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -59,6 +60,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .dialog >>> .el-dialog__header {
+    /*padding-top: 10px;*/
+  }
 
 </style>

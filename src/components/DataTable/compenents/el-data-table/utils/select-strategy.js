@@ -84,16 +84,14 @@ class StrategyPersistSelection extends StrategyAbstract {
     const { id, selected } = this.elDataTable
     const foundIndex = selected.findIndex(r => r[id] === row[id])
     if (typeof isSelected === 'undefined') {
-      if (foundIndex > -1) {
-        selected.splice(foundIndex, 1)
-      } else {
-        selected.push(row)
-      }
-    } else if (isSelected && foundIndex === -1) {
+      isSelected = foundIndex <= -1
+    }
+    if (isSelected && foundIndex === -1) {
       selected.push(row)
     } else if (!isSelected && foundIndex > -1) {
       selected.splice(foundIndex, 1)
     }
+    this.elDataTable.$emit('toggle-row-selection', isSelected, row)
     this.updateElTableSelection()
   }
   clearSelection() {

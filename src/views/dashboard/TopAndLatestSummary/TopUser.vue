@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       title: this.$t('dashboard.TopUsersOfWeek'),
-      unit: this.$t('dashboard.timesWeekUnit'),
+      unit: this.$t('dashboard.TimesWeekUnit'),
       dates_login_times_top10_users: []
     }
   },
