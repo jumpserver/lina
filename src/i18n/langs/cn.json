@@ -10,6 +10,7 @@
   },
   "assets": {
     "Action": "动作",
+    "CmdFilter": "命令过滤器",
     "UpdateAssetUserToken": "更新资产用户认证信息",
     "Password": "密码",
     "RefreshHardware": "更新硬件信息",

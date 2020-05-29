@@ -10,6 +10,7 @@
   },
   "assets": {
     "Action": "Action",
+    "CmdFilter": "CmdFilter",
     "UpdateAssetUserToken": "Update asset user auth",
     "Password": "Password",
     "RefreshHardware": "Refresh hardware",

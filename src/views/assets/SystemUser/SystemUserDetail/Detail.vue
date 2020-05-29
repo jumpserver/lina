@@ -5,6 +5,7 @@
     </el-col>
     <el-col :span="10">
       <AutoPushCard v-bind="AutoPushConfig" />
+      <RelationCard v-if="object.protocol === 'ssh'" ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
 </template>a
@@ -12,12 +13,14 @@
 <script>
 import DetailCard from '@/components/DetailCard'
 import AutoPushCard from './AutoPushCard'
+import RelationCard from '@/components/RelationCard/index'
 
 export default {
   name: 'Detail',
   components: {
     DetailCard,
-    AutoPushCard
+    AutoPushCard,
+    RelationCard
   },
   props: {
     object: {
@@ -37,6 +40,56 @@ export default {
             auto_push: this.object.auto_push
           }
         ]
+      },
+      nodeRelationConfig: {
+        icon: 'fa-info',
+        hasObjectsId: this.object.cmd_filters,
+        title: this.$t('assets.CmdFilter'),
+        objectsAjax: {
+          url: '/api/v1/assets/cmd-filters/',
+          processResults(data) {
+            let results = data.results
+            results = results.map((item) => {
+              return { label: item.name, value: item.id }
+            })
+            const more = !!data.next
+            return { results: results, pagination: more, total: data.count }
+          }
+        },
+        performAdd: (items) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/assets/system-users/${objectId}/`
+          const objectOldRelationCmdFilters = this.object.cmd_filters
+          items.map(v => objectOldRelationCmdFilters.push(v.value))
+          const data = { cmd_filters: objectOldRelationCmdFilters }
+          return this.$axios.patch(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/assets/system-users/${objectId}/`
+          const objectOldRelationCmdFilters = this.object.cmd_filters
+          const objectNewRelationCmdFilters = objectOldRelationCmdFilters.filter(v => v !== item.value)
+          const data = { cmd_filters: objectNewRelationCmdFilters }
+          return this.$axios.patch(relationUrl, data)
+        },
+        onAddSuccess: (objects, that) => {
+          this.$log.debug('Select value', that.select2.value)
+          that.iHasObjects = [...that.iHasObjects, ...objects]
+          that.$refs.select2.clearSelected()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          // setTimeout(() => location.reload(), 300)
+        },
+        onDeleteSuccess: (obj, that) => {
+          const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
+          that.iHasObjects.splice(theRemoveIndex, 1)
+          while (that.select2.disabledValues.indexOf(obj.value) !== -1) {
+            const i = that.select2.disabledValues.indexOf(obj.value)
+            this.$log.debug('disabled values remove index: ', i)
+            that.select2.disabledValues.splice(i, 1)
+          }
+          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          // setTimeout(() => location.reload(), 300)
+        }
       }
     }
   },
