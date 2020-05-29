@@ -33,8 +33,8 @@ export default {
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
-      }).catch(() => {
-        this.$log.error('Error occur: ')
+      }).catch((error) => {
+        this.$log.error('Error occur: ', error)
         // this.totalConfig = this.config
       }).finally(() => {
         this.loading = false
@@ -52,8 +52,8 @@ export default {
             label: this.$t('common.Actions'),
             align: 'center',
             width: '150px',
-            formatter: this.config.actions.formatter || ActionsFormatter,
-            formatterArgs: this.config.actions.formatterArgs || {}
+            formatter: ActionsFormatter,
+            actions: this.config.actions || {}
           }
           break
         case 'is_valid':
