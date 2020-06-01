@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <ListTable :table-config="iTableConfig" :header-actions="headerActions" />
+          <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" />
         </div>
       </div>
     </div>
@@ -53,12 +53,21 @@ export default {
   data() {
     return {
       iTableConfig: this.tableConfig,
-      iShowTree: this.showTree
+      iShowTree: this.showTree,
+      componentKey: 0
+
     }
+  },
+  watch: {
+
   },
   methods: {
     handleUrlChange(_url) {
       this.$set(this.iTableConfig, 'url', _url)
+      this.forceRerender()
+    },
+    forceRerender() {
+      this.componentKey += 1
     }
   }
 }

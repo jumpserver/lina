@@ -103,9 +103,12 @@ export default {
       }
       this.$axios.delete(
         `${this.treeSetting.nodeUrl}${currentNode.meta.node.id}/`
-      ).then(
+      ).then(res => {
+        this.$message.success(this.$t('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
-      )
+      }).catch(err => {
+        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + err))
+      })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
       const url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`
@@ -133,7 +136,7 @@ export default {
       const offset = $('#ztree').offset()
       const scrollTop = document.querySelector('.treebox').scrollTop
       x -= offset.left
-      y -= offset.top + scrollTop
+      y -= (offset.top + scrollTop) / 1.5
       x += document.body.scrollLeft
       y += document.body.scrollTop + document.documentElement.scrollTop
       this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
@@ -198,8 +201,9 @@ export default {
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
-        const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.zTree.editName(node)
+        this.refresh()
+        // const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
+        // this.zTree.editName(node)
       })
     },
     refresh: function() {

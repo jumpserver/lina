@@ -629,9 +629,9 @@
     "reply": "回复"
   },
   "tree": {
-    "AddNode": "",
-    "DeleteNode": "",
-    "RenameNode": ""
+    "AddNode": "添加节点",
+    "DeleteNode": "删除节点",
+    "RenameNode": "重命名节点"
   },
   "users": {
     "OldPassword": "原密码",

@@ -623,9 +623,9 @@
     "reply": "Reply"
   },
   "tree": {
-    "AddNode": "",
-    "DeleteNode": "",
-    "RenameNode": ""
+    "AddNode": "Add node",
+    "DeleteNode": "Delete node",
+    "RenameNode": "Rename node"
   },
   "users": {
     "OldPassword": "Old password",
