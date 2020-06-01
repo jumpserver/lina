@@ -16,13 +16,16 @@ export default {
 
       },
       fields: [
-        ['', ['name', 'assets', 'comment']]
+        [this.$t('common.Basic'), ['name', 'assets', 'comment']]
       ],
       fieldsMeta: {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: '资产',
+          label: this.$t('assets.Assets'),
+          el: {
+            value: []
+          },
           rules: [{
             required: false
           }]

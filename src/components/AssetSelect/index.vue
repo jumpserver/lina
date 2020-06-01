@@ -120,7 +120,7 @@ export default {
       this.dialogVisible = false
     },
     onInputChange(val) {
-      this.$emit('input', val)
+      this.$emit('change', val)
     },
     addToSelect(options, row) {
       const selectOptionsHas = options.find(item => item.value === row.id)
@@ -142,6 +142,7 @@ export default {
       if (selectValueIndex === -1) {
         selectValue.push(row.id)
       }
+      this.onInputChange(selectValue)
     },
     removeRowFromSelect(row) {
       const selectValue = this.$refs.select2.iValue
