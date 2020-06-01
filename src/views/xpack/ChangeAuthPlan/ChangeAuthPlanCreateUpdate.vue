@@ -15,11 +15,11 @@ export default {
     return {
       url: '/api/v1/xpack/change-auth-plan/plan/',
       fields: [
-        [this.$t('xpack.Basic'), ['name']],
+        [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
         [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('xpack.Other'), ['comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       initial: {
         password_strategy: 'custom',

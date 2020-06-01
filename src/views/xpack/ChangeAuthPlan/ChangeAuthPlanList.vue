@@ -21,12 +21,10 @@ export default {
         ],
         columnsMeta: {
           assets_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
-            width: '80px'
+            label: vm.$t('xpack.ChangeAuthPlan.AssetAmount')
           },
           nodes_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.NodeAmount'),
-            width: '80px'
+            label: vm.$t('xpack.ChangeAuthPlan.NodeAmount')
           },
           password_strategy_display: {
             label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
@@ -40,26 +38,30 @@ export default {
           },
           run_times: {
             label: vm.$t('xpack.ChangeAuthPlan.ExecutionTimes'),
-            width: '80px'
-          }
-        },
-        actions: {
-          formatterArgs: {
-            extraActions: [
-              {
-                title: vm.$t('xpack.ChangeAuthPlan.Execute'),
-                name: 'execute',
-                type: 'info',
-                callback: function(data) {
-                  this.$axios.post(
-                    `/api/v1/xpack/change-auth-plan/plan-execution/`,
-                    { plan: data.cellValue }
-                  ).then(res => {
-                    window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                  })
-                }.bind(this)
-              }
-            ]
+            width: '87px'
+          },
+          comment: {
+            width: '90px'
+          },
+          actions: {
+            width: '164px',
+            formatterArgs: {
+              extraActions: [
+                {
+                  title: vm.$t('xpack.ChangeAuthPlan.Execute'),
+                  name: 'execute',
+                  type: 'info',
+                  callback: function(data) {
+                    this.$axios.post(
+                      `/api/v1/xpack/change-auth-plan/plan-execution/`,
+                      { plan: data.cellValue }
+                    ).then(res => {
+                      window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                    })
+                  }.bind(this)
+                }
+              ]
+            }
           }
         }
       },
