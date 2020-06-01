@@ -25,8 +25,8 @@ export default {
     return {
       tableConfig: {
         extraQuery: {
-          date_to: (new Date().getTime() / 1000),
-          date_from: (new Date().getTime() / 1000) - 432000
+          date_to: this.formatDate(new Date().getTime()),
+          date_from: this.formatDate((new Date().getTime()) - 432000000)
         },
         hasSelection: false,
         url: this.url,
@@ -109,6 +109,24 @@ export default {
     }
   },
   mounted() {
+  },
+  methods: {
+
+    formatDate(inputTime) {
+      const date = new Date(inputTime)
+      const y = date.getFullYear()
+      let m = date.getMonth() + 1
+      m = m < 10 ? ('0' + m) : m
+      let d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
+      let h = date.getHours()
+      h = h < 10 ? ('0' + h) : h
+      let minute = date.getMinutes()
+      let second = date.getSeconds()
+      minute = minute < 10 ? ('0' + minute) : minute
+      second = second < 10 ? ('0' + second) : second
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+    }
   }
 }
 </script>
