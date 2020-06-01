@@ -430,3 +430,7 @@ a {
   background: white;
   border-color: $--color-danger;
 }
+
+.el-alert .el-alert__description {
+  margin: 1px 0 0;
+}

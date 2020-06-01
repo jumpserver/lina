@@ -380,7 +380,7 @@
     "DatabaseAppPermissionDetail": "数据库应用授权详情",
     "DatabaseAppPermissionUpdate": "更新数据库应用授权规则",
     "DatabaseAppUpdate": "",
-    "DomainCreate": "创建域名",
+    "DomainCreate": "创建网关",
     "DomainDetail": "域名详情",
     "DomainList": "网关列表",
     "DomainUpdate": "更新网关",
