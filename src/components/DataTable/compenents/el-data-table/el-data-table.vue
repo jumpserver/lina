@@ -162,7 +162,7 @@ import getSelectStrategy from './utils/select-strategy'
 import getLocatedSlotKeys from './utils/extract-keys'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
-
+import merge from 'deepmerge'
 const defaultFirstPage = 0
 const noPaginationDataPath = 'payload'
 
@@ -845,9 +845,8 @@ export default {
         formValue = this.$refs.searchForm.getFormValue()
         Object.assign(query, formValue)
       }
-      Object.assign(query, this.innerQuery)
       Object.assign(query, this._extraQuery)
-
+      Object.assign(query, this.innerQuery)
       query[this.pageSizeKey] = this.hasPagination
         ? this.size
         : this.noPaginationSize
@@ -882,7 +881,6 @@ export default {
       }
 
       const query = this.getQuery()
-
       let formValue = {}
       if (this.$refs.searchForm) {
         formValue = this.$refs.searchForm.getFormValue()
@@ -958,12 +956,11 @@ export default {
     },
     search(attrs) {
       // Orange 重置查询对象
-      this.innerQuery = Object.assign(this.innerQuery, attrs)
+      this.innerQuery = merge(this.innerQuery, attrs)
       return this.getList()
     },
     searchDate(attrs) {
-      this.innerQuery = Object.assign(this.innerQuery, attrs)
-      console.log(this.innerQuery)
+      this.innerQuery = merge(this.innerQuery, attrs)
       return this.getList()
     },
 
