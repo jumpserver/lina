@@ -55,21 +55,21 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
     let { current_org_roles } = await store.dispatch('users/getProfile')
-    console.log('Current org role: ', current_org_roles)
+    // console.log('Current org role: ', current_org_roles)
 
     current_org_roles = checkRoles(current_org_roles)
-    console.log('Current org role: ', current_org_roles)
+    // console.log('Current org role: ', current_org_roles)
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
-    console.log('Access routes: ', accessRoutes)
+    // console.log('Access routes: ', accessRoutes)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
-    console.log('Next to: ', to)
+    // console.log('Next to: ', to)
     next({ ...to, replace: true })
   } catch (error) {
     // remove token and go to login page to re-login
@@ -90,13 +90,13 @@ export async function startup({ to, from, next }) {
 
   // set page title
   setHeadTitle({ to, from, next })
-  console.log('Set head title')
+  // console.log('Set head title')
   checkLogin({ to, from, next })
-  console.log('Check login')
+  // console.log('Check login')
   await getPublicSetting({ to, from, next })
-  console.log('Get public setting')
+  // console.log('Get public setting')
   await getUserRoleAndSetRoutes({ to, from, next })
-  console.log('Get profile')
+  // console.log('Get profile')
   return true
 }
 
