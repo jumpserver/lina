@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
+import { timeOffset, toSafeLocalDateStr, formatDate } from '@/utils/common'
 import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'BaseList',
@@ -24,6 +24,10 @@ export default {
   data() {
     return {
       tableConfig: {
+        extraQuery: {
+          date_to: formatDate(new Date().getTime()),
+          date_from: formatDate((new Date().getTime()) - 432000000)
+        },
         hasSelection: false,
         url: this.url,
         columns: [
@@ -103,6 +107,12 @@ export default {
         hasDatePicker: true
       }
     }
+  },
+  mounted() {
+    console.log(this.tableConfig.extraQuery)
+  },
+  methods: {
+
   }
 }
 </script>

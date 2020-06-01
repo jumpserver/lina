@@ -7,23 +7,30 @@
     :end-placeholder="this.$t('common.StartDate')"
     align="center"
     size="large"
-    value-format="timestamp"
     :clearable="false"
     class="datepicker"
+    value-format="yyyy-MM-ddThh:mm"
+    :default-time="['12:00:00', '12:00:00']"
     @change="handleDateChange"
   />
 </template>
 
 <script>
+
+import { formatDate } from '@/utils/common'
+
 export default {
   name: '',
   components: {},
   data() {
     return {
-      value: ''
+      value: [formatDate((new Date().getTime()) - 432000000), formatDate(new Date().getTime())]
     }
   },
   computed: {
+
+  },
+  mounted() {
 
   },
   methods: {

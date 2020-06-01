@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(item,index) in items" :key="index" style="display: flex;justify-content: space-around;margin-top: 8px;">
-      <el-input v-model="item.value" :placeholder="placeholder" class="input-with-select" v-bind="$attrs" @input="onInput" v-on="$listeners">
+      <el-input v-model="item.value" :placeholder="placeholder" class="input-with-select" v-bind="$attrs">
         <el-select slot="prepend" v-model="item.select" placeholder="请选择">
           <el-option label="ssh" value="ssh" />
           <el-option label="vnc" value="vnc" />
@@ -21,7 +21,7 @@
 export default {
   props: {
     value: {
-      type: Array,
+      type: [Array, String],
       default: () => []
     },
     title: {
@@ -48,7 +48,7 @@ export default {
     values() {
       const data = []
       this.items.map(i => {
-        data.push(`${i.value}/${i.select}`)
+        data.push(`${i.select}/${i.value}`)
       })
       return data
     }
@@ -57,7 +57,7 @@ export default {
     values: {
       handler(value) {
         console.log(value)
-        this.$emit('customEvent', value, 'message')
+        this.$emit('input', value)
       },
       immediate: true,
       deep: true

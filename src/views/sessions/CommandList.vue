@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { formatDate, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
@@ -22,6 +22,10 @@ export default {
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
         ],
+        extraQuery: {
+          date_to: formatDate(new Date().getTime()),
+          date_from: formatDate((new Date().getTime()) - 432000000)
+        },
         columnsMeta: {
           expandCol: {
             type: 'expand',
@@ -59,7 +63,6 @@ export default {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
-
         },
         tableActions: {
           hasEdit: false,
