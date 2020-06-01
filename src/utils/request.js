@@ -51,10 +51,10 @@ service.interceptors.request.use(
 )
 
 function ifUnauthorized({ response, error }) {
-  if (response.status === 401) {
+  if (response.status === 401 && response.config.url.indexOf('/users/profile') === -1) {
     // 未授权重定向到登录页面
-    const title = i18n.t('common.Info').String()
-    const msg = i18n.t('auth.LoginRequiredMsg').String()
+    const title = i18n.t('common.Info')
+    const msg = i18n.t('auth.LoginRequiredMsg')
     MessageBox.confirm(msg, title, {
       confirmButtonText: i18n.t('auth.ReLogin'),
       cancelButtonText: i18n.t('common.Cancel'),

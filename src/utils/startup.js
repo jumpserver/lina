@@ -5,32 +5,29 @@ import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
 import { getPermission, getToken, setPermission } from '@/utils/auth'
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
 
 function setHeadTitle({ to, from, next }) {
   document.title = getPageTitle(to.meta.title)
 }
 
-function checkLogin({ to, from, next }) {
+async function checkLogin({ to, from, next }) {
+  if (whiteList.indexOf(to.path) !== -1) {
+    next()
+  }
   // determine whether the user has logged in
   const hasToken = getToken()
   if (!hasToken) {
-    /* has no token*/
-
-    if (whiteList.indexOf(to.path) !== -1) {
-      next()
-    } else {
-      // other pages that do not have permission to access are redirected to the login page.
-      next(process.env.LOGIN_PATH)
-      return
-    }
+    window.location = process.env.VUE_APP_LOGIN_PATH
+    return
   }
 
-  if (to.path === '/login') {
-    // if is logged in, redirect to the home page
-    next({ path: '/' })
-    return
+  try {
+    return await store.dispatch('users/getProfile')
+  } catch (e) {
+    // return false
+    window.location = process.env.VUE_APP_LOGIN_PATH
   }
 }
 
@@ -44,12 +41,7 @@ async function getPublicSetting({ to, from, next }) {
 
 export async function getUserRoleAndSetRoutes({ to, from, next }) {
   // determine whether the user has obtained his permission roles through getProfile
-  const currentUser = store.getters.currentUser
-  const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0
-  if (hasRoles) {
-    next()
-    return
-  }
+
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
@@ -76,8 +68,6 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
     // await store.dispatch('user/resetToken')
     Message.error(error || 'Has Error')
     console.log('Error occur: ', error)
-    next(`/core/auth/login/`)
-    // next()
   }
 }
 
@@ -89,14 +79,10 @@ export async function startup({ to, from, next }) {
   initial = true
 
   // set page title
-  setHeadTitle({ to, from, next })
-  // console.log('Set head title')
-  checkLogin({ to, from, next })
-  // console.log('Check login')
+  await setHeadTitle({ to, from, next })
+  await checkLogin({ to, from, next })
   await getPublicSetting({ to, from, next })
-  // console.log('Get public setting')
   await getUserRoleAndSetRoutes({ to, from, next })
-  // console.log('Get profile')
   return true
 }
 

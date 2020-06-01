@@ -13,11 +13,11 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   try {
     await startup({ to, from, next })
-    await getUserRoleAndSetRoutes({ to, from, next })
+    // await getUserRoleAndSetRoutes({ to, from, next })
   } catch (e) {
     console.log('Start service error: ', e)
   }
-  NProgress.done()
+  next()
 })
 
 router.afterEach(() => {

@@ -47,7 +47,7 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
-      '^/core/': {
+      '^/(core|static|media)/': {
         target: process.env.VUE_APP_CORE_HOST,
         changeOrigin: true
       }
