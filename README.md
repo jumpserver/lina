@@ -5,8 +5,6 @@ Lina 是 JumpServer 的前端 UI 项目, 主要使用 [Vue](https://cn.vuejs.org
 
 ## 开发运行
 
-前置条件: 部署运行好 JumpServer API 服务器
-
 ```
 0. 前置条件: 部署运行好 JumpServer API 服务器
 
