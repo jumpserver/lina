@@ -58,6 +58,7 @@ async function getUserRoleAndSetRoutes({ to, from, next }) {
     console.log('Current org role: ', current_org_roles)
 
     current_org_roles = checkRoles(current_org_roles)
+    console.log('Current org role: ', current_org_roles)
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
@@ -68,6 +69,7 @@ async function getUserRoleAndSetRoutes({ to, from, next }) {
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
+    console.log('Next to: ', to)
     next({ ...to, replace: true })
   } catch (error) {
     // remove token and go to login page to re-login
@@ -99,18 +101,18 @@ export async function startup({ to, from, next }) {
 }
 
 function checkRoles(val) {
-  let currentRule = getPermission()
-  if (currentRule) {
-    if (val && !val.includes(currentRule)) {
+  let currentRoles = getPermission()
+  if (currentRoles) {
+    if (val && !val.includes(currentRoles)) {
       // TODO 异常注入处理
-      currentRule = val[0]
-      setPermission(currentRule)
+      currentRoles = val[0]
+      setPermission(currentRoles)
     }
   } else {
     // 设置默认路由
-    currentRule = val[0]
-    setPermission(currentRule)
+    currentRoles = val[0]
+    setPermission(currentRoles)
   }
-  return [currentRule]
+  return [currentRoles]
 }
 
