@@ -11,7 +11,11 @@ NProgress.configure({
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
-  await startup({ to, from, next })
+  try {
+    await startup({ to, from, next })
+  } catch (e) {
+    console.log('Start service error: ', e)
+  }
   NProgress.done()
 })
 
