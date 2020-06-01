@@ -39,6 +39,12 @@ server {
 }
 ```
 
+## 致谢
+- [Vue](https://cn.vuejs.org) 前端框架
+- [Element UI](https://element.eleme.cn/) 饿了么 UI组件库
+- [Vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) 项目脚手架
+
+
 ## License & Copyright
 Copyright (c) 2014-2020 飞致云 FIT2CLOUD, All rights reserved.
 
