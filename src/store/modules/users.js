@@ -72,10 +72,9 @@ const actions = {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
-        const { admin_or_audit_orgs, rule } = response
-        const rules = [rule]
+        const { admin_or_audit_orgs, current_org_roles } = response
         // roles must be a non-empty array
-        if (!rules || rules.length <= 0) {
+        if (!current_org_roles || current_org_roles.length <= 0) {
           reject('getProfile: roles must be a non-null array!')
         }
 

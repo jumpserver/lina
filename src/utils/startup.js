@@ -1,5 +1,4 @@
 import getPageTitle from '@/utils/get-page-title'
-import NProgress from 'nprogress'
 import store from '@/store'
 import router from '@/router'
 import { Message } from 'element-ui'
@@ -23,7 +22,6 @@ function checkLogin({ to, from, next }) {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      NProgress.done()
       next(process.env.LOGIN_PATH)
       return
     }
@@ -32,7 +30,6 @@ function checkLogin({ to, from, next }) {
   if (to.path === '/login') {
     // if is logged in, redirect to the home page
     next({ path: '/' })
-    NProgress.done()
     return
   }
 }
@@ -43,41 +40,41 @@ async function getPublicSetting({ to, from, next }) {
   if (!publicSettings) {
     await store.dispatch('settings/getPublicSettings')
   }
-  // determine whether the user has obtained his permission roles through getProfile
-  const currentUser = store.getters.currentUser
-  const hasRoles = currentUser && currentUser.currentOrgRoles && currentUser.currentOrgRoles.length > 0
-  if (hasRoles) {
-    next()
-    return
-  }
 }
 
 async function getUserRoleAndSetRoutes({ to, from, next }) {
+  // determine whether the user has obtained his permission roles through getProfile
+  // const currentUser = store.getters.currentUser
+  // const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0
+  // if (hasRoles) {
+  //   next()
+  //   return
+  // }
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-    let { currentOrgRoles } = await store.dispatch('users/getProfile')
+    // 不能改名 current_org_roles, 里面返回的就是这个
+    let { current_org_roles } = await store.dispatch('users/getProfile')
+    console.log('Current org role: ', current_org_roles)
 
-    currentOrgRoles = checkRoles(currentOrgRoles)
+    current_org_roles = checkRoles(current_org_roles)
 
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', currentOrgRoles)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
+    console.log('Access routes: ', accessRoutes)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
-    next({
-      ...to,
-      replace: true
-    })
+    next({ ...to, replace: true })
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
     Message.error(error || 'Has Error')
+    console.log('Error occur: ', error)
     next(`/core/auth/login/`)
-    NProgress.done()
     // next()
   }
 }
