@@ -51,7 +51,7 @@ export default {
       },
       assetRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('xpack.ChangeAuthPlan.addAsset'),
+        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
         performAdd: (items, vm) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/asset/add/`
           const data = {
@@ -62,7 +62,7 @@ export default {
       },
       nodeRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('xpack.ChangeAuthPlan.addNode'),
+        title: this.$t('xpack.ChangeAuthPlan.AddNode'),
         objectsAjax: {
           url: `/api/v1/assets/nodes/`,
           processResults(data) {
