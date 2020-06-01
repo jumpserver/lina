@@ -22,6 +22,10 @@ export default {
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
         ],
+        extraQuery: {
+          date_to: (new Date().getTime() / 1000),
+          date_from: (new Date().getTime() / 1000) - 432000
+        },
         columnsMeta: {
           expandCol: {
             type: 'expand',
