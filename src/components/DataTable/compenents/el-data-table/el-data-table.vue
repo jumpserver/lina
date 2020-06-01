@@ -958,12 +958,12 @@ export default {
     },
     search(attrs) {
       // Orange 重置查询对象
-      // this.innerQuery = Object.assign(this.innerQuery, attrs)
-      this.innerQuery = attrs
+      this.innerQuery = Object.assign(this.innerQuery, attrs)
       return this.getList()
     },
     searchDate(attrs) {
-      this.extraQuery = attrs
+      this.innerQuery = Object.assign(this.innerQuery, attrs)
+      console.log(this.innerQuery)
       return this.getList()
     },
 

@@ -7,7 +7,7 @@
     :end-placeholder="this.$t('common.StartDate')"
     align="center"
     size="large"
-    value-format="timestamp"
+    value-format="yyyy-MM-DD hh:mm:ss"
     :clearable="false"
     class="datepicker"
     @change="handleDateChange"
@@ -15,16 +15,20 @@
 </template>
 
 <script>
+
 export default {
   name: '',
   components: {},
   data() {
     return {
-      value: [(new Date().getTime()) - 432000000, new Date().getTime()]
+      value: []
     }
   },
   computed: {
 
+  },
+  mounted() {
+    console.log(this.value)
   },
   methods: {
     handleDateChange(val) {

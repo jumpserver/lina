@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
+import { timeOffset, toSafeLocalDateStr, formatDate } from '@/utils/common'
 import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'BaseList',
@@ -25,8 +25,8 @@ export default {
     return {
       tableConfig: {
         extraQuery: {
-          date_to: this.formatDate(new Date().getTime()),
-          date_from: this.formatDate((new Date().getTime()) - 432000000)
+          date_to: formatDate(new Date().getTime()),
+          date_from: formatDate((new Date().getTime()) - 432000000)
         },
         hasSelection: false,
         url: this.url,
@@ -112,21 +112,6 @@ export default {
   },
   methods: {
 
-    formatDate(inputTime) {
-      const date = new Date(inputTime)
-      const y = date.getFullYear()
-      let m = date.getMonth() + 1
-      m = m < 10 ? ('0' + m) : m
-      let d = date.getDate()
-      d = d < 10 ? ('0' + d) : d
-      let h = date.getHours()
-      h = h < 10 ? ('0' + h) : h
-      let minute = date.getMinutes()
-      let second = date.getSeconds()
-      minute = minute < 10 ? ('0' + minute) : minute
-      second = second < 10 ? ('0' + second) : second
-      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
-    }
   }
 }
 </script>
