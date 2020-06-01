@@ -24,6 +24,9 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
+        columns: [
+          'hostname', 'ip', 'hardware_info', 'reachable', 'actions'
+        ],
         columnsMeta: {
           hostname: {
             formatter: DetailFormatter,
@@ -33,7 +36,7 @@ export default {
           },
           ip: {
             sortable: 'custom',
-            width: '120px'
+            width: '140px'
           },
           hardware_info: {
             showOverflowTooltip: true
@@ -54,10 +57,7 @@ export default {
               }
             }
           }
-        },
-        columns: [
-          'hostname', 'ip', 'hardware_info', 'reachable', 'actions'
-        ]
+        }
       },
       headerActions: {
         createRoute: 'AssetCreate'
