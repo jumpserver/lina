@@ -74,7 +74,10 @@ export default {
                 return { results: results, pagination: more, total: data.count }
               }
             }
-          }
+          },
+          rules: [{
+            required: true
+          }]
         },
         nodes: {
           el: {
