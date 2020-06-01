@@ -36,7 +36,7 @@ export default {
       defaultSetting: {
         async: {
           enable: true,
-          url: `${this.setting.treeUrl}`,
+          url: (process.env.ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get'
         },
