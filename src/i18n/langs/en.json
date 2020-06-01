@@ -25,7 +25,8 @@
     "custom_cmdline": "Cmdline",
     "custom_target": "Target URL",
     "custom_username": "Account",
-    "custom_password": "Password"
+    "custom_password": "Password",
+    "": ""
   },
   "assets": {
     "Action": "Action",
@@ -222,7 +223,9 @@
     },
     "updateErrorMsg": "Update failed",
     "updateSelected": "Update selected",
-    "updateSuccessMsg": "Update success"
+    "updateSuccessMsg": "Update success",
+    "Disable": "",
+    "Enable": ""
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -333,7 +336,8 @@
     "uploadFile": "Upload file",
     "userCount": "User count",
     "userGroupCount": "User group count",
-    "usersAndUserGroups": "Users and user groups"
+    "usersAndUserGroups": "Users and user groups",
+    "": ""
   },
   "route": {
     "": "",
@@ -534,7 +538,8 @@
       "terminalHeartbeatInterval": "Units: seconds",
       "terminalSessionKeepDuration": "Units: days, Session, record, command will be delete if more than duration, only in database",
       "terminalTelnetRegex": "ex: Last\\\\s*login|success|\\u6210\\u529f",
-      "userGuideUrl": "User first login update profile done redirect to it"
+      "userGuideUrl": "User first login update profile done redirect to it",
+      "ApiKeyList": ""
     },
     "helpTip": {
       "emailUserSSL": "If SMTP port is 465, may be select",
@@ -593,7 +598,10 @@
     "consult": "Consult",
     "ImportLicense": "Import license",
     "AssetCount": "Asset count",
-    "ImportLicenseTip": "Please Import License"
+    "ImportLicenseTip": "Please Import License",
+    "ApiKeyList": "",
+    "DateCreated": "",
+    "Create": ""
   },
   "settings": {
     "setting": ""
@@ -662,13 +670,71 @@
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",
       "remoteAppPermissionRules": "Remote app permission rules"
-    }
+    },
+    "Profile": "",
+    "ProfileSetting": "",
+    "LoginPasswordSetting": "",
+    "SSHKeySetting": "",
+    "SetMFA": "",
+    "UpdateMFA": "",
+    "ResetPublicKeyAndDownload": "",
+    "IsActive": "",
+    "MfaLevel": "",
+    "DateJoined": "",
+    "DateLastLogin": "",
+    "DatePasswordLastUpdated": "",
+    "DateExpired": "",
+    "Comment": "",
+    "OldSSHKey": "",
+    "UpdateSSHKey": "",
+    "FingerPrint": "",
+    "HelpText": {
+      "SSHKeyOfProfileSSHUpdatePage": ""
+    },
+    "ResetAndDownloadSSHKey": ""
   },
   "xpack": {
     "Admin": "Admin",
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
-    "ChangeAuthPlan": "",
+    "ChangeAuthPlan": {
+      "PasswordStrategy": "",
+      "HelpText": {
+        "UsernameOfCreateUpdatePage": "",
+        "CrontabOfCreateUpdatePage": "",
+        "IntervalOfCreateUpdatePage": ""
+      },
+      "RegularlyPerform": "",
+      "CyclePerform": "",
+      "PasswordLength": "",
+      "addAsset": "",
+      "addNode": "",
+      "Username": "",
+      "AssetAmount": "",
+      "NodeAmount": "",
+      "TimeDelta": "",
+      "DateStart": "",
+      "Asset": "",
+      "Success": "",
+      "Retry": "",
+      "TaskList": "",
+      "Result": "",
+      "Log": "",
+      "Detail": "",
+      "ManualExecutePlan": "",
+      "Execute": "",
+      "Name": "",
+      "DateJoined": "",
+      "DateUpdated": "",
+      "AssetAndNode": "",
+      "ExecutionList": "",
+      "Timer": "",
+      "ExecutionTimes": "",
+      "ChangeAuthPlan": "",
+      "ChangeAuthPlanCreate": "",
+      "ChangeAuthPlanUpdate": "",
+      "ExecutionDetail": ""
+    },
     "ChangeAuthPlanCreate": "",
     "ChangeAuthPlanDetail": "",
     "ChangeAuthPlanExecutionTask": "",
@@ -719,6 +785,12 @@
       "SyncInstanceTaskCreate": "Create sync instance task",
       "SyncInstanceTaskUpdate": "Update sync instance task",
       "CoveredAlwaysHelpTips": "The asset information is always covered"
-    }
-  }
+    },
+    "Basic": "",
+    "Asset": "",
+    "Other": "",
+    "Node": "",
+    "import": ""
+  },
+  "": ""
 }
