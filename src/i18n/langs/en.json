@@ -224,8 +224,8 @@
     "updateErrorMsg": "Update failed",
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
-    "Disable": "",
-    "Enable": ""
+    "Disable": "Disable",
+    "Enable": "Enable"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -539,7 +539,7 @@
       "terminalSessionKeepDuration": "Units: days, Session, record, command will be delete if more than duration, only in database",
       "terminalTelnetRegex": "ex: Last\\\\s*login|success|\\u6210\\u529f",
       "userGuideUrl": "User first login update profile done redirect to it",
-      "ApiKeyList": ""
+      "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation"
     },
     "helpTip": {
       "emailUserSSL": "If SMTP port is 465, may be select",
@@ -599,7 +599,7 @@
     "ImportLicense": "Import license",
     "AssetCount": "Asset count",
     "ImportLicenseTip": "Please Import License",
-    "ApiKeyList": "",
+    "ApiKeyList": "Api key list",
     "DateCreated": "",
     "Create": ""
   },
@@ -628,6 +628,9 @@
     "RenameNode": ""
   },
   "users": {
+    "OldPassword": "Old password",
+    "NewPassword": "New password",
+    "ConfirmPassword": "Confirm password",
     "Account": "Account",
     "Authentication": "Account",
     "Email": "Email",

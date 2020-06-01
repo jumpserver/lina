@@ -46,7 +46,8 @@ export default {
             width: '80px'
           },
           date_created: {
-            label: this.$t('setting.DateCreated'),
+            label: this.$t('common.dateCreated'),
+            showOverflowTooltip: true,
             formatter: DateFormatter
           },
           actions: {
