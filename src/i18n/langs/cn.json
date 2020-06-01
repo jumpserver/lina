@@ -634,6 +634,9 @@
     "RenameNode": ""
   },
   "users": {
+    "OldPassword": "原密码",
+    "NewPassword": "新密码",
+    "ConfirmPassword": "确认密码",
     "DateJoined": "创建日期",
     "MfaLevel": "多因子认证",
     "IsActive": "激活",
