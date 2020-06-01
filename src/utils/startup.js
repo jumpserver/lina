@@ -8,6 +8,10 @@ import { getPermission, getToken, setPermission } from '@/utils/auth'
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
 
+function reject() {
+  return new Promise((resolve, reject) => reject())
+}
+
 function setHeadTitle({ to, from, next }) {
   document.title = getPageTitle(to.meta.title)
 }
@@ -20,7 +24,7 @@ async function checkLogin({ to, from, next }) {
   const hasToken = getToken()
   if (!hasToken) {
     window.location = process.env.VUE_APP_LOGIN_PATH
-    return
+    return reject()
   }
 
   try {
@@ -28,6 +32,7 @@ async function checkLogin({ to, from, next }) {
   } catch (e) {
     // return false
     window.location = process.env.VUE_APP_LOGIN_PATH
+    return reject()
   }
 }
 
