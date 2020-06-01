@@ -37,29 +37,30 @@ export default {
           },
           timedelta: {
             label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
-          }
-        },
-        actions: {
-          formatterArgs: {
-            hasDelete: false,
-            hasUpdate: false,
-            extraActions: [
-              {
-                name: 'retry',
-                type: 'info',
-                title: this.$t('xpack.ChangeAuthPlan.Retry'),
-                callback: function({ cellValue, tableData }) {
-                  this.$axios.put(
-                    `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${cellValue}/`,
-                  ).then(res => {
-                    window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                  })
-                }.bind(this)
-              }
-            ]
+          },
+          actions: {
+            formatterArgs: {
+              hasDelete: false,
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'retry',
+                  type: 'info',
+                  title: this.$t('xpack.ChangeAuthPlan.Retry'),
+                  callback: function({ cellValue, tableData }) {
+                    this.$axios.put(
+                      `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${cellValue}/`,
+                    ).then(res => {
+                      window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                    })
+                  }.bind(this)
+                }
+              ]
+            }
           }
         }
       },
