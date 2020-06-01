@@ -2,7 +2,7 @@
 import router from './router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { startup, getUserRoleAndSetRoutes } from '@/utils/startup'
+import { startup } from '@/utils/startup'
 
 NProgress.configure({
   showSpinner: false
