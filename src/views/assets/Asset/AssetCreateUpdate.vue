@@ -14,18 +14,18 @@ export default {
     return {
       initial: {
         is_active: true,
-        platform: 'linux'
+        platform: 'Linux'
       },
       fields: [
         [this.$t('assets.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
-        [this.$t('assets.Protocols'), ['protocols']],
+        [this.$t('assets.Protocols'), ['protocol']],
         [this.$t('assets.Auth'), ['admin_user']],
         [this.$t('assets.Node'), ['nodes']],
         [this.$t('assets.Label'), ['labels']],
         [this.$t('assets.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        protocols: {
+        protocol: {
           component: CustomInput
         },
         platform: {
