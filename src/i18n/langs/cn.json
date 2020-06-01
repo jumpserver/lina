@@ -25,7 +25,8 @@
     "custom_cmdline": "运行参数",
     "custom_target": "目标地址",
     "custom_username": "登录账号",
-    "custom_password": "登录密码"
+    "custom_password": "登录密码",
+    "": ""
   },
   "assets": {
     "Action": "动作",
@@ -52,7 +53,7 @@
     "CreatedBy": "创建者",
     "Database": "数据库",
     "DateJoined": "创建日期",
-    "DateUpdated":"更新日期",
+    "DateUpdated": "更新日期",
     "Disk": "硬盘",
     "Domain": "网域",
     "DomainDetail": "网域详情",
@@ -118,7 +119,7 @@
     "Content": "内容",
     "CreateRules": "创建规则",
     "Value": "值",
-    "Charset":"字符集",
+    "Charset": "字符集",
     "Meta": "源数据",
     "PlatformDetail": "平台详情",
     "SystemUser": "系统用户",
@@ -180,7 +181,7 @@
     "action": "动作",
     "activateSelected": "激活所选",
     "deleteSuccessMsg": "删除成功",
-    "deleteFailedMsg":"删除失败",
+    "deleteFailedMsg": "删除失败",
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
     "createBy": "创建者",
@@ -338,7 +339,8 @@
     "uploadFile": "上传文件",
     "userCount": "用户数量",
     "userGroupCount": "用户组数量",
-    "usersAndUserGroups": "用户或用户组"
+    "usersAndUserGroups": "用户或用户组",
+    "": ""
   },
   "route": {
     "AdminUserCreate": "创建管理用户",
@@ -434,7 +436,8 @@
     "Users": "用户管理",
     "WebFTP": "文件管理",
     "WebTerminal": "Web终端",
-    "BatchCommandLog": "批量命令"
+    "BatchCommandLog": "批量命令",
+    "": ""
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -692,7 +695,8 @@
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
-    }
+    },
+    "dateLastLogin": ""
   },
   "xpack": {
     "Basic": "基本",
@@ -751,7 +755,7 @@
     "Corporation": "公司",
     "Edition": "版本",
     "Expired": "过期时间",
-    "GatherUserTask":"收集用户任务",
+    "GatherUserTask": "收集用户任务",
     "GatherUserList": "收集用户",
     "GatherUserTaskCreate": "创建任务",
     "GatherUserTaskList": "任务列表",
@@ -794,6 +798,8 @@
       "SyncInstanceTaskCreate": "创建同步实例任务",
       "SyncInstanceTaskUpdate": "更新同步实例任务",
       "CoveredAlwaysHelpTips": "资产信息总是被覆盖"
-    }
-  }
+    },
+    "import": ""
+  },
+  "": ""
 }
