@@ -42,14 +42,14 @@ async function getPublicSetting({ to, from, next }) {
   }
 }
 
-async function getUserRoleAndSetRoutes({ to, from, next }) {
+export async function getUserRoleAndSetRoutes({ to, from, next }) {
   // determine whether the user has obtained his permission roles through getProfile
-  // const currentUser = store.getters.currentUser
-  // const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0
-  // if (hasRoles) {
-  //   next()
-  //   return
-  // }
+  const currentUser = store.getters.currentUser
+  const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0
+  if (hasRoles) {
+    next()
+    return
+  }
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
