@@ -109,6 +109,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.tableConfig.extraQuery)
   },
   methods: {
 
