@@ -32,19 +32,19 @@ export default {
       fields: ['old_password', 'new_password', 'new_password_again'],
       fieldsMeta: {
         old_password: {
-          label: '原密码',
+          label: this.$t('users.OldPassword'),
           el: {
             type: 'password'
           }
         },
         new_password: {
-          label: '新密码',
+          label: this.$t('users.NewPassword'),
           el: {
             type: 'password'
           }
         },
         new_password_again: {
-          label: '确认密码',
+          label: this.$t('users.ConfirmPassword'),
           el: {
             type: 'password'
           }
