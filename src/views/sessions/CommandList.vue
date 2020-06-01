@@ -63,7 +63,6 @@ export default {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
-
         },
         tableActions: {
           hasEdit: false,
