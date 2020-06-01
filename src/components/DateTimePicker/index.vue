@@ -20,7 +20,7 @@ export default {
   components: {},
   data() {
     return {
-      value: ''
+      value: [(new Date().getTime()) - 432000000, new Date().getTime()]
     }
   },
   computed: {

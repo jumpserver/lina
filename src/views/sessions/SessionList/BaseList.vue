@@ -24,6 +24,10 @@ export default {
   data() {
     return {
       tableConfig: {
+        extraQuery: {
+          date_to: (new Date().getTime() / 1000),
+          date_from: (new Date().getTime() / 1000) - 432000
+        },
         hasSelection: false,
         url: this.url,
         columns: [
@@ -103,6 +107,8 @@ export default {
         hasDatePicker: true
       }
     }
+  },
+  mounted() {
   }
 }
 </script>
