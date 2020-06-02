@@ -6,8 +6,13 @@
         <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="customSettings.logo_index != '/static/img/logo_text.png' " :src="customSettings.logo_index" class="sidebar-logo">
-        <img v-else-if="logoText" :src="logoText" class="sidebar-logo-text">
+        <div v-if="publicSettings.XPACK_ENABLED&&publicSettings.XPACK_LICENSE_IS_VALID">
+          <img v-if="customSettings" :src="logo_index" class="sidebar-logo">
+          <img v-else-if="logoText" :src="logoText" class="sidebar-logo-text">
+        </div>
+        <div v-else>
+          <img :src="logoText" class="sidebar-logo-text">
+        </div>
         <!--        <h1 class="sidebar-title">{{ title }}</h1>-->
       </router-link>
     </transition>
@@ -34,11 +39,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'customSettings'
-    ])
+      'customSettings',
+      'publicSettings'
+    ]),
+    logo_index() {
+      return this.customSettings.logo_index
+    }
   },
   created() {
-    console.log(this.customSettings.logo_index)
+
   }
 }
 </script>
