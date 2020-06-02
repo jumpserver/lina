@@ -34,7 +34,7 @@ export default {
       ],
       fieldsMeta: {
         login_mode: {
-          helpText: '如果选择手动登录模式，用户名和密码可以不填写'
+          helpText: this.$t('assets.LoginModeHelpMessage')
         },
         username: {
           el: {
@@ -49,7 +49,7 @@ export default {
         },
         username_same_with_user: {
           type: 'switch',
-          helpText: '用户名是动态的，登录资产时使用当前用户的用户名登录',
+          helpText: this.$t('assets.UsernameHelpMessage'),
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
             return false
@@ -93,7 +93,7 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: '1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户'
+          helpText: this.$t('assets.PriorityHelpMessage')
         },
         auto_push: {
           type: 'switch',
@@ -103,14 +103,14 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: 'SFTP的起始路径，tmp目录, 用户home目录或者自定义',
+          helpText: this.$t('assets.SFTPHelpMessage'),
           hidden: (item) => item.protocol !== 'ssh'
         },
         sudo: {
           rules: [
             { required: true }
           ],
-          helpText: '使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig',
+          helpText: this.$t('assets.SudoHelpMessage'),
           hidden: (item) => item.protocol !== 'ssh'
         },
         password: {
