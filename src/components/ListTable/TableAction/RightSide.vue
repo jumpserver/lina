@@ -9,7 +9,6 @@
 import ActionsGroup from '@/components/ActionsGroup'
 import DialogAction from './ImExportDialog'
 import { cleanActions } from './utils'
-import _ from 'lodash'
 
 const defaultTrue = { type: Boolean, default: true }
 
@@ -65,9 +64,6 @@ export default {
     }
   },
   methods: {
-    handleSearch: _.debounce(function() {
-      this.searchTable({ search: this.keyword })
-    }, 500),
     handleTagSearch(val) {
       this.searchTable(val)
     },

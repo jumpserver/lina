@@ -94,7 +94,7 @@ export default {
       this.$axios.put(
         this.upLoadUrl,
         item.file,
-        { headers: { 'Content-Type': 'text/csv' }, disableFlashMsg: true }
+        { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
         const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
         this.onSuccess(msg)
@@ -106,7 +106,7 @@ export default {
       this.$axios.post(
         this.upLoadUrl,
         item.file,
-        { headers: { 'Content-Type': 'text/csv' }, disableFlashMsg: true }
+        { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
         const msg = this.$t('common.imExport.createSuccessMsg', { count: data.length })
         this.onSuccess(msg)

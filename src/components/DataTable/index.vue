@@ -102,8 +102,8 @@ export default {
     searchDate(attrs) {
       return this.$refs.table.searchDate(attrs)
     },
-    search(attrs) {
-      return this.$refs.table.search(attrs)
+    search(attrs, reset) {
+      return this.$refs.table.search(attrs, reset)
     },
     getQuery() {
       return this.$refs.table.getQuery()

@@ -20,7 +20,7 @@ export default {
             showOverflowTooltip: true
           },
           ip: {
-            width: '130px'
+            width: '140px'
           },
           status: {
             width: '80px'
