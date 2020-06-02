@@ -29,7 +29,8 @@ export default {
         hasCreate: false,
         hasBulkDelete: false,
         hasImport: false,
-        hasRefresh: false
+        hasRefresh: false,
+        hasDatePicker: true
       }
     }
   }
