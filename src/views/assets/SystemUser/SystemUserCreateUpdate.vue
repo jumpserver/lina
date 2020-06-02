@@ -44,7 +44,7 @@ export default {
         private_key: {
           component: UploadKey,
           hidden: (form) => {
-            return form.login_mode !== 'auto'
+            return form => form.auto_generate_key === true || form.login_mode !== 'auto'
           }
         },
         username_same_with_user: {
