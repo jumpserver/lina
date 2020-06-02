@@ -18,6 +18,18 @@ export default {
           'filename', 'is_success', 'date_start'
         ],
         columnsMeta: {
+          remote_addr: {
+            width: '140px'
+          },
+          operate: {
+            width: '80px'
+          },
+          is_success: {
+            width: '80px'
+          },
+          date_start: {
+            width: '160px'
+          }
         },
         hasSelection: false
       },
