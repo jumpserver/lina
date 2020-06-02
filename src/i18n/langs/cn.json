@@ -31,6 +31,11 @@
   "assets": {
     "Action": "动作",
     "AutoGenerateKey": "自动生成密钥",
+    "LoginModeHelpMessage": "如果选择手动登录模式，用户名和密码可以不填写",
+    "UsernameHelpMessage": "用户名是动态的，登录资产时使用当前用户的用户名登录",
+    "PriorityHelpMessage": "1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户",
+    "SFTPHelpMessage": "SFTP的起始路径，tmp目录, 用户home目录或者自定义",
+    "SudoHelpMessage": "使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig",
     "CmdFilter": "命令过滤器",
     "DeactiveSelected": "禁用所选",
     "ActiveSelected": "激活所选",

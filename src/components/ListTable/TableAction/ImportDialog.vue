@@ -74,7 +74,8 @@ export default {
       return this.url
     },
     downloadImportTempUrl() {
-      return process.env.VUE_APP_BASE_API + this.url + '?format=csv&template=import&limit=1'
+      const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      return baseUrl + '?format=csv&template=import&limit=1'
     },
     uploadHelpTextClass() {
       const cls = ['el-upload__tip']
@@ -161,7 +162,8 @@ export default {
         resources.push(data[index].id)
       }
       const spm = await createSourceIdCache(resources)
-      const url = process.env.VUE_APP_BASE_API + `${this.url}?format=csv&template=update&spm=` + spm.spm
+      const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      const url = `${baseUrl}?format=csv&template=update&spm=` + spm.spm
       return this.downloadCsv(url)
     },
     async handleImportConfirm() {

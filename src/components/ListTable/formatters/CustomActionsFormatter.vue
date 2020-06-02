@@ -42,6 +42,9 @@ export default {
       return []
     }
   },
+  mounted() {
+    console.log(this.col)
+  },
   methods: {
     checkBool(item, attr, defaults) {
       if (!item) {

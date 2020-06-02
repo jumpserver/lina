@@ -30,7 +30,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { CustomActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
 import Dialog from '@/components/Dialog'
@@ -145,12 +145,17 @@ export default {
             prop: 'id',
             align: 'center',
             label: this.$t('assets.Action'),
-            formatter: CustomActionsFormatter,
+            formatter: ActionsFormatter,
             formatterArgs: {
+              hasUpdate: false, // can set function(row, value)
+              canUpdate: false, // can set function(row, value)
+              hasDelete: false, // can set function(row, value)
+              canDelete: false,
               extraActions: [
                 {
                   name: 'delete',
                   title: this.$t('common.Delete'),
+                  type: 'primary',
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
                       this.$refs.ListTable.reloadTable()

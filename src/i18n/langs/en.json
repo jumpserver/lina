@@ -30,6 +30,11 @@
   },
   "assets": {
     "Action": "Action",
+    "LoginModeHelpMessage": "If you choose manual login mode, you do not need to fill in the username and password.",
+    "UsernameHelpMessage": "Username is dynamic, When connect asset, using current user's username",
+    "PriorityHelpMessage": "1-100, High level will be using login asset as default, if user was granted more than 2 system user",
+    "SFTPHelpMessage": "SFTP root dir, tmp, home or custom",
+    "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami,/bin/ifconfig",
     "AutoGenerateKey": "Auto generate ssh key",
     "CmdFilter": "CmdFilter",
     "DeactiveSelected": "Deactive selected",
