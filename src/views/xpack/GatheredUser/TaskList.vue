@@ -16,7 +16,11 @@ export default {
         columns: [
           'name', 'nodes', 'periodic_display', 'executed_times', 'actions'
         ],
-        columnsMeta: {}
+        columnsMeta: {
+          name: {
+            formatter: null
+          }
+        }
       },
       headerActions: {
         hasBulkDelete: false,
