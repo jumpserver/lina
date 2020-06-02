@@ -2,9 +2,8 @@
   <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
-<script>
+<script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'TaskHistory',
@@ -25,22 +24,18 @@ export default {
           'date_start', 'stat', 'ratio', 'is_finished', 'is_success', 'timedelta', 'adhoc_short_id', 'actions'
         ],
         columnsMeta: {
-          date_start: {
-            formatter: function(row) {
-              return toSafeLocalDateStr(row.date_start)
-            }
-          },
           stat: {
             label: this.$t('ops.stat'),
             align: 'center',
             width: '80px',
             formatter: function(row) {
-              const summary = <div>
-                <span class='text-primary'>{row.stat.success}</span>/
-                <span class='text-danger'>{row.stat.failed}</span>/
-                <span>{row.stat.total}</span>
-              </div>
-              return summary
+              return (
+                <div>
+                  <span class='text-primary'>{row.stat.success}</span>/
+                  <span class='text-danger'>{row.stat.failed}</span>/
+                  <span>{row.stat.total}</span>
+                </div>
+              )
             }
           },
           ratio: {

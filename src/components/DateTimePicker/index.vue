@@ -31,6 +31,15 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
+            text: this.$t('common.DateLast24Hours'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
             text: this.$t('common.DateLastWeek'),
             onClick(picker) {
               const end = new Date()
@@ -75,7 +84,7 @@ export default {
 
 <style lang='less' scoped>
   .datepicker{
-    width: 280px;
+    width: 250px;
   }
   .el-input__inner{
     border: 1px solid #dcdee2;

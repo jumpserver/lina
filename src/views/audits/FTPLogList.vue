@@ -19,26 +19,20 @@ export default {
         ],
         columnsMeta: {
           remote_addr: {
-            width: '140px'
+            width: '130px'
           },
           operate: {
-            width: '80px'
+            width: '90px'
           },
           is_success: {
             width: '80px'
-          },
-          date_start: {
-            width: '160px'
           }
-        },
-        hasSelection: false
+        }
       },
       headerActions: {
-        hasSelection: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasImport: false,
-        hasRefresh: false
+        hasLeftActions: false,
+        hasDatePicker: true,
+        hasImport: false
       }
     }
   }

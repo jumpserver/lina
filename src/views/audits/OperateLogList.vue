@@ -28,8 +28,8 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasImport: false,
-        hasRefresh: false
+        hasDatePicker: true,
+        hasImport: false
       }
     }
   }

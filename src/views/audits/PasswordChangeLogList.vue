@@ -16,20 +16,14 @@ export default {
         columns: ['user', 'change_by', 'remote_addr', 'datetime'],
         columnsMeta: {
           datetime: {
-            width: '160px'
-          },
-          remote_addr: {
-            width: '140px'
+            width: '180px'
           }
-        },
-        hasSelection: false
+        }
       },
       headerActions: {
-        hasSelection: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasImport: false,
-        hasRefresh: false
+        hasLeftActions: false,
+        hasDatePicker: true,
+        hasImport: false
       }
     }
   }

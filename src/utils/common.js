@@ -74,7 +74,7 @@ export function toSafeLocalDateStr(d) {
   const date = safeDate(d)
   // var date_s = date.toLocaleString(getUserLang(), {hour12: false});
   const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
-  return date_s.split('/').join('-')
+  return date_s
 }
 
 export function getApiPath(that) {

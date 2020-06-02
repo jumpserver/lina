@@ -27,15 +27,12 @@ export default {
           date_start: {
             width: '160px'
           }
-        },
-        hasSelection: false
+        }
       },
       headerActions: {
-        hasSelection: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasImport: false,
-        hasRefresh: false
+        hasLeftActions: false,
+        hasDatePicker: true,
+        hasImport: false
       }
     }
   }
