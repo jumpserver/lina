@@ -76,14 +76,7 @@ export default {
             multiple: true,
             value: [],
             ajax: {
-              url: '/api/v1/assets/cmd-filters/',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/cmd-filters/'
             }
           }
         },

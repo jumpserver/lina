@@ -65,13 +65,8 @@ export default {
         title: this.$t('xpack.ChangeAuthPlan.AddNode'),
         objectsAjax: {
           url: `/api/v1/assets/nodes/`,
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
           }
         },
         hasObjectsId: this.object.nodes,

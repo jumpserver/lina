@@ -42,13 +42,8 @@ export default {
       clearable: true,
       ajax: {
         url: '/api/v1/assets/assets/?fields_size=mini',
-        processResults(data) {
-          let results = data.results
-          results = results.map((item) => {
-            return { label: item.hostname + '(' + item.ip + ')', value: item.id }
-          })
-          const more = !!data.next
-          return { results: results, pagination: more, total: data.count }
+        transformOption: (item) => {
+          return { label: item.hostname + '(' + item.ip + ')', value: item.id }
         }
       }
     }

@@ -120,11 +120,13 @@ export default {
         delete params['pageSize']
         return params
       }
+      const defaultTransformOption = (item) => {
+        return { label: item.name, value: item.id }
+      }
+      const transformOption = this.ajax.transformOption || defaultTransformOption
       const defaultProcessResults = (data) => {
         let results = data.results
-        results = results.map((item) => {
-          return { label: item.name, value: item.id }
-        })
+        results = results.map(transformOption)
         const more = !!data.next
         const total = data.count
         return { results: results, pagination: more, total: total }
@@ -133,6 +135,7 @@ export default {
         url: '',
         pageSize: defaultPageSize,
         makeParams: defaultMakeParams,
+        transformOption: defaultTransformOption,
         processResults: defaultProcessResults
       }
       return Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {})

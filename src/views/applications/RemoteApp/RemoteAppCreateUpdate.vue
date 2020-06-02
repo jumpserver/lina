@@ -32,12 +32,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/assets/assets/?platform__base=Windows',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.hostname, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.hostname, value: item.id }
               }
             }
           }

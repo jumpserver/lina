@@ -32,15 +32,7 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/platforms/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: item.name, value: item.name }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/platforms/'
             }
           }
         },
@@ -48,15 +40,7 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/domains/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/domains/'
             }
           }
         },
@@ -64,15 +48,7 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/admin-users/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/admin-users/'
             }
           },
           rules: [{
@@ -83,13 +59,8 @@ export default {
           el: {
             ajax: {
               url: '/api/v1/assets/nodes/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.full_value}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: `${item.full_value}`, value: item.id }
               }
             }
           }
@@ -97,15 +68,7 @@ export default {
         labels: {
           el: {
             ajax: {
-              url: '/api/v1/assets/labels/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/labels/'
             }
           }
         },

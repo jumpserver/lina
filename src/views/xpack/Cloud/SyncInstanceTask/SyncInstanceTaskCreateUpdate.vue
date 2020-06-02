@@ -36,14 +36,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/xpack/cloud/accounts/',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/xpack/cloud/accounts/'
             }
           }
         },
@@ -53,12 +46,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/assets/nodes/',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
               }
             }
           }
@@ -68,14 +57,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/admin-users/',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/admin-users/'
             }
           }
         },
@@ -92,14 +74,7 @@ export default {
             multiple: true,
             value: [],
             ajax: {
-              url: '/api/v1/xpack/cloud/regions/',
-              processResults(data) {
-                const results = data.regions.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/xpack/cloud/regions/'
             }
           }
         }
