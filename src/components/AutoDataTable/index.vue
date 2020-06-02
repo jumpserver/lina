@@ -81,6 +81,9 @@ export default {
           col.align = 'center'
           col.width = '80px'
           break
+        case 'datetime':
+          col.formatter = DateFormatter
+          col.width = '160px'
       }
       return col
     },
