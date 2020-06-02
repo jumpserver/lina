@@ -6,8 +6,8 @@
         <h1 v-else class="sidebar-title">{{ title }}</h1>
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="customSettings.logo_index != '/static/img/logo_text.png' " :src="customSettings.logo_index" class="sidebar-logo">
-        <img v-else-if="logoText" :src="logoText" class="sidebar-logo-text">
+        <img :src="logoSrc" class="sidebar-logo-text">
+        <!--        <img v-else-if="logoText" :src="logoText" class="sidebar-logo-text">-->
         <!--        <h1 class="sidebar-title">{{ title }}</h1>-->
       </router-link>
     </transition>
@@ -35,7 +35,14 @@ export default {
   computed: {
     ...mapGetters([
       'customSettings'
-    ])
+    ]),
+    logoSrc() {
+      if (this.customSettings.logo_index !== '/static/img/logo_text.png') {
+        return this.customSettings.logo_index
+      } else {
+        return this.logoText
+      }
+    }
   },
   created() {
     console.log(this.customSettings.logo_index)
