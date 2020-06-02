@@ -161,7 +161,8 @@ export default {
         resources.push(data[index].id)
       }
       const spm = await createSourceIdCache(resources)
-      const url = process.env.VUE_APP_BASE_API + `${this.url}?format=csv&template=update&spm=` + spm.spm
+      const BaseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      const url = `${BaseUrl}?format=csv&template=update&spm=` + spm.spm
       return this.downloadCsv(url)
     },
     async handleImportConfirm() {

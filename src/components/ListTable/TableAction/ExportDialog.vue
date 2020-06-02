@@ -57,7 +57,7 @@ export default {
       window.URL.revokeObjectURL(url)
     },
     async handleExport() {
-      const url = process.env.VUE_APP_BASE_API + `${this.url}`
+      const url = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
       let query = {}
       if (this.exportOption === '2') {
         const resources = []
