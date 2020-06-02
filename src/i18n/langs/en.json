@@ -31,6 +31,8 @@
   "assets": {
     "Action": "Action",
     "CmdFilter": "CmdFilter",
+    "DeactiveSelected": "Deactive selected",
+    "ActiveSelected": "Active selected",
     "UpdateAssetUserToken": "Update asset user auth",
     "Password": "Password",
     "RefreshHardware": "Refresh hardware",
@@ -624,9 +626,9 @@
     "reply": "Reply"
   },
   "tree": {
-    "AddNode": "",
-    "DeleteNode": "",
-    "RenameNode": ""
+    "AddNode": "Add node",
+    "DeleteNode": "Delete node",
+    "RenameNode": "Rename node"
   },
   "users": {
     "OldPassword": "Old password",

@@ -60,7 +60,43 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'AssetCreate'
+        createRoute: 'AssetCreate',
+        extraMoreActions: [
+          {
+            name: 'DeactiveSelected',
+            title: this.$t('assets.DeactiveSelected'),
+            type: 'primary',
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: function({ selectedRows }) {
+              console.log(selectedRows)
+              const ids = selectedRows.map((v) => {
+                return { pk: v.id, is_active: false }
+              })
+              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          },
+          {
+            name: 'ActiveSelected',
+            title: this.$t('assets.ActiveSelected'),
+            type: 'primary',
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: function({ selectedRows }) {
+              console.log(selectedRows)
+              const ids = selectedRows.map((v) => {
+                return { pk: v.id, is_active: true }
+              })
+              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        ]
       },
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }

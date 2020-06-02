@@ -31,6 +31,8 @@
   "assets": {
     "Action": "动作",
     "CmdFilter": "命令过滤器",
+    "DeactiveSelected": "禁用所选",
+    "ActiveSelected": "激活所选",
     "UpdateAssetUserToken": "更新资产用户认证信息",
     "Password": "密码",
     "RefreshHardware": "更新硬件信息",
@@ -630,9 +632,9 @@
     "reply": "回复"
   },
   "tree": {
-    "AddNode": "",
-    "DeleteNode": "",
-    "RenameNode": ""
+    "AddNode": "添加节点",
+    "DeleteNode": "删除节点",
+    "RenameNode": "重命名节点"
   },
   "users": {
     "OldPassword": "原密码",

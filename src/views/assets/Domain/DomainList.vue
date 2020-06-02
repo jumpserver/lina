@@ -60,6 +60,7 @@ export default {
         hasRefresh: false,
         hasBulkDelete: false,
         hasSearch: false,
+        hasMoreActions: false,
         createRoute: 'DomainCreate'
       },
       notice: this.$t('assets.DomainHelpMessage')

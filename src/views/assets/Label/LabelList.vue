@@ -52,6 +52,7 @@ export default {
         hasImport: false,
         hasRefresh: true,
         hasSearch: true,
+        hasMoreActions: false,
         createRoute: 'LabelCreate'
       }
     }
