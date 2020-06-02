@@ -58,6 +58,12 @@ export default {
             return { label: item.display_name, value: item.value }
           })
         }
+        if (field.type === 'boolean') {
+          option.children = [
+            { label: this.$t('common.Yes'), value: true },
+            { label: this.$t('common.No'), value: false }
+          ]
+        }
         vm.options.push(option)
       }
     },
