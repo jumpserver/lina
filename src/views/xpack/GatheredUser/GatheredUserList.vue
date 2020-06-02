@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       treeSetting: {
-        showMenu: true,
+        showMenu: false,
         showRefresh: true,
         showAssets: true,
         url: '/api/v1/assets/gathered-users/',
