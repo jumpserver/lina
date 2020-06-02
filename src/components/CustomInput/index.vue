@@ -21,7 +21,7 @@
 export default {
   props: {
     value: {
-      type: [Array, String],
+      type: [Array],
       default: () => []
     },
     title: {
@@ -56,11 +56,22 @@ export default {
   watch: {
     values: {
       handler(value) {
-        console.log(value)
         this.$emit('input', value)
       },
       immediate: true,
       deep: true
+    }
+  },
+  mounted() {
+    if (this.value.length !== 0) {
+      this.items = []
+      this.value.forEach(v => {
+        const data = v.split('/')
+        this.items.push({
+          value: data[1],
+          select: data[0]
+        })
+      })
     }
   },
   methods: {
@@ -75,7 +86,7 @@ export default {
     handleAdd(index) {
       this.items.push(
         {
-          value: ' ',
+          value: '',
           select: ''
         }
       )
