@@ -44,7 +44,15 @@ export default {
         private_key: {
           component: UploadKey,
           hidden: (form) => {
-            return form.login_mode !== 'auto'
+            if (form.login_mode !== 'auto') {
+              return true
+            }
+            if (!form.auto_push) {
+              return false
+            }
+            if (form.auto_generate_key) {
+              return true
+            }
           }
         },
         username_same_with_user: {
@@ -115,7 +123,15 @@ export default {
         },
         password: {
           helpText: '密码或密钥密码',
-          hidden: form => form.auto_generate_key === true || form.login_mode !== 'auto'
+          hidden: form => {
+            if (form.login_mode !== 'auto') {
+              return true
+            }
+            if (!form.auto_push) {
+              return false
+            }
+            return form.auto_generate_key === true
+          }
         },
         shell: {
           hidden: (item) => item.protocol !== 'ssh',
