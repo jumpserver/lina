@@ -15,6 +15,12 @@ export default {
         url: '/api/v1/audits/password-change-logs/',
         columns: ['user', 'change_by', 'remote_addr', 'datetime'],
         columnsMeta: {
+          datetime: {
+            width: '160px'
+          },
+          remote_addr: {
+            width: '140px'
+          }
         },
         hasSelection: false
       },
