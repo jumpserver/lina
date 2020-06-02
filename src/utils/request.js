@@ -1,12 +1,9 @@
 import axios from 'axios'
 import i18n from '@/i18n/i18n'
+import NProgress from 'nprogress' // progress bar
 
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import {
-  getToken,
-  getCurrentOrg
-} from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -20,10 +17,10 @@ function beforeRequestAddToken(config) {
     // let each request carry token
     // ['X-Token'] is a custom headers key
     // please modify it according to the actual situation
-    config.headers['X-CSRFToken'] = getToken()
-    if (getCurrentOrg().id !== '') {
-      config.headers['X-JMS-ORG'] = getCurrentOrg().id
-    }
+    config.headers['X-CSRFToken'] = store.getters.token
+  }
+  if (store.getters.currentOrg) {
+    config.headers['X-JMS-ORG'] = store.getters.currentOrg.id
   }
 }
 
@@ -39,6 +36,7 @@ function beforeRequestAddTimezone(config) {
 service.interceptors.request.use(
   config => {
     // do something before request is sent
+    NProgress.start()
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
     return config
@@ -100,6 +98,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    NProgress.done()
     const res = response.data
 
     if (response.config.raw === 1) {
@@ -108,6 +107,7 @@ service.interceptors.response.use(
     return res
   },
   error => {
+    NProgress.done()
     if (!error.response) {
       return Promise.reject(error)
     }

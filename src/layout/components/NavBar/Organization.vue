@@ -1,11 +1,11 @@
 <template>
   <transition name="sidebarLogoFade">
     <el-select
-      v-if="!isCollapse && userAdminOrgList.length>1 && checkPermission "
+      v-if="needShow()"
       :value="currentOrg.id"
       class="org-select"
       filterable
-      placeholder="请选择"
+      :placeholder="$t('common.Select')"
       @change="changeOrg"
     >
       <template slot="prefix">
@@ -25,7 +25,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getPermission } from '@/utils/auth'
+import { getCurrentRole } from '@/utils/auth'
+import { hasUUID } from '@/utils/common'
 export default {
   props: {
     isCollapse: {
@@ -36,13 +37,13 @@ export default {
     }
   },
   computed: {
-    checkPermission() {
-      return getPermission() === 'Admin'
-    },
     ...mapGetters([
       'currentOrg',
       'userAdminOrgList'
     ]),
+    hasOrgPermission() {
+      return getCurrentRole() === 'Admin'
+    },
     orgIdMapper() {
       const mapper = {}
       this.userAdminOrgList.forEach((v) => {
@@ -52,15 +53,60 @@ export default {
     }
   },
   mounted() {
-    this.$log.debug('Admin orgs: ', this.userAdminOrgList)
+    if (this.hasOrgPermission) {
+      this.checkCurrentOrgIsNeedChange()
+    }
   },
   methods: {
+    needShow() {
+      return !this.isCollapse && this.userAdminOrgList.length > 1 && this.hasOrgPermission
+    },
+    checkCurrentOrgIsNeedChange() {
+      if (!this.currentOrg || typeof this.currentOrg !== 'object') {
+        this.$log.debug('Not has current org')
+        this.change2PropOrg()
+        return
+      }
+      if (!this.hasCurrentOrgPermission()) {
+        this.$log.debug('Not has current org permission')
+        this.change2PropOrg()
+      }
+    },
+    getPropOrg() {
+      let defaultOrg = this.userAdminOrgList.find((item) => item.id === '')
+      if (defaultOrg) {
+        return defaultOrg
+      }
+      defaultOrg = this.userAdminOrgList.find((item) => item.id === 'DEFAULT')
+      if (defaultOrg) {
+        return defaultOrg
+      }
+      return this.userAdminOrgList[0]
+    },
+    change2PropOrg() {
+      const org = this.getPropOrg()
+      setTimeout(() => this.changeOrg(org.id), 100)
+    },
+    hasCurrentOrgPermission() {
+      const currentOrgId = this.currentOrg.id
+      const orgInList = this.userAdminOrgList.find((item) => item.id === currentOrgId)
+      return orgInList
+    },
     changeOrg(orgId) {
       const org = this.orgIdMapper[orgId]
       if (!org) {
         this.$log.debug('Error: org not found')
+      } else {
+        this.$log.debug('Change to org: ', org)
       }
-      this.$store.dispatch('users/setCurrentOrg', org)
+      this.$store.dispatch('users/setCurrentOrg', org).then(() => {
+        this.$log.debug('Set current org to: ', org)
+        if (hasUUID(location.href)) {
+          location.href = process.env.VUE_APP_PUBLIC_PATH
+        } else {
+          window.location.reload(true)
+        }
+      })
     }
   }
 }

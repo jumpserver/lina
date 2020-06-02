@@ -25,7 +25,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
-import { getPermission, setPermission } from '@/utils/auth'
+import { getCurrentRole, setCurrentRole } from '@/utils/auth'
 
 export default {
   name: 'AccountDropdown',
@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     CheckPermission() {
-      return getPermission() === 'Admin'
+      return getCurrentRole() === 'Admin'
     },
     CheckRules() {
       return this.getCurrentOrgRoles.includes('Admin')
@@ -57,12 +57,12 @@ export default {
           this.$router.push({ name: 'UserProfile' })
           break
         case 'AdminPage':
-          setPermission('Admin')
-          window.location.href = `/`
+          setCurrentRole('Admin')
+          window.location.href = `/ui/`
           break
         case 'UserPage':
-          setPermission('User')
-          window.location.href = `/`
+          setCurrentRole('User')
+          window.location.href = `/ui/`
           break
         case 'logout':
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`

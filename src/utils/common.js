@@ -123,3 +123,8 @@ export function formatDate(inputTime) {
   // return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
   return y + '-' + m + '-' + d + 'T' + h + ':' + minute
 }
+
+const uuidPattern = /[0-9a-zA-Z\-]{36}/
+export function hasUUID(s) {
+  return s.search(uuidPattern) !== -1
+}

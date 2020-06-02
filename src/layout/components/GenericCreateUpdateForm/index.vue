@@ -6,6 +6,7 @@
     :form="form"
     :fields="fields"
     :url="totalUrl"
+    :is-submitting="isSubmitting"
     v-bind="$attrs"
     v-on="$listeners"
     @submit="handleSubmit"
@@ -101,7 +102,8 @@ export default {
   data() {
     return {
       form: {},
-      loading: true
+      loading: true,
+      isSubmitting: false
     }
   },
   computed: {
@@ -135,6 +137,7 @@ export default {
       const performSubmit = this.performSubmit || this.defaultPerformSubmit
       const msg = this.method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
       const route = this.method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      this.isSubmitting = true
       performSubmit(validValues).then(() => {
         this.$message.success(msg)
         this.$router.push(route)
@@ -150,6 +153,8 @@ export default {
             this.$refs.form.setFieldError(key, value)
           }
         }
+      }).finally(() => {
+        this.isSubmitting = false
       })
     },
     async getFormValue() {

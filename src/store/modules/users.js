@@ -1,18 +1,17 @@
 import { logout, getProfile } from '@/api/users'
 import {
-  getToken,
-  getCurrentOrg,
-  setCurrentOrg
+  getTokenFromCookie,
+  getCurrentOrgFromCookie,
+  saveCurrentOrgToCookie
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
+    token: getTokenFromCookie(),
+    currentOrg: getCurrentOrgFromCookie(),
     profile: {},
-    currentOrg: getCurrentOrg(),
-    orgs: [],
-    internalInit: Boolean
+    orgs: []
   }
 }
 
@@ -28,21 +27,12 @@ const mutations = {
   SET_PROFILE: (state, profile) => {
     state.profile = profile
   },
-  SET_STATUS: (state) => {
-    state.internalInit = true
-  },
   SET_ORGS: (state, orgs) => {
-    // API BUG FIX
-    for (let index = 0; index < orgs.length; index++) {
-      if (orgs[index].id === 'DEFAULT') {
-        orgs[index].id = ''
-      }
-    }
     state.orgs = orgs
   },
   SET_CURRENT_ORG(state, org) {
+    saveCurrentOrgToCookie(org)
     state.currentOrg = org
-    setCurrentOrg(org)
   }
 }
 
@@ -65,9 +55,6 @@ const actions = {
   // get user Profile
   getProfile({ commit, state }) {
     return new Promise((resolve, reject) => {
-      if (!state.internalInit) {
-        reject('Init failed, please Login again.')
-      }
       getProfile().then(response => {
         if (!response) {
           reject('Verification failed, please Login again.')
@@ -80,9 +67,9 @@ const actions = {
 
         commit('SET_PROFILE', response)
         commit('SET_ORGS', admin_or_audit_orgs)
-        commit('SET_STATUS')
         resolve(response)
       }).catch(error => {
+        console.log(error)
         reject(error)
       })
     })
@@ -111,6 +98,7 @@ const actions = {
     })
   },
   setCurrentOrg({ commit }, data) {
+    console.log('users.setCurrentOrg: ', data)
     commit('SET_CURRENT_ORG', data)
   }
 }

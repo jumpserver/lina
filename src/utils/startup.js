@@ -3,13 +3,13 @@ import store from '@/store'
 import router from '@/router'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
-import { getPermission, getToken, setPermission } from '@/utils/auth'
+import { getCurrentRole, getTokenFromCookie, setCurrentRole } from '@/utils/auth'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
 
-function reject() {
-  return new Promise((resolve, reject) => reject())
+function reject(msg) {
+  return new Promise((resolve, reject) => reject(msg))
 }
 
 function setHeadTitle({ to, from, next }) {
@@ -21,18 +21,20 @@ async function checkLogin({ to, from, next }) {
     next()
   }
   // determine whether the user has logged in
-  const hasToken = getToken()
+  const hasToken = getTokenFromCookie()
   if (!hasToken) {
-    window.location = process.env.VUE_APP_LOGIN_PATH
-    return reject()
+    setTimeout(() => {
+      window.location = process.env.VUE_APP_LOGIN_PATH
+    }, 1000)
+    return reject('No token found in cookie')
   }
 
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
     // return false
-    window.location = process.env.VUE_APP_LOGIN_PATH
-    return reject()
+    // window.location = process.env.VUE_APP_LOGIN_PATH
+    return reject('No profile get: ' + e)
   }
 }
 
@@ -92,18 +94,18 @@ export async function startup({ to, from, next }) {
 }
 
 function checkRoles(val) {
-  let currentRoles = getPermission()
-  if (currentRoles) {
-    if (val && !val.includes(currentRoles)) {
+  let currentRole = getCurrentRole()
+  if (currentRole) {
+    if (val && !val.includes(currentRole)) {
       // TODO 异常注入处理
-      currentRoles = val[0]
-      setPermission(currentRoles)
+      currentRole = val[0]
+      setCurrentRole(currentRole)
     }
   } else {
     // 设置默认路由
-    currentRoles = val[0]
-    setPermission(currentRoles)
+    currentRole = val[0]
+    setCurrentRole(currentRole)
   }
-  return [currentRoles]
+  return [currentRole]
 }
 
