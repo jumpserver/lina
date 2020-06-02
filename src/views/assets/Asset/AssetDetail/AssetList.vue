@@ -42,7 +42,7 @@ export default {
                 { action: 'test' }
               ).then(res => {
                 console.log(`/ops/celery/task/${res.task}/log/`)
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
             }.bind(this)

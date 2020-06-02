@@ -55,7 +55,7 @@ export default {
         {
           title: this.$t('users.ResetAndDownloadSSHKey'),
           callback: function() {
-            window.open(`/users/profile/pubkey/generate/`, '_blank')
+            window.open(`/core/users/profile/pubkey/generate/`, '_blank')
           }
         }
       ]

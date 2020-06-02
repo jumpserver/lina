@@ -67,7 +67,7 @@ export default {
               this.$axios.get(
                 `api/v1/assets/admin-users/${this.object.id}/connective/`
               ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
             }.bind(this)
@@ -123,7 +123,7 @@ export default {
                       `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
                       { action: 'test' }
                     ).then(res => {
-                      window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })
                   }
                 },

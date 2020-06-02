@@ -39,9 +39,8 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasDatePicker: true,
         hasImport: false,
-        hasRefresh: false
+        hasDatePicker: true
       }
     }
   }

@@ -19,7 +19,7 @@ export default {
         ],
         columnsMeta: {
           remote_addr: {
-            width: '130px'
+            width: '140px'
           },
           operate: {
             width: '90px'
