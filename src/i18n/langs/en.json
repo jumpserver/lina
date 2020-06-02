@@ -31,6 +31,8 @@
   "assets": {
     "Action": "Action",
     "CmdFilter": "CmdFilter",
+    "DeactiveSelected": "Deactive selected",
+    "ActiveSelected": "Active selected",
     "UpdateAssetUserToken": "Update asset user auth",
     "Password": "Password",
     "RefreshHardware": "Refresh hardware",
