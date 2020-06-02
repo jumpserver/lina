@@ -58,10 +58,9 @@ export default {
       this.dataTable.getList()
     },
     search(attrs) {
-      return this.dataTable.search(attrs)
+      return this.dataTable.search(attrs, true)
     },
     handleDateChange(attrs) {
-      console.log(attrs)
       this.iTableConfig.extraQuery = {
         date_from: attrs[0],
         date_to: attrs[1]

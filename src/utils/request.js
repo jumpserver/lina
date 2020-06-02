@@ -65,10 +65,22 @@ function ifUnauthorized({ response, error }) {
   }
 }
 
+function ifBadRequest({ response, error }) {
+  console.log(response)
+  if (response.status === 400) {
+    error.message = i18n.t('common.BadRequestErrorMsg')
+  }
+}
+
 function flashErrorMsg({ response, error }) {
-  if (!response.config.disableFlashMsg) {
+  if (!response.config.disableFlashErrorMsg) {
+    let msg = error.message
+    const data = response.data
+    if (data && (data.error || data.msg)) {
+      msg = data.error || data.msg
+    }
     Message({
-      message: error.message,
+      message: msg,
       type: 'error',
       duration: 5 * 1000
     })
@@ -102,6 +114,7 @@ service.interceptors.response.use(
 
     const response = error.response
     ifUnauthorized({ response, error })
+    ifBadRequest({ response, error })
     flashErrorMsg({ response, error })
     return Promise.reject(error)
   }

@@ -18,6 +18,15 @@ export default {
           'is_success', 'date_start'
         ],
         columnsMeta: {
+          is_finished: {
+            width: '100px'
+          },
+          is_success: {
+            width: '100px'
+          },
+          date_start: {
+            width: '160px'
+          }
         },
         hasSelection: false
       },

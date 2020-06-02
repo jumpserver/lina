@@ -60,7 +60,7 @@ function cleanDateStr(d) {
     }
     switch (i) {
       case 0:
-        d = d.replaceAll('-', '/')
+        d = d.split('/').join('-')
         break
       case 1:
         d = d.split('+')[0].trimRight()

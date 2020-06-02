@@ -954,9 +954,13 @@ export default {
           this.loading = false
         })
     },
-    search(attrs) {
+    search(attrs, reset) {
       // Orange 重置查询对象
-      this.innerQuery = merge(this.innerQuery, attrs)
+      if (reset) {
+        this.innerQuery = merge({}, attrs)
+      } else {
+        this.innerQuery = merge(this.innerQuery, attrs)
+      }
       return this.getList()
     },
     searchDate(attrs) {

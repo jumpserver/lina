@@ -13,21 +13,32 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
-        columns: ['id', 'username', 'type', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
+        columns: ['username', 'type', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
         columnsMeta: {
-          id: {
-            type: 'index'
-          },
           user_agent: {
-            formatter: (row, column, cellValue) => cellValue.slice(0, 20),
-            width: '150px'
+            width: '150px',
+            showOverflowTooltip: true
+          },
+          ip: {
+            width: '140px'
+          },
+          status: {
+            width: '80px'
+          },
+          mfa: {
+            label: 'MFA',
+            width: '80px'
+          },
+          type: {
+            width: '100px'
+          },
+          datetime: {
+            width: '160px'
           }
         }
       },
       headerActions: {
-        hasSelection: false,
-        hasCreate: false,
-        hasBulkDelete: false,
+        hasLeftActions: false,
         hasImport: false,
         hasRefresh: false
       }

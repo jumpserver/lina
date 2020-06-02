@@ -15,13 +15,19 @@ export default {
         url: '/api/v1/audits/operate-logs/',
         columns: ['user', 'action', 'resource_type', 'resource', 'remote_addr', 'datetime'],
         columnsMeta: {
-        },
-        hasSelection: false
+          datetime: {
+            width: '160px'
+          },
+          remote_addr: {
+            width: '140px'
+          },
+          action: {
+            width: '90px'
+          }
+        }
       },
       headerActions: {
-        hasSelection: false,
-        hasCreate: false,
-        hasBulkDelete: false,
+        hasLeftActions: false,
         hasImport: false,
         hasRefresh: false
       }

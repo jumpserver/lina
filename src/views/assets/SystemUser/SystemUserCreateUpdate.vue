@@ -6,6 +6,10 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import UploadKey from '@/components/UploadKey'
 import { Select2 } from '@/components'
+
+// const asciiProtocols = ['ssh', 'telnet', 'mysql']
+const graphProtocols = ['vnc', 'rdp']
+
 export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -21,11 +25,10 @@ export default {
         sftp_root: 'tmp',
         sudo: '/bin/whoami',
         shell: '/bin/bash'
-
       },
       fields: [
         [this.$t('common.BasicInfo'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key', 'auto_push']],
+        [this.$t('common.Auth'), ['auto_push', 'auto_generate_key', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Others'), ['sftp_root', 'sudo', 'shell', 'comment']]
       ],
@@ -54,11 +57,16 @@ export default {
         },
         auto_generate_key: {
           type: 'switch',
+          label: this.$t('assets.AutoGenerateKey'),
           hidden: form => {
             if (JSON.stringify(this.$route.params) !== '{}') {
               return true
-            } else {
-              return form.login_mode !== 'auto'
+            }
+            if (form.login_mode !== 'auto') {
+              return true
+            }
+            if (!form.auto_push) {
+              return true
             }
           }
         },
@@ -72,18 +80,12 @@ export default {
         },
         cmd_filters: {
           component: Select2,
+          hidden: (form) => graphProtocols.indexOf(form.protocol) !== -1,
           el: {
             multiple: true,
             value: [],
             ajax: {
-              url: '/api/v1/assets/cmd-filters/',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/cmd-filters/'
             }
           }
         },
@@ -101,19 +103,22 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: 'SFTP的起始路径，tmp目录, 用户home目录或者自定义'
+          helpText: 'SFTP的起始路径，tmp目录, 用户home目录或者自定义',
+          hidden: (item) => item.protocol !== 'ssh'
         },
         sudo: {
           rules: [
             { required: true }
           ],
-          helpText: '使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig'
+          helpText: '使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig',
+          hidden: (item) => item.protocol !== 'ssh'
         },
         password: {
           helpText: '密码或密钥密码',
           hidden: form => form.auto_generate_key === true || form.login_mode !== 'auto'
         },
         shell: {
+          hidden: (item) => item.protocol !== 'ssh',
           rules: [
             { required: true }
           ]

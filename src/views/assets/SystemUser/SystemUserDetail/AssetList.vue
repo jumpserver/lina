@@ -6,7 +6,7 @@
       </el-col>
       <el-col :span="10">
         <QuickActions type="primary" :actions="quickActions" />
-        <RelationCard type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
+        <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
     <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
@@ -203,18 +203,13 @@ export default {
         hasSearch: true,
         hasCreate: false
       },
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-info',
         title: this.$t('perms.addNodeToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
           }
         },
         hasObjectsId: [],
@@ -259,8 +254,8 @@ export default {
         `/api/v1/assets/system-users-nodes-relations/?systemuser=${this.object.id}&draw=1&limit=15&offset=0`
       ).then(data => {
         for (const x in data.results) {
-          this.nodeReletionConfig.hasObjectsId.push(data.results[x].node)
-          this.nodeReletionConfig.hasObjects.push({
+          this.nodeRelationConfig.hasObjectsId.push(data.results[x].node)
+          this.nodeRelationConfig.hasObjects.push({
             value: data.results[x].node,
             label: data.results[x].node_display
           })

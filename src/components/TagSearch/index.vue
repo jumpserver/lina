@@ -2,9 +2,11 @@
   <div class="filter-field">
     <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
     <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)">
-      <strong v-if="v.label">{{ v.label + ':' }}</strong> {{ v.value }}
+      <strong v-if="v.label">{{ v.label + ':' }}</strong>
+      <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
+      <span v-else>{{ v.value }}</span>
     </el-tag>
-    <span v-if="filterLabel" slot="prefix" class="filterTitle">{{ filterLabel + ':' }}</span>
+    <span v-if="keyLabel" slot="prefix" class="filterTitle">{{ keyLabel + ':' }}</span>
     <el-input ref="SearchInput" v-model="filterValue" :placeholder="placeholder" class="search-input" @blur="focus = false" @focus="focus = true" @change="handleConfirm" />
   </div>
 </template>
@@ -26,12 +28,13 @@ export default {
     return {
       filterKey: '',
       filterValue: '',
+      valueLabel: '',
       filterTags: {},
       focus: false
     }
   },
   computed: {
-    filterLabel() {
+    keyLabel() {
       for (const field of this.options) {
         if (field.value === this.filterKey) {
           return field.label
@@ -60,14 +63,30 @@ export default {
   watch: {
     filterTags: {
       handler(val) {
-        if (val) {
-          this.$emit('tagSearch', this.filterMaps)
-        }
+        console.log(this.filterTags)
+        this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
+        // this.$emit('tagSearch', this.filterMaps)
       },
       deep: true
     }
   },
   methods: {
+    getValueLabel(key, value) {
+      for (const field of this.options) {
+        if (field.value !== key) {
+          continue
+        }
+        if (!field.children) {
+          continue
+        }
+        for (const child of field.children) {
+          if (child.value === value) {
+            return child.label
+          }
+        }
+      }
+      return ''
+    },
     handleMenuItemChange(keys) {
       this.$log.debug('Tag search keys: ', keys)
       if (keys.length === 0) {
@@ -79,10 +98,10 @@ export default {
       } else if (keys.length === 2) {
         this.filterKey = keys[0]
         this.filterValue = keys[1]
+        this.valueLabel = this.getValueLabel(keys[0], keys[1])
         this.handleConfirm()
       }
       this.$nextTick(() => this.$refs.Cascade.handleClear())
-      // setTimeout(() => this.$refs.Cascade.handleClear(), 100)
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
@@ -92,9 +111,11 @@ export default {
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search'
       }
-      this.$set(this.filterTags, this.filterKey, { label: this.filterLabel, value: this.filterValue })
+      const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
+      this.$set(this.filterTags, this.filterKey, tag)
       this.filterKey = ''
       this.filterValue = ''
+      this.valueLabel = ''
     }
   }
 }

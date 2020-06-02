@@ -46,15 +46,7 @@ export default {
         hasObjectsId: this.object.cmd_filters,
         title: this.$t('assets.CmdFilter'),
         objectsAjax: {
-          url: '/api/v1/assets/cmd-filters/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.name, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
-          }
+          url: '/api/v1/assets/cmd-filters/'
         },
         performAdd: (items) => {
           const objectId = this.object.id

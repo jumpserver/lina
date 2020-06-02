@@ -31,13 +31,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/users/users/?fields_size=mini',
-              processResults(data) {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }
           }
@@ -64,13 +59,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/assets/nodes/',
-              processResults(data) {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: item.full_value, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
               }
             }
           }
@@ -80,13 +70,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/assets/system-users/',
-              processResults(data) {
-                let results = data.results
-                results = results.filter((item) => item.protocol !== 'mysql').map((item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }
           }
