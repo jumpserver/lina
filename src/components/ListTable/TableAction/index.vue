@@ -4,13 +4,13 @@
       <div class="table-header-left-side">
         <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
         <span v-else style="display: flex;flex-direction: row">
-          <DateTimePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
           <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+          <DateTimePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
         </span>
       </div>
       <div class="table-action-right-side">
-        <DateTimePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
         <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+        <DateTimePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
         <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
       </div>
     </slot>
@@ -62,6 +62,7 @@ export default {
   data() {
     return {
       keyword: ''
+
     }
   },
   computed: {
@@ -131,7 +132,7 @@ export default {
     padding: 5px 20px;
   }
   .datepicker{
-    margin-right: 15px;
+    margin-left: 10px;
   }
 
 </style>

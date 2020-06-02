@@ -9,9 +9,12 @@
     size="large"
     :clearable="false"
     class="datepicker"
+    :picker-options="pickerOptions"
     value-format="yyyy-MM-ddThh:mm"
     :default-time="['12:00:00', '12:00:00']"
+    v-bind="$attrs"
     @change="handleDateChange"
+    v-on="$listeners"
   />
 </template>
 
@@ -24,7 +27,36 @@ export default {
   components: {},
   data() {
     return {
-      value: [formatDate((new Date().getTime()) - 432000000), formatDate(new Date().getTime())]
+      value: [formatDate((new Date().getTime()) - 432000000), formatDate(new Date().getTime())],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: this.$t('common.DateLastWeek'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: this.$t('common.DateLastMonth'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: this.$t('common.DateLast3Months'),
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }
+        ]
+      }
     }
   },
   computed: {

@@ -136,6 +136,9 @@
   "common": {
     "CrontabHelpTips": "eg：每周日 03:05 执行 <5 3 * * 0> <br> 提示： 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href='https://tool.lu/crontab/' target='_blank'>在线工具</a>） <br>注意： 如果同时设置了定期执行和周期执行，优先使用定期执行",
     "BadRequestErrorMsg": "请求错误，请检查填写内容",
+    "DateLastWeek": "最近一周",
+    "DateLastMonth": "最近一个月",
+    "DateLast3Months": "最近三个月",
     "Action": "动作",
     "Actions": "操作",
     "Activate": "激活",
