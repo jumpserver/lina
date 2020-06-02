@@ -30,6 +30,7 @@
   },
   "assets": {
     "Action": "动作",
+    "AutoGenerateKey": "自动生成密钥",
     "CmdFilter": "命令过滤器",
     "DeactiveSelected": "禁用所选",
     "ActiveSelected": "激活所选",

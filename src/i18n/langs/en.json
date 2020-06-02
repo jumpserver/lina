@@ -30,6 +30,7 @@
   },
   "assets": {
     "Action": "Action",
+    "AutoGenerateKey": "Auto generate ssh key",
     "CmdFilter": "CmdFilter",
     "DeactiveSelected": "Deactive selected",
     "ActiveSelected": "Active selected",
