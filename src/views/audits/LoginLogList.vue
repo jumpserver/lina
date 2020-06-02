@@ -40,7 +40,8 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasRefresh: false
+        hasRefresh: false,
+        hasDatePicker: true
       }
     }
   }
