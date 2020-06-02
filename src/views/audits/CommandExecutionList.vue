@@ -31,6 +31,7 @@ export default {
         hasSelection: false
       },
       headerActions: {
+        hasLeftActions: false,
         hasSelection: false,
         hasCreate: false,
         hasBulkDelete: false,
