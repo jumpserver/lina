@@ -40,10 +40,10 @@ export default {
             click: function() {
               if (this.object.mfa_enabled) {
                 if (!this.object.mfa_force_enabled) {
-                  window.location.href = `/core/users/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
+                  window.location.href = `/core/auth/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
                 }
               } else {
-                window.location.href = `/core/users/profile/otp/enable/start/?next=${this.$route.fullPath}`
+                window.location.href = `/core/auth/profile/otp/enable/start/?next=${this.$route.fullPath}`
               }
             }.bind(this)
           }
@@ -56,7 +56,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.location.href = `/core/users/profile/otp/update/?next=${this.$route.fullPath}`
+              window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
             }.bind(this)
           }
         },
@@ -68,7 +68,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.open(`/core/users/profile/pubkey/generate/`, '_blank')
+              window.open(`/core/auth/profile/pubkey/generate/`, '_blank')
             }
           }
         }
