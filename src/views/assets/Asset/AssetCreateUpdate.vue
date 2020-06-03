@@ -32,7 +32,10 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/platforms/'
+              url: '/api/v1/assets/platforms/',
+              transformOption: (item) => {
+                return { label: `${item.name}`, value: item.name }
+              }
             }
           }
         },

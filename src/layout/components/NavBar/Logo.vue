@@ -40,7 +40,7 @@ export default {
     // eslint-disable-next-line vue/return-in-computed-property
     logoSrc() {
       if (this.publicSettings.XPACK_LICENSE_IS_VALID) {
-        if (this.customSettings && this.customSettings.logo_index && this.customSettings.logo_index !== '/media/xpack/logo/logo_text.png') {
+        if (this.customSettings && this.customSettings.logo_index && this.customSettings.logo_index !== '/static/img/logo_text.png') {
           return this.customSettings.logo_index
         }
       } else {
