@@ -4,12 +4,16 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import { getDaysAgo } from '@/utils/common'
 
 export default {
   components: {
     GenericListPage
   },
   data() {
+    const now = new Date()
+    const dateFrom = getDaysAgo(7, now).toISOString()
+    const dateTo = now.toISOString()
     return {
       tableConfig: {
         url: '/api/v1/audits/ftp-logs/',
@@ -18,8 +22,17 @@ export default {
           'filename', 'is_success', 'date_start'
         ],
         columnsMeta: {
+          user: {
+            showOverflowTooltip: true
+          },
+          system_user: {
+            showOverflowTooltip: true
+          },
           remote_addr: {
             width: '140px'
+          },
+          filename: {
+            showOverflowTooltip: true
           },
           operate: {
             width: '90px'
@@ -27,12 +40,20 @@ export default {
           is_success: {
             width: '80px'
           }
+        },
+        extraQuery: {
+          date_to: dateTo,
+          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
+        hasImport: false,
         hasDatePicker: true,
-        hasImport: false
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        }
       }
     }
   }

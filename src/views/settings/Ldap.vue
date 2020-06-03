@@ -106,7 +106,11 @@ export default {
           label: this.$t('setting.authLdapBindDn')
         },
         AUTH_LDAP_BIND_PASSWORD: {
-          label: this.$t('setting.authLdapBindPassword')
+          label: this.$t('setting.authLdapBindPassword'),
+          type: 'input',
+          el: {
+            type: 'password'
+          }
         },
         AUTH_LDAP_SEARCH_OU: {
           label: this.$t('setting.authLdapSearchOu'),

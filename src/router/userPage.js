@@ -1,5 +1,6 @@
 import Layout from '@/layout/index'
 import i18n from '@/i18n/i18n'
+import commonRoutes from './common'
 
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
@@ -7,6 +8,7 @@ const URL = scheme + '//' + document.location.hostname + port
 
 export default [
   // 404 page must be placed at the end !!!
+  commonRoutes.userFirstLogin,
   {
     path: '/',
     component: Layout,
@@ -41,6 +43,7 @@ export default [
       }
     ]
   },
+  commonRoutes.userProfile,
   {
     path: '/command-executions',
     component: Layout,

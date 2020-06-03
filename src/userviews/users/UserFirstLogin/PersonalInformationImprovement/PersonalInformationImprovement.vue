@@ -1,0 +1,83 @@
+<template>
+  <IBox>
+    <GenericCreateUpdateForm
+      :fields="fields"
+      :fields-meta="fieldsMeta"
+      :initial="object"
+      :url="url"
+      :update-success-next-route="updateSuccessNextRoute"
+      :get-method="getMethod"
+    />
+  </IBox>
+</template>
+
+<script>
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index'
+import { IBox } from '@/components'
+
+export default {
+  name: 'ProfileUpdate',
+  components: {
+    GenericCreateUpdateForm,
+    IBox
+  },
+  props: {
+    object: {
+      type: Object,
+      default: null
+    }
+  },
+  data() {
+    return {
+      url: `/api/v1/users/profile/`,
+      fields: [
+        [this.$t('users.Account'), ['username', 'name', 'email']],
+        [this.$t('users.MFA'), ['mfa_level']],
+        [this.$t('users.SSHKey'), ['public_key']],
+        [this.$t('common.Other'), ['phone', 'wechat']],
+        [this.$t('users.TermsAndConditions'), ['terms']]
+      ],
+      fieldsMeta: {
+        username: {
+          disabled: true
+        },
+        name: {
+          disabled: true
+        },
+        email: {
+          disabled: true
+        },
+        mfa_level: {
+          helpText: this.$t('users.HelpText.MFAOfUserFirstLoginPersonalInformationImprovementPage')
+        },
+        public_key: {
+          el: {
+            type: 'textarea',
+            placeholder: 'ssh-rsa AAAA...'
+          },
+          helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
+        },
+        terms: {
+          label: this.$t('users.IAgree'),
+          type: 'checkbox',
+          checked: false,
+          rules: [
+            { required: true }
+          ],
+          helpText: this.$t('users.HelpText.MFAOfUserFirstLoginUserGuidePage')
+        }
+      },
+      updateSuccessNextRoute: { name: 'UserGuide' }
+    }
+  },
+  methods: {
+    getMethod() {
+      return 'put'
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

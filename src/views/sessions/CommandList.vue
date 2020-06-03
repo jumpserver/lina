@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { formatDate, toSafeLocalDateStr } from '@/utils/common'
+import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
@@ -14,17 +14,19 @@ export default {
   },
   data() {
     const vm = this
+    const now = new Date()
+    const dateFrom = getDaysAgo(2, now).toISOString()
+    const dateTo = now.toISOString()
     return {
       tableConfig: {
-        hasSelection: false,
         url: '/api/v1/terminal/commands/',
         columns: [
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
         ],
         extraQuery: {
-          date_to: formatDate(new Date().getTime()),
-          date_from: formatDate((new Date().getTime()) - 432000000)
+          date_to: dateTo,
+          date_from: dateFrom
         },
         columnsMeta: {
           expandCol: {
@@ -63,17 +65,16 @@ export default {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
-        },
-        tableActions: {
-          hasEdit: false,
-          hasDelete: false
         }
       },
       headerActions: {
         hasLeftActions: false,
-        hasImport: false,
         hasExport: false,
-        hasDatePicker: true
+        hasDatePicker: true,
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        }
       }
     }
   }

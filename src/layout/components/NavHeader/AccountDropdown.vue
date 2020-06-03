@@ -8,11 +8,11 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <el-dropdown-item v-if="CheckPermission && CheckRules " icon="el-icon-guide" command="UserPage">{{
-          $t('common.nav.UserPage') }}
+        <el-dropdown-item v-if="isInAdminRole && hasAdminRole " icon="el-icon-guide" command="userPage">
+          {{ $t('common.nav.UserPage') }}
         </el-dropdown-item>
-        <el-dropdown-item v-if="!CheckPermission && CheckRules " icon="el-icon-guide" command="AdminPage">{{
-          $t('common.nav.AdminPage') }}
+        <el-dropdown-item v-if="!isInAdminRole && hasAdminRole " icon="el-icon-guide" command="adminPage">
+          {{ $t('common.nav.AdminPage') }}
         </el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
@@ -25,7 +25,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
-import { getCurrentRole, setCurrentRole } from '@/utils/auth'
 
 export default {
   name: 'AccountDropdown',
@@ -39,14 +38,15 @@ export default {
     }
   },
   computed: {
-    CheckPermission() {
-      return getCurrentRole() === 'Admin'
+    isInAdminRole() {
+      return this.currentRole === 'Admin'
     },
-    CheckRules() {
+    hasAdminRole() {
       return this.getCurrentOrgRoles.includes('Admin')
     },
     ...mapGetters([
       'currentUser',
+      'currentRole',
       'getCurrentOrgRoles'
     ])
   },
@@ -56,12 +56,12 @@ export default {
         case 'profile':
           this.$router.push({ name: 'UserProfile' })
           break
-        case 'AdminPage':
-          setCurrentRole('Admin')
+        case 'adminPage':
+          this.$store.dispatch('users/setCurrentRole', 'Admin')
           window.location.href = `/ui/`
           break
-        case 'UserPage':
-          setCurrentRole('User')
+        case 'userPage':
+          this.$store.dispatch('users/setCurrentRole', 'User')
           window.location.href = `/ui/`
           break
         case 'logout':

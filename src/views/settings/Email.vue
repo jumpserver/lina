@@ -57,7 +57,11 @@ export default {
         },
         EMAIL_HOST_PASSWORD: {
           label: this.$t('setting.emailHostPassword'),
-          helpText: this.$t('setting.helpText.emailHostPassword')
+          helpText: this.$t('setting.helpText.emailHostPassword'),
+          type: 'input',
+          el: {
+            type: 'password'
+          }
         },
         EMAIL_FROM: {
           label: this.$t('setting.emailEmailFrom'),
