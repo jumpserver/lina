@@ -84,8 +84,8 @@ export const commonRoutes = {
         name: 'UserGuide',
         meta: { title: i18n.t('route.UserGuide') }
       }
-    ]
-    // hidden: true
+    ],
+    hidden: true
   }
 }
 
