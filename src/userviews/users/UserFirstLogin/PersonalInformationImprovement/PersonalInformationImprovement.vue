@@ -32,7 +32,8 @@ export default {
     return {
       url: `/api/v1/users/profile/`,
       fields: [
-        [this.$t('users.Account'), ['username', 'name', 'email', 'mfa_level', 'public_key']],
+        [this.$t('users.Account'), ['username', 'name', 'email']],
+        [this.$t('users.Authentication'), ['mfa_level', 'public_key']],
         [this.$t('common.Other'), ['phone', 'wechat']],
         [this.$t('users.TermsAndConditions'), ['terms']]
       ],
