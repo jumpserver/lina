@@ -45,7 +45,10 @@ export default {
             name: 'SSHUpdate'
           }
         ],
-        hasRightSide: false
+        hasRightSide: false,
+        actions: {
+          detailApiUrl: '/api/v1/users/profile/'
+        }
       }
     }
   }
