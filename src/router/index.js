@@ -66,6 +66,26 @@ export const commonRoutes = {
         meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
       }
     ]
+  },
+  userFirstLogin: {
+    path: '/users/first-login',
+    component: Layout,
+    meta: { title: i18n.t('route.UserFirstLogin'), icon: 'user' },
+    children: [
+      {
+        path: 'personal-information-improvement/',
+        component: () => import('@/userviews/users/UserFirstLogin/PersonalInformationImprovement/index'),
+        name: 'PersonalInformationImprovement',
+        meta: { title: i18n.t('route.PersonalInformationImprovement') }
+      },
+      {
+        path: 'guide/',
+        component: () => import('@/userviews/users/UserFirstLogin/UserGuide/index'),
+        name: 'UserGuide',
+        meta: { title: i18n.t('route.UserGuide') }
+      }
+    ]
+    // hidden: true
   }
 }
 
@@ -75,6 +95,7 @@ export const commonRoutes = {
  */
 export const adminRoutes = [
   Object.assign({}, commonRoutes.userProfile, { hidden: true }),
+  commonRoutes.userFirstLogin,
   {
     path: '/',
     component: Layout,
