@@ -10,10 +10,10 @@ import {
 function hasPermission(roles, route) {
   let requireRoles = route.meta ? route.meta.roles : null
   if (!requireRoles) {
-    requireRoles = ['Admin']
+    requireRoles = ['Admin', 'SuperAdmin']
   }
-  const has = roles.some(role => requireRoles.includes(role))
-  return has
+  return roles.some(role => requireRoles.includes(role))
+  // return has
 }
 
 /**

@@ -61,7 +61,6 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', cleanedRoles)
-    console.log('Access routes: ', accessRoutes)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)

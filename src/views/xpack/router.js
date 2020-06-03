@@ -13,7 +13,7 @@ export default {
       path: 'interface-setting',
       component: () => import('@/views/xpack/InterfaceSettings.vue'),
       name: 'InterfaceSetting',
-      meta: { title: i18n.t('xpack.InterfaceSettings') }
+      meta: { title: i18n.t('xpack.InterfaceSettings'), roles: ['SuperAdmin'] }
     },
     // {
     //   path: 'license',
