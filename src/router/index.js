@@ -7,7 +7,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-const requireContext = require.context('@/views/', true, /router\.js$/)
+const requireContext = require.context('@/views/xpack/', true, /router\.js$/)
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -47,17 +47,11 @@ export const constantRoutes = [
     name: '404',
     component: () => import('@/views/404'),
     hidden: true
-  }
-]
-
-/**
- * admin and user routes
- * the routes that need to be dynamically loaded based on admin or user roles
- */
-export const commonRoutes = {
-  userProfile: {
-    path: '/users/profile',
+  },
+  {
+    path: '/profile',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: '',
@@ -67,14 +61,20 @@ export const commonRoutes = {
       }
     ]
   }
-}
+]
+
+/**
+ * user routes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+// 权限路由
+import userPageRoutes from './userPage'
 
 /**
  * admin
  * the routes that need to be dynamically loaded based on admin roles
  */
-export const adminRoutes = [
-  Object.assign({}, commonRoutes.userProfile, { hidden: true }),
+export const allRoleRoutes = [
   {
     path: '/',
     component: Layout,
@@ -144,7 +144,10 @@ export const adminRoutes = [
     path: '/tickets/',
     component: Layout,
     redirect: '/tickets/tickets/',
-    children: TicketsRoutes
+    children: TicketsRoutes,
+    meta: {
+      licenseRequired: true
+    }
   },
   {
     path: '/audits/',
@@ -164,17 +167,12 @@ export const adminRoutes = [
       path: 'settings',
       name: 'Settings',
       component: () => import('@/views/settings/index'),
-      meta: { title: i18n.t('route.Settings'), icon: 'gears' }
+      meta: { title: i18n.t('route.Settings'), icon: 'gears', roles: ['SuperAdmin'] }
     }]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  ...userPageRoutes,
+  { path: '*', redirect: '/404', hidden: true, meta: { roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }}
 ]
-/**
- * user routes
- * the routes that need to be dynamically loaded based on user roles
- */
-// 权限路由
-export { default as userRoutes } from './userPage'
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

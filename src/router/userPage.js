@@ -10,13 +10,21 @@ export default [
   {
     path: '/',
     component: Layout,
-    redirect: '/assets',
+    meta: {
+      roles: ['User'],
+      title: i18n.t('route.MyAssets'),
+      icon: 'files-o'
+    },
     children: [
       {
-        path: 'assets',
+        path: '',
         name: 'assets',
         component: () => import('@/userviews/assets/index'),
-        meta: { title: i18n.t('route.MyAssets'), icon: 'files-o' }
+        meta: {
+          title: i18n.t('route.MyAssets'),
+          icon: 'files-o',
+          roles: ['User']
+        }
       }
     ]
   },
@@ -25,53 +33,61 @@ export default [
     name: 'Apps',
     component: Layout,
     redirect: '/apps/remoteapp',
-    meta: { title: i18n.t('route.MyApps'), icon: 'th' },
+    meta: { title: i18n.t('route.MyApps'), icon: 'th', roles: ['User'] },
     children: [
       {
         path: '/apps/remoteapp',
         name: 'remoteapp',
         component: () => import('@/userviews/apps/RemoteApp'),
-        meta: { title: i18n.t('route.RemoteApp') }
+        meta: { title: i18n.t('route.RemoteApp'), roles: ['User'] }
       },
       {
         path: '/apps/database',
         name: 'assets',
         component: () => import('@/userviews/apps/DatabaseApp'),
-        meta: { title: i18n.t('route.DatabaseApp') }
+        meta: { title: i18n.t('route.DatabaseApp'), roles: ['User'] }
       }
     ]
   },
   {
     path: '/command-executions',
     component: Layout,
+    meta: {
+      roles: ['User']
+    },
     children: [
       {
         path: '',
         name: 'CommandExecutions',
         component: () => import('@/views/ops/CommandExecution'),
-        meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal' }
+        meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal', roles: ['User'] }
       }
     ]
   },
   {
     path: `external-luna`,
     component: Layout,
+    meta: {
+      roles: ['User']
+    },
     children: [
       {
         path: `${URL}/luna/`,
-        meta: { title: i18n.t('route.WebTerminal'), icon: 'window-maximize', activeMenu: '/assets' }
+        meta: { title: i18n.t('route.WebTerminal'), icon: 'window-maximize', activeMenu: '/assets', roles: ['User'] }
       }
     ]
   },
   {
     path: 'external-elfinder',
     component: Layout,
+    meta: {
+      roles: ['User']
+    },
     children: [
       {
         path: `${URL}/koko/elfinder/sftp/`,
-        meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets' }
+        meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets', roles: ['User'] }
       }
     ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]

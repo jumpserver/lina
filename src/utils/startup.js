@@ -53,15 +53,15 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
-    let { current_org_roles } = await store.dispatch('users/getProfile')
+    const { current_org_roles } = await store.dispatch('users/getProfile')
     // console.log('Current org role: ', current_org_roles)
 
-    current_org_roles = checkRoles(current_org_roles)
-    // console.log('Current org role: ', current_org_roles)
+    const cleanedRoles = cleanCurrentRole(current_org_roles)
+    console.log('Current org role: ', cleanedRoles)
 
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
-    // console.log('Access routes: ', accessRoutes)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', cleanedRoles)
+    console.log('Access routes: ', accessRoutes)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
@@ -80,7 +80,6 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
 
 export async function startup({ to, from, next }) {
   if (initial) {
-    console.debug('Has initial')
     return true
   }
   initial = true
@@ -93,19 +92,16 @@ export async function startup({ to, from, next }) {
   return true
 }
 
-function checkRoles(val) {
+function cleanCurrentRole(val) {
   let currentRole = store.getters.currentRole
-  if (currentRole) {
-    if (val && !val.includes(currentRole)) {
-      // TODO 异常注入处理
-      currentRole = val[0]
-      store.dispatch('users/setCurrentRole', currentRole)
-    }
-  } else {
-    // 设置默认路由
+  if (!currentRole) {
     currentRole = val[0]
-    store.dispatch('users/setCurrentRole', currentRole)
   }
+  if (val && !val.includes(currentRole)) {
+    // TODO 异常注入处理
+    currentRole = val[0]
+  }
+  store.dispatch('users/setCurrentRole', currentRole)
   return [currentRole]
 }
 
