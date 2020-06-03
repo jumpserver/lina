@@ -21,18 +21,18 @@ export default {
   name: 'DatetimeRangePicker',
   components: {},
   props: {
-    startValue: {
-      type: [Number, String],
+    dateStart: {
+      type: [Number, String, Date],
       default: null
     },
-    endValue: {
+    dateEnd: {
       type: [Number, String, Date],
       default: null
     }
   },
   data() {
-    const startValue = this.startValue || this.$route.query['date_start']
-    const endValue = this.$route.query['date_end']
+    const startValue = this.dateStart || this.$route.query['date_start']
+    const endValue = this.dateEnd || this.$route.query['date_end']
     const dateStart = new Date(startValue)
     const dateTo = new Date(endValue)
     return {
@@ -77,9 +77,15 @@ export default {
       }
     }
   },
+  mounted() {
+    this.$log.debug('Datetime range picker value: ', this.value)
+  },
   methods: {
     handleDateChange(val) {
-      this.$emit('dateChange', val)
+      if (val[0].getTime() && val[1].getTime()) {
+        this.$log.debug('Date change: ', val)
+        this.$emit('dateChange', val)
+      }
     }
   }
 }

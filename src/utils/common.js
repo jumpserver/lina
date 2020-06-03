@@ -128,3 +128,10 @@ const uuidPattern = /[0-9a-zA-Z\-]{36}/
 export function hasUUID(s) {
   return s.search(uuidPattern) !== -1
 }
+
+export function getDaysAgo(days, now) {
+  if (!now) {
+    now = new Date()
+  }
+  return new Date(now.getTime() - 3600 * 1000 * 24 * days)
+}

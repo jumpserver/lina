@@ -4,6 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import { getDaysAgo } from '@/utils/common'
 
 export default {
   components: {
@@ -11,7 +12,7 @@ export default {
   },
   data() {
     const now = new Date()
-    const oneDayAgo = (new Date(now.getTime() - 3600 * 1000 * 24)).toISOString()
+    const dateFrom = getDaysAgo(7, now).toISOString()
     const dateTo = now.toISOString()
     return {
       tableConfig: {
@@ -41,13 +42,17 @@ export default {
         },
         extraQuery: {
           date_to: dateTo,
-          date_from: oneDayAgo
+          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasDatePicker: true
+        hasDatePicker: true,
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        }
       }
     }
   }
