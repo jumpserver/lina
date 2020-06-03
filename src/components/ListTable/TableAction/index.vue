@@ -5,12 +5,12 @@
         <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
         <span v-else style="display: flex;flex-direction: row">
           <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
-          <DatetimeRangePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
+          <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
         </span>
       </div>
       <div class="table-action-right-side">
         <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
-        <DatetimeRangePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
+        <DatetimeRangePicker v-if="hasDatePicker && hasLeftActions" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
         <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
       </div>
     </slot>
@@ -38,6 +38,10 @@ export default {
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
+    datePicker: {
+      type: Object,
+      default: () => ({})
+    },
     searchConfig: {
       type: Object,
       default: () => ({})

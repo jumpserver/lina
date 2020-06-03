@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { timeOffset, toSafeLocalDateStr, formatDate } from '@/utils/common'
+import { timeOffset, toSafeLocalDateStr, getDaysAgo } from '@/utils/common'
 import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'BaseList',
@@ -22,16 +22,14 @@ export default {
     }
   },
   data() {
+    const now = new Date()
+    const dateFrom = getDaysAgo(2, now).toISOString()
+    const dateTo = now.toISOString()
     return {
       tableConfig: {
-        extraQuery: {
-          date_to: formatDate(new Date().getTime()),
-          date_from: formatDate((new Date().getTime()) - 432000000)
-        },
-        hasSelection: false,
         url: this.url,
         columns: [
-          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+          'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
           'command_amount', 'date_start', 'duration', 'actions'
         ],
         columnsMeta: {
@@ -97,19 +95,24 @@ export default {
               ]
             }
           }
+        },
+        extraQuery: {
+          date_to: dateTo,
+          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
-        hasExport: false,
         hasImport: false,
-        hasRefresh: false,
-        hasDatePicker: true
+        hasDatePicker: true,
+        datePicker: {
+          dateStart: dateTo,
+          dateEnd: dateFrom
+        }
       }
     }
   },
   methods: {
-
   }
 }
 </script>

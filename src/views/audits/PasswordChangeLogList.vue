@@ -4,12 +4,16 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
+import { getDaysAgo } from '@/utils/common'
 
 export default {
   components: {
     GenericListPage
   },
   data() {
+    const now = new Date()
+    const dateFrom = getDaysAgo(7, now).toISOString()
+    const dateTo = now.toISOString()
     return {
       tableConfig: {
         url: '/api/v1/audits/password-change-logs/',
@@ -18,12 +22,20 @@ export default {
           datetime: {
             width: '180px'
           }
+        },
+        extraQuery: {
+          date_to: dateTo,
+          date_from: dateFrom
         }
       },
       headerActions: {
         hasLeftActions: false,
+        hasImport: false,
         hasDatePicker: true,
-        hasImport: false
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        }
       }
     }
   }

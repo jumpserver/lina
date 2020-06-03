@@ -9,7 +9,6 @@
     :clearable="false"
     class="datepicker"
     :picker-options="pickerOptions"
-    :value-format="valueFormatter"
     :default-time="['00:00:01', '23:59:59']"
     v-bind="$attrs"
     @change="handleDateChange"
@@ -18,28 +17,26 @@
 </template>
 
 <script>
-import { formatDate } from '@/utils/common'
 export default {
   name: 'DatetimeRangePicker',
   components: {},
   props: {
-    startValue: {
-      type: Number,
+    dateStart: {
+      type: [Number, String, Date],
       default: null
     },
-    endValue: {
-      type: Number,
+    dateEnd: {
+      type: [Number, String, Date],
       default: null
     }
   },
   data() {
-    const startValue = this.startValue || this.$route.query['date_start']
-    const endValue = this.$route.query['date_end']
+    const startValue = this.dateStart || this.$route.query['date_start']
+    const endValue = this.dateEnd || this.$route.query['date_end']
     const dateStart = new Date(startValue)
     const dateTo = new Date(endValue)
     return {
-      valueFormatter: 'yyyy-MM-ddTHH:mm:ss',
-      value: [startValue ? formatDate(dateStart) : '', endValue ? formatDate(dateTo) : ''],
+      value: [dateStart, dateTo],
       pickerOptions: {
         shortcuts: [
           {
@@ -80,15 +77,15 @@ export default {
       }
     }
   },
-  computed: {
-
-  },
   mounted() {
-
+    this.$log.debug('Datetime range picker value: ', this.value)
   },
   methods: {
     handleDateChange(val) {
-      this.$emit('dateChange', val)
+      if (val[0].getTime() && val[1].getTime()) {
+        this.$log.debug('Date change: ', val)
+        this.$emit('dateChange', val)
+      }
     }
   }
 }
@@ -96,7 +93,7 @@ export default {
 
 <style lang='less' scoped>
   .datepicker{
-    width: 235px;
+    width: 240px;
   }
   .el-input__inner{
     border: 1px solid #dcdee2;
