@@ -19,7 +19,7 @@ export function getInterfaceInfo() {
 
 export function restoreInterface() {
   return request({
-    url: '/xpack/interface/restore/default',
+    url: '/api/v1/xpack/interface/restore',
     method: 'get'
   })
 }
