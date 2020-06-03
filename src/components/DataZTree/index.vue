@@ -65,6 +65,9 @@ export default {
     },
     rMenu() {
       return this.$refs.ztree.rMenu
+    },
+    refresh() {
+      return this.$refs.ztree.refresh
     }
   },
   methods: {

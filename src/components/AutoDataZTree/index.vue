@@ -96,6 +96,7 @@ export default {
       }
     },
     removeTreeNode: function() {
+      const vm = this
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
       if (!currentNode) {
@@ -103,11 +104,15 @@ export default {
       }
       this.$axios.delete(
         `${this.treeSetting.nodeUrl}${currentNode.meta.node.id}/`
-      ).then(
-        this.zTree.removeNode(currentNode)
-      )
+      ).then(() => {
+        vm.$refs.dataztree.refresh()
+        this.$message.success(this.$t('common.deleteSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+      })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
+      const vm = this
       const url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`
       if (isCancel) {
         return
@@ -122,6 +127,10 @@ export default {
         }
         treeNode.name = treeNode.name + ' (' + assets_amount + ')'
         this.zTree.updateNode(treeNode)
+        vm.$refs.dataztree.refresh()
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
     onBodyMouseDown: function(event) {
@@ -180,6 +189,7 @@ export default {
     },
     addTreeNode: function() {
       this.hideRMenu()
+      const vm = this
       const parentNode = this.zTree.getSelectedNodes()[0]
       if (!parentNode) {
         return
@@ -199,9 +209,12 @@ export default {
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
-        // Disabled
+        vm.$refs.dataztree.refresh()
         // const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
         // this.zTree.editName(node)
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
     refresh: function() {

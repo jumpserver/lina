@@ -34,6 +34,7 @@ import SessionsRoute from './sessions'
 import OpsRoutes from './ops'
 import TicketsRoutes from './tickets'
 import AuditsRoutes from './audits'
+import commonRoutes from './common'
 
 /**
  * constantRoutes
@@ -48,19 +49,7 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-  {
-    path: '/profile',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '',
-        name: 'UserProfile',
-        component: () => import('@/userviews/users/UserProfile/index'),
-        meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
-      }
-    ]
-  }
+  ...commonRoutes
 ]
 
 /**

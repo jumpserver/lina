@@ -49,7 +49,7 @@ service.interceptors.request.use(
 )
 
 function ifUnauthorized({ response, error }) {
-  if (response.status === 401 && response.config.url.indexOf('/users/profile') === -1) {
+  if (response.status === 401 && response.config.url.indexOf('/users/profile') !== -1) {
     // 未授权重定向到登录页面
     const title = i18n.t('common.Info')
     const msg = i18n.t('auth.LoginRequiredMsg')

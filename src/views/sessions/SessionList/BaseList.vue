@@ -70,29 +70,7 @@ export default {
               hasEdit: false,
               hasDelete: false,
               hasUpdate: false,
-              extraActions: [
-                {
-                  name: 'replay',
-                  title: this.$t('sessions.replay'),
-                  type: 'warning',
-                  callback: function({ cellValue, tableData }) {
-                    // 跳转到luna页面
-                    const replayUrl = '/luna/replay/' + cellValue
-                    window.open(replayUrl)
-                  }
-                },
-                {
-                  name: 'download',
-                  title: this.$t('sessions.download'),
-                  type: 'primary',
-                  callback: function({ cellValue, tableData }) {
-                    // 跳转下载页面
-                    const downloadUrl = '/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
-                      .replace('00000000-0000-0000-0000-000000000000', cellValue)
-                    window.open(downloadUrl)
-                  }
-                }
-              ]
+              extraActions: this.extraActions
             }
           }
         },
