@@ -41,11 +41,11 @@ export default {
     logoSrc() {
       if (this.publicSettings.XPACK_LICENSE_IS_VALID) {
         if (this.customSettings && this.customSettings.logo_index && this.customSettings.logo_index !== '/static/img/logo_text.png') {
+          console.log(this.customSettings.logo_index)
           return this.customSettings.logo_index
         }
-      } else {
-        return this.logoText
       }
+      return this.logoText
     }
   },
   created() {
