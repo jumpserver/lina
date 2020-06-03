@@ -6,6 +6,7 @@
       :initial="object"
       :url="url"
       :update-success-next-route="updateSuccessNextRoute"
+      :clean-form-value="cleanFormValue"
       :get-method="getMethod"
     />
   </IBox>
@@ -67,7 +68,11 @@ export default {
           helpText: this.$t('users.HelpText.MFAOfUserFirstLoginUserGuidePage')
         }
       },
-      updateSuccessNextRoute: { name: 'UserGuide' }
+      updateSuccessNextRoute: { name: 'UserGuide' },
+      cleanFormValue(value) {
+        value = Object.assign({}, value, { is_first_login: false })
+        return value
+      }
     }
   },
   methods: {
