@@ -98,6 +98,10 @@ export default {
           vm.initTree()
         }
       })
+    },
+    refresh: function() {
+      const refreshIconRef = $('#tree-refresh')
+      refreshIconRef.click()
     }
   }
 
