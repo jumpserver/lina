@@ -34,18 +34,22 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'customSettings'
+      'customSettings',
+      'publicSettings'
     ]),
+    // eslint-disable-next-line vue/return-in-computed-property
     logoSrc() {
-      if (this.customSettings.logo_index !== '/static/img/logo_text.png') {
-        return this.customSettings.logo_index
+      if (this.publicSettings.XPACK_LICENSE_IS_VALID) {
+        if (this.customSettings && this.customSettings.logo_index && this.customSettings.logo_index !== '/static/img/logo_text.png') {
+          return this.customSettings.logo_index
+        }
       } else {
         return this.logoText
       }
     }
   },
   created() {
-    console.log(this.customSettings.logo_index)
+
   }
 }
 </script>
