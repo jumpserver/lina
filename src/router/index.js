@@ -140,6 +140,7 @@ export const adminRoutes = [
     children: OpsRoutes
   },
   {
+    name: 'Tickets',
     path: '/tickets/',
     component: Layout,
     redirect: '/tickets/tickets/',
@@ -155,6 +156,7 @@ export const adminRoutes = [
   },
   ...requireContext.keys().map(key => requireContext(key).default),
   {
+    name: 'Settings',
     path: '/settings',
     component: Layout,
     redirect: '/settings/',

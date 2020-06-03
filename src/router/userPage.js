@@ -22,6 +22,7 @@ export default [
   },
   {
     path: '/apps',
+    name: 'Apps',
     component: Layout,
     redirect: '/apps/remoteapp',
     meta: { title: i18n.t('route.MyApps'), icon: 'th' },

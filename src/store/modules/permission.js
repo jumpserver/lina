@@ -3,6 +3,7 @@ import {
   userRoutes,
   constantRoutes
 } from '@/router'
+import _ from 'lodash'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -45,9 +46,31 @@ export function filterNoneXpackRoutes(routes) {
     const tmp = {
       ...route
     }
-    if (tmp.name !== 'Xpack') {
+    if (tmp.name !== 'Xpack' && tmp.name !== 'Tickets') {
+      if (tmp.name === 'applications' || tmp.name === 'Perms') {
+        tmp.children = _.remove(tmp.children, (n) => {
+          return !n.name.includes('RemoteApp')
+        })
+        console.log(tmp.children)
+      }
       accessedRoutes.push(tmp)
     }
+  })
+  return accessedRoutes
+}
+
+export function filterUserNoneXpackRoutes(routes) {
+  const accessedRoutes = []
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (tmp.name === 'Apps') {
+      tmp.children = _.remove(tmp.children, (n) => {
+        return !n.name.includes('remoteapp')
+      })
+    }
+    accessedRoutes.push(tmp)
   })
   return accessedRoutes
 }
@@ -71,11 +94,14 @@ const actions = {
       if (roles.includes('Admin')) {
         accessedRoutes = adminRoutes || []
         if (!store.rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID) {
-          console.log(store.rootState.settings.publicSettings)
           accessedRoutes = filterNoneXpackRoutes(adminRoutes)
         }
-      } else {
-        accessedRoutes = filterAsyncRoutes(userRoutes, roles)
+      } else if (roles.includes('User')) {
+        accessedRoutes = userRoutes || []
+        // accessedRoutes = filterAsyncRoutes(userRoutes, roles)
+        if (!store.rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID) {
+          accessedRoutes = filterUserNoneXpackRoutes(userRoutes)
+        }
       }
       store.commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
