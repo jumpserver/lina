@@ -5,12 +5,12 @@
         <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
         <span v-else style="display: flex;flex-direction: row">
           <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
-          <DateTimePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
+          <DatetimeRangePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
         </span>
       </div>
       <div class="table-action-right-side">
         <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
-        <DateTimePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
+        <DatetimeRangePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
         <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
       </div>
     </slot>
@@ -20,7 +20,7 @@
 <script>
 import AutoDataSearch from '@/components/AutoDataSearch'
 import LeftSide from './LeftSide'
-import DateTimePicker from '@/components/DateTimePicker'
+import DatetimeRangePicker from '@/components/DatetimeRangePicker'
 import RightSide from './RightSide'
 
 const defaultTrue = { type: Boolean, default: true }
@@ -30,7 +30,7 @@ export default {
   components: {
     AutoDataSearch,
     LeftSide,
-    DateTimePicker,
+    DatetimeRangePicker,
     RightSide
   },
   props: {

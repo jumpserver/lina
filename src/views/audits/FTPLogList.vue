@@ -18,8 +18,17 @@ export default {
           'filename', 'is_success', 'date_start'
         ],
         columnsMeta: {
+          user: {
+            showOverflowTooltip: true
+          },
+          system_user: {
+            showOverflowTooltip: true
+          },
           remote_addr: {
             width: '140px'
+          },
+          filename: {
+            showOverflowTooltip: true
           },
           operate: {
             width: '90px'

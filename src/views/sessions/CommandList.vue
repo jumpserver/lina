@@ -24,7 +24,7 @@ export default {
         ],
         extraQuery: {
           date_to: formatDate(new Date().getTime()),
-          date_from: formatDate((new Date().getTime()) - 432000000)
+          date_from: formatDate((new Date().getTime()) - 3600 * 1000 * 24)
         },
         columnsMeta: {
           expandCol: {

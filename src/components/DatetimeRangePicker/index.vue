@@ -1,17 +1,16 @@
 <template>
   <el-date-picker
     v-model="value"
-    type="daterange"
+    type="datetimerange"
     :range-separator="this.$t('common.To')"
-    :start-placeholder="this.$t('common.StartDate')"
-    :end-placeholder="this.$t('common.StartDate')"
-    align="center"
-    size="large"
+    :start-placeholder="this.$t('common.DateStart')"
+    :end-placeholder="this.$t('common.DateEnd')"
+    size="small"
     :clearable="false"
     class="datepicker"
     :picker-options="pickerOptions"
-    value-format="yyyy-MM-ddThh:mm"
-    :default-time="['12:00:00', '12:00:00']"
+    :value-format="valueFormatter"
+    :default-time="['00:00:01', '23:59:59']"
     v-bind="$attrs"
     @change="handleDateChange"
     v-on="$listeners"
@@ -19,15 +18,28 @@
 </template>
 
 <script>
-
 import { formatDate } from '@/utils/common'
-
 export default {
-  name: '',
+  name: 'DatetimeRangePicker',
   components: {},
+  props: {
+    startValue: {
+      type: Number,
+      default: null
+    },
+    endValue: {
+      type: Number,
+      default: null
+    }
+  },
   data() {
+    const startValue = this.startValue || this.$route.query['date_start']
+    const endValue = this.$route.query['date_end']
+    const dateStart = new Date(startValue)
+    const dateTo = new Date(endValue)
     return {
-      value: [formatDate((new Date().getTime()) - 432000000), formatDate(new Date().getTime())],
+      valueFormatter: 'yyyy-MM-ddTHH:mm:ss',
+      value: [startValue ? formatDate(dateStart) : '', endValue ? formatDate(dateTo) : ''],
       pickerOptions: {
         shortcuts: [
           {
@@ -84,16 +96,16 @@ export default {
 
 <style lang='less' scoped>
   .datepicker{
-    width: 250px;
+    width: 235px;
   }
   .el-input__inner{
     border: 1px solid #dcdee2;
     border-radius: 3px;
     height: 36px;
   }
-  .el-date-editor /deep/ .el-input__icon{
-    line-height: 28px;
-  }
+  /*.el-date-editor /deep/ .el-input__icon{*/
+  /*  line-height: 28px;*/
+  /*}*/
   .el-date-editor /deep/ .el-range-separator{
     line-height: 28px;
   }
