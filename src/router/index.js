@@ -34,6 +34,7 @@ import SessionsRoute from './sessions'
 import OpsRoutes from './ops'
 import TicketsRoutes from './tickets'
 import AuditsRoutes from './audits'
+import commonRoutes from './common'
 
 /**
  * constantRoutes
@@ -51,30 +52,12 @@ export const constantRoutes = [
 ]
 
 /**
- * admin and user routes
- * the routes that need to be dynamically loaded based on admin or user roles
- */
-export const commonRoutes = {
-  userProfile: {
-    path: '/users/profile',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        name: 'UserProfile',
-        component: () => import('@/userviews/users/UserProfile/index'),
-        meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
-      }
-    ]
-  }
-}
-
-/**
  * admin
  * the routes that need to be dynamically loaded based on admin roles
  */
 export const adminRoutes = [
   Object.assign({}, commonRoutes.userProfile, { hidden: true }),
+  commonRoutes.userFirstLogin,
   {
     path: '/',
     component: Layout,
