@@ -10,6 +10,9 @@ export default {
     GenericListPage
   },
   data() {
+    const now = new Date()
+    const oneDayAgo = (new Date(now.getTime() - 3600 * 1000 * 24)).toISOString()
+    const dateTo = now.toISOString()
     return {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
@@ -35,6 +38,10 @@ export default {
           datetime: {
             width: '160px'
           }
+        },
+        extraQuery: {
+          date_to: dateTo,
+          date_from: oneDayAgo
         }
       },
       headerActions: {

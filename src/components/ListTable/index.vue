@@ -62,12 +62,12 @@ export default {
     },
     handleDateChange(attrs) {
       this.iTableConfig.extraQuery = {
-        date_from: attrs[0],
-        date_to: attrs[1]
+        date_from: attrs[0].toISOString(),
+        date_to: attrs[1].toISOString()
       }
       return this.dataTable.searchDate({
-        date_from: attrs[0],
-        date_to: attrs[1]
+        date_from: attrs[0].toISOString(),
+        date_to: attrs[1].toISOString()
       })
     },
     toggleRowSelection(row, isSelected) {
