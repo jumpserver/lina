@@ -32,9 +32,7 @@ export default {
     return {
       url: `/api/v1/users/profile/`,
       fields: [
-        [this.$t('users.Account'), ['username', 'name', 'email']],
-        [this.$t('users.MFA'), ['mfa_level']],
-        [this.$t('users.SSHKey'), ['public_key']],
+        [this.$t('users.Account'), ['username', 'name', 'email', 'mfa_level', 'public_key']],
         [this.$t('common.Other'), ['phone', 'wechat']],
         [this.$t('users.TermsAndConditions'), ['terms']]
       ],
@@ -49,9 +47,13 @@ export default {
           disabled: true
         },
         mfa_level: {
+          hidden: (formValue) => {
+            return formValue.mfa_level === 2
+          },
           helpText: this.$t('users.HelpText.MFAOfUserFirstLoginPersonalInformationImprovementPage')
         },
         public_key: {
+          label: this.$t('users.SSHKey'),
           el: {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...'
@@ -71,6 +73,9 @@ export default {
       updateSuccessNextRoute: { name: 'UserGuide' },
       cleanFormValue(value) {
         value = Object.assign({}, value, { is_first_login: false })
+        if (value.mfa_level === 2) {
+          delete value['mfa_level']
+        }
         return value
       }
     }
