@@ -25,7 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getCurrentRole } from '@/utils/auth'
+import { getCurrentRoleFromCookie } from '@/utils/auth'
 import { hasUUID } from '@/utils/common'
 export default {
   props: {
@@ -42,7 +42,7 @@ export default {
       'userAdminOrgList'
     ]),
     hasOrgPermission() {
-      return getCurrentRole() === 'Admin'
+      return getCurrentRoleFromCookie() === 'Admin'
     },
     orgIdMapper() {
       const mapper = {}

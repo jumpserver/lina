@@ -3,7 +3,7 @@ import store from '@/store'
 import router from '@/router'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
-import { getCurrentRole, getTokenFromCookie, setCurrentRole } from '@/utils/auth'
+import { getCurrentRoleFromCookie, getTokenFromCookie, saveCurrentRoleToCookie } from '@/utils/auth'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -94,17 +94,17 @@ export async function startup({ to, from, next }) {
 }
 
 function checkRoles(val) {
-  let currentRole = getCurrentRole()
+  let currentRole = getCurrentRoleFromCookie()
   if (currentRole) {
     if (val && !val.includes(currentRole)) {
       // TODO 异常注入处理
       currentRole = val[0]
-      setCurrentRole(currentRole)
+      saveCurrentRoleToCookie(currentRole)
     }
   } else {
     // 设置默认路由
     currentRole = val[0]
-    setCurrentRole(currentRole)
+    saveCurrentRoleToCookie(currentRole)
   }
   return [currentRole]
 }

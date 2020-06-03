@@ -2,7 +2,8 @@ import { logout, getProfile } from '@/api/users'
 import {
   getTokenFromCookie,
   getCurrentOrgFromCookie,
-  saveCurrentOrgToCookie
+  saveCurrentOrgToCookie,
+  getCurrentRoleFromCookie, saveCurrentRoleToCookie
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -10,6 +11,7 @@ const getDefaultState = () => {
   return {
     token: getTokenFromCookie(),
     currentOrg: getCurrentOrgFromCookie(),
+    currentRole: getCurrentRoleFromCookie(),
     profile: {},
     orgs: []
   }
@@ -33,6 +35,10 @@ const mutations = {
   SET_CURRENT_ORG(state, org) {
     saveCurrentOrgToCookie(org)
     state.currentOrg = org
+  },
+  SET_CURRENT_ROLE(state, role) {
+    saveCurrentRoleToCookie(role)
+    state.currentRole = role
   }
 }
 
@@ -98,8 +104,10 @@ const actions = {
     })
   },
   setCurrentOrg({ commit }, data) {
-    console.log('users.setCurrentOrg: ', data)
     commit('SET_CURRENT_ORG', data)
+  },
+  setCurrentRole({ commit }, role) {
+    commit('SET_CURRENT_ROLE', role)
   }
 }
 
