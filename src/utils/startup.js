@@ -78,6 +78,12 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
   }
 }
 
+export async function checkUserFirstLogin({ to, from, next }) {
+  if (store.state.users.profile.is_first_login) {
+    next('/users/first-login/personal-information-improvement/')
+  }
+}
+
 export async function startup({ to, from, next }) {
   if (initial) {
     console.debug('Has initial')
@@ -90,6 +96,7 @@ export async function startup({ to, from, next }) {
   await checkLogin({ to, from, next })
   await getPublicSetting({ to, from, next })
   await getUserRoleAndSetRoutes({ to, from, next })
+  await checkUserFirstLogin({ to, from, next })
   return true
 }
 
