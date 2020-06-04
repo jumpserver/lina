@@ -7,6 +7,7 @@ import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
 import ShowKeyFormatter from '@/components/ListTable/formatters/ShowKeyFormatter'
+import DialogDetailFormatter from './DialogDetailFormatter'
 
 export default {
   DetailFormatter,
@@ -17,7 +18,8 @@ export default {
   DeleteActionFormatter,
   DateFormatter,
   SystemUserFormatter,
-  ShowKeyFormatter
+  ShowKeyFormatter,
+  DialogDetailFormatter
 }
 
 export {
@@ -29,5 +31,6 @@ export {
   DeleteActionFormatter,
   DateFormatter,
   SystemUserFormatter,
-  ShowKeyFormatter
+  ShowKeyFormatter,
+  DialogDetailFormatter
 }

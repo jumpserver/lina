@@ -59,6 +59,9 @@ export default {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...'
           },
+          hidden: (formValue) => {
+            return formValue.source !== 'local'
+          },
           helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
         },
         terms: {

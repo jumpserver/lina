@@ -19,7 +19,7 @@ export default {
       url: '/api/v1/xpack/gathered-user/tasks/',
       initial: {
         is_periodic: true,
-        interval: 24
+        interval: null
       },
       fieldsMeta: {
         crontab: {
