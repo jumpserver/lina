@@ -58,6 +58,12 @@ export default {
             assets: items
           }
           return this.$axios.patch(relationUrl, data)
+        },
+        onAddSuccess: (that) => {
+          this.$log.debug('AssetSelect value', that.assets)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$refs.listTable.reloadTable()
+          that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       },
       nodeRelationConfig: {
