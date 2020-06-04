@@ -731,6 +731,9 @@
     "dateLastLogin": ""
   },
   "xpack": {
+    "Vault": {
+      "Vault": "密码匣子"
+    },
     "Basic": "基本",
     "Other": "其他",
     "Admin": "管理员",
