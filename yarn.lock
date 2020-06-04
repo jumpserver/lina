@@ -1315,6 +1315,13 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
 
+"@ztree/ztree_v3@3.5.44":
+  version "3.5.44"
+  resolved "https://registry.yarnpkg.com/@ztree/ztree_v3/-/ztree_v3-3.5.44.tgz#940890a91483bc8a7347f4fe4c9e6e3ffc7d61ec"
+  integrity sha512-+W6z8rCnls3/Zw9Q9JgpK9C6krQANoGk6wFupNY/aPumjb7JWQiX2V5Uzl12ClCPponaROle7cZxz4bsBWQPWw==
+  dependencies:
+    jquery ">=1.4.4"
+
 abab@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
@@ -10183,10 +10190,3 @@ zrender@4.3.0:
   version "4.3.0"
   resolved "https://registry.npm.taobao.org/zrender/download/zrender-4.3.0.tgz#9f056121b20bbae44414d287bf6a119ff7042661"
   integrity sha1-nwVhIbILuuREFNKHv2oRn/cEJmE=
-
-ztree@^3.5.24:
-  version "3.5.24"
-  resolved "https://registry.yarnpkg.com/ztree/-/ztree-3.5.24.tgz#b63fe52981fdf2c329675cfd2772f0d147521ff1"
-  integrity sha1-tj/lKYH98sMpZ1z9J3Lw0UdSH/E=
-  dependencies:
-    jquery ">=1.4.4"

@@ -38,7 +38,10 @@ export default {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
           autoParam: ['id=key', 'name=n', 'level=lv'],
-          type: 'get'
+          type: 'get',
+          headers: {
+            'X-JMS-ORG': JSON.parse(this.$cookie.get('jms_current_org')).id || ''
+          }
         },
         callback: {
           onRightClick: this.onRightClick.bind(this),
@@ -68,6 +71,9 @@ export default {
     rMenu() {
       return this.$refs.dataztree.rMenu
     }
+  },
+  mounted() {
+
   },
   methods: {
     editTreeNode: function() {

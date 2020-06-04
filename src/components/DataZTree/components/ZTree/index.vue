@@ -18,7 +18,7 @@
 // 导入JQuery
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
-import 'ztree'
+import '@ztree/ztree_v3/js/jquery.ztree.core.min.js'
 import '@/styles/ztree.css'
 
 const defaultObject = {
