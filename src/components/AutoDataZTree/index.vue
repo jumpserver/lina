@@ -174,8 +174,8 @@ export default {
     },
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
       const treeNodesIds = []
+      const vm = this
       $.each(treeNodes, function(index, value) {
-        console.log(value)
         treeNodesIds.push(value.meta.node.id)
       })
       const the_url = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
@@ -184,7 +184,10 @@ export default {
           nodes: treeNodesIds
         }
       ).then((res) => {
-        console.log(res)
+        vm.$refs.dataztree.refresh()
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
     addTreeNode: function() {
