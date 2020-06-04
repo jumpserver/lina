@@ -13,7 +13,7 @@ const getDefaultState = () => {
     token: getTokenFromCookie(),
     currentOrg: getCurrentOrgFromCookie(),
     currentRole: getCurrentRoleFromCookie(),
-    profile: {},
+    profile: null,
     roles: [],
     orgs: []
   }
