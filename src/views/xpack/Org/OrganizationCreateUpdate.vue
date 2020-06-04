@@ -42,7 +42,7 @@ export default {
             }
           },
           users: {
-            label: this.$t('xpack.USER'),
+            label: this.$t('xpack.User'),
             el: {
               value: [],
               ajax: {
