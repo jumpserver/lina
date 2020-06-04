@@ -25,7 +25,7 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'hardware_info', 'reachable', 'actions'
+          'hostname', 'ip', 'hardware_info', 'connectivity', 'actions'
         ],
         columnsMeta: {
           hostname: {
@@ -41,9 +41,19 @@ export default {
           hardware_info: {
             showOverflowTooltip: true
           },
-          reachable: {
+          connectivity: {
             label: this.$t('assets.Reachable'),
             formatter: BooleanFormatter,
+            formatterArgs: {
+              iconChoices: {
+                0: 'fa-times text-danger',
+                1: 'fa-check text-primary',
+                2: 'fa-circle text-warning'
+              },
+              typeChange: function(val) {
+                return val.status
+              }
+            },
             width: '80px',
             align: 'center'
           },
