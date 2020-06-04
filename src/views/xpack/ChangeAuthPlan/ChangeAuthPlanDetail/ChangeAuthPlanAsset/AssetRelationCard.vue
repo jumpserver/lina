@@ -3,7 +3,7 @@
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <AssetSelect ref="assetSelect" @getAsset="getAsset" />
+          <AssetSelect ref="assetSelect" @change="getAsset" />
         </td>
       </tr>
       <tr>

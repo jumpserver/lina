@@ -448,7 +448,8 @@
     "Users": "Users",
     "WebFTP": "WebFTP",
     "WebTerminal": "Web terminal",
-    "BatchCommandLog": "Batch command log"
+    "BatchCommandLog": "Batch command log",
+    "TaskMonitor": "Task monitor"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
@@ -614,8 +615,8 @@
     "AssetCount": "Asset count",
     "ImportLicenseTip": "Please Import License",
     "ApiKeyList": "Api key list",
-    "DateCreated": "",
-    "Create": ""
+    "all": "All",
+    "auto": "Auto"
   },
   "settings": {
     "setting": ""

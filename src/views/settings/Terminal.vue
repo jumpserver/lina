@@ -71,8 +71,8 @@ export default {
           label: this.$t('setting.terminalAssetListPageSize'),
           type: 'select',
           options: [
-            { label: 'All', value: 'all' },
-            { label: 'Auto', value: 'auto' },
+            { label: this.$t('setting.all'), value: 'all' },
+            { label: this.$t('setting.auto'), value: 'auto' },
             { label: '10', value: '10' },
             { label: '15', value: '15' },
             { label: '25', value: '25' },
