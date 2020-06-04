@@ -42,8 +42,9 @@ export default {
   },
   computed: {
     isInAdminRole() {
-      console.log(this.currentRole)
-      return (this.currentRole & rolec.PERM_ADMIN) === rolec.PERM_ADMIN
+      const inAdmin = rolec.hasPerm(this.currentRole, rolec.PERM_ADMIN)
+      this.$log.debug('Current in admin role: ', inAdmin)
+      return inAdmin
     },
     hasAdminRole() {
       return this.currentOrgRoles.includes('Admin')
@@ -53,9 +54,6 @@ export default {
       'currentRole',
       'currentOrgRoles'
     ])
-  },
-  mounted() {
-    console.log('Roles: ', this.currentOrgRoles)
   },
   methods: {
     handleClick(val) {
