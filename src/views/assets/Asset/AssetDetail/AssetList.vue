@@ -79,14 +79,22 @@ export default {
             label: this.$t('assets.Action'),
             formatter: CustomActionsFormatter,
             formatterArgs: {
+              hasUpdate: false, // can set function(row, value)
+              canUpdate: false, // can set function(row, value)
+              hasDelete: false, // can set function(row, value)
+              canDelete: false,
               extraActions: [
                 {
                   name: this.$t('common.Delete'),
                   title: this.$t('common.Delete'),
+                  type: 'primary',
                   callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
+                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(res => {
                       this.$refs.ListTable.reloadTable()
-                    )
+                      this.$message.success(this.$t('common.deleteSuccessMsg'))
+                    }).catch(error => {
+                      this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                    })
                   }
                 }
               ]
