@@ -32,6 +32,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       selectFields: ['EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD',
         'EMAIL_FROM', 'EMAIL_RECIPIENT', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS'],
@@ -91,7 +92,9 @@ export default {
               value['EMAIL_HOST_PASSWORD'] = ''
             }
             testEmailSetting(value).then(res => {
-              console.log(res)
+              vm.$message.success(res['msg'])
+            }).catch(res => {
+              vm.$message.error(res['response']['data']['error'])
             })
           }
         }
