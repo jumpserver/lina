@@ -40,8 +40,6 @@ export default {
     },
     write: function(val) {
       this.xterm.write(val)
-    },
-    changeSelectedAssets() {
     }
   }
 

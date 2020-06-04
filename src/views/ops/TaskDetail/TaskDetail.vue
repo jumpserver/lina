@@ -43,7 +43,7 @@ export default {
           callbacks: {
             click: function() {
               const taskId = vm.object.latest_execution.id
-              window.open(`/core/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
+              window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
             }
           }
         }

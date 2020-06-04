@@ -33,12 +33,5 @@ export default [
     name: 'BatchCommand',
     component: () => import('@/views/ops/CommandExecution'),
     meta: { title: i18n.t('route.BatchCommand') }
-  },
-  {
-    path: 'celery/task/:id',
-    component: () => import('@/views/ops/CeleryTaskLog'),
-    name: 'CeleryTaskLog',
-    hidden: true,
-    meta: { title: i18n.t('route.CeleryTaskLog') }
   }
 ]

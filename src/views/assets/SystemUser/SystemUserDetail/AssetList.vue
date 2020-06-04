@@ -110,7 +110,7 @@ export default {
                 `api/v1/assets/system-users/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
-                window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
             }.bind(this)
@@ -171,7 +171,7 @@ export default {
                       `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
                       { action: 'test' }
                     ).then(res => {
-                      window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })
                   }
                 },
