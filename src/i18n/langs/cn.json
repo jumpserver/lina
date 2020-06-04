@@ -452,7 +452,7 @@
     "WebFTP": "文件管理",
     "WebTerminal": "Web终端",
     "BatchCommandLog": "批量命令",
-    "": ""
+    "TaskMonitor": "任务监控"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",

@@ -448,7 +448,8 @@
     "Users": "Users",
     "WebFTP": "WebFTP",
     "WebTerminal": "Web terminal",
-    "BatchCommandLog": "Batch command log"
+    "BatchCommandLog": "Batch command log",
+    "TaskMonitor": "Task monitor"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
