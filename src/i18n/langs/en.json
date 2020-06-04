@@ -272,6 +272,9 @@
     "Weekly": "Weekly",
     "TimesWeekUnit": "times/week"
   },
+  "audits": {
+    "View": "查看"
+  },
   "ops": {
     "ID": "ID",
     "No": "No",
