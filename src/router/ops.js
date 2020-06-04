@@ -40,5 +40,11 @@ export default [
     name: 'CeleryTaskLog',
     hidden: true,
     meta: { title: i18n.t('route.CeleryTaskLog') }
+  },
+  {
+    path: 'task/monitor',
+    name: 'TaskMonitor',
+    component: () => window.open(`/core/flower?_=${Date.now()}`),
+    meta: { title: i18n.t('route.TaskMonitor') }
   }
 ]

@@ -71,7 +71,7 @@ const actions = {
   // get user Profile
   getProfile({ commit, state }, refresh = false) {
     return new Promise((resolve, reject) => {
-      if (!refresh && state.profile && state.profile.length > 0) {
+      if (!refresh && state.profile && Object.keys(state.profile).length > 0) {
         resolve(state.profile)
         return
       }

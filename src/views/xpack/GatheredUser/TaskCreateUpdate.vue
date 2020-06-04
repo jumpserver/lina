@@ -17,6 +17,10 @@ export default {
         [this.$t('common.Others'), ['comment']]
       ],
       url: '/api/v1/xpack/gathered-user/tasks/',
+      initial: {
+        is_periodic: true,
+        interval: null
+      },
       fieldsMeta: {
         crontab: {
           helpTips: this.$t('common.CrontabHelpTips')
