@@ -13,9 +13,7 @@ function hasPermission(roles, route) {
   if (!requirePerms) {
     requirePerms = [rolec.PERM_ADMIN]
   }
-  const requirePermsSum = rolec.sumPerms(requirePerms)
-  const userRolesSum = rolec.sumPerms(roles)
-  const has = (requirePermsSum & userRolesSum) === requirePermsSum
+  const has = rolec.hasPerm(roles, requirePerms)
   // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
   return has
 }

@@ -73,6 +73,18 @@ export function getAdminOrUserPageRole(allRoles, page) {
   return allRoles[1]
 }
 
+export function hasPerm(source, target) {
+  if (typeof source !== 'object') {
+    source = [source]
+  }
+  if (typeof target !== 'object') {
+    target = [target]
+  }
+  const totalSource = sumPerms(source)
+  const totalTarget = sumPerms(target)
+  return (totalTarget & totalSource) === totalTarget
+}
+
 export function sumPerms(perms) {
   let sum = 0
   for (const perm of perms) {
@@ -86,5 +98,5 @@ export default {
   SUPER_ADMIN, SUPER_AUDITOR, ORG_ADMIN, ORG_AUDITOR,
   USER, ANON,
   getRolesDisplay, getPermsToRolesDisplay, getAdminOrUserPageRole,
-  parseUserRoles, sumPerms
+  parseUserRoles, sumPerms, hasPerm
 }

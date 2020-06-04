@@ -106,15 +106,18 @@ function cleanCurrentRole(allRoles) {
   let currentRole = store.getters.currentRole
   // 没有的话就应该选择一个
 
-  console.log('Curernt ROle', currentRole)
+  // console.log('Curernt Role', currentRole)
   if (!currentRole && typeof currentRole !== 'number') {
     currentRole = rolec.getAdminOrUserPageRole(allRoles)
-    console.log('1')
-  } else {
-    console.log('2')
-    if ((currentRole & rolec.sumPerms(allRoles)) !== currentRole) {
-      currentRole = rolec.getAdminOrUserPageRole(allRoles)
-    }
+  }
+  const hasAudit = rolec.hasPerm(currentRole, rolec.PERM_AUDIT)
+  const hasAdmin = rolec.hasPerm(allRoles, rolec.PERM_ADMIN)
+  // 这代表上次用户登录了auditor，这次切换了
+  if (hasAudit && hasAdmin) {
+    currentRole = rolec.getAdminOrUserPageRole(allRoles)
+  }
+  if (!rolec.hasPerm(allRoles, currentRole)) {
+    currentRole = rolec.getAdminOrUserPageRole(allRoles)
   }
   store.dispatch('users/setCurrentRole', currentRole)
   return [currentRole]
