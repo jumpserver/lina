@@ -1,6 +1,9 @@
 <template>
   <div>
-    <i :class="'fa ' + iconClass" />
+    <el-tooltip v-if="formatterArgs.hasTips" :content="tips" placement="bottom" effect="dark">
+      <i :class="'fa ' + iconClass" />
+    </el-tooltip>
+    <i v-else :class="'fa ' + iconClass" />
   </div>
 </template>
 
@@ -20,6 +23,10 @@ export default {
           },
           typeChange(val) {
             return !!val
+          },
+          hasTips: false,
+          tips(val) {
+            return val.datetime
           }
         }
       }
@@ -34,6 +41,9 @@ export default {
     iconClass() {
       const key = this.formatterArgs.typeChange(this.cellValue)
       return this.formatterArgs.iconChoices[key]
+    },
+    tips() {
+      return this.formatterArgs.tips(this.cellValue)
     }
   }
 }

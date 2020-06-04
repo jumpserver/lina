@@ -52,7 +52,8 @@ export default {
               },
               typeChange: function(val) {
                 return val.status
-              }
+              },
+              hasTips: true
             },
             width: '80px',
             align: 'center'
