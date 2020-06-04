@@ -1,7 +1,7 @@
 <template>
   <Page>
     <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <TreeTable :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+    <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
   </Page>
 </template>
 

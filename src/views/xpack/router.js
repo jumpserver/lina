@@ -182,7 +182,26 @@ export default {
           meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate') }
         }
       ]
+    },
+    {
+      path: 'vault',
+      component: empty,
+      meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' },
+      children: [
+        {
+          path: 'vault',
+          component: () => import('@/views/xpack/Vault/VaultList.vue'),
+          name: 'VaultList',
+          meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' }
+        },
+        {
+          path: 'vault/create',
+          component: () => import('@/views/xpack/Vault/VaultCreate'),
+          name: 'VaultCreate',
+          meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault/vault' },
+          hidden: true
+        }
+      ]
     }
-
   ]
 }
