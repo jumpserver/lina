@@ -72,7 +72,7 @@ function cleanDateStr(d) {
 
 export function toSafeLocalDateStr(d) {
   const date = safeDate(d)
-  // var date_s = date.toLocaleString(getUserLang(), {hour12: false});
+  // let date_s = date.toLocaleString(getUserLang(), {hour12: false});
   const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
   return date_s
 }
@@ -134,4 +134,26 @@ export function getDaysAgo(days, now) {
     now = new Date()
   }
   return new Date(now.getTime() - 3600 * 1000 * 24 * days)
+}
+
+export function setUrlParam(url, name, value) {
+  const urlArray = url.split('?')
+  if (urlArray.length === 1) {
+    url += '?' + name + '=' + value
+  } else {
+    const oriParam = urlArray[1].split('&')
+    const oriParamMap = {}
+    oriParam.forEach(function(value, index) {
+      const v = value.split('=')
+      oriParamMap[v[0]] = v[1]
+    })
+    oriParamMap[name] = value
+    url = urlArray[0] + '?'
+    const newParam = []
+    for (const [key, value] of Object.entries(oriParamMap)) {
+      newParam.push(key + '=' + value)
+    }
+    url += newParam.join('&')
+  }
+  return url
 }

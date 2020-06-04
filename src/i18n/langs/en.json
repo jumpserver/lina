@@ -145,6 +145,7 @@
     "DateLastWeek": "Last week",
     "DateLastMonth": "Last month",
     "DateLast3Months": "Last 3 months",
+    "Remove": "Remove",
     "Yes": "Yes",
     "No": "No",
     "Action": "Action",
@@ -273,7 +274,8 @@
     "TimesWeekUnit": "times/week"
   },
   "audits": {
-    "View": "查看"
+    "View": "View",
+    "Hosts": "Hosts"
   },
   "ops": {
     "ID": "ID",
