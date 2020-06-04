@@ -11,7 +11,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { CustomActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 import QuickActions from '@/components/QuickActions/index'
 
 export default {
@@ -77,7 +77,7 @@ export default {
             prop: 'id',
             align: 'center',
             label: this.$t('assets.Action'),
-            formatter: CustomActionsFormatter,
+            formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               canUpdate: false, // can set function(row, value)
@@ -96,6 +96,30 @@ export default {
                       this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
                     })
                   }
+                },
+                {
+                  name: this.$t('common.Test'),
+                  title: this.$t('common.Test'),
+                  callback: (val) => {
+                    console.log(val.cellValue)
+                    this.$axios.post(
+                      `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
+                      { action: 'test' }
+                    ).then(res => {
+                      window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                    })
+                  }
+                },
+                {
+                  name: this.$t('common.Update'),
+                  title: this.$t('common.Update'),
+                  callback: function(val) {
+                    console.log(val)
+                    this.showDialog = true
+                    this.dialogInfo.asset = val.row.asset
+                    this.dialogInfo.hostname = val.row.hostname
+                    this.dialogInfo.username = val.row.username
+                  }.bind(this)
                 }
               ]
             }
