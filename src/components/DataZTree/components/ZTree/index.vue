@@ -127,7 +127,7 @@ export default {
     border: none;
   }
   div#rMenu li{
-    margin: 2px 0;
+    margin: 6px 0;
     cursor: pointer;
     list-style: none outside none;
   }
