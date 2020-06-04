@@ -2,13 +2,13 @@
   <DataZTree ref="dataztree" :setting="treeSetting">
     <slot slot="rMenu">
       <li id="m_create" class="rmenu" tabindex="-1" @click="addTreeNode">
-        <i class="fa fa-plus-square-o" />{{ this.$t('tree.AddNode') }}
+        <i class="fa fa-plus-square-o" />  {{ this.$t('tree.AddNode') }}
       </li>
       <li id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
-        <i class="fa fa-pencil-square-o" />{{ this.$t('tree.RenameNode') }}
+        <i class="fa fa-pencil-square-o" />  {{ this.$t('tree.RenameNode') }}
       </li>
       <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
-        <i class="fa fa-minus-square" />{{ this.$t('tree.DeleteNode') }}
+        <i class="fa fa-minus-square" />  {{ this.$t('tree.DeleteNode') }}
       </li>
       <slot name="rMenu" />
     </slot>
@@ -174,8 +174,8 @@ export default {
     },
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
       const treeNodesIds = []
+      const vm = this
       $.each(treeNodes, function(index, value) {
-        console.log(value)
         treeNodesIds.push(value.meta.node.id)
       })
       const the_url = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
@@ -184,7 +184,10 @@ export default {
           nodes: treeNodesIds
         }
       ).then((res) => {
-        console.log(res)
+        vm.$refs.dataztree.refresh()
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
     addTreeNode: function() {
@@ -228,22 +231,26 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  .rmenu > a {
-    border-radius: 3px;
-    color: inherit;
-    line-height: 25px;
-    margin: 4px;
-    text-align: left;
-    font-weight: normal;
-    display: block;
-    padding: 3px 20px;
-    clear: both;
+  .rmenu {
+    font-size: 12px;
+    padding: 0 16px;
+    position: relative;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #606266;
+    height: 24px;
+    line-height: 24px;
+    box-sizing: border-box;
+    cursor: pointer;
   }
 
   .rmenu > a:hover, .dropdown-menu > a:focus {
     color: #262626;
     text-decoration: none;
     background-color: #f5f5f5;
+  }
+  .rmenu:hover{
+    background-color: #f5f7fa;
   }
 </style>
