@@ -5,7 +5,7 @@
     </el-col>
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
+      <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
 </template>a
@@ -107,7 +107,7 @@ export default {
         //   }
         // }
       ],
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-info',
         title: this.$t('assets.Node'),
         objectsAjax: {
@@ -173,7 +173,7 @@ export default {
         },
         {
           key: this.$t('assets.AdminUser'),
-          value: this.object.admin_user
+          value: this.object.admin_user_display
         },
         {
           key: this.$t('assets.Domain'),

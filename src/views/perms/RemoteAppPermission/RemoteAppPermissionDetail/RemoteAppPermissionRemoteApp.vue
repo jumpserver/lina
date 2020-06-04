@@ -4,8 +4,8 @@
       <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="remoteAppReletionConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="systemUserReletionConfig" />
+      <RelationCard type="primary" v-bind="remoteAppRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="systemUserRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -58,7 +58,7 @@ export default {
         hasLeftActions: false,
         hasRightActions: false
       },
-      remoteAppReletionConfig: {
+      remoteAppRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addRemoteAppToThisPermission'),
         objectsAjax: {
@@ -81,7 +81,7 @@ export default {
           setTimeout(() => location.reload(), 300)
         }
       },
-      systemUserReletionConfig: {
+      systemUserRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {

@@ -4,9 +4,9 @@
       <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <AssetRelationCard type="primary" v-bind="assetReletionConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
-      <RelationCard type="warning" style="margin-top: 15px" v-bind="systemUserReletionConfig" />
+      <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <RelationCard type="warning" style="margin-top: 15px" v-bind="systemUserRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -61,7 +61,7 @@ export default {
         hasLeftActions: false,
         hasRightActions: false
       },
-      assetReletionConfig: {
+      assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
         performAdd: (items) => {
@@ -76,7 +76,7 @@ export default {
           return this.$axios.post(relationUrl, data)
         }
       },
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addNodeToThisPermission'),
         objectsAjax: {
@@ -122,7 +122,7 @@ export default {
           setTimeout(() => location.reload(), 300)
         }
       },
-      systemUserReletionConfig: {
+      systemUserRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {

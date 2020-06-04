@@ -4,8 +4,8 @@
       <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="userReletionConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="groupReletionConfig" />
+      <RelationCard type="primary" v-bind="userRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="groupRelationConfig" />
     </el-col>
   </el-row>
 
@@ -59,7 +59,7 @@ export default {
         hasLeftActions: false,
         hasRightActions: false
       },
-      userReletionConfig: {
+      userRelationConfig: {
         icon: 'fa-user',
         title: this.$t('perms.addUserToThisPermission'),
         objectsAjax: {
@@ -89,7 +89,7 @@ export default {
           setTimeout(() => location.reload(), 300)
         }
       },
-      groupReletionConfig: {
+      groupRelationConfig: {
         icon: 'fa-group',
         title: this.$t('perms.addUserGroupToThisPermission'),
         objectsAjax: {

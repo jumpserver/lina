@@ -22,7 +22,6 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.SystemUserDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
@@ -31,12 +30,12 @@ export default {
           },
           {
             title: this.$t('assets.AssetList'),
-            name: 'AssetList'
+            name: 'AssetUserList'
           }
         ],
         hasRightSide: true,
         getObjectName: function(obj) {
-          return obj.hostname
+          return obj.hostname + '(' + obj.ip + ')'
         }
       }
     }
