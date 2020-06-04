@@ -732,7 +732,8 @@
   },
   "xpack": {
     "Vault": {
-      "Vault": "密码匣子"
+      "Vault": "密码匣子",
+      "Create": "创建"
     },
     "Basic": "基本",
     "Other": "其他",
