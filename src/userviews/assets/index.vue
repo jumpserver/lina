@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, SystemUserFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/ListTable/formatters'
 export default {
   components: {
     GenericTreeListPage
@@ -36,7 +36,36 @@ export default {
           {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
-            formatter: DetailFormatter,
+            formatter: DialogDetailFormatter,
+            formatterArgs: {
+              getDialogTile: function({ col, row, cellValue }) {
+                return this.$t('assets.AssetDetail')
+              }.bind(this),
+              getDetailItems: function({ col, row, cellValue }) {
+                return [
+                  {
+                    key: this.$t('assets.Hostname'),
+                    value: row.hostname
+                  },
+                  {
+                    key: this.$t('assets.ip'),
+                    value: row.ip
+                  },
+                  {
+                    key: this.$t('assets.Protocols'),
+                    value: row.protocols.join(', ')
+                  },
+                  {
+                    key: this.$t('assets.Platform'),
+                    value: row.platform
+                  },
+                  {
+                    key: this.$t('assets.Domain'),
+                    value: row.domain
+                  }
+                ]
+              }.bind(this)
+            },
             sortable: true,
             align: 'center'
           },
