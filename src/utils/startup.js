@@ -4,6 +4,7 @@ import router from '@/router'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
+import rolec from '@/utils/role'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -25,15 +26,16 @@ async function checkLogin({ to, from, next }) {
   if (!hasToken) {
     setTimeout(() => {
       window.location = process.env.VUE_APP_LOGIN_PATH
-    }, 1000)
+    }, 100)
     return reject('No token found in cookie')
   }
 
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
-    // return false
-    // window.location = process.env.VUE_APP_LOGIN_PATH
+    setTimeout(() => {
+      window.location = process.env.VUE_APP_LOGIN_PATH
+    }, 100)
     return reject('No profile get: ' + e)
   }
 }
@@ -53,11 +55,11 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
-    const { current_org_roles } = await store.dispatch('users/getProfile')
-    // console.log('Current org role: ', current_org_roles)
+    const roles = await store.dispatch('users/getRoles')
+    console.log(roles, rolec.getRolesDisplay(roles))
 
-    const cleanedRoles = cleanCurrentRole(current_org_roles)
-    console.log('Current org role: ', cleanedRoles)
+    const cleanedRoles = cleanCurrentRole(roles)
+    console.log('Current org role: ', cleanedRoles, rolec.getRolesDisplay(cleanedRoles))
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', cleanedRoles)
@@ -92,20 +94,27 @@ export async function startup({ to, from, next }) {
   // set page title
   await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
+  await store.dispatch('users/getInOrgs')
+  await store.dispatch('users/getRoles')
   await getPublicSetting({ to, from, next })
   await getUserRoleAndSetRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
 }
 
-function cleanCurrentRole(val) {
+function cleanCurrentRole(allRoles) {
   let currentRole = store.getters.currentRole
-  if (!currentRole) {
-    currentRole = val[0]
-  }
-  if (val && !val.includes(currentRole)) {
-    // TODO 异常注入处理
-    currentRole = val[0]
+  // 没有的话就应该选择一个
+
+  console.log('Curernt ROle', currentRole)
+  if (!currentRole && typeof currentRole !== 'number') {
+    currentRole = rolec.getAdminOrUserPageRole(allRoles)
+    console.log('1')
+  } else {
+    console.log('2')
+    if ((currentRole & rolec.sumPerms(allRoles)) !== currentRole) {
+      currentRole = rolec.getAdminOrUserPageRole(allRoles)
+    }
   }
   store.dispatch('users/setCurrentRole', currentRole)
   return [currentRole]

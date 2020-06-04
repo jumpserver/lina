@@ -9,6 +9,7 @@ export default [
   {
     path: '/users/profile',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: '',

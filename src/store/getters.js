@@ -3,7 +3,7 @@ const getters = {
   device: state => state.app.device,
   token: state => state.users.token,
   currentOrg: state => state.users.currentOrg,
-  currentRole: state => state.users.currentRoles,
+  currentRole: state => state.users.currentRole,
   userAdminOrgList: state => state.users.orgs,
   currentUser: state => state.users.profile,
   permission_routes: state => state.permission.routes,
@@ -11,6 +11,6 @@ const getters = {
   cachedViews: state => state.tagsView.cachedViews,
   publicSettings: state => state.settings.publicSettings,
   customSettings: state => state.settings.customSettings,
-  getCurrentOrgRoles: state => state.users.profile.current_org_roles
+  currentOrgRoles: state => state.users.roles
 }
 export default getters

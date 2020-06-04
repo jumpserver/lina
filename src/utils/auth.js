@@ -9,10 +9,15 @@ export function getTokenFromCookie() {
 }
 
 export function getCurrentRoleFromCookie() {
-  return VueCookie.get(CURRENT_ROLE_KEY)
+  const role = VueCookie.get(CURRENT_ROLE_KEY)
+  if (role) {
+    return parseInt(role) || null
+  }
+  return role
 }
 
 export function saveCurrentRoleToCookie(role) {
+  console.log('Save current role to cookie: ', role)
   return VueCookie.set(CURRENT_ROLE_KEY, role, 14)
 }
 

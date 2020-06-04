@@ -7,6 +7,7 @@ import {
   saveCurrentRoleToCookie
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import rolec from '@/utils/role'
 
 const getDefaultState = () => {
   return {
@@ -14,8 +15,9 @@ const getDefaultState = () => {
     currentOrg: getCurrentOrgFromCookie(),
     currentRole: getCurrentRoleFromCookie(),
     profile: {},
-    roles: [],
-    orgs: []
+    roles: {},
+    orgs: [],
+    perms: 0b00000000
   }
 }
 
@@ -34,6 +36,12 @@ const mutations = {
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
   },
+  SET_ROLES(state, roles) {
+    state.roles = roles
+  },
+  SET_PERMS(state, perms) {
+    state.perms = perms
+  },
   SET_CURRENT_ORG(state, org) {
     saveCurrentOrgToCookie(org)
     state.currentOrg = org
@@ -41,9 +49,6 @@ const mutations = {
   SET_CURRENT_ROLE(state, role) {
     saveCurrentRoleToCookie(role)
     state.currentRole = role
-  },
-  SET_ROLES(state, roles) {
-    state.roles = roles
   }
 }
 
@@ -64,9 +69,9 @@ const actions = {
   // },
 
   // get user Profile
-  getProfile({ commit, state }) {
+  getProfile({ commit, state }, refresh = false) {
     return new Promise((resolve, reject) => {
-      if (state.profile) {
+      if (!refresh && state.profile && state.profile.length > 0) {
         resolve(state.profile)
         return
       }
@@ -74,19 +79,7 @@ const actions = {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
-        const { admin_or_audit_orgs, current_org_roles, role } = response
-        // roles must be a non-empty array
-        const roles = current_org_roles || []
-        if (role === 'Admin') {
-          roles.push('SuperAdmin')
-        }
-        if (!roles || roles.length <= 0) {
-          reject('getProfile: roles must be a non-null array!')
-        }
-
-        commit('SET_ROLES', roles)
         commit('SET_PROFILE', response)
-        commit('SET_ORGS', admin_or_audit_orgs)
         resolve(response)
       }).catch(error => {
         console.log(error)
@@ -94,11 +87,47 @@ const actions = {
       })
     })
   },
-  getRoles({ commit, state }) {
-
+  getRoles({ commit, dispatch, state }, refresh) {
+    return new Promise((resolve, reject) => {
+      if (!refresh && state.roles && state.roles.length > 0) {
+        return resolve(state.roles)
+      }
+      return dispatch('getProfile').then((profile) => {
+        const { current_org_roles: currentOrgRoles, role } = profile
+        const roles = rolec.parseUserRoles(currentOrgRoles, role)
+        commit('SET_ROLES', roles)
+        resolve(roles)
+      }).catch((e) => {
+        reject(e)
+      })
+    })
   },
-  getOrgs({ commit, state }) {
-
+  getInOrgs({ commit, dispatch, state }, refresh) {
+    return new Promise((resolve, reject) => {
+      if (!refresh && state.role && state.role.length > 0) {
+        return resolve(state.roles)
+      }
+      dispatch('getProfile').then(profile => {
+        const { admin_or_audit_orgs: inOrgs } = profile
+        commit('SET_ORGS', inOrgs)
+        resolve(inOrgs)
+      }).catch((e) => reject(e))
+    })
+  },
+  getTotalPerms({ commit, dispatch, state }, refresh) {
+    return new Promise((resolve, reject) => {
+      if (!refresh && state.perms && state.perms !== 0) {
+        return resolve(state.perms)
+      }
+      dispatch('getRoles').then(roles => {
+        let perms = 0b00000000
+        for (const role of roles) {
+          perms |= role
+        }
+        commit('SET_PERMS', perms)
+        resolve(perms)
+      }).catch((e) => reject(e))
+    })
   },
   // user logout
   logout({ commit, state }) {

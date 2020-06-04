@@ -2,18 +2,22 @@ import {
   allRoleRoutes,
   constantRoutes
 } from '@/router'
+import rolec from '@/utils/role'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
  * @param route
  */
 function hasPermission(roles, route) {
-  let requireRoles = route.meta ? route.meta.roles : null
-  if (!requireRoles) {
-    requireRoles = ['Admin', 'SuperAdmin']
+  let requirePerms = route.meta ? route.meta.permissions : null
+  if (!requirePerms) {
+    requirePerms = [rolec.PERM_ADMIN]
   }
-  return roles.some(role => requireRoles.includes(role))
-  // return has
+  const requirePermsSum = rolec.sumPerms(requirePerms)
+  const userRolesSum = rolec.sumPerms(roles)
+  const has = (requirePermsSum & userRolesSum) === requirePermsSum
+  // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
+  return has
 }
 
 /**

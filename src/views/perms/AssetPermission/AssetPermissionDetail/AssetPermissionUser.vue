@@ -36,7 +36,7 @@ export default {
         ],
         columnsMeta: {
           user_display: {
-            label: this.$t('perms.User'),
+            label: this.$t('perms.USER'),
             align: 'center'
           },
           delete_action: {

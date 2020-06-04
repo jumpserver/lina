@@ -24,7 +24,7 @@ export default {
             }
           },
           users_amount: {
-            label: this.$t('perms.User'),
+            label: this.$t('perms.USER'),
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {

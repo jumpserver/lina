@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import i18n from '@/i18n/i18n'
+import rolec from '@/utils/role'
 
 Vue.use(Router)
 
@@ -68,12 +69,15 @@ export const allRoleRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    meta: {
+      permissions: [rolec.PERM_AUDIT]
+    },
     children: [
       {
         path: 'dashboard',
         name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
+        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard', permissions: [rolec.PERM_AUDIT] }
       }
     ]
   },
@@ -117,7 +121,7 @@ export const allRoleRoutes = [
     component: Layout,
     redirect: '/terminal/session-online/',
     name: 'Sessions',
-    meta: { title: i18n.t('route.Sessions'), icon: 'rocket' },
+    meta: { title: i18n.t('route.Sessions'), icon: 'rocket', permissions: [rolec.PERM_AUDIT] },
     children: SessionsRoute
   },
   {
@@ -143,7 +147,7 @@ export const allRoleRoutes = [
     component: Layout,
     redirect: '/audits/login-log/',
     name: 'Audits',
-    meta: { title: i18n.t('route.Audits'), icon: 'history' },
+    meta: { title: i18n.t('route.Audits'), icon: 'history', permissions: [rolec.PERM_AUDIT] },
     children: AuditsRoutes
   },
   ...requireContext.keys().map(key => requireContext(key).default),
@@ -152,11 +156,12 @@ export const allRoleRoutes = [
     path: '/settings',
     component: Layout,
     redirect: '/settings/',
+    permissions: [rolec.PERM_SUPER],
     children: [{
       path: 'settings',
       name: 'Settings',
       component: () => import('@/views/settings/index'),
-      meta: { title: i18n.t('route.Settings'), icon: 'gears', roles: ['SuperAdmin'] }
+      meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
     }]
   },
   ...userPageRoutes,

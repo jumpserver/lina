@@ -1,6 +1,7 @@
 import Layout from '@/layout/index'
 import empty from '@/layout/empty'
 import i18n from '@/i18n/i18n'
+import rolec from '@/utils/role'
 
 export default {
   path: '/xpack',
@@ -13,7 +14,7 @@ export default {
       path: 'interface-setting',
       component: () => import('@/views/xpack/InterfaceSettings.vue'),
       name: 'InterfaceSetting',
-      meta: { title: i18n.t('xpack.InterfaceSettings'), roles: ['SuperAdmin'] }
+      meta: { title: i18n.t('xpack.InterfaceSettings'), permissions: [rolec.PERM_SUPER] }
     },
     // {
     //   path: 'license',
@@ -61,7 +62,7 @@ export default {
       component: empty,
       name: 'OrganizationList',
       redirect: '',
-      meta: { title: i18n.t('xpack.OrganizationList'), roles: ['SuperAdmin'] },
+      meta: { title: i18n.t('xpack.OrganizationList'), permissions: [rolec.PERM_SUPER] },
       children: [
         {
           path: '',

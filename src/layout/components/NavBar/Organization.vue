@@ -26,6 +26,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { hasUUID } from '@/utils/common'
+import rolec from '@/utils/role'
 export default {
   props: {
     isCollapse: {
@@ -41,8 +42,8 @@ export default {
       'currentRole',
       'userAdminOrgList'
     ]),
-    hasOrgPermission() {
-      return this.currentRole === 'Admin'
+    inAdminPage() {
+      return (this.currentRole & rolec.PERM_USE) !== rolec.PERM_USE
     },
     orgIdMapper() {
       const mapper = {}
@@ -53,13 +54,13 @@ export default {
     }
   },
   mounted() {
-    if (this.hasOrgPermission) {
+    if (this.inAdminPage) {
       this.checkCurrentOrgIsNeedChange()
     }
   },
   methods: {
     needShow() {
-      return !this.isCollapse && this.userAdminOrgList.length > 1 && this.hasOrgPermission
+      return !this.isCollapse && this.userAdminOrgList.length > 1 && this.inAdminPage
     },
     checkCurrentOrgIsNeedChange() {
       if (!this.currentOrg || typeof this.currentOrg !== 'object') {
