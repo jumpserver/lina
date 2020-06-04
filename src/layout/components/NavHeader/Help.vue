@@ -17,7 +17,7 @@ export default {
     handleCommand(command) {
       switch (command) {
         case 'support':
-          window.open('https://jinshuju.net/f/sQ91MK', '_blank')
+          window.open('http://www.jumpserver.org/support/', '_blank')
           break
         default:
           window.open('http://docs.jumpserver.org', '_blank')

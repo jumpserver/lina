@@ -136,7 +136,7 @@ export default {
       this.dialogLicenseImport = true
     },
     consultAction: function() {
-      const url = 'https://jinshuju.net/f/sQ91MK'
+      const url = 'http://www.jumpserver.org/support/'
       window.open(url)
     },
     importLicense() {
