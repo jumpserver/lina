@@ -5,6 +5,7 @@
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { getDaysAgo } from '@/utils/common'
+import { DetailFormatter, DisplayFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -12,7 +13,7 @@ export default {
   },
   data() {
     const now = new Date()
-    const dateFrom = getDaysAgo(1, now)
+    const dateFrom = getDaysAgo(7, now).toISOString()
     const dateTo = now.toISOString()
     return {
       tableConfig: {
@@ -22,11 +23,32 @@ export default {
           'is_success', 'date_start'
         ],
         columnsMeta: {
+          hosts: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getTitle: ({ cellValue }) => {
+                return cellValue.length
+              }
+            }
+          },
+          user: {
+            formatter: DisplayFormatter
+          },
+          run_as: {
+            formatter: DisplayFormatter
+          },
           is_finished: {
             width: '100px'
           },
           is_success: {
             width: '100px'
+          },
+          result: {
+            width: '80px',
+            formatter: (row) => {
+              const label = this.$t('audits.View')
+              return <el-link Type='success'>{ label }</el-link>
+            }
           },
           date_start: {
             width: '160px'

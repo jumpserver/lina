@@ -45,14 +45,14 @@ export default {
           path: 'gathered-users/tasks/create',
           component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
           name: 'GatherUserTaskCreate',
-          meta: { title: i18n.t('xpack.GatherUserTaskCreate') },
+          meta: { title: i18n.t('xpack.GatherUserTaskCreate'), activeMenu: '/xpack/gather-users' },
           hidden: true
         },
         {
-          path: 'gathered-users/tasks/update',
+          path: 'gathered-users/tasks/:id/update',
           component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
           name: 'GatherUserTaskUpdate',
-          meta: { title: i18n.t('xpack.GatherUserTaskUpdate'), action: 'update' },
+          meta: { title: i18n.t('xpack.GatherUserTaskUpdate'), action: 'update', activeMenu: '/xpack/gather-users' },
           hidden: true
         }
       ]

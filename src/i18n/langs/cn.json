@@ -650,6 +650,9 @@
     "DeleteNode": "删除节点",
     "RenameNode": "重命名节点"
   },
+  "audits": {
+    "View": "查看"
+  },
   "users": {
     "SSHKey": "SSH公钥",
     "TermsAndConditions": "条款和条件",
