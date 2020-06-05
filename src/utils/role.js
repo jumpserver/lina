@@ -13,6 +13,9 @@ const ORG_AUDITOR = PERM_AUDIT
 const USER = PERM_USE
 const ANON = PERM_NONE
 
+const ADMIN_PAGE_REQUIRE_PERM_MIN = PERM_SUPER | PERM_ADMIN | PERM_AUDIT
+const USER_PAGE_REQUIRE_PERM_MIN = PERM_USE
+
 const ROLE_NAME_MAPPER = {
   SuperAdmin: SUPER_ADMIN,
   SuperAuditor: SUPER_AUDITOR,
@@ -35,6 +38,9 @@ export function getPermsToRolesDisplay(perms) {
 }
 
 export function getRolesDisplay(roles) {
+  if (typeof roles !== 'object') {
+    roles = [roles]
+  }
   const display = []
   for (const role of roles) {
     if (ROLE_NAME_MAPPER_REVERSED[role]) {
@@ -44,33 +50,33 @@ export function getRolesDisplay(roles) {
   return display
 }
 
-export function parseUserRoles(currentOrgRoles, role) {
-  if (role === 'Admin') {
+export function parseUserRoles(currentOrgRoles, clusterRole) {
+  if (clusterRole === 'Admin') {
     return [SUPER_ADMIN, USER]
   }
   if (currentOrgRoles.includes('Admin')) {
     return [ORG_ADMIN, USER]
   }
-  if (role === 'Auditor' || currentOrgRoles.includes('Auditor')) {
+  if (clusterRole === 'Auditor' || currentOrgRoles.includes('Auditor')) {
     return [ORG_AUDITOR]
   }
   return [USER]
 }
 
-export function getAdminOrUserPageRole(allRoles, page) {
-  // 切换到管理员页面的时候应该的最高权限
-  if (allRoles.length === 1) {
-    return allRoles[0]
-  }
-  if (!page) {
-    page = 'admin'
-  }
-  // 优先admin
-  if (page === 'admin') {
-    // 第一个是管理员或超级管理员，第二个肯定是用户
-    return allRoles[0]
-  }
-  return allRoles[1]
+export function getUserInAdminPagePerm(userPerm) {
+  return (ADMIN_PAGE_REQUIRE_PERM_MIN & userPerm)
+}
+
+export function getUserInUserPagePerm(userPerm) {
+  return (USER_PAGE_REQUIRE_PERM_MIN & userPerm)
+}
+
+export function hasAdminPagePerm(userPerm) {
+  return getUserInAdminPagePerm(userPerm) !== 0
+}
+
+export function hasUserPagePerm(userPerm) {
+  return getUserInUserPagePerm(userPerm) !== 0
 }
 
 export function hasPerm(source, target) {
@@ -97,6 +103,9 @@ export default {
   PERM_USE, PERM_AUDIT, PERM_ADMIN, PERM_SUPER,
   SUPER_ADMIN, SUPER_AUDITOR, ORG_ADMIN, ORG_AUDITOR,
   USER, ANON,
-  getRolesDisplay, getPermsToRolesDisplay, getAdminOrUserPageRole,
-  parseUserRoles, sumPerms, hasPerm
+  ADMIN_PAGE_REQUIRE_PERM_MIN, USER_PAGE_REQUIRE_PERM_MIN,
+  getRolesDisplay, getPermsToRolesDisplay,
+  parseUserRoles, sumPerms, hasPerm,
+  getUserInAdminPagePerm, getUserInUserPagePerm,
+  hasAdminPagePerm, hasUserPagePerm
 }

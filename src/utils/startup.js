@@ -49,36 +49,58 @@ async function getPublicSetting({ to, from, next }) {
   }
 }
 
-async function changeCurrentOrgIsNeed({ to, from, next }) {
+async function changeCurrentOrgIfNeed({ to, from, next }) {
+  await store.dispatch('users/getInOrgs')
+  const adminOrgs = store.getters.userAdminOrgList
+  if (!adminOrgs || adminOrgs.length === 0) {
+    return
+  }
   const currentOrg = store.getters.currentOrg
-
   if (!currentOrg || typeof currentOrg !== 'object') {
     console.log('Not has current org')
     orgUtil.change2PropOrg()
     return reject('change prop org')
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
-    this.$log.debug('Not has current org permission')
+    console.debug('Not has current org permission')
     orgUtil.change2PropOrg()
     return reject('change prop org')
   }
 }
 
-export async function getUserRoleAndSetRoutes({ to, from, next }) {
+async function changeCurrentRoleIfNeed({ to, from, next }) {
+  await store.dispatch('users/getRoles')
+  const userPerms = store.getters.currentOrgPerms
+
+  let currentRole = store.getters.currentRole
+  // 如果设置了当前角色，并且有这个权限的话
+  if (currentRole && rolec.hasPerm(userPerms, currentRole)) {
+    return
+  }
+
+  const adminOrgs = store.getters.userAdminOrgList
+  if (!adminOrgs || adminOrgs.length === 0) {
+    currentRole = rolec.USER_PAGE_REQUIRE_PERM_MIN
+  } else if (rolec.hasAdminPagePerm(userPerms)) {
+    currentRole = rolec.getUserInAdminPagePerm(userPerms)
+  } else {
+    currentRole = rolec.getUserInUserPagePerm(userPerms)
+  }
+  await store.dispatch('users/setCurrentRole', currentRole)
+}
+
+export async function generatePageRoutes({ to, from, next }) {
   // determine whether the user has obtained his permission roles through getProfile
 
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
-    const roles = await store.dispatch('users/getRoles')
-    console.log(roles, rolec.getRolesDisplay(roles))
-
-    const cleanedRoles = cleanCurrentRole(roles)
-    console.log('Current org role: ', cleanedRoles, rolec.getRolesDisplay(cleanedRoles))
+    const currentRole = store.getters.currentRole
+    console.log('Current org role: ', currentRole, rolec.getRolesDisplay(currentRole))
 
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', cleanedRoles)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', currentRole)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
@@ -110,33 +132,11 @@ export async function startup({ to, from, next }) {
   // set page title
   await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
-  await store.dispatch('users/getInOrgs')
-  await store.dispatch('users/getRoles')
-  await changeCurrentOrgIsNeed({ to, from, next })
+  await changeCurrentOrgIfNeed({ to, from, next })
+  await changeCurrentRoleIfNeed({ to, from, next })
   await getPublicSetting({ to, from, next })
-  await getUserRoleAndSetRoutes({ to, from, next })
+  await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
-}
-
-function cleanCurrentRole(allRoles) {
-  let currentRole = store.getters.currentRole
-  // 没有的话就应该选择一个
-
-  // console.log('Curernt Role', currentRole)
-  if (!currentRole && typeof currentRole !== 'number') {
-    currentRole = rolec.getAdminOrUserPageRole(allRoles)
-  }
-  const hasAudit = rolec.hasPerm(currentRole, rolec.PERM_AUDIT)
-  const hasAdmin = rolec.hasPerm(allRoles, rolec.PERM_ADMIN)
-  // 这代表上次用户登录了auditor，这次切换了
-  if (hasAudit && hasAdmin) {
-    currentRole = rolec.getAdminOrUserPageRole(allRoles)
-  }
-  if (!rolec.hasPerm(allRoles, currentRole)) {
-    currentRole = rolec.getAdminOrUserPageRole(allRoles)
-  }
-  store.dispatch('users/setCurrentRole', currentRole)
-  return [currentRole]
 }
 
