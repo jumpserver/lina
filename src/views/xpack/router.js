@@ -25,7 +25,7 @@ export default {
         {
           path: '',
           component: () => import('@/views/xpack/GatheredUser/index'),
-          name: 'GatherUserList',
+          name: 'GatherUserListIndex',
           meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/xpack/gathered-users' }
         },
         {
@@ -61,9 +61,8 @@ export default {
     {
       path: 'orgs',
       component: empty,
-      name: 'OrganizationList',
       redirect: '',
-      meta: { title: i18n.t('xpack.Organization.OrganizationList'), permissions: [rolec.PERM_SUPER] },
+      meta: { permissions: [rolec.PERM_SUPER] },
       children: [
         {
           path: '',
@@ -159,7 +158,6 @@ export default {
       path: 'cloud',
       component: empty,
       redirect: '',
-      name: 'Cloud',
       meta: { title: i18n.t('xpack.Cloud.Cloud') },
       children: [
         {

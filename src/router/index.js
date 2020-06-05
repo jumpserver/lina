@@ -152,17 +152,18 @@ export const allRoleRoutes = [
   },
   ...requireContext.keys().map(key => requireContext(key).default),
   {
-    name: 'Settings',
     path: '/settings',
     component: Layout,
     redirect: '/settings/',
     permissions: [rolec.PERM_SUPER],
-    children: [{
-      path: 'settings',
-      name: 'Settings',
-      component: () => import('@/views/settings/index'),
-      meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
-    }]
+    children: [
+      {
+        path: '',
+        name: 'Settings',
+        component: () => import('@/views/settings/index'),
+        meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
+      }
+    ]
   },
   ...userPageRoutes,
   { path: '*', redirect: '/404', hidden: true, meta: { roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }}
