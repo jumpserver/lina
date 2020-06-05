@@ -1,7 +1,11 @@
 <template>
   <Page>
     <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+    <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting">
+      <div slot="rMenu" slot-scope="{data}">
+        <slot name="rMenu" :data="data" />
+      </div>
+    </TreeTable>
   </Page>
 </template>
 
@@ -12,6 +16,14 @@ export default {
   name: 'GenericTreeListPage',
   components: {
     Page, TreeTable
+  },
+  methods: {
+    hideRMenu() {
+      this.$refs.TreeTable.hideRMenu()
+    },
+    getSelectedNodes: function() {
+      return this.$refs.TreeTable.getSelectedNodes()
+    }
   },
   props: {
     ...TreeTable.props,

@@ -229,6 +229,9 @@ export default {
         '/api/v1/assets/nodes/00000000-0000-0000-0000-000000000000/tasks/',
         { action: 'refresh_cache' }
       )
+    },
+    getSelectedNodes: function() {
+      return this.zTree.getSelectedNodes()
     }
   }
 }
