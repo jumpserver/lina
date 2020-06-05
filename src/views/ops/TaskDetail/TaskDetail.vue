@@ -11,7 +11,7 @@
   </el-row>
 </template>
 
-<script>
+<script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
@@ -38,7 +38,7 @@ export default {
           title: this.$t('ops.laskExecutionOutput'),
           attrs: {
             type: 'primary',
-            label: this.$t('ops.run')
+            label: this.$t('common.View')
           },
           callbacks: {
             click: function() {
@@ -92,7 +92,7 @@ export default {
         {
           key: this.$t('ops.latestVersion'),
           value: this.object.latest_execution,
-          callback: function(row, data) {
+          formatter: function(row, data) {
             const url = `/ops/adhoc/${data.adhoc}`
             return <a href={ url }>{ data.adhoc_short_id }</a>
           }
@@ -100,6 +100,17 @@ export default {
         {
           key: this.$t('ops.lastRun'),
           value: toSafeLocalDateStr(this.object.latest_execution.date_finished)
+        },
+        {
+          key: this.$t('ops.laskExecutionOutput'),
+          value: this.object.latest_execution.id,
+          formatter: function(row, value) {
+            const onClick = function() {
+              window.open(`/core/ops/celery/task/${value}/log/`, '', 'width=900,height=600')
+            }
+            const title = this.$t('common.View')
+            return <a onClick={onClick} >{ title }</a>
+          }
         },
         {
           key: this.$t('ops.timeDelta'),

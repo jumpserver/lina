@@ -10,14 +10,15 @@ export default {
       type: Object,
       default: () => ({})
     },
-    callback: {
+    formatter: {
       type: Function,
       default: null
     }
   },
   render(h) {
-    if (typeof this.callback === 'function') {
-      return this.callback(this.item, this.value)
+    if (typeof this.formatter === 'function') {
+      console.log(this.formatter)
+      return this.formatter(this.item, this.value)
     }
     return <span>{this.value}</span>
   }
