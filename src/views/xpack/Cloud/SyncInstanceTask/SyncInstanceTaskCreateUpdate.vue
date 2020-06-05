@@ -74,7 +74,14 @@ export default {
             multiple: true,
             value: [],
             ajax: {
-              url: '/api/v1/xpack/cloud/regions/'
+              url: '/api/v1/xpack/cloud/regions/',
+              processResults(data) {
+                const results = data.regions.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
             }
           }
         }
