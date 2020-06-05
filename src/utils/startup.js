@@ -81,7 +81,10 @@ async function changeCurrentRoleIfNeed({ to, from, next }) {
   const adminOrgs = store.getters.userAdminOrgList
   if (!adminOrgs || adminOrgs.length === 0) {
     currentRole = rolec.USER_PAGE_REQUIRE_PERM_MIN
-  } else if (rolec.hasAdminPagePerm(userPerms)) {
+    await store.dispatch('users/setCurrentRole', currentRole)
+    return
+  }
+  if (rolec.hasAdminPagePerm(userPerms)) {
     currentRole = rolec.getUserInAdminPagePerm(userPerms)
   } else {
     currentRole = rolec.getUserInUserPagePerm(userPerms)
