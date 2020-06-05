@@ -5,6 +5,7 @@
         <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
           <AutoDataZTree
             ref="AutoDataZTree"
+            :key="DataZTree"
             :setting="treeSetting"
             class="auto-data-ztree"
           />
@@ -58,6 +59,7 @@ export default {
   },
   data() {
     return {
+      DataZTree: 0,
       codeMirrorOptions: {
         lineNumbers: true,
         lineWrapping: true,
@@ -135,7 +137,7 @@ export default {
     },
     handleSystemUserChange(id) {
       this.treeSetting.treeUrl = `${this.basicUrl}&system_user=${id}`
-      this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.initTree()
+      this.DataZTree++
     },
     getSelectedAssetsNode() {
       const nodes = this.zTree.getCheckedNodes(true)
@@ -169,15 +171,11 @@ export default {
       const port = document.location.port ? ':' + document.location.port : ''
       const url = '/ws/ops/tasks/log/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
-      const failOverPort = '8070'
-      const failOverWsURL = scheme + '://' + document.location.hostname + ':' + failOverPort + url
+      // const failOverPort = '8070'
+      // const failOverWsURL = scheme + '://' + document.location.hostname + ':' + failOverPort + url
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
-        this.ws = new WebSocket(failOverWsURL)
-        this.setWsCallback()
-        this.ws.onerror = (e) => {
-          this.xterm.write(this.wrapperError('Connect websocket server error'))
-        }
+        this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
@@ -188,28 +186,45 @@ export default {
       }
     },
     wrapperError(msg) {
-      return '\\033[31m' + msg + '\\033[0m\r\n'
+      return `\r\n${msg}\r\n`
+    },
+    writeExecutionOutput(taskId) {
+      let msg = this.$t('assets.Pending')
+      this.xterm.write(msg)
+      msg = JSON.stringify({ task: taskId })
+      this.ws.send(msg)
     },
     execute() {
-      // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
-      // const url = '{% url "api-ops:command-execution-list" %}?' + size
+      const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
+      const url = '/api/v1/ops/command-executions/?' + size
       const runAs = this.selectedSystemUser
-      // const command = editor.getValue()
+      const command = this.actions
       const hosts = this.getSelectedAssetsNode().map(function(node) {
         return node.id
       })
       if (hosts.length === 0) {
-        this.xterm.write(this.wrapperError("{% trans 'Unselected assets' %}"))
+        this.xterm.write(this.wrapperError(this.$t('assets.UnselectedAssets')))
         return
       }
-      // if (!command) {
-      //   this.xterm.write(this.wrapperError("{% trans 'No input command' %}"))
-      //   return
-      // }
+      if (!command) {
+        this.xterm.write(this.wrapperError(this.$t('assets.NoInputCommand')))
+        return
+      }
       if (!runAs) {
-        this.xterm.write(this.wrapperError("{% trans 'No system user was selected' %}"))
+        this.xterm.write(this.wrapperError(this.$t('assets.NoSystemUserWasSelected')))
         return
       }
+      const data = {
+        hosts: hosts,
+        run_as: runAs,
+        command: command
+      }
+      this.$axios.post(
+        url, data
+      ).then(res => {
+        this.writeExecutionOutput(res.id)
+        console.log('success')
+      })
     }
   }
 }
