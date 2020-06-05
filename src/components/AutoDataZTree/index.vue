@@ -217,7 +217,7 @@ export default {
         this.zTree.addNodes(parentNode, 0, newNode)
         // vm.$refs.dataztree.refresh()
         const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.currentNodeId = node.meta.node.id
+        this.currentNodeId = node.meta.node.id || newNode.id
         this.zTree.editName(node)
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
