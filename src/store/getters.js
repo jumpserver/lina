@@ -11,6 +11,7 @@ const getters = {
   cachedViews: state => state.tagsView.cachedViews,
   publicSettings: state => state.settings.publicSettings,
   customSettings: state => state.settings.customSettings,
-  currentOrgRoles: state => state.users.roles
+  currentOrgRoles: state => state.users.roles,
+  currentOrgPerms: state => state.users.perms
 }
 export default getters

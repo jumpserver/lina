@@ -8,7 +8,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <div v-if="currentOrgRoles.length > 1|| hasAdminOrg ">
+        <div v-if="currentOrgRoles.length > 1 || hasAdminOrg ">
           <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">
             {{ $t('common.nav.UserPage') }}
           </el-dropdown-item>
@@ -28,6 +28,7 @@
 import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
 import rolec from '@/utils/role'
+import orgUtil from '@/utils/org'
 
 export default {
   name: 'AccountDropdown',
@@ -41,23 +42,31 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'currentUser',
+      'currentRole',
+      'currentOrgRoles',
+      'userAdminOrgList',
+      'currentOrgPerms'
+    ]),
     isInAdminRole() {
-      const inAdmin = rolec.hasPerm(this.currentRole, rolec.PERM_ADMIN)
-      this.$log.debug('Current in admin role: ', inAdmin)
+      const inAdmin = (this.currentRole & this.adminPageRequirePerm) !== 0
       return inAdmin
     },
     hasAdminOrg() {
       return this.userAdminOrgList.length > 0
     },
-    hasAdminRole() {
-      return this.currentOrgRoles.includes('Admin')
+    adminPageRequirePerm() {
+      return rolec.PERM_SUPER | rolec.PERM_ADMIN | rolec.PERM_AUDIT
     },
-    ...mapGetters([
-      'currentUser',
-      'currentRole',
-      'currentOrgRoles',
-      'userAdminOrgList'
-    ])
+    currentOrgAdminPagePerm() {
+      // 只有有一个权限就可以
+      return this.adminPageRequirePerm & this.currentOrgPerms
+    },
+    currentOrgUsePagePerm() {
+      const userPageRequireRole = rolec.PERM_USE
+      return userPageRequireRole & this.currentOrgPerms
+    }
   },
   methods: {
     handleClick(val) {
@@ -66,13 +75,19 @@ export default {
           this.$router.push({ name: 'UserProfile' })
           break
         case 'adminPage':
-          this.$store.dispatch('users/setCurrentRole', this.currentOrgRoles[0])
-          window.location.href = `/ui/`
+          this.$store.dispatch('users/setCurrentRole', this.currentOrgAdminPagePerm)
+          if (this.currentOrgAdminPagePerm) {
+            window.location.href = `/ui/`
+          } else {
+            orgUtil.change2PropOrg()
+          }
           break
         case 'userPage':
-          this.$store.dispatch('users/setCurrentRole', this.currentOrgRoles[1])
-          console.log('Switch to: ', this.currentOrgRoles[1])
-          window.location.href = `/ui/`
+          if (this.currentOrgUsePagePerm) {
+            this.$store.dispatch('users/setCurrentRole', rolec.USER)
+            console.log('Switch to: ', rolec.USER)
+            window.location.href = `/ui/`
+          }
           break
         case 'logout':
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`

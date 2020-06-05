@@ -5,6 +5,7 @@ import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import rolec from '@/utils/role'
+import orgUtil from '@/utils/org'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -45,6 +46,21 @@ async function getPublicSetting({ to, from, next }) {
   const publicSettings = store.getters.publicSettings
   if (!publicSettings) {
     await store.dispatch('settings/getPublicSettings')
+  }
+}
+
+async function changeCurrentOrgIsNeed({ to, from, next }) {
+  const currentOrg = store.getters.currentOrg
+
+  if (!currentOrg || typeof currentOrg !== 'object') {
+    console.log('Not has current org')
+    orgUtil.change2PropOrg()
+    return reject('change prop org')
+  }
+  if (!orgUtil.hasCurrentOrgPermission()) {
+    this.$log.debug('Not has current org permission')
+    orgUtil.change2PropOrg()
+    return reject('change prop org')
   }
 }
 
@@ -96,6 +112,7 @@ export async function startup({ to, from, next }) {
   await checkLogin({ to, from, next })
   await store.dispatch('users/getInOrgs')
   await store.dispatch('users/getRoles')
+  await changeCurrentOrgIsNeed({ to, from, next })
   await getPublicSetting({ to, from, next })
   await getUserRoleAndSetRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })

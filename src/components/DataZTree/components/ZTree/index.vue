@@ -58,7 +58,6 @@ export default {
             name: this.$t('common.tree.Empty')
           })
         }
-        console.log(this.treeSetting)
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(

@@ -96,6 +96,7 @@ const actions = {
         const { current_org_roles: currentOrgRoles, role } = profile
         const roles = rolec.parseUserRoles(currentOrgRoles, role)
         commit('SET_ROLES', roles)
+        commit('SET_PERMS', rolec.sumPerms(roles))
         resolve(roles)
       }).catch((e) => {
         reject(e)
@@ -111,21 +112,6 @@ const actions = {
         const { admin_or_audit_orgs: inOrgs } = profile
         commit('SET_ORGS', inOrgs)
         resolve(inOrgs)
-      }).catch((e) => reject(e))
-    })
-  },
-  getTotalPerms({ commit, dispatch, state }, refresh) {
-    return new Promise((resolve, reject) => {
-      if (!refresh && state.perms && state.perms !== 0) {
-        return resolve(state.perms)
-      }
-      dispatch('getRoles').then(roles => {
-        let perms = 0b00000000
-        for (const role of roles) {
-          perms |= role
-        }
-        commit('SET_PERMS', perms)
-        resolve(perms)
       }).catch((e) => reject(e))
     })
   },
