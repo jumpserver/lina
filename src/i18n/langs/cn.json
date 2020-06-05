@@ -31,6 +31,10 @@
   "assets": {
     "Action": "动作",
     "AutoGenerateKey": "自动生成密钥",
+    "UnselectedAssets":"未选择资产",
+    "Pending": "等待",
+    "NoSystemUserWasSelected":"未选择系统用户",
+    "NoInputCommand": "未输入命令",
     "LoginModeHelpMessage": "如果选择手动登录模式，用户名和密码可以不填写",
     "UsernameHelpMessage": "用户名是动态的，登录资产时使用当前用户的用户名登录",
     "PriorityHelpMessage": "1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户",
@@ -49,7 +53,6 @@
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
     "AssetNumber": "资产编号",
-    "AssetUserList": "资产用户列表",
     "Assets": "资产",
     "Auth": "认证",
     "AutoPush": "自动推送",
@@ -147,8 +150,6 @@
     "DateLastWeek": "最近一周",
     "DateLastMonth": "最近一月",
     "DateLast3Months": "最近三月",
-    "View": "查看",
-    "Remove": "移除",
     "Yes": "是",
     "No": "否",
     "Action": "动作",
@@ -400,9 +401,9 @@
     "DatabaseAppPermissionUpdate": "更新数据库应用授权规则",
     "DatabaseAppUpdate": "",
     "DomainCreate": "创建网关",
-    "DomainDetail": "网域详情",
-    "DomainList": "网域列表",
-    "DomainUpdate": "更新网域",
+    "DomainDetail": "域名详情",
+    "DomainList": "网关列表",
+    "DomainUpdate": "更新网关",
     "FileManager": "文件管理",
     "FtpLog": "FTP日志",
     "GatewayCreate": "创建网关",
@@ -456,7 +457,7 @@
     "WebFTP": "文件管理",
     "WebTerminal": "Web终端",
     "BatchCommandLog": "批量命令",
-    "TaskMonitor": "任务监控"
+    "": ""
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -626,9 +627,7 @@
     "consult": "咨询",
     "ImportLicense": "导入许可证",
     "AssetCount": "资产数量",
-    "ImportLicenseTip": "请导入许可证",
-    "all": "全部",
-    "auto": "自动"
+    "ImportLicenseTip": "请导入许可证"
   },
   "settings": {
     "setting": ""
@@ -739,10 +738,6 @@
     "dateLastLogin": ""
   },
   "xpack": {
-    "Vault": {
-      "Vault": "密码匣子",
-      "Create": "创建"
-    },
     "Basic": "基本",
     "Other": "其他",
     "Admin": "管理员",
@@ -782,8 +777,8 @@
       "DateJoined": "创建日期",
       "DateUpdated": "更新日期",
       "ManualExecutePlan": "手动执行计划",
-      "AddAsset": "添加资产",
-      "AddNode": "添加节点",
+      "addAsset": "添加资产",
+      "addNode": "添加节点",
       "Result": "结果",
       "TimeDelta": "运行时间",
       "DateStart": "开始日期",
@@ -799,20 +794,11 @@
     "Corporation": "公司",
     "Edition": "版本",
     "Expired": "过期时间",
-    "GatherUser": {
-      "GatherUser": "收集用户",
-      "GatherUserTask": "收集用户任务",
-      "GatherUserList": "收集资产用户列表",
-      "GatherUserTaskCreate": "创建任务",
-      "GatherUserTaskList": "收集资产任务列表",
-      "GatherUserTaskUpdate": "更新任务"
-    },
-    "Organization": {
-      "OrganizationCreate": "创建组织",
-      "OrganizationDetail": "组织详情",
-      "OrganizationList": "组织管理",
-      "OrganizationUpdate": "更新组织"
-    },
+    "GatherUserTask": "收集用户任务",
+    "GatherUserList": "收集用户",
+    "GatherUserTaskCreate": "创建任务",
+    "GatherUserTaskList": "任务列表",
+    "GatherUserTaskUpdate": "更新任务",
     "ImportLicense": "导入许可证",
     "ImportLicenseTip": "请导入许可证",
     "InterfaceSettings": "界面设置",
@@ -820,6 +806,10 @@
     "LicenseDetail": "许可证详情",
     "LicenseFile": "许可证文件",
     "NoLicense": "暂无许可证",
+    "OrganizationCreate": "创建组织",
+    "OrganizationDetail": "组织详情",
+    "OrganizationList": "组织管理",
+    "OrganizationUpdate": "更新组织",
     "RestoreButton": "恢复默认",
     "SubscriptionID": "订阅授权ID",
     "Timer": "定时执行",
@@ -839,7 +829,7 @@
     "restoreDialogTitle": "你确认吗",
     "technologyConsult": "技术咨询",
     "Cloud": {
-      "CloudCenter": "云管中心",
+      "Cloud": "云管中心",
       "AccountList": "账户列表",
       "AccountCreate": "创建账户",
       "AccountUpdate": "更新账户",

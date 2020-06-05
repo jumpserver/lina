@@ -4,10 +4,15 @@
       <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
         <component
           :is="component"
+          ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
           @urlChange="handleUrlChange"
-        />
+        >
+          <div slot="rMenu" slot-scope="{data}">
+            <slot name="rMenu" :data="data" />
+          </div>
+        </component>
       </div>
       <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
         <div class="mini">
@@ -68,6 +73,12 @@ export default {
     },
     forceRerender() {
       this.componentKey += 1
+    },
+    hideRMenu() {
+      this.$refs.AutoDataZTree.hideRMenu()
+    },
+    getSelectedNodes: function() {
+      return this.$refs.AutoDataZTree.getSelectedNodes()
     }
   }
 }

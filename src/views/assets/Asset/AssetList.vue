@@ -1,5 +1,11 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :help-message="helpMessage" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <GenericTreeListPage ref="TreeList" :table-config="tableConfig" :help-message="helpMessage" :header-actions="headerActions" :tree-setting="treeSetting">
+    <div slot="rMenu">
+      <li id="m_del" class="rmenu" tabindex="-1" @click="handleClick">
+        <i class="fa fa-minus-square" />  {{ this.$t('tree.Demo') }}
+      </li>
+    </div>
+  </GenericTreeListPage>
 </template>
 
 <script>
@@ -111,10 +117,37 @@ export default {
       },
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }
+  },
+  methods: {
+    handleClick() {
+      this.$refs.TreeList.hideRMenu()
+      console.log(this.$refs.TreeList.getSelectedNodes())
+    }
   }
 }
 </script>
 
 <style>
+  .rmenu {
+    font-size: 12px;
+    padding: 0 16px;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #606266;
+    height: 24px;
+    line-height: 24px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
 
+  .rmenu > a:hover, .dropdown-menu > a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+  }
+  .rmenu:hover{
+    background-color: #f5f7fa;
+  }
 </style>

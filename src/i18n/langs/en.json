@@ -30,6 +30,10 @@
   },
   "assets": {
     "Action": "Action",
+    "NoInputCommand": "No input command",
+    "UnselectedAssets":"Unselected assets",
+    "Pending": "Pending",
+    "NoSystemUserWasSelected":"No system user was selected",
     "LoginModeHelpMessage": "If you choose manual login mode, you do not need to fill in the username and password.",
     "UsernameHelpMessage": "Username is dynamic, When connect asset, using current user's username",
     "PriorityHelpMessage": "1-100, High level will be using login asset as default, if user was granted more than 2 system user",
@@ -51,7 +55,6 @@
     "AssetList": "Asset list",
     "AssetNumber": "Asset number",
     "Assets": "Assets",
-    "AssetUserList": "Asset user",
     "Auth": "Auth",
     "AutoPush": "Auto push",
     "BasePlatform": "Base platform",
@@ -146,8 +149,6 @@
     "DateLastWeek": "Last week",
     "DateLastMonth": "Last month",
     "DateLast3Months": "Last 3 months",
-    "Remove": "Remove",
-    "View": "View",
     "Yes": "Yes",
     "No": "No",
     "Action": "Action",
@@ -274,10 +275,6 @@
     "UsersTotal": "Users total",
     "Weekly": "Weekly",
     "TimesWeekUnit": "times/week"
-  },
-  "audits": {
-    "View": "View",
-    "Hosts": "Hosts"
   },
   "ops": {
     "ID": "ID",
@@ -455,8 +452,7 @@
     "Users": "Users",
     "WebFTP": "WebFTP",
     "WebTerminal": "Web terminal",
-    "BatchCommandLog": "Batch command log",
-    "TaskMonitor": "Task monitor"
+    "BatchCommandLog": "Batch command log"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
@@ -622,8 +618,8 @@
     "AssetCount": "Asset count",
     "ImportLicenseTip": "Please Import License",
     "ApiKeyList": "Api key list",
-    "all": "All",
-    "auto": "Auto"
+    "DateCreated": "",
+    "Create": ""
   },
   "settings": {
     "setting": ""
@@ -728,10 +724,6 @@
     "ResetAndDownloadSSHKey": "Reset and download SSH Key"
   },
   "xpack": {
-    "Vault": {
-      "Vault": "Vault",
-      "Create": "Create"
-    },
     "Admin": "Admin",
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
