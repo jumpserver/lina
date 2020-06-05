@@ -17,7 +17,6 @@ router.beforeEach(async(to, from, next) => {
   } catch (e) {
     const msg = 'Start service error: ' + e
     console.log(msg)
-    alert(msg)
   }
 })
 

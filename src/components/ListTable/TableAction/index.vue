@@ -4,12 +4,12 @@
       <div class="table-header-left-side">
         <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
         <span v-else style="display: flex;flex-direction: row">
-          <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+          <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
           <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
         </span>
       </div>
       <div class="table-action-right-side">
-        <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+        <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
         <DatetimeRangePicker v-if="hasDatePicker && hasLeftActions" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
         <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
       </div>
@@ -66,12 +66,17 @@ export default {
   data() {
     return {
       keyword: ''
-
     }
   },
   computed: {
     hasSelectedRows() {
       return this.selectedRows.length > 0
+    },
+    iSearchTableConfig() {
+      const configDefault = {
+        url: this.tableUrl
+      }
+      return Object.assign(configDefault, this.searchConfig)
     }
   },
   methods: {

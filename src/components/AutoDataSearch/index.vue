@@ -1,10 +1,8 @@
 <template>
-  <TagSearch v-if="options !== []" :options="options" :config="defaultConfig" v-on="$listeners" />
+  <TagSearch :options="options" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script>
-const merge = require('deepmerge')
-// import { optionUrlMeta } from '@/api/common'
 import TagSearch from '@/components/TagSearch'
 export default {
   name: 'AutoDataSearch',
@@ -12,24 +10,11 @@ export default {
   props: {
     url: {
       type: String,
-      default: () => {}
+      default: ''
     },
-    config: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  data() {
-    return {
-      defaultConfig: {
-        expandTrigger: 'hover'
-      },
-      options: []
-    }
-  },
-  computed: {
-    iConfig() {
-      return this.config ? merge(this.defaultConfig, this.config) : this.defaultConfig
+    options: {
+      type: Array,
+      default: () => []
     }
   },
   watch: {
@@ -38,7 +23,9 @@ export default {
     }
   },
   mounted() {
-    this.genericOptions()
+    if (this.url) {
+      this.genericOptions()
+    }
   },
   methods: {
     async genericOptions() {

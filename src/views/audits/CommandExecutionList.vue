@@ -91,6 +91,18 @@ export default {
         hasLeftActions: false,
         hasDatePicker: true,
         hasImport: false,
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('audits.User'),
+              value: 'user__name'
+            },
+            {
+              label: this.$t('audits.RunUser'),
+              value: 'run_as__name'
+            }
+          ]
+        },
         datePicker: {
           dateStart: dateFrom,
           dateEnd: dateTo

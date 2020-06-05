@@ -175,7 +175,7 @@ export default {
       })
 
       // TODO 修改默认确认框
-      const msg = '你想移动节点: `' + treeNodesNames.join(',') + '` 到 `' + targetNode.name + '` 下吗?'
+      const msg = this.$t('common.tree.DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
       return confirm(msg)
     },
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
@@ -184,9 +184,9 @@ export default {
       $.each(treeNodes, function(index, value) {
         treeNodesIds.push(value.meta.node.id)
       })
-      const the_url = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
+      const theUrl = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
       this.$axios.put(
-        the_url, {
+        theUrl, {
           nodes: treeNodesIds
         }
       ).then((res) => {
@@ -218,10 +218,11 @@ export default {
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
-        vm.$refs.dataztree.refresh()
-        // const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        // this.zTree.editName(node)
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        // vm.$refs.dataztree.refresh()
+        console.log(vm.zTree)
+        const node = vm.zTree.getNodeByParam('id', newNode.id, parentNode)
+        vm.zTree.editName(node)
+        vm.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })

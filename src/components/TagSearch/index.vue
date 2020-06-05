@@ -63,7 +63,6 @@ export default {
   watch: {
     filterTags: {
       handler(val) {
-        console.log(this.filterTags)
         this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
         // this.$emit('tagSearch', this.filterMaps)
       },

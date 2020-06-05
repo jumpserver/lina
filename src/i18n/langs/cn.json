@@ -239,7 +239,8 @@
     "rows": "行",
     "tree": {
       "Empty": "空",
-      "Loading": "加载中"
+      "Loading": "加载中",
+      "DropConfirmMsg": "你想移动节点: {src} 到 {dst} 下吗?"
     },
     "updateErrorMsg": "更新失败",
     "updateSelected": "更新所选",
@@ -655,7 +656,10 @@
   },
   "audits": {
     "View": "查看",
-    "Hosts": "主机"
+    "Hosts": "主机",
+    "User": "用户",
+    "Command": "命令",
+    "RunUser": "运行用户"
   },
   "users": {
     "SSHKey": "SSH公钥",
