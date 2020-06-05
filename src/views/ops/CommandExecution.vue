@@ -27,7 +27,7 @@
                   <el-option
                     v-for="item in options"
                     :key="item.id"
-                    :disabled="item.protocol !== 'ssh'"
+                    :disabled="item.protocol !== 'ssh' && item.login_mode!== 'auto'"
                     :label="`${item.name}(${item.username})`"
                     :value="item.id"
                   />
@@ -66,7 +66,7 @@ export default {
         mode: 'shell'
       },
       treeSetting: {
-        treeUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=0',
+        treeUrl: '',
         showRefresh: true,
         showMenu: false,
         check: {
@@ -95,6 +95,7 @@ export default {
           onClick: this.onClick.bind(this)
         },
         async: {
+
           enable: false
         }
       },
@@ -102,7 +103,7 @@ export default {
       actions: '',
       options: [],
       selectedSystemUser: '',
-      basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=0',
+      basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=2',
       ws: '',
       wsConnected: false
     }
@@ -117,6 +118,14 @@ export default {
   },
   mounted() {
     this.$axios.get('/api/v1/assets/system-users/').then(res => {
+      for (const i in res) {
+        // :disabled="item.protocol !== 'ssh'&& item.login_mode!=='auto'"
+        if (res[i].protocol === 'ssh' && res[i].login_mode === 'auto') {
+          this.handleSystemUserChange(res[i].id)
+          this.selectedSystemUser = res[i].id
+          break
+        }
+      }
       this.options = res
     })
     this.xterm.write(`选择左侧资产, 选择运行的系统用户，批量执行命令`)

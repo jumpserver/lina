@@ -4,6 +4,10 @@
       <ul id="ztree" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
+      <div v-if="this.treeSetting.treeUrl===''">
+        {{ this.$t('common.tree.Empty') }}<a id="tree-refresh"><i class="fa fa-refresh" /></a>
+      </div>
+
     </div>
     <div id="rMenu">
       <ul class="dropdown-menu menu-actions">
