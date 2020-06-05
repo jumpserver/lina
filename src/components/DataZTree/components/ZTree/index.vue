@@ -18,7 +18,7 @@
 // 导入JQuery
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
-import '@ztree/ztree_v3/js/jquery.ztree.core.min.js'
+import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
 import '@/styles/ztree.css'
 
 const defaultObject = {
@@ -58,6 +58,7 @@ export default {
             name: this.$t('common.tree.Empty')
           })
         }
+        console.log(this.treeSetting)
         this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(
