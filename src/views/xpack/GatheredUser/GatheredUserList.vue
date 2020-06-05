@@ -1,13 +1,13 @@
 <template>
-  <ListTable :table-config="tableConfig" :tree-setting="treeSetting" :header-actions="headerActions" />
+  <TreeTable :table-config="tableConfig" :tree-setting="treeSetting" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import TreeTable from '@/components/TreeTable'
 
 export default {
   components: {
-    ListTable
+    TreeTable
   },
   data() {
     return {

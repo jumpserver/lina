@@ -30,7 +30,7 @@ export default {
     return {
       userRelationConfig: {
         icon: 'fa-user',
-        title: this.$t('xpack.USER'),
+        title: this.$t('xpack.User'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name',
           transformOption: (item) => {

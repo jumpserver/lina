@@ -19,6 +19,11 @@ export default {
         columnsMeta: {
           name: {
             formatter: null
+          },
+          actions: {
+            formatterArgs: {
+              updateRoute: 'AccountUpdate'
+            }
           }
         }
       },

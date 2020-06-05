@@ -23,11 +23,11 @@ export default {
         activeMenu: 'GatheredUserList',
         submenu: [
           {
-            title: this.$t('xpack.GatherUserList'),
+            title: this.$t('xpack.GatherUser.GatherUserList'),
             name: 'GatheredUserList'
           },
           {
-            title: this.$t('xpack.GatherUserTaskList'),
+            title: this.$t('xpack.GatherUser.GatherUserTaskList'),
             name: 'TaskList'
           }
         ]

@@ -23,7 +23,7 @@ export default {
         activeMenu: 'OrganizationDetail',
         submenu: [
           {
-            title: this.$t('xpack.OrganizationDetail'),
+            title: this.$t('xpack.Organization.OrganizationDetail'),
             name: 'OrganizationDetail'
           }
         ]
