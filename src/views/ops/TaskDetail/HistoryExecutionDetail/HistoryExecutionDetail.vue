@@ -4,16 +4,14 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <QuickActions type="primary" :actions="quickActions" />
-      <RunInfoCard type="primary" style="margin-top: 15px" v-bind="RunSuccessConfig" />
+      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
 </template>
 
-<script>
+<script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
-import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../RunInfoCard'
 
@@ -21,8 +19,7 @@ export default {
   name: 'HistoryExecutionDetail',
   components: {
     DetailCard,
-    RunInfoCard,
-    QuickActions
+    RunInfoCard
   },
   props: {
     object: {
@@ -31,23 +28,7 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
-      quickActions: [
-        {
-          title: this.$t('ops.output'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('ops.run')
-          },
-          callbacks: {
-            click: function() {
-              const taskId = vm.object.id
-              window.open(`/core/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
-            }
-          }
-        }
-      ],
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),
@@ -99,6 +80,17 @@ export default {
         {
           key: this.$t('ops.isSuccess'),
           value: this.toChoicesDisplay(this.object.is_success)
+        },
+        {
+          key: this.$t('ops.output'),
+          value: this.object.id,
+          formatter: function(row, value) {
+            const onClick = function() {
+              window.open(`/core/ops/celery/task/${value}/log/`, '', 'width=900,height=600')
+            }
+            const title = this.$t('common.View')
+            return <a onClick={onClick} >{ title }</a>
+          }
         }
       ]
     }

@@ -4,7 +4,7 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunSuccessConfig" />
+      <RunInfoCard type="info" v-bind="RunSuccessConfig" />
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
   </el-row>
@@ -82,17 +82,6 @@ export default {
           value: this.$d(new Date(this.object.latest_execution.date_finished))
         },
         {
-          key: this.$t('ops.laskExecutionOutput'),
-          value: this.object.latest_execution.id,
-          formatter: function(row, value) {
-            const onClick = function() {
-              window.open(`/core/ops/celery/task/${value}/log/`, '', 'width=900,height=600')
-            }
-            const title = this.$t('common.View')
-            return <a onClick={onClick} >{ title }</a>
-          }
-        },
-        {
           key: this.$t('ops.timeDelta'),
           value: this.object.latest_execution.timedelta.toFixed(2) + 's'
         },
@@ -107,6 +96,17 @@ export default {
         {
           key: this.$t('ops.contents'),
           value: 'api 没有该数据'
+        },
+        {
+          key: this.$t('ops.laskExecutionOutput'),
+          value: this.object.latest_execution.id,
+          formatter: function(row, value) {
+            const onClick = function() {
+              window.open(`/core/ops/celery/task/${value}/log/`, '', 'width=900,height=600')
+            }
+            const title = this.$t('common.View')
+            return <a onClick={onClick} >{ title }</a>
+          }
         }
       ]
     }
