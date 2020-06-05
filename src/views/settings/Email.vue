@@ -93,6 +93,8 @@ export default {
             }
             testEmailSetting(value).then(res => {
               vm.$message.success(res['msg'])
+            }).catch(res => {
+              vm.$message.error(res['response']['data']['error'])
             })
           }
         }

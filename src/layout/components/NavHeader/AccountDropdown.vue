@@ -8,7 +8,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <div v-if="currentOrgRoles.length > 1">
+        <div v-if="currentOrgRoles.length > 1|| hasAdminOrg ">
           <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">
             {{ $t('common.nav.UserPage') }}
           </el-dropdown-item>
@@ -46,13 +46,17 @@ export default {
       this.$log.debug('Current in admin role: ', inAdmin)
       return inAdmin
     },
+    hasAdminOrg() {
+      return this.userAdminOrgList.length > 0
+    },
     hasAdminRole() {
       return this.currentOrgRoles.includes('Admin')
     },
     ...mapGetters([
       'currentUser',
       'currentRole',
-      'currentOrgRoles'
+      'currentOrgRoles',
+      'userAdminOrgList'
     ])
   },
   methods: {
