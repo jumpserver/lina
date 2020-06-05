@@ -1,25 +1,18 @@
 <template>
-
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :span="18">
       <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
-    <el-col :span="10">
-      <QuickActions type="primary" :actions="quickActions" />
-    </el-col>
   </el-row>
-
 </template>
 
 <script>
 import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
-import QuickActions from '@/components/QuickActions/index'
 
 export default {
   name: 'Detail',
   components: {
-    QuickActions,
     ListTable
   },
   props: {
@@ -60,7 +53,8 @@ export default {
           },
           {
             prop: 'ip',
-            label: this.$t('assets.ip')
+            label: this.$t('assets.ip'),
+            width: '140px'
           },
           {
             prop: 'username',
@@ -68,7 +62,8 @@ export default {
           },
           {
             prop: 'version',
-            label: this.$t('assets.Version')
+            label: this.$t('assets.Version'),
+            width: '50px'
           },
           {
             prop: 'date_created',
@@ -87,9 +82,9 @@ export default {
               canDelete: false,
               extraActions: [
                 {
-                  name: this.$t('common.Delete'),
-                  title: this.$t('common.Delete'),
-                  type: 'primary',
+                  name: this.$t('common.Remove'),
+                  title: this.$t('common.Remove'),
+                  type: 'warning',
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(res => {
                       this.$refs.ListTable.reloadTable()
@@ -130,12 +125,8 @@ export default {
       },
       headerActions: {
         hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasBulkDelete: false,
-        hasSearch: true,
-        hasCreate: false
+        hasLeftActions: false,
+        hasRefresh: false
       }
     }
   },
