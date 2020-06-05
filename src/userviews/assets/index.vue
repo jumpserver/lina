@@ -4,13 +4,14 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { ActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/ListTable/formatters'
+import { LoadingActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/ListTable/formatters'
 export default {
   components: {
     GenericTreeListPage
   },
   data() {
     return {
+      allFavorites: [],
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -90,11 +91,12 @@ export default {
           {
             prop: 'id',
             align: 'center',
-            formatter: ActionsFormatter,
+            formatter: LoadingActionsFormatter,
             width: '100px',
             label: this.$t('common.action'),
             formatterArgs: {
               hasDelete: false,
+              loading: true,
               hasUpdate: false,
               extraActions: [
                 {
@@ -108,10 +110,15 @@ export default {
                 {
                   name: 'favor',
                   type: 'info',
-                  fa: 'fa-star-o',
+                  fa: function(row, cellValue) {
+                    if (this.checkFavorite(cellValue)) {
+                      return 'fa-star'
+                    }
+                    return 'fa-star-o'
+                  }.bind(this),
                   callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
-                  }
+                    this.addOrDeleteFavorite(cellValue)
+                  }.bind(this)
                 }
               ]
             }
@@ -129,6 +136,43 @@ export default {
         hasSearch: true,
         hasRightActions: false
       }
+    }
+  },
+  mounted() {
+    this.refreshAllFavorites()
+  },
+  methods: {
+    refreshAllFavorites() {
+      this.tableConfig.columns[3].formatterArgs.loading = true
+      this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
+        this.allFavorites = resp
+        this.tableConfig.columns[3].formatterArgs.loading = false
+      })
+    },
+    addOrDeleteFavorite(assetId) {
+      if (this.checkFavorite(assetId)) {
+        this.$axios.delete(`/api/v1/assets/favorite-assets/?asset=${assetId}`).then(res => this.removeFavorite(assetId))
+      } else {
+        const data = {
+          asset: assetId
+        }
+        this.$axios.post('/api/v1/assets/favorite-assets/', data).then(res => this.addFavorite(assetId))
+      }
+    },
+    checkFavorite(assetId) {
+      let ok = false
+      this.allFavorites.forEach(element => {
+        if (element['asset'] === assetId) {
+          ok = true
+        }
+      })
+      return ok
+    },
+    removeFavorite(assetId) {
+      this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
+    },
+    addFavorite(assetId) {
+      this.allFavorites.push({ asset: assetId })
     }
   }
 }

@@ -161,9 +161,6 @@ export default {
   },
   methods: {
     async loadMore(load) {
-      if (this.loading) {
-        return
-      }
       if (!this.params.hasMore) {
         return
       }
@@ -173,11 +170,8 @@ export default {
       if (!load) {
         load = defaultLoad
       }
-      try {
-        await load()
-      } finally {
-        this.loading = false
-      }
+      await load()
+      this.loading = false
     },
     resetParams() {
       this.params = _.cloneDeep(this.defaultParams)
@@ -195,7 +189,6 @@ export default {
     },
     async getInitialOptions() {
       const params = this.safeMakeParams(this.params)
-      this.$log.debug('Get initial options: ', params)
       let data = await this.$axios.get(this.iAjax.url, { params: params })
       data = this.iAjax.processResults.bind(this)(data)
       data.results.forEach((v) => {
@@ -209,6 +202,7 @@ export default {
         this.$emit('loadInitialOptionsDone', this.initialOptions)
         this.params.hasMore = false
         this.resetParams()
+        return true
       } else {
         await this.loadMore(this.getInitialOptions)
       }

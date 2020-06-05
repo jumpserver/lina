@@ -22,7 +22,7 @@ export default {
             el: {
               value: [],
               ajax: {
-                url: '/api/v1/users/users/?fields_size=mini',
+                url: '/api/v1/users/users/?fields_size=mini&oid=DEFAULT',
                 transformOption: (item) => {
                   return { label: item.name + '(' + item.username + ')', value: item.id }
                 }
@@ -34,7 +34,7 @@ export default {
             el: {
               value: [],
               ajax: {
-                url: '/api/v1/users/users/?fields_size=mini',
+                url: '/api/v1/users/users/?fields_size=mini&oid=DEFAULT',
                 transformOption: (item) => {
                   return { label: item.name + '(' + item.username + ')', value: item.id }
                 }
