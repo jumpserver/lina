@@ -768,11 +768,17 @@
     "Corporation": "Corporation",
     "Edition": "Edition",
     "Expired": "Expired",
-    "GatherUserTask": "Gather user task",
-    "GatherUserList": "Gather user",
-    "GatherUserTaskCreate": "Create gather user task",
-    "GatherUserTaskList": "Gather user task list",
-    "GatherUserTaskUpdate": "Update gather user task",
+    "GatherUser": {
+      "GatherUser": "Gather user",
+      "GatherUserTask": "Gather user task",
+      "GatherUserList": "Gather user",
+      "GatherUserTaskCreate": "Create gather user task",
+      "GatherUserTaskList": "Gather user task list",
+      "GatherUserTaskUpdate": "Update gather user task"
+    },
+    "Vault": {
+      "Vault": "Vault"
+    },
     "ImportLicense": "Import license",
     "ImportLicenseTip": "Please Import License",
     "InterfaceSettings": "Interface setting",
@@ -780,10 +786,12 @@
     "LicenseDetail": "License detail",
     "LicenseFile": "License file",
     "NoLicense": "No License",
-    "OrganizationCreate": "Create organization",
-    "OrganizationDetail": "Org detail",
-    "OrganizationList": "Organlizations",
-    "OrganizationUpdate": "Update org",
+    "Organization": {
+      "OrganizationCreate": "Create organization",
+      "OrganizationDetail": "Org detail",
+      "OrganizationList": "Organlizations",
+      "OrganizationUpdate": "Update org"
+    },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",
     "Timer": "Timer",
@@ -803,7 +811,8 @@
     "restoreDialogTitle": "Are you sure?",
     "technologyConsult": "Technology Consult",
     "Cloud": {
-      "Cloud": "Cloud centre",
+      "CloudCenter": "Cloud center",
+      "Cloud": "Cloud center",
       "AccountList": "Account list",
       "AccountCreate": "Create account",
       "AccountUpdate": "Update account",
