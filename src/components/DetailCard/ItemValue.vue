@@ -1,4 +1,4 @@
-<script>
+<script type="text/jsx">
 export default {
   name: 'ItemValue',
   props: {
@@ -17,7 +17,6 @@ export default {
   },
   render(h) {
     if (typeof this.formatter === 'function') {
-      console.log(this.formatter)
       return this.formatter(this.item, this.value)
     }
     return <span>{this.value}</span>

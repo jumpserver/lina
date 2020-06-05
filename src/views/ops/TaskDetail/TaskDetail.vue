@@ -4,7 +4,6 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <QuickActions type="primary" :actions="quickActions" />
       <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunSuccessConfig" />
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
     </el-col>
@@ -13,16 +12,13 @@
 
 <script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
-import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../RunInfoCard/index'
 
 export default {
   name: 'TaskDetail',
   components: {
     DetailCard,
-    RunInfoCard,
-    QuickActions
+    RunInfoCard
   },
   props: {
     object: {
@@ -31,23 +27,7 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
-      quickActions: [
-        {
-          title: this.$t('ops.laskExecutionOutput'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.View')
-          },
-          callbacks: {
-            click: function() {
-              const taskId = vm.object.latest_execution.id
-              window.open(`/core/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
-            }
-          }
-        }
-      ],
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),
@@ -83,7 +63,7 @@ export default {
         },
         {
           key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          value: this.$d(new Date(this.object.date_created))
         },
         {
           key: this.$t('ops.totalVersions'),
@@ -99,7 +79,7 @@ export default {
         },
         {
           key: this.$t('ops.lastRun'),
-          value: toSafeLocalDateStr(this.object.latest_execution.date_finished)
+          value: this.$d(new Date(this.object.latest_execution.date_finished))
         },
         {
           key: this.$t('ops.laskExecutionOutput'),
