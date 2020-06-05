@@ -102,7 +102,6 @@ export default {
       }
     },
     removeTreeNode: function() {
-      const vm = this
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
       if (!currentNode) {
@@ -111,14 +110,13 @@ export default {
       this.$axios.delete(
         `${this.treeSetting.nodeUrl}${currentNode.meta.node.id}/`
       ).then(() => {
-        vm.$refs.dataztree.refresh()
         this.$message.success(this.$t('common.deleteSuccessMsg'))
+        this.zTree.removeNode(currentNode)
       }).catch(error => {
         this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
-      const vm = this
       const url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`
       if (isCancel) {
         return
@@ -127,13 +125,12 @@ export default {
         url,
         { 'value': treeNode.name }
       ).then(res => {
-        let assets_amount = treeNode.meta.node.assets_amount
-        if (!assets_amount) {
-          assets_amount = 0
+        let assetsAmount = treeNode.meta.node.assetsAmount
+        if (!assetsAmount) {
+          assetsAmount = 0
         }
-        treeNode.name = treeNode.name + ' (' + assets_amount + ')'
+        treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
         this.zTree.updateNode(treeNode)
-        vm.$refs.dataztree.refresh()
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
@@ -173,14 +170,15 @@ export default {
       $.each(treeNodes, function(index, value) {
         treeNodesNames.push(value.name)
       })
-
+      if (!targetNode) {
+        return false
+      }
       // TODO 修改默认确认框
       const msg = this.$t('common.tree.DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
       return confirm(msg)
     },
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
       const treeNodesIds = []
-      const vm = this
       $.each(treeNodes, function(index, value) {
         treeNodesIds.push(value.meta.node.id)
       })
@@ -190,7 +188,6 @@ export default {
           nodes: treeNodesIds
         }
       ).then((res) => {
-        vm.$refs.dataztree.refresh()
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
@@ -198,7 +195,6 @@ export default {
     },
     addTreeNode: function() {
       this.hideRMenu()
-      const vm = this
       const parentNode = this.zTree.getSelectedNodes()[0]
       if (!parentNode) {
         return
@@ -219,10 +215,10 @@ export default {
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
         // vm.$refs.dataztree.refresh()
-        console.log(vm.zTree)
-        const node = vm.zTree.getNodeByParam('id', newNode.id, parentNode)
-        vm.zTree.editName(node)
-        vm.$message.success(this.$t('common.updateSuccessMsg'))
+        const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
+        this.currentNodeId = node.meta.node.id || newNode.id
+        this.zTree.editName(node)
+        this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })

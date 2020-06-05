@@ -187,7 +187,7 @@ export default {
           component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
           name: 'AccountUpdate',
           hidden: true,
-          meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update', activeMenu: '/xpack/cloud/acount' }
+          meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update', activeMenu: '/xpack/cloud' }
         },
         {
           path: 'sync-instance-tasks',
