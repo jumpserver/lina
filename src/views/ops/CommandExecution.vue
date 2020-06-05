@@ -66,7 +66,7 @@ export default {
         mode: 'shell'
       },
       treeSetting: {
-        treeUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=1',
+        treeUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=0',
         showRefresh: true,
         showMenu: false,
         check: {
