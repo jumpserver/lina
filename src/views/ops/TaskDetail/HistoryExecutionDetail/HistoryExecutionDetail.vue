@@ -29,6 +29,21 @@ export default {
   },
   data() {
     return {
+      quickActions: [
+        {
+          title: this.$t('ops.output'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('ops.run')
+          },
+          callbacks: {
+            click: function() {
+              const taskId = vm.object.id
+              window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
+            }
+          }
+        }
+      ],
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),

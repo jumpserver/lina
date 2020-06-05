@@ -28,6 +28,21 @@ export default {
   },
   data() {
     return {
+      quickActions: [
+        {
+          title: this.$t('ops.laskExecutionOutput'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('ops.run')
+          },
+          callbacks: {
+            click: function() {
+              const taskId = vm.object.latest_execution.id
+              window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
+            }
+          }
+        }
+      ],
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),

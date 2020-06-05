@@ -75,7 +75,7 @@ export default {
                     this.$axios.get(
                       `/api/v1/ops/tasks/${cellValue}/run/`
                     ).then(res => {
-                      window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })
                   }
                 }

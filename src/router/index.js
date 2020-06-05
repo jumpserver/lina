@@ -165,6 +165,13 @@ export const allRoleRoutes = [
     }]
   },
   ...userPageRoutes,
+  {
+    path: '/ops/celery/task/:id/log/',
+    component: () => import('@/views/ops/CeleryTaskLog'),
+    name: 'CeleryTaskLog',
+    hidden: true,
+    meta: { title: i18n.t('route.CeleryTaskLog'), roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }
+  },
   { path: '*', redirect: '/404', hidden: true, meta: { roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }}
 ]
 
