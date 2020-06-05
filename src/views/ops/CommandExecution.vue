@@ -102,7 +102,7 @@ export default {
       actions: '',
       options: [],
       selectedSystemUser: '',
-      basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=1',
+      basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=0',
       ws: '',
       wsConnected: false
     }
