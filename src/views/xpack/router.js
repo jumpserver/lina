@@ -11,90 +11,6 @@ export default {
   meta: { title: 'Xpack', icon: 'sitemap', licenseRequired: true },
   children: [
     {
-      path: 'interface-setting',
-      component: () => import('@/views/xpack/InterfaceSettings.vue'),
-      name: 'InterfaceSetting',
-      meta: { title: i18n.t('xpack.InterfaceSettings'), permissions: [rolec.PERM_SUPER] }
-    },
-    {
-      path: 'gathered-users',
-      component: empty,
-      redirect: '',
-      meta: { title: i18n.t('xpack.GatherUser.GatherUserList') },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/xpack/GatheredUser/index'),
-          name: 'GatherUserList',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/xpack/gathered-users' }
-        },
-        {
-          path: '',
-          component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),
-          name: 'GatherUserList',
-          hidden: true,
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserList'), activeMenu: '/xpack/gathered-users' }
-        },
-        {
-          path: 'tasks',
-          component: () => import('@/views/xpack/GatheredUser/TaskList'),
-          name: 'GatherUserTaskList',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskList'), activeMenu: '/xpack/gathered-users' },
-          hidden: true
-        },
-        {
-          path: 'tasks/create',
-          component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
-          name: 'GatherUserTaskCreate',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'), activeMenu: '/xpack/gathered-users' },
-          hidden: true
-        },
-        {
-          path: 'tasks/:id/update',
-          component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
-          name: 'GatherUserTaskUpdate',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'), action: 'update', activeMenu: '/xpack/gathered-users' },
-          hidden: true
-        }
-      ]
-    },
-    {
-      path: 'orgs',
-      component: empty,
-      name: 'OrganizationList',
-      redirect: '',
-      meta: { title: i18n.t('xpack.Organization.OrganizationList'), permissions: [rolec.PERM_SUPER] },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/xpack/Org/OrganizationList'),
-          name: 'OrganizationList',
-          meta: { title: i18n.t('xpack.Organization.OrganizationList') }
-        },
-        {
-          path: 'orgs/create',
-          component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
-          name: 'OrganizationCreate',
-          hidden: true,
-          meta: { title: i18n.t('xpack.Organization.OrganizationCreate'), activeMenu: '/xpack/orgs', action: 'create' }
-        },
-        {
-          path: 'orgs/:id/update',
-          component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
-          name: 'OrganizationUpdate',
-          hidden: true,
-          meta: { title: i18n.t('xpack.Organization.OrganizationUpdate'), activeMenu: '/xpack/orgs', action: 'update' }
-        },
-        {
-          path: 'orgs/:id',
-          component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
-          name: 'OrganizationDetail',
-          hidden: true,
-          meta: { title: i18n.t('xpack.Organization.OrganizationDetail'), activeMenu: '/xpack/orgs' }
-        }
-      ]
-    },
-    {
       path: 'change-auth-plan',
       component: empty,
       meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan/plan' },
@@ -136,30 +52,9 @@ export default {
       ]
     },
     {
-      path: 'vault',
-      component: empty,
-      meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' },
-      children: [
-        {
-          path: 'vault',
-          component: () => import('@/views/xpack/Vault/VaultList.vue'),
-          name: 'VaultList',
-          meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' }
-        },
-        {
-          path: 'vault/create',
-          component: () => import('@/views/xpack/Vault/VaultCreate'),
-          name: 'VaultCreate',
-          meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault/vault' },
-          hidden: true
-        }
-      ]
-    },
-    {
       path: 'cloud',
       component: empty,
       redirect: '',
-      name: 'Cloud',
       meta: { title: i18n.t('xpack.Cloud.Cloud') },
       children: [
         {
@@ -209,6 +104,109 @@ export default {
           name: 'SyncInstanceTaskUpdate',
           hidden: true,
           meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate') }
+        }
+      ]
+    },
+    {
+      path: 'interface-setting',
+      component: () => import('@/views/xpack/InterfaceSettings.vue'),
+      name: 'InterfaceSetting',
+      meta: { title: i18n.t('xpack.InterfaceSettings'), permissions: [rolec.PERM_SUPER] }
+    },
+    {
+      path: 'gathered-users',
+      component: empty,
+      redirect: '',
+      meta: { title: i18n.t('xpack.GatherUser.GatherUserList') },
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/xpack/GatheredUser/index'),
+          name: 'GatherUserListIndex',
+          meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/xpack/gathered-users' }
+        },
+        {
+          path: '',
+          component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),
+          name: 'GatherUserList',
+          hidden: true,
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserList'), activeMenu: '/xpack/gathered-users' }
+        },
+        {
+          path: 'tasks',
+          component: () => import('@/views/xpack/GatheredUser/TaskList'),
+          name: 'GatherUserTaskList',
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskList'), activeMenu: '/xpack/gathered-users' },
+          hidden: true
+        },
+        {
+          path: 'tasks/create',
+          component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
+          name: 'GatherUserTaskCreate',
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'), activeMenu: '/xpack/gathered-users' },
+          hidden: true
+        },
+        {
+          path: 'tasks/:id/update',
+          component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
+          name: 'GatherUserTaskUpdate',
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'), action: 'update', activeMenu: '/xpack/gathered-users' },
+          hidden: true
+        }
+      ]
+    },
+    {
+      path: 'orgs',
+      component: empty,
+      redirect: '',
+      meta: { permissions: [rolec.PERM_SUPER] },
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/xpack/Org/OrganizationList'),
+          name: 'OrganizationList',
+          meta: { title: i18n.t('xpack.Organization.OrganizationList') }
+        },
+        {
+          path: 'orgs/create',
+          component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
+          name: 'OrganizationCreate',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Organization.OrganizationCreate'), activeMenu: '/xpack/orgs', action: 'create' }
+        },
+        {
+          path: 'orgs/:id/update',
+          component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
+          name: 'OrganizationUpdate',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Organization.OrganizationUpdate'), activeMenu: '/xpack/orgs', action: 'update' }
+        },
+        {
+          path: 'orgs/:id',
+          component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
+          name: 'OrganizationDetail',
+          hidden: true,
+          meta: { title: i18n.t('xpack.Organization.OrganizationDetail'), activeMenu: '/xpack/orgs' }
+        }
+      ]
+    },
+    {
+      path: 'vault',
+      component: empty,
+      meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' },
+      children: [
+        {
+          path: 'vault',
+          component: () => import('@/views/xpack/Vault/VaultList.vue'),
+          name: 'VaultList',
+          meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' }
+        },
+        {
+          path: 'vault/create',
+          component: () => import('@/views/xpack/Vault/VaultCreate'),
+          name: 'VaultCreate',
+          meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault/vault' },
+          hidden: true
         }
       ]
     }

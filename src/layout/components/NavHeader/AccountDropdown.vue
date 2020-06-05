@@ -50,7 +50,7 @@ export default {
       'currentOrgPerms'
     ]),
     isInAdminRole() {
-      const inAdmin = (this.currentRole & this.adminPageRequirePerm) !== 0
+      const inAdmin = rolec.hasPerm(rolec.ADMIN_PAGE_REQUIRE_PERM_MIN, this.currentRole)
       return inAdmin
     },
     hasAdminOrg() {
@@ -59,9 +59,9 @@ export default {
     adminPageRequirePerm() {
       return rolec.PERM_SUPER | rolec.PERM_ADMIN | rolec.PERM_AUDIT
     },
-    currentOrgAdminPagePerm() {
+    hasCurrentOrgAdminPagePerm() {
       // 只有有一个权限就可以
-      return this.adminPageRequirePerm & this.currentOrgPerms
+      return rolec.hasAdminPagePerm(this.currentOrgPerms)
     },
     currentOrgUsePagePerm() {
       const userPageRequireRole = rolec.PERM_USE
@@ -75,8 +75,9 @@ export default {
           this.$router.push({ name: 'UserProfile' })
           break
         case 'adminPage':
-          this.$store.dispatch('users/setCurrentRole', this.currentOrgAdminPagePerm)
-          if (this.currentOrgAdminPagePerm) {
+          if (this.hasCurrentOrgAdminPagePerm) {
+            const currentRole = rolec.getUserInAdminPagePerm(this.currentOrgPerms)
+            this.$store.dispatch('users/setCurrentRole', currentRole)
             window.location.href = `/ui/`
           } else {
             orgUtil.change2PropOrg()
