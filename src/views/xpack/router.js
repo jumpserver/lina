@@ -30,8 +30,15 @@ export default {
       children: [
         {
           path: '',
+          component: () => import('@/views/xpack/GatheredUser/index'),
+          name: 'GatherUserList',
+          meta: { title: i18n.t('xpack.GatherUserList'), activeMenu: '/xpack/gathered-users' }
+        },
+        {
+          path: '',
           component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),
           name: 'GatherUserList',
+          hidden: true,
           meta: { title: i18n.t('xpack.GatherUserList'), activeMenu: '/xpack/gathered-users' }
         },
         {
@@ -162,9 +169,16 @@ export default {
       meta: { title: i18n.t('xpack.Cloud.Cloud') },
       children: [
         {
+          path: '',
+          component: () => import('@/views/xpack/Cloud/index.vue'),
+          name: 'CloudCenter',
+          meta: { title: i18n.t('xpack.Cloud.CloudCenter') }
+        },
+        {
           path: 'account',
           component: () => import('@/views/xpack/Cloud/Account/AccountList'),
           name: 'AccountList',
+          hidden: true,
           meta: { title: i18n.t('xpack.Cloud.AccountList') }
         },
         {
@@ -185,6 +199,7 @@ export default {
           path: 'sync-instance-tasks',
           component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
           name: 'SyncInstanceTaskList',
+          hidden: true,
           meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList') }
         },
         {

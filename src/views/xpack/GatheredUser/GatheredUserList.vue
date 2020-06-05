@@ -1,13 +1,13 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :tree-setting="treeSetting" :header-actions="headerActions" />
+  <ListTable :table-config="tableConfig" :tree-setting="treeSetting" :header-actions="headerActions" />
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import ListTable from '@/components/ListTable'
 
 export default {
   components: {
-    GenericTreeListPage
+    ListTable
   },
   data() {
     return {
@@ -31,19 +31,8 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasBulkDelete: false,
-        hasImport: false,
-        hasRefresh: false,
-        extraActions: [
-          {
-            name: 'gather-user-tasks',
-            title: this.$t('xpack.GatherUserTask'),
-            type: 'primary',
-            has: true,
-            can: true,
-            callback: this.onGatherUserTasks
-          }
-        ]
+        hasLeftActions: false,
+        hasImport: false
       }
     }
   },
