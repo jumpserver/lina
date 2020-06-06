@@ -4,7 +4,7 @@
       <ul id="ztree" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
-      <div v-if="this.treeSetting.treeUrl===''">
+      <div v-if="treeSetting.treeUrl===''">
         {{ this.$t('common.tree.Empty') }}<a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
 
