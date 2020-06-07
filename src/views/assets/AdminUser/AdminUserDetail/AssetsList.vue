@@ -136,7 +136,6 @@ export default {
                   name: this.$t('common.Update'),
                   title: this.$t('common.Update'),
                   callback: function(val) {
-                    console.log(val)
                     this.showDialog = true
                     this.dialogInfo.asset = val.row.asset
                     this.dialogInfo.hostname = val.row.hostname
