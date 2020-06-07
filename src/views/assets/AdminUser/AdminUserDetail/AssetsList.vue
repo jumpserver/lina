@@ -96,7 +96,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.get(
-                `api/v1/assets/admin-users/${this.object.id}/connective/`
+                `/api/v1/assets/admin-users/${this.object.id}/connective/`
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
@@ -165,7 +165,7 @@ export default {
                   callback: (val) => {
                     console.log(val.cellValue)
                     this.$axios.post(
-                      `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
+                      `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
                       { action: 'test' }
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
