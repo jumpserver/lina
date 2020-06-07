@@ -8,7 +8,7 @@
         <QuickActions type="primary" :actions="quickActions" />
       </el-col>
     </el-row>
-    <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showMFADialog" />
+    <Dialog width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" />
     <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
       <el-form label-position="right" label-width="80px" :model="dialogInfo">
         <el-form-item :label="this.$t('assets.Hostname')">

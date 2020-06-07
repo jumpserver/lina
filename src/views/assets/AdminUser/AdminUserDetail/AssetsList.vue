@@ -1,12 +1,13 @@
 <template><div>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :span="18">
       <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
-    <el-col :span="10">
+    <el-col :span="6">
       <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
+  <Dialog width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" />
   <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
     <el-form label-position="right" label-width="80px" :model="dialogInfo">
       <el-form-item :label="this.$t('assets.Hostname')">
@@ -48,6 +49,7 @@ export default {
   data() {
     return {
       showDialog: false,
+      showMFADialog: false,
       dialogInfo: {
         asset: '',
         username: '',
@@ -109,6 +111,14 @@ export default {
               hasDelete: false, // can set function(row, value)
               canDelete: false,
               extraActions: [
+                {
+                  name: this.$t('common.View'),
+                  title: this.$t('common.View'),
+                  type: 'primary',
+                  callback: function(val) {
+                    this.showMFADialog = true
+                  }.bind(this)
+                },
                 {
                   name: this.$t('common.Delete'),
                   title: this.$t('common.Delete'),

@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :span="18">
       <DetailCard :items="detailCardItems" />
     </el-col>
-    <el-col :span="10" />
+    <el-col :span="6" />
   </el-row>
 </template>
 
