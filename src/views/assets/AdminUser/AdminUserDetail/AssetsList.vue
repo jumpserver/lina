@@ -17,7 +17,7 @@
           <el-input v-model="MFAInfo.username" disabled />
         </el-form-item>
         <el-form-item :label="this.$t('assets.Password')">
-          <el-input v-model="MFAInfo.password" type="password" disabled show-password />
+          <el-input v-model="MFAInfo.password" type="password" show-password />
         </el-form-item>
       </el-form>
     </div>
