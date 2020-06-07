@@ -12,13 +12,13 @@
       <div v-if="MFAConfirmed">
         <el-form label-position="right" label-width="80px" :model="MFAInfo">
           <el-form-item :label="this.$t('assets.Hostname')">
-            <el-input v-model="dialogInfo.hostname" disabled />
+            <el-input v-model="MFAInfo.hostname" disabled />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="dialogInfo.username" disabled />
+            <el-input v-model="MFAInfo.username" disabled />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Password')">
-            <el-input v-model="dialogInfo.password" type="password" disabled show-password />
+            <el-input v-model="MFAInfo.password" type="password" disabled show-password />
           </el-form-item>
         </el-form>
       </div>
@@ -228,6 +228,13 @@ export default {
       )
     },
     handleMFAConfirm() {
+      this.MFAInfo = {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: ''
+      }
+      this.MFAInput = ''
       this.showMFADialog = false
       this.MFAConfirmed = false
     },
