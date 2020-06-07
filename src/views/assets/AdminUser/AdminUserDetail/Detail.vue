@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :span="18">
       <DetailCard :items="detailCardItems" />
     </el-col>
-    <el-col :span="10">
+    <el-col :span="6">
       <RelationCard ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>

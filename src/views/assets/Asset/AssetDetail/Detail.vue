@@ -6,6 +6,7 @@
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
       <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <LabelCard type="warning" style="margin-top: 15px" v-bind="labelConfig" />
     </el-col>
   </el-row>
 </template>a
@@ -14,6 +15,7 @@
 import DetailCard from '@/components/DetailCard'
 import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
+import LabelCard from '@/components/LabelCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
@@ -21,7 +23,8 @@ export default {
   components: {
     DetailCard,
     QuickActions,
-    RelationCard
+    RelationCard,
+    LabelCard
   },
   props: {
     object: {
@@ -149,6 +152,10 @@ export default {
             this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
           })
         }
+      },
+      labelConfig: {
+        title: this.$t('assets.Label'),
+        labels: this.object.labels
       }
     }
   },
