@@ -9,8 +9,29 @@
         <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
-    <Dialog width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" />
-    <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
+    <Dialog width="25%" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" @cancel="handleMFAConfirm()">
+      <div v-if="MFAConfirmed">
+        <el-form label-position="right" label-width="80px" :model="MFAInfo">
+          <el-form-item :label="this.$t('assets.Hostname')">
+            <el-input v-model="dialogInfo.hostname" disabled />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.Username')">
+            <el-input v-model="dialogInfo.username" disabled />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.Password')">
+            <el-input v-model="dialogInfo.password" type="password" disabled show-password />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else style="display: flex;justify-content:space-between;">
+        <div style="line-height: 34px;text-align: center">MFA</div>
+        <div style="width: 70%">
+          <el-input v-model="MFAInput" />
+        </div>
+        <el-button size="small" type="primary" @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
+      </div>
+    </Dialog>
+    <Dialog width="50%" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
       <el-form label-position="right" label-width="80px" :model="dialogInfo">
         <el-form-item :label="this.$t('assets.Hostname')">
           <el-input v-model="dialogInfo.hostname" disabled />
@@ -60,6 +81,15 @@ export default {
         password: '',
         key: ''
       },
+      MFAConfirmed: false,
+      MFAInput: '',
+      MFAInfo: {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: ''
+      },
+
       showMFADialog: false,
       AutoPushConfig: {
         icon: 'fa-info',
@@ -159,6 +189,7 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
+                    this.MFAInfo.asset = val.cellValue
                     this.showMFADialog = true
                   }.bind(this)
                 },
@@ -189,7 +220,6 @@ export default {
                   name: this.$t('common.Update'),
                   title: this.$t('common.Update'),
                   callback: function(val) {
-                    console.log(val)
                     this.showDialog = true
                     this.dialogInfo.asset = val.row.asset
                     this.dialogInfo.hostname = val.row.hostname
@@ -278,6 +308,25 @@ export default {
       }
       )
     },
+    MFAConfirm() {
+      if (this.MFAInput.length !== 6) {
+        return this.$message.error(this.$t('common.updateErrorMsg'))
+      }
+      this.$axios.post(
+        `/api/v1/authentication/otp/verify/`, {
+          code: this.MFAInput
+        }
+      ).then(
+        res => {
+          this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
+            this.MFAConfirmed = true
+            this.MFAInfo.hostname = res.hostname
+            this.MFAInfo.password = res.password
+            this.MFAInfo.username = res.username
+          })
+        }
+      )
+    },
     handleCancel() {
       this.dialogInfo = {
         asset: '',
@@ -287,6 +336,10 @@ export default {
         key: ''
       }
       this.showDialog = false
+    },
+    handleMFAConfirm() {
+      this.showMFADialog = false
+      this.MFAConfirmed = false
     },
     Onchange(e) {
       const vm = this
