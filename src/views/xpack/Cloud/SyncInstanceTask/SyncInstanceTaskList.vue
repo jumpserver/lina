@@ -17,7 +17,11 @@ export default {
           'name', 'account_name', 'history_count', 'instance_count', 'periodic_display',
           'date_last_sync', 'comment', 'actions'
         ],
-        columnsMeta: {}
+        columnsMeta: {
+          name: {
+            formatter: null
+          }
+        }
       },
       headerActions: {
         hasBulkDelete: false,
