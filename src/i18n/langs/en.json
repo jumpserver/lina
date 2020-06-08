@@ -626,8 +626,8 @@
     "AssetCount": "Asset count",
     "ImportLicenseTip": "Please Import License",
     "ApiKeyList": "Api key list",
-    "DateCreated": "",
-    "Create": ""
+    "all": "All",
+    "auto": "Auto"
   },
   "settings": {
     "setting": ""

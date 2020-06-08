@@ -635,7 +635,9 @@
     "consult": "咨询",
     "ImportLicense": "导入许可证",
     "AssetCount": "资产数量",
-    "ImportLicenseTip": "请导入许可证"
+    "ImportLicenseTip": "请导入许可证",
+    "all": "全部",
+    "auto": "自动"
   },
   "settings": {
     "setting": ""
