@@ -66,7 +66,14 @@ export default {
                   name: 'TestConnection',
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
-                    console.log(val)
+                    if (!val.row.port) {
+                      return this.$message.error(this.$t('common.BadRequestErrorMsg'))
+                    }
+                    this.$axios.post(`/api/v1/assets/gateways/${val.cellValue}/test-connective/`, { port: val.row.port }).then(
+                      res => {
+                        return this.$message.success(this.$t('common.TestSuccessMsg'))
+                      }
+                    )
                   }
                 }
               ]
