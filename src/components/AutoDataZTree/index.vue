@@ -163,7 +163,19 @@ export default {
       })
     },
     testNodeAssetConnectivity: function() {
-
+      this.hideRMenu()
+      const currentNode = this.zTree.getSelectedNodes()[0]
+      if (!currentNode) {
+        return
+      }
+      this.$axios.post(
+        `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
+        { 'action': 'test' }
+      ).then((res) => {
+        window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+      })
     },
     showNodeInfo: function() {
 
