@@ -5,6 +5,8 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Protocols from './components/Protocols'
+import rules from '@/components/DataForm/rules'
+
 export default {
   name: 'AssetCreateUpdate',
   components: {
@@ -54,24 +56,25 @@ export default {
           }
         },
         admin_user: {
+          component: 'el-select',
           el: {
             multiple: false,
             ajax: {
               url: '/api/v1/assets/admin-users/'
             }
           },
-          rules: [{
-            required: false
-          }]
+          rules: [rules.RequiredChange]
         },
         nodes: {
+          rules: [rules.RequiredChange],
           el: {
             ajax: {
               url: '/api/v1/assets/nodes/',
               transformOption: (item) => {
                 return { label: `${item.full_value}`, value: item.id }
               }
-            }
+            },
+            clearable: true
           }
         },
         labels: {

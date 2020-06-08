@@ -263,6 +263,7 @@ export default {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options)
       this.$emit('changeOptions', options)
+      this.$emit('change', options)
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {
