@@ -210,7 +210,18 @@ export default {
       this.$emit('urlChange', `${this.setting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=0`)
     },
     showNodeInfo: function() {
-
+      this.hideRMenu()
+      const currentNode = this.zTree.getSelectedNodes()[0]
+      if (!currentNode) {
+        return
+      }
+      this.$axios.get(
+        `/api/v1/assets/nodes/${currentNode.meta.node.id}/`
+      ).then(res => {
+        this.$emit('showNodeInfoDialog', res)
+      }).catch(error => {
+        this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
+      })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
       const url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`

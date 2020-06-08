@@ -29,6 +29,9 @@
     "": ""
   },
   "assets": {
+    "FullName": "Full name",
+    "Key": "Key",
+    "NodeInformation": "Node information",
     "Action": "Action",
     "NoInputCommand": "No input command",
     "UnselectedAssets":"Unselected assets",
@@ -244,6 +247,7 @@
       "Empty": "Empty",
       "Loading": "Loading"
     },
+    "getErrorMsg": "Get failed",
     "updateErrorMsg": "Update failed",
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
