@@ -2,7 +2,7 @@
   <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
-<script>
+<script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
 import { REMOTE_APP_TYPE_META_MAP, ALL_TYPES } from './const'
 

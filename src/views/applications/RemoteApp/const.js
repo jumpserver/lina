@@ -19,7 +19,6 @@ function genTypeFieldsConfig(fields) {
 }
 
 export const REMOTE_APP_TYPE_FIELDS_MAP = {}
-
 REMOTE_APP_TYPE_FIELDS_MAP[CHROME] = genTypeFieldsConfig([
   'chrome_target', 'chrome_username', 'chrome_password'
 ])
@@ -33,6 +32,11 @@ REMOTE_APP_TYPE_FIELDS_MAP[CUSTOM] = genTypeFieldsConfig([
   'custom_cmdline', 'custom_target', 'custom_username', 'custom_password'
 ])
 
+export const REMOTE_APP_PATH_DEFAULT_MAP = {}
+REMOTE_APP_PATH_DEFAULT_MAP[CHROME] = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+REMOTE_APP_PATH_DEFAULT_MAP[MYSQL_WORKBENCH] = 'C:\\Program Files\\MySQL\\MySQL Workbench 8.0 CE\\MySQLWorkbench.exe'
+REMOTE_APP_PATH_DEFAULT_MAP[VMWARE_CLIENT] = 'C:\\Program Files (x86)\\VMware\\Infrastructure\\Virtual Infrastructure Client\\Launcher\\VpxClient.exe'
+
 export const REMOTE_APP_TYPE_META_MAP = {}
 
 for (const value of ALL_TYPES) {
@@ -41,3 +45,4 @@ for (const value of ALL_TYPES) {
     title: i18n.t('applications.' + value)
   }
 }
+

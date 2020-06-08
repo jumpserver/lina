@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { REMOTE_APP_TYPE_FIELDS_MAP, REMOTE_APP_TYPE_META_MAP } from './const'
+import { REMOTE_APP_TYPE_FIELDS_MAP, REMOTE_APP_TYPE_META_MAP, REMOTE_APP_PATH_DEFAULT_MAP } from './const'
 
 export default {
   components: {
@@ -14,10 +14,12 @@ export default {
     const appType = this.$route.query.type
     const fieldsMap = REMOTE_APP_TYPE_FIELDS_MAP[appType]
     const appTypeMeta = REMOTE_APP_TYPE_META_MAP[appType]
+    const pathInitial = REMOTE_APP_PATH_DEFAULT_MAP[appType]
 
     return {
       initial: {
-        type: appTypeMeta.name
+        type: appTypeMeta.name,
+        path: pathInitial
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'asset', 'type', 'path']],
@@ -27,9 +29,9 @@ export default {
       url: '/api/v1/applications/remote-apps/',
       fieldsMeta: {
         asset: {
+          rules: [{ required: false }],
           el: {
             multiple: false,
-            value: [],
             ajax: {
               url: '/api/v1/assets/assets/?platform__base=Windows',
               transformOption: (item) => {

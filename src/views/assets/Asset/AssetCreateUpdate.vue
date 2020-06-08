@@ -55,7 +55,7 @@ export default {
             }
           },
           rules: [{
-            required: true
+            required: false
           }]
         },
         nodes: {
