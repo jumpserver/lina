@@ -24,6 +24,9 @@ export default {
                 this.$router.push({ name: 'SyncInstanceTaskUpdate', params: { id: row.id }})
               }
             }
+          },
+          name: {
+            formatter: null
           }
         }
       },
