@@ -34,7 +34,9 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         reload()
         this.$message.success(this.$t('common.deleteSuccessMsg'))
       } catch (error) {
-        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+        if (!error.response || !error.response.data || !error.response.data.msg) {
+          this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+        }
       } finally {
         instance.confirmButtonLoading = false
       }
