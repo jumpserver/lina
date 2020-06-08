@@ -333,6 +333,7 @@
     "Node": "节点",
     "SystemUser": "系统用户",
     "User": "用户",
+    "USER": "用户",
     "UserGroups": "用户组",
     "addAssetToThisPermission": "添加资产",
     "addDatabaseAppToThisPermission": "添加数据库应用",

@@ -1,6 +1,28 @@
 <template>
   <div>
     <GenericTreeListPage ref="TreeTablePage" :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+    <Dialog width="25%" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" @cancel="handleMFAConfirm()">
+      <div v-if="MFAConfirmed">
+        <el-form label-position="right" label-width="80px" :model="MFAInfo">
+          <el-form-item :label="this.$t('assets.Hostname')">
+            <el-input v-model="MFAInfo.hostname" disabled />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.Username')">
+            <el-input v-model="MFAInfo.username" disabled />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.Password')">
+            <el-input v-model="MFAInfo.password" type="password" show-password />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-else style="display: flex;justify-content:space-between;">
+        <div style="line-height: 34px;text-align: center">MFA</div>
+        <div style="width: 70%">
+          <el-input v-model="MFAInput" />
+        </div>
+        <el-button size="small" type="primary" @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
+      </div>
+    </Dialog>
     <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
       <el-form label-position="right" label-width="80px" :model="dialogInfo">
         <el-form-item :label="this.$t('assets.Hostname')">
@@ -33,7 +55,16 @@ export default {
   },
   data() {
     return {
+      MFAConfirmed: false,
+      MFAInput: '',
+      MFAInfo: {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: ''
+      },
       showDialog: false,
+      showMFADialog: false,
       dialogInfo: {
         asset: '',
         username: '',
@@ -94,6 +125,15 @@ export default {
               canDelete: false,
               extraActions: [
                 {
+                  name: this.$t('common.View'),
+                  title: this.$t('common.View'),
+                  type: 'primary',
+                  callback: function(val) {
+                    this.MFAInfo.asset = val.cellValue
+                    this.showMFADialog = true
+                  }.bind(this)
+                },
+                {
                   name: 'delete',
                   title: this.$t('common.Delete'),
                   type: 'primary',
@@ -109,10 +149,10 @@ export default {
                   callback: (val) => {
                     console.log(val.cellValue)
                     this.$axios.post(
-                      `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
+                      `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
                       { action: 'test' }
                     ).then(res => {
-                      window.open(`/core/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })
                   }
                 },
@@ -126,13 +166,6 @@ export default {
                     this.dialogInfo.hostname = val.row.hostname
                     this.dialogInfo.username = val.row.username
                   }.bind(this)
-                },
-                {
-                  name: 'Push',
-                  title: this.$t('common.Push'),
-                  callback: function(val) {
-                    console.log('Push')
-                  }
                 }
               ]
             }
@@ -142,6 +175,36 @@ export default {
     }
   },
   methods: {
+    MFAConfirm() {
+      if (this.MFAInput.length !== 6) {
+        return this.$message.error(this.$t('common.updateErrorMsg'))
+      }
+      this.$axios.post(
+        `/api/v1/authentication/otp/verify/`, {
+          code: this.MFAInput
+        }
+      ).then(
+        res => {
+          this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
+            this.MFAConfirmed = true
+            this.MFAInfo.hostname = res.hostname
+            this.MFAInfo.password = res.password
+            this.MFAInfo.username = res.username
+          })
+        }
+      )
+    },
+    handleMFAConfirm() {
+      this.MFAInfo = {
+        asset: '',
+        username: '',
+        hostname: '',
+        password: ''
+      }
+      this.MFAInput = ''
+      this.showMFADialog = false
+      this.MFAConfirmed = false
+    },
     handleCancel() {
       this.dialogInfo = {
         asset: '',

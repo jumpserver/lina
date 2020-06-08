@@ -330,6 +330,7 @@
     "Node": "Node",
     "SystemUser": "System user",
     "User": "User",
+    "USER": "User",
     "UserGroups": "UserGroups",
     "addAssetToThisPermission": "Add asset to this permission",
     "addDatabaseAppToThisPermission": "Add DatabaseApp to this permission",
