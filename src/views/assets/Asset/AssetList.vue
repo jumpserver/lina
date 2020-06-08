@@ -115,6 +115,33 @@ export default {
                 this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
+          },
+          {
+            name: 'RemoveFromCurrentNode',
+            title: this.$t('assets.RemoveFromCurrentNode'),
+            can: ({ selectedRows }) => {
+              if (!this.$route.query.node) {
+                return false
+              }
+              return selectedRows.length > 0
+            },
+            callback: function({ selectedRows, reloadTable }) {
+              const assetsId = []
+              for (const item of selectedRows) {
+                assetsId.push(item.id)
+              }
+              const nodeId = this.$route.query.node
+              if (!nodeId) {
+                return
+              }
+              const url = `/api/v1/assets/nodes/${nodeId}/assets/remove/`
+              this.$axios.put(url, { assets: assetsId }).then(res => {
+                this.$message.success(this.$t('common.removeSuccessMsg'))
+                reloadTable()
+              }).catch(err => {
+                this.$message.error(this.$t('common.removeErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
           }
         ]
       },

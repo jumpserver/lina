@@ -33,6 +33,7 @@
     "AutoGenerateKey": "自动生成密钥",
     "UnselectedAssets":"未选择资产",
     "Pending": "等待",
+    "RemoveFromCurrentNode": "从节点移除",
     "AssetUserList": "资产用户列表",
     "NoSystemUserWasSelected":"未选择系统用户",
     "NoInputCommand": "未输入命令",
@@ -154,6 +155,8 @@
     "TestSuccessMsg": "测试成功",
     "MFAConfirm": "MFA 认证",
     "SelectPlaceholder": "请选择",
+    "removeSuccessMsg": "移除成功",
+    "removeErrorMsg": "移除失败: ",
     "Yes": "是",
     "No": "否",
     "Remove":"删除",
@@ -732,9 +735,7 @@
       "MFAOfUserFirstLoginUserGuidePage": "为了保护您和公司的安全，请妥善保管您的账户、密码和密钥等重要敏感信息；（如：设置复杂密码，并启用多因子认证）",
       "SSHKeyOfProfileSSHUpdatePage": "复制你的公钥到这里"
     },
-    "removeErrorMsg": "移除失败",
-    "removeSuccessMsg": "移除成功",
-    "removeWarningMsg": "你确定从组织移除 ",
+    "removeFromOrgWarningMsg": "你确定从组织移除 ",
     "tabs": {
       "assetPermissionRules": "资产授权规则",
       "databasePermissionRules": "数据库授权规则",

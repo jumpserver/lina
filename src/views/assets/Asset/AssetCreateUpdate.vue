@@ -56,11 +56,13 @@ export default {
           }
         },
         admin_user: {
-          component: 'el-select',
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/admin-users/'
+              url: '/api/v1/assets/admin-users/',
+              transformOption: (item) => {
+                return { label: `${item.name}(${item.username})`, value: item.id }
+              }
             }
           },
           rules: [rules.RequiredChange]
