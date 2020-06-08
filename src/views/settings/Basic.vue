@@ -37,7 +37,7 @@ export default {
         SITE_URL: {
           label: this.$t('setting.siteUrl'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.siteUrl')
         },
@@ -48,7 +48,7 @@ export default {
         EMAIL_SUBJECT_PREFIX: {
           label: this.$t('setting.emailSubjectPrefix'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.emailSubjectPrefix')
         }

@@ -41,19 +41,19 @@ export default {
         EMAIL_HOST: {
           label: this.$t('setting.emailHost'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         EMAIL_PORT: {
           label: this.$t('setting.emailPort'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         EMAIL_HOST_USER: {
           label: this.$t('setting.emailHostUser'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         EMAIL_HOST_PASSWORD: {
