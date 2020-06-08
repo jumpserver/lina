@@ -21,7 +21,9 @@
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" />
+          <slot name="table">
+            <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" />
+          </slot>
         </div>
       </div>
     </div>
@@ -60,15 +62,14 @@ export default {
       iTableConfig: this.tableConfig,
       iShowTree: this.showTree,
       componentKey: 0
-
     }
   },
   watch: {
-
   },
   methods: {
     handleUrlChange(_url) {
       this.$set(this.iTableConfig, 'url', _url)
+      this.$emit('urlChange', _url)
       this.forceRerender()
     },
     forceRerender() {

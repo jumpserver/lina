@@ -15,13 +15,25 @@
           </el-form-item>
         </el-form>
       </div>
-      <div v-else style="display: flex;justify-content:space-between;">
-        <div style="line-height: 34px;text-align: center">MFA</div>
-        <div style="width: 70%">
+      <el-row v-else :gutter="20">
+        <el-col :span="4">
+          <div style="line-height: 34px;text-align: center">MFA</div>
+        </el-col>
+        <el-col :span="14">
           <el-input v-model="MFAInput" />
-        </div>
-        <el-button size="small" type="primary" @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
-      </div>
+          <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
+        </el-col>
+        <el-col :span="4">
+          <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
+        </el-col>
+      </el-row>
+      <!--      <div v-else style="display: flex;justify-content:space-between; padding: 30px 20px 0">-->
+      <!--        <div style="line-height: 34px;text-align: center">MFA</div>-->
+      <!--        <div style="width: 70%">-->
+      <!--          <el-input v-model="MFAInput" />-->
+      <!--        </div>-->
+      <!--        <el-button size="small" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>-->
+      <!--      </div>-->
     </Dialog>
     <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
       <el-form label-position="right" label-width="80px" :model="dialogInfo">
@@ -58,6 +70,10 @@ export default {
     url: {
       type: String,
       required: true
+    },
+    hasLeftActions: {
+      type: Boolean,
+      default: false
     },
     otherActions: {
       type: Array,
@@ -164,13 +180,19 @@ export default {
         ]
       },
       headerActions: {
-        hasRightActions: false,
-        hasLeftActions: false,
+        hasLeftActions: this.hasLeftActions,
+        hasBulkDelete: false,
         hasSearch: true
       }
     }
   },
   computed: {
+  },
+  watch: {
+    url(iNew) {
+      this.$set(this.tableConfig, 'url', iNew)
+      console.log('Url change', this.tableConfig)
+    }
   },
   mounted() {
     if (this.otherActions) {
