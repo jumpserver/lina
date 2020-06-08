@@ -671,6 +671,7 @@
     "RunUser": "运行用户"
   },
   "users": {
+    "LoginConfirm": "登录确认人",
     "SSHKey": "SSH公钥",
     "TermsAndConditions": "条款和条件",
     "IAgree": "我同意",
