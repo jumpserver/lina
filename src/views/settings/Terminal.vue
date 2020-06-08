@@ -85,7 +85,7 @@ export default {
         TERMINAL_SESSION_KEEP_DURATION: {
           label: this.$t('setting.terminalSessionKeepDuration'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.terminalSessionKeepDuration')
         },

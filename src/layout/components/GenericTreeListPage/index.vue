@@ -17,6 +17,13 @@ export default {
   components: {
     Page, TreeTable
   },
+  props: {
+    ...TreeTable.props,
+    helpMessage: {
+      type: String,
+      default: null
+    }
+  },
   methods: {
     hideRMenu() {
       this.$refs.TreeTable.hideRMenu()
@@ -24,15 +31,7 @@ export default {
     getSelectedNodes: function() {
       return this.$refs.TreeTable.getSelectedNodes()
     }
-  },
-  props: {
-    ...TreeTable.props,
-    helpMessage: {
-      type: String,
-      default: null
-    }
   }
-
 }
 </script>
 

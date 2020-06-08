@@ -75,7 +75,7 @@ export default {
                   type: 'primary',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
                   callback: function({ cellValue, tableData }) {
-                    window.open(`/core/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                    window.open(`/#/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {

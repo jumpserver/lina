@@ -44,7 +44,7 @@ export default {
           label: this.$t('sessions.type'),
           disabled: true,
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         hosts: {
@@ -56,13 +56,13 @@ export default {
         index: {
           label: this.$t('sessions.index'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         doc_type: {
           label: this.$t('sessions.docType'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         }
       },

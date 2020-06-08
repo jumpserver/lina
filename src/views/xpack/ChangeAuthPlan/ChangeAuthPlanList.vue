@@ -56,7 +56,7 @@ export default {
                       `/api/v1/xpack/change-auth-plan/plan-execution/`,
                       { plan: data.cellValue }
                     ).then(res => {
-                      window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                     })
                   }.bind(this)
                 }
