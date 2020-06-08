@@ -17,7 +17,15 @@ export default {
           'name', 'account_name', 'history_count', 'instance_count', 'periodic_display',
           'date_last_sync', 'comment', 'actions'
         ],
-        columnsMeta: {}
+        columnsMeta: {
+          actions: {
+            formatterArgs: {
+              onUpdate: ({ row }) => {
+                this.$router.push({ name: 'SyncInstanceTaskUpdate', params: { id: row.id }})
+              }
+            }
+          }
+        }
       },
       headerActions: {
         hasBulkDelete: false,

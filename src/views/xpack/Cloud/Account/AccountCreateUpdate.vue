@@ -20,7 +20,9 @@ export default {
       ],
       url: '/api/v1/xpack/cloud/accounts/',
       fieldsMeta: {
-      }
+      },
+      updateSuccessNextRoute: { name: 'CloudCenter' },
+      createSuccessNextRoute: { name: 'CloudCenter' }
     }
   }
 }
