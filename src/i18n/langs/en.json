@@ -647,8 +647,16 @@
   },
   "tree": {
     "AddNode": "Add node",
+    "CreateNode": "Create node",
     "DeleteNode": "Delete node",
-    "RenameNode": "Rename node"
+    "RenameNode": "Rename node",
+    "AddAssetToNode": "Add asset to node",
+    "moveAssetToNode": "move asset to node",
+    "updateNodeAssetHardwareInfo": "Update node asset hardware information",
+    "testNodeAssetConnectivity": "Test node asset connectivity",
+    "showAssetOnlyCurrentNode": "Show asset only current node",
+    "showAssetAllChildrenNode": "Show asset all children node",
+    "showNodeInfo": "Show node information"
   },
   "users": {
     "SSHKey": "SSH Key",

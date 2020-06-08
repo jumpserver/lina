@@ -1,14 +1,39 @@
 <template>
   <DataZTree ref="dataztree" :setting="treeSetting">
     <slot slot="rMenu">
-      <li id="m_create" class="rmenu" tabindex="-1" @click="addTreeNode">
-        <i class="fa fa-plus-square-o" />  {{ this.$t('tree.AddNode') }}
+      <li id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
+        <i class="fa fa-plus-square-o" />  {{ this.$t('tree.CreateNode') }}
       </li>
       <li id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
         <i class="fa fa-pencil-square-o" />  {{ this.$t('tree.RenameNode') }}
       </li>
       <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
         <i class="fa fa-minus-square" />  {{ this.$t('tree.DeleteNode') }}
+      </li>
+      <li class="divider" />
+      <li id="m_add_asset_to_node" class="rmenu" tabindex="-1" @click="addAssetToNode">
+        <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
+      </li>
+      <li id="m_move_asset_to_node" class="rmenu" tabindex="-1" @click="moveAssetToNode">
+        <i class="fa fa-scissors" />  {{ this.$t('tree.moveAssetToNode') }}
+      </li>
+      <li class="divider" />
+      <li id="m_update_node_asset_hardware_info" class="rmenu" tabindex="-1" @click="updateNodeAssetHardwareInfo">
+        <i class="fa fa-refresh" />  {{ this.$t('tree.updateNodeAssetHardwareInfo') }}
+      </li>
+      <li id="m_test_node_asset_connectivity" class="rmenu" tabindex="-1" @click="testNodeAssetConnectivity">
+        <i class="fa fa-link" />  {{ this.$t('tree.testNodeAssetConnectivity') }}
+      </li>
+      <li class="divider" />
+      <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="showAssetOnlyCurrentNode">
+        <i class="fa fa-indent" />  {{ this.$t('tree.showAssetOnlyCurrentNode') }}
+      </li>
+      <li id="m_show_asset_all_children_node" class="rmenu" tabindex="-1" @click="showAssetAllChildrenNode">
+        <i class="fa fa-align-justify" />  {{ this.$t('tree.showAssetAllChildrenNode') }}
+      </li>
+      <li class="divider" />
+      <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="showNodeInfo">
+        <i class="fa fa-info-circle" />  {{ this.$t('tree.showNodeInfo') }}
       </li>
       <slot name="rMenu" />
     </slot>
@@ -116,6 +141,27 @@ export default {
         this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
       })
     },
+    addAssetToNode: function() {
+
+    },
+    moveAssetToNode: function() {
+
+    },
+    updateNodeAssetHardwareInfo: function() {
+
+    },
+    testNodeAssetConnectivity: function() {
+
+    },
+    showNodeInfo: function() {
+
+    },
+    showAssetOnlyCurrentNode: function() {
+
+    },
+    showAssetAllChildrenNode: function() {
+
+    },
     onRename: function(event, treeId, treeNode, isCancel) {
       const url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`
       if (isCancel) {
@@ -193,7 +239,7 @@ export default {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
-    addTreeNode: function() {
+    createTreeNode: function() {
       this.hideRMenu()
       const parentNode = this.zTree.getSelectedNodes()[0]
       if (!parentNode) {
@@ -258,5 +304,12 @@ export default {
   }
   .rmenu:hover{
     background-color: #f5f7fa;
+  }
+
+  .divider{
+    margin: 1px 0;
+    list-style: none outside none;
+    background-color: #e5e5e5;
+    height: 1px
   }
 </style>
