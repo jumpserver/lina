@@ -73,7 +73,6 @@ export default {
     }
   },
   mounted() {
-
   },
   methods: {
     editTreeNode: function() {
@@ -96,9 +95,11 @@ export default {
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.node.id
+        this.$route.query['node'] = this.currentNodeId
         this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=null`)
       } else if (treeNode.meta.type === 'asset') {
         this.$emit('urlChange', `${this.setting.url}?asset_id=${treeNode.meta.asset.id}&show_current_asset=null`)
+        this.$route.query['asset'] = treeNode.meta.asset.id
       }
     },
     removeTreeNode: function() {

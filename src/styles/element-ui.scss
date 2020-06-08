@@ -11,6 +11,10 @@ $--color-info: #23c6c8;
 $--color-warning: #f8ac59;
 $--color-danger: #ed5565;
 
+$--color-text-primary: #303133;
+/// color|1|Font Color|2
+$--color-text-regular: #606266;
+
 .el-upload {
   input[type="file"] {
     display: none !important;
@@ -433,4 +437,12 @@ a {
 
 .el-alert .el-alert__description {
   margin: 1px 0 0;
+}
+
+.el-input-group__prepend div.el-select .el-input__inner {
+  color: $--color-text-primary;
+}
+
+.el-input-group__prepend div.el-select .el-input__inner:hover {
+  color: $--color-text-primary;
 }

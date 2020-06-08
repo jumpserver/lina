@@ -11,11 +11,21 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const nodesInitial = []
+    if (this.$route.query['node']) {
+      nodesInitial.push(this.$route.query.node)
+    }
+    const assetsInitial = []
+    if (this.$route.query['asset']) {
+      assetsInitial.push(this.$route.query.asset)
+    }
     return {
       initial: {
         is_active: true,
         actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
-        date_expired: '2099-12-31 00:00:00 +0800'
+        date_expired: '2099-12-31 00:00:00 +0800',
+        nodes: nodesInitial,
+        assets: assetsInitial
       },
       fields: [
         [this.$t('perms.Basic'), ['name']],

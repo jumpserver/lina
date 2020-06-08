@@ -4,17 +4,23 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import CustomInput from '@/components/CustomInput'
+import Protocols from './components/Protocols'
 export default {
   name: 'AssetCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const nodesInitial = []
+    if (this.$route.query['node']) {
+      nodesInitial.push(this.$route.query.node)
+    }
     return {
       initial: {
         is_active: true,
-        platform: 'Linux'
+        platform: 'Linux',
+        protocols: ['ssh/22'],
+        nodes: nodesInitial
       },
       fields: [
         [this.$t('assets.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
@@ -26,7 +32,7 @@ export default {
       ],
       fieldsMeta: {
         protocols: {
-          component: CustomInput
+          component: Protocols
         },
         platform: {
           el: {

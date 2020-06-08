@@ -97,6 +97,10 @@ export default {
         }
       },
       headerActions: {
+        createRoute: {
+          name: 'AssetPermissionCreate',
+          query: this.$route.query
+        },
         hasRightActions: false,
         hasBulkDelete: false,
         hasBulkUpdate: false,

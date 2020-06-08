@@ -77,7 +77,10 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'AssetCreate',
+        createRoute: {
+          name: 'AssetCreate',
+          query: this.$route.query
+        },
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
