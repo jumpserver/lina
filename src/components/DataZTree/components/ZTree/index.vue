@@ -176,7 +176,7 @@ export default {
     background-color: #f5f5f5;
   }
   .treebox {
-    height: calc(100vh - 120px);
+    height: 80vh;
     overflow: auto;
   }
 </style>
