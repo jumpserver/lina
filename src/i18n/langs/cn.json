@@ -224,6 +224,7 @@
     "createSuccessMsg": "创建成功",
     "createdBy": "创建人",
     "dateCreated": "创建日期",
+    "dateStart": "开始日期",
     "dateExpired": "失效日期",
     "deleteErrorMsg": "删除失败",
     "deleteSelected": "删除所选",
