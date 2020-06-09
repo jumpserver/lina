@@ -91,11 +91,19 @@ export default {
           }
           break
         case 'logout':
+          this.logout()
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
           break
         case 'apiKey':
           this.$refs.api.showApi()
           break
+      }
+    },
+    logout() {
+      // Clean Status
+      const statusList = ['currentOrg', 'currentRole', 'jms_current_org', 'jms_current_role', 'sidebarStatus', 'django_language', 'X-JMS-ORG', 'activeTab']
+      for (const i in statusList) {
+        this.$cookie.delete(statusList[i])
       }
     }
   }
