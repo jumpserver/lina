@@ -50,7 +50,6 @@ export default {
       default(that) {
         this.$log.debug('AssetSelect value', that.assets)
         this.$message.success(this.$t('common.updateSuccessMsg'))
-        setTimeout(() => location.reload(), 300)
       }
     }
   },
