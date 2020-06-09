@@ -1,5 +1,5 @@
 import defaultSettings from '@/settings'
-import { getPublicSettings, getLogo } from '@/api/settings'
+import { getPublicSettings } from '@/api/settings'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -8,8 +8,7 @@ const state = {
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
-  publicSettings: null,
-  customSettings: null
+  publicSettings: null
 }
 
 const mutations = {
@@ -20,9 +19,6 @@ const mutations = {
   },
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
-  },
-  SET_CUSTOM_SETTINGS: (state, settings) => {
-    state.customSettings = settings
   }
 }
 
@@ -35,13 +31,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
         commit('SET_PUBLIC_SETTINGS', response.data)
-        if (response.data.XPACK_ENABLED) {
-          if (response.data.XPACK_LICENSE_IS_VALID) {
-            getLogo().then((res) => {
-              commit('SET_CUSTOM_SETTINGS', res)
-            })
-          }
-        }
         resolve(response)
       }).catch(error => {
         reject(error)
