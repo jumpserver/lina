@@ -8,7 +8,6 @@
           :setting="treeSetting"
           class="auto-data-ztree"
           @urlChange="handleUrlChange"
-          @showNodeInfoDialog="showNodeInfoDialog"
         >
           <div slot="rMenu" slot-scope="{data}">
             <slot name="rMenu" :data="data" />
@@ -27,12 +26,6 @@
           </slot>
         </div>
       </div>
-      <Dialog width="30%" :title="this.$t('assets.NodeInformation')" :visible.sync="nodeInfoDialog.show" :show-cancel="false" :show-confirm="false">
-        <el-row v-for="item in nodeInfoDialog.items" :key="'card-' + item.key" :gutter="10" class="item">
-          <el-col :span="6"><div class="item-label"><label>{{ item.label }}: </label></div></el-col>
-          <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
-        </el-row>
-      </Dialog>
     </div>
   </el-collapse-transition>
 </template>
@@ -70,11 +63,7 @@ export default {
     return {
       iTableConfig: this.tableConfig,
       iShowTree: this.showTree,
-      componentKey: 0,
-      nodeInfoDialog: {
-        show: false,
-        items: []
-      }
+      componentKey: 0
     }
   },
   watch: {
@@ -93,15 +82,6 @@ export default {
     },
     getSelectedNodes: function() {
       return this.$refs.AutoDataZTree.getSelectedNodes()
-    },
-    showNodeInfoDialog(node) {
-      this.nodeInfoDialog.show = true
-      this.nodeInfoDialog.items = [
-        { key: 'id', label: 'ID', value: node.id },
-        { key: 'name', label: this.$t('assets.Name'), value: node.name },
-        { key: 'fullName', label: this.$t('assets.FullName'), value: node.full_value },
-        { key: 'key', label: this.$t('assets.Key'), value: node.key }
-      ]
     }
   }
 }
@@ -130,12 +110,5 @@ export default {
   .auto-data-ztree {
     overflow: auto;
     /*border-right: solid 1px red;*/
-  }
-
-  .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-     }
   }
 </style>

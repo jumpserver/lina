@@ -11,7 +11,6 @@
     </div>
     <div id="rMenu">
       <ul class="dropdown-menu menu-actions">
-        <li class="divider" />
         <slot name="rMenu" />
       </ul>
     </div>
