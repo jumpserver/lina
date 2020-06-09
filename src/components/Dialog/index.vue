@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     :title="title"
+    :top="top"
     class="dialog"
     v-bind="$attrs"
     v-on="$listeners"
@@ -32,6 +33,10 @@ export default {
       default() {
         return this.$t('common.Cancel')
       }
+    },
+    top: {
+      type: String,
+      default: '3vh'
     },
     showConfirm: {
       type: Boolean,

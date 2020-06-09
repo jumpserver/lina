@@ -159,7 +159,9 @@ export default {
       this.initialized = true
     }
     this.$nextTick(() => {
-      this.$refs.select.elFormItem.clearValidate()
+      if (this.$refs.select.elFormItem) {
+        this.$refs.select.elFormItem.clearValidate()
+      }
     })
   },
   methods: {

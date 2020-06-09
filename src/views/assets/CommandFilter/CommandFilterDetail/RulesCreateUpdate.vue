@@ -12,27 +12,26 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 export default {
-  name: 'RulesCreateUpate',
+  name: 'RulesCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
+    const filterId = this.$route.params.id
     return {
       initial: {
-        filter: this.$route.params.ruleid,
+        filter: filterId,
         type: 'regex',
         priority: 50,
         action: 0
       },
-
       fields: [
-        ['', ['filter', 'type', 'content', 'priority', 'action', 'comment']]
+        [this.$t('common.Basic'), ['filter', 'type', 'content', 'priority', 'action', 'comment']]
       ],
       fieldsMeta: {
         filter: {
           type: 'input',
           el: {
             disabled: true,
-            multiple: false,
-            value: this.$route.params.ruleid
+            multiple: false
           }
         },
         content: {
@@ -53,11 +52,13 @@ export default {
       createSuccessNextRoute: {
         name: 'CommandFilterList'
       },
-      url: `/api/v1/assets/cmd-filters/${this.$route.params.ruleid}/rules/`
+      url: `/api/v1/assets/cmd-filters/${filterId}/rules/`
     }
   },
   computed: {
-
+  },
+  mounted() {
+    console.log(this.url)
   }
 }
 </script>

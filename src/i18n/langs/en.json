@@ -381,6 +381,7 @@
     "Exclude": "Exclude"
   },
   "route": {
+    "TaskMonitor": "Task monitor",
     "AdminUserCreate": "Admin user create",
     "AdminUserDetail": "Admin user detail",
     "AdminUserList": "Admin users",
@@ -426,7 +427,7 @@
     "FtpLog": "FTP logs",
     "GatewayCreate": "Gateway create",
     "GatewayUpdate": "Gateway update",
-    "JobCenter": "Job center",
+    "JobCenter": "Jobcenter",
     "LabelCreate": "Label create",
     "LabelList": "Labels",
     "LabelUpdate": "Label update",
