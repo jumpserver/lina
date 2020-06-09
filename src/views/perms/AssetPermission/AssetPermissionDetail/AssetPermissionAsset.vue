@@ -64,18 +64,18 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
-        performAdd: (items) => {
+        performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map(item => {
             return {
               assetpermission: objectId,
-              asset: v
+              asset: item
             }
           })
           return this.$axios.post(relationUrl, data)
         },
-        onAddSuccess: (that) => {
+        onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
@@ -154,7 +154,6 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -173,7 +172,6 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
         }
       }
     }
