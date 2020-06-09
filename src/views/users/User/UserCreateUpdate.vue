@@ -14,7 +14,7 @@ export default {
         password_strategy: 0,
         mfa_level: 0,
         source: 'local',
-        role: 'Admin',
+        role: 'User',
         date_expired: '2099-12-31 00:00:00 +0800'
       },
       fields: [
