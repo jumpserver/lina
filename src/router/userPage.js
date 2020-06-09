@@ -13,14 +13,12 @@ export default [
     component: Layout,
     meta: {
       roles: [rolec.USER],
-      title: i18n.t('route.MyAssets'),
-      icon: 'files-o',
       permissions: [rolec.PERM_USE]
     },
     children: [
       {
         path: '',
-        name: 'assets',
+        name: 'MyAssets',
         component: () => import('@/userviews/assets/index'),
         meta: {
           title: i18n.t('route.MyAssets'),
@@ -39,13 +37,13 @@ export default [
     children: [
       {
         path: '/apps/remoteapp',
-        name: 'remoteapp',
+        name: 'MyRemoteApps',
         component: () => import('@/userviews/apps/RemoteApp'),
         meta: { title: i18n.t('route.RemoteApp'), permissions: [rolec.PERM_USE] }
       },
       {
         path: '/apps/database',
-        name: 'assets',
+        name: 'MyDatebases',
         component: () => import('@/userviews/apps/DatabaseApp'),
         meta: { title: i18n.t('route.DatabaseApp'), permissions: [rolec.PERM_USE] }
       }
