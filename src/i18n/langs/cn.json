@@ -378,7 +378,9 @@
     "userCount": "用户数量",
     "userGroupCount": "用户组数量",
     "usersAndUserGroups": "用户或用户组",
-    "": ""
+    "Inherit": "继承",
+    "Include": "包含",
+    "Exclude": "不包含"
   },
   "route": {
     "AdminUserCreate": "创建管理用户",
