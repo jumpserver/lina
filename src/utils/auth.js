@@ -33,6 +33,7 @@ export function getCurrentOrgFromCookie() {
 
 export function saveCurrentOrgToCookie(org) {
   VueCookie.set(CURRENT_ORG_KEY, JSON.stringify(org), 14)
+  VueCookie.set('X-JMS-ORG', org.id)
 }
 
 export function removeCurrentOrg() {

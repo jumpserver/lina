@@ -7,7 +7,6 @@
       <div v-if="treeSetting.treeUrl===''">
         {{ this.$t('common.tree.Empty') }}<a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
-
     </div>
     <div id="rMenu">
       <ul class="dropdown-menu menu-actions">
@@ -174,5 +173,9 @@ export default {
     color: #262626;
     text-decoration: none;
     background-color: #f5f5f5;
+  }
+  .treebox {
+    height: 100vh - 120;
+    overflow: auto;
   }
 </style>
