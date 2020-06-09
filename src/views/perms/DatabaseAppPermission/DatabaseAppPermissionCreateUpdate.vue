@@ -18,7 +18,7 @@ export default {
         [this.$t('perms.' + 'Basic'), ['name']],
         [this.$t('perms.' + 'USER'), ['users', 'user_groups']],
         [this.$t('perms.' + 'databaseApp'), ['database_apps', 'system_users']],
-        [this.$t('common.Other'), ['is_active', 'date_expired', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/database-app-permissions/',
       fieldsMeta: {
@@ -60,6 +60,12 @@ export default {
               }
             }
           }
+        },
+        date_start: {
+          label: this.$t('common.dateStart')
+        },
+        date_expired: {
+          label: this.$t('common.dateExpired')
         },
         actions: {
           label: this.$t('perms.Actions')
