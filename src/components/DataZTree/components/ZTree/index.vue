@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="treebox">
-      <ul id="ztree" class="ztree">
+      <ul :id="iZTreeID" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
       <div v-if="treeSetting.treeUrl===''">
@@ -9,9 +9,8 @@
       </div>
 
     </div>
-    <div id="rMenu">
+    <div :id="iRMenuID" class="rMenu">
       <ul class="dropdown-menu menu-actions">
-        <li class="divider" />
         <slot name="rMenu" />
       </ul>
     </div>
@@ -38,6 +37,8 @@ export default {
   },
   data() {
     return {
+      iZTreeID: `zTree_${this._uid}`,
+      iRMenuID: `rMenu_${this._uid}`,
       zTree: '',
       rMenu: ''
     }
@@ -62,7 +63,7 @@ export default {
             name: this.$t('common.tree.Empty')
           })
         }
-        this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
+        this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(
             this.zTree,
@@ -71,7 +72,7 @@ export default {
         }
 
         if (this.treeSetting.showMenu) {
-          this.rMenu = $('#rMenu')
+          this.rMenu = $(`#${this.iRMenuID}`)
         }
         if (this.treeSetting.otherMenu) {
           $('.menu-actions').append(this.otherMenu)
@@ -113,7 +114,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  div#rMenu {
+  div.rMenu {
     position: absolute;
     visibility: hidden;
     text-align: left;
@@ -130,7 +131,7 @@ export default {
     opacity: .9;
     border: none;
   }
-  div#rMenu li{
+  div.rMenu li{
     margin: 6px 0;
     cursor: pointer;
     list-style: none outside none;

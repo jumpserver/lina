@@ -677,12 +677,12 @@
     "DeleteNode": "删除节点",
     "RenameNode": "重命名节点",
     "AddAssetToNode": "添加资产到节点",
-    "moveAssetToNode": "移动资产到节点",
-    "updateNodeAssetHardwareInfo": "更新节点资产硬件信息",
-    "testNodeAssetConnectivity": "测试资产节点可连接性",
-    "showAssetOnlyCurrentNode": "仅显示当前节点资产",
-    "showAssetAllChildrenNode": "显示所有子节点资产",
-    "showNodeInfo": "显示节点详情"
+    "MoveAssetToNode": "移动资产到节点",
+    "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息",
+    "TestNodeAssetConnectivity": "测试资产节点可连接性",
+    "ShowAssetOnlyCurrentNode": "仅显示当前节点资产",
+    "ShowAssetAllChildrenNode": "显示所有子节点资产",
+    "ShowNodeInfo": "显示节点详情"
   },
   "audits": {
     "View": "查看",

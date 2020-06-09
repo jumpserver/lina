@@ -10,31 +10,6 @@
       <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
         <i class="fa fa-minus-square" />  {{ this.$t('tree.DeleteNode') }}
       </li>
-      <li class="divider" />
-      <li id="m_add_asset_to_node" class="rmenu" tabindex="-1" @click="addAssetToNode">
-        <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
-      </li>
-      <li id="m_move_asset_to_node" class="rmenu" tabindex="-1" @click="moveAssetToNode">
-        <i class="fa fa-scissors" />  {{ this.$t('tree.moveAssetToNode') }}
-      </li>
-      <li class="divider" />
-      <li id="m_update_node_asset_hardware_info" class="rmenu" tabindex="-1" @click="updateNodeAssetHardwareInfo">
-        <i class="fa fa-refresh" />  {{ this.$t('tree.updateNodeAssetHardwareInfo') }}
-      </li>
-      <li id="m_test_node_asset_connectivity" class="rmenu" tabindex="-1" @click="testNodeAssetConnectivity">
-        <i class="fa fa-link" />  {{ this.$t('tree.testNodeAssetConnectivity') }}
-      </li>
-      <li class="divider" />
-      <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="showAssetOnlyCurrentNode">
-        <i class="fa fa-indent" />  {{ this.$t('tree.showAssetOnlyCurrentNode') }}
-      </li>
-      <li id="m_show_asset_all_children_node" class="rmenu" tabindex="-1" @click="showAssetAllChildrenNode">
-        <i class="fa fa-align-justify" />  {{ this.$t('tree.showAssetAllChildrenNode') }}
-      </li>
-      <li class="divider" />
-      <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="showNodeInfo">
-        <i class="fa fa-info-circle" />  {{ this.$t('tree.showNodeInfo') }}
-      </li>
       <slot name="rMenu" />
     </slot>
   </DataZTree>
@@ -97,20 +72,7 @@ export default {
       return this.$refs.dataztree.rMenu
     }
   },
-  mounted() {
-    this.decorateRMenu()
-  },
   methods: {
-    decorateRMenu() {
-      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
-      if (show_current_asset === '1') {
-        $('#m_show_asset_all_children_node').css('color', '#606266')
-        $('#m_show_asset_only_current_node').css('color', 'green')
-      } else {
-        $('#m_show_asset_all_children_node').css('color', 'green')
-        $('#m_show_asset_only_current_node').css('color', '#606266')
-      }
-    },
     editTreeNode: function() {
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
@@ -129,14 +91,18 @@ export default {
     // Request URL: http://localhost/api/v1/assets/assets/?node_id=d8212328-538d-41a6-bcfd-1e8cc7e3aed4&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
     onSelected: function(event, treeNode) {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
+      let combinator = '?'
+      if (this.setting.url.indexOf('?') !== -1) {
+        combinator = '&'
+      }
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.node.id
         this.$route.query['node'] = this.currentNodeId
-        this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
+        this.$emit('urlChange', `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
       } else if (treeNode.meta.type === 'asset') {
         this.$route.query['asset'] = treeNode.meta.asset.id
-        this.$emit('urlChange', `${this.setting.url}?asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
+        this.$emit('urlChange', `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
       }
     },
     removeTreeNode: function() {
@@ -152,77 +118,6 @@ export default {
         this.zTree.removeNode(currentNode)
       }).catch(error => {
         this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
-      })
-    },
-    addAssetToNode: function() {
-
-    },
-    moveAssetToNode: function() {
-
-    },
-    updateNodeAssetHardwareInfo: function() {
-      this.hideRMenu()
-      const currentNode = this.zTree.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$axios.post(
-        `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
-        { 'action': 'refresh' }
-      ).then((res) => {
-        window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-      }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      })
-    },
-    testNodeAssetConnectivity: function() {
-      this.hideRMenu()
-      const currentNode = this.zTree.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$axios.post(
-        `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
-        { 'action': 'test' }
-      ).then((res) => {
-        window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-      }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      })
-    },
-    showAssetOnlyCurrentNode: function(event) {
-      console.log(1, event)
-      this.hideRMenu()
-      const currentNode = this.zTree.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$cookie.set('show_current_asset', '1', 1)
-      this.decorateRMenu()
-      this.$emit('urlChange', `${this.setting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=1`)
-    },
-    showAssetAllChildrenNode: function() {
-      this.hideRMenu()
-      const currentNode = this.zTree.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$cookie.set('show_current_asset', '0', 1)
-      this.decorateRMenu()
-      this.$emit('urlChange', `${this.setting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=0`)
-    },
-    showNodeInfo: function() {
-      this.hideRMenu()
-      const currentNode = this.zTree.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$axios.get(
-        `/api/v1/assets/nodes/${currentNode.meta.node.id}/`
-      ).then(res => {
-        this.$emit('showNodeInfoDialog', res)
-      }).catch(error => {
-        this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
@@ -246,12 +141,15 @@ export default {
       })
     },
     onBodyMouseDown: function(event) {
-      if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
+      const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
+      if (!(event.target.id === 'rMenu' || $(event.target).parents(`#${rMenuID}`).length > 0)) {
         this.rMenu.css({ 'visibility': 'hidden' })
       }
     },
     showRMenu: function(type, x, y) {
-      const offset = $('#ztree').offset()
+      const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
+      const zTreeID = this.$refs.dataztree.$refs.ztree.iZTreeID
+      const offset = $(`#${zTreeID}`).offset()
       const scrollTop = document.querySelector('.treebox').scrollTop
       x -= offset.left
       // Tmp
@@ -259,7 +157,7 @@ export default {
       x += document.body.scrollLeft
       y += document.body.scrollTop + document.documentElement.scrollTop
       this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
-      $('#rMenu ul').show()
+      $(`#${rMenuID} ul`).show()
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onRightClick: function(event, treeId, treeNode) {
@@ -367,12 +265,5 @@ export default {
   }
   .rmenu:hover{
     background-color: #f5f7fa;
-  }
-
-  .divider{
-    margin: 1px 0;
-    list-style: none outside none;
-    background-color: #e5e5e5;
-    height: 1px
   }
 </style>
