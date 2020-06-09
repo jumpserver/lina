@@ -379,7 +379,9 @@
     "userCount": "用户数量",
     "userGroupCount": "用户组数量",
     "usersAndUserGroups": "用户或用户组",
-    "": ""
+    "Inherit": "继承",
+    "Include": "包含",
+    "Exclude": "不包含"
   },
   "route": {
     "AdminUserCreate": "创建管理用户",
@@ -691,7 +693,7 @@
     "RunUser": "运行用户"
   },
   "users": {
-    "LoginConfirm": "登录确认人",
+    "LoginConfirm": "登录复核",
     "SSHKey": "SSH公钥",
     "TermsAndConditions": "条款和条件",
     "IAgree": "我同意",
@@ -781,6 +783,7 @@
     "Label": "标签",
     "assetAndNode": "资产或节点",
     "Success": "成功",
+    "Execute": "执行",
     "ChangeAuthPlan": {
       "Asset": "资产",
       "Success": "成功",

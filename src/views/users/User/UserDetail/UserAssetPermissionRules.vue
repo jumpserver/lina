@@ -81,7 +81,33 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasExport: false,
-        hasImport: false
+        hasImport: false,
+        searchConfig: {
+          url: '',
+          options: [
+            { label: this.$t('common.Name'), value: 'name' },
+            { label: this.$t('perms.isValid'), value: 'is_valid' },
+            { label: this.$t('common.Username'), value: 'username' },
+            { label: this.$t('perms.UserGroups'), value: 'user_group' },
+            { label: this.$t('perms.IP'), value: 'ip' },
+            { label: this.$t('perms.hostName'), value: 'hostname' },
+            { label: this.$t('perms.Node'), value: 'node' },
+            { label: this.$t('perms.SystemUser'), value: 'system_user' },
+            {
+              label: this.$t('perms.Inherit'), value: 'all',
+              children: [
+                {
+                  value: '1',
+                  label: this.$t('perms.Include')
+                },
+                {
+                  value: '0',
+                  label: this.$t('perms.Exclude')
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   }

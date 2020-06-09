@@ -60,7 +60,10 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasExport: false
+        hasExport: false,
+        searchConfig: {
+          url: ''
+        }
       }
     }
   }
