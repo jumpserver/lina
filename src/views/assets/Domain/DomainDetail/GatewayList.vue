@@ -4,7 +4,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-
+import DisplayFormatter from '@/components/ListTable/formatters/DisplayFormatter'
 export default {
   components: {
     ListTable
@@ -22,7 +22,8 @@ export default {
         columns: ['name', 'ip', 'port', 'protocol', 'username', 'comment', 'actions'],
         columnsMeta: {
           name: {
-            sortable: 'custom'
+            sortable: 'custom',
+            formatter: DisplayFormatter
           },
           protocol: {
             sortable: 'custom'
