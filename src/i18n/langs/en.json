@@ -659,6 +659,7 @@
     "RenameNode": "Rename node"
   },
   "users": {
+    "LoginConfirm": "Login approvers",
     "SSHKey": "SSH Key",
     "TermsAndConditions": "Terms and conditions",
     "IAgree": "I agree",

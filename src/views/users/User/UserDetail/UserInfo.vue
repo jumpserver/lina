@@ -6,6 +6,7 @@
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
+      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="info" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
@@ -182,6 +183,32 @@ export default {
             }
           })
           return this.$axios.post(relationUrl, data)
+        }
+      },
+      loginConfirmSetting: {
+        icon: 'fa-user',
+        title: this.$t('users.LoginConfirm'),
+        objectsAjax: {
+          url: '/api/v1/users/users/'
+        },
+        hasObjectsId: this.object.login_confirm_settings,
+        performDelete: (item) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/authentication/login-confirm-settings/${objectId}/`
+          const data = {
+            reviewers: this.object.login_confirm_settings.filter(approver => approver !== item.value)
+          }
+          return this.$axios.patch(relationUrl, data)
+        },
+        performAdd: (items) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/authentication/login-confirm-settings/${objectId}/`
+          const data = {
+            reviewers: [...this.object.login_confirm_settings, ...items.map(v => {
+              return v.value
+            })]
+          }
+          return this.$axios.patch(relationUrl, data)
         }
       }
     }
