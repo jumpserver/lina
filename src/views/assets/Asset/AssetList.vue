@@ -3,37 +3,54 @@
     <GenericTreeListPage ref="TreeList" :table-config="tableConfig" :help-message="helpMessage" :header-actions="headerActions" :tree-setting="treeSetting">
       <div slot="rMenu">
         <li class="divider" />
-        <li id="m_add_asset_to_node" class="rmenu" tabindex="-1" @click="addAssetToNode">
+        <li id="m_add_asset_to_node" class="rmenu" tabindex="-1" @click="rMenuAddAssetToNode">
           <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
         </li>
-        <li id="m_move_asset_to_node" class="rmenu" tabindex="-1" @click="moveAssetToNode">
-          <i class="fa fa-scissors" />  {{ this.$t('tree.moveAssetToNode') }}
+        <li id="m_move_asset_to_node" class="rmenu" tabindex="-1" @click="rMenuMoveAssetToNode">
+          <i class="fa fa-scissors" />  {{ this.$t('tree.MoveAssetToNode') }}
         </li>
         <li class="divider" />
-        <li id="m_update_node_asset_hardware_info" class="rmenu" tabindex="-1" @click="updateNodeAssetHardwareInfo">
-          <i class="fa fa-refresh" />  {{ this.$t('tree.updateNodeAssetHardwareInfo') }}
+        <li id="m_update_node_asset_hardware_info" class="rmenu" tabindex="-1" @click="rMenuUpdateNodeAssetHardwareInfo">
+          <i class="fa fa-refresh" />  {{ this.$t('tree.UpdateNodeAssetHardwareInfo') }}
         </li>
-        <li id="m_test_node_asset_connectivity" class="rmenu" tabindex="-1" @click="testNodeAssetConnectivity">
-          <i class="fa fa-link" />  {{ this.$t('tree.testNodeAssetConnectivity') }}
-        </li>
-        <li class="divider" />
-        <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="showAssetOnlyCurrentNode">
-          <i class="fa fa-indent" />  {{ this.$t('tree.showAssetOnlyCurrentNode') }}
-        </li>
-        <li id="m_show_asset_all_children_node" class="rmenu" tabindex="-1" @click="showAssetAllChildrenNode">
-          <i class="fa fa-align-justify" />  {{ this.$t('tree.showAssetAllChildrenNode') }}
+        <li id="m_test_node_asset_connectivity" class="rmenu" tabindex="-1" @click="rMenuTestNodeAssetConnectivity">
+          <i class="fa fa-link" />  {{ this.$t('tree.TestNodeAssetConnectivity') }}
         </li>
         <li class="divider" />
-        <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="showNodeInfo">
-          <i class="fa fa-info-circle" />  {{ this.$t('tree.showNodeInfo') }}
+        <li id="m_show_asset_only_current_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetOnlyCurrentNode">
+          <i class="fa fa-indent" />  {{ this.$t('tree.ShowAssetOnlyCurrentNode') }}
+        </li>
+        <li id="m_show_asset_all_children_node" class="rmenu" tabindex="-1" @click="rMenuShowAssetAllChildrenNode">
+          <i class="fa fa-align-justify" />  {{ this.$t('tree.ShowAssetAllChildrenNode') }}
+        </li>
+        <li class="divider" />
+        <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
+          <i class="fa fa-info-circle" />  {{ this.$t('tree.ShowNodeInfo') }}
         </li>
       </div>
     </GenericTreeListPage>
-    <Dialog width="30%" :title="this.$t('assets.NodeInformation')" :visible.sync="nodeInfoDialog.dialogVisible" :show-cancel="false" :show-confirm="false">
-      <el-row v-for="item in nodeInfoDialog.items" :key="'card-' + item.key" :gutter="10" class="item">
+    <Dialog width="30%" :title="this.$t('assets.NodeInformation')" :visible.sync="nodeInfoDialogSetting.dialogVisible" :show-cancel="false" :show-confirm="false">
+      <el-row v-for="item in nodeInfoDialogSetting.items" :key="'card-' + item.key" :gutter="10" class="item">
         <el-col :span="6"><div class="item-label"><label>{{ item.label }}: </label></div></el-col>
         <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
       </el-row>
+    </Dialog>
+    <Dialog
+      v-if="assetTreeTableDialogSetting.dialogVisible"
+      :title="this.$t('assets.Assets')"
+      :visible.sync="assetTreeTableDialogSetting.dialogVisible"
+      width="70%"
+      top="1vh"
+      @confirm="assetTreeTableDialogHandleConfirm"
+      @cancel="assetTreeTableDialogHandleCancel"
+    >
+      <TreeTable
+        ref="TreeTable"
+        :tree-setting="assetTreeTableDialogSetting.treeSetting"
+        :table-config="assetTreeTableDialogSetting.tableConfig"
+        :header-actions="assetTreeTableDialogSetting.headerActions"
+      />
+
     </Dialog>
   </div>
 </template>
@@ -43,11 +60,13 @@ import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
 import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
+import TreeTable from '@/components/TreeTable'
 
 export default {
   components: {
     GenericTreeListPage,
-    Dialog
+    Dialog,
+    TreeTable
   },
   data() {
     return {
@@ -179,9 +198,56 @@ export default {
         ]
       },
       helpMessage: this.$t('assets.AssetListHelpMessage'),
-      nodeInfoDialog: {
+      nodeInfoDialogSetting: {
         dialogVisible: false,
         items: []
+      },
+      assetTreeTableDialogSetting: {
+        dialogVisible: false,
+        assetsSelected: [],
+        action: '',
+        treeSetting: {
+          showMenu: false,
+          showRefresh: true,
+          showAssets: false,
+          url: '/api/v1/assets/assets/?fields_size=mini',
+          nodeUrl: '/api/v1/assets/nodes/',
+          // ?assets=0不显示资产. =1显示资产
+          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+        },
+        tableConfig: {
+          url: '/api/v1/assets/assets/',
+          hasTree: true,
+          columns: [
+            {
+              prop: 'hostname',
+              label: this.$t('assets.Hostname'),
+              sortable: true,
+              formatter: DetailFormatter,
+              formatterArgs: {
+                route: 'AssetDetail'
+              }
+            },
+            {
+              prop: 'ip',
+              label: this.$t('assets.ip'),
+              sortable: 'custom'
+            }
+          ],
+          listeners: {
+            'toggle-row-selection': (isSelected, row) => {
+              if (isSelected) {
+                this.addRowToAssetsSelected(row)
+              } else {
+                this.removeRowFromAssetsSelected(row)
+              }
+            }
+          }
+        },
+        headerActions: {
+          hasLeftActions: false,
+          hasRightActions: false
+        }
       }
     }
   },
@@ -205,13 +271,15 @@ export default {
     getSelectedNodes() {
       return this.$refs.TreeList.getSelectedNodes()
     },
-    addAssetToNode: function() {
-
+    rMenuAddAssetToNode: function() {
+      this.assetTreeTableDialogSetting.dialogVisible = true
+      this.assetTreeTableDialogSetting.action = 'add'
     },
-    moveAssetToNode: function() {
-
+    rMenuMoveAssetToNode: function() {
+      this.assetTreeTableDialogSetting.dialogVisible = true
+      this.assetTreeTableDialogSetting.action = 'move'
     },
-    updateNodeAssetHardwareInfo: function() {
+    rMenuUpdateNodeAssetHardwareInfo: function() {
       this.hideRMenu()
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) {
@@ -226,7 +294,7 @@ export default {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
-    testNodeAssetConnectivity: function() {
+    rMenuTestNodeAssetConnectivity: function() {
       this.hideRMenu()
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) {
@@ -241,7 +309,7 @@ export default {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
-    showAssetOnlyCurrentNode: function() {
+    rMenuShowAssetOnlyCurrentNode: function() {
       this.hideRMenu()
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) {
@@ -252,7 +320,7 @@ export default {
       const url = `${this.treeSetting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=1`
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
     },
-    showAssetAllChildrenNode: function() {
+    rMenuShowAssetAllChildrenNode: function() {
       this.hideRMenu()
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) {
@@ -263,18 +331,17 @@ export default {
       const url = `${this.treeSetting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=0`
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
     },
-    showNodeInfo: function() {
+    rMenuShowNodeInfo: function() {
       this.hideRMenu()
       const currentNode = this.getSelectedNodes()[0]
       if (!currentNode) {
         return
       }
-      console.log('....')
       this.$axios.get(
         `/api/v1/assets/nodes/${currentNode.meta.node.id}/`
       ).then(res => {
-        this.nodeInfoDialog.dialogVisible = true
-        this.nodeInfoDialog.items = [
+        this.nodeInfoDialogSetting.dialogVisible = true
+        this.nodeInfoDialogSetting.items = [
           { key: 'id', label: 'ID', value: res.id },
           { key: 'name', label: this.$t('assets.Name'), value: res.name },
           { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value },
@@ -283,6 +350,43 @@ export default {
       }).catch(error => {
         this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
       })
+    },
+    addRowToAssetsSelected(row) {
+      const selectValueIndex = this.assetTreeTableDialogSetting.assetsSelected.indexOf(row.id)
+      if (selectValueIndex === -1) {
+        this.assetTreeTableDialogSetting.assetsSelected.push(row.id)
+      }
+    },
+    removeRowFromAssetsSelected(row) {
+      const selectValueIndex = this.assetTreeTableDialogSetting.assetsSelected.indexOf(row.id)
+      if (selectValueIndex > -1) {
+        this.assetTreeTableDialogSetting.assetsSelected.splice(selectValueIndex, 1)
+      }
+    },
+    assetTreeTableDialogHandleConfirm() {
+      const currentNode = this.getSelectedNodes()[0]
+      const assetsSelected = this.assetTreeTableDialogSetting.assetsSelected
+      if (!currentNode || assetsSelected.length === 0) {
+        return
+      }
+      let url = `/api/v1/assets/nodes/${currentNode.meta.node.id}/assets/add/`
+      if (this.assetTreeTableDialogSetting.action === 'move') {
+        url = `/api/v1/assets/nodes/${currentNode.meta.node.id}/assets/replace/`
+      }
+      this.$axios.put(
+        url, { assets: assetsSelected }
+      ).then(res => {
+        this.assetTreeTableDialogSetting.dialogVisible = false
+        this.assetTreeTableDialogSetting.assetsSelected = []
+        $('#tree-refresh').trigger('click')
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+      })
+    },
+    assetTreeTableDialogHandleCancel() {
+      this.assetTreeTableDialogSetting.dialogVisible = false
+      this.assetTreeTableDialogSetting.assetsSelected = []
     }
   }
 }

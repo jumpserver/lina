@@ -91,14 +91,18 @@ export default {
     // Request URL: http://localhost/api/v1/assets/assets/?node_id=d8212328-538d-41a6-bcfd-1e8cc7e3aed4&show_current_asset=null&draw=2&limit=15&offset=0&_=1587022917769
     onSelected: function(event, treeNode) {
       const show_current_asset = this.$cookie.get('show_current_asset') || '0'
+      let combinator = '?'
+      if (this.setting.url.indexOf('?') !== -1) {
+        combinator = '&'
+      }
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.node.id
         this.$route.query['node'] = this.currentNodeId
-        this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
+        this.$emit('urlChange', `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
       } else if (treeNode.meta.type === 'asset') {
         this.$route.query['asset'] = treeNode.meta.asset.id
-        this.$emit('urlChange', `${this.setting.url}?asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
+        this.$emit('urlChange', `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
       }
     },
     removeTreeNode: function() {
@@ -137,12 +141,15 @@ export default {
       })
     },
     onBodyMouseDown: function(event) {
-      if (!(event.target.id === 'rMenu' || $(event.target).parents('#rMenu').length > 0)) {
+      const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
+      if (!(event.target.id === 'rMenu' || $(event.target).parents(`#${rMenuID}`).length > 0)) {
         this.rMenu.css({ 'visibility': 'hidden' })
       }
     },
     showRMenu: function(type, x, y) {
-      const offset = $('#ztree').offset()
+      const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
+      const zTreeID = this.$refs.dataztree.$refs.ztree.iZTreeID
+      const offset = $(`#${zTreeID}`).offset()
       const scrollTop = document.querySelector('.treebox').scrollTop
       x -= offset.left
       // Tmp
@@ -150,7 +157,7 @@ export default {
       x += document.body.scrollLeft
       y += document.body.scrollTop + document.documentElement.scrollTop
       this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
-      $('#rMenu ul').show()
+      $(`#${rMenuID} ul`).show()
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onRightClick: function(event, treeId, treeNode) {

@@ -663,12 +663,12 @@
     "DeleteNode": "Delete node",
     "RenameNode": "Rename node",
     "AddAssetToNode": "Add asset to node",
-    "moveAssetToNode": "move asset to node",
-    "updateNodeAssetHardwareInfo": "Update node asset hardware information",
-    "testNodeAssetConnectivity": "Test node asset connectivity",
-    "showAssetOnlyCurrentNode": "Show asset only current node",
-    "showAssetAllChildrenNode": "Show asset all children node",
-    "showNodeInfo": "Show node information"
+    "MoveAssetToNode": "move asset to node",
+    "UpdateNodeAssetHardwareInfo": "Update node asset hardware information",
+    "TestNodeAssetConnectivity": "Test node asset connectivity",
+    "ShowAssetOnlyCurrentNode": "Show asset only current node",
+    "ShowAssetAllChildrenNode": "Show asset all children node",
+    "ShowNodeInfo": "Show node information"
   },
   "users": {
     "LoginConfirm": "Login approvers",
