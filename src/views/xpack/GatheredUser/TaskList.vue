@@ -27,7 +27,7 @@ export default {
               updateRoute: 'GatherUserTaskUpdate',
               extraActions: [
                 {
-                  title: vm.$t('xpack.ChangeAuthPlan.Execute'),
+                  title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
                   callback: function(data) {

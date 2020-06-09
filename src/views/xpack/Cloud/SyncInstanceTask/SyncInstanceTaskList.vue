@@ -10,6 +10,7 @@ export default {
     ListTable
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/xpack/cloud/sync-instance-tasks/',
@@ -22,7 +23,21 @@ export default {
             formatterArgs: {
               onUpdate: ({ row }) => {
                 this.$router.push({ name: 'SyncInstanceTaskUpdate', params: { id: row.id }})
-              }
+              },
+              extraActions: [
+                {
+                  title: vm.$t('xpack.Execute'),
+                  name: 'execute',
+                  type: 'info',
+                  callback: function(data) {
+                    this.$axios.get(
+                      `/api/v1/xpack/cloud/sync-instance-tasks/${data.row.id}/run/`
+                    ).then(res => {
+                    }).catch(res => {
+                    })
+                  }
+                }
+              ]
             }
           },
           name: {

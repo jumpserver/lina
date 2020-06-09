@@ -755,6 +755,7 @@
     "Admin": "Admin",
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
+    "Execute": "Execute",
     "ChangeAuthPlan": {
       "PasswordStrategy": "Password strategy",
       "HelpText": {
