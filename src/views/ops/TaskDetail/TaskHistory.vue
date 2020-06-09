@@ -4,6 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
+import { DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'TaskHistory',
@@ -67,7 +68,11 @@ export default {
             }
           },
           adhoc_short_id: {
-            label: this.$t('ops.version')
+            label: this.$t('ops.version'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'HistoryExecutionDetail'
+            }
           },
           actions: {
             prop: 'id',
