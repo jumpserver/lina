@@ -110,7 +110,8 @@ export default {
           },
           {
             prop: 'version',
-            label: this.$t('assets.Version')
+            label: this.$t('assets.Version'),
+            width: '50px'
           },
           {
             prop: 'date_created',

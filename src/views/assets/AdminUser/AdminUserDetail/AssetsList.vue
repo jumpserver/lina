@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       assetUserUrl: `/api/v1/assets/asset-users/?prefer_id=${this.object.id}&prefer=admin_user&latest=1`,
-
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
