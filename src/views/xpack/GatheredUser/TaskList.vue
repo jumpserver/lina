@@ -10,6 +10,8 @@ export default {
     ListTable
   },
   data() {
+    const vm = this
+
     return {
       tableConfig: {
         url: '/api/v1/xpack/gathered-user/tasks/',
@@ -22,7 +24,22 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'GatherUserTaskUpdate'
+              updateRoute: 'GatherUserTaskUpdate',
+              extraActions: [
+                {
+                  title: vm.$t('xpack.ChangeAuthPlan.Execute'),
+                  name: 'execute',
+                  type: 'info',
+                  callback: function(data) {
+                    this.$axios.post(
+                      `/api/v1/xpack/gathered-user/task-executions/`,
+                      { task: data.row.id }
+                    ).then(res => {
+                    }).catch(res => {
+                    })
+                  }
+                }
+              ]
             }
           }
         }
