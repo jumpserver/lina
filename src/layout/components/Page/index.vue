@@ -7,7 +7,7 @@
       </template>
     </PageHeading>
     <PageContent>
-      <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
+      <el-alert v-if="helpMessage" type="success"> <span v-html="helpMessage" /> </el-alert>
       <slot />
     </PageContent>
   </div>

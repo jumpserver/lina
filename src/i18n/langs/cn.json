@@ -31,6 +31,7 @@
   "assets": {
     "PasswordWithoutSpecialCharHelpText": "不能包含特殊字符",
     "GatewayProtocolHelpText": "SSH网关，支持代理SSH,RDP和VNC",
+    "RemoteAppListHelpMessage": "使用此功能前，请确保已将应用加载器上传到应用服务器并成功发布为一个 RemoteApp 应用 <b><a href='https://github.com/jumpserver/Jmservisor/releases'>下载应用加载器</a></b>",
     "FullName": "全称",
     "Key": "键",
     "NodeInformation": "节点信息",

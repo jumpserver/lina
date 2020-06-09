@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
 </template>
 
 <script type="text/jsx">
@@ -13,6 +13,7 @@ export default {
   data() {
     const vm = this
     return {
+      helpMessage: this.$t('assets.RemoteAppListHelpMessage'),
       tableConfig: {
         url: '/api/v1/applications/remote-apps/',
         columns: [
