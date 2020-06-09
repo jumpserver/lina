@@ -5,6 +5,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { DetailFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'TaskAdhoc',
   components: {
@@ -25,7 +26,11 @@ export default {
         ],
         columnsMeta: {
           short_id: {
-            label: this.$t('ops.version')
+            label: this.$t('ops.version'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AdhocDetail'
+            }
           },
           hosts: {
             label: this.$t('ops.hosts'),
