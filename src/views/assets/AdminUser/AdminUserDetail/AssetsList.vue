@@ -1,9 +1,9 @@
 <template><div>
   <el-row :gutter="20">
-    <el-col :span="18">
+    <el-col :span="16">
       <AssetUserTable :url="assetUserUrl" />
     </el-col>
-    <el-col :span="6">
+    <el-col :span="8">
       <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>

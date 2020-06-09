@@ -1,15 +1,14 @@
 <template>
   <div>
     <el-row :gutter="24">
-      <el-col :span="18">
+      <el-col :span="16">
         <AssetUserTable ref="ListTable" :url="assetUserUrl" />
       </el-col>
-      <el-col :span="6">
+      <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
       </el-col>
     </el-row>
   </div>
-
 </template>
 
 <script>

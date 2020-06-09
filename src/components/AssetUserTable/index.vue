@@ -1,7 +1,7 @@
 <template><div>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false">
+    <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
       <div v-if="MFAConfirmed">
         <el-form label-position="right" label-width="80px" :model="MFAInfo">
           <el-form-item :label="this.$t('assets.Hostname')">
@@ -27,13 +27,6 @@
           <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
         </el-col>
       </el-row>
-      <!--      <div v-else style="display: flex;justify-content:space-between; padding: 30px 20px 0">-->
-      <!--        <div style="line-height: 34px;text-align: center">MFA</div>-->
-      <!--        <div style="width: 70%">-->
-      <!--          <el-input v-model="MFAInput" />-->
-      <!--        </div>-->
-      <!--        <el-button size="small" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>-->
-      <!--      </div>-->
     </Dialog>
     <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
       <el-form label-position="right" label-width="80px" :model="dialogInfo">
@@ -56,6 +49,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ListTable from '@/components/ListTable/index'
 import Dialog from '@/components/Dialog'
 import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
@@ -131,6 +125,7 @@ export default {
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
+              moreActionsTitle: this.$t('common.More'),
               extraActions: [
                 {
                   name: 'View',
@@ -177,21 +172,53 @@ export default {
               ]
             }
           }
-        ]
+        ],
+        extraQuery: {
+          latest: 1
+        }
       },
       headerActions: {
         hasLeftActions: this.hasLeftActions,
         hasBulkDelete: false,
-        hasSearch: true
+        hasSearch: true,
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('assets.OnlyLatestVersion'),
+              value: 'latest',
+              children: [
+                {
+                  label: this.$t('common.Yes'),
+                  value: 1
+                },
+                {
+                  label: this.$t('common.No'),
+                  value: 0
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   },
   computed: {
+    ...mapGetters([
+      'publicSettings',
+      'MFAVerifyAt'
+    ]),
+    needMFAVerify() {
+      if (!this.publicSettings.SECURITY_VIEW_AUTH_NEED_MFA) {
+        return false
+      }
+      const ttl = this.publicSettings.SECURITY_MFA_VERIFY_TTL
+      const now = new Date()
+      return !(this.MFAVerifyAt && (now - this.MFAVerifyAt) < ttl * 1000)
+    }
   },
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
-      console.log('Url change', this.tableConfig)
     }
   },
   mounted() {

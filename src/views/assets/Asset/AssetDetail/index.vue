@@ -9,7 +9,7 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import AssetUserList from './AssetList.vue'
+import AssetUserList from './AssetUserList.vue'
 export default {
   name: 'AssetListDetail',
   components: {

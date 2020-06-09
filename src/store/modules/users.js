@@ -17,7 +17,8 @@ const getDefaultState = () => {
     profile: {},
     roles: {},
     orgs: [],
-    perms: 0b00000000
+    perms: 0b00000000,
+    MFAVerifyAt: null
   }
 }
 
@@ -49,6 +50,9 @@ const mutations = {
   SET_CURRENT_ROLE(state, role) {
     saveCurrentRoleToCookie(role)
     state.currentRole = role
+  },
+  SET_MFA_VERIFY(state, date) {
+    state.MFAVerifyAt = date
   }
 }
 
@@ -142,6 +146,9 @@ const actions = {
   },
   setCurrentRole({ commit }, role) {
     commit('SET_CURRENT_ROLE', role)
+  },
+  setMFAVerify({ commit }, date) {
+    commit('SET_MFA_VERIFY', date)
   }
 }
 

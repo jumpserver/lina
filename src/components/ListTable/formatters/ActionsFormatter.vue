@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" />
+  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" />
 </template>
 
 <script>
@@ -91,7 +91,8 @@ export default {
     return {
       colActions: colActions,
       defaultActions: defaultActions,
-      extraActions: colActions.extraActions
+      extraActions: colActions.extraActions,
+      moreActionsTitle: colActions.moreActionsTitle
     }
   },
   computed: {

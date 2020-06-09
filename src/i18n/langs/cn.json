@@ -30,6 +30,7 @@
   },
   "assets": {
     "Action": "动作",
+    "OnlyLatestVersion": "仅最新版本",
     "AutoGenerateKey": "自动生成密钥",
     "UnselectedAssets":"未选择资产",
     "Pending": "等待",
