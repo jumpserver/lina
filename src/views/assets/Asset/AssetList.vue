@@ -35,23 +35,24 @@
         <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
       </el-row>
     </Dialog>
-    <Dialog
-      v-if="assetTreeTableDialogSetting.dialogVisible"
-      :title="this.$t('assets.Assets')"
-      :visible.sync="assetTreeTableDialogSetting.dialogVisible"
-      width="70%"
-      top="1vh"
-      @confirm="assetTreeTableDialogHandleConfirm"
-      @cancel="assetTreeTableDialogHandleCancel"
-    >
-      <TreeTable
-        ref="TreeTable"
-        :tree-setting="assetTreeTableDialogSetting.treeSetting"
-        :table-config="assetTreeTableDialogSetting.tableConfig"
-        :header-actions="assetTreeTableDialogSetting.headerActions"
-      />
-
-    </Dialog>
+    <div class="asset-select-dialog">
+      <Dialog
+        v-if="assetTreeTableDialogSetting.dialogVisible"
+        :title="this.$t('assets.Assets')"
+        :visible.sync="assetTreeTableDialogSetting.dialogVisible"
+        width="70%"
+        top="1vh"
+        @confirm="assetTreeTableDialogHandleConfirm"
+        @cancel="assetTreeTableDialogHandleCancel"
+      >
+        <TreeTable
+          ref="TreeTable"
+          :tree-setting="assetTreeTableDialogSetting.treeSetting"
+          :table-config="assetTreeTableDialogSetting.tableConfig"
+          :header-actions="assetTreeTableDialogSetting.headerActions"
+        />
+      </Dialog>
+    </div>
   </div>
 </template>
 
@@ -421,6 +422,10 @@ export default {
     list-style: none outside none;
     background-color: #e5e5e5;
     height: 1px
+  }
+
+  .asset-select-dialog >>> .transition-box:first-child {
+    background-color: #f3f3f3 ;
   }
 
   .el-row {
