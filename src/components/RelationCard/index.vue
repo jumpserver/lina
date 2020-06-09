@@ -169,7 +169,7 @@ export default {
     }
   },
   mounted() {
-    if (this.hasObjectsId.length !== 0) {
+    if (this.hasObjectsId && this.hasObjectsId.length !== 0) {
       setTimeout(() => {
         this.getHasObjectsByIds()
       }, 50)
