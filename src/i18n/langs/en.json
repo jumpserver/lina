@@ -29,6 +29,9 @@
     "": ""
   },
   "assets": {
+    "FullName": "Full name",
+    "Key": "Key",
+    "NodeInformation": "Node information",
     "Action": "Action",
     "NoInputCommand": "No input command",
     "OnlyLatestVersion": "Only latest version",
@@ -251,6 +254,7 @@
       "Empty": "Empty",
       "Loading": "Loading"
     },
+    "getErrorMsg": "Get failed",
     "updateErrorMsg": "Update failed",
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
@@ -655,8 +659,16 @@
   },
   "tree": {
     "AddNode": "Add node",
+    "CreateNode": "Create node",
     "DeleteNode": "Delete node",
-    "RenameNode": "Rename node"
+    "RenameNode": "Rename node",
+    "AddAssetToNode": "Add asset to node",
+    "moveAssetToNode": "move asset to node",
+    "updateNodeAssetHardwareInfo": "Update node asset hardware information",
+    "testNodeAssetConnectivity": "Test node asset connectivity",
+    "showAssetOnlyCurrentNode": "Show asset only current node",
+    "showAssetAllChildrenNode": "Show asset all children node",
+    "showNodeInfo": "Show node information"
   },
   "users": {
     "LoginConfirm": "Login approvers",

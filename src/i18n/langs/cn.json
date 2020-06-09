@@ -29,6 +29,9 @@
     "": ""
   },
   "assets": {
+    "FullName": "全称",
+    "Key": "键",
+    "NodeInformation": "节点信息",
     "Action": "动作",
     "OnlyLatestVersion": "仅最新版本",
     "AutoGenerateKey": "自动生成密钥",
@@ -255,6 +258,7 @@
       "DropConfirmMsg": "你想移动节点: {src} 到 {dst} 下吗?"
     },
     "updateErrorMsg": "更新失败",
+    "getErrorMsg": "获取失败",
     "updateSelected": "更新所选",
     "updateSuccessMsg": "更新成功",
     "Disable": "禁用",
@@ -665,8 +669,16 @@
   },
   "tree": {
     "AddNode": "添加节点",
+    "CreateNode": "创建节点",
     "DeleteNode": "删除节点",
-    "RenameNode": "重命名节点"
+    "RenameNode": "重命名节点",
+    "AddAssetToNode": "添加资产到节点",
+    "moveAssetToNode": "移动资产到节点",
+    "updateNodeAssetHardwareInfo": "更新节点资产硬件信息",
+    "testNodeAssetConnectivity": "测试资产节点可连接性",
+    "showAssetOnlyCurrentNode": "仅显示当前节点资产",
+    "showAssetAllChildrenNode": "显示所有子节点资产",
+    "showNodeInfo": "显示节点详情"
   },
   "audits": {
     "View": "查看",
