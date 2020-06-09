@@ -91,7 +91,8 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'
-            }
+            },
+            showOverflowTooltip: true
           },
           ip: {
             sortable: 'custom',
@@ -114,7 +115,7 @@ export default {
               },
               hasTips: true
             },
-            width: '80px',
+            width: '90px',
             align: 'center'
           },
           actions: {
