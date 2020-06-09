@@ -55,14 +55,14 @@ export default [
     hidden: true
   },
   {
-    path: 'domains/:domainid/gateway/create',
+    path: 'gateways/create',
     name: 'GatewayCreate',
     component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
     meta: { title: i18n.t('route.GatewayCreate'), activeMenu: '/assets/domains' },
     hidden: true
   },
   {
-    path: 'domains/gateway/:id/create',
+    path: 'gateways/:id/update',
     name: 'GatewayUpdate',
     component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
     meta: { title: i18n.t('route.GatewayUpdate'), activeMenu: '/assets/domains' },

@@ -87,6 +87,12 @@ export default {
         }
       }
     },
+    getNextRoute: {
+      type: Function,
+      default(res, method) {
+        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      }
+    },
     getUrl: {
       type: Function,
       default: function() {
@@ -136,12 +142,16 @@ export default {
     defaultOnSubmit(validValues) {
       const performSubmit = this.performSubmit || this.defaultPerformSubmit
       const msg = this.method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
-      const route = this.method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      const event = this.method === 'post' ? 'createSuccess' : 'updateSuccess'
       this.isSubmitting = true
-      performSubmit(validValues).then(() => {
+      performSubmit(validValues).then((res) => {
+        const route = this.getNextRoute(res, this.method)
+        this.$emit(event, res)
+        this.$emit('submitSuccess', res)
         this.$message.success(msg)
-        this.$router.push(route)
+        setTimeout(() => this.$router.push(route), 100)
       }).catch(error => {
+        this.$emit('submitError', error)
         const response = error.response
         const data = response.data
         if (response.status === 400) {

@@ -92,7 +92,7 @@ export default {
       colActions: colActions,
       defaultActions: defaultActions,
       extraActions: colActions.extraActions,
-      moreActionsTitle: colActions.moreActionsTitle
+      moreActionsTitle: colActions.moreActionsTitle || this.$t('common.More')
     }
   },
   computed: {

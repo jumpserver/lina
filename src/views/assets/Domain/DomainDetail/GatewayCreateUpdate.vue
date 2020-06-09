@@ -4,14 +4,14 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
-    :create-success-next-route="createSuccessNextRoute"
-    :update-success-next-route="updateSuccessNextRoute"
+    :get-next-route="getNextRoute"
   />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Uploadkey from '@/components/UploadKey/'
+import { Select2 } from '@/components'
 export default {
   name: 'GatewayCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -19,7 +19,8 @@ export default {
     return {
       initial: {
         protocol: 'ssh',
-        domain: this.$route.params.domainid,
+        port: 22,
+        domain: this.$route.query.domain,
         is_active: true
       },
       fields: [
@@ -35,20 +36,20 @@ export default {
           }
         },
         domain: {
-          type: 'input',
+          component: Select2,
           el: {
+            ajax: {
+              url: '/api/v1/assets/domains/'
+            },
             disabled: true,
-            multiple: false,
-            value: this.$route.params.ruleid
+            multiple: false
           }
         },
-        username: {
-          el: {
-            placeholder: '用户名'
-          }
+        protocol: {
+          helpText: this.$t('assets.GatewayProtocolHelpText')
         },
         password: {
-          helpText: '不能包含特殊字符'
+          helpText: this.$t('assets.PasswordWithoutSpecialCharHelpText')
         },
         is_active: {
           type: 'switch'
@@ -58,16 +59,33 @@ export default {
         }
       },
       updateSuccessNextRoute: {
-        name: 'DomainList'
+        name: 'DomainDetail',
+        params: {
+          id: ''
+        }
       },
       createSuccessNextRoute: {
-        name: 'DomainList'
+        name: 'DomainDetail',
+        params: {
+        }
       },
       url: `/api/v1/assets/gateways/`
     }
   },
-  computed: {
-
+  methods: {
+    getNextRoute(res, method) {
+      const domain = res.domain
+      const route = {
+        name: 'DomainDetail',
+        params: {
+          id: domain
+        },
+        query: {
+          activeTab: 'GatewayList'
+        }
+      }
+      return route
+    }
   }
 }
 </script>

@@ -29,6 +29,8 @@
     "": ""
   },
   "assets": {
+    "PasswordWithoutSpecialCharHelpText": "Password can't has special chars ",
+    "GatewayProtocolHelpText": "SSH protocol gateway, support proxy SSH, RDP, VNC",
     "FullName": "Full name",
     "Key": "Key",
     "NodeInformation": "Node information",
