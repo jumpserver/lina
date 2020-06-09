@@ -67,12 +67,10 @@ export default {
                 ]
               }.bind(this)
             },
-            sortable: true,
-            align: 'center'
+            sortable: true
           },
           {
             prop: 'ip',
-            align: 'center',
             label: this.$t('assets.ip'),
             sortable: 'custom'
           },
@@ -128,13 +126,8 @@ export default {
       headerActions: {
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
         hasLeftActions: false,
-        hasSearch: true,
-        hasRightActions: false
+        hasSearch: true
       }
     }
   },
