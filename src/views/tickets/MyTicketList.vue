@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      url: 'api/v1/tickets/tickets/?assign=0'
+      url: '/api/v1/tickets/tickets/?assign=0'
     }
   }
 }
