@@ -2,6 +2,9 @@
   <Page>
     <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
     <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting">
+      <template #table>
+        <slot name="table" />
+      </template>
       <div slot="rMenu" slot-scope="{data}">
         <slot name="rMenu" :data="data" />
       </div>

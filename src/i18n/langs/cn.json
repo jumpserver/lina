@@ -33,9 +33,11 @@
     "Key": "键",
     "NodeInformation": "节点信息",
     "Action": "动作",
+    "OnlyLatestVersion": "仅最新版本",
     "AutoGenerateKey": "自动生成密钥",
     "UnselectedAssets":"未选择资产",
     "Pending": "等待",
+    "RemoveFromCurrentNode": "从节点移除",
     "AssetUserList": "资产用户列表",
     "NoSystemUserWasSelected":"未选择系统用户",
     "NoInputCommand": "未输入命令",
@@ -150,11 +152,16 @@
   "common": {
     "CrontabHelpTips": "eg：每周日 03:05 执行 <5 3 * * 0> <br> 提示： 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href='https://tool.lu/crontab/' target='_blank'>在线工具</a>） <br>注意： 如果同时设置了定期执行和周期执行，优先使用定期执行",
     "BadRequestErrorMsg": "请求错误，请检查填写内容",
+    "MFARequireForSecurity": "为了安全请输入MFA",
     "DateLast24Hours": "最近一天",
     "DateLastWeek": "最近一周",
     "DateLastMonth": "最近一月",
     "DateLast3Months": "最近三月",
+    "TestSuccessMsg": "测试成功",
     "MFAConfirm": "MFA 认证",
+    "SelectPlaceholder": "请选择",
+    "removeSuccessMsg": "移除成功",
+    "removeErrorMsg": "移除失败: ",
     "Yes": "是",
     "No": "否",
     "Remove":"删除",
@@ -191,7 +198,7 @@
     "Open": "打开",
     "Other": "其它",
     "Others": "其他",
-    "Push": "",
+    "Push": "推送",
     "QuickUpdate": "快速更新",
     "Reset": "重置",
     "Search": "搜索",
@@ -336,6 +343,7 @@
     "Node": "节点",
     "SystemUser": "系统用户",
     "User": "用户",
+    "USER": "用户",
     "UserGroups": "用户组",
     "addAssetToThisPermission": "添加资产",
     "addDatabaseAppToThisPermission": "添加数据库应用",
@@ -636,7 +644,9 @@
     "consult": "咨询",
     "ImportLicense": "导入许可证",
     "AssetCount": "资产数量",
-    "ImportLicenseTip": "请导入许可证"
+    "ImportLicenseTip": "请导入许可证",
+    "all": "全部",
+    "auto": "自动"
   },
   "settings": {
     "setting": ""
@@ -678,6 +688,7 @@
     "RunUser": "运行用户"
   },
   "users": {
+    "LoginConfirm": "登录确认人",
     "SSHKey": "SSH公钥",
     "TermsAndConditions": "条款和条件",
     "IAgree": "我同意",
@@ -741,9 +752,7 @@
       "MFAOfUserFirstLoginUserGuidePage": "为了保护您和公司的安全，请妥善保管您的账户、密码和密钥等重要敏感信息；（如：设置复杂密码，并启用多因子认证）",
       "SSHKeyOfProfileSSHUpdatePage": "复制你的公钥到这里"
     },
-    "removeErrorMsg": "移除失败",
-    "removeSuccessMsg": "移除成功",
-    "removeWarningMsg": "你确定从组织移除 ",
+    "removeFromOrgWarningMsg": "你确定从组织移除 ",
     "tabs": {
       "assetPermissionRules": "资产授权规则",
       "databasePermissionRules": "数据库授权规则",
@@ -851,7 +860,8 @@
     "restoreDialogTitle": "你确认吗",
     "technologyConsult": "技术咨询",
     "Vault": {
-      "Vault": "密码匣子"
+      "Vault": "密码匣子",
+      "Create": "创建密码"
     },
     "Cloud": {
       "CloudCenter": "云管中心",

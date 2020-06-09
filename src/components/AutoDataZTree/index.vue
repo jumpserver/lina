@@ -132,8 +132,10 @@ export default {
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.node.id
+        this.$route.query['node'] = this.currentNodeId
         this.$emit('urlChange', `${this.setting.url}?node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
       } else if (treeNode.meta.type === 'asset') {
+        this.$route.query['asset'] = treeNode.meta.asset.id
         this.$emit('urlChange', `${this.setting.url}?asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
       }
     },

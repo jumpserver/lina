@@ -34,8 +34,10 @@
     "NodeInformation": "Node information",
     "Action": "Action",
     "NoInputCommand": "No input command",
+    "OnlyLatestVersion": "Only latest version",
     "UnselectedAssets":"Unselected assets",
     "Pending": "Pending",
+    "RemoveFromCurrentNode": "Remove from node",
     "NoSystemUserWasSelected":"No system user was selected",
     "LoginModeHelpMessage": "If you choose manual login mode, you do not need to fill in the username and password.",
     "UsernameHelpMessage": "Username is dynamic, When connect asset, using current user's username",
@@ -150,10 +152,15 @@
     "CrontabHelpTips": "eg: Every Sunday 03:05 run <5 3 * * 0> <br>Tips:Using 5 digits linux crontab expressions<min hour day month week> (<a href='https://tool.lu/crontab/' target='_blank'>Online tools</a>) <br>Note:If both Regularly perform and Cycle perform are set,give priority to Regularly perform",
     "BadRequestErrorMsg" : "Bad request, please check again",
     "DateLast24Hours": "Last 24 hours",
+    "MFARequireForSecurity": "MFA required for security",
+    "TestSuccessMsg": "Test Success",
     "DateLastWeek": "Last week",
     "DateLastMonth": "Last month",
     "DateLast3Months": "Last 3 months",
+    "removeErrorMsg": "Remove failed: ",
+    "removeSuccessMsg": "Remove success",
     "MFAConfirm": "MFA Confirm",
+    "SelectPlaceholder": "Select",
     "Yes": "Yes",
     "Remove":"Remove",
     "No": "No",
@@ -333,6 +340,7 @@
     "Node": "Node",
     "SystemUser": "System user",
     "User": "User",
+    "USER": "User",
     "UserGroups": "UserGroups",
     "addAssetToThisPermission": "Add asset to this permission",
     "addDatabaseAppToThisPermission": "Add DatabaseApp to this permission",
@@ -627,8 +635,8 @@
     "AssetCount": "Asset count",
     "ImportLicenseTip": "Please Import License",
     "ApiKeyList": "Api key list",
-    "DateCreated": "",
-    "Create": ""
+    "all": "All",
+    "auto": "Auto"
   },
   "settings": {
     "setting": ""
@@ -663,6 +671,7 @@
     "showNodeInfo": "Show node information"
   },
   "users": {
+    "LoginConfirm": "Login approvers",
     "SSHKey": "SSH Key",
     "TermsAndConditions": "Terms and conditions",
     "IAgree": "I agree",
@@ -707,7 +716,6 @@
     },
     "removeErrorMsg": "Remove failed: ",
     "removeSuccessMsg": "Remove success",
-    "removeWarningMsg": "Are you sure remove ",
     "tabs": {
       "assetPermissionRules": "Asset permission rules",
       "databasePermissionRules": "Database Permission rules",
@@ -727,6 +735,7 @@
     "MfaLevel": "MFA level",
     "DateJoined": "Date joined",
     "DateLastLogin": "Date last login",
+    "removeFromOrgWarningMsg": "Are you sure remove ",
     "DatePasswordLastUpdated": "Date password last updated",
     "DateExpired": "Date expired",
     "Comment": "Comment",

@@ -1,69 +1,28 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="18">
-        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <el-col :span="16">
+        <AssetUserTable ref="ListTable" :url="assetUserUrl" :other-actions="otherActions" />
       </el-col>
-      <el-col :span="6">
+      <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
         <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
-    <Dialog width="25%" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" @cancel="handleMFAConfirm()">
-      <div v-if="MFAConfirmed">
-        <el-form label-position="right" label-width="80px" :model="MFAInfo">
-          <el-form-item :label="this.$t('assets.Hostname')">
-            <el-input v-model="MFAInfo.hostname" disabled />
-          </el-form-item>
-          <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="MFAInfo.username" disabled />
-          </el-form-item>
-          <el-form-item :label="this.$t('assets.Password')">
-            <el-input v-model="MFAInfo.password" type="password" show-password />
-          </el-form-item>
-        </el-form>
-      </div>
-      <div v-else style="display: flex;justify-content:space-between;">
-        <div style="line-height: 34px;text-align: center">MFA</div>
-        <div style="width: 70%">
-          <el-input v-model="MFAInput" />
-        </div>
-        <el-button size="small" type="primary" @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
-      </div>
-    </Dialog>
-    <Dialog width="50%" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
-      <el-form label-position="right" label-width="80px" :model="dialogInfo">
-        <el-form-item :label="this.$t('assets.Hostname')">
-          <el-input v-model="dialogInfo.hostname" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Username')">
-          <el-input v-model="dialogInfo.username" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Password')">
-          <el-input v-model="dialogInfo.password" type="password" />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.sshkey')">
-          <input type="file" @change="Onchange">
-        </el-form-item>
-      </el-form>
-    </Dialog>
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
-import Dialog from '@/components/Dialog'
+import { AssetUserTable } from '@/components'
 
 export default {
   name: 'Detail',
   components: {
     QuickActions,
-    ListTable,
     RelationCard,
-    Dialog
+    AssetUserTable
   },
   props: {
     object: {
@@ -72,25 +31,25 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      showDialog: false,
-      dialogInfo: {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      },
-      MFAConfirmed: false,
-      MFAInput: '',
-      MFAInfo: {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: ''
-      },
-
-      showMFADialog: false,
+      assetUserUrl: `/api/v1/assets/asset-users/?prefer_id=${this.object.id}&prefer=system_user&latest=1`,
+      otherActions: [
+        {
+          name: 'Push',
+          title: this.$t('common.Push'),
+          can: () => vm.object.auto_push,
+          callback: function({ row }) {
+            const assetId = row.asset
+            const username = row.username
+            const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/?username=${username}`
+            const data = { action: 'push', asset: assetId }
+            this.$axios.post(theUrl, data).then(resp => {
+              window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+            })
+          }
+        }
+      ],
       AutoPushConfig: {
         icon: 'fa-info',
         title: this.$t('assets.QuickUpdate'),
@@ -149,105 +108,6 @@ export default {
           }
         }
       ],
-      tableConfig: {
-        url: `/api/v1/assets/asset-users/?prefer_id=${this.object.id}&prefer=system_user&latest=1`,
-        columns: [
-          {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname')
-          },
-          {
-            prop: 'ip',
-            label: this.$t('assets.ip')
-          },
-          {
-            prop: 'username',
-            label: this.$t('assets.Username')
-          },
-          {
-            prop: 'version',
-            label: this.$t('assets.Version')
-          },
-          {
-            prop: 'date_created',
-            label: this.$t('assets.date_joined'),
-            formatter: DateFormatter
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasUpdate: false, // can set function(row, value)
-              canUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
-              canDelete: false,
-              extraActions: [
-                {
-                  name: this.$t('common.View'),
-                  title: this.$t('common.View'),
-                  type: 'primary',
-                  callback: function(val) {
-                    this.MFAInfo.asset = val.cellValue
-                    this.showMFADialog = true
-                  }.bind(this)
-                },
-                {
-                  name: 'delete',
-                  title: this.$t('common.Delete'),
-                  type: 'primary',
-                  callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
-                      this.$refs.ListTable.reloadTable()
-                    )
-                  }
-                },
-                {
-                  name: this.$t('common.Test'),
-                  title: this.$t('common.Test'),
-                  callback: (val) => {
-                    console.log(val.cellValue)
-                    this.$axios.post(
-                      `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
-                      { action: 'test' }
-                    ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-                    })
-                  }
-                },
-                {
-                  name: this.$t('common.Update'),
-                  title: this.$t('common.Update'),
-                  callback: function(val) {
-                    this.showDialog = true
-                    this.dialogInfo.asset = val.row.asset
-                    this.dialogInfo.hostname = val.row.hostname
-                    this.dialogInfo.username = val.row.username
-                  }.bind(this)
-                },
-                {
-                  name: 'Push',
-                  title: this.$t('common.Push'),
-                  callback: function(val) {
-                    console.log('Push')
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      },
-      headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasLeftActions: false,
-        hasBulkDelete: false,
-        hasSearch: true,
-        hasCreate: false
-      },
       nodeRelationConfig: {
         icon: 'fa-info',
         title: this.$t('perms.addNodeToThisPermission'),
@@ -288,7 +148,6 @@ export default {
     }
   },
   computed: {
-
   },
   mounted() {
     this.getNodeList()
@@ -307,85 +166,6 @@ export default {
         }
       }
       )
-    },
-    MFAConfirm() {
-      if (this.MFAInput.length !== 6) {
-        return this.$message.error(this.$t('common.updateErrorMsg'))
-      }
-      this.$axios.post(
-        `/api/v1/authentication/otp/verify/`, {
-          code: this.MFAInput
-        }
-      ).then(
-        res => {
-          this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
-            this.MFAConfirmed = true
-            this.MFAInfo.hostname = res.hostname
-            this.MFAInfo.password = res.password
-            this.MFAInfo.username = res.username
-          })
-        }
-      )
-    },
-    handleCancel() {
-      this.dialogInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      }
-      this.showDialog = false
-    },
-    handleMFAConfirm() {
-      this.MFAInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: ''
-      }
-      this.MFAInput = ''
-      this.showMFADialog = false
-      this.MFAConfirmed = false
-    },
-    Onchange(e) {
-      const vm = this
-      // TODO 校验文件类型
-      const reader = new FileReader()
-      reader.onload = function() {
-        vm.dialogInfo.key = this.result
-      }
-      reader.readAsText(
-        e.target.files[0]
-      )
-    },
-    handleConfirm() {
-      const data = {
-        asset: this.dialogInfo.asset,
-        username: this.dialogInfo.username
-      }
-      if (this.dialogInfo.password !== '') {
-        data.password = this.dialogInfo.password
-      }
-      if (this.dialogInfo.key !== '') {
-        data.key = this.dialogInfo.key
-      }
-      this.$axios.post(
-        `/api/v1/assets/asset-users/`,
-        data
-      ).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(err => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-      })
-      this.dialogInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      }
-      this.showDialog = false
     }
   }
 }

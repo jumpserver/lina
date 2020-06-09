@@ -85,7 +85,9 @@ export default {
             }
           }
         }
-      }
+      },
+      updateSuccessNextRoute: { name: 'CloudCenter' },
+      createSuccessNextRoute: { name: 'CloudCenter' }
     }
   }
 }

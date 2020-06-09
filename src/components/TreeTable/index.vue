@@ -22,7 +22,9 @@
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" />
+          <slot name="table">
+            <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" />
+          </slot>
         </div>
       </div>
       <Dialog width="30%" :title="this.$t('assets.NodeInformation')" :visible.sync="nodeInfoDialog.show" :show-cancel="false" :show-confirm="false">
@@ -76,11 +78,11 @@ export default {
     }
   },
   watch: {
-
   },
   methods: {
     handleUrlChange(_url) {
       this.$set(this.iTableConfig, 'url', _url)
+      this.$emit('urlChange', _url)
       this.forceRerender()
     },
     forceRerender() {

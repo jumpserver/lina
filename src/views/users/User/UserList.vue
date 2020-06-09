@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     removeUserFromOrg({ row, col, reload }) {
-      const msg = this.$t('users.removeWarningMsg') + ' "' + row.name + '"'
+      const msg = this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
       const title = this.$t('common.Info')
       const performDelete = function() {
         const url = `/api/v1/users/users/${row.id}/`
@@ -116,9 +116,9 @@ export default {
             await performDelete.bind(this)({ row: row, col: col })
             done()
             reload()
-            this.$message.success(this.$t('users.removeSuccessMsg'))
+            this.$message.success(this.$t('common.removeSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$t('users.removeErrorMsg' + ' ' + error))
+            this.$message.error(this.$t('common.removeErrorMsg' + ' ' + error))
           } finally {
             instance.confirmButtonLoading = false
           }

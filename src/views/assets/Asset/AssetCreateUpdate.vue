@@ -4,17 +4,25 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import CustomInput from '@/components/CustomInput'
+import Protocols from './components/Protocols'
+import rules from '@/components/DataForm/rules'
+
 export default {
   name: 'AssetCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const nodesInitial = []
+    if (this.$route.query['node']) {
+      nodesInitial.push(this.$route.query.node)
+    }
     return {
       initial: {
         is_active: true,
-        platform: 'Linux'
+        platform: 'Linux',
+        protocols: ['ssh/22'],
+        nodes: nodesInitial
       },
       fields: [
         [this.$t('assets.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
@@ -26,7 +34,7 @@ export default {
       ],
       fieldsMeta: {
         protocols: {
-          component: CustomInput
+          component: Protocols
         },
         platform: {
           el: {
@@ -51,21 +59,24 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/admin-users/'
+              url: '/api/v1/assets/admin-users/',
+              transformOption: (item) => {
+                return { label: `${item.name}(${item.username})`, value: item.id }
+              }
             }
           },
-          rules: [{
-            required: true
-          }]
+          rules: [rules.RequiredChange]
         },
         nodes: {
+          rules: [rules.RequiredChange],
           el: {
             ajax: {
               url: '/api/v1/assets/nodes/',
               transformOption: (item) => {
                 return { label: `${item.full_value}`, value: item.id }
               }
-            }
+            },
+            clearable: true
           }
         },
         labels: {

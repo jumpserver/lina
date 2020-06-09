@@ -45,7 +45,7 @@ export default {
             }
           },
           users_amount: {
-            label: this.$t('perms.USER'),
+            label: this.$t('perms.User'),
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -97,6 +97,10 @@ export default {
         }
       },
       headerActions: {
+        createRoute: {
+          name: 'AssetPermissionCreate',
+          query: this.$route.query
+        },
         hasRightActions: false,
         hasBulkDelete: false,
         hasBulkUpdate: false,

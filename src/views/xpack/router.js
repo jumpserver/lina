@@ -8,7 +8,7 @@ export default {
   component: Layout,
   redirect: '/applications/remote-apps/',
   name: 'Xpack',
-  meta: { title: 'Xpack', icon: 'sitemap', licenseRequired: true },
+  meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true },
   children: [
     {
       path: 'change-auth-plan',

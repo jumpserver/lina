@@ -120,7 +120,6 @@ export default {
       return cleanedActions
     }
   }
-
 }
 </script>
 

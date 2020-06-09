@@ -1,14 +1,7 @@
-<template>
+<template><div>
   <div>
-    <el-row :gutter="24">
-      <el-col :span="18">
-        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-      </el-col>
-      <el-col :span="6">
-        <QuickActions type="primary" :actions="quickActions" />
-      </el-col>
-    </el-row>
-    <Dialog width="25%" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" @cancel="handleMFAConfirm()">
+    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
       <div v-if="MFAConfirmed">
         <el-form label-position="right" label-width="80px" :model="MFAInfo">
           <el-form-item :label="this.$t('assets.Hostname')">
@@ -22,13 +15,18 @@
           </el-form-item>
         </el-form>
       </div>
-      <div v-else style="display: flex;justify-content:space-between;">
-        <div style="line-height: 34px;text-align: center">MFA</div>
-        <div style="width: 70%">
+      <el-row v-else :gutter="20">
+        <el-col :span="4">
+          <div style="line-height: 34px;text-align: center">MFA</div>
+        </el-col>
+        <el-col :span="14">
           <el-input v-model="MFAInput" />
-        </div>
-        <el-button size="small" type="primary" @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
-      </div>
+          <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
+        </el-col>
+        <el-col :span="4">
+          <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
+        </el-col>
+      </el-row>
     </Dialog>
     <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
       <el-form label-position="right" label-width="80px" :model="dialogInfo">
@@ -47,12 +45,12 @@
       </el-form>
     </Dialog>
   </div>
-
+</div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ListTable from '@/components/ListTable/index'
-import QuickActions from '@/components/QuickActions'
 import Dialog from '@/components/Dialog'
 import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 
@@ -60,129 +58,24 @@ export default {
   name: 'Detail',
   components: {
     ListTable,
-    QuickActions,
     Dialog
   },
   props: {
-    object: {
-      type: Object,
-      default: () => {}
+    url: {
+      type: String,
+      required: true
+    },
+    hasLeftActions: {
+      type: Boolean,
+      default: false
+    },
+    otherActions: {
+      type: Array,
+      default: null
     }
   },
   data() {
     return {
-      quickActions: [
-        {
-          title: this.$t('assets.TestAssetsConnective'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('assets.Test')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/asset-users/tasks/?asset_id=${this.object.id}&latest=1`,
-                { action: 'test' }
-              ).then(res => {
-                console.log(`/ops/celery/task/${res.task}/log/`)
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-              }
-              )
-            }.bind(this)
-          }
-        }
-      ],
-      tableConfig: {
-        url: `/api/v1/assets/asset-users/?asset_id=${this.object.id}&latest=1`,
-        columns: [
-          {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname')
-          },
-          {
-            prop: 'ip',
-            label: this.$t('assets.ip'),
-            width: '140px'
-          },
-          {
-            prop: 'username',
-            label: this.$t('assets.Username')
-          },
-          {
-            prop: 'version',
-            label: this.$t('assets.Version'),
-            width: '50px'
-          },
-          {
-            prop: 'date_created',
-            label: this.$t('assets.DateJoined'),
-            formatter: DateFormatter
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              hasUpdate: false, // can set function(row, value)
-              canUpdate: false, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
-              canDelete: false,
-              extraActions: [
-                {
-                  name: this.$t('common.View'),
-                  title: this.$t('common.View'),
-                  type: 'primary',
-                  callback: function(val) {
-                    this.MFAInfo.asset = val.cellValue
-                    this.showMFADialog = true
-                  }.bind(this)
-                },
-                {
-                  name: this.$t('common.Remove'),
-                  title: this.$t('common.Remove'),
-                  callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(res => {
-                      this.$refs.ListTable.reloadTable()
-                      this.$message.success(this.$t('common.deleteSuccessMsg'))
-                    }).catch(error => {
-                      this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
-                    })
-                  }
-                },
-                {
-                  name: this.$t('common.Test'),
-                  title: this.$t('common.Test'),
-                  callback: (val) => {
-                    console.log(val.cellValue)
-                    this.$axios.post(
-                      `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
-                      { action: 'test' }
-                    ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-                    })
-                  }
-                },
-                {
-                  name: this.$t('common.Update'),
-                  title: this.$t('common.Update'),
-                  callback: function(val) {
-                    this.showDialog = true
-                    this.dialogInfo.asset = val.row.asset
-                    this.dialogInfo.hostname = val.row.hostname
-                    this.dialogInfo.username = val.row.username
-                  }.bind(this)
-                }
-              ]
-            }
-          }
-        ]
-      },
-      headerActions: {
-        hasRightActions: false,
-        hasLeftActions: false,
-        hasRefresh: false
-      },
       MFAConfirmed: false,
       MFAInput: '',
       MFAInfo: {
@@ -199,13 +92,142 @@ export default {
         hostname: '',
         password: '',
         key: ''
+      },
+      tableConfig: {
+        url: this.url,
+        columns: [
+          {
+            prop: 'hostname',
+            label: this.$t('assets.Hostname')
+          },
+          {
+            prop: 'ip',
+            label: this.$t('assets.ip')
+          },
+          {
+            prop: 'username',
+            label: this.$t('assets.Username')
+          },
+          {
+            prop: 'version',
+            label: this.$t('assets.Version')
+          },
+          {
+            prop: 'date_created',
+            label: this.$t('assets.date_joined'),
+            formatter: DateFormatter
+          },
+          {
+            prop: 'id',
+            label: this.$t('common.Action'),
+            align: 'center',
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false, // can set function(row, value)
+              hasDelete: false, // can set function(row, value)
+              moreActionsTitle: this.$t('common.More'),
+              extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t('common.View'),
+                  type: 'primary',
+                  callback: function(val) {
+                    this.MFAInfo.asset = val.cellValue
+                    this.showMFADialog = true
+                  }.bind(this)
+                },
+                {
+                  name: 'Delete',
+                  title: this.$t('common.Delete'),
+                  type: 'primary',
+                  callback: (val) => {
+                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
+                      this.$refs.ListTable.reloadTable()
+                    )
+                  }
+                },
+                {
+                  name: 'Test',
+                  title: this.$t('common.Test'),
+                  callback: (val) => {
+                    console.log(val.cellValue)
+                    this.$axios.post(
+                      `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
+                      { action: 'test' }
+                    ).then(res => {
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                    })
+                  }
+                },
+                {
+                  name: 'Update',
+                  title: this.$t('common.Update'),
+                  callback: function(val) {
+                    this.showDialog = true
+                    this.dialogInfo.asset = val.row.asset
+                    this.dialogInfo.hostname = val.row.hostname
+                    this.dialogInfo.username = val.row.username
+                  }.bind(this)
+                }
+              ]
+            }
+          }
+        ],
+        extraQuery: {
+          latest: 1
+        }
+      },
+      headerActions: {
+        hasLeftActions: this.hasLeftActions,
+        hasBulkDelete: false,
+        hasSearch: true,
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('assets.OnlyLatestVersion'),
+              value: 'latest',
+              children: [
+                {
+                  label: this.$t('common.Yes'),
+                  value: 1
+                },
+                {
+                  label: this.$t('common.No'),
+                  value: 0
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   },
   computed: {
-
+    ...mapGetters([
+      'publicSettings',
+      'MFAVerifyAt'
+    ]),
+    needMFAVerify() {
+      if (!this.publicSettings.SECURITY_VIEW_AUTH_NEED_MFA) {
+        return false
+      }
+      const ttl = this.publicSettings.SECURITY_MFA_VERIFY_TTL
+      const now = new Date()
+      return !(this.MFAVerifyAt && (now - this.MFAVerifyAt) < ttl * 1000)
+    }
+  },
+  watch: {
+    url(iNew) {
+      this.$set(this.tableConfig, 'url', iNew)
+    }
   },
   mounted() {
+    if (this.otherActions) {
+      const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
+      for (const item of this.otherActions) {
+        actionColumn.formatterArgs.extraActions.push(item)
+      }
+    }
   },
   methods: {
     MFAConfirm() {

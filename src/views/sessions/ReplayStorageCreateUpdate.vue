@@ -43,7 +43,7 @@ export default {
           label: this.$t('sessions.type'),
           disabled: true,
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         bucket: {
@@ -69,7 +69,7 @@ export default {
             { label: 'https', value: 'https' }
           ],
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         container_name: {

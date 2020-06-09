@@ -1,17 +1,14 @@
 <template>
   <div>
     <div v-for="(item,index) in items" :key="index" style="display: flex;justify-content: space-around;margin-top: 8px;">
-      <el-input v-model="item.value" :placeholder="placeholder" class="input-with-select" v-bind="$attrs">
-        <el-select slot="prepend" v-model="item.select" placeholder="请选择">
-          <el-option label="ssh" value="ssh" />
-          <el-option label="vnc" value="vnc" />
-          <el-option label="rdp" value="rdp" />
-          <el-option label="telnet" value="telnet" />
+      <el-input v-model="item.value" class="input-with-select" v-bind="$attrs">
+        <el-select slot="prepend" v-model="item.select" @change="handleProtocolChange">
+          <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
       </el-input>
-      <div style="display: flex">
+      <div style="display: flex" class="input-button">
         <el-button type="danger" icon="el-icon-minus" style="flex-shrink: 0;" size="mini" :disabled="items.length===1" @click="handleDelete(index)" />
-        <el-button type="success" icon="el-icon-plus" style="flex-shrink: 0;" size="mini" @click="handleAdd(index)" />
+        <el-button type="primary" icon="el-icon-plus" style="flex-shrink: 0;" size="mini" @click="handleAdd(index)" />
       </div>
     </div>
   </div>
@@ -27,10 +24,6 @@ export default {
     title: {
       type: String,
       default: ''
-    },
-    placeholder: {
-      type: String,
-      default: () => ''
     }
   },
   data() {
@@ -40,6 +33,24 @@ export default {
         {
           value: '',
           select: ''
+        }
+      ],
+      protocols: [
+        {
+          name: 'ssh',
+          port: 22
+        },
+        {
+          name: 'rdp',
+          port: 3389
+        },
+        {
+          name: 'telnet',
+          port: 23
+        },
+        {
+          name: 'vnc',
+          port: 5901
         }
       ]
     }
@@ -51,6 +62,22 @@ export default {
         data.push(`${i.select}/${i.value}`)
       })
       return data
+    },
+    itemsMap() {
+      const mapper = {}
+      for (const item of this.items) {
+        mapper[item.select] = item
+      }
+      return mapper
+    },
+    remainProtocols() {
+      const remain = []
+      for (const item of this.protocols) {
+        if (!this.itemsMap[item.name]) {
+          remain.push(item)
+        }
+      }
+      return remain
     }
   },
   watch: {
@@ -90,6 +117,21 @@ export default {
           select: ''
         }
       )
+    },
+    handleProtocolChange(val) {
+      let port = 22
+      switch (val) {
+        case 'rdp':
+          port = 3389
+          break
+        case 'telnet':
+          port = 23
+          break
+        case 'vnc':
+          port = 5901
+          break
+      }
+      this.itemsMap[val].value = port
     }
   }
 }
@@ -110,5 +152,13 @@ export default {
 
   .el-select /deep/ .el-input__inner {
     width: 100px;
+  }
+
+  .input-button {
+    margin-top: 4px;
+  }
+  .input-button /deep/ .el-button.el-button--mini {
+    height: 25px;
+    padding: 5px;
   }
 </style>

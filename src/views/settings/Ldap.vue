@@ -99,7 +99,7 @@ export default {
         AUTH_LDAP_SERVER_URI: {
           label: this.$t('setting.authLdapServerUri'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         AUTH_LDAP_BIND_DN: {
@@ -119,7 +119,7 @@ export default {
         AUTH_LDAP_SEARCH_FILTER: {
           label: this.$t('setting.authLdapSearchFilter'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.authLdapSearchFilter')
         },
@@ -129,7 +129,7 @@ export default {
             type: 'textarea'
           },
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.authLdapUserAttrMap')
         },
