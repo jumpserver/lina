@@ -23,12 +23,12 @@ export default {
         activeMenu: 'SyncInstanceTaskList',
         submenu: [
           {
-            title: this.$t('xpack.Cloud.SyncInstanceTaskList'),
-            name: 'SyncInstanceTaskList'
-          },
-          {
             title: this.$t('xpack.Cloud.AccountList'),
             name: 'AccountList'
+          },
+          {
+            title: this.$t('xpack.Cloud.SyncInstanceTaskList'),
+            name: 'SyncInstanceTaskList'
           }
         ]
       }
