@@ -675,7 +675,7 @@
     "showNodeInfo": "Show node information"
   },
   "users": {
-    "LoginConfirm": "Login approvers",
+    "LoginConfirm": "Login confirm",
     "SSHKey": "SSH Key",
     "TermsAndConditions": "Terms and conditions",
     "IAgree": "I agree",
