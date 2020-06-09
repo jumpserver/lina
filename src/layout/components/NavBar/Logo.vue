@@ -38,7 +38,11 @@ export default {
     ]),
     // eslint-disable-next-line vue/return-in-computed-property
     logoSrc() {
-      return this.publicSettings.LOGO_URLS.logo_index
+      if (this.publicSettings.LOGO_URLS.logo_index !== '/static/img/logo_text.png') {
+        return this.publicSettings.LOGO_URLS.logo_index
+      } else {
+        return this.logoText
+      }
     }
   },
   created() {
