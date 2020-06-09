@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="14">
-      <DetailCard :title="cardTitle" :items="detailCardItems" />
+      <DetailCard :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
@@ -52,9 +52,6 @@ export default {
     }
   },
   computed: {
-    cardTitle() {
-      return this.object.id
-    },
     detailCardItems() {
       return [
         {
