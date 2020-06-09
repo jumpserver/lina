@@ -24,17 +24,6 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasSelection: false,
         hasTree: true,
-        tagSearch: [
-          { label: this.$t('common.Name'), key: 'name' },
-          { label: this.$t('perms.isValid'), key: 'is_valid' },
-          { label: this.$t('common.Username'), key: 'username' },
-          { label: this.$t('perms.UserGroups'), key: 'user_group' },
-          { label: this.$t('perms.IP'), key: 'ip' },
-          { label: this.$t('perms.hostName'), key: 'hostname' },
-          { label: this.$t('perms.Node'), key: 'node' },
-          { label: this.$t('perms.SystemUser'), key: 'system_user' },
-          { label: '继承(先占位)', key: 'all=0' }
-        ],
         columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_active', 'actions'],
         columnsMeta: {
           name: {
@@ -100,6 +89,32 @@ export default {
         createRoute: {
           name: 'AssetPermissionCreate',
           query: this.$route.query
+        },
+        searchConfig: {
+          url: '',
+          options: [
+            { label: this.$t('common.Name'), value: 'name' },
+            { label: this.$t('perms.isValid'), value: 'is_valid' },
+            { label: this.$t('common.Username'), value: 'username' },
+            { label: this.$t('perms.UserGroups'), value: 'user_group' },
+            { label: this.$t('perms.IP'), value: 'ip' },
+            { label: this.$t('perms.hostName'), value: 'hostname' },
+            { label: this.$t('perms.Node'), value: 'node' },
+            { label: this.$t('perms.SystemUser'), value: 'system_user' },
+            {
+              label: this.$t('perms.Inherit'), value: 'all',
+              children: [
+                {
+                  value: '1',
+                  label: this.$t('perms.Include')
+                },
+                {
+                  value: '0',
+                  label: this.$t('perms.Exclude')
+                }
+              ]
+            }
+          ]
         },
         hasRightActions: false,
         hasBulkDelete: false,

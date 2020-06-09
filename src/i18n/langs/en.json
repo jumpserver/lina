@@ -375,7 +375,9 @@
     "userCount": "User count",
     "userGroupCount": "User group count",
     "usersAndUserGroups": "Users and user groups",
-    "": ""
+    "Inherit": "Inherit",
+    "Include": "Include",
+    "Exclude": "Exclude"
   },
   "route": {
     "AdminUserCreate": "Admin user create",
