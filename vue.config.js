@@ -44,6 +44,11 @@ module.exports = {
         target: process.env.VUE_APP_CORE_HOST,
         changeOrigin: true
       },
+      '/ws/': {
+        target: 'ws://127.0.0.1:8080',
+        changeOrigin: true,
+        ws: true
+      },
       '^/(core|static|media)/': {
         target: process.env.VUE_APP_CORE_HOST,
         changeOrigin: true
