@@ -18,6 +18,7 @@
 <script>
 import IBox from '@/components/IBox'
 import AssetSelect from '@/components/AssetSelect'
+
 export default {
   name: 'AssetRelationCard',
   components: {

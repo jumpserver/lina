@@ -15,7 +15,7 @@
 import ListTable from '@/components/ListTable'
 import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
-import AssetRelationCard from './AssetRelationCard/index'
+import AssetRelationCard from '@/components/AssetRelationCard'
 
 export default {
   name: 'AssetPermissionAsset',
