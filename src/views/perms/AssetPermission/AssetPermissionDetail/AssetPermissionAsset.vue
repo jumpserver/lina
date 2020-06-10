@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
@@ -15,7 +15,7 @@
 import ListTable from '@/components/ListTable'
 import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
-import AssetRelationCard from './AssetRelationCard/index'
+import AssetRelationCard from '@/components/AssetRelationCard'
 
 export default {
   name: 'AssetPermissionAsset',
@@ -64,16 +64,22 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
-        performAdd: (items) => {
+        performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map(item => {
             return {
               assetpermission: objectId,
-              asset: v
+              asset: item
             }
           })
           return this.$axios.post(relationUrl, data)
+        },
+        onAddSuccess: (items, that) => {
+          this.$log.debug('AssetSelect value', that.assets)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$refs.ListTable.reloadTable()
+          that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       },
       nodeRelationConfig: {
@@ -102,7 +108,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -119,7 +125,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       },
       systemUserRelationConfig: {
@@ -148,7 +154,6 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -167,7 +172,6 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
         }
       }
     }

@@ -27,7 +27,7 @@ export default {
         activeMenu: 'RemoteAppPermissionDetail',
         submenu: [
           {
-            title: this.$t('perms.remoteAppPermissionDetail'),
+            title: this.$t('common.BasicInfo'),
             name: 'RemoteAppPermissionDetail'
           },
           {
