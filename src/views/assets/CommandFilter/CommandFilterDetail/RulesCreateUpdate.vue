@@ -4,18 +4,22 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
-    :create-success-next-route="createSuccessNextRoute"
-    :update-success-next-route="updateSuccessNextRoute"
+    :get-next-route="getNextRoute"
   />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import Select2 from '@/components/Select2'
 export default {
   name: 'RulesCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
-    const filterId = this.$route.params.id
+    const filterId = this.$route.query.filter
+    const regexPlaceholder = 'rm.*|reboot|shutdown'
+    const commandPlaceholder = 'rm\rreboot'
+    const commandHelpText = this.$t('assets.CommandFilterRuleContentHelpText')
+    const vm = this
     return {
       initial: {
         filter: filterId,
@@ -28,29 +32,52 @@ export default {
       ],
       fieldsMeta: {
         filter: {
-          type: 'input',
+          component: Select2,
           el: {
+            ajax: {
+              url: '/api/v1/assets/cmd-filters/'
+            },
             disabled: true,
             multiple: false
+          }
+        },
+        'action.value': {
+          on: {
+            change: ([val]) => {
+              if (val === 'command') {
+                vm.fieldsMeta.content.el.placeholder = commandPlaceholder
+                vm.fieldsMeta.content.helpText = commandHelpText
+              } else {
+                vm.fieldsMeta.content.el.placeholder = regexPlaceholder
+                vm.fieldsMeta.content.helpText = ''
+              }
+            }
           }
         },
         content: {
           type: 'input',
           el: {
             type: 'textarea',
-            placeholder: 'rm.*|reboot|shutdown'
+            placeholder: 'rm.*|reboot|shutdown',
+            rows: 4
           },
-          helpText: '每行一个命令'
+          helpText: ''
         },
         priority: {
-          helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
+          // helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
+          helpText: this.$t('assets.CommandFilterRulePriorityHelpText')
         }
       },
-      updateSuccessNextRoute: {
-        name: 'CommandFilterList'
-      },
-      createSuccessNextRoute: {
-        name: 'CommandFilterList'
+      getNextRoute(res, method) {
+        return {
+          name: 'CommandFilterDetail',
+          params: {
+            id: res.filter
+          },
+          query: {
+            activeTable: 'rules'
+          }
+        }
       },
       url: `/api/v1/assets/cmd-filters/${filterId}/rules/`
     }

@@ -13,12 +13,24 @@ const defaultPerformDelete = function({ row, col }) {
 }
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-  const routeName = this.colActions.updateRoute
-  this.$router.push({ name: routeName, params: { id: id }})
+  let route = { params: { id: id }}
+  const updateRoute = this.colActions.updateRoute
+
+  if (typeof updateRoute === 'object') {
+    route = Object.assign(route, updateRoute)
+  } else {
+    route.name = updateRoute
+  }
+  this.$router.push(route)
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  const msg = this.$t('common.deleteWarningMsg') + ' "' + `${row.name || row.hostname}` + '"'
+  let msg = this.$t('common.deleteWarningMsg')
+  const name = row.name || row.hostname
+  if (name) {
+    msg += ` "${name}" `
+  }
+  msg += ' ?'
   const title = this.$t('common.Info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {

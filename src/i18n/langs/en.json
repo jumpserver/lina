@@ -29,6 +29,8 @@
     "": ""
   },
   "assets": {
+    "CommandFilterRuleContentHelpText": "One line one command",
+    "CommandFilterRulePriorityHelpText": "1-100, the higher will be match first",
     "RemoteAppListHelpMessage": "Before using this feature, make sure that the application loader has been uploaded to the application server and successfully published as a RemoteApp application <b><a href='https://github.com/jumpserver/Jmservisor/releases'> Download application loader</a></b>",
     "PasswordWithoutSpecialCharHelpText": "Password can't has special chars ",
     "GatewayProtocolHelpText": "SSH protocol gateway, support proxy SSH, RDP, VNC",

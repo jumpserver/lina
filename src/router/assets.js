@@ -130,36 +130,36 @@ export default [
     ]
   },
   {
-    path: 'platforms',
+    path: 'system-users',
     component: empty,
-    meta: { permissions: [rolec.PERM_SUPER] },
     redirect: '',
+    meta: { },
     children: [
       {
         path: '',
-        name: 'PlatformList',
-        component: () => import('@/views/assets/Platform/PlatformList'),
-        meta: { title: i18n.t('route.PlatformList'), activeMenu: '/assets/platforms' }
+        name: 'SystemUserList',
+        component: () => import('@/views/assets/SystemUser/SystemUserList.vue'),
+        meta: { title: i18n.t('route.SystemUserList'), activeMenu: '/assets/system-users' }
       },
       {
         path: 'create',
-        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformCreate',
-        meta: { title: i18n.t('route.PlatformCreate'), activeMenu: '/assets/platform' },
+        name: 'SystemUserCreate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
         hidden: true
       },
       {
         path: ':id/update',
-        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
-        name: 'PlatformUpdate',
-        meta: { title: i18n.t('route.PlatformUpdate'), activeMenu: '/assets/platform', permissions: [rolec.PERM_SUPER] },
+        name: 'SystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
         hidden: true
       },
       {
         path: ':id',
-        component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
-        name: 'PlatformDetail',
-        meta: { title: i18n.t('route.PlatformDetail'), activeMenu: '/assets/platform' },
+        name: 'SystemUserDetail',
+        component: () => import('@/views/assets/SystemUser/SystemUserDetail/index.vue'),
+        meta: { title: i18n.t('route.SystemUserDetail'), activeMenu: '/assets/system-users' },
         hidden: true
       }
     ]
@@ -191,20 +191,6 @@ export default [
         hidden: true
       },
       {
-        path: ':id/rules/create',
-        component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpdate.vue'), // Parent router-view
-        name: 'CommandFilterRulesCreate',
-        meta: { title: i18n.t('route.CommandFilterRulesCreate'), activeMenu: '/assets/cmd-filters' },
-        hidden: true
-      },
-      {
-        path: ':id/rules/:id/update',
-        component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpdate.vue'), // Parent router-view
-        name: 'CommandFilterRulesUpdate',
-        meta: { title: i18n.t('route.CommandFilterRulesUpdate'), activeMenu: '/assets/cmd-filters' },
-        hidden: true
-      },
-      {
         path: ':id',
         component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/index.vue'), // Parent router-view
         name: 'CommandFilterDetail',
@@ -214,36 +200,57 @@ export default [
     ]
   },
   {
-    path: 'system-users',
+    path: 'command-filter-rules',
     component: empty,
-    redirect: '',
-    meta: { },
+    hidden: true,
     children: [
       {
-        path: '',
-        name: 'SystemUserList',
-        component: () => import('@/views/assets/SystemUser/SystemUserList.vue'),
-        meta: { title: i18n.t('route.SystemUserList'), activeMenu: '/assets/system-users' }
-      },
-      {
         path: 'create',
-        name: 'SystemUserCreate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
-        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
+        component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpdate.vue'), // Parent router-view
+        name: 'CommandFilterRulesCreate',
+        meta: { title: i18n.t('route.CommandFilterRulesCreate'), activeMenu: '/assets/cmd-filters' },
         hidden: true
       },
       {
         path: ':id/update',
-        name: 'SystemUserUpdate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
-        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
+        component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpdate.vue'), // Parent router-view
+        name: 'CommandFilterRulesUpdate',
+        meta: { title: i18n.t('route.CommandFilterRulesUpdate'), activeMenu: '/assets/cmd-filters' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: 'platforms',
+    component: empty,
+    meta: { permissions: [rolec.PERM_SUPER] },
+    redirect: '',
+    children: [
+      {
+        path: '',
+        name: 'PlatformList',
+        component: () => import('@/views/assets/Platform/PlatformList'),
+        meta: { title: i18n.t('route.PlatformList'), activeMenu: '/assets/platforms' }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
+        name: 'PlatformCreate',
+        meta: { title: i18n.t('route.PlatformCreate'), activeMenu: '/assets/platform' },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
+        name: 'PlatformUpdate',
+        meta: { title: i18n.t('route.PlatformUpdate'), activeMenu: '/assets/platform', permissions: [rolec.PERM_SUPER] },
         hidden: true
       },
       {
         path: ':id',
-        name: 'SystemUserDetail',
-        component: () => import('@/views/assets/SystemUser/SystemUserDetail/index.vue'),
-        meta: { title: i18n.t('route.SystemUserDetail'), activeMenu: '/assets/system-users' },
+        component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
+        name: 'PlatformDetail',
+        meta: { title: i18n.t('route.PlatformDetail'), activeMenu: '/assets/platform' },
         hidden: true
       }
     ]

@@ -4,7 +4,6 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'Rules',
@@ -21,87 +20,33 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/cmd-filters/${this.object.id}/rules/`,
-        columns: [
-          {
-            prop: 'type.display',
-            label: this.$t('assets.Type')
+        columns: ['type', 'content', 'priority', 'action', 'comment', 'actions'],
+        columnsMeta: {
+          content: {
+            showOverflowTooltip: true
           },
-          {
-            prop: 'content',
-            label: this.$t('assets.Content')
-          },
-          {
-            prop: 'priority',
-            label: this.$t('assets.Priority')
-          },
-          {
-            prop: 'action.display',
-            label: this.$t('assets.RuleAction')
-          },
-          {
-            prop: 'action.comment',
-            label: this.$t('assets.Comment')
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: ActionsFormatter,
-            width: '200px',
+          actions: {
             formatterArgs: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/assets/cmd-filters/${this.object.id}/rules/${id}/`
-                return this.$axios.delete(url).then(res => {
-                  this.$message.success(this.$t('common.deleteSuccessMsg'))
-                }).catch(err => {
-                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + err))
-                })
-              },
-              onUpdate: ({ row, col }) => {
-                console.log(this)
-                this.$router.push({
-                  name: 'CommandFilterRulesUpdate',
-                  params: {
-                    ruleid: this.object.id,
-                    id: row.id
-                  }
-                })
+              updateRoute: {
+                name: 'CommandFilterRulesUpdate',
+                query: {
+                  filter: this.object.id
+                }
               }
-
             }
           }
-        ]
+        }
       },
       headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: true,
         hasBulkDelete: false,
         hasSearch: true,
-        extraActions: [
-          {
-            name: 'actionCreate',
-            title: this.$t('assets.CreateRules'),
-            type: 'primary',
-            has: true,
-            can: true,
-            callback: this.createRoute.bind(this)
+        createRoute: {
+          name: 'CommandFilterRulesCreate',
+          query: {
+            filter: this.object.id
           }
-        ],
-        hasCreate: false
-      }
-    }
-  },
-  methods: {
-    createRoute(val) {
-      this.$router.push({
-        name: 'CommandFilterRulesCreate',
-        params: {
-          ruleid: this.object.id
         }
-      })
+      }
     }
   }
 }
