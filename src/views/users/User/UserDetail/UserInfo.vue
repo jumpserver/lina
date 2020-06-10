@@ -204,7 +204,7 @@ export default {
           const objectId = this.object.id
           const relationUrl = `/api/v1/authentication/login-confirm-settings/${objectId}/`
           const data = {
-            reviewers: [...this.object.login_confirm_settings, ...items.map(v => {
+            reviewers: [...this.object.login_confirm_settings || [], ...items.map(v => {
               return v.value
             })]
           }
