@@ -3,7 +3,7 @@
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <AssetSelect ref="assetSelect" @change="getAsset" />
+          <AssetSelect ref="assetSelect" />
         </td>
       </tr>
       <tr>
@@ -16,8 +16,9 @@
 </template>
 
 <script>
-import IBox from '@/components/IBox/index'
-import AssetSelect from '@/components/AssetSelect/index'
+import IBox from '@/components/IBox'
+import AssetSelect from '@/components/AssetSelect'
+
 export default {
   name: 'AssetRelationCard',
   components: {
@@ -47,26 +48,19 @@ export default {
     },
     onAddSuccess: {
       type: Function,
-      default(that) {
-        this.$log.debug('AssetSelect value', that.assets)
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-        setTimeout(() => location.reload(), 500)
-      }
+      default: (objects, that) => {}
     }
   },
   data() {
     return {
-      assets: []
     }
   },
   methods: {
     addObjects() {
-      this.performAdd(this.assets, this).then(
-        () => this.onAddSuccess(this)
+      const objects = this.$refs.assetSelect.$refs.select2.iValue
+      this.performAdd(objects, this).then(
+        () => this.onAddSuccess(objects, this)
       )
-    },
-    getAsset(assets) {
-      this.assets = assets
     }
   }
 }
