@@ -19,8 +19,8 @@
         <el-upload
           ref="upload"
           action="string"
-          :http-request="handleImport"
           list-type="text/csv"
+          :http-request="handleImport"
           :limit="1"
           :auto-upload="false"
           :before-upload="beforeUpload"
