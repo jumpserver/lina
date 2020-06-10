@@ -153,7 +153,7 @@ export default {
     }
   },
   mounted() {
-    this.$log.debug('Select2 url is: ', this.iAjax.url)
+    // this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
       this.initialSelect()
       this.initialized = true
@@ -226,7 +226,7 @@ export default {
       })
     },
     async initialSelect() {
-      this.$log.debug('Select ajax config', this.iAjax)
+      // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
         if (this.value && this.value.length !== 0) {
           this.$log.debug('Start init select2 value')

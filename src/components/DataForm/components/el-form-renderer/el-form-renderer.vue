@@ -101,6 +101,7 @@ export default {
       handler(v) {
         this.options = collect(v, 'options')
         this.setValueFromModel()
+        this.initValue = _clonedeep(this.value)
       },
       immediate: true
     },

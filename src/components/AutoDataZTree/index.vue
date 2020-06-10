@@ -208,9 +208,7 @@ export default {
       }
       // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
       const url = `${this.treeSetting.nodeUrl}${parentNode.meta.node.id}/children/`
-      this.$axios.post(
-        url, {}
-      ).then(data => {
+      this.$axios.post(url, {}).then(data => {
         const newNode = {
           id: data['key'],
           name: data['value'],
@@ -225,9 +223,9 @@ export default {
         const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
         this.currentNodeId = node.meta.node.id || newNode.id
         this.zTree.editName(node)
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$t('common.createSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$t('common.createErrorMsg' + ' ' + error))
       })
     },
     refresh: function() {

@@ -14,7 +14,7 @@
 
     <el-form-item>
       <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" @click="handleClick(button)">{{ button.title }}</el-button>
-      <el-button v-if="defaultButton" size="small" @click="resetForm('form')">{{ $t('common.Reset') }}</el-button>
+      <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">{{ $t('common.Reset') }}</el-button>
       <el-button v-if="defaultButton" size="small" :loading="isSubmitting" type="primary" @click="submitForm('form')">{{ $t('common.Submit') }}</el-button>
     </el-form-item>
   </ElFormRender>
@@ -28,6 +28,10 @@ export default {
   },
   props: {
     defaultButton: {
+      type: Boolean,
+      default: true
+    },
+    hasReset: {
       type: Boolean,
       default: true
     },
