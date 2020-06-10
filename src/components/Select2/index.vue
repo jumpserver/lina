@@ -150,6 +150,9 @@ export default {
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
+    },
+    value(iNew) {
+      this.iValue = iNew
     }
   },
   mounted() {
