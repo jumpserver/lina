@@ -53,6 +53,11 @@
         />
       </Dialog>
     </div>
+    <GenericUpdateFormDialog
+      :selected-rows="selectedRows"
+      :form-setting="updateSelectedDialogSetting.formSetting"
+      :dialog-setting="updateSelectedDialogSetting.dialogSetting"
+    />
   </div>
 </template>
 
@@ -62,15 +67,19 @@ import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/component
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'
+import { GenericUpdateFormDialog } from '@/layout/components'
 
 export default {
   components: {
     GenericTreeListPage,
     Dialog,
-    TreeTable
+    TreeTable,
+    GenericUpdateFormDialog
   },
   data() {
+    const vm = this
     return {
+      selectedRows: [],
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -171,6 +180,15 @@ export default {
             }.bind(this)
           },
           {
+            name: 'updateSelected',
+            title: this.$t('common.updateSelected'),
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: ({ selectedRows, reloadTable }) => {
+              vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
+              vm.selectedRows = selectedRows
+            }
+          },
+          {
             name: 'RemoveFromCurrentNode',
             title: this.$t('assets.RemoveFromCurrentNode'),
             can: ({ selectedRows }) => {
@@ -249,6 +267,62 @@ export default {
         headerActions: {
           hasLeftActions: false,
           hasRightActions: false
+        }
+      },
+      updateSelectedDialogSetting: {
+        dialogSetting: {
+          dialogVisible: false
+        },
+        formSetting: {
+          url: '/api/v1/assets/assets/',
+          initial: {
+            platform: 'Linux'
+          },
+          fields: [
+            [this.$t('assets.Basic'), ['platform', 'domain']],
+            [this.$t('assets.Auth'), ['admin_user']],
+            [this.$t('assets.Label'), ['labels']],
+            [this.$t('assets.Other'), ['comment']]
+          ],
+          fieldsMeta: {
+            platform: {
+              el: {
+                multiple: false,
+                ajax: {
+                  url: '/api/v1/assets/platforms/',
+                  transformOption: (item) => {
+                    return { label: `${item.name}`, value: item.name }
+                  }
+                }
+              }
+            },
+            domain: {
+              el: {
+                multiple: false,
+                ajax: {
+                  url: '/api/v1/assets/domains/'
+                }
+              }
+            },
+            admin_user: {
+              el: {
+                multiple: false,
+                ajax: {
+                  url: '/api/v1/assets/admin-users/',
+                  transformOption: (item) => {
+                    return { label: `${item.name}(${item.username})`, value: item.id }
+                  }
+                }
+              }
+            },
+            labels: {
+              el: {
+                ajax: {
+                  url: '/api/v1/assets/labels/'
+                }
+              }
+            }
+          }
         }
       }
     }
