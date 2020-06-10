@@ -24,7 +24,19 @@ export default {
       default: ''
     },
     hasExport: defaultTrue,
+    handleExport: {
+      type: Function,
+      default: function({ selectedRows }) {
+        this.$eventBus.$emit('showExportDialog', { selectedRows })
+      }
+    },
     hasImport: defaultTrue,
+    handleImport: {
+      type: Function,
+      default: function({ selectedRows }) {
+        this.$eventBus.$emit('showImportDialog', { selectedRows })
+      }
+    },
     hasRefresh: defaultTrue,
     selectedRows: {
       type: Array,
@@ -42,8 +54,8 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport },
-        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport },
+        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport.bind(this) },
+        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport.bind(this) },
         { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
       ],
       dialogExportVisible: false,
@@ -67,12 +79,12 @@ export default {
     handleTagSearch(val) {
       this.searchTable(val)
     },
-    handleExport({ selectedRows }) {
-      this.$eventBus.$emit('showExportDialog', { selectedRows })
-    },
-    handleImport({ selectedRows }) {
-      this.$eventBus.$emit('showImportDialog', { selectedRows })
-    },
+    // handleExport({ selectedRows }) {
+    //   this.$eventBus.$emit('showExportDialog', { selectedRows })
+    // },
+    // handleImport({ selectedRows }) {
+    //   this.$eventBus.$emit('showImportDialog', { selectedRows })
+    // },
     handleRefresh() {
       this.reloadTable()
     }

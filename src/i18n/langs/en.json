@@ -336,6 +336,9 @@
     "versionDetail": "Version detail",
     "versionRunExecution": "Version run execution",
     "TaskMonitor": "Task monitor",
+    "selectAssetsMessage":"Select the left asset, select the running system user, execute command in batch",
+    "selectedAssets": "Selected assets:",
+    "inTotal": "In total",
     "Execute": "Execute",
     "PleaseSelect": "Please select"
   },

@@ -128,7 +128,7 @@ export default {
       }
       this.options = res
     })
-    this.xterm.write(`选择左侧资产, 选择运行的系统用户，批量执行命令`)
+    this.xterm.write(this.$t('ops.selectAssetsMessage'))
     this.enableWS()
   },
   methods: {
@@ -168,10 +168,10 @@ export default {
       const nodes_names = nodes.map(function(node) {
         return node.name
       })
-      let message = `已选择资产:`
+      let message = this.$t('ops.selectedAssets')
       message += nodes_names.join(', ')
       message += '\r\n'
-      message += `总共：${nodes_names.length} 个\r\n`
+      message += this.$t('ops.inTotal') + `：${nodes_names.length} \r\n`
       this.xterm.clear()
       this.xterm.write(message)
     },

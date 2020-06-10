@@ -72,6 +72,14 @@ export default {
     otherActions: {
       type: Array,
       default: null
+    },
+    handleExport: {
+      type: Function,
+      default: null
+    },
+    handleImport: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -229,6 +237,15 @@ export default {
         actionColumn.formatterArgs.extraActions.push(item)
       }
     }
+  },
+  created() {
+    if (this.handleExport) {
+      this.headerActions.handleExport = this.handleExport
+    }
+    if (this.handleImport) {
+      this.headerActions.handleImport = this.handleImport
+    }
+    console.log(this.headerActions)
   },
   methods: {
     MFAConfirm() {
