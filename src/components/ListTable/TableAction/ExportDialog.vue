@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="$t('common.Export')" :visible.sync="showExportDialog" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
+  <Dialog :title="$t('common.Export')" :visible.sync="showExportDialog" :destroy-on-close="true" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
     <el-form label-position="left" style="padding-left: 50px">
       <el-form-item :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
         <el-radio v-model="exportOption" class="export-item" label="1">{{ this.$t('common.imExport.ExportAll') }}</el-radio>

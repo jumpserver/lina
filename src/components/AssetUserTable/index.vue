@@ -246,7 +246,6 @@ export default {
     if (this.handleImport) {
       this.headerActions.handleImport = this.handleImport
     }
-    console.log(this.headerActions)
   },
   methods: {
     MFAConfirm() {

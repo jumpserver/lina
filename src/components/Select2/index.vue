@@ -150,6 +150,9 @@ export default {
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
+    },
+    value(iNew) {
+      this.iValue = iNew
     }
   },
   mounted() {
@@ -159,8 +162,10 @@ export default {
       this.initialized = true
     }
     this.$nextTick(() => {
-      if (this.$refs.select.elFormItem) {
-        this.$refs.select.elFormItem.clearValidate()
+      // 因为elform存在问题，这个来清楚验证
+      const elFormItem = this.$refs.select.elFormItem
+      if (elFormItem && elFormItem.clearValidate) {
+        elFormItem.clearValidate()
       }
     })
   },

@@ -6,7 +6,7 @@
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
-      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="info" style="margin-top: 15px" />
+      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="danger" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
@@ -204,7 +204,7 @@ export default {
           const objectId = this.object.id
           const relationUrl = `/api/v1/authentication/login-confirm-settings/${objectId}/`
           const data = {
-            reviewers: [...this.object.login_confirm_settings, ...items.map(v => {
+            reviewers: [...this.object.login_confirm_settings || [], ...items.map(v => {
               return v.value
             })]
           }
