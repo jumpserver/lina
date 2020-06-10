@@ -24,7 +24,8 @@
 <script>
 import TreeTable from '@/components/TreeTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
-import { Select2, Dialog } from '@/components'
+import Select2 from '@/components/Select2'
+import Dialog from '@/components/Dialog'
 
 export default {
   componentName: 'AssetSelect',
