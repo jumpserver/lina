@@ -102,7 +102,7 @@ export default {
                   fa: 'fa-terminal',
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
+                    window.open(`/luna/?login_to=${cellValue}`, '_blank')
                   }
                 },
                 {
