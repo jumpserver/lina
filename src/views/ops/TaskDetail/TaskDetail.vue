@@ -32,16 +32,16 @@ export default {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),
         content: {
-          hostname: 'linux',
-          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
+          hostname: this.object.last_success[0],
+          result: this.object.last_success[1]
         }
       },
       RunFailedConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunFailedHosts'),
         content: {
-          hostname: 'window',
-          result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+          hostname: this.object.last_failure[0],
+          result: this.object.last_failure[1]
         }
       },
       taskData: {}

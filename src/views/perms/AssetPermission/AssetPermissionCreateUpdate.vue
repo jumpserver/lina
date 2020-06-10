@@ -23,6 +23,7 @@ export default {
       initial: {
         is_active: true,
         actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
+        date_start: '2020-06-18 00:00:00 +0800',
         date_expired: '2099-12-31 00:00:00 +0800',
         nodes: nodesInitial,
         assets: assetsInitial
@@ -32,7 +33,7 @@ export default {
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
         [this.$t('common.action'), ['actions']],
-        [this.$t('common.Other'), ['is_active', 'date_expired', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       fieldsMeta: {
@@ -96,6 +97,9 @@ export default {
             { label: 'upload_file', value: this.$t('perms.uploadFile') },
             { label: 'download_file', value: this.$t('perms.downloadFile') }
           ]
+        },
+        date_start: {
+          label: this.$t('common.dateStart')
         },
         date_expired: {
           label: this.$t('common.dateExpired')

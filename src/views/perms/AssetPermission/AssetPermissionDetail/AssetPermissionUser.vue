@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="userRelationConfig" />
@@ -85,7 +85,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       },
       groupRelationConfig: {
@@ -117,7 +117,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         },
         onDeleteSuccess: (obj, that) => {
           const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
@@ -128,7 +128,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       }
     }

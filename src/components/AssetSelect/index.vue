@@ -11,7 +11,7 @@
       @confirm="handleConfirm"
       @cancel="handleCancel"
     >
-      <GenericTreeListPage
+      <TreeTable
         ref="ListPage"
         :tree-setting="treeSetting"
         :table-config="tableConfig"
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import TreeTable from '@/components/TreeTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 import { Select2, Dialog } from '@/components'
 
 export default {
   componentName: 'AssetSelect',
-  components: { GenericTreeListPage, Select2, Dialog },
+  components: { TreeTable, Select2, Dialog },
   props: {
     value: {
       type: Array,

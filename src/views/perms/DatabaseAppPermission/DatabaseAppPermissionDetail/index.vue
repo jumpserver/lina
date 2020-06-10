@@ -27,7 +27,7 @@ export default {
         activeMenu: 'DatabaseAppPermissionDetail',
         submenu: [
           {
-            title: this.$t('perms.databaseAppPermissionDetail'),
+            title: this.$t('common.BasicInfo'),
             name: 'DatabaseAppPermissionDetail'
           },
           {

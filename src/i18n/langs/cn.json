@@ -224,6 +224,7 @@
     "createSuccessMsg": "创建成功",
     "createdBy": "创建人",
     "dateCreated": "创建日期",
+    "dateStart": "开始日期",
     "dateExpired": "失效日期",
     "deleteErrorMsg": "删除失败",
     "deleteSelected": "删除所选",
@@ -338,7 +339,9 @@
     "versionRunExecution": "执行历史",
     "selectAssetsMessage":"选择左侧资产, 选择运行的系统用户，批量执行命令",
     "selectedAssets": "已选择资产:",
-    "inTotal": "总共"
+    "inTotal": "总共",
+    "Execute": "执行",
+    "PleaseSelect": "请选择"
   },
   "perms": {
     "Actions": "动作",
@@ -417,7 +420,7 @@
     "CreateReplayStorage": "创建录像存储",
     "Dashboard": "仪表盘",
     "DatabaseApp": "数据库应用",
-    "DatabaseAppCreate": "",
+    "DatabaseAppCreate": "创建数据库应用",
     "DatabaseAppDetail": "数据库详情",
     "DatabaseAppPermission": "数据库授权",
     "DatabaseAppPermissionCreate": "创建数据库授权规则",

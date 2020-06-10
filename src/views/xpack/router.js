@@ -89,21 +89,21 @@ export default {
           component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
           name: 'SyncInstanceTaskList',
           hidden: true,
-          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList') }
+          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList'), activeMenu: '/xpack/cloud' }
         },
         {
           path: 'sync-instance-tasks/create',
           component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
           name: 'SyncInstanceTaskCreate',
           hidden: true,
-          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate') }
+          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'), activeMenu: '/xpack/cloud' }
         },
         {
           path: 'sync-instance-tasks/:id/update',
           component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
           name: 'SyncInstanceTaskUpdate',
           hidden: true,
-          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate') }
+          meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'), activeMenu: '/xpack/cloud' }
         }
       ]
     },

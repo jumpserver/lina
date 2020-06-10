@@ -30,7 +30,7 @@ export default {
         activeMenu: 'AssetPermissionDetail',
         submenu: [
           {
-            title: this.$t('perms.assetPermissionDetail'),
+            title: this.$t('common.BasicInfo'),
             name: 'AssetPermissionDetail'
           },
           {

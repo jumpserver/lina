@@ -23,7 +23,7 @@
                 <CodeMirror :options="codeMirrorOptions" @change="handleActionChange" />
               </div>
               <div style="display: flex;flex-direction: column ;justify-content: space-between">
-                <el-select v-model="selectedSystemUser" placeholder="请选择" @change="handleSystemUserChange">
+                <el-select v-model="selectedSystemUser" :placeholder="this.$t('ops.PleaseSelect')" @change="handleSystemUserChange">
                   <el-option
                     v-for="item in options"
                     :key="item.id"
@@ -32,7 +32,7 @@
                     :value="item.id"
                   />
                 </el-select>
-                <el-button type="primary" size="small" @click="execute">执行</el-button>
+                <el-button type="primary" size="small" @click="execute">{{ this.$t('ops.Execute') }}</el-button>
               </div>
             </div>
           </IBox>

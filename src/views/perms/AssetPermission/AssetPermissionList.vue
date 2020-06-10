@@ -24,7 +24,7 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasSelection: false,
         hasTree: true,
-        columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_active', 'actions'],
+        columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
           name: {
             formatterArgs: {

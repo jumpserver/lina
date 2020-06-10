@@ -13,7 +13,7 @@
 <script>
 import ListTable from '@/components/ListTable/index'
 import RelationCard from '@/components/RelationCard/index'
-import AssetRelationCard from './AssetRelationCard'
+import AssetRelationCard from '@/components/AssetRelationCard'
 
 export default {
   name: 'ChangeAuthPlanAsset',
@@ -52,14 +52,14 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
-        performAdd: (items, vm) => {
+        performAdd: (items, that) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/asset/add/`
           const data = {
             assets: items
           }
           return this.$axios.patch(relationUrl, data)
         },
-        onAddSuccess: (that) => {
+        onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.listTable.reloadTable()

@@ -158,6 +158,9 @@ export default {
       this.initialSelect()
       this.initialized = true
     }
+    this.$nextTick(() => {
+      this.$refs.select.elFormItem.clearValidate()
+    })
   },
   methods: {
     async loadMore(load) {
