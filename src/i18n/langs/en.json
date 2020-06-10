@@ -160,6 +160,7 @@
     "MFARequireForSecurity": "MFA required for security",
     "TestSuccessMsg": "Test Success",
     "DateLastWeek": "Last week",
+    "MFAConfirm": "MFA Confirm",
     "DateLastMonth": "Last month",
     "DateLast3Months": "Last 3 months",
     "removeErrorMsg": "Remove failed: ",

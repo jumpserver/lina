@@ -18,7 +18,9 @@
     "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'"
   },
   "dependencies": {
+    "@ztree/ztree_v3": "3.5.44",
     "axios": "0.18.1",
+    "babel-polyfill": "^6.26.0",
     "deepmerge": "^4.2.2",
     "echarts": "^4.7.0",
     "element-ui": "2.13.2",
@@ -52,8 +54,7 @@
     "vuejs-logger": "^1.5.4",
     "vuex": "3.1.0",
     "xterm": "^4.5.0",
-    "xterm-addon-fit": "^0.3.0",
-    "@ztree/ztree_v3": "3.5.44"
+    "xterm-addon-fit": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
