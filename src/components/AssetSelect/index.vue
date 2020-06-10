@@ -73,6 +73,7 @@ export default {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
             sortable: true,
+            showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'

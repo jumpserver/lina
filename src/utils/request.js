@@ -49,7 +49,8 @@ service.interceptors.request.use(
 )
 
 function ifUnauthorized({ response, error }) {
-  if (response.status === 401 && response.config.url.indexOf('/users/profile') !== -1) {
+  if (response.status === 401 && response.request.url.indexOf('/users/profile') !== -1) {
+    response.config.disableFlashErrorMsg = true
     // 未授权重定向到登录页面
     const title = i18n.t('common.Info')
     const msg = i18n.t('auth.LoginRequiredMsg')
@@ -64,7 +65,6 @@ function ifUnauthorized({ response, error }) {
 }
 
 function ifBadRequest({ response, error }) {
-  console.log(response)
   if (response.status === 400) {
     error.message = i18n.t('common.BadRequestErrorMsg')
   }
