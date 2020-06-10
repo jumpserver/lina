@@ -6,7 +6,7 @@
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
-      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="info" style="margin-top: 15px" />
+      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="danger" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
