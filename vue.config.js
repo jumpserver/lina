@@ -37,6 +37,9 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    entry: {
+      app: ['babel-polyfill', './src/main.js']
+    },
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
