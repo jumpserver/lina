@@ -335,7 +335,10 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史"
+    "versionRunExecution": "执行历史",
+    "selectAssetsMessage":"选择左侧资产, 选择运行的系统用户，批量执行命令",
+    "selectedAssets": "已选择资产:",
+    "inTotal": "总共"
   },
   "perms": {
     "Actions": "动作",
