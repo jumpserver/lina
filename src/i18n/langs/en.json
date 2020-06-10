@@ -333,7 +333,9 @@
     "version": "Version",
     "versionDetail": "Version detail",
     "versionRunExecution": "Version run execution",
-    "TaskMonitor": "Task monitor"
+    "TaskMonitor": "Task monitor",
+    "Execute": "Execute",
+    "PleaseSelect": "Please select"
   },
   "perms": {
     "Actions": "Actions",

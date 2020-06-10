@@ -336,7 +336,9 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史"
+    "versionRunExecution": "执行历史",
+    "Execute": "执行",
+    "PleaseSelect": "请选择"
   },
   "perms": {
     "Actions": "动作",
