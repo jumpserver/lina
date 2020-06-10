@@ -37,8 +37,4 @@ export default {
 </script>
 
 <style scoped>
- .upload-key input {
-    opacity: 70;
-    cursor: pointer
-  }
 </style>
