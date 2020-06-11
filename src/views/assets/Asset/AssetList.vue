@@ -279,13 +279,12 @@ export default {
             platform: 'Linux'
           },
           fields: [
-            [this.$t('assets.Basic'), ['platform', 'domain']],
-            [this.$t('assets.Auth'), ['admin_user']],
-            [this.$t('assets.Label'), ['labels']],
-            [this.$t('assets.Other'), ['comment']]
+            'platform', 'domain', 'admin_user', 'labels', 'comment'
           ],
           fieldsMeta: {
             platform: {
+              label: this.$t('assets.Platform'),
+              hidden: () => false,
               el: {
                 multiple: false,
                 ajax: {
@@ -297,6 +296,8 @@ export default {
               }
             },
             domain: {
+              label: this.$t('assets.Domain'),
+              hidden: () => false,
               el: {
                 multiple: false,
                 ajax: {
@@ -305,6 +306,8 @@ export default {
               }
             },
             admin_user: {
+              label: this.$t('assets.AdminUser'),
+              hidden: () => false,
               el: {
                 multiple: false,
                 ajax: {
@@ -316,11 +319,17 @@ export default {
               }
             },
             labels: {
+              label: this.$t('assets.Label'),
+              hidden: () => false,
               el: {
                 ajax: {
                   url: '/api/v1/assets/labels/'
                 }
               }
+            },
+            comment: {
+              label: this.$t('common.Comment'),
+              hidden: () => false
             }
           }
         }
