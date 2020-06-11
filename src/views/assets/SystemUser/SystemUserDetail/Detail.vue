@@ -68,7 +68,6 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
           // setTimeout(() => location.reload(), 300)
         },
         onDeleteSuccess: (obj, that) => {

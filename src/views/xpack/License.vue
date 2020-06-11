@@ -68,7 +68,7 @@ export default {
           title: this.$t('xpack.ImportLicense'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.import')
+            label: this.$t('xpack.Import')
           },
           callbacks: {
             click: this.importAction

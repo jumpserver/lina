@@ -98,7 +98,7 @@ export default {
           value: 'api 没有该数据'
         },
         {
-          key: this.$t('ops.laskExecutionOutput'),
+          key: this.$t('ops.lastExecutionOutput'),
           value: this.object.latest_execution.id,
           formatter: function(row, value) {
             const onClick = function() {
