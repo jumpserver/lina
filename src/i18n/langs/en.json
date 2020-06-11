@@ -10,6 +10,24 @@
     "mysql": "Mysql",
     "port": "Port",
     "type": "Type",
+    "chrome": "Chrome",
+    "chrome_target": "target URL",
+    "chrome_username": "Account",
+    "chrome_password": "Password",
+    "mysql_workbench": "MySQL Workbench",
+    "mysql_workbench_ip": "DB IP",
+    "mysql_workbench_name": "DB Name",
+    "mysql_workbench_username": "DB Account",
+    "mysql_workbench_password": "DB Password",
+    "vmware_client": "vSphere Client",
+    "vmware_target": "target URL",
+    "vmware_username": "Account",
+    "vmware_password": "Password",
+    "custom": "Custom",
+    "custom_cmdline": "Cmdline",
+    "custom_target": "target URL",
+    "custom_username": "Account",
+    "custom_password": "Password",
     "Custom": "Custom"
   },
   "assets": {
@@ -835,6 +853,13 @@
     "logoLogoutTip": "Tips: This will be displayed on the enterprise user logout page. (suggest image size: 82px*82px)",
     "restoreDialogMessage": "This will restore default Settings of the interface !!!",
     "restoreDialogTitle": "Are you sure?",
-    "technologyConsult": "Technology Consult"
+    "technologyConsult": "Technology Consult",
+    "RegularlyPerform": "Regularly perform",
+    "CyclePerform": "Cycle perform",
+    "HelpText": {
+      "CrontabOfCreateUpdatePage": "For example: every Sunday at 03:05 execute <5 3 * * 0> <br/> Using the 5-bit Linux crontab expression <minute hour day month week> (<a href=\"https://tool.lu/crontab/\" target=\"_blank\"> Online tool </a>) <br/> If both regularly perform and cycle perform execution are set, use regularly perform first",
+      "IntervalOfCreateUpdatePage": "Unit: hour",
+      "UsernameOfCreateUpdatePage": "The username of the user on the target host; If already existed, modify user password; If it doesn't exist, add the user and set the password."
+    }
   }
 }

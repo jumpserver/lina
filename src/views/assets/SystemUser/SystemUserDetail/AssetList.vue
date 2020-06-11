@@ -6,6 +6,7 @@
       </el-col>
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
+        <AssetRelationCard ref="assetSelect" type="primary" v-bind="assetRelationConfig" />
         <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
@@ -15,6 +16,7 @@
 <script>
 import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
+import AssetRelationCard from '@/components/AssetRelationCard'
 import { AssetUserTable } from '@/components'
 
 export default {
@@ -22,7 +24,8 @@ export default {
   components: {
     QuickActions,
     RelationCard,
-    AssetUserTable
+    AssetUserTable,
+    AssetRelationCard
   },
   props: {
     object: {
@@ -61,31 +64,28 @@ export default {
           }
         ]
       },
-      systemUserRelationConfig: {
-        icon: 'fa-info',
-        title: this.$t('assets.command_filter_list'),
-        objectsAjax: {
-          url: '/api/v1/assets/system-users/'
-        },
-        hasObjectsId: this.object.system_users,
-        performAdd: (items) => {
-          // TODO: Orange API 待修复
-          const relationUrl = `/api/v1/assets/cmd-filters/`
-          const objectId = this.object.id
-          const data = items.map(v => {
-            return {
-              cmd_filter: objectId,
-              systemuser: v.value
-            }
-          })
+      assetRelationConfig: {
+        icon: 'fa-edit',
+        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        performAdd: (items, that) => {
+          const relationUrl = `/api/v1/assets/system-users-assets-relations/`
+          console.log(items)
+          const data = [
+
+          ]
+          items.map(v =>
+            data.push({
+              asset: v,
+              systemuser: this.object.id
+            })
+          )
           return this.$axios.post(relationUrl, data)
         },
-        performDelete: (item) => {
-          const itemId = item.value
-          const objectId = this.object.id
-          // TODO: Orange API 待修复
-          const relationUrl = `/api/v1/assets/cmd-filters/?cmd-filters=${objectId}&systemuser=${itemId}`
-          return this.$axios.delete(relationUrl)
+        onAddSuccess: (items, that) => {
+          this.$log.debug('AssetSelect value', that.assets)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$refs.ListTable.$refs.ListTable.reloadTable()
+          that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       },
       quickActions: [

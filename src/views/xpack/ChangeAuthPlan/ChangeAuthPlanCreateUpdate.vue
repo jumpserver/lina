@@ -69,19 +69,18 @@ export default {
           type: 'switch'
         },
         crontab: {
-          label: this.$t('xpack.ChangeAuthPlan.RegularlyPerform'),
+          label: this.$t('xpack.RegularlyPerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.CrontabOfCreateUpdatePage')
+          helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
         },
         interval: {
-          label: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
+          label: this.$t('xpack.CyclePerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
           },
-          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.IntervalOfCreateUpdatePage')
-          // helpText: '（单位： 时）'
+          helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
         }
       }
     }

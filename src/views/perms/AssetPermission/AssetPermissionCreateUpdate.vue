@@ -23,7 +23,7 @@ export default {
       initial: {
         is_active: true,
         actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
-        date_start: '2020-06-18 00:00:00 +0800',
+        date_start: this.$moment().format('YYYY-MM-DD HH:mm:ss ZZ'),
         date_expired: '2099-12-31 00:00:00 +0800',
         nodes: nodesInitial,
         assets: assetsInitial

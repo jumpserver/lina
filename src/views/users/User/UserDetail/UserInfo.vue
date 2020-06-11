@@ -241,10 +241,6 @@ export default {
           value: this.object.source_display
         },
         {
-          key: this.$t('users.DateExpired'),
-          value: this.object.date_expired
-        },
-        {
           key: this.$t('common.CreatedBy'),
           value: this.object.created_by
         },
@@ -253,12 +249,16 @@ export default {
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.DateLastLogin'),
-          value: this.object.last_login
+          key: this.$t('users.DateExpired'),
+          value: this.object.date_expired
         },
         {
           key: this.$t('users.DatePasswordUpdated'),
           value: this.object.date_password_last_updated
+        },
+        {
+          key: this.$t('users.DateLastLogin'),
+          value: this.object.last_login
         },
         {
           key: this.$t('common.Comment'),

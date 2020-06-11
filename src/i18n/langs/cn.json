@@ -10,6 +10,24 @@
     "mysql": "Mysql",
     "port": "端口",
     "type": "类型",
+    "chrome": "Chrome",
+    "chrome_target": "目标URL",
+    "chrome_username": "登录账号",
+    "chrome_password": "登录密码",
+    "mysql_workbench": "MySQL Workbench",
+    "mysql_workbench_ip": "数据库IP",
+    "mysql_workbench_name": "数据库名",
+    "mysql_workbench_username": "数据库账号",
+    "mysql_workbench_password": "数据库密码",
+    "vmware_client": "vSphere Client",
+    "vmware_target": "目标地址",
+    "vmware_username": "登录账号",
+    "vmware_password": "登录密码",
+    "custom": "自定义",
+    "custom_cmdline": "运行参数",
+    "custom_target": "目标地址",
+    "custom_username": "登录账号",
+    "custom_password": "登录密码",
     "Custom": "自定义"
   },
   "assets": {
@@ -732,7 +750,8 @@
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
-    }
+    },
+    "dateLastLogin": "最后登录日期"
   },
   "xpack": {
     "Admin": "管理员",
@@ -835,6 +854,13 @@
     "logoLogoutTip": "提示：将会显示在企业版用户退出页面（建议图片大小为：82px*82px）",
     "restoreDialogMessage": "您确定要恢复默认初始化吗？",
     "restoreDialogTitle": "你确认吗",
-    "technologyConsult": "技术咨询"
+    "technologyConsult": "技术咨询",
+    "RegularlyPerform": "定期执行",
+    "CyclePerform": "周期执行",
+    "HelpText": {
+      "CrontabOfCreateUpdatePage": "例如：每周日 03:05 执行 <5 3 * * 0> <br/> 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href=\"https://tool.lu/crontab/\" target=\"_blank\">在线工具</a>） <br/> 如果同时设置了定期执行和周期执行，优先使用定期执行",
+      "IntervalOfCreateUpdatePage": "单位：时",
+      "UsernameOfCreateUpdatePage": "目标主机上用户的用户名；如果已️存在，修改用户密码；如果不存在，添加用户并设置密码；"
+    }
   }
 }
