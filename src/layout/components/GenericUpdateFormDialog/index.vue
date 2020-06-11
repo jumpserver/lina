@@ -8,9 +8,27 @@
     :show-cancel="false"
     :show-confirm="false"
   >
-    <GenericCreateUpdateForm
-      v-bind="iFormSetting"
-    />
+    <el-row>
+      <el-col :span="4">
+        <div class="select-prop-label">
+          <label>{{ selectPropertiesLabel }}</label>
+        </div>
+      </el-col>
+      <el-col :span="18">
+        <el-checkbox-group v-model="checkedFields" @change="handleCheckedFieldsChange">
+          <el-checkbox v-for="(value, name) in iFormSetting.fieldsMeta" :key="name" :checked="true" :label="name">{{ value.label }}</el-checkbox>
+        </el-checkbox-group>
+      </el-col>
+    </el-row>
+    <el-row class="el-row-divider">
+      <el-divider />
+    </el-row>
+    <el-row>
+      <GenericCreateUpdateForm
+        :key="internalKey"
+        v-bind="iFormSetting"
+      />
+    </el-row>
   </Dialog>
 </template>
 
@@ -39,6 +57,9 @@ export default {
   },
   data: function() {
     return {
+      internalKey: 0,
+      selectPropertiesLabel: this.$t('common.SelectProperties'),
+      checkedFields: [],
       iFormSetting: {}
     }
   },
@@ -47,6 +68,16 @@ export default {
     this.iFormSetting = Object.assign({}, this.formSetting, defaultFormSetting)
   },
   methods: {
+    handleCheckedFieldsChange(values) {
+      for (const field of Object.keys(this.iFormSetting.fieldsMeta)) {
+        if (values.indexOf(field) === -1) {
+          this.iFormSetting.fieldsMeta[field].hidden = () => true
+        } else {
+          this.iFormSetting.fieldsMeta[field].hidden = () => false
+        }
+      }
+      this.internalKey++
+    },
     getDefaultFormSetting() {
       const vm = this
       return {
@@ -87,6 +118,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .el-row-divider{
+    margin-bottom: 20px;
+  }
+  .select-prop-label{
+    float: right;
+    padding-right: 30px;
+  }
 
 </style>

@@ -64,7 +64,17 @@ export default {
       },
       ticketActions: {
         hasLeftActions: false,
-        hasRightActions: false
+        hasRightActions: false,
+        searchConfig: {
+          default: {
+            status: {
+              key: 'status',
+              label: this.$t('tickets.Status'),
+              value: 'open',
+              valueLabel: this.$t('tickets.Open')
+            }
+          }
+        }
       }
     }
   }
