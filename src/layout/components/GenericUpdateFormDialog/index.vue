@@ -83,13 +83,17 @@ export default {
       return {
         getMethod: () => 'post',
         cleanFormValue: function(value) {
-          const newValue = []
+          const filterValue = {}
+          Object.keys(value).filter((key) => vm.checkedFields.includes(key)).forEach((key) => {
+            filterValue[key] = value[key]
+          })
+          const formValue = []
           let object = {}
           for (const row of vm.selectedRows) {
-            object = Object.assign({}, value, { id: row.id })
-            newValue.push(object)
+            object = Object.assign({}, filterValue, { id: row.id })
+            formValue.push(object)
           }
-          return newValue
+          return formValue
         },
         onSubmit: function(validValues) {
           const url = this.url
