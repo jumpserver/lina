@@ -22,6 +22,10 @@ export default {
     options: {
       type: Array,
       default: () => []
+    },
+    default: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -29,7 +33,7 @@ export default {
       filterKey: '',
       filterValue: '',
       valueLabel: '',
-      filterTags: {},
+      filterTags: this.default || {},
       focus: false
     }
   },
@@ -68,6 +72,9 @@ export default {
       },
       deep: true
     }
+  },
+  mounted() {
+    this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
   },
   methods: {
     getValueLabel(key, value) {
@@ -112,6 +119,7 @@ export default {
       }
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)
+      console.log(this.filterTags)
       this.filterKey = ''
       this.filterValue = ''
       this.valueLabel = ''

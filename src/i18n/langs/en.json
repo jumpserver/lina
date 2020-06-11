@@ -669,7 +669,9 @@
     "title": "Title",
     "type": "Type",
     "user": "User",
-    "reply": "Reply"
+    "reply": "Reply",
+    "Open":"Open",
+    "Status": "Status"
   },
   "tree": {
     "AddNode": "Add node",

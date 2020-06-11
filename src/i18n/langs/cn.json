@@ -679,7 +679,9 @@
     "title": "标题",
     "type": "类型",
     "user": "用户",
-    "reply": "回复"
+    "reply": "回复",
+    "Open":"开启",
+    "Status": "状态"
   },
   "tree": {
     "AddNode": "添加节点",
