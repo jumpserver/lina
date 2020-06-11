@@ -6,7 +6,7 @@
 import { GenericListPage } from '@/layout/components'
 import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
-import { DetailFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -38,7 +38,19 @@ export default {
             label: this.$t('sessions.command')
           },
           risk_level: {
-            label: this.$t('sessions.riskLevel')
+            label: this.$t('sessions.riskLevel'),
+            formatter: BooleanFormatter,
+            formatterArgs: {
+              hasTips: true,
+              tips(val) {
+                switch (val) {
+                  case 0:
+                    return vm.$t('sessions.riskLevels.common')
+                  default:
+                    return vm.$t('sessions.riskLevels.common')
+                }
+              }
+            }
           },
           user: {
             label: this.$t('sessions.user')

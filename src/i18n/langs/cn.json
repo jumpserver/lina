@@ -538,7 +538,10 @@
     "terminate": "终断",
     "test": "测试",
     "type": "类型",
-    "user": "用户"
+    "user": "用户",
+    "riskLevels": {
+      "common": "普通"
+    }
   },
   "setting": {
     "Secret": "密钥",
