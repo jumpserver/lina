@@ -13,6 +13,7 @@ export default {
       default() {
         return {
           route: this.$route.name.replace('List', 'Detail'),
+          getRoute: null,
           routeQuery: {},
           getTitle({ col, row, cellValue }) {
             return cellValue
@@ -31,10 +32,30 @@ export default {
   methods: {
     goDetail() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
-      const routeName = this.formatterArgs.route
+      let route = this.formatterArgs.route
+      if (this.getRoute && typeof this.getRoute === 'function') {
+        route = this.getRoute({ row: this.row, col: this.col, cellValue: this.cellValue })
+      }
+      if (!route) {
+        console.error('No route found')
+        return
+      }
+      let detailRoute = {}
+      if (typeof route === 'string') {
+        detailRoute.name = route
+        detailRoute.params = { id: this.row.id }
+      } else {
+        detailRoute = route
+      }
+
       const routeQuery = this.formatterArgs.routeQuery
-      this.$log.debug('Will go to detail route: ', routeName)
-      this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
+      if (routeQuery && typeof routeQuery === 'object') {
+        detailRoute.query = this.formatterArgs.routeQuery
+      }
+      this.route.push(detailRoute)
+      // const routeName = this.formatterArgs.route
+      // this.$log.debug('Will go to detail route: ', routeName)
+      // this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
     }
   }
 }
