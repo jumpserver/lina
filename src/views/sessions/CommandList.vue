@@ -53,9 +53,14 @@ export default {
             label: this.$t('sessions.session'),
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'SessionDetail',
               getTitle() {
                 return vm.$t('sessions.goto')
+              },
+              getRoute({ cellValue }) {
+                return {
+                  name: 'SessionDetail',
+                  params: { id: cellValue }
+                }
               }
             }
           },
