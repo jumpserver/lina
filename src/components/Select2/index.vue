@@ -4,10 +4,10 @@
     v-model="iValue"
     v-loadmore="loadMore"
     :options="iOptions"
+    :remote="remote"
     :remote-method="filterOptions"
     :multiple="multiple"
     filterable
-    remote
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
@@ -96,7 +96,8 @@ export default {
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
-      initialOptions: []
+      initialOptions: [],
+      remote: true
     }
   },
   computed: {
@@ -241,6 +242,9 @@ export default {
         }
         this.$log.debug('Start get select2 options')
         await this.getOptions()
+        if (this.iOptions.length === 0) {
+          this.remote = false
+        }
       }
       this.iValue = this.value
     },

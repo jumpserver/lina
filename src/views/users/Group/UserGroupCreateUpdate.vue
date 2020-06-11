@@ -12,6 +12,7 @@ export default {
     return {
       config: {
         initial: {
+          users: []
         },
         url: '/api/v1/users/groups/',
         fields: [
@@ -20,8 +21,12 @@ export default {
         fieldsMeta: {
           users: {
             el: {
-              value: [],
-              url: '/api/v1/users/users/?fields_size=mini'
+              ajax: {
+                url: '/api/v1/users/users/?fields_size=mini&order=name',
+                transformOption: (item) => {
+                  return { label: item.name + '(' + item.username + ')', value: item.id }
+                }
+              }
             }
           }
         }
