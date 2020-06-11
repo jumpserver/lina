@@ -25,7 +25,8 @@ export default {
           },
           asset: {
             formatter: function(row, column, cellValue, index) {
-              return <a class='detail el-link el-link--success is-underline' href={ `/assets/assets/${cellValue}` }>{ row.asset_info.hostname }</a>
+              const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
+              return <router-link{...{ attrs: route }} >{ row.asset_info.hostname }</router-link>
             }
           },
           actions: {
