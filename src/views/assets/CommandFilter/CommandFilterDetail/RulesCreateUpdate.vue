@@ -15,7 +15,7 @@ export default {
   name: 'RulesCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
-    const filterId = this.$route.query.filter
+    const filterId = this.$route.query.filter || '00000000-0000-0000-0000-000000000000'
     const regexPlaceholder = 'rm.*|reboot|shutdown'
     const commandPlaceholder = 'rm\rreboot'
     const commandHelpText = this.$t('assets.CommandFilterRuleContentHelpText')
@@ -41,7 +41,7 @@ export default {
             multiple: false
           }
         },
-        'action.value': {
+        type: {
           on: {
             change: ([val]) => {
               if (val === 'command') {
@@ -81,11 +81,6 @@ export default {
       },
       url: `/api/v1/assets/cmd-filters/${filterId}/rules/`
     }
-  },
-  computed: {
-  },
-  mounted() {
-    console.log(this.url)
   }
 }
 </script>

@@ -5,7 +5,7 @@
     :method="method"
     :form="form"
     :fields="fields"
-    :url="totalUrl"
+    :url="iUrl"
     :is-submitting="isSubmitting"
     v-bind="$attrs"
     v-on="$listeners"
@@ -116,7 +116,7 @@ export default {
     method() {
       return this.getMethod(this)
     },
-    totalUrl() {
+    iUrl() {
       return this.getUrl()
     }
   },
@@ -137,7 +137,7 @@ export default {
       return handler(values)
     },
     defaultPerformSubmit(validValues) {
-      return this.$axios[this.method](this.totalUrl, validValues)
+      return this.$axios[this.method](this.iUrl, validValues)
     },
     defaultOnSubmit(validValues) {
       const performSubmit = this.performSubmit || this.defaultPerformSubmit
@@ -178,7 +178,7 @@ export default {
       return object
     },
     async getObjectDetail() {
-      return this.$axios.get(this.totalUrl)
+      return this.$axios.get(this.iUrl)
     }
   }
 }

@@ -11,7 +11,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const appType = this.$route.query.type
+    const appType = this.$route.query.type || 'chrome'
     const fieldsMap = REMOTE_APP_TYPE_FIELDS_MAP[appType]
     const appTypeMeta = REMOTE_APP_TYPE_META_MAP[appType]
     const pathInitial = REMOTE_APP_PATH_DEFAULT_MAP[appType]
