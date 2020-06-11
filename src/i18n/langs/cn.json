@@ -40,11 +40,11 @@
     "Action": "动作",
     "OnlyLatestVersion": "仅最新版本",
     "AutoGenerateKey": "自动生成密钥",
-    "UnselectedAssets":"未选择资产",
+    "UnselectedAssets": "未选择资产",
     "Pending": "等待",
     "RemoveFromCurrentNode": "从节点移除",
     "AssetUserList": "资产用户列表",
-    "NoSystemUserWasSelected":"未选择系统用户",
+    "NoSystemUserWasSelected": "未选择系统用户",
     "NoInputCommand": "未输入命令",
     "LoginModeHelpMessage": "如果选择手动登录模式，用户名和密码可以不填写",
     "UsernameHelpMessage": "用户名是动态的，登录资产时使用当前用户的用户名登录",
@@ -169,7 +169,7 @@
     "removeErrorMsg": "移除失败: ",
     "Yes": "是",
     "No": "否",
-    "Remove":"删除",
+    "Remove": "删除",
     "View": "查看",
     "Action": "动作",
     "Actions": "操作",
@@ -269,7 +269,10 @@
     "updateSelected": "更新所选",
     "updateSuccessMsg": "更新成功",
     "Disable": "禁用",
-    "Enable": "启用"
+    "Enable": "启用",
+    "createErrorMsg": "创建失败",
+    "Select": "选择",
+    "CreatedBy": "创建者"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
@@ -299,7 +302,8 @@
     "UserRatio": "用户占比统计",
     "UsersTotal": "用户总数",
     "Weekly": "按周",
-    "TimesWeekUnit": "次/周"
+    "TimesWeekUnit": "次/周",
+    "USER": ""
   },
   "ops": {
     "ID": "ID",
@@ -340,7 +344,7 @@
     "version": "版本",
     "versionDetail": "版本详情",
     "versionRunExecution": "执行历史",
-    "selectAssetsMessage":"选择左侧资产, 选择运行的系统用户，批量执行命令",
+    "selectAssetsMessage": "选择左侧资产, 选择运行的系统用户，批量执行命令",
     "selectedAssets": "已选择资产:",
     "inTotal": "总共",
     "Execute": "执行",
@@ -390,7 +394,8 @@
     "usersAndUserGroups": "用户或用户组",
     "Inherit": "继承",
     "Include": "包含",
-    "Exclude": "不包含"
+    "Exclude": "不包含",
+    "": ""
   },
   "route": {
     "AdminUserCreate": "创建管理用户",
@@ -429,7 +434,7 @@
     "DatabaseAppPermissionCreate": "创建数据库授权规则",
     "DatabaseAppPermissionDetail": "数据库授权详情",
     "DatabaseAppPermissionUpdate": "更新数据库授权规则",
-    "DatabaseAppUpdate": "",
+    "DatabaseAppUpdate": "数据库应用更新",
     "DomainCreate": "创建网域",
     "DomainDetail": "网域详情",
     "DomainList": "网域列表",
@@ -449,7 +454,7 @@
     "PasswordChangeLog": "改密日志",
     "Perms": "权限管理",
     "PlatformCreate": "创建系统平台",
-    "PlatformDetail": "",
+    "PlatformDetail": "系统平台详情",
     "PlatformList": "平台列表",
     "PlatformUpdate": "更新系统平台",
     "RemoteApp": "远程应用",
@@ -479,7 +484,7 @@
     "UserGroupCreate": "创建用户组",
     "UserGroupDetail": "用户组详情",
     "UserGroupList": "用户组",
-    "UserGroupUpdate": "",
+    "UserGroupUpdate": "更新用户组",
     "UserList": "用户列表",
     "UserProfile": "个人信息",
     "UserUpdate": "更新用户",
@@ -488,7 +493,10 @@
     "WebTerminal": "Web终端",
     "BatchCommandLog": "批量命令",
     "TaskMonitor": "任务监控",
-    "": ""
+    "": "",
+    "UserFirstLogin": "首次登录",
+    "PersonalInformationImprovement": "个人信息完善",
+    "UserGuide": "用户向导"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -534,7 +542,7 @@
     "storage": "存储",
     "systemUser": "系统用户",
     "terminalDetail": "终端详情",
-    "terminalUpdate": "",
+    "terminalUpdate": "更新终端",
     "terminate": "终断",
     "test": "测试",
     "type": "类型",
@@ -663,7 +671,7 @@
     "auto": "自动"
   },
   "settings": {
-    "setting": ""
+    "setting": "设置"
   },
   "tickets": {
     "Accept": "接受",
@@ -775,7 +783,8 @@
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
     },
-    "dateLastLogin": ""
+    "dateLastLogin": "最后登录日期",
+    "DatePasswordUpdated": "密码更新日期"
   },
   "xpack": {
     "Basic": "基本",
@@ -889,7 +898,7 @@
       "SyncInstanceTaskUpdate": "更新同步实例任务",
       "CoveredAlwaysHelpTips": "资产信息总是被覆盖"
     },
-    "import": ""
+    "Import": "导入"
   },
   "": ""
 }

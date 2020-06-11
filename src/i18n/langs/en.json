@@ -40,10 +40,10 @@
     "Action": "Action",
     "NoInputCommand": "No input command",
     "OnlyLatestVersion": "Only latest version",
-    "UnselectedAssets":"Unselected assets",
+    "UnselectedAssets": "Unselected assets",
     "Pending": "Pending",
     "RemoveFromCurrentNode": "Remove from node",
-    "NoSystemUserWasSelected":"No system user was selected",
+    "NoSystemUserWasSelected": "No system user was selected",
     "LoginModeHelpMessage": "If you choose manual login mode, you do not need to fill in the username and password.",
     "UsernameHelpMessage": "Username is dynamic, When connect asset, using current user's username",
     "PriorityHelpMessage": "1-100, High level will be using login asset as default, if user was granted more than 2 system user",
@@ -150,12 +150,12 @@
     "AssetListHelpMessage": "The left side is the asset tree, right click to create, delete, and change the tree node, authorization asset is also organized as a node, and the right side is the asset under that node\n"
   },
   "auth": {
-    "LoginRequiredMsg": "",
+    "LoginRequiredMsg": "You account has logout, Please login again",
     "ReLogin": "Re-Login"
   },
   "common": {
     "CrontabHelpTips": "eg: Every Sunday 03:05 run <5 3 * * 0> <br>Tips:Using 5 digits linux crontab expressions<min hour day month week> (<a href='https://tool.lu/crontab/' target='_blank'>Online tools</a>) <br>Note:If both Regularly perform and Cycle perform are set,give priority to Regularly perform",
-    "BadRequestErrorMsg" : "Bad request, please check again",
+    "BadRequestErrorMsg": "Bad request, please check again",
     "DateLast24Hours": "Last 24 hours",
     "MFARequireForSecurity": "MFA required for security",
     "TestSuccessMsg": "Test Success",
@@ -165,10 +165,9 @@
     "DateLast3Months": "Last 3 months",
     "removeErrorMsg": "Remove failed: ",
     "removeSuccessMsg": "Remove success",
-    "MFAConfirm": "MFA Confirm",
     "SelectPlaceholder": "Select",
     "Yes": "Yes",
-    "Remove":"Remove",
+    "Remove": "Remove",
     "No": "No",
     "Action": "Action",
     "View": "View",
@@ -258,14 +257,19 @@
     "rows": "rows",
     "tree": {
       "Empty": "Empty",
-      "Loading": "Loading"
+      "Loading": "Loading",
+      "DropConfirmMsg": "Are you sure mv {src} to {dst} ?"
     },
     "getErrorMsg": "Get failed",
     "updateErrorMsg": "Update failed",
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
     "Disable": "Disable",
-    "Enable": "Enable"
+    "Enable": "Enable",
+    "createErrorMsg": "Create error",
+    "Select": "Select",
+    "dateStart": "Date start",
+    "CreatedBy": "Created by"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -295,7 +299,8 @@
     "UserRatio": "User Ratio",
     "UsersTotal": "Users total",
     "Weekly": "Weekly",
-    "TimesWeekUnit": "times/week"
+    "TimesWeekUnit": "times/week",
+    "USER": ""
   },
   "ops": {
     "ID": "ID",
@@ -337,7 +342,7 @@
     "versionDetail": "Version detail",
     "versionRunExecution": "Version run execution",
     "TaskMonitor": "Task monitor",
-    "selectAssetsMessage":"Select the left asset, select the running system user, execute command in batch",
+    "selectAssetsMessage": "Select the left asset, select the running system user, execute command in batch",
     "selectedAssets": "Selected assets:",
     "inTotal": "In total",
     "Execute": "Execute",
@@ -386,7 +391,8 @@
     "usersAndUserGroups": "Users and user groups",
     "Inherit": "Inherit",
     "Include": "Include",
-    "Exclude": "Exclude"
+    "Exclude": "Exclude",
+    "": ""
   },
   "route": {
     "TaskMonitor": "Task monitor",
@@ -483,7 +489,11 @@
     "Users": "Users",
     "WebFTP": "WebFTP",
     "WebTerminal": "Web terminal",
-    "BatchCommandLog": "Batch command log"
+    "BatchCommandLog": "Batch command log",
+    "": "",
+    "UserFirstLogin": "UserFirstLogin",
+    "PersonalInformationImprovement": "PersonalInformationImprovement",
+    "UserGuide": "UserGuide"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
@@ -513,7 +523,7 @@
     "httpPort": "Http port",
     "id": "ID",
     "index": "Index",
-    "info": "",
+    "info": "info",
     "join": "join",
     "loginFrom": "Login from",
     "name": "Name",
@@ -529,7 +539,7 @@
     "storage": "Storage",
     "systemUser": "System user",
     "terminalDetail": "Terminal detail",
-    "terminalUpdate": "",
+    "terminalUpdate": "Update terminal",
     "terminate": "Terminate",
     "test": "Test",
     "type": "Type",
@@ -650,10 +660,11 @@
     "ImportLicenseTip": "Please Import License",
     "ApiKeyList": "Api key list",
     "all": "All",
-    "auto": "Auto"
+    "auto": "Auto",
+    "Create": "Create"
   },
   "settings": {
-    "setting": ""
+    "setting": "Setting"
   },
   "tickets": {
     "Accept": "Accept",
@@ -761,7 +772,8 @@
       "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
       "SSHKeyOfProfileSSHUpdatePage": "Copy your public key here"
     },
-    "ResetAndDownloadSSHKey": "Reset and download SSH Key"
+    "ResetAndDownloadSSHKey": "Reset and download SSH Key",
+    "DatePasswordUpdated": "Date password updated"
   },
   "xpack": {
     "Admin": "Admin",
@@ -804,7 +816,8 @@
       "ChangeAuthPlan": "Change auth plan",
       "ChangeAuthPlanCreate": "Create change auth plan",
       "ChangeAuthPlanUpdate": "Update change auth plan",
-      "ExecutionDetail": "Execution detail"
+      "ExecutionDetail": "Execution detail",
+      "AddNode": "Add node"
     },
     "Corporation": "Corporation",
     "Edition": "Edition",
@@ -818,7 +831,8 @@
       "GatherUserTaskUpdate": "Update gather user task"
     },
     "Vault": {
-      "Vault": "Vault"
+      "Vault": "Vault",
+      "Create": "Create"
     },
     "ImportLicense": "Import license",
     "ImportLicenseTip": "Please Import License",
@@ -864,7 +878,13 @@
     },
     "Asset": "Asset",
     "Node": "Node",
-    "import": ""
+    "Import": "Import"
   },
-  "": ""
+  "": "",
+  "audits": {
+    "Hosts": "Host",
+    "View": "View",
+    "User": "User",
+    "RunUser": "Run user"
+  }
 }
