@@ -1,5 +1,5 @@
 <template>
-  <TabPage :submenu="submenu" :active-menu="activeMenu">
+  <Page>
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
         :fields="fields"
@@ -11,11 +11,11 @@
         :more-buttons="moreButtons"
       />
     </IBox>
-  </TabPage>
+  </Page>
 </template>
 
 <script>
-import { TabPage } from '@/layout/components'
+import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { getInterfaceInfo, postInterface, restoreInterface } from '@/views/xpack/api'
@@ -24,7 +24,7 @@ export default {
   name: 'InterfaceSettings',
   components: {
     IBox,
-    TabPage,
+    Page,
     GenericCreateUpdateForm
   },
   data() {
@@ -32,13 +32,6 @@ export default {
       loading: true,
       files: {},
       interfaceInfo: {},
-      activeMenu: 'interface',
-      submenu: [
-        {
-          title: this.$t('xpack.InterfaceSettings'),
-          name: 'interface'
-        }
-      ],
       successUrl: { name: 'Settings' },
       fields: [
         ['', ['login_title']],

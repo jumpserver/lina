@@ -4,7 +4,6 @@
     ref="form"
     :method="method"
     :form="form"
-    :fields="fields"
     :url="iUrl"
     :is-submitting="isSubmitting"
     v-bind="$attrs"
@@ -24,12 +23,6 @@ export default {
       type: String,
       default: ''
     },
-    fields: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
     object: {
       type: Object,
       default: null
@@ -48,7 +41,9 @@ export default {
     },
     performSubmit: {
       type: Function,
-      default: null
+      default(validValues) {
+        return this.$axios[this.method](this.iUrl, validValues)
+      }
     },
     createSuccessMsg: {
       type: String,
@@ -76,6 +71,12 @@ export default {
         return { name: routeName }
       }
     },
+    getNextRoute: {
+      type: Function,
+      default(res, method) {
+        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      }
+    },
     getMethod: {
       type: Function,
       default: function() {
@@ -87,12 +88,6 @@ export default {
         }
       }
     },
-    getNextRoute: {
-      type: Function,
-      default(res, method) {
-        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
-      }
-    },
     getUrl: {
       type: Function,
       default: function() {
@@ -102,6 +97,33 @@ export default {
           url = `${url}${params.id}/`
         }
         return url
+      }
+    },
+    onPerformSuccess: {
+      type: Function,
+      default(res, method, vm) {
+        const msg = method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
+        const route = this.getNextRoute(res, method)
+        this.$emit('submitSuccess', res)
+        this.$message.success(msg)
+        setTimeout(() => this.$router.push(route), 100)
+      }
+    },
+    onPerformError: {
+      type: Function,
+      default(error, method, vm) {
+        this.$emit('submitError', error)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          for (const key of Object.keys(data)) {
+            let value = data[key]
+            if (value instanceof Array) {
+              value = value.join(';')
+            }
+            this.$refs.form.setFieldError(key, value)
+          }
+        }
       }
     }
   },
@@ -120,7 +142,7 @@ export default {
       return this.getUrl()
     }
   },
-  async mounted() {
+  async created() {
     this.loading = true
     try {
       const values = await this.getFormValue()
@@ -136,36 +158,12 @@ export default {
       values = this.cleanFormValue(values)
       return handler(values)
     },
-    defaultPerformSubmit(validValues) {
-      return this.$axios[this.method](this.iUrl, validValues)
-    },
     defaultOnSubmit(validValues) {
-      const performSubmit = this.performSubmit || this.defaultPerformSubmit
-      const msg = this.method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
-      const event = this.method === 'post' ? 'createSuccess' : 'updateSuccess'
       this.isSubmitting = true
-      performSubmit(validValues).then((res) => {
-        const route = this.getNextRoute(res, this.method)
-        this.$emit(event, res)
-        this.$emit('submitSuccess', res)
-        this.$message.success(msg)
-        setTimeout(() => this.$router.push(route), 100)
-      }).catch(error => {
-        this.$emit('submitError', error)
-        const response = error.response
-        const data = response.data
-        if (response.status === 400) {
-          for (const key of Object.keys(data)) {
-            let value = data[key]
-            if (value instanceof Array) {
-              value = value.join(';')
-            }
-            this.$refs.form.setFieldError(key, value)
-          }
-        }
-      }).finally(() => {
-        this.isSubmitting = false
-      })
+      this.performSubmit(validValues)
+        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this))
+        .catch((error) => this.onPerformError(error, this.method, this))
+        .finally(() => { this.isSubmitting = false })
     },
     async getFormValue() {
       if (this.method !== 'put') {
@@ -174,6 +172,7 @@ export default {
       let object = this.object
       if (object === null) {
         object = await this.getObjectDetail()
+        this.$emit('update:object', object)
       }
       return object
     },

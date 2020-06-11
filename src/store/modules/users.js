@@ -37,6 +37,9 @@ const mutations = {
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
   },
+  ADD_ORG: (state, org) => {
+    state.orgs.push(org)
+  },
   SET_ROLES(state, roles) {
     state.roles = roles
   },
@@ -118,6 +121,9 @@ const actions = {
         resolve(inOrgs)
       }).catch((e) => reject(e))
     })
+  },
+  addAdminOrg({ commit, state }, org) {
+    commit('ADD_ORG', org)
   },
   // user logout
   logout({ commit, state }) {
