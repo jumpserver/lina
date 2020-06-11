@@ -2,7 +2,7 @@
   <div>
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
     <GenericUpdateFormDialog
-      :selected-rows="selectedRows"
+      :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
     />
@@ -22,7 +22,6 @@ export default {
   data() {
     const vm = this
     return {
-      selectedRows: [],
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
@@ -99,12 +98,13 @@ export default {
             can: ({ selectedRows }) => selectedRows.length > 0,
             callback: ({ selectedRows, reloadTable }) => {
               vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
-              vm.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
             }
           }
         ]
       },
       updateSelectedDialogSetting: {
+        selectedRows: [],
         dialogSetting: {
           dialogVisible: false
         },

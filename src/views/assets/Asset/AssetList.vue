@@ -54,7 +54,7 @@
       </Dialog>
     </div>
     <GenericUpdateFormDialog
-      :selected-rows="selectedRows"
+      :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
     />
@@ -79,7 +79,6 @@ export default {
   data() {
     const vm = this
     return {
-      selectedRows: [],
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -185,7 +184,7 @@ export default {
             can: ({ selectedRows }) => selectedRows.length > 0,
             callback: ({ selectedRows, reloadTable }) => {
               vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
-              vm.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
             }
           },
           {
@@ -270,6 +269,7 @@ export default {
         }
       },
       updateSelectedDialogSetting: {
+        selectedRows: [],
         dialogSetting: {
           dialogVisible: false
         },
