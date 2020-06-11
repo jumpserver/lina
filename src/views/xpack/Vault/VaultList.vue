@@ -26,7 +26,7 @@
           <br>
           <el-radio v-model="exportOption" class="export-item" label="2">{{ this.$t('common.imExport.ExportOnlySelectedItems') }}</el-radio>
           <br>
-          <el-radio v-model="exportOption" class="export-item" label="3">{{ this.$t('common.imExport.ExportOnlyFiltered') }}</el-radio>
+          <el-radio v-model="exportOption" disabled class="export-item" label="3">{{ this.$t('common.imExport.ExportOnlyFiltered') }}</el-radio>
         </el-form-item>
       </el-form>
     </Dialog>
@@ -78,6 +78,7 @@ import Dialog from '@/components/Dialog'
 import { setUrlParam } from '@/utils/common'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Vault',
@@ -96,6 +97,7 @@ export default {
       showExportDialog: false,
       exportOption: '1',
       meta: {},
+      MfaExpired: 0,
       showMFADialog: false,
       MFAInput: '',
       selectedRows: '',
@@ -105,15 +107,23 @@ export default {
         url: '/api/v1/assets/asset-users/',
         handleImport: function({ selectedRows }) {
           this.selectedRows = selectedRows
-          this.showMFADialog = true
           this.dialogStatus = 'import'
-          console.log(this.selectedRows)
+          if (this.MFAVerifyAt + this.MFA_TTl * 1000 > (new Date()).valueOf()) {
+            this.showMFADialog = false
+            this.showImportDialog = true
+          } else {
+            this.showMFADialog = true
+          }
         }.bind(this),
         handleExport: function({ selectedRows }) {
           this.selectedRows = selectedRows
-          this.showMFADialog = true
           this.dialogStatus = 'export'
-          console.log(this.selectedRows)
+          if (this.MFAVerifyAt + this.MFA_TTl * 1000 > (new Date()).valueOf()) {
+            this.showMFADialog = false
+            this.showExportDialog = true
+          } else {
+            this.showMFADialog = true
+          }
         }.bind(this)
       },
       treeSetting: {
@@ -160,7 +170,11 @@ export default {
         cls.push('error-msg')
       }
       return cls
-    }
+    },
+    ...mapGetters([
+      'MFAVerifyAt',
+      'MFA_TTl'
+    ])
   },
   methods: {
     performUpdate(item) {
@@ -290,6 +304,7 @@ export default {
         }
       ).then(
         res => {
+          this.$store.dispatch('users/setMFAVerify')
           if (this.dialogStatus === 'import') {
             this.showMFADialog = false
             this.showImportDialog = true

@@ -51,8 +51,8 @@ const mutations = {
     saveCurrentRoleToCookie(role)
     state.currentRole = role
   },
-  SET_MFA_VERIFY(state, date) {
-    state.MFAVerifyAt = date
+  SET_MFA_VERIFY(state) {
+    state.MFAVerifyAt = (new Date()).valueOf()
   }
 }
 
@@ -147,8 +147,8 @@ const actions = {
   setCurrentRole({ commit }, role) {
     commit('SET_CURRENT_ROLE', role)
   },
-  setMFAVerify({ commit }, date) {
-    commit('SET_MFA_VERIFY', date)
+  setMFAVerify({ commit }) {
+    commit('SET_MFA_VERIFY')
   }
 }
 
