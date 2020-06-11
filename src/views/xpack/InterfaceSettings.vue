@@ -62,7 +62,6 @@ export default {
           },
           on: {
             fileChange: ([value], updateForm) => {
-              console.log(value)
               this.files['login_image'] = value
             }
           }
