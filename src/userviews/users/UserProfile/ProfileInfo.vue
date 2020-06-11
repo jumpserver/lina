@@ -9,7 +9,7 @@
   </el-row>
 </template>a
 
-<script>
+<script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
@@ -99,8 +99,13 @@ export default {
           key: this.$t('users.IsActive')
         },
         {
-          value: `${this.object.public_key_comment} ${this.object.public_key_hash_md5}`,
-          key: 'SSHKey'
+          value: this.object,
+          key: 'SSHKey',
+          formatter: (item, val) => {
+            const comment = val.public_key_comment
+            const md5 = val.public_key_hash_md5
+            return <span>{ comment } <br /> { md5 }</span>
+          }
         },
         {
           value: this.object.mfa_level_display,

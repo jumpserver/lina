@@ -533,7 +533,10 @@
     "terminate": "Terminate",
     "test": "Test",
     "type": "Type",
-    "user": "Use"
+    "user": "Use",
+    "riskLevels": {
+      "common": "common"
+    }
   },
   "setting": {
     "Basic": "Basic setting",

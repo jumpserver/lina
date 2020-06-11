@@ -15,7 +15,10 @@ export default {
         initial: {
         },
         url: '/api/v1/orgs/orgs/',
-        fields: ['name', 'admins', 'auditors', 'users', 'comment'],
+        fields: [
+          [this.$t('common.Basic'), ['name', 'comment']],
+          [this.$t('common.Members'), ['admins', 'auditors', 'users']]
+        ],
         fieldsMeta: {
           admins: {
             label: this.$t('xpack.Admin'),
@@ -53,6 +56,11 @@ export default {
               }
             }
           }
+        },
+        onPerformSuccess(res, method) {
+          const org = { id: res.id, name: res.name }
+          this.$store.dispatch('users/addAdminOrg', org)
+          return this.$router.push({ name: 'OrganizationList' })
         }
       }
     }

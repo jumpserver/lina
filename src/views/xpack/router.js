@@ -165,24 +165,24 @@ export default {
           path: '',
           component: () => import('@/views/xpack/Org/OrganizationList'),
           name: 'OrganizationList',
-          meta: { title: i18n.t('xpack.Organization.OrganizationList') }
+          meta: { title: i18n.t('xpack.Organization.OrganizationList'), activeMenu: '/xpack/orgs' }
         },
         {
-          path: 'orgs/create',
+          path: 'create',
           component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
           name: 'OrganizationCreate',
           hidden: true,
           meta: { title: i18n.t('xpack.Organization.OrganizationCreate'), activeMenu: '/xpack/orgs', action: 'create' }
         },
         {
-          path: 'orgs/:id/update',
+          path: ':id/update',
           component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
           name: 'OrganizationUpdate',
           hidden: true,
           meta: { title: i18n.t('xpack.Organization.OrganizationUpdate'), activeMenu: '/xpack/orgs', action: 'update' }
         },
         {
-          path: 'orgs/:id',
+          path: ':id',
           component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
           name: 'OrganizationDetail',
           hidden: true,
@@ -193,16 +193,17 @@ export default {
     {
       path: 'vault',
       component: empty,
-      meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' },
+      redirect: '',
+      meta: { },
       children: [
         {
-          path: 'vault',
+          path: '',
           component: () => import('@/views/xpack/Vault/VaultList.vue'),
           name: 'VaultList',
           meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' }
         },
         {
-          path: 'vault/create',
+          path: 'create',
           component: () => import('@/views/xpack/Vault/VaultCreate'),
           name: 'VaultCreate',
           meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault/vault' },
