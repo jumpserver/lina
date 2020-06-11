@@ -75,6 +75,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasExport: false,
+        hasImport: false,
         hasDatePicker: true,
         datePicker: {
           dateStart: dateFrom,
