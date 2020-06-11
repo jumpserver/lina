@@ -1,14 +1,23 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericUpdateFormDialog
+      :selected-rows="updateSelectedDialogSetting.selectedRows"
+      :form-setting="updateSelectedDialogSetting.formSetting"
+      :dialog-setting="updateSelectedDialogSetting.dialogSetting"
+    />
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { GenericListPage } from '@/layout/components'
+import { GenericUpdateFormDialog } from '@/layout/components'
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    GenericUpdateFormDialog
   },
   data() {
     const vm = this
@@ -82,8 +91,45 @@ export default {
                 reloadTable()
               })
             }
+          },
+          {
+            name: 'updateSelected',
+            title: this.$t('common.updateSelected'),
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: ({ selectedRows, reloadTable }) => {
+              vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
+            }
           }
         ]
+      },
+      updateSelectedDialogSetting: {
+        selectedRows: [],
+        dialogSetting: {
+          dialogVisible: false
+        },
+        formSetting: {
+          initial: {
+            date_expired: '2099-12-31 00:00:00 +0800'
+          },
+          fields: [
+            [this.$t('users.Account'), ['groups']],
+            [this.$t('users.Secure'), ['date_expired']],
+            [this.$t('common.Other'), ['comment']]
+          ],
+          url: '/api/v1/users/users/',
+          fieldsMeta: {
+            groups: {
+              el: {
+                multiple: true,
+                ajax: {
+                  url: '/api/v1/users/groups/'
+                },
+                value: []
+              }
+            }
+          }
+        }
       }
     }
   },
