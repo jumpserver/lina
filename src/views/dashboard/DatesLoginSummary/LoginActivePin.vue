@@ -46,7 +46,7 @@ export default {
           show: false
         },
         title: {
-          subtext: this.$t('dashboard.USER')
+          subtext: this.$t('dashboard.User')
         },
         color: ['#1ab394', '#1C84C6', '#9CC3DA'],
         tooltip: {

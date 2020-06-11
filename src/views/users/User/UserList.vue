@@ -113,13 +113,13 @@ export default {
             date_expired: '2099-12-31 00:00:00 +0800'
           },
           fields: [
-            [this.$t('users.Account'), ['groups']],
-            [this.$t('users.Secure'), ['date_expired']],
-            [this.$t('common.Other'), ['comment']]
+            'groups', 'date_expired', 'comment'
           ],
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
+              label: this.$t('users.UserGroups'),
+              hidden: () => false,
               el: {
                 multiple: true,
                 ajax: {
@@ -127,6 +127,16 @@ export default {
                 },
                 value: []
               }
+            },
+            date_expired: {
+              label: this.$t('common.dateExpired'),
+              hidden: () => false
+
+            },
+            comment: {
+              label: this.$t('common.Comment'),
+              hidden: () => false
+
             }
           }
         }

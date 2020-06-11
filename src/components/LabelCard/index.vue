@@ -17,7 +17,7 @@ export default {
     title: {
       type: String,
       default() {
-        return this.$t('asset.Label')
+        return this.$t('assets.Label')
       }
     },
     labels: {

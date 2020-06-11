@@ -7,12 +7,18 @@ export const CUSTOM = 'custom'
 
 export const ALL_TYPES = [CHROME, MYSQL_WORKBENCH, VMWARE_CLIENT, CUSTOM]
 
+export const ALL_TITLE_MAPPER = {}
+ALL_TITLE_MAPPER[CHROME] = 'Chrome'
+ALL_TITLE_MAPPER[MYSQL_WORKBENCH] = 'MySQL Workbench'
+ALL_TITLE_MAPPER[VMWARE_CLIENT] = 'vSphere Client'
+ALL_TITLE_MAPPER[CUSTOM] = i18n.t('applications.Custom')
+
 function genTypeFieldsConfig(fields) {
   const config = []
   fields.forEach((item, index, array) => {
     config.push({
       id: item, el: {}, attrs: {}, type: 'input', prop: item,
-      label: i18n.t('applications.' + item)
+      label: ALL_TITLE_MAPPER[item]
     })
   })
   return config
@@ -42,7 +48,7 @@ export const REMOTE_APP_TYPE_META_MAP = {}
 for (const value of ALL_TYPES) {
   REMOTE_APP_TYPE_META_MAP[value] = {
     name: value,
-    title: i18n.t('applications.' + value)
+    title: ALL_TITLE_MAPPER[value]
   }
 }
 

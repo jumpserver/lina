@@ -45,8 +45,9 @@ def remove_keys(lang):
 
     remove_unused_keys(data, unused_keys)
 
-    with open(lang_path, 'w') as f:
+    with open(lang_path, 'wb') as f:
         data = json.dumps(data, indent=2, sort_keys=True, ensure_ascii=False)
+        data = data.encode('utf8')
         f.write(data)
 
 

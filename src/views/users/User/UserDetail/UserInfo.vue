@@ -6,7 +6,7 @@
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
-      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="danger" style="margin-top: 15px" />
+      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="warning" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
@@ -241,23 +241,23 @@ export default {
           value: this.object.source_display
         },
         {
-          key: this.$t('users.dateExpired'),
+          key: this.$t('users.DateExpired'),
           value: this.object.date_expired
         },
         {
-          key: this.$t('common.createdBy'),
+          key: this.$t('common.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('users.dateJoined'),
+          key: this.$t('users.DateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.dateLastLogin'),
+          key: this.$t('users.DateLastLogin'),
           value: this.object.last_login
         },
         {
-          key: this.$t('users.datePasswordUpdated'),
+          key: this.$t('users.DatePasswordUpdated'),
           value: this.object.date_password_last_updated
         },
         {
