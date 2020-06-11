@@ -13,6 +13,10 @@ export default {
   data() {
     const vm = this
     return {
+      initial: {
+        is_periodic: true,
+        interval: 24
+      },
       fields: [
         [
           this.$t(''), [
@@ -23,9 +27,6 @@ export default {
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {
-        crontab: {
-          helpTips: this.$t('common.CrontabHelpTips')
-        },
         account: {
           on: {
             change: ([event], updateForm) => {
@@ -65,9 +66,6 @@ export default {
           type: 'switch',
           helpTips: this.$t('xpack.Cloud.CoveredAlwaysHelpTips')
         },
-        is_periodic: {
-          type: 'switch'
-        },
         regions: {
           component: Select2,
           el: {
@@ -84,6 +82,23 @@ export default {
               }
             }
           }
+        },
+        is_periodic: {
+          type: 'switch'
+        },
+        crontab: {
+          label: this.$t('xpack.RegularlyPerform'),
+          hidden: (formValue) => {
+            return formValue.is_periodic === false
+          },
+          helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
+        },
+        interval: {
+          label: this.$t('xpack.CyclePerform'),
+          hidden: (formValue) => {
+            return formValue.is_periodic === false
+          },
+          helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
