@@ -732,7 +732,8 @@
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
-    }
+    },
+    "dateLastLogin": "最后登录日期"
   },
   "xpack": {
     "Admin": "管理员",
