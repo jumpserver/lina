@@ -40,7 +40,8 @@ Vue.config.productionTip = false
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
 window.$cookie = VueCookie
-
+import VueMoment from 'vue-moment'
+Vue.use(VueMoment)
 // logger
 import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'

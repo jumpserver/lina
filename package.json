@@ -18,6 +18,7 @@
     "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'"
   },
   "dependencies": {
+    "@ztree/ztree_v3": "3.5.44",
     "axios": "0.18.1",
     "deepmerge": "^4.2.2",
     "echarts": "^4.7.0",
@@ -39,6 +40,7 @@
     "lodash.set": "^4.3.2",
     "lodash.topairs": "^4.3.0",
     "lodash.values": "^4.3.0",
+    "moment-parseformat": "^3.0.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
@@ -47,13 +49,13 @@
     "vue-cookie": "^1.1.4",
     "vue-echarts": "^5.0.0-beta.0",
     "vue-i18n": "^8.15.5",
+    "vue-moment": "^4.1.0",
     "vue-router": "3.0.6",
     "vue-select": "^3.9.5",
     "vuejs-logger": "^1.5.4",
     "vuex": "3.1.0",
     "xterm": "^4.5.0",
-    "xterm-addon-fit": "^0.3.0",
-    "@ztree/ztree_v3": "3.5.44"
+    "xterm-addon-fit": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
