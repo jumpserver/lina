@@ -10,7 +10,9 @@
   >
     <el-row>
       <el-col :span="4">
-        <label>{{ selectPropertiesLabel }}</label>
+        <div class="select-prop-label">
+          <label>{{ selectPropertiesLabel }}</label>
+        </div>
       </el-col>
       <el-col :span="18">
         <el-checkbox-group v-model="checkedFields" @change="handleCheckedFieldsChange">
@@ -18,7 +20,7 @@
         </el-checkbox-group>
       </el-col>
     </el-row>
-    <el-row class="margin-bottom-20">
+    <el-row class="el-row-divider">
       <el-divider />
     </el-row>
     <el-row>
@@ -117,8 +119,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .margin-bottom-20{
+  .el-row-divider{
     margin-bottom: 20px;
+  }
+  .select-prop-label{
+    float: right;
+    padding-right: 30px;
   }
 
 </style>
