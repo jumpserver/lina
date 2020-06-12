@@ -12,12 +12,12 @@ export default {
     return {
       initial: {
         is_active: true,
-        date_start: '2020-06-18 00:00:00 +0800',
+        date_start: this.$moment().format('YYYY-MM-DD HH:mm:ss ZZ'),
         date_expired: '2099-12-31 00:00:00 +0800'
       },
       fields: [
         [this.$t('perms.' + 'Basic'), ['name']],
-        [this.$t('perms.' + 'USER'), ['users', 'user_groups']],
+        [this.$t('perms.' + 'User'), ['users', 'user_groups']],
         [this.$t('perms.' + 'databaseApp'), ['database_apps', 'system_users']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
