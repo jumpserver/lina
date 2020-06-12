@@ -80,8 +80,8 @@ export default {
           key: this.$t('ops.latestVersion'),
           value: this.object.latest_execution,
           formatter: function(row, data) {
-            const url = `/ops/adhoc/${data.adhoc}`
-            return <a href={ url }>{ data.adhoc_short_id }</a>
+            const route = { to: { name: 'AdhocDetail', params: { id: data.adhoc }}}
+            return <router-link {...{ attrs: route }}>{ data.adhoc_short_id }</router-link>
           }
         },
         {
