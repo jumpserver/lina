@@ -34,8 +34,8 @@ export default {
   data() {
     const vm = this
     return {
-      selectFields: ['EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD',
-        'EMAIL_FROM', 'EMAIL_RECIPIENT', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS'],
+      selectFields: [[this.$t('common.BasicInfo'), ['EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD',
+        'EMAIL_FROM', 'EMAIL_RECIPIENT', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS']]],
       successUrl: { name: 'Settings', params: { activeMenu: 'Email' }},
       fieldsMeta: {
         EMAIL_HOST: {

@@ -19,7 +19,7 @@ export default {
       },
       fields: [
         [
-          this.$t(''), [
+          this.$t('common.BasicInfo'), [
             'name', 'account', 'regions', 'node', 'admin_user', 'covered_always',
             'is_periodic', 'crontab', 'interval', 'comment'
           ]

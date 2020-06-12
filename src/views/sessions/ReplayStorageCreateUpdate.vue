@@ -91,11 +91,11 @@ export default {
         }
       },
       fieldsMap: {
-        s3: ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment'],
-        ceph: ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment'],
-        swift: ['name', 'type', 'bucket', 'access_key', 'secret_key', 'region', 'endpoint', 'protocol', 'comment'],
-        oss: ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment'],
-        azure: ['name', 'type', 'container_name', 'account_name', 'account_key', 'endpoint_suffix', 'comment']
+        s3: [[this.$t('common.BasicInfo'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]],
+        ceph: [[this.$t('common.BasicInfo'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]],
+        swift: [[this.$t('common.BasicInfo'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'region', 'endpoint', 'protocol', 'comment']]],
+        oss: [[this.$t('common.BasicInfo'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]],
+        azure: [[this.$t('common.BasicInfo'), ['name', 'type', 'container_name', 'account_name', 'account_key', 'endpoint_suffix', 'comment']]]
       }
     }
   },

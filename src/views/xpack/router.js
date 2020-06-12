@@ -75,7 +75,7 @@ export default {
           component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
           name: 'AccountCreate',
           hidden: true,
-          meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create' }
+          meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create', activeMenu: '/xpack/cloud' }
         },
         {
           path: 'account/:id/update',
@@ -200,13 +200,13 @@ export default {
           path: '',
           component: () => import('@/views/xpack/Vault/VaultList.vue'),
           name: 'VaultList',
-          meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault/vault' }
+          meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault' }
         },
         {
           path: 'create',
           component: () => import('@/views/xpack/Vault/VaultCreate'),
           name: 'VaultCreate',
-          meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault/vault' },
+          meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault' },
           hidden: true
         }
       ]

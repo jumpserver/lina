@@ -17,7 +17,7 @@ export default {
 
       },
       fields: [
-        ['', ['name', 'username', 'password', 'private_key', 'comment']]
+        [this.$t('common.BasicInfo'), ['name', 'username', 'password', 'private_key', 'comment']]
       ],
       fieldsMeta: {
         name: {

@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      selectFields: ['SITE_URL', 'USER_GUIDE_URL', 'EMAIL_SUBJECT_PREFIX'],
+      selectFields: [[this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'EMAIL_SUBJECT_PREFIX']]],
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
       fieldsMeta: {
         SITE_URL: {
