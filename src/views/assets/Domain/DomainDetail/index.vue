@@ -21,7 +21,6 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.DomainDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
