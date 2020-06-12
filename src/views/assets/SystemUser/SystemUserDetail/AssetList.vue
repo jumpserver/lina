@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="16">
-        <AssetUserTable ref="ListTable" :url="assetUserUrl" :other-actions="otherActions" />
+        <AssetUserTable ref="ListTable" :url="assetUserUrl" :other-actions="otherActions" :has-import="false" />
       </el-col>
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
