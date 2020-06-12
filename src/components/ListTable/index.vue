@@ -12,6 +12,7 @@ import AutoDataTable from '../AutoDataTable'
 import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
+import deepmerge from 'deepmerge'
 export default {
   name: 'ListTable',
   components: {
@@ -44,7 +45,7 @@ export default {
       return this.$refs.dataTable.$refs.dataTable
     },
     iTableConfig() {
-      const config = Object.assign(this.tableConfig, { extraQuery: this.extraQuery })
+      const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
     }

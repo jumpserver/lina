@@ -85,8 +85,8 @@ export default {
         hasExport: false,
         hasDatePicker: true,
         datePicker: {
-          dateStart: dateTo,
-          dateEnd: dateFrom
+          dateEnd: dateTo,
+          dateStart: dateFrom
         }
       }
     }
