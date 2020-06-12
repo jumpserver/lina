@@ -16,6 +16,7 @@
 
 <script>
 import TabPage from '../TabPage'
+import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common'
 import ActionsGroup from '@/components/ActionsGroup'
 
@@ -169,8 +170,15 @@ export default {
     },
     getObject() {
       const url = this.validActions.detailApiUrl
-      return this.$axios.get(url).then(data => {
+      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
+      }).catch(error => {
+        if (error.response && error.response.status === 404) {
+          const msg = this.$t('common.ObjectNotFoundOrDeletedMsg')
+          this.$message.error(msg)
+        } else {
+          flashErrorMsg({ error, response: error.response })
+        }
       })
     },
     handleTabClick(tab) {

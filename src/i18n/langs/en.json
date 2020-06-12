@@ -256,7 +256,8 @@
     "updateErrorMsg": "Update failed",
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
-    "SelectProperties": "Select properties"
+    "SelectProperties": "Select properties",
+    "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",

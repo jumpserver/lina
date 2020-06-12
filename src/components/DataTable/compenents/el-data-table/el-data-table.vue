@@ -876,7 +876,6 @@ export default {
     getList({ loading = true } = {}) {
       const { url } = this
       if (!url) {
-        console.warn('DataTable: url 为空, 不发送请求')
         return
       }
 
