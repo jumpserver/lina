@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard type="info" v-bind="RunSuccessConfig" />
-      <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard v-for="config in RunSuccessConfigs" :key="config.host" type="info" v-bind="config" />
+      <RunInfoCard v-for="config in RunFailedConfigs" :key="config.host" type="danger" style="margin-top: 15px" v-bind="config" />
     </el-col>
   </el-row>
 </template>
@@ -27,23 +27,30 @@ export default {
     }
   },
   data() {
+    this.object.last_success.length || (this.object.last_success = [''])
+    this.object.last_failure.length || (this.object.last_failure = [['', '']])
+
     return {
-      RunSuccessConfig: {
-        icon: 'fa-info',
-        title: this.$t('ops.lastRunSuccessHosts'),
-        content: {
-          hostname: this.object.last_success[0],
-          result: this.object.last_success[1]
+      RunSuccessConfigs: this.object.last_success.map(val => {
+        return {
+          icon: 'fa-info',
+          title: this.$t('ops.lastRunSuccessHosts'),
+          content: {
+            hostname: val,
+            result: ''
+          }
         }
-      },
-      RunFailedConfig: {
-        icon: 'fa-info',
-        title: this.$t('ops.lastRunFailedHosts'),
-        content: {
-          hostname: this.object.last_failure[0],
-          result: this.object.last_failure[1]
+      }),
+      RunFailedConfigs: this.object.last_failure.map(([host, msg]) => {
+        return {
+          icon: 'fa-info',
+          title: this.$t('ops.lastRunFailedHosts'),
+          content: {
+            hostname: host,
+            result: msg
+          }
         }
-      },
+      }),
       taskData: {}
     }
   },
