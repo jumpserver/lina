@@ -70,7 +70,7 @@ function ifBadRequest({ response, error }) {
   }
 }
 
-function flashErrorMsg({ response, error }) {
+export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     let msg = error.message
     const data = response.data
