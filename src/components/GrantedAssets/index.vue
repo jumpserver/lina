@@ -35,7 +35,6 @@ export default {
     getShowUrl: {
       type: Function,
       default({ row, col }) {
-        console.log(this.tableUrl)
         return this.tableUrl.replace('/assets/', `/assets/${row.id}/system-users/?cache_policy=1`)
       }
     }

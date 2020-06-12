@@ -171,7 +171,6 @@ export default {
                   name: 'Test',
                   title: this.$t('common.Test'),
                   callback: (val) => {
-                    console.log(val.cellValue)
                     this.$axios.post(
                       `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
                       { action: 'test' }

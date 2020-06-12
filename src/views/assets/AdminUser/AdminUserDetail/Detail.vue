@@ -50,7 +50,6 @@ export default {
           })
         },
         onAddSuccess: () => {
-          console.log(this)
           this.$refs.RelationCard.$refs.select2.clearSelected()
         }
       }

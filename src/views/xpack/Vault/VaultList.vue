@@ -141,7 +141,6 @@ export default {
               url = setUrlParam(url, 'node_id', nodeId)
             } else if (treeNode.meta.type === 'asset') {
               const assetId = treeNode.meta.asset.id
-              console.log('Asset id: ', assetId)
               url = setUrlParam(url, 'node_id', '')
               url = setUrlParam(url, 'asset_id', assetId)
             }

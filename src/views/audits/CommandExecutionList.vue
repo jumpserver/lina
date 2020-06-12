@@ -34,7 +34,6 @@ export default {
           hosts: {
             formatter: (row, col, cellValue) => {
               const onClick = () => {
-                console.log(vm.relationDialog)
                 vm.relationDialog.tableConfig.url = setUrlParam(vm.relationDialog.tableConfig.url, 'commandexecution', row.id)
                 vm.relationDialog.show = true
               }

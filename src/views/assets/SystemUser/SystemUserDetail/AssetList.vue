@@ -69,7 +69,6 @@ export default {
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/assets/system-users-assets-relations/`
-          console.log(items)
           const data = [
 
           ]

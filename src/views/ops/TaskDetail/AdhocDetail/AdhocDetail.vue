@@ -49,7 +49,6 @@ export default {
   },
   computed: {
     cardTitle() {
-      console.log('this.object===', this.object)
       return 'api 没有该数据'
     },
     detailCardItems() {

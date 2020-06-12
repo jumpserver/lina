@@ -41,7 +41,6 @@ export default {
   },
   computed: {
     dataTable() {
-      console.log(this.$refs.dataTable.$refs)
       return this.$refs.dataTable.$refs.dataTable
     },
     iTableConfig() {

@@ -43,7 +43,6 @@ export default {
                 `/api/v1/assets/asset-users/tasks/?asset_id=${this.object.id}&latest=1`,
                 { action: 'test' }
               ).then(res => {
-                console.log(`/ops/celery/task/${res.task}/log/`)
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
