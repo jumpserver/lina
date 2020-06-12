@@ -92,8 +92,8 @@ export default {
       dialogVisible: false,
       dialogLdapUserImport: false,
       initialData: {},
-      selectFields: ['AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD', 'AUTH_LDAP_SEARCH_OU',
-        'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP', 'AUTH_LDAP'],
+      selectFields: [[this.$t('common.BasicInfo'), ['AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD', 'AUTH_LDAP_SEARCH_OU',
+        'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP', 'AUTH_LDAP']]],
       successUrl: { name: 'Settings', params: { activeMenu: 'Email' }},
       fieldsMeta: {
         AUTH_LDAP_SERVER_URI: {

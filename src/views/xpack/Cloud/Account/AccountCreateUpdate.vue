@@ -13,7 +13,7 @@ export default {
     return {
       fields: [
         [
-          this.$t(''), [
+          this.$t('common.BasicInfo'), [
             'name', 'provider', 'access_key_id', 'access_key_secret', 'comment'
           ]
         ]

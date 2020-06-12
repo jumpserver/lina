@@ -80,6 +80,14 @@ export default {
     handleImport: {
       type: Function,
       default: null
+    },
+    hasImport: {
+      type: Boolean,
+      default: true
+    },
+    hasExport: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -200,6 +208,8 @@ export default {
       headerActions: {
         hasLeftActions: this.hasLeftActions,
         hasBulkDelete: false,
+        hasImport: this.hasImport,
+        hasExport: this.hasExport,
         hasSearch: true,
         searchConfig: {
           options: [

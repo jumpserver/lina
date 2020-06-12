@@ -1,7 +1,7 @@
 <template><div>
   <el-row :gutter="20">
     <el-col :span="16">
-      <AssetUserTable :url="assetUserUrl" />
+      <AssetUserTable :url="assetUserUrl" :has-import="false" />
     </el-col>
     <el-col :span="8">
       <QuickActions type="primary" :actions="quickActions" />
