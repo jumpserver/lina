@@ -27,21 +27,34 @@ export default {
     }
   },
   data() {
-    this.object.last_success.length || (this.object.last_success = [''])
-    this.object.last_failure.length || (this.object.last_failure = [['', '']])
+    let last_success = this.object.last_success
+    last_success.length || (last_success = [''])
+
+    let last_failure = []
+    for (const host in this.object.last_failure) {
+      const task = this.object.last_failure[host]
+      const msgs = []
+      for (const name in task) {
+        msgs.push(`${name} => ${task[name].msg}`)
+      }
+
+      last_failure.push([host, msgs.join('\n')])
+    }
+
+    last_failure.length || (last_failure = [['', '']])
 
     return {
-      RunSuccessConfigs: this.object.last_success.map(val => {
+      RunSuccessConfigs: last_success.map(host => {
         return {
           icon: 'fa-info',
           title: this.$t('ops.lastRunSuccessHosts'),
           content: {
-            hostname: val,
+            hostname: host,
             result: ''
           }
         }
       }),
-      RunFailedConfigs: this.object.last_failure.map(([host, msg]) => {
+      RunFailedConfigs: last_failure.map(([host, msg]) => {
         return {
           icon: 'fa-info',
           title: this.$t('ops.lastRunFailedHosts'),
@@ -80,8 +93,8 @@ export default {
           key: this.$t('ops.latestVersion'),
           value: this.object.latest_execution,
           formatter: function(row, data) {
-            const url = `/ops/adhoc/${data.adhoc}`
-            return <a href={ url }>{ data.adhoc_short_id }</a>
+            const route = { to: { name: 'AdhocDetail', params: { id: data.adhoc }}}
+            return <router-link {...{ attrs: route }}>{ data.adhoc_short_id }</router-link>
           }
         },
         {

@@ -236,21 +236,21 @@ export default [
         path: 'create',
         component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
         name: 'PlatformCreate',
-        meta: { title: i18n.t('route.PlatformCreate'), activeMenu: '/assets/platform' },
+        meta: { title: i18n.t('route.PlatformCreate'), activeMenu: '/assets/platforms' },
         hidden: true
       },
       {
         path: ':id/update',
         component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
         name: 'PlatformUpdate',
-        meta: { title: i18n.t('route.PlatformUpdate'), activeMenu: '/assets/platform', permissions: [rolec.PERM_SUPER] },
+        meta: { title: i18n.t('route.PlatformUpdate'), activeMenu: '/assets/platforms', permissions: [rolec.PERM_SUPER] },
         hidden: true
       },
       {
         path: ':id',
         component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
         name: 'PlatformDetail',
-        meta: { title: i18n.t('route.PlatformDetail'), activeMenu: '/assets/platform' },
+        meta: { title: i18n.t('route.PlatformDetail'), activeMenu: '/assets/platforms' },
         hidden: true
       }
     ]

@@ -33,8 +33,8 @@ export default {
     goDetail() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route
-      if (this.getRoute && typeof this.getRoute === 'function') {
-        route = this.getRoute({ row: this.row, col: this.col, cellValue: this.cellValue })
+      if (this.formatterArgs.getRoute && typeof this.formatterArgs.getRoute === 'function') {
+        route = this.formatterArgs.getRoute({ row: this.row, col: this.col, cellValue: this.cellValue })
       }
       if (!route) {
         console.error('No route found')
