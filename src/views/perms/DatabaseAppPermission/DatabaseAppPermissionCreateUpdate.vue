@@ -17,7 +17,7 @@ export default {
       },
       fields: [
         [this.$t('perms.' + 'Basic'), ['name']],
-        [this.$t('perms.' + 'USER'), ['users', 'user_groups']],
+        [this.$t('perms.' + 'User'), ['users', 'user_groups']],
         [this.$t('perms.' + 'databaseApp'), ['database_apps', 'system_users']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
