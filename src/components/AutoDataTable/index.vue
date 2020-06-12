@@ -5,6 +5,7 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
+import i18n from '@/i18n/i18n'
 export default {
   name: 'AutoDataTable',
   components: {
@@ -59,7 +60,7 @@ export default {
         case 'actions':
           col = {
             prop: 'id',
-            label: this.$t('common.Actions'),
+            label: i18n.t('common.Actions'),
             align: 'center',
             width: '150px',
             formatter: ActionsFormatter,
@@ -67,7 +68,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = this.$t('common.Validity')
+          col.label = i18n.t('common.Validity')
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'

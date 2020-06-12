@@ -119,7 +119,6 @@ export default {
       }
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)
-      console.log(this.filterTags)
       this.filterKey = ''
       this.filterValue = ''
       this.valueLabel = ''

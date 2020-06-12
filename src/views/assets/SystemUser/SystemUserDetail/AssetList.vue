@@ -6,7 +6,7 @@
       </el-col>
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
-        <AssetRelationCard ref="assetSelect" type="primary" v-bind="assetRelationConfig" />
+        <AssetRelationCard ref="assetSelect" type="primary" style="margin-top: 15px" v-bind="assetRelationConfig" />
         <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
@@ -69,7 +69,6 @@ export default {
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/assets/system-users-assets-relations/`
-          console.log(items)
           const data = [
 
           ]

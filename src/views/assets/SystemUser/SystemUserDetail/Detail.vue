@@ -109,11 +109,11 @@ export default {
         },
         {
           key: this.$t('assets.date_joined'),
-          value: '暂时没有这个API'
+          value: this.object.date_joined
         },
         {
           key: this.$t('assets.CreatedBy'),
-          value: '暂时没有这个API'
+          value: this.object.date_joined
         }
       ]
     }

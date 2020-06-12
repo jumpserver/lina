@@ -150,7 +150,6 @@ export default {
             type: 'primary',
             can: ({ selectedRows }) => selectedRows.length > 0,
             callback: function({ selectedRows }) {
-              console.log(selectedRows)
               const ids = selectedRows.map((v) => {
                 return { pk: v.id, is_active: false }
               })
@@ -167,7 +166,6 @@ export default {
             type: 'primary',
             can: ({ selectedRows }) => selectedRows.length > 0,
             callback: function({ selectedRows }) {
-              console.log(selectedRows)
               const ids = selectedRows.map((v) => {
                 return { pk: v.id, is_active: true }
               })

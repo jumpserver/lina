@@ -136,7 +136,6 @@ export default {
       this.actions = val
     },
     onClick(event, treeId, treeNode, clickFlag) {
-      console.log(event, treeId, treeNode, clickFlag)
       if (treeNode.meta.type === 'asset') {
         const protocolsStr = treeNode.meta.asset.protocols + ''
         if (protocolsStr.indexOf('ssh/') === -1) {
@@ -232,7 +231,6 @@ export default {
         url, data
       ).then(res => {
         this.writeExecutionOutput(res.id)
-        console.log('success')
       })
     }
   }
