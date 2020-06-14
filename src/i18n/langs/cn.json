@@ -242,7 +242,8 @@
       "Logout": "退出登录",
       "Profile": "个人信息",
       "Support": "支持",
-      "UserPage": "用户页面"
+      "UserPage": "用户页面",
+      "EnterpriseEdition": "企业版"
     },
     "passwordOrPassphrase": "密码或密钥密码",
     "removeErrorMsg": "移除失败: ",
