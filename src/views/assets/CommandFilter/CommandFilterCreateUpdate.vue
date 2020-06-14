@@ -13,7 +13,7 @@ export default {
 
       },
       fields: [
-        ['', ['name', 'comment']]
+        [this.$t('common.BasicInfo'), ['name', 'comment']]
       ],
       fieldsMeta: {
 

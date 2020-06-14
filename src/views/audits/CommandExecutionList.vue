@@ -56,7 +56,8 @@ export default {
             width: '80px',
             formatter: (row) => {
               const label = this.$t('audits.View')
-              return <el-link Type='success'>{ label }</el-link>
+              const route = { to: { name: 'CeleryTaskLog', params: { id: row.id }}}
+              return <router-link {...{ attrs: route }}>{ label }</router-link>
             }
           },
           date_start: {
