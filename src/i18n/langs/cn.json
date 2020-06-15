@@ -807,7 +807,9 @@
       "CoveredAlwaysHelpTips": "资产信息总是被覆盖",
       "SyncInstanceTaskCreate": "创建同步实例任务",
       "SyncInstanceTaskList": "同步实例任务列表",
-      "SyncInstanceTaskUpdate": "更新同步实例任务"
+      "SyncInstanceTaskUpdate": "更新同步实例任务",
+      "CloudSource": "同步源",
+      "SaveSetting": "同步设置"
     },
     "Corporation": "公司",
     "Edition": "版本",
