@@ -127,21 +127,13 @@ export default {
               node: v.value
             }
           })
-          return this.$axios.post(relationUrl, data).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.post(relationUrl, data)
         },
         performDelete: (item) => {
           const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
-          return this.$axios.delete(relationUrl).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.delete(relationUrl)
         }
       }
     }

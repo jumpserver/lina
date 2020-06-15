@@ -130,11 +130,7 @@ export default {
           items.map(v => {
             newData.push(v.value)
           })
-          return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.patch(relationUrl, { nodes: newData })
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -146,11 +142,7 @@ export default {
             }
           })
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.patch(relationUrl, { nodes: newData })
         }
       },
       labelConfig: {
