@@ -259,7 +259,8 @@
     "updateSelected": "更新所选",
     "updateSuccessMsg": "更新成功",
     "SelectProperties": "选择属性",
-    "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除"
+    "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
+    "removeSelected": "移除所选"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
