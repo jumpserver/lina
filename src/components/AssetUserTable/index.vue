@@ -270,7 +270,7 @@ export default {
   methods: {
     MFAConfirm() {
       if (this.MFAInput.length !== 6) {
-        return this.$message.error(this.$t('common.updateErrorMsg'))
+        return this.$message.error(this.$t('common.MFAErrorMsg'))
       }
       this.$axios.post(
         `/api/v1/authentication/otp/verify/`, {

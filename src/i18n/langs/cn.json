@@ -222,6 +222,7 @@
     "disableSelected": "禁用所选",
     "fieldRequiredError": "这个字段是必填项",
     "getErrorMsg": "获取失败",
+    "MFAErrorMsg":"MFA错误，请检查",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
