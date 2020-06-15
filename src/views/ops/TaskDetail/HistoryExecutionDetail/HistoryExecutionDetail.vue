@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
-      <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard v-for="config in RunSuccessConfigs" :key="config.host" type="info" v-bind="config" />
+      <RunInfoCard v-for="config in RunFailedConfigs" :key="config.host" type="danger" style="margin-top: 15px" v-bind="config" />
     </el-col>
   </el-row>
 </template>
@@ -14,6 +14,7 @@
 import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../RunInfoCard'
+import { toLastFailureDisplay, toLastSucessDisplay } from '../business'
 
 export default {
   name: 'HistoryExecutionDetail',
@@ -28,23 +29,30 @@ export default {
     }
   },
   data() {
+    const last_success = toLastSucessDisplay(this.object)
+    const last_failure = toLastFailureDisplay(this.object)
+
     return {
-      RunSuccessConfig: {
-        icon: 'fa-info',
-        title: this.$t('ops.lastRunSuccessHosts'),
-        content: {
-          hostname: 'linux',
-          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
+      RunSuccessConfigs: last_success.map(host => {
+        return {
+          icon: 'fa-info',
+          title: this.$t('ops.lastRunSuccessHosts'),
+          content: {
+            hostname: host,
+            result: ''
+          }
         }
-      },
-      RunFailedConfig: {
-        icon: 'fa-info',
-        title: this.$t('ops.lastRunFailedHosts'),
-        content: {
-          hostname: 'linux',
-          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
+      }),
+      RunFailedConfigs: last_failure.map(([host, msg]) => {
+        return {
+          icon: 'fa-info',
+          title: this.$t('ops.lastRunFailedHosts'),
+          content: {
+            hostname: host,
+            result: msg
+          }
         }
-      }
+      })
     }
   },
   computed: {

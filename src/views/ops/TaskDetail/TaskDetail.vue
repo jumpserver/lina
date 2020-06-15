@@ -13,6 +13,7 @@
 <script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import RunInfoCard from '../RunInfoCard/index'
+import { toLastFailureDisplay, toLastSucessDisplay } from './business'
 
 export default {
   name: 'TaskDetail',
@@ -27,21 +28,8 @@ export default {
     }
   },
   data() {
-    let last_success = this.object.last_success
-    last_success.length || (last_success = [''])
-
-    let last_failure = []
-    for (const host in this.object.last_failure) {
-      const task = this.object.last_failure[host]
-      const msgs = []
-      for (const name in task) {
-        msgs.push(`${name} => ${task[name].msg}`)
-      }
-
-      last_failure.push([host, msgs.join('\n')])
-    }
-
-    last_failure.length || (last_failure = [['', '']])
+    const last_success = toLastSucessDisplay(this.object.latest_execution)
+    const last_failure = toLastFailureDisplay(this.object.latest_execution)
 
     return {
       RunSuccessConfigs: last_success.map(host => {
@@ -115,7 +103,14 @@ export default {
         },
         {
           key: this.$t('ops.contents'),
-          value: 'api 没有该数据'
+          value: this.toContentsDisplay(this.object.contents),
+          formatter(row, value) {
+            return (<div>{
+              value.map((content) => {
+                return <div>{ content }</div>
+              })}
+            </div>)
+          }
         },
         {
           key: this.$t('ops.lastExecutionOutput'),
@@ -137,6 +132,14 @@ export default {
         return this.$t('ops.No')
       }
       return this.$t('ops.Yes')
+    },
+    toContentsDisplay(contents) {
+      const lines = []
+      for (let i = 0; i < contents.length; i++) {
+        const content = contents[i]
+        lines.push(`${i}. ${content.name} ::: ${content.action.module}`)
+      }
+      return lines
     }
   }
 }

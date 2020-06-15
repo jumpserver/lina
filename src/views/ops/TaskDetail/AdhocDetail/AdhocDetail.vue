@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
-      <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard v-for="config in RunSuccessConfigs" :key="config.host" type="info" v-bind="config" />
+      <RunInfoCard v-for="config in RunFailedConfigs" :key="config.host" type="danger" style="margin-top: 15px" v-bind="config" />
     </el-col>
   </el-row>
 </template>
@@ -14,6 +14,7 @@
 import DetailCard from '@/components/DetailCard/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../RunInfoCard'
+import { toLastFailureDisplay, toLastSucessDisplay } from '../business'
 
 export default {
   name: 'AdhocDetail',
@@ -28,28 +29,35 @@ export default {
     }
   },
   data() {
+    const last_success = toLastSucessDisplay(this.object.latest_execution)
+    const last_failure = toLastFailureDisplay(this.object.latest_execution)
+
     return {
-      RunSuccessConfig: {
-        icon: 'fa-info',
-        title: this.$t('ops.lastRunSuccessHosts'),
-        content: {
-          hostname: 'linux',
-          result: 'api没有该数据，api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+      RunSuccessConfigs: last_success.map(host => {
+        return {
+          icon: 'fa-info',
+          title: this.$t('ops.lastRunSuccessHosts'),
+          content: {
+            hostname: host,
+            result: ''
+          }
         }
-      },
-      RunFailedConfig: {
-        icon: 'fa-info',
-        title: this.$t('ops.lastRunFailedHosts'),
-        content: {
-          hostname: 'window',
-          result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
+      }),
+      RunFailedConfigs: last_failure.map(([host, msg]) => {
+        return {
+          icon: 'fa-info',
+          title: this.$t('ops.lastRunFailedHosts'),
+          content: {
+            hostname: host,
+            result: msg
+          }
         }
-      }
+      })
     }
   },
   computed: {
     cardTitle() {
-      return 'api 没有该数据'
+      return `${this.object.task_name}: ${this.object.short_id}`
     },
     detailCardItems() {
       return [
@@ -80,7 +88,7 @@ export default {
         },
         {
           key: this.$t('common.createBy'),
-          value: 'api 没有该数据'
+          value: this.object.created_by
         },
         {
           key: this.$t('common.dateCreated'),
@@ -88,27 +96,34 @@ export default {
         },
         {
           key: this.$t('ops.runTimes'),
-          value: 'api 没有该数据'
+          value: this.object.run_times
         },
         {
           key: this.$t('ops.lastRun'),
-          value: 'api 没有该数据'
+          value: this.object.latest_execution.last_run
         },
         {
           key: this.$t('ops.timeDelta'),
-          value: 'api 没有该数据'
+          value: this.object.latest_execution.timedelta
         },
         {
           key: this.$t('ops.isFinished'),
-          value: 'api 没有该数据'
+          value: this.toBooleanDisplay(this.object.latest_execution.is_finished)
         },
         {
           key: this.$t('ops.isSuccess'),
-          value: 'api 没有该数据'
+          value: this.toBooleanDisplay(this.object.latest_execution.is_success)
         },
         {
           key: this.$t('ops.tasks'),
-          value: 'api 没有该数据'
+          value: this.toContentsDisplay(this.object.tasks),
+          formatter(row, value) {
+            return (<div>{
+              value.map((content) => {
+                return <div>{ content }</div>
+              })}
+            </div>)
+          }
         }
       ]
     }
@@ -122,6 +137,23 @@ export default {
     },
     disPlayOptions(options) {
       return options.replace(/:/g, '=').replace(/'/g, '').replace('{', '').replace('}', '')
+    },
+    toContentsDisplay(contents) {
+      const lines = []
+      for (let i = 0; i < contents.length; i++) {
+        const content = contents[i]
+        lines.push(`${i}. ${content.name} ::: ${content.action.module}`)
+      }
+      return lines
+    },
+    toBooleanDisplay(value) {
+      if (value === true) {
+        return this.$t('ops.Yes')
+      } else if (value === false) {
+        return this.$t('ops.No')
+      } else {
+        return this.$t('ops.Unkown')
+      }
     }
   }
 }
