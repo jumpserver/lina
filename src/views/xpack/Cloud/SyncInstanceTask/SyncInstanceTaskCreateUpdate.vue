@@ -18,12 +18,11 @@ export default {
         interval: 24
       },
       fields: [
-        [
-          this.$t('common.BasicInfo'), [
-            'name', 'account', 'regions', 'node', 'admin_user', 'covered_always',
-            'is_periodic', 'crontab', 'interval', 'comment'
-          ]
-        ]
+        [this.$t('common.Basic'), ['name']],
+        [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['node', 'admin_user', 'covered_always']],
+        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('common.Other'), ['comment']]
       ],
       url: '/api/v1/xpack/cloud/sync-instance-tasks/',
       fieldsMeta: {

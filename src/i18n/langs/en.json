@@ -806,7 +806,9 @@
       "CoveredAlwaysHelpTips": "The asset information is always covered",
       "SyncInstanceTaskCreate": "Create sync instance task",
       "SyncInstanceTaskList": "Sync instance task list",
-      "SyncInstanceTaskUpdate": "Update sync instance task"
+      "SyncInstanceTaskUpdate": "Update sync instance task",
+      "CloudSource": "Cloud source",
+      "SaveSetting": "Save setting"
     },
     "Corporation": "Corporation",
     "Edition": "Edition",
