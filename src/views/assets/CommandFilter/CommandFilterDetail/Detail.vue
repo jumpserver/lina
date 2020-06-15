@@ -55,11 +55,7 @@ export default {
           items.map(v => {
             newData.push(v.value)
           })
-          return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.patch(relationUrl, { system_users: newData })
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -71,11 +67,7 @@ export default {
             }
           })
           const relationUrl = `/api/v1/assets/cmd-filters/${this.object.id}/`
-          return this.$axios.patch(relationUrl, { system_users: newData }).then(res => {
-            this.$message.success(this.$t('common.deleteSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + err))
-          })
+          return this.$axios.patch(relationUrl, { system_users: newData })
         }
       }
     }

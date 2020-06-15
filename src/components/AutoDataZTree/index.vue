@@ -209,6 +209,7 @@ export default {
       if (!parentNode) {
         return
       }
+      this.zTree.expandNode(parentNode, true, false, true, false)
       // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
       const url = `${this.treeSetting.nodeUrl}${parentNode.meta.node.id}/children/`
       this.$axios.post(url, {}).then(data => {
