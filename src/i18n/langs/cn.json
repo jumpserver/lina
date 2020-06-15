@@ -334,7 +334,8 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史"
+    "versionRunExecution": "执行历史",
+    "Unkown": "未知"
   },
   "perms": {
     "": "",
