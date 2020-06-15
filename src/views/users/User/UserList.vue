@@ -13,6 +13,7 @@
 import { mapGetters } from 'vuex'
 import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
+import { createSourceIdCache } from '@/api/common'
 
 export default {
   components: {
@@ -55,7 +56,16 @@ export default {
         }
       },
       headerActions: {
+        hasBulkDelete: false,
         extraMoreActions: [
+          {
+            title: this.$t('common.deleteSelected'),
+            name: 'deleteSelected',
+            can({ selectedRows }) {
+              return selectedRows.length > 0
+            },
+            callback: this.bulkDeleteCallback.bind(this)
+          },
           {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
@@ -153,6 +163,11 @@ export default {
       return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
     }
   },
+  mounted() {
+    if (!this.currentOrgIsDefault) {
+      this.headerActions.extraMoreActions[0].title = this.$t('common.removeSelected')
+    }
+  },
   methods: {
     removeUserFromOrg({ row, col, reload }) {
       const msg = this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
@@ -180,6 +195,40 @@ export default {
           }
         }
       })
+    },
+    bulkDeleteCallback({ selectedRows, reloadTable }) {
+      const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
+      const title = this.$t('common.Info')
+      const performDelete = this.performBulkDelete
+      this.$alert(msg, title, {
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger',
+        showCancelButton: true,
+        beforeClose: async(action, instance, done) => {
+          if (action !== 'confirm') return done()
+          instance.confirmButtonLoading = true
+          try {
+            await performDelete(selectedRows)
+            done()
+            reloadTable()
+            this.$message.success(this.$t('common.bulkDeleteSuccessMsg'))
+          } catch (error) {
+            this.$message.error(this.$t('common.bulkDeleteErrorMsg') + error)
+          } finally {
+            instance.confirmButtonLoading = false
+          }
+        }
+      }).catch(() => {
+        /* 取消*/
+      })
+    },
+    async performBulkDelete(selectedRows) {
+      const ids = selectedRows.map((v) => {
+        return v.id
+      })
+      const data = await createSourceIdCache(ids)
+      const url = `${this.tableConfig.url}?spm=` + data.spm
+      return this.$axios.delete(url)
     }
   }
 }
