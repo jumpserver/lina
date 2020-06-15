@@ -23,7 +23,17 @@ export default {
       },
       fieldsMeta: {
         crontab: {
-          helpTips: this.$t('common.CrontabHelpTips')
+          hidden: (formValue) => {
+            return !formValue.is_periodic
+          },
+          helpTips: this.$t('xpack.ChangeAuthPlan.HelpText.CrontabOfCreateUpdatePage')
+        },
+        interval: {
+          label: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
+          helpTips: this.$t('xpack.ChangeAuthPlan.HelpText.IntervalOfCreateUpdatePage'),
+          hidden: (formValue) => {
+            return !formValue.is_periodic
+          }
         },
         nodes: {
           el: {
