@@ -29,7 +29,7 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
           'command_amount', 'date_start', 'duration', 'actions'
         ],
         columnsMeta: {
@@ -38,7 +38,9 @@ export default {
             align: 'center',
             width: '60px',
             formatter: function(row, column, cellValue, index) {
-              return <a class='detail el-link el-link--success is-underline' href= { '/terminal/sessions/' + row.id }>{ index + 1}</a>
+              const label = index + 1
+              const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
+              return <router-link {...{ attrs: route }}>{ label }</router-link>
             }
           },
           command_amount: {
