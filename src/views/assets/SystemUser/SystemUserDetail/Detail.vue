@@ -109,11 +109,11 @@ export default {
         },
         {
           key: this.$t('assets.date_joined'),
-          value: this.object.date_joined
+          value: this.$d(new Date(this.object.date_created), 'medium')
         },
         {
           key: this.$t('assets.CreatedBy'),
-          value: this.object.date_joined
+          value: this.object.created_by
         }
       ]
     }
