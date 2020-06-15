@@ -20,6 +20,16 @@ export default {
       ],
       url: '/api/v1/xpack/cloud/accounts/',
       fieldsMeta: {
+        access_key_id: {
+          rules: [
+            { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError') }
+          ]
+        },
+        access_key_secret: {
+          rules: [
+            { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError') }
+          ]
+        }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
       createSuccessNextRoute: { name: 'CloudCenter' }
