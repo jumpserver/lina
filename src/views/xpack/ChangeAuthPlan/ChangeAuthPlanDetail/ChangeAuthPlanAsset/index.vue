@@ -14,6 +14,7 @@
 import ListTable from '@/components/ListTable/index'
 import RelationCard from '@/components/RelationCard/index'
 import AssetRelationCard from '@/components/AssetRelationCard'
+import { DeleteActionFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'ChangeAuthPlanAsset',
@@ -32,8 +33,29 @@ export default {
       tableConfig: {
         url: `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/assets/`,
         columns: [
-          'hostname', 'ip'
+          'hostname', 'ip', 'delete_action'
         ],
+        columnsMeta: {
+          delete_action: {
+            prop: 'id',
+            label: this.$t('common.Actions'),
+            align: 'center',
+            width: 150,
+            objects: this.object.assets,
+            formatter: DeleteActionFormatter,
+            onDelete: function(col, row, cellValue, reload) {
+              this.$axios.patch(
+                `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/asset/remove/`,
+                { assets: [row.id] }
+              ).then(res => {
+                this.$message.success(this.$t('common.deleteSuccessMsg'))
+                reload()
+              }).catch(error => {
+                this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+              })
+            }.bind(this)
+          }
+        },
         tableAttrs: {
           border: false
         }
