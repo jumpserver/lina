@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import AssetPermissionFormActionField from './components/AssetPermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
 
 export default {
@@ -89,14 +90,7 @@ export default {
         },
         actions: {
           label: this.$t('perms.Actions'),
-          type: 'checkbox-group',
-          options: [
-            { label: 'all', value: this.$t('perms.all') },
-            { label: 'connect', value: this.$t('perms.connect') },
-            { label: 'updownload', value: this.$t('perms.upDownload') },
-            { label: 'upload_file', value: this.$t('perms.uploadFile') },
-            { label: 'download_file', value: this.$t('perms.downloadFile') }
-          ]
+          component: AssetPermissionFormActionField
         },
         date_start: {
           label: this.$t('common.dateStart')
