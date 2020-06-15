@@ -26,11 +26,11 @@ export default {
           hidden: (formValue) => {
             return !formValue.is_periodic
           },
-          helpTips: this.$t('xpack.ChangeAuthPlan.HelpText.CrontabOfCreateUpdatePage')
+          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.CrontabOfCreateUpdatePage')
         },
         interval: {
           label: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
-          helpTips: this.$t('xpack.ChangeAuthPlan.HelpText.IntervalOfCreateUpdatePage'),
+          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.IntervalOfCreateUpdatePage'),
           hidden: (formValue) => {
             return !formValue.is_periodic
           }
