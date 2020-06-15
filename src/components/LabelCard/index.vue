@@ -1,6 +1,7 @@
 <template>
   <IBox fa="fa-info-circle" :title="title" v-bind="$attrs">
     <div class="quick-actions">
+      <p v-if="iTag.length === 0">{{ $t('common.Nothing') }}</p>
       <el-tag v-for="i in iTag" :key="i" type="info">{{ i }}</el-tag>
     </div>
   </IBox>

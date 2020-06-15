@@ -142,6 +142,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Nothing": "Nothing",
     "Action": "Action",
     "Actions": "Actions",
     "Activate": "Activate",
@@ -259,7 +260,8 @@
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
     "SelectProperties": "Select properties",
-    "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted"
+    "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted",
+    "removeSelected": "Remove selected"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
