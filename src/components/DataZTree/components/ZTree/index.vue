@@ -51,6 +51,9 @@ export default {
     this.initTree()
     // $('.treebox').css('height', window.innerHeight - 60)
   },
+  beforeDestroy() {
+    $.fn.zTree.destroy()
+  },
   methods: {
     initTree: function() {
       this.$axios.get(this.treeSetting.treeUrl).then(res => {

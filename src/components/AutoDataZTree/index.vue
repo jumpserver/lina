@@ -72,6 +72,9 @@ export default {
       return this.$refs.dataztree.rMenu
     }
   },
+  beforeDestroy() {
+    $('body').unbind('mousedown')
+  },
   methods: {
     editTreeNode: function() {
       this.hideRMenu()
