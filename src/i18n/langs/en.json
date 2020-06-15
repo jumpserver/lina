@@ -190,6 +190,7 @@
     "RemoveSuccessMsg": "Remove success",
     "Reset": "Reset",
     "Search": "Search",
+    "MFAErrorMsg":"MFA Error，please check",
     "Select": "Select",
     "SelectFile": "Select file",
     "Show": "Show",
