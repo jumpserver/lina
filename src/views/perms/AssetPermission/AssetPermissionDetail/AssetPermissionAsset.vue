@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" class- />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />

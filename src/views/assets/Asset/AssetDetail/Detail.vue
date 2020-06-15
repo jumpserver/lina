@@ -45,7 +45,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `api/v1/assets/assets/${this.object.id}/`,
+                `/api/v1/assets/assets/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))

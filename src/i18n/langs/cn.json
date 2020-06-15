@@ -223,6 +223,7 @@
     "disableSelected": "禁用所选",
     "fieldRequiredError": "这个字段是必填项",
     "getErrorMsg": "获取失败",
+    "MFAErrorMsg":"MFA错误，请检查",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -334,7 +335,8 @@
     "totalVersions": "版本数量",
     "version": "版本",
     "versionDetail": "版本详情",
-    "versionRunExecution": "执行历史"
+    "versionRunExecution": "执行历史",
+    "Unkown": "未知"
   },
   "perms": {
     "": "",

@@ -69,6 +69,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           // setTimeout(() => location.reload(), 300)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
         },
         onDeleteSuccess: (obj, that) => {
           const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)

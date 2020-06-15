@@ -30,7 +30,7 @@ export default {
             name: 'Detail'
           }
         ],
-        hasRightSide: this.hasRightSide
+        hasRightSide: this.$route.params.id > 7
       }
     }
   },
