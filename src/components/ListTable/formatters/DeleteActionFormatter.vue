@@ -16,7 +16,7 @@ export default {
     }
   },
   methods: {
-    onDelete(col, row, cellValue, reload) {
+    defaultOnDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
       this.$axios.delete(url).then(res => {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
@@ -24,6 +24,13 @@ export default {
       }).catch(error => {
         this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
       })
+    },
+    onDelete(col, row, cellValue, reload) {
+      if (col.onDelete && typeof col.onDelete === 'function') {
+        col.onDelete(col, row, cellValue, reload)
+      } else {
+        this.defaultOnDelete(col, row, cellValue, reload)
+      }
     },
     iCanDelete() {
       return this.col.objects.indexOf(this.cellValue) === -1
