@@ -225,7 +225,7 @@ export default {
         this.zTree.editName(node)
         this.$message.success(this.$t('common.createSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.createErrorMsg' + ' ' + error))
+        this.$message.error(this.$t('common.createErrorMsg') + ' ' + error)
       })
     },
     refresh: function() {

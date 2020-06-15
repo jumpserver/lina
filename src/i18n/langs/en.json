@@ -242,7 +242,8 @@
       "Logout": "Logout",
       "Profile": "Profile",
       "Support": "Support",
-      "UserPage": "User page"
+      "UserPage": "User page",
+      "EnterpriseEdition": "Enterprise edition"
     },
     "passwordOrPassphrase": "Password or Passphrase",
     "removeErrorMsg": "Remove failed: ",
