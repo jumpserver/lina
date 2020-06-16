@@ -37,6 +37,7 @@ export default {
             label: this.$t('perms.User'),
             formatter: DetailFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -49,6 +50,7 @@ export default {
             label: this.$t('perms.Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
+              route: 'AssetPermissionDetail',
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }
