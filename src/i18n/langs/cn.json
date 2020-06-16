@@ -769,7 +769,9 @@
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
     },
-    "dateLastLogin": "最后登录日期"
+    "dateLastLogin": "最后登录日期",
+    "UpdatePassword": "更新密码",
+    "SetPublicKey": "设置SSH公钥"
   },
   "xpack": {
     "Admin": "管理员",

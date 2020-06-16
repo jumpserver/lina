@@ -768,7 +768,9 @@
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",
       "remoteAppPermissionRules": "Remote app permission rules"
-    }
+    },
+    "UpdatePassword": "",
+    "UpdatePublicKey": ""
   },
   "xpack": {
     "Admin": "Admin",

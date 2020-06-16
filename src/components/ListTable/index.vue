@@ -64,11 +64,8 @@ export default {
     handleSelectionChange(val) {
       this.selectedRows = val
     },
-    getDataTable() {
-      return this.$refs.dataTable.$refs.dataTable
-    },
     reloadTable() {
-      this.getDataTable().getList()
+      this.dataTable.getList()
     },
     search(attrs) {
       return this.dataTable.search(attrs, true)

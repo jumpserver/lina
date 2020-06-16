@@ -21,7 +21,7 @@ export default {
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.Authentication'), ['password_strategy', 'password', 'public_key', 'mfa_level', 'source']],
+        [this.$t('users.Authentication'), ['password_strategy', 'update_password', 'password', 'set_public_key', 'public_key', 'mfa_level', 'source']],
         [this.$t('users.Secure'), ['role', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
@@ -32,18 +32,41 @@ export default {
             return this.$route.params.id
           }
         },
+        update_password: {
+          label: this.$t('users.UpdatePassword'),
+          type: 'checkbox',
+          hidden: (formValue) => {
+            if (formValue.update_password) {
+              return true
+            }
+            return this.$route.meta.action !== 'update'
+          }
+        },
         password: {
           component: UserPassword,
           hidden: (formValue) => {
-            if (this.$route.meta.action === 'update') {
+            if (formValue.password_strategy) {
               return false
             }
-            return formValue.password_strategy !== 1
+            return !formValue.update_password
+          },
+          el: {
+            required: false
+          }
+        },
+        set_public_key: {
+          label: this.$t('users.SetPublicKey'),
+          type: 'checkbox',
+          hidden: (formValue) => {
+            if (formValue.set_public_key) {
+              return true
+            }
+            return this.$route.meta.action !== 'update'
           }
         },
         public_key: {
-          hidden: (formValue, item) => {
-            return this.$route.meta.action !== 'update'
+          hidden: (formValue) => {
+            return !formValue.set_public_key
           }
         },
         groups: {
