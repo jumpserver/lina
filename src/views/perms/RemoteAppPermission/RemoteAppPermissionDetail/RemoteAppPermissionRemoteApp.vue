@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="remoteAppRelationConfig" />
@@ -54,9 +54,15 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: false,
-        hasLeftActions: false,
-        hasRightActions: false
+        hasSearch: true,
+        hasRefresh: true,
+        hasLeftActions: true,
+        hasRightActions: true,
+        hasExport: false,
+        hasImport: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false
       },
       remoteAppRelationConfig: {
         icon: 'fa-edit',
@@ -78,7 +84,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       },
       systemUserRelationConfig: {
@@ -109,12 +115,13 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
           const objectOldRelationSystemUsers = this.object.system_users
+          console.log(1, objectOldRelationSystemUsers, item)
           const objectNewRelationSystemUsers = objectOldRelationSystemUsers.filter(v => v !== item.value)
           const data = { system_users: objectNewRelationSystemUsers }
           return this.$axios.patch(relationUrl, data)
@@ -128,7 +135,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       }
     }
