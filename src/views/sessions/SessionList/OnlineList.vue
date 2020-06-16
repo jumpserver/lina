@@ -11,6 +11,7 @@ export default {
     BaseList
   },
   data() {
+    const vm = this
     return {
       url: '/api/v1/terminal/sessions/?is_finished=0',
       extraActions: [
@@ -22,6 +23,8 @@ export default {
             // 终断 session reload
             const data = [cellValue]
             terminateSession(data).then(res => {
+              const msg = vm.$t('sessions.TerminateTaskSendSuccessMsg')
+              this.$message.success(msg)
               window.setTimeout(function() {
                 reload()
               }, 50000)

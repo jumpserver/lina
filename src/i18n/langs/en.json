@@ -544,7 +544,8 @@
     "riskLevels": {
       "common": "common"
     },
-    "Monitor": "Monitor"
+    "Monitor": "Monitor",
+    "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later"
   },
   "setting": {
     "ApiKeyList": "Api key list",

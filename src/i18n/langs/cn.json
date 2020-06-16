@@ -544,7 +544,8 @@
     "riskLevels": {
       "common": "普通"
     },
-    "Monitor": "监控"
+    "Monitor": "监控",
+    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新表格查看"
   },
   "setting": {
     "ApiKeyList": "API Key 列表",
