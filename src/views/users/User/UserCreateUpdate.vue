@@ -4,6 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import UserPassword from '@/components/UserPassword'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -31,6 +33,7 @@ export default {
           }
         },
         password: {
+          component: UserPassword,
           hidden: (formValue) => {
             if (this.$route.meta.action === 'update') {
               return false

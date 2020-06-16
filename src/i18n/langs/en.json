@@ -190,7 +190,7 @@
     "RemoveSuccessMsg": "Remove success",
     "Reset": "Reset",
     "Search": "Search",
-    "MFAErrorMsg":"MFA Error，please check",
+    "MFAErrorMsg": "MFA Error，please check",
     "Select": "Select",
     "SelectFile": "Select file",
     "Show": "Show",
@@ -259,7 +259,14 @@
     "updateSelected": "Update selected",
     "updateSuccessMsg": "Update success",
     "SelectProperties": "Select properties",
-    "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted"
+    "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted",
+    "password": {
+      "UPPER_CASE_REQUIRED": "Upper case required",
+      "LOWER_CASE_REQUIRED": "Lower case required",
+      "NUMBER_REQUIRED": "Number required",
+      "SPECIAL_CHAR_REQUIRED": "Special char required",
+      "MIN_LENGTH_ERROR": "Password minimum length {}"
+    }
   },
   "dashboard": {
     "ActiveAsset": "Asset active",

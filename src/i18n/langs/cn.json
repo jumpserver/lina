@@ -222,7 +222,7 @@
     "disableSelected": "禁用所选",
     "fieldRequiredError": "这个字段是必填项",
     "getErrorMsg": "获取失败",
-    "MFAErrorMsg":"MFA错误，请检查",
+    "MFAErrorMsg": "MFA错误，请检查",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -259,7 +259,14 @@
     "updateSelected": "更新所选",
     "updateSuccessMsg": "更新成功",
     "SelectProperties": "选择属性",
-    "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除"
+    "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
+    "password": {
+      "UPPER_CASE_REQUIRED": "需包含大写字母",
+      "LOWER_CASE_REQUIRED": "需包含小写字母",
+      "NUMBER_REQUIRED": "需包含数字",
+      "SPECIAL_CHAR_REQUIRED": "需包含特殊字符",
+      "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
+    }
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
