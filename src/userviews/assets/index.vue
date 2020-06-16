@@ -38,10 +38,9 @@ export default {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
             formatter: DialogDetailFormatter,
+            showOverflowTooltip: true,
             formatterArgs: {
-              getDialogTile: function({ col, row, cellValue }) {
-                return this.$t('assets.AssetDetail')
-              }.bind(this),
+              getDialogTile: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
               getDetailItems: function({ col, row, cellValue }) {
                 return [
                   {
@@ -72,7 +71,8 @@ export default {
           {
             prop: 'ip',
             label: this.$t('assets.ip'),
-            sortable: 'custom'
+            sortable: 'custom',
+            width: '180px'
           },
           {
             prop: 'SystemUsers',
@@ -140,6 +140,8 @@ export default {
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
         this.tableConfig.columns[3].formatterArgs.loading = false
+        console.log(this.tableConfig.columns)
+        console.log('Formatter args loading change')
       })
     },
     addOrDeleteFavorite(assetId) {
