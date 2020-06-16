@@ -22,6 +22,11 @@ export default {
           name: {
             formatter: null
           },
+          nodes: {
+            formatter: function(row, column, cellValue, index) {
+              return cellValue.length
+            }
+          },
           actions: {
             formatterArgs: {
               updateRoute: 'GatherUserTaskUpdate',
@@ -35,6 +40,7 @@ export default {
                       `/api/v1/xpack/gathered-user/task-executions/`,
                       { task: data.row.id }
                     ).then(res => {
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                     }).catch(res => {
                     })
                   }
