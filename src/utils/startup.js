@@ -100,7 +100,7 @@ export async function generatePageRoutes({ to, from, next }) {
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
     const currentRole = store.getters.currentRole
-    console.log('Current org role: ', currentRole, rolec.getRolesDisplay(currentRole))
+    // console.log('Current org role: ', currentRole, rolec.getRolesDisplay(currentRole))
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', currentRole)
