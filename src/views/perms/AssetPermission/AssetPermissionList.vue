@@ -99,11 +99,11 @@ export default {
               children: [
                 {
                   value: '1',
-                  label: this.$t('common.Validity')
+                  label: this.$t('common.Yes')
                 },
                 {
                   value: '0',
-                  label: this.$t('common.Invalidity')
+                  label: this.$t('common.No')
                 }
               ]
             },
