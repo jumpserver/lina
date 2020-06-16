@@ -68,7 +68,9 @@ export default {
       this.dataTable.getList()
     },
     search(attrs) {
-      return this.dataTable.search(attrs, true)
+      if (Object.keys(attrs).length > 0) {
+        return this.dataTable.search(attrs, true)
+      }
     },
     handleDateChange(attrs) {
       this.$set(this.extraQuery, 'date_from', attrs[0].toISOString())
@@ -77,10 +79,11 @@ export default {
       //   date_from: attrs[0].toISOString(),
       //   date_to: attrs[1].toISOString()
       // }
-      return this.dataTable.searchDate({
+      const query = {
         date_from: attrs[0].toISOString(),
         date_to: attrs[1].toISOString()
-      })
+      }
+      return this.dataTable.searchDate(query)
     },
     toggleRowSelection(row, isSelected) {
       return this.dataTable.toggleRowSelection(row, isSelected)
