@@ -1,5 +1,5 @@
 <template>
-  <TreeTable :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
 </template>
 
 <script type="text/jsx">
@@ -29,7 +29,8 @@ export default {
         const initialUrl = vm.tableConfig.initialUrl
         const nodeId = node.meta.node.id
         const url = initialUrl.replace('/assets/', `/nodes/${nodeId}/assets/`)
-        vm.tableConfig.url = url
+        // vm.tableConfig.url = url
+        vm.$refs.TreeTable.handleUrlChange(url)
       }
     },
     getShowUrl: {
