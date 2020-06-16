@@ -32,7 +32,10 @@ export default {
       headerActions: {
         hasCreate: false,
         hasLeftActions: false,
-        hasImport: false
+        hasImport: false,
+        searchConfig: {
+          exclude: ['asset']
+        }
       }
     }
   },
