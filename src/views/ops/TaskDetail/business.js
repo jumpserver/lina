@@ -1,24 +1,36 @@
 
 export const toLastSucessDisplay = function(object) {
-  if (!object) return ['']
-  const last_success = object.last_success
-  last_success.length || last_success.push('')
-  return last_success
+  const last_success = object && object.last_success
+
+  if (!(last_success instanceof Array)) return []
+  return last_success.map(host => {
+    return {
+      hostname: host,
+      result: ''
+    }
+  })
 }
 
 export const toLastFailureDisplay = function(object) {
-  if (!object) return [['', '']]
-  const last_failure = []
-  for (const host in object.last_failure) {
-    const task = object.last_failure[host]
+  const last_failure = object && object.last_failure
+  if (!(last_failure instanceof Object)) return []
+
+  const ret = []
+
+  for (const host in last_failure) {
+    const task = last_failure[host]
     const msgs = []
     for (const name in task) {
       msgs.push(`${name} => ${task[name].msg}`)
     }
 
-    last_failure.push([host, msgs.join('\n')])
+    ret.push(
+      {
+        hostname: host,
+        result: msgs.join('\n')
+      }
+    )
   }
 
-  last_failure.length || last_failure.push(['', ''])
-  return last_failure
+  return ret
 }
