@@ -119,6 +119,10 @@ export default {
   },
   mounted() {
     this.$axios.get('/api/v1/perms/system-users-permission/').then(res => {
+      if (res.length === 0) {
+        this.handleSystemUserChange('')
+        return
+      }
       for (const i in res) {
         // :disabled="item.protocol !== 'ssh'&& item.login_mode!=='auto'"
         if (res[i].protocol === 'ssh' && res[i].login_mode === 'auto') {
