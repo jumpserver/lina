@@ -15,7 +15,7 @@
 import DetailCard from '@/components/DetailCard'
 import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
-import LabelCard from '@/components/LabelCard'
+import LabelCard from './components/LabelCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {

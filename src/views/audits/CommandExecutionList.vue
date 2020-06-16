@@ -83,8 +83,7 @@ export default {
         headerActions: {
           hasLeftActions: false,
           hasImport: false,
-          hasExport: false,
-          tagSearch: []
+          hasExport: false
         }
       },
       headerActions: {

@@ -143,6 +143,11 @@ export default {
           name: 'AssetCreate',
           query: this.$route.query
         },
+        searchConfig: {
+          options: [
+            { label: this.$t('assets.Label'), value: 'label' }
+          ]
+        },
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
