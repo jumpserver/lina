@@ -203,6 +203,7 @@
     "Upload": "Upload",
     "Username": "Username",
     "Validity": "Validity",
+    "Invalidity": "Invalidity",
     "View": "View",
     "Yes": "Yes",
     "action": "Action",
@@ -768,7 +769,9 @@
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",
       "remoteAppPermissionRules": "Remote app permission rules"
-    }
+    },
+    "UpdatePassword": "",
+    "UpdatePublicKey": ""
   },
   "xpack": {
     "Admin": "Admin",

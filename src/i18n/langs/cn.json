@@ -202,6 +202,7 @@
     "Upload": "上传",
     "Username": "用户名",
     "Validity": "有效",
+    "Invalidity": "无效",
     "View": "查看",
     "Yes": "是",
     "action": "动作",
@@ -769,7 +770,9 @@
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"
     },
-    "dateLastLogin": "最后登录日期"
+    "dateLastLogin": "最后登录日期",
+    "UpdatePassword": "更新密码",
+    "SetPublicKey": "设置SSH公钥"
   },
   "xpack": {
     "Admin": "管理员",
