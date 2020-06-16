@@ -98,7 +98,6 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasExport: false,
         hasDatePicker: true,
         datePicker: {
           dateEnd: dateTo,

@@ -65,7 +65,11 @@ export default {
           .replace('详情', '')
         this.$log.debug('Object is: ', obj)
         const objectName = this.getObjectName(obj)
-        return `${objectType}: ${objectName}`
+        let title = `${objectType}: ${objectName}`
+        if (title.length > 80) {
+          title = title.slice(0, 80) + '...'
+        }
+        return title
       }
     },
     goBack: {

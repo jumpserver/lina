@@ -25,10 +25,7 @@ export default {
           label: this.$t('assets.Assets'),
           el: {
             value: []
-          },
-          rules: [{
-            required: false
-          }]
+          }
         }
       },
 

@@ -1,6 +1,7 @@
 <template>
   <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
     <table class="run-info">
+      <p v-if="contents.length === 0">{{ $t('common.Nothing') }}</p>
       <tr v-for="content in contents" :key="content.hostname">
         <td>{{ content.hostname }}</td>
         <td>{{ content.result }}</td>
