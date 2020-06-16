@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard v-for="config in RunSuccessConfigs" :key="config.host" type="info" v-bind="config" />
-      <RunInfoCard v-for="config in RunFailedConfigs" :key="config.host" type="danger" style="margin-top: 15px" v-bind="config" />
+      <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard type="info" v-bind="RunSuccessConfig" />
     </el-col>
   </el-row>
 </template>
@@ -13,6 +13,7 @@
 <script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import RunInfoCard from '../RunInfoCard/index'
+import { toLastFailureDisplay, toLastSucessDisplay } from './business'
 
 export default {
   name: 'TaskDetail',
@@ -27,43 +28,17 @@ export default {
     }
   },
   data() {
-    let last_success = this.object.last_success
-    last_success.length || (last_success = [''])
-
-    let last_failure = []
-    for (const host in this.object.last_failure) {
-      const task = this.object.last_failure[host]
-      const msgs = []
-      for (const name in task) {
-        msgs.push(`${name} => ${task[name].msg}`)
-      }
-
-      last_failure.push([host, msgs.join('\n')])
-    }
-
-    last_failure.length || (last_failure = [['', '']])
-
     return {
-      RunSuccessConfigs: last_success.map(host => {
-        return {
-          icon: 'fa-info',
-          title: this.$t('ops.lastRunSuccessHosts'),
-          content: {
-            hostname: host,
-            result: ''
-          }
-        }
-      }),
-      RunFailedConfigs: last_failure.map(([host, msg]) => {
-        return {
-          icon: 'fa-info',
-          title: this.$t('ops.lastRunFailedHosts'),
-          content: {
-            hostname: host,
-            result: msg
-          }
-        }
-      }),
+      RunSuccessConfig: {
+        icon: 'fa-info',
+        title: this.$t('ops.lastRunSuccessHosts'),
+        contents: toLastSucessDisplay(this.object.latest_execution)
+      },
+      RunFailedConfig: {
+        icon: 'fa-info',
+        title: this.$t('ops.lastRunFailedHosts'),
+        contents: toLastFailureDisplay(this.object.latest_execution)
+      },
       taskData: {}
     }
   },
@@ -115,7 +90,14 @@ export default {
         },
         {
           key: this.$t('ops.contents'),
-          value: 'api 没有该数据'
+          value: this.toContentsDisplay(this.object.contents),
+          formatter(row, value) {
+            return (<div>{
+              value.map((content) => {
+                return <div>{ content }</div>
+              })}
+            </div>)
+          }
         },
         {
           key: this.$t('ops.lastExecutionOutput'),
@@ -137,6 +119,14 @@ export default {
         return this.$t('ops.No')
       }
       return this.$t('ops.Yes')
+    },
+    toContentsDisplay(contents) {
+      const lines = []
+      for (let i = 0; i < contents.length; i++) {
+        const content = contents[i]
+        lines.push(`${i}. ${content.name} ::: ${content.action.module}`)
+      }
+      return lines
     }
   }
 }

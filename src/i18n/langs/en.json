@@ -142,6 +142,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Nothing": "Nothing",
     "Action": "Action",
     "Actions": "Actions",
     "Activate": "Activate",
@@ -208,6 +209,8 @@
     "activateSelected": "Activate selected",
     "bulkDeleteErrorMsg": "Bulk delete failed: ",
     "bulkDeleteSuccessMsg": "Bulk delete success",
+    "bulkRemoveErrorMsg": "Bulk remove failed: ",
+    "bulkRemoveSuccessMsg": "Bulk remove success",
     "createBy": "Create by",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
@@ -260,6 +263,8 @@
     "updateSuccessMsg": "Update success",
     "SelectProperties": "Select properties",
     "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted",
+    "removeSelected": "Remove selected",
+    "removeWarningMsg": "Are you sure to remove ",
     "password": {
       "UPPER_CASE_REQUIRED": "Upper case required",
       "LOWER_CASE_REQUIRED": "Lower case required",
@@ -341,7 +346,8 @@
     "totalVersions": "Total versions",
     "version": "Version",
     "versionDetail": "Version detail",
-    "versionRunExecution": "Version run execution"
+    "versionRunExecution": "Version run execution",
+    "Unkown": "Unkown"
   },
   "perms": {
     "": "",

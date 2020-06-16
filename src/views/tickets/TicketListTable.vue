@@ -1,7 +1,7 @@
 <template>
   <ListTable :table-config="ticketTableConfig" :header-actions="ticketActions" />
 </template>
-<script>
+<script type="text/jsx">
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 import { toSafeLocalDateStr } from '@/utils/common'

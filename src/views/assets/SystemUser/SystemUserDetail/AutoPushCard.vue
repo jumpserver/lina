@@ -60,4 +60,10 @@ export default {
   .box-margin {
     margin-bottom: 20px;
   }
+  .el-table::before{
+    display: none;
+  }
+  .el-table >>> td{
+    border-bottom: none;
+  }
 </style>

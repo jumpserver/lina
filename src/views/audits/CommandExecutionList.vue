@@ -57,7 +57,7 @@ export default {
             formatter: (row) => {
               const label = this.$t('audits.View')
               const route = { to: { name: 'CeleryTaskLog', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }}>{ label }</router-link>
+              return <router-link {...{ attrs: route }} target='_blank'>{ label }</router-link>
             }
           },
           date_start: {

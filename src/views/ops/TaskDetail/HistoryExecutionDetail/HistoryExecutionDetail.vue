@@ -4,8 +4,8 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RunInfoCard type="primary" v-bind="RunSuccessConfig" />
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard type="info" v-bind="RunSuccessConfig" />
     </el-col>
   </el-row>
 </template>
@@ -14,6 +14,7 @@
 import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../RunInfoCard'
+import { toLastFailureDisplay, toLastSucessDisplay } from '../business'
 
 export default {
   name: 'HistoryExecutionDetail',
@@ -32,18 +33,12 @@ export default {
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),
-        content: {
-          hostname: 'linux',
-          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
-        }
+        contents: toLastSucessDisplay(this.object)
       },
       RunFailedConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunFailedHosts'),
-        content: {
-          hostname: 'linux',
-          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
-        }
+        contents: toLastFailureDisplay(this.object)
       }
     }
   },
