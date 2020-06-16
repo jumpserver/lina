@@ -40,7 +40,7 @@ export default {
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {
-            'X-JMS-ORG': JSON.parse(this.$cookie.get('jms_current_org')).id || ''
+            'X-JMS-ORG': JSON.parse(this.$cookie.get('jms_current_org')) ? JSON.parse(this.$cookie.get('jms_current_org')).id : ''
           }
         },
         callback: {
