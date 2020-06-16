@@ -30,7 +30,7 @@ export default {
     config: {
       handler(iNew) {
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found: ', iNew.columns)
+        this.$log.debug('AutoDataTable Config change found')
       },
       deep: true
     }

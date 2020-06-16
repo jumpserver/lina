@@ -140,8 +140,6 @@ export default {
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
         this.tableConfig.columns[3].formatterArgs.loading = false
-        console.log(this.tableConfig.columns)
-        console.log('Formatter args loading change')
       })
     },
     addOrDeleteFavorite(assetId) {
