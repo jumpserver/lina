@@ -31,7 +31,7 @@ export default {
         },
         {
           name: 'join',
-          title: this.$t('sessions.join'),
+          title: this.$t('sessions.Monitor'),
           type: 'primary',
           can: (row, cellValue) => {
             return row.can_join
