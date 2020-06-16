@@ -22,17 +22,6 @@ export default {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
         hasSelection: false,
         hasTree: true,
-        tagSearch: [
-          { label: this.$t('common.Name'), key: 'name' },
-          { label: this.$t('common.isValid'), key: 'is_valid' },
-          { label: this.$t('users.Username'), key: 'username' },
-          { label: this.$t('users.UserGroups'), key: 'user_group' },
-          { label: this.$t('assets.IP'), key: 'ip' },
-          { label: this.$t('assets.Hostname'), key: 'hostname' },
-          { label: this.$t('assets.Node'), key: 'node' },
-          { label: this.$t('assets.SystemUser'), key: 'system_user' },
-          { label: '继承(先占位)', key: 'all=0' }
-        ],
         columns: [
           'name', 'users_amount', 'user_groups_amount', 'assets_amount',
           'nodes_amount', 'system_users_amount', 'is_active', 'actions'
