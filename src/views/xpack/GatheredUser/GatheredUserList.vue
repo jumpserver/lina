@@ -32,7 +32,19 @@ export default {
       headerActions: {
         hasCreate: false,
         hasLeftActions: false,
-        hasImport: false
+        hasImport: false,
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('assets.Hostname'),
+              value: 'asset__hostname'
+            },
+            {
+              label: 'IP',
+              value: 'asset__ip'
+            }
+          ]
+        }
       }
     }
   },
