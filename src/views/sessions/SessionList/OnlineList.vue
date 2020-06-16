@@ -33,6 +33,9 @@ export default {
           name: 'join',
           title: this.$t('sessions.Monitor'),
           type: 'primary',
+          can: (row, cellValue) => {
+            return row.can_join
+          },
           callback: function({ cellValue, tableData }) {
             // 跳转到luna页面
             const joinUrl = '/luna/join/?shareroom=' + cellValue
