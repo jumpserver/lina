@@ -77,7 +77,19 @@ export default {
           url: '',
           options: [
             { label: this.$t('common.Name'), value: 'name' },
-            { label: this.$t('perms.isValid'), value: 'is_valid' },
+            {
+              label: this.$t('perms.isValid'), value: 'is_valid',
+              children: [
+                {
+                  value: '1',
+                  label: this.$t('common.Validity')
+                },
+                {
+                  value: '0',
+                  label: this.$t('common.Invalidity')
+                }
+              ]
+            },
             { label: this.$t('common.Username'), value: 'username' },
             { label: this.$t('perms.UserGroups'), value: 'user_group' },
             { label: this.$t('perms.IP'), value: 'ip' },
