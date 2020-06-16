@@ -12,7 +12,13 @@ export default {
       type: String,
       default: ''
     },
+    // 增加选项
     options: {
+      type: Array,
+      default: () => []
+    },
+    // 排除选项
+    exclude: {
       type: Array,
       default: () => []
     }
@@ -34,6 +40,9 @@ export default {
       const meta = data.actions['GET'] || {}
       for (const [name, field] of Object.entries(meta)) {
         if (!field.filter) {
+          continue
+        }
+        if (vm.exclude.includes(name)) {
           continue
         }
         const option = {
