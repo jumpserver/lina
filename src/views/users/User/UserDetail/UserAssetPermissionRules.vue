@@ -24,7 +24,7 @@ export default {
         hasTree: true,
         columns: [
           'name', 'users_amount', 'user_groups_amount', 'assets_amount',
-          'nodes_amount', 'system_users_amount', 'is_active', 'actions'
+          'nodes_amount', 'system_users_amount', 'is_valid', 'actions'
         ],
         columnsMeta: {
           name: {
@@ -82,11 +82,11 @@ export default {
               children: [
                 {
                   value: '1',
-                  label: this.$t('common.Validity')
+                  label: this.$t('common.Yes')
                 },
                 {
                   value: '0',
-                  label: this.$t('common.Invalidity')
+                  label: this.$t('common.No')
                 }
               ]
             },

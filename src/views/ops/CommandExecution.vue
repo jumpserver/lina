@@ -141,12 +141,12 @@ export default {
       this.actions = val
     },
     onClick(event, treeId, treeNode, clickFlag) {
-      if (treeNode.meta.type === 'asset') {
-        const protocolsStr = treeNode.meta.asset.protocols + ''
-        if (protocolsStr.indexOf('ssh/') === -1) {
-          // Don't Support SSH
-        }
-      }
+      // if (treeNode.meta.type === 'asset') {
+      //   const protocolsStr = treeNode.meta.asset.protocols + ''
+      //   if (protocolsStr.indexOf('ssh/') === -1) {
+      //     // Don't Support SSH
+      //   }
+      // }
     },
     handleSystemUserChange(id) {
       this.treeSetting.treeUrl = `${this.basicUrl}&system_user=${id}`
