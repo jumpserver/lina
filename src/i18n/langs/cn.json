@@ -208,6 +208,8 @@
     "activateSelected": "激活所选",
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
+    "bulkRemoveErrorMsg": "批量移除失败: ",
+    "bulkRemoveSuccessMsg": "批量移除成功",
     "createBy": "创建者",
     "createErrorMsg": "创建失败",
     "createSuccessMsg": "创建成功",
@@ -223,7 +225,7 @@
     "disableSelected": "禁用所选",
     "fieldRequiredError": "这个字段是必填项",
     "getErrorMsg": "获取失败",
-    "MFAErrorMsg":"MFA错误，请检查",
+    "MFAErrorMsg": "MFA错误，请检查",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",
@@ -261,7 +263,15 @@
     "updateSuccessMsg": "更新成功",
     "SelectProperties": "选择属性",
     "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
-    "removeSelected": "移除所选"
+    "removeSelected": "移除所选",
+    "removeWarningMsg": "你确定要移除",
+    "password": {
+      "UPPER_CASE_REQUIRED": "须包含大写字母",
+      "LOWER_CASE_REQUIRED": "须包含小写字母",
+      "NUMBER_REQUIRED": "须包含数字",
+      "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
+      "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
+    }
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
@@ -533,7 +543,8 @@
     "user": "用户",
     "riskLevels": {
       "common": "普通"
-    }
+    },
+    "Monitor": "监控"
   },
   "setting": {
     "ApiKeyList": "API Key 列表",

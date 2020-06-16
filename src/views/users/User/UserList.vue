@@ -197,7 +197,11 @@ export default {
       })
     },
     bulkDeleteCallback({ selectedRows, reloadTable }) {
-      const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
+      let msgPrefix = this.$t('common.deleteWarningMsg')
+      if (!this.currentOrgIsDefault) {
+        msgPrefix = this.$t('common.removeWarningMsg')
+      }
+      const msg = msgPrefix + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
       const title = this.$t('common.Info')
       const performDelete = this.performBulkDelete
       this.$alert(msg, title, {
@@ -211,9 +215,17 @@ export default {
             await performDelete(selectedRows)
             done()
             reloadTable()
-            this.$message.success(this.$t('common.bulkDeleteSuccessMsg'))
+            let successMsg = this.$t('common.bulkDeleteSuccessMsg')
+            if (!this.currentOrgIsDefault) {
+              successMsg = this.$t('common.bulkRemoveSuccessMsg')
+            }
+            this.$message.success(successMsg)
           } catch (error) {
-            this.$message.error(this.$t('common.bulkDeleteErrorMsg') + error)
+            let errorMsg = this.$t('common.bulkDeleteErrorMsg')
+            if (!this.currentOrgIsDefault) {
+              errorMsg = this.$t('common.bulkRemoveErrorMsg')
+            }
+            this.$message.error(errorMsg + error)
           } finally {
             instance.confirmButtonLoading = false
           }

@@ -36,6 +36,7 @@ export function testLdapUserLogin(data) {
 
 export function refreshLdapUserCache() {
   return request({
+    disableFlashErrorMsg: true,
     url: '/api/v1/settings/ldap/cache/refresh/',
     method: 'get'
   })
@@ -43,6 +44,7 @@ export function refreshLdapUserCache() {
 
 export function importLdapUser(data) {
   return request({
+    disableFlashErrorMsg: true,
     url: '/api/v1/settings/ldap/users/import/',
     method: 'post',
     data: data

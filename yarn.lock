@@ -9703,6 +9703,11 @@ vue-moment@^4.1.0:
   dependencies:
     moment "^2.19.2"
 
+vue-password-strength-meter@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.npm.taobao.org/vue-password-strength-meter/download/vue-password-strength-meter-1.7.2.tgz#ddaae2246fb8a53fd8cdc5b1084b1d16cc401505"
+  integrity sha1-3ariJG+4pT/YzcWxCEsdFsxAFQU=
+
 vue-router@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.6.tgz#2e4f0f9cbb0b96d0205ab2690cfe588935136ac3"
@@ -10207,3 +10212,8 @@ zrender@4.3.0:
   version "4.3.0"
   resolved "https://registry.npm.taobao.org/zrender/download/zrender-4.3.0.tgz#9f056121b20bbae44414d287bf6a119ff7042661"
   integrity sha1-nwVhIbILuuREFNKHv2oRn/cEJmE=
+
+zxcvbn@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.npm.taobao.org/zxcvbn/download/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"
+  integrity sha1-KOwXzwl0PtyrBW3dixsGJizHPDA=

@@ -29,7 +29,7 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
           'command_amount', 'date_start', 'duration', 'actions'
         ],
         columnsMeta: {
@@ -38,17 +38,32 @@ export default {
             align: 'center',
             width: '60px',
             formatter: function(row, column, cellValue, index) {
-              return <a class='detail el-link el-link--success is-underline' href= { '/terminal/sessions/' + row.id }>{ index + 1}</a>
+              const label = index + 1
+              const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
+              return <router-link {...{ attrs: route }}>{ label }</router-link>
             }
           },
+          user: {
+            showOverflowTooltip: true
+          },
+          asset: {
+            showOverflowTooltip: true
+          },
           command_amount: {
-            label: this.$t('sessions.command')
+            label: this.$t('sessions.command'),
+            width: '60px'
           },
           login_from: {
-            label: this.$t('sessions.loginFrom')
+            label: this.$t('sessions.loginFrom'),
+            width: '110px'
+          },
+          remote_addr: {
+            width: '130px'
           },
           protocol: {
             label: this.$t('sessions.protocol'),
+            width: '60px',
+            sortable: false,
             formatter: null
           },
           date_start: {
@@ -60,7 +75,8 @@ export default {
             label: this.$t('sessions.duration'),
             formatter: function(row) {
               return timeOffset(row.date_start, row.date_end)
-            }
+            },
+            width: '80px'
           },
           actions: {
             prop: 'id',
