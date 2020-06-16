@@ -43,14 +43,27 @@ export default {
               return <router-link {...{ attrs: route }}>{ label }</router-link>
             }
           },
+          user: {
+            showOverflowTooltip: true
+          },
+          asset: {
+            showOverflowTooltip: true
+          },
           command_amount: {
-            label: this.$t('sessions.command')
+            label: this.$t('sessions.command'),
+            width: '60px'
           },
           login_from: {
-            label: this.$t('sessions.loginFrom')
+            label: this.$t('sessions.loginFrom'),
+            width: '110px'
+          },
+          remote_addr: {
+            width: '130px'
           },
           protocol: {
             label: this.$t('sessions.protocol'),
+            width: '60px',
+            sortable: false,
             formatter: null
           },
           date_start: {
@@ -62,7 +75,8 @@ export default {
             label: this.$t('sessions.duration'),
             formatter: function(row) {
               return timeOffset(row.date_start, row.date_end)
-            }
+            },
+            width: '80px'
           },
           actions: {
             prop: 'id',

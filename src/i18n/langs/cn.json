@@ -543,7 +543,8 @@
     "user": "用户",
     "riskLevels": {
       "common": "普通"
-    }
+    },
+    "Monitor": "监控"
   },
   "setting": {
     "ApiKeyList": "API Key 列表",

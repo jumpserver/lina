@@ -31,7 +31,7 @@ export default {
         },
         {
           name: 'join',
-          title: this.$t('sessions.join'),
+          title: this.$t('sessions.Monitor'),
           type: 'primary',
           callback: function({ cellValue, tableData }) {
             // 跳转到luna页面
