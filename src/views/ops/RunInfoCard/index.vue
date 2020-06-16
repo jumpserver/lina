@@ -1,7 +1,7 @@
 <template>
   <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
     <table class="run-info">
-      <tr>
+      <tr v-for="content in contents" :key="content.hostname">
         <td>{{ content.hostname }}</td>
         <td>{{ content.result }}</td>
       </tr>
@@ -26,9 +26,9 @@ export default {
       type: String,
       default: ''
     },
-    content: {
-      type: Object,
-      default: () => ({})
+    contents: {
+      type: Array,
+      default: () => ([])
     },
     url: {
       type: String,

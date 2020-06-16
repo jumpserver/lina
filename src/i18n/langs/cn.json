@@ -208,6 +208,8 @@
     "activateSelected": "激活所选",
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
+    "bulkRemoveErrorMsg": "批量移除失败: ",
+    "bulkRemoveSuccessMsg": "批量移除成功",
     "createBy": "创建者",
     "createErrorMsg": "创建失败",
     "createSuccessMsg": "创建成功",
@@ -261,7 +263,8 @@
     "updateSuccessMsg": "更新成功",
     "SelectProperties": "选择属性",
     "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
-    "removeSelected": "移除所选"
+    "removeSelected": "移除所选",
+    "removeWarningMsg": "你确定要移除"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
