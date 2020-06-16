@@ -19,7 +19,7 @@ export default {
       url: '/api/v1/xpack/gathered-user/tasks/',
       initial: {
         is_periodic: true,
-        interval: null
+        interval: 24
       },
       fieldsMeta: {
         crontab: {
@@ -47,7 +47,9 @@ export default {
         'is_periodic': {
           type: 'switch'
         }
-      }
+      },
+      createSuccessNextRoute: { name: 'GatherUserListIndex' },
+      updateSuccessNextRoute: { name: 'GatherUserListIndex' }
     }
   }
 }

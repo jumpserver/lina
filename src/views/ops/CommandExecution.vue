@@ -48,6 +48,7 @@ import Term from '@/components/Term'
 import IBox from '@/components/IBox'
 import CodeMirror from '@/components/CodeMirror'
 import Page from '@/layout/components/Page'
+
 export default {
   name: 'CommandExecution',
   components: {
@@ -117,7 +118,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('/api/v1/assets/system-users/').then(res => {
+    this.$axios.get('/api/v1/perms/system-users-permission/').then(res => {
       for (const i in res) {
         // :disabled="item.protocol !== 'ssh'&& item.login_mode!=='auto'"
         if (res[i].protocol === 'ssh' && res[i].login_mode === 'auto') {

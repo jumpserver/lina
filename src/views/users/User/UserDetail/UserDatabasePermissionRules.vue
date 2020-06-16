@@ -49,12 +49,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasExport: false,
-        searchConfig: {
-          url: '',
-          options: [
-          ]
-        }
+        hasExport: false
       }
     }
   }
