@@ -39,7 +39,6 @@ export default {
         patterns.push([pattern, i18n.t('common.password.SPECIAL_CHAR_REQUIRED')])
       }
       for (const [pattern, msg] of patterns) {
-        console.log(msg, value, pattern.test(value))
         if (!pattern.test(value)) {
           return callback(new Error(msg))
         }

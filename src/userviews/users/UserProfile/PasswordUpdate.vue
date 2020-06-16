@@ -6,12 +6,14 @@
       :initial="object"
       :url="url"
       :get-method="getMethod"
+      class="password-update"
     />
   </IBox>
 </template>
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import UserPassword from '@/components/UserPassword'
 import { IBox } from '@/components'
 
 export default {
@@ -39,9 +41,8 @@ export default {
         },
         new_password: {
           label: this.$t('users.NewPassword'),
-          el: {
-            type: 'password'
-          }
+          component: UserPassword,
+          rules: []
         },
         new_password_again: {
           label: this.$t('users.ConfirmPassword'),
@@ -60,6 +61,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.password-update >>> .el-input {
+  width: 600px;
+  max-width: 600px;
+}
 </style>

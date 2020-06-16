@@ -261,10 +261,10 @@
     "SelectProperties": "选择属性",
     "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",
     "password": {
-      "UPPER_CASE_REQUIRED": "需包含大写字母",
-      "LOWER_CASE_REQUIRED": "需包含小写字母",
-      "NUMBER_REQUIRED": "需包含数字",
-      "SPECIAL_CHAR_REQUIRED": "需包含特殊字符",
+      "UPPER_CASE_REQUIRED": "须包含大写字母",
+      "LOWER_CASE_REQUIRED": "须包含小写字母",
+      "NUMBER_REQUIRED": "须包含数字",
+      "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
     }
   },
