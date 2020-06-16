@@ -44,6 +44,10 @@ export default {
               const data = { is_active: v }
               vm.$axios.patch(url, data).catch(() => {
                 item.attrs.model = !v
+              }).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
               })
             }
           }
