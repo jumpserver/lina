@@ -739,7 +739,6 @@ export default {
   },
   computed: {
     hasSelect() {
-      console.log(this.columns.length && this.columns[0].type === 'selection')
       return this.columns.length && this.columns[0].type === 'selection'
     },
     selectable() {

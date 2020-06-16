@@ -1,5 +1,5 @@
 <template>
-  <DataTable ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
+  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script type="text/jsx">
@@ -21,12 +21,14 @@ export default {
     return {
       loading: true,
       method: 'get',
-      iConfig: {},
       autoConfig: {},
       meta: {}
     }
   },
   computed: {
+    iConfig() {
+      return Object.assign(this.config, this.autoConfig)
+    }
   },
   watch: {
     config: {
@@ -36,11 +38,11 @@ export default {
       deep: true
     }
   },
-  mounted() {
+  created() {
     this.optionUrlMetaAndGenCols()
   },
   methods: {
-    optionUrlMetaAndGenCols() {
+    async optionUrlMetaAndGenCols() {
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
@@ -141,7 +143,6 @@ export default {
         }
       }
       this.autoConfig.columns = columns
-      this.iConfig = Object.assign(this.config, this.autoConfig)
     }
   }
 }

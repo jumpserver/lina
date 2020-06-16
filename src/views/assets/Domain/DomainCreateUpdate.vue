@@ -13,7 +13,6 @@ export default {
   data() {
     return {
       initial: {
-
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'assets', 'comment']]

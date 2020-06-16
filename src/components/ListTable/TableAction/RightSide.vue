@@ -1,13 +1,13 @@
 <template>
   <div>
     <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
-    <DialogAction :selected-rows="selectedRows" :url="tableUrl" />
+    <ImExportDialog :selected-rows="selectedRows" :url="tableUrl" />
   </div>
 </template>
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
-import DialogAction from './ImExportDialog'
+import ImExportDialog from './ImExportDialog'
 import { cleanActions } from './utils'
 
 const defaultTrue = { type: Boolean, default: true }
@@ -16,7 +16,7 @@ export default {
   name: 'RightSide',
   components: {
     ActionsGroup,
-    DialogAction
+    ImExportDialog
   },
   props: {
     tableUrl: {
@@ -140,8 +140,7 @@ export default {
   }
 
   .export-item {
-    display: block;
-    padding: 5px 20px;
+
   }
 
 </style>

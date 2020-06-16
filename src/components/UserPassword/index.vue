@@ -24,6 +24,9 @@ export default {
   rules(item) {
     const passwordRule = store.getters.publicSettings.PASSWORD_RULE
     const validatePassword = (rule, value, callback) => {
+      if (!value) {
+        return callback()
+      }
       const patterns = []
       if (passwordRule.SECURITY_PASSWORD_UPPER_CASE) {
         patterns.push([/[A-Z]/, i18n.t('common.password.UPPER_CASE_REQUIRED')])
@@ -50,7 +53,7 @@ export default {
       callback()
     }
     return [
-      { required: true, trigger: 'change', validator: validatePassword }
+      { required: false, trigger: 'change', validator: validatePassword }
     ]
   },
   data() {
