@@ -209,6 +209,8 @@
     "activateSelected": "Activate selected",
     "bulkDeleteErrorMsg": "Bulk delete failed: ",
     "bulkDeleteSuccessMsg": "Bulk delete success",
+    "bulkRemoveErrorMsg": "Bulk remove failed: ",
+    "bulkRemoveSuccessMsg": "Bulk remove success",
     "createBy": "Create by",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
@@ -261,7 +263,8 @@
     "updateSuccessMsg": "Update success",
     "SelectProperties": "Select properties",
     "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted",
-    "removeSelected": "Remove selected"
+    "removeSelected": "Remove selected",
+    "removeWarningMsg": "Are you sure to remove "
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
