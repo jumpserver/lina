@@ -5,7 +5,7 @@
     </el-col>
     <el-col :span="10">
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
-      <RunInfoCard type="info" v-bind="RunSuccessConfig" />
+      <RunInfoCard type="info" v-bind="RunSuccessConfig" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
