@@ -17,6 +17,63 @@ function hasPermission(roles, route) {
   // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
   return has
 }
+function hasLicense(licState, route) {
+  if (licState) {
+    return licState
+  }
+  let requireLic = route.meta ? route.meta.licenseRequired : null
+  if (!requireLic) {
+    requireLic = false
+  }
+  return licState === requireLic
+}
+
+function hasCommand(cmdState, route) {
+  if (cmdState) {
+    return cmdState
+  }
+  let requireCmd = route.meta ? route.meta.command : null
+  if (!requireCmd) {
+    requireCmd = false
+  }
+  return cmdState === requireCmd
+}
+
+export function filterLicRoutes(routes, roles) {
+  const res = []
+
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (hasLicense(roles, tmp)) {
+      if (tmp.children) {
+        tmp.children = filterLicRoutes(tmp.children, roles)
+      }
+      res.push(tmp)
+    }
+  })
+
+  return res
+}
+
+export function filterCmdRoutes(routes, roles) {
+  const res = []
+
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (hasCommand(roles, tmp)) {
+      if (tmp.children) {
+        tmp.children = filterCmdRoutes(tmp.children, roles)
+      }
+      res.push(tmp)
+    }
+  })
+
+  return res
+}
 
 /**
  * Filter asynchronous routing tables by recursion
@@ -54,9 +111,12 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({ commit }, roles) {
+  generateRoutes({ commit, rootState }, roles) {
     return new Promise(resolve => {
-      const accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
+      console.log(rootState)
+      let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
+      accessedRoutes = filterCmdRoutes(accessedRoutes, rootState.settings.publicSettings.SECURITY_COMMAND_EXECUTION)
+      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_ENABLED)
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
