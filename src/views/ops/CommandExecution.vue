@@ -150,6 +150,7 @@ export default {
     },
     handleSystemUserChange(id) {
       this.treeSetting.treeUrl = `${this.basicUrl}&system_user=${id}`
+      this.xterm.clear()
       this.DataZTree++
     },
     getSelectedAssetsNode() {
