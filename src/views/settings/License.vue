@@ -29,7 +29,7 @@
 <script>
 import { QuickActions } from '@/components'
 import DetailCard from '@/components/DetailCard/index'
-import { importLicense } from '@/views/xpack/api'
+import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
 
 export default {
