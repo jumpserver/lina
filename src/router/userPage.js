@@ -54,7 +54,7 @@ export default [
     component: Layout,
     meta: {
       permissions: [rolec.PERM_USE],
-      command: true
+      commandExecutionRequired: true
     },
     children: [
       {

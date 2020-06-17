@@ -32,7 +32,7 @@ export default [
     path: 'command-executions/create',
     name: 'BatchCommand',
     component: () => import('@/views/ops/CommandExecution'),
-    meta: { title: i18n.t('route.BatchCommand'), command: true }
+    meta: { title: i18n.t('route.BatchCommand'), commandExecutionRequired: true }
   },
   // {
   //   path: 'celery/task/:id',

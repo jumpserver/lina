@@ -32,7 +32,7 @@ function hasCommand(cmdState, route) {
   if (cmdState) {
     return cmdState
   }
-  let requireCmd = route.meta ? route.meta.command : null
+  let requireCmd = route.meta ? route.meta.commandExecutionRequired : null
   if (!requireCmd) {
     requireCmd = false
   }
