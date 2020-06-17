@@ -22,18 +22,15 @@ export default {
       loading: true,
       method: 'get',
       autoConfig: {},
+      iConfig: {},
       meta: {}
-    }
-  },
-  computed: {
-    iConfig() {
-      return Object.assign(this.config, this.autoConfig)
     }
   },
   watch: {
     config: {
       handler(iNew) {
-        this.$log.debug('AutoDataTable Config change found: ', iNew)
+        this.optionUrlMetaAndGenCols()
+        this.$log.debug('AutoDataTable Config change found')
       },
       deep: true
     }
@@ -132,9 +129,9 @@ export default {
       return col
     },
     generateColumns() {
-      // const config = Object.assign({}, this.config)
+      const config = _.cloneDeep(this.config)
       const columns = []
-      for (let col of this.config.columns) {
+      for (let col of config.columns) {
         if (typeof col === 'object') {
           columns.push(col)
         } else if (typeof col === 'string') {
@@ -142,7 +139,8 @@ export default {
           columns.push(col)
         }
       }
-      this.autoConfig.columns = columns
+      config.columns = columns
+      this.iConfig = config
     }
   }
 }

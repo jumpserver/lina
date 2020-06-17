@@ -6,46 +6,8 @@
 import ActionsGroup from '@/components/ActionsGroup/index'
 import BaseFormatter from './base'
 
-const defaultPerformDelete = function({ row, col }) {
-  const id = row.id
-  const url = `${this.url}${id}/`
-  return this.$axios.delete(url)
-}
-const defaultUpdateCallback = function({ row, col }) {
-  const id = row.id
-  const routeName = this.colActions.updateRoute
-  this.$router.push({ name: routeName, params: { id: id }})
-}
-
-const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  const msg = this.$t('common.deleteWarningMsg') + ' "' + `${row.name || row.hostname}` + '"'
-  const title = this.$t('common.Info')
-  const performDelete = this.colActions.performDelete
-  this.$alert(msg, title, {
-    type: 'warning',
-    confirmButtonClass: 'el-button--danger',
-    showCancelButton: true,
-    beforeClose: async(action, instance, done) => {
-      if (action !== 'confirm') return done()
-      instance.confirmButtonLoading = true
-      try {
-        await performDelete.bind(this)({ row: row, col: col })
-        done()
-        reload()
-        this.$message.success(this.$t('common.deleteSuccessMsg'))
-      } catch (error) {
-        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
-      } finally {
-        instance.confirmButtonLoading = false
-      }
-    }
-  }).catch(() => {
-    /* 取消*/
-  })
-}
-
 export default {
-  name: 'ActionsFormatter',
+  name: 'LoadingActionsFormatter',
   components: { ActionsGroup },
   extends: BaseFormatter,
   props: {
@@ -58,9 +20,6 @@ export default {
           hasDelete: true, // can set function(row, value)
           canDelete: true,
           updateRoute: this.$route.name.replace('List', 'Update'),
-          performDelete: defaultPerformDelete,
-          onUpdate: defaultUpdateCallback,
-          onDelete: defaultDeleteCallback,
           extraActions: [] // format see defaultActions
         }
       }
