@@ -153,7 +153,7 @@ export default {
       this.DataZTree++
     },
     getSelectedAssetsNode() {
-      const nodes = this.zTree.getCheckedNodes(true)
+      const nodes = this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
       const assetsNodeId = []
       const assetsNode = []
       nodes.forEach(function(node) {

@@ -109,6 +109,9 @@ export default {
     refresh: function() {
       const refreshIconRef = $('#tree-refresh')
       refreshIconRef.click()
+    },
+    getCheckedNodes: function() {
+      return this.zTree.getCheckedNodes(true)
     }
   }
 
