@@ -30,7 +30,7 @@
         </el-form-item>
       </el-form>
     </Dialog>
-    <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" @confirm="handleImportConfirm" @cancel="handleImportCancel()">
+    <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" @confirm="handleImportConfirm()" @cancel="handleImportCancel()">
       <el-form label-position="left" style="padding-left: 50px">
         <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
           <el-radio v-model="importOption" class="export-item" disabled label="1">{{ this.$t('common.Create') }}</el-radio>
@@ -178,7 +178,7 @@ export default {
   methods: {
     performUpdate(item) {
       this.$axios.put(
-        this.upLoadUrl,
+        `/api/v1/assets/asset-users/`,
         item.file,
         { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
@@ -190,7 +190,7 @@ export default {
     },
     performCreate(item) {
       this.$axios.post(
-        this.upLoadUrl,
+        `/api/v1/assets/asset-users/`,
         item.file,
         { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
