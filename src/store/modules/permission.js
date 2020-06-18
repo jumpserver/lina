@@ -28,15 +28,16 @@ function hasLicense(licState, route) {
   return licState === requireLic
 }
 
-function hasCommand(cmdState, route) {
-  if (cmdState) {
-    return cmdState
+function hasCommand(cmdBulkExecutionEnable, route) {
+  const routeRequireCmd = route.meta ? route.meta.commandExecutionRequired : false
+  if (!routeRequireCmd) {
+    return true
   }
-  let requireCmd = route.meta ? route.meta.commandExecutionRequired : null
-  if (!requireCmd) {
-    requireCmd = false
+
+  if (!cmdBulkExecutionEnable) {
+    return false
   }
-  return cmdState === requireCmd
+  return true
 }
 
 export function filterLicRoutes(routes, roles) {
