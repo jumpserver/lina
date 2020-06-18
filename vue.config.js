@@ -29,7 +29,7 @@ module.exports = {
     /\/node_modules\/resize-detector\//
   ],
   publicPath: '/ui/',
-  outputDir: 'dist',
+  outputDir: 'lina',
   assetsDir: 'assets',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
