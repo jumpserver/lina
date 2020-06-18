@@ -3,34 +3,41 @@ import store from '@/store'
 import router from '@/router'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
-import { getPermission, getToken, setPermission } from '@/utils/auth'
+import { getTokenFromCookie } from '@/utils/auth'
+import rolec from '@/utils/role'
+import orgUtil from '@/utils/org'
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
+
+function reject(msg) {
+  return new Promise((resolve, reject) => reject(msg))
+}
 
 function setHeadTitle({ to, from, next }) {
   document.title = getPageTitle(to.meta.title)
 }
 
-function checkLogin({ to, from, next }) {
+async function checkLogin({ to, from, next }) {
+  if (whiteList.indexOf(to.path) !== -1) {
+    next()
+  }
   // determine whether the user has logged in
-  const hasToken = getToken()
+  const hasToken = getTokenFromCookie()
   if (!hasToken) {
-    /* has no token*/
-
-    if (whiteList.indexOf(to.path) !== -1) {
-      next()
-    } else {
-      // other pages that do not have permission to access are redirected to the login page.
-      next(process.env.LOGIN_PATH)
-      return
-    }
+    setTimeout(() => {
+      window.location = process.env.VUE_APP_LOGIN_PATH
+    }, 100)
+    return reject('No token found in cookie')
   }
 
-  if (to.path === '/login') {
-    // if is logged in, redirect to the home page
-    next({ path: '/' })
-    return
+  try {
+    return await store.dispatch('users/getProfile')
+  } catch (e) {
+    setTimeout(() => {
+      window.location = process.env.VUE_APP_LOGIN_PATH
+    }, 100)
+    return reject('No profile get: ' + e)
   }
 }
 
@@ -42,27 +49,61 @@ async function getPublicSetting({ to, from, next }) {
   }
 }
 
-export async function getUserRoleAndSetRoutes({ to, from, next }) {
-  // determine whether the user has obtained his permission roles through getProfile
-  const currentUser = store.getters.currentUser
-  const hasRoles = currentUser && currentUser.current_org_roles && currentUser.current_org_roles.length > 0
-  if (hasRoles) {
-    next()
+async function changeCurrentOrgIfNeed({ to, from, next }) {
+  await store.dispatch('users/getInOrgs')
+  const adminOrgs = store.getters.userAdminOrgList
+  if (!adminOrgs || adminOrgs.length === 0) {
     return
   }
+  const currentOrg = store.getters.currentOrg
+  if (!currentOrg || typeof currentOrg !== 'object') {
+    console.log('Not has current org')
+    orgUtil.change2PropOrg()
+    return reject('change prop org')
+  }
+  if (!orgUtil.hasCurrentOrgPermission()) {
+    console.debug('Not has current org permission')
+    orgUtil.change2PropOrg()
+    return reject('change prop org')
+  }
+}
+
+async function changeCurrentRoleIfNeed({ to, from, next }) {
+  await store.dispatch('users/getRoles')
+  const userPerms = store.getters.currentOrgPerms
+
+  let currentRole = store.getters.currentRole
+  // 如果设置了当前角色，并且有这个权限的话
+  if (currentRole && rolec.hasPerm(userPerms, currentRole)) {
+    return
+  }
+
+  const adminOrgs = store.getters.userAdminOrgList
+  if (!adminOrgs || adminOrgs.length === 0) {
+    currentRole = rolec.USER_PAGE_REQUIRE_PERM_MIN
+    await store.dispatch('users/setCurrentRole', currentRole)
+    return
+  }
+  if (rolec.hasAdminPagePerm(userPerms)) {
+    currentRole = rolec.getUserInAdminPagePerm(userPerms)
+  } else {
+    currentRole = rolec.getUserInUserPagePerm(userPerms)
+  }
+  await store.dispatch('users/setCurrentRole', currentRole)
+}
+
+export async function generatePageRoutes({ to, from, next }) {
+  // determine whether the user has obtained his permission roles through getProfile
+
   try {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
-    let { current_org_roles } = await store.dispatch('users/getProfile')
-    // console.log('Current org role: ', current_org_roles)
-
-    current_org_roles = checkRoles(current_org_roles)
-    // console.log('Current org role: ', current_org_roles)
+    const currentRole = store.getters.currentRole
+    // console.log('Current org role: ', currentRole, rolec.getRolesDisplay(currentRole))
 
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', current_org_roles)
-    // console.log('Access routes: ', accessRoutes)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', currentRole)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)
@@ -76,43 +117,29 @@ export async function getUserRoleAndSetRoutes({ to, from, next }) {
     // await store.dispatch('user/resetToken')
     Message.error(error || 'Has Error')
     console.log('Error occur: ', error)
-    next(`/core/auth/login/`)
-    // next()
+  }
+}
+
+export async function checkUserFirstLogin({ to, from, next }) {
+  if (store.state.users.profile.is_first_login) {
+    next('/users/first-login/personal-information-improvement/')
   }
 }
 
 export async function startup({ to, from, next }) {
   if (initial) {
-    console.debug('Has initial')
     return true
   }
   initial = true
 
   // set page title
-  setHeadTitle({ to, from, next })
-  // console.log('Set head title')
-  checkLogin({ to, from, next })
-  // console.log('Check login')
+  await setHeadTitle({ to, from, next })
+  await checkLogin({ to, from, next })
+  await changeCurrentOrgIfNeed({ to, from, next })
+  await changeCurrentRoleIfNeed({ to, from, next })
   await getPublicSetting({ to, from, next })
-  // console.log('Get public setting')
-  await getUserRoleAndSetRoutes({ to, from, next })
-  // console.log('Get profile')
+  await generatePageRoutes({ to, from, next })
+  await checkUserFirstLogin({ to, from, next })
   return true
-}
-
-function checkRoles(val) {
-  let currentRoles = getPermission()
-  if (currentRoles) {
-    if (val && !val.includes(currentRoles)) {
-      // TODO 异常注入处理
-      currentRoles = val[0]
-      setPermission(currentRoles)
-    }
-  } else {
-    // 设置默认路由
-    currentRoles = val[0]
-    setPermission(currentRoles)
-  }
-  return [currentRoles]
 }
 

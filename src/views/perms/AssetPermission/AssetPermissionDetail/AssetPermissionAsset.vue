@@ -1,12 +1,12 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" class- />
     </el-col>
     <el-col :md="10" :sm="24">
-      <AssetRelationCard type="primary" v-bind="assetReletionConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
-      <RelationCard type="warning" style="margin-top: 15px" v-bind="systemUserReletionConfig" />
+      <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <RelationCard type="warning" style="margin-top: 15px" v-bind="systemUserRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -15,7 +15,7 @@
 import ListTable from '@/components/ListTable'
 import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
-import AssetRelationCard from './AssetRelationCard/index'
+import AssetRelationCard from '@/components/AssetRelationCard'
 
 export default {
   name: 'AssetPermissionAsset',
@@ -57,37 +57,44 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: false,
-        hasLeftActions: false,
-        hasRightActions: false
+        hasSearch: true,
+        hasRefresh: true,
+        hasLeftActions: true,
+        hasRightActions: true,
+        hasExport: false,
+        hasImport: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false
       },
-      assetReletionConfig: {
+      assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
-        performAdd: (items) => {
+        performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
           const objectId = this.object.id
-          const data = items.map(v => {
+          const data = items.map(item => {
             return {
               assetpermission: objectId,
-              asset: v
+              asset: item
             }
           })
           return this.$axios.post(relationUrl, data)
+        },
+        onAddSuccess: (items, that) => {
+          this.$log.debug('AssetSelect value', that.assets)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$refs.ListTable.reloadTable()
+          that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       },
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addNodeToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
           }
         },
         hasObjectsId: this.object.nodes,
@@ -107,7 +114,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -124,21 +131,16 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       },
-      systemUserReletionConfig: {
+      systemUserRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
-          processResults(data) {
-            let results = data.results
-            results = results.filter((item) => item.protocol !== 'mysql').map((item) => {
-              return { label: item.name + '(' + item.username + ')', value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
           }
         },
         hasObjectsId: this.object.system_users,
@@ -158,7 +160,6 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -177,7 +178,6 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
         }
       }
     }

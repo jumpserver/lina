@@ -1,18 +1,24 @@
 import { logout, getProfile } from '@/api/users'
 import {
-  getToken,
-  getCurrentOrg,
-  setCurrentOrg
+  getTokenFromCookie,
+  getCurrentOrgFromCookie,
+  saveCurrentOrgToCookie,
+  getCurrentRoleFromCookie,
+  saveCurrentRoleToCookie
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import rolec from '@/utils/role'
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
+    token: getTokenFromCookie(),
+    currentOrg: getCurrentOrgFromCookie(),
+    currentRole: getCurrentRoleFromCookie(),
     profile: {},
-    currentOrg: getCurrentOrg(),
+    roles: {},
     orgs: [],
-    internalInit: Boolean
+    perms: 0b00000000,
+    MFAVerifyAt: null
   }
 }
 
@@ -28,21 +34,28 @@ const mutations = {
   SET_PROFILE: (state, profile) => {
     state.profile = profile
   },
-  SET_STATUS: (state) => {
-    state.internalInit = true
-  },
   SET_ORGS: (state, orgs) => {
-    // API BUG FIX
-    for (let index = 0; index < orgs.length; index++) {
-      if (orgs[index].id === 'DEFAULT') {
-        orgs[index].id = ''
-      }
-    }
     state.orgs = orgs
   },
+  ADD_ORG: (state, org) => {
+    state.orgs.push(org)
+  },
+  SET_ROLES(state, roles) {
+    state.roles = roles
+  },
+  SET_PERMS(state, perms) {
+    state.perms = perms
+  },
   SET_CURRENT_ORG(state, org) {
+    saveCurrentOrgToCookie(org)
     state.currentOrg = org
-    setCurrentOrg(org)
+  },
+  SET_CURRENT_ROLE(state, role) {
+    saveCurrentRoleToCookie(role)
+    state.currentRole = role
+  },
+  SET_MFA_VERIFY(state) {
+    state.MFAVerifyAt = (new Date()).valueOf()
   }
 }
 
@@ -63,31 +76,55 @@ const actions = {
   // },
 
   // get user Profile
-  getProfile({ commit, state }) {
+  getProfile({ commit, state }, refresh = false) {
     return new Promise((resolve, reject) => {
-      if (!state.internalInit) {
-        reject('Init failed, please Login again.')
+      if (!refresh && state.profile && Object.keys(state.profile).length > 0) {
+        resolve(state.profile)
+        return
       }
       getProfile().then(response => {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
-        const { admin_or_audit_orgs, current_org_roles } = response
-        // roles must be a non-empty array
-        if (!current_org_roles || current_org_roles.length <= 0) {
-          reject('getProfile: roles must be a non-null array!')
-        }
-
         commit('SET_PROFILE', response)
-        commit('SET_ORGS', admin_or_audit_orgs)
-        commit('SET_STATUS')
         resolve(response)
       }).catch(error => {
+        console.log(error)
         reject(error)
       })
     })
   },
-
+  getRoles({ commit, dispatch, state }, refresh) {
+    return new Promise((resolve, reject) => {
+      if (!refresh && state.roles && state.roles.length > 0) {
+        return resolve(state.roles)
+      }
+      return dispatch('getProfile').then((profile) => {
+        const { current_org_roles: currentOrgRoles, role } = profile
+        const roles = rolec.parseUserRoles(currentOrgRoles, role)
+        commit('SET_ROLES', roles)
+        commit('SET_PERMS', rolec.sumPerms(roles))
+        resolve(roles)
+      }).catch((e) => {
+        reject(e)
+      })
+    })
+  },
+  getInOrgs({ commit, dispatch, state }, refresh) {
+    return new Promise((resolve, reject) => {
+      if (!refresh && state.role && state.role.length > 0) {
+        return resolve(state.roles)
+      }
+      dispatch('getProfile').then(profile => {
+        const { admin_or_audit_orgs: inOrgs } = profile
+        commit('SET_ORGS', inOrgs)
+        resolve(inOrgs)
+      }).catch((e) => reject(e))
+    })
+  },
+  addAdminOrg({ commit, state }, org) {
+    commit('ADD_ORG', org)
+  },
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -112,6 +149,12 @@ const actions = {
   },
   setCurrentOrg({ commit }, data) {
     commit('SET_CURRENT_ORG', data)
+  },
+  setCurrentRole({ commit }, role) {
+    commit('SET_CURRENT_ROLE', role)
+  },
+  setMFAVerify({ commit }) {
+    commit('SET_MFA_VERIFY')
   }
 }
 

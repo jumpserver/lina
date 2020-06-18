@@ -4,7 +4,7 @@
       <DetailCard :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <RelationCard ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
+      <RelationCard ref="RelationCard" type="info" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -28,18 +28,13 @@ export default {
   },
   data() {
     return {
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-info',
         title: this.$t('assets.ReplaceNodeAssetsAdminUserWithThis'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
           }
         },
         performAdd: (items) => {
@@ -55,7 +50,6 @@ export default {
           })
         },
         onAddSuccess: () => {
-          console.log(this)
           this.$refs.RelationCard.$refs.select2.clearSelected()
         }
       }

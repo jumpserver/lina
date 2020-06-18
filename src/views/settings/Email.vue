@@ -32,32 +32,37 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      selectFields: ['EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD',
-        'EMAIL_FROM', 'EMAIL_RECIPIENT', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS'],
+      selectFields: [[this.$t('common.BasicInfo'), ['EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER', 'EMAIL_HOST_PASSWORD',
+        'EMAIL_FROM', 'EMAIL_RECIPIENT', 'EMAIL_USE_SSL', 'EMAIL_USE_TLS']]],
       successUrl: { name: 'Settings', params: { activeMenu: 'Email' }},
       fieldsMeta: {
         EMAIL_HOST: {
           label: this.$t('setting.emailHost'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         EMAIL_PORT: {
           label: this.$t('setting.emailPort'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         EMAIL_HOST_USER: {
           label: this.$t('setting.emailHostUser'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         EMAIL_HOST_PASSWORD: {
           label: this.$t('setting.emailHostPassword'),
-          helpText: this.$t('setting.helpText.emailHostPassword')
+          helpText: this.$t('setting.helpText.emailHostPassword'),
+          type: 'input',
+          el: {
+            type: 'password'
+          }
         },
         EMAIL_FROM: {
           label: this.$t('setting.emailEmailFrom'),
@@ -87,7 +92,9 @@ export default {
               value['EMAIL_HOST_PASSWORD'] = ''
             }
             testEmailSetting(value).then(res => {
-              console.log(res)
+              vm.$message.success(res['msg'])
+            }).catch(res => {
+              vm.$message.error(res['response']['data']['error'])
             })
           }
         }

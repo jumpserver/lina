@@ -4,17 +4,25 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import CustomInput from '@/components/CustomInput'
+import Protocols from './components/Protocols'
+import rules from '@/components/DataForm/rules'
+
 export default {
   name: 'AssetCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const nodesInitial = []
+    if (this.$route.query['node']) {
+      nodesInitial.push(this.$route.query.node)
+    }
     return {
       initial: {
         is_active: true,
-        platform: 'linux'
+        platform: 'Linux',
+        protocols: ['ssh/22'],
+        nodes: nodesInitial
       },
       fields: [
         [this.$t('assets.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
@@ -26,20 +34,15 @@ export default {
       ],
       fieldsMeta: {
         protocols: {
-          component: CustomInput
+          component: Protocols
         },
         platform: {
           el: {
             multiple: false,
             ajax: {
               url: '/api/v1/assets/platforms/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: item.name, value: item.name }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: `${item.name}`, value: item.name }
               }
             }
           }
@@ -48,15 +51,7 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/domains/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/domains/'
             }
           }
         },
@@ -65,44 +60,29 @@ export default {
             multiple: false,
             ajax: {
               url: '/api/v1/assets/admin-users/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: `${item.name}(${item.username})`, value: item.id }
               }
             }
-          }
+          },
+          rules: [rules.RequiredChange]
         },
         nodes: {
+          rules: [rules.RequiredChange],
           el: {
             ajax: {
               url: '/api/v1/assets/nodes/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.full_value}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: `${item.full_value}`, value: item.id }
               }
-            }
+            },
+            clearable: true
           }
         },
         labels: {
           el: {
             ajax: {
-              url: '/api/v1/assets/labels/',
-              processResults: (data) => {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: `${item.name}`, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/labels/'
             }
           }
         },

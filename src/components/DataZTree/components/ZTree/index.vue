@@ -1,13 +1,15 @@
 <template>
   <div>
     <div class="treebox">
-      <ul id="ztree" class="ztree">
+      <ul :id="iZTreeID" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
+      <div v-if="treeSetting.treeUrl===''">
+        {{ this.$t('common.tree.Empty') }}<a id="tree-refresh"><i class="fa fa-refresh" /></a>
+      </div>
     </div>
-    <div id="rMenu">
+    <div :id="iRMenuID" class="rMenu">
       <ul class="dropdown-menu menu-actions">
-        <li class="divider" />
         <slot name="rMenu" />
       </ul>
     </div>
@@ -18,7 +20,7 @@
 // 导入JQuery
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
-import 'ztree'
+import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
 import '@/styles/ztree.css'
 
 const defaultObject = {
@@ -34,6 +36,8 @@ export default {
   },
   data() {
     return {
+      iZTreeID: `zTree_${this._uid}`,
+      iRMenuID: `rMenu_${this._uid}`,
       zTree: '',
       rMenu: ''
     }
@@ -47,6 +51,9 @@ export default {
     this.initTree()
     // $('.treebox').css('height', window.innerHeight - 60)
   },
+  beforeDestroy() {
+    $.fn.zTree.destroy()
+  },
   methods: {
     initTree: function() {
       this.$axios.get(this.treeSetting.treeUrl).then(res => {
@@ -58,7 +65,7 @@ export default {
             name: this.$t('common.tree.Empty')
           })
         }
-        this.zTree = $.fn.zTree.init($('#ztree'), this.treeSetting, res)
+        this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(
             this.zTree,
@@ -67,7 +74,7 @@ export default {
         }
 
         if (this.treeSetting.showMenu) {
-          this.rMenu = $('#rMenu')
+          this.rMenu = $(`#${this.iRMenuID}`)
         }
         if (this.treeSetting.otherMenu) {
           $('.menu-actions').append(this.otherMenu)
@@ -98,6 +105,13 @@ export default {
           vm.initTree()
         }
       })
+    },
+    refresh: function() {
+      const refreshIconRef = $('#tree-refresh')
+      refreshIconRef.click()
+    },
+    getCheckedNodes: function() {
+      return this.zTree.getCheckedNodes(true)
     }
   }
 
@@ -105,7 +119,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  div#rMenu {
+  div.rMenu {
     position: absolute;
     visibility: hidden;
     text-align: left;
@@ -122,8 +136,8 @@ export default {
     opacity: .9;
     border: none;
   }
-  div#rMenu li{
-    margin: 1px 0;
+  div.rMenu li{
+    margin: 6px 0;
     cursor: pointer;
     list-style: none outside none;
   }
@@ -166,5 +180,9 @@ export default {
     color: #262626;
     text-decoration: none;
     background-color: #f5f5f5;
+  }
+  .treebox {
+    height: 80vh;
+    overflow: auto;
   }
 </style>

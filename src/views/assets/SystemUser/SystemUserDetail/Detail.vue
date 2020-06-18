@@ -46,15 +46,7 @@ export default {
         hasObjectsId: this.object.cmd_filters,
         title: this.$t('assets.CmdFilter'),
         objectsAjax: {
-          url: '/api/v1/assets/cmd-filters/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.name, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
-          }
+          url: '/api/v1/assets/cmd-filters/'
         },
         performAdd: (items) => {
           const objectId = this.object.id
@@ -76,8 +68,8 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
           // setTimeout(() => location.reload(), 300)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
         },
         onDeleteSuccess: (obj, that) => {
           const theRemoveIndex = that.iHasObjects.findIndex((v) => v.value === obj.value)
@@ -118,11 +110,11 @@ export default {
         },
         {
           key: this.$t('assets.date_joined'),
-          value: '暂时没有这个API'
+          value: this.$d(new Date(this.object.date_created), 'medium')
         },
         {
           key: this.$t('assets.CreatedBy'),
-          value: '暂时没有这个API'
+          value: this.object.created_by
         }
       ]
     }

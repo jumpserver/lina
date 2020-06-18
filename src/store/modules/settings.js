@@ -1,5 +1,5 @@
 import defaultSettings from '@/settings'
-import { getPublicSettings, getLogo } from '@/api/settings'
+import { getPublicSettings } from '@/api/settings'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -8,8 +8,7 @@ const state = {
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
-  publicSettings: null,
-  customSettings: null
+  publicSettings: null
 }
 
 const mutations = {
@@ -20,9 +19,6 @@ const mutations = {
   },
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
-  },
-  SET_CUSTOM_SETTINGS: (state, settings) => {
-    state.customSettings = settings
   }
 }
 
@@ -34,14 +30,12 @@ const actions = {
   getPublicSettings({ commit, state }) {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
+        const link = document.querySelector("link[rel*='icon']") || document.createElement('link')
+        link.type = 'image/x-icon'
+        link.rel = 'shortcut icon'
+        link.href = response.data.LOGO_URLS.favicon
+        document.getElementsByTagName('head')[0].appendChild(link)
         commit('SET_PUBLIC_SETTINGS', response.data)
-        if (response.data.XPACK_ENABLED) {
-          if (response.data.XPACK_LICENSE_IS_VALID) {
-            getLogo().then((res) => {
-              commit('SET_CUSTOM_SETTINGS', res)
-            })
-          }
-        }
         resolve(response)
       }).catch(error => {
         reject(error)

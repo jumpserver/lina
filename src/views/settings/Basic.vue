@@ -31,13 +31,13 @@ export default {
   },
   data() {
     return {
-      selectFields: ['SITE_URL', 'USER_GUIDE_URL', 'EMAIL_SUBJECT_PREFIX'],
+      selectFields: [[this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'EMAIL_SUBJECT_PREFIX']]],
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
       fieldsMeta: {
         SITE_URL: {
           label: this.$t('setting.siteUrl'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.siteUrl')
         },
@@ -48,7 +48,7 @@ export default {
         EMAIL_SUBJECT_PREFIX: {
           label: this.$t('setting.emailSubjectPrefix'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.emailSubjectPrefix')
         }

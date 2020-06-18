@@ -27,6 +27,7 @@ export default {
             draw: 1
           }
         },
+        extraQuery: {},
         defaultAlign: 'left',
         dataPath: 'results',
         totalPath: 'count',
@@ -85,10 +86,20 @@ export default {
   computed: {
     tableConfig() {
       const config = Object.assign(this.defaultConfig, this.config)
+      this.$log.debug('Datatable found config change')
       return config
     },
     iListeners() {
       return Object.assign({}, this.$listeners, this.tableConfig.listeners)
+    }
+  },
+  watch: {
+    config: {
+      handler() {
+        this.$log.debug('DataTable: found config change', this.tableConfig.url)
+        // this.getList()
+      },
+      deep: true
     }
   },
   methods: {
@@ -102,8 +113,8 @@ export default {
     searchDate(attrs) {
       return this.$refs.table.searchDate(attrs)
     },
-    search(attrs) {
-      return this.$refs.table.search(attrs)
+    search(attrs, reset) {
+      return this.$refs.table.search(attrs, reset)
     },
     getQuery() {
       return this.$refs.table.getQuery()

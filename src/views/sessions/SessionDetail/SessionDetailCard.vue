@@ -67,6 +67,7 @@ export default {
       ]
     },
     quickActions() {
+      const vm = this
       return [
         {
           title: this.$t('sessions.replaySession'),
@@ -76,7 +77,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.openReplaySession(this.sessionData.id)
+              vm.openReplaySession(vm.sessionData.id)
             }
 
           }
@@ -89,7 +90,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.openReplayDownload(this.sessionData.id)
+              vm.openReplayDownload(vm.sessionData.id)
             }
           }
         }
@@ -102,7 +103,7 @@ export default {
       window.open(replayUrl)
     },
     openReplayDownload: function(id) {
-      const downloadUrl = '/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
+      const downloadUrl = '/api/v1/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
         .replace('00000000-0000-0000-0000-000000000000', id)
       window.open(downloadUrl)
     }

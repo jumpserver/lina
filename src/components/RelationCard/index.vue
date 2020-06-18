@@ -169,7 +169,7 @@ export default {
     }
   },
   mounted() {
-    if (this.hasObjectsId.length !== 0) {
+    if (this.hasObjectsId && this.hasObjectsId.length !== 0) {
       setTimeout(() => {
         this.getHasObjectsByIds()
       }, 50)
@@ -221,6 +221,9 @@ export default {
     },
     addObjects() {
       const objects = this.$refs.select2.getOptionsByValues(this.select2.value)
+      if (objects.length === 0) {
+        return
+      }
       this.performAdd(objects, this).then(
         () => this.onAddSuccess(objects, this)
       )

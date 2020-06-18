@@ -1,49 +1,41 @@
-import Cookies from 'js-cookie'
+import VueCookie from 'vue-cookie'
 
-const TokenKey = 'csrftoken'
-const CurrentOrg = 'currentOrg'
-const Permission = 'currentRole'
+const TOKEN_KEY = 'csrftoken'
+const CURRENT_ORG_KEY = 'jms_current_org'
+const CURRENT_ROLE_KEY = 'jms_current_role'
 
-export function getToken() {
-  return Cookies.get(TokenKey)
+export function getTokenFromCookie() {
+  return VueCookie.get(TOKEN_KEY)
 }
 
-export function getPermission() {
-  return Cookies.get(Permission)
+export function getCurrentRoleFromCookie() {
+  const role = VueCookie.get(CURRENT_ROLE_KEY)
+  if (role) {
+    return parseInt(role) || null
+  }
+  return role
 }
 
-export function setPermission(token) {
-  return Cookies.set(Permission, token)
+export function saveCurrentRoleToCookie(role) {
+  console.log('Save current role to cookie: ', role)
+  return VueCookie.set(CURRENT_ROLE_KEY, role, 14)
 }
 
-export function removePermission() {
-  return Cookies.remove(Permission)
-}
-
-export function setToken(token) {
-  return Cookies.set(TokenKey, token)
-}
-
-export function removeToken() {
-  return Cookies.remove(TokenKey)
-}
-
-export function getCurrentOrg() {
-  let org = Cookies.getJSON(CurrentOrg)
-  if (!org) {
-    org = { id: '', name: 'DEFAULT' }
-    setCurrentOrg(org)
-    return org
+export function getCurrentOrgFromCookie() {
+  let org = null
+  try {
+    org = JSON.parse(VueCookie.get(CURRENT_ORG_KEY))
+  } catch (e) {
+    console.log('Current org in cookie: ', org)
   }
   return org
 }
 
-export function setCurrentOrg(org) {
-  Cookies.set(CurrentOrg, org)
-  // 切换组织后重新刷新页面
-  window.location.reload(true)
+export function saveCurrentOrgToCookie(org) {
+  VueCookie.set(CURRENT_ORG_KEY, JSON.stringify(org), 14)
+  VueCookie.set('X-JMS-ORG', org.id)
 }
 
 export function removeCurrentOrg() {
-  return Cookies.remove(CurrentOrg)
+  return VueCookie.remove(CURRENT_ORG_KEY)
 }

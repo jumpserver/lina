@@ -1,5 +1,6 @@
 import Layout from '@/layout/index'
 import i18n from '@/i18n/i18n'
+import rolec from '@/utils/role'
 
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
@@ -10,67 +11,84 @@ export default [
   {
     path: '/',
     component: Layout,
-    redirect: '/assets',
+    meta: {
+      roles: [rolec.USER],
+      permissions: [rolec.PERM_USE]
+    },
     children: [
       {
-        path: 'assets',
-        name: 'assets',
+        path: '',
+        name: 'MyAssets',
         component: () => import('@/userviews/assets/index'),
-        meta: { title: i18n.t('route.MyAssets'), icon: 'files-o' }
+        meta: {
+          title: i18n.t('route.MyAssets'),
+          icon: 'files-o',
+          permissions: [rolec.PERM_USE]
+        }
       }
     ]
   },
   {
     path: '/apps',
+    name: 'Apps',
     component: Layout,
     redirect: '/apps/remoteapp',
-    meta: { title: i18n.t('route.MyApps'), icon: 'th' },
+    meta: { title: i18n.t('route.MyApps'), icon: 'th', permissions: [rolec.PERM_USE] },
     children: [
       {
         path: '/apps/remoteapp',
-        name: 'remoteapp',
+        name: 'MyRemoteApps',
         component: () => import('@/userviews/apps/RemoteApp'),
-        meta: { title: i18n.t('route.RemoteApp') }
+        meta: { title: i18n.t('route.RemoteApp'), permissions: [rolec.PERM_USE] }
       },
       {
         path: '/apps/database',
-        name: 'assets',
+        name: 'MyDatebases',
         component: () => import('@/userviews/apps/DatabaseApp'),
-        meta: { title: i18n.t('route.DatabaseApp') }
+        meta: { title: i18n.t('route.DatabaseApp'), permissions: [rolec.PERM_USE] }
       }
     ]
   },
   {
     path: '/command-executions',
     component: Layout,
+    meta: {
+      permissions: [rolec.PERM_USE],
+      commandExecutionRequired: true
+    },
     children: [
       {
         path: '',
         name: 'CommandExecutions',
         component: () => import('@/views/ops/CommandExecution'),
-        meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal' }
+        meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal', permissions: [rolec.PERM_USE] }
       }
     ]
   },
   {
     path: `external-luna`,
     component: Layout,
+    meta: {
+      permissions: [rolec.PERM_USE]
+    },
     children: [
       {
         path: `${URL}/luna/`,
-        meta: { title: i18n.t('route.WebTerminal'), icon: 'window-maximize', activeMenu: '/assets' }
+        meta: { title: i18n.t('route.WebTerminal'), icon: 'window-maximize', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
       }
     ]
   },
   {
     path: 'external-elfinder',
     component: Layout,
+    meta: {
+      permissions: [rolec.PERM_USE]
+    },
     children: [
       {
         path: `${URL}/koko/elfinder/sftp/`,
-        meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets' }
+        meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
       }
     ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]

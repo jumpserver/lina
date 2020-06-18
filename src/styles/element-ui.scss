@@ -11,6 +11,10 @@ $--color-info: #23c6c8;
 $--color-warning: #f8ac59;
 $--color-danger: #ed5565;
 
+$--color-text-primary: #303133;
+/// color|1|Font Color|2
+$--color-text-regular: #606266;
+
 .el-upload {
   input[type="file"] {
     display: none !important;
@@ -187,9 +191,9 @@ td .el-button.el-button--mini {
 
 
 .el-select-dropdown__item.selected {
-  color: white;
   font-weight: 400;
-  background-color: $--color-primary;
+  color: $--color-text-primary;
+  background-color: #ddd;
 }
 
 
@@ -429,4 +433,20 @@ a {
   color: $--color-danger;
   background: white;
   border-color: $--color-danger;
+}
+
+.el-alert .el-alert__description {
+  margin: 1px 0 0;
+}
+
+.el-input-group__prepend div.el-select .el-input__inner {
+  color: $--color-text-primary;
+}
+
+.el-input-group__prepend div.el-select .el-input__inner:hover {
+  color: $--color-text-primary;
+}
+
+.el-table {
+  font-size: 13px;
 }

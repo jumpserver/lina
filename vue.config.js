@@ -24,6 +24,10 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+  transpileDependencies: [
+    /\/node_modules\/vue-echarts\//,
+    /\/node_modules\/resize-detector\//
+  ],
   publicPath: '/ui/',
   outputDir: 'dist',
   assetsDir: 'assets',
@@ -31,7 +35,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    host: 'localhost',
+    host: '0.0.0.0',
     open: false,
     overlay: {
       warnings: false,
@@ -40,15 +44,17 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:8080`,
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
+      '/api/': {
+        target: process.env.VUE_APP_CORE_HOST,
+        changeOrigin: true
       },
-      '^/core/': {
-        target: `http://localhost:8080`,
+      '/ws/': {
+        target: 'ws://127.0.0.1:8080',
+        changeOrigin: true,
+        ws: true
+      },
+      '^/(core|static|media)/': {
+        target: process.env.VUE_APP_CORE_HOST,
         changeOrigin: true
       }
     },

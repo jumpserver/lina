@@ -6,6 +6,7 @@
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
       <RelationCard v-bind="relationConfig" type="info" style="margin-top: 15px" />
+      <RelationCard v-if="this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE" v-bind="loginConfirmSetting" type="warning" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
@@ -43,6 +44,10 @@ export default {
               const data = { is_active: v }
               vm.$axios.patch(url, data).catch(() => {
                 item.attrs.model = !v
+              }).then(res => {
+                vm.$message.success(vm.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                vm.$message.error(vm.$t('common.updateErrorMsg' + ' ' + err))
               })
             }
           }
@@ -183,6 +188,32 @@ export default {
           })
           return this.$axios.post(relationUrl, data)
         }
+      },
+      loginConfirmSetting: {
+        icon: 'fa-user',
+        title: this.$t('users.LoginConfirm'),
+        objectsAjax: {
+          url: '/api/v1/users/users/'
+        },
+        hasObjectsId: this.object.login_confirm_settings,
+        performDelete: (item) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/authentication/login-confirm-settings/${objectId}/`
+          const data = {
+            reviewers: this.object.login_confirm_settings.filter(approver => approver !== item.value)
+          }
+          return this.$axios.patch(relationUrl, data)
+        },
+        performAdd: (items) => {
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/authentication/login-confirm-settings/${objectId}/`
+          const data = {
+            reviewers: [...this.object.login_confirm_settings || [], ...items.map(v => {
+              return v.value
+            })]
+          }
+          return this.$axios.patch(relationUrl, data)
+        }
       }
     }
   },
@@ -214,24 +245,24 @@ export default {
           value: this.object.source_display
         },
         {
-          key: this.$t('users.dateExpired'),
-          value: this.object.date_expired
-        },
-        {
-          key: this.$t('common.createdBy'),
+          key: this.$t('common.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('users.dateJoined'),
+          key: this.$t('users.DateJoined'),
           value: this.object.date_joined
         },
         {
-          key: this.$t('users.dateLastLogin'),
-          value: this.object.last_login
+          key: this.$t('users.DateExpired'),
+          value: this.object.date_expired
         },
         {
-          key: this.$t('users.datePasswordUpdated'),
+          key: this.$t('users.DatePasswordUpdated'),
           value: this.object.date_password_last_updated
+        },
+        {
+          key: this.$t('users.DateLastLogin'),
+          value: this.object.last_login
         },
         {
           key: this.$t('common.Comment'),

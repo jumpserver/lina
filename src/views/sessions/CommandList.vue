@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { formatDate, toSafeLocalDateStr } from '@/utils/common'
+import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
@@ -14,17 +14,19 @@ export default {
   },
   data() {
     const vm = this
+    const now = new Date()
+    const dateFrom = getDaysAgo(2, now).toISOString()
+    const dateTo = now.toISOString()
     return {
       tableConfig: {
-        hasSelection: false,
         url: '/api/v1/terminal/commands/',
         columns: [
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
         ],
         extraQuery: {
-          date_to: formatDate(new Date().getTime()),
-          date_from: formatDate((new Date().getTime()) - 432000000)
+          date_to: dateTo,
+          date_from: dateFrom
         },
         columnsMeta: {
           expandCol: {
@@ -32,28 +34,29 @@ export default {
             prop: 'output',
             formatter: OutputExpandFormatter
           },
-          input: {
-            label: this.$t('sessions.command')
-          },
           risk_level: {
-            label: this.$t('sessions.riskLevel')
-          },
-          user: {
-            label: this.$t('sessions.user')
-          },
-          asset: {
-            label: this.$t('sessions.asset')
-          },
-          system_user: {
-            label: this.$t('sessions.systemUser')
+            label: this.$t('sessions.riskLevel'),
+            formatter: (row, col, cellValue) => {
+              const display = row.risk_level_display
+              if (cellValue === 0) {
+                return display
+              } else {
+                return <span class='text-danger'> { display } </span>
+              }
+            }
           },
           session: {
             label: this.$t('sessions.session'),
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'SessionDetail',
               getTitle() {
                 return vm.$t('sessions.goto')
+              },
+              getRoute({ cellValue }) {
+                return {
+                  name: 'SessionDetail',
+                  params: { id: cellValue }
+                }
               }
             }
           },
@@ -63,17 +66,16 @@ export default {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
           }
-        },
-        tableActions: {
-          hasEdit: false,
-          hasDelete: false
         }
       },
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
-        hasExport: false,
-        hasDatePicker: true
+        hasDatePicker: true,
+        datePicker: {
+          dateStart: dateFrom,
+          dateEnd: dateTo
+        }
       }
     }
   }

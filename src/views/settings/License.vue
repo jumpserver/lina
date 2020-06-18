@@ -29,7 +29,7 @@
 <script>
 import { QuickActions } from '@/components'
 import DetailCard from '@/components/DetailCard/index'
-import { importLicense } from '@/views/xpack/api'
+import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -138,8 +138,8 @@ export default {
       this.dialogLicenseImport = true
     },
     consultAction: function() {
-      const url = 'https://jinshuju.net/f/sQ91MK'
-      window.open(url)
+      const url = 'http://www.jumpserver.org/support/'
+      window.open(url, '_blank')
     },
     importLicense() {
       if (this.licenseFile['file'] === undefined) {

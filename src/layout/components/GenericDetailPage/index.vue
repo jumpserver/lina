@@ -16,6 +16,7 @@
 
 <script>
 import TabPage from '../TabPage'
+import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common'
 import ActionsGroup from '@/components/ActionsGroup'
 
@@ -64,7 +65,11 @@ export default {
           .replace('详情', '')
         this.$log.debug('Object is: ', obj)
         const objectName = this.getObjectName(obj)
-        return `${objectType}: ${objectName}`
+        let title = `${objectType}: ${objectName}`
+        if (title.length > 80) {
+          title = title.slice(0, 80) + '...'
+        }
+        return title
       }
     },
     goBack: {
@@ -169,8 +174,15 @@ export default {
     },
     getObject() {
       const url = this.validActions.detailApiUrl
-      return this.$axios.get(url).then(data => {
+      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
+      }).catch(error => {
+        if (error.response && error.response.status === 404) {
+          const msg = this.$t('common.ObjectNotFoundOrDeletedMsg')
+          this.$message.error(msg)
+        } else {
+          flashErrorMsg({ error, response: error.response })
+        }
       })
     },
     handleTabClick(tab) {

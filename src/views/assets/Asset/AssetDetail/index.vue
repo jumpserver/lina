@@ -9,20 +9,19 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import AssetList from './AssetList.vue'
+import AssetUserList from './AssetUserList.vue'
 export default {
   name: 'AssetListDetail',
   components: {
     GenericDetailPage,
     TabPage,
     Detail,
-    AssetList
+    AssetUserList
   },
   data() {
     return {
       TaskDetail: {},
       config: {
-        title: this.$t('assets.SystemUserDetail'),
         activeMenu: 'Detail',
         submenu: [
           {
@@ -30,13 +29,13 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('assets.AssetList'),
-            name: 'AssetList'
+            title: this.$t('assets.AssetUserList'),
+            name: 'AssetUserList'
           }
         ],
         hasRightSide: true,
         getObjectName: function(obj) {
-          return obj.hostname
+          return obj.hostname + '(' + obj.ip + ')'
         }
       }
     }

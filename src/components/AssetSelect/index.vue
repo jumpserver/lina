@@ -11,7 +11,7 @@
       @confirm="handleConfirm"
       @cancel="handleCancel"
     >
-      <GenericTreeListPage
+      <TreeTable
         ref="ListPage"
         :tree-setting="treeSetting"
         :table-config="tableConfig"
@@ -22,13 +22,14 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import TreeTable from '@/components/TreeTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
-import { Select2, Dialog } from '@/components'
+import Select2 from '@/components/Select2'
+import Dialog from '@/components/Dialog'
 
 export default {
   componentName: 'AssetSelect',
-  components: { GenericTreeListPage, Select2, Dialog },
+  components: { TreeTable, Select2, Dialog },
   props: {
     value: {
       type: Array,
@@ -42,13 +43,8 @@ export default {
       clearable: true,
       ajax: {
         url: '/api/v1/assets/assets/?fields_size=mini',
-        processResults(data) {
-          let results = data.results
-          results = results.map((item) => {
-            return { label: item.hostname + '(' + item.ip + ')', value: item.id }
-          })
-          const more = !!data.next
-          return { results: results, pagination: more, total: data.count }
+        transformOption: (item) => {
+          return { label: item.hostname + '(' + item.ip + ')', value: item.id }
         }
       }
     }
@@ -77,6 +73,7 @@ export default {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
             sortable: true,
+            showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'
@@ -120,7 +117,7 @@ export default {
       this.dialogVisible = false
     },
     onInputChange(val) {
-      this.$emit('input', val)
+      this.$emit('change', val)
     },
     addToSelect(options, row) {
       const selectOptionsHas = options.find(item => item.value === row.id)
@@ -142,6 +139,7 @@ export default {
       if (selectValueIndex === -1) {
         selectValue.push(row.id)
       }
+      this.onInputChange(selectValue)
     },
     removeRowFromSelect(row) {
       const selectValue = this.$refs.select2.iValue

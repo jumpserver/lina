@@ -1,47 +1,31 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="14">
-        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <el-col :span="16">
+        <AssetUserTable ref="ListTable" :url="assetUserUrl" :other-actions="otherActions" :has-import="false" />
       </el-col>
-      <el-col :span="10">
+      <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
-        <RelationCard type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
+        <AssetRelationCard ref="assetSelect" type="primary" style="margin-top: 15px" v-bind="assetRelationConfig" />
+        <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
-    <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
-      <el-form label-position="right" label-width="80px" :model="dialogInfo">
-        <el-form-item :label="this.$t('assets.Hostname')">
-          <el-input v-model="dialogInfo.hostname" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Username')">
-          <el-input v-model="dialogInfo.username" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Password')">
-          <el-input v-model="dialogInfo.password" type="password" />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.sshkey')">
-          <input type="file" @change="Onchange">
-        </el-form-item>
-      </el-form>
-    </Dialog>
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
-import { CustomActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
-import Dialog from '@/components/Dialog'
+import AssetRelationCard from '@/components/AssetRelationCard'
+import { AssetUserTable } from '@/components'
 
 export default {
   name: 'Detail',
   components: {
     QuickActions,
-    ListTable,
     RelationCard,
-    Dialog
+    AssetUserTable,
+    AssetRelationCard
   },
   props: {
     object: {
@@ -50,15 +34,25 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
-      showDialog: false,
-      dialogInfo: {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      },
+      assetUserUrl: `/api/v1/assets/asset-users/?prefer_id=${this.object.id}&prefer=system_user&latest=1`,
+      otherActions: [
+        {
+          name: 'Push',
+          title: this.$t('common.Push'),
+          can: () => vm.object.auto_push,
+          callback: function({ row }) {
+            const assetId = row.asset
+            const username = row.username
+            const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/?username=${username}`
+            const data = { action: 'push', asset: assetId }
+            this.$axios.post(theUrl, data).then(resp => {
+              window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+            })
+          }
+        }
+      ],
       AutoPushConfig: {
         icon: 'fa-info',
         title: this.$t('assets.QuickUpdate'),
@@ -70,31 +64,27 @@ export default {
           }
         ]
       },
-      systemUserRelationConfig: {
-        icon: 'fa-info',
-        title: this.$t('assets.command_filter_list'),
-        objectsAjax: {
-          url: '/api/v1/assets/system-users/'
-        },
-        hasObjectsId: this.object.system_users,
-        performAdd: (items) => {
-          // TODO: Orange API 待修复
-          const relationUrl = `/api/v1/assets/cmd-filters/`
-          const objectId = this.object.id
-          const data = items.map(v => {
-            return {
-              cmd_filter: objectId,
-              systemuser: v.value
-            }
-          })
+      assetRelationConfig: {
+        icon: 'fa-edit',
+        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        performAdd: (items, that) => {
+          const relationUrl = `/api/v1/assets/system-users-assets-relations/`
+          const data = [
+
+          ]
+          items.map(v =>
+            data.push({
+              asset: v,
+              systemuser: this.object.id
+            })
+          )
           return this.$axios.post(relationUrl, data)
         },
-        performDelete: (item) => {
-          const itemId = item.value
-          const objectId = this.object.id
-          // TODO: Orange API 待修复
-          const relationUrl = `/api/v1/assets/cmd-filters/?cmd-filters=${objectId}&systemuser=${itemId}`
-          return this.$axios.delete(relationUrl)
+        onAddSuccess: (items, that) => {
+          this.$log.debug('AssetSelect value', that.assets)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$refs.ListTable.$refs.ListTable.reloadTable()
+          that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       },
       quickActions: [
@@ -107,114 +97,23 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `api/v1/assets/system-users/${this.object.id}/tasks/`,
+                `/api/v1/assets/system-users/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
             }.bind(this)
           }
         }
       ],
-      tableConfig: {
-        url: `/api/v1/assets/asset-users/?prefer_id=${this.object.id}&prefer=system_user&latest=1`,
-        columns: [
-          {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname')
-          },
-          {
-            prop: 'ip',
-            label: this.$t('assets.ip')
-          },
-          {
-            prop: 'username',
-            label: this.$t('assets.Username')
-          },
-          {
-            prop: 'version',
-            label: this.$t('assets.Version')
-          },
-          {
-            prop: 'date_created',
-            label: this.$t('assets.date_joined'),
-            formatter: DateFormatter
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: CustomActionsFormatter,
-            formatterArgs: {
-              extraActions: [
-                {
-                  name: 'delete',
-                  title: this.$t('common.Delete'),
-                  callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(
-                      this.$refs.ListTable.reloadTable()
-                    )
-                  }
-                },
-                {
-                  name: this.$t('common.Test'),
-                  title: this.$t('common.Test'),
-                  callback: (val) => {
-                    console.log(val.cellValue)
-                    this.$axios.post(
-                      `api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
-                      { action: 'test' }
-                    ).then(res => {
-                      window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-                    })
-                  }
-                },
-                {
-                  name: this.$t('common.Update'),
-                  title: this.$t('common.Update'),
-                  callback: function(val) {
-                    console.log(val)
-                    this.showDialog = true
-                    this.dialogInfo.asset = val.row.asset
-                    this.dialogInfo.hostname = val.row.hostname
-                    this.dialogInfo.username = val.row.username
-                  }.bind(this)
-                },
-                {
-                  name: 'Push',
-                  title: this.$t('common.Push'),
-                  callback: function(val) {
-                    console.log('Push')
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      },
-      headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasLeftActions: false,
-        hasBulkDelete: false,
-        hasSearch: true,
-        hasCreate: false
-      },
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-info',
         title: this.$t('perms.addNodeToThisPermission'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
           }
         },
         hasObjectsId: [],
@@ -228,27 +127,18 @@ export default {
               node: v.value
             }
           })
-          return this.$axios.post(relationUrl, data).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.post(relationUrl, data)
         },
         performDelete: (item) => {
           const itemId = item.value
           const objectId = this.object.id
           const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
-          return this.$axios.delete(relationUrl).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.delete(relationUrl)
         }
       }
     }
   },
   computed: {
-
   },
   mounted() {
     this.getNodeList()
@@ -259,63 +149,14 @@ export default {
         `/api/v1/assets/system-users-nodes-relations/?systemuser=${this.object.id}&draw=1&limit=15&offset=0`
       ).then(data => {
         for (const x in data.results) {
-          this.nodeReletionConfig.hasObjectsId.push(data.results[x].node)
-          this.nodeReletionConfig.hasObjects.push({
+          this.nodeRelationConfig.hasObjectsId.push(data.results[x].node)
+          this.nodeRelationConfig.hasObjects.push({
             value: data.results[x].node,
             label: data.results[x].node_display
           })
         }
       }
       )
-    },
-    handleCancel() {
-      this.dialogInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      }
-      this.showDialog = false
-    },
-    Onchange(e) {
-      const vm = this
-      // TODO 校验文件类型
-      const reader = new FileReader()
-      reader.onload = function() {
-        vm.dialogInfo.key = this.result
-      }
-      reader.readAsText(
-        e.target.files[0]
-      )
-    },
-    handleConfirm() {
-      const data = {
-        asset: this.dialogInfo.asset,
-        username: this.dialogInfo.username
-      }
-      if (this.dialogInfo.password !== '') {
-        data.password = this.dialogInfo.password
-      }
-      if (this.dialogInfo.key !== '') {
-        data.key = this.dialogInfo.key
-      }
-      this.$axios.post(
-        `/api/v1/assets/asset-users/`,
-        data
-      ).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(err => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-      })
-      this.dialogInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      }
-      this.showDialog = false
     }
   }
 }

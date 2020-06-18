@@ -1,11 +1,11 @@
 <template>
   <transition name="sidebarLogoFade">
     <el-select
-      v-if="!isCollapse && userAdminOrgList.length>1 && checkPermission "
+      v-if="needShow()"
       :value="currentOrg.id"
       class="org-select"
       filterable
-      placeholder="请选择"
+      :placeholder="$t('common.Select')"
       @change="changeOrg"
     >
       <template slot="prefix">
@@ -25,7 +25,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getPermission } from '@/utils/auth'
+import rolec from '@/utils/role'
+import orgUtil from '@/utils/org'
 export default {
   props: {
     isCollapse: {
@@ -36,31 +37,21 @@ export default {
     }
   },
   computed: {
-    checkPermission() {
-      return getPermission() === 'Admin'
-    },
     ...mapGetters([
       'currentOrg',
+      'currentRole',
       'userAdminOrgList'
     ]),
-    orgIdMapper() {
-      const mapper = {}
-      this.userAdminOrgList.forEach((v) => {
-        mapper[v.id] = v
-      })
-      return mapper
+    inAdminPage() {
+      return (this.currentRole & rolec.PERM_USE) !== rolec.PERM_USE
     }
   },
-  mounted() {
-    this.$log.debug('Admin orgs: ', this.userAdminOrgList)
-  },
   methods: {
+    needShow() {
+      return !this.isCollapse && this.userAdminOrgList.length > 1 && this.inAdminPage
+    },
     changeOrg(orgId) {
-      const org = this.orgIdMapper[orgId]
-      if (!org) {
-        this.$log.debug('Error: org not found')
-      }
-      this.$store.dispatch('users/setCurrentOrg', org)
+      orgUtil.changeOrg(orgId)
     }
   }
 }

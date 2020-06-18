@@ -1,7 +1,7 @@
 <template>
   <ListTable :table-config="ticketTableConfig" :header-actions="ticketActions" />
 </template>
-<script>
+<script type="text/jsx">
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
@@ -64,7 +64,17 @@ export default {
       },
       ticketActions: {
         hasLeftActions: false,
-        hasRightActions: false
+        hasRightActions: false,
+        searchConfig: {
+          default: {
+            status: {
+              key: 'status',
+              label: this.$t('tickets.Status'),
+              value: 'open',
+              valueLabel: this.$t('tickets.Open')
+            }
+          }
+        }
       }
     }
   }

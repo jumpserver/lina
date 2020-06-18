@@ -4,7 +4,7 @@
       <el-row v-for="item in items" :key="'card-' + item.key" :gutter="10" class="item">
         <el-col :span="6"><div :style="{ 'text-align': align }" class="item-label"><label>{{ item.key }}: </label></div></el-col>
         <el-col :span="18"><div class="item-text">
-          <ItemValue :value="item.value" :item="item" :callback="item.callback" />
+          <ItemValue :value="item.value" v-bind="item" />
         </div></el-col>
       </el-row>
       <slot />

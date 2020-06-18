@@ -2,7 +2,7 @@
 import router from './router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { startup, getUserRoleAndSetRoutes } from '@/utils/startup'
+import { startup } from '@/utils/startup'
 
 NProgress.configure({
   showSpinner: false
@@ -13,11 +13,11 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   try {
     await startup({ to, from, next })
-    await getUserRoleAndSetRoutes({ to, from, next })
+    next()
   } catch (e) {
-    console.log('Start service error: ', e)
+    const msg = 'Start service error: ' + e
+    console.log(e)
   }
-  NProgress.done()
 })
 
 router.afterEach(() => {

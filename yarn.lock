@@ -1315,6 +1315,13 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
 
+"@ztree/ztree_v3@3.5.44":
+  version "3.5.44"
+  resolved "https://registry.yarnpkg.com/@ztree/ztree_v3/-/ztree_v3-3.5.44.tgz#940890a91483bc8a7347f4fe4c9e6e3ffc7d61ec"
+  integrity sha512-+W6z8rCnls3/Zw9Q9JgpK9C6krQANoGk6wFupNY/aPumjb7JWQiX2V5Uzl12ClCPponaROle7cZxz4bsBWQPWw==
+  dependencies:
+    jquery ">=1.4.4"
+
 abab@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
@@ -3373,9 +3380,10 @@ element-theme-chalk@^2.13.1:
   resolved "https://registry.npm.taobao.org/element-theme-chalk/download/element-theme-chalk-2.13.1.tgz?cache=0&sync_timestamp=1586760865928&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felement-theme-chalk%2Fdownload%2Felement-theme-chalk-2.13.1.tgz#9a022717a154ef0ca46f54665b485444b45c0671"
   integrity sha1-mgInF6FU7wykb1RmW0hURLRcBnE=
 
-element-ui@2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.13.0.tgz#f6bb04e5b0a76ea5f62466044b774407ba4ebd2d"
+element-ui@2.13.2:
+  version "2.13.2"
+  resolved "https://registry.npm.taobao.org/element-ui/download/element-ui-2.13.2.tgz?cache=0&sync_timestamp=1589795164194&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felement-ui%2Fdownload%2Felement-ui-2.13.2.tgz#582bf47aaaaaafe23ea1958fae217a687ad06447"
+  integrity sha1-WCv0eqqqr+I+oZWPriF6aHrQZEc=
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
@@ -6565,6 +6573,16 @@ mockjs@1.0.1-beta3:
   dependencies:
     commander "*"
 
+moment-parseformat@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/moment-parseformat/-/moment-parseformat-3.0.0.tgz#3a1dc438b4bc073b7e93cc298cfb6c5daac26dba"
+  integrity sha512-dVgXe6b6DLnv4CHG7a1zUe5mSXaIZ3c6lSHm/EKeVeQI2/4pwe0VRde8OyoCE1Ro2lKT5P6uT9JElF7KDLV+jw==
+
+moment@^2.19.2:
+  version "2.26.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.26.0.tgz#5e1f82c6bafca6e83e808b30c8705eed0dcbd39a"
+  integrity sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -9678,6 +9696,18 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-moment@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-4.1.0.tgz#092a8ff723a96c6f85a0a8e23ad30f0bf320f3b0"
+  integrity sha512-Gzisqpg82ItlrUyiD9d0Kfru+JorW2o4mQOH06lEDZNgxci0tv/fua1Hl0bo4DozDV2JK1r52Atn/8QVCu8qQw==
+  dependencies:
+    moment "^2.19.2"
+
+vue-password-strength-meter@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.npm.taobao.org/vue-password-strength-meter/download/vue-password-strength-meter-1.7.2.tgz#ddaae2246fb8a53fd8cdc5b1084b1d16cc401505"
+  integrity sha1-3ariJG+4pT/YzcWxCEsdFsxAFQU=
+
 vue-router@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.6.tgz#2e4f0f9cbb0b96d0205ab2690cfe588935136ac3"
@@ -10183,9 +10213,7 @@ zrender@4.3.0:
   resolved "https://registry.npm.taobao.org/zrender/download/zrender-4.3.0.tgz#9f056121b20bbae44414d287bf6a119ff7042661"
   integrity sha1-nwVhIbILuuREFNKHv2oRn/cEJmE=
 
-ztree@^3.5.24:
-  version "3.5.24"
-  resolved "https://registry.yarnpkg.com/ztree/-/ztree-3.5.24.tgz#b63fe52981fdf2c329675cfd2772f0d147521ff1"
-  integrity sha1-tj/lKYH98sMpZ1z9J3Lw0UdSH/E=
-  dependencies:
-    jquery ">=1.4.4"
+zxcvbn@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.npm.taobao.org/zxcvbn/download/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"
+  integrity sha1-KOwXzwl0PtyrBW3dixsGJizHPDA=

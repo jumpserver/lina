@@ -17,6 +17,9 @@ export default {
           name: 'replay',
           title: this.$t('sessions.replay'),
           type: 'warning',
+          can: (row, cellValue) => {
+            return row.can_replay
+          },
           callback: function({ cellValue, tableData }) {
             // 跳转到luna页面
             const replayUrl = '/luna/replay/' + cellValue
@@ -27,11 +30,17 @@ export default {
           name: 'download',
           title: this.$t('sessions.download'),
           type: 'primary',
+          can: (row, cellValue) => {
+            return row.can_replay
+          },
           callback: function({ cellValue, tableData }) {
             // 跳转下载页面
-            const downloadUrl = '/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
-              .replace('00000000-0000-0000-0000-000000000000', cellValue)
-            window.open(downloadUrl)
+            const downloadUrl = `/api/v1/terminal/sessions/${cellValue}/replay/download/`
+
+            const a = document.createElement('a')
+            a.href = downloadUrl
+            a.click()
+            window.URL.revokeObjectURL(downloadUrl)
           }
         }
       ]

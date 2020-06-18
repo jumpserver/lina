@@ -26,11 +26,11 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            title: this.$t('assets.PlatformDetail'),
+            title: this.$t('common.BasicInfo'),
             name: 'Detail'
           }
         ],
-        hasRightSide: this.hasRightSide
+        hasRightSide: this.$route.params.id > 7
       }
     }
   },

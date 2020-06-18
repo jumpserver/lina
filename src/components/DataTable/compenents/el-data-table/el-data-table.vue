@@ -739,7 +739,6 @@ export default {
   },
   computed: {
     hasSelect() {
-      console.log(this.columns.length && this.columns[0].type === 'selection')
       return this.columns.length && this.columns[0].type === 'selection'
     },
     selectable() {
@@ -876,7 +875,6 @@ export default {
     getList({ loading = true } = {}) {
       const { url } = this
       if (!url) {
-        console.warn('DataTable: url 为空, 不发送请求')
         return
       }
 
@@ -954,9 +952,13 @@ export default {
           this.loading = false
         })
     },
-    search(attrs) {
+    search(attrs, reset) {
       // Orange 重置查询对象
-      this.innerQuery = merge(this.innerQuery, attrs)
+      if (reset) {
+        this.innerQuery = merge({}, attrs)
+      } else {
+        this.innerQuery = merge(this.innerQuery, attrs)
+      }
       return this.getList()
     },
     searchDate(attrs) {

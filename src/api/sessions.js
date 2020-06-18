@@ -45,14 +45,14 @@ export function getAllReplayStorage() {
 
 export function TestCommandStorage(id) {
   return request({
-    url: `api/v1/terminal/command-storages/${id}/test-connective/`,
+    url: `/api/v1/terminal/command-storages/${id}/test-connective/`,
     method: 'get'
   })
 }
 
 export function TestReplayStorage(id) {
   return request({
-    url: `api/v1/terminal/replay-storages/${id}/test-connective/`,
+    url: `/api/v1/terminal/replay-storages/${id}/test-connective/`,
     method: 'get'
   })
 }

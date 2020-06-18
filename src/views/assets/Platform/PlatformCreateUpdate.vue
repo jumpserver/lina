@@ -54,7 +54,6 @@ export default {
         }
       },
       performSubmit: function(formdata) {
-        console.log(formdata)
         var postData = {}
         if (formdata.base === 'Windows') {
           postData.meta = {}

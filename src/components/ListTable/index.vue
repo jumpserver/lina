@@ -2,7 +2,7 @@
   <div>
     <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <IBox class="table-content">
-      <AutoDataTable :key="iTableConfig.url" ref="dataTable" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
+      <AutoDataTable ref="dataTable" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
     </IBox>
   </div>
 </template>
@@ -12,6 +12,7 @@ import AutoDataTable from '../AutoDataTable'
 import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
+import deepmerge from 'deepmerge'
 export default {
   name: 'ListTable',
   components: {
@@ -36,19 +37,28 @@ export default {
     return {
       selectedRows: [],
       init: false,
-      iTableConfig: {
-        extraQuery: {
-          date_from: '',
-          date_to: ''
-        },
-        ...this.tableConfig
-      }
+      extraQuery: {}
     }
   },
   computed: {
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
+    },
+    iTableConfig() {
+      const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
+      this.$log.debug('ListTable: iTableConfig change', config)
+      return config
     }
+  },
+  watch: {
+    extraQuery: {
+      handler() {
+        this.$log.debug('ListTable: found extraQuery change')
+      },
+      deep: true
+    }
+  },
+  mounted() {
   },
   methods: {
     handleSelectionChange(val) {
@@ -58,18 +68,22 @@ export default {
       this.dataTable.getList()
     },
     search(attrs) {
-      return this.dataTable.search(attrs)
+      if (Object.keys(attrs).length > 0) {
+        return this.dataTable.search(attrs, true)
+      }
     },
     handleDateChange(attrs) {
-      console.log(attrs)
-      this.iTableConfig.extraQuery = {
-        date_from: attrs[0],
-        date_to: attrs[1]
+      this.$set(this.extraQuery, 'date_from', attrs[0].toISOString())
+      this.$set(this.extraQuery, 'date_to', attrs[1].toISOString())
+      // this.extraQuery = {
+      //   date_from: attrs[0].toISOString(),
+      //   date_to: attrs[1].toISOString()
+      // }
+      const query = {
+        date_from: attrs[0].toISOString(),
+        date_to: attrs[1].toISOString()
       }
-      return this.dataTable.searchDate({
-        date_from: attrs[0],
-        date_to: attrs[1]
-      })
+      return this.dataTable.searchDate(query)
     },
     toggleRowSelection(row, isSelected) {
       return this.dataTable.toggleRowSelection(row, isSelected)

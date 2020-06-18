@@ -1,5 +1,5 @@
 <template>
-  <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" @confirm="handleImportConfirm" @cancel="handleImportCancel()">
+  <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" :destroy-on-close="true" @confirm="handleImportConfirm" @cancel="handleImportCancel()">
     <el-form label-position="left" style="padding-left: 50px">
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
         <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
@@ -19,8 +19,8 @@
         <el-upload
           ref="upload"
           action="string"
-          :http-request="handleImport"
           list-type="text/csv"
+          :http-request="handleImport"
           :limit="1"
           :auto-upload="false"
           :before-upload="beforeUpload"
@@ -74,7 +74,8 @@ export default {
       return this.url
     },
     downloadImportTempUrl() {
-      return process.env.VUE_APP_BASE_API + this.url + '?format=csv&template=import&limit=1'
+      const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      return baseUrl + '?format=csv&template=import&limit=1'
     },
     uploadHelpTextClass() {
       const cls = ['el-upload__tip']
@@ -94,7 +95,7 @@ export default {
       this.$axios.put(
         this.upLoadUrl,
         item.file,
-        { headers: { 'Content-Type': 'text/csv' }, disableFlashMsg: true }
+        { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
         const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
         this.onSuccess(msg)
@@ -106,7 +107,7 @@ export default {
       this.$axios.post(
         this.upLoadUrl,
         item.file,
-        { headers: { 'Content-Type': 'text/csv' }, disableFlashMsg: true }
+        { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
         const msg = this.$t('common.imExport.createSuccessMsg', { count: data.length })
         this.onSuccess(msg)
@@ -161,7 +162,8 @@ export default {
         resources.push(data[index].id)
       }
       const spm = await createSourceIdCache(resources)
-      const url = process.env.VUE_APP_BASE_API + `${this.url}?format=csv&template=update&spm=` + spm.spm
+      const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
+      const url = `${baseUrl}?format=csv&template=update&spm=` + spm.spm
       return this.downloadCsv(url)
     },
     async handleImportConfirm() {

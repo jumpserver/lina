@@ -105,6 +105,9 @@ class StrategyPersistSelection extends StrategyAbstract {
     const { data, id, selected } = this.elDataTable
     data.forEach(r => {
       const isSelected = !!selected.find(r2 => r[id] === r2[id])
+      if (!this.elTable) {
+        return
+      }
       this.elTable.toggleRowSelection(r, isSelected)
     })
   }

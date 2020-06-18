@@ -1,12 +1,9 @@
 import axios from 'axios'
 import i18n from '@/i18n/i18n'
+import NProgress from 'nprogress' // progress bar
 
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import {
-  getToken,
-  getCurrentOrg
-} from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -20,10 +17,10 @@ function beforeRequestAddToken(config) {
     // let each request carry token
     // ['X-Token'] is a custom headers key
     // please modify it according to the actual situation
-    config.headers['X-CSRFToken'] = getToken()
-    if (getCurrentOrg().id !== '') {
-      config.headers['X-JMS-ORG'] = getCurrentOrg().id
-    }
+    config.headers['X-CSRFToken'] = store.getters.token
+  }
+  if (store.getters.currentOrg) {
+    config.headers['X-JMS-ORG'] = store.getters.currentOrg.id
   }
 }
 
@@ -39,6 +36,7 @@ function beforeRequestAddTimezone(config) {
 service.interceptors.request.use(
   config => {
     // do something before request is sent
+    NProgress.start()
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
     return config
@@ -51,10 +49,11 @@ service.interceptors.request.use(
 )
 
 function ifUnauthorized({ response, error }) {
-  if (response.status === 401) {
+  if (response.status === 401 && response.request.url.indexOf('/users/profile') !== -1) {
+    response.config.disableFlashErrorMsg = true
     // 未授权重定向到登录页面
-    const title = i18n.t('common.Info').String()
-    const msg = i18n.t('auth.LoginRequiredMsg').String()
+    const title = i18n.t('common.Info')
+    const msg = i18n.t('auth.LoginRequiredMsg')
     MessageBox.confirm(msg, title, {
       confirmButtonText: i18n.t('auth.ReLogin'),
       cancelButtonText: i18n.t('common.Cancel'),
@@ -65,10 +64,21 @@ function ifUnauthorized({ response, error }) {
   }
 }
 
-function flashErrorMsg({ response, error }) {
-  if (!response.config.disableFlashMsg) {
+function ifBadRequest({ response, error }) {
+  if (response.status === 400) {
+    error.message = i18n.t('common.BadRequestErrorMsg')
+  }
+}
+
+export function flashErrorMsg({ response, error }) {
+  if (!response.config.disableFlashErrorMsg) {
+    let msg = error.message
+    const data = response.data
+    if (data && (data.error || data.msg)) {
+      msg = data.error || data.msg
+    }
     Message({
-      message: error.message,
+      message: msg,
       type: 'error',
       duration: 5 * 1000
     })
@@ -88,6 +98,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    NProgress.done()
     const res = response.data
 
     if (response.config.raw === 1) {
@@ -96,12 +107,14 @@ service.interceptors.response.use(
     return res
   },
   error => {
+    NProgress.done()
     if (!error.response) {
       return Promise.reject(error)
     }
 
     const response = error.response
     ifUnauthorized({ response, error })
+    ifBadRequest({ response, error })
     flashErrorMsg({ response, error })
     return Promise.reject(error)
   }

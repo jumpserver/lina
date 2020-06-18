@@ -5,6 +5,7 @@
         <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
           <AutoDataZTree
             ref="AutoDataZTree"
+            :key="DataZTree"
             :setting="treeSetting"
             class="auto-data-ztree"
           />
@@ -22,16 +23,16 @@
                 <CodeMirror :options="codeMirrorOptions" @change="handleActionChange" />
               </div>
               <div style="display: flex;flex-direction: column ;justify-content: space-between">
-                <el-select v-model="selectedSystemUser" placeholder="请选择" @change="handleSystemUserChange">
+                <el-select v-model="selectedSystemUser" :placeholder="this.$t('ops.PleaseSelect')" @change="handleSystemUserChange">
                   <el-option
                     v-for="item in options"
                     :key="item.id"
-                    :disabled="item.protocol !== 'ssh'"
+                    :disabled="item.protocol !== 'ssh' && item.login_mode!== 'auto'"
                     :label="`${item.name}(${item.username})`"
                     :value="item.id"
                   />
                 </el-select>
-                <el-button type="primary" size="small" @click="execute">执行</el-button>
+                <el-button type="primary" size="small" @click="execute">{{ this.$t('ops.Execute') }}</el-button>
               </div>
             </div>
           </IBox>
@@ -47,6 +48,7 @@ import Term from '@/components/Term'
 import IBox from '@/components/IBox'
 import CodeMirror from '@/components/CodeMirror'
 import Page from '@/layout/components/Page'
+
 export default {
   name: 'CommandExecution',
   components: {
@@ -58,13 +60,14 @@ export default {
   },
   data() {
     return {
+      DataZTree: 0,
       codeMirrorOptions: {
         lineNumbers: true,
         lineWrapping: true,
         mode: 'shell'
       },
       treeSetting: {
-        treeUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=1',
+        treeUrl: '',
         showRefresh: true,
         showMenu: false,
         check: {
@@ -93,6 +96,7 @@ export default {
           onClick: this.onClick.bind(this)
         },
         async: {
+
           enable: false
         }
       },
@@ -114,10 +118,22 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('/api/v1/assets/system-users/').then(res => {
+    this.$axios.get('/api/v1/perms/system-users-permission/').then(res => {
+      if (res.length === 0) {
+        this.handleSystemUserChange('')
+        return
+      }
+      for (const i in res) {
+        // :disabled="item.protocol !== 'ssh'&& item.login_mode!=='auto'"
+        if (res[i].protocol === 'ssh' && res[i].login_mode === 'auto') {
+          this.handleSystemUserChange(res[i].id)
+          this.selectedSystemUser = res[i].id
+          break
+        }
+      }
       this.options = res
     })
-    this.xterm.write(`选择左侧资产, 选择运行的系统用户，批量执行命令`)
+    this.xterm.write(this.$t('ops.selectAssetsMessage'))
     this.enableWS()
   },
   methods: {
@@ -125,20 +141,20 @@ export default {
       this.actions = val
     },
     onClick(event, treeId, treeNode, clickFlag) {
-      console.log(event, treeId, treeNode, clickFlag)
-      if (treeNode.meta.type === 'asset') {
-        const protocolsStr = treeNode.meta.asset.protocols + ''
-        if (protocolsStr.indexOf('ssh/') === -1) {
-          // Don't Support SSH
-        }
-      }
+      // if (treeNode.meta.type === 'asset') {
+      //   const protocolsStr = treeNode.meta.asset.protocols + ''
+      //   if (protocolsStr.indexOf('ssh/') === -1) {
+      //     // Don't Support SSH
+      //   }
+      // }
     },
     handleSystemUserChange(id) {
       this.treeSetting.treeUrl = `${this.basicUrl}&system_user=${id}`
-      this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.initTree()
+      this.xterm.clear()
+      this.DataZTree++
     },
     getSelectedAssetsNode() {
-      const nodes = this.zTree.getCheckedNodes(true)
+      const nodes = this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
       const assetsNodeId = []
       const assetsNode = []
       nodes.forEach(function(node) {
@@ -157,10 +173,10 @@ export default {
       const nodes_names = nodes.map(function(node) {
         return node.name
       })
-      let message = `已选择资产:`
+      let message = this.$t('ops.selectedAssets')
       message += nodes_names.join(', ')
       message += '\r\n'
-      message += `总共：${nodes_names.length} 个\r\n`
+      message += this.$t('ops.inTotal') + `：${nodes_names.length} \r\n`
       this.xterm.clear()
       this.xterm.write(message)
     },
@@ -169,15 +185,11 @@ export default {
       const port = document.location.port ? ':' + document.location.port : ''
       const url = '/ws/ops/tasks/log/'
       const wsURL = scheme + '://' + document.location.hostname + port + url
-      const failOverPort = '8070'
-      const failOverWsURL = scheme + '://' + document.location.hostname + ':' + failOverPort + url
+      // const failOverPort = '8070'
+      // const failOverWsURL = scheme + '://' + document.location.hostname + ':' + failOverPort + url
       this.ws = new WebSocket(wsURL)
       this.ws.onerror = (e) => {
-        this.ws = new WebSocket(failOverWsURL)
-        this.setWsCallback()
-        this.ws.onerror = (e) => {
-          this.xterm.write(this.wrapperError('Connect websocket server error'))
-        }
+        this.xterm.write(this.wrapperError('Connect websocket server error'))
       }
       this.setWsCallback()
     },
@@ -188,28 +200,44 @@ export default {
       }
     },
     wrapperError(msg) {
-      return '\\033[31m' + msg + '\\033[0m\r\n'
+      return `\r\n${msg}\r\n`
+    },
+    writeExecutionOutput(taskId) {
+      let msg = this.$t('assets.Pending')
+      this.xterm.write(msg)
+      msg = JSON.stringify({ task: taskId })
+      this.ws.send(msg)
     },
     execute() {
-      // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
-      // const url = '{% url "api-ops:command-execution-list" %}?' + size
+      const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
+      const url = '/api/v1/ops/command-executions/?' + size
       const runAs = this.selectedSystemUser
-      // const command = editor.getValue()
+      const command = this.actions
       const hosts = this.getSelectedAssetsNode().map(function(node) {
         return node.id
       })
       if (hosts.length === 0) {
-        this.xterm.write(this.wrapperError("{% trans 'Unselected assets' %}"))
+        this.xterm.write(this.wrapperError(this.$t('assets.UnselectedAssets')))
         return
       }
-      // if (!command) {
-      //   this.xterm.write(this.wrapperError("{% trans 'No input command' %}"))
-      //   return
-      // }
+      if (!command) {
+        this.xterm.write(this.wrapperError(this.$t('assets.NoInputCommand')))
+        return
+      }
       if (!runAs) {
-        this.xterm.write(this.wrapperError("{% trans 'No system user was selected' %}"))
+        this.xterm.write(this.wrapperError(this.$t('assets.NoSystemUserWasSelected')))
         return
       }
+      const data = {
+        hosts: hosts,
+        run_as: runAs,
+        command: command
+      }
+      this.$axios.post(
+        url, data
+      ).then(res => {
+        this.writeExecutionOutput(res.id)
+      })
     }
   }
 }

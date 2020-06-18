@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import i18n from '@/i18n/i18n'
+import rolec from '@/utils/role'
 
 Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
 
-const requireContext = require.context('@/views/', true, /router\.js$/)
+const requireContext = require.context('@/views/xpack/', true, /router\.js$/)
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -34,6 +35,7 @@ import SessionsRoute from './sessions'
 import OpsRoutes from './ops'
 import TicketsRoutes from './tickets'
 import AuditsRoutes from './audits'
+import commonRoutes from './common'
 
 /**
  * constantRoutes
@@ -47,44 +49,35 @@ export const constantRoutes = [
     name: '404',
     component: () => import('@/views/404'),
     hidden: true
-  }
+  },
+  ...commonRoutes
 ]
 
 /**
- * admin and user routes
- * the routes that need to be dynamically loaded based on admin or user roles
+ * user routes
+ * the routes that need to be dynamically loaded based on user roles
  */
-export const commonRoutes = {
-  userProfile: {
-    path: '/users/profile',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        name: 'UserProfile',
-        component: () => import('@/userviews/users/UserProfile/index'),
-        meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
-      }
-    ]
-  }
-}
+// 权限路由
+import userPageRoutes from './userPage'
 
 /**
  * admin
  * the routes that need to be dynamically loaded based on admin roles
  */
-export const adminRoutes = [
-  Object.assign({}, commonRoutes.userProfile, { hidden: true }),
+export const allRoleRoutes = [
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    meta: {
+      permissions: [rolec.PERM_AUDIT]
+    },
     children: [
       {
         path: 'dashboard',
         name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
+        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard', permissions: [rolec.PERM_AUDIT] }
       }
     ]
   },
@@ -128,7 +121,7 @@ export const adminRoutes = [
     component: Layout,
     redirect: '/terminal/session-online/',
     name: 'Sessions',
-    meta: { title: i18n.t('route.Sessions'), icon: 'rocket' },
+    meta: { title: i18n.t('route.Sessions'), icon: 'rocket', permissions: [rolec.PERM_AUDIT] },
     children: SessionsRoute
   },
   {
@@ -140,17 +133,21 @@ export const adminRoutes = [
     children: OpsRoutes
   },
   {
+    name: 'Tickets',
     path: '/tickets/',
     component: Layout,
     redirect: '/tickets/tickets/',
-    children: TicketsRoutes
+    children: TicketsRoutes,
+    meta: {
+      licenseRequired: true
+    }
   },
   {
     path: '/audits/',
     component: Layout,
     redirect: '/audits/login-log/',
     name: 'Audits',
-    meta: { title: i18n.t('route.Audits'), icon: 'history' },
+    meta: { title: i18n.t('route.Audits'), icon: 'history', permissions: [rolec.PERM_AUDIT] },
     children: AuditsRoutes
   },
   ...requireContext.keys().map(key => requireContext(key).default),
@@ -158,26 +155,23 @@ export const adminRoutes = [
     path: '/settings',
     component: Layout,
     redirect: '/settings/',
-    children: [{
-      path: 'settings',
-      name: 'Settings',
-      component: () => import('@/views/settings/index'),
-      meta: { title: i18n.t('route.Settings'), icon: 'gears' }
-    }]
+    permissions: [rolec.PERM_SUPER],
+    children: [
+      {
+        path: '',
+        name: 'Settings',
+        component: () => import('@/views/settings/index'),
+        meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
+      }
+    ]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  ...userPageRoutes,
+  { path: '*', redirect: '/404', hidden: true, meta: { roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }}
 ]
-/**
- * user routes
- * the routes that need to be dynamically loaded based on user roles
- */
-// 权限路由
-export { default as userRoutes } from './userPage'
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  // mode: 'history',
   base: '/ui/',
   routes: constantRoutes
 })

@@ -64,7 +64,8 @@ export default {
         ]
       },
       headerActions: {
-        // hasBulkDelete: false,
+        hasBulkDelete: false,
+        hasMoreActions: false,
         createRoute: 'SystemUserCreate'
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')

@@ -1,19 +1,78 @@
 import {
-  adminRoutes,
-  userRoutes,
+  allRoleRoutes,
   constantRoutes
 } from '@/router'
+import rolec from '@/utils/role'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
  * @param route
  */
 function hasPermission(roles, route) {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
-  } else {
-    return true
+  let requirePerms = route.meta ? route.meta.permissions : null
+  if (!requirePerms) {
+    requirePerms = [rolec.PERM_ADMIN]
   }
+  const has = rolec.hasPerm(roles, requirePerms)
+  // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
+  return has
+}
+function hasLicense(licState, route) {
+  if (licState) {
+    return licState
+  }
+  let requireLic = route.meta ? route.meta.licenseRequired : null
+  if (!requireLic) {
+    requireLic = false
+  }
+  return licState === requireLic
+}
+
+function hasCommand(cmdState, route) {
+  if (cmdState) {
+    return cmdState
+  }
+  let requireCmd = route.meta ? route.meta.commandExecutionRequired : null
+  if (!requireCmd) {
+    requireCmd = false
+  }
+  return cmdState === requireCmd
+}
+
+export function filterLicRoutes(routes, roles) {
+  const res = []
+
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (hasLicense(roles, tmp)) {
+      if (tmp.children) {
+        tmp.children = filterLicRoutes(tmp.children, roles)
+      }
+      res.push(tmp)
+    }
+  })
+
+  return res
+}
+
+export function filterCmdRoutes(routes, roles) {
+  const res = []
+
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (hasCommand(roles, tmp)) {
+      if (tmp.children) {
+        tmp.children = filterCmdRoutes(tmp.children, roles)
+      }
+      res.push(tmp)
+    }
+  })
+
+  return res
 }
 
 /**
@@ -39,19 +98,6 @@ export function filterAsyncRoutes(routes, roles) {
   return res
 }
 
-export function filterNoneXpackRoutes(routes) {
-  const accessedRoutes = []
-  routes.forEach(route => {
-    const tmp = {
-      ...route
-    }
-    if (tmp.name !== 'Xpack') {
-      accessedRoutes.push(tmp)
-    }
-  })
-  return accessedRoutes
-}
-
 const state = {
   routes: [],
   addRoutes: []
@@ -60,24 +106,18 @@ const state = {
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
-    state.routes = constantRoutes.concat(routes)
+    state.routes = routes.concat(constantRoutes)
   }
 }
 
 const actions = {
-  generateRoutes(store, roles) {
+  generateRoutes({ commit, rootState }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('Admin')) {
-        accessedRoutes = adminRoutes || []
-        if (!store.rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID) {
-          console.log(store.rootState.settings.publicSettings)
-          accessedRoutes = filterNoneXpackRoutes(adminRoutes)
-        }
-      } else {
-        accessedRoutes = filterAsyncRoutes(userRoutes, roles)
-      }
-      store.commit('SET_ROUTES', accessedRoutes)
+      console.log(rootState)
+      let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
+      accessedRoutes = filterCmdRoutes(accessedRoutes, rootState.settings.publicSettings.SECURITY_COMMAND_EXECUTION)
+      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_ENABLED)
+      commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
   }

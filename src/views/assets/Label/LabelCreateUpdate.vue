@@ -16,16 +16,13 @@ export default {
 
       },
       fields: [
-        ['', ['name', 'value', 'assets']]
+        [this.$t('common.BasicInfo'), ['name', 'value', 'assets']]
       ],
       fieldsMeta: {
         assets: {
           type: 'assetSelect',
           component: AssetSelect,
-          label: '资产',
-          rules: [{
-            required: false
-          }]
+          label: this.$t('assets.Assets')
         }
       },
       url: '/api/v1/assets/labels/'

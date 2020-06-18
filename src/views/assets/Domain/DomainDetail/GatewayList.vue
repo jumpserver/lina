@@ -3,9 +3,8 @@
 </template>
 
 <script>
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
 import ListTable from '@/components/ListTable/index'
-
+import DisplayFormatter from '@/components/ListTable/formatters/DisplayFormatter'
 export default {
   components: {
     ListTable
@@ -20,40 +19,16 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('assets.Name'),
+        columns: ['name', 'ip', 'port', 'protocol', 'username', 'comment', 'actions'],
+        columnsMeta: {
+          name: {
+            sortable: 'custom',
+            formatter: DisplayFormatter
+          },
+          protocol: {
             sortable: 'custom'
           },
-          {
-
-            prop: 'ip',
-            label: this.$t('assets.ip')
-          },
-          {
-            prop: 'port',
-            label: this.$t('assets.Port')
-          },
-          {
-            prop: 'protocol',
-            label: this.$t('assets.Protocol'),
-            sortable: true
-          },
-          {
-            prop: 'username',
-            label: this.$t('assets.Username')
-          },
-          {
-            prop: 'comment',
-            label: this.$t('assets.Comment')
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: ActionsFormatter,
-            width: '200px',
+          actions: {
             formatterArgs: {
               updateRoute: 'GatewayUpdate',
               performDelete: ({ row, col }) => {
@@ -66,43 +41,32 @@ export default {
                   name: 'TestConnection',
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
-                    console.log(val)
+                    if (!val.row.port) {
+                      return this.$message.error(this.$t('common.BadRequestErrorMsg'))
+                    }
+                    this.$axios.post(`/api/v1/assets/gateways/${val.cellValue}/test-connective/`, { port: val.row.port }).then(
+                      res => {
+                        return this.$message.success(this.$t('common.TestSuccessMsg'))
+                      }
+                    )
                   }
                 }
               ]
             }
           }
-        ]
+
+        }
       },
       headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
         hasBulkDelete: false,
         hasSearch: true,
-        extraActions: [
-          {
-            name: 'actionCreate',
-            title: this.$t('common.Create'),
-            type: 'primary',
-            has: true,
-            can: true,
-            callback: this.createRoute.bind(this)
+        createRoute: {
+          name: 'GatewayCreate',
+          query: {
+            domain: this.object.id
           }
-        ],
-        hasCreate: false
-      }
-    }
-  },
-  methods: {
-    createRoute(val) {
-      this.$router.push({
-        name: 'GatewayCreate',
-        params: {
-          domainid: this.object.id
         }
-      })
+      }
     }
   }
 }

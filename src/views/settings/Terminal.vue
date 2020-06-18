@@ -71,12 +71,12 @@ export default {
           label: this.$t('setting.terminalAssetListPageSize'),
           type: 'select',
           options: [
-            { label: 'All', value: 'all' },
-            { label: 'Auto', value: 'auto' },
-            { label: '10', value: 10 },
-            { label: '15', value: 15 },
-            { label: '25', value: 25 },
-            { label: '50', value: 50 }
+            { label: this.$t('setting.all'), value: 'all' },
+            { label: this.$t('setting.auto'), value: 'auto' },
+            { label: '10', value: '10' },
+            { label: '15', value: '15' },
+            { label: '25', value: '25' },
+            { label: '50', value: '50' }
           ],
           rules: [
             { required: true }
@@ -85,7 +85,7 @@ export default {
         TERMINAL_SESSION_KEEP_DURATION: {
           label: this.$t('setting.terminalSessionKeepDuration'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.terminalSessionKeepDuration')
         },

@@ -4,8 +4,8 @@
     ref="form"
     :method="method"
     :form="form"
-    :fields="fields"
-    :url="totalUrl"
+    :url="iUrl"
+    :is-submitting="isSubmitting"
     v-bind="$attrs"
     v-on="$listeners"
     @submit="handleSubmit"
@@ -22,12 +22,6 @@ export default {
     url: {
       type: String,
       default: ''
-    },
-    fields: {
-      type: Array,
-      default: () => {
-        return []
-      }
     },
     object: {
       type: Object,
@@ -47,7 +41,9 @@ export default {
     },
     performSubmit: {
       type: Function,
-      default: null
+      default(validValues) {
+        return this.$axios[this.method](this.iUrl, validValues)
+      }
     },
     createSuccessMsg: {
       type: String,
@@ -75,6 +71,12 @@ export default {
         return { name: routeName }
       }
     },
+    getNextRoute: {
+      type: Function,
+      default(res, method) {
+        return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
+      }
+    },
     getMethod: {
       type: Function,
       default: function() {
@@ -96,23 +98,51 @@ export default {
         }
         return url
       }
+    },
+    onPerformSuccess: {
+      type: Function,
+      default(res, method, vm) {
+        const msg = method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
+        const route = this.getNextRoute(res, method)
+        this.$emit('submitSuccess', res)
+        this.$message.success(msg)
+        setTimeout(() => this.$router.push(route), 100)
+      }
+    },
+    onPerformError: {
+      type: Function,
+      default(error, method, vm) {
+        this.$emit('submitError', error)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          for (const key of Object.keys(data)) {
+            let value = data[key]
+            if (value instanceof Array) {
+              value = value.join(';')
+            }
+            this.$refs.form.setFieldError(key, value)
+          }
+        }
+      }
     }
   },
   data() {
     return {
       form: {},
-      loading: true
+      loading: true,
+      isSubmitting: false
     }
   },
   computed: {
     method() {
       return this.getMethod(this)
     },
-    totalUrl() {
+    iUrl() {
       return this.getUrl()
     }
   },
-  async mounted() {
+  async created() {
     this.loading = true
     try {
       const values = await this.getFormValue()
@@ -128,29 +158,12 @@ export default {
       values = this.cleanFormValue(values)
       return handler(values)
     },
-    defaultPerformSubmit(validValues) {
-      return this.$axios[this.method](this.totalUrl, validValues)
-    },
     defaultOnSubmit(validValues) {
-      const performSubmit = this.performSubmit || this.defaultPerformSubmit
-      const msg = this.method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
-      const route = this.method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
-      performSubmit(validValues).then(() => {
-        this.$message.success(msg)
-        this.$router.push(route)
-      }).catch(error => {
-        const response = error.response
-        const data = response.data
-        if (response.status === 400) {
-          for (const key of Object.keys(data)) {
-            let value = data[key]
-            if (value instanceof Array) {
-              value = value.join(';')
-            }
-            this.$refs.form.setFieldError(key, value)
-          }
-        }
-      })
+      this.isSubmitting = true
+      this.performSubmit(validValues)
+        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this))
+        .catch((error) => this.onPerformError(error, this.method, this))
+        .finally(() => { this.isSubmitting = false })
     },
     async getFormValue() {
       if (this.method !== 'put') {
@@ -159,11 +172,12 @@ export default {
       let object = this.object
       if (object === null) {
         object = await this.getObjectDetail()
+        this.$emit('update:object', object)
       }
       return object
     },
     async getObjectDetail() {
-      return this.$axios.get(this.totalUrl)
+      return this.$axios.get(this.iUrl)
     }
   }
 }

@@ -6,6 +6,10 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import UploadKey from '@/components/UploadKey'
 import { Select2 } from '@/components'
+
+// const asciiProtocols = ['ssh', 'telnet', 'mysql']
+const graphProtocols = ['vnc', 'rdp']
+
 export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -21,17 +25,16 @@ export default {
         sftp_root: 'tmp',
         sudo: '/bin/whoami',
         shell: '/bin/bash'
-
       },
       fields: [
         [this.$t('common.BasicInfo'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key', 'auto_push']],
+        [this.$t('common.Auth'), ['auto_push', 'auto_generate_key', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Others'), ['sftp_root', 'sudo', 'shell', 'comment']]
       ],
       fieldsMeta: {
         login_mode: {
-          helpText: '如果选择手动登录模式，用户名和密码可以不填写'
+          helpText: this.$t('assets.LoginModeHelpMessage')
         },
         username: {
           el: {
@@ -41,12 +44,20 @@ export default {
         private_key: {
           component: UploadKey,
           hidden: (form) => {
-            return form.login_mode !== 'auto'
+            if (form.login_mode !== 'auto') {
+              return true
+            }
+            if (!form.auto_push) {
+              return false
+            }
+            if (form.auto_generate_key) {
+              return true
+            }
           }
         },
         username_same_with_user: {
           type: 'switch',
-          helpText: '用户名是动态的，登录资产时使用当前用户的用户名登录',
+          helpText: this.$t('assets.UsernameHelpMessage'),
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
             return false
@@ -54,11 +65,16 @@ export default {
         },
         auto_generate_key: {
           type: 'switch',
+          label: this.$t('assets.AutoGenerateKey'),
           hidden: form => {
             if (JSON.stringify(this.$route.params) !== '{}') {
               return true
-            } else {
-              return form.login_mode !== 'auto'
+            }
+            if (form.login_mode !== 'auto') {
+              return true
+            }
+            if (!form.auto_push) {
+              return true
             }
           }
         },
@@ -72,18 +88,12 @@ export default {
         },
         cmd_filters: {
           component: Select2,
+          hidden: (form) => graphProtocols.indexOf(form.protocol) !== -1,
           el: {
             multiple: true,
             value: [],
             ajax: {
-              url: '/api/v1/assets/cmd-filters/',
-              processResults(data) {
-                const results = data.results.map((item) => {
-                  return { label: item.name, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/cmd-filters/'
             }
           }
         },
@@ -91,7 +101,7 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: '1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户'
+          helpText: this.$t('assets.PriorityHelpMessage')
         },
         auto_push: {
           type: 'switch',
@@ -101,19 +111,30 @@ export default {
           rules: [
             { required: true }
           ],
-          helpText: 'SFTP的起始路径，tmp目录, 用户home目录或者自定义'
+          helpText: this.$t('assets.SFTPHelpMessage'),
+          hidden: (item) => item.protocol !== 'ssh'
         },
         sudo: {
           rules: [
             { required: true }
           ],
-          helpText: '使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig'
+          helpText: this.$t('assets.SudoHelpMessage'),
+          hidden: (item) => item.protocol !== 'ssh'
         },
         password: {
           helpText: '密码或密钥密码',
-          hidden: form => form.auto_generate_key === true || form.login_mode !== 'auto'
+          hidden: form => {
+            if (form.login_mode !== 'auto') {
+              return true
+            }
+            if (!form.auto_push) {
+              return false
+            }
+            return form.auto_generate_key === true
+          }
         },
         shell: {
+          hidden: (item) => item.protocol !== 'ssh',
           rules: [
             { required: true }
           ]

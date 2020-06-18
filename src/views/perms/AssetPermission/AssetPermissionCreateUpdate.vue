@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import AssetPermissionFormActionField from './components/AssetPermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
 
 export default {
@@ -11,18 +12,29 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const nodesInitial = []
+    if (this.$route.query['node']) {
+      nodesInitial.push(this.$route.query.node)
+    }
+    const assetsInitial = []
+    if (this.$route.query['asset']) {
+      assetsInitial.push(this.$route.query.asset)
+    }
     return {
       initial: {
         is_active: true,
         actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
-        date_expired: '2099-12-31 00:00:00 +0800'
+        date_start: this.$moment().format('YYYY-MM-DD HH:mm:ss ZZ'),
+        date_expired: '2099-12-31 00:00:00 +0800',
+        nodes: nodesInitial,
+        assets: assetsInitial
       },
       fields: [
         [this.$t('perms.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
         [this.$t('common.action'), ['actions']],
-        [this.$t('common.Other'), ['is_active', 'date_expired', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       fieldsMeta: {
@@ -31,13 +43,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/users/users/?fields_size=mini',
-              processResults(data) {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }
           }
@@ -64,13 +71,8 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/assets/nodes/',
-              processResults(data) {
-                let results = data.results
-                results = results.map((item) => {
-                  return { label: item.full_value, value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
               }
             }
           }
@@ -80,27 +82,18 @@ export default {
             value: [],
             ajax: {
               url: '/api/v1/assets/system-users/',
-              processResults(data) {
-                let results = data.results
-                results = results.filter((item) => item.protocol !== 'mysql').map((item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }
           }
         },
         actions: {
           label: this.$t('perms.Actions'),
-          type: 'checkbox-group',
-          options: [
-            { label: 'all', value: this.$t('perms.all') },
-            { label: 'connect', value: this.$t('perms.connect') },
-            { label: 'updownload', value: this.$t('perms.upDownload') },
-            { label: 'upload_file', value: this.$t('perms.uploadFile') },
-            { label: 'download_file', value: this.$t('perms.downloadFile') }
-          ]
+          component: AssetPermissionFormActionField
+        },
+        date_start: {
+          label: this.$t('common.dateStart')
         },
         date_expired: {
           label: this.$t('common.dateExpired')

@@ -59,14 +59,6 @@ export default {
                   callback: function({ row, col, cellValue, reload }) {
                     window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
                   }
-                },
-                {
-                  name: 'favor',
-                  type: 'info',
-                  fa: 'fa-star-o',
-                  callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
-                  }
                 }
               ]
             }

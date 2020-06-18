@@ -4,25 +4,22 @@
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <QuickActions type="primary" :actions="quickActions" />
-      <RunInfoCard type="info" style="margin-top: 15px" v-bind="RunSuccessConfig" />
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
+      <RunInfoCard type="info" v-bind="RunSuccessConfig" style="margin-top: 15px" />
     </el-col>
   </el-row>
 </template>
 
-<script>
+<script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
-import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../RunInfoCard/index'
+import { toLastFailureDisplay, toLastSucessDisplay } from './business'
 
 export default {
   name: 'TaskDetail',
   components: {
     DetailCard,
-    RunInfoCard,
-    QuickActions
+    RunInfoCard
   },
   props: {
     object: {
@@ -31,38 +28,16 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
-      quickActions: [
-        {
-          title: this.$t('ops.laskExecutionOutput'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('ops.run')
-          },
-          callbacks: {
-            click: function() {
-              const taskId = vm.object.latest_execution.id
-              window.open(`/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
-            }
-          }
-        }
-      ],
       RunSuccessConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunSuccessHosts'),
-        content: {
-          hostname: 'linux',
-          result: 'api没有该数据==api没有该数据api没有该数据api没有该数据api没有该数据'
-        }
+        contents: toLastSucessDisplay(this.object.latest_execution)
       },
       RunFailedConfig: {
         icon: 'fa-info',
         title: this.$t('ops.lastRunFailedHosts'),
-        content: {
-          hostname: 'window',
-          result: 'api没有该数据api没有该数据api没有该数据api没有该数据api没有该数据'
-        }
+        contents: toLastFailureDisplay(this.object.latest_execution)
       },
       taskData: {}
     }
@@ -83,7 +58,7 @@ export default {
         },
         {
           key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          value: this.$d(new Date(this.object.date_created))
         },
         {
           key: this.$t('ops.totalVersions'),
@@ -92,14 +67,14 @@ export default {
         {
           key: this.$t('ops.latestVersion'),
           value: this.object.latest_execution,
-          callback: function(row, data) {
-            const url = `/ops/adhoc/${data.adhoc}`
-            return <a href={ url }>{ data.adhoc_short_id }</a>
+          formatter: function(row, data) {
+            const route = { to: { name: 'AdhocDetail', params: { id: data.adhoc }}}
+            return <router-link {...{ attrs: route }}>{ data.adhoc_short_id }</router-link>
           }
         },
         {
           key: this.$t('ops.lastRun'),
-          value: toSafeLocalDateStr(this.object.latest_execution.date_finished)
+          value: this.$d(new Date(this.object.latest_execution.date_finished))
         },
         {
           key: this.$t('ops.timeDelta'),
@@ -115,7 +90,25 @@ export default {
         },
         {
           key: this.$t('ops.contents'),
-          value: 'api 没有该数据'
+          value: this.toContentsDisplay(this.object.contents),
+          formatter(row, value) {
+            return (<div>{
+              value.map((content) => {
+                return <div>{ content }</div>
+              })}
+            </div>)
+          }
+        },
+        {
+          key: this.$t('ops.lastExecutionOutput'),
+          value: this.object.latest_execution.id,
+          formatter: function(row, value) {
+            const onClick = function() {
+              window.open(`/#/ops/celery/task/${value}/log/`, '', 'width=900,height=600')
+            }
+            const title = this.$t('common.View')
+            return <a onClick={onClick} >{ title }</a>
+          }
         }
       ]
     }
@@ -126,6 +119,14 @@ export default {
         return this.$t('ops.No')
       }
       return this.$t('ops.Yes')
+    },
+    toContentsDisplay(contents) {
+      const lines = []
+      for (let i = 0; i < contents.length; i++) {
+        const content = contents[i]
+        lines.push(`${i}. ${content.name} ::: ${content.action.module}`)
+      }
+      return lines
     }
   }
 }

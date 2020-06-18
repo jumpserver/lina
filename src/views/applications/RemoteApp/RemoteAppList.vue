@@ -1,8 +1,8 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
 </template>
 
-<script>
+<script type="text/jsx">
 import { GenericListPage } from '@/layout/components'
 import { REMOTE_APP_TYPE_META_MAP, ALL_TYPES } from './const'
 
@@ -13,6 +13,7 @@ export default {
   data() {
     const vm = this
     return {
+      helpMessage: this.$t('assets.RemoteAppListHelpMessage'),
       tableConfig: {
         url: '/api/v1/applications/remote-apps/',
         columns: [
@@ -24,7 +25,8 @@ export default {
           },
           asset: {
             formatter: function(row, column, cellValue, index) {
-              return <a class='detail el-link el-link--success is-underline' href={ `/assets/assets/${cellValue}` }>{ row.asset_info.hostname }</a>
+              const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
+              return <router-link{...{ attrs: route }} >{ row.asset_info.hostname }</router-link>
             }
           },
           actions: {

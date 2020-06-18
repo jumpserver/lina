@@ -1,10 +1,8 @@
 <template>
-  <TagSearch v-if="options !== []" :options="options" :config="defaultConfig" v-on="$listeners" />
+  <TagSearch :options="options" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script>
-const merge = require('deepmerge')
-// import { optionUrlMeta } from '@/api/common'
 import TagSearch from '@/components/TagSearch'
 export default {
   name: 'AutoDataSearch',
@@ -12,24 +10,17 @@ export default {
   props: {
     url: {
       type: String,
-      default: () => {}
+      default: ''
     },
-    config: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  data() {
-    return {
-      defaultConfig: {
-        expandTrigger: 'hover'
-      },
-      options: []
-    }
-  },
-  computed: {
-    iConfig() {
-      return this.config ? merge(this.defaultConfig, this.config) : this.defaultConfig
+    // 增加选项
+    options: {
+      type: Array,
+      default: () => []
+    },
+    // 排除选项
+    exclude: {
+      type: Array,
+      default: () => []
     }
   },
   watch: {
@@ -38,7 +29,9 @@ export default {
     }
   },
   mounted() {
-    this.genericOptions()
+    if (this.url) {
+      this.genericOptions()
+    }
   },
   methods: {
     async genericOptions() {
@@ -49,6 +42,9 @@ export default {
         if (!field.filter) {
           continue
         }
+        if (vm.exclude.includes(name)) {
+          continue
+        }
         const option = {
           label: field.label,
           value: name
@@ -57,6 +53,12 @@ export default {
           option.children = field.choices.map(item => {
             return { label: item.display_name, value: item.value }
           })
+        }
+        if (field.type === 'boolean') {
+          option.children = [
+            { label: this.$t('common.Yes'), value: true },
+            { label: this.$t('common.No'), value: false }
+          ]
         }
         vm.options.push(option)
       }

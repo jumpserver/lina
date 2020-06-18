@@ -92,21 +92,25 @@ export default {
       dialogVisible: false,
       dialogLdapUserImport: false,
       initialData: {},
-      selectFields: ['AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD', 'AUTH_LDAP_SEARCH_OU',
-        'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP', 'AUTH_LDAP'],
+      selectFields: [[this.$t('common.BasicInfo'), ['AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD', 'AUTH_LDAP_SEARCH_OU',
+        'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP', 'AUTH_LDAP']]],
       successUrl: { name: 'Settings', params: { activeMenu: 'Email' }},
       fieldsMeta: {
         AUTH_LDAP_SERVER_URI: {
           label: this.$t('setting.authLdapServerUri'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         AUTH_LDAP_BIND_DN: {
           label: this.$t('setting.authLdapBindDn')
         },
         AUTH_LDAP_BIND_PASSWORD: {
-          label: this.$t('setting.authLdapBindPassword')
+          label: this.$t('setting.authLdapBindPassword'),
+          type: 'input',
+          el: {
+            type: 'password'
+          }
         },
         AUTH_LDAP_SEARCH_OU: {
           label: this.$t('setting.authLdapSearchOu'),
@@ -115,7 +119,7 @@ export default {
         AUTH_LDAP_SEARCH_FILTER: {
           label: this.$t('setting.authLdapSearchFilter'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.authLdapSearchFilter')
         },
@@ -125,7 +129,7 @@ export default {
             type: 'textarea'
           },
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.authLdapUserAttrMap')
         },
@@ -143,18 +147,10 @@ export default {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
             testLdapSetting(value).then(resp => {
-              this.$notify({
-                message: resp,
-                type: 'success',
-                duration: 4500
-              })
+              this.$message.success(resp)
             }).catch(err => {
               const response = err.response
-              this.$notify({
-                message: response.data,
-                type: 'error',
-                duration: 4500
-              })
+              this.$message.error(response.data)
             })
           }.bind(this)
         },
@@ -168,7 +164,6 @@ export default {
           title: this.$t('setting.ldapBulkImport'),
           callback: function(value, form) {
             this.dialogLdapUserImport = true
-            this.$refs.listTable.reloadTable()
           }.bind(this)
         }
       ],
@@ -197,12 +192,7 @@ export default {
             can: true,
             callback: function() {
               refreshLdapUserCache().then(res => {
-                this.$notify({
-                  message: res.msg,
-                  type: 'success',
-                  duration: 4500
-                })
-                setTimeout(this.$refs.listTable.reloadTable, 500)
+                this.$message.success(res.msg)
               })
             }.bind(this)
           }
@@ -234,18 +224,10 @@ export default {
     },
     testUerLoginClick() {
       testLdapUserLogin(this.userLoginForm).then(res => {
-        this.$notify({
-          message: res,
-          type: 'success',
-          duration: 4500
-        })
+        this.$message.success(res)
       }).catch(err => {
         const response = err.response
-        this.$notify({
-          message: response.data,
-          type: 'error',
-          duration: 4500
-        })
+        this.$message.error(response.data)
       })
     },
     importUserClick() {
@@ -255,22 +237,12 @@ export default {
         username_list: selectIds
       }
       importLdapUser(data).then(res => {
-        this.$notify({
-          message: res.msg,
-          type: 'success',
-          duration: 4500
-        })
+        this.$message.success(res.msg)
       })
     },
     handlerListTableXHRError(errMsg) {
-      const response = errMsg.response
       if (this.dialogLdapUserImport) {
-        this.$notify({
-          message: response.data.msg,
-          type: 'error',
-          duration: 4500
-        })
-        setTimeout(this.$refs.listTable.reloadTable, 1000)
+        setTimeout(this.$refs.listTable.reloadTable, 3000)
       }
     }
   }

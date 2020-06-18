@@ -24,7 +24,7 @@ import '@/permission' // permission control
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
   const { mockXHR } = require('../mock')
   mockXHR()
 }
@@ -39,7 +39,9 @@ Vue.config.productionTip = false
 // cookie
 import VueCookie from 'vue-cookie'
 Vue.use(VueCookie)
-
+window.$cookie = VueCookie
+import VueMoment from 'vue-moment'
+Vue.use(VueMoment)
 // logger
 import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'

@@ -1,10 +1,11 @@
 <template>
-  <DataTable ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
+  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
+import i18n from '@/i18n/i18n'
 export default {
   name: 'AutoDataTable',
   components: {
@@ -20,15 +21,25 @@ export default {
     return {
       loading: true,
       method: 'get',
+      autoConfig: {},
       iConfig: {},
       meta: {}
     }
   },
-  mounted() {
+  watch: {
+    config: {
+      handler(iNew) {
+        this.optionUrlMetaAndGenCols()
+        this.$log.debug('AutoDataTable Config change found')
+      },
+      deep: true
+    }
+  },
+  created() {
     this.optionUrlMetaAndGenCols()
   },
   methods: {
-    optionUrlMetaAndGenCols() {
+    async optionUrlMetaAndGenCols() {
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
@@ -48,7 +59,7 @@ export default {
         case 'actions':
           col = {
             prop: 'id',
-            label: this.$t('common.Actions'),
+            label: i18n.t('common.Actions'),
             align: 'center',
             width: '150px',
             formatter: ActionsFormatter,
@@ -56,7 +67,7 @@ export default {
           }
           break
         case 'is_valid':
-          col.label = this.$t('common.Validity')
+          col.label = i18n.t('common.Validity')
           col.formatter = BooleanFormatter
           col.align = 'center'
           col.width = '80px'
@@ -81,6 +92,9 @@ export default {
           col.align = 'center'
           col.width = '80px'
           break
+        case 'datetime':
+          col.formatter = DateFormatter
+          col.width = '160px'
       }
       return col
     },
@@ -115,9 +129,9 @@ export default {
       return col
     },
     generateColumns() {
-      const config = Object.assign({}, this.config)
+      const config = _.cloneDeep(this.config)
       const columns = []
-      for (let col of this.config.columns) {
+      for (let col of config.columns) {
         if (typeof col === 'object') {
           columns.push(col)
         } else if (typeof col === 'string') {
@@ -125,7 +139,8 @@ export default {
           columns.push(col)
         }
       }
-      this.iConfig = Object.assign(config, { columns: columns })
+      config.columns = columns
+      this.iConfig = config
     }
   }
 }

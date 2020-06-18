@@ -29,7 +29,9 @@ export default {
             label: this.$t('assets.Rules'),
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'CommandFilterDetail',
+              routeQuery: {
+                activeTab: 'rules'
+              },
               getTitle: ({ cellValue }) => cellValue.length
             }
           },
@@ -74,6 +76,7 @@ export default {
         hasRefresh: true,
         hasBulkDelete: false,
         hasSearch: true,
+        hasMoreActions: false,
         createRoute: 'CommandFilterCreate'
       }
     }

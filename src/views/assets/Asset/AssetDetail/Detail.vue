@@ -5,7 +5,8 @@
     </el-col>
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeReletionConfig" />
+      <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <LabelCard type="warning" style="margin-top: 15px" v-bind="labelConfig" />
     </el-col>
   </el-row>
 </template>a
@@ -14,6 +15,7 @@
 import DetailCard from '@/components/DetailCard'
 import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
+import LabelCard from './components/LabelCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
@@ -21,7 +23,8 @@ export default {
   components: {
     DetailCard,
     QuickActions,
-    RelationCard
+    RelationCard,
+    LabelCard
   },
   props: {
     object: {
@@ -42,7 +45,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `api/v1/assets/assets/${this.object.id}/`,
+                `/api/v1/assets/assets/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
@@ -64,7 +67,7 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/tasks/`,
                 { action: 'refresh' }
               ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
             }.bind(this)
@@ -82,7 +85,7 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
-                window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
               }
               )
             }.bind(this)
@@ -107,18 +110,13 @@ export default {
         //   }
         // }
       ],
-      nodeReletionConfig: {
+      nodeRelationConfig: {
         icon: 'fa-info',
         title: this.$t('assets.Node'),
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.full_value, value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
           }
         },
         hasObjectsId: this.object.nodes,
@@ -132,11 +130,7 @@ export default {
           items.map(v => {
             newData.push(v.value)
           })
-          return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.patch(relationUrl, { nodes: newData })
         },
         performDelete: (item) => {
           const itemId = item.value
@@ -148,12 +142,12 @@ export default {
             }
           })
           const relationUrl = `/api/v1/assets/assets/${this.object.id}/`
-          return this.$axios.patch(relationUrl, { nodes: newData }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-          }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-          })
+          return this.$axios.patch(relationUrl, { nodes: newData })
         }
+      },
+      labelConfig: {
+        title: this.$t('assets.Label'),
+        labels: this.object.labels
       }
     }
   },
@@ -178,7 +172,7 @@ export default {
         },
         {
           key: this.$t('assets.AdminUser'),
-          value: this.object.admin_user
+          value: this.object.admin_user_display
         },
         {
           key: this.$t('assets.Domain'),

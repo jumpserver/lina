@@ -1,8 +1,8 @@
 <template>
-  <pre style="border: none; background: none; white-space: pre-wrap">
-      {{ '$ '+ row.input }}
-      <br>
-      {{ row.output }}
+  <pre style="border: none; background: none; white-space: pre-wrap;padding: 10px 20px">
+{{ '$ '+ row.input }}
+<br>
+{{ row.output }}
   </pre>
 </template>
 

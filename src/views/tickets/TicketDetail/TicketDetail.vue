@@ -108,13 +108,7 @@ export default {
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: this.comments,
-          callback: function(row, data) {
-            if (data.length !== 0) {
-              return <span>{data[0].user_display}</span>
-            }
-            return <span></span>
-          }
+          value: this.object.assignee_display
         },
         {
           key: this.$t('common.dateCreated'),

@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" />
+  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" />
 </template>
 
 <script>
@@ -13,12 +13,24 @@ const defaultPerformDelete = function({ row, col }) {
 }
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
-  const routeName = this.colActions.updateRoute
-  this.$router.push({ name: routeName, params: { id: id }})
+  let route = { params: { id: id }}
+  const updateRoute = this.colActions.updateRoute
+
+  if (typeof updateRoute === 'object') {
+    route = Object.assign(route, updateRoute)
+  } else {
+    route.name = updateRoute
+  }
+  this.$router.push(route)
 }
 
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
-  const msg = this.$t('common.deleteWarningMsg') + ' "' + row.name + '"'
+  let msg = this.$t('common.deleteWarningMsg')
+  const name = row.name || row.hostname
+  if (name) {
+    msg += ` "${name}" `
+  }
+  msg += ' ?'
   const title = this.$t('common.Info')
   const performDelete = this.colActions.performDelete
   this.$alert(msg, title, {
@@ -34,7 +46,9 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         reload()
         this.$message.success(this.$t('common.deleteSuccessMsg'))
       } catch (error) {
-        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+        if (!error.response || !error.response.data || !error.response.data.msg) {
+          this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+        }
       } finally {
         instance.confirmButtonLoading = false
       }
@@ -89,7 +103,8 @@ export default {
     return {
       colActions: colActions,
       defaultActions: defaultActions,
-      extraActions: colActions.extraActions
+      extraActions: colActions.extraActions,
+      moreActionsTitle: colActions.moreActionsTitle || this.$t('common.More')
     }
   },
   computed: {

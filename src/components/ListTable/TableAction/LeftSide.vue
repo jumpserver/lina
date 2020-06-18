@@ -24,7 +24,7 @@ export default {
       default: ''
     },
     createRoute: {
-      type: String,
+      type: [String, Object],
       default: function() {
         return this.$route.name.replace('List', 'Create')
       }
@@ -112,8 +112,13 @@ export default {
   },
   methods: {
     handleCreate() {
-      const routeName = this.createRoute
-      this.$router.push({ name: routeName })
+      let route = {}
+      if (typeof this.createRoute === 'string') {
+        route.name = this.createRoute
+      } else {
+        route = this.createRoute
+      }
+      this.$router.push(route)
       this.$log.debug('handle create')
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {

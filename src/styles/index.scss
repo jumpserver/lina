@@ -135,3 +135,16 @@ h4 {
 .el-dialog__body {
   padding-top: 10px;
 }
+
+.help-block {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: #737373;
+  font-size: 13px
+}
+
+input[type=file] {
+  font-size: 12px;
+  opacity: 80;
+}

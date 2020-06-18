@@ -4,10 +4,10 @@
     v-model="iValue"
     v-loadmore="loadMore"
     :options="iOptions"
+    :remote="remote"
     :remote-method="filterOptions"
     :multiple="multiple"
     filterable
-    remote
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
@@ -96,7 +96,8 @@ export default {
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
-      initialOptions: []
+      initialOptions: [],
+      remote: true
     }
   },
   computed: {
@@ -120,11 +121,13 @@ export default {
         delete params['pageSize']
         return params
       }
+      const defaultTransformOption = (item) => {
+        return { label: item.name, value: item.id }
+      }
+      const transformOption = this.ajax.transformOption || defaultTransformOption
       const defaultProcessResults = (data) => {
         let results = data.results
-        results = results.map((item) => {
-          return { label: item.name, value: item.id }
-        })
+        results = results.map(transformOption)
         const more = !!data.next
         const total = data.count
         return { results: results, pagination: more, total: total }
@@ -133,6 +136,7 @@ export default {
         url: '',
         pageSize: defaultPageSize,
         makeParams: defaultMakeParams,
+        transformOption: defaultTransformOption,
         processResults: defaultProcessResults
       }
       return Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {})
@@ -147,20 +151,27 @@ export default {
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
+    },
+    value(iNew) {
+      this.iValue = iNew
     }
   },
   mounted() {
-    this.$log.debug('Select2 url is: ', this.iAjax.url)
+    // this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
       this.initialSelect()
       this.initialized = true
     }
+    this.$nextTick(() => {
+      // 因为elform存在问题，这个来清楚验证
+      const elFormItem = this.$refs.select.elFormItem
+      if (elFormItem && elFormItem.clearValidate) {
+        elFormItem.clearValidate()
+      }
+    })
   },
   methods: {
     async loadMore(load) {
-      if (this.loading) {
-        return
-      }
       if (!this.params.hasMore) {
         return
       }
@@ -170,11 +181,8 @@ export default {
       if (!load) {
         load = defaultLoad
       }
-      try {
-        await load()
-      } finally {
-        this.loading = false
-      }
+      await load()
+      this.loading = false
     },
     resetParams() {
       this.params = _.cloneDeep(this.defaultParams)
@@ -192,7 +200,6 @@ export default {
     },
     async getInitialOptions() {
       const params = this.safeMakeParams(this.params)
-      this.$log.debug('Get initial options: ', params)
       let data = await this.$axios.get(this.iAjax.url, { params: params })
       data = this.iAjax.processResults.bind(this)(data)
       data.results.forEach((v) => {
@@ -206,6 +213,7 @@ export default {
         this.$emit('loadInitialOptionsDone', this.initialOptions)
         this.params.hasMore = false
         this.resetParams()
+        return true
       } else {
         await this.loadMore(this.getInitialOptions)
       }
@@ -224,7 +232,7 @@ export default {
       })
     },
     async initialSelect() {
-      this.$log.debug('Select ajax config', this.iAjax)
+      // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
         if (this.value && this.value.length !== 0) {
           this.$log.debug('Start init select2 value')
@@ -234,6 +242,9 @@ export default {
         }
         this.$log.debug('Start get select2 options')
         await this.getOptions()
+        if (this.iOptions.length === 0) {
+          this.remote = false
+        }
       }
       this.iValue = this.value
     },
@@ -266,6 +277,7 @@ export default {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options)
       this.$emit('changeOptions', options)
+      this.$emit('change', options)
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {

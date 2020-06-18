@@ -20,40 +20,28 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/perms/database-app-permissions/?user_id=${this.object.id}&draw=1`,
-        columns: ['name', 'users', 'user_groups', 'database_apps', 'system_users', 'is_valid', 'actions'],
+        columns: ['name', 'users_amount', 'user_groups_amount', 'database_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
           name: {
             formatterArgs: {
-              route: 'DatabasePermissionDetail'
+              route: 'DatabaseAppPermissionDetail'
             }
           },
-          users: {
-            label: this.$t('users.Users'),
-            formatter(row, col, colValue) {
-              return colValue.length
-            }
+          users_amount: {
+            label: this.$t('users.Users')
           },
-          user_groups: {
-            label: this.$t('users.UserGroups'),
-            formatter(row, col, colValue) {
-              return colValue.length
-            }
+          user_groups_amount: {
+            label: this.$t('users.UserGroups')
           },
-          database_apps: {
-            label: this.$t('assets.RemoteApps'),
-            formatter(row, col, colValue) {
-              return colValue.length
-            }
+          database_apps_amount: {
+            label: this.$t('assets.RemoteApps')
           },
-          system_users: {
-            label: this.$t('assets.SystemUsers'),
-            formatter(row, col, colValue) {
-              return colValue.length
-            }
+          system_users_amount: {
+            label: this.$t('assets.SystemUsers')
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'DatabasePermissionUpdate'
+              updateRoute: 'DatabaseAppPermissionUpdate'
             }
           }
         }

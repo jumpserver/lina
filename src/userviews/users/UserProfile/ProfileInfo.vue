@@ -9,7 +9,7 @@
   </el-row>
 </template>a
 
-<script>
+<script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
@@ -40,10 +40,10 @@ export default {
             click: function() {
               if (this.object.mfa_enabled) {
                 if (!this.object.mfa_force_enabled) {
-                  window.location.href = `/core/users/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
+                  window.location.href = `/core/auth/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
                 }
               } else {
-                window.location.href = `/core/users/profile/otp/enable/start/?next=${this.$route.fullPath}`
+                window.location.href = `/core/auth/profile/otp/enable/start/?next=${this.$route.fullPath}`
               }
             }.bind(this)
           }
@@ -56,7 +56,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.location.href = `/core/users/profile/otp/update/?next=${this.$route.fullPath}`
+              window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
             }.bind(this)
           }
         },
@@ -68,7 +68,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              window.open(`/core/users/profile/pubkey/generate/`, '_blank')
+              window.open(`/core/auth/profile/pubkey/generate/`, '_blank')
             }
           }
         }
@@ -99,8 +99,13 @@ export default {
           key: this.$t('users.IsActive')
         },
         {
-          value: `${this.object.public_key_comment} ${this.object.public_key_hash_md5}`,
-          key: 'SSHKey'
+          value: this.object,
+          key: 'SSHKey',
+          formatter: (item, val) => {
+            const comment = val.public_key_comment
+            const md5 = val.public_key_hash_md5
+            return <span>{ comment } <br /> { md5 }</span>
+          }
         },
         {
           value: this.object.mfa_level_display,
@@ -136,9 +141,6 @@ export default {
         }
       ]
     }
-  },
-  mounted() {
-    console.log(this.object)
   },
   methods: {
   }

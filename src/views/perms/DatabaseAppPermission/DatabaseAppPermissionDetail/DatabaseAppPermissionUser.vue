@@ -1,11 +1,11 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="userReletionConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="groupReletionConfig" />
+      <RelationCard type="primary" v-bind="userRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="groupRelationConfig" />
     </el-col>
   </el-row>
 
@@ -55,22 +55,23 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: false,
-        hasLeftActions: false,
-        hasRightActions: false
+        hasSearch: true,
+        hasRefresh: true,
+        hasLeftActions: true,
+        hasRightActions: true,
+        hasExport: false,
+        hasImport: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false
       },
-      userReletionConfig: {
+      userRelationConfig: {
         icon: 'fa-user',
         title: this.$t('perms.addUserToThisPermission'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini',
-          processResults(data) {
-            let results = data.results
-            results = results.map((item) => {
-              return { label: item.name + '(' + item.username + ')', value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
           }
         },
         hasObjectsId: this.object.users,
@@ -91,10 +92,10 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       },
-      groupReletionConfig: {
+      groupRelationConfig: {
         icon: 'fa-group',
         title: this.$t('perms.addUserGroupToThisPermission'),
         objectsAjax: {
@@ -117,7 +118,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
           const objectId = this.object.id
@@ -134,7 +135,7 @@ export default {
             that.select2.disabledValues.splice(i, 1)
           }
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          setTimeout(() => location.reload(), 300)
+          this.$refs.ListTable.reloadTable()
         }
       }
     }

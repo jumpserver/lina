@@ -60,7 +60,7 @@ function cleanDateStr(d) {
     }
     switch (i) {
       case 0:
-        d = d.replaceAll('-', '/')
+        d = d.split('/').join('-')
         break
       case 1:
         d = d.split('+')[0].trimRight()
@@ -72,9 +72,9 @@ function cleanDateStr(d) {
 
 export function toSafeLocalDateStr(d) {
   const date = safeDate(d)
-  // var date_s = date.toLocaleString(getUserLang(), {hour12: false});
+  // let date_s = date.toLocaleString(getUserLang(), {hour12: false});
   const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
-  return date_s.split('/').join('-')
+  return date_s
 }
 
 export function getApiPath(that) {
@@ -117,9 +117,43 @@ export function formatDate(inputTime) {
   let h = date.getHours()
   h = h < 10 ? ('0' + h) : h
   let minute = date.getMinutes()
-  // let second = date.getSeconds()
+  let second = date.getSeconds()
   minute = minute < 10 ? ('0' + minute) : minute
-  // second = second < 10 ? ('0' + second) : second
+  second = second < 10 ? ('0' + second) : second
   // return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
-  return y + '-' + m + '-' + d + 'T' + h + ':' + minute
+  return y + '-' + m + '-' + d + 'T' + h + ':' + minute + ':' + second
+}
+
+const uuidPattern = /[0-9a-zA-Z\-]{36}/
+export function hasUUID(s) {
+  return s.search(uuidPattern) !== -1
+}
+
+export function getDaysAgo(days, now) {
+  if (!now) {
+    now = new Date()
+  }
+  return new Date(now.getTime() - 3600 * 1000 * 24 * days)
+}
+
+export function setUrlParam(url, name, value) {
+  const urlArray = url.split('?')
+  if (urlArray.length === 1) {
+    url += '?' + name + '=' + value
+  } else {
+    const oriParam = urlArray[1].split('&')
+    const oriParamMap = {}
+    oriParam.forEach(function(value, index) {
+      const v = value.split('=')
+      oriParamMap[v[0]] = v[1]
+    })
+    oriParamMap[name] = value
+    url = urlArray[0] + '?'
+    const newParam = []
+    for (const [key, value] of Object.entries(oriParamMap)) {
+      newParam.push(key + '=' + value)
+    }
+    url += newParam.join('&')
+  }
+  return url
 }

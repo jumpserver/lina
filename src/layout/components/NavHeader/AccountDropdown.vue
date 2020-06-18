@@ -8,12 +8,14 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <el-dropdown-item v-if="CheckPermission && CheckRules " icon="el-icon-guide" command="UserPage">{{
-          $t('common.nav.UserPage') }}
-        </el-dropdown-item>
-        <el-dropdown-item v-if="!CheckPermission && CheckRules " icon="el-icon-guide" command="AdminPage">{{
-          $t('common.nav.AdminPage') }}
-        </el-dropdown-item>
+        <div v-if="currentOrgRoles.length > 1 || hasAdminOrg ">
+          <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">
+            {{ $t('common.nav.UserPage') }}
+          </el-dropdown-item>
+          <el-dropdown-item v-else icon="el-icon-guide" command="adminPage">
+            {{ $t('common.nav.AdminPage') }}
+          </el-dropdown-item>
+        </div>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
@@ -25,7 +27,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
-import { getPermission, setPermission } from '@/utils/auth'
+import rolec from '@/utils/role'
+import orgUtil from '@/utils/org'
 
 export default {
   name: 'AccountDropdown',
@@ -39,16 +42,31 @@ export default {
     }
   },
   computed: {
-    CheckPermission() {
-      return getPermission() === 'Admin'
-    },
-    CheckRules() {
-      return this.getCurrentOrgRoles.includes('Admin')
-    },
     ...mapGetters([
       'currentUser',
-      'getCurrentOrgRoles'
-    ])
+      'currentRole',
+      'currentOrgRoles',
+      'userAdminOrgList',
+      'currentOrgPerms'
+    ]),
+    isInAdminRole() {
+      const inAdmin = rolec.hasPerm(rolec.ADMIN_PAGE_REQUIRE_PERM_MIN, this.currentRole)
+      return inAdmin
+    },
+    hasAdminOrg() {
+      return this.userAdminOrgList.length > 0
+    },
+    adminPageRequirePerm() {
+      return rolec.PERM_SUPER | rolec.PERM_ADMIN | rolec.PERM_AUDIT
+    },
+    hasCurrentOrgAdminPagePerm() {
+      // 只有有一个权限就可以
+      return rolec.hasAdminPagePerm(this.currentOrgPerms)
+    },
+    currentOrgUsePagePerm() {
+      const userPageRequireRole = rolec.PERM_USE
+      return userPageRequireRole & this.currentOrgPerms
+    }
   },
   methods: {
     handleClick(val) {
@@ -56,20 +74,36 @@ export default {
         case 'profile':
           this.$router.push({ name: 'UserProfile' })
           break
-        case 'AdminPage':
-          setPermission('Admin')
-          window.location.href = `/`
+        case 'adminPage':
+          if (this.hasCurrentOrgAdminPagePerm) {
+            const currentRole = rolec.getUserInAdminPagePerm(this.currentOrgPerms)
+            this.$store.dispatch('users/setCurrentRole', currentRole)
+            window.location.href = `/ui/`
+          } else {
+            orgUtil.change2PropOrg()
+          }
           break
-        case 'UserPage':
-          setPermission('User')
-          window.location.href = `/`
+        case 'userPage':
+          if (this.currentOrgUsePagePerm) {
+            this.$store.dispatch('users/setCurrentRole', rolec.USER)
+            console.log('Switch to: ', rolec.USER)
+            window.location.href = `/ui/`
+          }
           break
         case 'logout':
-          window.location.href = `/core/auth/logout/?next=${this.$route.fullPath}`
+          this.logout()
+          window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
           break
         case 'apiKey':
           this.$refs.api.showApi()
           break
+      }
+    },
+    logout() {
+      // Clean Status
+      const statusList = ['currentOrg', 'currentRole', 'jms_current_org', 'jms_current_role', 'sidebarStatus', 'django_language', 'X-JMS-ORG', 'activeTab']
+      for (const i in statusList) {
+        this.$cookie.delete(statusList[i])
       }
     }
   }

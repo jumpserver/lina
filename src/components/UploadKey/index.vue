@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <input type="file" @change="Onchange">
+  <div class="upload-key">
+    <input type="file" @change="onChange">
     <div v-if="tip !== ''">{{ tip }}</div>
   </div>
 </template>
@@ -19,8 +19,10 @@ export default {
     }
   },
   methods: {
-    Onchange(e) {
-      // TODO 校验文件类型
+    onChange(e) {
+      if (e.target.files.length === 0) {
+        return
+      }
       const vm = this
       const reader = new FileReader()
       reader.onload = function() {
@@ -35,5 +37,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

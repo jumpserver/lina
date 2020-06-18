@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
@@ -15,51 +15,26 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columns: [
-          {
-            prop: 'name',
-            label: this.$t('assets.Name'),
-            formatter: DetailFormatter,
-            sortable: true,
-            formatterArgs: {
-              route: 'DomainDetail'
-            }
-          },
-          {
-            prop: 'asset_count',
+          'name', 'asset_count', 'gateway_count', 'comment', 'actions'
+        ],
+        columnsMeta: {
+          asset_count: {
             label: this.$t('assets.Assets')
           },
-          {
-            prop: 'gateway_count',
-            label: this.$t('assets.Gateway')
-          },
-          {
-            prop: 'comment',
-            label: this.$t('assets.Comment'),
-            sortable: 'custom'
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: ActionsFormatter,
-            width: '200px',
+          gateway_count: {
+            label: this.$t('assets.Gateway'),
+            formatter: DetailFormatter,
             formatterArgs: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/assets/domains/${id}/`
-                return this.$axios.delete(url)
+              routeQuery: {
+                activeTab: 'GatewayList'
               }
             }
           }
-        ]
+        }
       },
       headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
         hasBulkDelete: false,
-        hasSearch: false,
+        hasMoreActions: false,
         createRoute: 'DomainCreate'
       },
       notice: this.$t('assets.DomainHelpMessage')

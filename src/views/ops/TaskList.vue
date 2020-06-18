@@ -21,17 +21,18 @@ export default {
           },
           runtimes: {
             label: this.$t('ops.runTimes'),
+            width: '120px',
             formatter: function(row) {
-              const summary = <div>
-                <span class='text-primary'>{row.summary.success}</span>/
-                <span class='text-danger'>{row.summary.failed}</span>/
+              return (<div>
+                <span Class='text-primary'>{row.summary.success}</span>/
+                <span Class='text-danger'>{row.summary.failed}</span>/
                 <span>{row.summary.total}</span>
-              </div>
-              return summary
+              </div>)
             }
           },
           host_amount: {
             label: this.$t('ops.hosts'),
+            width: '50px',
             formatter: function(row) {
               return row.latest_execution.hosts_amount
             }
@@ -42,19 +43,21 @@ export default {
             width: '80px',
             formatter: row => {
               if (row.latest_execution.is_success) {
-                return <i class='fa fa-check text-primary'/>
+                return <i Class='fa fa-check text-primary'/>
               }
-              return <i class='fa fa-times text-danger'/>
+              return <i Class='fa fa-times text-danger'/>
             }
           },
           date_start: {
             label: this.$t('ops.date'),
+            width: '140px',
             formatter: function(row) {
               return toSafeLocalDateStr(row.latest_execution.date_start)
             }
           },
           time: {
             label: this.$t('ops.time'),
+            width: '140px',
             formatter: function(row) {
               return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
             }
@@ -72,7 +75,7 @@ export default {
                     this.$axios.get(
                       `/api/v1/ops/tasks/${cellValue}/run/`
                     ).then(res => {
-                      window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })
                   }
                 }

@@ -34,19 +34,6 @@ export default {
   },
   data() {
     return {
-      LANG_COOKIE_NAME: 'django_language',
-      supportLanguages: [
-        {
-          title: '中文(简体)',
-          code: 'cn',
-          cookieCode: 'zh-hans'
-        },
-        {
-          title: 'English',
-          code: 'en',
-          cookieCode: 'en'
-        }
-      ]
     }
   },
   computed: {

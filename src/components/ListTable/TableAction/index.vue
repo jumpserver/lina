@@ -4,13 +4,13 @@
       <div class="table-header-left-side">
         <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
         <span v-else style="display: flex;flex-direction: row">
-          <DateTimePicker v-if="hasDatePicker" class="datepicker" @dateChange="handleDateChange" />
-          <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+          <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
+          <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
         </span>
       </div>
       <div class="table-action-right-side">
-        <DateTimePicker v-if="hasDatePicker && hasLeftActions" class="datepicker" @dateChange="handleDateChange" />
-        <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" :config="searchConfig" :url="tableUrl" @tagSearch="handleTagSearch" />
+        <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
+        <DatetimeRangePicker v-if="hasDatePicker && hasLeftActions" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
         <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
       </div>
     </slot>
@@ -20,7 +20,7 @@
 <script>
 import AutoDataSearch from '@/components/AutoDataSearch'
 import LeftSide from './LeftSide'
-import DateTimePicker from '@/components/DateTimePicker'
+import DatetimeRangePicker from '@/components/DatetimeRangePicker'
 import RightSide from './RightSide'
 
 const defaultTrue = { type: Boolean, default: true }
@@ -30,7 +30,7 @@ export default {
   components: {
     AutoDataSearch,
     LeftSide,
-    DateTimePicker,
+    DatetimeRangePicker,
     RightSide
   },
   props: {
@@ -38,6 +38,10 @@ export default {
     hasSearch: defaultTrue,
     hasRightActions: defaultTrue,
     hasDatePicker: defaultFalse,
+    datePicker: {
+      type: Object,
+      default: () => ({})
+    },
     searchConfig: {
       type: Object,
       default: () => ({})
@@ -67,6 +71,12 @@ export default {
   computed: {
     hasSelectedRows() {
       return this.selectedRows.length > 0
+    },
+    iSearchTableConfig() {
+      const configDefault = {
+        url: this.tableUrl
+      }
+      return Object.assign(configDefault, this.searchConfig)
     }
   },
   methods: {
@@ -131,7 +141,7 @@ export default {
     padding: 5px 20px;
   }
   .datepicker{
-    margin-right: 15px;
+    margin-left: 10px;
   }
 
 </style>
