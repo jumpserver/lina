@@ -116,7 +116,7 @@ const actions = {
       console.log(rootState)
       let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
       accessedRoutes = filterCmdRoutes(accessedRoutes, rootState.settings.publicSettings.SECURITY_COMMAND_EXECUTION)
-      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_ENABLED)
+      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID)
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
