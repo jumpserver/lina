@@ -103,7 +103,7 @@ export default {
       window.open(replayUrl)
     },
     openReplayDownload: function(id) {
-      const downloadUrl = '/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
+      const downloadUrl = '/api/v1/terminal/session/00000000-0000-0000-0000-000000000000/replay/download/'
         .replace('00000000-0000-0000-0000-000000000000', id)
       window.open(downloadUrl)
     }

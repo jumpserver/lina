@@ -53,6 +53,7 @@ export default {
           actions: {
             prop: '',
             formatterArgs: {
+              hasUpdate: false,
               onDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/authentication/access-keys/${row.id}/`
@@ -63,27 +64,34 @@ export default {
                   this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
                 })
               }.bind(this),
-              onUpdate: function({ row, col, cellValue, reload }) {
-                this.$axios.patch(
-                  `/api/v1/authentication/access-keys/${row.id}/`,
-                  { is_active: !row.is_active }
-                ).then(res => {
-                  this.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$t('common.updateSuccessMsg'))
-                }).catch(error => {
-                  this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-                })
-              }.bind(this)
+              extraActions: [
+                {
+                  name: 'Enabled',
+                  title: this.$t('common.On/Off'),
+                  type: 'info',
+                  callback: function({ row, col, cellValue, reload }) {
+                    this.$axios.patch(
+                      `/api/v1/authentication/access-keys/${row.id}/`,
+                      { is_active: !row.is_active }
+                    ).then(res => {
+                      this.$refs.ListTable.reloadTable()
+                      this.$message.success(this.$t('common.updateSuccessMsg'))
+                    }).catch(error => {
+                      this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                    })
+                  }.bind(this)
+                }
+              ]
             }
           }
         }
       },
       headerActions: {
         hasSearch: true,
-        hasRightActions: false,
+        hasRightActions: true,
+        hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasRefresh: true,
         hasBulkDelete: false,
         hasCreate: false,
         extraActions: [

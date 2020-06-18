@@ -15,7 +15,16 @@ export function testEmailSetting(data) {
     data: data
   })
 }
-
+export function importLicense(formData) {
+  return request({
+    url: '/api/v1/xpack/license/import',
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: formData
+  })
+}
 export function testLdapSetting(data) {
   return request({
     disableFlashErrorMsg: true,

@@ -53,7 +53,8 @@ export default [
     path: '/command-executions',
     component: Layout,
     meta: {
-      permissions: [rolec.PERM_USE]
+      permissions: [rolec.PERM_USE],
+      commandExecutionRequired: true
     },
     children: [
       {

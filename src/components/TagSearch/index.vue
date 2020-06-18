@@ -25,7 +25,7 @@ export default {
     },
     default: {
       type: Object,
-      default: () => {}
+      default: null
     }
   },
   data() {
@@ -74,7 +74,8 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
+    setTimeout(() => this.$emit('tagSearch', this.filterMaps), 400)
+    // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
   },
   methods: {
     getValueLabel(key, value) {
