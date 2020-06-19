@@ -190,7 +190,11 @@ export default {
       return data.terminal
     },
     securityData(data) {
-      return data.security
+      const security = data.security
+      if (security.SECURITY_COMMAND_EXECUTION === null) {
+        security.SECURITY_COMMAND_EXECUTION = false
+      }
+      return security
     }
   }
 }
