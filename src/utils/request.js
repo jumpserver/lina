@@ -49,7 +49,7 @@ service.interceptors.request.use(
 )
 
 function ifUnauthorized({ response, error }) {
-  if (response.status === 401 && response.request.url.indexOf('/users/profile') !== -1) {
+  if (response.status === 401 && response.request.responseURL.indexOf('/users/profile') === -1) {
     response.config.disableFlashErrorMsg = true
     // 未授权重定向到登录页面
     const title = i18n.t('common.Info')

@@ -130,13 +130,58 @@ export default {
       }
     },
     basicData(data) {
-      return data.basic
+      const basic = data.basic
+      if (basic.SITE_URL === null) {
+        basic.SITE_URL = ''
+      }
+      if (basic.EMAIL_SUBJECT_PREFIX === null) {
+        basic.EMAIL_SUBJECT_PREFIX = ''
+      }
+      if (basic.USER_GUIDE_URL === null) {
+        basic.USER_GUIDE_URL = ''
+      }
+      return basic
     },
     emailData(data) {
-      return data.email
+      const email = data.email
+      if (email.EMAIL_FROM === null) {
+        email.EMAIL_FROM = ''
+      }
+      if (email.EMAIL_RECIPIENT === null) {
+        email.EMAIL_RECIPIENT = ''
+      }
+      if (email.EMAIL_USE_TLS === null) {
+        email.EMAIL_USE_TLS = false
+      }
+      if (email.EMAIL_HOST === null) {
+        email.EMAIL_HOST = ''
+      }
+      if (email.EMAIL_HOST_USER === null) {
+        email.EMAIL_HOST_USER = ''
+      }
+      if (email.EMAIL_PORT === null) {
+        email.EMAIL_PORT = ''
+      }
+      if (email.EMAIL_USE_SSL === null) {
+        email.EMAIL_USE_SSL = false
+      }
+      return email
     },
     emailContentData(data) {
-      return data.email_content
+      const email_content = data.email_content
+      if (email_content.EMAIL_CUSTOM_USER_CREATED_BODY === null) {
+        email_content.EMAIL_CUSTOM_USER_CREATED_BODY = ''
+      }
+      if (email_content.EMAIL_CUSTOM_USER_CREATED_HONORIFIC === null) {
+        email_content.EMAIL_CUSTOM_USER_CREATED_HONORIFIC = ''
+      }
+      if (email_content.EMAIL_CUSTOM_USER_CREATED_SIGNATURE === null) {
+        email_content.EMAIL_CUSTOM_USER_CREATED_SIGNATURE = ''
+      }
+      if (email_content.EMAIL_CUSTOM_USER_CREATED_SUBJECT === null) {
+        email_content.EMAIL_CUSTOM_USER_CREATED_SUBJECT = ''
+      }
+      return email_content
     },
     ldapData(data) {
       return data.ldap
