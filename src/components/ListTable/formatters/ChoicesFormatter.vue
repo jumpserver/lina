@@ -25,7 +25,14 @@ export default {
             return !!val
           },
           hasTips: false,
-          tips(val) {
+          tips(val, vm) {
+            if (val.status === 0) {
+              return vm.$t('assets.Unreachable')
+            } else if (val.status === 1) {
+              return vm.$t('assets.Reachable')
+            } else if (val.status === 2) {
+              return vm.$t('assets.Unknown')
+            }
             return val.datetime
           }
         }
@@ -43,7 +50,8 @@ export default {
       return this.formatterArgs.iconChoices[key]
     },
     tips() {
-      return this.formatterArgs.tips(this.cellValue)
+      const vm = this
+      return this.formatterArgs.tips(this.cellValue, vm)
     }
   }
 }

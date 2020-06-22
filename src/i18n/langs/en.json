@@ -100,6 +100,8 @@
     "PushSystemUserNow": "Push system user now",
     "QuickUpdate": "Quick update",
     "Reachable": "Reachable",
+    "Unreachable": "Unreachable",
+    "Unknown": "Unknown",
     "Refresh": "Refresh",
     "RefreshHardware": "Refresh hardware",
     "RemoteAppListHelpMessage": "Before using this feature, make sure that the application loader has been uploaded to the application server and successfully published as a RemoteApp application <b><a href='https://github.com/jumpserver/Jmservisor/releases'> Download application loader</a></b>",

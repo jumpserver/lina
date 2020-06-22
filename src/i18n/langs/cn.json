@@ -100,6 +100,8 @@
     "PushSystemUserNow": "推送系统用户",
     "QuickUpdate": "快速更新",
     "Reachable": "可连接",
+    "Unreachable": "不可连接",
+    "Unknown": "未知",
     "Refresh": "刷新",
     "RefreshHardware": "更新硬件信息",
     "RemoteAppListHelpMessage": "使用此功能前，请确保已将应用加载器上传到应用服务器并成功发布为一个 RemoteApp 应用 <b><a href='https://github.com/jumpserver/Jmservisor/releases'>下载应用加载器</a></b>",
