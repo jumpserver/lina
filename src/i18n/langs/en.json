@@ -175,6 +175,7 @@
     "EnterForSearch": "Press enter to search",
     "Export": "Export",
     "Import": "Import",
+    "Refresh": "Refresh",
     "Info": "Info",
     "MFAConfirm": "MFA Confirm",
     "MFARequireForSecurity": "MFA required for security",
