@@ -33,13 +33,14 @@ export default [
     name: 'Apps',
     component: Layout,
     redirect: '/apps/remoteapp',
+    alwaysShow: true,
     meta: { title: i18n.t('route.MyApps'), icon: 'th', permissions: [rolec.PERM_USE] },
     children: [
       {
         path: '/apps/remoteapp',
         name: 'MyRemoteApps',
         component: () => import('@/userviews/apps/RemoteApp'),
-        meta: { title: i18n.t('route.RemoteApp'), permissions: [rolec.PERM_USE] }
+        meta: { title: i18n.t('route.RemoteApp'), permissions: [rolec.PERM_USE], licenseRequired: true }
       },
       {
         path: '/apps/database',

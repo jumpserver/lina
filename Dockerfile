@@ -8,5 +8,5 @@ RUN yarn build:prod
 
 
 FROM nginx:alpine
-COPY --from=stage-build /data/dist /opt/lina/
+COPY --from=stage-build /data/lina /opt/lina/
 COPY nginx.conf /etc/nginx/conf.d/default.conf

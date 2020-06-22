@@ -28,15 +28,16 @@ function hasLicense(licState, route) {
   return licState === requireLic
 }
 
-function hasCommand(cmdState, route) {
-  if (cmdState) {
-    return cmdState
+function hasCommand(cmdBulkExecutionEnable, route) {
+  const routeRequireCmd = route.meta ? route.meta.commandExecutionRequired : false
+  if (!routeRequireCmd) {
+    return true
   }
-  let requireCmd = route.meta ? route.meta.commandExecutionRequired : null
-  if (!requireCmd) {
-    requireCmd = false
+
+  if (!cmdBulkExecutionEnable) {
+    return false
   }
-  return cmdState === requireCmd
+  return true
 }
 
 export function filterLicRoutes(routes, roles) {
@@ -113,10 +114,12 @@ const mutations = {
 const actions = {
   generateRoutes({ commit, rootState }, roles) {
     return new Promise(resolve => {
-      console.log(rootState)
       let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
       accessedRoutes = filterCmdRoutes(accessedRoutes, rootState.settings.publicSettings.SECURITY_COMMAND_EXECUTION)
-      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_ENABLED)
+      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID)
+      if (accessedRoutes.length === 0) {
+        console.log('No route find')
+      }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })

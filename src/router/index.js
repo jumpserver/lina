@@ -105,6 +105,7 @@ export const allRoleRoutes = [
     component: Layout,
     redirect: '/applications/remote-apps/',
     name: 'applications',
+    alwaysShow: true,
     meta: { title: i18n.t('route.Applications'), icon: 'th' },
     children: ApplicationsRoute
   },
@@ -129,6 +130,7 @@ export const allRoleRoutes = [
     component: Layout,
     redirect: '/ops/tasks/',
     name: 'JobCenter',
+    alwaysShow: true,
     meta: { title: i18n.t('route.JobCenter'), icon: 'coffee' },
     children: OpsRoutes
   },
