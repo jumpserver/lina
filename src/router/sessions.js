@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import rolec from '@/utils/role'
+import empty from '@/layout/empty'
 export default [
   {
     path: 'session',
@@ -34,23 +35,31 @@ export default [
   },
   {
     path: 'terminal',
-    name: 'TerminalList',
-    component: () => import('@/views/sessions/TerminalList'),
-    meta: { title: i18n.t('route.Terminal'), permissions: [rolec.PERM_SUPER] }
-  },
-  {
-    path: 'terminals/:id',
-    name: 'TerminalDetail',
-    component: () => import('@/views/sessions/TerminalDetail'),
-    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
-    hidden: true
-  },
-  {
-    path: 'terminals/:id/update',
-    name: 'TerminalUpdate',
-    component: () => import('@/views/sessions/TerminalUpdate'),
-    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
-    hidden: true
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('route.Terminal'), permissions: [rolec.PERM_SUPER] },
+    children: [
+      {
+        path: '',
+        name: 'TerminalList',
+        component: () => import('@/views/sessions/TerminalList'),
+        meta: { title: i18n.t('route.Terminal') }
+      },
+      {
+        path: ':id',
+        name: 'TerminalDetail',
+        component: () => import('@/views/sessions/TerminalDetail'),
+        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        name: 'TerminalUpdate',
+        component: () => import('@/views/sessions/TerminalUpdate'),
+        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
+        hidden: true
+      }
+    ]
   },
   {
     path: 'storages',
