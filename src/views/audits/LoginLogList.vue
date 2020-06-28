@@ -19,6 +19,9 @@ export default {
         url: '/api/v1/audits/login-logs/',
         columns: ['username', 'type', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
         columnsMeta: {
+          username: {
+            showOverflowTooltip: true
+          },
           user_agent: {
             width: '150px',
             showOverflowTooltip: true
@@ -38,6 +41,9 @@ export default {
           },
           datetime: {
             width: '160px'
+          },
+          reason: {
+            showOverflowTooltip: true
           }
         },
         extraQuery: {

@@ -20,6 +20,14 @@ export default {
           'is_valid', 'actions'
         ],
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              routeQuery: {
+                activeTab: 'RemoteAppPermissionDetail'
+              }
+            },
+            showOverflowTooltip: true
+          },
           users_amount: {
             label: this.$t('users.Users'),
             formatter: DetailFormatter,

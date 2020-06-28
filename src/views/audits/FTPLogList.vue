@@ -25,6 +25,9 @@ export default {
           user: {
             showOverflowTooltip: true
           },
+          asset: {
+            showOverflowTooltip: true
+          },
           system_user: {
             showOverflowTooltip: true
           },
