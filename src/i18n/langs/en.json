@@ -854,7 +854,9 @@
       "OrganizationCreate": "Create organization",
       "OrganizationDetail": "Org detail",
       "OrganizationList": "Organlizations",
-      "OrganizationUpdate": "Update org"
+      "OrganizationUpdate": "Update org",
+      "DeleteOrgTitle":"Please ensure that the following information in the organization has been deleted",
+      "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission"
     },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",
