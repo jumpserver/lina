@@ -31,7 +31,8 @@ export default {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'
               }
-            }
+            },
+            showOverflowTooltip: true
           },
           users_amount: {
             label: this.$t('perms.User'),

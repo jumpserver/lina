@@ -21,7 +21,8 @@ export default {
               routeQuery: {
                 activeTab: 'DatabaseAppPermissionDetail'
               }
-            }
+            },
+            showOverflowTooltip: true
           },
           users_amount: {
             label: this.$t('perms.User'),

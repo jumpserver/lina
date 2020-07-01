@@ -40,11 +40,16 @@ export default {
               return <el-link onClick={onClick}>{ cellValue.length }</el-link>
             }
           },
+          command: {
+            showOverflowTooltip: true
+          },
           user: {
-            formatter: DisplayFormatter
+            formatter: DisplayFormatter,
+            showOverflowTooltip: true
           },
           run_as: {
-            formatter: DisplayFormatter
+            formatter: DisplayFormatter,
+            showOverflowTooltip: true
           },
           is_finished: {
             width: '100px'

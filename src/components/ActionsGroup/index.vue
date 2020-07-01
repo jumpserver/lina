@@ -1,7 +1,12 @@
 <template>
   <div :class="grouped ? 'el-button-group' : ''">
     <el-button v-for="item in iActions" :key="item.name" :size="size" v-bind="item" @click="handleClick(item.name)">
-      <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
+      <el-tooltip v-if="['actionExport', 'actionImport', 'actionRefresh'].indexOf(item.name) !== -1" effect="dark" :content="item.tip" placement="top">
+        <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
+      </el-tooltip>
+      <span v-else>
+        <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
+      </span>
     </el-button>
     <el-dropdown v-if="iMoreActions.length > 0" trigger="click" @command="handleClick">
       <el-button :size="size" :type="moreActionsType" class="btn-more-actions">
