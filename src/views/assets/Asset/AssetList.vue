@@ -68,6 +68,7 @@ import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'
 import { GenericUpdateFormDialog } from '@/layout/components'
+import rules from '@/components/DataForm/rules'
 
 export default {
   components: {
@@ -309,6 +310,7 @@ export default {
               }
             },
             admin_user: {
+              rules: [rules.RequiredChange],
               label: this.$t('assets.AdminUser'),
               hidden: () => false,
               el: {

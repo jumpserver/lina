@@ -68,9 +68,7 @@ export default {
       this.dataTable.getList()
     },
     search(attrs) {
-      if (Object.keys(attrs).length > 0) {
-        return this.dataTable.search(attrs, true)
-      }
+      return this.dataTable.search(attrs, true)
     },
     handleDateChange(attrs) {
       this.$set(this.extraQuery, 'date_from', attrs[0].toISOString())

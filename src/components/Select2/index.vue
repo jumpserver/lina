@@ -240,7 +240,6 @@ export default {
           this.params.spm = data.spm
           await this.getInitialOptions()
         }
-        this.$log.debug('Start get select2 options')
         await this.getOptions()
         if (this.iOptions.length === 0) {
           this.remote = false

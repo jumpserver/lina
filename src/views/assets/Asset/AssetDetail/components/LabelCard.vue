@@ -2,7 +2,7 @@
   <IBox fa="fa-info-circle" :title="title" v-bind="$attrs">
     <div class="quick-actions">
       <p v-if="iLabels.length === 0">{{ $t('common.Nothing') }}</p>
-      <el-tag v-for="i in iLabels" :key="i.name + i.value" type="info">{{ i.name }}: {{ i.value }}</el-tag>
+      <el-tag v-for="i in iLabels" :key="i.name + i.value" type="info">{{ i.name }}:{{ i.value }}</el-tag>
     </div>
   </IBox>
 </template>

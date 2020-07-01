@@ -74,7 +74,12 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => this.$emit('tagSearch', this.filterMaps), 400)
+    setTimeout(() => {
+      if (Object.keys(this.filterMaps).length > 0) {
+        return this.$emit('tagSearch', this.filterMaps)
+      }
+    }
+    , 400)
     // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
   },
   methods: {
@@ -95,7 +100,6 @@ export default {
       return ''
     },
     handleMenuItemChange(keys) {
-      this.$log.debug('Tag search keys: ', keys)
       if (keys.length === 0) {
         return
       }

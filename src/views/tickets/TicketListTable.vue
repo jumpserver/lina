@@ -45,7 +45,7 @@ export default {
             prop: 'status',
             label: this.$t('tickets.status'),
             align: 'center',
-            width: '80px',
+            width: '100px',
             sortable: 'custom',
             formatter: row => {
               if (row.status === 'open') {
