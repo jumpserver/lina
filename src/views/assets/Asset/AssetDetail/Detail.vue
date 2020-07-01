@@ -164,7 +164,7 @@ export default {
         },
         {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols
+          value: this.object.protocols.toString()
         },
         {
           key: this.$t('assets.PublicIp'),
