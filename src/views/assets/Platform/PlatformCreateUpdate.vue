@@ -17,7 +17,7 @@ export default {
         charset: 'utf8'
       },
       fields: [
-        [this.$t('perms.Basic'), ['name', 'base', 'charset', 'security', 'console', 'comment']]
+        [this.$t('common.Basic'), ['name', 'base', 'charset', 'security', 'console', 'comment']]
       ],
       fieldsMeta: {
         security: {
