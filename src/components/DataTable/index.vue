@@ -86,7 +86,6 @@ export default {
   computed: {
     tableConfig() {
       const config = Object.assign(this.defaultConfig, this.config)
-      this.$log.debug('Datatable found config change')
       return config
     },
     iListeners() {
@@ -96,7 +95,6 @@ export default {
   watch: {
     config: {
       handler() {
-        this.$log.debug('DataTable: found config change', this.tableConfig.url)
         // this.getList()
       },
       deep: true

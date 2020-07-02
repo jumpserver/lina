@@ -9,6 +9,7 @@
       :object="object"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
+      :on-perform-success="onPerformSuccess"
     />
   </IBox>
 </template>
@@ -115,6 +116,11 @@ export default {
     },
     getMethod() {
       return 'put'
+    },
+    onPerformSuccess(res, method, vm) {
+      this.$emit('submitSuccess', res)
+      this.$message.success(this.$t('common.updateSuccessMsg'))
+      setTimeout(() => window.location.reload(), 500)
     }
   }
 }

@@ -13,10 +13,11 @@ export default {
         base: 'Linux',
         console: 'true',
         security: 'RDP',
-        comment: ''
+        comment: '',
+        charset: 'utf8'
       },
       fields: [
-        [this.$t('perms.Basic'), ['name', 'base', 'security', 'console', 'comment']]
+        [this.$t('perms.Basic'), ['name', 'base', 'charset', 'security', 'console', 'comment']]
       ],
       fieldsMeta: {
         security: {
@@ -62,6 +63,7 @@ export default {
         }
         postData.name = formdata.name
         postData.base = formdata.base
+        postData.charset = formdata.charset
         postData.comment = formdata.comment || ''
 
         const params = this.$route.params

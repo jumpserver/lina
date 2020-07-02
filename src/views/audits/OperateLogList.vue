@@ -19,6 +19,15 @@ export default {
         url: '/api/v1/audits/operate-logs/',
         columns: ['user', 'action', 'resource_type', 'resource', 'remote_addr', 'datetime'],
         columnsMeta: {
+          user: {
+            showOverflowTooltip: true
+          },
+          resource_type: {
+            showOverflowTooltip: true
+          },
+          resource: {
+            showOverflowTooltip: true
+          },
           datetime: {
             width: '160px'
           },

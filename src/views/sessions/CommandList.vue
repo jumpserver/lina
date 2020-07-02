@@ -36,6 +36,7 @@ export default {
           },
           risk_level: {
             label: this.$t('sessions.riskLevel'),
+            width: '120px',
             formatter: (row, col, cellValue) => {
               const display = row.risk_level_display
               if (cellValue === 0) {
@@ -45,9 +46,19 @@ export default {
               }
             }
           },
+          user: {
+            width: '140px'
+          },
+          asset: {
+            width: '140px'
+          },
+          system_user: {
+            width: '140px'
+          },
           session: {
             label: this.$t('sessions.session'),
             formatter: DetailFormatter,
+            width: '80px',
             formatterArgs: {
               getTitle() {
                 return vm.$t('sessions.goto')
@@ -62,6 +73,7 @@ export default {
           },
           timestamp: {
             label: this.$t('sessions.date'),
+            width: '150px',
             formatter: function(row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }

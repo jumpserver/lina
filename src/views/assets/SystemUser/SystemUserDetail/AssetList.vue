@@ -105,6 +105,23 @@ export default {
               )
             }.bind(this)
           }
+        },
+        {
+          title: this.$t('assets.PushSystemUserNow'),
+          attrs: {
+            type: 'primary',
+            disabled: !vm.object.auto_push,
+            label: this.$t('common.Push')
+          },
+          callbacks: {
+            click: function({ row }) {
+              const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/`
+              const data = { action: 'push' }
+              this.$axios.post(theUrl, data).then(resp => {
+                window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+              })
+            }.bind(this)
+          }
         }
       ],
       nodeRelationConfig: {

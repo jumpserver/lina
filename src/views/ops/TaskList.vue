@@ -32,7 +32,7 @@ export default {
           },
           host_amount: {
             label: this.$t('ops.hosts'),
-            width: '50px',
+            width: '65px',
             formatter: function(row) {
               return row.latest_execution.hosts_amount
             }
@@ -50,14 +50,14 @@ export default {
           },
           date_start: {
             label: this.$t('ops.date'),
-            width: '140px',
+            width: '150px',
             formatter: function(row) {
               return toSafeLocalDateStr(row.latest_execution.date_start)
             }
           },
           time: {
             label: this.$t('ops.time'),
-            width: '140px',
+            width: '100px',
             formatter: function(row) {
               return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
             }

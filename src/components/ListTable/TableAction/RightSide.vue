@@ -54,9 +54,9 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionExport', fa: 'fa-download', has: this.hasExport, callback: this.handleExport.bind(this) },
-        { name: 'actionImport', fa: 'fa-upload', has: this.hasImport, callback: this.handleImport.bind(this) },
-        { name: 'actionRefresh', fa: 'fa-refresh', has: this.hasRefresh, callback: this.handleRefresh }
+        { name: 'actionExport', fa: 'fa-download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExport.bind(this) },
+        { name: 'actionImport', fa: 'fa-upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImport.bind(this) },
+        { name: 'actionRefresh', fa: 'fa-refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefresh }
       ],
       dialogExportVisible: false,
       exportValue: 2
