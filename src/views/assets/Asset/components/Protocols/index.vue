@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-for="(item,index) in items" :key="index" style="display: flex;justify-content: space-around;margin-top: 8px;">
+    <div v-for="(item,index) in items" :key="index" style="display: flex;margin-top: 8px;">
       <el-input v-model="item.value" class="input-with-select" v-bind="$attrs">
         <el-select slot="prepend" v-model="item.select" @change="handleProtocolChange">
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
       </el-input>
-      <div style="display: flex" class="input-button">
+      <div style="display: flex; margin-left: 20px" class="input-button">
         <el-button type="danger" icon="el-icon-minus" style="flex-shrink: 0;" size="mini" :disabled="items.length===1" @click="handleDelete(index)" />
         <el-button type="primary" icon="el-icon-plus" style="flex-shrink: 0;" size="mini" @click="handleAdd(index)" />
       </div>
