@@ -40,7 +40,7 @@ export default {
             formatter: DialogDetailFormatter,
             showOverflowTooltip: true,
             formatterArgs: {
-              getDialogTile: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
+              getDialogTitle: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
               getDetailItems: function({ col, row, cellValue }) {
                 return [
                   {
@@ -62,6 +62,10 @@ export default {
                   {
                     key: this.$t('assets.Domain'),
                     value: row.domain
+                  },
+                  {
+                    key: this.$t('assets.Comment'),
+                    value: row.comment
                   }
                 ]
               }.bind(this)
