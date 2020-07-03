@@ -114,15 +114,18 @@ export default {
         columns: [
           {
             prop: 'hostname',
-            label: this.$t('assets.Hostname')
+            label: this.$t('assets.Hostname'),
+            showOverflowTooltip: true
           },
           {
             prop: 'ip',
-            label: this.$t('assets.ip')
+            label: this.$t('assets.ip'),
+            width: 140
           },
           {
             prop: 'username',
-            label: this.$t('assets.Username')
+            label: this.$t('assets.Username'),
+            showOverflowTooltip: true
           },
           {
             prop: 'version',
@@ -138,6 +141,7 @@ export default {
             prop: 'id',
             label: this.$t('common.Action'),
             align: 'center',
+            width: 150,
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
