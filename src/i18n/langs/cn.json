@@ -667,7 +667,8 @@
     "testLdapLoginTitle": "测试LDAP 用户登录",
     "userGuideUrl": "用户向导URL",
     "username": "用户名",
-    "usernamePlaceholder": "请输入用户名"
+    "usernamePlaceholder": "请输入用户名",
+    "refreshLdapCache":"刷新Ldap缓存，请稍后"
   },
   "settings": {
     "setting": "设置"
