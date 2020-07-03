@@ -24,9 +24,9 @@ export default {
         is_active: true
       },
       fields: [
-        [this.$t('assets.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
+        [this.$t('common.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
         [this.$t('assets.Auth'), ['username', 'password', 'private_key']],
-        [this.$t('assets.Other'), ['is_active', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         ip: {

@@ -47,13 +47,16 @@ export default {
             }
           },
           user: {
-            width: '140px'
+            width: '140px',
+            showOverflowTooltip: true
           },
           asset: {
-            width: '140px'
+            width: '140px',
+            showOverflowTooltip: true
           },
           system_user: {
-            width: '140px'
+            width: '140px',
+            showOverflowTooltip: true
           },
           session: {
             label: this.$t('sessions.session'),

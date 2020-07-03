@@ -24,6 +24,7 @@ export default {
             displayKey: 'get_type_display'
           },
           asset: {
+            showOverflowTooltip: true,
             formatter: function(row, column, cellValue, index) {
               const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
               return <router-link{...{ attrs: route }} >{ row.asset_info.hostname }</router-link>

@@ -30,7 +30,7 @@ export default {
         assets: assetsInitial
       },
       fields: [
-        [this.$t('perms.Basic'), ['name']],
+        [this.$t('common.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
         [this.$t('common.action'), ['actions']],

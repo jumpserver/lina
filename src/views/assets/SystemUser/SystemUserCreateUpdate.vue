@@ -27,10 +27,10 @@ export default {
         shell: '/bin/bash'
       },
       fields: [
-        [this.$t('common.BasicInfo'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
         [this.$t('common.Auth'), ['auto_push', 'auto_generate_key', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('common.Others'), ['sftp_root', 'sudo', 'shell', 'comment']]
+        [this.$t('common.Other'), ['sftp_root', 'sudo', 'shell', 'comment']]
       ],
       fieldsMeta: {
         login_mode: {

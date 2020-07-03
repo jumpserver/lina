@@ -13,7 +13,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
         [this.$t('applications.mysql'), ['host', 'port', 'database']],
-        [this.$t('common.Others'), ['comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         type: {
