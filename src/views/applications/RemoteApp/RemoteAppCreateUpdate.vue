@@ -24,7 +24,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'asset', 'type', 'path']],
         [appTypeMeta.title, ['params']],
-        [this.$t('common.Others'), ['comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       url: '/api/v1/applications/remote-apps/',
       fieldsMeta: {

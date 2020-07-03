@@ -60,10 +60,6 @@ export default {
                     value: row.platform
                   },
                   {
-                    key: this.$t('assets.Domain'),
-                    value: row.domain
-                  },
-                  {
                     key: this.$t('assets.Comment'),
                     value: row.comment
                   }
@@ -176,4 +172,7 @@ export default {
 </script>
 
 <style>
+  .el-card {
+    border: 0 !important;
+  }
 </style>

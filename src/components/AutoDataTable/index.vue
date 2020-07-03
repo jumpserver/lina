@@ -55,6 +55,7 @@ export default {
         case 'name':
           col.formatter = DetailFormatter
           col.sortable = 'custom'
+          col.showOverflowTooltip = true
           break
         case 'actions':
           col = {

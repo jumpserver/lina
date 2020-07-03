@@ -29,6 +29,9 @@ export default {
           'name', 'username', 'groups_display', 'role', 'source', 'is_valid', 'actions'
         ],
         columnsMeta: {
+          username: {
+            showOverflowTooltip: true
+          },
           source: {
             width: '120px'
           },

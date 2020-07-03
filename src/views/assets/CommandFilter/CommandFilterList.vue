@@ -19,6 +19,7 @@ export default {
             prop: 'name',
             label: this.$t('assets.Name'),
             formatter: DetailFormatter,
+            showOverflowTooltip: true,
             sortable: true,
             formatterArgs: {
               route: 'CommandFilterDetail'
