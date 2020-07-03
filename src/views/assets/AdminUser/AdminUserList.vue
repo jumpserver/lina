@@ -19,6 +19,7 @@ export default {
             prop: 'name',
             label: this.$t('common.Name'),
             formatter: DetailFormatter,
+            showOverflowTooltip: true,
             sortable: true,
             formatterArgs: {
               route: 'AdminUserDetail'
@@ -27,6 +28,7 @@ export default {
           {
             prop: 'username',
             label: this.$t('common.Username'),
+            showOverflowTooltip: true,
             sortable: 'custom'
           },
           {
