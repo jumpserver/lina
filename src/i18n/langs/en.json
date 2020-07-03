@@ -667,7 +667,8 @@
     "testLdapLoginTitle": "Test LDAP user login",
     "userGuideUrl": "User Guide URL",
     "username": "Username",
-    "usernamePlaceholder": "Please input username"
+    "usernamePlaceholder": "Please input username",
+    "refreshLdapCache":"Refreshing Ldap cache "
   },
   "settings": {
     "setting": "Setting"

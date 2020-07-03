@@ -51,6 +51,14 @@ export function refreshLdapUserCache() {
   })
 }
 
+export function StartLdapUserCache() {
+  return request({
+    disableFlashErrorMsg: true,
+    url: '/api/v1/settings/ldap/users/?cache_police=1',
+    method: 'get'
+  })
+}
+
 export function importLdapUser(data) {
   return request({
     disableFlashErrorMsg: true,
