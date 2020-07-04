@@ -858,7 +858,8 @@
       "ReleasedCount": "Released count",
       "DateSync": "Date sync",
       "Status": "Status",
-      "Log": "Log"
+      "Log": "Log",
+      "DeleteReleasedAssets": "Delete released assets"
     },
     "Corporation": "Corporation",
     "Edition": "Edition",

@@ -152,7 +152,7 @@ export default {
         return v.id
       })
       const data = await createSourceIdCache(ids)
-      const url = `${this.tableUrl}?spm=` + data.spm
+      const url = (this.tableUrl.indexOf('?') === -1) ? `${this.tableUrl}?spm=` + data.spm : `${this.tableUrl}&spm=` + data.spm
       return this.$axios.delete(url)
     },
     handleBulkUpdate({ selectedRows }) {

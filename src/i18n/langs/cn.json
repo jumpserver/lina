@@ -859,7 +859,8 @@
       "ReleasedCount": "已释放",
       "DateSync": "同步日期",
       "Status": "状态",
-      "Log": "日志"
+      "Log": "日志",
+      "DeleteReleasedAssets": "删除已释放资产"
     },
     "Corporation": "公司",
     "Edition": "版本",
