@@ -122,6 +122,7 @@
     "TestConnection": "Test connection",
     "Type": "Type",
     "UnselectedAssets": "Unselected assets",
+    "UnselectedNodes": "Unselected nodes",
     "UpdateAssetUserToken": "Update asset user auth",
     "Username": "Username",
     "UsernameHelpMessage": "Username is dynamic, When connect asset, using current user's username",
