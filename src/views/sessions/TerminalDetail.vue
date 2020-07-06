@@ -35,7 +35,8 @@ export default {
         hasDelete: false,
         actions: {
           hasDelete: false,
-          canDelete: false
+          canDelete: false,
+          detailApiUrl: `/api/v1/terminal/terminals/${this.$route.params.id}/`
         }
       }
     }
