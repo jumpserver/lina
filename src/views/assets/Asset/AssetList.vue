@@ -54,6 +54,7 @@
       </Dialog>
     </div>
     <GenericUpdateFormDialog
+      v-if="updateSelectedDialogSetting.dialogSetting.dialogVisible"
       :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
