@@ -164,7 +164,12 @@ export default {
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onRightClick: function(event, treeId, treeNode) {
+      console.log(treeNode)
       if (!this.setting.showMenu) {
+        return
+      }
+      // 屏蔽收藏资产
+      if (treeNode.id === '-12') {
         return
       }
       if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
