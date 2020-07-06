@@ -13,7 +13,7 @@ export default {
     return {
       allFavorites: [],
       treeSetting: {
-        showMenu: true,
+        showMenu: false,
         showRefresh: true,
         showAssets: false,
         url: '/api/v1/perms/users/assets/',

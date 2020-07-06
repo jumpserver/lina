@@ -164,7 +164,6 @@ export default {
       $('body').bind('mousedown', this.onBodyMouseDown)
     },
     onRightClick: function(event, treeId, treeNode) {
-      console.log(treeNode)
       if (!this.setting.showMenu) {
         return
       }
