@@ -24,7 +24,7 @@ export function getSessionCommands(id) {
 
 export function getTerminalDetail(id) {
   return request({
-    url: `/api/v1/terminal/terminal/${id}/`,
+    url: `/api/v1/terminal/terminals/${id}/`,
     method: 'get'
   })
 }
