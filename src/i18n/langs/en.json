@@ -823,12 +823,13 @@
       "Username": "Username"
     },
     "Cloud": {
+      "IsAlwaysUpdate": "Asset info is kept up-to-date",
       "AccountCreate": "Create account",
       "AccountList": "Account list",
       "AccountUpdate": "Update account",
       "Cloud": "Cloud center",
       "CloudCenter": "Cloud center",
-      "CoveredAlwaysHelpTips": "The asset information is always covered",
+      "IsAlwaysUpdateHelpTips": "Whether the asset information, including Hostname, IP, Platform, and AdminUser, is updated synchronously each time a synchronization task is performed",
       "SyncInstanceTaskCreate": "Create sync instance task",
       "SyncInstanceTaskList": "Sync instance task list",
       "SyncInstanceTaskDetail": "Sync instance task detail",
@@ -841,7 +842,6 @@
       "Account":"Account",
       "Node": "Node",
       "AdminUser":"Admin user",
-      "CoveredAlways": "Covered always",
       "PeriodicPerform":"Periodic perform",
       "Periodic":"Periodic",
       "RegularlyPerform": "Regularly perform",
