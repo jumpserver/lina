@@ -14,6 +14,7 @@ import { mapGetters } from 'vuex'
 import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
+import { getDayFuture } from '@/utils/common'
 
 export default {
   components: {
@@ -123,7 +124,7 @@ export default {
         },
         formSetting: {
           initial: {
-            date_expired: '2099-12-31 00:00:00 +0800'
+            date_expired: getDayFuture(36500, new Date()).toISOString()
           },
           fields: [
             'groups', 'date_expired', 'comment'

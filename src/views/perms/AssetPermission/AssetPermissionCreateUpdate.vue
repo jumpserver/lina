@@ -6,6 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetPermissionFormActionField from './components/AssetPermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
+import { getDayFuture } from '@/utils/common'
 
 export default {
   components: {
@@ -24,8 +25,8 @@ export default {
       initial: {
         is_active: true,
         actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
-        date_start: this.$moment().format('YYYY-MM-DD HH:mm:ss ZZ'),
-        date_expired: '2099-12-31 00:00:00 +0800',
+        date_start: new Date().toISOString(),
+        date_expired: getDayFuture(36500, new Date()).toISOString(),
         nodes: nodesInitial,
         assets: assetsInitial
       },
