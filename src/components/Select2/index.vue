@@ -11,6 +11,7 @@
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
+    :reserve-keyword="true"
     @change="onChange"
     @visible-change="onVisibleChange"
     v-on="$listeners"
@@ -97,7 +98,8 @@ export default {
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
       initialOptions: [],
-      remote: true
+      remote: true,
+      currentSelectOptions: []
     }
   },
   computed: {
@@ -256,7 +258,7 @@ export default {
       this.iOptions.push(option)
     },
     getOptionsByValues(values) {
-      return this.iOptions.filter((v) => {
+      return this.currentSelectOptions.filter((v) => {
         return values.indexOf(v.value) !== -1
       })
     },
@@ -274,6 +276,7 @@ export default {
     },
     onChange(values) {
       const options = this.getSelectedOptions()
+      this.currentSelectOptions = options
       this.$log.debug('Current select options: ', options)
       this.$emit('changeOptions', options)
       this.$emit('change', options)
