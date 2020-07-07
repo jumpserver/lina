@@ -67,6 +67,38 @@ export default [
     ]
   },
   {
+    path: '/tickets',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'TicketList',
+        component: () => import('@/views/tickets/TicketList'),
+        meta: { title: i18n.t('route.Tickets'), icon: 'check-square-o', permissions: [rolec.PERM_USE] }
+      },
+      {
+        path: 'tickets/:id',
+        name: 'TicketDetail',
+        component: () => import('@/views/tickets/TicketDetail/index'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
+        path: 'tickets/request-asset-perm/create',
+        name: 'RequestAssetPermTicketCreateUpdate',
+        component: () => import('@/views/tickets/RequestAssetPerm/RequestAssetPermTicketCreateUpdate'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      }
+    ],
+    meta: {
+      title: i18n.t('route.Tickets'),
+      icon: 'history',
+      permissions: [rolec.PERM_USE],
+      licenseRequired: true
+    }
+  },
+  {
     path: `external-luna`,
     component: Layout,
     meta: {

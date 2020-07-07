@@ -66,6 +66,7 @@ export default {
         hasLeftActions: true,
         hasRightActions: false,
         hasCreate: false,
+        hasBulkDelete: false,
         searchConfig: {
           default: {
             status: {
