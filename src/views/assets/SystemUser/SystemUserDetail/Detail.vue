@@ -8,7 +8,7 @@
       <RelationCard v-if="object.protocol === 'ssh'" ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
-</template>a
+</template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
