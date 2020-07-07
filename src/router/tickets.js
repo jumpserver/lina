@@ -12,5 +12,12 @@ export default [
     component: () => import('@/views/tickets/TicketDetail/index'),
     meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
     hidden: true
+  },
+  {
+    path: 'tickets/request-asset-perm/create',
+    name: 'RequestAssetPermTicketCreateUpdate',
+    component: () => import('@/views/tickets/RequestAssetPerm/RequestAssetPermTicketCreateUpdate'),
+    meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
+    hidden: true
   }
 ]

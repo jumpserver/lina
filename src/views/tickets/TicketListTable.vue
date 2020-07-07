@@ -63,8 +63,9 @@ export default {
         ]
       },
       ticketActions: {
-        hasLeftActions: false,
+        hasLeftActions: true,
         hasRightActions: false,
+        hasCreate: false,
         searchConfig: {
           default: {
             status: {
@@ -74,8 +75,27 @@ export default {
               valueLabel: this.$t('tickets.Open')
             }
           }
-        }
+        },
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
+        extraMoreActions: this.genExtraMoreActions()
       }
+    }
+  },
+  methods: {
+    genExtraMoreActions() {
+      return [
+        {
+          name: '',
+          title: 'request perm',
+          type: 'primary',
+          can: true,
+          callback: this.onCallback
+        }
+      ]
+    },
+    onCallback() {
+      this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
     }
   }
 }
