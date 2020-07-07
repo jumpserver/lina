@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/UserPassword'
+import { getDayFuture } from '@/utils/common'
 
 export default {
   components: {
@@ -17,7 +18,7 @@ export default {
         mfa_level: 0,
         source: 'local',
         role: 'User',
-        date_expired: '2099-12-31 00:00:00 +0800'
+        date_expired: getDayFuture(36500, new Date()).toISOString()
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
