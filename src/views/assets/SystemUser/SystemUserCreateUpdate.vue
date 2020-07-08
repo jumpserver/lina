@@ -114,7 +114,7 @@ export default {
           hidden: (item) => item.protocol !== 'ssh'
         },
         password: {
-          helpText: '密码或密钥密码',
+          helpText: this.$t('assets.PasswordHelpMessage'),
           hidden: form => {
             if (form.login_mode !== 'auto') {
               return true
