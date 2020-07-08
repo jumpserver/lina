@@ -50,7 +50,7 @@ export default {
         hosts: {
           label: this.$t('sessions.hosts'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         index: {
