@@ -21,7 +21,7 @@ export default {
         date_start: date_start
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'ips_or_not', 'ips', 'host_name', 'date_start', 'date_expired', 'assignees']]
+        [this.$t('common.Basic'), ['title', 'ips_or_not', 'ips', 'hostname', 'date_start', 'date_expired', 'assignees']]
       ],
       fieldsMeta: {
         ips_or_not: {
@@ -50,7 +50,10 @@ export default {
           el: {
             multiple: true,
             ajax: {
-              url: '/api/v1/users/users/'
+              url: '/api/v1/users/users/',
+              processResults: function(data) {
+                console.log(data)
+              }
             },
             value: []
           }

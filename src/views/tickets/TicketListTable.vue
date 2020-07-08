@@ -28,7 +28,13 @@ export default {
             formatter: DetailFormatter,
             sortable: 'custom',
             formatterArgs: {
-              route: 'TicketDetail'
+              getRoute: function({ row }) {
+                if (row.type === 'request_asset') {
+                  return 'AssetsTicketDetail'
+                } else {
+                  return 'TicketDetail'
+                }
+              }
             }
           },
           {
