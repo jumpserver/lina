@@ -98,6 +98,7 @@ export default {
     color: #FFFFFF;
     border-radius: 3px;
     line-height: 1.428;
+    cursor:pointer;
   }
   .el-tree{
     background-color: inherit !important;
