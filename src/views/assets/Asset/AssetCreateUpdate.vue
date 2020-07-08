@@ -25,12 +25,12 @@ export default {
         nodes: nodesInitial
       },
       fields: [
-        [this.$t('assets.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
+        [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
         [this.$t('assets.Protocols'), ['protocols']],
         [this.$t('assets.Auth'), ['admin_user']],
         [this.$t('assets.Node'), ['nodes']],
         [this.$t('assets.Label'), ['labels']],
-        [this.$t('assets.Other'), ['is_active', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         protocols: {

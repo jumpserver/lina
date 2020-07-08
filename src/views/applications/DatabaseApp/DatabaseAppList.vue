@@ -19,6 +19,9 @@ export default {
         columnsMeta: {
           get_type_display: {
             label: this.$t('applications.type')
+          },
+          database: {
+            showOverflowTooltip: true
           }
         }
       },

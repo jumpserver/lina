@@ -4,6 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { getDayFuture } from '@/utils/common'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -12,11 +14,11 @@ export default {
     return {
       initial: {
         is_active: true,
-        date_start: this.$moment().format('YYYY-MM-DD HH:mm:ss ZZ'),
-        date_expired: '2099-12-31 00:00:00 +0800'
+        date_start: new Date().toISOString(),
+        date_expired: getDayFuture(36500, new Date()).toISOString()
       },
       fields: [
-        [this.$t('perms.Basic'), ['name']],
+        [this.$t('common.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.remoteApp'), ['remote_apps', 'system_users']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]

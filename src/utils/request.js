@@ -49,9 +49,12 @@ service.interceptors.request.use(
 )
 
 function ifUnauthorized({ response, error }) {
-  if (response.status === 401 && response.request.responseURL.indexOf('/users/profile') === -1) {
+  if (response.status === 401) {
     response.config.disableFlashErrorMsg = true
-    // 未授权重定向到登录页面
+    if (response.request.responseURL.indexOf('/users/profile/') !== -1) {
+      window.location = '/core/auth/login/'
+      return
+    }
     const title = i18n.t('common.Info')
     const msg = i18n.t('auth.LoginRequiredMsg')
     MessageBox.confirm(msg, title, {

@@ -18,11 +18,13 @@ export default {
           {
             prop: 'name',
             label: this.$t('assets.Name'),
+            showOverflowTooltip: true,
             sortable: true
           },
           {
             prop: 'value',
             label: this.$t('assets.Value'),
+            showOverflowTooltip: true,
             sortable: 'custom'
           },
           {

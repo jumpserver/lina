@@ -9,7 +9,7 @@
       <LabelCard type="warning" style="margin-top: 15px" v-bind="labelConfig" />
     </el-col>
   </el-row>
-</template>a
+</template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
@@ -164,7 +164,7 @@ export default {
         },
         {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols
+          value: this.object.protocols.toString()
         },
         {
           key: this.$t('assets.PublicIp'),
@@ -176,7 +176,7 @@ export default {
         },
         {
           key: this.$t('assets.Domain'),
-          value: this.object.domain
+          value: this.object.domain_display
         },
         {
           key: this.$t('assets.Vendor'),

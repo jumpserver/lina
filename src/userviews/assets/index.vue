@@ -13,7 +13,7 @@ export default {
     return {
       allFavorites: [],
       treeSetting: {
-        showMenu: true,
+        showMenu: false,
         showRefresh: true,
         showAssets: false,
         url: '/api/v1/perms/users/assets/',
@@ -40,7 +40,7 @@ export default {
             formatter: DialogDetailFormatter,
             showOverflowTooltip: true,
             formatterArgs: {
-              getDialogTile: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
+              getDialogTitle: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
               getDetailItems: function({ col, row, cellValue }) {
                 return [
                   {
@@ -60,8 +60,8 @@ export default {
                     value: row.platform
                   },
                   {
-                    key: this.$t('assets.Domain'),
-                    value: row.domain
+                    key: this.$t('assets.Comment'),
+                    value: row.comment
                   }
                 ]
               }.bind(this)
@@ -172,4 +172,7 @@ export default {
 </script>
 
 <style>
+  .el-card {
+    border: 0 !important;
+  }
 </style>

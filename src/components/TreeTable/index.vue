@@ -1,7 +1,7 @@
 <template>
   <el-collapse-transition>
     <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
+      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="transition-box">
         <component
           :is="component"
           ref="AutoDataZTree"
@@ -14,7 +14,7 @@
           </div>
         </component>
       </div>
-      <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+      <div :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')">
         <div class="mini">
           <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
             <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />

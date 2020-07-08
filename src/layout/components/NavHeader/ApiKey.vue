@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog width="60%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
+    <Dialog :destroy-on-close="true" width="60%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
       <div>
         <el-alert type="success"> {{ helpMessage }} </el-alert>
         <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />

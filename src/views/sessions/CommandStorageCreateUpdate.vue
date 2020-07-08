@@ -50,7 +50,7 @@ export default {
         hosts: {
           label: this.$t('sessions.hosts'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ]
         },
         index: {
@@ -67,7 +67,7 @@ export default {
         }
       },
       fieldsMap: {
-        es: ['name', 'type', 'hosts', 'index', 'doc_type', 'comment']
+        es: [[this.$t('common.Basic'), ['name', 'type', 'hosts', 'index', 'doc_type', 'comment']]]
       },
       url: '/api/v1/terminal/command-storages/'
     }

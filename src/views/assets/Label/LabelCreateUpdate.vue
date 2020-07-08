@@ -16,7 +16,7 @@ export default {
 
       },
       fields: [
-        [this.$t('common.BasicInfo'), ['name', 'value', 'assets']]
+        [this.$t('common.Basic'), ['name', 'value', 'assets']]
       ],
       fieldsMeta: {
         assets: {

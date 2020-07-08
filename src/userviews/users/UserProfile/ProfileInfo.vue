@@ -7,7 +7,7 @@
       <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
-</template>a
+</template>
 
 <script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
