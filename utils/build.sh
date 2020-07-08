@@ -21,9 +21,10 @@ if [[ -n ${VERSION} ]]; then
 fi
 
 # 下载依赖模块并构建
-cd "${project_dir}" && yarn || exit 3
+cd "${project_dir}" || exit 3
+yarn || exit 4
 rm -rf lina dist
-yarn build:prod || exit 4
+yarn build:prod || exit 5
 
 # 打包
 rm -rf "${release_dir:?}"/*
