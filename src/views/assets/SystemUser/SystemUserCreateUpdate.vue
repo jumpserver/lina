@@ -47,12 +47,7 @@ export default {
             if (form.login_mode !== 'auto') {
               return true
             }
-            if (!form.auto_push) {
-              return false
-            }
-            if (form.auto_generate_key) {
-              return true
-            }
+            return form.auto_generate_key === true
           }
         },
         username_same_with_user: {
@@ -71,9 +66,6 @@ export default {
               return true
             }
             if (form.login_mode !== 'auto') {
-              return true
-            }
-            if (!form.auto_push) {
               return true
             }
           }
@@ -126,9 +118,6 @@ export default {
           hidden: form => {
             if (form.login_mode !== 'auto') {
               return true
-            }
-            if (!form.auto_push) {
-              return false
             }
             return form.auto_generate_key === true
           }
