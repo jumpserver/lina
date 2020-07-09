@@ -31,12 +31,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get(`/api/v1/tickets/tickets/apply-for-perm/${this.$route.params.id}/`).then(res => {
-      res.ips = res.ips.join(', ')
-      this.ticket = res
-    }).catch(err => {
-      this.$message.error(err)
-    })
+
   },
   methods: {
     getObjectName() {

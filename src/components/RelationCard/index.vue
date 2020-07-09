@@ -37,7 +37,6 @@
 import Select2 from '../Select2'
 import IBox from '../IBox'
 import { createSourceIdCache } from '@/api/common'
-
 export default {
   name: 'RelationCard',
   components: {

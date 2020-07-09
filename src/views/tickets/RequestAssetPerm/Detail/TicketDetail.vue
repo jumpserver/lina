@@ -1,6 +1,16 @@
 <template>
   <el-row>
     <DetailCard :title="cardTitle" :items="detailCardItems">
+      <template v-if="hasActionPerm&&object.status !== 'closed'">
+        <el-form ref="request_form" :model="request_form" label-width="280px" label-position="left">
+          <el-form-item :label="$t('tickets.Asset')" required>
+            <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" />
+          </el-form-item>
+          <el-form-item :label="$t('tickets.SystemUser')" required>
+            <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" />
+          </el-form-item>
+        </el-form>
+      </template>
       <div class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
@@ -36,16 +46,6 @@
           <el-form-item :label="$t('tickets.reply')">
             <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
           </el-form-item>
-          <el-form-item :label="$t('tickets.confirmed_assets')">
-            <el-select v-model="form.confirmed_assets" multiple placeholder="Select">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-form-item>
           <el-form-item style="float: right">
             <template v-if="hasActionPerm">
               <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import Select2 from '@/components/Select2'
 import DetailCard from '@/components/DetailCard'
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
@@ -68,7 +69,8 @@ import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'TicketDetail',
   components: {
-    DetailCard
+    DetailCard,
+    Select2
   },
   props: {
     object: {
@@ -83,8 +85,30 @@ export default {
         comments: '',
         confirmed_assets: []
       },
+      request_form: {
+        asset: [],
+        systemuser: ''
+      },
       comments: '',
-      assets: []
+      assets: [],
+      asset_select2: {
+        multiple: true,
+        ajax: {
+          url: this.object.assets_waitlist_url,
+          transformOption: (item) => {
+            return { label: item.hostname, value: item.id }
+          }
+        }
+      },
+      systemuser_select2: {
+        multiple: false,
+        ajax: {
+          url: this.object.system_user_waitlist_url,
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
+          }
+        }
+      }
     }
   },
   computed: {
@@ -123,12 +147,12 @@ export default {
           value: this.object.assignee_display
         },
         {
-          key: this.$t('tickets.ips'),
+          key: this.$t('tickets.IP'),
           value: this.object.ips
         },
         {
-          key: this.$t('tickets.host_name'),
-          value: this.object.host_name
+          key: this.$t('tickets.Hostname'),
+          value: this.object.hostname
         },
         {
           key: this.$t('common.dateCreated'),
@@ -144,12 +168,6 @@ export default {
     const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
     this.$axios.get(url).then(res => {
       this.comments = res
-    }).catch(err => {
-      this.$message.error(err)
-    })
-    const asset_url = `/api/v1/assets/assets/?ips=${this.object.ips.join(',')}`
-    this.$axios.get(asset_url).then(res => {
-      console.log('---------', res)
     }).catch(err => {
       this.$message.error(err)
     })
@@ -182,10 +200,24 @@ export default {
       })
     },
     handleApprove() {
-      this.createComment(function() {})
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { action: 'approve' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      // this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      if (this.request_form.asset.length === 0 || this.request_form.systemuser === '') {
+        return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
+      } else {
+        this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {
+          confirmed_system_user: this.request_form.systemuser,
+          confirmed_assets: this.request_form.asset
+        }).then(res => {
+          this.$axios.post(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/approve/`).then(
+            () => {
+              this.$message.success(this.$t('common.updateSuccessMsg'))
+              this.reloadPage()
+            }
+          )
+        }).catch(
+          () => this.$message.success(this.$t('common.updateErrorMsg'))
+        )
+      }
     },
     handleReject() {
       this.createComment(function() {})

@@ -217,6 +217,7 @@
     "bulkDeleteSuccessMsg": "Bulk delete success",
     "bulkRemoveErrorMsg": "Bulk remove failed: ",
     "bulkRemoveSuccessMsg": "Bulk remove success",
+    "NeedAssetsAndSystemUserErrMsg": "Need assets and systemuser",
     "createBy": "Create by",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
@@ -690,7 +691,11 @@
     "type": "Type",
     "user": "User",
     "Status": "Status",
-    "Open": "Open"
+    "Open": "Open",
+    "IP": "IP",
+    "Hostname": "Hostname",
+    "Asset": "Asset",
+    "SystemUser": "System user"
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",

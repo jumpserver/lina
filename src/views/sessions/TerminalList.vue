@@ -1,17 +1,24 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()" />
+  </div>
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import Dialog from '@/components/Dialog'
 import { BooleanFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    Dialog
   },
   data() {
     return {
+      showDialog: false,
+      selectRows: null,
       tableConfig: {
         url: '/api/v1/terminal/terminals/',
         columns: ['name', 'remote_addr', 'session_online', 'is_active', 'is_alive', 'actions'],
@@ -52,6 +59,19 @@ export default {
             can: true,
             callback: this.handleStorageConfiguration
           }
+        ],
+        extraMoreActions: [
+          {
+            name: 'updateSelected',
+            title: this.$t('common.updateSelected'),
+            type: 'primary',
+            has: true,
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: function({ selectedRows }) {
+              this.selectRows = selectedRows
+              this.showDialog = true
+            }.bind(this)
+          }
         ]
       }
     }
@@ -59,7 +79,14 @@ export default {
   methods: {
     handleStorageConfiguration() {
       this.$router.push('/terminal/storages')
+    },
+    handleConfirm() {
+
+    },
+    handleCancel() {
+      this.showDialog = false
     }
+
   }
 }
 </script>

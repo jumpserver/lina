@@ -77,6 +77,13 @@ export default [
         meta: { title: i18n.t('route.Tickets'), icon: 'check-square-o', permissions: [rolec.PERM_USE] }
       },
       {
+        path: 'tickets/request-asset-perm/create',
+        name: 'RequestAssetPermTicketCreateUpdate',
+        component: () => import('@/views/tickets/RequestAssetPerm/RequestAssetPermTicketCreateUpdate'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
         path: 'tickets/request-asset-perm/:id',
         name: 'AssetsTicketDetail',
         component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
@@ -87,13 +94,6 @@ export default [
         path: 'tickets/:id',
         name: 'TicketDetail',
         component: () => import('@/views/tickets/TicketDetail/index'),
-        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
-        hidden: true
-      },
-      {
-        path: 'tickets/request-asset-perm/create',
-        name: 'RequestAssetPermTicketCreateUpdate',
-        component: () => import('@/views/tickets/RequestAssetPerm/RequestAssetPermTicketCreateUpdate'),
         meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
         hidden: true
       }

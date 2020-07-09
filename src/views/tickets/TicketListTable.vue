@@ -94,7 +94,7 @@ export default {
       return [
         {
           name: '',
-          title: 'request perm',
+          title: this.$t('tickets.RequestAssetPerm'),
           type: 'primary',
           can: true,
           callback: this.onCallback
