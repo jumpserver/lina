@@ -4,7 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo } from '@/utils/common'
+import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   components: {
@@ -40,7 +40,10 @@ export default {
             width: '100px'
           },
           datetime: {
-            width: '160px'
+            width: '160px',
+            formatter: function(row, cell, value) {
+              return toSafeLocalDateStr(value)
+            }
           },
           reason: {
             showOverflowTooltip: true
