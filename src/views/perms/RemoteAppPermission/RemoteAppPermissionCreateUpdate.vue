@@ -52,15 +52,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: '/api/v1/assets/system-users/',
-              processResults(data) {
-                let results = data.results
-                results = results.filter((item) => item.protocol === 'rdp').map((item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/system-users/?protocol=rdp'
             }
           }
         },
