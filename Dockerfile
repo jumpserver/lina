@@ -1,4 +1,7 @@
 FROM node:10 as stage-build
+ARG VERSION
+ENV VERSION=$VERSION
+
 WORKDIR /data
 ADD . /data
 RUN cd utils && bash -ix build.sh
