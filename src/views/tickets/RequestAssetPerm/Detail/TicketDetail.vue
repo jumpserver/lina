@@ -86,13 +86,14 @@ export default {
         confirmed_assets: []
       },
       request_form: {
-        asset: [],
+        asset: this.object.confirmed_assets,
         systemuser: ''
       },
       comments: '',
       assets: [],
       asset_select2: {
         multiple: true,
+        value: this.object.confirmed_assets,
         ajax: {
           url: this.object.assets_waitlist_url,
           transformOption: (item) => {

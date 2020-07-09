@@ -22,29 +22,13 @@ export default {
         date_start: date_start
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'ips_or_not', 'ips', 'hostname', 'date_start', 'date_expired', 'assignees']]
+        [this.$t('common.Basic'), ['title', 'ips', 'hostname', 'date_start', 'date_expired', 'assignees']]
       ],
       fieldsMeta: {
-        ips_or_not: {
-          label: 'IP组或主机名',
-          type: 'checkbox'
-        },
         ips: {
-          hidden: (formValue) => {
-            return !formValue.ips_or_not
-          },
-          rules: [
-            { required: true }
-          ],
           helpText: '请输入逗号分割的IP地址组'
         },
         hostname: {
-          hidden: (formValue) => {
-            return formValue.ips_or_not
-          },
-          rules: [
-            { required: true }
-          ],
           helpText: '支持模糊匹配'
         },
         assignees: {
