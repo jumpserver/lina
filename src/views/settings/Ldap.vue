@@ -69,7 +69,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testLdapSetting, testLdapUserLogin,
-  importLdapUser, refreshLdapUserCache } from '@/api/settings'
+  importLdapUser, refreshLdapUserCache, StartLdapUserCache } from '@/api/settings'
 import ListTable from '@/components/ListTable'
 import { IBox } from '@/components'
 
@@ -192,7 +192,8 @@ export default {
             can: true,
             callback: function() {
               refreshLdapUserCache().then(res => {
-                this.$message.success(res.msg)
+                this.$message.success(this.$t('setting.refreshLdapCache'))
+                StartLdapUserCache()
               })
             }.bind(this)
           }
@@ -242,7 +243,7 @@ export default {
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {
-        setTimeout(this.$refs.listTable.reloadTable, 3000)
+        setTimeout(this.$refs.listTable.reloadTable, 30000)
       }
     }
   }

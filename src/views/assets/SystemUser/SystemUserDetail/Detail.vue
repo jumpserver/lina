@@ -8,12 +8,13 @@
       <RelationCard v-if="object.protocol === 'ssh'" ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
-</template>a
+</template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
 import AutoPushCard from './AutoPushCard'
 import RelationCard from '@/components/RelationCard/index'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'Detail',
@@ -110,7 +111,7 @@ export default {
         },
         {
           key: this.$t('assets.date_joined'),
-          value: this.$d(new Date(this.object.date_created), 'medium')
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('assets.CreatedBy'),

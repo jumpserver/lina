@@ -9,7 +9,7 @@
       <LabelCard type="warning" style="margin-top: 15px" v-bind="labelConfig" />
     </el-col>
   </el-row>
-</template>a
+</template>
 
 <script>
 import DetailCard from '@/components/DetailCard'

@@ -51,22 +51,27 @@ export default {
           },
           command_amount: {
             label: this.$t('sessions.command'),
-            width: '60px'
+            width: '100px'
+          },
+          system_user: {
+            showOverflowTooltip: true
           },
           login_from: {
             label: this.$t('sessions.loginFrom'),
-            width: '110px'
+            width: '120px',
+            showOverflowTooltip: true
           },
           remote_addr: {
-            width: '130px'
+            width: '120px'
           },
           protocol: {
             label: this.$t('sessions.protocol'),
-            width: '60px',
+            width: '80px',
             sortable: false,
             formatter: null
           },
           date_start: {
+            width: '100px',
             formatter: function(row) {
               return toSafeLocalDateStr(row.date_start)
             }
@@ -81,6 +86,7 @@ export default {
           actions: {
             prop: 'id',
             label: this.$t('common.Actions'),
+            width: '160px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,

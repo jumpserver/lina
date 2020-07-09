@@ -113,6 +113,7 @@
     "SFTPHelpMessage": "SFTP root dir, tmp, home or custom",
     "SerialNumber": "Serial number",
     "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami,/bin/ifconfig",
+    "PasswordHelpMessage": "Password or private key password",
     "SystemUser": "System user",
     "SystemUserDetail": "System user detail",
     "SystemUserListHelpMessage": "System user is JumpServer jump login assets used by the users, can be understood as the user login assets, such as web, sa, the dba (` ssh web@some-host `), rather than using a user the username login server jump (` ssh xiaoming@some-host `); In simple terms, users log into JumpServer using their own username, and JumpServer uses system users to log into assets. When system users are created, if you choose auto push JumpServer to use Ansible push system users into the asset, if the asset (Switch) does not support ansible, please manually fill in the account password.\n",
@@ -122,6 +123,7 @@
     "TestConnection": "Test connection",
     "Type": "Type",
     "UnselectedAssets": "Unselected assets",
+    "UnselectedNodes": "Unselected nodes",
     "UpdateAssetUserToken": "Update asset user auth",
     "Username": "Username",
     "UsernameHelpMessage": "Username is dynamic, When connect asset, using current user's username",
@@ -667,7 +669,8 @@
     "testLdapLoginTitle": "Test LDAP user login",
     "userGuideUrl": "User Guide URL",
     "username": "Username",
-    "usernamePlaceholder": "Please input username"
+    "usernamePlaceholder": "Please input username",
+    "refreshLdapCache":"Refreshing Ldap cache "
   },
   "settings": {
     "setting": "Setting"
@@ -821,12 +824,13 @@
       "Username": "Username"
     },
     "Cloud": {
+      "IsAlwaysUpdate": "Asset info is kept up-to-date",
       "AccountCreate": "Create account",
       "AccountList": "Account list",
       "AccountUpdate": "Update account",
       "Cloud": "Cloud center",
       "CloudCenter": "Cloud center",
-      "CoveredAlwaysHelpTips": "The asset information is always covered",
+      "IsAlwaysUpdateHelpTips": "Whether the asset information, including Hostname, IP, Platform, and AdminUser, is updated synchronously each time a synchronization task is performed",
       "SyncInstanceTaskCreate": "Create sync instance task",
       "SyncInstanceTaskList": "Sync instance task list",
       "SyncInstanceTaskDetail": "Sync instance task detail",
@@ -839,7 +843,6 @@
       "Account":"Account",
       "Node": "Node",
       "AdminUser":"Admin user",
-      "CoveredAlways": "Covered always",
       "PeriodicPerform":"Periodic perform",
       "Periodic":"Periodic",
       "RegularlyPerform": "Regularly perform",
@@ -857,7 +860,8 @@
       "ReleasedCount": "Released count",
       "DateSync": "Date sync",
       "Status": "Status",
-      "Log": "Log"
+      "Log": "Log",
+      "DeleteReleasedAssets": "Delete released assets"
     },
     "Corporation": "Corporation",
     "Edition": "Edition",

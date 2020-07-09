@@ -113,6 +113,7 @@
     "SFTPHelpMessage": "SFTP的起始路径，tmp目录, 用户home目录或者自定义",
     "SerialNumber": "序列号",
     "SudoHelpMessage": "使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig",
+    "PasswordHelpMessage": "密码或密钥密码",
     "SystemUser": "系统用户",
     "SystemUserDetail": "系统用户详情",
     "SystemUserListHelpMessage": "系统用户是 JumpServer 跳转登录资产时使用的用户，可以理解为登录资产用户，如 web，sa，dba（`ssh web@some-host`），而不是使用某个用户的用户名跳转登录服务器（`ssh xiaoming@some-host`）； 简单来说是用户使用自己的用户名登录 JumpServer，JumpServer 使用系统用户登录资产。 系统用户创建时，如果选择了自动推送，JumpServer 会使用 Ansible 自动推送系统用户到资产中，如果资产（交换机）不支持 Ansible，请手动填写账号密码。\n",
@@ -122,6 +123,7 @@
     "TestConnection": "测试连接",
     "Type": "类型",
     "UnselectedAssets": "未选择资产",
+    "UnselectedNodes": "未选择节点",
     "UpdateAssetUserToken": "更新资产用户认证信息",
     "Username": "用户名",
     "UsernameHelpMessage": "用户名是动态的，登录资产时使用当前用户的用户名登录",
@@ -132,6 +134,7 @@
     "date_joined": "创建日期",
     "ip": "IP",
     "sshkey": "sshkey"
+
   },
   "audits": {
     "Hosts": "主机",
@@ -667,7 +670,8 @@
     "testLdapLoginTitle": "测试LDAP 用户登录",
     "userGuideUrl": "用户向导URL",
     "username": "用户名",
-    "usernamePlaceholder": "请输入用户名"
+    "usernamePlaceholder": "请输入用户名",
+    "refreshLdapCache":"刷新Ldap缓存，请稍后"
   },
   "settings": {
     "setting": "设置"
@@ -822,12 +826,13 @@
       "Username": "用户名"
     },
     "Cloud": {
+      "IsAlwaysUpdate": "资产信息保持最新",
       "AccountCreate": "创建账户",
       "AccountList": "账户列表",
       "AccountUpdate": "更新账户",
       "Cloud": "云管中心",
       "CloudCenter": "云管中心",
-      "CoveredAlwaysHelpTips": "资产信息总是被覆盖",
+      "IsAlwaysUpdateHelpTips": "每次执行同步任务时，是否同步更新资产的信息，包括主机名、IP、系统平台、管理用户",
       "SyncInstanceTaskCreate": "创建同步实例任务",
       "SyncInstanceTaskList": "同步实例任务列表",
       "SyncInstanceTaskDetail": "同步实例任务详情",
@@ -840,7 +845,6 @@
       "Account":"账户",
       "Node": "节点",
       "AdminUser":"管理用户",
-      "CoveredAlways": "总是覆盖",
       "Periodic":"执行周期",
       "PeriodicPerform":"定时执行",
       "RegularlyPerform": "定期执行",
@@ -858,7 +862,8 @@
       "ReleasedCount": "已释放",
       "DateSync": "同步日期",
       "Status": "状态",
-      "Log": "日志"
+      "Log": "日志",
+      "DeleteReleasedAssets": "删除已释放资产"
     },
     "Corporation": "公司",
     "Edition": "版本",

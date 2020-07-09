@@ -78,6 +78,9 @@ export default {
               systemuser: this.object.id
             })
           )
+          if (data.length === 0) {
+            return this.$message.error(this.$t('assets.UnselectedAssets'))
+          }
           return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: (items, that) => {
@@ -144,6 +147,9 @@ export default {
               node: v.value
             }
           })
+          if (data.length === 0) {
+            return this.$message.error(this.$t('assets.UnselectedNodes'))
+          }
           return this.$axios.post(relationUrl, data)
         },
         performDelete: (item) => {

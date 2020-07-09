@@ -157,3 +157,10 @@ export function setUrlParam(url, name, value) {
   }
   return url
 }
+
+export function getDayFuture(days, now) {
+  if (!now) {
+    now = new Date()
+  }
+  return new Date(now.getTime() + 3600 * 1000 * 24 * days)
+}

@@ -167,6 +167,10 @@ export default {
       if (!this.setting.showMenu) {
         return
       }
+      // 屏蔽收藏资产
+      if (treeNode.id === '-12') {
+        return
+      }
       if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
         this.zTree.cancelSelectedNode()
         this.showRMenu('root', event.clientX, event.clientY)
