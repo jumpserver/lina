@@ -158,7 +158,16 @@ export default {
         {
           key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
+        },
+        {
+          key: this.$t('common.dateStart'),
+          value: toSafeLocalDateStr(this.object.date_start)
+        },
+        {
+          key: this.$t('common.dateExpired'),
+          value: toSafeLocalDateStr(this.object.date_expired)
         }
+
       ]
     },
     hasActionPerm() {
