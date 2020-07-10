@@ -83,7 +83,7 @@ export default {
             }
           }
         },
-        moreActionsTitle: this.$t('common.Create'),
+        moreActionsTitle: this.$t('common.MoreActions'),
         moreActionsType: 'primary',
         extraMoreActions: this.genExtraMoreActions()
       }
