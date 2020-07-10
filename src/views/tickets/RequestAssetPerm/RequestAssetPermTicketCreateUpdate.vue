@@ -33,7 +33,6 @@ export default {
           helpText: '支持模糊匹配'
         },
         org_id: {
-          label: '审核人组织',
           component: Select2,
           el: {
             multiple: false,
