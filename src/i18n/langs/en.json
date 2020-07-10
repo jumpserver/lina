@@ -113,6 +113,7 @@
     "SFTPHelpMessage": "SFTP root dir, tmp, home or custom",
     "SerialNumber": "Serial number",
     "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami,/bin/ifconfig",
+    "PasswordHelpMessage": "Password or private key password",
     "SystemUser": "System user",
     "SystemUserDetail": "System user detail",
     "SystemUserListHelpMessage": "System user is JumpServer jump login assets used by the users, can be understood as the user login assets, such as web, sa, the dba (` ssh web@some-host `), rather than using a user the username login server jump (` ssh xiaoming@some-host `); In simple terms, users log into JumpServer using their own username, and JumpServer uses system users to log into assets. When system users are created, if you choose auto push JumpServer to use Ansible push system users into the asset, if the asset (Switch) does not support ansible, please manually fill in the account password.\n",

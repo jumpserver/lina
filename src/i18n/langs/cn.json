@@ -113,6 +113,7 @@
     "SFTPHelpMessage": "SFTP的起始路径，tmp目录, 用户home目录或者自定义",
     "SerialNumber": "序列号",
     "SudoHelpMessage": "使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig",
+    "PasswordHelpMessage": "密码或密钥密码",
     "SystemUser": "系统用户",
     "SystemUserDetail": "系统用户详情",
     "SystemUserListHelpMessage": "系统用户是 JumpServer 跳转登录资产时使用的用户，可以理解为登录资产用户，如 web，sa，dba（`ssh web@some-host`），而不是使用某个用户的用户名跳转登录服务器（`ssh xiaoming@some-host`）； 简单来说是用户使用自己的用户名登录 JumpServer，JumpServer 使用系统用户登录资产。 系统用户创建时，如果选择了自动推送，JumpServer 会使用 Ansible 自动推送系统用户到资产中，如果资产（交换机）不支持 Ansible，请手动填写账号密码。\n",

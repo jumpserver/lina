@@ -4,6 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { getDayFuture } from '@/utils/common'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -12,8 +14,8 @@ export default {
     return {
       initial: {
         is_active: true,
-        date_start: this.$moment().format('YYYY-MM-DD HH:mm:ss ZZ'),
-        date_expired: '2099-12-31 00:00:00 +0800'
+        date_start: new Date().toISOString(),
+        date_expired: getDayFuture(36500, new Date()).toISOString()
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -50,15 +52,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: '/api/v1/assets/system-users/',
-              processResults(data) {
-                let results = data.results
-                results = results.filter((item) => item.protocol === 'rdp').map((item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                })
-                const more = !!data.next
-                return { results: results, pagination: more, total: data.count }
-              }
+              url: '/api/v1/assets/system-users/?protocol=rdp'
             }
           }
         },

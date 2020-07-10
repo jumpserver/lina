@@ -1,12 +1,11 @@
 FROM node:10 as stage-build
-WORKDIR /data
-ADD ./package.json /data/package.json
-ADD ./yarn.lock /data/yarn.lock
-RUN yarn
-ADD . /data
-RUN yarn build:prod
+ARG VERSION
+ENV VERSION=$VERSION
 
+WORKDIR /data
+ADD . /data
+RUN cd utils && bash -xieu build.sh
 
 FROM nginx:alpine
-COPY --from=stage-build /data/lina /opt/lina/
+COPY --from=stage-build /data/release/lina /opt/lina
 COPY nginx.conf /etc/nginx/conf.d/default.conf

@@ -219,7 +219,7 @@ export default {
       )
     },
     addObjects() {
-      const objects = this.$refs.select2.getOptionsByValues(this.select2.value)
+      const objects = this.$refs.select2.$refs.select.selected.map(item => ({ label: item.label, value: item.value }))
       if (objects.length === 0) {
         return
       }
