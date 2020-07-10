@@ -2,12 +2,12 @@
   <el-row>
     <DetailCard :title="cardTitle" :items="detailCardItems">
       <template v-if="hasActionPerm&&object.status !== 'closed'">
-        <el-form ref="request_form" :model="request_form" label-width="280px" label-position="left">
+        <el-form ref="request_form" :model="request_form" label-width="380px" label-position="left" class="assets">
           <el-form-item :label="$t('tickets.Asset')" required>
-            <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" />
+            <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" style="width: 30% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
-            <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" />
+            <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
           </el-form-item>
         </el-form>
       </template>
@@ -239,6 +239,9 @@ export default {
 </script>
 
 <style scoped>
+  .assets{
+    margin-top: 14px;
+  }
   .feed-activity-list {
     padding-top: 20px;
     line-height: 1.5;

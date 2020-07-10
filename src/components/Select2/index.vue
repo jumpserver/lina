@@ -172,6 +172,9 @@ export default {
   },
   methods: {
     async loadMore(load) {
+      if (!this.iAjax.url) {
+        return
+      }
       if (!this.params.hasMore) {
         return
       }

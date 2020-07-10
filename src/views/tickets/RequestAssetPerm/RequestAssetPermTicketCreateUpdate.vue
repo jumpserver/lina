@@ -4,8 +4,8 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import Select2 from '@/components/Select2'
 import { getDaysFuture } from '@/utils/common'
-import GroupSelectFormatter from './Detail/GroupSelectFormatter'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -19,10 +19,11 @@ export default {
       initial: {
         ips_or_not: true,
         date_expired: date_expired,
-        date_start: date_start
+        date_start: date_start,
+        org_id: 'DEFAULT'
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'ips', 'hostname', 'date_start', 'date_expired', 'assignees']]
+        [this.$t('common.Basic'), ['title', 'ips', 'hostname', 'date_start', 'date_expired', 'org_id', 'assignees']]
       ],
       fieldsMeta: {
         ips: {
@@ -31,11 +32,30 @@ export default {
         hostname: {
           helpText: '支持模糊匹配'
         },
+        org_id: {
+          label: '审核人组织',
+          component: Select2,
+          el: {
+            multiple: false,
+            options: this.$store.state.users.profile.user_all_orgs
+          },
+          on: {
+            changeOptions: ([event], updateForm) => {
+              console.log(event[0].value) // output: input value
+              this.fieldsMeta.assignees.el.ajax.url = `/api/v1/tickets/tickets/request-asset-perm/assignees/?org_id=${event[0].value}`
+            }
+          }
+        },
         assignees: {
-          component: GroupSelectFormatter,
           el: {
             multiple: true,
-            url: '/api/v1/tickets/tickets/request-asset-perm/assignees/'
+            value: [],
+            ajax: {
+              url: '/api/v1/tickets/tickets/request-asset-perm/assignees/',
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            }
           }
         }
       },
@@ -44,9 +64,6 @@ export default {
         name: 'TicketList'
       }
     }
-  },
-  created() {
-
   },
   methods: {
     performSubmit(validValues) {
