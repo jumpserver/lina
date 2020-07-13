@@ -148,6 +148,7 @@
   },
   "common": {
     "Action": "动作",
+    "RequestTickets": "请求工单",
     "Actions": "操作",
     "Activate": "激活",
     "Active": "激活中",
@@ -698,7 +699,7 @@
     "Hostname": "主机名",
     "Asset": "资产",
     "SystemUser": "系统用户",
-    "RequestAssetPerm": "请求资产授权"
+    "RequestAssetPerm": "申请资产授权"
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",

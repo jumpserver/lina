@@ -148,6 +148,7 @@
   "common": {
     "Nothing": "Nothing",
     "Action": "Action",
+    "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "Activate": "Activate",
     "Active": "Active",

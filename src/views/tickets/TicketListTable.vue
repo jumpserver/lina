@@ -15,6 +15,10 @@ export default {
     url: {
       type: String,
       default: '/api/v1/tickets/tickets/'
+    },
+    hasMoreActions: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -69,7 +73,7 @@ export default {
         ]
       },
       ticketActions: {
-        hasLeftActions: true,
+        hasLeftActions: this.hasMoreActions,
         hasRightActions: false,
         hasCreate: false,
         hasBulkDelete: false,
@@ -83,7 +87,7 @@ export default {
             }
           }
         },
-        moreActionsTitle: this.$t('common.MoreActions'),
+        moreActionsTitle: this.$t('common.RequestTickets'),
         moreActionsType: 'primary',
         extraMoreActions: this.genExtraMoreActions()
       }
