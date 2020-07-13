@@ -56,6 +56,7 @@ export default {
           title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
+            disabled: !this.object.mfa_enabled,
             label: this.$t('common.Reset')
           },
           callbacks: {
@@ -87,6 +88,7 @@ export default {
           title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
+            disabled: this.object.source !== 'local',
             label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
