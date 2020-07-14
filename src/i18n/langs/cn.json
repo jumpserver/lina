@@ -806,6 +806,9 @@
       "ExecutionDetail": "执行详情",
       "ExecutionList": "执行列表",
       "ExecutionTimes": "执行次数",
+      "validatorMessage": {
+        "EnsureThisValueIsGreaterThanOrEqualTo1": "请确保该值大于或者等于 1"
+      },
       "HelpText": {
         "CrontabOfCreateUpdatePage": "例如：每周日 03:05 执行 <5 3 * * 0> <br/> 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href=\"https://tool.lu/crontab/\" target=\"_blank\">在线工具</a>） <br/> 如果同时设置了定期执行和周期执行，优先使用定期执行",
         "IntervalOfCreateUpdatePage": "单位：时",
