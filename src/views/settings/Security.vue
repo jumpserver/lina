@@ -29,6 +29,21 @@ export default {
     }
   },
   data() {
+    var validatorLoginLimitCount = (rule, value, callback) => {
+      if (parseInt(value) < 3) {
+        return callback(new Error(this.$t('setting.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo3')))
+      }
+    }
+    var validatorLoginLimitTime = (rule, value, callback) => {
+      if (parseInt(value) < 5) {
+        return callback(new Error(this.$t('setting.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo5')))
+      }
+    }
+    var validatorPasswordMinLength = (rule, value, callback) => {
+      if (parseInt(value) < 6) {
+        return callback(new Error(this.$t('setting.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo6')))
+      }
+    }
     return {
       selectFields: [
         [this.$t('setting.SecuritySetting'), ['SECURITY_MFA_AUTH', 'SECURITY_COMMAND_EXECUTION', 'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
@@ -57,13 +72,15 @@ export default {
         SECURITY_LOGIN_LIMIT_COUNT: {
           label: this.$t('setting.securityLoginLimitCount'),
           rules: [
-            { required: true }
+            { required: true },
+            { validator: validatorLoginLimitCount }
           ]
         },
         SECURITY_LOGIN_LIMIT_TIME: {
           label: this.$t('setting.securityLoginLimitTime'),
           rules: [
-            { required: true }
+            { required: true },
+            { validator: validatorLoginLimitTime }
           ],
           helpText: this.$t('setting.helpText.securityLoginLimitTime')
         },
@@ -81,7 +98,8 @@ export default {
         SECURITY_PASSWORD_MIN_LENGTH: {
           label: this.$t('setting.securityPasswordMinLength'),
           rules: [
-            { required: true }
+            { required: true },
+            { validator: validatorPasswordMinLength }
           ]
         },
         SECURITY_PASSWORD_UPPER_CASE: {

@@ -635,6 +635,11 @@
       "securityPasswordUpperCase": "After opening, the user password changes and resets must contain uppercase letters",
       "securityServiceAccountRegistration": "Allow using bootstrap token register service account, when terminal setup, can disable it"
     },
+    "validatorMessage": {
+      "EnsureThisValueIsGreaterThanOrEqualTo3": "Ensure this value is greater than or equal to 3",
+      "EnsureThisValueIsGreaterThanOrEqualTo5": "Ensure this value is greater than or equal to 5",
+      "EnsureThisValueIsGreaterThanOrEqualTo6": "Ensure this value is greater than or equal to 6"
+    },
     "import": "Import",
     "importLdapUserTip": "Please submit the LDAP configuration before import",
     "importLdapUserTitle": "LDAP user list",
