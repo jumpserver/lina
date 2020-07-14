@@ -12,7 +12,7 @@ export default [
         path: '',
         name: 'AssetList',
         component: () => import('@/views/assets/Asset/AssetList.vue'),
-        meta: { title: i18n.t('route.AssetList') }
+        meta: { title: i18n.t('route.AssetList'), activeMenu: '/assets/assets' }
       },
       {
         path: 'create',
@@ -47,7 +47,7 @@ export default [
         path: '',
         name: 'DomainList',
         component: () => import('@/views/assets/Domain/DomainList.vue'),
-        meta: { title: i18n.t('route.DomainList') }
+        meta: { title: i18n.t('route.DomainList'), activeMenu: '/assets/domains' }
       },
       {
         path: 'create',
@@ -104,7 +104,7 @@ export default [
         path: '',
         name: 'AdminUserList',
         component: () => import('@/views/assets/AdminUser/AdminUserList'),
-        meta: { title: i18n.t('route.AdminUserList') }
+        meta: { title: i18n.t('route.AdminUserList'), activeMenu: '/assets/admin-users' }
       },
       {
         path: 'create',
@@ -174,7 +174,7 @@ export default [
         path: '',
         name: 'CommandFilterList',
         component: () => import('@/views/assets/CommandFilter/CommandFilterList.vue'),
-        meta: { title: i18n.t('route.CommandFilterList') }
+        meta: { title: i18n.t('route.CommandFilterList'), activeMenu: '/assets/cmd-filters' }
       },
       {
         path: ':id/update',
@@ -265,7 +265,7 @@ export default [
         path: '',
         name: 'LabelList',
         component: () => import('@/views/assets/Label/LabelList.vue'),
-        meta: { title: i18n.t('route.LabelList') }
+        meta: { title: i18n.t('route.LabelList'), activeMenu: '/assets/labels' }
       },
       {
         path: 'create',
