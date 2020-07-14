@@ -237,9 +237,13 @@ export default {
       const data = {
         username_list: selectIds
       }
-      importLdapUser(data).then(res => {
-        this.$message.success(res.msg)
-      })
+      if (selectIds.length === 0) {
+        this.$message.error(this.$t('setting.unselectedUser'))
+      } else {
+        importLdapUser(data).then(res => {
+          this.$message.success(res.msg)
+        })
+      }
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {
