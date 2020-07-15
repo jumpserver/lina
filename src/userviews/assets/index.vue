@@ -87,6 +87,12 @@ export default {
             }
           },
           {
+            prop: 'comment',
+            label: this.$t('assets.Comment'),
+            showOverflowTooltip: true,
+            width: '180px'
+          },
+          {
             prop: 'id',
             align: 'center',
             formatter: LoadingActionsFormatter,
@@ -136,10 +142,10 @@ export default {
   },
   methods: {
     refreshAllFavorites() {
-      this.tableConfig.columns[3].formatterArgs.loading = true
+      this.tableConfig.columns[4].formatterArgs.loading = true
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
-        this.tableConfig.columns[3].formatterArgs.loading = false
+        this.tableConfig.columns[4].formatterArgs.loading = false
       })
     },
     addOrDeleteFavorite(assetId) {
