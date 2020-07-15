@@ -19,7 +19,7 @@ export default {
     return {
       tableConfig: {
         hasSelection: false,
-        url: `/api/v1/terminal/commands/?session=${this.$route.params.id}`,
+        url: `/api/v1/terminal/commands/?session_id=${this.$route.params.id}`,
         columns: [
           'expandCol', 'index', 'input', 'timestamp'
         ],
