@@ -4,14 +4,14 @@
 
 <script>
 import BaseFormatter from './base'
+import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'DateFormatter',
   extends: BaseFormatter,
   data() {
     let value
     if (this.cellValue) {
-      const dt = new Date(this.cellValue)
-      value = this.$d(dt, 'medium')
+      value = toSafeLocalDateStr(this.cellValue)
     } else {
       value = ''
     }

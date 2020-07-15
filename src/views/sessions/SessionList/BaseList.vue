@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { timeOffset, toSafeLocalDateStr, getDaysAgo } from '@/utils/common'
+import { timeOffset, getDaysAgo } from '@/utils/common'
 import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'BaseList',
@@ -71,10 +71,7 @@ export default {
             formatter: null
           },
           date_start: {
-            width: '100px',
-            formatter: function(row) {
-              return toSafeLocalDateStr(row.date_start)
-            }
+            width: '100px'
           },
           duration: {
             label: this.$t('sessions.duration'),
