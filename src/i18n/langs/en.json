@@ -545,6 +545,7 @@
     "terminalDetail": "Terminal detail",
     "terminalUpdate": "Update terminal",
     "terminate": "Terminate",
+    "sessionTerminate": "Session Terminate",
     "test": "Test",
     "type": "Type",
     "user": "Use",
@@ -552,6 +553,7 @@
       "common": "common"
     },
     "Monitor": "Monitor",
+    "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later"
   },
   "setting": {
