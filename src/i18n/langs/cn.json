@@ -636,6 +636,11 @@
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
       "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当终端注册成功后可以禁止"
     },
+    "validatorMessage": {
+      "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
+      "EnsureThisValueIsGreaterThanOrEqualTo5": "请确保该值大于或者等于 5",
+      "EnsureThisValueIsGreaterThanOrEqualTo6": "请确保该值大于或者等于 6"
+    },
     "import": "导入",
     "importLdapUserTip": "请先提交LDAP配置再进行导入",
     "importLdapUserTitle": "LDAP 用户列表",
