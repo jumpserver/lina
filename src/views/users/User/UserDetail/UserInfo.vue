@@ -15,6 +15,8 @@
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import RelationCard from '@/components/RelationCard'
+import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'UserInfo',
   components: {
@@ -250,19 +252,19 @@ export default {
         },
         {
           key: this.$t('users.DateJoined'),
-          value: this.object.date_joined
+          value: toSafeLocalDateStr(this.object.date_joined)
         },
         {
           key: this.$t('users.DateExpired'),
-          value: this.object.date_expired
+          value: toSafeLocalDateStr(this.object.date_expired)
         },
         {
           key: this.$t('users.DatePasswordUpdated'),
-          value: this.object.date_password_last_updated
+          value: toSafeLocalDateStr(this.object.date_password_last_updated)
         },
         {
           key: this.$t('users.DateLastLogin'),
-          value: this.object.last_login
+          value: toSafeLocalDateStr(this.object.last_login)
         },
         {
           key: this.$t('common.Comment'),

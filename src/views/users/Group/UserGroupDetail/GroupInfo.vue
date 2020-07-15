@@ -12,6 +12,8 @@
 <script>
 import DetailCard from '@/components/DetailCard'
 import RelationCard from '@/components/RelationCard'
+import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'GroupInfo',
   components: {
@@ -69,7 +71,7 @@ export default {
         },
         {
           key: this.$t('common.dateCreated'),
-          value: this.object.date_created
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('common.Comment'),
