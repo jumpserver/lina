@@ -48,7 +48,7 @@
         <el-button type="primary" @click="testUerLoginClick">{{ $t('common.Confirm') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogLdapUserImport" :before-close="handleLdapUserImportClose" center>
+    <el-dialog :visible.sync="dialogLdapUserImport" :destroy-on-close="true" center>
       <div slot="title">
         {{ $t('setting.importLdapUserTitle') }}
         <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
@@ -60,7 +60,7 @@
         @error="handlerListTableXHRError($event)"
       />
       <div slot="footer">
-        <el-button @click="handleLdapUserImportClancel">{{ $t('common.Cancel') }}</el-button>
+        <el-button @click="dialogLdapUserImport=false">{{ $t('common.Cancel') }}</el-button>
         <el-button type="primary" @click="importUserClick">{{ $t('common.Import') }}</el-button>
       </div>
     </el-dialog>
@@ -245,14 +245,6 @@ export default {
       if (this.dialogLdapUserImport) {
         setTimeout(this.$refs.listTable.reloadTable, 30000)
       }
-    },
-    handleLdapUserImportClose(done) {
-      this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.clearSelection()
-      done()
-    },
-    handleLdapUserImportClancel() {
-      this.$refs.listTable.$refs.dataTable.$refs.dataTable.$refs.table.clearSelection()
-      this.dialogLdapUserImport = false
     }
   }
 }
