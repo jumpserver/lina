@@ -546,6 +546,7 @@
     "terminalDetail": "终端详情",
     "terminalUpdate": "更新终端",
     "terminate": "终断",
+    "sessionTerminate": "会话终断",
     "test": "测试",
     "type": "类型",
     "user": "用户",
@@ -553,7 +554,8 @@
       "common": "普通"
     },
     "Monitor": "监控",
-    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新表格查看"
+    "sessionMonitor": "监控",
+    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看"
   },
   "setting": {
     "ApiKeyList": "API Key 列表",
