@@ -33,16 +33,19 @@ export default {
       if (parseInt(value) < 3) {
         return callback(new Error(this.$t('setting.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo3')))
       }
+      callback()
     }
     var validatorLoginLimitTime = (rule, value, callback) => {
       if (parseInt(value) < 5) {
         return callback(new Error(this.$t('setting.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo5')))
       }
+      callback()
     }
     var validatorPasswordMinLength = (rule, value, callback) => {
       if (parseInt(value) < 6) {
         return callback(new Error(this.$t('setting.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo6')))
       }
+      callback()
     }
     return {
       selectFields: [
