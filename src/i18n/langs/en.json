@@ -545,6 +545,7 @@
     "terminalDetail": "Terminal detail",
     "terminalUpdate": "Update terminal",
     "terminate": "Terminate",
+    "sessionTerminate": "Session Terminate",
     "test": "Test",
     "type": "Type",
     "user": "Use",
@@ -552,6 +553,7 @@
       "common": "common"
     },
     "Monitor": "Monitor",
+    "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later"
   },
   "setting": {
@@ -583,6 +585,7 @@
     "authLdapSearchOu": "User OU",
     "authLdapServerUri": "LDAP server",
     "authLdapUserAttrMap": "User attr map",
+    "unselectedUser": "Unselected user",
     "auto": "Auto",
     "basicSetting": "Basic setting",
     "communityEdition": "Community edition",
@@ -634,6 +637,11 @@
       "securityPasswordSpecialChar": "After opening, the user password changes and resets must contain special characters",
       "securityPasswordUpperCase": "After opening, the user password changes and resets must contain uppercase letters",
       "securityServiceAccountRegistration": "Allow using bootstrap token register service account, when terminal setup, can disable it"
+    },
+    "validatorMessage": {
+      "EnsureThisValueIsGreaterThanOrEqualTo3": "Ensure this value is greater than or equal to 3",
+      "EnsureThisValueIsGreaterThanOrEqualTo5": "Ensure this value is greater than or equal to 5",
+      "EnsureThisValueIsGreaterThanOrEqualTo6": "Ensure this value is greater than or equal to 6"
     },
     "import": "Import",
     "importLdapUserTip": "Please submit the LDAP configuration before import",
@@ -803,6 +811,9 @@
       "ExecutionDetail": "Execution detail",
       "ExecutionList": "Execution list",
       "ExecutionTimes": "Execution times",
+      "validatorMessage": {
+        "EnsureThisValueIsGreaterThanOrEqualTo1": "Ensure this value is greater than or equal to 1"
+      },
       "HelpText": {
         "CrontabOfCreateUpdatePage": "For example: every Sunday at 03:05 execute <5 3 * * 0> <br/> Using the 5-bit Linux crontab expression <minute hour day month week> (<a href=\"https://tool.lu/crontab/\" target=\"_blank\"> Online tool </a>) <br/> If both regularly perform and cycle perform execution are set, use regularly perform first",
         "IntervalOfCreateUpdatePage": "Unit: hour",

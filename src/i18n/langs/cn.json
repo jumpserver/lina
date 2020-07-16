@@ -546,6 +546,7 @@
     "terminalDetail": "终端详情",
     "terminalUpdate": "更新终端",
     "terminate": "终断",
+    "sessionTerminate": "会话终断",
     "test": "测试",
     "type": "类型",
     "user": "用户",
@@ -553,7 +554,8 @@
       "common": "普通"
     },
     "Monitor": "监控",
-    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新表格查看"
+    "sessionMonitor": "监控",
+    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看"
   },
   "setting": {
     "ApiKeyList": "API Key 列表",
@@ -584,6 +586,7 @@
     "authLdapSearchOu": "用户OU",
     "authLdapServerUri": "LDAP地址",
     "authLdapUserAttrMap": "LDAP属性映射",
+    "unselectedUser": "没有选择用户",
     "auto": "自动",
     "basicSetting": "基本设置",
     "communityEdition": "社区版",
@@ -635,6 +638,11 @@
       "securityPasswordSpecialChar": "开启后，用户密码修改、重置必须包含特殊字符",
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
       "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当终端注册成功后可以禁止"
+    },
+    "validatorMessage": {
+      "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
+      "EnsureThisValueIsGreaterThanOrEqualTo5": "请确保该值大于或者等于 5",
+      "EnsureThisValueIsGreaterThanOrEqualTo6": "请确保该值大于或者等于 6"
     },
     "import": "导入",
     "importLdapUserTip": "请先提交LDAP配置再进行导入",
@@ -805,6 +813,9 @@
       "ExecutionDetail": "执行详情",
       "ExecutionList": "执行列表",
       "ExecutionTimes": "执行次数",
+      "validatorMessage": {
+        "EnsureThisValueIsGreaterThanOrEqualTo1": "请确保该值大于或者等于 1"
+      },
       "HelpText": {
         "CrontabOfCreateUpdatePage": "例如：每周日 03:05 执行 <5 3 * * 0> <br/> 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href=\"https://tool.lu/crontab/\" target=\"_blank\">在线工具</a>） <br/> 如果同时设置了定期执行和周期执行，优先使用定期执行",
         "IntervalOfCreateUpdatePage": "单位：时",

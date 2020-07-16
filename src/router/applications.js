@@ -11,7 +11,7 @@ export default [
       {
         path: '',
         name: 'RemoteAppList',
-        meta: { title: i18n.t('route.RemoteApp') },
+        meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps' },
         component: () => import('@/views/applications/RemoteApp/RemoteAppList')
       },
       {

@@ -176,7 +176,7 @@ export default {
                     this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
-                    }).catch(() => this.$message.error(this.$t('common.deleteFailedMsg')))
+                    })
                   }
                 },
                 {

@@ -50,6 +50,7 @@ export default {
         domain: {
           el: {
             multiple: false,
+            clearable: true,
             ajax: {
               url: '/api/v1/assets/domains/'
             }

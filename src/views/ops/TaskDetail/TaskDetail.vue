@@ -14,6 +14,7 @@
 import DetailCard from '@/components/DetailCard'
 import RunInfoCard from '../RunInfoCard/index'
 import { toLastFailureDisplay, toLastSucessDisplay } from './business'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'TaskDetail',
@@ -58,7 +59,7 @@ export default {
         },
         {
           key: this.$t('common.dateCreated'),
-          value: this.$d(new Date(this.object.date_created))
+          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('ops.totalVersions'),
@@ -74,7 +75,7 @@ export default {
         },
         {
           key: this.$t('ops.lastRun'),
-          value: this.$d(new Date(this.object.latest_execution.date_finished))
+          value: toSafeLocalDateStr(this.object.latest_execution.date_finished)
         },
         {
           key: this.$t('ops.timeDelta'),

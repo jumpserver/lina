@@ -48,7 +48,7 @@
         <el-button type="primary" @click="testUerLoginClick">{{ $t('common.Confirm') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogLdapUserImport" center>
+    <el-dialog :visible.sync="dialogLdapUserImport" :destroy-on-close="true" center>
       <div slot="title">
         {{ $t('setting.importLdapUserTitle') }}
         <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
@@ -60,7 +60,7 @@
         @error="handlerListTableXHRError($event)"
       />
       <div slot="footer">
-        <el-button @click="dialogLdapUserImport = false">{{ $t('common.Cancel') }}</el-button>
+        <el-button @click="dialogLdapUserImport=false">{{ $t('common.Cancel') }}</el-button>
         <el-button type="primary" @click="importUserClick">{{ $t('common.Import') }}</el-button>
       </div>
     </el-dialog>
@@ -237,9 +237,13 @@ export default {
       const data = {
         username_list: selectIds
       }
-      importLdapUser(data).then(res => {
-        this.$message.success(res.msg)
-      })
+      if (selectIds.length === 0) {
+        this.$message.error(this.$t('setting.unselectedUser'))
+      } else {
+        importLdapUser(data).then(res => {
+          this.$message.success(res.msg)
+        })
+      }
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {

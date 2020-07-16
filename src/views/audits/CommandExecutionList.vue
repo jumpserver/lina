@@ -9,7 +9,7 @@
 
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
+import { getDaysAgo } from '@/utils/common'
 import { Dialog, ListTable } from '@/components'
 import { DisplayFormatter } from '@/components/ListTable/formatters'
 import { setUrlParam } from '@/utils/common'
@@ -66,10 +66,7 @@ export default {
             }
           },
           date_start: {
-            width: '160px',
-            formatter: function(row, cell, value) {
-              return toSafeLocalDateStr(value)
-            }
+            width: '160px'
           }
         },
         extraQuery: {

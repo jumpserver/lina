@@ -7,6 +7,7 @@
       :url="url"
       :get-method="getMethod"
       class="password-update"
+      :update-success-next-route="updateSuccessNextRoute"
     />
   </IBox>
 </template>
@@ -50,6 +51,9 @@ export default {
             type: 'password'
           }
         }
+      },
+      updateSuccessNextRoute: {
+        path: '/'
       }
     }
   },

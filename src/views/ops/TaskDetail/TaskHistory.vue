@@ -5,6 +5,7 @@
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'TaskHistory',
@@ -25,6 +26,9 @@ export default {
           'date_start', 'stat', 'ratio', 'is_finished', 'is_success', 'timedelta', 'adhoc_short_id', 'actions'
         ],
         columnsMeta: {
+          date_start: {
+            formatter: (row) => toSafeLocalDateStr(row.date_start)
+          },
           stat: {
             label: this.$t('ops.stat'),
             align: 'center',
