@@ -39,9 +39,9 @@
           <el-form-item style="float: right">
             <template v-if="hasActionPerm">
               <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
-              <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
             </template>
-            <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
             <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
           </el-form-item>
         </el-form>
@@ -80,10 +80,9 @@ export default {
       return this.object.title
     },
     detailCardItems() {
-      const vm = this
       return [
         {
-          key: this.$t('tickets.user'),
+          key: this.$t('tickets.Applicant'),
           value: this.object.user_display
         },
         {
@@ -93,13 +92,20 @@ export default {
         {
           key: this.$t('tickets.status'),
           value: this.object.status,
-          callback: function(row, data) {
-            const open = vm.$t('common.Open')
-            const close = vm.$t('common.Close')
-            if (data === 'open') {
-              return <el-button type='primary' size='mini'>{open}</el-button>
+          formatter: (item, val) => {
+            if (this.object.status === 'open') {
+              return <el-tag type='success'>{this.$t('tickets.Pending')}</el-tag>
+            } else {
+              if (this.object.action === 'approve') {
+                return <el-tag type='primary'>{this.$t('tickets.Approved')}</el-tag>
+              }
+              if (this.object.action === 'reject') {
+                return <el-tag type='danger'>{this.$t('tickets.Rejected')}</el-tag>
+              }
+              if (this.object.action === '') {
+                return <el-tag type='info'>{this.$t('tickets.Closed')}</el-tag>
+              }
             }
-            return <el-button type='danger' size='mini'>{close}</el-button>
           }
         },
         {
