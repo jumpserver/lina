@@ -703,7 +703,13 @@
     "type": "Type",
     "user": "User",
     "Status": "Status",
-    "Open": "Open"
+    "Open": "Open",
+    "Applicant": "Applicant",
+    "Pending": "Pending",
+    "Approved": "Approved",
+    "Rejected": "Rejected",
+    "Closed": "Closed"
+
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",
