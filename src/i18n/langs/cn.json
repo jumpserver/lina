@@ -686,12 +686,12 @@
   },
   "tickets": {
     "Accept": "接受",
-    "AssignedMe": "待处理",
+    "AssignedMe": "待我审批",
     "Assignee": "处理人",
     "Assignees": "待处理人",
     "Close": "关闭",
     "Comment": "备注",
-    "MyTickets": "我的工单",
+    "MyTickets": "我发起的",
     "Reject": "拒绝",
     "date": "日期",
     "reply": "回复",
@@ -700,7 +700,12 @@
     "type": "类型",
     "user": "用户",
     "Status": "状态",
-    "Open": "打开"
+    "Open": "打开",
+    "Applicant": "申请人",
+    "Pending": "未处理",
+    "Approved": "已同意",
+    "Rejected": "已拒绝",
+    "Closed": "已关闭"
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",
