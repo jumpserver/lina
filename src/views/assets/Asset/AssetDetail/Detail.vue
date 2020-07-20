@@ -176,7 +176,7 @@ export default {
         },
         {
           key: this.$t('assets.Domain'),
-          value: this.object.domain
+          value: this.object.domain_display
         },
         {
           key: this.$t('assets.Vendor'),
