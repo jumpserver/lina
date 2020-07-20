@@ -953,6 +953,8 @@ export default {
         })
     },
     search(attrs, reset) {
+      // 重置搜索结果到第一页
+      this.page = defaultFirstPage
       // Orange 重置查询对象
       if (reset) {
         this.innerQuery = merge({}, attrs)
@@ -962,6 +964,8 @@ export default {
       return this.getList()
     },
     searchDate(attrs) {
+      // 重置搜索结果到第一页
+      this.page = defaultFirstPage
       this.innerQuery = merge(this.innerQuery, attrs)
       return this.getList()
     },
