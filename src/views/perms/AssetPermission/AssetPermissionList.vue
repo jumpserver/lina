@@ -35,6 +35,7 @@ export default {
           },
           users_amount: {
             label: this.$t('perms.User'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -44,6 +45,7 @@ export default {
           },
           user_groups_amount: {
             label: this.$t('perms.UserGroups'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -53,6 +55,7 @@ export default {
           },
           assets_amount: {
             label: this.$t('perms.Asset'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -62,6 +65,7 @@ export default {
           },
           nodes_amount: {
             label: this.$t('perms.Node'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -71,6 +75,7 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
