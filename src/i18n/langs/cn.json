@@ -559,7 +559,11 @@
     },
     "Monitor": "监控",
     "sessionMonitor": "监控",
-    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看"
+    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
+    "helpText": {
+      "esUrl": "提示：不需要写 http/https（例如：jumpserver.abc.com:9200）",
+      "esIndex": "提示：填写es服务器上已经创建好的索引"
+    }
   },
   "setting": {
     "ApiKeyList": "API Key 列表",

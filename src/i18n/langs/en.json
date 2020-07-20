@@ -558,7 +558,11 @@
     },
     "Monitor": "Monitor",
     "sessionMonitor": "Session Monitor",
-    "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later"
+    "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
+    "helpText": {
+      "esUrl": "Tip: You don't need to write HTTP/HTTPS (for example, Jumpserver.abc.com :9200)",
+      "esIndex":"Tip: Fill in the index that has been created on the ES server"
+    }
   },
   "setting": {
     "ApiKeyList": "Api key list",
