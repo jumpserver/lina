@@ -67,6 +67,8 @@ export default {
       const query = listTableRef.dataTable.getQuery()
       delete query['limit']
       delete query['offset']
+      delete query['date_from']
+      delete query['date_to']
       return query
     },
     tableHasQuery() {
@@ -77,7 +79,7 @@ export default {
         {
           label: this.$t('common.imExport.ExportAll'),
           value: 'all',
-          can: this.canExportAll
+          can: this.canExportAll && !this.tableHasQuery
         },
         {
           label: this.$t('common.imExport.ExportOnlySelectedItems'),
