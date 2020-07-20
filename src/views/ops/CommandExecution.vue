@@ -27,7 +27,7 @@
                   <el-option
                     v-for="item in options"
                     :key="item.id"
-                    :disabled="item.protocol !== 'ssh' && item.login_mode!== 'auto'"
+                    :disabled="item.protocol !== 'ssh' || item.login_mode!== 'auto'"
                     :label="`${item.name}(${item.username})`"
                     :value="item.id"
                   />
