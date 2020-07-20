@@ -51,13 +51,15 @@ export default {
           label: this.$t('sessions.hosts'),
           rules: [
             { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          ],
+          helpText: this.$t('sessions.helpText.esUrl')
         },
         index: {
           label: this.$t('sessions.index'),
           rules: [
             { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          ],
+          helpText: this.$t('sessions.helpText.esIndex')
         },
         doc_type: {
           label: this.$t('sessions.docType'),
