@@ -13,6 +13,7 @@
 import DetailCard from '@/components/DetailCard/index'
 import QuickActions from '@/components/QuickActions'
 import { terminateSession } from '@/api/sessions'
+import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'SessionDetailCard',
   components: {
@@ -59,11 +60,11 @@ export default {
         },
         {
           key: this.$t('sessions.dateStart'),
-          value: this.sessionData.date_start
+          value: toSafeLocalDateStr(this.sessionData.date_start)
         },
         {
           key: this.$t('sessions.dateEnd'),
-          value: this.sessionData.date_end
+          value: toSafeLocalDateStr(this.sessionData.date_end)
         }
       ]
     },
