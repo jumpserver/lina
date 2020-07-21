@@ -61,6 +61,18 @@ export default {
           }
         },
         {
+          title: this.$t('users.UpdateSSHKey'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Update')
+          },
+          callbacks: {
+            click: function() {
+              this.$emit('update:activeMenu', 'SSHUpdate')
+            }.bind(this)
+          }
+        },
+        {
           title: this.$t('users.ResetPublicKeyAndDownload'),
           attrs: {
             type: 'primary',
