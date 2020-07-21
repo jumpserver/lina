@@ -150,6 +150,7 @@
     "Action": "Action",
     "Actions": "Actions",
     "Activate": "Activate",
+    "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
     "Active": "Active",
     "Add": "Add",
     "AddSuccessMsg": "Add success",
@@ -394,6 +395,9 @@
     "systemUserCount": "System user count",
     "upDownload": "Upload download",
     "uploadFile": "Upload file",
+    "clipboardCopyPaste":"Copy Paste",
+    "clipboardCopy":"Clipboard copy",
+    "clipboardPaste":"Clipboard paste",
     "userCount": "User count",
     "userGroupCount": "User group count",
     "usersAndUserGroups": "Users and user groups"
