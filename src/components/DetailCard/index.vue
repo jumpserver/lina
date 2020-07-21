@@ -1,6 +1,10 @@
 <template>
   <IBox :title="title" fa="fa-info-circle">
     <div class="content">
+      <el-row :gutter="10" class="item">
+        <el-col :span="6"><div :style="{ 'text-align': align }" class="item-label"><label>ID: </label></div></el-col>
+        <el-col :span="18"><div class="item-text">{{ this.$route.params.id }}</div></el-col>
+      </el-row>
       <el-row v-for="item in items" :key="'card-' + item.key" :gutter="10" class="item">
         <el-col :span="6"><div :style="{ 'text-align': align }" class="item-label"><label>{{ item.key }}: </label></div></el-col>
         <el-col :span="18"><div class="item-text">
