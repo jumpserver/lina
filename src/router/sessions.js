@@ -43,7 +43,7 @@ export default [
         path: '',
         name: 'TerminalList',
         component: () => import('@/views/sessions/TerminalList'),
-        meta: { title: i18n.t('route.Terminal') }
+        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' }
       },
       {
         path: ':id',
