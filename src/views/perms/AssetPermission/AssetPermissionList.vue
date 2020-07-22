@@ -129,7 +129,8 @@ export default {
             }
           ]
         },
-        hasRightActions: false,
+        hasImport: false,
+        hasExport: false,
         hasBulkDelete: false,
         hasBulkUpdate: false,
         extraMoreActions: [
