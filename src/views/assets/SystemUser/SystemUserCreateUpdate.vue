@@ -28,9 +28,10 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['auto_push', 'auto_generate_key', 'password', 'private_key']],
+        [this.$t('assets.AutoPush'), ['auto_push', 'sftp_root', 'sudo', 'shell']],
+        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('common.Other'), ['sftp_root', 'sudo', 'shell', 'comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         login_mode: {
@@ -104,14 +105,14 @@ export default {
             { required: true }
           ],
           helpText: this.$t('assets.SFTPHelpMessage'),
-          hidden: (item) => item.protocol !== 'ssh'
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
         },
         sudo: {
           rules: [
             { required: true }
           ],
           helpText: this.$t('assets.SudoHelpMessage'),
-          hidden: (item) => item.protocol !== 'ssh'
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
         },
         password: {
           helpText: this.$t('assets.PasswordHelpMessage'),
@@ -123,7 +124,7 @@ export default {
           }
         },
         shell: {
-          hidden: (item) => item.protocol !== 'ssh',
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
           rules: [
             { required: true }
           ]
