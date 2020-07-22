@@ -545,6 +545,7 @@
     "systemUser": "系统用户",
     "terminalDetail": "终端详情",
     "terminalUpdate": "更新终端",
+    "terminalUpdateStorage": "更新终端存储",
     "terminate": "终断",
     "sessionTerminate": "会话终断",
     "test": "测试",
