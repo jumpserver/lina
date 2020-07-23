@@ -4,7 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
+import { getDaysAgo } from '@/utils/common'
 
 export default {
   components: {
@@ -42,11 +42,6 @@ export default {
           },
           is_success: {
             width: '80px'
-          },
-          date_start: {
-            formatter: function(row, cell, value) {
-              return toSafeLocalDateStr(value)
-            }
           }
         },
         extraQuery: {

@@ -1,7 +1,7 @@
 <template>
   <Page>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$attrs" v-on="$listeners" />
+      <GenericCreateUpdateForm ref="createUpdateForm" v-bind="$attrs" v-on="$listeners" />
     </IBox>
   </Page>
 </template>

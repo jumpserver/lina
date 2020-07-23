@@ -46,12 +46,21 @@ export default {
           actions: {
             formatterArgs: {
               hasDelete: () => this.currentOrgIsDefault,
+              canUpdate: function(row, cellValue) {
+                return row.can_update
+              },
+              canDelete: function(row, cellValue) {
+                return row.can_delete
+              },
               extraActions: [
                 {
                   title: this.$t('users.Remove'),
                   name: 'remove',
                   type: 'warning',
                   has: () => !this.currentOrgIsDefault,
+                  can: function(row, cellValue) {
+                    return row.can_delete
+                  },
                   callback: this.removeUserFromOrg
                 }
               ]

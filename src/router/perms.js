@@ -42,7 +42,7 @@ const remoteAppPermissionRoutes = [
         path: '',
         name: 'RemoteAppPermissionList',
         component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionList'),
-        meta: { title: i18n.t('route.RemoteAppPermission') }
+        meta: { title: i18n.t('route.RemoteAppPermission'), activeMenu: '/perms/remote-app-permissions' }
 
       },
       {

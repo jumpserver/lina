@@ -10,6 +10,7 @@
 
 <script>
 import BaseFormatter from './base'
+import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'ChoicesFormatter',
   extends: BaseFormatter,
@@ -54,7 +55,7 @@ export default {
       return this.formatterArgs.tipStatus(this.cellValue, vm)
     },
     tipTime() {
-      return this.cellValue.datetime
+      return toSafeLocalDateStr(this.cellValue.datetime)
     }
   }
 }
