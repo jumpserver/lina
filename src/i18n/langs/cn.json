@@ -557,7 +557,7 @@
     "sessionMonitor": "监控",
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {
-      "esUrl": "提示：不需要写 http/https（例如：jumpserver.abc.com:9200）",
+      "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com）",
       "esIndex": "提示：填写es服务器上已经创建好的索引"
     }
   },
