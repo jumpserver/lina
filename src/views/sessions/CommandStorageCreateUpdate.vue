@@ -65,7 +65,8 @@ export default {
           label: this.$t('sessions.docType'),
           rules: [
             { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          ],
+          helpText: this.$t('sessions.helpText.esDocType')
         }
       },
       fieldsMap: {
