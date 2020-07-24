@@ -151,6 +151,7 @@
     "Actions": "操作",
     "Activate": "激活",
     "Active": "激活中",
+    "actionsTips":"剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
     "Add": "添加",
     "AddSuccessMsg": "添加成功",
     "Auth": "认证",
@@ -395,6 +396,9 @@
     "systemUserCount": "系统用户数量",
     "upDownload": "上传下载",
     "uploadFile": "上传文件",
+    "clipboardCopyPaste":"复制粘贴",
+    "clipboardCopy":"剪切板复制",
+    "clipboardPaste":"剪切板粘贴",
     "userCount": "用户数量",
     "userGroupCount": "用户组数量",
     "usersAndUserGroups": "用户或用户组"
