@@ -54,6 +54,7 @@
 import DetailCard from '@/components/DetailCard'
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { STATUS_MAP } from '../const'
 
 export default {
   name: 'TicketDetail',
@@ -68,6 +69,7 @@ export default {
   },
   data() {
     return {
+      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -93,19 +95,7 @@ export default {
           key: this.$t('tickets.status'),
           value: this.object.status,
           formatter: (item, val) => {
-            if (this.object.status === 'open') {
-              return <el-tag type='success'>{this.$t('tickets.Pending')}</el-tag>
-            } else {
-              if (this.object.action === 'approve') {
-                return <el-tag type='primary'>{this.$t('tickets.Approved')}</el-tag>
-              }
-              if (this.object.action === 'reject') {
-                return <el-tag type='danger'>{this.$t('tickets.Rejected')}</el-tag>
-              }
-              if (this.object.action === '') {
-                return <el-tag type='info'>{this.$t('tickets.Closed')}</el-tag>
-              }
-            }
+            return <el-tag type={this.statusMap.type}> { this.statusMap.title }</el-tag>
           }
         },
         {
