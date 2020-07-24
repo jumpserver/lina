@@ -561,7 +561,8 @@
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",
-      "esIndex":"Tip: Fill in the index that has been created on the ES server"
+      "esIndex":"Es provides the default index: jumpserver",
+      "esDocType": "Es provides the default document type: command"
     }
   },
   "setting": {
