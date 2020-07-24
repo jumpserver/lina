@@ -22,7 +22,6 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
-        hasSelection: false,
         hasTree: true,
         columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
@@ -129,7 +128,6 @@ export default {
             }
           ]
         },
-        hasRightActions: false,
         hasBulkDelete: false,
         hasBulkUpdate: false,
         extraMoreActions: [
