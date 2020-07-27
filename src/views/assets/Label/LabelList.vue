@@ -29,7 +29,8 @@ export default {
           },
           {
             prop: 'asset_count',
-            label: this.$t('assets.Assets')
+            label: this.$t('assets.Assets'),
+            width: '80px'
           },
           {
             prop: 'id',

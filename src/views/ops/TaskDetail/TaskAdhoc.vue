@@ -34,6 +34,7 @@ export default {
           },
           hosts: {
             label: this.$t('ops.hosts'),
+            width: '80px',
             formatter: (row, column, cellValue) => {
               if (cellValue instanceof Array) {
                 return cellValue.length
@@ -43,7 +44,8 @@ export default {
             showOverflowTooltip: true
           },
           pattern: {
-            label: this.$t('ops.pattern')
+            label: this.$t('ops.pattern'),
+            width: '80px'
           },
           run_as: {
             label: this.$t('ops.runAs'),
@@ -67,6 +69,7 @@ export default {
           },
           actions: {
             prop: 'id',
+            width: '80px',
             formatterArgs: {
               hasEdit: false,
               hasDelete: false,
