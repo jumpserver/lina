@@ -22,6 +22,15 @@ export default {
         url: `/api/v1/assets/cmd-filters/${this.object.id}/rules/`,
         columns: ['type', 'content', 'priority', 'action', 'comment', 'actions'],
         columnsMeta: {
+          type: {
+            width: '100px'
+          },
+          priority: {
+            width: '70px'
+          },
+          action: {
+            width: '90px'
+          },
           content: {
             showOverflowTooltip: true
           },

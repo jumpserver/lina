@@ -23,7 +23,8 @@ export default {
             showOverflowTooltip: true
           },
           resource_type: {
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            width: '180px'
           },
           resource: {
             showOverflowTooltip: true
@@ -32,7 +33,7 @@ export default {
             width: '160px'
           },
           remote_addr: {
-            width: '140px'
+            width: '120px'
           },
           action: {
             width: '90px'

@@ -21,7 +21,8 @@ export default {
         ],
         columnsMeta: {
           type: {
-            displayKey: 'get_type_display'
+            displayKey: 'get_type_display',
+            width: '140px'
           },
           asset: {
             showOverflowTooltip: true,

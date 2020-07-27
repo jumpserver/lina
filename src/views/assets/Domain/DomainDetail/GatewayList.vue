@@ -25,8 +25,15 @@ export default {
             sortable: 'custom',
             formatter: DisplayFormatter
           },
+          ip: {
+            width: '140px'
+          },
+          port: {
+            width: '60px'
+          },
           protocol: {
-            sortable: 'custom'
+            sortable: 'custom',
+            width: '100px'
           },
           actions: {
             formatterArgs: {

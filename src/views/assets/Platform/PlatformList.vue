@@ -28,7 +28,8 @@ export default {
           {
             prop: 'base',
             label: this.$t('assets.BasePlatform'),
-            sortable: 'custom'
+            sortable: 'custom',
+            width: '140px'
           },
           {
             prop: 'comment',
