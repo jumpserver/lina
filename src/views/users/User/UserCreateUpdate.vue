@@ -79,6 +79,12 @@ export default {
             value: []
           }
         }
+      },
+      performSubmit: function(validValues) {
+        if (!this.password_strategy) {
+          delete validValues['password']
+        }
+        return this.$axios[this.method](this.iUrl, validValues)
       }
     }
   }
