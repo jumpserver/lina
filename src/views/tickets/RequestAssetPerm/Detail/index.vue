@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     getObjectName() {
-      return this.ticket.user_display
+      return this.ticket.title
     }
   }
 }

@@ -48,8 +48,7 @@ export default {
           },
           {
             prop: 'type_display',
-            label: this.$t('tickets.type'),
-            sortable: 'custom'
+            label: this.$t('tickets.type')
           },
           {
             prop: 'status',

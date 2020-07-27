@@ -1,52 +1,54 @@
 <template>
   <el-row>
-    <DetailCard :title="cardTitle" :items="detailCardItems">
-      <div class="feed-activity-list">
-        <div class="feed-element">
-          <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" class="header-avatar" />
-          </a>
-          <div class="media-body ">
-            <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
-            <br>
-            <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
-            <div style="padding-top: 10px">
-              <span v-html="object.body" />
-            </div>
-          </div>
-        </div>
-        <template v-if="comments">
-          <div v-for="item in comments" :key="item.user_display + item.body">
-            <div class="feed-element">
-              <a href="#" class="pull-left">
-                <el-avatar :src="imageUrl" class="header-avatar" />
-              </a>
-              <div class="media-body ">
-                <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
-                <br>
-                <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-                <div style="padding-top: 10px">
-                  {{ item.body }}
-                </div>
+    <el-col :span="18">
+      <DetailCard :title="cardTitle" :items="detailCardItems">
+        <div class="feed-activity-list">
+          <div class="feed-element">
+            <a href="#" class="pull-left">
+              <el-avatar :src="imageUrl" class="header-avatar" />
+            </a>
+            <div class="media-body ">
+              <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
+              <br>
+              <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
+              <div style="padding-top: 10px">
+                <span v-html="object.body" />
               </div>
             </div>
           </div>
-        </template>
-        <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-          <el-form-item :label="$t('tickets.reply')">
-            <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
-          </el-form-item>
-          <el-form-item style="float: right">
-            <template v-if="hasActionPerm">
-              <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
-              <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
-            </template>
-            <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
-            <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </DetailCard>
+          <template v-if="comments">
+            <div v-for="item in comments" :key="item.user_display + item.body">
+              <div class="feed-element">
+                <a href="#" class="pull-left">
+                  <el-avatar :src="imageUrl" class="header-avatar" />
+                </a>
+                <div class="media-body ">
+                  <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
+                  <br>
+                  <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
+                  <div style="padding-top: 10px">
+                    {{ item.body }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
+            <el-form-item :label="$t('tickets.reply')">
+              <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
+            </el-form-item>
+            <el-form-item style="float: right">
+              <template v-if="hasActionPerm">
+                <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
+                <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
+              </template>
+              <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </DetailCard>
+    </el-col>
   </el-row>
 </template>
 
@@ -93,7 +95,7 @@ export default {
         {
           key: this.$t('tickets.status'),
           value: this.object.status,
-          callback: function(row, data) {
+          formatter: function(row, data) {
             const open = vm.$t('common.Open')
             const close = vm.$t('common.Close')
             if (data === 'open') {
