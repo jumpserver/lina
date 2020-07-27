@@ -27,17 +27,20 @@ export default {
             showOverflowTooltip: true
           },
           ip: {
-            width: '140px'
+            width: '110px'
+          },
+          city: {
+            width: '90px'
           },
           status: {
-            width: '80px'
+            width: '85px'
           },
           mfa: {
             label: 'MFA',
             width: '80px'
           },
           type: {
-            width: '100px'
+            width: '110px'
           },
           datetime: {
             width: '160px'

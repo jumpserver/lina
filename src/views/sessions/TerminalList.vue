@@ -32,7 +32,8 @@ export default {
             label: this.$t('sessions.alive')
           },
           session_online: {
-            label: this.$t('sessions.session')
+            label: this.$t('sessions.session'),
+            width: '80px'
           }
         }
       },

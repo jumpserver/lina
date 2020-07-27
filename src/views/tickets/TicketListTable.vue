@@ -39,13 +39,14 @@ export default {
           {
             prop: 'type_display',
             label: this.$t('tickets.type'),
-            sortable: 'custom'
+            sortable: 'custom',
+            width: '110px'
           },
           {
             prop: 'status',
             label: this.$t('tickets.status'),
             align: 'center',
-            width: '100px',
+            width: '90px',
             sortable: 'custom',
             formatter: row => {
               if (row.status === 'open') {
@@ -58,7 +59,8 @@ export default {
             prop: 'date_created',
             label: this.$t('tickets.date'),
             sortable: 'custom',
-            formatter: (row) => toSafeLocalDateStr(row.date_created)
+            formatter: (row) => toSafeLocalDateStr(row.date_created),
+            width: '160px'
           }
         ]
       },

@@ -27,12 +27,13 @@ export default {
         ],
         columnsMeta: {
           date_start: {
-            formatter: (row) => toSafeLocalDateStr(row.date_start)
+            formatter: (row) => toSafeLocalDateStr(row.date_start),
+            width: '160px'
           },
           stat: {
             label: this.$t('ops.stat'),
             align: 'center',
-            width: '80px',
+            width: '100px',
             formatter: function(row) {
               return (
                 <div>
@@ -57,16 +58,17 @@ export default {
           },
           is_finished: {
             align: 'center',
-            width: '200px',
+            width: '100px',
             label: this.$t('ops.isFinished')
           },
           is_success: {
             align: 'center',
-            width: '200px',
+            width: '100px',
             label: this.$t('ops.isSuccess')
           },
           timedelta: {
             label: this.$t('ops.time'),
+            width: '100px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }

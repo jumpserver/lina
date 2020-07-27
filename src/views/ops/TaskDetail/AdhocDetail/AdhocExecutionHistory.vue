@@ -28,7 +28,7 @@ export default {
           stat: {
             label: this.$t('ops.stat'),
             align: 'center',
-            width: '80px',
+            width: '100px',
             formatter: function(row) {
               const summary = <div>
                 <span class='text-primary'>{row.stat.success}</span>/
@@ -52,16 +52,17 @@ export default {
           },
           is_finished: {
             align: 'center',
-            width: '200px',
+            width: '100px',
             label: this.$t('ops.isFinished')
           },
           is_success: {
             align: 'center',
-            width: '200px',
+            width: '100px',
             label: this.$t('ops.isSuccess')
           },
           timedelta: {
             label: this.$t('ops.time'),
+            width: '100px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
