@@ -35,7 +35,7 @@ export default {
           },
           users_amount: {
             label: this.$t('perms.User'),
-            width: '100px',
+            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -55,7 +55,7 @@ export default {
           },
           assets_amount: {
             label: this.$t('perms.Asset'),
-            width: '100px',
+            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -65,7 +65,7 @@ export default {
           },
           nodes_amount: {
             label: this.$t('perms.Node'),
-            width: '100px',
+            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {

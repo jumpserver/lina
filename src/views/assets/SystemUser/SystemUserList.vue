@@ -34,15 +34,18 @@ export default {
           {
             prop: 'protocol',
             label: this.$t('assets.Protocol'),
-            sortable: 'custom'
+            sortable: 'custom',
+            width: '100px'
           },
           {
             prop: 'login_mode_display',
-            label: this.$t('assets.LoginModel')
+            label: this.$t('assets.LoginModel'),
+            width: '120px'
           },
           {
             prop: 'assets_amount',
-            label: this.$t('assets.Assets')
+            label: this.$t('assets.Assets'),
+            width: '80px'
           },
           {
             prop: 'comment',

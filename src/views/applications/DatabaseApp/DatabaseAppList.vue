@@ -18,7 +18,14 @@ export default {
         ],
         columnsMeta: {
           get_type_display: {
-            label: this.$t('applications.type')
+            label: this.$t('applications.type'),
+            width: '80px'
+          },
+          host: {
+            width: '140px'
+          },
+          port: {
+            width: '60px'
           },
           database: {
             showOverflowTooltip: true
