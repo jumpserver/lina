@@ -100,10 +100,10 @@ export default {
     border-radius: 3px;
     height: 36px;
   }
-  /*.el-date-editor /deep/ .el-input__icon{*/
+  /*.el-date-editor  ::v-deep  .el-input__icon{*/
   /*  line-height: 28px;*/
   /*}*/
-  .el-date-editor /deep/ .el-range-separator{
+  .el-date-editor  ::v-deep  .el-range-separator{
     line-height: 28px;
   }
 </style>

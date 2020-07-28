@@ -84,7 +84,7 @@ li.is-active {
 //  line-height: 30px !important;
 //}
 ////重置字体大小 菜单宽度
-//.el-submenu /deep/ .el-submenu__title, .submenu-title-noDropdown{
+//.el-submenu  ::v-deep  .el-submenu__title, .submenu-title-noDropdown{
 //  height: 46px !important;
 //  line-height: 46px !important;
 //}
