@@ -88,27 +88,27 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-form /deep/ .el-form-item {
+  .el-form  ::v-deep  .el-form-item {
     margin-bottom: 12px;
   }
 
-  .el-form /deep/ .el-form-item__content {
+  .el-form  ::v-deep  .el-form-item__content {
     width: 75%;
   }
 
-  .el-form /deep/ .el-form-item__label {
+  .el-form  ::v-deep  .el-form-item__label {
     padding: 0 30px 0 0;
   }
 
-  .el-form /deep/ .el-form-item__error {
+  .el-form  ::v-deep  .el-form-item__error {
      position: inherit;
   }
 
-  .el-form /deep/ .form-group-header {
+  .el-form  ::v-deep  .form-group-header {
     margin-left: 50px;
   }
 
-  .el-form /deep/ .help-block {
+  .el-form  ::v-deep  .help-block {
     display: block;
     margin-top: 5px;
     margin-bottom: 10px;
@@ -116,7 +116,7 @@ export default {
     font-size: 12px;
     line-height: 18px;
   }
-  .el-form /deep/ .help-block a {
+  .el-form  ::v-deep  .help-block a {
     color: #1c84c6;
   }
 </style>

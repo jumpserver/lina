@@ -138,16 +138,16 @@ export default {
 
 <style lang="less" scoped>
 
-  .el-table /deep/ .el-table__row > td {
+  .el-table  ::v-deep  .el-table__row > td {
     line-height: 1.5;
     padding: 8px 0;
   }
-  .el-table /deep/ .el-table__row > td> div > span {
+  .el-table  ::v-deep  .el-table__row > td> div > span {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }
-  .el-table /deep/ .el-table__header > thead > tr >th {
+  .el-table  ::v-deep  .el-table__header > thead > tr >th {
     padding: 8px 0;
     background-color: #F5F5F6;
     font-size: 13px;
@@ -158,11 +158,11 @@ export default {
   }
 
   //分页
-  .el-pagination /deep/ .el-pagination__total{
+  .el-pagination  ::v-deep  .el-pagination__total{
     float: left;
   }
 
-  .el-pagination /deep/ .el-pagination__sizes{
+  .el-pagination  ::v-deep  .el-pagination__sizes{
     float: left;
   }
   //修改颜色

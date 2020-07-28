@@ -150,14 +150,14 @@ export default {
     background-color: #fff;
   }
 
-  .el-select /deep/ .el-input__inner {
+  .el-select  ::v-deep  .el-input__inner {
     width: 100px;
   }
 
   .input-button {
     margin-top: 4px;
   }
-  .input-button /deep/ .el-button.el-button--mini {
+  .input-button  ::v-deep  .el-button.el-button--mini {
     height: 25px;
     padding: 5px;
   }

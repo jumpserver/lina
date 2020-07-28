@@ -158,7 +158,7 @@ export default {
     top: 100%;
     z-index: 1000;
   }
-  .ztree /deep/ .fa-refresh {
+  .ztree  ::v-deep  .fa-refresh {
     font: normal normal normal 14px/1 FontAwesome !important;
   }
   .dropdown a:hover {
