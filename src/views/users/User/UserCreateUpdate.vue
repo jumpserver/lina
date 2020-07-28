@@ -87,6 +87,24 @@ export default {
         return this.$axios[this.method](this.iUrl, validValues)
       }
     }
+  },
+  methods: {
+    method: function() {
+      const params = this.$route.params
+      if (params.id) {
+        return 'put'
+      } else {
+        return 'post'
+      }
+    },
+    iUrl: function() {
+      const params = this.$route.params
+      let url = this.url
+      if (params.id) {
+        url = `${url}${params.id}/`
+      }
+      return url
+    }
   }
 }
 </script>
