@@ -84,7 +84,7 @@ export default [
     },
     children: [
       {
-        path: `${URL}/koko/elfinder/sftp/`,
+        path: `${BASEURL}/koko/elfinder/sftp/`,
         meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
       }
     ]
