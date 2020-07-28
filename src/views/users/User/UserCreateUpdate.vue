@@ -79,7 +79,22 @@ export default {
             value: []
           }
         }
-      }
+      },
+      performSubmit: function(validValues) {
+        let method
+        let iUrl = this.url
+        const params = this.$route.params
+        if (params.id) {
+          method = 'put'
+          iUrl = `${iUrl}${params.id}/`
+        } else {
+          method = 'post'
+        }
+        if (!this.password_strategy) {
+          delete validValues['password']
+        }
+        return this.$axios[method](iUrl, validValues)
+      }.bind(this)
     }
   }
 }
