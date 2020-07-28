@@ -1,6 +1,8 @@
 import i18n from '@/i18n/i18n'
 import rolec from '@/utils/role'
 import empty from '@/layout/empty'
+import { BASEURL } from '@/utils/common'
+
 export default [
   {
     path: 'session',
@@ -22,15 +24,15 @@ export default [
     hidden: true
   },
   {
-    path: 'luna',
+    path: `${BASEURL}/luna/?_=${Date.now()}`,
     name: 'WebTerminal',
-    component: () => window.open(`/luna/?_=${Date.now()}`),
+    // component: () => window.open(`/luna/?_=${Date.now()}`),
     meta: { title: i18n.t('route.WebTerminal') }
   },
   {
-    path: 'sftp',
+    path: `${BASEURL}/koko/elfinder/sftp/?`,
     name: 'FileManager',
-    component: () => window.open(`/koko/elfinder/sftp/?`),
+    // component: () => window.open(`/koko/elfinder/sftp/?`),
     meta: { title: i18n.t('route.FileManager') }
   },
   {

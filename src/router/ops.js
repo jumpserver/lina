@@ -1,5 +1,7 @@
 import i18n from '@/i18n/i18n'
 import rolec from '@/utils/role'
+import { BASEURL } from '@/utils/common'
+
 export default [
   {
     path: 'tasks',
@@ -42,9 +44,9 @@ export default [
   //   meta: { title: i18n.t('route.CeleryTaskLog') }
   // },
   {
-    path: 'task/monitor',
+    path: `${BASEURL}/core/flower?_=${Date.now()}`,
     name: 'TaskMonitor',
-    component: () => window.open(`/core/flower?_=${Date.now()}`),
+    // component: () => window.open(`/core/flower?_=${Date.now()}`),
     meta: { title: i18n.t('route.TaskMonitor'), permissions: [rolec.PERM_SUPER] }
   }
 ]
