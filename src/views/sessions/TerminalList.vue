@@ -148,12 +148,6 @@ export default {
   methods: {
     handleStorageConfiguration() {
       this.$router.push('/terminal/storages')
-    },
-    onCancel() {
-      this.dialogSettings.visible = false
-    },
-    onConfirm() {
-      this.dialogSettings.visible = false
     }
   }
 }
