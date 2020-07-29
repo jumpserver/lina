@@ -38,6 +38,7 @@ export default {
           fieldsMeta: {
             command_storage: {
               component: Select2,
+              rules: [{ required: true }],
               el: {
                 ajax: {
                   url: `/api/v1/terminal/command-storages/`
@@ -47,6 +48,7 @@ export default {
             },
             replay_storage: {
               component: Select2,
+              rules: [{ required: true }],
               el: {
                 ajax: {
                   url: `/api/v1/terminal/replay-storages/`
@@ -54,7 +56,38 @@ export default {
                 multiple: false
               }
             }
-          }
+          },
+          getMethod: () => 'post',
+          cleanFormValue: function(value) {
+            const formValue = []
+            let object = {}
+            for (const row of this.dialogSettings.selectedRows) {
+              object = Object.assign({}, value, { id: row.id })
+              formValue.push(object)
+            }
+            return formValue
+          }.bind(this),
+          onSubmit: function(validValues) {
+            const url = '/api/v1/terminal/terminals/'
+            const msg = this.$t('common.updateSuccessMsg')
+            this.$axios.patch(url, validValues).then((res) => {
+              this.$message.success(msg)
+              this.dialogSettings.visible = false
+            }).catch(error => {
+              this.$emit('submitError', error)
+              const response = error.response
+              const data = response.data
+              if (response.status === 400) {
+                for (const key of Object.keys(data)) {
+                  let value = data[key]
+                  if (value instanceof Array) {
+                    value = value.join(';')
+                  }
+                  this.$refs.form.setFieldError(key, value)
+                }
+              }
+            })
+          }.bind(this)
         }
       },
       tableConfig: {
