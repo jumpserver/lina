@@ -1,7 +1,7 @@
 <template>
   <IBox :title="title" fa="fa-info-circle">
     <div class="content">
-      <el-row :gutter="10" class="item">
+      <el-row v-if="this.$route.params.id" :gutter="10" class="item">
         <el-col :span="6"><div :style="{ 'text-align': align }" class="item-label"><label>ID: </label></div></el-col>
         <el-col :span="18"><div class="item-text">{{ this.$route.params.id }}</div></el-col>
       </el-row>
