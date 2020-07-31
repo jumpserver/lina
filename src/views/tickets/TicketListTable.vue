@@ -48,7 +48,7 @@ export default {
           },
           {
             prop: 'type_display',
-            label: this.$t('tickets.type')
+            label: this.$t('tickets.type'),
             width: '110px'
           },
           {
