@@ -1,10 +1,7 @@
 import Layout from '@/layout/index'
 import i18n from '@/i18n/i18n'
 import rolec from '@/utils/role'
-
-const scheme = document.location.protocol
-const port = document.location.port ? ':' + document.location.port : ''
-const URL = scheme + '//' + document.location.hostname + port
+import { BASE_URL } from '@/utils/common'
 
 export default [
   // 404 page must be placed at the end !!!
@@ -113,7 +110,7 @@ export default [
     },
     children: [
       {
-        path: `${URL}/luna/`,
+        path: `${BASE_URL}/luna/`,
         meta: { title: i18n.t('route.WebTerminal'), icon: 'window-maximize', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
       }
     ]
@@ -126,7 +123,7 @@ export default [
     },
     children: [
       {
-        path: `${URL}/koko/elfinder/sftp/`,
+        path: `${BASE_URL}/koko/elfinder/sftp/`,
         meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
       }
     ]

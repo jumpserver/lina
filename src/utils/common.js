@@ -171,3 +171,9 @@ export function getDayFuture(days, now) {
   }
   return new Date(now.getTime() + 3600 * 1000 * 24 * days)
 }
+
+const scheme = document.location.protocol
+const port = document.location.port ? ':' + document.location.port : ''
+const BASE_URL = scheme + '//' + document.location.hostname + port
+
+export { BASE_URL }
