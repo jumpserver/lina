@@ -711,12 +711,10 @@
     "user": "User",
     "Status": "Status",
     "Open": "Open",
-
     "IP": "IP",
     "Hostname": "Hostname",
     "Asset": "Asset",
-    "SystemUser": "System user"
-
+    "SystemUser": "System user",
     "Applicant": "Applicant",
     "Pending": "Pending",
     "Approved": "Approved",
