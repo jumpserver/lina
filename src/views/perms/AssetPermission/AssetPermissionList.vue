@@ -22,7 +22,6 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
-        hasSelection: false,
         hasTree: true,
         columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
@@ -36,6 +35,7 @@ export default {
           },
           users_amount: {
             label: this.$t('perms.User'),
+            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -45,6 +45,7 @@ export default {
           },
           user_groups_amount: {
             label: this.$t('perms.UserGroups'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -54,6 +55,7 @@ export default {
           },
           assets_amount: {
             label: this.$t('perms.Asset'),
+            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -63,6 +65,7 @@ export default {
           },
           nodes_amount: {
             label: this.$t('perms.Node'),
+            width: '60px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -72,6 +75,7 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser'),
+            width: '100px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -129,7 +133,6 @@ export default {
             }
           ]
         },
-        hasRightActions: false,
         hasBulkDelete: false,
         hasBulkUpdate: false,
         extraMoreActions: [

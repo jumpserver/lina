@@ -152,6 +152,7 @@
     "Actions": "操作",
     "Activate": "激活",
     "Active": "激活中",
+    "actionsTips":"剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
     "Add": "添加",
     "AddSuccessMsg": "添加成功",
     "Auth": "认证",
@@ -397,6 +398,9 @@
     "systemUserCount": "系统用户数量",
     "upDownload": "上传下载",
     "uploadFile": "上传文件",
+    "clipboardCopyPaste":"复制粘贴",
+    "clipboardCopy":"剪切板复制",
+    "clipboardPaste":"剪切板粘贴",
     "userCount": "用户数量",
     "userGroupCount": "用户组数量",
     "usersAndUserGroups": "用户或用户组"
@@ -557,7 +561,12 @@
     },
     "Monitor": "监控",
     "sessionMonitor": "监控",
-    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看"
+    "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
+    "helpText": {
+      "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com）",
+      "esIndex": "es提供默认index：jumpserver",
+      "esDocType": "es默认文档类型：command"
+    }
   },
   "setting": {
     "ApiKeyList": "API Key 列表",
@@ -708,6 +717,11 @@
     "Asset": "资产",
     "SystemUser": "系统用户",
     "RequestAssetPerm": "申请资产授权"
+    "Applicant": "申请人",
+    "Pending": "未处理",
+    "Approved": "已同意",
+    "Rejected": "已拒绝",
+    "Closed": "已关闭"
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",
@@ -848,8 +862,11 @@
       "AccountCreate": "创建账户",
       "AccountList": "账户列表",
       "AccountUpdate": "更新账户",
+      "AccountDetail": "账户详情",
       "Cloud": "云管中心",
       "CloudCenter": "云管中心",
+      "Provider": "云服务商",
+      "Validity": "有效",
       "IsAlwaysUpdateHelpTips": "每次执行同步任务时，是否同步更新资产的信息，包括主机名、IP、系统平台、管理用户",
       "SyncInstanceTaskCreate": "创建同步实例任务",
       "SyncInstanceTaskList": "同步实例任务列表",

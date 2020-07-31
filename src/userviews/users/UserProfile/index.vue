@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage :object.sync="user" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="user" />
+      <component :is="config.activeMenu" :object="user" @update:activeMenu="handleUpdate" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -60,6 +60,9 @@ export default {
         ])
       }
       return submenu
+    },
+    handleUpdate(value) {
+      this.config.activeMenu = value
     }
   }
 }

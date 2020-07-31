@@ -151,6 +151,7 @@
     "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "Activate": "Activate",
+    "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
     "Active": "Active",
     "Add": "Add",
     "AddSuccessMsg": "Add success",
@@ -396,6 +397,9 @@
     "systemUserCount": "System user count",
     "upDownload": "Upload download",
     "uploadFile": "Upload file",
+    "clipboardCopyPaste":"Copy Paste",
+    "clipboardCopy":"Clipboard copy",
+    "clipboardPaste":"Clipboard paste",
     "userCount": "User count",
     "userGroupCount": "User group count",
     "usersAndUserGroups": "Users and user groups"
@@ -556,7 +560,12 @@
     },
     "Monitor": "Monitor",
     "sessionMonitor": "Session Monitor",
-    "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later"
+    "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
+    "helpText": {
+      "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",
+      "esIndex":"Es provides the default index: jumpserver",
+      "esDocType": "Es provides the default document type: command"
+    }
   },
   "setting": {
     "ApiKeyList": "Api key list",
@@ -702,10 +711,17 @@
     "user": "User",
     "Status": "Status",
     "Open": "Open",
+
     "IP": "IP",
     "Hostname": "Hostname",
     "Asset": "Asset",
     "SystemUser": "System user"
+
+    "Applicant": "Applicant",
+    "Pending": "Pending",
+    "Approved": "Approved",
+    "Rejected": "Rejected",
+    "Closed": "Closed"
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",
@@ -845,8 +861,11 @@
       "AccountCreate": "Create account",
       "AccountList": "Account list",
       "AccountUpdate": "Update account",
+      "AccountDetail": "Account detail",
       "Cloud": "Cloud center",
       "CloudCenter": "Cloud center",
+      "Provider": "Provider",
+      "Validity": "Validity",
       "IsAlwaysUpdateHelpTips": "Whether the asset information, including Hostname, IP, Platform, and AdminUser, is updated synchronously each time a synchronization task is performed",
       "SyncInstanceTaskCreate": "Create sync instance task",
       "SyncInstanceTaskList": "Sync instance task list",

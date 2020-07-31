@@ -120,7 +120,7 @@ export default {
           {
             prop: 'ip',
             label: this.$t('assets.ip'),
-            width: 140
+            width: '120px'
           },
           {
             prop: 'username',
@@ -130,7 +130,7 @@ export default {
           {
             prop: 'version',
             label: this.$t('assets.Version'),
-            width: '50px'
+            width: '70px'
           },
           {
             prop: 'date_created',

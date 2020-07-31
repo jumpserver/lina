@@ -32,23 +32,23 @@
                 </div>
               </div>
             </div>
-          </template>
-          <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-            <el-form-item :label="$t('tickets.reply')">
-              <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
-            </el-form-item>
-            <el-form-item style="float: right">
-              <template v-if="hasActionPerm">
-                <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
-                <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
-              </template>
-              <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
-              <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </DetailCard>
-    </el-col>
+          </div>
+        </template>
+        <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
+          <el-form-item :label="$t('tickets.reply')">
+            <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
+          </el-form-item>
+          <el-form-item style="float: right">
+            <template v-if="hasActionPerm">
+              <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
+            </template>
+            <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </DetailCard>
   </el-row>
 </template>
 
@@ -56,6 +56,7 @@
 import DetailCard from '@/components/DetailCard'
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { STATUS_MAP } from '../const'
 
 export default {
   name: 'TicketDetail',
@@ -70,6 +71,8 @@ export default {
   },
   data() {
     return {
+      
+      : this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -82,10 +85,9 @@ export default {
       return this.object.title
     },
     detailCardItems() {
-      const vm = this
       return [
         {
-          key: this.$t('tickets.user'),
+          key: this.$t('tickets.Applicant'),
           value: this.object.user_display
         },
         {
@@ -95,13 +97,8 @@ export default {
         {
           key: this.$t('tickets.status'),
           value: this.object.status,
-          formatter: function(row, data) {
-            const open = vm.$t('common.Open')
-            const close = vm.$t('common.Close')
-            if (data === 'open') {
-              return <el-button type='primary' size='mini'>{open}</el-button>
-            }
-            return <el-button type='danger' size='mini'>{close}</el-button>
+          formatter: (item, val) => {
+            return <el-tag type={this.statusMap.type}> { this.statusMap.title }</el-tag>
           }
         },
         {

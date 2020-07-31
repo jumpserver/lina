@@ -36,7 +36,7 @@ export default {
           },
           risk_level: {
             label: this.$t('sessions.riskLevel'),
-            width: '120px',
+            width: '105px',
             formatter: (row, col, cellValue) => {
               const display = row.risk_level_display
               if (cellValue === 0) {

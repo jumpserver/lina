@@ -54,9 +54,34 @@ export default {
             type: 'primary',
             label: this.$t('common.Update')
           },
+          has: this.object.mfa_enabled,
           callbacks: {
             click: function() {
               window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('users.UpdatePassword'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Update')
+          },
+          callbacks: {
+            click: function() {
+              this.$emit('update:activeMenu', 'PasswordUpdate')
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('users.UpdateSSHKey'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('common.Update')
+          },
+          callbacks: {
+            click: function() {
+              this.$emit('update:activeMenu', 'SSHUpdate')
             }.bind(this)
           }
         },

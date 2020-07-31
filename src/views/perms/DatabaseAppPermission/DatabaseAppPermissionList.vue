@@ -26,6 +26,7 @@ export default {
           },
           users_amount: {
             label: this.$t('perms.User'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -35,6 +36,7 @@ export default {
           },
           user_groups_amount: {
             label: this.$t('perms.UserGroups'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -44,6 +46,7 @@ export default {
           },
           database_apps_amount: {
             label: this.$t('perms.databaseApp'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -53,6 +56,7 @@ export default {
           },
           system_users_amount: {
             label: this.$t('perms.SystemUser'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -63,7 +67,6 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
         hasBulkDelete: false
       }
     }
