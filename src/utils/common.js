@@ -167,6 +167,6 @@ export function getDayFuture(days, now) {
 
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
-const BASEURL = scheme + '//' + document.location.hostname + port
+const BASE_URL = scheme + '//' + document.location.hostname + port
 
-export { BASEURL }
+export { BASE_URL }
