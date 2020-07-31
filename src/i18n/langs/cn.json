@@ -716,7 +716,7 @@
     "Hostname": "主机名",
     "Asset": "资产",
     "SystemUser": "系统用户",
-    "RequestAssetPerm": "申请资产授权"
+    "RequestAssetPerm": "申请资产授权",
     "Applicant": "申请人",
     "Pending": "未处理",
     "Approved": "已同意",
