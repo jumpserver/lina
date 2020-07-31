@@ -148,6 +148,7 @@
   "common": {
     "Nothing": "Nothing",
     "Action": "Action",
+    "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "Activate": "Activate",
     "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
@@ -219,6 +220,7 @@
     "bulkDeleteSuccessMsg": "Bulk delete success",
     "bulkRemoveErrorMsg": "Bulk remove failed: ",
     "bulkRemoveSuccessMsg": "Bulk remove success",
+    "NeedAssetsAndSystemUserErrMsg": "Need assets and systemuser",
     "createBy": "Create by",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
@@ -710,12 +712,15 @@
     "user": "User",
     "Status": "Status",
     "Open": "Open",
+    "IP": "IP",
+    "Hostname": "Hostname",
+    "Asset": "Asset",
+    "SystemUser": "System user",
     "Applicant": "Applicant",
     "Pending": "Pending",
     "Approved": "Approved",
     "Rejected": "Rejected",
     "Closed": "Closed"
-
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",

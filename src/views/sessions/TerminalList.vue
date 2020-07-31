@@ -18,7 +18,6 @@ import { GenericListPage, GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/Select2'
 import { BooleanFormatter } from '@/components/ListTable/formatters'
-
 export default {
   components: {
     GenericListPage,
@@ -155,5 +154,4 @@ export default {
 </script>
 
 <style>
-
 </style>

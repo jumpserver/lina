@@ -1,32 +1,34 @@
 <template>
   <el-row>
-    <DetailCard :title="cardTitle" :items="detailCardItems">
-      <div class="feed-activity-list">
-        <div class="feed-element">
-          <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" class="header-avatar" />
-          </a>
-          <div class="media-body ">
-            <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
-            <br>
-            <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
-            <div style="padding-top: 10px">
-              <span v-html="object.body" />
+    <el-col :span="18">
+      <DetailCard :title="cardTitle" :items="detailCardItems">
+        <div class="feed-activity-list">
+          <div class="feed-element">
+            <a href="#" class="pull-left">
+              <el-avatar :src="imageUrl" class="header-avatar" />
+            </a>
+            <div class="media-body ">
+              <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
+              <br>
+              <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
+              <div style="padding-top: 10px">
+                <span v-html="object.body" />
+              </div>
             </div>
           </div>
-        </div>
-        <template v-if="comments">
-          <div v-for="item in comments" :key="item.user_display + item.body">
-            <div class="feed-element">
-              <a href="#" class="pull-left">
-                <el-avatar :src="imageUrl" class="header-avatar" />
-              </a>
-              <div class="media-body ">
-                <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
-                <br>
-                <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-                <div style="padding-top: 10px">
-                  {{ item.body }}
+          <template v-if="comments">
+            <div v-for="item in comments" :key="item.user_display + item.body">
+              <div class="feed-element">
+                <a href="#" class="pull-left">
+                  <el-avatar :src="imageUrl" class="header-avatar" />
+                </a>
+                <div class="media-body ">
+                  <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
+                  <br>
+                  <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
+                  <div style="padding-top: 10px">
+                    {{ item.body }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -69,7 +71,8 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
+      
+      : this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''

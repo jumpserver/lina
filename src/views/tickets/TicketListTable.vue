@@ -15,6 +15,10 @@ export default {
     url: {
       type: String,
       default: '/api/v1/tickets/tickets/'
+    },
+    hasMoreActions: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -28,7 +32,13 @@ export default {
             formatter: DetailFormatter,
             sortable: 'custom',
             formatterArgs: {
-              route: 'TicketDetail'
+              getRoute: function({ row }) {
+                if (row.type === 'request_asset') {
+                  return 'AssetsTicketDetail'
+                } else {
+                  return 'TicketDetail'
+                }
+              }
             }
           },
           {
@@ -38,8 +48,7 @@ export default {
           },
           {
             prop: 'type_display',
-            label: this.$t('tickets.type'),
-            sortable: 'custom',
+            label: this.$t('tickets.type')
             width: '110px'
           },
           {
@@ -65,8 +74,10 @@ export default {
         ]
       },
       ticketActions: {
-        hasLeftActions: false,
+        hasLeftActions: this.hasMoreActions,
         hasRightActions: false,
+        hasCreate: false,
+        hasBulkDelete: false,
         searchConfig: {
           default: {
             status: {
@@ -76,8 +87,27 @@ export default {
               valueLabel: this.$t('tickets.Open')
             }
           }
-        }
+        },
+        moreActionsTitle: this.$t('common.RequestTickets'),
+        moreActionsType: 'primary',
+        extraMoreActions: this.genExtraMoreActions()
       }
+    }
+  },
+  methods: {
+    genExtraMoreActions() {
+      return [
+        {
+          name: '',
+          title: this.$t('tickets.RequestAssetPerm'),
+          type: 'primary',
+          can: true,
+          callback: this.onCallback
+        }
+      ]
+    },
+    onCallback() {
+      this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
     }
   }
 }
