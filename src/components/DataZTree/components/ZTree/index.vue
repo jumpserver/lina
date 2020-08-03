@@ -52,7 +52,7 @@ export default {
     // $('.treebox').css('height', window.innerHeight - 60)
   },
   beforeDestroy() {
-    $.fn.zTree.destroy()
+    $.fn.zTree.destroy(this.iZTreeID)
   },
   methods: {
     initTree: function() {
