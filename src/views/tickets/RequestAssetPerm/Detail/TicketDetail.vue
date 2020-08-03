@@ -1,15 +1,16 @@
 <template>
   <el-row>
-    <el-col :span="18">
-      <IBox>
+    <el-col :span="17">
+      <IBox class="box">
         <div slot="header" class="clearfix ibox-title">
-          <i class="fa fa-info-circle" />
+          <i class="fa fa-info-circle" /> {{ $t('common.BasicInfo') }}
         </div>
         <div class="content">
           <el-row :gutter="10">
             <el-col v-for="item in detailCardItems" :key="'card-' + item.key" :span="12">
               <el-row class="item">
                 <el-col :span="6">
+                  <!--        </div>-->
                   <div :style="{ 'text-align': 'align' }" class="item-label">
                     <label>{{ item.key }}: </label>
                   </div>
@@ -22,62 +23,110 @@
               </el-row>
             </el-col>
           </el-row>
-          <template v-if="hasActionPerm&&object.status !== 'closed'">
-            <el-form ref="request_form" :model="request_form" label-width="140px" label-position="left" class="assets">
-              <el-form-item :label="$t('tickets.Asset')" required>
-                <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" style="width: 30% !important" />
-              </el-form-item>
-              <el-form-item :label="$t('tickets.SystemUser')" required>
-                <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
-              </el-form-item>
-            </el-form>
-          </template>
-          <div class="feed-activity-list">
+          <el-divider />
+          <el-row :gutter="10">
+            <el-col v-for="item in spcialCardItems" :key="'card-' + item.key" :span="12">
+              <el-row class="item">
+                <el-col :span="6">
+                  <!--        </div>-->
+                  <div :style="{ 'text-align': 'align' }" class="item-label">
+                    <label>{{ item.key }}: </label>
+                  </div>
+                </el-col>
+                <el-col :span="18">
+                  <div class="item-text">
+                    <ItemValue :value="item.value" v-bind="item" />
+                  </div>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+
+      </IBox>
+      <IBox v-if="hasActionPerm&&object.status !== 'closed'" class="box">
+        <div slot="header" class="clearfix ibox-title">
+          <i class="fa fa-info-circle" /> {{ $t('common.Actions') }}
+        </div>
+        <template>
+          <el-form ref="request_form" :model="request_form" label-width="140px" label-position="left" class="assets">
+            <el-form-item :label="$t('tickets.Asset')" required>
+              <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" style="width: 30% !important" />
+            </el-form-item>
+            <el-form-item :label="$t('tickets.SystemUser')" required>
+              <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
+            </el-form-item>
+          </el-form>
+        </template>
+      </IBox>
+      <IBox class="box">
+        <div slot="header" class="clearfix ibox-title">
+          <i class="fa fa-info-circle" /> {{ $t('common.Comment') }}
+        </div>
+        <div class="feed-activity-list">
+          <div class="feed-element">
+            <a href="#" class="pull-left">
+              <el-avatar :src="imageUrl" class="header-avatar" />
+            </a>
+            <div class="media-body ">
+              <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
+              <br>
+              <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
+              <div style="padding-top: 10px">
+                <span v-html="object.body" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <template v-if="comments">
+          <div v-for="item in comments" :key="item.user_display + item.body">
             <div class="feed-element">
               <a href="#" class="pull-left">
                 <el-avatar :src="imageUrl" class="header-avatar" />
               </a>
               <div class="media-body ">
-                <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
+                <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
                 <br>
-                <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
+                <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
                 <div style="padding-top: 10px">
-                  <span v-html="object.body" />
+                  {{ item.body }}
                 </div>
               </div>
             </div>
-            <template v-if="comments">
-              <div v-for="item in comments" :key="item.user_display + item.body">
-                <div class="feed-element">
-                  <a href="#" class="pull-left">
-                    <el-avatar :src="imageUrl" class="header-avatar" />
-                  </a>
-                  <div class="media-body ">
-                    <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
-                    <br>
-                    <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-                    <div style="padding-top: 10px">
-                      {{ item.body }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-              <el-form-item :label="$t('tickets.reply')">
-                <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
-              </el-form-item>
-              <el-form-item style="float: right">
-                <template v-if="hasActionPerm">
-                  <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
-                  <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
-                </template>
-                <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
-                <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
-              </el-form-item>
-            </el-form>
           </div>
-          <slot />
+        </template>
+        <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
+          <el-form-item :label="$t('tickets.reply')">
+            <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
+          </el-form-item>
+          <el-form-item style="float: right">
+            <template v-if="hasActionPerm">
+              <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
+              <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
+            </template>
+            <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
+            <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </IBox>
+    </el-col>
+    <el-col :span="6" :offset="1">
+      <IBox>
+        <div style="height: 350px;">
+          <el-steps direction="vertical" :active="ticketStatus">
+            <el-step
+              :title="`${this.$t('tickets.OpenTicket')}：${object.type_display}`"
+              :description="`${this.$t('tickets.Applicant')}：${object.user_display}`"
+            />
+            <el-step
+              :title="`${this.$t('tickets.HandleTicket')}`"
+              :description="`${this.$t('tickets.Assignees')}：${object.assignees_display}`"
+            />
+            <el-step
+              :title="`${this.$t('tickets.FinishedTicket')}`"
+              :description="`${this.$t('tickets.Assignee')}：${object.assignee_display}`"
+            />
+          </el-steps>
         </div>
       </IBox>
     </el-col>
@@ -141,12 +190,12 @@ export default {
           key: this.$t('tickets.status'),
           value: this.object.status,
           formatter: function(row, data) {
-            const open = vm.$t('common.Open')
-            const close = vm.$t('common.Close')
+            const open = vm.$t('tickets.Open')
+            const close = vm.$t('tickets.Close')
             if (data === 'open') {
-              return <el-button type='primary' size='mini'>{open}</el-button>
+              return <el-tag type='primary' size='mini'>{open}</el-tag>
             }
-            return <el-button type='danger' size='mini'>{close}</el-button>
+            return <el-tag type='danger' size='mini'>{close}</el-tag>
           }
         },
         {
@@ -166,16 +215,24 @@ export default {
           value: this.object.assignee_display
         },
         {
+          key: this.$t('common.dateCreated'),
+          value: toSafeLocalDateStr(this.object.date_created)
+        }
+      ]
+    },
+    spcialCardItems() {
+      return [
+        // {
+        //   key: this.$t('tickets.Assignee'),
+        //   value: this.object.assignee_display
+        // },
+        {
           key: this.$t('tickets.IP'),
           value: this.object.ips
         },
         {
           key: this.$t('tickets.Hostname'),
           value: this.object.hostname
-        },
-        {
-          key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('common.dateStart'),
@@ -189,6 +246,9 @@ export default {
     },
     hasActionPerm() {
       return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
+    },
+    ticketStatus() {
+      return this.object.status === 'open' ? 2 : 3
     }
   },
   mounted() {
@@ -302,5 +362,8 @@ export default {
   }
   .el-button--mini {
     padding: 4px 6px;
+  }
+  .box {
+    margin-bottom: 15px;
   }
 </style>
