@@ -74,8 +74,8 @@ export default {
       return this.url
     },
     downloadImportTempUrl() {
-      const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
-      return baseUrl + '?format=csv&template=import&limit=1'
+      const url = (this.url.indexOf('?') === -1) ? `${this.url}?format=csv&template=import&limit=1` : `${this.url}&format=csv&template=import&limit=1`
+      return url
     },
     uploadHelpTextClass() {
       const cls = ['el-upload__tip']
