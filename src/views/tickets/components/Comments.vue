@@ -64,7 +64,7 @@
           :disabled="object.status === 'closed'"
           type="danger"
           size="small"
-          @click="handleClosed"
+          @click="handleClose"
         >
           <i class="fa fa-times" />{{ $t('tickets.Close') }}
         </el-button>
@@ -161,7 +161,7 @@ export default {
       const data = { action: 'reject' }
       this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
-    handleClosed() {
+    handleClose() {
       const url = `/api/v1/tickets/tickets/${this.object.id}/`
       const data = { status: 'closed' }
       this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))

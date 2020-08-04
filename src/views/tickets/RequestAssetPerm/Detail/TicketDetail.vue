@@ -10,12 +10,12 @@
         <i class="fa fa-info-circle" /> {{ $t('common.Actions') }}
       </div>
       <template>
-        <el-form ref="request_form" :model="request_form" label-width="140px" label-position="left" class="assets">
+        <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
           <el-form-item :label="$t('tickets.Asset')" required>
-            <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" style="width: 30% !important" />
+            <Select2 ref="select2" v-model="requestForm.asset" v-bind="asset_select2" style="width: 30% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
-            <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
+            <Select2 ref="select2" v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
           </el-form-item>
         </el-form>
       </template>
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
-      request_form: {
+      requestForm: {
         asset: this.object.confirmed_assets,
         systemuser: ''
       },
@@ -157,12 +157,12 @@ export default {
       })
     },
     handleApprove() {
-      if (this.request_form.asset.length === 0 || this.request_form.systemuser === '') {
+      if (this.requestForm.asset.length === 0 || this.requestForm.systemuser === '') {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {
-          confirmed_system_user: this.request_form.systemuser,
-          confirmed_assets: this.request_form.asset
+          confirmed_system_user: this.requestForm.systemuser,
+          confirmed_assets: this.requestForm.asset
         }).then(res => {
           this.$axios.post(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/approve/`).then(
             () => {
