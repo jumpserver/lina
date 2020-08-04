@@ -1,5 +1,8 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :clean-form-value="cleanFormValue"
+  />
 </template>
 
 <script>
@@ -80,6 +83,14 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    cleanFormValue(value) {
+      if (!this.password_strategy) {
+        delete value['password']
+      }
+      return value
     }
   }
 }
