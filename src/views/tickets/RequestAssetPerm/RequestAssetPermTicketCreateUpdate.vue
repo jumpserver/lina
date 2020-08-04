@@ -23,7 +23,9 @@ export default {
         org_id: 'DEFAULT'
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'ips', 'hostname', 'date_start', 'date_expired', 'org_id', 'assignees']]
+        [this.$t('common.Basic'), ['title', 'org_id', 'assignees']],
+        [this.$t('tickets.RequestPerm'), ['ips', 'hostname', 'date_start', 'date_expired']]
+
       ],
       fieldsMeta: {
         ips: {

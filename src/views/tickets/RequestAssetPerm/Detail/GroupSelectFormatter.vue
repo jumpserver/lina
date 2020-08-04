@@ -34,7 +34,6 @@ export default {
     this.$axios.get(this.url).then(
       res => {
         this.options = res
-        console.log(this.options)
       }
     )
   }

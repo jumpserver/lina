@@ -1,98 +1,38 @@
 <template>
-  <el-row>
-    <el-col :span="18">
-      <IBox>
-        <div slot="header" class="clearfix ibox-title">
-          <i class="fa fa-info-circle" />
-        </div>
-        <div class="content">
-          <el-row :gutter="10">
-            <el-col v-for="item in detailCardItems" :key="'card-' + item.key" :span="12">
-              <el-row class="item">
-                <el-col :span="6">
-                  <div :style="{ 'text-align': 'align' }" class="item-label">
-                    <label>{{ item.key }}: </label>
-                  </div>
-                </el-col>
-                <el-col :span="18">
-                  <div class="item-text">
-                    <ItemValue :value="item.value" v-bind="item" />
-                  </div>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <template v-if="hasActionPerm&&object.status !== 'closed'">
-            <el-form ref="request_form" :model="request_form" label-width="140px" label-position="left" class="assets">
-              <el-form-item :label="$t('tickets.Asset')" required>
-                <Select2 ref="select2" v-model="request_form.asset" v-bind="asset_select2" style="width: 30% !important" />
-              </el-form-item>
-              <el-form-item :label="$t('tickets.SystemUser')" required>
-                <Select2 ref="select2" v-model="request_form.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
-              </el-form-item>
-            </el-form>
-          </template>
-          <div class="feed-activity-list">
-            <div class="feed-element">
-              <a href="#" class="pull-left">
-                <el-avatar :src="imageUrl" class="header-avatar" />
-              </a>
-              <div class="media-body ">
-                <strong>{{ object.user_display }}</strong> <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
-                <br>
-                <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
-                <div style="padding-top: 10px">
-                  <span v-html="object.body" />
-                </div>
-              </div>
-            </div>
-            <template v-if="comments">
-              <div v-for="item in comments" :key="item.user_display + item.body">
-                <div class="feed-element">
-                  <a href="#" class="pull-left">
-                    <el-avatar :src="imageUrl" class="header-avatar" />
-                  </a>
-                  <div class="media-body ">
-                    <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
-                    <br>
-                    <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-                    <div style="padding-top: 10px">
-                      {{ item.body }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-              <el-form-item :label="$t('tickets.reply')">
-                <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
-              </el-form-item>
-              <el-form-item style="float: right">
-                <template v-if="hasActionPerm">
-                  <el-button :disabled="object.status === 'closed'" type="primary" size="small" @click="handleApprove"><i class="fa fa-check" />{{ $t('tickets.Accept') }}</el-button>
-                  <el-button :disabled="object.status === 'closed'" type="warning" size="small" @click="handleReject"><i class="fa fa-ban" />{{ $t('tickets.Reject') }}</el-button>
-                </template>
-                <el-button :disabled="object.status === 'closed'" type="danger" size="small" @click="handleClosed"><i class="fa fa-times" />{{ $t('tickets.Close') }}</el-button>
-                <el-button :disabled="object.status === 'closed'" type="info" size="small" @click="handleComment"><i class="fa fa-pencil" />{{ $t('tickets.Comment') }}</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-          <slot />
-        </div>
-      </IBox>
-    </el-col>
-  </el-row>
+  <GenericTicketDetail
+    :object="object"
+    :detail-card-items="detailCardItems"
+    :special-card-items="specialCardItems"
+    :approve="handleApprove"
+  >
+    <IBox v-if="hasActionPerm&&object.status !== 'closed'" class="box">
+      <div slot="header" class="clearfix ibox-title">
+        <i class="fa fa-info-circle" /> {{ $t('common.Actions') }}
+      </div>
+      <template>
+        <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
+          <el-form-item :label="$t('tickets.Asset')" required>
+            <Select2 ref="select2" v-model="requestForm.asset" v-bind="asset_select2" style="width: 30% !important" />
+          </el-form-item>
+          <el-form-item :label="$t('tickets.SystemUser')" required>
+            <Select2 ref="select2" v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
+          </el-form-item>
+        </el-form>
+      </template>
+    </IBox>
+  </GenericTicketDetail>
 </template>
 
 <script>
-import IBox from '@/components/IBox'
-import ItemValue from './ItemValue'
-import Select2 from '@/components/Select2'
+import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { formatTime, getDateTimeStamp } from '@/utils'
+import { STATUS_MAP } from '../../const'
+import Select2 from '@/components/Select2'
+import IBox from '@/components/IBox'
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 export default {
   name: '',
-  components: { IBox, ItemValue, Select2 },
+  components: { GenericTicketDetail, IBox, Select2 },
   props: {
     object: {
       type: Object,
@@ -101,12 +41,8 @@ export default {
   },
   data() {
     return {
-      imageUrl: require('@/assets/img/admin.png'),
-      form: {
-        comments: '',
-        confirmed_assets: []
-      },
-      request_form: {
+      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
+      requestForm: {
         asset: this.object.confirmed_assets,
         systemuser: ''
       },
@@ -135,18 +71,12 @@ export default {
   },
   computed: {
     detailCardItems() {
-      const vm = this
       return [
         {
           key: this.$t('tickets.status'),
           value: this.object.status,
-          formatter: function(row, data) {
-            const open = vm.$t('common.Open')
-            const close = vm.$t('common.Close')
-            if (data === 'open') {
-              return <el-button type='primary' size='mini'>{open}</el-button>
-            }
-            return <el-button type='danger' size='mini'>{close}</el-button>
+          formatter: (item, val) => {
+            return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
         },
         {
@@ -166,16 +96,24 @@ export default {
           value: this.object.assignee_display
         },
         {
+          key: this.$t('common.dateCreated'),
+          value: toSafeLocalDateStr(this.object.date_created)
+        }
+      ]
+    },
+    specialCardItems() {
+      return [
+        // {
+        //   key: this.$t('tickets.Assignee'),
+        //   value: this.object.assignee_display
+        // },
+        {
           key: this.$t('tickets.IP'),
           value: this.object.ips
         },
         {
           key: this.$t('tickets.Hostname'),
           value: this.object.hostname
-        },
-        {
-          key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
         },
         {
           key: this.$t('common.dateStart'),
@@ -190,14 +128,6 @@ export default {
     hasActionPerm() {
       return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
     }
-  },
-  mounted() {
-    const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
-    this.$axios.get(url).then(res => {
-      this.comments = res
-    }).catch(err => {
-      this.$message.error(err)
-    })
   },
   methods: {
     formatTime(dateStr) {
@@ -227,13 +157,12 @@ export default {
       })
     },
     handleApprove() {
-      // this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
-      if (this.request_form.asset.length === 0 || this.request_form.systemuser === '') {
+      if (this.requestForm.asset.length === 0 || this.requestForm.systemuser === '') {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {
-          confirmed_system_user: this.request_form.systemuser,
-          confirmed_assets: this.request_form.asset
+          confirmed_system_user: this.requestForm.systemuser,
+          confirmed_assets: this.requestForm.asset
         }).then(res => {
           this.$axios.post(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/approve/`).then(
             () => {
@@ -245,50 +174,17 @@ export default {
           () => this.$message.success(this.$t('common.updateErrorMsg'))
         )
       }
-    },
-    handleReject() {
-      this.createComment(function() {})
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { action: 'reject' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
-    },
-    handleClosed() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { status: 'closed' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
-    },
-    handleComment() {
-      this.createComment()
     }
   }
 }
 </script>
 
 <style scoped>
-  .content {
-    font-size: 13px;
-    line-height: 2.5;
-  }
   .assets{
     margin-top: 14px;
   }
-  .feed-activity-list {
-    padding-top: 20px;
-    line-height: 1.5;
-  }
   .feed-activity-list .feed-element {
     border-bottom: 1px solid #e7eaec;
-  }
-  .feed-element:first-child {
-    margin-top: 0;
-  }
-  .feed-element {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-  .feed-element,
-  .media-body {
-    overflow: hidden;
   }
   .feed-element > .pull-left {
     margin-right: 10px;
@@ -297,10 +193,7 @@ export default {
     width: 38px;
     height: 38px;
   }
-  .text-muted {
-    color: #888888;
-  }
-  .el-button--mini {
-    padding: 4px 6px;
+  .box {
+    margin-bottom: 15px;
   }
 </style>
