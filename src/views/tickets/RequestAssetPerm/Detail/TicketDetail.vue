@@ -139,23 +139,6 @@ export default {
     reloadPage() {
       window.location.reload()
     },
-    createComment(successCallback) {
-      const commentText = this.form.comments
-      const ticketId = this.object.id
-      const commentUrl = `/api/v1/tickets/tickets/${ticketId}/comments/`
-      if (!commentText) { return }
-      const body = {
-        body: commentText,
-        ticket: ticketId
-      }
-      this.$axios.post(commentUrl, body).then(res => {
-        if (successCallback) {
-          successCallback()
-        } else {
-          this.reloadPage()
-        }
-      })
-    },
     handleApprove() {
       if (this.requestForm.asset.length === 0 || this.requestForm.systemuser === '') {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))

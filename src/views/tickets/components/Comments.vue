@@ -152,7 +152,7 @@ export default {
       })
     },
     handleApprove() {
-      const handler = this.approve() || this.defaultApprove()
+      const handler = this.approve || this.defaultApprove
       handler()
     },
     handleReject() {
