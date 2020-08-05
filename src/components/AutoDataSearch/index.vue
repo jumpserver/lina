@@ -47,7 +47,9 @@ export default {
         }
         const option = {
           label: field.label,
+          type: field.type,
           value: name
+
         }
         if (field.type === 'choice' && field.choices) {
           option.children = field.choices.map(item => {

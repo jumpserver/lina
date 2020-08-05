@@ -1,13 +1,21 @@
 <template>
   <div class="filter-field">
     <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
-    <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)">
+    <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)" @click="handleTagClick(v,k)">
       <strong v-if="v.label">{{ v.label + ':' }}</strong>
       <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
       <span v-else>{{ v.value }}</span>
     </el-tag>
     <span v-if="keyLabel" slot="prefix" class="filterTitle">{{ keyLabel + ':' }}</span>
-    <el-input ref="SearchInput" v-model="filterValue" :placeholder="placeholder" class="search-input" @blur="focus = false" @focus="focus = true" @change="handleConfirm" />
+    <el-input
+      ref="SearchInput"
+      v-model="filterValue"
+      :placeholder="placeholder"
+      class="search-input"
+      @blur="focus = false"
+      @focus="focus = true"
+      @change="handleConfirm"
+    />
   </div>
 </template>
 
@@ -127,6 +135,29 @@ export default {
       this.filterKey = ''
       this.filterValue = ''
       this.valueLabel = ''
+    },
+    handleTagClick(v, k) {
+      let currentFieldIsNecessary = false
+      for (const field of this.options) {
+        if (field.value === v.key) {
+          if (field.type === 'choice') {
+            currentFieldIsNecessary = true
+          }
+          if (field.type === 'boolean') {
+            currentFieldIsNecessary = true
+          }
+        }
+      }
+      if (currentFieldIsNecessary) {
+        return
+      }
+      if (this.filterValue.length !== 0) {
+        this.handleConfirm()
+      }
+      this.handleTagClose(k)
+      this.filterKey = v.key
+      this.filterValue = v.value
+      this.$refs.SearchInput.focus()
     }
   }
 }
