@@ -138,7 +138,7 @@ export async function startup({ to, from, next }) {
   // set page title
   await setHeadTitle({ to, from, next }) // 设置头部
   await checkLogin({ to, from, next }) // 检查是否满足条件 如果满足条件获取用户信息存vuex
-  await changeCurrentOrgIfNeed({ to, from, next })
+  await changeCurrentOrgIfNeed({ to, from, next }) // 查看是否有通行证
   await changeCurrentRoleIfNeed({ to, from, next }) // 获取角色
   await getPublicSetting({ to, from, next }) // 获取公用配置 如logo图标 密码位数规则等
   await generatePageRoutes({ to, from, next }) // 生成路由表
