@@ -75,7 +75,7 @@ const actions = {
   //   })
   // },
 
-  // get user Profile
+  // get user Profile 获取用户信息
   getProfile({ commit, state }, refresh = false) {
     return new Promise((resolve, reject) => {
       if (!refresh && state.profile && Object.keys(state.profile).length > 0) {
@@ -101,6 +101,7 @@ const actions = {
       }
       return dispatch('getProfile').then((profile) => {
         const { current_org_roles: currentOrgRoles, role } = profile
+        // 解析用户角色
         const roles = rolec.parseUserRoles(currentOrgRoles, role)
         commit('SET_ROLES', roles)
         commit('SET_PERMS', rolec.sumPerms(roles))
@@ -113,10 +114,12 @@ const actions = {
   getInOrgs({ commit, dispatch, state }, refresh) {
     return new Promise((resolve, reject) => {
       if (!refresh && state.role && state.role.length > 0) {
+        // 获取管理员或审计组织
         return resolve(state.roles)
       }
       dispatch('getProfile').then(profile => {
         const { admin_or_audit_orgs: inOrgs } = profile
+        // 获取管理员或审计组织
         commit('SET_ORGS', inOrgs)
         resolve(inOrgs)
       }).catch((e) => reject(e))

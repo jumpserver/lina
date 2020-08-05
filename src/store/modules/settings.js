@@ -30,11 +30,12 @@ const actions = {
   getPublicSettings({ commit, state }) {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
-        const link = document.querySelector("link[rel*='icon']") || document.createElement('link')
-        link.type = 'image/x-icon'
-        link.rel = 'shortcut icon'
-        link.href = response.data.LOGO_URLS.favicon
-        document.getElementsByTagName('head')[0].appendChild(link)
+        // const link = document.querySelector("link[rel*='icon']") || document.createElement('link')
+        // link.type = 'image/x-icon'
+        // link.rel = 'shortcut icon'
+        // link.href = response.data.LOGO_URLS.favicon
+        // console.log(response.data.LOGO_URLS.favicon);
+        // document.getElementsByTagName('head')[0].appendChild(link)
         commit('SET_PUBLIC_SETTINGS', response.data)
         resolve(response)
       }).catch(error => {

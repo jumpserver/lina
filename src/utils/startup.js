@@ -19,6 +19,7 @@ function setHeadTitle({ to, from, next }) {
 }
 
 async function checkLogin({ to, from, next }) {
+  // 主要获取用户信息 然后返回用户信息
   if (whiteList.indexOf(to.path) !== -1) {
     next()
   }
@@ -51,11 +52,11 @@ async function getPublicSetting({ to, from, next }) {
 
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getInOrgs')
-  const adminOrgs = store.getters.userAdminOrgList
+  const adminOrgs = store.getters.userAdminOrgList // 管理员或审计组织
   if (!adminOrgs || adminOrgs.length === 0) {
     return
   }
-  const currentOrg = store.getters.currentOrg
+  const currentOrg = store.getters.currentOrg  // 获取当前审计
   if (!currentOrg || typeof currentOrg !== 'object') {
     console.log('Not has current org')
     orgUtil.change2PropOrg()
@@ -73,6 +74,7 @@ async function changeCurrentRoleIfNeed({ to, from, next }) {
   const userPerms = store.getters.currentOrgPerms
 
   let currentRole = store.getters.currentRole
+
   // 如果设置了当前角色，并且有这个权限的话
   if (currentRole && rolec.hasPerm(userPerms, currentRole)) {
     return
@@ -105,22 +107,23 @@ export async function generatePageRoutes({ to, from, next }) {
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', currentRole)
 
-    // dynamically add accessible routes
-    router.addRoutes(accessRoutes)
+  // dynamically add accessible routes
+  router.addRoutes(accessRoutes)
 
-    // hack method to ensure that addRoutes is complete
-    // set the replace: true, so the navigation will not leave a history record
-    // console.log('Next to: ', to)
-    next({ ...to, replace: true })
-  } catch (error) {
-    // remove token and go to login page to re-login
-    // await store.dispatch('user/resetToken')
-    Message.error(error || 'Has Error')
-    console.log('Error occur: ', error)
-  }
+  // hack method to ensure that addRoutes is complete
+  // set the replace: true, so the navigation will not leave a history record
+  // console.log('Next to: ', to)
+  next({ ...to, replace: true })
+} catch (error) {
+  // remove token and go to login page to re-login
+  // await store.dispatch('user/resetToken')
+  Message.error(error || 'Has Error')
+  console.log('Error occur: ', error)
+}
 }
 
 export async function checkUserFirstLogin({ to, from, next }) {
+  // 判断是否是首次登陆
   if (store.state.users.profile.is_first_login) {
     next('/users/first-login/personal-information-improvement/')
   }
@@ -133,13 +136,13 @@ export async function startup({ to, from, next }) {
   initial = true
 
   // set page title
-  await setHeadTitle({ to, from, next })
-  await checkLogin({ to, from, next })
+  await setHeadTitle({ to, from, next }) // 设置头部
+  await checkLogin({ to, from, next }) // 检查是否满足条件 如果满足条件获取用户信息存vuex
   await changeCurrentOrgIfNeed({ to, from, next })
-  await changeCurrentRoleIfNeed({ to, from, next })
-  await getPublicSetting({ to, from, next })
-  await generatePageRoutes({ to, from, next })
-  await checkUserFirstLogin({ to, from, next })
+  await changeCurrentRoleIfNeed({ to, from, next }) // 获取角色
+  await getPublicSetting({ to, from, next }) // 获取公用配置 如logo图标 密码位数规则等
+  await generatePageRoutes({ to, from, next }) // 生成路由表
+  await checkUserFirstLogin({ to, from, next }) // 判断是否是首次登陆
   return true
 }
 

@@ -47,14 +47,13 @@ export function filterLicRoutes(routes, roles) {
     const tmp = {
       ...route
     }
-    if (hasLicense(roles, tmp)) {
+    if (hasLicense(roles, tmp)) { // 判断是否有权限
       if (tmp.children) {
         tmp.children = filterLicRoutes(tmp.children, roles)
       }
       res.push(tmp)
     }
   })
-
   return res
 }
 
