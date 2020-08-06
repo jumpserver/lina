@@ -6,13 +6,14 @@
     :default-expand-all="true"
     :default-checked-keys="value"
     :props="defaultProps"
+    v-bind="$attrs"
     @check="handleCheckChange"
   />
 </template>
 
 <script>
 export default {
-  name: 'AssetPermissionFormActionFiel',
+  name: 'AssetPermissionFormActionField',
   props: {
     value: {
       type: Array,

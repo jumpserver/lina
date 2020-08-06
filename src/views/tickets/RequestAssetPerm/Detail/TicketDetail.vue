@@ -7,15 +7,18 @@
   >
     <IBox v-if="hasActionPerm&&object.status !== 'closed'" class="box">
       <div slot="header" class="clearfix ibox-title">
-        <i class="fa fa-info-circle" /> {{ $t('common.Actions') }}
+        <i class="fa fa-edit" /> {{ $t('common.Actions') }}
       </div>
       <template>
         <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
           <el-form-item :label="$t('tickets.Asset')" required>
-            <Select2 ref="select2" v-model="requestForm.asset" v-bind="asset_select2" style="width: 30% !important" />
+            <Select2 v-model="requestForm.asset" v-bind="asset_select2" style="width: 30% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
-            <Select2 ref="select2" v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
+            <Select2 v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
+          </el-form-item>
+          <el-form-item :label="$t('assets.Action')" required>
+            <AssetPermissionFormActionField v-model="requestForm.actions" style="width: 30% !important" />
           </el-form-item>
         </el-form>
       </template>
@@ -29,10 +32,11 @@ import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
 import Select2 from '@/components/Select2'
 import IBox from '@/components/IBox'
+import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2 },
+  components: { GenericTicketDetail, IBox, Select2, AssetPermissionFormActionField },
   props: {
     object: {
       type: Object,
@@ -44,7 +48,8 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         asset: this.object.confirmed_assets,
-        systemuser: ''
+        systemuser: '',
+        actions: this.object.actions
       },
       comments: '',
       assets: [],
@@ -162,7 +167,8 @@ export default {
       } else {
         this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {
           confirmed_system_user: this.requestForm.systemuser,
-          confirmed_assets: this.requestForm.asset
+          confirmed_assets: this.requestForm.asset,
+          actions: this.requestForm.actions
         }).then(res => {
           this.$axios.post(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/approve/`).then(
             () => {
