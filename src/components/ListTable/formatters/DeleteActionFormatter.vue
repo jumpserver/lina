@@ -33,6 +33,9 @@ export default {
       }
     },
     iCanDelete() {
+      if (this.col.objects === 'all') {
+        return false
+      }
       return this.col.objects.indexOf(this.cellValue) === -1
     }
   }
