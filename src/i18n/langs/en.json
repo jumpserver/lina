@@ -923,8 +923,10 @@
       "OrganizationDetail": "Org detail",
       "OrganizationList": "Organlizations",
       "OrganizationUpdate": "Update org",
+      "OrganizationMembership": "Organization membership",
       "DeleteOrgTitle":"Please ensure that the following information in the organization has been deleted",
-      "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission"
+      "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission",
+      "OrgRole": "Org role"
     },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",
