@@ -27,7 +27,7 @@ export default {
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
-          'name', 'username', 'groups_display', 'role', 'source', 'is_valid', 'actions'
+          'name', 'username', 'groups_display', 'total_role_display', 'source', 'is_valid', 'actions'
         ],
         columnsMeta: {
           username: {
@@ -36,9 +36,9 @@ export default {
           source: {
             width: '120px'
           },
-          // role: {
-          //   width: '100px'
-          // },
+          total_role_display: {
+            label: this.$t('users.Role')
+          },
           groups_display: {
             width: '200px',
             showOverflowTooltip: true

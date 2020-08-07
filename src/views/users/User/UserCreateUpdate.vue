@@ -79,6 +79,9 @@ export default {
           label: this.$t('users.OrgRole'),
           hidden: () => {
             return !this.publicSettings.XPACK_LICENSE_IS_VALID
+          },
+          el: {
+            // disabled: () => this.currentOrgIsDefault
           }
         },
         groups: {
@@ -95,8 +98,8 @@ export default {
   },
   computed: {
     ...mapGetters(['publicSettings', 'currentOrg']),
-    ruleDisabled() {
-      return this.currentOrg.id === 'DEFAULT'
+    currentOrgIsDefault() {
+      return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
     }
   }
 }
