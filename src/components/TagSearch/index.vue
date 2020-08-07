@@ -152,18 +152,18 @@ export default {
       this.valueLabel = ''
     },
     handleTagClick(v, k) {
-      let currentFieldIsNecessary = false
+      let unableChange = false
       for (const field of this.options) {
         if (field.value === v.key) {
           if (field.type === 'choice') {
-            currentFieldIsNecessary = true
+            unableChange = true
           }
           if (field.type === 'boolean') {
-            currentFieldIsNecessary = true
+            unableChange = true
           }
         }
       }
-      if (currentFieldIsNecessary) {
+      if (unableChange) {
         return
       }
       if (this.filterValue.length !== 0) {
