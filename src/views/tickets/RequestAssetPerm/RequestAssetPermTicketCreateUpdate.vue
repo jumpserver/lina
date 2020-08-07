@@ -6,6 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/Select2'
 import { getDaysFuture } from '@/utils/common'
+import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -20,11 +21,12 @@ export default {
         ips_or_not: true,
         date_expired: date_expired,
         date_start: date_start,
-        org_id: 'DEFAULT'
+        org_id: 'DEFAULT',
+        actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'org_id', 'assignees']],
-        [this.$t('tickets.RequestPerm'), ['ips', 'hostname', 'date_start', 'date_expired']]
+        [this.$t('tickets.RequestPerm'), ['ips', 'hostname', 'actions', 'date_start', 'date_expired']]
 
       ],
       fieldsMeta: {
@@ -33,6 +35,11 @@ export default {
         },
         hostname: {
           helpText: '支持模糊匹配'
+        },
+        actions: {
+          label: this.$t('perms.Actions'),
+          component: AssetPermissionFormActionField,
+          helpText: this.$t('common.actionsTips')
         },
         org_id: {
           component: Select2,

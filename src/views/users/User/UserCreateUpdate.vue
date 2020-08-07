@@ -1,5 +1,8 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :clean-form-value="cleanFormValue"
+  />
 </template>
 
 <script>
@@ -100,6 +103,14 @@ export default {
     ...mapGetters(['publicSettings', 'currentOrg']),
     currentOrgIsDefault() {
       return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
+    }
+  },
+  methods: {
+    cleanFormValue(value) {
+      if (!this.password_strategy) {
+        delete value['password']
+      }
+      return value
     }
   }
 }
