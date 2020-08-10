@@ -50,10 +50,6 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('ops.ID'),
-          value: this.object.id
-        },
-        {
           key: this.$t('common.Name'),
           value: this.object.name
         },
