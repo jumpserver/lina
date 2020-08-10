@@ -49,10 +49,6 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('ops.ID'),
-          value: this.object.id
-        },
-        {
           key: this.$t('ops.hosts'),
           value: JSON.stringify(this.object.hosts.length)
         },
