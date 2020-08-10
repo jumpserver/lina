@@ -87,10 +87,19 @@ export default {
   },
   methods: {
     cleanFormValue(value) {
-      if (!this.password_strategy) {
+      const method = this.getMethod()
+      if (method === 'post' && !value.password_strategy) {
         delete value['password']
       }
       return value
+    },
+    getMethod() {
+      const params = this.$route.params
+      if (params.id) {
+        return 'put'
+      } else {
+        return 'post'
+      }
     }
   }
 }
