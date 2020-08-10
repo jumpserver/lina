@@ -208,7 +208,7 @@ export default {
         },
         {
           key: this.$t('assets.IsActive'),
-          value: this.object.is_active.toString()
+          value: this.toChoicesDisplay(this.object.is_active)
         },
         {
           key: this.$t('assets.SerialNumber'),
@@ -238,7 +238,12 @@ export default {
 
   },
   methods: {
-
+    toChoicesDisplay(value) {
+      if (!value) {
+        return this.$t('common.No')
+      }
+      return this.$t('common.Yes')
+    }
   }
 }
 </script>
