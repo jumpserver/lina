@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import UploadKey from '@/components/UploadKey'
 import { Select2 } from '@/components'
@@ -14,6 +15,7 @@ export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
+    const vm = this
     return {
       initial: {
         login_mode: 'auto',
@@ -28,9 +30,10 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['auto_push', 'auto_generate_key', 'password', 'private_key']],
+        [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'groups']],
+        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('common.Other'), ['sftp_root', 'sudo', 'shell', 'comment']]
+        [this.$t('common.Other'), ['sftp_root', 'comment']]
       ],
       fieldsMeta: {
         login_mode: {
@@ -39,6 +42,14 @@ export default {
         username: {
           el: {
             disabled: false
+          },
+          on: {
+            input: ([value], updateForm) => {
+              if (value) {
+                updateForm({ home: '/home/' + value })
+                updateForm({ groups: value })
+              }
+            }
           }
         },
         private_key: {
@@ -56,6 +67,12 @@ export default {
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
             return false
+          },
+          on: {
+            input: ([value], updateForm) => {
+              updateForm({ home: '/home/' + vm.currentUser.username })
+              updateForm({ groups: vm.currentUser.username })
+            }
           }
         },
         auto_generate_key: {
@@ -111,7 +128,7 @@ export default {
             { required: true }
           ],
           helpText: this.$t('assets.SudoHelpMessage'),
-          hidden: (item) => item.protocol !== 'ssh'
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
         },
         password: {
           helpText: this.$t('assets.PasswordHelpMessage'),
@@ -123,7 +140,21 @@ export default {
           }
         },
         shell: {
-          hidden: (item) => item.protocol !== 'ssh',
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
+          rules: [
+            { required: true }
+          ]
+        },
+        home: {
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
+          helpText: this.$t('assets.HomeHelpMessage'),
+          rules: [
+            { required: true }
+          ]
+        },
+        groups: {
+          hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push,
+          helpText: this.$t('assets.GroupsHelpMessage'),
           rules: [
             { required: true }
           ]
@@ -134,7 +165,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters([
+      'currentUser'
+    ])
   }
 }
 </script>

@@ -133,7 +133,9 @@
     "command_filter_list": "Command filter list",
     "date_joined": "Date joined",
     "ip": "IP",
-    "sshkey": "sshkey"
+    "sshkey": "sshkey",
+    "GroupsHelpMessage": "Default groups: Same as the system username",
+    "HomeHelpMessage": "Default home directory: /home/system username"
   },
   "audits": {
     "Hosts": "Host",
