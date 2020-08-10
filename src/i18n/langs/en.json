@@ -28,7 +28,8 @@
     "custom_target": "target URL",
     "custom_username": "Account",
     "custom_password": "Password",
-    "Custom": "Custom"
+    "Custom": "Custom",
+    "kubernetes":"Kubernetes"
   },
   "assets": {
     "Action": "Action",

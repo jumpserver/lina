@@ -28,7 +28,8 @@
     "custom_target": "目标地址",
     "custom_username": "登录账号",
     "custom_password": "登录密码",
-    "Custom": "自定义"
+    "Custom": "自定义",
+    "kubernetes":"Kubernetes"
   },
   "assets": {
     "Action": "动作",
