@@ -45,9 +45,12 @@ export default {
           el: {
             disabled: false
           },
+          rules: [{ required: true }],
           hidden: (form) => {
-            if (form.protocol === 'k8s') {
-              return true
+            if (form.login_mode === 'manual') {
+              this.fieldsMeta.username.rules[0].required = false
+            } else {
+              this.fieldsMeta.username.rules[0].required = true
             }
           }
         },
