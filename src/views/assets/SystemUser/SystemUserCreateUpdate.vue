@@ -46,9 +46,9 @@ export default {
             disabled: false
           },
           hidden: (form) => {
-            if (form.protocol === 'k8s') {
-              return true
-            }
+            // if (form.protocol === 'k8s') {
+            //   return true
+            // }
           }
         },
         private_key: {
