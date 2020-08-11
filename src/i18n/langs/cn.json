@@ -29,6 +29,7 @@
     "custom_username": "登录账号",
     "custom_password": "登录密码",
     "Custom": "自定义",
+    "cluster": "集群",
     "kubernetes":"Kubernetes"
   },
   "assets": {

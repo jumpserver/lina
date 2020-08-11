@@ -44,6 +44,12 @@ export default [
         name: 'MyDatebases',
         component: () => import('@/userviews/apps/DatabaseApp'),
         meta: { title: i18n.t('route.DatabaseApp'), permissions: [rolec.PERM_USE] }
+      },
+      {
+        path: '/apps/kubernetes',
+        name: 'MyKubernetes',
+        component: () => import('@/userviews/apps/KubernetesApp'),
+        meta: { title: i18n.t('route.KubernetesApp'), permissions: [rolec.PERM_USE] }
       }
     ]
   },

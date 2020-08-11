@@ -11,7 +11,7 @@ import Page from '@/layout/components/Page/index'
 import { ActionsFormatter } from '@/components/ListTable/formatters'
 
 export default {
-  name: 'DatabaseApp',
+  name: 'KubernetesApp',
   components: {
     ListTable,
     Page
@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/database-apps/`,
+        url: `/api/v1/perms/users/k8s-apps/`,
         columns: [
           {
             prop: 'name',
@@ -30,14 +30,14 @@ export default {
             sortable: true
           },
           {
-            prop: 'get_type_display',
+            prop: 'type_display',
             align: 'center',
             label: this.$t('assets.Type')
           },
           {
-            prop: 'database',
+            prop: 'cluster',
             align: 'center',
-            label: this.$t('assets.Database')
+            label: this.$t('applications.cluster')
           },
           {
             prop: 'comment',
@@ -58,7 +58,7 @@ export default {
                   fa: 'fa-terminal',
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=database_app&login_to=${cellValue}`, '_blank')
+                    window.open(`/luna/?type=k8s_app&login_to=${cellValue}`, '_blank')
                   }
                 }
               ]

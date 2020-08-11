@@ -79,16 +79,16 @@ export default [
   },
   {
     path: 'kubernetes-apps/:id/update',
-    name: 'DatabaseAppUpdate',
+    name: 'KubernetesAppUpdate',
     component: () => import('@/views/applications/KubernetesApp/KubernetesAppCreateUpdate'),
     meta: { title: i18n.t('route.KubernetesAppUpdate'), activeMenu: '/applications/kubernetes-apps', action: 'update' },
     hidden: true
+  },
+  {
+    path: 'kubernetes-apps/:id',
+    name: 'KubernetesAppDetail',
+    component: () => import('@/views/applications/KubernetesApp/KubernetesAppDetail/index'),
+    meta: { title: i18n.t('route.KubernetesAppDetail'), activeMenu: '/applications/kubernetes-apps' },
+    hidden: true
   }
-  // {
-  //   path: 'kubernetes-apps/:id',
-  //   name: 'DatabaseAppDetail',
-  //   component: () => import('@/views/applications/DatabaseApp/DatabaseAppDetail/index'),
-  //   meta: { title: i18n.t('route.DatabaseAppDetail'), activeMenu: '/applications/database-apps' },
-  //   hidden: true
-  // }
 ]
