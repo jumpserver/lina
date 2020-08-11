@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import UploadKey from '@/components/UploadKey'
 import { Select2 } from '@/components'
@@ -15,7 +14,6 @@ export default {
   name: 'SystemUserCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
-    const vm = this
     return {
       initial: {
         login_mode: 'auto',
@@ -67,12 +65,6 @@ export default {
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
             return false
-          },
-          on: {
-            input: ([value], updateForm) => {
-              updateForm({ home: '/home/' + vm.currentUser.username })
-              updateForm({ groups: vm.currentUser.username })
-            }
           }
         },
         auto_generate_key: {
@@ -146,14 +138,14 @@ export default {
           ]
         },
         home: {
-          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push || item.username_same_with_user,
           helpText: this.$t('assets.HomeHelpMessage'),
           rules: [
             { required: true }
           ]
         },
         groups: {
-          hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push,
+          hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push || item.username_same_with_user,
           helpText: this.$t('assets.GroupsHelpMessage'),
           rules: [
             { required: true }
@@ -163,11 +155,6 @@ export default {
       url: '/api/v1/assets/system-users/',
       authHiden: false
     }
-  },
-  computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
   }
 }
 </script>
