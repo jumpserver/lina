@@ -29,6 +29,7 @@
     "custom_username": "Account",
     "custom_password": "Password",
     "Custom": "Custom",
+    "cluster": "Cluster",
     "kubernetes":"Kubernetes"
   },
   "assets": {
