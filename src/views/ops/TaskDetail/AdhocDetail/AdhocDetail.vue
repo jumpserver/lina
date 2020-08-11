@@ -91,11 +91,11 @@ export default {
         },
         {
           key: this.$t('ops.isFinished'),
-          value: this.toBooleanDisplay(this.object.latest_execution.is_finished)
+          value: this.object.latest_execution.is_finished
         },
         {
           key: this.$t('ops.isSuccess'),
-          value: this.toBooleanDisplay(this.object.latest_execution.is_success)
+          value: this.object.latest_execution.is_success
         },
         {
           key: this.$t('ops.tasks'),
@@ -128,15 +128,6 @@ export default {
         lines.push(`${i}. ${content.name} ::: ${content.action.module}`)
       }
       return lines
-    },
-    toBooleanDisplay(value) {
-      if (value === true) {
-        return this.$t('ops.Yes')
-      } else if (value === false) {
-        return this.$t('ops.No')
-      } else {
-        return this.$t('ops.Unkown')
-      }
     }
   }
 }
