@@ -1,6 +1,5 @@
 import i18n from '@/i18n/i18n'
 import rolec from '@/utils/role'
-import empty from '@/layout/empty'
 import { BASE_URL } from '@/utils/common'
 
 export default [
@@ -8,7 +7,7 @@ export default [
     path: 'session',
     name: 'SessionList',
     component: () => import('@/views/sessions/SessionList/index'),
-    meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] }
+    meta: { title: i18n.t('route.Sessions'), activeMenu: '/terminal/session', permissions: [rolec.PERM_AUDIT] }
   },
   {
     path: 'command',
@@ -37,31 +36,23 @@ export default [
   },
   {
     path: 'terminal',
-    component: empty,
-    redirect: '',
-    meta: { title: i18n.t('route.Terminal'), permissions: [rolec.PERM_SUPER] },
-    children: [
-      {
-        path: '',
-        name: 'TerminalList',
-        component: () => import('@/views/sessions/TerminalList'),
-        meta: { title: i18n.t('route.Terminal') }
-      },
-      {
-        path: ':id',
-        name: 'TerminalDetail',
-        component: () => import('@/views/sessions/TerminalDetail'),
-        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
-        hidden: true
-      },
-      {
-        path: ':id/update',
-        name: 'TerminalUpdate',
-        component: () => import('@/views/sessions/TerminalUpdate'),
-        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
-        hidden: true
-      }
-    ]
+    name: 'TerminalList',
+    component: () => import('@/views/sessions/TerminalList'),
+    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' }
+  },
+  {
+    path: 'terminal/:id',
+    name: 'TerminalDetail',
+    component: () => import('@/views/sessions/TerminalDetail'),
+    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
+    hidden: true
+  },
+  {
+    path: 'terminal/:id/update',
+    name: 'TerminalUpdate',
+    component: () => import('@/views/sessions/TerminalUpdate'),
+    meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
+    hidden: true
   },
   {
     path: 'storages',

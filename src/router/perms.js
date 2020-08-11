@@ -1,5 +1,4 @@
 import i18n from '@/i18n/i18n'
-import empty from '@/layout/empty'
 
 const assetPermissionRoutes = [
   {
@@ -34,40 +33,32 @@ const assetPermissionRoutes = [
 const remoteAppPermissionRoutes = [
   {
     path: 'remote-app-permissions',
-    component: empty,
-    meta: { title: i18n.t('route.RemoteAppPermission'), licenseRequired: true },
-    redirect: '',
-    children: [
-      {
-        path: '',
-        name: 'RemoteAppPermissionList',
-        component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionList'),
-        meta: { title: i18n.t('route.RemoteAppPermission'), activeMenu: '/perms/remote-app-permissions' }
+    name: 'RemoteAppPermissionList',
+    component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionList'),
+    meta: { title: i18n.t('route.RemoteAppPermission'), activeMenu: '/perms/remote-app-permissions', licenseRequired: true }
 
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionCreateUpdate'),
-        name: 'RemoteAppPermissionCreate',
-        hidden: true,
-        meta: { title: i18n.t('route.RemoteAppPermissionCreate'), activeMenu: '/perms/remote-app-permissions', action: 'create' }
-      },
-      {
-        path: 'update',
-        component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionCreateUpdate'),
-        name: 'RemoteAppPermissionUpdate',
-        hidden: true,
-        meta: { title: i18n.t('route.RemoteAppPermissionUpdate'), activeMenu: '/perms/remote-app-permissions', action: 'update' }
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionDetail/index'),
-        name: 'RemoteAppPermissionDetail',
-        hidden: true,
-        meta: { title: i18n.t('route.RemoteAppPermissionDetail'), activeMenu: '/perms/remote-app-permissions' }
-      }]
+  },
+  {
+    path: 'remote-app-permissions/create',
+    component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionCreateUpdate'),
+    name: 'RemoteAppPermissionCreate',
+    hidden: true,
+    meta: { title: i18n.t('route.RemoteAppPermissionCreate'), activeMenu: '/perms/remote-app-permissions', action: 'create', licenseRequired: true }
+  },
+  {
+    path: 'remote-app-permissions/update',
+    component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionCreateUpdate'),
+    name: 'RemoteAppPermissionUpdate',
+    hidden: true,
+    meta: { title: i18n.t('route.RemoteAppPermissionUpdate'), activeMenu: '/perms/remote-app-permissions', action: 'update', licenseRequired: true }
+  },
+  {
+    path: 'remote-app-permissions/:id',
+    component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionDetail/index'),
+    name: 'RemoteAppPermissionDetail',
+    hidden: true,
+    meta: { title: i18n.t('route.RemoteAppPermissionDetail'), activeMenu: '/perms/remote-app-permissions', licenseRequired: true }
   }
-
 ]
 
 const databasePermissionRoutes = [
@@ -75,7 +66,7 @@ const databasePermissionRoutes = [
     path: 'database-app-permissions',
     name: 'DatabaseAppPermissionList',
     component: () => import('@/views/perms/DatabaseAppPermission/DatabaseAppPermissionList'),
-    meta: { title: i18n.t('route.DatabaseAppPermission') }
+    meta: { title: i18n.t('route.DatabaseAppPermission'), activeMenu: '/perms/database-app-permissions' }
   },
   {
     path: 'database-app-permissions/create',
@@ -105,7 +96,7 @@ const kubernetesPermissionRoutes = [
     path: 'kubernetes-app-permissions',
     name: 'KubernetesAppPermissionList',
     component: () => import('@/views/perms/KubernetesAppPermission/KubernetesAppPermissionList'),
-    meta: { title: i18n.t('route.KubernetesAppPermission') }
+    meta: { title: i18n.t('route.KubernetesAppPermission'), activeMenu: '/perms/kubernetes-app-permissions' }
   },
   {
     path: 'kubernetes-app-permissions/create',

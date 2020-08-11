@@ -1,47 +1,38 @@
 import i18n from '@/i18n/i18n'
-import empty from '@/layout/empty'
 
 export default [
   {
     path: 'remote-apps',
-    redirect: '',
-    component: empty,
-    meta: { title: i18n.t('route.RemoteApp'), licenseRequired: true },
-    children: [
-      {
-        path: '',
-        name: 'RemoteAppList',
-        meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps' },
-        component: () => import('@/views/applications/RemoteApp/RemoteAppList')
-      },
-      {
-        path: 'create',
-        name: 'RemoteAppCreate',
-        component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
-        meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps', action: 'create' },
-        hidden: true
-      },
-      {
-        path: ':id/update',
-        name: 'RemoteAppUpdate',
-        component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
-        meta: { title: i18n.t('route.RemoteAppUpdate'), activeMenu: '/applications/remote-apps', action: 'update' },
-        hidden: true
-      },
-      {
-        path: ':id',
-        name: 'RemoteAppDetail',
-        component: () => import('@/views/applications/RemoteApp/RemoteAppDetail/index'),
-        meta: { title: i18n.t('route.RemoteAppDetail'), activeMenu: '/applications/remote-apps' },
-        hidden: true
-      }
-    ]
+    name: 'RemoteAppList',
+    meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps' },
+    component: () => import('@/views/applications/RemoteApp/RemoteAppList')
+  },
+  {
+    path: 'remote-apps/create',
+    name: 'RemoteAppCreate',
+    component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
+    meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps', action: 'create' },
+    hidden: true
+  },
+  {
+    path: 'remote-apps/:id/update',
+    name: 'RemoteAppUpdate',
+    component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
+    meta: { title: i18n.t('route.RemoteAppUpdate'), activeMenu: '/applications/remote-apps', action: 'update' },
+    hidden: true
+  },
+  {
+    path: 'remote-apps/:id',
+    name: 'RemoteAppDetail',
+    component: () => import('@/views/applications/RemoteApp/RemoteAppDetail/index'),
+    meta: { title: i18n.t('route.RemoteAppDetail'), activeMenu: '/applications/remote-apps' },
+    hidden: true
   },
   {
     path: 'database-apps',
     name: 'DatabaseAppList',
     component: () => import('@/views/applications/DatabaseApp/DatabaseAppList'),
-    meta: { title: i18n.t('route.DatabaseApp') }
+    meta: { title: i18n.t('route.DatabaseApp'), activeMenu: '/applications/database-apps' }
   },
   {
     path: 'database-apps/create',
