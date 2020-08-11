@@ -794,6 +794,8 @@
     "ResetAndDownloadSSHKey": "重置并下载密钥",
     "ResetPublicKeyAndDownload": "重置并下载SSH密钥",
     "Role": "角色",
+    "SuperRole": "超级角色",
+    "OrgRole": "组织角色",
     "SSHKey": "SSH公钥",
     "SSHKeySetting": "SSH公钥设置",
     "Secure": "安全",
