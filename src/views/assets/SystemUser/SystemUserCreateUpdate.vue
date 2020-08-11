@@ -45,10 +45,13 @@ export default {
           el: {
             disabled: false
           },
+          rules: [{ required: false }],
           hidden: (form) => {
-            // if (form.protocol === 'k8s') {
-            //   return true
-            // }
+            if (form.protocol === 'k8s') {
+              this.fieldsMeta.username.rules[0].required = true
+            } else {
+              this.fieldsMeta.username.rules[0].required = false
+            }
           }
         },
         private_key: {
