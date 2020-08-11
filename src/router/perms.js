@@ -100,8 +100,38 @@ const databasePermissionRoutes = [
   }
 ]
 
+const kubernetesPermissionRoutes = [
+  {
+    path: 'kubernetes-app-permissions',
+    name: 'KubernetesAppPermissionList',
+    component: () => import('@/views/perms/KubernetesAppPermission/KubernetesAppPermissionList'),
+    meta: { title: i18n.t('route.KubernetesAppPermission') }
+  },
+  {
+    path: 'kubernetes-app-permissions/create',
+    component: () => import('@/views/perms/KubernetesAppPermission/KubernetesAppPermissionCreateUpdate'), // Parent router-view
+    name: 'KubernetesAppPermissionCreate',
+    hidden: true,
+    meta: { title: i18n.t('route.KubernetesAppPermissionCreate'), activeMenu: '/perms/kubernetes-app-permissions' }
+  },
+  {
+    path: 'kubernetes-app-permissions/update',
+    component: () => import('@/views/perms/KubernetesAppPermission/KubernetesAppPermissionCreateUpdate'), // Parent router-view
+    name: 'KubernetesAppPermissionUpdate',
+    hidden: true,
+    meta: { title: i18n.t('route.KubernetesAppPermissionUpdate'), activeMenu: '/perms/kubernetes-app-permissions', action: 'update' }
+  },
+  {
+    path: 'kubernetes-app-permissions/:id',
+    component: () => import('@/views/perms/KubernetesAppPermission/KubernetesAppPermissionDetail/index'),
+    name: 'KubernetesAppPermissionDetail',
+    hidden: true,
+    meta: { title: i18n.t('route.KubernetesAppPermissionDetail'), activeMenu: '/perms/kubernetes-app-permissions' }
+  }
+]
 export default [
   ... assetPermissionRoutes,
   ... remoteAppPermissionRoutes,
-  ... databasePermissionRoutes
+  ... databasePermissionRoutes,
+  ... kubernetesPermissionRoutes
 ]

@@ -15,7 +15,7 @@ import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'DatabaseAppPermissionDetail',
+  name: 'KubernetesAppPermissionDetail',
   components: {
     DetailCard,
     QuickActions
@@ -38,7 +38,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `/api/v1/perms/database-app-permissions/${this.object.id}/`,
+                `/api/v1/perms/k8s-app-permissions/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
@@ -67,8 +67,8 @@ export default {
           value: this.object.user_groups_amount
         },
         {
-          key: this.$t('perms.DatabaseAppCount'),
-          value: this.object.database_apps_amount
+          key: this.$t('perms.KubernetesAppCount'),
+          value: this.object.k8s_apps_amount
         },
         {
           key: this.$t('perms.systemUserCount'),
