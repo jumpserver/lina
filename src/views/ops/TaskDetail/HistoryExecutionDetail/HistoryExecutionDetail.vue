@@ -66,11 +66,11 @@ export default {
         },
         {
           key: this.$t('ops.isFinished'),
-          value: this.toChoicesDisplay(this.object.is_finished)
+          value: this.object.is_finished
         },
         {
           key: this.$t('ops.isSuccess'),
-          value: this.toChoicesDisplay(this.object.is_success)
+          value: this.object.is_success
         },
         {
           key: this.$t('ops.output'),
@@ -84,14 +84,6 @@ export default {
           }
         }
       ]
-    }
-  },
-  methods: {
-    toChoicesDisplay(c) {
-      if (!c) {
-        return this.$t('ops.No')
-      }
-      return this.$t('ops.Yes')
     }
   }
 }
