@@ -454,7 +454,7 @@
     "DatabaseAppPermissionUpdate": "更新数据库授权规则",
     "DatabaseAppUpdate": "数据库应用更新",
     "KubernetesApp": "Kubernetes",
-    "KubernetesAppCreate": "创建Kubernetes应用",
+    "KubernetesAppCreate": "创建Kubernetes",
     "KubernetesAppDetail": "Kubernetes详情",
     "KubernetesAppPermission": "Kubernetes授权",
     "KubernetesAppPermissionCreate": "创建Kubernetes授权规则",
