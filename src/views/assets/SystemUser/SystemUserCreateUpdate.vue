@@ -45,7 +45,6 @@ export default {
             input: ([value], updateForm) => {
               if (value) {
                 updateForm({ home: '/home/' + value })
-                updateForm({ system_groups: value })
               }
             }
           }
@@ -146,7 +145,7 @@ export default {
           ]
         },
         system_groups: {
-          label: this.$t('assets.UserGroups'),
+          label: this.$t('assets.LinuxUserAffiliateGroup'),
           hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push || item.username_same_with_user,
           helpText: this.$t('assets.GroupsHelpMessage'),
           rules: [

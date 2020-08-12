@@ -134,10 +134,10 @@
     "date_joined": "Date joined",
     "ip": "IP",
     "sshkey": "sshkey",
-    "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Default groups: Same as the system username)",
+    "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Please fill in the existing user groups)",
     "HomeHelpMessage": "Default home directory: /home/system username",
     "Home": "Home",
-    "UserGroups": "System groups"
+    "LinuxUserAffiliateGroup": "Linux user affiliate group"
   },
   "audits": {
     "Hosts": "Host",
