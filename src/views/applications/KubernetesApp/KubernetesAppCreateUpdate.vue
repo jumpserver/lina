@@ -9,7 +9,6 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const vm = this
     return {
       initial: {
         type: 'k8s'
@@ -21,8 +20,7 @@ export default {
       ],
       fieldsMeta: {
         type: {
-          disabled: true,
-          hidden: () => vm.$route.params.id
+          disabled: true
         }
       },
       url: '/api/v1/applications/k8s-apps/'
