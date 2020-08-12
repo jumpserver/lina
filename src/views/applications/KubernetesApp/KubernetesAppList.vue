@@ -23,26 +23,9 @@ export default {
         }
       },
       headerActions: {
-        hasCreate: false,
         hasBulkDelete: false,
-        createRoute: 'KubernetesAppCreate',
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary',
-        extraMoreActions: [
-          {
-            name: 'Kubernetes',
-            title: 'Kubernetes',
-            type: 'primary',
-            can: true,
-            callback: this.createKubernetes.bind(this)
-          }
-        ]
+        createRoute: 'KubernetesAppCreate'
       }
-    }
-  },
-  methods: {
-    createKubernetes() {
-      this.$router.push({ name: 'KubernetesAppCreate', query: { type: 'Kubernetes' }})
     }
   }
 }
