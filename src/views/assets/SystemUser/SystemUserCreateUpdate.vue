@@ -180,18 +180,12 @@ export default {
         home: {
           label: this.$t('assets.Home'),
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push || item.username_same_with_user,
-          helpText: this.$t('assets.HomeHelpMessage'),
-          rules: [
-            { required: true }
-          ]
+          helpText: this.$t('assets.HomeHelpMessage')
         },
         system_groups: {
           label: this.$t('assets.LinuxUserAffiliateGroup'),
           hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push || item.username_same_with_user,
-          helpText: this.$t('assets.GroupsHelpMessage'),
-          rules: [
-            { required: true }
-          ]
+          helpText: this.$t('assets.GroupsHelpMessage')
         }
       },
       url: '/api/v1/assets/system-users/',
