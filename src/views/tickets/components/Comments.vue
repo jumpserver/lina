@@ -1,23 +1,7 @@
 <template>
   <IBox class="box">
     <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-info-circle" /> {{ $t('common.Comment') }}
-    </div>
-    <div class="feed-activity-list">
-      <div class="feed-element">
-        <a href="#" class="pull-left">
-          <el-avatar :src="imageUrl" class="header-avatar" />
-        </a>
-        <div class="media-body ">
-          <strong>{{ object.user_display }}</strong>
-          <small class="text-muted"> {{ formatTime(object.date_created) }}</small>
-          <br>
-          <small class="text-muted">{{ toSafeLocalDateStr(object.date_created) }} </small>
-          <div style="padding-top: 10px">
-            <span v-html="object.body" />
-          </div>
-        </div>
-      </div>
+      <i class="fa fa-comments" /> {{ $t('common.Message') }}
     </div>
     <template v-if="comments">
       <div v-for="item in comments" :key="item.user_display + item.body" class="feed-activity-list">
@@ -74,7 +58,7 @@
           size="small"
           @click="handleComment"
         >
-          <i class="fa fa-pencil" />{{ $t('tickets.Comment') }}
+          <i class="fa fa-pencil" />{{ $t('tickets.reply') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -116,6 +100,7 @@ export default {
     const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
     this.$axios.get(url).then(res => {
       this.comments = res
+      console.log(this.comments)
     }).catch(err => {
       this.$message.error(err)
     })
@@ -152,7 +137,7 @@ export default {
       })
     },
     handleApprove() {
-      const handler = this.approve() || this.defaultApprove()
+      const handler = this.approve || this.defaultApprove
       handler()
     },
     handleReject() {

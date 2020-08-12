@@ -5,7 +5,6 @@
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
-
 export default {
   name: 'TicketListTable',
   components: {
@@ -59,9 +58,19 @@ export default {
             sortable: 'custom',
             formatter: row => {
               if (row.status === 'open') {
-                return <i class='fa fa-check-circle-o text-primary'/>
+                return <el-tag type='success' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Pending') }</el-tag>
               }
-              return <i class='fa fa-times-circle-o text-danger'/>
+              if (row.status === 'closed') {
+                return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
+              }
+              switch (row.action) {
+                case 'approve':
+                  return <el-tag type='primary' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Approved') }</el-tag>
+                case 'reject':
+                  return <el-tag type='danger' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Rejected') }</el-tag>
+                case '':
+                  return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
+              }
             }
           },
           {

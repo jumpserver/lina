@@ -1,14 +1,35 @@
 <template>
+
   <div class="filter-field">
     <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
-    <el-tag v-for="(v, k) in filterTags" :key="k" :name="k" closable size="small" class="filter-tag" type="info" @close="handleTagClose(k)">
+    <el-tag
+      v-for="(v, k) in filterTags"
+      :key="k"
+      :name="k"
+      closable
+      size="small"
+      class="filter-tag"
+      type="info"
+      :disable-transitions="true"
+      @close="handleTagClose(k)"
+      @click="handleTagClick(v,k)"
+    >
       <strong v-if="v.label">{{ v.label + ':' }}</strong>
       <span v-if="v.valueLabel">{{ v.valueLabel }}</span>
       <span v-else>{{ v.value }}</span>
     </el-tag>
     <span v-if="keyLabel" slot="prefix" class="filterTitle">{{ keyLabel + ':' }}</span>
-    <el-input ref="SearchInput" v-model="filterValue" :placeholder="placeholder" class="search-input" @blur="focus = false" @focus="focus = true" @change="handleConfirm" />
+    <el-input
+      ref="SearchInput"
+      v-model="filterValue"
+      :placeholder="placeholder"
+      class="search-input"
+      @blur="focus = false"
+      @focus="focus = true"
+      @change="handleConfirm"
+    />
   </div>
+
 </template>
 
 <script>
@@ -65,13 +86,13 @@ export default {
     }
   },
   watch: {
-    filterTags: {
-      handler(val) {
-        this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
-        // this.$emit('tagSearch', this.filterMaps)
-      },
-      deep: true
-    }
+    // filterTags: {
+    //   handler(val) {
+    //     this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
+    //     // this.$emit('tagSearch', this.filterMaps)
+    //   },
+    //   deep: true
+    // }
   },
   mounted() {
     setTimeout(() => {
@@ -116,6 +137,7 @@ export default {
     },
     handleTagClose(evt) {
       this.$delete(this.filterTags, evt)
+      this.$emit('tagSearch', this.filterMaps)
       return true
     },
     handleConfirm() {
@@ -124,9 +146,33 @@ export default {
       }
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)
+      this.$emit('tagSearch', this.filterMaps)
       this.filterKey = ''
       this.filterValue = ''
       this.valueLabel = ''
+    },
+    handleTagClick(v, k) {
+      let unableChange = false
+      for (const field of this.options) {
+        if (field.value === v.key) {
+          if (field.type === 'choice') {
+            unableChange = true
+          }
+          if (field.type === 'boolean') {
+            unableChange = true
+          }
+        }
+      }
+      if (unableChange) {
+        return
+      }
+      if (this.filterValue.length !== 0) {
+        this.handleConfirm()
+      }
+      this.$delete(this.filterTags, k)
+      this.filterKey = v.key
+      this.filterValue = v.value
+      this.$refs.SearchInput.focus()
     }
   }
 }

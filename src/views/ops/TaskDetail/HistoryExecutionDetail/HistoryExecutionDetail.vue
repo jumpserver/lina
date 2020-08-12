@@ -49,10 +49,6 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('ops.ID'),
-          value: this.object.id
-        },
-        {
           key: this.$t('ops.taskName'),
           value: this.object.task_display.replace('@', '')
         },
@@ -70,11 +66,11 @@ export default {
         },
         {
           key: this.$t('ops.isFinished'),
-          value: this.toChoicesDisplay(this.object.is_finished)
+          value: this.object.is_finished
         },
         {
           key: this.$t('ops.isSuccess'),
-          value: this.toChoicesDisplay(this.object.is_success)
+          value: this.object.is_success
         },
         {
           key: this.$t('ops.output'),
@@ -88,14 +84,6 @@ export default {
           }
         }
       ]
-    }
-  },
-  methods: {
-    toChoicesDisplay(c) {
-      if (!c) {
-        return this.$t('ops.No')
-      }
-      return this.$t('ops.Yes')
     }
   }
 }
