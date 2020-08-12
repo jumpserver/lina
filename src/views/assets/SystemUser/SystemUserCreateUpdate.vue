@@ -60,6 +60,9 @@ export default {
             } else {
               this.fieldsMeta.username.rules[0].required = true
             }
+            if (form.username_same_with_user) {
+              this.fieldsMeta.username.rules[0].required = false
+            }
           }
         },
         private_key: {
