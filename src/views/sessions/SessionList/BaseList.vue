@@ -63,7 +63,7 @@ export default {
             showOverflowTooltip: true
           },
           remote_addr: {
-            width: '105px'
+            width: '140px'
           },
           protocol: {
             label: this.$t('sessions.protocol'),

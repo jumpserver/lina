@@ -27,7 +27,7 @@ export default {
           },
           remote_addr: {
             showOverflowTooltip: true,
-            width: '120px'
+            width: '140px'
           },
           datetime: {
             width: '180px'
