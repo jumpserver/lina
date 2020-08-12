@@ -135,7 +135,11 @@
     "command_filter_list": "Command filter list",
     "date_joined": "Date joined",
     "ip": "IP",
-    "sshkey": "sshkey"
+    "sshkey": "sshkey",
+    "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Please fill in the existing user groups)",
+    "HomeHelpMessage": "Default home directory: /home/system username",
+    "Home": "Home",
+    "LinuxUserAffiliateGroup": "Linux user affiliate group"
   },
   "audits": {
     "Hosts": "Host",

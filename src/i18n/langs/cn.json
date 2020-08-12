@@ -135,7 +135,11 @@
     "command_filter_list": "命令过滤器列表",
     "date_joined": "创建日期",
     "ip": "IP",
-    "sshkey": "sshkey"
+    "sshkey": "sshkey",
+    "GroupsHelpMessage": "请输入用户组，多个用户组使用逗号分隔（需填写已存在的用户组）",
+    "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
+    "Home": "家目录",
+    "LinuxUserAffiliateGroup": "用户附属组"
 
   },
   "audits": {
