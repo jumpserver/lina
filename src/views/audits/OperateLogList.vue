@@ -33,7 +33,7 @@ export default {
             width: '160px'
           },
           remote_addr: {
-            width: '120px'
+            width: '140px'
           },
           action: {
             width: '90px'

@@ -453,7 +453,7 @@
     "DatabaseAppPermissionDetail": "数据库授权详情",
     "DatabaseAppPermissionUpdate": "更新数据库授权规则",
     "DatabaseAppUpdate": "数据库应用更新",
-    "KubernetesApp": "Kubernetes应用",
+    "KubernetesApp": "Kubernetes",
     "KubernetesAppCreate": "创建Kubernetes应用",
     "KubernetesAppDetail": "Kubernetes详情",
     "KubernetesAppPermission": "Kubernetes授权",

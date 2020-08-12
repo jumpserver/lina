@@ -27,7 +27,7 @@ export default {
             showOverflowTooltip: true
           },
           ip: {
-            width: '110px'
+            width: '140px'
           },
           city: {
             width: '90px'
