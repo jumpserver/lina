@@ -28,7 +28,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'groups']],
+        [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
         [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['sftp_root', 'comment']]
@@ -45,7 +45,7 @@ export default {
             input: ([value], updateForm) => {
               if (value) {
                 updateForm({ home: '/home/' + value })
-                updateForm({ groups: value })
+                updateForm({ system_groups: value })
               }
             }
           }
@@ -138,13 +138,15 @@ export default {
           ]
         },
         home: {
+          label: this.$t('assets.Home'),
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push || item.username_same_with_user,
           helpText: this.$t('assets.HomeHelpMessage'),
           rules: [
             { required: true }
           ]
         },
-        groups: {
+        system_groups: {
+          label: this.$t('assets.UserGroups'),
           hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push || item.username_same_with_user,
           helpText: this.$t('assets.GroupsHelpMessage'),
           rules: [

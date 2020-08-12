@@ -134,8 +134,10 @@
     "date_joined": "创建日期",
     "ip": "IP",
     "sshkey": "sshkey",
-    "GroupsHelpMessage": "默认用户组是与系统用户名同名",
-    "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username"
+    "GroupsHelpMessage": "请输入用户组，多个用户组使用逗号分隔（默认用户组是与系统用户名同名）",
+    "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
+    "Home": "家目录",
+    "UserGroups": "用户组"
 
   },
   "audits": {

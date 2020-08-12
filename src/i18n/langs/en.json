@@ -134,8 +134,10 @@
     "date_joined": "Date joined",
     "ip": "IP",
     "sshkey": "sshkey",
-    "GroupsHelpMessage": "Default groups: Same as the system username",
-    "HomeHelpMessage": "Default home directory: /home/system username"
+    "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Default groups: Same as the system username)",
+    "HomeHelpMessage": "Default home directory: /home/system username",
+    "Home": "Home",
+    "UserGroups": "System groups"
   },
   "audits": {
     "Hosts": "Host",
