@@ -28,6 +28,10 @@ export const REMOTE_APP_TYPE_FIELDS_MAP = {
       label: i18n.t('applications.mysql_workbench_ip')
     },
     {
+      id: 'mysql_workbench_port', el: {}, attrs: {}, type: 'input', prop: 'mysql_workbench_port',
+      label: i18n.t('applications.mysql_workbench_port')
+    },
+    {
       id: 'mysql_workbench_name', el: {}, attrs: {}, type: 'input', prop: 'mysql_workbench_name',
       label: i18n.t('applications.mysql_workbench_name')
     },

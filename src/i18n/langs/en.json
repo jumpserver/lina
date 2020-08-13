@@ -17,6 +17,7 @@
     "mysql_workbench": "MySQL Workbench",
     "mysql_workbench_ip": "DB IP",
     "mysql_workbench_name": "DB Name",
+    "mysql_workbench_port": "DB Port",
     "mysql_workbench_username": "DB Account",
     "mysql_workbench_password": "DB Password",
     "vmware_client": "vSphere Client",
