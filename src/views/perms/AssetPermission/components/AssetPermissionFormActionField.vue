@@ -6,17 +6,18 @@
     :default-expand-all="true"
     :default-checked-keys="value"
     :props="defaultProps"
+    v-bind="$attrs"
     @check="handleCheckChange"
   />
 </template>
 
 <script>
 export default {
-  name: 'AssetPermissionFormActionFiel',
+  name: 'AssetPermissionFormActionField',
   props: {
     value: {
       type: Array,
-      default: () => ['all', 'connect', 'upload_file', 'download_file', 'updownload']
+      default: () => ['all', 'connect', 'upload_file', 'download_file', 'updownload', 'clipboard_copy_paste', 'clipboard_copy', 'clipboard_paste']
     }
   },
   data() {
@@ -45,6 +46,20 @@ export default {
                 {
                   id: 'download_file',
                   label: this.$t('perms.downloadFile')
+                }
+              ]
+            },
+            {
+              id: 'clipboard_copy_paste',
+              label: this.$t('perms.clipboardCopyPaste'),
+              children: [
+                {
+                  id: 'clipboard_copy',
+                  label: this.$t('perms.clipboardCopy')
+                },
+                {
+                  id: 'clipboard_paste',
+                  label: this.$t('perms.clipboardPaste')
                 }
               ]
             }

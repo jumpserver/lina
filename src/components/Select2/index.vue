@@ -8,6 +8,7 @@
     :remote-method="filterOptions"
     :multiple="multiple"
     filterable
+    :clearable="clearable"
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
@@ -66,6 +67,10 @@ export default {
     },
     // 是否是多选
     multiple: {
+      type: Boolean,
+      default: true
+    },
+    clearable: {
       type: Boolean,
       default: true
     },
@@ -172,6 +177,9 @@ export default {
   },
   methods: {
     async loadMore(load) {
+      if (!this.iAjax.url) {
+        return
+      }
       if (!this.params.hasMore) {
         return
       }

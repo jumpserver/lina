@@ -176,7 +176,7 @@ export default {
         },
         {
           key: this.$t('assets.Domain'),
-          value: this.object.domain
+          value: this.object.domain_display
         },
         {
           key: this.$t('assets.Vendor'),
@@ -208,7 +208,7 @@ export default {
         },
         {
           key: this.$t('assets.IsActive'),
-          value: this.object.is_active.toString()
+          value: this.object.is_active
         },
         {
           key: this.$t('assets.SerialNumber'),

@@ -76,6 +76,9 @@ export default {
         case 'field':
           type = ''
           field.component = Select2
+          if (fieldMeta.required) {
+            field.el.clearable = false
+          }
           break
         case 'string':
           type = 'input'

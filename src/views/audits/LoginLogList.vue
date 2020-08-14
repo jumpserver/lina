@@ -29,15 +29,18 @@ export default {
           ip: {
             width: '140px'
           },
+          city: {
+            width: '90px'
+          },
           status: {
-            width: '80px'
+            width: '85px'
           },
           mfa: {
             label: 'MFA',
             width: '80px'
           },
           type: {
-            width: '100px'
+            width: '110px'
           },
           datetime: {
             width: '160px'

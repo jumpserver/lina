@@ -1,5 +1,5 @@
 <template>
-  <TicketListTable :url="url" />
+  <TicketListTable :url="url" :has-more-actions="true" />
 </template>
 
 <script>

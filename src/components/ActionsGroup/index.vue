@@ -8,7 +8,7 @@
         <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
       </span>
     </el-button>
-    <el-dropdown v-if="iMoreActions.length > 0" trigger="click" @command="handleClick">
+    <el-dropdown v-if="iMoreActions.length > 0" trigger="click" :placement="moreActionsPlacement" @command="handleClick">
       <el-button :size="size" :type="moreActionsType" class="btn-more-actions">
         {{ iMoreActionsTitle }}<i class="el-icon-arrow-down el-icon--right" />
       </el-button>
@@ -52,6 +52,11 @@ export default {
     moreActionsType: {
       type: String,
       default: 'default'
+    },
+    moreActionsPlacement: {
+      type: String,
+      default: 'bottom'
+      // 居中对齐
     }
   },
   computed: {

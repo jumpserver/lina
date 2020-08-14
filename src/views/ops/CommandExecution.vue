@@ -27,7 +27,7 @@
                   <el-option
                     v-for="item in options"
                     :key="item.id"
-                    :disabled="item.protocol !== 'ssh' && item.login_mode!== 'auto'"
+                    :disabled="item.protocol !== 'ssh' || item.login_mode!== 'auto'"
                     :label="`${item.name}(${item.username})`"
                     :value="item.id"
                   />
@@ -266,7 +266,7 @@ export default {
     overflow: auto;
     /*border-right: solid 1px red;*/
   }
-  .vue-codemirror-wrap /deep/ .CodeMirror{
+  .vue-codemirror-wrap  ::v-deep  .CodeMirror{
     width: 600px;
     height: 100px;
     border: 1px solid #eee;

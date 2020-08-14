@@ -23,7 +23,8 @@ export default {
             showOverflowTooltip: true
           },
           resource_type: {
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            width: '180px'
           },
           resource: {
             showOverflowTooltip: true

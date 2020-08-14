@@ -38,7 +38,7 @@ export default {
             showOverflowTooltip: true
           },
           operate: {
-            width: '90px'
+            width: '100px'
           },
           is_success: {
             width: '80px'

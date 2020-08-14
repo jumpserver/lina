@@ -32,6 +32,7 @@ export default {
         ],
         columnsMeta: {
           hosts: {
+            width: '60px',
             formatter: (row, col, cellValue) => {
               const onClick = () => {
                 vm.relationDialog.tableConfig.url = setUrlParam(vm.relationDialog.tableConfig.url, 'commandexecution', row.id)

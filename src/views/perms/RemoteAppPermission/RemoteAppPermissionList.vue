@@ -30,6 +30,7 @@ export default {
           },
           users_amount: {
             label: this.$t('users.Users'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -39,6 +40,7 @@ export default {
           },
           user_groups_amount: {
             label: this.$t('users.UserGroups'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -48,6 +50,7 @@ export default {
           },
           remote_apps_amount: {
             label: this.$t('assets.RemoteApps'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -57,6 +60,7 @@ export default {
           },
           system_users_amount: {
             label: this.$t('assets.SystemUsers'),
+            width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
@@ -67,7 +71,6 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
         hasBulkDelete: false
       }
     }

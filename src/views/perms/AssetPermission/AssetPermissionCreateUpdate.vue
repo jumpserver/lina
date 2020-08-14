@@ -91,7 +91,8 @@ export default {
         },
         actions: {
           label: this.$t('perms.Actions'),
-          component: AssetPermissionFormActionField
+          component: AssetPermissionFormActionField,
+          helpText: this.$t('common.actionsTips')
         },
         date_start: {
           label: this.$t('common.dateStart')

@@ -1,8 +1,8 @@
 <template>
   <IBox fa="fa-edit" :title="title" v-bind="$attrs">
-    <div class="quick-actions">
+    <div v-for="action of actions" :key="action.title" class="quick-actions">
       <table>
-        <ActionItem v-for="action of actions" :key="action.title" :action="action" />
+        <ActionItem v-if="action.has === undefined || action.has" :action="action" />
       </table>
     </div>
   </IBox>

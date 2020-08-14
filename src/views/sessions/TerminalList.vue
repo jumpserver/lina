@@ -1,17 +1,94 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <Dialog
+      :visible.sync="dialogSettings.visible"
+      :destroy-on-close="true"
+      :show-cancel="false"
+      :title="$t('sessions.terminalUpdateStorage')"
+      :show-confirm="false"
+    >
+      <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
+    </Dialog>
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListPage, GenericCreateUpdateForm } from '@/layout/components'
+import Dialog from '@/components/Dialog'
+import Select2 from '@/components/Select2'
 import { BooleanFormatter } from '@/components/ListTable/formatters'
-
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    Dialog,
+    GenericCreateUpdateForm
   },
   data() {
     return {
+      dialogSettings: {
+        selectedRows: [],
+        visible: false,
+        iFormSetting: {
+          url: '/api/v1/terminal/terminals/',
+          fields: [
+            ['', ['command_storage', 'replay_storage']]
+          ],
+          fieldsMeta: {
+            command_storage: {
+              component: Select2,
+              rules: [{ required: true }],
+              el: {
+                ajax: {
+                  url: `/api/v1/terminal/command-storages/`
+                },
+                multiple: false
+              }
+            },
+            replay_storage: {
+              component: Select2,
+              rules: [{ required: true }],
+              el: {
+                ajax: {
+                  url: `/api/v1/terminal/replay-storages/`
+                },
+                multiple: false
+              }
+            }
+          },
+          getMethod: () => 'post',
+          cleanFormValue: function(value) {
+            const formValue = []
+            let object = {}
+            for (const row of this.dialogSettings.selectedRows) {
+              object = Object.assign({}, value, { id: row.id })
+              formValue.push(object)
+            }
+            return formValue
+          }.bind(this),
+          onSubmit: function(validValues) {
+            const url = '/api/v1/terminal/terminals/'
+            const msg = this.$t('common.updateSuccessMsg')
+            this.$axios.patch(url, validValues).then((res) => {
+              this.$message.success(msg)
+              this.dialogSettings.visible = false
+            }).catch(error => {
+              this.$emit('submitError', error)
+              const response = error.response
+              const data = response.data
+              if (response.status === 400) {
+                for (const key of Object.keys(data)) {
+                  let value = data[key]
+                  if (value instanceof Array) {
+                    value = value.join(';')
+                  }
+                  this.$refs.form.setFieldError(key, value)
+                }
+              }
+            })
+          }.bind(this)
+        }
+      },
       tableConfig: {
         url: '/api/v1/terminal/terminals/',
         columns: ['name', 'remote_addr', 'session_online', 'is_active', 'is_alive', 'actions'],
@@ -32,7 +109,8 @@ export default {
             label: this.$t('sessions.alive')
           },
           session_online: {
-            label: this.$t('sessions.session')
+            label: this.$t('sessions.session'),
+            width: '80px'
           }
         }
       },
@@ -52,6 +130,17 @@ export default {
             can: true,
             callback: this.handleStorageConfiguration
           }
+        ],
+        extraMoreActions: [
+          {
+            name: 'updateSelected',
+            title: this.$t('common.updateSelected'),
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: function({ selectedRows, reloadTable }) {
+              this.dialogSettings.selectedRows = selectedRows
+              this.dialogSettings.visible = true
+            }.bind(this)
+          }
         ]
       }
     }
@@ -65,5 +154,4 @@ export default {
 </script>
 
 <style>
-
 </style>

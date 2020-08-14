@@ -39,6 +39,7 @@ export default {
           },
           timestamp: {
             label: this.$t('sessions.date'),
+            width: '160px',
             sortable: 'custom',
             formatter: function(row) {
               return toSafeLocalDateStr(row.timestamp * 1000)

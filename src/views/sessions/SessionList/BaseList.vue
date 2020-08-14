@@ -36,7 +36,7 @@ export default {
           index: {
             label: this.$t('sessions.id'),
             align: 'center',
-            width: '60px',
+            width: '40px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
@@ -51,18 +51,19 @@ export default {
           },
           command_amount: {
             label: this.$t('sessions.command'),
-            width: '100px'
+            width: '90px'
           },
           system_user: {
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            width: '100px'
           },
           login_from: {
             label: this.$t('sessions.loginFrom'),
-            width: '120px',
+            width: '115px',
             showOverflowTooltip: true
           },
           remote_addr: {
-            width: '120px'
+            width: '140px'
           },
           protocol: {
             label: this.$t('sessions.protocol'),

@@ -67,7 +67,7 @@ export default {
           value: this.object.user_groups_amount
         },
         {
-          key: this.$t('perms.remoteAppCount'),
+          key: this.$t('perms.DatabaseAppCount'),
           value: this.object.database_apps_amount
         },
         {

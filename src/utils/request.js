@@ -1,6 +1,5 @@
 import axios from 'axios'
 import i18n from '@/i18n/i18n'
-import NProgress from 'nprogress' // progress bar
 
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
@@ -36,7 +35,7 @@ function beforeRequestAddTimezone(config) {
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    NProgress.start()
+    // NProgress.start()
     beforeRequestAddToken(config)
     beforeRequestAddTimezone(config)
     return config
@@ -101,7 +100,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    NProgress.done()
+    // NProgress.done()
     const res = response.data
 
     if (response.config.raw === 1) {
@@ -110,7 +109,7 @@ service.interceptors.response.use(
     return res
   },
   error => {
-    NProgress.done()
+    // NProgress.done()
     if (!error.response) {
       return Promise.reject(error)
     }

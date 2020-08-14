@@ -156,20 +156,20 @@ export default {
   .el-select{
     width: 100%;
   }
-  .page /deep/ .page-heading{
+  .page  ::v-deep  .page-heading{
     display: none;
   }
-  .el-dialog__wrapper /deep/.el-dialog__body{
+  .el-dialog__wrapper  ::v-deep .el-dialog__body{
     padding: 5px 10px;
   }
-  .page /deep/ .treebox{
+  .page  ::v-deep  .treebox{
     height: inherit !important;
   }
   .asset-select-dialog >>> .transition-box:first-child {
     background-color: #f3f3f3 ;
   }
 
-  .el-dialog__wrapper /deep/.el-dialog__body .wrapper-content {
+  .el-dialog__wrapper  ::v-deep .el-dialog__body .wrapper-content {
     padding: 10px;
   }
 

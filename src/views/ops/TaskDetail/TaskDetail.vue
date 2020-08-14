@@ -50,10 +50,6 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('ops.ID'),
-          value: this.object.id
-        },
-        {
           key: this.$t('common.Name'),
           value: this.object.name
         },
@@ -83,11 +79,11 @@ export default {
         },
         {
           key: this.$t('ops.isFinished'),
-          value: this.toChoicesDisplay(this.object.latest_execution.is_finished)
+          value: this.object.latest_execution.is_finished
         },
         {
           key: this.$t('ops.isSuccess'),
-          value: this.toChoicesDisplay(this.object.latest_execution.is_success)
+          value: this.object.latest_execution.is_success
         },
         {
           key: this.$t('ops.contents'),
@@ -115,12 +111,6 @@ export default {
     }
   },
   methods: {
-    toChoicesDisplay(c) {
-      if (!c) {
-        return this.$t('ops.No')
-      }
-      return this.$t('ops.Yes')
-    },
     toContentsDisplay(contents) {
       const lines = []
       for (let i = 0; i < contents.length; i++) {

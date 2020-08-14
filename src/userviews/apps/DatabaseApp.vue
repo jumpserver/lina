@@ -69,13 +69,13 @@ export default {
       headerActions: {
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
+        hasRefresh: true,
         hasCreate: false,
         hasBulkDelete: false,
         hasBulkUpdate: false,
         hasLeftActions: false,
         hasSearch: true,
-        hasRightActions: false
+        hasRightActions: true
       }
     }
   },
