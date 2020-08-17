@@ -29,7 +29,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
-        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key']],
+        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key', 'token']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['sftp_root', 'comment']]
       ],
