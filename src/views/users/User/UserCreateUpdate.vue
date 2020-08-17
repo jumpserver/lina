@@ -76,12 +76,15 @@ export default {
           }
         },
         role: {
-          label: this.$t('users.SuperRole')
+          label: this.$t('users.SuperRole'),
+          hidden: () => {
+            return !this.currentOrgIsDefault
+          }
         },
         org_role: {
           label: this.$t('users.OrgRole'),
           hidden: () => {
-            return !this.publicSettings.XPACK_LICENSE_IS_VALID
+            return (!this.publicSettings.XPACK_LICENSE_IS_VALID) || this.currentOrgIsDefault
           },
           el: {
             // disabled: () => this.currentOrgIsDefault
