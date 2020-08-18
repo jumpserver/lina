@@ -60,18 +60,16 @@ export default {
               if (row.status === 'open') {
                 return <el-tag type='success' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Pending') }</el-tag>
               }
-              if (row.status === 'closed') {
-                return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
-              }
               switch (row.action) {
                 case 'approve':
                   return <el-tag type='primary' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Approved') }</el-tag>
                 case 'reject':
                   return <el-tag type='danger' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Rejected') }</el-tag>
-                case '':
+                default :
                   return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
               }
             }
+
           },
           {
             prop: 'date_created',
