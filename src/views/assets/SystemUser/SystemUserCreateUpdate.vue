@@ -56,9 +56,7 @@ export default {
           },
           on: {
             input: ([value], updateForm) => {
-              if (value) {
-                updateForm({ home: '/home/' + value })
-              }
+              updateForm({ home: `/home/${value}` })
             }
           },
           rules: [{ required: true, message: this.$t('common.fieldRequiredError') }],
