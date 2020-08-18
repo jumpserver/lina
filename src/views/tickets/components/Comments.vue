@@ -80,6 +80,14 @@ export default {
     approve: {
       type: Function,
       default: null
+    },
+    reject: {
+      type: Function,
+      default: null
+    },
+    close: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -119,6 +127,17 @@ export default {
       const data = { action: 'approve' }
       this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
+    defaultReject() {
+      this.createComment(function() {})
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { action: 'reject' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+    },
+    defaultClose() {
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { status: 'closed' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+    },
     createComment(successCallback) {
       const commentText = this.form.comments
       const ticketId = this.object.id
@@ -141,15 +160,12 @@ export default {
       handler()
     },
     handleReject() {
-      this.createComment(function() {})
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { action: 'reject' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const handler = this.reject || this.defaultReject
+      handler()
     },
     handleClose() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { status: 'closed' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const handler = this.close || this.defaultClose
+      handler()
     },
     handleComment() {
       this.createComment()
