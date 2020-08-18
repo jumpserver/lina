@@ -84,11 +84,12 @@ export default {
         org_role: {
           label: this.$t('users.OrgRole'),
           hidden: () => {
-            return (!this.publicSettings.XPACK_LICENSE_IS_VALID) || this.currentOrgIsDefault
+            return (!this.publicSettings.XPACK_LICENSE_IS_VALID)
           },
           el: {
-            // disabled: () => this.currentOrgIsDefault
-          }
+            disabled: false
+          },
+          helpText: this.$t('users.HelpText.OrgRoleHelpText')
         },
         groups: {
           el: {
@@ -106,6 +107,11 @@ export default {
     ...mapGetters(['publicSettings', 'currentOrg']),
     currentOrgIsDefault() {
       return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
+    }
+  },
+  mounted() {
+    if (this.currentOrgIsDefault) {
+      this.fieldsMeta.org_role.el.disabled = true
     }
   },
   methods: {
