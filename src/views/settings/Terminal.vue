@@ -47,7 +47,7 @@ export default {
         TERMINAL_HEARTBEAT_INTERVAL: {
           label: this.$t('setting.terminalHeartbeatInterval'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.terminalHeartbeatInterval')
         },
