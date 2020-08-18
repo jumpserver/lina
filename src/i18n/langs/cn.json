@@ -31,7 +31,8 @@
     "custom_password": "登录密码",
     "Custom": "自定义",
     "cluster": "集群",
-    "kubernetes":"Kubernetes"
+    "kubernetes":"Kubernetes",
+    "clusterHelpTextMessage": "例如：https://172.16.8.8"
   },
   "assets": {
     "Action": "动作",
@@ -395,7 +396,7 @@
     "assetCount": "资产数量",
     "connect": "连接",
     "databaseApp": "数据库应用",
-    "KubernetesApp": "kubernetes应用",
+    "KubernetesApp": "Kubernetes",
     "dateStart": "开始日期",
     "downloadFile": "下载文件",
     "hostName": "主机名",
@@ -459,13 +460,13 @@
     "DatabaseAppPermissionUpdate": "更新数据库授权规则",
     "DatabaseAppUpdate": "数据库应用更新",
     "KubernetesApp": "Kubernetes",
-    "KubernetesAppCreate": "创建Kubernetes应用",
+    "KubernetesAppCreate": "创建Kubernetes",
     "KubernetesAppDetail": "Kubernetes详情",
     "KubernetesAppPermission": "Kubernetes授权",
     "KubernetesAppPermissionCreate": "创建Kubernetes授权规则",
     "KubernetesAppPermissionDetail": "Kubernetes授权详情",
     "KubernetesAppPermissionUpdate": "更新Kubernetes授权规则",
-    "KubernetesAppUpdate": "更新Kubernetes应用",
+    "KubernetesAppUpdate": "更新Kubernetes",
 
     "DomainCreate": "创建网域",
     "DomainDetail": "网域详情",
