@@ -167,12 +167,12 @@ export default {
       }
     },
     handleClose() {
-      const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`
+      const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/close/`
       const data = { status: 'closed' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios.post(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleReject() {
-      const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`
+      const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/reject/`
       const data = { action: 'reject' }
       this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     }
