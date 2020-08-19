@@ -744,7 +744,7 @@
     "Asset": "Asset",
     "SystemUser": "System user",
     "Applicant": "Applicant",
-    "Pending": "Pending",
+    "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
     "Closed": "Closed"
