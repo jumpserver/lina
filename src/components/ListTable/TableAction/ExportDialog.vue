@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       showExportDialog: false,
-      exportOption: '',
+      exportOption: 'all',
       meta: {}
     }
   },
