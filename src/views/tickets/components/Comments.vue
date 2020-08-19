@@ -33,7 +33,7 @@
             size="small"
             @click="handleApprove"
           >
-            <i class="fa fa-check" />{{ $t('tickets.Accept') }}
+            <i class="fa fa-check" /> {{ $t('tickets.Accept') }}
           </el-button>
           <el-button
             :disabled="object.status === 'closed'"
@@ -41,7 +41,7 @@
             size="small"
             @click="handleReject"
           >
-            <i class="fa fa-ban" />{{ $t('tickets.Reject') }}
+            <i class="fa fa-ban" /> {{ $t('tickets.Reject') }}
           </el-button>
         </template>
         <el-button
@@ -50,7 +50,7 @@
           size="small"
           @click="handleClose"
         >
-          <i class="fa fa-times" />{{ $t('tickets.Close') }}
+          <i class="fa fa-times" /> {{ $t('tickets.Close') }}
         </el-button>
         <el-button
           :disabled="object.status === 'closed'"
@@ -58,7 +58,7 @@
           size="small"
           @click="handleComment"
         >
-          <i class="fa fa-pencil" />{{ $t('tickets.reply') }}
+          <i class="fa fa-pencil" /> {{ $t('tickets.reply') }}
         </el-button>
       </el-form-item>
     </el-form>
