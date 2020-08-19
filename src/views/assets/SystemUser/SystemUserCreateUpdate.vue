@@ -20,8 +20,8 @@ export default {
         priority: '20',
         protocol: 'ssh',
         username_same_with_user: false,
-        auto_generate_key: true,
-        auto_push: true,
+        auto_generate_key: false,
+        auto_push: false,
         sftp_root: 'tmp',
         sudo: '/bin/whoami',
         shell: '/bin/bash'
@@ -40,6 +40,14 @@ export default {
             if (form.protocol === 'k8s') {
               return true
             }
+          },
+          on: {
+            input: ([value], updateForm) => {
+              if (value === 'manual') {
+                updateForm({ auto_push: false })
+                updateForm({ auto_generate_key: false })
+              }
+            }
           }
         },
         username: {
@@ -53,13 +61,9 @@ export default {
               }
             }
           },
-          rules: [{ required: true }],
+          rules: [{ required: true, message: this.$t('common.fieldRequiredError') }],
           hidden: (form) => {
-            if (form.login_mode === 'manual') {
-              this.fieldsMeta.username.rules[0].required = false
-            } else {
-              this.fieldsMeta.username.rules[0].required = true
-            }
+            this.fieldsMeta.username.rules[0].required = form.login_mode !== 'manual'
             if (form.username_same_with_user) {
               this.fieldsMeta.username.rules[0].required = false
             }
@@ -82,25 +86,23 @@ export default {
           helpText: this.$t('assets.UsernameHelpMessage'),
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
-            if (form.protocol === 'k8s') {
-              return true
-            }
-            return false
+            return form.protocol === 'k8s'
           }
         },
         auto_generate_key: {
           type: 'switch',
           label: this.$t('assets.AutoGenerateKey'),
           hidden: form => {
+            this.fieldsMeta.auto_generate_key.el.disabled = ['ssh', 'rdp'].indexOf(form.protocol) === -1 || form.login_mode === 'manual'
             if (JSON.stringify(this.$route.params) !== '{}') {
-              return true
-            }
-            if (form.login_mode !== 'auto') {
               return true
             }
             if (form.protocol === 'k8s') {
               return true
             }
+          },
+          el: {
+            disabled: false
           }
         },
         token: {
@@ -108,7 +110,8 @@ export default {
             { required: true }
           ],
           el: {
-            type: 'password'
+            type: 'textarea',
+            autosize: true
           },
           hidden: form => form.protocol !== 'k8s'
         },
@@ -118,6 +121,14 @@ export default {
           ],
           el: {
             style: 'width:100%'
+          },
+          on: {
+            input: ([value], updateForm) => {
+              if (['ssh', 'rdp'].indexOf(value) === -1) {
+                updateForm({ auto_push: false })
+                updateForm({ auto_generate_key: false })
+              }
+            }
           }
         },
         cmd_filters: {
@@ -133,18 +144,23 @@ export default {
         },
         priority: {
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('assets.PriorityHelpMessage')
         },
         auto_push: {
           type: 'switch',
+          el: {
+            disabled: false
+          },
           hidden: form => {
-            if (form.login_mode !== 'auto') {
-              return true
-            }
-            if (form.protocol === 'k8s') {
-              return true
+            this.fieldsMeta.auto_push.el.disabled = ['ssh', 'rdp'].indexOf(form.protocol) === -1 || form.login_mode === 'manual'
+          },
+          on: {
+            input: ([value], updateForm) => {
+              if (!value) {
+                updateForm({ auto_generate_key: value })
+              }
             }
           }
         },
