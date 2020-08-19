@@ -78,7 +78,7 @@ export default {
         role: {
           label: this.$t('users.SuperRole'),
           hidden: () => {
-            return !this.currentOrgIsDefault
+            return !this.currentOrgIsDefault && this.publicSettings.role === 'Admin'
           }
         },
         org_role: {
