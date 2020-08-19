@@ -8,8 +8,10 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/UserPassword'
+import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
 import { getDayFuture } from '@/utils/common'
 import { mapGetters } from 'vuex'
+import rules from '@/components/DataForm/rules'
 
 export default {
   components: {
@@ -22,13 +24,13 @@ export default {
         mfa_level: 0,
         source: 'local',
         role: 'User',
-        org_role: 'User',
+        org_roles: ['User'],
         date_expired: getDayFuture(36500, new Date()).toISOString()
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
         [this.$t('users.Authentication'), ['password_strategy', 'update_password', 'password', 'set_public_key', 'public_key', 'mfa_level', 'source']],
-        [this.$t('users.Secure'), ['role', 'org_role', 'date_expired']],
+        [this.$t('users.Secure'), ['role', 'org_roles', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
@@ -81,13 +83,16 @@ export default {
             return !this.currentOrgIsDefault && this.publicSettings.role === 'Admin'
           }
         },
-        org_role: {
+        org_roles: {
+          rules: [rules.RequiredChange],
           label: this.$t('users.OrgRole'),
+          component: RoleCheckbox,
           hidden: () => {
             return (!this.publicSettings.XPACK_LICENSE_IS_VALID)
           },
           el: {
-            disabled: false
+            disabled: false,
+            rule: []
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
         },
@@ -111,7 +116,7 @@ export default {
   },
   mounted() {
     if (this.currentOrgIsDefault) {
-      this.fieldsMeta.org_role.el.disabled = true
+      this.fieldsMeta.org_roles.el.disabled = true
     }
   },
   methods: {
