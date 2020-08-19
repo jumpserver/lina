@@ -22,11 +22,11 @@ export default {
             label: i18n.t('users.OrgAdmin'),
             value: 'Admin'
           }, {
-            label: i18n.t('users.OrgUser'),
-            value: 'User'
-          }, {
             label: i18n.t('users.OrgAuditor'),
             value: 'Auditor'
+          }, {
+            label: i18n.t('users.OrgUser'),
+            value: 'User'
           }
         ]
     }
