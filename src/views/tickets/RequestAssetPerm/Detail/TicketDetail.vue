@@ -174,7 +174,7 @@ export default {
     handleReject() {
       const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/reject/`
       const data = { action: 'reject' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      this.$axios.post(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     }
   }
 }
