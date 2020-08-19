@@ -1,5 +1,5 @@
 <template>
-  <IBox class="box">
+  <IBox v-loading="loading" class="box">
     <div slot="header" class="clearfix ibox-title">
       <i class="fa fa-comments" /> {{ $t('common.Message') }}
     </div>
@@ -96,7 +96,8 @@ export default {
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
-      }
+      },
+      loading: false
     }
   },
   computed: {
@@ -105,13 +106,7 @@ export default {
     }
   },
   mounted() {
-    const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
-    this.$axios.get(url).then(res => {
-      this.comments = res
-      console.log(this.comments)
-    }).catch(err => {
-      this.$message.error(err)
-    })
+    this.getComment()
   },
   methods: {
     formatTime(dateStr) {
@@ -119,6 +114,18 @@ export default {
     },
     toSafeLocalDateStr(dataStr) {
       return toSafeLocalDateStr(dataStr)
+    },
+    getComment() {
+      this.loading = true
+      const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
+      this.$axios.get(url).then(res => {
+        this.comments = res
+      }).catch(err => {
+        this.$message.error(err)
+      }).finally(() => {
+        this.loading = false
+        this.form.comments = ''
+      })
     },
     defaultApprove() {
       this.createComment(function() {
@@ -168,7 +175,9 @@ export default {
       handler()
     },
     handleComment() {
-      this.createComment()
+      this.createComment(
+        this.getComment
+      )
     },
     reloadPage() {
       window.location.reload()
