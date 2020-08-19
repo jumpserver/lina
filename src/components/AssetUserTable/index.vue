@@ -312,6 +312,7 @@ export default {
         key: ''
       }
       this.showDialog = false
+      this.$refs.ListTable.reloadTable()
     },
     Onchange(e) {
       const vm = this
@@ -351,6 +352,7 @@ export default {
         key: ''
       }
       this.showDialog = false
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
