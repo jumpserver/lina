@@ -959,7 +959,8 @@
       "OrganizationMembership": "Organization membership",
       "DeleteOrgTitle":"Please ensure that the following information in the organization has been deleted",
       "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission",
-      "OrgRole": "Org role"
+      "OrgRole": "Org role",
+      "CreateOrgMsg": "Please go to Organization Details to add users"
     },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",
