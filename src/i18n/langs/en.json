@@ -32,7 +32,7 @@
     "Custom": "Custom",
     "cluster": "Cluster",
     "kubernetes":"Kubernetes",
-    "clusterHelpTextMessage": "Tips: https://172.16.8.8"
+    "clusterHelpTextMessage": "Tips: https://172.16.8.8:8443"
   },
   "assets": {
     "Action": "Action",
