@@ -73,7 +73,6 @@ function cleanDateStr(d) {
 }
 
 export function toSafeLocalDateStr(d) {
-  console.log(d)
   const date = safeDate(d)
   // let date_s = date.toLocaleString(getUserLang(), {hour12: false});
   const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
