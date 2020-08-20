@@ -1,5 +1,5 @@
 <template>
-  <IBox class="box">
+  <IBox v-loading="loading" class="box">
     <div slot="header" class="clearfix ibox-title">
       <i class="fa fa-comments" /> {{ $t('common.Message') }}
     </div>
@@ -13,9 +13,9 @@
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <div style="padding-top: 10px">
+            <pre style="padding-top: 10px">
               {{ item.body }}
-            </div>
+            </pre>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@
             size="small"
             @click="handleApprove"
           >
-            <i class="fa fa-check" />{{ $t('tickets.Accept') }}
+            <i class="fa fa-check" /> {{ $t('tickets.Accept') }}
           </el-button>
           <el-button
             :disabled="object.status === 'closed'"
@@ -41,7 +41,7 @@
             size="small"
             @click="handleReject"
           >
-            <i class="fa fa-ban" />{{ $t('tickets.Reject') }}
+            <i class="fa fa-ban" /> {{ $t('tickets.Reject') }}
           </el-button>
         </template>
         <el-button
@@ -50,7 +50,7 @@
           size="small"
           @click="handleClose"
         >
-          <i class="fa fa-times" />{{ $t('tickets.Close') }}
+          <i class="fa fa-times" /> {{ $t('tickets.Close') }}
         </el-button>
         <el-button
           :disabled="object.status === 'closed'"
@@ -58,7 +58,7 @@
           size="small"
           @click="handleComment"
         >
-          <i class="fa fa-pencil" />{{ $t('tickets.reply') }}
+          <i class="fa fa-pencil" /> {{ $t('tickets.reply') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -80,6 +80,14 @@ export default {
     approve: {
       type: Function,
       default: null
+    },
+    reject: {
+      type: Function,
+      default: null
+    },
+    close: {
+      type: Function,
+      default: null
     }
   },
   data() {
@@ -88,7 +96,8 @@ export default {
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
-      }
+      },
+      loading: false
     }
   },
   computed: {
@@ -97,13 +106,7 @@ export default {
     }
   },
   mounted() {
-    const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
-    this.$axios.get(url).then(res => {
-      this.comments = res
-      console.log(this.comments)
-    }).catch(err => {
-      this.$message.error(err)
-    })
+    this.getComment()
   },
   methods: {
     formatTime(dateStr) {
@@ -112,11 +115,34 @@ export default {
     toSafeLocalDateStr(dataStr) {
       return toSafeLocalDateStr(dataStr)
     },
+    getComment() {
+      this.loading = true
+      const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
+      this.$axios.get(url).then(res => {
+        this.comments = res
+      }).catch(err => {
+        this.$message.error(err)
+      }).finally(() => {
+        this.loading = false
+        this.form.comments = ''
+      })
+    },
     defaultApprove() {
       this.createComment(function() {
       })
       const url = `/api/v1/tickets/tickets/${this.object.id}/`
       const data = { action: 'approve' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+    },
+    defaultReject() {
+      this.createComment(function() {})
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { action: 'reject' }
+      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+    },
+    defaultClose() {
+      const url = `/api/v1/tickets/tickets/${this.object.id}/`
+      const data = { status: 'closed' }
       this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     createComment(successCallback) {
@@ -141,18 +167,17 @@ export default {
       handler()
     },
     handleReject() {
-      this.createComment(function() {})
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { action: 'reject' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const handler = this.reject || this.defaultReject
+      handler()
     },
     handleClose() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { status: 'closed' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const handler = this.close || this.defaultClose
+      handler()
     },
     handleComment() {
-      this.createComment()
+      this.createComment(
+        this.getComment
+      )
     },
     reloadPage() {
       window.location.reload()

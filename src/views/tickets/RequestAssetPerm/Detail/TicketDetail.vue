@@ -4,6 +4,8 @@
     :detail-card-items="detailCardItems"
     :special-card-items="specialCardItems"
     :approve="handleApprove"
+    :close="handleClose"
+    :reject="handleReject"
   >
     <IBox v-if="hasActionPerm&&object.status !== 'closed'" class="box">
       <div slot="header" class="clearfix ibox-title">
@@ -163,6 +165,16 @@ export default {
           () => this.$message.success(this.$t('common.updateErrorMsg'))
         )
       }
+    },
+    handleClose() {
+      const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/close/`
+      const data = { status: 'closed' }
+      this.$axios.post(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+    },
+    handleReject() {
+      const url = `/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/reject/`
+      const data = { action: 'reject' }
+      this.$axios.post(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     }
   }
 }

@@ -31,7 +31,8 @@
     "custom_password": "Password",
     "Custom": "Custom",
     "cluster": "Cluster",
-    "kubernetes":"Kubernetes"
+    "kubernetes":"Kubernetes",
+    "clusterHelpTextMessage": "Tips: https://172.16.8.8"
   },
   "assets": {
     "Action": "Action",
@@ -457,14 +458,14 @@
     "DatabaseAppPermissionDetail": "Databases permissions detail",
     "DatabaseAppPermissionUpdate": "Databases permissions update",
     "DatabaseAppUpdate": "Database app update",
-    "KubernetesApp": "kubernetes apps",
-    "KubernetesAppCreate": "kubernetes app create",
-    "KubernetesAppDetail": "kubernetes app detail",
-    "KubernetesAppPermission": "kubernetes permissions",
-    "KubernetesAppPermissionCreate": "kubernetes permissions create",
-    "KubernetesAppPermissionDetail": "kubernetes permissions detail",
-    "KubernetesAppPermissionUpdate": "kubernetes permissions update",
-    "KubernetesAppUpdate": "kubernetes app update",
+    "KubernetesApp": "Kubernetes apps",
+    "KubernetesAppCreate": "Kubernetes app create",
+    "KubernetesAppDetail": "Kubernetes app detail",
+    "KubernetesAppPermission": "Kubernetes permissions",
+    "KubernetesAppPermissionCreate": "Kubernetes permissions create",
+    "KubernetesAppPermissionDetail": "Kubernetes permissions detail",
+    "KubernetesAppPermissionUpdate": "Kubernetes permissions update",
+    "KubernetesAppUpdate": "Kubernetes app update",
     "DomainCreate": "Domain create",
     "DomainDetail": "Domain detail",
     "DomainList": "Domains",
@@ -743,7 +744,7 @@
     "Asset": "Asset",
     "SystemUser": "System user",
     "Applicant": "Applicant",
-    "Pending": "Pending",
+    "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
     "Closed": "Closed"
@@ -775,10 +776,14 @@
     "FingerPrint": "Fingerprint",
     "FirstLogin": "First login",
     "Guide": "Guide",
+    "OrgUser": "Org User",
+    "OrgAdmin": "Org Admin",
+    "OrgAuditor": "Org Auditor",
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "Enable multi-factor authentication to make the account more secure <br/> After is enabled, you will enter the multi-factor authentication binding process on your next login <br/> You can also bind directly in (personal information -> fast modifier -> modifier multiple factor Settings)",
       "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
-      "SSHKeyOfProfileSSHUpdatePage": "Copy your public key here"
+      "SSHKeyOfProfileSSHUpdatePage": "Copy your public key here",
+      "OrgRoleHelpText": "Organizational roles are the user's role in the current organization"
     },
     "IAgree": "I agree",
     "ImprovePersonalInformation": "Improve personal information",
@@ -954,7 +959,8 @@
       "OrganizationMembership": "Organization membership",
       "DeleteOrgTitle":"Please ensure that the following information in the organization has been deleted",
       "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission",
-      "OrgRole": "Org role"
+      "OrgRole": "Org role",
+      "CreateOrgMsg": "Please go to Organization Details to add users"
     },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",

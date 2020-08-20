@@ -21,6 +21,9 @@ export default {
       fieldsMeta: {
         type: {
           disabled: true
+        },
+        cluster: {
+          helpText: this.$t('applications.clusterHelpTextMessage')
         }
       },
       url: '/api/v1/applications/k8s-apps/'

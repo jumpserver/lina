@@ -65,9 +65,11 @@ function cleanDateStr(d) {
       case 1:
         d = d.split('+')[0].trimRight()
         break
+      case 2:
+        d = d.replace(/-/g, '/')
     }
   }
-  return null
+  return d
 }
 
 export function toSafeLocalDateStr(d) {

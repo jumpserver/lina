@@ -75,14 +75,14 @@ export default {
         SECURITY_LOGIN_LIMIT_COUNT: {
           label: this.$t('setting.securityLoginLimitCount'),
           rules: [
-            { required: true },
+            { required: true, message: this.$t('common.fieldRequiredError') },
             { validator: validatorLoginLimitCount }
           ]
         },
         SECURITY_LOGIN_LIMIT_TIME: {
           label: this.$t('setting.securityLoginLimitTime'),
           rules: [
-            { required: true },
+            { required: true, message: this.$t('common.fieldRequiredError') },
             { validator: validatorLoginLimitTime }
           ],
           helpText: this.$t('setting.helpText.securityLoginLimitTime')
@@ -94,14 +94,14 @@ export default {
         SECURITY_PASSWORD_EXPIRATION_TIME: {
           label: this.$t('setting.securityPasswordExpirationTime'),
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError') }
           ],
           helpText: this.$t('setting.helpText.securityPasswordExpirationTime')
         },
         SECURITY_PASSWORD_MIN_LENGTH: {
           label: this.$t('setting.securityPasswordMinLength'),
           rules: [
-            { required: true },
+            { required: true, message: this.$t('common.fieldRequiredError') },
             { validator: validatorPasswordMinLength }
           ]
         },
