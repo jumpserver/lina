@@ -111,7 +111,9 @@ export default {
             type: 'textarea',
             autosize: true
           },
-          hidden: form => form.protocol !== 'k8s'
+          hidden: form => {
+            return form.protocol !== 'k8s'
+          }
         },
         protocol: {
           rules: [
@@ -207,6 +209,16 @@ export default {
       },
       url: '/api/v1/assets/system-users/',
       authHiden: false
+    }
+  },
+  method: {
+
+  },
+  mounted() {
+    const params = this.$route.params
+    const method = params.id ? 'post' : 'put'
+    if (method === 'post') {
+      this.fieldsMeta.token.rules[0].required = false
     }
   }
 }
