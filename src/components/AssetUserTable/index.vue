@@ -154,7 +154,7 @@ export default {
                   type: 'primary',
                   callback: function(val) {
                     this.MFAInfo.asset = val.cellValue
-                    if (this.MFAVerifyAt + this.MFA_TTl * 1000 > (new Date()).valueOf()) {
+                    if (!this.needMFAVerify) {
                       this.showMFADialog = true
                       this.MFAConfirmed = true
                       this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
