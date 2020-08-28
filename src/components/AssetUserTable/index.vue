@@ -239,7 +239,8 @@ export default {
   computed: {
     ...mapGetters([
       'MFA_TTl',
-      'MFAVerifyAt'
+      'MFAVerifyAt',
+      'publicSettings'
     ]),
     needMFAVerify() {
       if (!this.publicSettings.SECURITY_VIEW_AUTH_NEED_MFA) {
