@@ -535,6 +535,7 @@
     "active": "active",
     "alive": "alive",
     "asset": "Asset",
+    "target": "Target",
     "bucket": "Bucket",
     "command": "Command",
     "commandStorage": "Command storage",
