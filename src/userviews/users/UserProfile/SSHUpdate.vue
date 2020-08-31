@@ -46,7 +46,8 @@ export default {
         public_key: {
           el: {
             type: 'textarea',
-            placeholder: 'ssh-rsa AAAA...'
+            placeholder: 'ssh-rsa AAAA...',
+            autosize: true
           },
           helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
         }
