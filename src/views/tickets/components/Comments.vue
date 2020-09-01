@@ -5,7 +5,7 @@
     </div>
     <template v-if="comments">
       <div v-for="item in comments" :key="item.user_display + item.body" class="feed-activity-list">
-        <div class="feed-element">
+        <div class="feed-element" :class="{'flex-container': currentUser.name + '(' + currentUser.username + ')' === item.user_display}">
           <a href="#" class="pull-left">
             <el-avatar :src="imageUrl" class="header-avatar" />
           </a>
@@ -13,9 +13,9 @@
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <pre style="padding-top: 10px">
+            <div style="padding-top: 10px; white-space: pre-line ">
               {{ item.body }}
-            </pre>
+            </div>
           </div>
         </div>
       </div>
@@ -69,6 +69,8 @@
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Comments',
   components: { IBox },
@@ -101,6 +103,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'currentUser'
+    ]),
     hasActionPerm() {
       return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
     }
@@ -219,5 +224,9 @@ export default {
 }
 .text-muted {
   color: #888888;
+}
+.flex-container {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
