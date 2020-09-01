@@ -5,7 +5,7 @@
     </div>
     <template v-if="comments">
       <div v-for="item in comments" :key="item.user_display + item.body" class="feed-activity-list">
-        <div class="feed-element" :class="{'flex-container': currentUser.name + '(' + currentUser.username + ')' === item.user_display}">
+        <div class="feed-element" :class="{'flex-container': isFlexEnd(item.user_display)}">
           <a href="#" class="pull-left">
             <el-avatar :src="imageUrl" class="header-avatar" />
           </a>
@@ -186,6 +186,9 @@ export default {
     },
     reloadPage() {
       window.location.reload()
+    },
+    isFlexEnd(value) {
+      return this.currentUser.name + '(' + this.currentUser.username + ')' === value
     }
   }
 
