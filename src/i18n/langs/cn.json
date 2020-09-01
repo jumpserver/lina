@@ -372,6 +372,7 @@
   },
   "perms": {
     "": "",
+    "Permission": "权限",
     "Actions": "动作",
     "Asset": "资产",
     "Basic": "基本",

@@ -372,6 +372,7 @@
   "perms": {
     "": "",
     "Actions": "Actions",
+    "Permission": "Permission",
     "Asset": "Asset",
     "Basic": "Basic",
     "Exclude": "Exclude",

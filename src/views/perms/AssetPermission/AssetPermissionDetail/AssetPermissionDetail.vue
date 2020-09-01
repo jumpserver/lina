@@ -80,7 +80,7 @@ export default {
           value: this.object.system_users_amount
         },
         {
-          key: this.$t('perms.Actions'),
+          key: this.$t('perms.Permission'),
           value: this.object.actions,
           formatter(row, value) {
             const actionMap = value.map(item => ACTIONS_FIELDS_MAP[item].action).join(',')
