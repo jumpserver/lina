@@ -1,5 +1,12 @@
 <template>
-  <Dialog :title="$t('common.Import')" :visible.sync="showImportDialog" :destroy-on-close="true" @confirm="handleImportConfirm" @cancel="handleImportCancel()">
+  <Dialog
+    :title="$t('common.Import')"
+    :visible.sync="showImportDialog"
+    :destroy-on-close="true"
+    :loading-status="loadStatus"
+    @confirm="handleImportConfirm"
+    @cancel="handleImportCancel()"
+  >
     <el-form label-position="left" style="padding-left: 50px">
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
         <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
@@ -63,7 +70,8 @@ export default {
       showImportDialog: false,
       importOption: '1',
       isCsv: true,
-      errorMsg: ''
+      errorMsg: '',
+      loadStatus: false
     }
   },
   computed: {
@@ -101,6 +109,8 @@ export default {
         this.onSuccess(msg)
       }).catch(error => {
         this.catchError(error)
+      }).finally(() => {
+        this.loadStatus = false
       })
     },
     performCreate(item) {
@@ -113,6 +123,8 @@ export default {
         this.onSuccess(msg)
       }).catch(error => {
         this.catchError(error)
+      }).finally(() => {
+        this.loadStatus = false
       })
     },
     catchError(error) {
@@ -149,6 +161,7 @@ export default {
       window.URL.revokeObjectURL(url)
     },
     handleImport(item) {
+      this.loadStatus = true
       if (this.importOption === '1') {
         this.performCreate(item)
       } else {
