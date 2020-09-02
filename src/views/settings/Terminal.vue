@@ -15,6 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 export default {
   name: 'Terminal',
   components: {
@@ -46,9 +47,7 @@ export default {
         },
         TERMINAL_HEARTBEAT_INTERVAL: {
           label: this.$t('setting.terminalHeartbeatInterval'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.terminalHeartbeatInterval')
         },
         TERMINAL_ASSET_LIST_SORT_BY: {
@@ -63,9 +62,7 @@ export default {
               value: 'ip'
             }
           ],
-          rules: [
-            { required: true }
-          ]
+          rules: [Required]
         },
         TERMINAL_ASSET_LIST_PAGE_SIZE: {
           label: this.$t('setting.terminalAssetListPageSize'),
@@ -78,15 +75,11 @@ export default {
             { label: '25', value: '25' },
             { label: '50', value: '50' }
           ],
-          rules: [
-            { required: true }
-          ]
+          rules: [Required]
         },
         TERMINAL_SESSION_KEEP_DURATION: {
           label: this.$t('setting.terminalSessionKeepDuration'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.terminalSessionKeepDuration')
         },
         TERMINAL_TELNET_REGEX: {

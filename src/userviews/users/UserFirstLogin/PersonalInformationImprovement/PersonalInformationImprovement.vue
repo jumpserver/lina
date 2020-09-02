@@ -15,6 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'ProfileUpdate',
@@ -68,9 +69,7 @@ export default {
           label: this.$t('users.IAgree'),
           type: 'checkbox',
           checked: false,
-          rules: [
-            { required: true }
-          ],
+          rules: [Required],
           helpText: this.$t('users.HelpText.MFAOfUserFirstLoginUserGuidePage')
         }
       },

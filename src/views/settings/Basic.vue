@@ -17,6 +17,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 export default {
   name: 'Basic',
   components: {
@@ -36,9 +37,7 @@ export default {
       fieldsMeta: {
         SITE_URL: {
           label: this.$t('setting.siteUrl'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.siteUrl')
         },
         USER_GUIDE_URL: {
@@ -47,9 +46,7 @@ export default {
         },
         EMAIL_SUBJECT_PREFIX: {
           label: this.$t('setting.emailSubjectPrefix'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.emailSubjectPrefix')
         }
       },

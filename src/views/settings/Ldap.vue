@@ -72,6 +72,7 @@ import { testLdapSetting, testLdapUserLogin,
   importLdapUser, refreshLdapUserCache, StartLdapUserCache } from '@/api/settings'
 import ListTable from '@/components/ListTable'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'Ldap',
@@ -98,9 +99,7 @@ export default {
       fieldsMeta: {
         AUTH_LDAP_SERVER_URI: {
           label: this.$t('setting.authLdapServerUri'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         AUTH_LDAP_BIND_DN: {
           label: this.$t('setting.authLdapBindDn')
@@ -118,9 +117,7 @@ export default {
         },
         AUTH_LDAP_SEARCH_FILTER: {
           label: this.$t('setting.authLdapSearchFilter'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.authLdapSearchFilter')
         },
         AUTH_LDAP_USER_ATTR_MAP: {
@@ -128,9 +125,7 @@ export default {
           el: {
             type: 'textarea'
           },
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.authLdapUserAttrMap')
         },
         AUTH_LDAP: {
