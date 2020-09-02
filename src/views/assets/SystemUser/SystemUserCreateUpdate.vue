@@ -114,7 +114,7 @@ export default {
           rules: [Required],
           el: {
             type: 'textarea',
-            autosize: true
+            autosize: { minRows: 3 }
           },
           hidden: form => {
             return form.protocol !== 'k8s'
