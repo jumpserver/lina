@@ -64,7 +64,8 @@ export default {
           label: 'Secret key'
         },
         endpoint: {
-          label: this.$t('sessions.endPoint')
+          label: this.$t('sessions.endPoint'),
+          helpText: storageTypeMeta.endpointHelpText
         },
         region: {
           label: this.$t('sessions.region')
