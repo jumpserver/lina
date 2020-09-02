@@ -1,3 +1,5 @@
+import i18n from '@/i18n/i18n'
+
 export const S3 = 's3'
 export const CEPH = 'ceph'
 export const SWIFT = 'swift'
@@ -8,7 +10,8 @@ export const STORAGE_TYPE_META_MAP = {
   [S3]: {
     name: S3,
     title: 'S3',
-    meta: ['bucket', 'access_key', 'secret_key', 'endpoint']
+    meta: ['bucket', 'access_key', 'secret_key', 'endpoint'],
+    endpointHelpText: i18n.t('sessions.helpText.s3Endpoint')
   },
   [CEPH]: {
     name: CEPH,
@@ -23,7 +26,8 @@ export const STORAGE_TYPE_META_MAP = {
   [OSS]: {
     name: OSS,
     title: 'Oss',
-    meta: ['bucket', 'access_key', 'secret_key', 'endpoint']
+    meta: ['bucket', 'access_key', 'secret_key', 'endpoint'],
+    endpointHelpText: i18n.t('sessions.helpText.ossEndpoint')
   },
   [AZURE]: {
     name: AZURE,
