@@ -17,6 +17,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { getReplayStorage } from '@/api/sessions'
 import { STORAGE_TYPE_META_MAP } from './const'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'ReplayStorageUpdate',
@@ -51,9 +52,7 @@ export default {
         type: {
           label: this.$t('sessions.type'),
           disabled: true,
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         bucket: {
           label: this.$t('sessions.bucket')
@@ -77,9 +76,7 @@ export default {
             { label: 'http', value: 'http' },
             { label: 'https', value: 'https' }
           ],
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         container_name: {
           label: this.$t('sessions.containerName')

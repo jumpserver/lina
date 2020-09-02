@@ -16,6 +16,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { getCommandStorage } from '@/api/sessions'
+import { Required } from '@/components/DataForm/rules'
 export default {
   name: 'CommandStorageUpdate',
   components: {
@@ -43,29 +44,21 @@ export default {
           type: 'select',
           label: this.$t('sessions.type'),
           disabled: true,
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         hosts: {
           label: this.$t('sessions.hosts'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('sessions.helpText.esUrl')
         },
         index: {
           label: this.$t('sessions.index'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('sessions.helpText.esIndex')
         },
         doc_type: {
           label: this.$t('sessions.docType'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('sessions.helpText.esDocType')
         }
       },
