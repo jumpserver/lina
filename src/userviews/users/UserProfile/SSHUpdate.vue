@@ -47,7 +47,7 @@ export default {
           el: {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...',
-            autosize: true
+            autosize: { minRows: 3 }
           },
           helpText: this.$t('users.HelpText.SSHKeyOfProfileSSHUpdatePage')
         }
