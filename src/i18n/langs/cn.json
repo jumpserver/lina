@@ -798,6 +798,7 @@
     "LoginConfirm": "登录复核",
     "LoginPasswordSetting": "登录密码设置",
     "MFA": "MFA",
+    "Existing":"已存在",
     "MfaLevel": "多因子认证",
     "Name": "姓名",
     "NewPassword": "新密码",
