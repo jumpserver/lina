@@ -1,5 +1,6 @@
 <template>
   <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
+    <el-badge slot="badge" slot-scope="props" :value="getBadgeValue(props)" size="mini" />
     <keep-alive>
       <component :is="config.activeMenu" />
     </keep-alive>
@@ -10,6 +11,8 @@
 import { TabPage } from '@/layout/components'
 import AssignedTicketList from './AssignedTicketList'
 import MyTicketList from './MyTicketList'
+import { getTicketOpenCount } from '@/api/ticket'
+
 export default {
   name: 'Index',
   components: {
@@ -19,6 +22,8 @@ export default {
   },
   data() {
     return {
+      myTicketOpenCount: 0,
+      assignedTicketCount: 0,
       config: {
         activeMenu: 'MyTicketList',
         submenu: [
@@ -32,6 +37,25 @@ export default {
           }
         ]
       }
+    }
+  },
+  mounted() {
+    this.getTicketOpenCount()
+  },
+  methods: {
+    getTicketOpenCount() {
+      getTicketOpenCount(0).then(data => {
+        this.myTicketOpenCount = data.count
+      })
+      getTicketOpenCount(1).then(data => {
+        this.assignedTicketCount = data.count
+      })
+    },
+    getBadgeValue(props) {
+      if (props.tab === 'MyTicketList') {
+        return this.myTicketOpenCount
+      }
+      return this.assignedTicketCount
     }
   }
 }

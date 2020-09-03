@@ -9,7 +9,14 @@
 
     <div>
       <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="iActiveMenu" class="page-submenu" @tab-click="handleTabClick">
-        <el-tab-pane v-for="item in submenu" :key="item.name" :label="item.title" :label-content="item.labelContent" :name="item.name" />
+        <template v-for="item in submenu">
+          <el-tab-pane :key="item.name" :label-content="item.labelContent" :name="item.name">
+            <span slot="label">
+              {{ item.title }}
+              <slot name="badge" :tab="item.name" />
+            </span>
+          </el-tab-pane>
+        </template>
       </el-tabs>
       <transition name="fade-transform" mode="out-in">
         <slot />
