@@ -144,7 +144,8 @@
     "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Please fill in the existing user groups)",
     "HomeHelpMessage": "Default home directory: /home/system username",
     "Home": "Home",
-    "LinuxUserAffiliateGroup": "Linux user affiliate group"
+    "LinuxUserAffiliateGroup": "Linux user affiliate group",
+    "ipDomain": "IP(Domain)"
   },
   "audits": {
     "Hosts": "Host",

@@ -81,7 +81,7 @@ export default {
           },
           {
             prop: 'ip',
-            label: this.$t('assets.ip'),
+            label: this.$t('assets.ipDomain'),
             sortable: 'custom'
           }
         ],

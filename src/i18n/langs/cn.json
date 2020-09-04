@@ -144,7 +144,8 @@
     "GroupsHelpMessage": "请输入用户组，多个用户组使用逗号分隔（需填写已存在的用户组）",
     "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
     "Home": "家目录",
-    "LinuxUserAffiliateGroup": "用户附属组"
+    "LinuxUserAffiliateGroup": "用户附属组",
+    "ipDomain": "IP(域名)"
 
   },
   "audits": {
