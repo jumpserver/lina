@@ -79,6 +79,9 @@ export default {
       if (ips) {
         validValues.ips = ips.split(',')
       }
+      if (ips === '') {
+        delete validValues['ips']
+      }
       return this.$axios['post'](this.url, validValues)
     }
   }
