@@ -1,6 +1,6 @@
 <template>
   <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <el-badge slot="badge" slot-scope="props" :value="getBadgeValue(props)" size="mini" />
+    <el-badge v-if="props.tab === 'AssignedTicketList'" slot="badge" slot-scope="props" :value="getBadgeValue(props)" size="mini" type="primary" />
     <keep-alive>
       <component :is="config.activeMenu" />
     </keep-alive>
@@ -22,7 +22,6 @@ export default {
   },
   data() {
     return {
-      myTicketOpenCount: 0,
       assignedTicketCount: 0,
       config: {
         activeMenu: 'MyTicketList',
@@ -44,17 +43,11 @@ export default {
   },
   methods: {
     getTicketOpenCount() {
-      getTicketOpenCount(0).then(data => {
-        this.myTicketOpenCount = data.count
-      })
       getTicketOpenCount(1).then(data => {
         this.assignedTicketCount = data.count
       })
     },
     getBadgeValue(props) {
-      if (props.tab === 'MyTicketList') {
-        return this.myTicketOpenCount
-      }
       return this.assignedTicketCount
     }
   }
@@ -62,5 +55,8 @@ export default {
 </script>
 
 <style scoped>
+  .primary {
+    background-color: #1ab394;
+  }
 
 </style>
