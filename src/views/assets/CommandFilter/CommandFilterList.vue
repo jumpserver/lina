@@ -47,6 +47,7 @@ export default {
           },
           {
             prop: 'comment',
+            showOverflowTooltip: true,
             label: this.$t('assets.Comment')
           },
           {
