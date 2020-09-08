@@ -41,7 +41,12 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'DatabaseAppPermissionUpdate'
+              updateRoute: 'DatabaseAppPermissionUpdate',
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/perms/database-app-permissions/${id}/?user_id=${this.object.id}&draw=1`
+                return this.$axios.delete(url)
+              }
             }
           }
         }
