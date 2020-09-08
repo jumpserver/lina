@@ -47,8 +47,8 @@ export default {
           onRightClick: this.onRightClick.bind(this),
           onRename: this.onRename.bind(this),
           onSelected: this.onSelected.bind(this),
-          beforeDrop: this.beforeDrop.bind(this),
-          onDrop: this.onDrop.bind(this),
+          // beforeDrop: this.beforeDrop.bind(this),
+          // onDrop: this.onDrop.bind(this),
           refresh: this.refresh.bind(this)
           // 尚未定义的函数
           // beforeClick
@@ -179,34 +179,34 @@ export default {
         this.showRMenu('node', event.clientX, event.clientY)
       }
     },
-    beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
-      const treeNodesNames = []
-      $.each(treeNodes, function(index, value) {
-        treeNodesNames.push(value.name)
-      })
-      if (!targetNode) {
-        return false
-      }
-      // TODO 修改默认确认框
-      const msg = this.$t('common.tree.DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
-      return confirm(msg)
-    },
-    onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
-      const treeNodesIds = []
-      $.each(treeNodes, function(index, value) {
-        treeNodesIds.push(value.meta.node.id)
-      })
-      const theUrl = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
-      this.$axios.put(
-        theUrl, {
-          nodes: treeNodesIds
-        }
-      ).then((res) => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      })
-    },
+    // beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
+    //   const treeNodesNames = []
+    //   $.each(treeNodes, function(index, value) {
+    //     treeNodesNames.push(value.name)
+    //   })
+    //   if (!targetNode) {
+    //     return false
+    //   }
+    //   // TODO 修改默认确认框
+    //   const msg = this.$t('common.tree.DropConfirmMsg', { src: treeNodesNames.join(','), dst: targetNode.name })
+    //   return confirm(msg)
+    // },
+    // onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
+    //   const treeNodesIds = []
+    //   $.each(treeNodes, function(index, value) {
+    //     treeNodesIds.push(value.meta.node.id)
+    //   })
+    //   const theUrl = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
+    //   this.$axios.put(
+    //     theUrl, {
+    //       nodes: treeNodesIds
+    //     }
+    //   ).then((res) => {
+    //     this.$message.success(this.$t('common.updateSuccessMsg'))
+    //   }).catch(error => {
+    //     this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+    //   })
+    // },
     createTreeNode: function() {
       this.hideRMenu()
       const parentNode = this.zTree.getSelectedNodes()[0]

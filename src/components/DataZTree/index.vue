@@ -37,8 +37,8 @@ export default {
           showRemoveBtn: false,
           showRenameBtn: false,
           drag: {
-            isCopy: true,
-            isMove: true
+            isCopy: false,
+            isMove: false
           }
         },
         callback: {
@@ -48,8 +48,8 @@ export default {
           onSelected: this.defaultCallback.bind(this, 'onSelected'),
           beforeDrag: this.defaultCallback.bind(this, 'beforeDrag'),
           onDrag: this.defaultCallback.bind(this, 'onDrag'),
-          beforeDrop: this.defaultCallback.bind(this, 'beforeDrop'),
-          onDrop: this.defaultCallback.bind(this, 'onDrop'),
+          // beforeDrop: this.defaultCallback.bind(this, 'beforeDrop'),
+          // onDrop: this.defaultCallback.bind(this, 'onDrop'),
           beforeAsync: this.defaultCallback.bind(this, 'beforeAsync'),
           refresh: this.defaultCallback.bind(this, 'refresh')
         }
