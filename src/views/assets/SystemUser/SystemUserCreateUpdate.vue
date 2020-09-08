@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import UploadKey from '@/components/UploadKey'
 import { Select2 } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 // const asciiProtocols = ['ssh', 'telnet', 'mysql']
 const graphProtocols = ['vnc', 'rdp', 'k8s']
@@ -59,10 +60,16 @@ export default {
               updateForm({ home: `/home/${value}` })
             }
           },
-          rules: [{ required: true, message: this.$t('common.fieldRequiredError') }],
+          rules: [Required],
           hidden: (form) => {
-            this.fieldsMeta.username.rules[0].required = form.login_mode !== 'manual'
-            if (form.username_same_with_user) {
+            if (form.login_mode === 'auto') {
+              this.fieldsMeta.username.rules = [Required]
+            } else {
+              this.fieldsMeta.username.rules[0].required = false
+            }
+            if (!form.username_same_with_user) {
+              this.fieldsMeta.username.rules = [Required]
+            } else {
               this.fieldsMeta.username.rules[0].required = false
             }
           }
@@ -104,19 +111,17 @@ export default {
           }
         },
         token: {
-          rules: [
-            { required: true }
-          ],
+          rules: [Required],
           el: {
             type: 'textarea',
-            autosize: true
+            autosize: { minRows: 3 }
           },
-          hidden: form => form.protocol !== 'k8s'
+          hidden: form => {
+            return form.protocol !== 'k8s'
+          }
         },
         protocol: {
-          rules: [
-            { required: true }
-          ],
+          rules: [Required],
           el: {
             style: 'width:100%'
           },
@@ -141,9 +146,7 @@ export default {
           }
         },
         priority: {
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('assets.PriorityHelpMessage')
         },
         auto_push: {
@@ -163,16 +166,12 @@ export default {
           }
         },
         sftp_root: {
-          rules: [
-            { required: true }
-          ],
+          rules: [Required],
           helpText: this.$t('assets.SFTPHelpMessage'),
           hidden: (item) => item.protocol !== 'ssh'
         },
         sudo: {
-          rules: [
-            { required: true }
-          ],
+          rules: [Required],
           helpText: this.$t('assets.SudoHelpMessage'),
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
         },
@@ -190,9 +189,7 @@ export default {
         },
         shell: {
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
-          rules: [
-            { required: true }
-          ]
+          rules: [Required]
         },
         home: {
           label: this.$t('assets.Home'),
@@ -207,6 +204,16 @@ export default {
       },
       url: '/api/v1/assets/system-users/',
       authHiden: false
+    }
+  },
+  method: {
+
+  },
+  mounted() {
+    const params = this.$route.params
+    const method = params.id ? 'post' : 'put'
+    if (method === 'post') {
+      this.fieldsMeta.token.rules[0].required = false
     }
   }
 }

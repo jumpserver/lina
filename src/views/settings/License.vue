@@ -11,23 +11,22 @@
         <QuickActions type="primary" :actions="quickActions" />
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="dialogLicenseImport" center>
-      <div slot="title">
-        <h4>{{ this.$t('setting.ImportLicense') }}</h4>
-      </div>
+    <Dialog
+      :visible.sync="dialogLicenseImport"
+      top="20vh"
+      :title="this.$t('setting.ImportLicense')"
+      @cancel="dialogLicenseImport = false"
+      @confirm="importLicense"
+    >
       {{ this.$t('setting.LicenseFile') }}
       <br>
       <input type="file" @change="fileChange">
-      <div slot="footer">
-        <el-button @click="dialogLicenseImport = false">{{ $t('common.Cancel') }}</el-button>
-        <el-button type="primary" @click="importLicense">{{ $t('common.Confirm') }}</el-button>
-      </div>
-    </el-dialog>
+    </Dialog>
   </div>
 </template>
 
 <script>
-import { QuickActions } from '@/components'
+import { QuickActions, Dialog } from '@/components'
 import DetailCard from '@/components/DetailCard/index'
 import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
@@ -36,7 +35,8 @@ export default {
   name: 'License',
   components: {
     DetailCard,
-    QuickActions
+    QuickActions,
+    Dialog
   },
   props: {
     object: {
@@ -55,11 +55,11 @@ export default {
           title: this.$t('setting.ImportLicense'),
           attrs: {
             type: 'primary',
-            label: this.$t('setting.import')
+            label: this.$t('setting.import'),
+            disabled: false
           },
           callbacks: {
             click: this.importAction
-
           }
         },
         {
@@ -75,7 +75,6 @@ export default {
       ]
     }
   },
-
   computed: {
     ...mapGetters([
       'publicSettings'
@@ -90,7 +89,7 @@ export default {
       return ''
     },
     detailItems() {
-      if (!this.publicSettings.XPACK_LICENSE_IS_VALID) {
+      if (!this.publicSettings.XPACK_ENABLED) {
         return [
           {
             key: this.$t('setting.License'),
@@ -109,7 +108,7 @@ export default {
         },
         {
           key: this.$t('setting.Expired'),
-          value: this.licenseData.expired
+          value: this.licenseData.date_expired
         },
         {
           key: this.$t('setting.AssetCount'),
@@ -123,7 +122,8 @@ export default {
     }
   },
   mounted() {
-    if (this.publicSettings.XPACK_LICENSE_IS_VALID) {
+    this.quickActions[0].attrs.disabled = !this.publicSettings.XPACK_ENABLED
+    if (this.publicSettings.XPACK_ENABLED) {
       this.$axios.get('/api/v1/xpack/license/detail').then(res => {
         this.licenseData = res
       }).finally(() => {

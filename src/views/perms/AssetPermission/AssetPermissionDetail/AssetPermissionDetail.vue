@@ -13,6 +13,7 @@
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { ACTIONS_FIELDS_MAP } from './const'
 
 export default {
   name: 'AssetPermissionDetail',
@@ -77,6 +78,14 @@ export default {
         {
           key: this.$t('perms.systemUserCount'),
           value: this.object.system_users_amount
+        },
+        {
+          key: this.$t('perms.Actions'),
+          value: this.object.actions,
+          formatter(row, value) {
+            const actionMap = value.map(item => ACTIONS_FIELDS_MAP[item].action).join(',')
+            return <span>{actionMap}</span>
+          }
         },
         {
           key: this.$t('perms.dateStart'),

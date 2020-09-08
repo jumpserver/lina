@@ -52,7 +52,12 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'RemoteAppPermissionUpdate'
+              updateRoute: 'RemoteAppPermissionUpdate',
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/perms/remote-app-permissions/${id}/?user_id=${this.object.id}&draw=1`
+                return this.$axios.delete(url)
+              }
             }
           }
         }

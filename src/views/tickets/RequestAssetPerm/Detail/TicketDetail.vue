@@ -105,6 +105,10 @@ export default {
         {
           key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
+        },
+        {
+          key: this.$t('common.Comment'),
+          value: this.object.comment
         }
       ]
     },

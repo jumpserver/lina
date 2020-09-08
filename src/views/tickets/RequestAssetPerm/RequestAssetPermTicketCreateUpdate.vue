@@ -25,7 +25,7 @@ export default {
         actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'org_id', 'assignees']],
+        [this.$t('common.Basic'), ['title', 'org_id', 'assignees', 'comment']],
         [this.$t('tickets.RequestPerm'), ['ips', 'hostname', 'actions', 'date_start', 'date_expired']]
 
       ],
@@ -78,6 +78,9 @@ export default {
       const ips = validValues.ips
       if (ips) {
         validValues.ips = ips.split(',')
+      }
+      if (ips === '') {
+        delete validValues['ips']
       }
       return this.$axios['post'](this.url, validValues)
     }

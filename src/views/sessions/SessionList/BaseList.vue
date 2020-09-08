@@ -47,6 +47,7 @@ export default {
             showOverflowTooltip: true
           },
           asset: {
+            label: this.$t('sessions.target'),
             showOverflowTooltip: true
           },
           command_amount: {

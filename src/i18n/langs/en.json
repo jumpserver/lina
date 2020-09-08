@@ -46,6 +46,9 @@
     "AssetListHelpMessage": "The left side is the asset tree, right click to create, delete, and change the tree node, authorization asset is also organized as a node, and the right side is the asset under that node\n",
     "AssetNumber": "Asset number",
     "AssetUserList": "Asset user list",
+    "TestGatewayTestConnection":"Test gateway test connection",
+    "TestGatewayHelpMessage": "If use nat, set the ssh real port",
+    "SshPort": "SSH Port",
     "Assets": "Assets",
     "Auth": "Auth",
     "AutoGenerateKey": "Auto generate ssh key",
@@ -141,7 +144,8 @@
     "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Please fill in the existing user groups)",
     "HomeHelpMessage": "Default home directory: /home/system username",
     "Home": "Home",
-    "LinuxUserAffiliateGroup": "Linux user affiliate group"
+    "LinuxUserAffiliateGroup": "Linux user affiliate group",
+    "ipDomain": "IP(Domain)"
   },
   "audits": {
     "Hosts": "Host",
@@ -371,7 +375,7 @@
   },
   "perms": {
     "": "",
-    "Actions": "Actions",
+    "Actions": "Permission",
     "Asset": "Asset",
     "Basic": "Basic",
     "Exclude": "Exclude",
@@ -535,6 +539,7 @@
     "active": "active",
     "alive": "alive",
     "asset": "Asset",
+    "target": "Target",
     "bucket": "Bucket",
     "command": "Command",
     "commandStorage": "Command storage",
@@ -588,7 +593,9 @@
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",
       "esIndex":"Es provides the default index: jumpserver",
-      "esDocType": "Es provides the default document type: command"
+      "esDocType": "Es provides the default document type: command",
+      "s3Endpoint": "S3: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China): http://s3.{REGION_NAME}.amazonaws.com.cn<br>Example: http://s3.cn-north-1.amazonaws.com.cn",
+      "ossEndpoint": "OSS: http://{REGION_NAME}.aliyuncs.com<br>Example: http://oss-cn-hangzhou.aliyuncs.com"
     }
   },
   "setting": {
@@ -763,6 +770,7 @@
   },
   "users": {
     "Account": "Account",
+    "Existing":"Existing",
     "Authentication": "Account",
     "Comment": "Comment",
     "ConfirmPassword": "Confirm password",
@@ -889,6 +897,7 @@
       "Username": "Username"
     },
     "Cloud": {
+      "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",
       "IsAlwaysUpdate": "Asset info is kept up-to-date",
       "AccountCreate": "Create account",
       "AccountList": "Account list",

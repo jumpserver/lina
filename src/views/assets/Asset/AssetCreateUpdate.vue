@@ -33,6 +33,9 @@ export default {
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        ip: {
+          label: this.$t('assets.ipDomain')
+        },
         protocols: {
           component: Protocols
         },

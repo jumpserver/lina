@@ -16,6 +16,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 export default {
   name: 'Security',
   components: {
@@ -75,14 +76,14 @@ export default {
         SECURITY_LOGIN_LIMIT_COUNT: {
           label: this.$t('setting.securityLoginLimitCount'),
           rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') },
+            Required,
             { validator: validatorLoginLimitCount }
           ]
         },
         SECURITY_LOGIN_LIMIT_TIME: {
           label: this.$t('setting.securityLoginLimitTime'),
           rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') },
+            Required,
             { validator: validatorLoginLimitTime }
           ],
           helpText: this.$t('setting.helpText.securityLoginLimitTime')
@@ -93,15 +94,13 @@ export default {
         },
         SECURITY_PASSWORD_EXPIRATION_TIME: {
           label: this.$t('setting.securityPasswordExpirationTime'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.securityPasswordExpirationTime')
         },
         SECURITY_PASSWORD_MIN_LENGTH: {
           label: this.$t('setting.securityPasswordMinLength'),
           rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') },
+            Required,
             { validator: validatorPasswordMinLength }
           ]
         },

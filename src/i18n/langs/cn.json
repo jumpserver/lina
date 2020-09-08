@@ -44,6 +44,9 @@
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
     "AssetListHelpMessage": "左侧是资产树，右击可以新建、删除、更改树节点，授权资产也是以节点方式组织的，右侧是属于该节点下的资产\n",
+    "TestGatewayTestConnection":"测试连接网关",
+    "TestGatewayHelpMessage": "如果使用了nat端口映射，请设置为ssh真实监听的端口",
+    "SshPort": "SSH 端口",
     "AssetNumber": "资产编号",
     "AssetUserList": "资产用户列表",
     "Assets": "资产",
@@ -141,7 +144,8 @@
     "GroupsHelpMessage": "请输入用户组，多个用户组使用逗号分隔（需填写已存在的用户组）",
     "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
     "Home": "家目录",
-    "LinuxUserAffiliateGroup": "用户附属组"
+    "LinuxUserAffiliateGroup": "用户附属组",
+    "ipDomain": "IP(域名)"
 
   },
   "audits": {
@@ -372,7 +376,7 @@
   },
   "perms": {
     "": "",
-    "Actions": "动作",
+    "Actions": "权限",
     "Asset": "资产",
     "Basic": "基本",
     "Exclude": "不包含",
@@ -537,6 +541,7 @@
     "active": "激活中",
     "alive": "在线",
     "asset": "资产",
+    "target": "目标",
     "bucket": "桶名称",
     "command": "命令",
     "commandStorage": "命令存储",
@@ -590,7 +595,9 @@
     "helpText": {
       "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com）",
       "esIndex": "es提供默认index：jumpserver",
-      "esDocType": "es默认文档类型：command"
+      "esDocType": "es默认文档类型：command",
+      "s3Endpoint": "S3 格式: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China) 格式: http://s3.{REGION_NAME}.amazonaws.com.cn<br>如: http://s3.cn-north-1.amazonaws.com.cn",
+      "ossEndpoint": "OSS 格式: http://{REGION_NAME}.aliyuncs.com<br>如: http://oss-cn-hangzhou.aliyuncs.com"
     }
   },
   "setting": {
@@ -794,6 +801,7 @@
     "LoginConfirm": "登录复核",
     "LoginPasswordSetting": "登录密码设置",
     "MFA": "MFA",
+    "Existing":"已存在",
     "MfaLevel": "多因子认证",
     "Name": "姓名",
     "NewPassword": "新密码",
@@ -893,6 +901,7 @@
       "Username": "用户名"
     },
     "Cloud": {
+      "HostnameStrategy": "用于生成资产主机名。例如：1. 实例名称 (instanceDemo)；2. 实例名称和部分IP(后两位) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "资产信息保持最新",
       "AccountCreate": "创建账户",
       "AccountList": "账户列表",

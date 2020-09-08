@@ -16,12 +16,17 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { getReplayStorage } from '@/api/sessions'
+import { STORAGE_TYPE_META_MAP } from './const'
+import { Required } from '@/components/DataForm/rules'
+
 export default {
   name: 'ReplayStorageUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const storageType = this.$route.query.type || 's3'
+    const storageTypeMeta = STORAGE_TYPE_META_MAP[storageType]
     return {
       loading: true,
       successUrl: { name: 'Storage', params: { activeMenu: 'RelayStorage' }},
@@ -32,6 +37,11 @@ export default {
         comment: ''
       },
       url: '/api/v1/terminal/replay-storages/',
+      fields: [
+        [this.$t('common.Basic'), ['name', 'type']],
+        [storageTypeMeta.title, storageTypeMeta.meta],
+        [this.$t('common.Other'), ['comment']]
+      ],
       fieldsMetas: {
         name: {
           label: this.$t('sessions.name')
@@ -42,9 +52,7 @@ export default {
         type: {
           label: this.$t('sessions.type'),
           disabled: true,
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         bucket: {
           label: this.$t('sessions.bucket')
@@ -56,7 +64,8 @@ export default {
           label: 'Secret key'
         },
         endpoint: {
-          label: this.$t('sessions.endPoint')
+          label: this.$t('sessions.endPoint'),
+          helpText: storageTypeMeta.endpointHelpText
         },
         region: {
           label: this.$t('sessions.region')
@@ -68,9 +77,7 @@ export default {
             { label: 'http', value: 'http' },
             { label: 'https', value: 'https' }
           ],
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         container_name: {
           label: this.$t('sessions.containerName')
@@ -89,20 +96,10 @@ export default {
             { label: 'core.windows.net', value: 'core.windows.net' }
           ]
         }
-      },
-      fieldsMap: {
-        s3: [[this.$t('common.Basic'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]],
-        ceph: [[this.$t('common.Basic'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]],
-        swift: [[this.$t('common.Basic'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'region', 'endpoint', 'protocol', 'comment']]],
-        oss: [[this.$t('common.Basic'), ['name', 'type', 'bucket', 'access_key', 'secret_key', 'endpoint', 'comment']]],
-        azure: [[this.$t('common.Basic'), ['name', 'type', 'container_name', 'account_name', 'account_key', 'endpoint_suffix', 'comment']]]
       }
     }
   },
   computed: {
-    fields() {
-      return this.fieldsMap[this.currentType]
-    },
     initial() {
       return {
         type: this.currentType,

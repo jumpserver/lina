@@ -13,14 +13,33 @@
         :more-buttons="moreButtons"
       />
     </IBox>
-    <el-dialog :visible.sync="dialogVisible" center>
-      <div slot="title">
-        {{ $t('setting.testLdapLoginTitle') }}
-        <br>
-        <small>
-          {{ $t('setting.testLdapLoginSubtitle') }}
-        </small>
+    <Dialog
+      :title="$t('setting.importLdapUserTitle')"
+      :visible.sync="dialogLdapUserImport"
+      :destroy-on-close="true"
+    >
+      <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
+      <ListTable
+        ref="listTable"
+        class="listTable"
+        :table-config="tableConfig"
+        :header-actions="headerActions"
+        @error="handlerListTableXHRError($event)"
+      />
+      <div slot="footer">
+        <el-button @click="dialogLdapUserImport=false">{{ $t('common.Cancel') }}</el-button>
+        <el-button type="primary" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">{{ $t('common.Import') }}</el-button>
       </div>
+    </Dialog>
+
+    <Dialog
+      :visible.sync="dialogVisible"
+      :title="$t('setting.testLdapLoginTitle') "
+      :destroy-on-close="true"
+      :loading-status="testLdapLoginStatus"
+      @confirm="testUerLoginClick()"
+      @cancel="dialogVisible = false"
+    >
       <el-form
         :model="userLoginForm"
         label-position="right"
@@ -43,42 +62,25 @@
           />
         </el-form-item>
       </el-form>
-      <div slot="footer">
-        <el-button @click="dialogVisible = false">{{ $t('common.Cancel') }}</el-button>
-        <el-button type="primary" @click="testUerLoginClick">{{ $t('common.Confirm') }}</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog :visible.sync="dialogLdapUserImport" :destroy-on-close="true" center>
-      <div slot="title">
-        {{ $t('setting.importLdapUserTitle') }}
-        <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
-      </div>
-      <ListTable
-        ref="listTable"
-        :table-config="tableConfig"
-        :header-actions="headerActions"
-        @error="handlerListTableXHRError($event)"
-      />
-      <div slot="footer">
-        <el-button @click="dialogLdapUserImport=false">{{ $t('common.Cancel') }}</el-button>
-        <el-button type="primary" @click="importUserClick">{{ $t('common.Import') }}</el-button>
-      </div>
-    </el-dialog>
+    </Dialog>
   </div>
 </template>
 <script>
+import Dialog from '@/components/Dialog'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testLdapSetting, testLdapUserLogin,
   importLdapUser, refreshLdapUserCache, StartLdapUserCache } from '@/api/settings'
 import ListTable from '@/components/ListTable'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'Ldap',
   components: {
     GenericCreateUpdateForm,
     ListTable,
-    IBox
+    IBox,
+    Dialog
   },
   props: {
     object: {
@@ -89,8 +91,10 @@ export default {
   data() {
     return {
       loading: true,
+      testLdapLoginStatus: false,
       dialogVisible: false,
       dialogLdapUserImport: false,
+      dialogLdapUserImportLoginStatus: false,
       initialData: {},
       selectFields: [[this.$t('common.BasicInfo'), ['AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD', 'AUTH_LDAP_SEARCH_OU',
         'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP', 'AUTH_LDAP']]],
@@ -98,9 +102,7 @@ export default {
       fieldsMeta: {
         AUTH_LDAP_SERVER_URI: {
           label: this.$t('setting.authLdapServerUri'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         AUTH_LDAP_BIND_DN: {
           label: this.$t('setting.authLdapBindDn')
@@ -118,9 +120,7 @@ export default {
         },
         AUTH_LDAP_SEARCH_FILTER: {
           label: this.$t('setting.authLdapSearchFilter'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.authLdapSearchFilter')
         },
         AUTH_LDAP_USER_ATTR_MAP: {
@@ -128,9 +128,7 @@ export default {
           el: {
             type: 'textarea'
           },
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ],
+          rules: [Required],
           helpText: this.$t('setting.helpText.authLdapUserAttrMap')
         },
         AUTH_LDAP: {
@@ -173,7 +171,25 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/settings/ldap/users/',
-        columns: ['username', 'name', 'email', 'existing']
+        columns: ['username', 'name', 'email', 'existing'],
+        columnsMeta: {
+          username: {
+            label: this.$t('users.Username'),
+            width: '180px'
+          },
+          name: {
+            label: this.$t('users.Name'),
+            width: '180px'
+          },
+          email: {
+            label: this.$t('users.Email')
+          },
+          existing: {
+            label: this.$t('users.Existing'),
+            width: '120px'
+          }
+
+        }
       },
       headerActions: {
         hasCreate: false,
@@ -182,7 +198,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasUpdate: false,
-        hasRefresh: false,
+        hasRefresh: true,
         extraActions: [
           {
             name: 'refresh',
@@ -224,14 +240,17 @@ export default {
       return 'put'
     },
     testUerLoginClick() {
+      this.testLdapLoginStatus = true
       testLdapUserLogin(this.userLoginForm).then(res => {
         this.$message.success(res)
       }).catch(err => {
         const response = err.response
         this.$message.error(response.data)
-      })
+        // eslint-disable-next-line no-return-assign
+      }).finally(() => this.testLdapLoginStatus = false)
     },
     importUserClick() {
+      this.dialogLdapUserImportLoginStatus = true
       const selectIds = []
       this.$refs.listTable.selectedRows.forEach((item, index) => { selectIds.push(item.id) })
       const data = {
@@ -239,10 +258,12 @@ export default {
       }
       if (selectIds.length === 0) {
         this.$message.error(this.$t('setting.unselectedUser'))
+        this.dialogLdapUserImportLoginStatus = false
       } else {
         importLdapUser(data).then(res => {
           this.$message.success(res.msg)
-        })
+          // eslint-disable-next-line no-return-assign
+        }).finally(() => this.dialogLdapUserImportLoginStatus = false)
       }
     },
     handlerListTableXHRError(errMsg) {
@@ -255,5 +276,9 @@ export default {
 </script>
 
 <style scoped>
+
+.listTable ::v-deep .table-action-right-side{
+  padding-top: 0px !important;
+}
 
 </style>

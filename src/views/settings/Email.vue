@@ -18,6 +18,7 @@
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testEmailSetting } from '@/api/settings'
 import { IBox } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'Email',
@@ -40,21 +41,15 @@ export default {
       fieldsMeta: {
         EMAIL_HOST: {
           label: this.$t('setting.emailHost'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         EMAIL_PORT: {
           label: this.$t('setting.emailPort'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         EMAIL_HOST_USER: {
           label: this.$t('setting.emailHostUser'),
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError') }
-          ]
+          rules: [Required]
         },
         EMAIL_HOST_PASSWORD: {
           label: this.$t('setting.emailHostPassword'),
