@@ -41,6 +41,7 @@ export default {
           {
             prop: 'comment',
             align: 'center',
+            showOverflowTooltip: true,
             label: this.$t('assets.Comment')
           },
           {
