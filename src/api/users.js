@@ -65,3 +65,7 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function refreshSessionIdAge() {
+  return getProfile()
+}
