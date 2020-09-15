@@ -1,3 +1,0 @@
-[submodule "src/views/xpack"]
-	path = src/views/xpack
-	url = git@github.com:jumpserver/lina-xpack.git
