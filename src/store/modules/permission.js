@@ -2,6 +2,7 @@ import {
   allRoleRoutes,
   constantRoutes
 } from '@/router'
+import store from '@/store'
 import rolec from '@/utils/role'
 /**
  * Use meta.role to determine if the current user has permission
@@ -17,6 +18,7 @@ function hasPermission(roles, route) {
   // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
   return has
 }
+
 function hasLicense(licState, route) {
   if (licState) {
     return licState
@@ -58,6 +60,32 @@ export function filterLicRoutes(routes, roles) {
   return res
 }
 
+function isNeedHidden(route) {
+  let hidden = route.meta ? route.meta.hidden : false
+  if (typeof hidden === 'function') {
+    hidden = hidden({ route: route, settings: store.getters.publicSettings })
+  }
+  return hidden
+}
+
+export function filterHiddenRoutes(routes) {
+  const res = []
+
+  routes.forEach(route => {
+    const tmp = {
+      ...route
+    }
+    if (!isNeedHidden(route)) {
+      if (tmp.children) {
+        tmp.children = filterHiddenRoutes(tmp.children)
+      }
+      res.push(tmp)
+    }
+  })
+
+  return res
+}
+
 export function filterCmdRoutes(routes, roles) {
   const res = []
 
@@ -84,18 +112,18 @@ export function filterCmdRoutes(routes, roles) {
 export function filterAsyncRoutes(routes, roles) {
   const res = []
 
-  routes.forEach(route => {
+  for (const route of routes) {
     const tmp = {
       ...route
     }
+
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
       res.push(tmp)
     }
-  })
-
+  }
   return res
 }
 
@@ -115,6 +143,7 @@ const actions = {
   generateRoutes({ commit, rootState }, roles) {
     return new Promise(resolve => {
       let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
+      accessedRoutes = filterHiddenRoutes(accessedRoutes)
       accessedRoutes = filterCmdRoutes(accessedRoutes, rootState.settings.publicSettings.SECURITY_COMMAND_EXECUTION)
       accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID)
       if (accessedRoutes.length === 0) {
