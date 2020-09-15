@@ -58,7 +58,7 @@ export default [
     component: Layout,
     meta: {
       permissions: [rolec.PERM_USE],
-      commandExecutionRequired: true
+      hidden: ({ settings }) => !settings.SECURITY_COMMAND_EXECUTION
     },
     children: [
       {

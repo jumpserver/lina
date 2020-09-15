@@ -34,7 +34,7 @@ export default [
     path: 'command-executions/create',
     name: 'BatchCommand',
     component: () => import('@/views/ops/CommandExecution'),
-    meta: { title: i18n.t('route.BatchCommand'), commandExecutionRequired: true }
+    meta: { title: i18n.t('route.BatchCommand'), hidden: ({ settings }) => !settings.SECURITY_COMMAND_EXECUTION }
   },
   // {
   //   path: 'celery/task/:id',
