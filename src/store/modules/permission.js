@@ -17,39 +17,26 @@ function hasPermission(roles, route) {
   // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
   return has
 }
-function hasLicense(licState, route) {
-  if (licState) {
-    return licState
-  }
-  let requireLic = route.meta ? route.meta.licenseRequired : null
-  if (!requireLic) {
-    requireLic = false
-  }
-  return licState === requireLic
-}
 
-function hasCommand(cmdBulkExecutionEnable, route) {
-  const routeRequireCmd = route.meta ? route.meta.commandExecutionRequired : false
-  if (!routeRequireCmd) {
-    return true
-  }
-
-  if (!cmdBulkExecutionEnable) {
+function hasLicense(route, rootState) {
+  const licenseIsValid = rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID
+  const licenseRequired = route.meta ? route.meta.licenseRequired : false
+  if (!licenseIsValid && licenseRequired) {
     return false
   }
   return true
 }
 
-export function filterLicRoutes(routes, roles) {
+export function filterLicenseRequiredRoutes(routes, rootState) {
   const res = []
 
   routes.forEach(route => {
     const tmp = {
       ...route
     }
-    if (hasLicense(roles, tmp)) {
+    if (hasLicense(route, rootState)) {
       if (tmp.children) {
-        tmp.children = filterLicRoutes(tmp.children, roles)
+        tmp.children = filterLicenseRequiredRoutes(tmp.children, rootState)
       }
       res.push(tmp)
     }
@@ -58,16 +45,24 @@ export function filterLicRoutes(routes, roles) {
   return res
 }
 
-export function filterCmdRoutes(routes, roles) {
+function isNeedHidden(route, rootState) {
+  let hidden = route.meta ? route.meta.hidden : false
+  if (typeof hidden === 'function') {
+    hidden = hidden({ route: route, settings: rootState.settings.publicSettings })
+  }
+  return hidden
+}
+
+export function filterHiddenRoutes(routes, rootState) {
   const res = []
 
   routes.forEach(route => {
     const tmp = {
       ...route
     }
-    if (hasCommand(roles, tmp)) {
+    if (!isNeedHidden(route, rootState)) {
       if (tmp.children) {
-        tmp.children = filterCmdRoutes(tmp.children, roles)
+        tmp.children = filterHiddenRoutes(tmp.children, rootState)
       }
       res.push(tmp)
     }
@@ -84,18 +79,18 @@ export function filterCmdRoutes(routes, roles) {
 export function filterAsyncRoutes(routes, roles) {
   const res = []
 
-  routes.forEach(route => {
+  for (const route of routes) {
     const tmp = {
       ...route
     }
+
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
       res.push(tmp)
     }
-  })
-
+  }
   return res
 }
 
@@ -115,8 +110,8 @@ const actions = {
   generateRoutes({ commit, rootState }, roles) {
     return new Promise(resolve => {
       let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
-      accessedRoutes = filterCmdRoutes(accessedRoutes, rootState.settings.publicSettings.SECURITY_COMMAND_EXECUTION)
-      accessedRoutes = filterLicRoutes(accessedRoutes, rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID)
+      accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
+      accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
       if (accessedRoutes.length === 0) {
         console.log('No route find')
       }
