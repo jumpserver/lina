@@ -36,13 +36,16 @@ function hasCurrentOrgPermission() {
   return orgInList
 }
 
-function changeOrg(orgId) {
+async function changeOrg(orgId) {
   const org = getOrgIdMapper()[orgId]
   if (!org) {
     console.debug('Error: org not found')
   } else {
     console.debug('Change to org: ', org)
   }
+  // 重置Role为空
+  await store.dispatch('users/setCurrentRole', null)
+
   store.dispatch('users/setCurrentOrg', org).then(() => {
     console.log('Set current org to: ', org)
     if (hasUUID(location.href)) {
