@@ -1,7 +1,7 @@
 <template>
   <div>
     <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
-    <ImExportDialog :selected-rows="selectedRows" :url="tableUrl" />
+    <ImExportDialog :selected-rows="selectedRows" :url="tableUrl" v-bind="$attrs" />
   </div>
 </template>
 
@@ -119,7 +119,7 @@ export default {
   }
 
   .right-side-actions >>> .el-button:hover {
-    background-color: rgb(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
   .action-search >>> .el-input__suffix i {
