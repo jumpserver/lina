@@ -87,6 +87,7 @@ export default {
         hasLeftActions: false,
         hasImport: false,
         hasDatePicker: true,
+        canExportSelected: false,
         datePicker: {
           dateStart: dateFrom,
           dateEnd: dateTo
