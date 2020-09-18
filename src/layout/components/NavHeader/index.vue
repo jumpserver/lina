@@ -10,6 +10,9 @@
       <div class="header-item">
         <Language />
       </div>
+      <div class="header-item">
+        <WebTerminal />
+      </div>
       <div class="header-item header-profile">
         <AccountDropdown />
       </div>
@@ -23,6 +26,7 @@ import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
 import Help from './Help'
 import Language from './Language'
+import WebTerminal from './WebTerminal'
 
 export default {
   components: {
@@ -30,7 +34,8 @@ export default {
     Hamburger,
     AccountDropdown,
     Language,
-    Help
+    Help,
+    WebTerminal
   },
   data() {
     return {
