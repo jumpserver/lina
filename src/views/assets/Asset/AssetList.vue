@@ -70,6 +70,7 @@ import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
+import Protocols from '@/views/assets/Asset/components/Protocols/index'
 
 export default {
   components: {
@@ -284,7 +285,7 @@ export default {
             platform: 'Linux'
           },
           fields: [
-            'platform', 'domain', 'admin_user', 'labels', 'comment'
+            'platform', 'protocols', 'domain', 'admin_user', 'labels', 'comment'
           ],
           fieldsMeta: {
             platform: {
@@ -299,6 +300,10 @@ export default {
                   }
                 }
               }
+            },
+            protocols: {
+              label: this.$t('assets.Protocols'),
+              component: Protocols
             },
             domain: {
               label: this.$t('assets.Domain'),
