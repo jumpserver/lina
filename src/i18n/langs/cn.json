@@ -761,7 +761,11 @@
     "Pending": "待处理",
     "Approved": "已同意",
     "Rejected": "已拒绝",
-    "Closed": "已完成"
+    "Closed": "已完成",
+    "helpText": {
+      "ips": "请输入逗号分割的IP地址组",
+      "fuzzySearch": "支持模糊搜索"
+    }
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",
