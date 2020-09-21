@@ -754,7 +754,11 @@
     "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
-    "Closed": "Closed"
+    "Closed": "Closed",
+    "helpText": {
+      "ips": "Enter the IP address group, separated by commas",
+      "fuzzySearch": "Support for fuzzy search"
+    }
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",

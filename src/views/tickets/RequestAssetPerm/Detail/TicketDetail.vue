@@ -50,7 +50,7 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         asset: this.object.confirmed_assets,
-        systemuser: '',
+        systemuser: this.object.confirmed_system_user,
         actions: this.object.actions
       },
       comments: '',
@@ -66,7 +66,8 @@ export default {
         }
       },
       systemuser_select2: {
-        multiple: false,
+        multiple: true,
+        value: this.object.confirmed_system_user,
         ajax: {
           url: this.object.system_user_waitlist_url,
           transformOption: (item) => {
@@ -125,6 +126,10 @@ export default {
         {
           key: this.$t('tickets.Hostname'),
           value: this.object.hostname
+        },
+        {
+          key: this.$t('tickets.SystemUser'),
+          value: this.object.system_user
         },
         {
           key: this.$t('common.dateStart'),
