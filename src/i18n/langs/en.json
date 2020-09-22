@@ -720,7 +720,10 @@
     "userGuideUrl": "User Guide URL",
     "username": "Username",
     "usernamePlaceholder": "Please input username",
-    "refreshLdapCache":"Refreshing Ldap cache "
+    "refreshLdapCache":"Refreshing Ldap cache ",
+    "LicenseExpired": "License expired",
+    "LicenseWillBe": "License will expire at ",
+    "Expire": ""
   },
   "settings": {
     "setting": "Setting"

@@ -722,7 +722,10 @@
     "userGuideUrl": "用户向导URL",
     "username": "用户名",
     "usernamePlaceholder": "请输入用户名",
-    "refreshLdapCache":"刷新Ldap缓存，请稍后"
+    "refreshLdapCache":"刷新Ldap缓存，请稍后",
+    "LicenseExpired": "许可证已经过期",
+    "LicenseWillBe": "许可证即将在 ",
+    "Expire": " 过期"
   },
   "settings": {
     "setting": "设置"
