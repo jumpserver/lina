@@ -1,4 +1,4 @@
-import { hasUUID } from '@/utils/common'
+import { hasUUID, BASE_URL } from '@/utils/common'
 import store from '@/store'
 
 function getPropOrg() {
@@ -49,7 +49,7 @@ async function changeOrg(orgId) {
   store.dispatch('users/setCurrentOrg', org).then(() => {
     console.log('Set current org to: ', org)
     if (hasUUID(location.href)) {
-      location.href = process.env.VUE_APP_PUBLIC_PATH
+      location.href = BASE_URL
     } else {
       window.location.reload(true)
     }
