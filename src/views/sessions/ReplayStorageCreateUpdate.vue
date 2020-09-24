@@ -58,10 +58,12 @@ export default {
           label: this.$t('sessions.bucket')
         },
         access_key: {
-          label: 'Access key'
+          label: 'Access key',
+          el: { 'show-password': true }
         },
         secret_key: {
-          label: 'Secret key'
+          label: 'Secret key',
+          el: { 'show-password': true }
         },
         endpoint: {
           label: this.$t('sessions.endPoint'),
@@ -127,6 +129,7 @@ export default {
         this.formData = this.convertMataToForm(this.replayData)
         this.loading = false
       })
+      return
     }
     if (query.type) {
       this.loading = false
