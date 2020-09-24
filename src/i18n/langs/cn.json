@@ -985,7 +985,8 @@
       "DeleteOrgTitle": "请确保组织内的以下信息已删除",
       "DeleteOrgMsg": "用户列表、用户组、资产列表、网域列表、管理用户、系统用户、标签管理、资产授权规则",
       "OrgRole": "组织角色",
-      "CreateOrgMsg": "请去组织详情内添加用户"
+      "CreateOrgMsg": "请去组织详情内添加用户",
+      "AddOrgMembers": "添加组织成员"
     },
     "RestoreButton": "恢复默认",
     "SubscriptionID": "订阅授权ID",
