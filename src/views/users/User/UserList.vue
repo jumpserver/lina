@@ -1,11 +1,53 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+    />
     <GenericUpdateFormDialog
       :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
     />
+    <Dialog
+      v-if="investDialogVisible"
+      title="Invite a collaborator to OmniDB"
+      :visible.sync="investDialogVisible"
+      custom-class="asset-select-dialog"
+      :show-cancel="false"
+      :show-confirm="false"
+      width="28%"
+      top="15vh"
+      @close="clearSelect"
+    >
+      <el-select
+        v-model="investValue"
+        multiple
+        filterable
+        remote
+        reserve-keyword
+        placeholder="请输入关键词"
+        :remote-method="remoteMethod"
+        :loading="selectLoading"
+      >
+        <el-option
+          v-for="item in investOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      <div>
+        <el-checkbox-group v-model="checkList">
+          <el-checkbox label="复选框 A" />
+          <el-checkbox label="复选框 B" />
+          <el-checkbox label="复选框 C" />
+          <el-checkbox label="禁用" disabled />
+          <el-checkbox label="选中且禁用" disabled />
+        </el-checkbox-group>
+        <el-button type="primary" size="small">buttonCont</el-button>
+      </div>
+    </Dialog>
   </div>
 </template>
 
@@ -13,13 +55,15 @@
 import { mapGetters } from 'vuex'
 import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
+import Dialog from '@/components/Dialog'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 
 export default {
   components: {
     GenericListPage,
-    GenericUpdateFormDialog
+    GenericUpdateFormDialog,
+    Dialog
   },
   data() {
     const vm = this
@@ -70,6 +114,16 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
+        extraActions: [
+          {
+            name: '邀请用户',
+            title: '邀请用户',
+            can: !this.currentOrgIsDefault,
+            callback: function() {
+              this.investDialogVisible = true
+            }.bind(this)
+          }
+        ],
         extraMoreActions: [
           {
             title: this.$t('common.deleteSelected'),
@@ -163,7 +217,12 @@ export default {
             }
           }
         }
-      }
+      },
+      investDialogVisible: false,
+      selectLoading: false,
+      investOptions: [],
+      investValue: '',
+      rulesList: []
     }
   },
   computed: {
@@ -254,11 +313,33 @@ export default {
       const data = await createSourceIdCache(ids)
       const url = `${this.tableConfig.url}?spm=` + data.spm
       return this.$axios.delete(url)
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.investOptions = []
+        this.selectLoading = true
+        this.$axios.get(` /api/v1/users/users/?search=${query}&all=1`).then(result => {
+          console.log(result)
+          for (let i = 0; i < result.length; i++) {
+            this.investOptions.push({
+              value: result[i].id,
+              label: result[i].name + '(' + result[i].username + ')'
+            })
+          }
+        }).finally(() => { this.selectLoading = false })
+      } else {
+        this.investOptions = []
+      }
+    },
+    clearSelect() {
+      this.investValue = []
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+.asset-select-dialog ::v-deep .transition-box:first-child {
+  background-color: #f3f3f3;
+}
 </style>
