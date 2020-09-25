@@ -37,6 +37,16 @@ const mutations = {
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
   },
+  MODIFY_ORG: (state, org) => {
+    console.log(state.orgs)
+    state.orgs = state.orgs.map(oldOrg => {
+      if (oldOrg.id === org.id) {
+        oldOrg.name = org.name
+      }
+      return oldOrg
+    }
+    )
+  },
   ADD_ORG: (state, org) => {
     state.orgs.push(org)
   },
@@ -124,6 +134,9 @@ const actions = {
   },
   addAdminOrg({ commit, state }, org) {
     commit('ADD_ORG', org)
+  },
+  modifyOrg({ commit, state }, org) {
+    commit('MODIFY_ORG', org)
   },
   // user logout
   logout({ commit, state }) {
