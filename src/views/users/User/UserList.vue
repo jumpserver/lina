@@ -43,7 +43,7 @@
         </el-select>
         <el-collapse-transition>
           <div
-            v-if="investValue.length>0"
+            v-if="investValue.length > 0"
             style="margin-top:15px;
                    display: flex;
                    flex-direction:column;
@@ -57,12 +57,17 @@
                    flex-direction:row;
                    justify-content:center;"
             >
-              <el-checkbox label="用户" checked />
-              <el-checkbox label="组织审计员" />
-              <el-checkbox label="组织管理员" />
+              <el-checkbox label="User" checked>用户</el-checkbox>
+              <el-checkbox label="Auditor">组织审计员</el-checkbox>
+              <el-checkbox label="Admin">组织管理员</el-checkbox>
             </el-checkbox-group>
 
-            <el-button type="primary" size="small" style="margin-top: 20px;width: 10vw" @click="investConfirm">邀请</el-button>
+            <el-button
+              type="primary"
+              size="small"
+              style="margin-top: 20px;width: 10vw"
+              @click="investConfirm"
+            >邀请</el-button>
           </div>
         </el-collapse-transition>
       </div>
@@ -90,7 +95,13 @@ export default {
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
-          'name', 'username', 'groups_display', 'total_role_display', 'source', 'is_valid', 'actions'
+          'name',
+          'username',
+          'groups_display',
+          'total_role_display',
+          'source',
+          'is_valid',
+          'actions'
         ],
         columnsMeta: {
           username: {
@@ -137,7 +148,13 @@ export default {
           {
             name: '邀请用户',
             title: '邀请用户',
-            can: !this.currentOrgIsDefault,
+            can:
+              (JSON.parse(this.$cookie.get('jms_current_org'))
+                ? JSON.parse(this.$cookie.get('jms_current_org')).id
+                : '') !== 'DEFAULT' ||
+              (JSON.parse(this.$cookie.get('jms_current_org'))
+                ? JSON.parse(this.$cookie.get('jms_current_org')).id
+                : '') !== '',
             callback: function() {
               this.investDialogVisible = true
             }.bind(this)
@@ -208,9 +225,7 @@ export default {
           initial: {
             date_expired: getDayFuture(36500, new Date()).toISOString()
           },
-          fields: [
-            'groups', 'date_expired', 'comment'
-          ],
+          fields: ['groups', 'date_expired', 'comment'],
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
@@ -227,12 +242,10 @@ export default {
             date_expired: {
               label: this.$t('common.dateExpired'),
               hidden: () => false
-
             },
             comment: {
               label: this.$t('common.Comment'),
               hidden: () => false
-
             }
           }
         }
@@ -245,23 +258,22 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'currentOrg',
-      'currentUser',
-      'device'
-    ]),
+    ...mapGetters(['currentOrg', 'currentUser', 'device']),
     currentOrgIsDefault() {
       return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
     }
   },
   mounted() {
     if (!this.currentOrgIsDefault) {
-      this.headerActions.extraMoreActions[0].title = this.$t('common.removeSelected')
+      this.headerActions.extraMoreActions[0].title = this.$t(
+        'common.removeSelected'
+      )
     }
   },
   methods: {
     removeUserFromOrg({ row, col, reload }) {
-      const msg = this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
+      const msg =
+        this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
       const title = this.$t('common.Info')
       const performDelete = function() {
         const url = `/api/v1/users/users/${row.id}/`
@@ -292,7 +304,13 @@ export default {
       if (!this.currentOrgIsDefault) {
         msgPrefix = this.$t('common.removeWarningMsg')
       }
-      const msg = msgPrefix + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
+      const msg =
+        msgPrefix +
+        ' ' +
+        selectedRows.length +
+        ' ' +
+        this.$t('common.rows') +
+        ' ?'
       const title = this.$t('common.Info')
       const performDelete = this.performBulkDelete
       this.$alert(msg, title, {
@@ -326,7 +344,7 @@ export default {
       })
     },
     async performBulkDelete(selectedRows) {
-      const ids = selectedRows.map((v) => {
+      const ids = selectedRows.map(v => {
         return v.id
       })
       const data = await createSourceIdCache(ids)
@@ -337,15 +355,20 @@ export default {
       if (query !== '') {
         this.investOptions = []
         this.selectLoading = true
-        this.$axios.get(` /api/v1/users/users/?search=${query}&all=1`).then(result => {
-          console.log(result)
-          for (let i = 0; i < result.length; i++) {
-            this.investOptions.push({
-              value: result[i].id,
-              label: result[i].name + '(' + result[i].username + ')'
-            })
-          }
-        }).finally(() => { this.selectLoading = false })
+        this.$axios
+          .get(` /api/v1/users/users/?search=${query}&all=1`)
+          .then(result => {
+            console.log(result)
+            for (let i = 0; i < result.length; i++) {
+              this.investOptions.push({
+                value: result[i].id,
+                label: result[i].name + '(' + result[i].username + ')'
+              })
+            }
+          })
+          .finally(() => {
+            this.selectLoading = false
+          })
       } else {
         this.investOptions = []
       }
@@ -355,7 +378,13 @@ export default {
       this.rulesList = []
     },
     investConfirm() {
-      console.log(this.rulesList, 'rulesList')
+      for (const rules of this.rulesList) {
+        this.$axios.patch('/api/v1/orgs/org-memeber-relation/', {
+          org: this.currentOrg.id,
+          user: this.investValue,
+          role: rules
+        })
+      }
     }
   }
 }
@@ -369,7 +398,7 @@ export default {
   width: 25.5vw;
 }
 
-.dialog ::v-deep .el-dialog__footer{
+.dialog ::v-deep .el-dialog__footer {
   padding: 0;
 }
 </style>
