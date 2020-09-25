@@ -34,6 +34,12 @@ export default {
     value: {
       type: Array,
       default: () => []
+    },
+    checkSelect: {
+      type: Function,
+      default(row, index) {
+        return true
+      }
     }
   },
   data() {
@@ -68,6 +74,7 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         hasTree: true,
+        checkSelect: this.checkSelect,
         columns: [
           {
             prop: 'hostname',

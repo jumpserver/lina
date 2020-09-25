@@ -90,7 +90,7 @@
 
         <!--非树-->
         <template v-else>
-          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign" />
+          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign" :selectable="checkSelect" />
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
@@ -713,6 +713,12 @@ export default {
     hasDetail: {
       type: Boolean,
       default: true
+    },
+    checkSelect: {
+      type: Function,
+      default(row, index) {
+        return true
+      }
     }
   },
   data() {
