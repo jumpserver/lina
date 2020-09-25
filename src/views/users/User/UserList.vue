@@ -18,34 +18,53 @@
       :show-confirm="false"
       width="28%"
       top="15vh"
+      after
+      :destroy-on-close="true"
       @close="clearSelect"
     >
-      <el-select
-        v-model="investValue"
-        multiple
-        filterable
-        remote
-        reserve-keyword
-        placeholder="请输入关键词"
-        :remote-method="remoteMethod"
-        :loading="selectLoading"
-      >
-        <el-option
-          v-for="item in investOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
       <div>
-        <el-checkbox-group v-model="checkList">
-          <el-checkbox label="复选框 A" />
-          <el-checkbox label="复选框 B" />
-          <el-checkbox label="复选框 C" />
-          <el-checkbox label="禁用" disabled />
-          <el-checkbox label="选中且禁用" disabled />
-        </el-checkbox-group>
-        <el-button type="primary" size="small">buttonCont</el-button>
+        <el-select
+          v-model="investValue"
+          multiple
+          filterable
+          remote
+          size="small"
+          reserve-keyword
+          placeholder="请输入关键词"
+          :remote-method="remoteMethod"
+          :loading="selectLoading"
+        >
+          <el-option
+            v-for="item in investOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <el-collapse-transition>
+          <div
+            v-if="investValue.length>0"
+            style="margin-top:15px;
+                   display: flex;
+                   flex-direction:column;
+                   align-items:center;
+                   justify-content:center;"
+          >
+            <el-checkbox-group
+              v-model="rulesList"
+              size="small"
+              style="display: flex;
+                   flex-direction:row;
+                   justify-content:center;"
+            >
+              <el-checkbox label="用户" checked />
+              <el-checkbox label="组织审计员" />
+              <el-checkbox label="组织管理员" />
+            </el-checkbox-group>
+
+            <el-button type="primary" size="small" style="margin-top: 20px;width: 10vw" @click="investConfirm">邀请</el-button>
+          </div>
+        </el-collapse-transition>
       </div>
     </Dialog>
   </div>
@@ -221,7 +240,7 @@ export default {
       investDialogVisible: false,
       selectLoading: false,
       investOptions: [],
-      investValue: '',
+      investValue: [],
       rulesList: []
     }
   },
@@ -333,6 +352,10 @@ export default {
     },
     clearSelect() {
       this.investValue = []
+      this.rulesList = []
+    },
+    investConfirm() {
+      console.log(this.rulesList, 'rulesList')
     }
   }
 }
@@ -341,5 +364,12 @@ export default {
 <style lang="less" scoped>
 .asset-select-dialog ::v-deep .transition-box:first-child {
   background-color: #f3f3f3;
+}
+.dialog ::v-deep .el-input {
+  width: 25.5vw;
+}
+
+.dialog ::v-deep .el-dialog__footer{
+  padding: 0;
 }
 </style>
