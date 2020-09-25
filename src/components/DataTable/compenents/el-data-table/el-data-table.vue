@@ -13,7 +13,7 @@
         :row-class-name="rowClassName"
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
-        @select-all="selectStrategy.onSelectAll($event, selectable)"
+        @select-all="selectStrategy.onSelectAll($event, checkSelect)"
         @sort-change="onSortChange"
       >
         <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
