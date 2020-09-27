@@ -1,6 +1,7 @@
 <template>
   <div>
     <GenericListPage
+      ref="GenericListPage"
       :table-config="tableConfig"
       :header-actions="headerActions"
     />
@@ -9,69 +10,7 @@
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
     />
-    <Dialog
-      v-if="investDialogVisible"
-      title="Invite a collaborator to OmniDB"
-      :visible.sync="investDialogVisible"
-      custom-class="asset-select-dialog"
-      :show-cancel="false"
-      :show-confirm="false"
-      width="28%"
-      top="15vh"
-      after
-      :destroy-on-close="true"
-      @close="clearSelect"
-    >
-      <div>
-        <el-select
-          v-model="investValue"
-          multiple
-          filterable
-          remote
-          size="small"
-          reserve-keyword
-          placeholder="请输入关键词"
-          :remote-method="remoteMethod"
-          :loading="selectLoading"
-        >
-          <el-option
-            v-for="item in investOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-collapse-transition>
-          <div
-            v-if="investValue.length > 0"
-            style="margin-top:15px;
-                   display: flex;
-                   flex-direction:column;
-                   align-items:center;
-                   justify-content:center;"
-          >
-            <el-checkbox-group
-              v-model="rulesList"
-              size="small"
-              style="display: flex;
-                   flex-direction:row;
-                   justify-content:center;"
-            >
-              <el-checkbox label="User" checked>用户</el-checkbox>
-              <el-checkbox label="Auditor">组织审计员</el-checkbox>
-              <el-checkbox label="Admin">组织管理员</el-checkbox>
-            </el-checkbox-group>
-
-            <el-button
-              type="primary"
-              size="small"
-              style="margin-top: 20px;width: 10vw"
-              @click="investConfirm"
-            >邀请</el-button>
-          </div>
-        </el-collapse-transition>
-      </div>
-    </Dialog>
+    <InvestUsersDialog :setting="InvestDialogSetting" @close="handleInvestDialogClose" />
   </div>
 </template>
 
@@ -79,15 +18,15 @@
 import { mapGetters } from 'vuex'
 import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
-import Dialog from '@/components/Dialog'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
+import InvestUsersDialog from '@/views/users/User/components/InvestUsersDialog'
 
 export default {
   components: {
+    InvestUsersDialog,
     GenericListPage,
-    GenericUpdateFormDialog,
-    Dialog
+    GenericUpdateFormDialog
   },
   data() {
     const vm = this
@@ -146,18 +85,13 @@ export default {
         hasBulkDelete: false,
         extraActions: [
           {
-            name: '邀请用户',
-            title: '邀请用户',
+            name: this.$t('users.InvestUser'),
+            title: this.$t('users.InvestUser'),
             can:
               (JSON.parse(this.$cookie.get('jms_current_org'))
                 ? JSON.parse(this.$cookie.get('jms_current_org')).id
-                : '') !== 'DEFAULT' ||
-              (JSON.parse(this.$cookie.get('jms_current_org'))
-                ? JSON.parse(this.$cookie.get('jms_current_org')).id
-                : '') !== '',
-            callback: function() {
-              this.investDialogVisible = true
-            }.bind(this)
+                : '') !== 'DEFAULT',
+            callback: function() { this.InvestDialogSetting.investDialogVisible = true }.bind(this)
           }
         ],
         extraMoreActions: [
@@ -250,11 +184,9 @@ export default {
           }
         }
       },
-      investDialogVisible: false,
-      selectLoading: false,
-      investOptions: [],
-      investValue: [],
-      rulesList: []
+      InvestDialogSetting: {
+        investDialogVisible: false
+      }
     }
   },
   computed: {
@@ -351,40 +283,9 @@ export default {
       const url = `${this.tableConfig.url}?spm=` + data.spm
       return this.$axios.delete(url)
     },
-    remoteMethod(query) {
-      if (query !== '') {
-        this.investOptions = []
-        this.selectLoading = true
-        this.$axios
-          .get(` /api/v1/users/users/?search=${query}&all=1`)
-          .then(result => {
-            console.log(result)
-            for (let i = 0; i < result.length; i++) {
-              this.investOptions.push({
-                value: result[i].id,
-                label: result[i].name + '(' + result[i].username + ')'
-              })
-            }
-          })
-          .finally(() => {
-            this.selectLoading = false
-          })
-      } else {
-        this.investOptions = []
-      }
-    },
-    clearSelect() {
-      this.investValue = []
-      this.rulesList = []
-    },
-    investConfirm() {
-      for (const rules of this.rulesList) {
-        this.$axios.patch('/api/v1/orgs/org-memeber-relation/', {
-          org: this.currentOrg.id,
-          user: this.investValue,
-          role: rules
-        })
-      }
+    handleInvestDialogClose() {
+      this.InvestDialogSetting.investDialogVisible = false
+      this.$refs.GenericListPage.$refs.ListTable.reloadTable()
     }
   }
 }

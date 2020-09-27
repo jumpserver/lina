@@ -786,10 +786,14 @@
     "Email": "Email",
     "FingerPrint": "Fingerprint",
     "FirstLogin": "First login",
+    "InvestUser": "Invest user",
+    "InvestUserInOrg": "Invest user in this org",
+    "Invest": "Invest",
     "Guide": "Guide",
     "OrgUser": "Org User",
     "OrgAdmin": "Org Admin",
     "OrgAuditor": "Org Auditor",
+
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "Enable multi-factor authentication to make the account more secure <br/> After is enabled, you will enter the multi-factor authentication binding process on your next login <br/> You can also bind directly in (personal information -> fast modifier -> modifier multiple factor Settings)",
       "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
