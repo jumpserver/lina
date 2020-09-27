@@ -169,6 +169,7 @@
     "AddSuccessMsg": "添加成功",
     "Auth": "认证",
     "BadRequestErrorMsg": "请求错误，请检查填写内容",
+    "BadRoleErrorMsg": "请求错误，无该操作权限",
     "Basic": "基本",
     "BasicInfo": "基本信息",
     "Cancel": "取消",

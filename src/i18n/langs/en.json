@@ -169,6 +169,7 @@
     "AddSuccessMsg": "Add success",
     "Auth": "Authorization",
     "BadRequestErrorMsg": "Bad request, please check again",
+    "BadRoleErrorMsg": "Bad request, no permission for this operation",
     "Basic": "Basic",
     "BasicInfo": "Basic info",
     "Cancel": "Cancel",
