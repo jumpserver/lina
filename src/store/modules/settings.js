@@ -31,10 +31,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
         const link = document.querySelector("link[rel*='icon']") || document.createElement('link')
+        const title = document.querySelector('title') || document.createElement('title')
         link.type = 'image/x-icon'
         link.rel = 'shortcut icon'
         link.href = response.data.LOGO_URLS.favicon
+        title.innerHTML = response.data.LOGIN_TITLE
         document.getElementsByTagName('head')[0].appendChild(link)
+        document.getElementsByTagName('head')[0].appendChild(title)
         commit('SET_PUBLIC_SETTINGS', response.data)
         resolve(response)
       }).catch(error => {
