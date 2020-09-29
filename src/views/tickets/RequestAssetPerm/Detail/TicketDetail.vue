@@ -69,7 +69,7 @@ export default {
         multiple: true,
         value: this.object.confirmed_system_users,
         ajax: {
-          url: this.object.system_user_waitlist_url,
+          url: this.object.system_users_waitlist_url,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
