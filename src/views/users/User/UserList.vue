@@ -10,7 +10,7 @@
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
     />
-    <InvestUsersDialog :setting="InvestDialogSetting" @close="handleInvestDialogClose" />
+    <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
   </div>
 </template>
 
@@ -20,11 +20,11 @@ import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
-import InvestUsersDialog from '@/views/users/User/components/InvestUsersDialog'
+import InviteUsersDialog from '@/views/users/User/components/InviteUsersDialog'
 
 export default {
   components: {
-    InvestUsersDialog,
+    InviteUsersDialog,
     GenericListPage,
     GenericUpdateFormDialog
   },
@@ -85,13 +85,13 @@ export default {
         hasBulkDelete: false,
         extraActions: [
           {
-            name: this.$t('users.InvestUser'),
-            title: this.$t('users.InvestUser'),
+            name: this.$t('users.InviteUser'),
+            title: this.$t('users.InviteUser'),
             can:
               (JSON.parse(this.$cookie.get('jms_current_org'))
                 ? JSON.parse(this.$cookie.get('jms_current_org')).id
                 : '') !== 'DEFAULT',
-            callback: function() { this.InvestDialogSetting.investDialogVisible = true }.bind(this)
+            callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
           }
         ],
         extraMoreActions: [
@@ -184,8 +184,8 @@ export default {
           }
         }
       },
-      InvestDialogSetting: {
-        investDialogVisible: false
+      InviteDialogSetting: {
+        InviteDialogVisible: false
       }
     }
   },
@@ -283,8 +283,8 @@ export default {
       const url = `${this.tableConfig.url}?spm=` + data.spm
       return this.$axios.delete(url)
     },
-    handleInvestDialogClose() {
-      this.InvestDialogSetting.investDialogVisible = false
+    handleInviteDialogClose() {
+      this.InviteDialogSetting.InviteDialogVisible = false
       this.$refs.GenericListPage.$refs.ListTable.reloadTable()
     }
   }

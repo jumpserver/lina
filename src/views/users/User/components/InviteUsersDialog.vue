@@ -1,8 +1,8 @@
 <template>
   <Dialog
-    v-if="setting.investDialogVisible"
-    :title="this.$t('users.InvestUserInOrg')"
-    :visible.sync="setting.investDialogVisible"
+    v-if="setting.InviteDialogVisible"
+    :title="this.$t('users.InviteUserInOrg')"
+    :visible.sync="setting.InviteDialogVisible"
     custom-class="asset-select-dialog"
     :show-cancel="false"
     :show-confirm="false"
@@ -14,7 +14,7 @@
   >
     <div>
       <el-select
-        v-model="investValue"
+        v-model="InviteValue"
         multiple
         filterable
         remote
@@ -25,7 +25,7 @@
         :loading="selectLoading"
       >
         <el-option
-          v-for="item in investOptions"
+          v-for="item in InviteOptions"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -33,7 +33,7 @@
       </el-select>
       <el-collapse-transition>
         <div
-          v-if="investValue.length > 0"
+          v-if="InviteValue.length > 0"
           style="margin-top:15px;
                    display: flex;
                    flex-direction:column;
@@ -54,11 +54,11 @@
 
           <el-button
             type="primary"
-            :loading="investLoading"
+            :loading="InviteLoading"
             size="small"
             style="margin-top: 20px;width: 10vw"
-            @click="investConfirm"
-          >{{ $t('users.Invest') }}</el-button>
+            @click="InviteConfirm"
+          >{{ $t('users.Invite') }}</el-button>
         </div>
       </el-collapse-transition>
     </div>
@@ -75,16 +75,16 @@ export default {
     setting: {
       type: Object,
       default: () => {
-        return { investDialogVisible: false }
+        return { InviteDialogVisible: false }
       }
     }
   },
   data() {
     return {
       selectLoading: false,
-      investLoading: false,
-      investOptions: [],
-      investValue: [],
+      InviteLoading: false,
+      InviteOptions: [],
+      InviteValue: [],
       rulesList: []
     }
   },
@@ -94,14 +94,14 @@ export default {
   methods: {
     remoteMethod(query) {
       if (query !== '') {
-        this.investOptions = []
+        this.InviteOptions = []
         this.selectLoading = true
         this.$axios
           .get(` /api/v1/users/users/?search=${query}&all=1`)
           .then(result => {
             console.log(result)
             for (let i = 0; i < result.length; i++) {
-              this.investOptions.push({
+              this.InviteOptions.push({
                 value: result[i].id,
                 label: result[i].name + '(' + result[i].username + ')'
               })
@@ -111,19 +111,19 @@ export default {
             this.selectLoading = false
           })
       } else {
-        this.investOptions = []
+        this.InviteOptions = []
       }
     },
     clearSelect() {
-      this.investValue = []
+      this.InviteValue = []
       this.rulesList = []
-      this.investOptions = []
+      this.InviteOptions = []
     },
-    investConfirm() {
-      this.investLoading = true
+    InviteConfirm() {
+      this.InviteLoading = true
       const data = []
       for (const rule of this.rulesList) {
-        for (const user of this.investValue) {
+        for (const user of this.InviteValue) {
           data.push({
             org: this.currentOrg.id,
             user: user,
@@ -134,7 +134,7 @@ export default {
       this.$axios.post(`/api/v1/orgs/org-memeber-relation/?org_id=${this.currentOrg.id}&ignore_already_exist=1`, data).then(() => {
         this.$message.success(this.$t('common.AddSuccessMsg'))
       }).finally(() => {
-        this.investLoading = false
+        this.InviteLoading = false
         this.clearSelect()
         this.$emit('close')
       })
