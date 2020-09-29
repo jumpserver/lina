@@ -1,11 +1,16 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage
+      ref="GenericListPage"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+    />
     <GenericUpdateFormDialog
       :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
     />
+    <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
   </div>
 </template>
 
@@ -15,9 +20,11 @@ import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
+import InviteUsersDialog from '@/views/users/User/components/InviteUsersDialog'
 
 export default {
   components: {
+    InviteUsersDialog,
     GenericListPage,
     GenericUpdateFormDialog
   },
@@ -27,7 +34,13 @@ export default {
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
-          'name', 'username', 'groups_display', 'total_role_display', 'source', 'is_valid', 'actions'
+          'name',
+          'username',
+          'groups_display',
+          'total_role_display',
+          'source',
+          'is_valid',
+          'actions'
         ],
         columnsMeta: {
           username: {
@@ -70,6 +83,17 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
+        extraActions: [
+          {
+            name: this.$t('users.InviteUser'),
+            title: this.$t('users.InviteUser'),
+            can:
+              (JSON.parse(this.$cookie.get('jms_current_org'))
+                ? JSON.parse(this.$cookie.get('jms_current_org')).id
+                : '') !== 'DEFAULT',
+            callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
+          }
+        ],
         extraMoreActions: [
           {
             title: this.$t('common.deleteSelected'),
@@ -135,9 +159,7 @@ export default {
           initial: {
             date_expired: getDayFuture(36500, new Date()).toISOString()
           },
-          fields: [
-            'groups', 'date_expired', 'comment'
-          ],
+          fields: ['groups', 'date_expired', 'comment'],
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
@@ -154,36 +176,36 @@ export default {
             date_expired: {
               label: this.$t('common.dateExpired'),
               hidden: () => false
-
             },
             comment: {
               label: this.$t('common.Comment'),
               hidden: () => false
-
             }
           }
         }
+      },
+      InviteDialogSetting: {
+        InviteDialogVisible: false
       }
     }
   },
   computed: {
-    ...mapGetters([
-      'currentOrg',
-      'currentUser',
-      'device'
-    ]),
+    ...mapGetters(['currentOrg', 'currentUser', 'device']),
     currentOrgIsDefault() {
       return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
     }
   },
   mounted() {
     if (!this.currentOrgIsDefault) {
-      this.headerActions.extraMoreActions[0].title = this.$t('common.removeSelected')
+      this.headerActions.extraMoreActions[0].title = this.$t(
+        'common.removeSelected'
+      )
     }
   },
   methods: {
     removeUserFromOrg({ row, col, reload }) {
-      const msg = this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
+      const msg =
+        this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
       const title = this.$t('common.Info')
       const performDelete = function() {
         const url = `/api/v1/users/users/${row.id}/`
@@ -214,7 +236,13 @@ export default {
       if (!this.currentOrgIsDefault) {
         msgPrefix = this.$t('common.removeWarningMsg')
       }
-      const msg = msgPrefix + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
+      const msg =
+        msgPrefix +
+        ' ' +
+        selectedRows.length +
+        ' ' +
+        this.$t('common.rows') +
+        ' ?'
       const title = this.$t('common.Info')
       const performDelete = this.performBulkDelete
       this.$alert(msg, title, {
@@ -248,17 +276,30 @@ export default {
       })
     },
     async performBulkDelete(selectedRows) {
-      const ids = selectedRows.map((v) => {
+      const ids = selectedRows.map(v => {
         return v.id
       })
       const data = await createSourceIdCache(ids)
       const url = `${this.tableConfig.url}?spm=` + data.spm
       return this.$axios.delete(url)
+    },
+    handleInviteDialogClose() {
+      this.InviteDialogSetting.InviteDialogVisible = false
+      this.$refs.GenericListPage.$refs.ListTable.reloadTable()
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.asset-select-dialog ::v-deep .transition-box:first-child {
+  background-color: #f3f3f3;
+}
+.dialog ::v-deep .el-input {
+  width: 25.5vw;
+}
 
+.dialog ::v-deep .el-dialog__footer {
+  padding: 0;
+}
 </style>
