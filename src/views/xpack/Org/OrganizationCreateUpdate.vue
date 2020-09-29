@@ -58,10 +58,16 @@ export default {
           // }
         },
         onPerformSuccess(res, method) {
-          const org = { id: res.id, name: res.name }
-          this.$store.dispatch('users/addAdminOrg', org)
-          this.$message.success(this.$t('xpack.Organization.CreateOrgMsg'))
-          return this.$router.push({ name: 'OrganizationList' })
+          switch (method) {
+            case 'post':
+              this.$store.dispatch('users/addAdminOrg', { id: res.id, name: res.name })
+              this.$message.success(this.$t('xpack.Organization.CreateOrgMsg'))
+              return this.$router.push({ name: 'OrganizationList' })
+            case 'put':
+              this.$store.dispatch('users/modifyOrg', { id: res.id, name: res.name })
+              this.$message.success(this.$t('common.updateSuccessMsg'))
+              return this.$router.push({ name: 'OrganizationList' })
+          }
         }
       }
     }
