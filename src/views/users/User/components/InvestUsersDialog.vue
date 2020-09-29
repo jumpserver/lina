@@ -131,8 +131,8 @@ export default {
           })
         }
       }
-      this.$axios.post('/api/v1/orgs/org-memeber-relation/', data).then(() => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+      this.$axios.post(`/api/v1/orgs/org-memeber-relation/?org_id=${this.currentOrg.id}&ignore_already_exist=1`, data).then(() => {
+        this.$message.success(this.$t('common.AddSuccessMsg'))
       }).finally(() => {
         this.investLoading = false
         this.clearSelect()
