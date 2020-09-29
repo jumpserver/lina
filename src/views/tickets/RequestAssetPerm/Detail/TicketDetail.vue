@@ -160,7 +160,7 @@ export default {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {
-          confirmed_system_user: this.requestForm.systemuser,
+          confirmed_system_users: this.requestForm.systemuser,
           confirmed_assets: this.requestForm.asset,
           actions: this.requestForm.actions
         }).then(res => {
