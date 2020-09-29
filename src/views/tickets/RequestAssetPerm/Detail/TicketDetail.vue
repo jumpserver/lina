@@ -50,7 +50,7 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         asset: this.object.confirmed_assets,
-        systemuser: this.object.confirmed_system_user,
+        systemuser: this.object.confirmed_system_users,
         actions: this.object.actions
       },
       comments: '',
@@ -67,7 +67,7 @@ export default {
       },
       systemuser_select2: {
         multiple: true,
-        value: this.object.confirmed_system_user,
+        value: this.object.confirmed_system_users,
         ajax: {
           url: this.object.system_user_waitlist_url,
           transformOption: (item) => {
