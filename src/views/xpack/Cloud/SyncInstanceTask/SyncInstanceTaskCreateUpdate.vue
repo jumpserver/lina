@@ -32,6 +32,7 @@ export default {
           on: {
             change: ([event], updateForm) => {
               vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event}`
+              updateForm({ regions: '' })
             }
           },
           el: {
