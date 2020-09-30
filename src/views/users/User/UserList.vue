@@ -50,7 +50,8 @@ export default {
             width: '120px'
           },
           total_role_display: {
-            label: this.$t('users.Role')
+            label: this.$t('users.Role'),
+            showOverflowTooltip: true
           },
           groups_display: {
             width: '200px',
