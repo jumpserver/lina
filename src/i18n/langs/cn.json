@@ -426,6 +426,7 @@
   },
   "route": {
     "": "",
+    "Ticket":"工单",
     "AdminUserCreate": "创建管理用户",
     "AdminUserDetail": "管理用户详情",
     "AdminUserList": "管理用户",

@@ -425,6 +425,7 @@
   },
   "route": {
     "": "",
+    "Ticket": "Tickets",
     "AdminUserCreate": "Admin user create",
     "AdminUserDetail": "Admin user detail",
     "AdminUserList": "Admin users",

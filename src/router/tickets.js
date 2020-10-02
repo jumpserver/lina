@@ -4,7 +4,8 @@ export default [
     path: 'tickets',
     name: 'TicketList',
     component: () => import('@/views/tickets/TicketList'),
-    meta: { title: i18n.t('route.Tickets'), icon: 'check-square-o', activeMenu: '/tickets/tickets' }
+    meta: { title: i18n.t('route.Tickets'), icon: 'check-square-o', activeMenu: '/tickets/tickets' },
+    hidden: true
   },
   {
     path: 'tickets/:id',
