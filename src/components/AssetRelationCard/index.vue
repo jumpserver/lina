@@ -3,7 +3,7 @@
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <AssetSelect ref="assetSelect" />
+          <AssetSelect ref="assetSelect" :can-select="canSelect" />
         </td>
       </tr>
       <tr>
@@ -49,6 +49,12 @@ export default {
     onAddSuccess: {
       type: Function,
       default: (objects, that) => {}
+    },
+    canSelect: {
+      type: Function,
+      default(row, index) {
+        return true
+      }
     }
   },
   data() {
