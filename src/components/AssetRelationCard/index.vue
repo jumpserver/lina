@@ -3,7 +3,7 @@
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <AssetSelect ref="assetSelect" :check-select="checkSelect" />
+          <AssetSelect ref="assetSelect" :can-select="canSelect" />
         </td>
       </tr>
       <tr>
@@ -50,7 +50,7 @@ export default {
       type: Function,
       default: (objects, that) => {}
     },
-    checkSelect: {
+    canSelect: {
       type: Function,
       default(row, index) {
         return true

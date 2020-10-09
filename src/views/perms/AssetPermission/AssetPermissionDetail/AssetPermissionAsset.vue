@@ -71,7 +71,7 @@ export default {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
         hasObjectsId: this.object.assets,
-        checkSelect: (row, index) => {
+        canSelect: (row, index) => {
           return this.object.assets.indexOf(row.id) === -1
         },
         performAdd: (items, that) => {

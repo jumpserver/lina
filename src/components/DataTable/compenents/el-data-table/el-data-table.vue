@@ -13,7 +13,7 @@
         :row-class-name="rowClassName"
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
-        @select-all="selectStrategy.onSelectAll($event, checkSelect)"
+        @select-all="selectStrategy.onSelectAll($event, canSelect)"
         @sort-change="onSortChange"
       >
         <!--TODO 不用jsx写, 感觉template逻辑有点不清晰了-->
@@ -90,7 +90,7 @@
 
         <!--非树-->
         <template v-else>
-          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign" :selectable="checkSelect" />
+          <el-data-table-column v-if="hasSelection" type="selection" :align="selectionAlign" :selectable="canSelect" />
           <el-data-table-column
             v-for="col in columns"
             :key="col.prop"
@@ -714,7 +714,7 @@ export default {
       type: Boolean,
       default: true
     },
-    checkSelect: {
+    canSelect: {
       type: Function,
       default(row, index) {
         return true
