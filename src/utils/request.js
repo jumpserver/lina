@@ -72,6 +72,9 @@ function ifBadRequest({ response, error }) {
   if (response.status === 400) {
     error.message = i18n.t('common.BadRequestErrorMsg')
   }
+  if (response.status === 403) {
+    error.message = i18n.t('common.BadRoleErrorMsg')
+  }
 }
 
 export function flashErrorMsg({ response, error }) {

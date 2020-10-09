@@ -34,12 +34,9 @@ export default {
           url: '/api/v1/assets/system-users/',
           processResults: (data) => {
             let results = data.results
-            const notUndefined = anyValue => typeof anyValue !== 'undefined'
-            results = results.map((item) => {
-              if (item.protocol === 'ssh' || item.protocol === 'telnet') {
-                return { label: `${item.name}(${item.username})`, value: item.id }
-              }
-            }).filter(notUndefined)
+            results = results.filter((item) => item.protocol === 'ssh' || item.protocol === 'telnet').map((item) => {
+              return { label: item.name + '(' + item.username + ')', value: item.id }
+            })
             const more = !!data.next
             return { results: results, pagination: more, total: data.count }
           }

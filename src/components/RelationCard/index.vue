@@ -6,6 +6,7 @@
           <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
         </td>
       </tr>
+      <slot />
       <tr>
         <td colspan="2">
           <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $t('common.Add') }}</el-button>

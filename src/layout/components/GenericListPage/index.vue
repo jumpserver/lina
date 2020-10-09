@@ -1,6 +1,6 @@
 <template>
   <Page v-bind="$attrs">
-    <ListTable v-bind="$attrs" />
+    <ListTable ref="ListTable" v-bind="$attrs" />
   </Page>
 </template>
 

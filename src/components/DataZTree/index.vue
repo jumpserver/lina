@@ -37,8 +37,8 @@ export default {
           showRemoveBtn: false,
           showRenameBtn: false,
           drag: {
-            isCopy: true,
-            isMove: true
+            isCopy: false,
+            isMove: false
           }
         },
         callback: {

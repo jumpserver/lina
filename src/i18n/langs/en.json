@@ -169,6 +169,7 @@
     "AddSuccessMsg": "Add success",
     "Auth": "Authorization",
     "BadRequestErrorMsg": "Bad request, please check again",
+    "BadRoleErrorMsg": "Bad request, no permission for this operation",
     "Basic": "Basic",
     "BasicInfo": "Basic info",
     "Cancel": "Cancel",
@@ -424,6 +425,7 @@
   },
   "route": {
     "": "",
+    "Ticket": "Tickets",
     "AdminUserCreate": "Admin user create",
     "AdminUserDetail": "Admin user detail",
     "AdminUserList": "Admin users",
@@ -720,7 +722,10 @@
     "userGuideUrl": "User Guide URL",
     "username": "Username",
     "usernamePlaceholder": "Please input username",
-    "refreshLdapCache":"Refreshing Ldap cache "
+    "refreshLdapCache":"Refreshing Ldap cache ",
+    "LicenseExpired": "License expired",
+    "LicenseWillBe": "License will expire at ",
+    "Expire": ""
   },
   "settings": {
     "setting": "Setting"
@@ -754,7 +759,11 @@
     "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
-    "Closed": "Closed"
+    "Closed": "Closed",
+    "helpText": {
+      "ips": "Enter the IP address group, separated by commas",
+      "fuzzySearch": "Support for fuzzy search"
+    }
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",
@@ -783,10 +792,14 @@
     "Email": "Email",
     "FingerPrint": "Fingerprint",
     "FirstLogin": "First login",
+    "InviteUser": "Invite user",
+    "InviteUserInOrg": "Invite user in this org",
+    "Invite": "Invite",
     "Guide": "Guide",
     "OrgUser": "Org User",
     "OrgAdmin": "Org Admin",
     "OrgAuditor": "Org Auditor",
+
     "HelpText": {
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "Enable multi-factor authentication to make the account more secure <br/> After is enabled, you will enter the multi-factor authentication binding process on your next login <br/> You can also bind directly in (personal information -> fast modifier -> modifier multiple factor Settings)",
       "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
@@ -969,7 +982,8 @@
       "DeleteOrgTitle":"Please ensure that the following information in the organization has been deleted",
       "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission",
       "OrgRole": "Org role",
-      "CreateOrgMsg": "Please go to Organization Details to add users"
+      "CreateOrgMsg": "Please go to Organization Details to add users",
+      "AddOrgMembers": "Add organization members"
     },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",
@@ -986,9 +1000,9 @@
     "loginImageTip": "Tips: This will be displayed on the enterprise user login page. (suggest image size: 492px*472px)",
     "loginTitle": "Title of login page",
     "loginTitleTip": "Tips: This will be displayed on the enterprise user login page. (eg: Welcome to the JumpServer open source fortress)",
-    "logoIndex": "Logo of management page",
+    "logoIndex": "Logo (It contains text)",
     "logoIndexTip": "Tips: This will appear at the top left of the administration page. (suggest image size: 185px*55px)",
-    "logoLogout": "Logo of logout page",
+    "logoLogout": "Logo (It contains no text)",
     "logoLogoutTip": "Tips: This will be displayed on the enterprise user logout page. (suggest image size: 82px*82px)",
     "restoreDialogMessage": "This will restore default Settings of the interface !!!",
     "restoreDialogTitle": "Are you sure?",

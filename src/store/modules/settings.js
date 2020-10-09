@@ -35,6 +35,10 @@ const actions = {
         link.rel = 'shortcut icon'
         link.href = response.data.LOGO_URLS.favicon
         document.getElementsByTagName('head')[0].appendChild(link)
+
+        // 动态修改Title
+        if (response.data.LOGIN_TITLE) { document.title = response.data.LOGIN_TITLE }
+
         commit('SET_PUBLIC_SETTINGS', response.data)
         resolve(response)
       }).catch(error => {

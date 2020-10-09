@@ -110,7 +110,7 @@ export default {
   methods: {
     dialogConfirm() {
       this.buttonLoading = true
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: this.portInput }).then(
+      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: parseInt(this.portInput) }).then(
         res => {
           return this.$message.success(this.$t('common.TestSuccessMsg'))
         }

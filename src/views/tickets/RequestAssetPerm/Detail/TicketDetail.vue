@@ -50,7 +50,7 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         asset: this.object.confirmed_assets,
-        systemuser: '',
+        systemuser: this.object.confirmed_system_users,
         actions: this.object.actions
       },
       comments: '',
@@ -66,9 +66,10 @@ export default {
         }
       },
       systemuser_select2: {
-        multiple: false,
+        multiple: true,
+        value: this.object.confirmed_system_users,
         ajax: {
-          url: this.object.system_user_waitlist_url,
+          url: this.object.system_users_waitlist_url,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
@@ -127,6 +128,10 @@ export default {
           value: this.object.hostname
         },
         {
+          key: this.$t('tickets.SystemUser'),
+          value: this.object.system_user
+        },
+        {
           key: this.$t('common.dateStart'),
           value: toSafeLocalDateStr(this.object.date_start)
         },
@@ -155,7 +160,7 @@ export default {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {
-          confirmed_system_user: this.requestForm.systemuser,
+          confirmed_system_users: this.requestForm.systemuser,
           confirmed_assets: this.requestForm.asset,
           actions: this.requestForm.actions
         }).then(res => {
