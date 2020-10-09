@@ -10,6 +10,9 @@
       <div class="header-item">
         <Language />
       </div>
+      <div v-if="publicSettings.TICKETS_ENABLED&&publicSettings.XPACK_LICENSE_IS_VALID" class="header-item">
+        <Tickets />
+      </div>
       <div class="header-item">
         <WebTerminal />
       </div>
@@ -27,6 +30,7 @@ import AccountDropdown from './AccountDropdown'
 import Help from './Help'
 import Language from './Language'
 import WebTerminal from './WebTerminal'
+import Tickets from './Tickets'
 
 export default {
   components: {
@@ -35,6 +39,7 @@ export default {
     AccountDropdown,
     Language,
     Help,
+    Tickets,
     WebTerminal
   },
   data() {
@@ -43,7 +48,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar'
+      'sidebar', 'publicSettings'
     ])
   },
   methods: {
