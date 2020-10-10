@@ -108,6 +108,7 @@ export default {
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
+          window.location.reload()
         }
       }
     }
