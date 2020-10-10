@@ -4,9 +4,11 @@
       <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="adminRelationConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="auditorRelationConfig" />
-      <RelationCard type="warning" style="margin-top: 15px" v-bind="userRelationConfig" />
+      <RelationCard type="primary" v-bind="memberRelationConfig">
+        <el-radio-group v-model="defaultOrgRole" style="padding: 8px">
+          <el-radio v-for="item in group" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
+        </el-radio-group>
+      </RelationCard>
     </el-col>
   </el-row>
 </template>
@@ -30,6 +32,19 @@ export default {
   },
   data() {
     return {
+      defaultOrgRole: 'User',
+      group: [
+        {
+          label: this.$t('users.OrgAdmin'),
+          value: 'Admin'
+        }, {
+          label: this.$t('users.OrgAuditor'),
+          value: 'Auditor'
+        }, {
+          label: this.$t('users.OrgUser'),
+          value: 'User'
+        }
+      ],
       tableConfig: {
         url: `/api/v1/orgs/org-memeber-relation/?org_id=${this.object.id}`,
         columns: [
@@ -68,79 +83,9 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false
       },
-      adminRelationConfig: {
+      memberRelationConfig: {
         icon: 'fa-user',
-        title: this.$t('xpack.Admin'),
-        objectsAjax: {
-          url: '/api/v1/users/users/?fields_size=mini&order=name&all=1',
-          transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
-          }
-        },
-        hasObjectsId: this.object.admins,
-        showHasObjects: false,
-        performAdd: (items) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const objectRelationAdmin = this.object.admins
-          items.map(v => objectRelationAdmin.push(v.value))
-          const data = { admins: objectRelationAdmin }
-          return this.$axios.patch(relationUrl, data)
-        },
-        performDelete: (item) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const objectOldRelationAdmin = this.object.admins
-          const objectNewRelationAdmin = objectOldRelationAdmin.filter(v => v !== item.value)
-          const data = { admins: objectNewRelationAdmin }
-          return this.$axios.patch(relationUrl, data)
-        },
-        onAddSuccess: (objects, that) => {
-          this.$log.debug('Select value', that.select2.value)
-          that.iHasObjects = [...that.iHasObjects, ...objects]
-          that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
-        }
-      },
-      auditorRelationConfig: {
-        icon: 'fa-user',
-        title: this.$t('xpack.Auditor'),
-        objectsAjax: {
-          url: '/api/v1/users/users/?fields_size=mini&order=name&all=1',
-          transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
-          }
-        },
-        hasObjectsId: this.object.auditors,
-        showHasObjects: false,
-        performAdd: (items) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const objectRelationAuditors = this.object.auditors
-          items.map(v => objectRelationAuditors.push(v.value))
-          const data = { auditors: objectRelationAuditors }
-          return this.$axios.patch(relationUrl, data)
-        },
-        performDelete: (item) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const objectOldRelationAuditors = this.object.auditors
-          const objectNewRelationAuditors = objectOldRelationAuditors.filter(v => v !== item.value)
-          const data = { auditors: objectNewRelationAuditors }
-          return this.$axios.patch(relationUrl, data)
-        },
-        onAddSuccess: (objects, that) => {
-          this.$log.debug('Select value', that.select2.value)
-          that.iHasObjects = [...that.iHasObjects, ...objects]
-          that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
-        }
-      },
-      userRelationConfig: {
-        icon: 'fa-user',
-        title: this.$t('xpack.User'),
+        title: this.$t('xpack.Organization.AddOrgMembers'),
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name&all=1',
           transformOption: (item) => {
@@ -150,12 +95,12 @@ export default {
         hasObjectsId: this.object.users,
         showHasObjects: false,
         performAdd: (items) => {
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/orgs/orgs/${objectId}/`
-          const objectRelationUsers = this.object.users
-          items.map(v => objectRelationUsers.push(v.value))
-          const data = { users: objectRelationUsers }
-          return this.$axios.patch(relationUrl, data)
+          const relationUrl = `/api/v1/orgs/org-memeber-relation/`
+          const data = []
+          for (const user of items) {
+            data.push({ org: this.object.id, user: user.value, role: this.defaultOrgRole })
+          }
+          return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)
@@ -164,6 +109,19 @@ export default {
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
+      }
+    }
+  },
+  watch: {
+    defaultOrgRole(value) {
+      if (value === 'Admin') {
+        this.$set(this.memberRelationConfig, 'hasObjectsId', this.object.admins)
+      }
+      if (value === 'Auditor') {
+        this.$set(this.memberRelationConfig, 'hasObjectsId', this.object.auditors)
+      }
+      if (value === 'User') {
+        this.$set(this.memberRelationConfig, 'hasObjectsId', this.object.users)
       }
     }
   }
