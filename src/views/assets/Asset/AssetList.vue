@@ -282,7 +282,8 @@ export default {
         formSetting: {
           url: '/api/v1/assets/assets/',
           initial: {
-            platform: 'Linux'
+            platform: 'Linux',
+            protocols: ['ssh/22']
           },
           fields: [
             'platform', 'protocols', 'domain', 'admin_user', 'labels', 'comment'
