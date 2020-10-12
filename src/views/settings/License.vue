@@ -1,8 +1,5 @@
 <template>
   <div v-if="!loading">
-    <el-alert v-if="isExpire" type="error">
-      {{ isExpire }}
-    </el-alert>
     <el-alert v-if="!isValidateLicense" type="success">
       {{ this.$t('setting.ImportLicenseTip') }}
     </el-alert>
@@ -33,7 +30,6 @@ import { QuickActions, Dialog } from '@/components'
 import DetailCard from '@/components/DetailCard/index'
 import { importLicense } from '@/api/settings'
 import { mapGetters } from 'vuex'
-import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'License',
@@ -88,16 +84,6 @@ export default {
         return this.publicSettings.XPACK_LICENSE_IS_VALID
       }
       return true
-    },
-    isExpire() {
-      const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
-      if (intervalDays < 0) {
-        return this.$t('setting.LicenseExpired')
-      }
-      if (intervalDays < 7) {
-        return this.$t('setting.LicenseWillBe') + this.licenseData.date_expired + this.$t('setting.Expire')
-      }
-      return false
     },
     cardTitle() {
       return ''
@@ -172,12 +158,6 @@ export default {
     },
     fileChange(e) {
       this.licenseFile['file'] = e.target.files[0]
-    },
-    getIntervalDays(date) {
-      const dateExpired = new Date(toSafeLocalDateStr(date))
-      const dateNow = new Date()
-      const intervalTime = dateExpired.getTime() - dateNow.getTime()
-      return Math.floor(intervalTime / (24 * 3600 * 1000))
     }
   }
 }
