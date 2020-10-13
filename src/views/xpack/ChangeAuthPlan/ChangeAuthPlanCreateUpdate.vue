@@ -102,6 +102,9 @@ export default {
       } else {
         delete data['password']
       }
+      if (data['interval'] === '') {
+        delete data['interval']
+      }
       return data
     },
     generatePasswordRulesItemsFields() {
