@@ -93,7 +93,7 @@ export default {
 
 <style lang='less' scoped>
   .datepicker{
-    width: 240px;
+    width: 233px;
   }
   .el-input__inner{
     border: 1px solid #dcdee2;
