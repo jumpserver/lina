@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
+import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
@@ -16,7 +16,7 @@ export default {
     const vm = this
     const now = new Date()
     const dateFrom = getDaysAgo(2, now).toISOString()
-    const dateTo = now.toISOString()
+    const dateTo = getDayEnd(now).toISOString()
     return {
       tableConfig: {
         url: '/api/v1/terminal/commands/',

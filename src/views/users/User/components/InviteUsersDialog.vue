@@ -97,7 +97,7 @@ export default {
         this.InviteOptions = []
         this.selectLoading = true
         this.$axios
-          .get(` /api/v1/users/users/?search=${query}&all=1`)
+          .get(` /api/v1/users/users/suggestion/?search=${query}`)
           .then(result => {
             console.log(result)
             for (let i = 0; i < result.length; i++) {

@@ -39,7 +39,8 @@ export default {
       iZTreeID: `zTree_${this._uid}`,
       iRMenuID: `rMenu_${this._uid}`,
       zTree: '',
-      rMenu: ''
+      rMenu: '',
+      init: false
     }
   },
   computed: {
@@ -56,7 +57,14 @@ export default {
   },
   methods: {
     initTree: function() {
-      this.$axios.get(this.treeSetting.treeUrl).then(res => {
+      let treeUrl
+      if (this.init && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 && this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1) {
+        treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1) ? `${this.treeSetting.treeUrl}?rebuild_tree=1` : `${this.treeSetting.treeUrl}&rebuild_tree=1`
+      } else {
+        treeUrl = this.treeSetting.treeUrl
+        this.init = true
+      }
+      this.$axios.get(treeUrl).then(res => {
         if (!res) {
           res = []
         }
@@ -65,6 +73,7 @@ export default {
             name: this.$t('common.tree.Empty')
           })
         }
+        this.treeSetting.treeUrl = treeUrl
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(

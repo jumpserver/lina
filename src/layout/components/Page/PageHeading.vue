@@ -1,22 +1,31 @@
 <template>
-  <div class="page-heading">
-    <el-row :gutter="0">
-      <el-col :span="16" class="page-heading-left">
-        <slot><h2>{{ title }}</h2></slot>
-      </el-col>
-      <el-col :span="8">
-        <div class="page-heading-right">
-          <slot name="rightSide" />
-        </div>
-      </el-col>
-    </el-row>
+  <div>
+    <slot name="globalNotification">
+      <LicenseExpireTip />
+    </slot>
+    <div class="page-heading">
+      <el-row :gutter="0">
+        <el-col :span="16" class="page-heading-left">
+          <slot><h2>{{ title }}</h2></slot>
+        </el-col>
+        <el-col :span="8">
+          <div class="page-heading-right">
+            <slot name="rightSide" />
+          </div>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 <!--    <Breadcrumb />-->
 </template>
 
 <script>
+import LicenseExpireTip from '@/layout/components/Page/LicenseExpireTip'
 export default {
   name: 'PageHeading',
+  components: {
+    LicenseExpireTip
+  },
   props: {
     title: {
       type: String,

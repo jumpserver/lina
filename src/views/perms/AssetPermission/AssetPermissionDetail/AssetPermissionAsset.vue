@@ -70,6 +70,10 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addAssetToThisPermission'),
+        hasObjectsId: this.object.assets,
+        canSelect: (row, index) => {
+          return this.object.assets.indexOf(row.id) === -1
+        },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/perms/asset-permissions-assets-relations/`
           const objectId = this.object.id
@@ -86,6 +90,7 @@ export default {
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           that.$refs.assetSelect.$refs.select2.clearSelected()
+          window.location.reload()
         }
       },
       nodeRelationConfig: {
