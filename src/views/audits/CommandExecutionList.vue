@@ -9,7 +9,7 @@
 
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysAgo } from '@/utils/common'
+import { getDayEnd, getDaysAgo } from '@/utils/common'
 import { Dialog, ListTable } from '@/components'
 import { DisplayFormatter } from '@/components/ListTable/formatters'
 import { setUrlParam } from '@/utils/common'
@@ -21,7 +21,7 @@ export default {
   data() {
     const now = new Date()
     const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = now.toISOString()
+    const dateTo = getDayEnd(now).toISOString()
     const vm = this
     return {
       tableConfig: {
