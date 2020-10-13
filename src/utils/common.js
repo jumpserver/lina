@@ -145,6 +145,13 @@ export function getDaysFuture(days, now) {
   return new Date(now.getTime() + 3600 * 1000 * 24 * days)
 }
 
+export function getDayEnd(now) {
+  if (!now) {
+    now = new Date()
+  }
+  return new Date(new Date(now.toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1)
+}
+
 export function setUrlParam(url, name, value) {
   const urlArray = url.split('?')
   if (urlArray.length === 1) {

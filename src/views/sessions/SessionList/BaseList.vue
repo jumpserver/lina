@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { timeOffset, getDaysAgo } from '@/utils/common'
+import { timeOffset, getDaysAgo, getDayEnd } from '@/utils/common'
 import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'BaseList',
@@ -24,7 +24,7 @@ export default {
   data() {
     const now = new Date()
     const dateFrom = getDaysAgo(2, now).toISOString()
-    const dateTo = now.toISOString()
+    const dateTo = getDayEnd(now).toISOString()
     return {
       tableConfig: {
         url: this.url,
