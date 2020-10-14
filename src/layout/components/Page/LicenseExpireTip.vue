@@ -20,9 +20,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'publicSettings'
+      'publicSettings',
+      'currentUser'
     ]),
     isExpire() {
+      if (this.currentUser.role !== 'Admin') {
+        return false
+      }
       const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
       if (intervalDays < 0) {
         return this.$t('setting.LicenseExpired')
@@ -34,7 +38,7 @@ export default {
     }
   },
   mounted() {
-    if (this.publicSettings.XPACK_ENABLED) {
+    if (this.publicSettings.XPACK_ENABLED && this.currentUser.role === 'Admin') {
       this.$axios.get('/api/v1/xpack/license/detail').then(res => {
         this.licenseData = res
       }).finally(() => {
