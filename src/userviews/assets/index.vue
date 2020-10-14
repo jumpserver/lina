@@ -107,6 +107,9 @@ export default {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
+                  can: (row, cellValue) => {
+                    return row.is_active
+                  },
                   callback: function({ row, col, cellValue, reload }) {
                     window.open(`/luna/?login_to=${cellValue}`, '_blank')
                   }
