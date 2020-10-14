@@ -88,7 +88,7 @@ export default {
           {
             name: this.$t('users.InviteUser'),
             title: this.$t('users.InviteUser'),
-            can:
+            has:
               (JSON.parse(this.$cookie.get('jms_current_org'))
                 ? JSON.parse(this.$cookie.get('jms_current_org')).id
                 : '') !== 'DEFAULT',

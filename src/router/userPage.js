@@ -72,6 +72,7 @@ export default [
   {
     path: '/tickets',
     component: Layout,
+    hidden: true,
     meta: {
       title: i18n.t('route.Tickets'),
       icon: 'history',

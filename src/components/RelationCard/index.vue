@@ -22,7 +22,7 @@
           </td>
         </tr>
       </template>
-      <tr v-if="params.hasMore" class="item">
+      <tr v-if="params.hasMore && showHasMore" class="item">
         <td colspan="2">
           <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
@@ -82,6 +82,10 @@ export default {
     value: {
       type: [Array, Number, String],
       default: () => []
+    },
+    showHasMore: {
+      type: Boolean,
+      default: true
     },
     performDelete: {
       type: Function,
