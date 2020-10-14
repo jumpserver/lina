@@ -125,13 +125,12 @@ export default {
       for (const rule of this.rulesList) {
         for (const user of this.InviteValue) {
           data.push({
-            org: this.currentOrg.id,
             user: user,
             role: rule
           })
         }
       }
-      this.$axios.post(`/api/v1/orgs/org-memeber-relation/?org_id=${this.currentOrg.id}&ignore_already_exist=1`, data).then(() => {
+      this.$axios.post(`/api/v1/users/users/invite/`, data).then(() => {
         this.$message.success(this.$t('common.AddSuccessMsg'))
       }).finally(() => {
         this.InviteLoading = false
