@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--    <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>-->
-    <el-badge v-if="getBadgeValue() !== 0" :value="getBadgeValue()" size="mini" type="primary">
+    <el-badge :value="getBadgeValue()" size="mini" type="primary">
       <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>
     </el-badge>
   </div>
