@@ -86,6 +86,7 @@ export default {
       memberRelationConfig: {
         icon: 'fa-user',
         title: this.$t('xpack.Organization.AddOrgMembers'),
+        showHasMore: false,
         objectsAjax: {
           url: '/api/v1/users/users/?fields_size=mini&order=name&all=1',
           transformOption: (item) => {
