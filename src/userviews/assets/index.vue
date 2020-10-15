@@ -60,6 +60,10 @@ export default {
                     value: row.platform
                   },
                   {
+                    key: this.$t('common.Activate'),
+                    value: row.is_active
+                  },
+                  {
                     key: this.$t('assets.Comment'),
                     value: row.comment
                   }
@@ -130,7 +134,12 @@ export default {
               ]
             }
           }
-        ]
+        ],
+        tableAttrs: {
+          rowClassName({ row }) {
+            return !row.is_active ? 'row_disabled' : ''
+          }
+        }
       },
       headerActions: {
         hasExport: false,
@@ -183,5 +192,9 @@ export default {
 <style>
   .el-card {
     border: 0 !important;
+  }
+  .row_disabled,.row_disabled:hover,.row_disabled:hover > td{
+    cursor: not-allowed;
+    background-color:rgba(192,196,204,0.28) !important;
   }
 </style>
