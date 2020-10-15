@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--    <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>-->
-    <el-badge :value="getBadgeValue()" :hidden="getBadgeValue()===0" size="mini" type="primary">
+    <el-badge :value="assignedTicketCount" :hidden="assignedTicketCount===0" size="mini" type="primary">
       <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>
     </el-badge>
   </div>
@@ -12,19 +12,17 @@ import { getTicketOpenCount } from '@/api/ticket'
 
 export default {
   name: 'WebTerminal',
-  data: function() {
+  data() {
     return {
       assignedTicketCount: 0
     }
   },
   created() {
-    this.getTicketsOpenCount()
+    this.ticketsOpenedCount()
   },
   methods: {
-    getBadgeValue() {
-      return this.assignedTicketCount
-    },
-    getTicketsOpenCount() {
+
+    ticketsOpenedCount() {
       getTicketOpenCount(1).then(data => {
         this.assignedTicketCount = data.count
       })
