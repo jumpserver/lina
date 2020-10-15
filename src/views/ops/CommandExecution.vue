@@ -93,10 +93,10 @@ export default {
         },
         callback: {
           onCheck: this.onCheck.bind(this),
-          onClick: this.onClick.bind(this)
+          onClick: this.onClick.bind(this),
+          onSelected: this.onSelected.bind(this)
         },
         async: {
-
           enable: false
         }
       },
@@ -147,6 +147,9 @@ export default {
       //     // Don't Support SSH
       //   }
       // }
+    },
+    onSelected(event, treeNode) {
+
     },
     handleSystemUserChange(id) {
       this.treeSetting.treeUrl = `${this.basicUrl}&system_user=${id}`
