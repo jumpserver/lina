@@ -855,7 +855,9 @@
     "tabs": {
       "assetPermissionRules": "Asset permission rules",
       "databasePermissionRules": "Database Permission rules",
+      "k8sPermissionRules": "Kubernetes Permission rules",
       "grantedAssets": "Granted assets",
+      "grantedK8Ss":"Granted K8Ss",
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",
       "remoteAppPermissionRules": "Remote app permission rules"

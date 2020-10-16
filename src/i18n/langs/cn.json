@@ -857,7 +857,9 @@
     "tabs": {
       "assetPermissionRules": "资产授权规则",
       "databasePermissionRules": "数据库授权规则",
+      "k8sPermissionRules": "Kubernetes授权规则",
       "grantedAssets": "授权的资产",
+      "grantedK8Ss": "授权的Kubernetes",
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
       "remoteAppPermissionRules": "远程应用授权规则"

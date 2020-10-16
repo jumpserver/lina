@@ -13,6 +13,8 @@ import UserGrantedAssets from './UserGrantedAssets'
 import UserGrantedRemoteApps from './UserGrantedRemoteApps'
 import UserRemoteAppPermissionRules from './UserRemoteAppPermissionRules'
 import UserGrantedDatabases from './UserGrantedDatabases'
+import UserGrantedK8Ss from './UserGrantedK8Ss'
+import UserK8SPermissionRules from './UserK8SPermissionRules'
 import UserDatabasePermissionRules from './UserDatabasePermissionRules'
 import UserInfo from './UserInfo'
 
@@ -25,7 +27,9 @@ export default {
     UserGrantedRemoteApps,
     UserRemoteAppPermissionRules,
     UserGrantedDatabases,
-    UserDatabasePermissionRules
+    UserDatabasePermissionRules,
+    UserK8SPermissionRules,
+    UserGrantedK8Ss
   },
   data() {
     const vm = this
@@ -65,6 +69,14 @@ export default {
           {
             title: this.$t('users.tabs.databasePermissionRules'),
             name: 'UserDatabasePermissionRules'
+          },
+          {
+            title: this.$t('users.tabs.grantedK8Ss'),
+            name: 'UserGrantedK8Ss'
+          },
+          {
+            title: this.$t('users.tabs.k8sPermissionRules'),
+            name: 'UserK8SPermissionRules'
           }
         ]
       }
