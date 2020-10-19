@@ -14,11 +14,14 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/k8s-apps/',
         columns: [
-          'name', 'cluster', 'comment', 'actions'
+          'name', 'type', 'cluster', 'comment', 'actions'
         ],
         columnsMeta: {
           comment: {
             width: '340px'
+          },
+          type: {
+            width: '140px'
           }
         }
       },

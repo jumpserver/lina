@@ -25,6 +25,12 @@ export default {
             formatterArgs: {
               route: 'KubernetesAppDetail'
             }
+          },
+          comment: {
+            width: '340px'
+          },
+          type: {
+            width: '140px'
           }
         }
       },
