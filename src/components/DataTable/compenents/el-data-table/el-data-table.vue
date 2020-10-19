@@ -422,7 +422,7 @@ export default {
     onEdit: {
       type: Function,
       default(row) {
-        console.log('On delete row')
+        // console.log('On delete row')
       }
     },
     /**

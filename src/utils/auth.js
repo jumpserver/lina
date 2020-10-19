@@ -17,7 +17,7 @@ export function getCurrentRoleFromCookie() {
 }
 
 export function saveCurrentRoleToCookie(role) {
-  console.log('Save current role to cookie: ', role)
+  // console.log('Save current role to cookie: ', role)
   return VueCookie.set(CURRENT_ROLE_KEY, role, 14)
 }
 
@@ -26,7 +26,7 @@ export function getCurrentOrgFromCookie() {
   try {
     org = JSON.parse(VueCookie.get(CURRENT_ORG_KEY))
   } catch (e) {
-    console.log('Current org in cookie: ', org)
+    // console.log('Current org in cookie: ', org)
   }
   return org
 }

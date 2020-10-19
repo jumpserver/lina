@@ -43,7 +43,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.col)
+    // console.log(this.col)
   },
   methods: {
     checkBool(item, attr, defaults) {

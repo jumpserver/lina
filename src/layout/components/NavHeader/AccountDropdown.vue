@@ -82,7 +82,7 @@ export default {
         case 'userPage':
           if (this.currentOrgUsePagePerm) {
             this.$store.dispatch('users/setCurrentRole', rolec.USER)
-            console.log('Switch to: ', rolec.USER)
+            // console.log('Switch to: ', rolec.USER)
             window.location.href = `/ui/`
           }
           break
