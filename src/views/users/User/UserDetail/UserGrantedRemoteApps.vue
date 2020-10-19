@@ -26,6 +26,10 @@ export default {
               route: 'RemoteAppDetail'
             }
           },
+          type: {
+            displayKey: 'get_type_display',
+            width: '140px'
+          },
           asset: {
             formatter(row) {
               return row.asset_info.hostname

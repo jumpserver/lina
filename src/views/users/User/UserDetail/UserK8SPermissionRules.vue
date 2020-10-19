@@ -28,16 +28,20 @@ export default {
             }
           },
           users_amount: {
-            label: this.$t('users.Users')
+            label: this.$t('users.Users'),
+            width: '110px'
           },
           user_groups_amount: {
-            label: this.$t('users.UserGroups')
+            label: this.$t('users.UserGroups'),
+            width: '110px'
           },
           k8s_apps_amount: {
-            label: this.$t('perms.KubernetesApp')
+            label: this.$t('perms.KubernetesApp'),
+            width: '110px'
           },
           system_users_amount: {
-            label: this.$t('assets.SystemUsers')
+            label: this.$t('assets.SystemUsers'),
+            width: '110px'
           },
           actions: {
             formatterArgs: {
