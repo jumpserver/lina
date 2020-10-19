@@ -121,7 +121,7 @@ export default {
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
           const objectOldRelationSystemUsers = this.object.system_users
-          console.log(1, objectOldRelationSystemUsers, item)
+          // console.log(1, objectOldRelationSystemUsers, item)
           const objectNewRelationSystemUsers = objectOldRelationSystemUsers.filter(v => v !== item.value)
           const data = { system_users: objectNewRelationSystemUsers }
           return this.$axios.patch(relationUrl, data)

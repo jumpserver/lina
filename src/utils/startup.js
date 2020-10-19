@@ -57,7 +57,7 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
   }
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
-    console.log('Not has current org')
+    // console.log('Not has current org')
     orgUtil.change2PropOrg()
     return reject('change prop org')
   }

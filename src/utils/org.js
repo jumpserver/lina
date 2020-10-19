@@ -47,7 +47,7 @@ async function changeOrg(orgId) {
   await store.dispatch('users/setCurrentRole', null)
 
   store.dispatch('users/setCurrentOrg', org).then(() => {
-    console.log('Set current org to: ', org)
+    // console.log('Set current org to: ', org)
     if (hasUUID(location.href)) {
       location.href = BASE_URL
     } else {

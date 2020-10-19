@@ -38,7 +38,7 @@ const mutations = {
     state.orgs = orgs
   },
   MODIFY_ORG: (state, org) => {
-    console.log(state.orgs)
+    // console.log(state.orgs)
     state.orgs = state.orgs.map(oldOrg => {
       if (oldOrg.id === org.id) {
         oldOrg.name = org.name
@@ -99,7 +99,7 @@ const actions = {
         commit('SET_PROFILE', response)
         resolve(response)
       }).catch(error => {
-        console.log(error)
+        // console.log(error)
         reject(error)
       })
     })
