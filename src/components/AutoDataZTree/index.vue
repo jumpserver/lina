@@ -139,8 +139,6 @@ export default {
         treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },
     onBodyMouseDown: function(event) {
