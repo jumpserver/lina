@@ -30,7 +30,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
-        [this.$t('common.Auth'), ['auto_generate_key', 'password', 'private_key', 'token']],
+        [this.$t('common.Auth'), ['auto_generate_key', 'update_password', 'password', 'private_key', 'token']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['sftp_root', 'comment']]
       ],
@@ -175,16 +175,26 @@ export default {
           helpText: this.$t('assets.SudoHelpMessage'),
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
         },
+        update_password: {
+          label: this.$t('users.UpdatePassword'),
+          type: 'checkbox',
+          hidden: (formValue) => {
+            if (formValue.update_password) {
+              return true
+            }
+            return !this.$route.params.id
+          }
+        },
         password: {
           helpText: this.$t('assets.PasswordHelpMessage'),
           hidden: form => {
-            if (form.login_mode !== 'auto') {
+            if (form.login_mode !== 'auto' || form.protocol === 'k8s' || form.auto_generate_key) {
               return true
             }
-            if (form.protocol === 'k8s') {
-              return true
+            if (!this.$route.params.id) {
+              return false
             }
-            return form.auto_generate_key === true
+            return !form.update_password
           }
         },
         shell: {
