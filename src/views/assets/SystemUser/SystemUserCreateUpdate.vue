@@ -179,7 +179,7 @@ export default {
           label: this.$t('users.UpdatePassword'),
           type: 'checkbox',
           hidden: (formValue) => {
-            if (formValue.update_password) {
+            if (formValue.update_password || formValue.protocol === 'k8s') {
               return true
             }
             return !this.$route.params.id
