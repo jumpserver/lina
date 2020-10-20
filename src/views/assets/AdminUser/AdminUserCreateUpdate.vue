@@ -17,7 +17,8 @@ export default {
 
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'username', 'password', 'private_key', 'comment']]
+        [this.$t('common.Basic'), ['name', 'username', 'update_password', 'password', 'private_key']],
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         name: {
@@ -30,8 +31,24 @@ export default {
             placeholder: this.$t('common.Username')
           }
         },
+        update_password: {
+          label: this.$t('users.UpdatePassword'),
+          type: 'checkbox',
+          hidden: (formValue) => {
+            if (formValue.update_password) {
+              return true
+            }
+            return !this.$route.params.id
+          }
+        },
         password: {
-          helpText: this.$t('common.passwordOrPassphrase')
+          helpText: this.$t('common.passwordOrPassphrase'),
+          hidden: (formValue) => {
+            if (!this.$route.params.id) {
+              return false
+            }
+            return !formValue.update_password
+          }
         },
         private_key: {
           component: Uploadkey
