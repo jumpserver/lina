@@ -25,7 +25,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
-        [this.$t('assets.Auth'), ['username', 'password', 'private_key']],
+        [this.$t('assets.Auth'), ['username', 'update_password', 'password', 'private_key']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
@@ -48,8 +48,24 @@ export default {
         protocol: {
           helpText: this.$t('assets.GatewayProtocolHelpText')
         },
+        update_password: {
+          label: this.$t('users.UpdatePassword'),
+          type: 'checkbox',
+          hidden: (formValue) => {
+            if (formValue.update_password) {
+              return true
+            }
+            return !this.$route.params.id
+          }
+        },
         password: {
-          helpText: this.$t('assets.PasswordWithoutSpecialCharHelpText')
+          helpText: this.$t('assets.PasswordWithoutSpecialCharHelpText'),
+          hidden: (formValue) => {
+            if (!this.$route.params.id) {
+              return false
+            }
+            return !formValue.update_password
+          }
         },
         is_active: {
           type: 'switch'
