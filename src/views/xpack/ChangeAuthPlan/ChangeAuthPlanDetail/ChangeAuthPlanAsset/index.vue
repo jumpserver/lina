@@ -74,6 +74,9 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        canSelect: (row, index) => {
+          return this.object.assets.indexOf(row.id) === -1
+        },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/asset/add/`
           const data = {
