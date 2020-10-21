@@ -24,7 +24,7 @@ export default {
       'currentUser'
     ]),
     isExpire() {
-      if (this.currentUser.role !== 'Admin') {
+      if (!this.publicSettings.XPACK_ENABLED || this.currentUser.role !== 'Admin') {
         return false
       }
       const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
