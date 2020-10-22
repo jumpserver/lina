@@ -76,7 +76,7 @@ export default {
             title: this.$t('sessions.replaySession'),
             attrs: {
               type: 'primary',
-              label: this.$t('sessions.go')
+              label: this.$t('sessions.replay')
             },
             callbacks: {
               click: function() {
