@@ -85,7 +85,12 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AssetPermissionUpdate'
+              updateRoute: 'AssetPermissionUpdate',
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/perms/asset-permissions/${id}/`
+                return this.$axios.delete(url)
+              }
             }
           }
         }
