@@ -25,7 +25,7 @@ export default {
             width: '140px'
           },
           port: {
-            width: '60px'
+            width: '70px'
           },
           database: {
             showOverflowTooltip: true
