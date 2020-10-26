@@ -2,6 +2,7 @@
   <div>
     <slot name="globalNotification">
       <LicenseExpireTip />
+      <PasswordExpireTip />
     </slot>
     <div class="page-heading">
       <el-row :gutter="0">
@@ -21,10 +22,12 @@
 
 <script>
 import LicenseExpireTip from '@/layout/components/Page/LicenseExpireTip'
+import PasswordExpireTip from '@/layout/components/Page/PasswordExpireTip'
 export default {
   name: 'PageHeading',
   components: {
-    LicenseExpireTip
+    LicenseExpireTip,
+    PasswordExpireTip
   },
   props: {
     title: {
