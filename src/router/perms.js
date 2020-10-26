@@ -42,7 +42,7 @@ const remoteAppPermissionRoutes = [
         path: '',
         name: 'RemoteAppPermissionList',
         component: () => import('@/views/perms/RemoteAppPermission/RemoteAppPermissionList'),
-        meta: { title: i18n.t('route.RemoteAppPermission'), activeMenu: '/perms/remote-app-permissions' }
+        meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/perms/remote-app-permissions' }
 
       },
       {
@@ -75,7 +75,7 @@ const databasePermissionRoutes = [
     path: 'database-app-permissions',
     name: 'DatabaseAppPermissionList',
     component: () => import('@/views/perms/DatabaseAppPermission/DatabaseAppPermissionList'),
-    meta: { title: i18n.t('route.DatabaseAppPermission') }
+    meta: { title: i18n.t('route.DatabaseApp') }
   },
   {
     path: 'database-app-permissions/create',
@@ -105,7 +105,7 @@ const kubernetesPermissionRoutes = [
     path: 'kubernetes-app-permissions',
     name: 'KubernetesAppPermissionList',
     component: () => import('@/views/perms/KubernetesAppPermission/KubernetesAppPermissionList'),
-    meta: { title: i18n.t('route.KubernetesAppPermission') }
+    meta: { title: i18n.t('route.KubernetesApp') }
   },
   {
     path: 'kubernetes-app-permissions/create',
