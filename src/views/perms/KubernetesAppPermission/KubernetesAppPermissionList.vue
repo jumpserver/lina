@@ -12,8 +12,8 @@ export default {
   },
   data() {
     return {
+      title: this.$t('perms.KubernetesAppPermission'),
       tableConfig: {
-        title: this.$t('perms.KubernetesAppPermission'),
         url: '/api/v1/perms/k8s-app-permissions/',
         columns: ['name', 'users_amount', 'user_groups_amount', 'k8s_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
         columnsMeta: {
