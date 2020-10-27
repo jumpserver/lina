@@ -654,6 +654,9 @@
     "emailTest": "测试连接",
     "emailUserSSL": "使用SSL",
     "emailUserTLS": "使用TLS",
+    "SecurityInsecureCommand": "危险命令告警",
+    "Insecure_Command_Alert": "危险命令告警",
+    "SecurityInsecureCommandEmailReceiver": "告警接收邮件",
     "helpText": {
       "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
@@ -674,7 +677,8 @@
       "terminalHeartbeatInterval": "单位: 秒",
       "terminalSessionKeepDuration": "单位：天。 会话、录像、命令记录超过该时长将会被删除(仅影响数据库存储, oss等不受影响)",
       "terminalTelnetRegex": "登录telnet服务器成功后的提示正则表达式，如: Last\\s*login|success|成功",
-      "userGuideUrl": "用户第一次登录，修改profile后重定向到地址"
+      "userGuideUrl": "用户第一次登录，修改profile后重定向到地址",
+      "SecurityInsecureCommandEmailReceiver": "多个邮箱时，以半角逗号','分隔"
     },
     "helpTip": {
       "emailUserSSL": "如果SMTP端口是465，通常需要启用SSL",
@@ -685,7 +689,8 @@
       "securityPasswordNumber": "开启后，用户密码修改、重置必须包含数字字符",
       "securityPasswordSpecialChar": "开启后，用户密码修改、重置必须包含特殊字符",
       "securityPasswordUpperCase": "开启后，用户密码修改、重置必须包含大写字母",
-      "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当终端注册成功后可以禁止"
+      "securityServiceAccountRegistration": "允许使用bootstrap token注册终端, 当终端注册成功后可以禁止",
+      "SecurityInsecureCommand": "开启后，当资产上有危险命令执行时，会发送邮件告警通知"
     },
     "validatorMessage": {
       "EnsureThisValueIsGreaterThanOrEqualTo3": "请确保该值大于或者等于 3",
