@@ -54,7 +54,8 @@ export default {
           'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME', 'SECURITY_MAX_IDLE_TIME',
           'SECURITY_PASSWORD_EXPIRATION_TIME']],
         [this.$t('setting.PasswordCheckRule'), ['SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
-          'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR']]
+          'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR']],
+        [this.$t('setting.Insecure_Command_Alert'), ['SECURITY_INSECURE_COMMAND', 'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER']]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'Security' }},
       fieldsMeta: {
@@ -123,6 +124,15 @@ export default {
           label: this.$t('setting.securityPasswordSpecialChar'),
           type: 'checkbox',
           helpTips: this.$t('setting.helpTip.securityPasswordSpecialChar')
+        },
+        SECURITY_INSECURE_COMMAND: {
+          label: this.$t('setting.SecurityInsecureCommand'),
+          type: 'checkbox',
+          helpTips: this.$t('setting.helpTip.SecurityInsecureCommand')
+        },
+        SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER: {
+          label: this.$t('setting.SecurityInsecureCommandEmailReceiver'),
+          helpText: this.$t('setting.helpText.SecurityInsecureCommandEmailReceiver')
         }
       },
       url: '/api/v1/settings/setting/'
