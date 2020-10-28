@@ -119,6 +119,11 @@ export default {
         if (!has) {
           continue
         }
+        // 是否有分割线
+        const divided = this.checkItem(action, 'divided', false)
+        delete action['divided']
+        action.divided = divided
+
         // 是否是disabled
         const can = this.checkItem(action, 'can')
         delete action['can']

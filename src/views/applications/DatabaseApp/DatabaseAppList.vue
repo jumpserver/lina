@@ -12,22 +12,25 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/applications/database-apps/',
+        url: '/api/v1/applications/applications/?category=db',
         columns: [
-          'name', 'get_type_display', 'host', 'port', 'database', 'comment', 'actions'
+          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'comment', 'actions'
         ],
         columnsMeta: {
-          get_type_display: {
+          type_display: {
             label: this.$t('applications.type'),
-            width: '80px'
+            width: '120px'
           },
-          host: {
+          'attrs.host': {
+            label: this.$t('applications.host'),
             width: '140px'
           },
-          port: {
+          'attrs.port': {
+            label: this.$t('applications.port'),
             width: '60px'
           },
-          database: {
+          'attrs.database': {
+            label: this.$t('applications.database'),
             showOverflowTooltip: true
           }
         }

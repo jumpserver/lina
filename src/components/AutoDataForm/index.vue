@@ -131,7 +131,8 @@ export default {
     },
     generateField(name) {
       let field = { id: name, prop: name, el: {}, attrs: {}}
-      const fieldMeta = this.meta[name] || {}
+      // const fieldMeta = this.meta[name] || this.meta['attrs']['children'][name] || {}
+      const fieldMeta = this.meta[name] || ((this.meta['attrs']) ? (this.meta['attrs']['children'][name]) : {})
       field.label = fieldMeta.label
       field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
       field = this.generateFieldByName(name, field)
@@ -149,12 +150,26 @@ export default {
       })
       return this.generateFields(fields)
     },
+    genreateFieldAttrs(name) {
+      const fields = []
+      Object.keys(this.meta[name]['children']).forEach((key, i) => {
+        const filed = this.generateField(key)
+        fields.push(filed)
+      })
+
+      return fields
+    },
     generateFields(data) {
       let fields = []
       for (let field of data) {
         if (field instanceof Array) {
           const items = this.generateFieldGroup(field)
           fields = [...fields, ...items]
+        } else if (field === 'attrs') {
+          const items = this.genreateFieldAttrs(field)
+          fields = [...fields, ...items]
+          // 修改title插入ID
+          this.groups[this.groups.length - 1].name = items[0].id
         } else if (typeof field === 'string') {
           field = this.generateField(field)
           fields.push(field)

@@ -15,7 +15,7 @@ export default {
     return {
       helpMessage: this.$t('assets.RemoteAppListHelpMessage'),
       tableConfig: {
-        url: '/api/v1/applications/remote-apps/',
+        url: '/api/v1/applications/applications/?category=remote_app',
         columns: [
           'name', 'type', 'asset', 'comment', 'actions'
         ],
@@ -25,6 +25,7 @@ export default {
             width: '140px'
           },
           asset: {
+            label: this.$t('assets.Assets'),
             showOverflowTooltip: true,
             formatter: function(row, column, cellValue, index) {
               const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}

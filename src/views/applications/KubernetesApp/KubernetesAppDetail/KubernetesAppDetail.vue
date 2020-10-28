@@ -37,7 +37,7 @@ export default {
         },
         {
           key: this.$t('applications.cluster'),
-          value: this.object.cluster
+          value: this.object.attrs.cluster
         },
         {
           key: this.$t('common.dateCreated'),

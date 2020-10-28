@@ -8,9 +8,9 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import RemoteAppPermissionRemoteApp from './RemoteAppPermissionRemoteApp'
-import RemoteAppPermissionDetail from './RemoteAppPermissionDetail'
-import RemoteAppPermissionUser from './RemoteAppPermissionUser'
+import RemoteAppPermissionRemoteApp from './ApplicationsPermission'
+import RemoteAppPermissionDetail from './AppliactionPermissionDetail'
+import RemoteAppPermissionUser from './ApplicationPermissionUser'
 
 export default {
   components: {
@@ -35,10 +35,14 @@ export default {
             name: 'RemoteAppPermissionUser'
           },
           {
-            title: this.$t('perms.remoteApp'),
+            title: this.$t('perms.appsList'),
             name: 'RemoteAppPermissionRemoteApp'
           }
-        ]
+        ],
+        actions: {
+          detailApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`
+        }
       }
     }
   },

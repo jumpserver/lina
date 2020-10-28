@@ -12,11 +12,14 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/applications/k8s-apps/',
+        url: '/api/v1/applications/applications/?category=cloud',
         columns: [
-          'name', 'type', 'cluster', 'comment', 'actions'
+          'name', 'type', 'attrs.cluster', 'comment', 'actions'
         ],
         columnsMeta: {
+          'attrs.cluster': {
+            label: this.$t('applications.cluster')
+          },
           comment: {
             width: '340px'
           },

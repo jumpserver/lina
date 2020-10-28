@@ -37,15 +37,15 @@ export default {
         },
         {
           key: this.$t('applications.host'),
-          value: this.object.host
+          value: this.object.attrs.host
         },
         {
           key: this.$t('applications.port'),
-          value: JSON.stringify(this.object.port)
+          value: JSON.stringify(this.object.attrs.port)
         },
         {
           key: this.$t('applications.database'),
-          value: this.object.database
+          value: this.object.attrs.database
         },
         {
           key: this.$t('common.dateCreated'),
