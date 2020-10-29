@@ -8,15 +8,15 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import RemoteAppPermissionRemoteApp from './ApplicationsPermission'
-import RemoteAppPermissionDetail from './AppliactionPermissionDetail'
-import RemoteAppPermissionUser from './ApplicationPermissionUser'
+import ApplicationPermissionRemoteApp from './ApplicationsPermission'
+import ApplicationPermissionDetail from './AppliactionPermissionDetail'
+import ApplicationPermissionUser from './ApplicationPermissionUser'
 
 export default {
   components: {
-    RemoteAppPermissionRemoteApp,
-    RemoteAppPermissionDetail,
-    RemoteAppPermissionUser,
+    ApplicationPermissionRemoteApp,
+    ApplicationPermissionDetail,
+    ApplicationPermissionUser,
     GenericDetailPage,
     TabPage
   },
@@ -24,19 +24,19 @@ export default {
     return {
       RemoteAppPermission: {},
       config: {
-        activeMenu: 'RemoteAppPermissionDetail',
+        activeMenu: 'ApplicationPermissionDetail',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'RemoteAppPermissionDetail'
+            name: 'ApplicationPermissionDetail'
           },
           {
             title: this.$t('perms.usersAndUserGroups'),
-            name: 'RemoteAppPermissionUser'
+            name: 'ApplicationPermissionUser'
           },
           {
             title: this.$t('perms.appsList'),
-            name: 'RemoteAppPermissionRemoteApp'
+            name: 'ApplicationPermissionRemoteApp'
           }
         ],
         actions: {
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     TabClick(tab) {
-      if (tab.name !== 'RemoteAppPermissionDetail') {
+      if (tab.name !== 'ApplicationPermissionDetail') {
         this.$set(this.config, 'hasRightSide', false)
       } else {
         this.$set(this.config, 'hasRightSide', true)

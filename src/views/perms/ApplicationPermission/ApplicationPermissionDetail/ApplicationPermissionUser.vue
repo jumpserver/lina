@@ -77,10 +77,13 @@ export default {
         showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/application-permissions/${objectId}/users/add/`
+          const relationUrl = `/api/v1/perms/application-permissions-users-relations/`
           const usersId = items.map(v => v.value)
-          const data = { users: usersId }
-          return this.$axios.patch(relationUrl, data)
+          const data = []
+          for (const user of usersId) {
+            data.push({ applicationpermission: objectId, user: user })
+          }
+          return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)

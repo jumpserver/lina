@@ -70,7 +70,7 @@ export default {
         icon: 'fa-edit',
         title: this.$t('perms.addRemoteAppToThisPermission'),
         objectsAjax: {
-          url: `/api/v1/applications/applications/?category=${this.object.category}`,
+          url: `/api/v1/applications/applications/?category=${this.object.category}&type=${this.object.type}`,
           transformOption: (item) => {
             return { label: item.name + ' (' + item.type_display + ')', value: item.id }
           }
@@ -79,10 +79,13 @@ export default {
         showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/application-permissions/${objectId}/applications/add/`
+          const relationUrl = `/api/v1/perms/application-permissions-applications-relations/`
           const remoteAppId = items.map(v => v.value)
-          const data = { application: remoteAppId }
-          return this.$axios.patch(relationUrl, data)
+          const data = []
+          for (const app of remoteAppId) {
+            data.push({ applicationpermission: objectId, application: app })
+          }
+          return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)
@@ -99,7 +102,7 @@ export default {
           url: '/api/v1/assets/system-users/',
           processResults(data) {
             let results = data.results
-            const protocol = vm.object.category === 'remote_app' ? 'rdp' : 'ssh'
+            const protocol = vm.object.category === 'remote_app' ? `rdp` : vm.object.type
             results = results.filter((item) => item.protocol === protocol).map((item) => {
               return { label: item.name + '(' + item.username + ')', value: item.id }
             })
@@ -127,7 +130,6 @@ export default {
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/application-permissions/${objectId}/`
           const objectOldRelationSystemUsers = this.object.system_users
-          console.log(1, objectOldRelationSystemUsers, item)
           const objectNewRelationSystemUsers = objectOldRelationSystemUsers.filter(v => v !== item.value)
           const data = { system_users: objectNewRelationSystemUsers }
           return this.$axios.patch(relationUrl, data)

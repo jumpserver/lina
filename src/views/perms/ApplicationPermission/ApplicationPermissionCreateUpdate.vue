@@ -48,7 +48,7 @@ export default {
           type: 'select',
           options: [
             {
-              label: this.$route.query.category,
+              label: this.$t(`applications.applicationsCategory.${this.$route.query.category}`),
               value: this.$route.query.category
             }
           ],
@@ -58,7 +58,7 @@ export default {
           type: 'select',
           options: [
             {
-              label: this.$route.query.type,
+              label: this.$t(`applications.applicationsType.${this.$route.query.type}`),
               value: this.$route.query.type
             }
           ],

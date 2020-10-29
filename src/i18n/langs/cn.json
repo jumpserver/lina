@@ -2,6 +2,22 @@
   "": "",
   "applications": {
     "": "",
+    "applicationsType": {
+      "chrome": "Chrome",
+      "mysql_workbench": "MySQL Workbench",
+      "vmware_client":"Vmware Client",
+      "custom":"Custom",
+      "mysql": "MySQL",
+      "oracle": "Oracle",
+      "postgresql": "PostgreSQL",
+      "mariadb": "MariaDB",
+      "k8s": "Kubernetes"
+    },
+    "applicationsCategory": {
+      "remote_app": "远程应用",
+      "db": "数据库应用",
+      "cloud": "云应用"
+    },
     "appPath": "应用路径",
     "appType": "应用类型",
     "asset": "资产",
