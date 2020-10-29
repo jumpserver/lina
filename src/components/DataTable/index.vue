@@ -31,7 +31,7 @@ export default {
         defaultAlign: 'left',
         dataPath: 'results',
         totalPath: 'count',
-        saveQuery: false, // 关闭路径保存查询参数
+        saveQuery: true, // 关闭路径保存查询参数
         persistSelection: true, // 切换页面 已勾选项不会丢失
         hasEdit: userTableActions.hasEdit !== false, // 有编辑按钮
         hasDelete: userTableActions.hasDelete !== false,

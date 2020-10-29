@@ -52,7 +52,7 @@ export default {
           },
           on: {
             changeOptions: ([event], updateForm) => {
-              console.log(event[0].value) // output: input value
+              // console.log(event[0].value) // output: input value
               this.fieldsMeta.assignees.el.ajax.url = `/api/v1/tickets/tickets/request-asset-perm/assignees/?org_id=${event[0].value}`
             }
           }

@@ -77,7 +77,7 @@ export default {
     },
     handleClick(button) {
       const callback = button.callback || function(values, form) {
-        console.log('Click ', button.title, ': ', values)
+        // console.log('Click ', button.title, ': ', values)
       }
       const form = this.$refs['form']
       const values = form.getFormValue()
