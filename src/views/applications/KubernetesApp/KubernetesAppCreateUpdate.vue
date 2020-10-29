@@ -34,16 +34,18 @@ export default {
         if (params.id) {
           url = `${url}${params.id}/`
         }
-        return `${url}?category=cloud`
+        return `${url}?type=k8s`
       },
       performSubmit(validValues) {
-        const url = this.getUrl()
+        const params = this.$route.params
+        const baseUrl = `/api/v1/applications/applications/`
+        const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
         const method = this.getMethod()
         validValues.attrs = {
           cluster: validValues.cluster
         }
         validValues.category = 'cloud'
-        return this.$axios[method](`${url}&type=${validValues.type}`, validValues)
+        return this.$axios[method](`${url}?type=${validValues.type}`, validValues)
       }
     }
   },

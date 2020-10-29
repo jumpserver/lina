@@ -32,17 +32,17 @@ export default {
           key: this.$t('common.Name'),
           value: this.object.name
         },
-        {
-          key: this.$t('applications.asset'),
-          value: this.object.asset_info.hostname
-        },
+        // {
+        //   key: this.$t('applications.asset'),
+        //   value: this.object.attrs.asset_info.hostname
+        // },
         {
           key: this.$t('applications.appType'),
-          value: this.object.get_type_display
+          value: this.object.type_display
         },
         {
           key: this.$t('applications.appPath'),
-          value: this.object.path
+          value: this.object.attrs.path
         },
         {
           key: this.$t('common.dateCreated'),
