@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :title="title" />
 </template>
 
 <script>
@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      title: this.$t('perms.DatabaseAppPermission'),
       tableConfig: {
         url: '/api/v1/perms/database-app-permissions/',
         columns: ['name', 'users_amount', 'user_groups_amount', 'database_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
