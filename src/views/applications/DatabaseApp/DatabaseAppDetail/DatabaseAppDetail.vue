@@ -33,7 +33,7 @@ export default {
         },
         {
           key: this.$t('applications.type'),
-          value: this.object.get_type_display
+          value: this.object.type_display
         },
         {
           key: this.$t('applications.host'),

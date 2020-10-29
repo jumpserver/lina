@@ -1,38 +1,46 @@
 import i18n from '@/i18n/i18n'
 import router from '@/router'
+import store from '@/store'
 export const CHROME = 'chrome'
 export const MYSQL_WORKBENCH = 'mysql_workbench'
 export const VMWARE_CLIENT = 'vmware_client'
 export const CUSTOM = 'custom'
 export const REMOTEAPP_CATEGORY = 'remote_app'
 
+function isValidateLicense() {
+  if (store.getters.publicSettings.XPACK_ENABLED) {
+    return store.getters.publicSettings.XPACK_LICENSE_IS_VALID
+  }
+  return true
+}
+
 export const REMOTE_APP = [
   {
     name: CHROME,
     title: i18n.t(`applications.applicationsType.${CHROME}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: CHROME, category: REMOTEAPP_CATEGORY }}) }
   },
   {
     name: MYSQL_WORKBENCH,
     title: i18n.t(`applications.applicationsType.${MYSQL_WORKBENCH}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: MYSQL_WORKBENCH, category: REMOTEAPP_CATEGORY }}) }
   },
   {
     name: VMWARE_CLIENT,
     title: i18n.t(`applications.applicationsType.${VMWARE_CLIENT}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: VMWARE_CLIENT, category: REMOTEAPP_CATEGORY }}) }
   },
   {
     name: CUSTOM,
     title: i18n.t(`applications.applicationsType.${CUSTOM}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: CUSTOM, category: REMOTEAPP_CATEGORY }}) }
   }
 ]
@@ -56,21 +64,21 @@ export const DATABASE = [
     name: ORACLE,
     title: i18n.t(`applications.applicationsType.${ORACLE}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: ORACLE, category: DATABASE_CATEGORY }}) }
   },
   {
     name: POSTGRESQL,
     title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: POSTGRESQL, category: DATABASE_CATEGORY }}) }
   },
   {
     name: MARIADB,
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
-    can: true,
+    can: isValidateLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: MARIADB, category: DATABASE_CATEGORY }}) }
   }
 ]

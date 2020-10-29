@@ -1,9 +1,10 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -32,6 +33,21 @@ export default {
           'attrs.database': {
             label: this.$t('applications.database'),
             showOverflowTooltip: true
+          },
+          actions: {
+            prop: '',
+            formatterArgs: {
+              onDelete: function({ row, col, cellValue, reload }) {
+                this.$axios.delete(
+                  `/api/v1/applications/applications/${row.id}/`
+                ).then(res => {
+                  this.$refs.GenericListTable.$refs.ListTable.reloadTable()
+                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                }).catch(error => {
+                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                })
+              }.bind(this)
+            }
           }
         }
       },
@@ -48,14 +64,53 @@ export default {
             type: 'primary',
             can: true,
             callback: this.createMysql.bind(this)
+          },
+          {
+            name: 'PostgreSQL',
+            title: 'PostgreSQL',
+            type: 'primary',
+            can: this.isValidateLicense,
+            callback: this.createPostgreSQL.bind(this)
+          },
+          {
+            name: 'MariaDB',
+            title: 'MariaDB',
+            type: 'primary',
+            can: this.isValidateLicense,
+            callback: this.createMariaDB.bind(this)
+          },
+          {
+            name: 'Oracle',
+            title: 'Oracle',
+            type: 'primary',
+            can: this.isValidateLicense,
+            callback: this.createOracle.bind(this)
           }
         ]
       }
     }
   },
+  computed: {
+    ...mapGetters(['publicSettings', 'currentOrg']),
+    isValidateLicense() {
+      if (this.publicSettings.XPACK_ENABLED) {
+        return this.publicSettings.XPACK_LICENSE_IS_VALID
+      }
+      return true
+    }
+  },
   methods: {
     createMysql() {
       this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mysql' }})
+    },
+    createPostgreSQL() {
+      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'postgresql' }})
+    },
+    createMariaDB() {
+      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mariadb' }})
+    },
+    createOracle() {
+      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
     }
   }
 }

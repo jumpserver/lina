@@ -38,16 +38,24 @@ export default {
       },
       performSubmit(validValues) {
         const url = this.getUrl()
+        const method = this.getMethod()
         validValues.attrs = {
           cluster: validValues.cluster
         }
         validValues.category = 'cloud'
-        return this.$axios['put'](`${url}&type=${validValues.type}`, validValues)
+        return this.$axios[method](`${url}&type=${validValues.type}`, validValues)
       }
     }
   },
   computed: {
-
+    getMethod() {
+      const params = this.$route.params
+      if (params.id) {
+        return 'put'
+      } else {
+        return 'post'
+      }
+    }
   }
 }
 </script>

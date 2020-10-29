@@ -13,7 +13,7 @@ export default {
 
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
-        [this.$t('applications.mysql'), ['attrs']],
+        [this.$t('applications.DBInfo'), ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
@@ -40,19 +40,28 @@ export default {
       },
       performSubmit(validValues) {
         const url = this.getUrl()
+        const method = this.getMethod()
         validValues.attrs = {
           host: validValues.host,
           port: validValues.port,
           database: validValues.database
         }
         validValues.category = 'db'
-        return this.$axios['put'](`${url}&type=${validValues.type}`, validValues)
+        return this.$axios[method](`${url}&type=${validValues.type}`, validValues)
       }
     }
   },
   computed: {
     initial() {
       return this.$route.query
+    },
+    getMethod() {
+      const params = this.$route.params
+      if (params.id) {
+        return 'put'
+      } else {
+        return 'post'
+      }
     }
   }
 }

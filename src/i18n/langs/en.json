@@ -48,7 +48,8 @@
     "Custom": "Custom",
     "cluster": "Cluster",
     "kubernetes":"Kubernetes",
-    "clusterHelpTextMessage": "Tips: https://172.16.8.8:8443"
+    "clusterHelpTextMessage": "Tips: https://172.16.8.8:8443",
+    "DBInfo": "Database Info"
   },
   "assets": {
     "Action": "Action",

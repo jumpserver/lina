@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
@@ -25,6 +25,21 @@ export default {
           },
           type: {
             width: '140px'
+          },
+          actions: {
+            prop: '',
+            formatterArgs: {
+              onDelete: function({ row, col, cellValue, reload }) {
+                this.$axios.delete(
+                  `/api/v1/applications/applications/${row.id}/`
+                ).then(res => {
+                  this.$refs.GenericListTable.$refs.ListTable.reloadTable()
+                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                }).catch(error => {
+                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                })
+              }.bind(this)
+            }
           }
         }
       },
