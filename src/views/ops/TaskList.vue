@@ -86,7 +86,7 @@ export default {
       },
       headerActions: {
         hasRightActions: false,
-        hasLeftActions: false
+        hasCreate: false
       }
     }
   }
