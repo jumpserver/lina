@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/k8s-apps/`,
+        url: `/api/v1/perms/users/applications/?category=cloud`,
         columns: [
           {
             prop: 'name',

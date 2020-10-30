@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/remote-apps/`,
+        url: `/api/v1/perms/users/applications/?category=remote_app`,
         columns: [
           {
             prop: 'name',
