@@ -46,22 +46,22 @@ export default {
         },
         category: {
           type: 'select',
-          options: [
-            {
-              label: this.$t(`applications.applicationsCategory.${this.$route.query.category}`),
-              value: this.$route.query.category
-            }
-          ],
+          // options: [
+          //   {
+          //     label: this.$t(`applications.applicationsCategory.${this.$route.query.category}`),
+          //     value: this.$route.query.category
+          //   }
+          // ],
           disabled: true
         },
         type: {
           type: 'select',
-          options: [
-            {
-              label: this.$t(`applications.applicationsType.${this.$route.query.type}`),
-              value: this.$route.query.type
-            }
-          ],
+          // options: [
+          //   {
+          //     label: this.$t(`applications.applicationsType.${this.$route.query.type}`),
+          //     value: this.$route.query.type
+          //   }
+          // ],
           disabled: true
         },
         applications: {
