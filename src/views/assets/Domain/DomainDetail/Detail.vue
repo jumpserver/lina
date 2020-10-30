@@ -38,6 +38,10 @@ export default {
           value: `${this.object.asset_count}`
         },
         {
+          key: this.$t('assets.Applications'),
+          value: `${this.object.application_count}`
+        },
+        {
           key: this.$t('assets.Gateway'),
           value: `${this.object.gateway_count}`
         },
