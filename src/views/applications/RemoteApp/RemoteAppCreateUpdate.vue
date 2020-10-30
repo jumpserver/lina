@@ -91,7 +91,7 @@ export default {
       },
       fieldsMeta: {
         asset: {
-          rules: [{ required: false }],
+          rules: [{ required: true }],
           el: {
             multiple: false,
             ajax: {
