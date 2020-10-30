@@ -15,7 +15,7 @@ export default {
         type: 'k8s'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type']],
+        [this.$t('common.Basic'), ['name', 'type', 'domain']],
         [this.$t('applications.kubernetes'), ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -25,6 +25,15 @@ export default {
         },
         cluster: {
           helpText: this.$t('applications.clusterHelpTextMessage')
+        },
+        domain: {
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: '/api/v1/assets/domains/'
+            }
+          }
         }
       },
       url: '/api/v1/applications/applications/',

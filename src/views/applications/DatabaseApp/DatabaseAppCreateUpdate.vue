@@ -12,7 +12,7 @@ export default {
     return {
 
       fields: [
-        [this.$t('common.Basic'), ['name', 'type']],
+        [this.$t('common.Basic'), ['name', 'type', 'domain']],
         [this.$t('applications.DBInfo'), ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -27,6 +27,15 @@ export default {
         },
         host: {
           type: 'input'
+        },
+        domain: {
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: '/api/v1/assets/domains/'
+            }
+          }
         }
       },
       url: '/api/v1/applications/applications/',

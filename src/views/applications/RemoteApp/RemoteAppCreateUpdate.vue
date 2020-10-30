@@ -22,7 +22,7 @@ export default {
         path: pathInitial
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type']],
+        [this.$t('common.Basic'), ['name', 'type', 'domain']],
         [appTypeMeta.title, ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -115,6 +115,15 @@ export default {
         asset_info: {
           type: 'input',
           hidden: () => true
+        },
+        domain: {
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: '/api/v1/assets/domains/'
+            }
+          }
         },
         ...fieldsMap
       }
