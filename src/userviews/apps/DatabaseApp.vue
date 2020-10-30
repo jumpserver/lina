@@ -30,7 +30,7 @@ export default {
             sortable: true
           },
           {
-            prop: 'get_type_display',
+            prop: 'type_display',
             align: 'center',
             label: this.$t('assets.Type')
           },
