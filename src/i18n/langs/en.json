@@ -9,7 +9,7 @@
       "custom":"Custom",
       "mysql": "MySQL",
       "oracle": "Oracle",
-      "": "PostgreSQL",
+      "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
       "k8s": "kubernetes"
     },
