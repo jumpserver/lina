@@ -170,6 +170,7 @@
     "Auth": "Authorization",
     "BadRequestErrorMsg": "Bad request, please check again",
     "BadRoleErrorMsg": "Bad request, no permission for this operation",
+    "BadConflictErrorMsg": "Refreshing, please try again later",
     "Basic": "Basic",
     "BasicInfo": "Basic info",
     "Cancel": "Cancel",
