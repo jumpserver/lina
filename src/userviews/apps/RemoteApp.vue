@@ -31,7 +31,7 @@ export default {
           {
             prop: 'type_display',
             align: 'center',
-            label: this.$t('assets.RemoteType')
+            label: this.$t('assets.Type')
           },
           {
             prop: 'asset_info.hostname',
