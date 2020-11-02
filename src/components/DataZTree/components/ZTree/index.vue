@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="treebox">
+    <ul v-show="loading" class="ztree">
+      {{ this.$t('common.tree.Loading') }}...
+    </ul>
+    <div v-show="!loading" class="treebox">
       <ul :id="iZTreeID" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
@@ -40,7 +43,8 @@ export default {
       iRMenuID: `rMenu_${this._uid}`,
       zTree: '',
       rMenu: '',
-      init: false
+      init: false,
+      loading: false
     }
   },
   computed: {
@@ -57,12 +61,15 @@ export default {
   },
   methods: {
     initTree: function() {
+      const vm = this
       let treeUrl
+      if (this.init) {
+        this.loading = true
+      }
       if (this.init && this.treeSetting.treeUrl.indexOf('/perms/') !== -1 && this.treeSetting.treeUrl.indexOf('rebuild_tree') === -1) {
         treeUrl = (this.treeSetting.treeUrl.indexOf('?') === -1) ? `${this.treeSetting.treeUrl}?rebuild_tree=1` : `${this.treeSetting.treeUrl}&rebuild_tree=1`
       } else {
         treeUrl = this.treeSetting.treeUrl
-        this.init = true
       }
       this.$axios.get(treeUrl).then(res => {
         if (!res) {
@@ -74,6 +81,9 @@ export default {
           })
         }
         this.treeSetting.treeUrl = treeUrl
+        if (this.init) {
+          vm.zTree.destroy()
+        }
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(
@@ -88,6 +98,9 @@ export default {
         if (this.treeSetting.otherMenu) {
           $('.menu-actions').append(this.otherMenu)
         }
+      }).finally(_ => {
+        vm.loading = false
+        vm.init = true
       })
     },
     rootNodeAddDom: function(ztree, callback) {
@@ -104,7 +117,6 @@ export default {
       }
       const refreshIconRef = $('#tree-refresh')
       refreshIconRef.bind('click', function() {
-        ztree.destroy()
         const result = callback()
         if (result && result.then) {
           result.finally(() => {
