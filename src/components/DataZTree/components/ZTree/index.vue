@@ -75,7 +75,10 @@ export default {
       this.$axios.get(treeUrl, {
         'axios-retry': {
           retries: 20,
-          retryCondition: e => { return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409 },
+          retryCondition: e => {
+            console.log(e)
+            return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409
+          },
           shouldResetTimeout: true,
           retryDelay: () => { return 5000 }
         }
