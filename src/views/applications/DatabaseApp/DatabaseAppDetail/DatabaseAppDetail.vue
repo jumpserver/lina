@@ -33,19 +33,19 @@ export default {
         },
         {
           key: this.$t('applications.type'),
-          value: this.object.get_type_display
+          value: this.object.type_display
         },
         {
           key: this.$t('applications.host'),
-          value: this.object.host
+          value: this.object.attrs.host
         },
         {
           key: this.$t('applications.port'),
-          value: JSON.stringify(this.object.port)
+          value: JSON.stringify(this.object.attrs.port)
         },
         {
           key: this.$t('applications.database'),
-          value: this.object.database
+          value: this.object.attrs.database
         },
         {
           key: this.$t('common.dateCreated'),

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/database-apps/`,
+        url: `/api/v1/perms/users/applications/?category=db`,
         columns: [
           {
             prop: 'name',
@@ -30,7 +30,7 @@ export default {
             sortable: true
           },
           {
-            prop: 'get_type_display',
+            prop: 'type_display',
             align: 'center',
             label: this.$t('assets.Type')
           },

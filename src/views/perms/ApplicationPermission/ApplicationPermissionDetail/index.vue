@@ -8,15 +8,15 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import RemoteAppPermissionRemoteApp from './RemoteAppPermissionRemoteApp'
-import RemoteAppPermissionDetail from './RemoteAppPermissionDetail'
-import RemoteAppPermissionUser from './RemoteAppPermissionUser'
+import ApplicationPermissionRemoteApp from './ApplicationsPermission'
+import ApplicationPermissionDetail from './AppliactionPermissionDetail'
+import ApplicationPermissionUser from './ApplicationPermissionUser'
 
 export default {
   components: {
-    RemoteAppPermissionRemoteApp,
-    RemoteAppPermissionDetail,
-    RemoteAppPermissionUser,
+    ApplicationPermissionRemoteApp,
+    ApplicationPermissionDetail,
+    ApplicationPermissionUser,
     GenericDetailPage,
     TabPage
   },
@@ -24,27 +24,31 @@ export default {
     return {
       RemoteAppPermission: {},
       config: {
-        activeMenu: 'RemoteAppPermissionDetail',
+        activeMenu: 'ApplicationPermissionDetail',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'RemoteAppPermissionDetail'
+            name: 'ApplicationPermissionDetail'
           },
           {
             title: this.$t('perms.usersAndUserGroups'),
-            name: 'RemoteAppPermissionUser'
+            name: 'ApplicationPermissionUser'
           },
           {
-            title: this.$t('perms.remoteApp'),
-            name: 'RemoteAppPermissionRemoteApp'
+            title: this.$t('perms.appsList'),
+            name: 'ApplicationPermissionRemoteApp'
           }
-        ]
+        ],
+        actions: {
+          detailApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`
+        }
       }
     }
   },
   methods: {
     TabClick(tab) {
-      if (tab.name !== 'RemoteAppPermissionDetail') {
+      if (tab.name !== 'ApplicationPermissionDetail') {
         this.$set(this.config, 'hasRightSide', false)
       } else {
         this.$set(this.config, 'hasRightSide', true)

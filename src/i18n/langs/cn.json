@@ -2,6 +2,22 @@
   "": "",
   "applications": {
     "": "",
+    "applicationsType": {
+      "chrome": "Chrome",
+      "mysql_workbench": "MySQL Workbench",
+      "vmware_client":"Vmware Client",
+      "custom":"Custom",
+      "mysql": "MySQL",
+      "oracle": "Oracle",
+      "postgresql": "PostgreSQL",
+      "mariadb": "MariaDB",
+      "k8s": "Kubernetes"
+    },
+    "applicationsCategory": {
+      "remote_app": "远程应用",
+      "db": "数据库应用",
+      "cloud": "云应用"
+    },
     "appPath": "应用路径",
     "appType": "应用类型",
     "asset": "资产",
@@ -32,7 +48,8 @@
     "Custom": "自定义",
     "cluster": "集群",
     "kubernetes":"Kubernetes",
-    "clusterHelpTextMessage": "例如：https://172.16.8.8:8443"
+    "clusterHelpTextMessage": "例如：https://172.16.8.8:8443",
+    "DBInfo": "数据库信息"
   },
   "assets": {
     "Action": "动作",
@@ -113,6 +130,7 @@
     "RefreshHardware": "更新硬件信息",
     "RemoteAppListHelpMessage": "使用此功能前，请确保已将应用加载器上传到应用服务器并成功发布为一个 RemoteApp 应用 <b><a href='https://github.com/jumpserver/Jmservisor/releases'>下载应用加载器</a></b>",
     "RemoteApps": "远程应用",
+    "Applications": "应用",
     "RemoteType": "应用类型",
     "RemoveFromCurrentNode": "从节点移除",
     "ReplaceNodeAssetsAdminUserWithThis": "替换资产的管理员",
@@ -415,6 +433,8 @@
     "refreshSuccess": "刷新成功",
     "remoteApp": "远程应用",
     "remoteAppCount": "远程应用数量",
+    "appsCount": "应用数量",
+    "appsList":"应用列表",
     "DatabaseAppCount": "数据库应用数量",
     "KubernetesAppCount": "Kubernetes应用数量",
     "systemUserCount": "系统用户数量",
@@ -506,6 +526,11 @@
     "RemoteAppPermissionCreate": "创建远程应用授权规则",
     "RemoteAppPermissionDetail": "远程应用授权详情",
     "RemoteAppPermissionUpdate": "更新远程应用授权规则",
+    "ApplicationDetail": "应用详情",
+    "ApplicationPermission": "应用授权",
+    "ApplicationPermissionCreate": "创建应用授权规则",
+    "ApplicationPermissionDetail": "应用授权详情",
+    "ApplicationPermissionUpdate": "更新应用授权规则",
     "RemoteAppUpdate": "更新远程应用",
     "ReplayStorageUpdate": "更新录像存储",
     "SessionDetail": "会话详情",

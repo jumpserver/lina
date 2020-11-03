@@ -5,6 +5,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import { ApplicationTypes } from '../const'
 
 export default {
   components: {
@@ -12,65 +13,81 @@ export default {
   },
   data() {
     return {
-      title: this.$t('perms.DatabaseAppPermission'),
+      title: this.$t('perms.RemoteAppPermission'),
       tableConfig: {
-        url: '/api/v1/perms/database-app-permissions/',
-        columns: ['name', 'users_amount', 'user_groups_amount', 'database_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
+        url: '/api/v1/perms/application-permissions/',
+        columns: [
+          'name', 'category_display', 'users_amount', 'user_groups_amount',
+          'applications_amount', 'system_users_amount',
+          'is_valid', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatterArgs: {
               routeQuery: {
-                activeTab: 'DatabaseAppPermissionDetail'
+                activeTab: 'RemoteAppPermissionDetail'
               }
             },
             showOverflowTooltip: true
           },
+          category_display: {
+            width: '135px'
+          },
           users_amount: {
-            label: this.$t('perms.User'),
+            label: this.$t('users.Users'),
             width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'DatabaseAppPermissionUser'
+                activeTab: 'RemoteAppPermissionUser'
               }
             }
           },
           user_groups_amount: {
-            label: this.$t('perms.UserGroups'),
+            label: this.$t('users.UserGroups'),
             width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'DatabaseAppPermissionUser'
+                activeTab: 'RemoteAppPermissionUser'
               }
             }
           },
-          database_apps_amount: {
-            label: this.$t('perms.databaseApp'),
+          applications_amount: {
+            label: this.$t('assets.Applications'),
             width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'DatabaseAppPermissionDatabaseApp'
+                activeTab: 'RemoteAppPermissionRemoteApp'
               }
             }
           },
           system_users_amount: {
-            label: this.$t('perms.SystemUser'),
+            label: this.$t('assets.SystemUsers'),
             width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'DatabaseAppPermissionDatabaseApp'
+                activeTab: 'RemoteAppPermissionRemoteApp'
               }
             }
           }
         }
       },
       headerActions: {
-        hasBulkDelete: false
+        hasCreate: false,
+        hasMoreActions: false,
+        hasBulkDelete: false,
+        // createRoute: 'RemoteAppCreate',
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
+        extraMoreActions: ApplicationTypes
       }
     }
+  },
+  methods: {
+
   }
 }
 </script>

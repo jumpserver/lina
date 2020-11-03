@@ -18,7 +18,7 @@ export const REMOTE_APP_TYPE_FIELDS_MAP = {
       label: i18n.t('applications.chrome_username')
     },
     {
-      id: 'chrome_password', el: { 'show-password': true }, attrs: {}, type: 'input', prop: 'chrome_password',
+      id: 'chrome_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'chrome_password',
       label: i18n.t('applications.chrome_password')
     }
   ],
@@ -40,7 +40,7 @@ export const REMOTE_APP_TYPE_FIELDS_MAP = {
       label: i18n.t('applications.mysql_workbench_username')
     },
     {
-      id: 'mysql_workbench_password', el: { 'show-password': true }, attrs: {}, type: 'input', prop: 'mysql_workbench_password',
+      id: 'mysql_workbench_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'mysql_workbench_password',
       label: i18n.t('applications.mysql_workbench_password')
     }
   ],
@@ -54,7 +54,7 @@ export const REMOTE_APP_TYPE_FIELDS_MAP = {
       label: i18n.t('applications.vmware_username')
     },
     {
-      id: 'vmware_password', el: { 'show-password': true }, attrs: {}, type: 'input', prop: 'vmware_password',
+      id: 'vmware_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'vmware_password',
       label: i18n.t('applications.vmware_password')
     }
   ],
@@ -72,7 +72,7 @@ export const REMOTE_APP_TYPE_FIELDS_MAP = {
       label: i18n.t('applications.custom_username')
     },
     {
-      id: 'custom_password', el: { 'show-password': true }, attrs: {}, type: 'input', prop: 'custom_password',
+      id: 'custom_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'custom_password',
       label: i18n.t('applications.custom_password')
     }
   ]

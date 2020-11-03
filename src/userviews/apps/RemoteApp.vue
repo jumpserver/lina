@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/remote-apps/`,
+        url: `/api/v1/perms/users/applications/?category=remote_app`,
         columns: [
           {
             prop: 'name',
@@ -29,9 +29,9 @@ export default {
             sortable: true
           },
           {
-            prop: 'get_type_display',
+            prop: 'type_display',
             align: 'center',
-            label: this.$t('assets.RemoteType')
+            label: this.$t('assets.Type')
           },
           {
             prop: 'asset_info.hostname',

@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       DatabaseApp: {
-        name: '', get_type_display: '', host: '', port: '', database: '', date_created: '', created_by: '', comment: ''
+        name: '', get_type_display: '', host: '', port: '', database: '', date_created: '', created_by: '', comment: '', attrs: ''
       },
       config: {
         activeMenu: 'DatabaseAppDetail',
@@ -28,7 +28,11 @@ export default {
             title: this.$t('route.DatabaseAppDetail'),
             name: 'DatabaseAppDetail'
           }
-        ]
+        ],
+        actions: {
+          detailApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`
+        }
       }
     }
   }

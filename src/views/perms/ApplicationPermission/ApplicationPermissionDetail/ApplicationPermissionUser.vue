@@ -4,8 +4,8 @@
       <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="remoteAppRelationConfig" />
-      <RelationCard type="info" style="margin-top: 15px" v-bind="systemUserRelationConfig" />
+      <RelationCard type="primary" v-bind="userRelationConfig" />
+      <RelationCard type="info" style="margin-top: 15px" v-bind="groupRelationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -30,23 +30,23 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/remote-app-permissions/${this.object.id}/remote-apps/all/`,
+        url: `/api/v1/perms/application-permissions/${this.object.id}/users/all/`,
         columns: [
-          'remoteapp_display', 'delete_action'
+          'user_display', 'delete_action'
         ],
         columnsMeta: {
-          remoteapp_display: {
-            label: this.$t('perms.remoteApp'),
+          user_display: {
+            label: this.$t('perms.User'),
             align: 'center'
           },
           delete_action: {
-            prop: 'remoteapp',
+            prop: 'user',
             label: this.$t('common.Actions'),
             align: 'center',
             width: 150,
-            objects: this.object.remote_apps,
+            objects: this.object.users,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/remote-app-permissions-remote-apps-relations/?remoteapppermission=${this.$route.params.id}&remoteapp=`
+            deleteUrl: `/api/v1/perms/application-permissions-users-relations/?applicationpermission=${this.object.id}&user=`
           }
         },
         tableAttrs: {
@@ -64,20 +64,26 @@ export default {
         hasBulkDelete: false,
         hasBulkUpdate: false
       },
-      remoteAppRelationConfig: {
-        icon: 'fa-edit',
-        title: this.$t('perms.addRemoteAppToThisPermission'),
+      userRelationConfig: {
+        icon: 'fa-user',
+        title: this.$t('perms.addUserToThisPermission'),
         objectsAjax: {
-          url: '/api/v1/applications/remote-apps/'
+          url: '/api/v1/users/users/?fields_size=mini',
+          transformOption: (item) => {
+            return { label: item.name + '(' + item.username + ')', value: item.id }
+          }
         },
-        hasObjectsId: this.object.remote_apps,
+        hasObjectsId: this.object.users,
         showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/remote-apps/add/`
-          const remoteAppId = items.map(v => v.value)
-          const data = { remote_apps: remoteAppId }
-          return this.$axios.patch(relationUrl, data)
+          const relationUrl = `/api/v1/perms/application-permissions-users-relations/`
+          const usersId = items.map(v => v.value)
+          const data = []
+          for (const user of usersId) {
+            data.push({ applicationpermission: objectId, user: user })
+          }
+          return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: (objects, that) => {
           this.$log.debug('Select value', that.select2.value)
@@ -87,27 +93,19 @@ export default {
           this.$refs.ListTable.reloadTable()
         }
       },
-      systemUserRelationConfig: {
-        icon: 'fa-edit',
-        title: this.$t('perms.addSystemUserToThisPermission'),
+      groupRelationConfig: {
+        icon: 'fa-group',
+        title: this.$t('perms.addUserGroupToThisPermission'),
         objectsAjax: {
-          url: '/api/v1/assets/system-users/',
-          processResults(data) {
-            let results = data.results
-            results = results.filter((item) => item.protocol === 'rdp').map((item) => {
-              return { label: item.name + '(' + item.username + ')', value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
-          }
+          url: '/api/v1/users/groups/'
         },
-        hasObjectsId: this.object.system_users,
+        hasObjectsId: this.object.user_groups,
         performAdd: (items) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
-          const objectRelationSystemUsers = this.object.system_users
-          items.map(v => objectRelationSystemUsers.push(v.value))
-          const data = { system_users: objectRelationSystemUsers }
+          const relationUrl = `/api/v1/perms/application-permissions/${objectId}/`
+          const objectRelationUserGroups = this.object.user_groups
+          items.map(v => objectRelationUserGroups.push(v.value))
+          const data = { user_groups: objectRelationUserGroups }
           return this.$axios.patch(relationUrl, data)
         },
         onAddSuccess: (objects, that) => {
@@ -119,11 +117,10 @@ export default {
         },
         performDelete: (item) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/perms/remote-app-permissions/${objectId}/`
-          const objectOldRelationSystemUsers = this.object.system_users
-          // console.log(1, objectOldRelationSystemUsers, item)
-          const objectNewRelationSystemUsers = objectOldRelationSystemUsers.filter(v => v !== item.value)
-          const data = { system_users: objectNewRelationSystemUsers }
+          const relationUrl = `/api/v1/perms/application-permissions/${objectId}/`
+          const objectOldRelationUserGroups = this.object.user_groups
+          const objectNewRelationUserGroups = objectOldRelationUserGroups.filter(v => v !== item.value)
+          const data = { user_groups: objectNewRelationUserGroups }
           return this.$axios.patch(relationUrl, data)
         },
         onDeleteSuccess: (obj, that) => {

@@ -13,6 +13,7 @@
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
+import deepmerge from 'deepmerge'
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -172,6 +173,9 @@ export default {
       let object = this.object
       if (object === null) {
         object = await this.getObjectDetail()
+        if (object['attrs']) {
+          object = deepmerge(object, object['attrs'])
+        }
         this.$emit('update:object', object)
       }
       return object

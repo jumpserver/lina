@@ -38,7 +38,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `/api/v1/perms/remote-app-permissions/${this.object.id}/`,
+                `/api/v1/perms/application-permissions/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
@@ -59,6 +59,10 @@ export default {
           value: this.object.name
         },
         {
+          key: this.$t('assets.Applications'),
+          value: this.object.category_display
+        },
+        {
           key: this.$t('perms.userCount'),
           value: this.object.users_amount
         },
@@ -67,8 +71,8 @@ export default {
           value: this.object.user_groups_amount
         },
         {
-          key: this.$t('perms.remoteAppCount'),
-          value: this.object.remote_apps_amount
+          key: this.$t('perms.appsCount'),
+          value: this.object.applications_amount
         },
         {
           key: this.$t('perms.systemUserCount'),
