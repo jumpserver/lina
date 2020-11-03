@@ -88,7 +88,7 @@
     "DeactiveSelected": "Deactive selected",
     "Disk": "Disk",
     "AdDomain": "AD Domain",
-    "AdDomainHelpText": "AD domains  provided to domain users for login ",
+    "AdDomainHelpText": "AD domain provided to domain users for login",
     "Domain": "Domain",
     "DomainDetail": "Domain detail",
     "DomainHelpMessage": "The domain function is added to address the fact that some environments (such as the hybrid cloud) cannot be connected directly by jumping on the gateway server.\nJMS => Domain gateway => Target assets",
