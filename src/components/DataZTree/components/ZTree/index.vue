@@ -25,6 +25,7 @@
 import $ from '@/utils/jquery-vendor.js'
 import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
 import '@/styles/ztree.css'
+import axiosRetry from 'axios-retry'
 
 const defaultObject = {
   type: Object,
@@ -74,6 +75,7 @@ export default {
       this.$axios.get(treeUrl, {
         'axios-retry': {
           retries: 20,
+          retryCondition: e => { return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409 },
           shouldResetTimeout: true,
           retryDelay: () => { return 5000 }
         }
