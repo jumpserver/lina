@@ -46,7 +46,7 @@ export default {
         }
       ],
       tableConfig: {
-        url: `/api/v1/orgs/org-memeber-relation/?org_id=${this.object.id}`,
+        url: `/api/v1/orgs/org-member-relation/?org_id=${this.object.id}`,
         columns: [
           'user_display', 'role_display', 'delete_action'
         ],
@@ -65,7 +65,7 @@ export default {
             objects: 'all',
             formatter: DeleteActionFormatter,
             hasBackSlash: true,
-            deleteUrl: `/api/v1/orgs/org-memeber-relation/?id=`
+            deleteUrl: `/api/v1/orgs/org-member-relation/?id=`
           }
         },
         tableAttrs: {
@@ -96,7 +96,7 @@ export default {
         hasObjectsId: this.object.users,
         showHasObjects: false,
         performAdd: (items) => {
-          const relationUrl = `/api/v1/orgs/org-memeber-relation/`
+          const relationUrl = `/api/v1/orgs/org-member-relation/`
           const data = []
           for (const user of items) {
             data.push({ org: this.object.id, user: user.value, role: this.defaultOrgRole })
