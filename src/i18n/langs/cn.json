@@ -87,6 +87,8 @@
     "DateUpdated": "更新日期",
     "DeactiveSelected": "禁用所选",
     "Disk": "硬盘",
+    "AdDomain": "AD域名",
+    "AdDomainHelpText": "提供给域用户登录的AD域名",
     "Domain": "网域",
     "DomainDetail": "网域详情",
     "DomainHelpMessage": "网域功能是为了解决部分环境（如：混合云）无法直接连接而新增的功能，原理是通过网关服务器进行跳转登录。JMS => 网域网关 => 目标资产",

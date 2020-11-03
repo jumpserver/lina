@@ -30,7 +30,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
-        [this.$t('common.Auth'), ['auto_generate_key', 'update_password', 'password', 'private_key', 'token']],
+        [this.$t('common.Auth'), ['auto_generate_key', 'update_password', 'password', 'private_key', 'token', 'ad_domain']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['sftp_root', 'comment']]
       ],
@@ -133,6 +133,11 @@ export default {
               }
             }
           }
+        },
+        ad_domain: {
+          label: this.$t('assets.AdDomain'),
+          hidden: (form) => ['rdp'].indexOf(form.protocol) === -1,
+          helpText: this.$t('assets.AdDomainHelpText')
         },
         cmd_filters: {
           component: Select2,
