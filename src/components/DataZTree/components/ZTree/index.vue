@@ -71,7 +71,13 @@ export default {
       } else {
         treeUrl = this.treeSetting.treeUrl
       }
-      this.$axios.get(treeUrl).then(res => {
+      this.$axios.get(treeUrl, {
+        'axios-retry': {
+          retries: 20,
+          shouldResetTimeout: true,
+          retryDelay: () => { return 5000 }
+        }
+      }).then(res => {
         if (!res) {
           res = []
         }
