@@ -214,6 +214,10 @@ td .el-button.el-button--mini {
   color: white;
 }
 
+.el-select-dropdown__item.is-disabled:hover{
+  color:#c0c4cc;
+}
+
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after {
   color: $--color-primary;
 }
