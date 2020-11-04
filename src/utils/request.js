@@ -4,6 +4,7 @@ import { getTokenFromCookie } from '@/utils/auth'
 import { refreshSessionIdAge } from '@/api/users'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
+import axiosRetry from 'axios-retry'
 
 // create an axios instance
 const service = axios.create({
@@ -76,6 +77,7 @@ function ifBadRequest({ response, error }) {
     error.message = i18n.t('common.BadRoleErrorMsg')
   }
   if (response.status === 409) {
+    error.response.status = 409
     error.message = i18n.t('common.BadConflictErrorMsg')
   }
 }
@@ -143,5 +145,10 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+axiosRetry(service, {
+  // 默认不开启请求重试
+  retries: 0
+})
 
 export default service
