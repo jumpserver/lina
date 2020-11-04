@@ -76,7 +76,6 @@ export default {
         'axios-retry': {
           retries: 20,
           retryCondition: e => {
-            console.log(e)
             return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409
           },
           shouldResetTimeout: true,
