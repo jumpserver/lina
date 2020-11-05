@@ -11,7 +11,7 @@ function isValidateLicense() {
   if (store.getters.publicSettings.XPACK_ENABLED) {
     return store.getters.publicSettings.XPACK_LICENSE_IS_VALID
   }
-  return true
+  return false
 }
 
 export const REMOTE_APP = [

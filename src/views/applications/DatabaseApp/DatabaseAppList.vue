@@ -91,13 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings', 'currentOrg']),
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return true
-    }
+    ...mapGetters(['publicSettings', 'currentOrg'])
   },
   methods: {
     createMysql() {
@@ -111,6 +105,12 @@ export default {
     },
     createOracle() {
       this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
+    },
+    isValidateLicense() {
+      if (this.publicSettings.XPACK_ENABLED) {
+        return this.publicSettings.XPACK_LICENSE_IS_VALID
+      }
+      return false
     }
   }
 }
