@@ -83,7 +83,7 @@ export default {
       if (this.publicSettings.XPACK_ENABLED) {
         return this.publicSettings.XPACK_LICENSE_IS_VALID
       }
-      return true
+      return false
     },
     cardTitle() {
       return ''
