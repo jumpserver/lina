@@ -59,20 +59,17 @@ export default {
       window.location.reload()
     },
     getLangCode() {
-      if (localStorage.lang) {
-        return localStorage.lang
+      let langCode = localStorage.lang
+      if (!langCode) {
+        langCode = this.$cookie.get(this.LANG_COOKIE_NAME)
       }
-      let browserLang = navigator.language || navigator.userLanguage
-      browserLang = browserLang.substr(0, 2)
-      browserLang = browserLang.replace('zh', 'cn')
-      if (browserLang) {
-        return browserLang
+      if (!langCode) {
+        langCode = navigator.language || navigator.userLanguage
       }
-
-      const cookieCode = this.$cookie.get(this.LANG_COOKIE_NAME)
-      const lang = this.supportLanguages.find((v) => v.cookieCode === cookieCode)
-      if (lang) {
-        return lang[0].code
+      langCode = langCode.substr(0, 2)
+      langCode = langCode.replace('zh', 'cn')
+      if (langCode) {
+        return langCode
       }
     }
   }
