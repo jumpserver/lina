@@ -62,28 +62,28 @@ export default {
             name: 'MySQL',
             title: 'MySQL',
             type: 'primary',
-            can: true,
+            has: true,
             callback: this.createMysql.bind(this)
           },
           {
             name: 'PostgreSQL',
             title: 'PostgreSQL',
             type: 'primary',
-            can: this.isValidateLicense,
+            has: this.isValidateLicense,
             callback: this.createPostgreSQL.bind(this)
           },
           {
             name: 'MariaDB',
             title: 'MariaDB',
             type: 'primary',
-            can: this.isValidateLicense,
+            has: this.isValidateLicense,
             callback: this.createMariaDB.bind(this)
           },
           {
             name: 'Oracle',
             title: 'Oracle',
             type: 'primary',
-            can: this.isValidateLicense,
+            has: this.isValidateLicense,
             callback: this.createOracle.bind(this)
           }
         ]
