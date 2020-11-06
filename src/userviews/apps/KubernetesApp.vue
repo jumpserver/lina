@@ -35,7 +35,7 @@ export default {
             label: this.$t('assets.Type')
           },
           {
-            prop: 'cluster',
+            prop: 'attrs.cluster',
             align: 'center',
             label: this.$t('applications.cluster')
           },

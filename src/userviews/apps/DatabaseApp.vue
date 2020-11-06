@@ -35,7 +35,7 @@ export default {
             label: this.$t('assets.Type')
           },
           {
-            prop: 'database',
+            prop: 'attrs.database',
             align: 'center',
             label: this.$t('assets.Database')
           },
