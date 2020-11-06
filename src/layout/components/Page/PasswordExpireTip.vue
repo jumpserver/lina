@@ -24,37 +24,22 @@ export default {
       'currentUser'
     ]),
     isExpire() {
-      const datePasswordLastUpdatedTime = new Date(toSafeLocalDateStr(this.currentUser.date_password_last_updated))
-      const dateNow = new Date()
-      const intervalTime = Math.floor((dateNow.getTime() - datePasswordLastUpdatedTime.getTime()) / (24 * 3600 * 1000))
+      const intervalTime = this.getIntervalDays(this.currentUser.date_password_last_updated)
       const securityPasswordExpirationTime = this.publicSettings.SECURITY_PASSWORD_EXPIRATION_TIME
-      if (securityPasswordExpirationTime > intervalTime) {
-        if (securityPasswordExpirationTime - intervalTime < 7) {
-          return '快过期了'
-        }
+      if (intervalTime >= securityPasswordExpirationTime) {
+        return this.$t('users.passwordExpired')
       }
-
-      // const securityPasswordExpirationTime = this.publicSettings.SECURITY_PASSWORD_EXPIRATION_TIME
-      return true
+      if (securityPasswordExpirationTime - intervalTime <= 5) {
+        return this.$t('users.passwordWillExpiredPrefixMsg') + (securityPasswordExpirationTime - intervalTime) + this.$t('users.passwordWillExpiredSuffixMsg')
+      }
+      return false
     }
-    //   if (!this.publicSettings.XPACK_ENABLED || this.currentUser.role !== 'Admin') {
-    //     return false
-    //   }
-    //   const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
-    //   if (intervalDays < 0) {
-    //     return this.$t('setting.LicenseExpired')
-    //   }
-    //   if (intervalDays < 7) {
-    //     return this.$t('setting.LicenseWillBe') + this.licenseData.date_expired + this.$t('setting.Expire')
-    //   }
-    //   return false
-    // }
   },
   methods: {
     getIntervalDays(date) {
       const dateExpired = new Date(toSafeLocalDateStr(date))
       const dateNow = new Date()
-      const intervalTime = dateExpired.getTime() - dateNow.getTime()
+      const intervalTime = dateNow.getTime() - dateExpired.getTime()
       return Math.floor(intervalTime / (24 * 3600 * 1000))
     }
   }

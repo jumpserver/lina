@@ -863,7 +863,10 @@
       "remoteAppPermissionRules": "Remote app permission rules"
     },
     "UpdatePassword": "",
-    "UpdatePublicKey": ""
+    "UpdatePublicKey": "",
+    "passwordExpired": "Password expired",
+    "passwordWillExpiredPrefixMsg": "The password will expire in ",
+    "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible."
   },
   "xpack": {
     "Admin": "Admin",
