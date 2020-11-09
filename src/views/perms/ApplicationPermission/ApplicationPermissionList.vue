@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      title: this.$t('perms.RemoteAppPermission'),
+      title: this.$t('route.ApplicationPermission'),
       tableConfig: {
         url: '/api/v1/perms/application-permissions/',
         columns: [

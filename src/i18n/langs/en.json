@@ -527,6 +527,7 @@
     "RemoteApp": "Remote apps",
     "RemoteAppDetail": "Remote app detail",
     "RemoteAppPermission": "Remote apps permissions",
+    "ApplicationPermission": "Application permissions",
     "RemoteAppPermissionCreate": "Remote apps permission create",
     "RemoteAppPermissionDetail": "Remote apps permissions detail",
     "RemoteAppPermissionUpdate": "Remote app permission update",
