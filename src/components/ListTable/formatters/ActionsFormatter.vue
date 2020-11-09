@@ -107,7 +107,7 @@ export default {
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
         callback: colActions.onUpdate,
-        order: 5
+        order: 10
       },
       {
         name: 'delete',
@@ -116,16 +116,16 @@ export default {
         has: colActions.hasDelete,
         can: colActions.canDelete,
         callback: colActions.onDelete,
-        order: 10
+        order: 20
       },
       {
-        name: 'delete',
+        name: 'clone',
         title: this.$t('common.Clone'),
         type: 'info',
         has: colActions.hasClone,
         can: colActions.canClone,
         callback: colActions.onClone,
-        order: 10
+        order: 30
       }
     ]
     return {
@@ -143,9 +143,11 @@ export default {
         v.has = this.cleanBoolean(v, 'has')
         v.can = this.cleanBoolean(v, 'can')
         v.callback = this.cleanCallback(v)
+        v.order = v.order || 100
         return v
       })
       actions = actions.filter((v) => v.has)
+      actions.sort((a, b) => a.order - b.order)
       return actions
     },
     actions() {
