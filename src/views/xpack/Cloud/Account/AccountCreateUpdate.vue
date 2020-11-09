@@ -42,18 +42,7 @@ export default {
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
-      createSuccessNextRoute: { name: 'CloudCenter' },
-      performSubmit(validValues) {
-        const params = this.$route.params
-        const baseUrl = `/api/v1/xpack/cloud/accounts/`
-        const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
-        const method = this.getMethod()
-        validValues.attrs = {
-          subscription_id: validValues.subscription_id,
-          tenant_id: validValues.tenant_id
-        }
-        return this.$axios[method](`${url}?provider=${validValues.provider}`, validValues)
-      }
+      createSuccessNextRoute: { name: 'CloudCenter' }
     }
   },
   computed: {

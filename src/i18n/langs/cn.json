@@ -953,10 +953,10 @@
     "Cloud": {
       "Aliyun": "阿里云",
       "Qcloud": "腾讯云",
-      "AWS_China": "AWS 中国",
-      "AWS_Int": "AWS 国际",
+      "AWS_China": "AWS(中国)",
+      "AWS_Int": "AWS(国际)",
       "HuaweiCloud": "华为云",
-      "Azure":"微软Azure",
+      "Azure":"Azure(中国)",
       "HostnameStrategy": "用于生成资产主机名。例如：1. 实例名称 (instanceDemo)；2. 实例名称和部分IP(后两位) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "资产信息保持最新",
       "AccountCreate": "创建账户",

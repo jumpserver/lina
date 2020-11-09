@@ -940,10 +940,10 @@
     "Cloud": {
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
-      "AWS_China": "AWS China",
-      "AWS_Int": "AWS International",
+      "AWS_China": "AWS(China)",
+      "AWS_Int": "AWS(International)",
       "HuaweiCloud": "Huawei Cloud",
-      "Azure":"Microsoft Azure",
+      "Azure":"Azure(China)",
       "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",
       "IsAlwaysUpdate": "Asset info is kept up-to-date",
       "AccountCreate": "Create account",
