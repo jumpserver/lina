@@ -90,6 +90,13 @@ export default {
         return { name: routeName }
       }
     },
+    objectDetailRoute: {
+      type: Object,
+      default: function() {
+        const routeName = this.$route.name.replace('Update', 'Detail').replace('Create', 'Detail')
+        return { name: routeName }
+      }
+    },
     // 获取下一个路由
     getNextRoute: {
       type: Function,
@@ -128,9 +135,29 @@ export default {
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
+        let msgLinkName = this.$t('common.Detail')
+        if (res.name) {
+          msgLinkName = res.name
+        } else if (res.hostname) {
+          msgLinkName = res.hostname
+        }
+        const detailRoute = this.objectDetailRoute
+        detailRoute['params'] = { 'id': res.id }
         const route = this.getNextRoute(res, method)
         this.$emit('submitSuccess', res)
-        this.$message.success(msg)
+        const h = this.$createElement
+        this.$log.debug('router is: ', detailRoute)
+        this.$message({
+          message: h('p', null, [
+            h('el-link', {
+              on: {
+                click: () => this.$router.push(detailRoute)
+              }
+            }, msgLinkName),
+            h('span', { style: { 'padding-left': '5px' }}, msg)
+          ]),
+          type: 'success'
+        })
         if (!addContinue) {
           setTimeout(() => this.$router.push(route), 100)
         }
