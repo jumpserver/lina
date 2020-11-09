@@ -34,7 +34,7 @@ export default {
             label: this.$t('assets.Type')
           },
           {
-            prop: 'asset_info.hostname',
+            prop: 'attrs.asset_info.hostname',
             align: 'center',
             label: this.$t('assets.Asset')
           },

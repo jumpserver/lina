@@ -97,7 +97,7 @@ export default {
     },
     logout() {
       // Clean Status
-      const statusList = ['currentOrg', 'currentRole', 'jms_current_org', 'jms_current_role', 'sidebarStatus', 'django_language', 'X-JMS-ORG', 'activeTab']
+      const statusList = ['currentOrg', 'currentRole', 'jms_current_org', 'jms_current_role', 'sidebarStatus', 'X-JMS-ORG', 'activeTab']
       for (const i in statusList) {
         this.$cookie.delete(statusList[i])
       }

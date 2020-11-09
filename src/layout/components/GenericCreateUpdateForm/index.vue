@@ -238,9 +238,6 @@ export default {
     },
     async getObjectDetail() {
       return this.$axios.get(this.iUrl)
-    },
-    defaultOnDetail() {
-
     }
   }
 }

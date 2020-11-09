@@ -904,7 +904,10 @@
     },
     "dateLastLogin": "最后登录日期",
     "UpdatePassword": "更新密码",
-    "SetPublicKey": "设置SSH公钥"
+    "SetPublicKey": "设置SSH公钥",
+    "passwordExpired": "密码过期了",
+    "passwordWillExpiredPrefixMsg": "密码即将在 ",
+    "passwordWillExpiredSuffixMsg": "天 后过期，请尽快修改您的密码。"
   },
   "xpack": {
     "Admin": "管理员",
