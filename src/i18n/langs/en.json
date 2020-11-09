@@ -259,6 +259,7 @@
     "createBy": "Create by",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
+    "saveSuccessContinueMsg": "Create success, you may add another",
     "createdBy": "Created by",
     "dateCreated": "Date created",
     "dateFinished": "Date finished",
