@@ -62,28 +62,28 @@ export default {
             name: 'MySQL',
             title: 'MySQL',
             type: 'primary',
-            can: true,
+            has: true,
             callback: this.createMysql.bind(this)
           },
           {
             name: 'PostgreSQL',
             title: 'PostgreSQL',
             type: 'primary',
-            can: this.isValidateLicense,
+            has: this.isValidateLicense,
             callback: this.createPostgreSQL.bind(this)
           },
           {
             name: 'MariaDB',
             title: 'MariaDB',
             type: 'primary',
-            can: this.isValidateLicense,
+            has: this.isValidateLicense,
             callback: this.createMariaDB.bind(this)
           },
           {
             name: 'Oracle',
             title: 'Oracle',
             type: 'primary',
-            can: this.isValidateLicense,
+            has: this.isValidateLicense,
             callback: this.createOracle.bind(this)
           }
         ]
@@ -91,13 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings', 'currentOrg']),
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return true
-    }
+    ...mapGetters(['publicSettings', 'currentOrg'])
   },
   methods: {
     createMysql() {
@@ -111,6 +105,12 @@ export default {
     },
     createOracle() {
       this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
+    },
+    isValidateLicense() {
+      if (this.publicSettings.XPACK_ENABLED) {
+        return this.publicSettings.XPACK_LICENSE_IS_VALID
+      }
+      return false
     }
   }
 }

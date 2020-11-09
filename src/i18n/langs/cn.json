@@ -239,6 +239,7 @@
     "SelectFile": "选择文件",
     "Show": "显示",
     "Submit": "提交",
+    "SaveAndAddAnother": "保存并继续添加",
     "Test": "测试",
     "TestSuccessMsg": "测试成功",
     "To": "至",
@@ -261,6 +262,7 @@
     "cloneFrom": "克隆自",
     "createErrorMsg": "创建失败",
     "createSuccessMsg": "创建成功",
+    "saveSuccessContinueMsg": "创建成功，更新内容后可以继续添加",
     "createdBy": "创建人",
     "dateCreated": "创建日期",
     "dateExpired": "失效日期",
@@ -904,7 +906,10 @@
     },
     "dateLastLogin": "最后登录日期",
     "UpdatePassword": "更新密码",
-    "SetPublicKey": "设置SSH公钥"
+    "SetPublicKey": "设置SSH公钥",
+    "passwordExpired": "密码过期了",
+    "passwordWillExpiredPrefixMsg": "密码即将在 ",
+    "passwordWillExpiredSuffixMsg": "天 后过期，请尽快修改您的密码。"
   },
   "xpack": {
     "Admin": "管理员",

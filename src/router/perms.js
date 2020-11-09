@@ -35,7 +35,7 @@ const ApplicationPermissionRoutes = [
   {
     path: 'app-permissions',
     component: empty,
-    meta: { title: i18n.t('route.ApplicationPermission'), licenseRequired: true },
+    meta: { title: i18n.t('route.ApplicationPermission') },
     redirect: '',
     children: [
       {

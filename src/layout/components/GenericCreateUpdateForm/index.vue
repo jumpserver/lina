@@ -5,6 +5,8 @@
     :method="method"
     :form="form"
     :url="iUrl"
+    :has-save-continue="iHasSaveContinue"
+    :has-reset="iHasReset"
     :is-submitting="isSubmitting"
     v-bind="$attrs"
     v-on="$listeners"
@@ -60,6 +62,12 @@ export default {
       }
     },
     // 更新成功的msg
+    saveSuccessContinueMsg: {
+      type: String,
+      default: function() {
+        return this.$t('common.saveSuccessContinueMsg')
+      }
+    },
     updateSuccessMsg: {
       type: String,
       default: function() {
@@ -115,12 +123,17 @@ export default {
     },
     onPerformSuccess: {
       type: Function,
-      default(res, method, vm) {
-        const msg = method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
+      default(res, method, vm, addContinue) {
+        let msg = method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
+        if (addContinue) {
+          msg = this.saveSuccessContinueMsg
+        }
         const route = this.getNextRoute(res, method)
         this.$emit('submitSuccess', res)
         this.$message.success(msg)
-        setTimeout(() => this.$router.push(route), 100)
+        if (!addContinue) {
+          setTimeout(() => this.$router.push(route), 100)
+        }
       }
     },
     onPerformError: {
@@ -139,6 +152,10 @@ export default {
           }
         }
       }
+    },
+    hasSaveContinue: {
+      type: Boolean,
+      default: null
     }
   },
   data() {
@@ -155,6 +172,18 @@ export default {
     },
     iUrl() {
       return this.getUrl()
+    },
+    iHasSaveContinue() {
+      if (this.hasSaveContinue != null) {
+        return this.hasSaveContinue
+      }
+      return this.method === 'post'
+    },
+    iHasReset() {
+      if (this.hasReset != null) {
+        return this.hasReset
+      }
+      return this.method === 'put'
     }
   },
   async created() {
@@ -168,16 +197,16 @@ export default {
     }
   },
   methods: {
-    handleSubmit(values) {
+    handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
       values = this.cleanFormValue(values)
-      return handler(values)
+      return handler(values, formName, addContinue)
     },
-    defaultOnSubmit(validValues) {
+    defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true
       this.performSubmit(validValues)
-        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this))
+        .then((res) => this.onPerformSuccess.bind(this)(res, this.method, this, addContinue))
         .catch((error) => this.onPerformError(error, this.method, this))
         .finally(() => { this.isSubmitting = false })
     },

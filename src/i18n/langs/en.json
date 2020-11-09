@@ -261,6 +261,7 @@
     "cloneFrom": "Clone from",
     "createErrorMsg": "Create error",
     "createSuccessMsg": "Create success",
+    "saveSuccessContinueMsg": "Create success, you may add another",
     "createdBy": "Created by",
     "dateCreated": "Date created",
     "dateFinished": "Date finished",
@@ -891,7 +892,10 @@
       "remoteAppPermissionRules": "Remote app permission rules"
     },
     "UpdatePassword": "",
-    "UpdatePublicKey": ""
+    "UpdatePublicKey": "",
+    "passwordExpired": "Password expired",
+    "passwordWillExpiredPrefixMsg": "The password will expire in ",
+    "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible."
   },
   "xpack": {
     "Admin": "Admin",
