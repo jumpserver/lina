@@ -20,44 +20,53 @@ export default {
     AutoDataForm
   },
   props: {
+    // 创建对象的地址
     url: {
       type: String,
       default: ''
     },
+    // 更新的对象
     object: {
       type: Object,
       default: null
     },
+    // form的默认值
     initial: {
       type: Object,
       default: () => ({})
     },
+    // 提交前，清理form的值
     cleanFormValue: {
       type: Function,
       default: (value) => value
     },
+    // 当提交的时候，怎么处理
     onSubmit: {
       type: Function,
       default: null
     },
+    // 如何提交数据
     performSubmit: {
       type: Function,
       default(validValues) {
         return this.$axios[this.method](this.iUrl, validValues)
       }
     },
+    // 创建成功的msg
     createSuccessMsg: {
       type: String,
       default: function() {
         return this.$t('common.createSuccessMsg')
       }
     },
+    // 更新成功的msg
     updateSuccessMsg: {
       type: String,
       default: function() {
         return this.$t('common.updateSuccessMsg')
       }
     },
+    // 创建成功的跳转路由
     createSuccessNextRoute: {
       type: Object,
       default: function() {
@@ -65,6 +74,7 @@ export default {
         return { name: routeName }
       }
     },
+    // 更新成功的跳转路由
     updateSuccessNextRoute: {
       type: Object,
       default: function() {
@@ -72,12 +82,14 @@ export default {
         return { name: routeName }
       }
     },
+    // 获取下一个路由
     getNextRoute: {
       type: Function,
       default(res, method) {
         return method === 'post' ? this.createSuccessNextRoute : this.updateSuccessNextRoute
       }
     },
+    // 获取提交的方法
     getMethod: {
       type: Function,
       default: function() {
@@ -89,6 +101,7 @@ export default {
         }
       }
     },
+    // 获取创建和更新的url function
     getUrl: {
       type: Function,
       default: function() {
@@ -132,7 +145,8 @@ export default {
     return {
       form: {},
       loading: true,
-      isSubmitting: false
+      isSubmitting: false,
+      clone: false
     }
   },
   computed: {
@@ -147,6 +161,7 @@ export default {
     this.loading = true
     try {
       const values = await this.getFormValue()
+      this.$log.debug(this.$attrs)
       this.form = Object.assign(this.form, values)
     } finally {
       this.loading = false
@@ -167,21 +182,35 @@ export default {
         .finally(() => { this.isSubmitting = false })
     },
     async getFormValue() {
-      if (this.method !== 'put') {
+      const cloneFrom = this.$route.query['clone_from']
+      this.$log.debug('Clone from: ', cloneFrom)
+      if (this.method !== 'put' && !cloneFrom) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
-      if (object === null) {
-        object = await this.getObjectDetail()
+      if (cloneFrom) {
+        const url = `${this.url}${cloneFrom}/`
+        object = await this.getObjectDetail(url)
+        if (object['name']) {
+          object.name = this.$t('common.cloneFrom') + ' ' + object.name
+        } else if (object['hostname']) {
+          object.hostname = this.$t('common.cloneFrom') + ' ' + object.hostname
+        }
+      } else {
+        object = await this.getObjectDetail(this.iUrl)
+      }
+      if (object) {
         if (object['attrs']) {
           object = deepmerge(object, object['attrs'])
         }
+        this.$log.debug('Object is: ', object)
         this.$emit('update:object', object)
       }
       return object
     },
-    async getObjectDetail() {
-      return this.$axios.get(this.iUrl)
+    async getObjectDetail(url) {
+      this.$log.debug('Get object detail: ', url)
+      return this.$axios.get(url)
     }
   }
 }
