@@ -15,7 +15,7 @@ export default {
       fields: [
         [
           '', [
-            'name', 'provider', 'attrs', 'access_key_id', 'access_key_secret', 'comment'
+            'name', 'provider', 'access_key_id', 'access_key_secret', 'attrs', 'comment'
           ]
         ]
       ],
