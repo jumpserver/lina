@@ -46,6 +46,10 @@ export default {
     },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
+      const hasClone = _.get(config, 'columnsMeta.actions.formatterArgs.hasClone')
+      if (!this.headerActions.hasCreate && hasClone == null) {
+        config.columnsMeta.actions.formatterArgs.hasClone = false
+      }
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
     }
@@ -59,6 +63,8 @@ export default {
     }
   },
   mounted() {
+    this.$log.debug(this.headerActions)
+    this.$log.debug(this.iTableConfig)
   },
   methods: {
     handleSelectionChange(val) {
