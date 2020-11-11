@@ -135,7 +135,7 @@ export default {
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
-        let msgLinkName = this.$t('common.Detail')
+        let msgLinkName = this.$t('common.Resource')
         if (res.name) {
           msgLinkName = res.name
         } else if (res.hostname) {
@@ -152,9 +152,15 @@ export default {
             h('el-link', {
               on: {
                 click: () => this.$router.push(detailRoute)
-              }
+              },
+              style: { 'vertical-align': 'top' }
             }, msgLinkName),
-            h('span', { style: { 'padding-left': '5px' }}, msg)
+            h('span', { style: {
+              'padding-left': '5px',
+              'height': '18px',
+              'line-height': '18px',
+              'font-size': '13.5px',
+              'font-weight': ' 400' }}, msg)
           ]),
           type: 'success'
         })

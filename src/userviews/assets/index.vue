@@ -105,6 +105,7 @@ export default {
             formatterArgs: {
               hasDelete: false,
               loading: true,
+              hasClone: false,
               hasUpdate: false,
               extraActions: [
                 {
