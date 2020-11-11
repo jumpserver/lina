@@ -214,10 +214,11 @@ export default {
     }
   },
   async created() {
+    this.$log.debug('Object init is: ', this.object)
     this.loading = true
     try {
       const values = await this.getFormValue()
-      this.$log.debug(this.$attrs)
+      this.$log.debug('Final object is: ', values)
       this.form = Object.assign(this.form, values)
     } finally {
       this.loading = false
@@ -239,21 +240,23 @@ export default {
     },
     async getFormValue() {
       const cloneFrom = this.$route.query['clone_from']
-      this.$log.debug('Clone from: ', cloneFrom)
       if (this.method !== 'put' && !cloneFrom) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
-      if (cloneFrom) {
-        const url = `${this.url}${cloneFrom}/`
-        object = await this.getObjectDetail(url)
-        if (object['name']) {
-          object.name = this.$t('common.cloneFrom') + ' ' + object.name
-        } else if (object['hostname']) {
-          object.hostname = this.$t('common.cloneFrom') + ' ' + object.hostname
+      if (!object) {
+        if (cloneFrom) {
+          this.$log.debug('Clone from: ', cloneFrom)
+          const url = `${this.url}${cloneFrom}/`
+          object = await this.getObjectDetail(url)
+          if (object['name']) {
+            object.name = this.$t('common.cloneFrom') + ' ' + object.name
+          } else if (object['hostname']) {
+            object.hostname = this.$t('common.cloneFrom') + ' ' + object.hostname
+          }
+        } else {
+          object = await this.getObjectDetail(this.iUrl)
         }
-      } else {
-        object = await this.getObjectDetail(this.iUrl)
       }
       if (object) {
         if (object['attrs']) {
