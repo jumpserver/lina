@@ -106,6 +106,9 @@ export default {
               type: 'danger',
               label: this.$t('sessions.terminate')
             },
+            can: () => {
+              return vm.sessionData.can_terminate
+            },
             callbacks: {
               click: function() {
               // 终断 session reload
