@@ -72,6 +72,10 @@ export default {
             } else {
               this.fieldsMeta.username.rules[0].required = false
             }
+            if (['mysql', 'postgresql', 'mariadb', 'oracle'].indexOf(form.protocol) !== -1) {
+              this.fieldsMeta.username.rules = [Required]
+              this.fieldsMeta.username.rules[0].required = true
+            }
           }
         },
         private_key: {

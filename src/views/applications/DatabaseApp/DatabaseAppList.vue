@@ -28,7 +28,7 @@ export default {
           },
           'attrs.port': {
             label: this.$t('applications.port'),
-            width: '60px'
+            width: '80px'
           },
           'attrs.database': {
             label: this.$t('applications.database'),
