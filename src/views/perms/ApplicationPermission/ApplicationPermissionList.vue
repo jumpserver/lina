@@ -1,10 +1,11 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :title="title" />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import { ApplicationTypes } from '../const'
 
 export default {
   components: {
@@ -12,11 +13,12 @@ export default {
   },
   data() {
     return {
+      title: this.$t('route.ApplicationPermission'),
       tableConfig: {
-        url: '/api/v1/perms/remote-app-permissions/',
+        url: '/api/v1/perms/application-permissions/',
         columns: [
-          'name', 'users_amount', 'user_groups_amount',
-          'remote_apps_amount', 'system_users_amount',
+          'name', 'category_display', 'users_amount', 'user_groups_amount',
+          'applications_amount', 'system_users_amount',
           'is_valid', 'actions'
         ],
         columnsMeta: {
@@ -27,6 +29,9 @@ export default {
               }
             },
             showOverflowTooltip: true
+          },
+          category_display: {
+            width: '135px'
           },
           users_amount: {
             label: this.$t('users.Users'),
@@ -48,8 +53,8 @@ export default {
               }
             }
           },
-          remote_apps_amount: {
-            label: this.$t('assets.RemoteApps'),
+          applications_amount: {
+            label: this.$t('assets.Applications'),
             width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
@@ -71,9 +76,18 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false
+        hasCreate: false,
+        hasMoreActions: false,
+        hasBulkDelete: false,
+        // createRoute: 'RemoteAppCreate',
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
+        extraMoreActions: ApplicationTypes
       }
     }
+  },
+  methods: {
+
   }
 }
 </script>

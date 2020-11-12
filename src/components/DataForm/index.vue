@@ -15,6 +15,7 @@
     <el-form-item>
       <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" @click="handleClick(button)">{{ button.title }}</el-button>
       <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">{{ $t('common.Reset') }}</el-button>
+      <el-button v-if="defaultButton && hasSaveContinue" size="small" @click="submitForm('form', true)">{{ $t('common.SaveAndAddAnother') }}</el-button>
       <el-button v-if="defaultButton" size="small" :loading="isSubmitting" type="primary" @click="submitForm('form')">{{ $t('common.Submit') }}</el-button>
     </el-form-item>
   </ElFormRender>
@@ -32,6 +33,10 @@ export default {
       default: true
     },
     hasReset: {
+      type: Boolean,
+      default: true
+    },
+    hasSaveContinue: {
       type: Boolean,
       default: true
     },
@@ -60,11 +65,11 @@ export default {
   },
   methods: {
     // 获取表单数据
-    submitForm(formName) {
+    submitForm(formName, addContinue) {
       const form = this.$refs[formName]
       form.validate((valid) => {
         if (valid) {
-          this.$emit('submit', form.getFormValue(), form)
+          this.$emit('submit', form.getFormValue(), form, addContinue)
         } else {
           this.$emit('invalid', valid)
           return false
@@ -77,7 +82,7 @@ export default {
     },
     handleClick(button) {
       const callback = button.callback || function(values, form) {
-        console.log('Click ', button.title, ': ', values)
+        // console.log('Click ', button.title, ': ', values)
       }
       const form = this.$refs['form']
       const values = form.getFormValue()

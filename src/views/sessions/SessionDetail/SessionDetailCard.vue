@@ -76,7 +76,7 @@ export default {
             title: this.$t('sessions.replaySession'),
             attrs: {
               type: 'primary',
-              label: this.$t('sessions.go')
+              label: this.$t('sessions.replay')
             },
             callbacks: {
               click: function() {
@@ -104,7 +104,8 @@ export default {
             title: this.$t('sessions.sessionTerminate'),
             attrs: {
               type: 'danger',
-              label: this.$t('sessions.terminate')
+              label: this.$t('sessions.terminate'),
+              disabled: !vm.sessionData.can_terminate
             },
             callbacks: {
               click: function() {
@@ -124,10 +125,8 @@ export default {
             title: this.$t('sessions.sessionMonitor'),
             attrs: {
               type: 'primary',
-              label: this.$t('sessions.Monitor')
-            },
-            can: () => {
-              return vm.sessionData.can_join
+              label: this.$t('sessions.Monitor'),
+              disabled: !vm.sessionData.can_join
             },
             callbacks: {
               click: function() {

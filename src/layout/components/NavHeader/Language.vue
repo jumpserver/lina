@@ -31,17 +31,24 @@ export default {
     }
   },
   computed: {
+    supportedLangMapper() {
+      return this.supportLanguages.reduce((map, obj) => {
+        map[obj.code] = obj
+        return map
+      })
+    },
     currentLang() {
-      const cookieCode = this.$cookie.get(this.LANG_COOKIE_NAME)
-      let lang = this.supportLanguages.find((v) => v.cookieCode === cookieCode)
+      const langCode = this.getLangCode()
+      let lang = this.supportedLangMapper[langCode]
       if (!lang) {
         lang = this.supportLanguages[0]
-        this.changeLangTo(lang)
-      }
-      if (lang.code !== this.$i18n.locale) {
-        this.changeLangTo(lang)
       }
       return lang
+    }
+  },
+  mounted() {
+    if (this.currentLang.code !== this.$i18n.locale) {
+      this.changeLangTo(this.currentLang)
     }
   },
   methods: {
@@ -50,6 +57,20 @@ export default {
       localStorage.setItem('lang', item.code)
       this.$cookie.set(this.LANG_COOKIE_NAME, item.cookieCode)
       window.location.reload()
+    },
+    getLangCode() {
+      let langCode = localStorage.lang
+      if (!langCode) {
+        langCode = this.$cookie.get(this.LANG_COOKIE_NAME)
+      }
+      if (!langCode) {
+        langCode = navigator.language || navigator.userLanguage
+      }
+      langCode = langCode.substr(0, 2)
+      langCode = langCode.replace('zh', 'cn')
+      if (langCode) {
+        return langCode
+      }
     }
   }
 }

@@ -5,7 +5,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 export default {
-  name: 'UserGrantedRemoteApps',
+  name: 'UserGrantedK8Ss',
   components: {
     ListTable
   },
@@ -18,22 +18,19 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/${this.object.id}/remote-apps/?draw=1`,
-        columns: ['name', 'type', 'asset', 'comment'],
+        url: `/api/v1/perms/users/${this.object.id}/k8s-apps/?draw=1`,
+        columns: ['name', 'type', 'cluster', 'comment'],
         columnsMeta: {
           name: {
             formatterArgs: {
-              route: 'RemoteAppDetail'
+              route: 'KubernetesAppDetail'
             }
+          },
+          comment: {
+            width: '340px'
           },
           type: {
-            displayKey: 'get_type_display',
             width: '140px'
-          },
-          asset: {
-            formatter(row) {
-              return row.asset_info.hostname
-            }
           }
         }
       },

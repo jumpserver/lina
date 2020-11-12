@@ -148,3 +148,8 @@ input[type=file] {
   font-size: 12px;
   opacity: 80;
 }
+
+.el-table__body {
+  width: 100%;
+  table-layout: fixed !important;
+}

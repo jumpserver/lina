@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/k8s-apps/`,
+        url: `/api/v1/perms/users/applications/?category=cloud`,
         columns: [
           {
             prop: 'name',
@@ -35,7 +35,7 @@ export default {
             label: this.$t('assets.Type')
           },
           {
-            prop: 'cluster',
+            prop: 'attrs.cluster',
             align: 'center',
             label: this.$t('applications.cluster')
           },
@@ -53,6 +53,7 @@ export default {
             formatterArgs: {
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'connect',

@@ -14,8 +14,8 @@ export default {
     return {
       fields: [
         [
-          this.$t('common.Basic'), [
-            'name', 'provider', 'access_key_id', 'access_key_secret', 'comment'
+          '', [
+            'name', 'provider', 'access_key_id', 'access_key_secret', 'attrs', 'comment'
           ]
         ]
       ],
@@ -42,12 +42,42 @@ export default {
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
-      createSuccessNextRoute: { name: 'CloudCenter' }
+      createSuccessNextRoute: { name: 'CloudCenter' },
+      performSubmit(validValues) {
+        const params = this.$route.params
+        const baseUrl = `/api/v1/xpack/cloud/accounts/`
+        const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
+        const method = this.getMethod()
+        validValues.attrs = {
+          subscription_id: validValues.subscription_id,
+          tenant_id: validValues.tenant_id
+        }
+        return this.$axios[method](`${url}?provider=${validValues.provider}`, validValues)
+      },
+      getUrl() {
+        const params = this.$route.params
+        let url = `/api/v1/xpack/cloud/accounts/`
+        const method = this.getMethod()
+        if (params.id) {
+          url = `${url}${params.id}/`
+        }
+        return method === 'post' ? `${url}?provider=${this.$route.query.provider}` : `${url}?provider=azure`
+      }
     }
   },
   computed: {
     initial() {
       return this.$route.query
+    }
+  },
+  methods: {
+    getMethod() {
+      const params = this.$route.params
+      if (params.id) {
+        return 'put'
+      } else {
+        return 'post'
+      }
     }
   }
 }

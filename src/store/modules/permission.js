@@ -113,7 +113,7 @@ const actions = {
       accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
       accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
       if (accessedRoutes.length === 0) {
-        console.log('No route find')
+        // console.log('No route find')
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)

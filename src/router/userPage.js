@@ -115,6 +115,7 @@ export default [
   {
     path: `external-luna`,
     component: Layout,
+    hidden: true,
     meta: {
       permissions: [rolec.PERM_USE]
     },

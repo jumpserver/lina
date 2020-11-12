@@ -24,7 +24,7 @@ export default {
       'currentUser'
     ]),
     isExpire() {
-      if (this.currentUser.role !== 'Admin') {
+      if (!this.publicSettings.XPACK_ENABLED || this.currentUser.role !== 'Admin') {
         return false
       }
       const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
@@ -38,15 +38,15 @@ export default {
     }
   },
   mounted() {
-    if (this.publicSettings.XPACK_ENABLED && this.currentUser.role === 'Admin') {
-      this.$axios.get('/api/v1/xpack/license/detail').then(res => {
-        this.licenseData = res
-      }).finally(() => {
-        this.loading = false
-      })
-    } else {
-      this.loading = false
-    }
+    // if (this.publicSettings.XPACK_ENABLED && this.currentUser.role === 'Admin') {
+    //   this.$axios.get('/api/v1/xpack/license/detail').then(res => {
+    //     this.licenseData = res
+    //   }).finally(() => {
+    //     this.loading = false
+    //   })
+    // } else {
+    //   this.loading = false
+    // }
   },
   methods: {
     getIntervalDays(date) {

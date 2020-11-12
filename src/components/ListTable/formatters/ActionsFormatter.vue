@@ -24,6 +24,19 @@ const defaultUpdateCallback = function({ row, col }) {
   this.$router.push(route)
 }
 
+const defaultCloneCallback = function({ row, col }) {
+  const id = row.id
+  let route = { query: { clone_from: id }}
+  const cloneRoute = this.colActions.cloneRoute
+
+  if (typeof cloneRoute === 'object') {
+    route = Object.assign(route, cloneRoute)
+  } else {
+    route.name = cloneRoute
+  }
+  this.$router.push(route)
+}
+
 const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
   let msg = this.$t('common.deleteWarningMsg')
   const name = row.name || row.hostname
@@ -71,10 +84,14 @@ export default {
           canUpdate: true, // can set function(row, value)
           hasDelete: true, // can set function(row, value)
           canDelete: true,
+          hasClone: true,
+          canClone: true,
           updateRoute: this.$route.name.replace('List', 'Update'),
+          cloneRoute: this.$route.name.replace('List', 'Create'),
           performDelete: defaultPerformDelete,
           onUpdate: defaultUpdateCallback,
           onDelete: defaultDeleteCallback,
+          onClone: defaultCloneCallback,
           extraActions: [] // format see defaultActions
         }
       }
@@ -89,7 +106,8 @@ export default {
         type: 'primary',
         has: colActions.hasUpdate,
         can: colActions.canUpdate,
-        callback: colActions.onUpdate
+        callback: colActions.onUpdate,
+        order: 10
       },
       {
         name: 'delete',
@@ -97,7 +115,17 @@ export default {
         type: 'danger',
         has: colActions.hasDelete,
         can: colActions.canDelete,
-        callback: colActions.onDelete
+        callback: colActions.onDelete,
+        order: 20
+      },
+      {
+        name: 'clone',
+        title: this.$t('common.Clone'),
+        type: 'info',
+        has: colActions.hasClone,
+        can: colActions.canClone,
+        callback: colActions.onClone,
+        order: 30
       }
     ]
     return {
@@ -115,9 +143,11 @@ export default {
         v.has = this.cleanBoolean(v, 'has')
         v.can = this.cleanBoolean(v, 'can')
         v.callback = this.cleanCallback(v)
+        v.order = v.order || 100
         return v
       })
       actions = actions.filter((v) => v.has)
+      actions.sort((a, b) => a.order - b.order)
       return actions
     },
     actions() {

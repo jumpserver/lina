@@ -19,6 +19,9 @@ export default {
           name: 'terminate',
           title: this.$t('sessions.terminate'),
           type: 'danger',
+          can: (row, cellValue) => {
+            return row.can_terminate
+          },
           callback: function({ reload, cellValue, tableData }) {
             // 终断 session reload
             const data = [cellValue]
