@@ -32,7 +32,7 @@ export default {
         password_strategy: 'custom',
         is_periodic: true,
         password_rules: {
-          length: 20
+          length: 30
         },
         interval: 24
       },
