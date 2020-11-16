@@ -38,12 +38,12 @@ export default {
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
               },
-              onDelete: function({ row, col, cellValue, reload }) {
+              performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
                 ).then(res => {
                   this.$refs.GenericListTable.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                  // this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
                   this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
                 })
