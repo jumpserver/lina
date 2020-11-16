@@ -18,12 +18,16 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/remote-app-permissions/?user_id=${this.object.id}&draw=1`,
-        columns: ['name', 'users_amount', 'user_groups_amount', 'remote_apps_amount', 'system_users_amount', 'is_valid', 'actions'],
+        url: `/api/v1/perms/application-permissions/?user_id=${this.object.id}&draw=1`,
+        columns: [
+          'name', 'category_display', 'users_amount', 'user_groups_amount',
+          'applications_amount', 'system_users_amount',
+          'is_valid', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatterArgs: {
-              route: 'RemoteAppPermissionDetail'
+              route: 'ApplicationPermissionDetail'
             },
             showOverflowTooltip: true
           },
@@ -35,8 +39,8 @@ export default {
             label: this.$t('users.UserGroups'),
             width: '110px'
           },
-          remote_apps_amount: {
-            label: this.$t('assets.RemoteApps'),
+          applications_amount: {
+            label: this.$t('assets.Applications'),
             width: '110px'
           },
           system_users_amount: {
@@ -48,7 +52,7 @@ export default {
               updateRoute: 'RemoteAppPermissionUpdate',
               performDelete: ({ row, col }) => {
                 const id = row.id
-                const url = `/api/v1/perms/remote-app-permissions/${id}/?user_id=${this.object.id}&draw=1`
+                const url = `/api/v1/perms/application-permissions/${id}/?user_id=${this.object.id}&draw=1`
                 return this.$axios.delete(url)
               }
             }
