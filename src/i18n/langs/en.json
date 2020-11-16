@@ -892,6 +892,8 @@
       "grantedK8Ss":"Granted K8Ss",
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",
+      "grantedApplications": "Granted applications",
+      "ApplicationPermissionRules": "Application permission rules",
       "remoteAppPermissionRules": "Remote app permission rules"
     },
     "UpdatePassword": "",
