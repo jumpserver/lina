@@ -281,6 +281,7 @@ export default {
         },
         formSetting: {
           url: '/api/v1/assets/assets/',
+          hasSaveContinue: false,
           initial: {
             platform: 'Linux',
             protocols: ['ssh/22']

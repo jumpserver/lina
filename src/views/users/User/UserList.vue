@@ -161,6 +161,7 @@ export default {
             date_expired: getDayFuture(36500, new Date()).toISOString()
           },
           fields: ['groups', 'date_expired', 'comment'],
+          hasSaveContinue: false,
           url: '/api/v1/users/users/',
           fieldsMeta: {
             groups: {
