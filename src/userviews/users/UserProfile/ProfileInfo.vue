@@ -65,7 +65,8 @@ export default {
           title: this.$t('users.UpdatePassword'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Update')
+            label: this.$t('common.Update'),
+            disabled: this.$store.state.users.profile.source !== 'local'
           },
           callbacks: {
             click: function() {
@@ -77,7 +78,8 @@ export default {
           title: this.$t('users.UpdateSSHKey'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Update')
+            label: this.$t('common.Update'),
+            disabled: this.$store.state.users.profile.source !== 'local'
           },
           callbacks: {
             click: function() {
