@@ -191,6 +191,9 @@ export default {
             if (formValue.update_password || formValue.protocol === 'k8s') {
               return true
             }
+            if (formValue.login_mode === 'login_mode') {
+              return true
+            }
             return !this.$route.params.id
           }
         },

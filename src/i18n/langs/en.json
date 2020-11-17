@@ -787,6 +787,7 @@
     "Asset": "Asset",
     "SystemUser": "System user",
     "Applicant": "Applicant",
+    "RequestAssetPerm": "Request asset perm",
     "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
