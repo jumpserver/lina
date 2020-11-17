@@ -34,7 +34,7 @@ export default {
             label: this.$t('ops.hosts'),
             width: '65px',
             formatter: function(row) {
-              return row.latest_execution.hosts_amount
+              return _.get(row, 'latest_execution.hosts_amount', 0)
             }
           },
           is_success: {
@@ -42,7 +42,7 @@ export default {
             align: 'center',
             width: '80px',
             formatter: row => {
-              if (row.latest_execution.is_success) {
+              if (_.get(row, 'latest_execution.is_success', false)) {
                 return <i Class='fa fa-check text-primary'/>
               }
               return <i Class='fa fa-times text-danger'/>
@@ -52,14 +52,20 @@ export default {
             label: this.$t('ops.date'),
             width: '150px',
             formatter: function(row) {
-              return toSafeLocalDateStr(row.latest_execution.date_start)
+              if (_.get(row, 'latest_execution.date_start', false)) {
+                return toSafeLocalDateStr(row.latest_execution.date_start)
+              }
+              return ''
             }
           },
           time: {
             label: this.$t('ops.time'),
             width: '100px',
             formatter: function(row) {
-              return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
+              if (_.get(row, 'latest_execution.date_start', false)) {
+                return timeOffset(row.latest_execution.date_start, row.latest_execution.date_finished)
+              }
+              return ''
             }
           },
           actions: {
