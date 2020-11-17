@@ -13,7 +13,7 @@
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <pre style="padding-top: 10px">
+            <pre style="padding-top: 10px; overflow: auto">
 {{ item.body }}
             </pre>
           </div>
