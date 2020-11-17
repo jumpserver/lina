@@ -28,7 +28,6 @@ export default {
             label: this.$t('assets.Assets'),
             showOverflowTooltip: true,
             formatter: function(row, column, cellValue, index) {
-              console.log(row, column, cellValue)
               const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
               return <router-link{...{ attrs: route }} >{ row.attrs.asset_info.hostname }</router-link>
             }

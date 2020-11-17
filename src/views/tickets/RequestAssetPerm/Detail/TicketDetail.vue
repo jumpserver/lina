@@ -156,7 +156,6 @@ export default {
       window.location.reload()
     },
     handleApprove() {
-      console.log(this.requestForm)
       if (this.requestForm.asset.length === 0 || this.requestForm.systemuser.length === 0) {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
