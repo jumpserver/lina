@@ -11,7 +11,6 @@ export default {
     GenericListPage
   },
   data() {
-    const vm = this
     return {
       helpMessage: this.$t('assets.RemoteAppListHelpMessage'),
       tableConfig: {
@@ -35,9 +34,9 @@ export default {
           },
           actions: {
             formatterArgs: {
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
-              },
+              // onUpdate: ({ row }) => {
+              //   vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
+              // },
               onDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`

@@ -29,11 +29,12 @@ export default {
       url: '/api/v1/applications/applications/',
       getUrl() {
         const params = this.$route.params
+        const method = this.getMethod()
         let url = `/api/v1/applications/applications/`
         if (params.id) {
           url = `${url}${params.id}/`
         }
-        return `${url}?type=${this.$route.query.type}`
+        return method === 'post' ? `${url}?type=${this.$route.query.type}` : `${url}?category=remote_app`
       },
       performSubmit(validValues) {
         const params = this.$route.params
