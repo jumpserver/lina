@@ -28,7 +28,6 @@ export default {
             label: this.$t('assets.Assets'),
             showOverflowTooltip: true,
             formatter: function(row, column, cellValue, index) {
-              console.log(row, column, cellValue)
               const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
               return <router-link{...{ attrs: route }} >{ row.attrs.asset_info.hostname }</router-link>
             }
@@ -38,12 +37,12 @@ export default {
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
               },
-              onDelete: function({ row, col, cellValue, reload }) {
+              performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
                 ).then(res => {
                   this.$refs.GenericListTable.$refs.ListTable.reloadTable()
-                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                  // this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
                   this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
                 })

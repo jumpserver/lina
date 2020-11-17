@@ -903,6 +903,8 @@
       "grantedK8Ss": "授权的Kubernetes",
       "grantedDatabases": "授权的数据库",
       "grantedRemoteApps": "授权的远程应用",
+      "grantedApplications": "授权的应用",
+      "ApplicationPermissionRules": "应用授权规则",
       "remoteAppPermissionRules": "远程应用授权规则"
     },
     "dateLastLogin": "最后登录日期",

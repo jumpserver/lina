@@ -99,15 +99,9 @@ export default {
         icon: 'fa-edit',
         title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
-          url: '/api/v1/assets/system-users/',
-          processResults(data) {
-            let results = data.results
-            const protocol = vm.object.category === 'remote_app' ? `rdp` : vm.object.type
-            results = results.filter((item) => item.protocol === protocol).map((item) => {
-              return { label: item.name + '(' + item.username + ')', value: item.id }
-            })
-            const more = !!data.next
-            return { results: results, pagination: more, total: data.count }
+          url: `/api/v1/assets/system-users/?category=${vm.object.category}&type=${vm.object.type}`,
+          transformOption: (item) => {
+            return { label: item.name + ' (' + item.username + ')', value: item.id }
           }
         },
         hasObjectsId: this.object.system_users,

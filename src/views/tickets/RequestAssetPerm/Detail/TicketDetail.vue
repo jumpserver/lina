@@ -156,7 +156,7 @@ export default {
       window.location.reload()
     },
     handleApprove() {
-      if (this.requestForm.asset.length === 0 || this.requestForm.systemuser === '') {
+      if (this.requestForm.asset.length === 0 || this.requestForm.systemuser.length === 0) {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.patch(`/api/v1/tickets/tickets/request-asset-perm/${this.object.id}/`, {

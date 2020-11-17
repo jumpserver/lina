@@ -787,6 +787,7 @@
     "Asset": "Asset",
     "SystemUser": "System user",
     "Applicant": "Applicant",
+    "RequestAssetPerm": "Request asset perm",
     "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
@@ -891,6 +892,8 @@
       "grantedK8Ss":"Granted K8Ss",
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",
+      "grantedApplications": "Granted applications",
+      "ApplicationPermissionRules": "Application permission rules",
       "remoteAppPermissionRules": "Remote app permission rules"
     },
     "UpdatePassword": "",

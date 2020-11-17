@@ -84,7 +84,7 @@ export default {
           canUpdate: true, // can set function(row, value)
           hasDelete: true, // can set function(row, value)
           canDelete: true,
-          hasClone: true,
+          hasClone: false,
           canClone: true,
           updateRoute: this.$route.name.replace('List', 'Update'),
           cloneRoute: this.$route.name.replace('List', 'Create'),
