@@ -99,7 +99,7 @@ export default {
         icon: 'fa-edit',
         title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
-          url: `/api/v1/assets/system-users/?category=${vm.object.category}&type=${vm.object.type}`,
+          url: vm.object.category === 'remote_app' ? `/api/v1/assets/system-users/?protocol=rdp` : `/api/v1/assets/system-users/?protocol=${vm.object.type}`,
           transformOption: (item) => {
             return { label: item.name + ' (' + item.username + ')', value: item.id }
           }
