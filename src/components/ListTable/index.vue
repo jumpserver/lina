@@ -46,10 +46,8 @@ export default {
     },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
-      let hasClone = _.get(config, 'columnsMeta.actions.formatterArgs.hasClone')
-      if (this.headerActions.hasCreate && hasClone == null) {
-        hasClone = true
-      }
+      let hasClone = _.get(config, 'columnsMeta.actions.formatterArgs.hasClone', null)
+      hasClone = !!(this.headerActions.hasCreate && hasClone == null)
       _.set(config, 'columnsMeta.actions.formatterArgs.hasClone', hasClone)
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
