@@ -98,6 +98,7 @@ export default {
           const url = this.url
           const msg = this.updateSuccessMsg
           this.$axios.patch(url, validValues).then((res) => {
+            vm.$emit('update')
             this.$message.success(msg)
             vm.dialogSetting.dialogVisible = false
           }).catch(error => {

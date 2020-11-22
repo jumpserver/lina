@@ -9,6 +9,7 @@
       :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
       :dialog-setting="updateSelectedDialogSetting.dialogSetting"
+      @update="handleDialogUpdate"
     />
     <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
   </div>
@@ -287,6 +288,9 @@ export default {
     },
     handleInviteDialogClose() {
       this.InviteDialogSetting.InviteDialogVisible = false
+      this.$refs.GenericListPage.$refs.ListTable.reloadTable()
+    },
+    handleDialogUpdate() {
       this.$refs.GenericListPage.$refs.ListTable.reloadTable()
     }
   }
