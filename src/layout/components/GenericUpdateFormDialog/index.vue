@@ -1,6 +1,5 @@
 <template>
   <Dialog
-    v-if="dialogSetting.dialogVisible"
     :title="this.$t('common.updateSelected')"
     :visible.sync="dialogSetting.dialogVisible"
     width="70%"
