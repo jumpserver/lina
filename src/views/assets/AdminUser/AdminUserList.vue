@@ -60,7 +60,6 @@ export default {
       },
       updateRoute: 'AdminUserUpdate',
       headerActions: {
-        hasBulkDelete: false,
         createRoute: 'AdminUserCreate'
       },
       helpMessage: this.$t('assets.AdminUserListHelpMessage')
