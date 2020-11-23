@@ -76,7 +76,6 @@ export default {
         hasExport: false,
         hasImport: false,
         hasRefresh: true,
-        hasBulkDelete: false,
         hasSearch: true,
         hasMoreActions: false,
         createRoute: 'CommandFilterCreate'

@@ -64,7 +64,6 @@ export default {
         hasExport: false,
         hasImport: false,
         hasRefresh: false,
-        hasBulkDelete: false,
         hasSearch: false,
         hasMoreActions: false,
         createRoute: 'PlatformCreate'
