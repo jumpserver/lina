@@ -27,8 +27,8 @@ export default [
     path: `${BASE_URL}/luna/?_=${Date.now()}`,
     name: 'WebTerminal',
     // component: () => window.open(`/luna/?_=${Date.now()}`),
-    meta: { title: i18n.t('route.WebTerminal') },
-    hidden: true
+    meta: { title: i18n.t('route.WebTerminal') }
+    // hidden: true
   },
   {
     path: `${BASE_URL}/koko/elfinder/sftp/?`,
