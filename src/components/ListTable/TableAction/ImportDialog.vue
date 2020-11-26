@@ -8,6 +8,11 @@
     @cancel="handleImportCancel()"
   >
     <el-form label-position="left" style="padding-left: 50px">
+      <el-form-item label="文件类型" :label-width="'100px'">
+        <el-radio-group v-model="importTypeOption">
+          <el-radio v-for="option of importTypeOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
         <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
         <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.Update') }}</el-radio>
@@ -33,7 +38,7 @@
           :before-upload="beforeUpload"
         >
           <el-button size="mini" type="default">{{ this.$t('common.SelectFile') }}</el-button>
-          <div slot="tip" :class="uploadHelpTextClass" style="line-height: 1.5">{{ this.$t('common.imExport.onlyCSVFilesTips') }}</div>
+          <!--          <div slot="tip" :class="uploadHelpTextClass" style="line-height: 1.5">{{ this.$t('common.imExport.onlyCSVFilesTips') }}</div>-->
         </el-upload>
       </el-form-item>
     </el-form>
@@ -71,18 +76,34 @@ export default {
       importOption: '1',
       isCsv: true,
       errorMsg: '',
-      loadStatus: false
+      loadStatus: false,
+      importTypeOption: 'csv'
     }
   },
   computed: {
     hasSelected() {
       return this.selectedRows.length > 0
     },
+    importTypeOptions() {
+      return [
+        {
+          label: 'CSV',
+          value: 'csv',
+          can: true
+        },
+        {
+          label: 'Excel',
+          value: 'xlsx',
+          can: true
+        }
+      ]
+    },
     upLoadUrl() {
       return this.url
     },
     downloadImportTempUrl() {
-      const url = (this.url.indexOf('?') === -1) ? `${this.url}?format=csv&template=import&limit=1` : `${this.url}&format=csv&template=import&limit=1`
+      const format = this.importTypeOption === 'csv' ? 'format=csv&template=import&limit=1' : 'format=xlsx&template=import&limit=1'
+      const url = (this.url.indexOf('?') === -1) ? `${this.url}?${format}` : `${this.url}&${format}`
       return url
     },
     uploadHelpTextClass() {
@@ -103,7 +124,7 @@ export default {
       this.$axios.put(
         this.upLoadUrl,
         item.file,
-        { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
+        { headers: { 'Content-Type': this.importTypeOption === 'csv' ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
       ).then((data) => {
         const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
         this.onSuccess(msg)
@@ -117,7 +138,7 @@ export default {
       this.$axios.post(
         this.upLoadUrl,
         item.file,
-        { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
+        { headers: { 'Content-Type': this.importTypeOption === 'csv' ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
       ).then((data) => {
         const msg = this.$t('common.imExport.createSuccessMsg', { count: data.length })
         this.onSuccess(msg)
@@ -176,7 +197,8 @@ export default {
       }
       const spm = await createSourceIdCache(resources)
       const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
-      const url = `${baseUrl}?format=csv&template=update&spm=` + spm.spm
+      const format = this.importTypeOption === 'csv' ? '?format=csv&template=update&spm=' : '?format=xlsx&template=update&spm='
+      const url = `${baseUrl}${format}` + spm.spm
       return this.downloadCsv(url)
     },
     async handleImportConfirm() {
@@ -186,7 +208,7 @@ export default {
       this.showImportDialog = false
     },
     beforeUpload(file) {
-      this.isCsv = _.endsWith(file.name, 'csv')
+      this.isCsv = _.endsWith(file.name, 'csv') || _.endsWith(file.name, 'xlsx')
       return this.isCsv
     }
   }
