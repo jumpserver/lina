@@ -55,6 +55,8 @@ export default {
         hasCreate: false,
         hasMoreActions: false,
         hasBulkDelete: false,
+        hasExport: false,
+        hasImport: false,
         // createRoute: 'RemoteAppCreate',
         moreActionsTitle: this.$t('common.Create'),
         moreActionsType: 'primary',
