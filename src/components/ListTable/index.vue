@@ -44,11 +44,31 @@ export default {
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },
+    hasCreateAction() {
+      const hasLeftAction = this.headerActions.hasLeftActions
+      if (hasLeftAction === false) {
+        return false
+      }
+      const hasCreate = this.headerActions.hasCreate
+      if (hasCreate === false) {
+        return false
+      }
+      return true
+    },
+    hasCloneAction() {
+      const hasClone = _.get(this.tableConfig, 'columnsMeta.actions.formatterArgs.hasClone', null)
+      if (hasClone) {
+        return true
+      }
+      if (this.hasCreateAction && hasClone == null) {
+        return true
+      }
+      return false
+    },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
-      let hasClone = _.get(config, 'columnsMeta.actions.formatterArgs.hasClone', null)
-      hasClone = !!(this.headerActions.hasCreate && hasClone == null)
-      _.set(config, 'columnsMeta.actions.formatterArgs.hasClone', hasClone)
+      this.$log.debug('Header actions', this.headerActions)
+      _.set(config, 'columnsMeta.actions.formatterArgs.hasClone', this.hasCloneAction)
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
     }
