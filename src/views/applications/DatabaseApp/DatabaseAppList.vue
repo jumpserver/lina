@@ -53,6 +53,8 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        hasExport: false,
+        hasImport: false,
         hasBulkDelete: false,
         createRoute: 'DatabaseAppCreate',
         moreActionsTitle: this.$t('common.Create'),
