@@ -276,7 +276,7 @@
     "disableSelected": "Disable selected",
     "fieldRequiredError": "This field is required",
     "getErrorMsg": "Get failed",
-    "fileType": "File type ",
+    "fileType": "File type",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
