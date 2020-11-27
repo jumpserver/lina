@@ -8,7 +8,7 @@
     @cancel="handleImportCancel()"
   >
     <el-form label-position="left" style="padding-left: 50px">
-      <el-form-item label="文件类型" :label-width="'100px'">
+      <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
         <el-radio-group v-model="importTypeOption">
           <el-radio v-for="option of importTypeOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
         </el-radio-group>

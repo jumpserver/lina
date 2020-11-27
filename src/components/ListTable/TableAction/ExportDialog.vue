@@ -1,7 +1,7 @@
 <template>
   <Dialog v-if="showExportDialog" :title="$t('common.Export')" :visible.sync="showExportDialog" :destroy-on-close="true" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
     <el-form label-position="left" style="padding-left: 50px">
-      <el-form-item :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+      <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
         <el-radio-group v-model="exportTypeOption">
           <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
         </el-radio-group>

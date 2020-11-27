@@ -289,6 +289,7 @@
       "onlyCSVFilesTips": "仅支持csv文件导入",
       "updateSuccessMsg": "导入更新成功，总共：{count}"
     },
+    "fileType": "文件类型",
     "isValid": "有效",
     "nav": {
       "APIKey": "API Key",
