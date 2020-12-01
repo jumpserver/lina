@@ -86,7 +86,8 @@ export default {
                 }
               }
             })
-          }.bind(this)
+          }.bind(this),
+          hasSaveContinue: false
         }
       },
       tableConfig: {
