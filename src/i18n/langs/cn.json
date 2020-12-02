@@ -186,6 +186,7 @@
     "Active": "激活中",
     "actionsTips":"剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
     "Add": "添加",
+    "UpdateAssetDetail": "更新资产详细信息",
     "AddSuccessMsg": "添加成功",
     "Auth": "认证",
     "BadRequestErrorMsg": "请求错误，请检查填写内容",

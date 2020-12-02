@@ -136,7 +136,17 @@ export default {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
                 return this.$axios.delete(url)
-              }
+              },
+              extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t(`common.UpdateAssetDetail`),
+                  type: 'primary',
+                  callback: function({ cellValue, tableData }) {
+                    return this.$router.push({ name: 'AssetDetailCreateUpdate', params: { id: cellValue }})
+                  }
+                }
+              ]
             }
           }
         }
