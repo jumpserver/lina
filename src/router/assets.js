@@ -142,19 +142,62 @@ export default [
         meta: { title: i18n.t('route.SystemUserList'), activeMenu: '/assets/system-users' }
       },
       {
-        path: 'create',
-        name: 'SystemUserCreate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
+        path: 'ssh/create',
+        name: 'SSHSystemUserCreate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/SSHSystemUserCreateUpdate.vue'),
         meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
         hidden: true
       },
       {
-        path: ':id/update',
-        name: 'SystemUserUpdate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
+        path: 'ssh/:id/update',
+        name: 'SSHSystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/SSHSystemUserCreateUpdate.vue'),
         meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
         hidden: true
       },
+      {
+        path: 'telnet/create',
+        name: 'TelnetSystemUserCreate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/TelnetSystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
+        hidden: true
+      },
+      {
+        path: 'telnet/:id/update',
+        name: 'TelnetSystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/TelnetSystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
+        hidden: true
+      },
+      {
+        path: 'vnc/create',
+        name: 'VNCSystemUserCreate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/VNCSystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
+        hidden: true
+      },
+      {
+        path: 'vnc/:id/update',
+        name: 'VNCSystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/VNCSystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
+        hidden: true
+      },
+      {
+        path: 'rdp/create',
+        name: 'RDPSystemUserCreate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/RDPSystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
+        hidden: true
+      },
+      {
+        path: 'rdp/:id/update',
+        name: 'RDPSystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/RDPSystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
+        hidden: true
+      },
+
       {
         path: ':id',
         name: 'SystemUserDetail',

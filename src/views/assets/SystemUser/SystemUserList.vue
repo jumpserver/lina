@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { SystemUserTypes } from './const'
 import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
@@ -71,8 +72,12 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
+        hasCreate: false,
         hasMoreActions: false,
-        createRoute: 'SystemUserCreate'
+        // createRoute: 'SystemUserCreate',
+        moreActionsTitle: this.$t('common.Create'),
+        moreActionsType: 'primary',
+        extraMoreActions: SystemUserTypes
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')
     }
