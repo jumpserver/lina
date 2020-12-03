@@ -24,7 +24,8 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['hostname', 'ip', 'platform']],
-        ['', ['vendor', 'model', 'cpu_model', 'memory', 'disk_info', 'os_arch']]
+        [this.$t('assets.Hardware'), ['vendor', 'model', 'cpu_model', 'memory', 'disk_info', 'disk_total']],
+        [this.$t('assets.Os'), ['sn', 'os', 'os_version', 'os_arch']]
       ],
       fieldsMeta: {
         platform: {
@@ -59,6 +60,26 @@ export default {
           }
         },
         disk_info: {
+          el: {
+            type: `input`
+          }
+        },
+        disk_total: {
+          el: {
+            type: `input`
+          }
+        },
+        sn: {
+          el: {
+            type: `input`
+          }
+        },
+        os: {
+          el: {
+            type: `input`
+          }
+        },
+        os_version: {
           el: {
             type: `input`
           }

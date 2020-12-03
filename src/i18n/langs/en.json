@@ -58,6 +58,7 @@
     "AdminUserDetail": "Admin user detail",
     "AdminUserListHelpMessage": "Admin users are asset (charged server) on the root, or have NOPASSWD: ALL sudo permissions users, JumpServer users of the system using the user to `push system user`, `get assets hardware information`, etc.\n",
     "Asset": "Asset",
+    "Hardware": "Hardware",
     "AssetDetail": "Asset detail",
     "AssetList": "Asset list",
     "AssetListHelpMessage": "The left side is the asset tree, right click to create, delete, and change the tree node, authorization asset is also organized as a node, and the right side is the asset under that node\n",
