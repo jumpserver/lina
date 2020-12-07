@@ -129,6 +129,7 @@ export default {
             { text: this.$t('common.Yes'), value: true },
             { text: this.$t('common.No'), value: false }
           ]
+          col.sortable = false
           col.filterMethod = function(value, row, column) {
             const property = column['property']
             return row[property] === value
@@ -145,6 +146,7 @@ export default {
             }
             return { text: item.display_name, value: item.value }
           })
+          col.sortable = false
           col.filterMethod = function(value, row, column) {
             const property = column['property']
             return row[property] === value
