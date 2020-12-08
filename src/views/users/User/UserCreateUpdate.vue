@@ -29,7 +29,7 @@ export default {
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.Authentication'), ['password_strategy', 'update_password', 'password', 'set_public_key', 'public_key', 'mfa_level', 'source']],
+        [this.$t('users.Authentication'), ['password_strategy', 'update_password', 'password', 'set_public_key', 'public_key', 'mfa_level']],
         [this.$t('users.Secure'), ['role', 'org_roles', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
