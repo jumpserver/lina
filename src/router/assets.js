@@ -37,8 +37,8 @@ export default [
       },
       {
         path: 'detail/:id/update',
-        name: 'AssetDetailCreateUpdate',
-        component: () => import('@/views/assets/Asset/AssetDetailCreateUpdate.vue'),
+        name: 'AssetMoreInformationEdit',
+        component: () => import('@/views/assets/Asset/AssetMoreInformationEdit.vue'),
         meta: { title: i18n.t('common.UpdateAssetDetail'), activeMenu: '/assets/assets' },
         hidden: true
       }

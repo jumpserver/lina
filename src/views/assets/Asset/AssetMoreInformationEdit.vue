@@ -6,7 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 
 export default {
-  name: 'AssetDetailCreateUpdate',
+  name: 'AssetMoreInformationEdit',
   components: {
     GenericCreateUpdatePage
   },
