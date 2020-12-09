@@ -61,8 +61,8 @@ export default {
     generateFieldByType(type, field, fieldMeta) {
       switch (type) {
         case 'choice':
+          type = 'radio-group'
           if (!fieldMeta.read_only) {
-            type = 'radio-group'
             field.options = fieldMeta.choices.map(v => {
               return { label: v.display_name, value: v.value }
             })
@@ -93,12 +93,14 @@ export default {
           break
       }
       if (type === 'radio-group') {
-        const options = fieldMeta.choices.map(v => {
-          return { label: v.display_name, value: v.value }
-        })
-        if (options.length > 4) {
-          type = 'select'
-          field.el.filterable = true
+        if (!fieldMeta.read_only) {
+          const options = fieldMeta.choices.map(v => {
+            return { label: v.display_name, value: v.value }
+          })
+          if (options.length > 4) {
+            type = 'select'
+            field.el.filterable = true
+          }
         }
       }
       field.type = type
