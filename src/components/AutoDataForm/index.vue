@@ -61,10 +61,12 @@ export default {
     generateFieldByType(type, field, fieldMeta) {
       switch (type) {
         case 'choice':
-          type = 'radio-group'
-          field.options = fieldMeta.choices.map(v => {
-            return { label: v.display_name, value: v.value }
-          })
+          if (!fieldMeta.read_only) {
+            type = 'radio-group'
+            field.options = fieldMeta.choices.map(v => {
+              return { label: v.display_name, value: v.value }
+            })
+          }
           break
         case 'datetime':
           type = 'date-picker'
