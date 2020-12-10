@@ -237,6 +237,12 @@ export default {
           hidden: true
         }
       ]
+    },
+    {
+      path: 'system-monitor',
+      component: () => import('@/views/xpack/SystemMonitor/index.vue'),
+      name: 'SystemMonitor',
+      meta: { title: i18n.t('xpack.SystemMonitor'), permissions: [rolec.PERM_SUPER] }
     }
   ]
 }

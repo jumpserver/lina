@@ -24,6 +24,9 @@
           <i class="fa fa-align-justify" />  {{ this.$t('tree.ShowAssetAllChildrenNode') }}
         </li>
         <li class="divider" />
+        <li id="m_check_assets_amount" class="rmenu" tabindex="-1" @click="rCheckAssetsAmount">
+          <i class="fa fa-clone" />  {{ this.$t('tree.CheckAssetsAmount') }}
+        </li>
         <li id="m_show_node_info" class="rmenu" tabindex="-1" @click="rMenuShowNodeInfo">
           <i class="fa fa-info-circle" />  {{ this.$t('tree.ShowNodeInfo') }}
         </li>
@@ -136,7 +139,17 @@ export default {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
                 return this.$axios.delete(url)
-              }
+              },
+              extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t(`common.UpdateAssetDetail`),
+                  type: 'primary',
+                  callback: function({ cellValue, tableData }) {
+                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: cellValue }})
+                  }
+                }
+              ]
             }
           }
         }
@@ -445,6 +458,15 @@ export default {
           { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value },
           { key: 'key', label: this.$t('assets.Key'), value: res.key }
         ]
+      }).catch(error => {
+        this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
+      })
+    },
+    rCheckAssetsAmount: function() {
+      this.$axios.post(
+        `/api/v1/assets/nodes/launch_check_assets_amount_task/`
+      ).then(res => {
+        window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
       }).catch(error => {
         this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
       })

@@ -14,10 +14,10 @@
       <template>
         <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
           <el-form-item :label="$t('tickets.Asset')" required>
-            <Select2 v-model="requestForm.asset" v-bind="asset_select2" style="width: 30% !important" />
+            <Select2 v-model="requestForm.asset" v-bind="asset_select2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
-            <Select2 v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 30% !important" />
+            <Select2 v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('assets.Action')" required>
             <AssetPermissionFormActionField v-model="requestForm.actions" style="width: 30% !important" />

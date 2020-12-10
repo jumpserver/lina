@@ -1,6 +1,11 @@
 <template>
   <Dialog v-if="showExportDialog" :title="$t('common.Export')" :visible.sync="showExportDialog" :destroy-on-close="true" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
     <el-form label-position="left" style="padding-left: 50px">
+      <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
+        <el-radio-group v-model="exportTypeOption">
+          <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item class="export-form" :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
         <el-radio-group v-model="exportOption">
           <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
@@ -52,6 +57,7 @@ export default {
     return {
       showExportDialog: false,
       exportOption: 'all',
+      exportTypeOption: 'csv',
       meta: {}
     }
   },
@@ -92,6 +98,20 @@ export default {
           can: this.tableHasQuery && this.canExportFiltered
         }
       ]
+    },
+    exportTypeOptions() {
+      return [
+        {
+          label: 'CSV',
+          value: 'csv',
+          can: true
+        },
+        {
+          label: 'Excel',
+          value: 'xlsx',
+          can: true
+        }
+      ]
     }
   },
   mounted() {
@@ -123,7 +143,7 @@ export default {
         // delete query['limit']
         // delete query['offset']
       }
-      query['format'] = 'csv'
+      query['format'] = this.exportTypeOption
       const queryStr =
           (url.indexOf('?') > -1 ? '&' : '?') +
           queryUtil.stringify(query, '=', '&')

@@ -70,7 +70,6 @@ export default {
         ]
       },
       headerActions: {
-        hasBulkDelete: false,
         hasMoreActions: false,
         createRoute: 'SystemUserCreate'
       },
