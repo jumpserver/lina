@@ -180,6 +180,7 @@
   "common": {
     "Nothing": "Nothing",
     "Action": "Action",
+    "CustomCol":"Custom table col",
     "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "Activate": "Activate",

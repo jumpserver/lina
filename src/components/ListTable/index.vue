@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
+    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="iHeaderActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <IBox class="table-content">
       <AutoDataTable ref="dataTable" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
     </IBox>
@@ -13,6 +13,7 @@ import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
 import deepmerge from 'deepmerge'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ListTable',
   components: {
@@ -41,6 +42,7 @@ export default {
     }
   },
   computed: {
+
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },
@@ -65,13 +67,24 @@ export default {
       }
       return false
     },
+    iHeaderActions() {
+      const config = this.headerActions
+      const hasColumnSetting = _.get(this.headerActions, 'hasColumnSetting', false)
+      if (hasColumnSetting) {
+        config.totalColumns = this.tableConfig.columns
+      }
+      return config
+    },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
       this.$log.debug('Header actions', this.headerActions)
       _.set(config, 'columnsMeta.actions.formatterArgs.hasClone', this.hasCloneAction)
       this.$log.debug('ListTable: iTableConfig change', config)
-      return config
-    }
+      return this.getActiveColumns(config)
+    },
+    ...mapGetters({
+      tableColConfig: 'tableConfig'
+    })
   },
   watch: {
     extraQuery: {
@@ -86,6 +99,22 @@ export default {
     this.$log.debug(this.iTableConfig)
   },
   methods: {
+    getActiveColumns(config) {
+      const ACTIVE_COLUMN_KEY = this.$route.name
+      const hasColumnSetting = _.get(this.headerActions, 'hasColumnSetting', false)
+      const defaultColumn = _.get(this.headerActions, 'defaultColumn', [])
+      if (hasColumnSetting) {
+        const currentColumnSetting = _.get(this.tableColConfig, ACTIVE_COLUMN_KEY, defaultColumn || [])
+        const currentColumn = []
+        config.columns.forEach((v, k) => {
+          if (currentColumnSetting.indexOf(v.prop) !== -1 || v.prop === 'id') {
+            currentColumn.push(config.columns[k])
+          }
+        })
+        config.columns = currentColumn
+      }
+      return config
+    },
     handleSelectionChange(val) {
       this.selectedRows = val
     },

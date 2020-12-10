@@ -2,21 +2,25 @@
   <div>
     <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
     <ImExportDialog :selected-rows="selectedRows" :url="tableUrl" v-bind="$attrs" />
+    <ColumnSettingPopover v-bind="$attrs" />
   </div>
 </template>
 
 <script>
 import ActionsGroup from '@/components/ActionsGroup'
 import ImExportDialog from './ImExportDialog'
+import ColumnSettingPopover from './ColumnSettingPopover'
 import { cleanActions } from './utils'
 
 const defaultTrue = { type: Boolean, default: true }
+const defaultFalse = { type: Boolean, default: false }
 
 export default {
   name: 'RightSide',
   components: {
     ActionsGroup,
-    ImExportDialog
+    ImExportDialog,
+    ColumnSettingPopover
   },
   props: {
     tableUrl: {
@@ -37,6 +41,13 @@ export default {
         this.$eventBus.$emit('showImportDialog', { selectedRows })
       }
     },
+    hasColumnSetting: defaultFalse,
+    handleColumnConfig: {
+      type: Function,
+      default: function({ selectedRows }) {
+        this.$eventBus.$emit('showColumnSettingPopover')
+      }
+    },
     hasRefresh: defaultTrue,
     selectedRows: {
       type: Array,
@@ -54,6 +65,7 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
+        { name: 'actionColumnSetting', fa: 'fa-cog', tip: this.$t('common.Setting'), has: this.hasColumnSetting, callback: this.handleColumnConfig.bind(this) },
         { name: 'actionExport', fa: 'fa-download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExport.bind(this) },
         { name: 'actionImport', fa: 'fa-upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImport.bind(this) },
         { name: 'actionRefresh', fa: 'fa-refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefresh }

@@ -182,6 +182,7 @@
     "Action": "动作",
     "RequestTickets": "申请工单",
     "Actions": "操作",
+    "CustomCol":"自定义列表字段",
     "Activate": "激活",
     "Active": "激活中",
     "actionsTips":"剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
