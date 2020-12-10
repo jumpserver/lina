@@ -820,6 +820,7 @@
     "RenameNode": "重命名节点",
     "ShowAssetAllChildrenNode": "显示所有子节点资产",
     "ShowAssetOnlyCurrentNode": "仅显示当前节点资产",
+    "CheckAssetsAmount": "校对资产数量",
     "ShowNodeInfo": "显示节点详情",
     "TestNodeAssetConnectivity": "测试资产节点可连接性",
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
