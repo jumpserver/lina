@@ -118,6 +118,43 @@ export default {
       }
       return col
     },
+    addFilterIfNeed(col) {
+      if (col.prop) {
+        const column = this.meta[col.prop] || {}
+        if (!column.filter) {
+          return col
+        }
+        if (column.type === 'boolean') {
+          col.filters = [
+            { text: this.$t('common.Yes'), value: true },
+            { text: this.$t('common.No'), value: false }
+          ]
+          col.sortable = false
+          col.filterMethod = function(value, row, column) {
+            const property = column['property']
+            return row[property] === value
+          }
+        }
+        if (column.type === 'choice' && column.choices) {
+          col.filters = column.choices.map(item => {
+            if (typeof (item.value) === 'boolean') {
+              if (item.value) {
+                return { text: item.display_name, value: 'True' }
+              } else {
+                return { text: item.display_name, value: 'False' }
+              }
+            }
+            return { text: item.display_name, value: item.value }
+          })
+          col.sortable = false
+          col.filterMethod = function(value, row, column) {
+            const property = column['property']
+            return row[property] === value
+          }
+        }
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
@@ -127,6 +164,7 @@ export default {
       col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
+      col = this.addFilterIfNeed(col)
       return col
     },
     generateColumns() {

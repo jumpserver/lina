@@ -95,6 +95,8 @@
             v-for="col in columns"
             :key="col.prop"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+            :filters="col.filters || null"
+            :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             v-bind="{align: columnsAlign, ...col}"
           >
             <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
