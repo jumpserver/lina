@@ -808,6 +808,7 @@
     "RenameNode": "Rename node",
     "ShowAssetAllChildrenNode": "Show asset all children node",
     "ShowAssetOnlyCurrentNode": "Show asset only current node",
+    "CheckAssetsAmount": "Check assets amount",
     "ShowNodeInfo": "Show node information",
     "TestNodeAssetConnectivity": "Test node asset connectivity",
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
