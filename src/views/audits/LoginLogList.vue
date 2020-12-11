@@ -17,7 +17,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
-        columns: ['username', 'type', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
+        columns: ['username', 'type', 'backend', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
         columnsMeta: {
           username: {
             showOverflowTooltip: true
