@@ -49,7 +49,9 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'RemoteAppPermissionUpdate',
+              onUpdate: ({ row, col, cellValue }) => {
+                this.$router.push({ name: 'ApplicationPermissionUpdate', params: { id: cellValue }})
+              },
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/perms/application-permissions/${id}/?user_id=${this.object.id}&draw=1`
