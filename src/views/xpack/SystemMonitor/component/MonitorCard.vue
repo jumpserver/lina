@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="font-size: 24px;font-weight: 300">
-      <span>{{ (type).replace(/^\S/, s => s.toUpperCase()) }}</span>
+      <span>{{ `${(type).replace(/^\S/, s => s.toUpperCase())} ( ${serviceData.total} )` }}</span>
     </div>
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">
