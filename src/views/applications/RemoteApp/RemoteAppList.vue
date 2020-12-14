@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  <GenericListPage ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
 </template>
 
 <script type="text/jsx">
