@@ -185,6 +185,8 @@
     "RequestTickets": "申请工单",
     "Actions": "操作",
     "Activate": "激活",
+    "NeedSpecifiedFile": "需上传指定格式文件",
+    "TestPortErrorMsg":"端口错误,请重新输入",
     "Active": "激活中",
     "actionsTips":"剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
     "Add": "添加",
