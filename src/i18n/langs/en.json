@@ -184,6 +184,8 @@
     "Action": "Action",
     "RequestTickets": "Request tickets",
     "Actions": "Actions",
+    "NeedSpecifiedFile": "Required to upload the specified format file",
+    "TestPortErrorMsg":"Port Error, please check",
     "Activate": "Activate",
     "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
     "Active": "Active",

@@ -208,7 +208,12 @@ export default {
       this.showImportDialog = false
     },
     beforeUpload(file) {
-      this.isCsv = _.endsWith(file.name, 'csv') || _.endsWith(file.name, 'xlsx')
+      this.isCsv = this.importTypeOption === 'csv' ? _.endsWith(file.name, 'csv') : _.endsWith(file.name, 'xlsx')
+      if (!this.isCsv) {
+        this.$message.error(
+          this.$t('common.NeedSpecifiedFile')
+        )
+      }
       return this.isCsv
     }
   }
