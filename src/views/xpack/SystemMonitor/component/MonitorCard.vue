@@ -1,7 +1,9 @@
 <template>
   <div>
     <div style="font-size: 24px;font-weight: 300">
-      <span>{{ `${(type).replace(/^\S/, s => s.toUpperCase())} ( ${serviceData.total} )` }}</span>
+      <span v-if="type === 'omnidb'">{{ `OmniDB ( ${serviceData.total} )` }}</span>
+      <span v-else-if="type === 'guacamole'">{{ `Guacamole ( ${serviceData.total} )` }}</span>
+      <span v-else>{{ `KoKo ( ${serviceData.total} )` }}</span>
     </div>
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">

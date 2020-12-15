@@ -92,10 +92,33 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/terminals/',
-        columns: ['name', 'remote_addr', 'session_online', 'is_active', 'is_alive', 'actions'],
+        columns: ['name', 'remote_addr', 'session_online',
+          'state.session_active_count',
+          'state.system_cpu_load_1',
+          'state.system_disk_used_percent',
+          'state.system_memory_used_percent',
+          'is_active',
+          'is_alive',
+          'actions'],
         columnsMeta: {
           name: {
             sortable: 'custom'
+          },
+          'state.session_active_count': {
+            label: this.$t('sessions.sessionActiveCount'),
+            width: '160px'
+          },
+          'state.system_cpu_load_1': {
+            label: this.$t('sessions.systemCpuLoad'),
+            width: '160px'
+          },
+          'state.system_disk_used_percent': {
+            label: this.$t('sessions.systemDiskUsedPercent'),
+            width: '160px'
+          },
+          'state.system_memory_used_percent': {
+            label: this.$t('sessions.systemMemoryUsedPercent'),
+            width: '160px'
           },
           remote_addr: {
             sortable: 'custom'
