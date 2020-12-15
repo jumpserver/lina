@@ -1,7 +1,9 @@
 <template>
   <div>
     <div style="font-size: 24px;font-weight: 300">
-      <span>{{ `${(type).replace(/^\S/, s => s.toUpperCase())} ( ${serviceData.total} )` }}</span>
+      <span v-if="type === 'omnidb'">{{ `OmniDB ( ${serviceData.total} )` }}</span>
+      <span v-else-if="type === 'guacamole'">{{ `Guacamole ( ${serviceData.total} )` }}</span>
+      <span v-else>{{ `KoKo ( ${serviceData.total} )` }}</span>
     </div>
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">
@@ -24,6 +26,11 @@
                 role="progressbar"
                 :style="{'width':toPercent(serviceData.critical) }"
               />
+              <div
+                class="progress-bar progress-bar-offline"
+                role="progressbar"
+                :style="{'width':toPercent(serviceData.offline) }"
+              />
             </div>
             <div style="display: flex;justify-content: space-around;font-size: 14px;">
               <span>
@@ -31,12 +38,16 @@
                 {{ $t('xpack.NormalLoad') }}: {{ serviceData.normal }}
               </span>
               <span>
-                <i class="el-icon-warning" style="color: #E6A23C;" />
+                <i class="el-icon-bell" style="color: #E6A23C;" />
                 {{ $t('xpack.HighLoad') }}: {{ serviceData.high }}
               </span>
               <span>
-                <i class="el-icon-circle-close" style="color: #FF4949;" />
+                <i class="el-icon-message-solid" style="color: #FF4949;" />
                 {{ $t('xpack.CriticalLoad') }}: {{ serviceData.critical }}
+              </span>
+              <span>
+                <i class="el-icon-circle-close" style="color: #bfbaba;" />
+                {{ $t('xpack.Offline') }}: {{ serviceData.offline }}
               </span>
             </div>
           </div>
@@ -120,6 +131,9 @@ export default {
 }
 .progress-bar-danger{
   background-color: #FF4949 !important;
+}
+.progress-bar-offline{
+  background-color: #bfbaba !important;
 }
 .progress-bar {
   float: left;
