@@ -1,12 +1,14 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
+      ref="GenericCreateUpdateForm"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"
       :url="url"
       :get-method="getMethod"
       :more-buttons="moreButtons"
+      :on-perform-success="onPerformSuccess"
     />
   </IBox>
 </template>
@@ -65,6 +67,10 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    onPerformSuccess() {
+      this.$refs.GenericCreateUpdateForm.$refs.form.$refs.dataForm.resetForm('form')
+      this.$message.success(this.$t('common.updateSuccessMsg'))
     }
   }
 }
