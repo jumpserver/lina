@@ -97,6 +97,7 @@ export default {
           'state.system_cpu_load_1',
           'state.system_disk_used_percent',
           'state.system_memory_used_percent',
+          'status_display',
           'is_active',
           'is_alive',
           'actions'],
@@ -119,6 +120,10 @@ export default {
           'state.system_memory_used_percent': {
             label: this.$t('sessions.systemMemoryUsedPercent'),
             width: '160px'
+          },
+          'status_display': {
+            label: this.$t('xpack.LoadStatus'),
+            width: '120px'
           },
           remote_addr: {
             sortable: 'custom'
