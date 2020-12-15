@@ -1,13 +1,13 @@
 <template>
   <Page>
     <el-row :gutter="40">
-      <el-col :lg="{span:8,offset:4 }" :md="24" class="monitorCard">
+      <el-col :lg="{span:10,offset:2 }" :md="24" class="monitorCard">
         <MonitorCard type="koko" />
       </el-col>
-      <el-col :lg="8" :md="24" class="monitorCard">
+      <el-col :lg="10" :md="24" class="monitorCard">
         <MonitorCard type="guacamole" />
       </el-col>
-      <el-col :lg="{span:8,offset:4 }" :md="24" class="monitorCard">
+      <el-col :lg="{span:10,offset:2 }" :md="24" class="monitorCard">
         <MonitorCard type="omnidb" />
       </el-col>
     </el-row>
