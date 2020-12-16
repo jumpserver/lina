@@ -10,6 +10,7 @@
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
       :on-perform-success="onPerformSuccess"
+      :has-detail-in-msg="false"
     />
   </IBox>
 </template>

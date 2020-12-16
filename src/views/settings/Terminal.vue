@@ -9,6 +9,7 @@
       :object="object"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
+      :has-detail-in-msg="false"
     />
   </IBox>
 </template>
