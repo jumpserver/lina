@@ -192,6 +192,9 @@ export default {
       if (!field) {
         return
       }
+      if (typeof error === 'object') {
+        error = JSON.stringify(error)
+      }
       if (field.attrs.error === error) {
         error += '.'
       }
