@@ -107,19 +107,19 @@ export default {
           },
           'state.session_active_count': {
             label: this.$t('sessions.sessionActiveCount'),
-            width: '160px'
+            width: '120px'
           },
           'state.system_cpu_load_1': {
             label: this.$t('sessions.systemCpuLoad'),
-            width: '160px'
+            width: '120px'
           },
           'state.system_disk_used_percent': {
             label: this.$t('sessions.systemDiskUsedPercent'),
-            width: '160px'
+            width: '120px'
           },
           'state.system_memory_used_percent': {
             label: this.$t('sessions.systemMemoryUsedPercent'),
-            width: '160px'
+            width: '120px'
           },
           'status_display': {
             label: this.$t('xpack.LoadStatus'),

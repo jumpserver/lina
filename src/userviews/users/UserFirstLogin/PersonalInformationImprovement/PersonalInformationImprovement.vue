@@ -8,6 +8,7 @@
       :update-success-next-route="updateSuccessNextRoute"
       :clean-form-value="cleanFormValue"
       :get-method="getMethod"
+      :on-perform-success="onPerformSuccess"
     />
   </IBox>
 </template>
@@ -86,6 +87,10 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    onPerformSuccess() {
+      this.$message.success(this.$t('common.updateSuccessMsg'))
+      setTimeout(() => this.$router.push({ name: 'UserGuide' }), 100)
     }
   }
 }
