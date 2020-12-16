@@ -147,23 +147,27 @@ export default {
         this.$emit('submitSuccess', res)
         const h = this.$createElement
         this.$log.debug('router is: ', detailRoute)
-        this.$message({
-          message: h('p', null, [
-            h('el-link', {
-              on: {
-                click: () => this.$router.push(detailRoute)
-              },
-              style: { 'vertical-align': 'top' }
-            }, msgLinkName),
-            h('span', { style: {
-              'padding-left': '5px',
-              'height': '18px',
-              'line-height': '18px',
-              'font-size': '13.5px',
-              'font-weight': ' 400' }}, msg)
-          ]),
-          type: 'success'
-        })
+        if (this.hasDetailInMsg) {
+          this.$message({
+            message: h('p', null, [
+              h('el-link', {
+                on: {
+                  click: () => this.$router.push(detailRoute)
+                },
+                style: { 'vertical-align': 'top' }
+              }, msgLinkName),
+              h('span', { style: {
+                'padding-left': '5px',
+                'height': '18px',
+                'line-height': '18px',
+                'font-size': '13.5px',
+                'font-weight': ' 400' }}, msg)
+            ]),
+            type: 'success'
+          })
+        } else {
+          this.$message.success(msg)
+        }
         if (!addContinue) {
           setTimeout(() => this.$router.push(route), 100)
         }
@@ -189,6 +193,10 @@ export default {
     hasSaveContinue: {
       type: Boolean,
       default: null
+    },
+    hasDetailInMsg: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

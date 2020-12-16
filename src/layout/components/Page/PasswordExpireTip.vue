@@ -24,6 +24,10 @@ export default {
       'currentUser'
     ]),
     isExpire() {
+      // 用户来源不是Local时不显示密码过期提示
+      if (this.currentUser.source !== 'local') {
+        return false
+      }
       const intervalTime = this.getIntervalDays(this.currentUser.date_password_last_updated)
       const securityPasswordExpirationTime = this.publicSettings.SECURITY_PASSWORD_EXPIRATION_TIME
       if (intervalTime >= securityPasswordExpirationTime) {

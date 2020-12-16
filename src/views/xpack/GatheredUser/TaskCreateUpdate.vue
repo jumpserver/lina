@@ -21,6 +21,7 @@ export default {
         is_periodic: true,
         interval: 24
       },
+      hasDetailInMsg: false,
       fieldsMeta: {
         crontab: {
           hidden: (formValue) => {
