@@ -59,6 +59,9 @@ export default {
         doc_type: {
           label: this.$t('sessions.docType'),
           rules: [Required],
+          el: {
+            disabled: true
+          },
           helpText: this.$t('sessions.helpText.esDocType')
         }
       },
@@ -73,7 +76,7 @@ export default {
       return this.fieldsMap[this.currentType]
     },
     initial() {
-      return { type: this.currentType }
+      return { type: this.currentType, doc_type: 'command' }
     },
     currentType() {
       const params = this.$route.params
