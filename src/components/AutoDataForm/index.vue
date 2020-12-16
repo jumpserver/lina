@@ -196,7 +196,7 @@ export default {
         const str = error
         error = ''
         Object.keys(str).forEach(key => {
-          error += `${str[key][0]} | `
+          error += `${parseInt(key) + 1}.${str[key][0]}  `
         })
       }
       if (field.attrs.error === error) {
