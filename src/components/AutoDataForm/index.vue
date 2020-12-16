@@ -193,7 +193,11 @@ export default {
         return
       }
       if (typeof error === 'object') {
-        error = JSON.stringify(error)
+        const str = error
+        error = ''
+        Object.keys(str).forEach(key => {
+          error += `${str[key][0]} | `
+        })
       }
       if (field.attrs.error === error) {
         error += '.'
