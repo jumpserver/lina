@@ -198,6 +198,7 @@
     "BadRoleErrorMsg": "请求错误，无该操作权限",
     "BadConflictErrorMsg": "正在刷新中，请稍后再试",
     "Basic": "基本",
+    "PleaseAgreeToTheTerms": "请同意条款",
     "BasicInfo": "基本信息",
     "Cancel": "取消",
     "Close": "关闭",

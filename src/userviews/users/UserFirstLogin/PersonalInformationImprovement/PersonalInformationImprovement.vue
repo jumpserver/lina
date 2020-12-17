@@ -9,6 +9,7 @@
       :clean-form-value="cleanFormValue"
       :get-method="getMethod"
       :on-perform-success="onPerformSuccess"
+      :perform-submit="performSubmit"
     />
   </IBox>
 </template>
@@ -87,6 +88,13 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    performSubmit(validValues) {
+      if (!validValues.terms) {
+        this.$message.error(this.$t('common.PleaseAgreeToTheTerms'))
+        return Promise.reject()
+      }
+      return this.$axios['put'](this.url, validValues)
     },
     onPerformSuccess() {
       this.$message.success(this.$t('common.updateSuccessMsg'))

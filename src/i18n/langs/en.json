@@ -190,6 +190,7 @@
     "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
     "Active": "Active",
     "Add": "Add",
+    "PleaseAgreeToTheTerms": "Please agree to the terms",
     "PushSelected":"Push selected",
     "UpdateAssetDetail": "Update more detail",
     "AddSuccessMsg": "Add success",
