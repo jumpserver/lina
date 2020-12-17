@@ -11,6 +11,7 @@
         v-bind="tableAttrs"
         :data="data"
         :row-class-name="rowClassName"
+        v-on="$listeners"
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
         @select-all="selectStrategy.onSelectAll($event, canSelect)"
@@ -96,6 +97,7 @@
             :key="col.prop"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
             :filters="col.filters || null"
+            :filter-multiple="false"
             :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             v-bind="{align: columnsAlign, ...col}"
           >
