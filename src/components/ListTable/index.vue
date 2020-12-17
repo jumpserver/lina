@@ -81,10 +81,6 @@ export default {
       deep: true
     }
   },
-  mounted() {
-    this.$log.debug(this.headerActions)
-    this.$log.debug(this.iTableConfig)
-  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val
