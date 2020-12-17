@@ -1,5 +1,5 @@
 <template>
-  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
+  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
 </template>
 
 <script type="text/jsx">
@@ -14,6 +14,10 @@ export default {
   props: {
     config: {
       type: Object,
+      default: () => ({})
+    },
+    filterTable: {
+      type: Function,
       default: () => ({})
     }
   },
@@ -130,10 +134,7 @@ export default {
             { text: this.$t('common.No'), value: false }
           ]
           col.sortable = false
-          col.filterMethod = function(value, row, column) {
-            const property = column['property']
-            return row[property] === value
-          }
+          col['column-key'] = col.prop
         }
         if (column.type === 'choice' && column.choices) {
           col.filters = column.choices.map(item => {
@@ -147,10 +148,7 @@ export default {
             return { text: item.display_name, value: item.value }
           })
           col.sortable = false
-          col.filterMethod = function(value, row, column) {
-            const property = column['property']
-            return row[property] === value
-          }
+          col['column-key'] = col.prop
         }
       }
       return col
@@ -180,6 +178,12 @@ export default {
       }
       config.columns = columns
       this.iConfig = config
+    },
+    filterChange(filters) {
+      const key = Object.keys(filters)[0]
+      const attr = {}
+      attr[key] = filters[key][0]
+      this.filterTable(attr)
     }
   }
 }
