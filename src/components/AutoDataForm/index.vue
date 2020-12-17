@@ -199,9 +199,9 @@ export default {
           error += `${parseInt(key) + 1}.${str[key][0]}  `
         })
       }
-      if (field.attrs.error === error) {
-        error += '.'
-      }
+      // if (field.attrs.error === error) {
+      //   error += '.'
+      // }
       field.attrs.error = error
     }
   }

@@ -49,6 +49,7 @@ export default {
             formatter: ActionsFormatter,
             width: '200px',
             formatterArgs: {
+              hasClone: true,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/admin-users/${id}/`

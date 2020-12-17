@@ -60,6 +60,7 @@ export default {
             label: this.$t('common.Action'),
             updateRoute: 'SystemUserUpdate',
             formatterArgs: {
+              hasClone: true,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/system-users/${id}/`
