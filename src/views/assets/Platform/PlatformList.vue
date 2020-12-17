@@ -44,6 +44,7 @@ export default {
             formatter: ActionsFormatter,
             width: '200px',
             formatterArgs: {
+              hasClone: true,
               canDelete: (row, vaule) => {
                 return !row.internal
               },

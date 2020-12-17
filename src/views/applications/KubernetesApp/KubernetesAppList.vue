@@ -29,6 +29,7 @@ export default {
           actions: {
             prop: '',
             formatterArgs: {
+              hasClone: true,
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
