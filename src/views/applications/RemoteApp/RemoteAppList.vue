@@ -34,6 +34,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              hasClone: true,
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
               },
