@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/application-permissions/?user_id=${this.object.id}&draw=1`,
+        url: `/api/v1/perms/application-permissions/?user_id=${this.$route.params.id}&draw=1`,
         columns: [
           'name', 'category_display', 'users_amount', 'user_groups_amount',
           'applications_amount', 'system_users_amount',
