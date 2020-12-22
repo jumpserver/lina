@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/${this.object.id}/applications/`,
+        url: `/api/v1/perms/users/${this.$route.params.id}/applications/`,
         columns: ['name', 'category_display', 'type', 'asset', 'comment'],
         columnsMeta: {
           name: {

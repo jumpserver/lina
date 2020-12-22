@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
+        url: `/api/v1/perms/asset-permissions/?user_id=${this.$route.params.id}`,
         hasSelection: false,
         hasTree: true,
         columns: [
