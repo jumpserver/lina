@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage :fields="iFields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
 </template>
 
 <script>
@@ -7,7 +7,6 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import UploadKey from '@/components/UploadKey'
 import { Select2 } from '@/components'
 import { Required } from '@/components/DataForm/rules'
-
 // const asciiProtocols = ['ssh', 'telnet', 'mysql']
 const graphProtocols = ['vnc', 'rdp', 'k8s']
 
@@ -19,7 +18,7 @@ export default {
       initial: {
         login_mode: 'auto',
         priority: '20',
-        protocol: 'ssh',
+        protocol: this.$route.query.protocol,
         username_same_with_user: false,
         auto_generate_key: false,
         auto_push: false,
@@ -127,6 +126,7 @@ export default {
         protocol: {
           rules: [Required],
           el: {
+            disabled: true,
             style: 'width:100%'
           },
           on: {
@@ -230,6 +230,27 @@ export default {
   },
   method: {
 
+  },
+  computed: {
+    iFields() {
+      switch (this.$route.query.protocol) {
+        case 'k8s':case 'vnc':case 'rdp':
+          return [
+            [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+            [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
+            [this.$t('common.Auth'), ['auto_generate_key', 'update_password', 'password', 'private_key', 'token', 'ad_domain']],
+            [this.$t('common.Other'), ['sftp_root', 'comment']]
+          ]
+        default:
+          return [
+            [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+            [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
+            [this.$t('common.Auth'), ['auto_generate_key', 'update_password', 'password', 'private_key', 'token', 'ad_domain']],
+            [this.$t('common.Command filter'), ['cmd_filters']],
+            [this.$t('common.Other'), ['sftp_root', 'comment']]
+          ]
+      }
+    }
   },
   mounted() {
     const params = this.$route.params

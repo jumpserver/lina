@@ -8,6 +8,14 @@
         <i v-if="item.fa" :class="'fa ' + item.fa" />{{ item.title }}
       </span>
     </el-button>
+    <el-dropdown v-if="iMoreCreates.length > 0" trigger="click" :placement="moreCreatesPlacement" @command="handleClick">
+      <el-button :size="size" :type="moreCreatesType" class="btn-more-actions">
+        {{ iMoreCreatesTitle }}<i class="el-icon-arrow-down el-icon--right" />
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-for="item in iMoreCreates" :key="item.name" :command="item.name" v-bind="item" @click="handleClick(item.name)">{{ item.title }} </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
     <el-dropdown v-if="iMoreActions.length > 0" trigger="click" :placement="moreActionsPlacement" @command="handleClick">
       <el-button :size="size" :type="moreActionsType" class="btn-more-actions">
         {{ iMoreActionsTitle }}<i class="el-icon-arrow-down el-icon--right" />
@@ -57,7 +65,27 @@ export default {
       type: String,
       default: 'bottom'
       // 居中对齐
+    },
+    moreCreates: {
+      type: Array,
+      default: () => []
+    },
+    moreCreatesTitle: {
+      type: String,
+      default() {
+        return this.$t('common.MoreActions')
+      }
+    },
+    moreCreatesType: {
+      type: String,
+      default: 'default'
+    },
+    moreCreatesPlacement: {
+      type: String,
+      default: 'bottom'
+      // 居中对齐
     }
+
   },
   computed: {
     iActions() {
@@ -66,8 +94,11 @@ export default {
     iMoreActions() {
       return this.cleanActions(this.moreActions)
     },
+    iMoreCreates() {
+      return this.cleanActions(this.moreCreates)
+    },
     totalActions() {
-      return [...this.actions, ...this.moreActions]
+      return [...this.actions, ...this.moreActions, ...this.moreCreates]
     },
     totalNamedActions() {
       const actions = {}
@@ -81,6 +112,9 @@ export default {
     },
     iMoreActionsTitle() {
       return this.moreActionsTitle || this.$t('common.MoreActions')
+    },
+    iMoreCreatesTitle() {
+      return this.moreCreatesTitle || this.$t('common.MoreActions')
     }
   },
   methods: {
