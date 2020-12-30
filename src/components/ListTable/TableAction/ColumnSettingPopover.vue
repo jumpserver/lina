@@ -9,15 +9,25 @@
     top="10%"
     @confirm="handleColumnConfirm()"
   >
-    <el-checkbox-group v-model="columnList">
-      <el-checkbox
-        v-for="item in totalColumns"
-        :key="item.prop"
-        :label="item.prop"
-        :disabled="item.prop==='id'"
-      >
-        {{ item.label }}
-      </el-checkbox>
+    <el-checkbox-group
+      v-model="columnList"
+    >
+      <el-row>
+        <el-col
+          v-for="item in totalColumns"
+          :key="item.prop"
+          :span="8"
+          style="margin-top:5px;"
+        >
+          <el-checkbox
+            :label="item.prop"
+            :disabled="item.prop==='id' ||item.prop==='actions' "
+          >
+            {{ item.label }}
+          </el-checkbox>
+        </el-col>
+      </el-row>
+
     </el-checkbox-group>
   </Dialog>
 </template>
@@ -58,7 +68,10 @@ export default {
     this.$eventBus.$on('showColumnSettingPopover', () => {
       this.showColumnSettingPopover = true
     })
+    console.log(this.tableConfig, this.$route.name, this.defaultColumn)
     this.columnList = _.get(this.tableConfig, this.$route.name, this.defaultColumn || [])
+    console.log(this.columnList)
+    console.log(this.totalColumns)
   },
   methods: {
     handleColumnConfirm() {

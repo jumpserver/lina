@@ -73,7 +73,7 @@ export default {
         hasBulkDelete: false,
         hasMoreActions: false,
         hasColumnSetting: true,
-        defaultColumn: ['name', 'username'],
+        defaultColumn: ['name', 'username', 'protocol', 'assets_amount', 'comment', 'id'],
         createRoute: 'SystemUserCreate'
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')

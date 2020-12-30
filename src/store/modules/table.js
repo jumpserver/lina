@@ -1,7 +1,9 @@
 import VueCookie from 'vue-cookie'
+import Vue from 'vue'
 
 function getTableConfigfromCookie() {
-  return JSON.parse(VueCookie.get('tableConfig')) || {}
+  console.log(VueCookie.get('tableConfig') ? JSON.parse(VueCookie.get('tableConfig')) : {})
+  return VueCookie.get('tableConfig') ? JSON.parse(VueCookie.get('tableConfig')) : {}
 }
 
 const state = {
@@ -10,7 +12,7 @@ const state = {
 
 const mutations = {
   SET_TABLE_CONFIG: (state, tableConfig) => {
-    state.tableConfig[tableConfig.key] = tableConfig.value
+    Vue.set(state.tableConfig, tableConfig.key, tableConfig.value)
     VueCookie.set('tableConfig', JSON.stringify(state.tableConfig), 14)
   }
 }

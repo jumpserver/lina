@@ -58,6 +58,7 @@
     "AdminUserDetail": "管理用户详情",
     "AdminUserListHelpMessage": "管理用户是资产（被控服务器）上的 root，或拥有 NOPASSWD: ALL sudo 权限的用户， JumpServer 使用该用户来 `推送系统用户`、`获取资产硬件信息` 等。\n",
     "Asset": "资产",
+    "HardwareInfo": "硬件信息",
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
     "AssetListHelpMessage": "左侧是资产树，右击可以新建、删除、更改树节点，授权资产也是以节点方式组织的，右侧是属于该节点下的资产\n",

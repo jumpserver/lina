@@ -142,6 +142,7 @@ export default {
       }
       config.columns = columns
       this.iConfig = config
+      this.$eventBus.$emit('columnsChange', config)
     }
   }
 }

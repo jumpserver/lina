@@ -92,6 +92,12 @@ export default {
         this.$log.debug('ListTable: found extraQuery change')
       },
       deep: true
+    },
+    tableColConfig: {
+      handler() {
+        this.$log.debug('ListTable: found colConfig change')
+      },
+      deep: true
     }
   },
   mounted() {
