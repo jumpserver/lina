@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionColumnSetting', fa: 'fa-cog', tip: this.$t('common.Setting'), has: this.hasColumnSetting, callback: this.handleColumnConfig.bind(this) },
+        { name: 'actionColumnSetting', fa: 'fa-cog', tip: this.$t('common.CustomCol'), has: this.hasColumnSetting, callback: this.handleColumnConfig.bind(this) },
         { name: 'actionExport', fa: 'fa-download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExport.bind(this) },
         { name: 'actionImport', fa: 'fa-upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImport.bind(this) },
         { name: 'actionRefresh', fa: 'fa-refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefresh }

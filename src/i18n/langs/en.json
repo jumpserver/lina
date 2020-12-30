@@ -187,6 +187,7 @@
     "Activate": "Activate",
     "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
     "Active": "Active",
+    "TableColSettingInfo": "Please select the list details you want to display",
     "Add": "Add",
     "AddSuccessMsg": "Add success",
     "Auth": "Authorization",

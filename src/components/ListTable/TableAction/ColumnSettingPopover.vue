@@ -9,6 +9,9 @@
     top="10%"
     @confirm="handleColumnConfirm()"
   >
+    <el-alert type="success">
+      {{ this.$t('common.TableColSettingInfo') }}
+    </el-alert>
     <el-checkbox-group
       v-model="columnList"
     >

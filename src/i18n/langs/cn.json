@@ -187,6 +187,7 @@
     "Activate": "激活",
     "Active": "激活中",
     "actionsTips":"剪切板权限控制目前仅支持 RDP/VNC 协议的连接",
+    "TableColSettingInfo": "请选择您想显示的列表详细信息。",
     "Add": "添加",
     "AddSuccessMsg": "添加成功",
     "Auth": "认证",
