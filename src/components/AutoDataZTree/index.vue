@@ -157,6 +157,11 @@ export default {
       y -= (offset.top + scrollTop) / 3 - 10
       x += document.body.scrollLeft
       y += document.body.scrollTop + document.documentElement.scrollTop
+
+      if (y + $(`#${rMenuID} ul`).height() >= window.innerHeight) {
+        y -= $(`#${rMenuID} ul`).height()
+      }
+
       this.rMenu.css({ 'top': y + 'px', 'left': x + 'px', 'visibility': 'visible' })
       $(`#${rMenuID} ul`).show()
       $('body').bind('mousedown', this.onBodyMouseDown)
