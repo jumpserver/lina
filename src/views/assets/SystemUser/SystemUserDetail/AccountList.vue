@@ -30,25 +30,6 @@ export default {
     }
   },
   computed: {
-  },
-  mounted() {
-    this.getNodeList()
-  },
-  methods: {
-    getNodeList() {
-      this.$axios.get(
-        `/api/v1/assets/system-users-nodes-relations/?systemuser=${this.object.id}&draw=1&limit=15&offset=0`
-      ).then(data => {
-        for (const x in data.results) {
-          this.nodeRelationConfig.hasObjectsId.push(data.results[x].node)
-          this.nodeRelationConfig.hasObjects.push({
-            value: data.results[x].node,
-            label: data.results[x].node_display
-          })
-        }
-      }
-      )
-    }
   }
 }
 </script>
