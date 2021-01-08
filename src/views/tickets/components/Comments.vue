@@ -117,7 +117,7 @@ export default {
     },
     getComment() {
       this.loading = true
-      const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
+      const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       this.$axios.get(url).then(res => {
         this.comments = res
       }).catch(err => {
@@ -148,7 +148,7 @@ export default {
     createComment(successCallback) {
       const commentText = this.form.comments
       const ticketId = this.object.id
-      const commentUrl = `/api/v1/tickets/tickets/${ticketId}/comments/`
+      const commentUrl = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       if (!commentText) { return }
       const body = {
         body: commentText,

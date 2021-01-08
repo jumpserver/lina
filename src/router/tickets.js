@@ -27,5 +27,12 @@ export default [
     component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
     meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
     hidden: true
+  },
+  {
+    path: 'tickets/request-application-perm/create',
+    name: 'RequestApplicationPermTicketCreateUpdate',
+    component: () => import('@/views/tickets/RequestApplicationPerm/RequestApplicationPermTicketCreateUpdate'),
+    meta: { title: i18n.t('route.TicketCreate'), activeMenu: '/tickets/tickets' },
+    hidden: true
   }
 ]

@@ -19,12 +19,16 @@ export default {
       ticket: { title: '', user_display: '', type_display: '', status: '', assignees_display: '', date_created: '' },
       config: {
         activeMenu: 'TicketDetail',
+        url: '',
         submenu: [
           {
             title: this.$t('route.TicketDetail'),
             name: 'TicketDetail'
           }
         ],
+        actions: {
+          detailApiUrl: `/api/v1/tickets/tickets/${this.$route.params.id}/`
+        },
         getObjectName: this.getObjectName,
         hasRightSide: false
       }

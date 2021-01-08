@@ -200,6 +200,7 @@
     "Basic": "基本",
     "PleaseAgreeToTheTerms": "请同意条款",
     "BasicInfo": "基本信息",
+    "ApplyInfo": "申请信息",
     "Cancel": "取消",
     "Close": "关闭",
     "Command filter": "命令过滤器",
@@ -800,6 +801,8 @@
     "reply": "回复",
     "status": "状态",
     "title": "标题",
+    "action": "动作",
+    "IPGroup": "IP 组",
     "type": "类型",
     "user": "用户",
     "Status": "状态",
@@ -812,6 +815,7 @@
     "Asset": "资产",
     "SystemUser": "系统用户",
     "RequestAssetPerm": "申请资产授权",
+    "RequestApplicationPerm": "申请应用授权",
     "Applicant": "申请人",
     "Pending": "待处理",
     "Approved": "已同意",
@@ -819,7 +823,8 @@
     "Closed": "已完成",
     "helpText": {
       "ips": "请输入逗号分割的IP地址组",
-      "fuzzySearch": "支持模糊搜索"
+      "fuzzySearch": "支持模糊搜索",
+      "application": "请输入逗号分割的应用组"
     }
   },
   "tree": {
