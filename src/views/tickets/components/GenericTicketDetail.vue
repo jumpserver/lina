@@ -1,7 +1,8 @@
 <template>
   <el-row>
     <el-col :span="17">
-      <Details :detail-card-items="detailCardItems" :special-card-items="specialCardItems" />
+      <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
+      <Details :detail-card-items="specialCardItems" :title="$t('common.ApplyInfo')" />
       <slot id="MoreDetails" />
       <Comments :object="object" v-bind="$attrs" />
     </el-col>

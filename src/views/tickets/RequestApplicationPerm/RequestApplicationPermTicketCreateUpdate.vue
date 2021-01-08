@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/Select2'
 import { getDaysFuture } from '@/utils/common'
-import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
+import { Required } from '@/components/DataForm/rules'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -17,19 +17,17 @@ export default {
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
     return {
-      // 工单创建 隐藏提示信息中的跳转连接
-      hasDetailInMsg: false,
       initial: {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
         org_id: 'DEFAULT',
-        type: 'apply_asset',
+        type: 'apply_application',
         apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
-        [this.$t('tickets.RequestPerm'), ['apply_ip_group', 'apply_hostname_group', 'apply_system_user_group', 'apply_actions', 'apply_date_start', 'apply_date_expired']]
+        [this.$t('tickets.RequestPerm'), ['apply_category_type', 'apply_application_group', 'apply_system_user_group', 'apply_date_start', 'apply_date_expired']]
 
       ],
       fieldsMeta: {
@@ -38,22 +36,70 @@ export default {
             disabled: true
           }
         },
-        apply_ip_group: {
-          label: this.$t('tickets.IPGroup'),
-          helpText: this.$t('tickets.helpText.ips')
+        apply_category_type: {
+          type: 'cascader',
+          label: this.$t('applications.appType'),
+          rules: [Required],
+          el: {
+            multiple: false,
+            options: [
+              { label: 'DB',
+                value: 'db',
+                children: [
+                  {
+                    label: 'MySQL',
+                    value: 'mysql'
+                  },
+                  {
+                    label: 'Oracle',
+                    value: 'oracle'
+                  },
+                  {
+                    label: 'PostgreSQL',
+                    value: 'postgresql'
+                  },
+                  {
+                    label: 'MariaDB',
+                    value: 'mariadb'
+                  }
+                ]
+              },
+              { label: 'Cloud', value: 'cloud', children: [
+                {
+                  label: 'Kubernetes',
+                  value: 'k8s'
+                }
+              ]
+              },
+              { label: 'Remote App', value: 'remote_app',
+                children: [
+                  {
+                    label: 'MySQL Workbench',
+                    value: 'mysql_workbench'
+                  },
+                  {
+                    label: 'vSphere Client',
+                    value: 'vmware_client'
+                  },
+                  {
+                    label: 'Custom',
+                    value: 'custom'
+                  }, {
+                    label: 'Chrome',
+                    value: 'chrome'
+                  }
+                ]
+              }
+            ]
+          }
         },
-        apply_hostname_group: {
-          label: this.$t('assets.Hostname'),
-          helpText: this.$t('tickets.helpText.fuzzySearch')
+        apply_application_group: {
+          label: this.$t('assets.Applications'),
+          helpText: this.$t('tickets.helpText.application')
         },
         apply_system_user_group: {
           label: this.$t('assets.SystemUser'),
           helpText: this.$t('tickets.helpText.fuzzySearch')
-        },
-        apply_actions: {
-          label: this.$t('perms.Actions'),
-          component: AssetPermissionFormActionField,
-          helpText: this.$t('common.actionsTips')
         },
         apply_date_start: {
           label: this.$t('common.DateStart'),
@@ -94,7 +140,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/tickets/tickets/?type=apply_asset&action=open',
+      url: '/api/v1/tickets/tickets/?type=apply_application&action=open',
       createSuccessNextRoute: {
         name: 'TicketList'
       }
@@ -102,17 +148,14 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
+      console.log(validValues)
       const meta = {}
-      const ips = validValues.apply_ip_group
-      if (ips) {
-        validValues.meta.apply_ip_group = ips.split(',')
+      const applications = validValues.apply_application_group
+      if (applications) {
+        validValues.meta.apply_application_group = applications.split(',')
       }
-      if (ips === '') {
-        delete validValues['apply_ip_group']
-      }
-      if (validValues.apply_hostname_group) {
-        meta.apply_hostname_group = validValues.apply_ip_group
-        delete validValues['apply_hostname_group']
+      if (applications === '') {
+        delete validValues['apply_application_group']
       }
 
       if (validValues.apply_system_user_group) {
@@ -120,10 +163,10 @@ export default {
         delete validValues['apply_system_user_group']
       }
 
-      if (validValues.apply_actions) {
-        meta.apply_actions = validValues.apply_actions
-        delete validValues['apply_actions']
-      }
+      meta.apply_category = validValues.apply_category_type[0]
+
+      meta.apply_type = validValues.apply_category_type[1]
+
       meta.apply_date_start = validValues.apply_date_start
       delete validValues['apply_date_start']
 
@@ -132,12 +175,14 @@ export default {
 
       validValues['meta'] = meta
 
-      return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_asset`, validValues)
+      return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+.el-form ::v-deep .el-cascader{
+  width: 100%;
+}
 </style>

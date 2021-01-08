@@ -203,6 +203,7 @@
     "BadConflictErrorMsg": "Refreshing, please try again later",
     "Basic": "Basic",
     "BasicInfo": "Basic info",
+    "ApplyInfo": "Apply info",
     "Cancel": "Cancel",
     "Close": "Close",
     "Command filter": "Command filter",
@@ -789,6 +790,8 @@
     "Close": "Close",
     "Comment": "Comment",
     "MyTickets": "My tickets",
+    "action": "Action",
+    "IPGroup": "IP 组",
     "Reject": "Reject",
     "date": "Date",
     "reply": "Reply",
@@ -804,13 +807,15 @@
     "SystemUser": "System user",
     "Applicant": "Applicant",
     "RequestAssetPerm": "Request asset perm",
+    "RequestApplicationPerm": "Request application perm",
     "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
     "Closed": "Closed",
     "helpText": {
       "ips": "Enter the IP address group, separated by commas",
-      "fuzzySearch": "Support for fuzzy search"
+      "fuzzySearch": "Support for fuzzy search",
+      "application": "Enter the application group, separated by commas"
     }
   },
   "tree": {
