@@ -793,6 +793,8 @@
     "Assignee": "处理人",
     "Assignees": "待处理人",
     "Close": "关闭",
+    "OpenStatus":"开启",
+    "CloseStatus":"关闭",
     "Comment": "备注",
     "MyTickets": "我发起的",
     "RequestPerm":"授权申请",

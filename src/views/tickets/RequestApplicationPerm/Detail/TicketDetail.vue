@@ -31,9 +31,6 @@
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$t('assets.Action')" required>
-            <AssetPermissionFormActionField v-model="requestForm.actions" style="width: 30% !important" />
-          </el-form-item>
         </el-form>
       </template>
     </IBox>
@@ -46,11 +43,10 @@ import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
 import Select2 from '@/components/Select2'
 import IBox from '@/components/IBox'
-import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2, AssetPermissionFormActionField },
+  components: { GenericTicketDetail, IBox, Select2 },
   props: {
     object: {
       type: Object,
@@ -63,7 +59,6 @@ export default {
       requestForm: {
         asset: this.object.meta.recommend_assets,
         systemuser: this.object.meta.recommend_system_users,
-        actions: this.object.meta.apply_actions,
         apply_date_expired: this.object.meta.apply_date_expired,
         apply_date_start: this.object.meta.apply_date_start
       },
@@ -71,11 +66,13 @@ export default {
       assets: [],
       asset_select2: {
         multiple: true,
-        value: this.object.meta.recommend_assets,
+        value: this.object.meta.recommend_applications,
         ajax: {
-          url: `/api/v1/assets/assets/?org_id=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: `/api/v1/applications/applications/?org_id=${(this.object.org_id === '')
+            ? 'DEFAULT'
+            : this.object.org_id}&category=${this.object.meta.apply_category}&type=${this.object.meta.apply_type}`,
           transformOption: (item) => {
-            return { label: item.hostname, value: item.id }
+            return { label: item.name, value: item.id }
           }
         }
       },
@@ -83,7 +80,13 @@ export default {
         multiple: true,
         value: this.object.meta.recommend_system_users,
         ajax: {
-          url: `/api/v1/assets/system-users/?org_id=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: `/api/v1/assets/system-users/?org_id=${(this.object.org_id === '')
+            ? 'DEFAULT'
+            : this.object.org_id
+          }&protocol=${(this.object.meta.apply_type === 'remote_app')
+            ? 'rdp'
+            : this.object.meta.apply_type
+          }`,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
@@ -134,12 +137,12 @@ export default {
         //   value: this.object.assignee_display
         // },
         {
-          key: this.$t('tickets.IP'),
-          value: this.object.meta.apply_ip_group
+          key: this.$t('applications.appType'),
+          value: `${this.object.meta.apply_category_display} / ${this.object.meta.apply_type_display} `
         },
         {
-          key: this.$t('tickets.Hostname'),
-          value: this.object.meta.apply_hostname_group
+          key: this.$t('assets.Applications'),
+          value: this.object.meta.approve_applications
         },
         {
           key: this.$t('tickets.SystemUser'),
@@ -176,8 +179,7 @@ export default {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {
             approve_system_users: this.requestForm.systemuser,
-            approve_assets: this.requestForm.asset,
-            approve_actions: this.requestForm.actions,
+            approve_applications: this.requestForm.asset,
             approve_date_start: this.requestForm.apply_date_start,
             approve_date_expired: this.requestForm.apply_date_expired
           }
