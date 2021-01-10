@@ -35,7 +35,7 @@ export default {
                 if (row.type === 'apply_asset') {
                   return 'AssetsTicketDetail'
                 } else if (row.type === 'apply_application') {
-                  return 'AssetsTicketDetail'
+                  return 'AppsTicketDetail'
                 } else {
                   return 'TicketDetail'
                 }
@@ -60,9 +60,9 @@ export default {
             sortable: 'custom',
             formatter: row => {
               if (row.status === 'open') {
-                return <el-tag type='primary' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Open') }</el-tag>
+                return <el-tag type='primary' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.OpenStatus') }</el-tag>
               } else {
-                return <el-tag type='danger' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
+                return <el-tag type='danger' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.CloseStatus') }</el-tag>
               }
             }
           },

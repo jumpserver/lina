@@ -788,6 +788,8 @@
     "FinishedTicket": "Finished Ticket",
     "Assignees": "Assignees",
     "Close": "Close",
+    "OpenStatus":"Open",
+    "CloseStatus":"Close",
     "Comment": "Comment",
     "MyTickets": "My tickets",
     "action": "Action",
