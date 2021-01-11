@@ -71,10 +71,7 @@ export default {
     this.$eventBus.$on('showColumnSettingPopover', () => {
       this.showColumnSettingPopover = true
     })
-    console.log(this.tableConfig, this.$route.name, this.defaultColumn)
     this.columnList = _.get(this.tableConfig, this.$route.name, this.defaultColumn || [])
-    console.log(this.columnList)
-    console.log(this.totalColumns)
   },
   methods: {
     handleColumnConfirm() {
