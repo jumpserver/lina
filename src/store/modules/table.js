@@ -2,7 +2,6 @@ import VueCookie from 'vue-cookie'
 import Vue from 'vue'
 
 function getTableConfigfromCookie() {
-  console.log(VueCookie.get('tableConfig') ? JSON.parse(VueCookie.get('tableConfig')) : {})
   return VueCookie.get('tableConfig') ? JSON.parse(VueCookie.get('tableConfig')) : {}
 }
 

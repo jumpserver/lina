@@ -82,6 +82,12 @@ export default {
       this.$log.debug('ListTable: iTableConfig change', config)
       return this.getActiveColumns(config)
     },
+    defaultColumn() {
+      return _.get(this.headerActions, 'defaultColumn', [])
+    },
+    currentColumnSetting() {
+      return _.get(this.tableColConfig, this.$route.name, this.defaultColumn || [])
+    },
     ...mapGetters({
       tableColConfig: 'tableConfig'
     })
@@ -102,11 +108,9 @@ export default {
   },
   methods: {
     getActiveColumns(config) {
-      const ACTIVE_COLUMN_KEY = this.$route.name
       const hasColumnSetting = _.get(this.headerActions, 'hasColumnSetting', false)
-      const defaultColumn = _.get(this.headerActions, 'defaultColumn', [])
       if (hasColumnSetting) {
-        const currentColumnSetting = _.get(this.tableColConfig, ACTIVE_COLUMN_KEY, defaultColumn || [])
+        const currentColumnSetting = this.currentColumnSetting
         const currentColumn = []
         config.columns.forEach((v, k) => {
           if (currentColumnSetting.indexOf(v.prop) !== -1 || v.prop === 'id') {

@@ -1010,7 +1010,7 @@ export default {
     },
     handleSizeChange(val) {
       if (this.size === val) return
-
+      this.$emit('sizeChange', val)
       this.page = defaultFirstPage
       this.size = val
       this.getList()

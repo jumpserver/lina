@@ -175,7 +175,7 @@ export default {
       },
       headerActions: {
         hasColumnSetting: true,
-        defaultColumn: ['name', 'username', 'protocol', 'assets_amount', 'comment', 'actions'],
+        defaultColumn: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions'],
         createRoute: {
           name: 'AssetCreate',
           query: this.$route.query
