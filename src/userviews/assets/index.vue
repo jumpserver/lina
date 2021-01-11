@@ -91,6 +91,11 @@ export default {
             }
           },
           {
+            prop: 'platform',
+            label: this.$t('assets.Platform'),
+            width: '120px'
+          },
+          {
             prop: 'comment',
             label: this.$t('assets.Comment'),
             showOverflowTooltip: true,
@@ -146,7 +151,9 @@ export default {
         hasExport: false,
         hasImport: false,
         hasLeftActions: false,
-        hasSearch: true
+        hasSearch: true,
+        hasColumnSetting: true,
+        defaultColumn: ['hostname', 'ip', 'SystemUsers', 'comment', 'id']
       }
     }
   },

@@ -58,6 +58,7 @@
     "AdminUserDetail": "Admin user detail",
     "AdminUserListHelpMessage": "Admin users are asset (charged server) on the root, or have NOPASSWD: ALL sudo permissions users, JumpServer users of the system using the user to `push system user`, `get assets hardware information`, etc.\n",
     "Asset": "Asset",
+    "HardwareInfo": "Hardware info",
     "Hardware": "Hardware",
     "AccountList": "Account list",
     "AssetDetail": "Asset detail",
@@ -182,6 +183,7 @@
   "common": {
     "Nothing": "Nothing",
     "Action": "Action",
+    "CustomCol":"Custom table col",
     "RequestTickets": "Request tickets",
     "Actions": "Actions",
     "NeedSpecifiedFile": "Required to upload the specified format file",
@@ -189,6 +191,7 @@
     "Activate": "Activate",
     "actionsTips":"Clipboard's copy and paste control only support RDP/VNC protocol.",
     "Active": "Active",
+    "TableColSettingInfo": "Please select the list details you want to display",
     "Add": "Add",
     "PleaseAgreeToTheTerms": "Please agree to the terms",
     "PushSelected":"Push selected",
