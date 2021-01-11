@@ -9,6 +9,7 @@
       :object="object"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
+      :has-detail-in-msg="false"
     />
   </IBox>
 </template>
@@ -31,7 +32,7 @@ export default {
   data() {
     return {
       selectFields: [
-        [this.$t('setting.basicSetting'), ['TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH', 'TERMINAL_HEARTBEAT_INTERVAL',
+        [this.$t('setting.basicSetting'), ['TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
           'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_ASSET_LIST_PAGE_SIZE', 'TERMINAL_SESSION_KEEP_DURATION',
           'TERMINAL_TELNET_REGEX']]
       ],

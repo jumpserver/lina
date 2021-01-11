@@ -64,7 +64,7 @@ export default {
         },
         {
           key: this.$t('sessions.dateEnd'),
-          value: toSafeLocalDateStr(this.sessionData.date_end)
+          value: this.sessionData.date_end ? toSafeLocalDateStr(this.sessionData.date_end) : ''
         }
       ]
     },

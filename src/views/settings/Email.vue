@@ -10,6 +10,7 @@
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
       :more-buttons="moreButtons"
+      :has-detail-in-msg="false"
     />
   </IBox>
 </template>

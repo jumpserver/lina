@@ -92,7 +92,6 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
         hasSearch: true,
         createRoute: {
           name: 'GatewayCreate',
@@ -110,7 +109,14 @@ export default {
   methods: {
     dialogConfirm() {
       this.buttonLoading = true
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: parseInt(this.portInput) }).then(
+
+      const port = parseInt(this.portInput)
+
+      if (isNaN(port)) {
+        this.buttonLoading = false
+        return this.$message.error(this.$t('common.TestPortErrorMsg'))
+      }
+      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port }).then(
         res => {
           return this.$message.success(this.$t('common.TestSuccessMsg'))
         }

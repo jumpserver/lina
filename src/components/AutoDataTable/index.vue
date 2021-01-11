@@ -1,5 +1,5 @@
 <template>
-  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
+  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
 </template>
 
 <script type="text/jsx">
@@ -14,6 +14,10 @@ export default {
   props: {
     config: {
       type: Object,
+      default: () => ({})
+    },
+    filterTable: {
+      type: Function,
       default: () => ({})
     }
   },
@@ -118,6 +122,37 @@ export default {
       }
       return col
     },
+    addFilterIfNeed(col) {
+      if (col.prop) {
+        const column = this.meta[col.prop] || {}
+        if (!column.filter) {
+          return col
+        }
+        if (column.type === 'boolean') {
+          col.filters = [
+            { text: this.$t('common.Yes'), value: true },
+            { text: this.$t('common.No'), value: false }
+          ]
+          col.sortable = false
+          col['column-key'] = col.prop
+        }
+        if (column.type === 'choice' && column.choices) {
+          col.filters = column.choices.map(item => {
+            if (typeof (item.value) === 'boolean') {
+              if (item.value) {
+                return { text: item.display_name, value: 'True' }
+              } else {
+                return { text: item.display_name, value: 'False' }
+              }
+            }
+            return { text: item.display_name, value: item.value }
+          })
+          col.sortable = false
+          col['column-key'] = col.prop
+        }
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
@@ -127,6 +162,7 @@ export default {
       col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
+      col = this.addFilterIfNeed(col)
       return col
     },
     generateColumns() {
@@ -143,6 +179,12 @@ export default {
       config.columns = columns
       this.iConfig = config
       this.$eventBus.$emit('columnsChange', config)
+    },
+    filterChange(filters) {
+      const key = Object.keys(filters)[0]
+      const attr = {}
+      attr[key] = filters[key][0]
+      this.filterTable(attr)
     }
   }
 }

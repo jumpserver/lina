@@ -17,6 +17,8 @@ export default {
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
     return {
+      // 工单创建 隐藏提示信息中的跳转连接
+      hasDetailInMsg: false,
       initial: {
         ips_or_not: true,
         date_expired: date_expired,

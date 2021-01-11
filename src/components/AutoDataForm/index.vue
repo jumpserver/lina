@@ -62,9 +62,11 @@ export default {
       switch (type) {
         case 'choice':
           type = 'radio-group'
-          field.options = fieldMeta.choices.map(v => {
-            return { label: v.display_name, value: v.value }
-          })
+          if (!fieldMeta.read_only) {
+            field.options = fieldMeta.choices.map(v => {
+              return { label: v.display_name, value: v.value }
+            })
+          }
           break
         case 'datetime':
           type = 'date-picker'
@@ -91,12 +93,14 @@ export default {
           break
       }
       if (type === 'radio-group') {
-        const options = fieldMeta.choices.map(v => {
-          return { label: v.display_name, value: v.value }
-        })
-        if (options.length > 4) {
-          type = 'select'
-          field.el.filterable = true
+        if (!fieldMeta.read_only) {
+          const options = fieldMeta.choices.map(v => {
+            return { label: v.display_name, value: v.value }
+          })
+          if (options.length > 4) {
+            type = 'select'
+            field.el.filterable = true
+          }
         }
       }
       field.type = type
@@ -188,9 +192,16 @@ export default {
       if (!field) {
         return
       }
-      if (field.attrs.error === error) {
-        error += '.'
+      if (typeof error === 'object') {
+        const str = error
+        error = ''
+        Object.keys(str).forEach(key => {
+          error += `${parseInt(key) + 1}.${str[key][0]}  `
+        })
       }
+      // if (field.attrs.error === error) {
+      //   error += '.'
+      // }
       field.attrs.error = error
     }
   }

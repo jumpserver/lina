@@ -22,8 +22,8 @@ export default {
       initial: {
         password_strategy: 0,
         mfa_level: 0,
-        source: 'local',
         role: 'User',
+        source: 'local',
         org_roles: ['User'],
         date_expired: getDayFuture(36500, new Date()).toISOString()
       },
@@ -49,6 +49,9 @@ export default {
             }
             return this.$route.meta.action !== 'update' || formValue.source !== 'local'
           }
+        },
+        source: {
+          hidden: () => { return true }
         },
         password: {
           component: UserPassword,

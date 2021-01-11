@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  <GenericListPage ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
 </template>
 
 <script type="text/jsx">
@@ -34,6 +34,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              hasClone: true,
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
               },
@@ -55,6 +56,8 @@ export default {
         hasCreate: false,
         hasMoreActions: false,
         hasBulkDelete: false,
+        hasExport: false,
+        hasImport: false,
         // createRoute: 'RemoteAppCreate',
         moreActionsTitle: this.$t('common.Create'),
         moreActionsType: 'primary',

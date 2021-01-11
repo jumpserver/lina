@@ -153,3 +153,7 @@ input[type=file] {
   width: 100%;
   table-layout: fixed !important;
 }
+
+.el-table__column-filter-trigger i {
+  color: #888888 !important;
+}

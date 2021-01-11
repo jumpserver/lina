@@ -47,8 +47,8 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
         hasSearch: true,
+        hasBulkDelete: false,
         createRoute: {
           name: 'CommandFilterRulesCreate',
           query: {

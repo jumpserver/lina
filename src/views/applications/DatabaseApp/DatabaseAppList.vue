@@ -37,6 +37,7 @@ export default {
           actions: {
             prop: '',
             formatterArgs: {
+              hasClone: true,
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
@@ -53,6 +54,8 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        hasExport: false,
+        hasImport: false,
         hasBulkDelete: false,
         createRoute: 'DatabaseAppCreate',
         moreActionsTitle: this.$t('common.Create'),

@@ -68,14 +68,14 @@ export default {
       },
       remoteAppRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('perms.addRemoteAppToThisPermission'),
+        title: this.$t('perms.addApplicationToThisPermission'),
         objectsAjax: {
           url: `/api/v1/applications/applications/?category=${this.object.category}&type=${this.object.type}`,
           transformOption: (item) => {
             return { label: item.name + ' (' + item.type_display + ')', value: item.id }
           }
         },
-        hasObjectsId: this.object.application,
+        hasObjectsId: this.object.applications,
         showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
