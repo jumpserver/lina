@@ -68,7 +68,7 @@ export default {
       fieldsMap: {
         es: [[this.$t('common.Basic'), ['name', 'type', 'hosts', 'index', 'doc_type', 'comment']]]
       },
-      url: '/api/v1/terminal/command-storages/'
+      url: this.$route.params.id ? '/api/v1/terminal/command-storages/' : `/api/v1/terminal/command-storages/?type=es`
     }
   },
   computed: {
@@ -137,9 +137,9 @@ export default {
         type: 'es',
         comment: value.comment,
         meta: {
-          es_hosts: host_array,
-          es_index: value.index,
-          es_doc_type: value.doc_type
+          HOSTS: host_array,
+          INDEX: value.index,
+          DOC_TYPE: value.doc_type
         }
       }
     }
