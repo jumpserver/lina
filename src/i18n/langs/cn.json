@@ -20,6 +20,7 @@
     },
     "appPath": "应用路径",
     "appType": "应用类型",
+    "appName": "应用名称",
     "asset": "资产",
     "database": "数据库",
     "host": "主机",
@@ -829,7 +830,7 @@
     "helpText": {
       "ips": "请输入逗号分割的IP地址组",
       "fuzzySearch": "支持模糊搜索",
-      "application": "请输入逗号分割的应用组"
+      "application": "请输入逗号分割的应用名称组"
     }
   },
   "tree": {
