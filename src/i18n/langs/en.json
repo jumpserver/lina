@@ -20,6 +20,7 @@
     },
     "appPath": "App path",
     "appType": "App type",
+    "appName": "App name",
     "asset": "Asset",
     "database": "Database",
     "host": "Host",

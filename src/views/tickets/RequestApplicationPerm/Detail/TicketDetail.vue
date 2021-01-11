@@ -141,8 +141,8 @@ export default {
           value: `${this.object.meta.apply_category_display} / ${this.object.meta.apply_type_display} `
         },
         {
-          key: this.$t('assets.Applications'),
-          value: this.object.meta.approve_applications
+          key: this.$t('applications.appName'),
+          value: this.object.meta.apply_application_group
         },
         {
           key: this.$t('tickets.SystemUser'),

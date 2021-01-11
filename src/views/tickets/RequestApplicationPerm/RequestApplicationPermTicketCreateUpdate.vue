@@ -94,7 +94,7 @@ export default {
           }
         },
         apply_application_group: {
-          label: this.$t('assets.Applications'),
+          label: this.$t('applications.appName'),
           helpText: this.$t('tickets.helpText.application')
         },
         apply_system_user_group: {
@@ -152,7 +152,7 @@ export default {
       const meta = {}
       const applications = validValues.apply_application_group
       if (applications) {
-        validValues.meta.apply_application_group = applications.split(',')
+        meta.apply_application_group = applications.split(',')
       }
       if (applications === '') {
         delete validValues['apply_application_group']
