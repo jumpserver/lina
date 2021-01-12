@@ -112,10 +112,6 @@ export default {
       deep: true
     }
   },
-  mounted() {
-    console.log(_.get(this.globalTableConfig, 'paginationSize', 15))
-    console.log(typeof _.get(this.globalTableConfig, 'paginationSize', 15))
-  },
   methods: {
     getList() {
       this.$refs.table.clearSelection()
