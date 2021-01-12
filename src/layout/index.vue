@@ -16,6 +16,8 @@
 <script>
 import { NavHeader, NavBar, AppMain, Footer, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import { setWaterMark, removeWatermark } from '@/utils/watermark'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Layout',
@@ -48,7 +50,17 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
-    }
+    },
+    ...mapGetters([
+      'currentUser'
+    ])
+  },
+  mounted() {
+    console.log(this.currentUser)
+    setWaterMark(this.currentUser.username, (new Date()).toISOString())
+  },
+  destroyed() {
+    removeWatermark()
   },
   methods: {
     handleClickOutside() {
