@@ -162,10 +162,10 @@ export default {
   },
   methods: {
     refreshAllFavorites() {
-      this.tableConfig.columns[4].formatterArgs.loading = true
+      this.tableConfig.columns[this.tableConfig.columns.length - 1].formatterArgs.loading = true
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
-        this.tableConfig.columns[4].formatterArgs.loading = false
+        this.tableConfig.columns[this.tableConfig.columns.length - 1].formatterArgs.loading = false
       })
     },
     addOrDeleteFavorite(assetId) {
