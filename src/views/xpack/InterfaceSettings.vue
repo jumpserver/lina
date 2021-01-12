@@ -17,7 +17,7 @@
 
 <script>
 import { Page } from '@/layout/components'
-import { IBox, UploadField } from '@/components'
+import { IBox, ThemePicker, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { getInterfaceInfo, postInterface, restoreInterface } from '@/views/xpack/api'
 
@@ -40,7 +40,8 @@ export default {
         ['', ['login_image']],
         ['', ['favicon']],
         ['', ['logo_index']],
-        ['', ['logo_logout']]
+        ['', ['logo_logout']],
+        ['', ['theme_color', 'bar_menu_color', 'bar_menu_active_color', 'bar_submenu_color', 'bar_submenu_active_color']]
       ],
       fieldsMeta: {
         login_title: {
@@ -87,6 +88,48 @@ export default {
             fileChange: ([value], updateForm) => {
               this.files['logo_index'] = value
             }
+          }
+        },
+        theme_color: {
+          label: `主题色设置`,
+          component: ThemePicker,
+          el: {
+            defaultColor: '#1ab394'
+          }
+        },
+        // bar_title_color: {
+        //   label: `侧边栏标题颜色设置`,
+        //   component: ThemePicker,
+        //   el: {
+        //     defaultColor: '#2f4050'
+        //   }
+        // },
+        bar_menu_color: {
+          label: `侧边栏菜单颜色设置`,
+          component: ThemePicker,
+          el: {
+            defaultColor: '#2f4050'
+          }
+        },
+        bar_menu_active_color: {
+          label: `侧边栏菜单高亮颜色设置`,
+          component: ThemePicker,
+          el: {
+            defaultColor: '#293846'
+          }
+        },
+        bar_submenu_color: {
+          label: `侧边栏子菜单颜色设置`,
+          component: ThemePicker,
+          el: {
+            defaultColor: '#1f2d3d'
+          }
+        },
+        bar_submenu_active_color: {
+          label: `侧边栏子菜单高亮颜色设置`,
+          component: ThemePicker,
+          el: {
+            defaultColor: '#001528'
           }
         },
         logo_logout: {
