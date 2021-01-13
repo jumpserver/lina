@@ -1062,7 +1062,15 @@
       "DeleteOrgMsg":"User list、User group、Asset list、Domain list、Admin user、System user、Labels、Asset permission",
       "OrgRole": "Org role",
       "CreateOrgMsg": "Please go to Organization Details to add users",
-      "AddOrgMembers": "Add organization members"
+      "AddOrgMembers": "Add organization members",
+      "users_amount": "users amount",
+      "groups_amount": "groups amount",
+      "assets_amount": "assets amount",
+      "admin_users_amount": "admin users amount",
+      "system_users_amount": "system users amount",
+      "applications_amount": "applications amount",
+      "asset_perms_amount": "asset perms amount",
+      "app_perms_amount": "app perms amount"
     },
     "RestoreButton": "Restore Default",
     "SubscriptionID": "Subscription ID",
