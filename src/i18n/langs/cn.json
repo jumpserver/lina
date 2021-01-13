@@ -813,6 +813,8 @@
     "user": "用户",
     "Status": "状态",
     "Open": "待处理",
+    "OrgName":"组织名称",
+    "AssignedInfo":"审批信息",
     "OpenTicket": "创建工单",
     "HandleTicket": "处理工单",
     "FinishedTicket": "完成工单",

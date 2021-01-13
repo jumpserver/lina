@@ -3,6 +3,7 @@
     :object="object"
     :detail-card-items="detailCardItems"
     :special-card-items="specialCardItems"
+    :assigned-card-items="assignedCardItems"
     :approve="handleApprove"
     :close="handleClose"
     :reject="handleReject"
@@ -118,6 +119,10 @@ export default {
           value: (this.object.processor_display === 'No') ? '' : this.object.processor_display
         },
         {
+          key: this.$t('tickets.OrgName'),
+          value: this.object.org_name
+        },
+        {
           key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
@@ -152,6 +157,26 @@ export default {
         {
           key: this.$t('common.dateExpired'),
           value: toSafeLocalDateStr(this.object.meta.apply_date_expired)
+        }
+      ]
+    },
+    assignedCardItems() {
+      return [
+        {
+          key: this.$t('assets.Asset'),
+          value: this.object.meta.approve_assets
+        },
+        {
+          key: this.$t('tickets.SystemUser'),
+          value: this.object.meta.approve_system_users
+        },
+        {
+          key: this.$t('common.dateStart'),
+          value: toSafeLocalDateStr(this.object.meta.approve_date_start)
+        },
+        {
+          key: this.$t('common.dateExpired'),
+          value: toSafeLocalDateStr(this.object.meta.approve_date_expired)
         }
       ]
     },
