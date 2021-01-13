@@ -84,7 +84,7 @@ export default {
           url: `/api/v1/assets/system-users/?org_id=${(this.object.org_id === '')
             ? 'DEFAULT'
             : this.object.org_id
-          }&protocol=${(this.object.meta.apply_type === 'remote_app')
+          }&protocol=${(this.object.meta.apply_category === 'remote_app')
             ? 'rdp'
             : this.object.meta.apply_type
           }`,
@@ -167,11 +167,11 @@ export default {
       return [
         {
           key: this.$t('applications.appName'),
-          value: this.object.meta.approve_applications
+          value: this.object.meta.approve_applications_display
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.approve_system_users
+          value: this.object.meta.approve_system_users_display
         },
         {
           key: this.$t('common.dateStart'),

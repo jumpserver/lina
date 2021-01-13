@@ -148,9 +148,9 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      console.log(validValues)
       const meta = {}
       const applications = validValues.apply_application_group
+      const systemUser = validValues.apply_system_user_group
       if (applications) {
         meta.apply_application_group = applications.split(',')
       }
@@ -158,8 +158,10 @@ export default {
         delete validValues['apply_application_group']
       }
 
-      if (validValues.apply_system_user_group) {
-        meta.apply_system_user_group = validValues.apply_system_user_group
+      if (systemUser) {
+        meta.apply_system_user_group = systemUser.split(',')
+      }
+      if (systemUser === '') {
         delete validValues['apply_system_user_group']
       }
 
