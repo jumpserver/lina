@@ -3,6 +3,7 @@
     <el-col :span="17">
       <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
       <Details :detail-card-items="specialCardItems" :title="$t('common.ApplyInfo')" />
+      <Details v-if="object.action === 'approve'" :detail-card-items="assignedCardItems" :title="$t('tickets.AssignedInfo')" />
       <slot id="MoreDetails" />
       <Comments :object="object" v-bind="$attrs" />
     </el-col>
@@ -31,7 +32,12 @@ export default {
     detailCardItems: {
       type: Array,
       default: () => ([])
+    },
+    assignedCardItems: {
+      type: Array,
+      default: () => ([])
     }
+
   },
   data() {
     return {}
