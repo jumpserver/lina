@@ -116,7 +116,7 @@ export default {
       }
 
       if (validValues.apply_system_user_group) {
-        meta.apply_system_user_group = validValues.apply_system_user_group
+        meta.apply_system_user_group = validValues.apply_system_user_group.split(',')
         delete validValues['apply_system_user_group']
       }
 

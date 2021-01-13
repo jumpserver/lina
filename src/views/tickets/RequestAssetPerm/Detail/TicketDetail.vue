@@ -164,11 +164,11 @@ export default {
       return [
         {
           key: this.$t('assets.Asset'),
-          value: this.object.meta.approve_assets
+          value: this.object.meta.approve_assets_display
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.approve_system_users
+          value: this.object.meta.approve_system_users_display
         },
         {
           key: this.$t('common.dateStart'),
