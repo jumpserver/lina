@@ -4,7 +4,7 @@
       <i class="fa fa-comments" /> {{ $t('common.Message') }}
     </div>
     <template v-if="comments">
-      <div v-for="item in comments" :key="item.user_display + item.body" class="feed-activity-list">
+      <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
             <el-avatar :src="imageUrl" class="header-avatar" />
