@@ -32,8 +32,10 @@ export default {
             sortable: 'custom',
             formatterArgs: {
               getRoute: function({ row }) {
-                if (row.type === 'request_asset') {
+                if (row.type === 'apply_asset') {
                   return 'AssetsTicketDetail'
+                } else if (row.type === 'apply_application') {
+                  return 'AppsTicketDetail'
                 } else {
                   return 'TicketDetail'
                 }
@@ -48,11 +50,25 @@ export default {
           {
             prop: 'type_display',
             label: this.$t('tickets.type'),
-            width: '110px'
+            width: '160px'
           },
           {
             prop: 'status',
             label: this.$t('tickets.status'),
+            align: 'center',
+            width: '90px',
+            sortable: 'custom',
+            formatter: row => {
+              if (row.status === 'open') {
+                return <el-tag type='primary' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.OpenStatus') }</el-tag>
+              } else {
+                return <el-tag type='danger' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.CloseStatus') }</el-tag>
+              }
+            }
+          },
+          {
+            prop: 'action',
+            label: this.$t('tickets.action'),
             align: 'center',
             width: '90px',
             sortable: 'custom',
@@ -69,7 +85,6 @@ export default {
                   return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
               }
             }
-
           },
           {
             prop: 'date_created',
@@ -105,16 +120,20 @@ export default {
     genExtraMoreActions() {
       return [
         {
-          name: '',
+          name: 'RequestAssetPerm',
           title: this.$t('tickets.RequestAssetPerm'),
           type: 'primary',
           can: true,
-          callback: this.onCallback
+          callback: () => this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
+        },
+        {
+          name: 'RequestApplicationPerm',
+          title: this.$t('tickets.RequestApplicationPerm'),
+          type: 'primary',
+          can: true,
+          callback: () => this.$router.push({ name: 'RequestApplicationPermTicketCreateUpdate' })
         }
       ]
-    },
-    onCallback() {
-      this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
     }
   }
 }

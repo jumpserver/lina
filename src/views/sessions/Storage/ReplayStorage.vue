@@ -94,15 +94,11 @@ export default {
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     TestReplayStorage(cellValue).then(data => {
-                      let success = 'success'
                       if (!data.is_valid) {
-                        success = 'error'
+                        this.$message.error(data.msg)
+                      } else {
+                        this.$message.success(data.msg)
                       }
-                      this.$notify({
-                        message: data.msg,
-                        type: success,
-                        duration: 4500
-                      })
                     })
                   }
                 }

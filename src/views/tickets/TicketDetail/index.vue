@@ -16,7 +16,14 @@ export default {
   },
   data() {
     return {
-      ticket: { title: '', user_display: '', type_display: '', status: '', assignees_display: '', date_created: '' },
+      ticket: {
+        title: '',
+        user_display: '',
+        type_display: '',
+        status: '',
+        assignees_display: '',
+        date_created: ''
+      },
       config: {
         activeMenu: 'TicketDetail',
         submenu: [

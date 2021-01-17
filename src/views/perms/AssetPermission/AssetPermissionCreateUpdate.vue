@@ -82,7 +82,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: '/api/v1/assets/system-users/',
+              url: '/api/v1/assets/system-users/?protocol__in=rdp,ssh,vnc,telnet',
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }

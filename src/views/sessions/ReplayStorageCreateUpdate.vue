@@ -36,7 +36,7 @@ export default {
         name: '',
         comment: ''
       },
-      url: '/api/v1/terminal/replay-storages/',
+      url: this.$route.params.id ? `/api/v1/terminal/replay-storages/` : `/api/v1/terminal/replay-storages/?type=${storageType}`,
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
         [storageTypeMeta.title, storageTypeMeta.meta],
@@ -221,10 +221,10 @@ export default {
         type: 's3',
         comment: value.comment,
         meta: {
-          s3_bucket: value.bucket,
-          s3_access_key: value.access_key,
-          s3_secret_key: value.secret_key,
-          s3_endpoint: value.endpoint
+          BUCKET: value.bucket,
+          ACCESS_KEY: value.access_key,
+          SECRET_KEY: value.secret_key,
+          ENDPOINT: value.endpoint
         }
       }
     },
@@ -234,10 +234,10 @@ export default {
         type: 'ceph',
         comment: value.comment,
         meta: {
-          ceph_bucket: value.bucket,
-          ceph_access_key: value.access_key,
-          ceph_secret_key: value.secret_key,
-          ceph_endpoint: value.endpoint
+          BUCKET: value.bucket,
+          ACCESS_KEY: value.access_key,
+          SECRET_KEY: value.secret_key,
+          ENDPOINT: value.endpoint
         }
       }
     },
@@ -247,12 +247,12 @@ export default {
         type: 'swift',
         comment: value.comment,
         meta: {
-          swift_bucket: value.bucket,
-          swift_access_key: value.access_key,
-          swift_secret_key: value.secret_key,
-          swift_region: value.region,
-          swift_endpoint: value.endpoint,
-          swift_protocol: value.protocol
+          BUCKET: value.bucket,
+          ACCESS_KEY: value.access_key,
+          SECRET_KEY: value.secret_key,
+          REGION: value.region,
+          ENDPOINT: value.endpoint,
+          PROTOCOL: value.protocol
         }
       }
     },
@@ -262,10 +262,10 @@ export default {
         type: 'oss',
         comment: value.comment,
         meta: {
-          oss_bucket: value.bucket,
-          oss_access_key: value.access_key,
-          oss_secret_key: value.secret_key,
-          oss_endpoint: value.endpoint
+          BUCKET: value.bucket,
+          ACCESS_KEY: value.access_key,
+          SECRET_KEY: value.secret_key,
+          ENDPOINT: value.endpoint
         }
       }
     },
@@ -275,10 +275,10 @@ export default {
         type: 'azure',
         comment: value.comment,
         meta: {
-          azure_container_name: value.container_name,
-          azure_account_name: value.account_name,
-          azure_account_key: value.account_key,
-          azure_endpoint_suffix: value.endpoint_suffix
+          CONTAINER_NAME: value.container_name,
+          ACCOUNT_NAME: value.account_name,
+          ACCOUNT_KEY: value.account_key,
+          ENDPOINT_SUFFIX: value.endpoint_suffix
         }
       }
     }

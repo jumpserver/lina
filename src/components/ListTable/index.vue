@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
+    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="iHeaderActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
     <IBox class="table-content">
       <AutoDataTable ref="dataTable" :filter-table="filter" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
     </IBox>
@@ -13,6 +13,7 @@ import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
 import deepmerge from 'deepmerge'
+import { mapGetters } from 'vuex'
 export default {
   name: 'ListTable',
   components: {
@@ -41,6 +42,7 @@ export default {
     }
   },
   computed: {
+
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },
@@ -65,13 +67,30 @@ export default {
       }
       return false
     },
+    iHeaderActions() {
+      const config = this.headerActions
+      const hasColumnSetting = _.get(this.headerActions, 'hasColumnSetting', false)
+      if (hasColumnSetting) {
+        config.totalColumns = this.tableConfig.columns
+      }
+      return config
+    },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
       this.$log.debug('Header actions', this.headerActions)
       _.set(config, 'columnsMeta.actions.formatterArgs.hasClone', this.hasCloneAction)
       this.$log.debug('ListTable: iTableConfig change', config)
-      return config
-    }
+      return this.getActiveColumns(config)
+    },
+    defaultColumn() {
+      return _.get(this.headerActions, 'defaultColumn', [])
+    },
+    currentColumnSetting() {
+      return _.get(this.tableColConfig, this.$route.name, this.defaultColumn || [])
+    },
+    ...mapGetters({
+      tableColConfig: 'tableConfig'
+    })
   },
   watch: {
     extraQuery: {
@@ -79,9 +98,29 @@ export default {
         this.$log.debug('ListTable: found extraQuery change')
       },
       deep: true
+    },
+    tableColConfig: {
+      handler() {
+        this.$log.debug('ListTable: found colConfig change')
+      },
+      deep: true
     }
   },
   methods: {
+    getActiveColumns(config) {
+      const hasColumnSetting = _.get(this.headerActions, 'hasColumnSetting', false)
+      if (hasColumnSetting) {
+        const currentColumnSetting = this.currentColumnSetting
+        const currentColumn = []
+        config.columns.forEach((v, k) => {
+          if (currentColumnSetting.indexOf(v.prop) !== -1 || v.prop === 'id') {
+            currentColumn.push(config.columns[k])
+          }
+        })
+        config.columns = currentColumn
+      }
+      return config
+    },
     handleSelectionChange(val) {
       this.selectedRows = val
     },

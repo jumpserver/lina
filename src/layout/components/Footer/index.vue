@@ -4,7 +4,7 @@
       Version <strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv2. </span>
     </div>
     <div v-if="!publicSettings.XPACK_LICENSE_IS_VALID" style="padding-left:20px;">
-      <strong>Copyright</strong> FIT2CLOUD 飞致云 © 2014-2020
+      <strong>Copyright</strong> FIT2CLOUD 飞致云 © 2014-2021
     </div>
   </div>
 </template>

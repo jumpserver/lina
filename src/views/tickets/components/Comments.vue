@@ -4,7 +4,7 @@
       <i class="fa fa-comments" /> {{ $t('common.Message') }}
     </div>
     <template v-if="comments">
-      <div v-for="item in comments" :key="item.user_display + item.body" class="feed-activity-list">
+      <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
             <el-avatar :src="imageUrl" class="header-avatar" />
@@ -117,7 +117,7 @@ export default {
     },
     getComment() {
       this.loading = true
-      const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
+      const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       this.$axios.get(url).then(res => {
         this.comments = res
       }).catch(err => {
@@ -148,7 +148,7 @@ export default {
     createComment(successCallback) {
       const commentText = this.form.comments
       const ticketId = this.object.id
-      const commentUrl = `/api/v1/tickets/tickets/${ticketId}/comments/`
+      const commentUrl = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       if (!commentText) { return }
       const body = {
         body: commentText,

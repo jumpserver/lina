@@ -7,7 +7,7 @@
           :description="`${this.$t('tickets.Applicant')}：${object.user_display}`"
         >
           <div slot="description">
-            <div>{{ `${this.$t('tickets.Applicant')}：${object.user_display}` }}</div>
+            <div>{{ `${this.$t('tickets.Applicant')}：${object.applicant_display}` }}</div>
             <div>{{ `${this.$t('common.dateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
           </div>
         </el-step>
@@ -20,7 +20,7 @@
           :description="ticketSteps===STATUS.close ? `${this.$t('tickets.Assignee')}：${object.assignee_display}`:'' "
         >
           <div v-if="ticketSteps===STATUS.close" slot="description">
-            <div>{{ `${this.$t('tickets.Assignee')}：${object.assignee_display}` }}</div>
+            <div>{{ `${this.$t('tickets.Assignee')}：${object.processor_display}` }}</div>
             <div>{{ `${this.$t('common.dateFinished')}:  ${toSafeLocalDateStr(object.date_updated)}` }}</div>
           </div>
         </el-step>

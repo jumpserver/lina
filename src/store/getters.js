@@ -13,6 +13,7 @@ const getters = {
   currentOrgRoles: state => state.users.roles,
   currentOrgPerms: state => state.users.perms,
   MFAVerifyAt: state => state.users.MFAVerifyAt,
-  MFA_TTl: state => state.settings.publicSettings.SECURITY_MFA_VERIFY_TTL
+  MFA_TTl: state => state.settings.publicSettings.SECURITY_MFA_VERIFY_TTL,
+  tableConfig: state => state.table.tableConfig
 }
 export default getters

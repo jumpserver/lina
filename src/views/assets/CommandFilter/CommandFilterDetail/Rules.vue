@@ -36,6 +36,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              hasClone: false,
               updateRoute: {
                 name: 'CommandFilterRulesUpdate',
                 query: {

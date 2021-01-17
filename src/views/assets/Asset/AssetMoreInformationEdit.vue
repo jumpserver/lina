@@ -24,7 +24,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['hostname', 'ip', 'platform']],
-        [this.$t('assets.Hardware'), ['vendor', 'model', 'cpu_model', 'memory', 'disk_info', 'disk_total']],
+        [this.$t('assets.Hardware'), ['vendor', 'model', 'number', 'cpu_model', 'memory', 'disk_info', 'disk_total']],
         [this.$t('assets.Os'), ['sn', 'os', 'os_version', 'os_arch']]
       ],
       fieldsMeta: {
