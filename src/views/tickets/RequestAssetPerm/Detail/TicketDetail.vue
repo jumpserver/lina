@@ -14,6 +14,9 @@
       </div>
       <template>
         <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
+          <el-form-item :label="$t('perms.PermName')" required>
+            <el-input v-model="requestForm.name" />
+          </el-form-item>
           <el-form-item :label="$t('tickets.Asset')" required>
             <Select2 v-model="requestForm.asset" v-bind="asset_select2" style="width: 50% !important" />
           </el-form-item>
@@ -62,6 +65,7 @@ export default {
     return {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
+        name: this.object.meta.approve_permission_name,
         asset: this.object.meta.recommend_assets,
         systemuser: this.object.meta.recommend_system_users,
         actions: this.object.meta.apply_actions,
@@ -74,7 +78,7 @@ export default {
         multiple: true,
         value: this.object.meta.recommend_assets,
         ajax: {
-          url: `/api/v1/assets/assets/?org_id=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: `/api/v1/assets/assets/?oid=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
           transformOption: (item) => {
             return { label: item.hostname, value: item.id }
           }
@@ -84,7 +88,7 @@ export default {
         multiple: true,
         value: this.object.meta.recommend_system_users,
         ajax: {
-          url: `/api/v1/assets/system-users/?org_id=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: `/api/v1/assets/system-users/?oid=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
@@ -200,6 +204,7 @@ export default {
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {
+            approve_permission_name: this.requestForm.name,
             approve_system_users: this.requestForm.systemuser,
             approve_assets: this.requestForm.asset,
             approve_actions: this.requestForm.actions,

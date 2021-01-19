@@ -4,15 +4,19 @@
 
 <script>
 import TicketListTable from './TicketListTable'
+import { mapGetters } from 'vuex'
 export default {
   name: 'AssignedTicketList',
   components: {
     TicketListTable
   },
-  data() {
-    return {
-      url: '/api/v1/tickets/tickets/?assign=1'
-    }
+  computed: {
+    url() {
+      return `/api/v1/tickets/tickets/?assignees__id=${this.currentUser.id}`
+    },
+    ...mapGetters([
+      'currentUser'
+    ])
   }
 }
 </script>

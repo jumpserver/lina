@@ -427,6 +427,7 @@
     "SystemUser": "系统用户",
     "User": "用户",
     "UserGroups": "用户组",
+    "PermName":"授权名称",
     "DatabaseAppPermission": "数据库授权",
     "RemoteAppPermission": "远程应用授权",
     "addApplicationToThisPermission": "添加应用",

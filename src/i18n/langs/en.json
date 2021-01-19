@@ -438,6 +438,7 @@
     "addUserGroupToThisPermission": "Add user group to this permission",
     "addUserToThisPermission": "Add user to this permission",
     "all": "All",
+    "PermName":"Perm name",
     "assetAndNode": "Assets and node",
     "assetCount": "Asset count",
     "connect": "Connect",
