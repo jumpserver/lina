@@ -10,11 +10,13 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import AssetUserList from './AssetUserList.vue'
+import AssetList from './AssetList.vue'
 export default {
   components: {
     GenericDetailPage,
     TabPage,
     Detail,
+    AssetList,
     AssetUserList
   },
   data() {
@@ -26,6 +28,10 @@ export default {
           {
             title: this.$t('assets.AdminUserDetail'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('assets.AssetList'),
+            name: 'AssetList'
           },
           {
             title: this.$t('assets.AssetUserList'),
