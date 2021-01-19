@@ -106,6 +106,14 @@ export default {
               return selectedRows.length > 0 && vm.object.auto_push
             },
             callback: this.bulkPushCallback.bind(this)
+          },
+          {
+            title: this.$t('assets.TestAssetsConnective'),
+            name: 'TestSelected',
+            can({ selectedRows }) {
+              return selectedRows.length > 0 && vm.object.auto_push
+            },
+            callback: this.bulkTestCallback.bind(this)
           }
         ]
       },
@@ -213,6 +221,16 @@ export default {
         return v.asset
       })
       const data = { action: 'push', assets: assets }
+      this.$axios.post(theUrl, data).then(resp => {
+        window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+      })
+    },
+    bulkTestCallback({ selectedRows }) {
+      const theUrl = `/api/v1/assets/system-users/${this.object.id}/tasks/`
+      const assets = selectedRows.map((v) => {
+        return v.asset
+      })
+      const data = { action: 'test', assets: assets }
       this.$axios.post(theUrl, data).then(resp => {
         window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
       })
