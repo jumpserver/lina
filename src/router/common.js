@@ -45,5 +45,12 @@ export default [
     name: 'CeleryTaskLog',
     hidden: true,
     meta: { title: i18n.t('route.CeleryTaskLog'), roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }
+  },
+  {
+    path: '/ops/task/task/:id/log/',
+    component: () => import('@/views/ops/CeleryTaskLog'),
+    name: 'TaskLog',
+    hidden: true,
+    meta: { title: i18n.t('route.CeleryTaskLog'), roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }
   }
 ]

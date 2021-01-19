@@ -102,10 +102,11 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
+      console.log(validValues)
       const meta = {}
       const ips = validValues.apply_ip_group
       if (ips) {
-        validValues.meta.apply_ip_group = ips.split(',')
+        meta.apply_ip_group = ips.split(',')
       }
       if (ips === '') {
         delete validValues['apply_ip_group']

@@ -154,6 +154,7 @@ export default {
             label: this.$t('common.Actions'),
             width: '140px',
             formatterArgs: {
+              hasClone: true,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`

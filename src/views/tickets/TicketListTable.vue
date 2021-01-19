@@ -104,9 +104,9 @@ export default {
           default: {
             status: {
               key: 'status',
-              label: this.$t('tickets.Status'),
+              label: this.$t('tickets.action'),
               value: 'open',
-              valueLabel: this.$t('tickets.Open')
+              valueLabel: this.$t('tickets.Pending')
             }
           }
         },

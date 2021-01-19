@@ -14,7 +14,10 @@
       </div>
       <template>
         <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
-          <el-form-item :label="$t('tickets.Asset')" required>
+          <el-form-item :label="$t('perms.PermName')" required>
+            <el-input v-model="requestForm.name" />
+          </el-form-item>
+          <el-form-item :label="$t('assets.Applications')" required>
             <Select2 v-model="requestForm.asset" v-bind="asset_select2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
@@ -58,6 +61,7 @@ export default {
     return {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
+        name: this.object.meta.approve_permission_name,
         asset: this.object.meta.recommend_assets,
         systemuser: this.object.meta.recommend_system_users,
         apply_date_expired: this.object.meta.apply_date_expired,
@@ -69,7 +73,7 @@ export default {
         multiple: true,
         value: this.object.meta.recommend_applications,
         ajax: {
-          url: `/api/v1/applications/applications/?org_id=${(this.object.org_id === '')
+          url: `/api/v1/applications/applications/?oid=${(this.object.org_id === '')
             ? 'DEFAULT'
             : this.object.org_id}&category=${this.object.meta.apply_category}&type=${this.object.meta.apply_type}`,
           transformOption: (item) => {
@@ -81,7 +85,7 @@ export default {
         multiple: true,
         value: this.object.meta.recommend_system_users,
         ajax: {
-          url: `/api/v1/assets/system-users/?org_id=${(this.object.org_id === '')
+          url: `/api/v1/assets/system-users/?oid=${(this.object.org_id === '')
             ? 'DEFAULT'
             : this.object.org_id
           }&protocol=${(this.object.meta.apply_category === 'remote_app')
@@ -203,6 +207,7 @@ export default {
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {
+            approve_permission_name: this.requestForm.name,
             approve_system_users: this.requestForm.systemuser,
             approve_applications: this.requestForm.asset,
             approve_date_start: this.requestForm.apply_date_start,

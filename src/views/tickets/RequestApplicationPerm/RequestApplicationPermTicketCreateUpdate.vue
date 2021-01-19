@@ -1,5 +1,9 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :perform-submit="performSubmit" :create-success-next-route="createSuccessNextRoute" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :perform-submit="performSubmit"
+    :create-success-next-route="createSuccessNextRoute"
+  />
 </template>
 
 <script>
@@ -17,6 +21,7 @@ export default {
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
     return {
+      hasDetailInMsg: false,
       initial: {
         ips_or_not: true,
         apply_date_expired: date_expired,
@@ -43,7 +48,8 @@ export default {
           el: {
             multiple: false,
             options: [
-              { label: 'DB',
+              {
+                label: this.$t(`applications.applicationsCategory.db`),
                 value: 'db',
                 children: [
                   {
@@ -64,14 +70,19 @@ export default {
                   }
                 ]
               },
-              { label: 'Cloud', value: 'cloud', children: [
-                {
-                  label: 'Kubernetes',
-                  value: 'k8s'
-                }
-              ]
+              {
+                label: this.$t(`applications.applicationsCategory.cloud`),
+                value: 'cloud',
+                children: [
+                  {
+                    label: 'Kubernetes',
+                    value: 'k8s'
+                  }
+                ]
               },
-              { label: 'Remote App', value: 'remote_app',
+              {
+                label: this.$t(`applications.applicationsCategory.remote_app`),
+                value: 'remote_app',
                 children: [
                   {
                     label: 'MySQL Workbench',
@@ -184,7 +195,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-form ::v-deep .el-cascader{
+.el-form ::v-deep .el-cascader {
   width: 100%;
 }
 </style>
