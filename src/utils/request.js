@@ -107,7 +107,7 @@ function refreshSessionAgeDelay(response) {
   }
   timer = setTimeout(function() {
     refreshSessionIdAge()
-  }, 60 * 10 * 1000)
+  }, 30 * 1000)
 }
 
 // response interceptor
