@@ -15,7 +15,7 @@ export default {
       xterm: null,
       ws: null,
       taskId: this.$route.params.id,
-      type: this.$route.params.type || 'celery',
+      type: this.$route.params.type || this.$route.query.type || 'celery',
       url: '/ws/ops/tasks/log/',
       failOverPort: process.env.VUE_APP_WS_PORT
     }
