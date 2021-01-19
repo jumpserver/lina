@@ -8,11 +8,14 @@ import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 export default {
   name: 'CeleryTaskLog',
+  props: {
+  },
   data() {
     return {
       xterm: null,
       ws: null,
       taskId: this.$route.params.id,
+      type: this.$route.params.type || 'celery',
       url: '/ws/ops/tasks/log/',
       failOverPort: process.env.VUE_APP_WS_PORT
     }
@@ -71,7 +74,7 @@ export default {
         this.xterm.write(data.message)
       }
       this.ws.onopen = (e) => {
-        const msg = { 'task': this.taskId }
+        const msg = { 'task': this.taskId, 'type': this.type }
         this.ws.send(JSON.stringify(msg))
       }
     },

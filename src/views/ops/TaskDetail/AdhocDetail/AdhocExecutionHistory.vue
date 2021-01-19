@@ -83,7 +83,7 @@ export default {
                   title: this.$t('ops.detail'),
                   type: 'primary',
                   callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: cellValue }})
+                    return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: cellValue, type: 'ansible' }})
                   }
                 }
               ]
