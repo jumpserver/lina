@@ -37,6 +37,7 @@ export default {
       ],
       fieldsMeta: {
         type: {
+          hidden: () => true,
           el: {
             disabled: true
           }

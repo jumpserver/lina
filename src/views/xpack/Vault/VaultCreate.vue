@@ -5,7 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Uploadkey from '@/components/UploadKey'
-
+import Select2 from '@/components/Select2'
 export default {
   name: 'AdminUserCreateUpdate',
   components: {
@@ -23,6 +23,7 @@ export default {
       fieldsMeta: {
         asset: {
           label: this.$t('perms.Asset'),
+          component: Select2,
           el: {
             multiple: false,
             ajax: {
