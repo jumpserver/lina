@@ -18,7 +18,7 @@
             <el-input v-model="requestForm.name" />
           </el-form-item>
           <el-form-item :label="$t('assets.Applications')" required>
-            <Select2 v-model="requestForm.asset" v-bind="asset_select2" style="width: 50% !important" />
+            <Select2 v-model="requestForm.application" v-bind="asset_select2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
             <Select2 v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 50% !important" />
@@ -62,7 +62,7 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         name: this.object.meta.approve_permission_name,
-        asset: this.object.meta.recommend_applications,
+        application: this.object.meta.recommend_applications,
         systemuser: this.object.meta.recommend_system_users,
         apply_date_expired: this.object.meta.apply_date_expired,
         apply_date_start: this.object.meta.apply_date_start
@@ -202,14 +202,14 @@ export default {
       window.location.reload()
     },
     handleApprove() {
-      if (this.requestForm.asset.length === 0 || this.requestForm.systemuser.length === 0) {
+      if (this.requestForm.application.length === 0 || this.requestForm.systemuser.length === 0) {
         return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {
             approve_permission_name: this.requestForm.name,
             approve_system_users: this.requestForm.systemuser,
-            approve_applications: this.requestForm.asset,
+            approve_applications: this.requestForm.application,
             approve_date_start: this.requestForm.apply_date_start,
             approve_date_expired: this.requestForm.apply_date_expired
           }
