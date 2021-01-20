@@ -62,7 +62,7 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         name: this.object.meta.approve_permission_name,
-        asset: this.object.meta.recommend_assets,
+        asset: this.object.meta.recommend_applications,
         systemuser: this.object.meta.recommend_system_users,
         apply_date_expired: this.object.meta.apply_date_expired,
         apply_date_start: this.object.meta.apply_date_start
