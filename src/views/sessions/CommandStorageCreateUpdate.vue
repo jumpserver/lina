@@ -8,6 +8,7 @@
       :create-success-next-route="successUrl"
       :clean-form-value="cleanFormValue"
       :object="formData"
+      :has-detail-in-msg="false"
       :fields-meta="fieldsMeta"
     />
   </div>
