@@ -1,6 +1,7 @@
 <template>
   <GenericCreateUpdatePage
     :fields="fields"
+    :has-detail-in-msg="false"
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
