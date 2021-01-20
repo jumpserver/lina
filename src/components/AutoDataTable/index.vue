@@ -178,7 +178,6 @@ export default {
       }
       config.columns = columns
       this.iConfig = config
-      this.$eventBus.$emit('columnsChange', config)
     },
     filterChange(filters) {
       const key = Object.keys(filters)[0]
