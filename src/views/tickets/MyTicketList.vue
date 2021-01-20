@@ -4,6 +4,7 @@
 
 <script>
 import TicketListTable from './TicketListTable'
+import { mapGetters } from 'vuex'
 export default {
   name: 'MyTicketList',
   components: {
@@ -11,8 +12,16 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/tickets/tickets/?assign=0'
+
     }
+  },
+  computed: {
+    url() {
+      return `/api/v1/tickets/tickets/?applicant=${this.currentUser.id}`
+    },
+    ...mapGetters([
+      'currentUser'
+    ])
   }
 }
 </script>
