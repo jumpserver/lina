@@ -336,7 +336,8 @@
       "NUMBER_REQUIRED": "须包含数字",
       "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
-    }
+    },
+    "lastCannotBeDeleteMsg": "最后一项，不能被删除"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
