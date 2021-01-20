@@ -18,7 +18,7 @@
             <el-input v-model="requestForm.name" />
           </el-form-item>
           <el-form-item :label="$t('assets.Applications')" required>
-            <Select2 v-model="requestForm.application" v-bind="asset_select2" style="width: 50% !important" />
+            <Select2 v-model="requestForm.application" v-bind="apps_select2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
             <Select2 v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 50% !important" />
@@ -69,7 +69,7 @@ export default {
       },
       comments: '',
       assets: [],
-      asset_select2: {
+      apps_select2: {
         multiple: true,
         value: this.object.meta.recommend_applications,
         ajax: {
