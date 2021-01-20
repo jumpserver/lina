@@ -334,7 +334,8 @@
       "NUMBER_REQUIRED": "Number required",
       "SPECIAL_CHAR_REQUIRED": "Special char required",
       "MIN_LENGTH_ERROR": "Password minimum length {}"
-    }
+    },
+    "lastCannotBeDeleteMsg": "The last one can't be delete"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",

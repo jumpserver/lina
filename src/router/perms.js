@@ -56,7 +56,7 @@ const ApplicationPermissionRoutes = [
         component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionDetail/index'),
         name: 'ApplicationPermissionDetail',
         hidden: true,
-        meta: { title: i18n.t('route.ApplicationPermissionDetail'), activeMenu: '/perms/remote-app-permissions' }
+        meta: { title: i18n.t('route.ApplicationPermissionDetail'), activeMenu: '/perms/app-permissions' }
       },
       {
         path: ':id/update',

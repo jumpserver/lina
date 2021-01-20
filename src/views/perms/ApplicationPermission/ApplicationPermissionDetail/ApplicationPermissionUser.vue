@@ -54,15 +54,9 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: true,
-        hasRefresh: true,
-        hasLeftActions: true,
-        hasRightActions: true,
+        hasLeftActions: false,
         hasExport: false,
-        hasImport: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasImport: false
       },
       userRelationConfig: {
         icon: 'fa-user',
