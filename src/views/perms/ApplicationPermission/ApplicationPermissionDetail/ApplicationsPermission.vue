@@ -56,15 +56,9 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: true,
-        hasRefresh: true,
-        hasLeftActions: true,
-        hasRightActions: true,
+        hasLeftActions: false,
         hasExport: false,
-        hasImport: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasImport: false
       },
       remoteAppRelationConfig: {
         icon: 'fa-edit',
@@ -117,7 +111,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
@@ -125,6 +119,10 @@ export default {
           const relationUrl = `/api/v1/perms/application-permissions/${objectId}/`
           const objectOldRelationSystemUsers = this.object.system_users
           const objectNewRelationSystemUsers = objectOldRelationSystemUsers.filter(v => v !== item.value)
+          if (objectNewRelationSystemUsers.length === 0) {
+            this.$message.error(this.$tc('common.lastCannotBeDeleteMsg'))
+            return
+          }
           const data = { system_users: objectNewRelationSystemUsers }
           return this.$axios.patch(relationUrl, data)
         },

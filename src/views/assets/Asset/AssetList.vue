@@ -98,40 +98,24 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          {
-            prop: 'hostname',
+          'hostname', 'ip', 'hardware_info', 'connectivity', 'actions'
+        ],
+        columnsMeta: {
+          hostname: {
             formatter: DetailFormatter,
-            label: this.$t('assets.Hostname'),
             formatterArgs: {
               route: 'AssetDetail'
             },
             showOverflowTooltip: true
           },
-          {
-            prop: 'ip',
+          ip: {
             sortable: 'custom',
-            label: `IP`,
             width: '140px'
           },
-          {
-            prop: 'domain_display',
-            label: this.$t('assets.Domain')
-          },
-          {
-            prop: 'hardware_info',
-            label: this.$t('assets.HardwareInfo'),
+          hardware_info: {
             showOverflowTooltip: true
           },
-          {
-            prop: 'public_ip',
-            label: this.$t('assets.PublicIp')
-          },
-          {
-            prop: 'platform',
-            label: this.$t('assets.Platform')
-          },
-          {
-            prop: 'connectivity',
+          connectivity: {
             label: this.$t('assets.Reachable'),
             formatter: BooleanFormatter,
             formatterArgs: {
@@ -148,11 +132,8 @@ export default {
             width: '90px',
             align: 'center'
           },
-          {
-            prop: 'actions',
+          actions: {
             formatter: ActionsFormatter,
-            label: this.$t('common.Actions'),
-            width: '140px',
             formatterArgs: {
               hasClone: true,
               performDelete: ({ row, col }) => {
@@ -172,11 +153,9 @@ export default {
               ]
             }
           }
-        ]
+        }
       },
       headerActions: {
-        hasColumnSetting: true,
-        defaultColumn: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions'],
         createRoute: {
           name: 'AssetCreate',
           query: this.$route.query

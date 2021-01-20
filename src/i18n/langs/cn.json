@@ -62,6 +62,7 @@
     "HardwareInfo": "硬件信息",
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
+    "ReplaceNodeAssetsAdminUser":"替换节点资产的管理员",
     "AssetListHelpMessage": "左侧是资产树，右击可以新建、删除、更改树节点，授权资产也是以节点方式组织的，右侧是属于该节点下的资产\n",
     "TestGatewayTestConnection":"测试连接网关",
     "TestGatewayHelpMessage": "如果使用了nat端口映射，请设置为ssh真实监听的端口",
@@ -336,7 +337,8 @@
       "NUMBER_REQUIRED": "须包含数字",
       "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
-    }
+    },
+    "lastCannotBeDeleteMsg": "最后一项，不能被删除"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",

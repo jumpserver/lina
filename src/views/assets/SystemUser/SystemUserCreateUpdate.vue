@@ -96,6 +96,9 @@ export default {
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
             return form.protocol === 'k8s'
+          },
+          el: {
+            disabled: false
           }
         },
         auto_generate_key: {
@@ -233,9 +236,10 @@ export default {
   },
   mounted() {
     const params = this.$route.params
-    const method = params.id ? 'post' : 'put'
-    if (method === 'post') {
+    const method = params.id ? 'update' : 'create'
+    if (method === 'update') {
       this.fieldsMeta.token.rules[0].required = false
+      this.fieldsMeta.username_same_with_user.el.disabled = true
     }
   }
 }

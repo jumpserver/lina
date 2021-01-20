@@ -151,9 +151,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasLeftActions: false,
-        hasSearch: true,
-        hasColumnSetting: true,
-        defaultColumn: ['hostname', 'ip', 'SystemUsers', 'comment', 'id']
+        hasSearch: true
       }
     }
   },

@@ -18,6 +18,11 @@ export default {
       assignedTicketCount: 0
     }
   },
+  computed: {
+    ...mapGetters([
+      'currentUser'
+    ])
+  },
   created() {
     this.ticketsOpenedCount()
   },
@@ -30,11 +35,6 @@ export default {
     goToTickets() {
       this.$router.push({ name: 'TicketList' })
     }
-  },
-  computed: {
-    ...mapGetters([
-      'currentUser'
-    ])
   }
 }
 </script>

@@ -56,6 +56,7 @@
     "Action": "Action",
     "ActiveSelected": "Active selected",
     "AdminUser": "Admin user",
+    "ReplaceNodeAssetsAdminUser":"Replace node assets admin user with this",
     "AdminUserDetail": "Admin user detail",
     "AdminUserListHelpMessage": "Admin users are asset (charged server) on the root, or have NOPASSWD: ALL sudo permissions users, JumpServer users of the system using the user to `push system user`, `get assets hardware information`, etc.\n",
     "Asset": "Asset",
@@ -334,7 +335,8 @@
       "NUMBER_REQUIRED": "Number required",
       "SPECIAL_CHAR_REQUIRED": "Special char required",
       "MIN_LENGTH_ERROR": "Password minimum length {}"
-    }
+    },
+    "lastCannotBeDeleteMsg": "The last one can't be delete"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
