@@ -222,7 +222,7 @@ export default {
       })
       const data = { action: 'push', assets: assets }
       this.$axios.post(theUrl, data).then(resp => {
-        window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
       })
     },
     bulkTestCallback({ selectedRows }) {
@@ -232,7 +232,7 @@ export default {
       })
       const data = { action: 'test', assets: assets }
       this.$axios.post(theUrl, data).then(resp => {
-        window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
       })
     }
   }
