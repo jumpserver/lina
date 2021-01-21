@@ -103,7 +103,6 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      console.log(validValues)
       const meta = {}
       const ips = validValues.apply_ip_group
       if (ips) {
@@ -113,7 +112,7 @@ export default {
         delete validValues['apply_ip_group']
       }
       if (validValues.apply_hostname_group) {
-        meta.apply_hostname_group = validValues.apply_ip_group
+        meta.apply_hostname_group = validValues.apply_hostname_group.split(',')
         delete validValues['apply_hostname_group']
       }
 
