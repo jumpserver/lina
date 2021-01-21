@@ -265,11 +265,11 @@ export default {
             }
             this.$message.success(successMsg)
           } catch (error) {
-            let errorMsg = this.$t('common.bulkDeleteErrorMsg')
-            if (!this.currentOrgIsDefault) {
-              errorMsg = this.$t('common.bulkRemoveErrorMsg')
-            }
-            this.$message.error(errorMsg + error)
+            // let errorMsg = this.$t('common.bulkDeleteErrorMsg')
+            // if (!this.currentOrgIsDefault) {
+            //   errorMsg = this.$t('common.bulkRemoveErrorMsg')
+            // }
+            // this.$message.error(errorMsg + error)
           } finally {
             instance.confirmButtonLoading = false
           }
