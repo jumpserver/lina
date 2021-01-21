@@ -111,7 +111,7 @@ export default {
             title: this.$t('assets.TestAssetsConnective'),
             name: 'TestSelected',
             can({ selectedRows }) {
-              return selectedRows.length > 0 && vm.object.auto_push
+              return selectedRows.length > 0
             },
             callback: this.bulkTestCallback.bind(this)
           }
