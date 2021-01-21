@@ -56,7 +56,8 @@ export default {
           rules: [Required]
         },
         bucket: {
-          label: this.$t('sessions.bucket')
+          label: this.$t('sessions.bucket'),
+          rules: [Required]
         },
         access_key: {
           label: 'Access key',
@@ -68,10 +69,12 @@ export default {
         },
         endpoint: {
           label: this.$t('sessions.endPoint'),
-          helpText: storageTypeMeta.endpointHelpText
+          helpText: storageTypeMeta.endpointHelpText,
+          rules: [Required]
         },
         region: {
-          label: this.$t('sessions.region')
+          label: this.$t('sessions.region'),
+          rules: [Required]
         },
         protocol: {
           label: this.$t('sessions.protocol'),
@@ -83,13 +86,16 @@ export default {
           rules: [Required]
         },
         container_name: {
-          label: this.$t('sessions.containerName')
+          label: this.$t('sessions.containerName'),
+          rules: [Required]
         },
         account_name: {
-          label: this.$t('sessions.accountName')
+          label: this.$t('sessions.accountName'),
+          rules: [Required]
         },
         account_key: {
-          label: this.$t('sessions.accountKey')
+          label: this.$t('sessions.accountKey'),
+          rules: [Required]
         },
         endpoint_suffix: {
           label: this.$t('sessions.endpointSuffix'),

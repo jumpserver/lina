@@ -166,20 +166,18 @@ export default {
       if (applications) {
         meta.apply_application_group = applications.split(',')
       }
-      if (applications === '') {
-        delete validValues['apply_application_group']
-      }
+      delete validValues['apply_application_group']
 
       if (systemUser) {
         meta.apply_system_user_group = systemUser.split(',')
       }
-      if (systemUser === '') {
-        delete validValues['apply_system_user_group']
-      }
+
+      delete validValues['apply_system_user_group']
 
       meta.apply_category = validValues.apply_category_type[0]
-
       meta.apply_type = validValues.apply_category_type[1]
+
+      delete validValues['apply_category_type']
 
       meta.apply_date_start = validValues.apply_date_start
       delete validValues['apply_date_start']
