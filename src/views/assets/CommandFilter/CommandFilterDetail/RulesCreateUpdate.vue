@@ -4,6 +4,7 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    :has-detail-in-msg="false"
     :get-next-route="getNextRoute"
   />
 </template>
