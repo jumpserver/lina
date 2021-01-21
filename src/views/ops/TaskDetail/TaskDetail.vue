@@ -101,7 +101,7 @@ export default {
           value: this.object.latest_execution.id,
           formatter: function(row, value) {
             const onClick = function() {
-              window.open(`/#/ops/celery/task/${value}/log/`, '', 'width=900,height=600')
+              window.open(`/#/ops/task/task/${value}/log/?type=ansible`, '', 'width=900,height=600')
             }
             const title = this.$t('common.View')
             return <a onClick={onClick} >{ title }</a>
