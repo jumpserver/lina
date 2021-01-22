@@ -711,6 +711,9 @@
     "SecurityInsecureCommand": "危险命令告警",
     "Insecure_Command_Alert": "危险命令告警",
     "SecurityInsecureCommandEmailReceiver": "告警接收邮件",
+    "MailSend": "邮件发送",
+    "LDAPServerInfo": "LDAP 服务器",
+    "LDAPUser": "LDAP 用户",
     "helpText": {
       "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
@@ -720,7 +723,7 @@
       "emailCustomUserCreatedHonorific": "提示: 创建用户时，发送设置密码邮件的敬语 (例如: 您好)",
       "emailCustomUserCreatedSignature": "提示: 邮件的署名 (例如: jumpserver)",
       "emailCustomUserCreatedSubject": "提示: 创建用户时，发送设置密码邮件的主题 (例如: 创建用户成功)",
-      "emailEmailFrom": "提示：发送邮件账号，默认使用SMTP账号作为发送账号",
+      "emailEmailFrom": "",
       "emailHostPassword": "提示：一些邮件提供商需要输入的是Token",
       "emailRecipient": "提示：仅用来作为测试邮件收件人",
       "emailSubjectPrefix": "提示: 一些关键字可能会被邮件提供商拦截，如 跳板机、JumpServer",

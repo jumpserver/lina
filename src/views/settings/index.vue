@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div>
     <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
       <keep-alive>
         <component :is="activeMenu" :object="componentData" />
@@ -19,7 +19,6 @@ import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
 import License from './License'
-import { getSettings } from '@/api/settings'
 export default {
   components: {
     IBox,
@@ -71,36 +70,14 @@ export default {
     }
   },
   computed: {
-    Title() {
+    title() {
       return this.$t('settings.setting')
     },
     componentData() {
-      switch (this.activeMenu) {
-        case 'Basic':
-          return this.basicData(this.settingsData)
-        case 'Email':
-          return this.emailData(this.settingsData)
-        case 'EmailContent':
-          return this.emailContentData(this.settingsData)
-        case 'Ldap':
-          return this.ldapData(this.settingsData)
-        case 'Terminal':
-          return this.terminalData(this.settingsData)
-        case 'Security':
-          return this.securityData(this.settingsData)
-        case 'License':
-          return {}
-      }
-      return this.basicData(this.settingsData)
+      return {}
     }
-
   },
   mounted() {
-    getSettings().then(data => {
-      this.settingsData = data
-      this.initial()
-      this.loading = false
-    })
   },
   methods: {
     initial() {
@@ -127,74 +104,10 @@ export default {
         case 'License':
           this.activeMenu = 'License'
           break
+        default:
+          this.activeMenu = 'Basic'
+          break
       }
-    },
-    basicData(data) {
-      const basic = data.basic
-      if (basic.SITE_URL === null) {
-        basic.SITE_URL = ''
-      }
-      if (basic.EMAIL_SUBJECT_PREFIX === null) {
-        basic.EMAIL_SUBJECT_PREFIX = ''
-      }
-      if (basic.USER_GUIDE_URL === null) {
-        basic.USER_GUIDE_URL = ''
-      }
-      return basic
-    },
-    emailData(data) {
-      const email = data.email
-      if (email.EMAIL_FROM === null) {
-        email.EMAIL_FROM = ''
-      }
-      if (email.EMAIL_RECIPIENT === null) {
-        email.EMAIL_RECIPIENT = ''
-      }
-      if (email.EMAIL_USE_TLS === null) {
-        email.EMAIL_USE_TLS = false
-      }
-      if (email.EMAIL_HOST === null) {
-        email.EMAIL_HOST = ''
-      }
-      if (email.EMAIL_HOST_USER === null) {
-        email.EMAIL_HOST_USER = ''
-      }
-      if (email.EMAIL_PORT === null) {
-        email.EMAIL_PORT = ''
-      }
-      if (email.EMAIL_USE_SSL === null) {
-        email.EMAIL_USE_SSL = false
-      }
-      return email
-    },
-    emailContentData(data) {
-      const email_content = data.email_content
-      if (email_content.EMAIL_CUSTOM_USER_CREATED_BODY === null) {
-        email_content.EMAIL_CUSTOM_USER_CREATED_BODY = ''
-      }
-      if (email_content.EMAIL_CUSTOM_USER_CREATED_HONORIFIC === null) {
-        email_content.EMAIL_CUSTOM_USER_CREATED_HONORIFIC = ''
-      }
-      if (email_content.EMAIL_CUSTOM_USER_CREATED_SIGNATURE === null) {
-        email_content.EMAIL_CUSTOM_USER_CREATED_SIGNATURE = ''
-      }
-      if (email_content.EMAIL_CUSTOM_USER_CREATED_SUBJECT === null) {
-        email_content.EMAIL_CUSTOM_USER_CREATED_SUBJECT = ''
-      }
-      return email_content
-    },
-    ldapData(data) {
-      return data.ldap
-    },
-    terminalData(data) {
-      return data.terminal
-    },
-    securityData(data) {
-      const security = data.security
-      if (security.SECURITY_COMMAND_EXECUTION === null) {
-        security.SECURITY_COMMAND_EXECUTION = false
-      }
-      return security
     }
   }
 }

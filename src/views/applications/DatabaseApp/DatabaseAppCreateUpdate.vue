@@ -10,7 +10,6 @@ export default {
   },
   data() {
     return {
-
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'domain']],
         [this.$t('applications.DBInfo'), ['attrs']],

@@ -34,9 +34,12 @@ async function checkLogin({ to, from, next }) {
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
-    setTimeout(() => {
-      window.location = process.env.VUE_APP_LOGIN_PATH
-    }, 100)
+    const status = e.response.status
+    if (status === 401 || status === 403) {
+      setTimeout(() => {
+        window.location = process.env.VUE_APP_LOGIN_PATH
+      }, 100)
+    }
     return reject('No profile get: ' + e)
   }
 }
