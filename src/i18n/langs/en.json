@@ -704,6 +704,7 @@
     "MailSend": "Mail send",
     "LDAPServerInfo": "LDAP Server",
     "LDAPUser": "LDAP User",
+    "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
       "authLdapSearchFilter": "Choice may be (cn|uid|sAMAccountName)=%(user)s)",
