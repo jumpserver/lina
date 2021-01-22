@@ -43,7 +43,7 @@ export default {
           ]
         ],
         [
-          this.$t('setting.Insecure_Command_Alert'),
+          this.$t('setting.InsecureCommandAlert'),
           [
             'SECURITY_INSECURE_COMMAND', 'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER'
           ]
