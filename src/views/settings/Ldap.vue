@@ -1,13 +1,9 @@
 <template>
-  <div v-if="!loading">
+  <div>
     <IBox>
       <GenericCreateUpdateForm
         :fields="selectFields"
         :url="url"
-        :initial="initialData"
-        :update-success-next-route="successUrl"
-        :clean-form-value="cleanFormValue"
-        :object="initialData"
         :fields-meta="fieldsMeta"
         :get-method="getMethod"
         :more-buttons="moreButtons"
@@ -69,11 +65,12 @@
 <script>
 import Dialog from '@/components/Dialog'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { testLdapSetting, testLdapUserLogin,
-  importLdapUser, refreshLdapUserCache, StartLdapUserCache } from '@/api/settings'
+import {
+  testLdapSetting, testLdapUserLogin,
+  importLdapUser, refreshLdapUserCache, StartLdapUserCache
+} from '@/api/settings'
 import ListTable from '@/components/ListTable'
 import { IBox } from '@/components'
-import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'Ldap',
@@ -83,12 +80,6 @@ export default {
     IBox,
     Dialog
   },
-  props: {
-    object: {
-      type: Object,
-      default: null
-    }
-  },
   data() {
     return {
       loading: true,
@@ -96,48 +87,34 @@ export default {
       dialogVisible: false,
       dialogLdapUserImport: false,
       dialogLdapUserImportLoginStatus: false,
-      initialData: {},
-      selectFields: [[this.$t('common.BasicInfo'), ['AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD', 'AUTH_LDAP_SEARCH_OU',
-        'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP', 'AUTH_LDAP']]],
-      successUrl: { name: 'Settings', params: { activeMenu: 'Email' }},
+      selectFields: [
+        [
+          this.$t('setting.LDAPServerInfo'),
+          [
+            'AUTH_LDAP_SERVER_URI', 'AUTH_LDAP_BIND_DN', 'AUTH_LDAP_BIND_PASSWORD'
+          ]
+        ],
+        [
+          this.$t('setting.LDAPUser'),
+          [
+            'AUTH_LDAP_SEARCH_OU', 'AUTH_LDAP_SEARCH_FILTER', 'AUTH_LDAP_USER_ATTR_MAP'
+          ]
+        ],
+        [
+          this.$t('common.Other'),
+          [
+            'AUTH_LDAP'
+          ]
+        ]
+      ],
       fieldsMeta: {
-        AUTH_LDAP_SERVER_URI: {
-          label: this.$t('setting.authLdapServerUri'),
-          rules: [Required]
-        },
-        AUTH_LDAP_BIND_DN: {
-          label: this.$t('setting.authLdapBindDn')
-        },
-        AUTH_LDAP_BIND_PASSWORD: {
-          label: this.$t('setting.authLdapBindPassword'),
-          type: 'input',
-          el: {
-            type: 'password'
-          }
-        },
-        AUTH_LDAP_SEARCH_OU: {
-          label: this.$t('setting.authLdapSearchOu'),
-          helpText: this.$t('setting.helpText.authLdapSearchOu')
-        },
-        AUTH_LDAP_SEARCH_FILTER: {
-          label: this.$t('setting.authLdapSearchFilter'),
-          rules: [Required],
-          helpText: this.$t('setting.helpText.authLdapSearchFilter')
-        },
         AUTH_LDAP_USER_ATTR_MAP: {
-          label: this.$t('setting.authLdapUserAttrMap'),
           el: {
             type: 'textarea'
-          },
-          rules: [Required],
-          helpText: this.$t('setting.helpText.authLdapUserAttrMap')
-        },
-        AUTH_LDAP: {
-          label: this.$t('setting.authLdap'),
-          type: 'checkbox'
+          }
         }
       },
-      url: '/api/v1/settings/setting/',
+      url: '/api/v1/settings/setting/?category=ldap',
       moreButtons: [
         {
           title: this.$t('setting.ldapConnectTest'),

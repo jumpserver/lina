@@ -87,6 +87,12 @@ export default {
             field.el.type = 'textarea'
             field.el.rows = 3
           }
+          if (fieldMeta.write_only) {
+            field.el.type = 'password'
+          }
+          break
+        case 'boolean':
+          type = 'checkbox'
           break
         default:
           type = 'input'
@@ -137,6 +143,7 @@ export default {
       // const fieldMeta = this.meta[name] || this.meta['attrs']['children'][name] || {}
       const fieldMeta = this.meta[name] || ((this.meta['attrs']) ? (this.meta['attrs']['children'][name]) : {})
       field.label = fieldMeta.label
+      field.helpText = fieldMeta.help_text
       field = this.generateFieldByType(fieldMeta.type, field, fieldMeta)
       field = this.generateFieldByName(name, field)
       field = this.generateFieldByOther(field, fieldMeta)
