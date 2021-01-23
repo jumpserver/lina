@@ -112,7 +112,6 @@ function addFilterIfNeed(col, meta) {
 }
 function generateColumns(CONFIG, META) {
   const config = _.cloneDeep(CONFIG)
-  console.log(config, 'configCloneDeep')
   const columns = []
 
   for (let col of config.columns) {
