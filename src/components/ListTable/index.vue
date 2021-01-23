@@ -1,8 +1,21 @@
 <template>
   <div>
-    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
+    <TableAction
+      :table-url="iTableConfig.url"
+      :search-table="search"
+      :date-pick="handleDateChange"
+      v-bind="headerActions"
+      :selected-rows="selectedRows"
+      :reload-table="reloadTable"
+    />
     <IBox class="table-content">
-      <AutoDataTable ref="dataTable" :filter-table="filter" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
+      <AutoDataTable
+        ref="dataTable"
+        :filter-table="filter"
+        :config="iTableConfig"
+        @selection-change="handleSelectionChange"
+        v-on="$listeners"
+      />
     </IBox>
   </div>
 </template>

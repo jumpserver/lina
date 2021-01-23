@@ -145,12 +145,7 @@ export default {
       }
     },
     handleSizeChange(val) {
-      this.$store.commit('table/SET_TABLE_CONFIG',
-        {
-          key: 'paginationSize',
-          value: val
-        }
-      )
+      this.$store.commit('table/SET_PAGE_SIZE', val)
     }
   }
 }
