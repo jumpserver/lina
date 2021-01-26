@@ -43,7 +43,7 @@ export default {
             }
           },
           {
-            prop: 'user_display',
+            prop: 'applicant_display',
             label: this.$t('tickets.user'),
             sortable: 'custom'
           },
