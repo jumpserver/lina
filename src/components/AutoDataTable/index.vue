@@ -1,15 +1,24 @@
 <template>
-  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
+  <div>
+    <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
+    <ColumnSettingPopover
+      :current-columns="currentColumns"
+      :total-columns-list="totalColumnsList"
+      @columnsUpdate="handleColumnsChange"
+    />
+  </div>
 </template>
 
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import i18n from '@/i18n/i18n'
+import ColumnSettingPopover from './components/ColumnSettingPopover'
 export default {
   name: 'AutoDataTable',
   components: {
-    DataTable
+    DataTable,
+    ColumnSettingPopover
   },
   props: {
     config: {
@@ -27,7 +36,18 @@ export default {
       method: 'get',
       autoConfig: {},
       iConfig: {},
-      meta: {}
+      meta: {},
+      totalColumns: [],
+      currentColumns: [],
+      defaultColumns: [],
+      totalColumnsList: []
+    }
+  },
+  computed: {
+    tableConfig() {
+      return sessionStorage.getItem('tableConfig')
+        ? JSON.parse(sessionStorage.getItem('tableConfig'))
+        : {}
     }
   },
   watch: {
@@ -48,6 +68,10 @@ export default {
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
+      }).then(() => {
+        this.generateDefaultColumns()
+      }).then(() => {
+        this.generateCurrentColumns(this.currentColumns)
       }).catch((error) => {
         this.$log.error('Error occur: ', error)
       }).finally(() => {
@@ -176,8 +200,47 @@ export default {
           columns.push(col)
         }
       }
+      // 第一次初始化时记录 totalColumns
+      this.totalColumns = columns
       config.columns = columns
       this.iConfig = config
+    },
+    generateCurrentColumns(col) {
+      const currentColumns = []
+      this.totalColumns.forEach((v, k) => {
+        if (col.indexOf(v.prop) !== -1 ||
+          v.prop === 'id') {
+          currentColumns.push(this.totalColumns[k])
+        }
+      })
+      this.iConfig.columns = currentColumns
+    },
+    generateDefaultColumns() {
+      let defaultColumns = []
+      const totalColumnsList = []
+
+      this.totalColumns.forEach((v, k) => {
+        if (!this.iConfig.defaultColumns) {
+          defaultColumns.push(v.prop)
+        } else {
+          defaultColumns = this.iConfig.defaultColumns
+        }
+        totalColumnsList.push({
+          prop: v.prop,
+          label: v.label
+        })
+      })
+      this.defaultColumns = defaultColumns
+      this.totalColumnsList = totalColumnsList
+      this.currentColumns = _.get(this.tableConfig[this.$route.name], 'currentColumns', this.defaultColumns)
+    },
+    handleColumnsChange(val) {
+      this.currentColumns = val
+      this.tableConfig[this.$route.name] = {
+        'currentColumns': val
+      }
+      sessionStorage.setItem('tableConfig', JSON.stringify(this.tableConfig))
+      this.generateCurrentColumns(val)
     },
     filterChange(filters) {
       const key = Object.keys(filters)[0]
