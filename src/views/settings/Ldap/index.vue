@@ -1,20 +1,18 @@
 <template>
-  <div>
-    <IBox>
-      <GenericCreateUpdateForm
-        :fields="selectFields"
-        :url="url"
-        :fields-meta="fieldsMeta"
-        :get-method="getMethod"
-        :more-buttons="moreButtons"
-        :has-detail-in-msg="false"
-        :after-get-form-value="changeFormValue"
-        :clean-form-value="cleanFormValue"
-      />
-      <ImportDialog :show.sync="dialogLdapUserImport" />
-      <TestLoginDialog :show.sync="dialogTest" />
-    </IBox>
-  </div>
+  <IBox>
+    <GenericCreateUpdateForm
+      :fields="selectFields"
+      :url="url"
+      :fields-meta="fieldsMeta"
+      :get-method="getMethod"
+      :more-buttons="moreButtons"
+      :has-detail-in-msg="false"
+      :after-get-form-value="changeFormValue"
+      :clean-form-value="cleanFormValue"
+    />
+    <ImportDialog :show.sync="dialogLdapUserImport" />
+    <TestLoginDialog :show.sync="dialogTest" />
+  </IBox>
 </template>
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'

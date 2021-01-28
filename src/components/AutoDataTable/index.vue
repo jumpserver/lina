@@ -2,10 +2,10 @@
   <div>
     <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
     <ColumnSettingPopover
-      :current-columns="currentColumns"
-      :total-columns-list="totalColumnsList"
-      :min-columns="minColsList"
-      @columnsUpdate="handleColumnsChange"
+      :current-columns="popoverColumns.currentCols"
+      :total-columns-list="popoverColumns.totalColumnsList"
+      :min-columns="popoverColumns.minCols"
+      @columnsUpdate="handlePopoverColumnsChange"
     />
   </div>
 </template>
@@ -38,11 +38,13 @@ export default {
       autoConfig: {},
       iConfig: {},
       meta: {},
+      cleanedColumnsShow: {},
       totalColumns: [],
-      currentColumns: [],
-      defaultColumns: [],
-      totalColumnsList: [],
-      minColsList: []
+      popoverColumns: {
+        totalColumnsList: [],
+        minCols: [],
+        currentCols: []
+      }
     }
   },
   computed: {
@@ -69,13 +71,13 @@ export default {
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         this.meta = data.actions[this.method.toUpperCase()] || {}
-        this.generateColumns()
-      }).then(() => {
-        // 生成给子组件使用的TotalColList
-        this.generateColsList()
+        this.generateTotalColumns()
       }).then(() => {
         //  根据当前列重新生成最终渲染表格
-        this.generateCurrentColumns(this.currentColumns)
+        this.filterShowColumns()
+      }).then(() => {
+        // 生成给子组件使用的TotalColList
+        this.generatePopoverColumns()
       }).catch((error) => {
         this.$log.error('Error occur: ', error)
       }).finally(() => {
@@ -193,7 +195,7 @@ export default {
       col = this.addFilterIfNeed(col)
       return col
     },
-    generateColumns() {
+    generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       const columns = []
       for (let col of config.columns) {
@@ -210,45 +212,65 @@ export default {
       this.iConfig = config
     },
     // 生成给子组件使用的TotalColList
-    generateColsList() {
-      let defaultColumns = []
-      const totalColumnsList = []
-      this.totalColumns.forEach((v, k) => {
-        if (!_.get(this.iConfig['columnsShow'], 'default', false)) {
-          defaultColumns.push(v.prop)
-        } else {
-          defaultColumns = _.get(this.iConfig['columnsShow'], 'default')
-        }
-        totalColumnsList.push({
-          prop: v.prop,
-          label: v.label
-        })
-      })
-      this.defaultColumns = defaultColumns
-      this.totalColumnsList = totalColumnsList
-      this.minColsList = _.get(this.iConfig['columnsShow'], 'min', [])
-      this.currentColumns = _.get(this.tableConfig[this.$route.name], 'currentColumns', this.defaultColumns)
-    },
-    generateCurrentColumns(col) {
-      const currentColumns = []
-      this.totalColumns.forEach((v, k) => {
-        // 过滤展示表格
-        if (col.indexOf(v.prop) !== -1 ||
-          // 根据必须展示列过滤展示表格
-          this.minColsList.indexOf(v.prop) !== -1 ||
-          v.prop === 'id') {
-          currentColumns.push(this.totalColumns[k])
+    cleanColumnsShow() {
+      const totalColumnsNames = this.totalColumns.map(obj => obj.prop)
+      // 默认列
+      let defaultColumnsNames = _.get(this.iConfig, 'columnsShow.default', [])
+      if (defaultColumnsNames.length === 0) {
+        defaultColumnsNames = totalColumnsNames
+      }
+      // Clean it
+      defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
+
+      // 最小列
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', [])
+        .filter(n => defaultColumnsNames.indexOf(n) > -1)
+
+      // 应该显示的列
+      const configShowColumnsNames = _.get(this.tableConfig[this.$route.name], 'showColumns', null)
+      let showColumnsNames = configShowColumnsNames || defaultColumnsNames
+      if (showColumnsNames.length === 0) {
+        showColumnsNames = totalColumnsNames
+      }
+      // 校对显示的列，是不是包含最小列
+      minColumnsNames.forEach((v, i) => {
+        if (showColumnsNames.indexOf(v) === -1) {
+          showColumnsNames.push(v)
         }
       })
-      this.iConfig.columns = currentColumns
+      // Clean it
+      showColumnsNames = totalColumnsNames.filter(n => showColumnsNames.indexOf(n) > -1)
+
+      this.cleanedColumnsShow = {
+        default: defaultColumnsNames,
+        show: showColumnsNames,
+        min: minColumnsNames,
+        configShow: configShowColumnsNames
+      }
+      this.$log.debug('Cleaned colums show: ', this.cleanedColumnsShow)
     },
-    handleColumnsChange(val) {
-      this.currentColumns = val
+    filterShowColumns() {
+      this.cleanColumnsShow()
+      this.iConfig.columns = this.totalColumns.filter(obj => {
+        return this.cleanedColumnsShow.show.indexOf(obj.prop) > -1
+      })
+    },
+    generatePopoverColumns() {
+      this.popoverColumns.totalColumnsList = this.totalColumns.map(obj => {
+        return { prop: obj.prop, label: obj.label }
+      })
+      this.popoverColumns.currentCols = this.cleanedColumnsShow.show
+      this.popoverColumns.minCols = this.cleanedColumnsShow.min
+      this.$log.debug('Popover cols: ', this.popoverColumns)
+    },
+    handlePopoverColumnsChange(columns) {
+      // this.$log.debug('Columns change: ', columns)
+      this.popoverColumns.currentCols = columns
       this.tableConfig[this.$route.name] = {
-        'currentColumns': val
+        'showColumns': columns
       }
       sessionStorage.setItem('tableConfig', JSON.stringify(this.tableConfig))
-      this.generateCurrentColumns(val)
+      this.filterShowColumns()
     },
     filterChange(filters) {
       const key = Object.keys(filters)[0]

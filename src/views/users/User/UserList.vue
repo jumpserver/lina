@@ -43,6 +43,10 @@ export default {
           'is_valid',
           'actions'
         ],
+        // columnsShow: {
+        //   min: ['name', 'username', 'actions'],
+        //   default: ['name', 'username', 'groups_display']
+        // },
         columnsMeta: {
           username: {
             showOverflowTooltip: true
