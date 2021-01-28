@@ -77,8 +77,11 @@ export function toSafeLocalDateStr(d) {
     return ''
   }
   const date = safeDate(d)
-  // let date_s = date.toLocaleString(getUserLang(), {hour12: false});
-  const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
+  // const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
+  const date_s =
+    date.toLocaleDateString(getUserLang(), { hourCycle: 'h23' }) +
+    ' ' +
+    date.toLocaleTimeString(getUserLang(), { hourCycle: 'h23' })
   return date_s
 }
 
