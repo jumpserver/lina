@@ -144,15 +144,15 @@ export default {
         // },
         {
           key: this.$t('tickets.IP'),
-          value: this.object.meta.apply_ip_group
+          value: this.object.meta.apply_ip_group.toString()
         },
         {
           key: this.$t('tickets.Hostname'),
-          value: this.object.meta.apply_hostname_group
+          value: this.object.meta.apply_hostname_group.toString()
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.apply_system_user_group
+          value: this.object.meta.apply_system_user_group.toString()
         },
         {
           key: this.$t('common.dateStart'),
