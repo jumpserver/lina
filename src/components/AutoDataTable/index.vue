@@ -223,7 +223,7 @@ export default {
       defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', [])
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['action', 'id'])
         .filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 应该显示的列
