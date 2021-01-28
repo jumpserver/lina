@@ -24,7 +24,11 @@
         >
           <el-checkbox
             :label="item.prop"
-            :disabled="item.prop==='id' ||item.prop==='actions' "
+            :disabled="
+              item.prop==='id' ||
+                item.prop==='actions' ||
+                minColumns.indexOf(item.prop)!==-1
+            "
           >
             {{ item.label }}
           </el-checkbox>
@@ -48,6 +52,10 @@ export default {
       default: () => []
     },
     currentColumns: {
+      type: Array,
+      default: () => []
+    },
+    minColumns: {
       type: Array,
       default: () => []
     }

@@ -4,6 +4,7 @@
     <ColumnSettingPopover
       :current-columns="currentColumns"
       :total-columns-list="totalColumnsList"
+      :min-columns="minColsList"
       @columnsUpdate="handleColumnsChange"
     />
   </div>
@@ -40,7 +41,8 @@ export default {
       totalColumns: [],
       currentColumns: [],
       defaultColumns: [],
-      totalColumnsList: []
+      totalColumnsList: [],
+      minColsList: []
     }
   },
   computed: {
@@ -69,8 +71,10 @@ export default {
         this.meta = data.actions[this.method.toUpperCase()] || {}
         this.generateColumns()
       }).then(() => {
-        this.generateDefaultColumns()
+        // 生成给子组件使用的TotalColList
+        this.generateColsList()
       }).then(() => {
+        //  根据当前列重新生成最终渲染表格
         this.generateCurrentColumns(this.currentColumns)
       }).catch((error) => {
         this.$log.error('Error occur: ', error)
@@ -205,25 +209,15 @@ export default {
       config.columns = columns
       this.iConfig = config
     },
-    generateCurrentColumns(col) {
-      const currentColumns = []
-      this.totalColumns.forEach((v, k) => {
-        if (col.indexOf(v.prop) !== -1 ||
-          v.prop === 'id') {
-          currentColumns.push(this.totalColumns[k])
-        }
-      })
-      this.iConfig.columns = currentColumns
-    },
-    generateDefaultColumns() {
+    // 生成给子组件使用的TotalColList
+    generateColsList() {
       let defaultColumns = []
       const totalColumnsList = []
-
       this.totalColumns.forEach((v, k) => {
-        if (!this.iConfig.defaultColumns) {
+        if (!_.get(this.iConfig['columnsShow'], 'default', false)) {
           defaultColumns.push(v.prop)
         } else {
-          defaultColumns = this.iConfig.defaultColumns
+          defaultColumns = _.get(this.iConfig['columnsShow'], 'default')
         }
         totalColumnsList.push({
           prop: v.prop,
@@ -232,7 +226,21 @@ export default {
       })
       this.defaultColumns = defaultColumns
       this.totalColumnsList = totalColumnsList
+      this.minColsList = _.get(this.iConfig['columnsShow'], 'min', [])
       this.currentColumns = _.get(this.tableConfig[this.$route.name], 'currentColumns', this.defaultColumns)
+    },
+    generateCurrentColumns(col) {
+      const currentColumns = []
+      this.totalColumns.forEach((v, k) => {
+        // 过滤展示表格
+        if (col.indexOf(v.prop) !== -1 ||
+          // 根据必须展示列过滤展示表格
+          this.minColsList.indexOf(v.prop) !== -1 ||
+          v.prop === 'id') {
+          currentColumns.push(this.totalColumns[k])
+        }
+      })
+      this.iConfig.columns = currentColumns
     },
     handleColumnsChange(val) {
       this.currentColumns = val
