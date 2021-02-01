@@ -1,8 +1,8 @@
-import VueCookie from 'vue-cookie'
+
 import Vue from 'vue'
 
 function getTableConfigfromCookie() {
-  return VueCookie.get('tableConfig') ? JSON.parse(VueCookie.get('tableConfig')) : {}
+  return localStorage.getItem('tableConfig') ? JSON.parse(localStorage.getItem('tableConfig')) : {}
 }
 
 const state = {
@@ -11,8 +11,9 @@ const state = {
 
 const mutations = {
   SET_TABLE_CONFIG: (state, tableConfig) => {
-    Vue.set(state.tableConfig, tableConfig.key, tableConfig.value)
-    VueCookie.set('tableConfig', JSON.stringify(state.tableConfig), 14)
+    const _tableConfig = localStorage.getItem('tableConfig') ? JSON.parse(localStorage.getItem('tableConfig')) : {}
+    Vue.set(_tableConfig, tableConfig.key, tableConfig.value)
+    localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
   }
 }
 

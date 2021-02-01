@@ -48,11 +48,7 @@ export default {
     }
   },
   computed: {
-    tableConfig() {
-      return sessionStorage.getItem('tableConfig')
-        ? JSON.parse(sessionStorage.getItem('tableConfig'))
-        : {}
-    }
+
   },
   watch: {
     config: {
@@ -227,7 +223,10 @@ export default {
         .filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 应该显示的列
-      const configShowColumnsNames = _.get(this.tableConfig[this.$route.name], 'showColumns', null)
+      const _tableConfig = localStorage.getItem('tableConfig')
+        ? JSON.parse(localStorage.getItem('tableConfig'))
+        : {}
+      const configShowColumnsNames = _.get(_tableConfig[this.$route.name], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
         showColumnsNames = totalColumnsNames
@@ -266,10 +265,13 @@ export default {
     handlePopoverColumnsChange(columns) {
       // this.$log.debug('Columns change: ', columns)
       this.popoverColumns.currentCols = columns
-      this.tableConfig[this.$route.name] = {
+      const _tableConfig = localStorage.getItem('tableConfig')
+        ? JSON.parse(localStorage.getItem('tableConfig'))
+        : {}
+      _tableConfig[this.$route.name] = {
         'showColumns': columns
       }
-      sessionStorage.setItem('tableConfig', JSON.stringify(this.tableConfig))
+      localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
       this.filterShowColumns()
     },
     filterChange(filters) {
