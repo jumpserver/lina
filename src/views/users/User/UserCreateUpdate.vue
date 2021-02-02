@@ -50,9 +50,6 @@ export default {
             return this.$route.meta.action !== 'update' || formValue.source !== 'local'
           }
         },
-        source: {
-          hidden: () => { return true }
-        },
         password: {
           component: UserPassword,
           hidden: (formValue) => {
