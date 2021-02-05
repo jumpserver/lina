@@ -454,3 +454,7 @@ a {
 .el-table {
   font-size: 13px;
 }
+
+.el-table-filter__list-item:hover {
+  color: $--color-text-primary;
+}
