@@ -199,7 +199,9 @@ export default {
     setWsCallback() {
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        this.xterm.write(data.message)
+        let message = data.message
+        message = message.replace(/Task ops\.tasks\.run_command_execution.*/, '')
+        this.xterm.write(message)
       }
     },
     wrapperError(msg) {
