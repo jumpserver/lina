@@ -15,8 +15,12 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
         columns: [
-          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'comment', 'actions'
+          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'date_created', 'comment', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'comment', 'actions']
+        },
         columnsMeta: {
           type_display: {
             label: this.$t('applications.type'),
@@ -35,7 +39,7 @@ export default {
             showOverflowTooltip: true
           },
           actions: {
-            prop: '',
+            prop: 'actions',
             formatterArgs: {
               hasClone: false,
               performDelete: function({ row, col, cellValue, reload }) {

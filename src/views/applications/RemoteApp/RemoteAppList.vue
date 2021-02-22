@@ -17,8 +17,12 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=remote_app',
         columns: [
-          'name', 'type', 'attrs.asset', 'comment', 'actions'
+          'name', 'type', 'attrs.asset', 'date_created', 'comment', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'type', 'attrs.asset', 'comment', 'actions']
+        },
         columnsMeta: {
           type: {
             displayKey: 'get_type_display',
@@ -33,6 +37,7 @@ export default {
             }
           },
           actions: {
+            prop: 'actions',
             formatterArgs: {
               hasClone: false,
               onUpdate: ({ row }) => {
