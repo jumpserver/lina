@@ -17,10 +17,18 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/application-permissions/',
         columns: [
-          'name', 'category_display', 'users_amount', 'user_groups_amount',
-          'applications_amount', 'system_users_amount',
+          'name', 'type_display', 'category_display', 'users_amount', 'user_groups_amount',
+          'applications_amount', 'system_users_amount', 'date_created', 'date_expired',
           'is_valid', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'name', 'category_display', 'users_amount', 'user_groups_amount',
+            'applications_amount', 'system_users_amount',
+            'is_valid', 'actions'
+          ]
+        },
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -29,6 +37,9 @@ export default {
               }
             },
             showOverflowTooltip: true
+          },
+          type_display: {
+            width: '135px'
           },
           category_display: {
             width: '135px'
