@@ -89,7 +89,7 @@ export default {
           break
         case 'actions':
           col = {
-            prop: 'id',
+            prop: 'actions',
             label: i18n.t('common.Actions'),
             align: 'center',
             width: '150px',
