@@ -465,7 +465,7 @@ export default {
     },
     rCheckAssetsAmount: function() {
       this.$axios.post(
-        `/api/v1/assets/nodes/launch_check_assets_amount_task/`
+        `/api/v1/assets/nodes/check_assets_amount_task/`
       ).then(res => {
         window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
       }).catch(error => {
