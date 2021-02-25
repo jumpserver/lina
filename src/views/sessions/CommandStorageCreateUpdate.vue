@@ -4,7 +4,6 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     :has-detail-in-msg="false"
-    :clean-form-value="cleanFormValue"
     :perform-submit="performSubmit"
   />
 </template>
@@ -53,10 +52,6 @@ export default {
 
   },
   methods: {
-    cleanFormValue(value) {
-      console.log(value)
-      return value
-    },
     performSubmit(validValues) {
       const method = this.getMethod()
       const commandType = this.$route.query.type || 'es'
