@@ -12,7 +12,7 @@ export default {
     return {
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'domain']],
-        [this.$t('applications.DBInfo'), ['attrs']],
+        [this.$t('applications.DBInfo'), ['host', 'port', 'database']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
