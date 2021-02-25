@@ -125,6 +125,9 @@ export default {
                 2: 'fa-circle text-warning'
               },
               typeChange: function(val) {
+                if (!val) {
+                  return 2
+                }
                 return val.status
               },
               hasTips: true
@@ -156,6 +159,7 @@ export default {
         }
       },
       headerActions: {
+        // canCreate: false,
         createRoute: {
           name: 'AssetCreate',
           query: this.$route.query
