@@ -42,21 +42,20 @@ export default {
     }
   },
   computed: {
-
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },
-    hasCreateAction() {
-      const hasLeftAction = this.headerActions.hasLeftActions
-      if (hasLeftAction === false) {
-        return false
-      }
-      const hasCreate = this.headerActions.hasCreate
-      if (hasCreate === false) {
-        return false
-      }
-      return true
-    },
+    // hasCreateAction() {
+    //   const hasLeftAction = this.headerActions.hasLeftActions
+    //   if (hasLeftAction === false) {
+    //     return false
+    //   }
+    //   const hasCreate = this.headerActions.hasCreate
+    //   if (hasCreate === false) {
+    //     return false
+    //   }
+    //   return true
+    // },
     iTableConfig() {
       const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
       this.$log.debug('Header actions', this.headerActions)

@@ -29,7 +29,10 @@ export default {
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.Authentication'), ['password_strategy', 'update_password', 'password', 'set_public_key', 'public_key', 'mfa_level', 'source']],
+        [this.$t('users.Authentication'), [
+          'password_strategy', 'update_password', 'password', 'set_public_key',
+          'public_key', 'mfa_level', 'source'
+        ]],
         [this.$t('users.Secure'), ['role', 'org_roles', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
@@ -80,7 +83,7 @@ export default {
         role: {
           label: this.$t('users.SuperRole'),
           hidden: () => {
-            return !this.currentOrgIsDefault && this.publicSettings.role === 'Admin'
+            return !this.currentOrgIsRoot && this.publicSettings.role === 'Admin'
           }
         },
         org_roles: {
@@ -88,7 +91,7 @@ export default {
           label: this.$t('users.OrgRole'),
           component: RoleCheckbox,
           hidden: () => {
-            return (!this.publicSettings.XPACK_LICENSE_IS_VALID)
+            return !this.publicSettings.XPACK_LICENSE_IS_VALID
           },
           el: {
             disabled: false,
@@ -110,12 +113,12 @@ export default {
   },
   computed: {
     ...mapGetters(['publicSettings', 'currentOrg']),
-    currentOrgIsDefault() {
-      return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
+    currentOrgIsRoot() {
+      return this.currentOrg.is_root
     }
   },
   mounted() {
-    if (this.currentOrgIsDefault) {
+    if (this.currentOrgIsRoot) {
       this.fieldsMeta.org_roles.el.disabled = true
     }
   },

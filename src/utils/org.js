@@ -1,4 +1,5 @@
 import { hasUUID, BASE_URL } from '@/utils/common'
+import { getOrgDetail } from '@/api/orgs'
 import store from '@/store'
 
 function getPropOrg() {
@@ -19,14 +20,14 @@ function change2PropOrg() {
   setTimeout(() => changeOrg(org.id), 100)
 }
 
-function getOrgIdMapper() {
-  const mapper = {}
-  const userAdminOrgList = store.getters.userAdminOrgList
-  userAdminOrgList.forEach((v) => {
-    mapper[v.id] = v
-  })
-  return mapper
-}
+// function getOrgIdMapper() {
+//   const mapper = {}
+//   const userAdminOrgList = store.getters.userAdminOrgList
+//   userAdminOrgList.forEach((v) => {
+//     mapper[v.id] = v
+//   })
+//   return mapper
+// }
 
 function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
@@ -37,7 +38,7 @@ function hasCurrentOrgPermission() {
 }
 
 async function changeOrg(orgId) {
-  const org = getOrgIdMapper()[orgId]
+  const org = await getOrgDetail(orgId)
   if (!org) {
     console.debug('Error: org not found')
   } else {
