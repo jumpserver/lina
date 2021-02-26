@@ -22,7 +22,7 @@ export default {
         path: pathInitial
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'domain']],
+        [this.$t('common.Basic'), ['name', 'type']],
         [appTypeMeta.title, fieldsMap],
         [this.$t('common.Other'), ['comment']]
       ],
