@@ -11,12 +11,12 @@ export default {
     ListTable
   },
   computed: {
-    ...mapGetters(['currentOrg']),
+    ...mapGetters(['currentOrgIsRoot']),
     iAttrs() {
       const attrs = _.cloneDeep(this.$attrs)
       const canCreate = _.get(attrs, 'header-actions.canCreate', null)
       this.$log.debug('Can create: ', canCreate)
-      if (canCreate === null && this.currentOrg.is_root) {
+      if (canCreate === null && this.currentOrgIsRoot) {
         _.set(attrs, 'header-actions.canCreate', false)
       }
       // attrs.headerActions.can

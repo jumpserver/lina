@@ -112,10 +112,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings', 'currentOrg']),
-    currentOrgIsRoot() {
-      return this.currentOrg.is_root
-    }
+    ...mapGetters(['publicSettings', 'currentOrgIsRoot'])
   },
   mounted() {
     if (this.currentOrgIsRoot) {

@@ -198,10 +198,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentOrg', 'currentUser', 'device']),
-    currentOrgIsRoot() {
-      return this.currentOrg.is_root
-    }
+    ...mapGetters(['currentOrgIsRoot', 'currentUser', 'device'])
   },
   mounted() {
     if (!this.currentOrgIsRoot) {
