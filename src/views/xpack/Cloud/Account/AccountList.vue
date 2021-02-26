@@ -37,7 +37,18 @@ export default {
               updateRoute: 'AccountUpdate',
               onUpdate: ({ row, col }) => {
                 vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider }})
-              }
+              },
+              extraActions: [
+                {
+                  name: 'TestConnection',
+                  title: this.$t('assets.TestConnection'),
+                  callback: function(val) {
+                    this.$axios.get(`/api/v1/xpack/cloud/accounts/${val.row.id}/test-connective/`).then(res => {
+                      this.$message.success(this.$t('common.TestSuccessMsg'))
+                    })
+                  }
+                }
+              ]
             }
           },
           validity: {

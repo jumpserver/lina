@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      console.log('>>>>>>>>', attrs)
       const method = this.getMethod()
       const accountProvider = this.$route.query.provider || aliyun
       const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
