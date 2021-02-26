@@ -8,73 +8,27 @@ export const CUSTOM = 'custom'
 export const ALL_TYPES = [CHROME, MYSQL_WORKBENCH, VMWARE_CLIENT, CUSTOM]
 
 export const REMOTE_APP_TYPE_FIELDS_MAP = {
-  [CHROME]: [
-    {
-      id: 'chrome_target', el: {}, attrs: {}, type: 'input', prop: 'chrome_target',
-      label: i18n.t('applications.chrome_target')
-    },
-    {
-      id: 'chrome_username', el: {}, attrs: {}, type: 'input', prop: 'chrome_username',
-      label: i18n.t('applications.chrome_username')
-    },
-    {
-      id: 'chrome_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'chrome_password',
-      label: i18n.t('applications.chrome_password')
-    }
-  ],
+  [CHROME]: ['asset', 'path', 'chrome_target', 'chrome_username', 'chrome_password'],
   [MYSQL_WORKBENCH]: [
-    {
-      id: 'mysql_workbench_ip', el: {}, attrs: {}, type: 'input', prop: 'mysql_workbench_ip',
-      label: i18n.t('applications.mysql_workbench_ip')
-    },
-    {
-      id: 'mysql_workbench_port', el: {}, attrs: {}, type: 'input', prop: 'mysql_workbench_port',
-      label: i18n.t('applications.mysql_workbench_port')
-    },
-    {
-      id: 'mysql_workbench_name', el: {}, attrs: {}, type: 'input', prop: 'mysql_workbench_name',
-      label: i18n.t('applications.mysql_workbench_name')
-    },
-    {
-      id: 'mysql_workbench_username', el: {}, attrs: {}, type: 'input', prop: 'mysql_workbench_username',
-      label: i18n.t('applications.mysql_workbench_username')
-    },
-    {
-      id: 'mysql_workbench_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'mysql_workbench_password',
-      label: i18n.t('applications.mysql_workbench_password')
-    }
+    'asset', 'path',
+    'mysql_workbench_ip',
+    'mysql_workbench_port',
+    'mysql_workbench_name',
+    'mysql_workbench_username',
+    'mysql_workbench_password'
   ],
   [VMWARE_CLIENT]: [
-    {
-      id: 'vmware_target', el: {}, attrs: {}, type: 'input', prop: 'vmware_target',
-      label: i18n.t('applications.vmware_target')
-    },
-    {
-      id: 'vmware_username', el: {}, attrs: {}, type: 'input', prop: 'vmware_username',
-      label: i18n.t('applications.vmware_username')
-    },
-    {
-      id: 'vmware_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'vmware_password',
-      label: i18n.t('applications.vmware_password')
-    }
+    'asset', 'path',
+    'vmware_target',
+    'vmware_username',
+    'vmware_password'
   ],
   [CUSTOM]: [
-    {
-      id: 'custom_cmdline', el: {}, attrs: {}, type: 'input', prop: 'custom_cmdline',
-      label: i18n.t('applications.custom_cmdline')
-    },
-    {
-      id: 'custom_target', el: {}, attrs: {}, type: 'input', prop: 'custom_target',
-      label: i18n.t('applications.custom_target')
-    },
-    {
-      id: 'custom_username', el: {}, attrs: {}, type: 'input', prop: 'custom_username',
-      label: i18n.t('applications.custom_username')
-    },
-    {
-      id: 'custom_password', el: { 'show-password': true }, attrs: {}, type: 'password', prop: 'custom_password',
-      label: i18n.t('applications.custom_password')
-    }
+    'asset', 'path',
+    'custom_cmdline',
+    'custom_target',
+    'custom_username',
+    'custom_password'
   ]
 }
 

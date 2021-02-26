@@ -281,9 +281,11 @@ export default {
         }
       }
       if (object) {
-        if (object['attrs']) {
-          object = deepmerge(object, object['attrs'])
-        }
+        Object.keys(object).forEach(function(key) {
+          if (object[key] instanceof Object) {
+            object = deepmerge(object, object[key])
+          }
+        })
         this.$log.debug('Object is: ', object)
         this.$emit('update:object', object)
       }
