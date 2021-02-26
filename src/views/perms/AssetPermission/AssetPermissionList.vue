@@ -23,7 +23,11 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
-        columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions'],
+        columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'date_created', 'date_expired', 'is_valid', 'actions'],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions']
+        },
         columnsMeta: {
           name: {
             formatterArgs: {
