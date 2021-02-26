@@ -1,16 +1,22 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericTreeListPage
+    ref="GenericTreeListPage"
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+    :tree-setting="treeSetting"
+    @TreeInitFinish="checkFirstNode"
+  />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
-    GenericListPage
+    GenericTreeListPage
   },
   data() {
     const vm = this
@@ -92,6 +98,43 @@ export default {
           dateStart: dateFrom,
           dateEnd: dateTo
         }
+      },
+      treeSetting: {
+        showMenu: false,
+        showRefresh: true,
+        showAssets: false,
+        url: '/api/v1/assets/assets/',
+        nodeUrl: '/api/v1/assets/nodes/',
+        // ?assets=0不显示资产. =1显示资产
+        treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
+        callback: {
+          onSelected: function(event, treeNode) {
+            // 禁止点击根节点
+            if (treeNode.id === 'root') {
+              return
+            }
+            let combinator = '?'
+            if (this.tableConfig.url.indexOf('?') !== -1) {
+              combinator = '&'
+            }
+            this.tableConfig.url = `${this.tableConfig.url}${combinator}command_storage_id=${treeNode.id}`
+          }.bind(this)
+        }
+      }
+    }
+  },
+  computed: {
+
+  },
+  watch: {
+
+  },
+  methods: {
+    checkFirstNode(obj) {
+      const ztree = obj
+      const nodes = ztree.getNodes()
+      if (nodes[0].children.length > 0) {
+        ztree.selectNode(nodes[0].children[0])
       }
     }
   }

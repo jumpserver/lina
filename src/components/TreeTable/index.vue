@@ -7,6 +7,7 @@
           ref="AutoDataZTree"
           :setting="treeSetting"
           class="auto-data-ztree"
+          v-on="$listeners"
           @urlChange="handleUrlChange"
         >
           <div slot="rMenu" slot-scope="{data}">
@@ -82,6 +83,12 @@ export default {
     },
     getSelectedNodes: function() {
       return this.$refs.AutoDataZTree.getSelectedNodes()
+    },
+    getNodes: function() {
+      return this.$refs.AutoDataZTree.getNodes()
+    },
+    selectNode: function(node) {
+      return this.$refs.AutoDataZTree.selectNode(node)
     }
   }
 }
