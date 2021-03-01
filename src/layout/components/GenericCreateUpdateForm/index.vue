@@ -15,7 +15,6 @@
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import deepmerge from 'deepmerge'
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -281,11 +280,18 @@ export default {
         }
       }
       if (object) {
-        Object.keys(object).forEach(function(key) {
-          if (object[key] instanceof Object) {
-            object = deepmerge(object, object[key])
+        const _object = {}
+        Object.keys(object).forEach((key) => {
+          // https://stackoverflow.com/questions/26222604/why-is-array-instanceof-object
+          if (object[key] instanceof Object && !(object[key] instanceof Array)) {
+            Object.keys(object[key]).forEach(innerKey => {
+              _object[innerKey] = object[key][innerKey]
+            })
+          } else {
+            _object[key] = object[key]
           }
         })
+        object = _object
         this.$log.debug('Object is: ', object)
         this.$emit('update:object', object)
       }
