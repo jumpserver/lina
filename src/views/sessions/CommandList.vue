@@ -113,11 +113,7 @@ export default {
             if (treeNode.id === 'root') {
               return
             }
-            let combinator = '?'
-            if (this.tableConfig.url.indexOf('?') !== -1) {
-              combinator = '&'
-            }
-            this.tableConfig.url = `${this.tableConfig.url}${combinator}command_storage_id=${treeNode.id}`
+            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}`
           }.bind(this)
         }
       }
