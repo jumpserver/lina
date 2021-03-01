@@ -98,7 +98,7 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'hardware_info', 'connectivity', 'actions'
+          'hostname', 'ip', 'admin_user_display', 'hardware_info', 'number', 'connectivity', 'actions'
         ],
         columnsMeta: {
           hostname: {
@@ -156,6 +156,10 @@ export default {
               ]
             }
           }
+        },
+        columnsShow: {
+          min: ['hostname', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
         }
       },
       headerActions: {
@@ -469,7 +473,7 @@ export default {
     },
     rCheckAssetsAmount: function() {
       this.$axios.post(
-        `/api/v1/assets/nodes/launch_check_assets_amount_task/`
+        `/api/v1/assets/nodes/check_assets_amount_task/`
       ).then(res => {
         window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
       }).catch(error => {

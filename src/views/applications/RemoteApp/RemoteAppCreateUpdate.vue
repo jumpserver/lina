@@ -22,8 +22,8 @@ export default {
         path: pathInitial
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'domain']],
-        [appTypeMeta.title, ['attrs']],
+        [this.$t('common.Basic'), ['name', 'type']],
+        [appTypeMeta.title, fieldsMap],
         [this.$t('common.Other'), ['comment']]
       ],
       url: '/api/v1/applications/applications/',
@@ -86,7 +86,6 @@ export default {
           }
         }
         validValues.category = 'remote_app'
-        console.log(validValues)
         return this.$axios[method](`${url}?type=${validValues.type}`, validValues)
       },
       fieldsMeta: {
@@ -115,6 +114,9 @@ export default {
         asset_info: {
           type: 'input',
           hidden: () => true
+        },
+        hello: {
+          type: 'input'
         },
         domain: {
           el: {
