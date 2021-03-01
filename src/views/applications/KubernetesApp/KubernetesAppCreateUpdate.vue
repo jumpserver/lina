@@ -16,7 +16,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'domain']],
-        [this.$t('applications.kubernetes'), ['cluster']],
+        [this.$t('applications.kubernetes'), ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
