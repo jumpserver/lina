@@ -9,7 +9,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/UserPassword'
 import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
-import { getDayFuture } from '@/utils/common'
 import { mapGetters } from 'vuex'
 import rules from '@/components/DataForm/rules'
 
@@ -20,12 +19,12 @@ export default {
   data() {
     return {
       initial: {
-        password_strategy: 0,
-        mfa_level: 0,
-        role: 'User',
-        source: 'local',
-        org_roles: ['User'],
-        date_expired: getDayFuture(36500, new Date()).toISOString()
+        // password_strategy: 0,
+        // mfa_level: 0,
+        // role: 'User',
+        // source: 'local',
+        // org_roles: ['User'],
+        // date_expired: getDayFuture(36500, new Date()).toISOString()
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],

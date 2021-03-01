@@ -15,7 +15,6 @@
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import deepmerge from 'deepmerge'
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -281,12 +280,7 @@ export default {
         }
       }
       if (object) {
-        Object.keys(object).forEach(function(key) {
-          if (object[key] instanceof Object) {
-            object = deepmerge(object, object[key])
-          }
-        })
-        this.$log.debug('Object is: ', object)
+        object = _.cloneDeep(object)
         this.$emit('update:object', object)
       }
       return object
