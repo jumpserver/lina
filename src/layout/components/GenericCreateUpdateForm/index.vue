@@ -280,6 +280,7 @@ export default {
         }
       }
       if (object) {
+        object = _.cloneDeep(object)
         this.$log.debug('Object is: ', object)
         this.$emit('update:object', object)
       }
