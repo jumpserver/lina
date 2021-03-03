@@ -121,7 +121,7 @@ export default {
                     return row.is_active
                   },
                   callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?login_to=${cellValue}`, '_blank')
+                    window.open(`/luna/?login_to=${row.id}`, '_blank')
                   }
                 },
                 {
@@ -134,7 +134,7 @@ export default {
                     return 'fa-star-o'
                   }.bind(this),
                   callback: function({ row, col, cellValue, reload }) {
-                    this.addOrDeleteFavorite(cellValue)
+                    this.addOrDeleteFavorite(row.id)
                   }.bind(this)
                 }
               ]

@@ -149,8 +149,8 @@ export default {
                   name: 'View',
                   title: this.$t(`common.UpdateAssetDetail`),
                   type: 'primary',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: cellValue }})
+                  callback: function({ cellValue, tableData, row }) {
+                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: row.id }})
                   }
                 }
               ]
