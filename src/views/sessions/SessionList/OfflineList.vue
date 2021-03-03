@@ -20,9 +20,9 @@ export default {
           can: (row, cellValue) => {
             return row.can_replay
           },
-          callback: function({ cellValue, tableData }) {
+          callback: function({ row, tableData }) {
             // 跳转到luna页面
-            const replayUrl = '/luna/replay/' + cellValue
+            const replayUrl = '/luna/replay/' + row.id
             window.open(replayUrl)
           }
         },
@@ -33,9 +33,9 @@ export default {
           can: (row, cellValue) => {
             return row.can_replay
           },
-          callback: function({ cellValue, tableData }) {
+          callback: function({ row, tableData }) {
             // 跳转下载页面
-            const downloadUrl = `/api/v1/terminal/sessions/${cellValue}/replay/download/`
+            const downloadUrl = `/api/v1/terminal/sessions/${row.id}/replay/download/`
 
             const a = document.createElement('a')
             a.href = downloadUrl
