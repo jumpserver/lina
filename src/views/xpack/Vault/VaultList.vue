@@ -82,7 +82,7 @@ import * as queryUtil from '@/components/DataTable/compenents/el-data-table/util
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Vault',
+  name: 'VaultList',
   components: {
     GenericTreeListPage,
     AssetUserTable,

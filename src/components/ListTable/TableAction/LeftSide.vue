@@ -16,6 +16,7 @@ export default {
   },
   props: {
     hasCreate: defaultTrue,
+    canCreate: defaultTrue,
     hasBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
     hasLeftActions: defaultTrue,
@@ -66,7 +67,7 @@ export default {
           title: this.$t('common.Create'),
           type: 'primary',
           has: this.hasCreate,
-          can: true,
+          can: this.canCreate,
           callback: this.handleCreate
         }
       ],

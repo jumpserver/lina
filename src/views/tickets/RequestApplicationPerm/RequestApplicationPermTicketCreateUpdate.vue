@@ -26,7 +26,7 @@ export default {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
-        org_id: 'DEFAULT',
+        org_id: '00000000-0000-0000-0000-000000000001',
         type: 'apply_application',
         apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
       },

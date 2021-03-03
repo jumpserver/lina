@@ -7,7 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import Uploadkey from '@/components/UploadKey'
 import Select2 from '@/components/Select2'
 export default {
-  name: 'AdminUserCreateUpdate',
+  name: 'VaultCreate',
   components: {
     GenericCreateUpdatePage
   },

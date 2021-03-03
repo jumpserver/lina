@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
     <Dialog
       v-if="dialogVisible"
       :title="this.$t('assets.TestGatewayTestConnection')"
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable/index'
 import DisplayFormatter from '@/components/ListTable/formatters/DisplayFormatter'
 import Dialog from '@/components/Dialog'
 export default {
   components: {
-    ListTable,
+    GenericListTable,
     Dialog
   },
   props: {
