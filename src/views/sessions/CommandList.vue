@@ -1,11 +1,13 @@
 <template>
-  <GenericTreeListPage
-    ref="GenericTreeListPage"
-    :table-config="tableConfig"
-    :header-actions="headerActions"
-    :tree-setting="treeSetting"
-    @TreeInitFinish="checkFirstNode"
-  />
+  <div v-loading="loading">
+    <GenericTreeListPage
+      ref="GenericTreeListPage"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+      :tree-setting="treeSetting"
+      @TreeInitFinish="checkFirstNode"
+    />
+  </div>
 </template>
 
 <script>
@@ -24,8 +26,9 @@ export default {
     const dateFrom = getDaysAgo(2, now).toISOString()
     const dateTo = getDayEnd(now).toISOString()
     return {
+      loading: true,
       tableConfig: {
-        url: '/api/v1/terminal/commands/',
+        url: '',
         columns: [
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
@@ -103,8 +106,6 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/assets/assets/',
-        nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
         callback: {
@@ -132,6 +133,7 @@ export default {
       if (nodes[0].children.length > 0) {
         ztree.selectNode(nodes[0].children[0])
       }
+      this.loading = false
     }
   }
 }
