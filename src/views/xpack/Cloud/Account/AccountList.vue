@@ -129,6 +129,7 @@ export default {
       return () => { this.$router.push({ name: 'AccountCreate', query: { provider: provider }}) }
     }
   }
+
 }
 </script>
 
