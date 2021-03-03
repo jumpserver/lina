@@ -22,18 +22,25 @@ export default {
       successUrl: { name: 'Storage', params: { activeMenu: 'CommandStorage' }},
 
       initial: { type: commandType, doc_type: 'command' },
-      fields: [[this.$t('common.Basic'), ['name', 'type', 'HOSTS', 'INDEX', 'comment']]],
+      fields: [
+        [this.$t('common.Basic'), ['name', 'type', 'meta', 'comment']]
+      ],
       fieldsMeta: {
         type: {
           type: 'select',
           disabled: true
         },
-        HOSTS: {
-          helpText: this.$t('sessions.helpText.esUrl')
-        },
-        INDEX: {
-          rules: [Required],
-          helpText: this.$t('sessions.helpText.esIndex')
+        meta: {
+          fields: ['HOSTS', 'INDEX'],
+          fieldsMeta: {
+            HOSTS: {
+              helpText: this.$t('sessions.helpText.esUrl')
+            },
+            INDEX: {
+              rules: [Required],
+              helpText: this.$t('sessions.helpText.esIndex')
+            }
+          }
         }
       },
       getUrl() {
@@ -54,21 +61,7 @@ export default {
   methods: {
     performSubmit(validValues) {
       const method = this.getMethod()
-      const commandType = this.$route.query.type || 'es'
-      switch (commandType) {
-        case 'es':
-          validValues.meta = {
-            HOSTS: validValues.HOSTS.split(',').map(item => (item.trim())),
-            INDEX: validValues.INDEX
-          }
-          break
-        default:
-          validValues.meta = {
-            HOSTS: validValues.HOSTS.split(',').map(item => (item.trim())),
-            INDEX: validValues.INDEX
-          }
-          break
-      }
+      validValues.meta.HOSTS = validValues.meta.HOSTS.split(',').map(item => (item.trim()))
       return this.$axios[method](`${this.getUrl()}`, validValues)
     },
     getMethod() {
