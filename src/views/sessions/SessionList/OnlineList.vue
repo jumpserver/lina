@@ -22,9 +22,9 @@ export default {
           can: (row, cellValue) => {
             return row.can_terminate
           },
-          callback: function({ reload, cellValue, tableData }) {
+          callback: function({ reload, row }) {
             // 终断 session reload
-            const data = [cellValue]
+            const data = [row.id]
             terminateSession(data).then(res => {
               const msg = vm.$t('sessions.TerminateTaskSendSuccessMsg')
               this.$message.success(msg)
