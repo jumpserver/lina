@@ -5,6 +5,7 @@
         <component
           :is="component"
           ref="AutoDataZTree"
+          :key="componentTreeKey"
           :setting="treeSetting"
           class="auto-data-ztree"
           v-on="$listeners"
@@ -23,7 +24,7 @@
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
           <slot name="table">
-            <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" />
+            <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" v-on="$listeners" />
           </slot>
         </div>
       </div>
@@ -64,10 +65,17 @@ export default {
     return {
       iTableConfig: this.tableConfig,
       iShowTree: this.showTree,
-      componentKey: 0
+      componentKey: 0,
+      componentTreeKey: 0
     }
   },
   watch: {
+    treeConfig: {
+      handler(val) {
+
+      },
+      deep: true
+    }
   },
   methods: {
     handleUrlChange(_url) {
@@ -77,6 +85,9 @@ export default {
     },
     forceRerender() {
       this.componentKey += 1
+    },
+    forceRerenderTree() {
+      this.componentTreeKey += 1
     },
     hideRMenu() {
       this.$refs.AutoDataZTree.hideRMenu()

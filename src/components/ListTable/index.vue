@@ -86,9 +86,11 @@ export default {
       this.dataTable.getList()
     },
     search(attrs) {
+      this.$emit('TagSearch', attrs)
       return this.dataTable.search(attrs, true)
     },
     filter(attrs) {
+      this.$emit('TagFilter', attrs)
       this.$refs.dataTable.$refs.dataTable.search(attrs, true)
     },
     handleDateChange(attrs) {
@@ -102,6 +104,7 @@ export default {
         date_from: attrs[0].toISOString(),
         date_to: attrs[1].toISOString()
       }
+      this.$emit('TagDateChange', attrs)
       return this.dataTable.searchDate(query)
     },
     toggleRowSelection(row, isSelected) {

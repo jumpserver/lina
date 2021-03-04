@@ -6,6 +6,9 @@
       :header-actions="headerActions"
       :tree-setting="treeSetting"
       @TreeInitFinish="checkFirstNode"
+      @TagSearch="handleTagChange"
+      @TagFilter="handleFilterChange"
+      @TagDateChange="handleDateChange"
     />
   </div>
 </template>
@@ -15,6 +18,9 @@ import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
+import deepmerge from 'deepmerge'
+import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 
 export default {
   components: {
@@ -26,6 +32,10 @@ export default {
     const dateFrom = getDaysAgo(2, now).toISOString()
     const dateTo = getDayEnd(now).toISOString()
     return {
+      query: {
+        date_from: getDaysAgo(2, now).toISOString(),
+        date_to: getDayEnd(now).toISOString()
+      },
       loading: true,
       tableConfig: {
         url: '',
@@ -107,7 +117,7 @@ export default {
         showRefresh: true,
         showAssets: false,
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/terminal/command-storages/tree/?real=1',
+        treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}`,
         callback: {
           onSelected: function(event, treeNode) {
             // 禁止点击根节点
@@ -121,7 +131,9 @@ export default {
     }
   },
   computed: {
-
+    treeTable() {
+      return this.$refs.GenericTreeListPage.$refs.TreeTable
+    }
   },
   watch: {
 
@@ -134,6 +146,44 @@ export default {
         ztree.selectNode(nodes[0].children[0])
       }
       this.loading = false
+    },
+    handleTagChange(query) {
+      const _query = this.cleanUrl(query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
+    },
+    handleFilterChange(query) {
+      const _query = this.cleanUrl(query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
+    },
+    handleDateChange(object) {
+      this.query = {
+        date_from: object[0].toISOString(),
+        date_to: object[1].toISOString()
+      }
+      console.log(this.query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
+    },
+    cleanUrl(query) {
+      query = Object.keys(query)
+        .filter(k => !isFalsey(query[k]))
+        .reduce((obj, k) => {
+          obj[k] = query[k].toString().trim()
+          return obj
+        }, {})
+      query = deepmerge(this.query, query)
+      return query
     }
   }
 }
