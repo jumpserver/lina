@@ -24,15 +24,18 @@ export default {
       hasDetailInMsg: false,
       initial: {
         ips_or_not: true,
-        apply_date_expired: date_expired,
-        apply_date_start: date_start,
+        meta: {
+          apply_date_expired: date_expired,
+          apply_date_start: date_start,
+          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+        },
         org_id: '00000000-0000-0000-0000-000000000001',
-        type: 'apply_application',
-        apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+        type: 'apply_application'
+
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
-        [this.$t('tickets.RequestPerm'), ['apply_category_type', 'apply_application_group', 'apply_system_user_group', 'apply_date_start', 'apply_date_expired']]
+        [this.$t('tickets.RequestPerm'), ['meta']]
 
       ],
       fieldsMeta: {
@@ -42,89 +45,92 @@ export default {
             disabled: true
           }
         },
-        apply_category_type: {
-          type: 'cascader',
-          label: this.$t('applications.appType'),
-          rules: [Required],
-          el: {
-            multiple: false,
-            options: [
-              {
-                label: this.$t(`applications.applicationsCategory.db`),
-                value: 'db',
-                children: [
+        meta: {
+          fields: ['apply_category_type', 'apply_application_group', 'apply_system_user_group', 'apply_date_start', 'apply_date_expired'],
+          fieldsMeta: {
+            apply_date_start: {
+              label: this.$t('common.DateStart'),
+              type: 'date-picker',
+              el: {
+                type: 'datetime'
+              }
+            },
+            apply_application_group: {
+              helpText: this.$t('tickets.helpText.application')
+            },
+            apply_system_user_group: {
+              helpText: this.$t('tickets.helpText.fuzzySearch')
+            },
+            apply_date_expired: {
+              label: this.$t('common.DateEnd'),
+              type: 'date-picker',
+              el: {
+                type: 'datetime'
+              }
+            },
+            apply_category_type: {
+              type: 'cascader',
+              label: this.$t('applications.appType'),
+              rules: [Required],
+              el: {
+                multiple: false,
+                options: [
                   {
-                    label: 'MySQL',
-                    value: 'mysql'
+                    label: this.$t(`applications.applicationsCategory.db`),
+                    value: 'db',
+                    children: [
+                      {
+                        label: 'MySQL',
+                        value: 'mysql'
+                      },
+                      {
+                        label: 'Oracle',
+                        value: 'oracle'
+                      },
+                      {
+                        label: 'PostgreSQL',
+                        value: 'postgresql'
+                      },
+                      {
+                        label: 'MariaDB',
+                        value: 'mariadb'
+                      }
+                    ]
                   },
                   {
-                    label: 'Oracle',
-                    value: 'oracle'
+                    label: this.$t(`applications.applicationsCategory.cloud`),
+                    value: 'cloud',
+                    children: [
+                      {
+                        label: 'Kubernetes',
+                        value: 'k8s'
+                      }
+                    ]
                   },
                   {
-                    label: 'PostgreSQL',
-                    value: 'postgresql'
-                  },
-                  {
-                    label: 'MariaDB',
-                    value: 'mariadb'
-                  }
-                ]
-              },
-              {
-                label: this.$t(`applications.applicationsCategory.cloud`),
-                value: 'cloud',
-                children: [
-                  {
-                    label: 'Kubernetes',
-                    value: 'k8s'
-                  }
-                ]
-              },
-              {
-                label: this.$t(`applications.applicationsCategory.remote_app`),
-                value: 'remote_app',
-                children: [
-                  {
-                    label: 'MySQL Workbench',
-                    value: 'mysql_workbench'
-                  },
-                  {
-                    label: 'vSphere Client',
-                    value: 'vmware_client'
-                  },
-                  {
-                    label: 'Custom',
-                    value: 'custom'
-                  }, {
-                    label: 'Chrome',
-                    value: 'chrome'
+                    label: this.$t(`applications.applicationsCategory.remote_app`),
+                    value: 'remote_app',
+                    children: [
+                      {
+                        label: 'MySQL Workbench',
+                        value: 'mysql_workbench'
+                      },
+                      {
+                        label: 'vSphere Client',
+                        value: 'vmware_client'
+                      },
+                      {
+                        label: 'Custom',
+                        value: 'custom'
+                      }, {
+                        label: 'Chrome',
+                        value: 'chrome'
+                      }
+                    ]
                   }
                 ]
               }
-            ]
-          }
-        },
-        apply_application_group: {
-          label: this.$t('applications.appName'),
-          helpText: this.$t('tickets.helpText.application')
-        },
-        apply_system_user_group: {
-          label: this.$t('assets.SystemUser'),
-          helpText: this.$t('tickets.helpText.fuzzySearch')
-        },
-        apply_date_start: {
-          label: this.$t('common.DateStart'),
-          type: 'date-picker',
-          el: {
-            type: 'datetime'
-          }
-        },
-        apply_date_expired: {
-          label: this.$t('common.DateEnd'),
-          type: 'date-picker',
-          el: {
-            type: 'datetime'
+            }
           }
         },
         org_id: {
@@ -160,33 +166,15 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      const meta = {}
-      const applications = validValues.apply_application_group
-      const systemUser = validValues.apply_system_user_group
-      if (applications) {
-        meta.apply_application_group = applications.split(',')
+      validValues.meta.apply_category = validValues.meta.apply_category_type[0]
+      validValues.meta.apply_type = validValues.meta.apply_category_type[1]
+      delete validValues.meta['apply_category_type']
+      if (validValues.meta.apply_application_group) {
+        validValues.meta.apply_application_group = validValues.meta.apply_application_group.split(',')
       }
-      delete validValues['apply_application_group']
-
-      if (systemUser) {
-        meta.apply_system_user_group = systemUser.split(',')
+      if (validValues.meta.apply_system_user_group) {
+        validValues.meta.apply_system_user_group = validValues.meta.apply_system_user_group.split(',')
       }
-
-      delete validValues['apply_system_user_group']
-
-      meta.apply_category = validValues.apply_category_type[0]
-      meta.apply_type = validValues.apply_category_type[1]
-
-      delete validValues['apply_category_type']
-
-      meta.apply_date_start = validValues.apply_date_start
-      delete validValues['apply_date_start']
-
-      meta.apply_date_expired = validValues.apply_date_expired
-      delete validValues['apply_date_expired']
-
-      validValues['meta'] = meta
-
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }
   }
