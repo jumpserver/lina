@@ -1,7 +1,14 @@
 <template>
   <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'">
     <template v-for="action in iActions">
-      <el-dropdown v-if="action.dropdown" :key="action.name" class="action-item" trigger="click" placement="bottom-start" @command="handleDropdownCallback">
+      <el-dropdown
+        v-if="action.dropdown"
+        :key="action.name"
+        class="action-item"
+        trigger="click"
+        placement="bottom-start"
+        @command="handleDropdownCallback"
+      >
         <el-button :size="size" v-bind="cleanButtonAction(action)">
           {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
@@ -21,7 +28,14 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-button v-else :key="action.name" :size="size" v-bind="cleanButtonAction(action)" class="action-item" @click="handleClick(action)">
+      <el-button
+        v-else
+        :key="action.name"
+        :size="size"
+        v-bind="cleanButtonAction(action)"
+        class="action-item"
+        @click="handleClick(action)"
+      >
         <el-tooltip v-if="action.tip" effect="dark" :content="action.tip" placement="top">
           <i v-if="action.fa" :class="'fa ' + action.fa" />{{ action.title }}
         </el-tooltip>
@@ -141,13 +155,21 @@ export default {
   font-size: 12px;
   color: #909399;
   line-height: 30px;
-  padding: 0 6px;
+  padding-left: 10px;
+  padding-top: 10px;
+  border-top: solid 1px #e4e7ed;
+}
+
+.dropdown-menu-title:first-child {
+  padding-top: 0;
+  border-top: none;
 }
 
 .el-button-ungroup .action-item {
   margin-left: 4px
 }
+
 .el-button-ungroup .action-item:first-child {
-  margin-left: 0
+  margin-left: 0;
 }
 </style>

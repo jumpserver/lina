@@ -62,7 +62,6 @@ export default {
             {
               title: 'SSH',
               name: 'SSH',
-              divided: true,
               type: 'primary',
               group: this.$t('assets.HostProtocol'),
               has: true
@@ -88,7 +87,6 @@ export default {
             {
               name: 'MySQL',
               title: 'MySQL',
-              divided: true,
               type: 'primary',
               has: true,
               group: this.$t('assets.DatabaseProtocol')
@@ -113,7 +111,6 @@ export default {
             },
             {
               name: 'K8S',
-              divided: true,
               title: 'K8S',
               type: 'primary',
               has: this.isValidateLicense,
