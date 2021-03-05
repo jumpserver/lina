@@ -32,11 +32,6 @@ export default {
               },
               canUpdate: (row, value) => {
                 return !row.internal
-              },
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/assets/platforms/${id}/`
-                return this.$axios.delete(url)
               }
             }
           }
