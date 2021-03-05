@@ -27,10 +27,10 @@ export default {
             formatter: ActionsFormatter,
             width: '200px',
             formatterArgs: {
-              canDelete: (row, vaule) => {
+              canDelete: (row, value) => {
                 return !row.internal
               },
-              canUpdate: (row, vaule) => {
+              canUpdate: (row, value) => {
                 return !row.internal
               },
               performDelete: ({ row, col }) => {
