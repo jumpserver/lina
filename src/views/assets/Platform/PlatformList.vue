@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter } from '@/components/ListTable/formatters'
 export default {
   components: {
     GenericListPage
@@ -22,9 +21,6 @@ export default {
           },
           actions: {
             prop: 'actions',
-            align: 'center',
-            label: this.$t('assets.Action'),
-            formatter: ActionsFormatter,
             width: '200px',
             formatterArgs: {
               canDelete: (row, value) => {
