@@ -16,6 +16,7 @@
 import Page from '@/layout/components/Page'
 import TreeTable from '@/components/TreeTable'
 import { mapGetters } from 'vuex'
+import rolec from '@/utils/role'
 export default {
   name: 'GenericTreeListPage',
   components: {
@@ -29,12 +30,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentOrgIsRoot']),
+    ...mapGetters(['currentOrgIsRoot', 'currentRole']),
+    isInAdminRole() {
+      const inAdmin = rolec.hasPerm(rolec.ADMIN_PAGE_REQUIRE_PERM_MIN, this.currentRole)
+      return inAdmin
+    },
     iHeaderActions() {
       const attrs = _.cloneDeep(this.headerActions)
       const canCreate = _.get(attrs, 'canCreate', null)
-      if (canCreate === null && this.currentOrgIsRoot) {
-        _.set(attrs, 'canCreate', false)
+      if (this.isInAdminRole) {
+        if (canCreate === null && this.currentOrgIsRoot) {
+          _.set(attrs, 'canCreate', false)
+        }
       }
       return attrs
     }
