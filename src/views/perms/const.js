@@ -20,7 +20,6 @@ export const REMOTE_APP = [
     title: i18n.t(`applications.applicationsType.${CHROME}`),
     type: 'primary',
     group: i18n.t('applications.RemoteApp'),
-    divided: true,
     has: hasValidLicense,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: CHROME, category: REMOTEAPP_CATEGORY }}) }
   },
@@ -60,7 +59,6 @@ export const DATABASE = [
     type: 'primary',
     has: true,
     group: i18n.t('applications.Database'),
-    divided: true,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: MYSQL, category: DATABASE_CATEGORY }}) }
   },
   {
@@ -94,7 +92,6 @@ export const CLOUD = [
     name: KUBERNETES,
     title: i18n.t(`applications.applicationsType.${KUBERNETES}`),
     group: i18n.t('applications.Cloud'),
-    divided: true,
     type: 'primary',
     has: true,
     callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: KUBERNETES, category: CLOUD_CATEGORY }}) }

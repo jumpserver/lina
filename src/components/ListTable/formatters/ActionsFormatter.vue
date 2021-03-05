@@ -163,9 +163,6 @@ export default {
       return this.cleanedActions.slice(1, this.cleanedActions.length)
     }
   },
-  mounted() {
-    this.$log.debug('ActionsFormatter', this.colActions)
-  },
   methods: {
     cleanBoolean(item, attr) {
       const ok = item[attr]
