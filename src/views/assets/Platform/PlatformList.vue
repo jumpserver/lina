@@ -20,8 +20,6 @@ export default {
             width: '140px'
           },
           actions: {
-            prop: 'actions',
-            width: '200px',
             formatterArgs: {
               canDelete: (row, value) => {
                 return !row.internal
