@@ -1,15 +1,15 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script type="text/jsx">
-import ListTable from '@/components/ListTable'
+import GenericListTable from '@/layout/components/GenericListTable'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, vmware } from '../const'
 import { BooleanFormatter, DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
-    ListTable
+    GenericListTable
   },
   data() {
     const vm = this
@@ -129,6 +129,7 @@ export default {
       return () => { this.$router.push({ name: 'AccountCreate', query: { provider: provider }}) }
     }
   }
+
 }
 </script>
 

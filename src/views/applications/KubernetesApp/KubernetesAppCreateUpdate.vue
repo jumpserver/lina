@@ -16,15 +16,20 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'domain']],
-        [this.$t('applications.kubernetes'), ['cluster']],
+        [this.$t('applications.kubernetes'), ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         type: {
           disabled: true
         },
-        cluster: {
-          helpText: this.$t('applications.clusterHelpTextMessage')
+        attrs: {
+          fields: ['cluster'],
+          fieldsMeta: {
+            cluster: {
+              helpText: this.$t('applications.clusterHelpTextMessage')
+            }
+          }
         },
         domain: {
           el: {
@@ -50,9 +55,6 @@ export default {
         const baseUrl = `/api/v1/applications/applications/`
         const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
         const method = this.getMethod()
-        validValues.attrs = {
-          cluster: validValues.cluster
-        }
         validValues.category = 'cloud'
         return this.$axios[method](`${url}?type=${validValues.type}`, validValues)
       }

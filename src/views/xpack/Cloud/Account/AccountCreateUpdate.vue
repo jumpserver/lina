@@ -26,10 +26,13 @@ export default {
       url: '/api/v1/xpack/cloud/accounts/',
       fields: [
         [this.$t('common.Basic'), ['name', 'provider']],
-        [this.$t(accountProviderAttrs.title), accountProviderAttrs.attrs],
+        [this.$t(accountProviderAttrs.title), ['attrs']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        attrs: {
+          fields: accountProviderAttrs.attrs
+        },
         provider: {
           rules: [Required],
           el: {
@@ -54,17 +57,6 @@ export default {
   methods: {
     performSubmit(validValues) {
       const method = this.getMethod()
-      const accountProvider = this.$route.query.provider || aliyun
-      const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
-      const attrs = {}
-      for (const attr of accountProviderAttrs.attrs) {
-        const v = validValues[attr]
-        if (!v) {
-          continue
-        }
-        attrs[attr] = v
-      }
-      validValues.attrs = attrs
       return this.$axios[method](`${this.getUrl()}`, validValues)
     },
     getMethod() {

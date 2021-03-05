@@ -1,5 +1,13 @@
 <template>
-  <GenericCreateUpdatePage ref="createUpdatePage" :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+
+  <GenericCreateUpdatePage
+    ref="createUpdatePage"
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+  />
+
 </template>
 
 <script>
@@ -109,8 +117,9 @@ export default {
   },
   async mounted() {
     const params = this.$route.params
+    const query = this.$route.query
     // 更新获取链接
-    if (params.id) {
+    if (params.id || query.clone_from) {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
       this.fieldsMeta.applications.el.ajax.url = `/api/v1/applications/applications/?category=${form.category}&type=${form.type}`
       this.fieldsMeta.system_users.el.ajax.url = form.category === 'remote_app' ? `/api/v1/assets/system-users/?protocol=rdp` : `/api/v1/assets/system-users/?protocol=${form.type}`

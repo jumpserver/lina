@@ -1,14 +1,14 @@
 <template>
-  <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'HistoryList',
-  components: { ListTable },
+  components: { GenericListTable },
   props: {
     object: {
       type: Object,

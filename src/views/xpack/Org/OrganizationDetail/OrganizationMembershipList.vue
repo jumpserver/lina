@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <RelationCard type="primary" v-bind="memberRelationConfig">
@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'OrganizationMembershipList',
   components: {
-    ListTable,
+    GenericListTable,
     RelationCard
   },
   props: {
@@ -108,7 +108,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
+          this.$refs.GenericListTable.reloadTable()
           window.location.reload()
         }
       }

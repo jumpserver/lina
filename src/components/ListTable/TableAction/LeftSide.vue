@@ -22,6 +22,7 @@ export default {
   props: {
     hasLeftActions: defaultTrue,
     hasCreate: defaultTrue,
+    canCreate: defaultTrue,
     hasBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
     tableUrl: {

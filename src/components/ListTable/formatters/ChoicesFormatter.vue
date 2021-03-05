@@ -28,6 +28,9 @@ export default {
           },
           hasTips: false,
           tipStatus(val, vm) {
+            if (!val) {
+              return vm.$t('assets.Unknown')
+            }
             if (val.status === 0) {
               return vm.$t('assets.Unreachable')
             } else if (val.status === 1) {
@@ -55,6 +58,9 @@ export default {
       return this.formatterArgs.tipStatus(this.cellValue, vm)
     },
     tipTime() {
+      if (!this.cellValue) {
+        return ''
+      }
       return toSafeLocalDateStr(this.cellValue.datetime)
     }
   }

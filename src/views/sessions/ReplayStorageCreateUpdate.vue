@@ -38,12 +38,15 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
-        [storageTypeMeta.title, storageTypeMeta.meta],
+        [storageTypeMeta.title, ['meta']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         type: {
           disabled: true
+        },
+        meta: {
+          fields: storageTypeMeta.meta
         }
       }
     }
@@ -57,35 +60,6 @@ export default {
   methods: {
     performSubmit(validValues) {
       const method = this.getMethod()
-      const storageType = this.$route.query.type || 's3'
-      switch (storageType) {
-        case 'swift':
-          validValues.meta = {
-            BUCKET: validValues.BUCKET,
-            ACCESS_KEY: validValues.ACCESS_KEY,
-            SECRET_KEY: validValues.SECRET_KEY,
-            REGION: validValues.REGION,
-            ENDPOINT: validValues.ENDPOINT,
-            PROTOCOL: validValues.PROTOCOL
-          }
-          break
-        case 'azure':
-          validValues.meta = {
-            CONTAINER_NAME: validValues.CONTAINER_NAME,
-            ACCOUNT_NAME: validValues.ACCOUNT_NAME,
-            ACCOUNT_KEY: validValues.ACCOUNT_KEY,
-            ENDPOINT_SUFFIX: validValues.ENDPOINT_SUFFIX
-          }
-          break
-        default:
-          validValues.meta = {
-            BUCKET: validValues.BUCKET,
-            ACCESS_KEY: validValues.ACCESS_KEY,
-            ENDPOINT: validValues.ENDPOINT,
-            SECRET_KEY: validValues.SECRET_KEY
-          }
-          break
-      }
       return this.$axios[method](`${this.getUrl()}`, validValues)
     },
     getMethod() {

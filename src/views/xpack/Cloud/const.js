@@ -37,7 +37,7 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [azure]: {
     name: azure,
     title: i18n.t('xpack.Cloud.Azure'),
-    attrs: ['access_key_id', 'access_key_secret', 'tenant_id', 'subscription_id']
+    attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id']
   },
   [vmware]: {
     name: vmware,
