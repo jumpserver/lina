@@ -42,7 +42,6 @@ export default {
     }
   },
   computed: {
-
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },

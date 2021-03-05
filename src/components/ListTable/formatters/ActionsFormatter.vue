@@ -84,7 +84,7 @@ export default {
           canUpdate: true, // can set function(row, value)
           hasDelete: true, // can set function(row, value)
           canDelete: true,
-          hasClone: false,
+          hasClone: true,
           canClone: true,
           updateRoute: this.$route.name.replace('List', 'Update'),
           cloneRoute: this.$route.name.replace('List', 'Create'),
@@ -162,6 +162,9 @@ export default {
       }
       return this.cleanedActions.slice(1, this.cleanedActions.length)
     }
+  },
+  mounted() {
+    this.$log.debug('ActionsFormatter', this.colActions)
   },
   methods: {
     cleanBoolean(item, attr) {

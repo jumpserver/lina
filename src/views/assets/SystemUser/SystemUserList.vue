@@ -56,73 +56,73 @@ export default {
         createRoute: 'SystemUserCreate',
         moreCreatesTitle: this.$t('common.Create'),
         moreCreatesType: 'primary',
-        moreCreates: [
-          {
-            title: 'SSH',
-            name: 'SSH',
-            type: 'primary',
-            has: true,
-            callback: this.createSystemUser('ssh').bind(this)
+        moreCreates: {
+          callback: (option) => {
+            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.type }})
           },
-          {
-            title: 'Telnet',
-            name: 'Telnet',
-            type: 'primary',
-            has: true,
-            callback: this.createSystemUser('telnet').bind(this)
-          },
-          {
-            title: 'RDP',
-            name: 'RDP',
-            type: 'primary',
-            has: true,
-            callback: this.createSystemUser('rdp').bind(this)
-          },
-          {
-            title: 'VNC',
-            name: 'VNC',
-            type: 'primary',
-            has: true,
-            callback: this.createSystemUser('vnc').bind(this)
-          },
-          {
-            name: 'MySQL',
-            title: 'MySQL',
-            divided: true,
-            type: 'primary',
-            has: true,
-            callback: this.createSystemUser('mysql').bind(this)
-          },
-          {
-            name: 'PostgreSQL',
-            title: 'PostgreSQL',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createSystemUser('postgresql').bind(this)
-          },
-          {
-            name: 'MariaDB',
-            title: 'MariaDB',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createSystemUser('mariadb').bind(this)
-          },
-          {
-            name: 'Oracle',
-            title: 'Oracle',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createSystemUser('oracle').bind(this)
-          },
-          {
-            name: 'K8S',
-            divided: true,
-            title: 'K8S',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createSystemUser('k8s').bind(this)
-          }
-        ]
+          dropdown: [
+            {
+              title: 'SSH',
+              name: 'SSH',
+              divided: true,
+              type: 'primary',
+              group: this.$t('assets.HostProtocol'),
+              has: true
+            },
+            {
+              title: 'Telnet',
+              name: 'Telnet',
+              type: 'primary',
+              has: true
+            },
+            {
+              title: 'RDP',
+              name: 'RDP',
+              type: 'primary',
+              has: true
+            },
+            {
+              title: 'VNC',
+              name: 'VNC',
+              type: 'primary',
+              has: true
+            },
+            {
+              name: 'MySQL',
+              title: 'MySQL',
+              divided: true,
+              type: 'primary',
+              has: true,
+              group: this.$t('assets.DatabaseProtocol')
+            },
+            {
+              name: 'PostgreSQL',
+              title: 'PostgreSQL',
+              type: 'primary',
+              has: this.isValidateLicense
+            },
+            {
+              name: 'MariaDB',
+              title: 'MariaDB',
+              type: 'primary',
+              has: this.isValidateLicense
+            },
+            {
+              name: 'Oracle',
+              title: 'Oracle',
+              type: 'primary',
+              has: this.isValidateLicense
+            },
+            {
+              name: 'K8S',
+              divided: true,
+              title: 'K8S',
+              type: 'primary',
+              has: this.isValidateLicense,
+              group: this.$t('assets.OtherProtocol')
+            }
+          ]
+        }
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')
     }
@@ -131,9 +131,6 @@ export default {
     ...mapGetters(['publicSettings', 'currentOrg'])
   },
   methods: {
-    createSystemUser(type) {
-      return () => { this.$router.push({ name: 'SystemUserCreate', query: { protocol: type }}) }
-    },
     isValidateLicense() {
       if (this.publicSettings.XPACK_ENABLED) {
         return this.publicSettings.XPACK_LICENSE_IS_VALID

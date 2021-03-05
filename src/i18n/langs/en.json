@@ -170,7 +170,10 @@
     "HomeHelpMessage": "Default home directory: /home/system username",
     "Home": "Home",
     "LinuxUserAffiliateGroup": "Linux user affiliate group",
-    "ipDomain": "IP(Domain)"
+    "ipDomain": "IP(Domain)",
+    "HostProtocol": "Host Protocol",
+    "DatabaseProtocol": "Database Protocol",
+    "Other Protocol": "Database Protocol"
   },
   "audits": {
     "Hosts": "Host",
