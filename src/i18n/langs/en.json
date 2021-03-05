@@ -2,6 +2,9 @@
   "": "",
   "applications": {
     "": "",
+    "RemoteApp": "Remote app",
+    "Database": "Database",
+    "Cloud": "Cloud",
     "applicationsType": {
       "chrome": "Chrome",
       "mysql_workbench": "MySQL Workbench",

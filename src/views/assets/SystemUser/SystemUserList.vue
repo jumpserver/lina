@@ -54,8 +54,6 @@ export default {
         hasMoreActions: false,
         hasCreate: false,
         createRoute: 'SystemUserCreate',
-        moreCreatesTitle: this.$t('common.Create'),
-        moreCreatesType: 'primary',
         moreCreates: {
           callback: (option) => {
             vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.type }})

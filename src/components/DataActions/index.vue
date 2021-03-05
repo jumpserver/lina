@@ -1,7 +1,7 @@
 <template>
   <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'">
     <template v-for="action in iActions">
-      <el-dropdown v-if="action.dropdown" :key="action.name" class="action-item" trigger="click" @command="handleDropdownCallback">
+      <el-dropdown v-if="action.dropdown" :key="action.name" class="action-item" trigger="click" placement="bottom-start" @command="handleDropdownCallback">
         <el-button :size="size" v-bind="cleanButtonAction(action)">
           {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>

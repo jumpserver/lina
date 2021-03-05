@@ -2,6 +2,9 @@
   "": "",
   "applications": {
     "": "",
+    "RemoteApp": "远程应用",
+    "Database": "数据库",
+    "Cloud": "云",
     "applicationsType": {
       "chrome": "Chrome",
       "mysql_workbench": "MySQL Workbench",
