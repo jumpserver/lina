@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-
 export default {
   components: {
     GenericListPage
@@ -19,6 +18,16 @@ export default {
         columnsMeta: {
           base: {
             width: '140px'
+          },
+          actions: {
+            formatterArgs: {
+              canDelete: (row, value) => {
+                return !row.internal
+              },
+              canUpdate: (row, value) => {
+                return !row.internal
+              }
+            }
           }
         }
       },
