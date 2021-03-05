@@ -2,7 +2,7 @@ import { hasUUID, BASE_URL } from '@/utils/common'
 import { getOrgDetail } from '@/api/orgs'
 import store from '@/store'
 
-const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000001'
+export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000001'
 // const ROOT_ORG_ID = '00000000-0000-0000-0000-000000000000'
 
 function getPropOrg() {
@@ -59,5 +59,6 @@ async function changeOrg(orgId) {
 export default {
   hasCurrentOrgPermission,
   changeOrg,
+  DEFAULT_ORG_ID,
   change2PropOrg
 }

@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { DEFAULT_ORG_ID } from '@/utils/org'
 import Select2 from '@/components/Select2'
 import { getDaysFuture } from '@/utils/common'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
@@ -26,7 +27,7 @@ export default {
           apply_date_start: date_start,
           apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
         },
-        org_id: 'DEFAULT',
+        org_id: DEFAULT_ORG_ID,
         type: 'apply_asset'
       },
       fields: [
@@ -76,7 +77,7 @@ export default {
             multiple: true,
             value: [],
             ajax: {
-              url: `/api/v1/tickets/assignees/?org_id=DEFAULT`,
+              url: `/api/v1/tickets/assignees/?org_id=${DEFAULT_ORG_ID}`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }

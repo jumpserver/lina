@@ -9,6 +9,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/Select2'
+import { DEFAULT_ORG_ID } from '@/utils/org'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 export default {
@@ -150,7 +151,7 @@ export default {
             multiple: true,
             value: [],
             ajax: {
-              url: `/api/v1/tickets/assignees/?org_id=DEFAULT`,
+              url: `/api/v1/tickets/assignees/?org_id=${DEFAULT_ORG_ID}`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
