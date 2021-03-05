@@ -167,6 +167,7 @@
     "Version": "Version",
     "command_filter_list": "Command filter list",
     "date_joined": "Date joined",
+    "sshKeyFingerprint": "SSH fingerprint",
     "ip": "IP",
     "sshkey": "sshkey",
     "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Please fill in the existing user groups)",

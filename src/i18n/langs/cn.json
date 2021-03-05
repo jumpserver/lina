@@ -167,6 +167,7 @@
     "Version": "版本",
     "command_filter_list": "命令过滤器列表",
     "date_joined": "创建日期",
+    "sshKeyFingerprint": "SSH 指纹",
     "ip": "IP",
     "sshkey": "sshkey",
     "GroupsHelpMessage": "请输入用户组，多个用户组使用逗号分隔（需填写已存在的用户组）",

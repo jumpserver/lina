@@ -67,6 +67,10 @@ export default {
           value: this.object.username
         },
         {
+          key: this.$t('assets.sshKeyFingerprint'),
+          value: this.object.ssh_key_fingerprint
+        },
+        {
           key: this.$t('assets.date_joined'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
