@@ -2,6 +2,9 @@
   "": "",
   "applications": {
     "": "",
+    "RemoteApp": "远程应用",
+    "Database": "数据库",
+    "Cloud": "云",
     "applicationsType": {
       "chrome": "Chrome",
       "mysql_workbench": "MySQL Workbench",
@@ -170,7 +173,10 @@
     "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
     "Home": "家目录",
     "LinuxUserAffiliateGroup": "用户附属组",
-    "ipDomain": "IP(域名)"
+    "ipDomain": "IP(域名)",
+    "HostProtocol": "主机协议",
+    "DatabaseProtocol": "数据库协议",
+    "OtherProtocol": "其它协议"
 
   },
   "audits": {

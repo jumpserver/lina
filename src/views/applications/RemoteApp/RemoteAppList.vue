@@ -64,25 +64,26 @@ export default {
         hasExport: false,
         hasImport: false,
         // createRoute: 'RemoteAppCreate',
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary',
-        extraMoreActions: this.genExtraMoreActions()
+        moreCreates: {
+          dropdown: this.getCreateAppType(),
+          callback: (app) => {
+            console.log('App: ', app)
+            vm.$router.push({ name: 'RemoteAppCreate', query: { type: app.name }})
+          }
+        }
       }
     }
   },
   methods: {
-    onCallback(type) {
-      this.$router.push({ name: 'RemoteAppCreate', query: { type: type }})
-    },
-    genExtraMoreActions() {
+    getCreateAppType() {
       const extraMoreActions = []
       for (const value of ALL_TYPES) {
         const item = { ...REMOTE_APP_TYPE_META_MAP[value] }
-        item.type = 'primary'
         item.can = true
-        item.callback = this.onCallback.bind(this, value)
+        item.has = true
         extraMoreActions.push(item)
       }
+      console.log('core', extraMoreActions)
       return extraMoreActions
     }
   }

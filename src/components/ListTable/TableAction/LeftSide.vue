@@ -1,9 +1,14 @@
 <template>
-  <ActionsGroup v-if="hasLeftActions" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" v-bind="$attrs" class="header-action" />
+  <DataActions
+    v-if="hasLeftActions"
+    :actions="iActions"
+    v-bind="$attrs"
+    class="header-action"
+  />
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup'
+import DataActions from '@/components/DataActions'
 import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
 
@@ -12,14 +17,14 @@ const defaultFalse = { type: Boolean, default: false }
 export default {
   name: 'LeftSide',
   components: {
-    ActionsGroup
+    DataActions
   },
   props: {
+    hasLeftActions: defaultTrue,
     hasCreate: defaultTrue,
     canCreate: defaultTrue,
     hasBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
-    hasLeftActions: defaultTrue,
     tableUrl: {
       type: String,
       default: ''
@@ -54,23 +59,37 @@ export default {
       type: String,
       default: null
     },
-    moreActionsButton: {
+    moreCreates: {
       type: Object,
-      default: () => ({})
+      default: null
     }
   },
   data() {
+    const defaultActions = [
+      {
+        name: 'actionCreate',
+        title: this.$t('common.Create'),
+        type: 'primary',
+        has: this.hasCreate && !this.moreCreates,
+        can: true,
+        callback: this.handleCreate
+      }
+    ]
+    if (this.moreCreates) {
+      const defaultMoreCreate = {
+        name: 'actionMoreCreate',
+        title: this.$t('common.Create'),
+        type: 'primary',
+        has: true,
+        can: true,
+        dropdown: [],
+        callback: this.handleCreate
+      }
+      const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
+      defaultActions.push(createCreateAction)
+    }
     return {
-      defaultActions: [
-        {
-          name: 'actionCreate',
-          title: this.$t('common.Create'),
-          type: 'primary',
-          has: this.hasCreate,
-          can: this.canCreate,
-          callback: this.handleCreate
-        }
-      ],
+      defaultActions: defaultActions,
       defaultMoreActions: [
         {
           title: this.$t('common.deleteSelected'),
@@ -93,6 +112,9 @@ export default {
     }
   },
   computed: {
+    iActions() {
+      return [...this.actions, this.moreAction]
+    },
     actions() {
       const actions = [...this.defaultActions, ...this.extraActions]
       return cleanActions(actions, true, {
@@ -100,12 +122,17 @@ export default {
         reloadTable: this.reloadTable
       })
     },
-    moreActions() {
-      const actions = [...this.defaultMoreActions, ...this.extraMoreActions]
-      return cleanActions(actions, true, {
+    moreAction() {
+      let dropdown = [...this.defaultMoreActions, ...this.extraMoreActions]
+      dropdown = cleanActions(dropdown, true, {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable
       })
+      return {
+        name: 'moreActions',
+        title: this.moreActionsTitle || this.$t('common.MoreActions'),
+        dropdown: dropdown
+      }
     },
     hasSelectedRows() {
       return this.selectedRows.length > 0

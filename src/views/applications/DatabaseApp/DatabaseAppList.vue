@@ -62,38 +62,38 @@ export default {
         hasImport: false,
         hasBulkDelete: false,
         createRoute: 'DatabaseAppCreate',
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary',
-        extraMoreActions: [
-          {
-            name: 'MySQL',
-            title: 'MySQL',
-            type: 'primary',
-            has: true,
-            callback: this.createMysql.bind(this)
-          },
-          {
-            name: 'PostgreSQL',
-            title: 'PostgreSQL',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createPostgreSQL.bind(this)
-          },
-          {
-            name: 'MariaDB',
-            title: 'MariaDB',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createMariaDB.bind(this)
-          },
-          {
-            name: 'Oracle',
-            title: 'Oracle',
-            type: 'primary',
-            has: this.isValidateLicense,
-            callback: this.createOracle.bind(this)
-          }
-        ]
+        moreCreates: {
+          dropdown: [
+            {
+              name: 'MySQL',
+              title: 'MySQL',
+              type: 'primary',
+              has: true,
+              callback: this.createMysql.bind(this)
+            },
+            {
+              name: 'PostgreSQL',
+              title: 'PostgreSQL',
+              type: 'primary',
+              has: this.isValidateLicense,
+              callback: this.createPostgreSQL.bind(this)
+            },
+            {
+              name: 'MariaDB',
+              title: 'MariaDB',
+              type: 'primary',
+              has: this.isValidateLicense,
+              callback: this.createMariaDB.bind(this)
+            },
+            {
+              name: 'Oracle',
+              title: 'Oracle',
+              type: 'primary',
+              has: this.isValidateLicense,
+              callback: this.createOracle.bind(this)
+            }
+          ]
+        }
       }
     }
   },
