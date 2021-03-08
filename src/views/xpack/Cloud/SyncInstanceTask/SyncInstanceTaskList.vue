@@ -80,7 +80,7 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
+        hasMoreActions: false,
         hasImport: false,
         hasExport: false,
         createRoute: 'SyncInstanceTaskCreate'
