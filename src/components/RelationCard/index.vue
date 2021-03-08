@@ -1,6 +1,6 @@
 <template>
   <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
-    <table style="width: 100%;table-layout:fixed;">
+    <table style="width: 100%;table-layout:fixed;" class="CardTable">
       <tr>
         <td colspan="2">
           <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
