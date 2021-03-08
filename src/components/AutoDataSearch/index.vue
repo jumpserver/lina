@@ -57,7 +57,6 @@ export default {
           continue
         }
         if (vm.exclude.includes(name)) {
-          console.log(name)
           continue
         }
         const option = {

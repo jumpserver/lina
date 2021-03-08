@@ -169,7 +169,6 @@ export default {
         date_from: object[0].toISOString(),
         date_to: object[1].toISOString()
       }
-      console.log(this.query)
       const url = `/api/v1/terminal/command-storages/tree/?real=1`
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
       const treeUrl = url + queryStr
