@@ -60,7 +60,7 @@ export default {
         hasCreate: false,
         hasExport: false,
         hasImport: false,
-        hasBulkDelete: false,
+        hasMoreActions: false,
         createRoute: 'DatabaseAppCreate',
         moreCreates: {
           dropdown: [

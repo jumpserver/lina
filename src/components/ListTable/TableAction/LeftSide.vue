@@ -25,6 +25,7 @@ export default {
     canCreate: defaultTrue,
     hasBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
+    hasMoreActions: defaultTrue,
     tableUrl: {
       type: String,
       default: ''
@@ -123,6 +124,9 @@ export default {
       })
     },
     moreAction() {
+      if (!this.hasMoreActions) {
+        return
+      }
       let dropdown = [...this.defaultMoreActions, ...this.extraMoreActions]
       dropdown = cleanActions(dropdown, true, {
         selectedRows: this.selectedRows,

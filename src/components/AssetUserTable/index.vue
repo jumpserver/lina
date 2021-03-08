@@ -211,7 +211,7 @@ export default {
       },
       headerActions: {
         hasLeftActions: this.hasLeftActions,
-        hasBulkDelete: false,
+        hasMoreActions: false,
         hasImport: this.hasImport,
         hasExport: this.hasExport,
         hasSearch: true,

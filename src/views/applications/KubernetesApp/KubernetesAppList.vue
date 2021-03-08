@@ -49,7 +49,7 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
+        hasMoreActions: false,
         hasExport: false,
         hasImport: false,
         createRoute: 'KubernetesAppCreate'

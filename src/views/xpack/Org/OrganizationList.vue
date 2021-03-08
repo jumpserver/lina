@@ -87,7 +87,7 @@ export default {
       },
       headerActions: {
         hasRightActions: false,
-        hasBulkDelete: false
+        hasMoreActions: false
       }
     }
   }
