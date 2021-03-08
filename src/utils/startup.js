@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import rolec from '@/utils/role'
 import orgUtil from '@/utils/org'
+import { getCurrentOrg } from '@/api/orgs'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -52,22 +53,29 @@ async function getPublicSetting({ to, from, next }) {
   }
 }
 
+async function refreshCurrentOrg() {
+  getCurrentOrg().then(org => {
+    store.dispatch('users/setCurrentOrg', org)
+  })
+}
+
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getInOrgs')
   const adminOrgs = store.getters.userAdminOrgList
   if (!adminOrgs || adminOrgs.length === 0) {
     return
   }
+  await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
     // console.log('Not has current org')
     orgUtil.change2PropOrg()
-    return reject('change prop org')
+    return reject('Change prop org')
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
     console.debug('Not has current org permission')
     orgUtil.change2PropOrg()
-    return reject('change prop org')
+    return reject('Change prop org')
   }
 }
 

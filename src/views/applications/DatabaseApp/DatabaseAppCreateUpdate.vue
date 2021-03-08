@@ -24,15 +24,20 @@ export default {
           }],
           disabled: true
         },
-        host: {
-          type: 'input'
-        },
         domain: {
           el: {
             multiple: false,
             clearable: true,
             ajax: {
               url: '/api/v1/assets/domains/'
+            }
+          }
+        },
+        attrs: {
+          fields: ['host', 'port', 'database'],
+          fieldsMeta: {
+            host: {
+              type: 'input'
             }
           }
         }
@@ -52,11 +57,6 @@ export default {
         const baseUrl = `/api/v1/applications/applications/`
         const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
         const method = this.getMethod()
-        validValues.attrs = {
-          host: validValues.host,
-          port: validValues.port,
-          database: validValues.database
-        }
         validValues.category = 'db'
         return this.$axios[method](`${url}?type=${validValues.type}`, validValues)
       }

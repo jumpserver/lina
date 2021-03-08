@@ -13,7 +13,11 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/admin-users/',
-        columns: ['name', 'username', 'assets_amount', 'comment', 'actions'],
+        columns: ['name', 'username', 'assets_amount', 'date_created', 'comment', 'actions'],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'username', 'assets_amount', 'comment', 'actions']
+        },
         columnsMeta: {
           username: {
             showOverflowTooltip: true

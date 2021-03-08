@@ -64,7 +64,7 @@ export default {
           },
           actions: {
             formatterArgs: {
-              hasDelete: () => this.currentOrgIsDefault,
+              hasDelete: () => this.currentOrgIsRoot,
               canUpdate: function(row, cellValue) {
                 return row.can_update
               },
@@ -76,7 +76,7 @@ export default {
                   title: this.$t('users.Remove'),
                   name: 'remove',
                   type: 'warning',
-                  has: () => !this.currentOrgIsDefault,
+                  has: () => !this.currentOrgIsRoot,
                   can: function(row, cellValue) {
                     return row.can_delete
                   },
@@ -89,6 +89,7 @@ export default {
       },
       headerActions: {
         hasBulkDelete: false,
+        canCreate: true,
         extraActions: [
           {
             name: this.$t('users.InviteUser'),
@@ -197,13 +198,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentOrg', 'currentUser', 'device']),
-    currentOrgIsDefault() {
-      return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
-    }
+    ...mapGetters(['currentOrgIsRoot', 'currentUser', 'device'])
   },
   mounted() {
-    if (!this.currentOrgIsDefault) {
+    if (!this.currentOrgIsRoot) {
       this.headerActions.extraMoreActions[0].title = this.$t(
         'common.removeSelected'
       )
@@ -240,7 +238,7 @@ export default {
     },
     bulkDeleteCallback({ selectedRows, reloadTable }) {
       let msgPrefix = this.$t('common.deleteWarningMsg')
-      if (!this.currentOrgIsDefault) {
+      if (!this.currentOrgIsRoot) {
         msgPrefix = this.$t('common.removeWarningMsg')
       }
       const msg =
@@ -264,13 +262,13 @@ export default {
             done()
             reloadTable()
             let successMsg = this.$t('common.bulkDeleteSuccessMsg')
-            if (!this.currentOrgIsDefault) {
+            if (!this.currentOrgIsRoot) {
               successMsg = this.$t('common.bulkRemoveSuccessMsg')
             }
             this.$message.success(successMsg)
           } catch (error) {
             // let errorMsg = this.$t('common.bulkDeleteErrorMsg')
-            // if (!this.currentOrgIsDefault) {
+            // if (!this.currentOrgIsRoot) {
             //   errorMsg = this.$t('common.bulkRemoveErrorMsg')
             // }
             // this.$message.error(errorMsg + error)

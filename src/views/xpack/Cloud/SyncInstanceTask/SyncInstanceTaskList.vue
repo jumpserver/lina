@@ -1,14 +1,14 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import GenericListTable from '@/layout/components/GenericListTable'
 import { DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
-    ListTable
+    GenericListTable
   },
   data() {
     const vm = this

@@ -47,7 +47,7 @@ export default {
     // 初始值
     form: {
       type: Object,
-      default: () => { return {} }
+      default: () => ({})
     },
     moreButtons: {
       type: Array,
