@@ -4,7 +4,7 @@
       <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="memberRelationConfig">
+      <RelationCard type="primary" v-bind="memberRelationConfig" class="RelationCard">
         <el-radio-group v-model="defaultOrgRole" style="padding: 8px">
           <el-radio v-for="item in group" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
         </el-radio-group>
@@ -131,5 +131,7 @@ export default {
 </script>
 
 <style scoped>
-
+.RelationCard ::v-deep .CardTable{
+  table-layout:inherit !important;
+}
 </style>
