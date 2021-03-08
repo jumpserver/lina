@@ -153,7 +153,7 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    this.MFAInfo.asset = val.cellValue
+                    this.MFAInfo.asset = val.row.id
                     if (!this.needMFAVerify) {
                       this.showMFADialog = true
                       this.MFAConfirmed = true

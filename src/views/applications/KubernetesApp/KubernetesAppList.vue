@@ -14,8 +14,12 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=cloud',
         columns: [
-          'name', 'type', 'attrs.cluster', 'comment', 'actions'
+          'name', 'type', 'attrs.cluster', 'date_created', 'comment', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'type', 'attrs.cluster', 'comment', 'actions']
+        },
         columnsMeta: {
           'attrs.cluster': {
             label: this.$t('applications.cluster')
@@ -27,7 +31,7 @@ export default {
             width: '140px'
           },
           actions: {
-            prop: '',
+            prop: 'actions',
             formatterArgs: {
               hasClone: false,
               performDelete: function({ row, col, cellValue, reload }) {

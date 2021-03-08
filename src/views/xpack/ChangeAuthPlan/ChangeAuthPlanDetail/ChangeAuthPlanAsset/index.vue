@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard/index'
 import AssetRelationCard from '@/components/AssetRelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters'
@@ -19,7 +19,7 @@ import { DeleteActionFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'ChangeAuthPlanAsset',
   components: {
-    ListTable, RelationCard, AssetRelationCard
+    GenericListTable, RelationCard, AssetRelationCard
   },
   props: {
     object: {

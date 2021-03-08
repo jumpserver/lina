@@ -2,6 +2,9 @@
   "": "",
   "applications": {
     "": "",
+    "RemoteApp": "远程应用",
+    "Database": "数据库",
+    "Cloud": "云",
     "applicationsType": {
       "chrome": "Chrome",
       "mysql_workbench": "MySQL Workbench",
@@ -170,7 +173,10 @@
     "HomeHelpMessage": "默认家目录 /home/系统用户名: /home/username",
     "Home": "家目录",
     "LinuxUserAffiliateGroup": "用户附属组",
-    "ipDomain": "IP(域名)"
+    "ipDomain": "IP(域名)",
+    "HostProtocol": "主机协议",
+    "DatabaseProtocol": "数据库协议",
+    "OtherProtocol": "其它协议"
 
   },
   "audits": {
@@ -652,7 +658,7 @@
     "sessionMonitor": "监控",
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {
-      "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com）",
+      "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com:3000,http://www.jumpserver.b.com:3000）",
       "esIndex": "es提供默认index：jumpserver",
       "esDocType": "es默认文档类型：command",
       "s3Endpoint": "S3 格式: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China) 格式: http://s3.{REGION_NAME}.amazonaws.com.cn<br>如: http://s3.cn-north-1.amazonaws.com.cn",

@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { DEFAULT_ORG_ID } from '@/utils/org'
 import Select2 from '@/components/Select2'
 import { getDaysFuture } from '@/utils/common'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
@@ -21,16 +22,17 @@ export default {
       hasDetailInMsg: false,
       initial: {
         ips_or_not: true,
-        apply_date_expired: date_expired,
-        apply_date_start: date_start,
-        org_id: 'DEFAULT',
-        type: 'apply_asset',
-        apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+        meta: {
+          apply_date_expired: date_expired,
+          apply_date_start: date_start,
+          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+        },
+        org_id: DEFAULT_ORG_ID,
+        type: 'apply_asset'
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
-        [this.$t('tickets.RequestPerm'), ['apply_ip_group', 'apply_hostname_group', 'apply_system_user_group', 'apply_actions', 'apply_date_start', 'apply_date_expired']]
-
+        [this.$t('tickets.RequestPerm'), ['meta']]
       ],
       fieldsMeta: {
         type: {
@@ -39,35 +41,23 @@ export default {
             disabled: true
           }
         },
-        apply_ip_group: {
-          label: this.$t('tickets.IPGroup'),
-          helpText: this.$t('tickets.helpText.ips')
-        },
-        apply_hostname_group: {
-          label: this.$t('assets.Hostname'),
-          helpText: this.$t('tickets.helpText.fuzzySearch')
-        },
-        apply_system_user_group: {
-          label: this.$t('assets.SystemUser'),
-          helpText: this.$t('tickets.helpText.fuzzySearch')
-        },
-        apply_actions: {
-          label: this.$t('perms.Actions'),
-          component: AssetPermissionFormActionField,
-          helpText: this.$t('common.actionsTips')
-        },
-        apply_date_start: {
-          label: this.$t('common.DateStart'),
-          type: 'date-picker',
-          el: {
-            type: 'datetime'
-          }
-        },
-        apply_date_expired: {
-          label: this.$t('common.DateEnd'),
-          type: 'date-picker',
-          el: {
-            type: 'datetime'
+        meta: {
+          fields: ['apply_ip_group', 'apply_hostname_group', 'apply_system_user_group', 'apply_actions', 'apply_date_start', 'apply_date_expired'],
+          fieldsMeta: {
+            apply_actions: {
+              label: this.$t('perms.Actions'),
+              component: AssetPermissionFormActionField,
+              helpText: this.$t('common.actionsTips')
+            },
+            apply_ip_group: {
+              helpText: this.$t('tickets.helpText.ips')
+            },
+            apply_hostname_group: {
+              helpText: this.$t('tickets.helpText.fuzzySearch')
+            },
+            apply_system_user_group: {
+              helpText: this.$t('tickets.helpText.fuzzySearch')
+            }
           }
         },
         org_id: {
@@ -87,7 +77,7 @@ export default {
             multiple: true,
             value: [],
             ajax: {
-              url: `/api/v1/tickets/assignees/?org_id=DEFAULT`,
+              url: `/api/v1/tickets/assignees/?org_id=${DEFAULT_ORG_ID}`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
@@ -103,36 +93,15 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      const meta = {}
-      const ips = validValues.apply_ip_group
-      if (ips) {
-        meta.apply_ip_group = ips.split(',')
+      if (validValues.meta.apply_ip_group) {
+        validValues.meta.apply_ip_group = validValues.meta.apply_ip_group.split(',')
       }
-      if (ips === '') {
-        delete validValues['apply_ip_group']
+      if (validValues.meta.apply_hostname_group) {
+        validValues.meta.apply_hostname_group = validValues.meta.apply_hostname_group.split(',')
       }
-      if (validValues.apply_hostname_group) {
-        meta.apply_hostname_group = validValues.apply_hostname_group.split(',')
-        delete validValues['apply_hostname_group']
+      if (validValues.meta.apply_system_user_group) {
+        validValues.meta.apply_system_user_group = validValues.meta.apply_system_user_group.split(',')
       }
-
-      if (validValues.apply_system_user_group) {
-        meta.apply_system_user_group = validValues.apply_system_user_group.split(',')
-        delete validValues['apply_system_user_group']
-      }
-
-      if (validValues.apply_actions) {
-        meta.apply_actions = validValues.apply_actions
-        delete validValues['apply_actions']
-      }
-      meta.apply_date_start = validValues.apply_date_start
-      delete validValues['apply_date_start']
-
-      meta.apply_date_expired = validValues.apply_date_expired
-      delete validValues['apply_date_expired']
-
-      validValues['meta'] = meta
-
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_asset`, validValues)
     }
   }

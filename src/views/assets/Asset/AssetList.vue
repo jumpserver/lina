@@ -98,7 +98,7 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'hardware_info', 'connectivity', 'actions'
+          'hostname', 'ip', 'admin_user_display', 'hardware_info', 'number', 'connectivity', 'actions'
         ],
         columnsMeta: {
           hostname: {
@@ -125,6 +125,9 @@ export default {
                 2: 'fa-circle text-warning'
               },
               typeChange: function(val) {
+                if (!val) {
+                  return 2
+                }
                 return val.status
               },
               hasTips: true
@@ -146,16 +149,21 @@ export default {
                   name: 'View',
                   title: this.$t(`common.UpdateAssetDetail`),
                   type: 'primary',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: cellValue }})
+                  callback: function({ cellValue, tableData, row }) {
+                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: row.id }})
                   }
                 }
               ]
             }
           }
+        },
+        columnsShow: {
+          min: ['hostname', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
         }
       },
       headerActions: {
+        // canCreate: false,
         createRoute: {
           name: 'AssetCreate',
           query: this.$route.query

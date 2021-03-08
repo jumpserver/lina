@@ -2,7 +2,6 @@ import DetailFormatter from './DetailFormatter'
 import DisplayFormatter from './DisplayFormatter'
 import BooleanFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
-import CustomActionsFormatter from './CustomActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
@@ -15,7 +14,6 @@ export default {
   DisplayFormatter,
   BooleanFormatter,
   ActionsFormatter,
-  CustomActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
   SystemUserFormatter,
@@ -29,7 +27,6 @@ export {
   DisplayFormatter,
   BooleanFormatter,
   ActionsFormatter,
-  CustomActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
   SystemUserFormatter,

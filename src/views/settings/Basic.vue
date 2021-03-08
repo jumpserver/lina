@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL']]
+        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL']]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
       url: '/api/v1/settings/setting/?category=basic'

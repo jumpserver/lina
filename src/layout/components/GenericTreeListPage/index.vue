@@ -21,6 +21,7 @@
 <script>
 import Page from '@/layout/components/Page'
 import TreeTable from '@/components/TreeTable'
+import { mapGetters } from 'vuex'
 export default {
   name: 'GenericTreeListPage',
   components: {
@@ -31,6 +32,17 @@ export default {
     helpMessage: {
       type: String,
       default: null
+    }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot']),
+    iHeaderActions() {
+      const attrs = _.cloneDeep(this.headerActions)
+      const canCreate = _.get(attrs, 'canCreate', null)
+      if (canCreate === null && this.currentOrgIsRoot) {
+        _.set(attrs, 'canCreate', false)
+      }
+      return attrs
     }
   },
   methods: {
