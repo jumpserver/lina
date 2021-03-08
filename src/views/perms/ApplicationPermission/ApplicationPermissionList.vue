@@ -12,7 +12,6 @@ export default {
     GenericListPage
   },
   data() {
-    const vm = this
     return {
       title: this.$t('route.ApplicationPermission'),
       tableConfig: {
@@ -100,9 +99,6 @@ export default {
         moreActionsTitle: this.$t('common.Create'),
         moreActionsType: 'primary',
         moreCreates: {
-          callback: (option) => {
-            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.type }})
-          },
           dropdown: ApplicationTypes
         }
       }
