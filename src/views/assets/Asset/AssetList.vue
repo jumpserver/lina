@@ -98,8 +98,12 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'admin_user_display', 'hardware_info', 'number', 'connectivity', 'actions'
+          'hostname', 'ip', 'admin_user_display', 'platform', 'hardware_info', 'cpu_model', 'disk_info', 'memory', 'os', 'number', 'public_ip', 'connectivity', 'actions'
         ],
+        columnsShow: {
+          min: ['hostname', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
+        },
         columnsMeta: {
           hostname: {
             formatter: DetailFormatter,
@@ -156,10 +160,6 @@ export default {
               ]
             }
           }
-        },
-        columnsShow: {
-          min: ['hostname', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
         }
       },
       headerActions: {
