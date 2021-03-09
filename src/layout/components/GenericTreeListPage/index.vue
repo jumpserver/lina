@@ -29,11 +29,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentOrgIsRoot']),
+    ...mapGetters(['currentOrg']),
     iHeaderActions() {
       const attrs = _.cloneDeep(this.headerActions)
       const canCreate = _.get(attrs, 'canCreate', null)
-      if (canCreate === null && this.currentOrgIsRoot) {
+      if (canCreate === null && this.currentOrg && this.currentOrg.is_root) {
         _.set(attrs, 'canCreate', false)
       }
       return attrs
