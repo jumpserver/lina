@@ -85,6 +85,20 @@ export default {
     },
     cleanFormValue() {
       this._cleanFormValue(this.iForm, this.remoteMeta)
+    },
+    setFieldError(name, error) {
+      const field = this.totalFields.find((v) => v.prop === name)
+      if (!field) {
+        return
+      }
+      if (field.attrs.error === error) {
+        error += '.'
+      }
+      if (field.type === 'nestedField') {
+        field.el.errors = error
+      } else {
+        field.attrs.error = error
+      }
     }
   }
 }
