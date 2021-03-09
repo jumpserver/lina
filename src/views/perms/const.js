@@ -1,5 +1,4 @@
 import i18n from '@/i18n/i18n'
-import router from '@/router'
 import store from '@/store'
 export const CHROME = 'chrome'
 export const MYSQL_WORKBENCH = 'mysql_workbench'
@@ -20,29 +19,25 @@ export const REMOTE_APP = [
     title: i18n.t(`applications.applicationsType.${CHROME}`),
     type: 'primary',
     group: i18n.t('applications.RemoteApp'),
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: CHROME, category: REMOTEAPP_CATEGORY }}) }
+    has: hasValidLicense
   },
   {
     name: MYSQL_WORKBENCH,
     title: i18n.t(`applications.applicationsType.${MYSQL_WORKBENCH}`),
     type: 'primary',
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: MYSQL_WORKBENCH, category: REMOTEAPP_CATEGORY }}) }
+    has: hasValidLicense
   },
   {
     name: VMWARE_CLIENT,
     title: i18n.t(`applications.applicationsType.${VMWARE_CLIENT}`),
     type: 'primary',
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: VMWARE_CLIENT, category: REMOTEAPP_CATEGORY }}) }
+    has: hasValidLicense
   },
   {
     name: CUSTOM,
     title: i18n.t(`applications.applicationsType.${CUSTOM}`),
     type: 'primary',
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: CUSTOM, category: REMOTEAPP_CATEGORY }}) }
+    has: hasValidLicense
   }
 ]
 
@@ -58,29 +53,25 @@ export const DATABASE = [
     title: i18n.t(`applications.applicationsType.${MYSQL}`),
     type: 'primary',
     has: true,
-    group: i18n.t('applications.Database'),
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: MYSQL, category: DATABASE_CATEGORY }}) }
+    group: i18n.t('applications.Database')
   },
   {
     name: ORACLE,
     title: i18n.t(`applications.applicationsType.${ORACLE}`),
     type: 'primary',
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: ORACLE, category: DATABASE_CATEGORY }}) }
+    has: hasValidLicense
   },
   {
     name: POSTGRESQL,
     title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
     type: 'primary',
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: POSTGRESQL, category: DATABASE_CATEGORY }}) }
+    has: hasValidLicense
   },
   {
     name: MARIADB,
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
-    has: hasValidLicense,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: MARIADB, category: DATABASE_CATEGORY }}) }
+    has: hasValidLicense
   }
 ]
 
@@ -93,8 +84,7 @@ export const CLOUD = [
     title: i18n.t(`applications.applicationsType.${KUBERNETES}`),
     group: i18n.t('applications.Cloud'),
     type: 'primary',
-    has: true,
-    callback: function() { router.push({ name: 'ApplicationPermissionCreate', query: { type: KUBERNETES, category: CLOUD_CATEGORY }}) }
+    has: true
   }
 ]
 

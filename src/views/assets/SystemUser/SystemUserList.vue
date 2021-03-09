@@ -56,7 +56,7 @@ export default {
         createRoute: 'SystemUserCreate',
         moreCreates: {
           callback: (option) => {
-            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.type }})
+            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.title.toLowerCase() }})
           },
           dropdown: [
             {
