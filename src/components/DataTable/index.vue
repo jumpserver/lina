@@ -100,6 +100,9 @@ export default {
     iListeners() {
       return Object.assign({}, this.$listeners, this.tableConfig.listeners)
     },
+    dataTable() {
+      return this.$refs.table
+    },
     ...mapGetters({
       'globalTableConfig': 'tableConfig'
     })

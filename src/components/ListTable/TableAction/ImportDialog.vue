@@ -4,61 +4,55 @@
     :visible.sync="showImportDialog"
     :destroy-on-close="true"
     :loading-status="loadStatus"
+    width="80%"
     @confirm="handleImportConfirm"
     @cancel="handleImportCancel()"
   >
     <el-form label-position="left" style="padding-left: 50px">
-      <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
-        <el-radio-group v-model="importTypeOption">
-          <el-radio v-for="option of importTypeOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
         <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
         <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.Update') }}</el-radio>
         <div style="line-height: 1.5">
-          <span v-if="importOption==='1'" class="el-upload__tip">
-            {{ this.$t('common.imExport.downloadImportTemplateMsg') }}
-            <el-link type="success" :underline="false" :href="downloadImportTempUrl">{{ this.$t('common.Download') }}</el-link>
-          </span>
-          <span v-else class="el-upload__tip">
-            {{ this.$t('common.imExport.downloadUpdateTemplateMsg') }}
-            <el-link type="success" :underline="false" @click="downloadUpdateTempUrl">{{ this.$t('common.Download') }}</el-link>
+          <span class="el-upload__tip">
+            {{ downloadTemplateTitle }}
+            <el-link type="success" :underline="false" :href="getDownloadTemplateUrl('csv')" style="padding-left: 10px"> CSV </el-link>
+            <el-link type="success" :underline="false" :href="getDownloadTemplateUrl('xlsx')" style="padding-left: 10px"> XLSX </el-link>
           </span>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('common.Upload' )" :label-width="'100px'">
+      <el-form-item v-if="!showTable" :label="$t('common.Upload' )" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
+          drag
           action="string"
           list-type="text/csv"
-          :http-request="handleImport"
           :limit="1"
           :auto-upload="false"
-          :before-upload="beforeUpload"
+          :on-change="onFileChange"
+          accept=".csv,.xlsx"
         >
-          <el-button size="mini" type="default">{{ this.$t('common.SelectFile') }}</el-button>
-          <!--          <div slot="tip" :class="uploadHelpTextClass" style="line-height: 1.5">{{ this.$t('common.imExport.onlyCSVFilesTips') }}</div>-->
+          <i class="el-icon-upload" />
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
+      <div v-else>
+        <DataTable :config="tableConfig" class="importTable" />
+      </div>
     </el-form>
-    <div v-if="errorMsg" class="error-msg error-results">
-      <ul v-if="typeof errorMsg === 'object'">
-        <li v-for="(item, index) in errorMsg" :key="item + '-' + index"> {{ item }}</li>
-      </ul>
-      <span v-else>{{ errorMsg }}</span>
-    </div>
   </Dialog>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
-import { createSourceIdCache } from '@/api/common'
+// import { createSourceIdCache } from '@/api/common'
+import DataTable from '@/components/DataTable'
 
 export default {
   name: 'ImportDialog',
   components: {
-    Dialog
+    Dialog,
+    DataTable
   },
   props: {
     selectedRows: {
@@ -74,37 +68,26 @@ export default {
     return {
       showImportDialog: false,
       importOption: '1',
-      isCsv: true,
       errorMsg: '',
       loadStatus: false,
-      importTypeOption: 'csv'
+      importTypeOption: 'csv',
+      importTypeIsCsv: true,
+      showTable: false,
+      tableConfig: {
+        paginationSizes: [10],
+        paginationSize: 10,
+        hasSelection: false,
+        columns: [],
+        totalData: []
+      }
     }
   },
   computed: {
     hasSelected() {
       return this.selectedRows.length > 0
     },
-    importTypeOptions() {
-      return [
-        {
-          label: 'CSV',
-          value: 'csv',
-          can: true
-        },
-        {
-          label: 'Excel',
-          value: 'xlsx',
-          can: true
-        }
-      ]
-    },
     upLoadUrl() {
       return this.url
-    },
-    downloadImportTempUrl() {
-      const format = this.importTypeOption === 'csv' ? 'format=csv&template=import&limit=1' : 'format=xlsx&template=import&limit=1'
-      const url = (this.url.indexOf('?') === -1) ? `${this.url}?${format}` : `${this.url}&${format}`
-      return url
     },
     uploadHelpTextClass() {
       const cls = ['el-upload__tip']
@@ -112,6 +95,18 @@ export default {
         cls.push('error-msg')
       }
       return cls
+    },
+    downloadTemplateTitle() {
+      if (this.importOption === '1') {
+        return this.$t('common.imExport.downloadImportTemplateMsg')
+      } else {
+        return this.$t('common.imExport.downloadUpdateTemplateMsg')
+      }
+    }
+  },
+  watch: {
+    importOption(val) {
+      this.showTable = false
     }
   },
   mounted() {
@@ -120,56 +115,90 @@ export default {
     })
   },
   methods: {
-    performUpdate(item) {
-      this.$axios.put(
-        this.upLoadUrl,
-        item.file,
-        { headers: { 'Content-Type': this.importTypeOption === 'csv' ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
+    onFileChange(file, fileList) {
+      if (file.status !== 'ready') {
+        return
+      }
+      // const isCsv = file.raw.type = 'text/csv'
+      const isCsv = file.name.indexOf('csv') > -1
+      this.tableConfig.columns = []
+      this.$axios.post(
+        this.upLoadUrl + 'render-to-json/',
+        file.raw,
+        { headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
       ).then((data) => {
-        const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
-        this.onSuccess(msg)
+        const tableTitle = data['title']
+        const tableData = data['data']
+        this.tableConfig.columns.push({
+          prop: 'success',
+          label: '状态',
+          width: '80px',
+          fixed: true
+        })
+        tableTitle.forEach(item => {
+          this.tableConfig.columns.push({
+            prop: item[1],
+            label: item[0],
+            minWidth: '100px',
+            showOverflowTooltip: true
+          })
+        })
+        this.showTable = true
+        console.log(tableData)
+        this.tableConfig.totalData = []
+        setTimeout(() => {
+          tableData.forEach((item, index) => {
+            item.id = index
+            item.success = ''
+          })
+          this.tableConfig.totalData = tableData
+        }, 300)
       }).catch(error => {
-        this.catchError(error)
+        console.log(error)
       }).finally(() => {
         this.loadStatus = false
       })
     },
-    performCreate(item) {
-      this.$axios.post(
-        this.upLoadUrl,
-        item.file,
-        { headers: { 'Content-Type': this.importTypeOption === 'csv' ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
-      ).then((data) => {
-        const msg = this.$t('common.imExport.createSuccessMsg', { count: data.length })
-        this.onSuccess(msg)
-      }).catch(error => {
-        this.catchError(error)
-      }).finally(() => {
-        this.loadStatus = false
+    getDownloadTemplateUrl(tp) {
+      const template = this.importOption === '1' ? 'import' : 'update'
+      const query = tp === 'csv' ? `format=csv&template=${template}&limit=1` : `format=xlsx&template=${template}&limit=1`
+      return (this.url.indexOf('?') === -1) ? `${this.url}?${query}` : `${this.url}&${query}`
+    },
+    performUpdate() {
+      this.tableConfig.totalData.forEach(item => {
+        this.$axios.put(
+          this.upLoadUrl,
+          item,
+          { disableFlashErrorMsg: true }
+        ).then((data) => {
+          const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
+          this.onSuccess(msg)
+        }).catch(error => {
+          this.catchError(error)
+        }).finally(() => {
+          this.loadStatus = false
+        })
+      })
+    },
+    performCreate() {
+      this.tableConfig.totalData.forEach(item => {
+        this.$axios.post(
+          this.upLoadUrl,
+          item,
+          { disableFlashErrorMsg: true }
+        ).then((data) => {
+          item.id = data['id']
+          item.FALSE = 'TRUE'
+        }).catch(error => {
+          item.FALSE = 'FALSE'
+          console.log(error)
+        }).finally(() => {
+          this.loadStatus = false
+        })
       })
     },
     catchError(error) {
-      this.$refs.upload.clearFiles()
-      if (error.response && error.response.status === 400) {
-        const errorData = error.response.data
-        const totalErrorMsg = []
-        errorData.forEach((value, index) => {
-          if (typeof value === 'string') {
-            totalErrorMsg.push(`line ${index}. ${value}`)
-          } else {
-            const errorMsg = [`line ${index}. `]
-            for (const [k, v] of Object.entries(value)) {
-              if (v) {
-                errorMsg.push(`${k}: ${v}`)
-              }
-            }
-            if (errorMsg.length > 1) {
-              totalErrorMsg.push(errorMsg.join(' '))
-            }
-          }
-        })
-        this.errorMsg = totalErrorMsg
-      }
+      console.log(error)
     },
     onSuccess(msg) {
       this.errorMsg = ''
@@ -181,40 +210,18 @@ export default {
       a.click()
       window.URL.revokeObjectURL(url)
     },
-    handleImport(item) {
-      this.loadStatus = true
-      if (this.importOption === '1') {
-        this.performCreate(item)
-      } else {
-        this.performUpdate(item)
-      }
-    },
-    async downloadUpdateTempUrl() {
-      var resources = []
-      const data = this.selectedRows
-      for (let index = 0; index < data.length; index++) {
-        resources.push(data[index].id)
-      }
-      const spm = await createSourceIdCache(resources)
-      const baseUrl = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
-      const format = this.importTypeOption === 'csv' ? '?format=csv&template=update&spm=' : '?format=xlsx&template=update&spm='
-      const url = `${baseUrl}${format}` + spm.spm
-      return this.downloadCsv(url)
-    },
     async handleImportConfirm() {
-      this.$refs.upload.submit()
+      if (this.importOption === '1') {
+        this.performCreate()
+      } else {
+        this.performUpdate()
+      }
     },
     handleImportCancel() {
       this.showImportDialog = false
-    },
-    beforeUpload(file) {
-      this.isCsv = this.importTypeOption === 'csv' ? _.endsWith(file.name, 'csv') : _.endsWith(file.name, 'xlsx')
-      if (!this.isCsv) {
-        this.$message.error(
-          this.$t('common.NeedSpecifiedFile')
-        )
-      }
-      return this.isCsv
+      this.showTable = false
+      this.tableConfig.columns = []
+      this.tableConfig.totalData = []
     }
   }
 }
@@ -229,6 +236,15 @@ export default {
     background-color: #f3f3f4;
     max-height: 200px;
     overflow: auto
+  }
+  .file-uploader >>> .el-upload-dragger, .file-uploader >>> .el-upload {
+    width: 100%;
+    padding-right: 150px;
+  }
+
+  .importTable {
+    padding-right: 50px;
+    overflow: auto;
   }
 
 </style>
