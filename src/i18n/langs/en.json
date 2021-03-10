@@ -457,6 +457,7 @@
     "downloadFile": "Download file",
     "hostName": "Hostname",
     "isValid": "Validity",
+    "isEffective": "Effective",
     "nodeCount": "Node count",
     "refreshFail": "Refresh fail",
     "refreshPermissionCache": "Refresh permission cache",

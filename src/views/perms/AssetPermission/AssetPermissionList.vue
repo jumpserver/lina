@@ -121,6 +121,19 @@ export default {
                 }
               ]
             },
+            {
+              label: this.$t('perms.isEffective'), value: 'is_effective',
+              children: [
+                {
+                  value: '1',
+                  label: this.$t('common.Yes')
+                },
+                {
+                  value: '0',
+                  label: this.$t('common.No')
+                }
+              ]
+            },
             { label: this.$t('common.Username'), value: 'username' },
             { label: this.$t('perms.UserGroups'), value: 'user_group' },
             { label: this.$t('perms.IP'), value: 'ip' },

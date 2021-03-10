@@ -459,6 +459,7 @@
     "downloadFile": "下载文件",
     "hostName": "主机名",
     "isValid": "有效",
+    "isEffective": "起作用的",
     "nodeCount": "节点数量",
     "refreshFail": "刷新失败",
     "refreshPermissionCache": "刷新授权缓存",
