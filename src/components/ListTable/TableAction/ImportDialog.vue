@@ -46,6 +46,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 // import { createSourceIdCache } from '@/api/common'
+import StatusFormatter from '@/components/ListTable/formatters/StatusFormatter'
 import DataTable from '@/components/DataTable'
 
 export default {
@@ -78,7 +79,18 @@ export default {
         paginationSize: 10,
         hasSelection: false,
         columns: [],
-        totalData: []
+        totalData: [],
+        tableAttrs: {
+          rowClassName: (row) => {
+            if (row.importState === 'failed') {
+              return 'import-failed-item'
+            } else if (row.importState === 'success') {
+              return 'import-success-item'
+            } else {
+              return 'import-ready'
+            }
+          }
+        }
       }
     }
   },
@@ -130,10 +142,25 @@ export default {
         const tableTitle = data['title']
         const tableData = data['data']
         this.tableConfig.columns.push({
-          prop: 'success',
+          prop: 'importState',
           label: '状态',
           width: '80px',
-          fixed: true
+          fixed: true,
+          formatter: StatusFormatter,
+          formatterArgs: {
+            conChoices: {
+              'success': 'fa-check text-primary',
+              'failed': 'fa-times text-danger',
+              '': 'fa-times text-error'
+            },
+            getChoicesKey(val) {
+              return val
+            },
+            getTip(val, col) {
+              return 'hello'
+            },
+            hasTips: true
+          }
         })
         tableTitle.forEach(item => {
           this.tableConfig.columns.push({
@@ -144,12 +171,11 @@ export default {
           })
         })
         this.showTable = true
-        console.log(tableData)
         this.tableConfig.totalData = []
         setTimeout(() => {
           tableData.forEach((item, index) => {
             item.id = index
-            item.success = ''
+            item.importState = ''
           })
           this.tableConfig.totalData = tableData
         }, 300)
@@ -188,9 +214,9 @@ export default {
           { disableFlashErrorMsg: true }
         ).then((data) => {
           item.id = data['id']
-          item.FALSE = 'TRUE'
+          item.importState = 'success'
         }).catch(error => {
-          item.FALSE = 'FALSE'
+          item.importState = 'failed'
           console.log(error)
         }).finally(() => {
           this.loadStatus = false
@@ -237,7 +263,11 @@ export default {
     max-height: 200px;
     overflow: auto
   }
-  .file-uploader >>> .el-upload-dragger, .file-uploader >>> .el-upload {
+  .file-uploader >>> .el-upload-dragger {
+    width: 100%;
+  }
+
+  .file-uploader >>> .el-upload {
     width: 100%;
     padding-right: 150px;
   }
