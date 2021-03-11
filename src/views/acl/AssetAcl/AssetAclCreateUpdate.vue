@@ -22,10 +22,11 @@ export default {
         }
       },
       fields: [
-        ['', ['name']],
+        [this.$t('common.Basic'), ['name']],
+        [this.$t('acl.users'), ['users']],
         [this.$t('acl.asset'), ['assets']],
         [this.$t('acl.system_user'), ['system_users']],
-        [this.$t('perms.Actions'), ['users', 'reviewers', 'action', 'priority']],
+        [this.$t('perms.Actions'), ['action', 'reviewers', 'priority']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {

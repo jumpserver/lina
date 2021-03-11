@@ -123,7 +123,10 @@ export const allRoleRoutes = [
     component: Layout,
     redirect: '/perms/access-control-list/',
     name: 'Acl',
-    meta: { title: i18n.t('route.Acl'), icon: 'fort-awesome' },
+    meta: {
+      licenseRequired: true,
+      title: i18n.t('route.Acl'),
+      icon: 'fort-awesome' },
     children: aclRoutes
   },
   {
