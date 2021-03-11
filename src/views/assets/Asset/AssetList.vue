@@ -98,7 +98,15 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'admin_user_display', 'platform', 'hardware_info', 'cpu_model', 'disk_info', 'memory', 'os', 'number', 'public_ip', 'connectivity', 'actions'
+          'hostname', 'ip', 'public_ip', 'admin_user_display',
+          'protocols',
+          'platform', 'hardware_info', 'model',
+          'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
+          'disk_info', 'disk_total', 'memory',
+          'os', 'os_arch', 'os_version',
+          'number', 'vendor', 'sn',
+          'connectivity',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
@@ -117,6 +125,15 @@ export default {
             width: '140px'
           },
           hardware_info: {
+            showOverflowTooltip: true
+          },
+          cpu_model: {
+            showOverflowTooltip: true
+          },
+          sn: {
+            showOverflowTooltip: true
+          },
+          comment: {
             showOverflowTooltip: true
           },
           connectivity: {

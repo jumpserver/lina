@@ -92,15 +92,13 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/terminals/',
-        columns: ['name', 'remote_addr', 'session_online',
-          'state.session_active_count',
-          'state.system_cpu_load_1',
-          'state.system_disk_used_percent',
-          'state.system_memory_used_percent',
+        columns: [
+          'name', 'remote_addr', 'session_online',
+          'state.session_active_count', 'state.system_cpu_load_1',
+          'state.system_disk_used_percent', 'state.system_memory_used_percent',
           'status_display',
-          'is_active',
-          'is_alive',
-          'actions'],
+          'is_active', 'is_alive', 'actions'
+        ],
         columnsMeta: {
           name: {
             sortable: 'custom'

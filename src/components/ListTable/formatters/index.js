@@ -1,7 +1,8 @@
 import DetailFormatter from './DetailFormatter'
 import ArrayFormatter from './ArrayFormatter'
 import DisplayFormatter from './DisplayFormatter'
-import BooleanFormatter from './ChoicesFormatter'
+import BooleanFormatter from './BooleanFormatter'
+import ChoicesFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
@@ -14,6 +15,7 @@ export default {
   DetailFormatter,
   DisplayFormatter,
   BooleanFormatter,
+  ChoicesFormatter,
   ActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
@@ -28,6 +30,7 @@ export {
   DetailFormatter,
   DisplayFormatter,
   BooleanFormatter,
+  ChoicesFormatter,
   ActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,

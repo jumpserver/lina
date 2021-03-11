@@ -14,7 +14,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/cmd-filters/',
-        columns: ['name', 'rules', 'system_users', 'is_active', 'date_created', 'comment', 'actions'],
+        columns: [
+          'name', 'rules', 'system_users', 'is_active',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'rules', 'system_users', 'comment', 'actions']

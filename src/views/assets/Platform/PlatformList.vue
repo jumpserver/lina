@@ -13,7 +13,8 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/platforms/',
         columns: [
-          'name', 'base', 'comment', 'actions'
+          'name', 'base',
+          'comment', 'actions'
         ],
         columnsMeta: {
           base: {
@@ -32,11 +33,7 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasSearch: false,
+        hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
         createRoute: 'PlatformCreate'
