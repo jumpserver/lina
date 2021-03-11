@@ -36,6 +36,7 @@ import OpsRoutes from './ops'
 import TicketsRoutes from './tickets'
 import AuditsRoutes from './audits'
 import commonRoutes from './common'
+import aclRoutes from './acl'
 
 /**
  * constantRoutes
@@ -116,6 +117,14 @@ export const allRoleRoutes = [
     name: 'Perms',
     meta: { title: i18n.t('route.Perms'), icon: 'edit' },
     children: PermsRoute
+  },
+  {
+    path: '/acl/',
+    component: Layout,
+    redirect: '/perms/access-control-list/',
+    name: 'Acl',
+    meta: { title: i18n.t('route.Acl'), icon: 'fort-awesome' },
+    children: aclRoutes
   },
   {
     path: '/terminal/',

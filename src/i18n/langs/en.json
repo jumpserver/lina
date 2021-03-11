@@ -1,5 +1,16 @@
 {
   "": "",
+  "acl": {
+    "name": "Name",
+    "username": "Username",
+    "ip_group": "IP group",
+    "action": "Action",
+    "priority": "Priority",
+    "date_created": "Date created",
+    "created_by": "Created by",
+    "asset": "Asset",
+    "system_user": "System user"
+  },
   "applications": {
     "": "",
     "RemoteApp": "Remote app",
@@ -526,6 +537,11 @@
     "KubernetesAppPermissionDetail": "Kubernetes permissions detail",
     "KubernetesAppPermissionUpdate": "Kubernetes permissions update",
     "KubernetesAppUpdate": "Kubernetes app update",
+    "Acl": "Access control",
+    "UserAclList": "User acl list",
+    "UserAclCreate": "User acl create",
+    "UserAclUpdate": "User acl update",
+    "UserAclDetail": "User acl detail",
     "DomainCreate": "Domain create",
     "DomainDetail": "Domain detail",
     "DomainList": "Domains",
