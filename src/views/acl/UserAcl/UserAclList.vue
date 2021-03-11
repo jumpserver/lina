@@ -4,6 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import { ArrayFormatter } from '@/components/ListTable/formatters'
 
 export default {
   components: {
@@ -26,6 +27,10 @@ export default {
                 user: this.$route.params.id
               }
             }
+          },
+          ip_group: {
+            formatter: ArrayFormatter,
+            showOverflowTooltip: true
           },
           action: {
             prop: 'action_display'
