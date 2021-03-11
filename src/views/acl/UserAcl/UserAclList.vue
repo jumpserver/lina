@@ -22,7 +22,12 @@ export default {
           actions: {
             formatterArgs: {
               hasClone: false,
-              updateRoute: { name: 'UserAclUpdate', query: { user: this.$route.params.id }}
+              updateRoute: { name: 'UserAclUpdate', query: { user: this.$route.params.id }},
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/acls/login-acls/${id}/?user=${this.$route.params.id}`
+                return this.$axios.delete(url)
+              }
             }
           }
         }
