@@ -13,7 +13,6 @@ export default {
   data() {
     return {
       initial: {
-        priority: 20,
         action: 'login_confirm',
         system_users: {
           name_group: '*',

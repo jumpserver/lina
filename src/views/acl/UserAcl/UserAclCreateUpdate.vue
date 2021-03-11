@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       initial: {
-        priority: 20,
         action: 'reject',
         ip_group: '*',
         user: this.$route.query.user
