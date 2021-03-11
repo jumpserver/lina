@@ -29,6 +29,13 @@ export default [
     hidden: true
   },
   {
+    path: 'tickets/login-asset-confirm/:id',
+    name: 'loginAssetTicketDetail',
+    component: () => import('@/views/tickets/LoginAssetConfirm/Detail/index'),
+    meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
+    hidden: true
+  },
+  {
     path: 'tickets/request-application-perm/create',
     name: 'RequestApplicationPermTicketCreateUpdate',
     component: () => import('@/views/tickets/RequestApplicationPerm/RequestApplicationPermTicketCreateUpdate'),
