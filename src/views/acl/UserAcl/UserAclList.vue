@@ -1,33 +1,34 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/acls/login-acls/',
-        columns: ['name', 'users', 'ip_group', 'priority', 'action', 'comment', 'actions'],
+        url: `/api/v1/acls/login-acls/?user=${this.$route.params.id}`,
+        columns: ['name', 'ip_group', 'priority', 'action', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'users', 'ip_group', 'priority', 'action', 'comment', 'actions']
+          default: ['name', 'ip_group', 'priority', 'action', 'comment', 'actions']
         },
         columnsMeta: {
-          users: {
-            prop: 'users_amount',
-            showOverflowTooltip: true
+          actions: {
+            formatterArgs: {
+              hasClone: false,
+              updateRoute: { name: 'UserAclUpdate', query: { user: this.$route.params.id }}
+            }
           }
         }
       },
-      updateRoute: 'UserAclUpdate',
       headerActions: {
-        createRoute: 'UserAclCreate',
+        createRoute: { name: 'UserAclCreate', query: { user: this.$route.params.id }},
         hasRefresh: true,
         hasExport: false,
         hasImport: false,

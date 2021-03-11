@@ -6,32 +6,33 @@ export default [
     component: empty,
     redirect: '',
     meta: { title: i18n.t('route.UserAclList') },
+    hidden: true,
     children: [
       {
         path: '',
         name: 'UserAclList',
         component: () => import('@/views/acl/UserAcl/UserAclList'),
-        meta: { title: i18n.t('route.UserAclList'), activeMenu: '/acl/user-acl' }
+        meta: { title: i18n.t('route.UserAclList') }
       },
       {
         path: 'create',
         name: 'UserAclCreate',
         component: () => import('@/views/acl/UserAcl/UserAclCreateUpdate'),
-        meta: { title: i18n.t('route.UserAclCreate'), activeMenu: '/acl/user-acl' },
+        meta: { title: i18n.t('route.UserAclCreate') },
         hidden: true
       },
       {
         path: ':id',
         name: 'UserAclDetail',
         component: () => import('@/views/acl/UserAcl/UserAclDetail'),
-        meta: { title: i18n.t('route.UserAclDetail'), activeMenu: '/acl/user-acl' },
+        meta: { title: i18n.t('route.UserAclDetail') },
         hidden: true
       },
       {
         path: ':id/update',
         name: 'UserAclUpdate',
         component: () => import('@/views/acl/UserAcl/UserAclCreateUpdate'),
-        meta: { title: i18n.t('route.UserAclUpdate'), activeMenu: '/acl/user-acl' },
+        meta: { title: i18n.t('route.UserAclUpdate') },
         hidden: true
       }
     ]

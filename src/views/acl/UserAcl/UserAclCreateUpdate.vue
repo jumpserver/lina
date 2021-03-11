@@ -1,6 +1,11 @@
 
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :perform-submit="performSubmit" :after-get-form-value="afterGetFormValue" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :perform-submit="performSubmit"
+    :after-get-form-value="afterGetFormValue"
+    :get-url="getUrl"
+  />
 </template>
 
 <script>
@@ -14,17 +19,19 @@ export default {
     return {
       initial: {
         priority: 20,
-        action: 'reject'
+        action: 'reject',
+        ip_group: '*',
+        user: this.$route.query.user
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'users', 'ip_group', 'action', 'priority']],
+        [this.$t('common.Basic'), ['name', 'user', 'ip_group', 'action', 'priority']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
-
-        users: {
+        user: {
           el: {
-            value: [],
+            disabled: true,
+            multiple: false,
             ajax: {
               url: '/api/v1/users/users/?fields_size=mini',
               transformOption: (item) => {
@@ -34,7 +41,13 @@ export default {
           }
         }
       },
-      url: '/api/v1/acls/login-acls/'
+      url: `/api/v1/acls/login-acls/`,
+      updateSuccessNextRoute: { name: 'UserDetail', params: {
+        id: this.$route.query.user
+      }},
+      createSuccessNextRoute: { name: 'UserDetail', params: {
+        id: this.$route.query.user
+      }}
     }
   },
   methods: {
@@ -46,6 +59,16 @@ export default {
         return 'post'
       }
     },
+    getUrl() {
+      const params = this.$route.params
+      let url = this.url
+      if (params.id) {
+        url = `${url}${params.id}/?user=${this.$route.query.user}`
+      } else {
+        url = `${url}?user=${this.$route.query.user}`
+      }
+      return url
+    },
     afterGetFormValue(validValues) {
       validValues.ip_group = validValues.ip_group.toString()
       return validValues
@@ -54,9 +77,8 @@ export default {
       if (validValues.ip_group) {
         validValues.ip_group = validValues.ip_group.split(',')
       }
-      const baseUrl = `/api/v1/acls/login-acls/`
       const method = this.getMethod()
-      return this.$axios[method](`${baseUrl}`, validValues)
+      return this.$axios[method](`${this.getUrl()}}`, validValues)
     }
   }
 }
