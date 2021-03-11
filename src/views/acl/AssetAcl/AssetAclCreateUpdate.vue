@@ -28,12 +28,12 @@ export default {
         }
       },
       fields: [
-        [this.$t('common.Basic'), ['name']],
+        [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['users']],
         [this.$t('acl.asset'), ['assets']],
         [this.$t('acl.system_user'), ['system_users']],
-        [this.$t('perms.Actions'), ['action', 'reviewers', 'priority']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('acl.action'), ['action', 'reviewers']],
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -42,13 +42,11 @@ export default {
         users: {
           fields: ['username_group'],
           fieldsMeta: {
-            username_group: {
-              rules: [{ required: true }]
-            }
+
           }
         },
         system_users: {
-          fields: ['name_group', 'protocol_group', 'username_group']
+          fields: ['name_group', 'username_group', 'protocol_group']
         },
         reviewers: {
           el: {

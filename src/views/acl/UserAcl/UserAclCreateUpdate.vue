@@ -23,8 +23,8 @@ export default {
         user: this.$route.query.user
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'user', 'ip_group', 'action', 'priority', 'is_active']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Basic'), ['name', 'user', 'ip_group', 'action', 'priority']],
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
         is_active: {

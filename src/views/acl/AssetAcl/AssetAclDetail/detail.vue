@@ -64,31 +64,31 @@ export default {
         },
         {
           key: this.$t('acl.username_group'),
-          value: this.object.users.username_group
+          value: this.object.users.username_group.toString()
         },
         {
           key: this.$t('acl.hostname_group'),
-          value: this.object.assets.hostname_group
+          value: this.object.assets.hostname_group.toString()
         },
         {
           key: this.$t('acl.asset_ip_group'),
-          value: this.object.assets.ip_group
+          value: this.object.assets.ip_group.toString()
         },
         {
           key: this.$t('acl.system_users_name_group'),
-          value: this.object.system_users.name_group
+          value: this.object.system_users.name_group.toString()
         },
         {
           key: this.$t('acl.system_users_protocol_group'),
-          value: this.object.system_users.protocol_group
+          value: this.object.system_users.protocol_group.toString()
         },
         {
           key: this.$t('acl.system_users_username_group'),
-          value: this.object.system_users.username_group
+          value: this.object.system_users.username_group.toString()
         },
         {
           key: this.$t('acl.action'),
-          value: this.object.action
+          value: this.object.action_display
         },
         {
           key: this.$t('acl.priority'),

@@ -13,14 +13,15 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/acls/login-asset-acls/',
-        columns: ['name', 'user_username_group', 'hostname_group', 'ip_group', 'name_group', 'protocol_group', 'systemuser_username_group', 'reviewers', 'priority', 'comment', 'actions'],
+        columns: ['name', 'user_username_group', 'hostname_group', 'ip_group', 'name_group', 'protocol_group', 'systemuser_username_group', 'reviewers', 'priority', 'is_active', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'users', 'hostname_group', 'ip_group', 'reviewers', 'priority', 'comment', 'actions']
+          default: ['name', 'user_username_group', 'hostname_group', 'ip_group', 'reviewers', 'priority', 'is_active', 'comment', 'actions']
         },
         columnsMeta: {
           user_username_group: {
             prop: 'users.username_group',
+            showOverflowTooltip: true,
             label: this.$t('acl.username_group')
           },
           reviewers: {
