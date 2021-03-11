@@ -14,7 +14,8 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=cloud',
         columns: [
-          'name', 'type', 'attrs.cluster', 'date_created', 'comment', 'actions'
+          'name', 'type', 'attrs.cluster',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],

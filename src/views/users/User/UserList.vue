@@ -35,20 +35,25 @@ export default {
       tableConfig: {
         url: '/api/v1/users/users/',
         columns: [
-          'name',
-          'username',
-          'groups_display',
-          'total_role_display',
-          'source',
-          'is_valid',
-          'actions'
+          'name', 'username', 'email', 'phone', 'wechat',
+          'groups_display', 'total_role_display', 'source',
+          'is_valid', 'login_blocked', 'mfa_enabled', 'is_expired',
+          'mfa_force_enabled',
+          'last_login', 'date_joined', 'date_password_last_updated',
+          'comment', 'created_by', 'actions'
         ],
-        // columnsShow: {
-        //   min: ['name', 'username', 'actions'],
-        //   default: ['name', 'username', 'groups_display']
-        // },
+        columnsShow: {
+          min: ['name', 'username', 'actions'],
+          default: [
+            'name', 'username', 'groups_display', 'total_role_display',
+            'source', 'is_valid', 'actions'
+          ]
+        },
         columnsMeta: {
           username: {
+            showOverflowTooltip: true
+          },
+          email: {
             showOverflowTooltip: true
           },
           source: {

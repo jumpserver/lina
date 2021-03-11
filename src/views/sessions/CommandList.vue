@@ -32,6 +32,7 @@ export default {
           expandCol: {
             type: 'expand',
             prop: 'output',
+            label: '>',
             formatter: OutputExpandFormatter
           },
           risk_level: {

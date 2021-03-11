@@ -18,9 +18,11 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/application-permissions/',
         columns: [
-          'name', 'type_display', 'category_display', 'users_amount', 'user_groups_amount',
-          'applications_amount', 'system_users_amount', 'date_created', 'date_expired',
-          'is_valid', 'actions'
+          'name', 'type_display', 'category_display',
+          'users_amount', 'user_groups_amount',
+          'applications_amount', 'system_users_amount',
+          'date_expired', 'is_valid',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -101,7 +103,10 @@ export default {
         moreActionsType: 'primary',
         moreCreates: {
           callback: (option) => {
-            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.type }})
+            vm.$router.push({ name: 'ApplicationPermissionCreate', query: {
+              category: option.category.toLowerCase(),
+              type: option.name.toLowerCase()
+            }})
           },
           dropdown: ApplicationTypes
         }

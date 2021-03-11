@@ -15,7 +15,11 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/system-users/',
-        columns: ['name', 'username', 'username_same_with_user', 'protocol', 'login_mode', 'assets_amount', 'priority', 'date_created', 'comment', 'actions'],
+        columns: [
+          'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
+          'assets_amount', 'priority',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'username', 'protocol', 'login_mode', 'assets_amount', 'comment', 'actions']

@@ -19,8 +19,6 @@ export default {
       if (canCreate === null && this.currentOrgIsRoot) {
         _.set(attrs, 'header-actions.canCreate', false)
       }
-      // attrs.headerActions.can
-      // console.log()
       return attrs
     }
   }

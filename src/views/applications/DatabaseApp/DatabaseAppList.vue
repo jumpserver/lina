@@ -15,7 +15,8 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
         columns: [
-          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'date_created', 'comment', 'actions'
+          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],

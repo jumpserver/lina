@@ -19,24 +19,28 @@ export const REMOTE_APP = [
     title: i18n.t(`applications.applicationsType.${CHROME}`),
     type: 'primary',
     group: i18n.t('applications.RemoteApp'),
+    category: REMOTEAPP_CATEGORY,
     has: hasValidLicense
   },
   {
     name: MYSQL_WORKBENCH,
     title: i18n.t(`applications.applicationsType.${MYSQL_WORKBENCH}`),
     type: 'primary',
+    category: REMOTEAPP_CATEGORY,
     has: hasValidLicense
   },
   {
     name: VMWARE_CLIENT,
     title: i18n.t(`applications.applicationsType.${VMWARE_CLIENT}`),
     type: 'primary',
+    category: REMOTEAPP_CATEGORY,
     has: hasValidLicense
   },
   {
     name: CUSTOM,
     title: i18n.t(`applications.applicationsType.${CUSTOM}`),
     type: 'primary',
+    category: REMOTEAPP_CATEGORY,
     has: hasValidLicense
   }
 ]
@@ -52,6 +56,7 @@ export const DATABASE = [
     name: MYSQL,
     title: i18n.t(`applications.applicationsType.${MYSQL}`),
     type: 'primary',
+    category: DATABASE_CATEGORY,
     has: true,
     group: i18n.t('applications.Database')
   },
@@ -59,18 +64,21 @@ export const DATABASE = [
     name: ORACLE,
     title: i18n.t(`applications.applicationsType.${ORACLE}`),
     type: 'primary',
+    category: DATABASE_CATEGORY,
     has: hasValidLicense
   },
   {
     name: POSTGRESQL,
     title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
     type: 'primary',
+    category: DATABASE_CATEGORY,
     has: hasValidLicense
   },
   {
     name: MARIADB,
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
+    category: DATABASE_CATEGORY,
     has: hasValidLicense
   }
 ]
@@ -84,6 +92,7 @@ export const CLOUD = [
     title: i18n.t(`applications.applicationsType.${KUBERNETES}`),
     group: i18n.t('applications.Cloud'),
     type: 'primary',
+    category: CLOUD_CATEGORY,
     has: true
   }
 ]
