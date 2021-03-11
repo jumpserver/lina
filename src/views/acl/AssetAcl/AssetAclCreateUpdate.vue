@@ -18,6 +18,13 @@ export default {
           name_group: '*',
           protocol_group: '*',
           username_group: '*'
+        },
+        users: {
+          username_group: '*'
+        },
+        assets: {
+          hostname_group: '*',
+          ip_group: '*'
         }
       },
       fields: [
