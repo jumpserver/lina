@@ -1,5 +1,5 @@
 <template>
-  <DataZTree ref="dataztree" :setting="treeSetting">
+  <DataZTree ref="dataztree" :setting="treeSetting" v-on="$listeners">
     <slot slot="rMenu">
       <li id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
         <i class="fa fa-plus-square-o" />  {{ this.$t('tree.CreateNode') }}
@@ -244,6 +244,12 @@ export default {
     },
     getSelectedNodes: function() {
       return this.zTree.getSelectedNodes()
+    },
+    getNodes: function() {
+      return this.zTree.getNodes()
+    },
+    selectNode: function(node) {
+      return this.zTree.selectNode(node)
     }
   }
 }

@@ -1,16 +1,30 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <div v-loading="loading">
+    <GenericTreeListPage
+      ref="GenericTreeListPage"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+      :tree-setting="treeSetting"
+      @TreeInitFinish="checkFirstNode"
+      @TagSearch="handleTagChange"
+      @TagFilter="handleFilterChange"
+      @TagDateChange="handleDateChange"
+    />
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
 import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/ListTable/formatters'
+import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
+import deepmerge from 'deepmerge'
+import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 
 export default {
   components: {
-    GenericListPage
+    GenericTreeListPage
   },
   data() {
     const vm = this
@@ -18,8 +32,13 @@ export default {
     const dateFrom = getDaysAgo(2, now).toISOString()
     const dateTo = getDayEnd(now).toISOString()
     return {
+      query: {
+        date_from: getDaysAgo(2, now).toISOString(),
+        date_to: getDayEnd(now).toISOString()
+      },
+      loading: true,
       tableConfig: {
-        url: '/api/v1/terminal/commands/',
+        url: '',
         columns: [
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
@@ -77,6 +96,7 @@ export default {
           timestamp: {
             label: this.$t('sessions.date'),
             width: '150px',
+            sortable: 'custom',
             formatter: function(row) {
               return toSafeLocalDateStr(row.timestamp * 1000)
             }
@@ -92,7 +112,78 @@ export default {
           dateStart: dateFrom,
           dateEnd: dateTo
         }
+      },
+      treeSetting: {
+        showMenu: false,
+        showRefresh: true,
+        showAssets: false,
+        // ?assets=0不显示资产. =1显示资产
+        treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}`,
+        callback: {
+          onSelected: function(event, treeNode) {
+            // 禁止点击根节点
+            if (treeNode.id === 'root') {
+              return
+            }
+            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}`
+          }.bind(this)
+        }
       }
+    }
+  },
+  computed: {
+    treeTable() {
+      return this.$refs.GenericTreeListPage.$refs.TreeTable
+    }
+  },
+  watch: {
+
+  },
+  methods: {
+    checkFirstNode(obj) {
+      const ztree = obj
+      const nodes = ztree.getNodes()
+      if (nodes[0].children.length > 0) {
+        ztree.selectNode(nodes[0].children[0])
+      }
+      this.loading = false
+    },
+    handleTagChange(query) {
+      const _query = this.cleanUrl(query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
+    },
+    handleFilterChange(query) {
+      const _query = this.cleanUrl(query)
+      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
+    },
+    handleDateChange(object) {
+      this.query = {
+        date_from: object[0].toISOString(),
+        date_to: object[1].toISOString()
+      }
+      const url = `/api/v1/terminal/command-storages/tree/?real=1`
+      const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(this.query, '=', '&')
+      const treeUrl = url + queryStr
+      this.$set(this.treeSetting, 'treeUrl', treeUrl)
+      this.treeTable.forceRerenderTree()
+    },
+    cleanUrl(query) {
+      query = Object.keys(query)
+        .filter(k => !isFalsey(query[k]))
+        .reduce((obj, k) => {
+          obj[k] = query[k].toString().trim()
+          return obj
+        }, {})
+      query = deepmerge(this.query, query)
+      return query
     }
   }
 }

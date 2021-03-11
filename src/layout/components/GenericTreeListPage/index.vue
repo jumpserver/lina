@@ -1,7 +1,13 @@
 <template>
   <Page>
     <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="iHeaderActions" :tree-setting="treeSetting">
+    <TreeTable
+      ref="TreeTable"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+      :tree-setting="treeSetting"
+      v-on="$listeners"
+    >
       <template #table>
         <slot name="table" />
       </template>
@@ -45,6 +51,12 @@ export default {
     },
     getSelectedNodes: function() {
       return this.$refs.TreeTable.getSelectedNodes()
+    },
+    getNodes: function() {
+      return this.$refs.TreeTable.getNodes()
+    },
+    selectNode: function(node) {
+      return this.$refs.TreeTable.selectNode(node)
     }
   }
 }
