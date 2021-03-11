@@ -25,10 +25,10 @@ export default {
             name: 'Detail'
           }
         ],
-        hasRightSide: true,
+        hasRightSide: false,
         actions: {
-          detailApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/`
+          detailApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/?user=${this.$route.query.user}`,
+          deleteApiUrl: `/api/v1/acls/login-acls/${this.$route.params.id}/?user=${this.$route.query.user}`
         }
       }
     }

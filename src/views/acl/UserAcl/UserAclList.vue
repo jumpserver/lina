@@ -13,12 +13,23 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/acls/login-acls/?user=${this.$route.params.id}`,
-        columns: ['name', 'ip_group', 'priority', 'action', 'comment', 'actions'],
+        columns: ['name', 'ip_group', 'priority', 'action', 'is_active', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'ip_group', 'priority', 'action', 'comment', 'actions']
+          default: ['name', 'ip_group', 'priority', 'action', 'is_active', 'comment', 'actions']
         },
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              route: 'UserAclDetail',
+              routeQuery: {
+                user: this.$route.params.id
+              }
+            }
+          },
+          action: {
+            prop: 'action_display'
+          },
           actions: {
             formatterArgs: {
               hasClone: false,

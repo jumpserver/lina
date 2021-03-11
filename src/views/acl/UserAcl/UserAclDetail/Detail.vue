@@ -64,7 +64,7 @@ export default {
         },
         {
           key: this.$t('acl.username'),
-          value: this.object.users
+          value: this.object.user_display
         },
         {
           key: this.$t('acl.ip_group'),
@@ -72,7 +72,7 @@ export default {
         },
         {
           key: this.$t('acl.action'),
-          value: this.object.action
+          value: this.object.action_display
         },
         {
           key: this.$t('acl.priority'),
@@ -83,7 +83,7 @@ export default {
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('UserAcl.created_by'),
+          key: this.$t('acl.created_by'),
           value: this.object.created_by
         }
       ]
