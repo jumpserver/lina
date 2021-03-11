@@ -72,7 +72,7 @@ export default {
         title: this.$t('common.Create'),
         type: 'primary',
         has: this.hasCreate && !this.moreCreates,
-        can: true,
+        can: this.canCreate,
         callback: this.handleCreate
       }
     ]
