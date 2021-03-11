@@ -1,4 +1,5 @@
 import DetailFormatter from './DetailFormatter'
+import ArrayFormatter from './ArrayFormatter'
 import DisplayFormatter from './DisplayFormatter'
 import BooleanFormatter from './BooleanFormatter'
 import ChoicesFormatter from './ChoicesFormatter'
@@ -21,7 +22,8 @@ export default {
   SystemUserFormatter,
   ShowKeyFormatter,
   DialogDetailFormatter,
-  LoadingActionsFormatter
+  LoadingActionsFormatter,
+  ArrayFormatter
 }
 
 export {
@@ -35,5 +37,6 @@ export {
   SystemUserFormatter,
   ShowKeyFormatter,
   DialogDetailFormatter,
-  LoadingActionsFormatter
+  LoadingActionsFormatter,
+  ArrayFormatter
 }

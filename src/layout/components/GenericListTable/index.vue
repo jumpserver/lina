@@ -19,6 +19,7 @@ export default {
       if (canCreate === null && this.currentOrgIsRoot) {
         _.set(attrs, 'header-actions.canCreate', false)
       }
+      this.$log.debug('List table Attrs: ', attrs)
       return attrs
     }
   }
