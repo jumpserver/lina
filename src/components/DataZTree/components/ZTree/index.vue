@@ -95,6 +95,8 @@ export default {
           vm.zTree.destroy()
         }
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
+        // 手动上报事件, Tree加载完成
+        this.$emit('TreeInitFinish', this.zTree)
         if (this.treeSetting.showRefresh) {
           this.rootNodeAddDom(
             this.zTree,

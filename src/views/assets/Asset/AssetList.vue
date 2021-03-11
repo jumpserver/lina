@@ -98,8 +98,20 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'hardware_info', 'connectivity', 'actions'
+          'hostname', 'ip', 'public_ip', 'admin_user_display',
+          'protocols',
+          'platform', 'hardware_info', 'model',
+          'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
+          'disk_info', 'disk_total', 'memory',
+          'os', 'os_arch', 'os_version',
+          'number', 'vendor', 'sn',
+          'connectivity',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
+        columnsShow: {
+          min: ['hostname', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
+        },
         columnsMeta: {
           hostname: {
             formatter: DetailFormatter,
@@ -115,6 +127,15 @@ export default {
           hardware_info: {
             showOverflowTooltip: true
           },
+          cpu_model: {
+            showOverflowTooltip: true
+          },
+          sn: {
+            showOverflowTooltip: true
+          },
+          comment: {
+            showOverflowTooltip: true
+          },
           connectivity: {
             label: this.$t('assets.Reachable'),
             formatter: BooleanFormatter,
@@ -125,6 +146,9 @@ export default {
                 2: 'fa-circle text-warning'
               },
               typeChange: function(val) {
+                if (!val) {
+                  return 2
+                }
                 return val.status
               },
               hasTips: true
@@ -146,8 +170,8 @@ export default {
                   name: 'View',
                   title: this.$t(`common.UpdateAssetDetail`),
                   type: 'primary',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: cellValue }})
+                  callback: function({ cellValue, tableData, row }) {
+                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: row.id }})
                   }
                 }
               ]
@@ -156,6 +180,7 @@ export default {
         }
       },
       headerActions: {
+        // canCreate: false,
         createRoute: {
           name: 'AssetCreate',
           query: this.$route.query
@@ -465,7 +490,7 @@ export default {
     },
     rCheckAssetsAmount: function() {
       this.$axios.post(
-        `/api/v1/assets/nodes/launch_check_assets_amount_task/`
+        `/api/v1/assets/nodes/check_assets_amount_task/`
       ).then(res => {
         window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
       }).catch(error => {

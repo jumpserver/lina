@@ -36,6 +36,8 @@ export default {
                   return 'AssetsTicketDetail'
                 } else if (row.type === 'apply_application') {
                   return 'AppsTicketDetail'
+                } else if (row.type === 'login_asset_confirm') {
+                  return 'loginAssetTicketDetail'
                 } else {
                   return 'TicketDetail'
                 }
@@ -43,7 +45,7 @@ export default {
             }
           },
           {
-            prop: 'user_display',
+            prop: 'applicant_display',
             label: this.$t('tickets.user'),
             sortable: 'custom'
           },

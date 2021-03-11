@@ -15,7 +15,6 @@
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import deepmerge from 'deepmerge'
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -36,6 +35,10 @@ export default {
     initial: {
       type: Object,
       default: () => ({})
+    },
+    afterGetFormValue: {
+      type: Function,
+      default: (value) => value
     },
     // 提交前，清理form的值
     cleanFormValue: {
@@ -61,13 +64,14 @@ export default {
         return this.$t('common.createSuccessMsg')
       }
     },
-    // 更新成功的msg
+    // 保存成功，继续添加的msg
     saveSuccessContinueMsg: {
       type: String,
       default: function() {
         return this.$t('common.saveSuccessContinueMsg')
       }
     },
+    // 更新成功的msg
     updateSuccessMsg: {
       type: String,
       default: function() {
@@ -93,7 +97,9 @@ export default {
     objectDetailRoute: {
       type: Object,
       default: function() {
-        const routeName = this.$route.name.replace('Update', 'Detail').replace('Create', 'Detail')
+        const routeName = this.$route.name
+          .replace('Update', 'Detail')
+          .replace('Create', 'Detail')
         return { name: routeName }
       }
     },
@@ -233,7 +239,8 @@ export default {
     try {
       const values = await this.getFormValue()
       this.$log.debug('Final object is: ', values)
-      this.form = Object.assign(this.form, values)
+      const formValue = Object.assign(this.form, values)
+      this.form = this.afterGetFormValue(formValue)
     } finally {
       this.loading = false
     }
@@ -273,10 +280,7 @@ export default {
         }
       }
       if (object) {
-        if (object['attrs']) {
-          object = deepmerge(object, object['attrs'])
-        }
-        this.$log.debug('Object is: ', object)
+        object = _.cloneDeep(object)
         this.$emit('update:object', object)
       }
       return object

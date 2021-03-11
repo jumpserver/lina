@@ -13,7 +13,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/labels/',
-        columns: ['name', 'value', 'asset_count', 'actions'],
+        columns: [
+          'name', 'value', 'asset_count',
+          'date_created', 'comment', 'org_name', 'actions'
+        ],
         columnsMeta: {
           name: {
             formatter: null
@@ -24,11 +27,6 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: true,
-        hasSearch: true,
         hasMoreActions: false,
         createRoute: 'LabelCreate'
       }

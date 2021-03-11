@@ -59,8 +59,8 @@ export default {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
-                  callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=database_app&login_to=${cellValue}`, '_blank')
+                  callback: function({ row }) {
+                    window.open(`/luna/?type=database_app&login_to=${row.id}`, '_blank')
                   }
                 }
               ]

@@ -151,11 +151,11 @@ export default {
         },
         {
           key: this.$t('applications.appName'),
-          value: this.object.meta.apply_application_group
+          value: this.object.meta.apply_application_group.toString()
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.apply_system_user_group
+          value: this.object.meta.apply_system_user_group.toString()
         },
         {
           key: this.$t('common.dateStart'),

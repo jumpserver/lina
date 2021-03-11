@@ -53,8 +53,11 @@ export default {
             label: this.$t('xpack.Organization.app_perms_amount')
           },
           actions: {
-            prop: '',
+            prop: 'id',
             formatterArgs: {
+              canDelete: function(row, cellValue) {
+                return !row.is_default
+              },
               onDelete: function({ row, col, cellValue, reload }) {
                 const msg = this.$t('xpack.Organization.DeleteOrgMsg')
                 const title = this.$t('xpack.Organization.DeleteOrgTitle')
@@ -84,7 +87,7 @@ export default {
       },
       headerActions: {
         hasRightActions: false,
-        hasBulkDelete: false
+        hasMoreActions: false
       }
     }
   }

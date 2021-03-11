@@ -15,6 +15,7 @@ import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
 import UserGrantedDatabases from './UserGrantedDatabases'
 import UserGrantedK8Ss from './UserGrantedK8Ss'
 import UserK8SPermissionRules from './UserK8SPermissionRules'
+import UserAclList from '@/views/acl/UserAcl/UserAclList'
 import UserDatabasePermissionRules from './UserDatabasePermissionRules'
 import UserInfo from './UserInfo'
 
@@ -29,7 +30,8 @@ export default {
     UserGrantedDatabases,
     UserDatabasePermissionRules,
     UserK8SPermissionRules,
-    UserGrantedK8Ss
+    UserGrantedK8Ss,
+    UserAclList
   },
   data() {
     const vm = this
@@ -61,23 +63,11 @@ export default {
           {
             title: this.$t('users.tabs.ApplicationPermissionRules'),
             name: 'UserApplicationPermissionRules'
+          },
+          {
+            title: '用户登录规则',
+            name: 'UserAclList'
           }
-          // {
-          //   title: this.$t('users.tabs.grantedDatabases'),
-          //   name: 'UserGrantedDatabases'
-          // },
-          // {
-          //   title: this.$t('users.tabs.databasePermissionRules'),
-          //   name: 'UserDatabasePermissionRules'
-          // },
-          // {
-          //   title: this.$t('users.tabs.grantedK8Ss'),
-          //   name: 'UserGrantedK8Ss'
-          // },
-          // {
-          //   title: this.$t('users.tabs.k8sPermissionRules'),
-          //   name: 'UserK8SPermissionRules'
-          // }
         ]
       }
     }

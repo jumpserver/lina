@@ -1,8 +1,9 @@
 import DetailFormatter from './DetailFormatter'
+import ArrayFormatter from './ArrayFormatter'
 import DisplayFormatter from './DisplayFormatter'
-import BooleanFormatter from './ChoicesFormatter'
+import BooleanFormatter from './BooleanFormatter'
+import ChoicesFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
-import CustomActionsFormatter from './CustomActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
@@ -14,26 +15,28 @@ export default {
   DetailFormatter,
   DisplayFormatter,
   BooleanFormatter,
+  ChoicesFormatter,
   ActionsFormatter,
-  CustomActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
   SystemUserFormatter,
   ShowKeyFormatter,
   DialogDetailFormatter,
-  LoadingActionsFormatter
+  LoadingActionsFormatter,
+  ArrayFormatter
 }
 
 export {
   DetailFormatter,
   DisplayFormatter,
   BooleanFormatter,
+  ChoicesFormatter,
   ActionsFormatter,
-  CustomActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
   SystemUserFormatter,
   ShowKeyFormatter,
   DialogDetailFormatter,
-  LoadingActionsFormatter
+  LoadingActionsFormatter,
+  ArrayFormatter
 }

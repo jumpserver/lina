@@ -14,7 +14,14 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/cmd-filters/',
-        columns: ['name', 'rules', 'system_users', 'comment', 'actions'],
+        columns: [
+          'name', 'rules', 'system_users', 'is_active',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
+        ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'rules', 'system_users', 'comment', 'actions']
+        },
         columnsMeta: {
           rules: {
             label: this.$t('assets.Rules'),
@@ -27,6 +34,9 @@ export default {
                 activeTab: 'rules'
               }
             }
+          },
+          date_created: {
+            label: this.$t('users.DateJoined')
           },
           system_users: {
             label: this.$t('assets.SystemUsers'),
@@ -41,7 +51,7 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
+        hasRightActions: true,
         hasExport: false,
         hasImport: false,
         hasRefresh: true,

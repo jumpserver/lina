@@ -4,7 +4,7 @@
     :content="fields"
     :form="basicForm"
     label-position="right"
-    label-width="17%"
+    label-width="20%"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -47,7 +47,7 @@ export default {
     // 初始值
     form: {
       type: Object,
-      default: () => { return {} }
+      default: () => ({})
     },
     moreButtons: {
       type: Array,
