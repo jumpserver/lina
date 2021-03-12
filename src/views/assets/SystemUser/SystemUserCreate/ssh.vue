@@ -18,7 +18,6 @@ export default {
     return {
       initial: {
         login_mode: 'auto',
-        priority: '20',
         protocol: this.$route.query.protocol,
         username_same_with_user: false,
         auto_generate_key: false,
@@ -157,10 +156,6 @@ export default {
               url: '/api/v1/assets/cmd-filters/'
             }
           }
-        },
-        priority: {
-          rules: [Required],
-          helpText: this.$t('assets.PriorityHelpMessage')
         },
         auto_push: {
           type: 'switch',

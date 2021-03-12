@@ -44,7 +44,7 @@ export default [
   //   meta: { title: i18n.t('route.CeleryTaskLog') }
   // },
   {
-    path: `${BASE_URL}/core/flower?_=${Date.now()}`,
+    path: `${BASE_URL}/core/flower/?_=${Date.now()}`,
     name: 'TaskMonitor',
     // component: () => window.open(`/core/flower?_=${Date.now()}`),
     meta: { title: i18n.t('route.TaskMonitor'), permissions: [rolec.PERM_SUPER] }
