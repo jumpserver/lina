@@ -18,7 +18,6 @@ export default {
     return {
       initial: {
         login_mode: 'auto',
-        priority: '20',
         protocol: this.$route.query.protocol,
         username_same_with_user: false,
         auto_generate_key: false,
