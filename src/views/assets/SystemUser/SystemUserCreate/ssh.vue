@@ -157,10 +157,6 @@ export default {
             }
           }
         },
-        priority: {
-          rules: [Required],
-          helpText: this.$t('assets.PriorityHelpMessage')
-        },
         auto_push: {
           type: 'switch',
           el: {

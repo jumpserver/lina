@@ -101,10 +101,6 @@ export default {
             }
           }
         },
-        priority: {
-          rules: [Required],
-          helpText: this.$t('assets.PriorityHelpMessage')
-        },
         update_password: {
           label: this.$t('users.UpdatePassword'),
           type: 'checkbox',
