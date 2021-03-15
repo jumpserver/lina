@@ -16,9 +16,11 @@ const getDefaultState = () => {
     currentRole: getCurrentRoleFromCookie(),
     profile: {},
     roles: {},
+    sysRole: '',
     orgs: [],
     perms: 0b00000000,
-    MFAVerifyAt: null
+    MFAVerifyAt: null,
+    isSuperAdmin: false
   }
 }
 
@@ -51,6 +53,9 @@ const mutations = {
   },
   SET_ROLES(state, roles) {
     state.roles = roles
+  },
+  SET_SYS_ROLE(state, role) {
+    state.sysRole = role
   },
   SET_PERMS(state, perms) {
     state.perms = perms
@@ -111,6 +116,7 @@ const actions = {
       return dispatch('getProfile').then((profile) => {
         const { current_org_roles: currentOrgRoles, role } = profile
         const roles = rolec.parseUserRoles(currentOrgRoles, role)
+        commit('SET_SYS_ROLE', role)
         commit('SET_ROLES', roles)
         commit('SET_PERMS', rolec.sumPerms(roles))
         resolve(roles)
