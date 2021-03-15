@@ -67,60 +67,46 @@ export default {
       headerActions: {
         hasBulkDelete: false,
         hasImport: false,
-        hasCreate: false,
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary',
-        extraMoreActions: [
-          {
-            name: aliyun,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(aliyun).bind(this)
+        hasMoreActions: false,
+        moreCreates: {
+          callback: (option) => {
+            vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})
           },
-          {
-            name: qcloud,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(qcloud).bind(this)
-          },
-          {
-            name: aws_china,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_china].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(aws_china).bind(this)
-          },
-          {
-            name: aws_international,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_international].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(aws_international).bind(this)
-          },
-          {
-            name: huaweicloud,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(huaweicloud).bind(this)
-          },
-          {
-            name: azure,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(azure).bind(this)
-          },
-          {
-            name: vmware,
-            title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title,
-            type: 'primary',
-            can: true,
-            callback: this.createAccount(vmware).bind(this)
-          }
-        ]
+          dropdown: [
+            {
+              name: aliyun,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title,
+              type: 'primary',
+              can: true
+            },
+            {
+              name: qcloud,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud].title,
+              type: 'primary',
+              can: true
+            },
+            {
+              name: aws_china,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_china].title
+            },
+            {
+              name: aws_international,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_international].title
+            },
+            {
+              name: huaweicloud,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
+            },
+            {
+              name: azure,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title
+            },
+            {
+              name: vmware,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
+            }
+          ]
+        }
       }
     }
   },

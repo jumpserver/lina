@@ -82,7 +82,7 @@ export default {
         title: this.$t('common.Create'),
         type: 'primary',
         has: true,
-        can: true,
+        can: this.canCreate,
         dropdown: [],
         callback: this.handleCreate
       }
