@@ -31,6 +31,15 @@ export default {
   },
   data() {
     const vm = this
+    const hasDelete = () => {
+      return vm.currentUserIsSuperAdmin
+    }
+    const hasRemove = () => {
+      if (!vm.publicSettings.XPACK_LICENSE_IS_VALID) {
+        return false
+      }
+      return !vm.currentOrgIsRoot
+    }
     return {
       tableConfig: {
         url: '/api/v1/users/users/',
@@ -69,7 +78,7 @@ export default {
           },
           actions: {
             formatterArgs: {
-              hasDelete: () => this.currentOrgIsRoot,
+              hasDelete: hasDelete,
               canUpdate: function(row, cellValue) {
                 return row.can_update
               },
@@ -81,7 +90,7 @@ export default {
                   title: this.$t('users.Remove'),
                   name: 'remove',
                   type: 'warning',
-                  has: () => !this.currentOrgIsRoot,
+                  has: hasRemove,
                   can: function(row, cellValue) {
                     return row.can_delete
                   },
@@ -93,27 +102,27 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
+        hasBulkDelete: hasDelete,
         canCreate: true,
         extraActions: [
           {
             name: this.$t('users.InviteUser'),
             title: this.$t('users.InviteUser'),
-            has:
-              (JSON.parse(this.$cookie.get('jms_current_org'))
-                ? JSON.parse(this.$cookie.get('jms_current_org')).id
-                : '') !== 'DEFAULT',
+            has: () => {
+              return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
+            },
             callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
           }
         ],
         extraMoreActions: [
           {
-            title: this.$t('common.deleteSelected'),
-            name: 'deleteSelected',
+            title: this.$t('common.removeSelected'),
+            name: 'removeSelected',
+            has: hasRemove,
             can({ selectedRows }) {
               return selectedRows.length > 0
             },
-            callback: this.bulkDeleteCallback.bind(this)
+            callback: this.bulkRemoveCallback.bind(this)
           },
           {
             name: 'disableSelected',
@@ -203,95 +212,29 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentOrgIsRoot', 'currentUser', 'device'])
-  },
-  mounted() {
-    if (!this.currentOrgIsRoot) {
-      this.headerActions.extraMoreActions[0].title = this.$t(
-        'common.removeSelected'
-      )
-    }
+    ...mapGetters([
+      'currentOrgIsRoot', 'currentUser', 'publicSettings',
+      'device', 'currentOrgIsDefault', 'currentUserIsSuperAdmin'
+    ])
   },
   methods: {
     removeUserFromOrg({ row, col, reload }) {
-      const msg =
-        this.$t('users.removeFromOrgWarningMsg') + ' "' + row.name + '"'
-      const title = this.$t('common.Info')
-      const performDelete = function() {
-        const url = `/api/v1/users/users/${row.id}/`
-        return this.$axios.delete(url)
-      }
-      this.$alert(msg, title, {
-        type: 'warning',
-        confirmButtonClass: 'el-button--danger',
-        showCancelButton: true,
-        beforeClose: async(action, instance, done) => {
-          if (action !== 'confirm') return done()
-          instance.confirmButtonLoading = true
-          try {
-            await performDelete.bind(this)({ row: row, col: col })
-            done()
-            reload()
-            this.$message.success(this.$t('common.removeSuccessMsg'))
-          } catch (error) {
-            this.$message.error(this.$t('common.removeErrorMsg' + ' ' + error))
-          } finally {
-            instance.confirmButtonLoading = false
-          }
-        }
+      const url = `/api/v1/users/users/${row.id}/remove/`
+      this.$axios.post(url).then(() => {
+        reload()
+        this.$message.success(this.$t('common.removeSuccessMsg'))
       })
     },
-    bulkDeleteCallback({ selectedRows, reloadTable }) {
-      let msgPrefix = this.$t('common.deleteWarningMsg')
-      if (!this.currentOrgIsRoot) {
-        msgPrefix = this.$t('common.removeWarningMsg')
-      }
-      const msg =
-        msgPrefix +
-        ' ' +
-        selectedRows.length +
-        ' ' +
-        this.$t('common.rows') +
-        ' ?'
-      const title = this.$t('common.Info')
-      const performDelete = this.performBulkDelete
-      this.$alert(msg, title, {
-        type: 'warning',
-        confirmButtonClass: 'el-button--danger',
-        showCancelButton: true,
-        beforeClose: async(action, instance, done) => {
-          if (action !== 'confirm') return done()
-          instance.confirmButtonLoading = true
-          try {
-            await performDelete(selectedRows)
-            done()
-            reloadTable()
-            let successMsg = this.$t('common.bulkDeleteSuccessMsg')
-            if (!this.currentOrgIsRoot) {
-              successMsg = this.$t('common.bulkRemoveSuccessMsg')
-            }
-            this.$message.success(successMsg)
-          } catch (error) {
-            // let errorMsg = this.$t('common.bulkDeleteErrorMsg')
-            // if (!this.currentOrgIsRoot) {
-            //   errorMsg = this.$t('common.bulkRemoveErrorMsg')
-            // }
-            // this.$message.error(errorMsg + error)
-          } finally {
-            instance.confirmButtonLoading = false
-          }
-        }
-      }).catch(() => {
-        /* 取消*/
-      })
-    },
-    async performBulkDelete(selectedRows) {
+    async bulkRemoveCallback({ selectedRows, reloadTable }) {
       const ids = selectedRows.map(v => {
         return v.id
       })
       const data = await createSourceIdCache(ids)
-      const url = `${this.tableConfig.url}?spm=` + data.spm
-      return this.$axios.delete(url)
+      const url = `${this.tableConfig.url}/remove/?spm=` + data.spm
+      this.$axios.post(url).then(() => {
+        reloadTable()
+        this.$message.success(this.$t('common.removeSuccessMsg'))
+      })
     },
     handleInviteDialogClose() {
       this.InviteDialogSetting.InviteDialogVisible = false

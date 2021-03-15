@@ -48,7 +48,10 @@ export default {
   },
   methods: {
     needShow() {
-      return !this.isCollapse && this.userAdminOrgList.length > 1 && this.inAdminPage
+      const otherOrgs = this.userAdminOrgList.filter(org => {
+        return !org.is_root && !org.is_default
+      })
+      return !this.isCollapse && otherOrgs.length > 0 && this.inAdminPage
     },
     changeOrg(orgId) {
       orgUtil.changeOrg(orgId)
