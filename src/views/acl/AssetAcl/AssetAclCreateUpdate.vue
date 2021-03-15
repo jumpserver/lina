@@ -82,24 +82,23 @@ export default {
       return validValues
     },
     performSubmit(validValues) {
-      if (validValues.assets.ip_group) {
-        console.log(validValues.assets.ip_group)
-        validValues.assets.ip_group = validValues.assets.ip_group.split(',')
+      if (!Array.isArray(validValues.assets.ip_group)) {
+        validValues.assets.ip_group = validValues.assets.ip_group ? validValues.assets.ip_group.split(',') : []
       }
-      if (validValues.assets.hostname_group) {
-        validValues.assets.hostname_group = validValues.assets.hostname_group.split(',')
+      if (!Array.isArray(validValues.assets.hostname_group)) {
+        validValues.assets.hostname_group = validValues.assets.hostname_group ? validValues.assets.hostname_group.split(',') : []
       }
-      if (validValues.system_users.protocol_group) {
-        validValues.system_users.protocol_group = validValues.system_users.protocol_group.split(',')
+      if (!Array.isArray(validValues.system_users.protocol_group)) {
+        validValues.system_users.protocol_group = validValues.system_users.protocol_group ? validValues.system_users.protocol_group.split(',') : []
       }
-      if (validValues.system_users.name_group) {
-        validValues.system_users.name_group = validValues.system_users.name_group.split(',')
+      if (!Array.isArray(validValues.system_users.name_group)) {
+        validValues.system_users.name_group = validValues.system_users.name_group ? validValues.system_users.name_group.split(',') : []
       }
-      if (validValues.system_users.username_group) {
-        validValues.system_users.username_group = validValues.system_users.username_group.split(',')
+      if (!Array.isArray(validValues.system_users.username_group)) {
+        validValues.system_users.username_group = validValues.system_users.username_group ? validValues.system_users.username_group.split(',') : []
       }
-      if (validValues.users.username_group) {
-        validValues.users.username_group = validValues.users.username_group.split(',')
+      if (!Array.isArray(validValues.users.username_group)) {
+        validValues.users.username_group = validValues.users.username_group ? validValues.users.username_group.split(',') : []
       }
       const baseUrl = `/api/v1/acls/login-asset-acls/`
       const method = this.getMethod()
