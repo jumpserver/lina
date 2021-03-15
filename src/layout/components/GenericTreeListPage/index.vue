@@ -4,7 +4,7 @@
     <TreeTable
       ref="TreeTable"
       :table-config="tableConfig"
-      :header-actions="headerActions"
+      :header-actions="iHeaderActions"
       :tree-setting="treeSetting"
       v-on="$listeners"
     >
@@ -39,6 +39,7 @@ export default {
     iHeaderActions() {
       const attrs = _.cloneDeep(this.headerActions)
       const canCreate = _.get(attrs, 'canCreate', null)
+      // this.$log.debug('Current org: ', this.currentOrg)
       if (canCreate === null && this.currentOrg && this.currentOrg.is_root) {
         _.set(attrs, 'canCreate', false)
       }
