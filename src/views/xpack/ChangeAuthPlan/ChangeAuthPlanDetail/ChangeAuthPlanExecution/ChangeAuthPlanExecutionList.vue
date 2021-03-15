@@ -74,16 +74,16 @@ export default {
                   name: 'log',
                   type: 'primary',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
-                  callback: function({ cellValue, tableData }) {
-                    window.open(`/#/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                  callback: function({ row }) {
+                    window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
+                  callback: function({ row }) {
+                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
