@@ -22,6 +22,9 @@ export default {
           user_username_group: {
             prop: 'users.username_group',
             showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.users.username_group.toString()} </span>
+            },
             label: this.$t('acl.username_group')
           },
           reviewers: {
@@ -29,23 +32,43 @@ export default {
           },
           hostname_group: {
             prop: 'assets.hostname_group',
-            label: this.$t('acl.hostname_group')
+            label: this.$t('acl.hostname_group'),
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.assets.hostname_group.toString()} </span>
+            }
           },
           ip_group: {
             prop: 'assets.ip_group',
-            label: this.$t('acl.asset_ip_group')
+            label: this.$t('acl.asset_ip_group'),
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.assets.ip_group.toString()} </span>
+            }
           },
           name_group: {
             prop: 'system_users.name_group',
-            label: this.$t('acl.system_users_name_group')
+            label: this.$t('acl.system_users_name_group'),
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.system_users.name_group.toString()} </span>
+            }
           },
           protocol_group: {
             prop: 'system_users.protocol_group',
-            label: this.$t('acl.system_users_protocol_group')
+            label: this.$t('acl.system_users_protocol_group'),
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.system_users.protocol_group.toString()} </span>
+            }
           },
           systemuser_username_group: {
             prop: 'system_users.username_group',
-            label: this.$t('acl.system_users_username_group')
+            label: this.$t('acl.system_users_username_group'),
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.system_users.username_group.toString()} </span>
+            }
           }
         }
       },

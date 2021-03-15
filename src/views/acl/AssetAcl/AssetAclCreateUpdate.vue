@@ -64,6 +64,16 @@ export default {
     }
   },
   methods: {
+    getUrl() {
+      const params = this.$route.params
+      let url = `/api/v1/acls/login-asset-acls/`
+      if (params.id) {
+        url = `${url}${params.id}`
+      } else {
+        url = `${url}`
+      }
+      return url
+    },
     getMethod() {
       const params = this.$route.params
       if (params.id) {
@@ -82,28 +92,26 @@ export default {
       return validValues
     },
     performSubmit(validValues) {
-      if (validValues.assets.ip_group) {
-        console.log(validValues.assets.ip_group)
-        validValues.assets.ip_group = validValues.assets.ip_group.split(',')
+      if (!Array.isArray(validValues.assets.ip_group)) {
+        validValues.assets.ip_group = validValues.assets.ip_group ? validValues.assets.ip_group.split(',') : []
       }
-      if (validValues.assets.hostname_group) {
-        validValues.assets.hostname_group = validValues.assets.hostname_group.split(',')
+      if (!Array.isArray(validValues.assets.hostname_group)) {
+        validValues.assets.hostname_group = validValues.assets.hostname_group ? validValues.assets.hostname_group.split(',') : []
       }
-      if (validValues.system_users.protocol_group) {
-        validValues.system_users.protocol_group = validValues.system_users.protocol_group.split(',')
+      if (!Array.isArray(validValues.system_users.protocol_group)) {
+        validValues.system_users.protocol_group = validValues.system_users.protocol_group ? validValues.system_users.protocol_group.split(',') : []
       }
-      if (validValues.system_users.name_group) {
-        validValues.system_users.name_group = validValues.system_users.name_group.split(',')
+      if (!Array.isArray(validValues.system_users.name_group)) {
+        validValues.system_users.name_group = validValues.system_users.name_group ? validValues.system_users.name_group.split(',') : []
       }
-      if (validValues.system_users.username_group) {
-        validValues.system_users.username_group = validValues.system_users.username_group.split(',')
+      if (!Array.isArray(validValues.system_users.username_group)) {
+        validValues.system_users.username_group = validValues.system_users.username_group ? validValues.system_users.username_group.split(',') : []
       }
-      if (validValues.users.username_group) {
-        validValues.users.username_group = validValues.users.username_group.split(',')
+      if (!Array.isArray(validValues.users.username_group)) {
+        validValues.users.username_group = validValues.users.username_group ? validValues.users.username_group.split(',') : []
       }
-      const baseUrl = `/api/v1/acls/login-asset-acls/`
       const method = this.getMethod()
-      return this.$axios[method](`${baseUrl}`, validValues)
+      return this.$axios[method](`${this.getUrl()}`, validValues)
     }
   }
 }

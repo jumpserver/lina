@@ -76,11 +76,11 @@ export default {
       return validValues
     },
     performSubmit(validValues) {
-      if (validValues.ip_group) {
-        validValues.ip_group = validValues.ip_group.split(',')
+      if (!Array.isArray(validValues.ip_group)) {
+        validValues.ip_group = validValues.ip_group ? validValues.ip_group.split(',') : []
       }
       const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}}`, validValues)
+      return this.$axios[method](`${this.getUrl()}`, validValues)
     }
   }
 }
