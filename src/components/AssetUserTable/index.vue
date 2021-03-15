@@ -88,6 +88,10 @@ export default {
     hasExport: {
       type: Boolean,
       default: true
+    },
+    hasClone: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -146,6 +150,7 @@ export default {
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
+              hasClone: this.hasClone,
               moreActionsTitle: this.$t('common.More'),
               extraActions: [
                 {
