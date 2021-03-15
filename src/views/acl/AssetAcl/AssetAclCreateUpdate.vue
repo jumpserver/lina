@@ -64,6 +64,16 @@ export default {
     }
   },
   methods: {
+    getUrl() {
+      const params = this.$route.params
+      let url = `/api/v1/acls/login-asset-acls/`
+      if (params.id) {
+        url = `${url}${params.id}`
+      } else {
+        url = `${url}`
+      }
+      return url
+    },
     getMethod() {
       const params = this.$route.params
       if (params.id) {
@@ -100,9 +110,8 @@ export default {
       if (!Array.isArray(validValues.users.username_group)) {
         validValues.users.username_group = validValues.users.username_group ? validValues.users.username_group.split(',') : []
       }
-      const baseUrl = `/api/v1/acls/login-asset-acls/`
       const method = this.getMethod()
-      return this.$axios[method](`${baseUrl}`, validValues)
+      return this.$axios[method](`${this.getUrl()}`, validValues)
     }
   }
 }
