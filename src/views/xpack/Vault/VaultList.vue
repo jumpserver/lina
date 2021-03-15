@@ -105,6 +105,7 @@ export default {
       assetUserConfig: {
         hasLeftActions: true,
         hasCreate: true,
+        hasClone: false,
         url: '/api/v1/assets/asset-users/',
         handleImport: function({ selectedRows }) {
           this.selectedRows = selectedRows

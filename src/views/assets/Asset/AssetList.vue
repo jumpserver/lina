@@ -67,7 +67,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/ListTable/formatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'
@@ -138,7 +138,7 @@ export default {
           },
           connectivity: {
             label: this.$t('assets.Reachable'),
-            formatter: BooleanFormatter,
+            formatter: ChoicesFormatter,
             formatterArgs: {
               iconChoices: {
                 0: 'fa-times text-danger',

@@ -64,10 +64,10 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
-                  callback: function(data) {
+                  callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/xpack/change-auth-plan/plan-execution/`,
-                      { plan: data.cellValue }
+                      { plan: row.id }
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                     })

@@ -4,7 +4,9 @@ const getters = {
   token: state => state.users.token,
   currentOrg: state => state.users.currentOrg,
   currentOrgIsDefault: state => state.users.currentOrg.is_default,
-  currentOrgIsRoot: state => state.users.currentOrg.is_root,
+  currentOrgIsRoot: state => {
+    return state.users.currentOrg && state.users.currentOrg.is_root
+  },
   currentRole: state => state.users.currentRole,
   userAdminOrgList: state => state.users.orgs,
   currentUser: state => state.users.profile,
@@ -16,6 +18,9 @@ const getters = {
   currentOrgPerms: state => state.users.perms,
   MFAVerifyAt: state => state.users.MFAVerifyAt,
   MFA_TTl: state => state.settings.publicSettings.SECURITY_MFA_VERIFY_TTL,
-  tableConfig: state => state.table.tableConfig
+  tableConfig: state => state.table.tableConfig,
+  currentUserIsSuperAdmin: state => {
+    return state.users.sysRole === 'Admin'
+  }
 }
 export default getters
