@@ -50,7 +50,7 @@ export default {
           actions: {
             formatterArgs: {
               onUpdate: ({ row, col, cellValue }) => {
-                this.$router.push({ name: 'ApplicationPermissionUpdate', params: { id: cellValue }})
+                this.$router.push({ name: 'ApplicationPermissionUpdate', params: { id: row.id }})
               },
               performDelete: ({ row, col }) => {
                 const id = row.id

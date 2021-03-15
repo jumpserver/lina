@@ -79,8 +79,8 @@ export default {
                   name: 'detail',
                   title: this.$t('ops.detail'),
                   type: 'primary',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'AdhocDetail', params: { id: cellValue }})
+                  callback: function({ row, tableData }) {
+                    return this.$router.push({ name: 'AdhocDetail', params: { id: row.id }})
                   }
                 }
               ]
