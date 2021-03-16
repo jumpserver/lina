@@ -112,31 +112,26 @@ export default {
             }
           }
         },
-        moreActionsTitle: this.$t('common.RequestTickets'),
-        moreActionsType: 'primary',
-        extraMoreActions: this.genExtraMoreActions()
+        createTitle: this.$t('common.RequestTickets'),
+        hasMoreActions: false,
+        moreCreates: {
+          dropdown: [
+            {
+              name: 'RequestAssetPerm',
+              title: this.$t('tickets.RequestAssetPerm'),
+              callback: () => this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
+            },
+            {
+              name: 'RequestApplicationPerm',
+              title: this.$t('tickets.RequestApplicationPerm'),
+              callback: () => this.$router.push({ name: 'RequestApplicationPermTicketCreateUpdate' })
+            }
+          ]
+        }
       }
     }
   },
   methods: {
-    genExtraMoreActions() {
-      return [
-        {
-          name: 'RequestAssetPerm',
-          title: this.$t('tickets.RequestAssetPerm'),
-          type: 'primary',
-          can: true,
-          callback: () => this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
-        },
-        {
-          name: 'RequestApplicationPerm',
-          title: this.$t('tickets.RequestApplicationPerm'),
-          type: 'primary',
-          can: true,
-          callback: () => this.$router.push({ name: 'RequestApplicationPermTicketCreateUpdate' })
-        }
-      ]
-    }
   }
 }
 </script>
