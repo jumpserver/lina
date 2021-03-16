@@ -61,6 +61,7 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               moreActionsTitle: this.$t('xpack.Cloud.Log'),
+              hasClone: false,
               extraActions: [
                 {
                   name: 'View',

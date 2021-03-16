@@ -72,6 +72,7 @@ export default {
             prop: 'id',
             formatterArgs: {
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'run',

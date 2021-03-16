@@ -138,6 +138,11 @@ export default {
           session_online: {
             label: this.$t('sessions.session'),
             width: '80px'
+          },
+          actions: {
+            formatterArgs: {
+              hasClone: false
+            }
           }
         }
       },

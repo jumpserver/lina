@@ -74,6 +74,7 @@ export default {
               hasEdit: false,
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'detail',

@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="16">
-        <AssetUserTable ref="ListTable" :url="assetUserUrl" :has-import="false" />
+        <AssetUserTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" />
       </el-col>
       <el-col :span="8" />
     </el-row>
