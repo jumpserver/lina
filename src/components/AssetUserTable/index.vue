@@ -178,7 +178,7 @@ export default {
                   title: this.$t('common.Delete'),
                   type: 'primary',
                   callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/asset-users/${val.cellValue}/`).then(() => {
+                    this.$axios.delete(`/api/v1/assets/asset-users/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
                     })
@@ -189,7 +189,7 @@ export default {
                   title: this.$t('common.Test'),
                   callback: (val) => {
                     this.$axios.post(
-                      `/api/v1/assets/asset-users/tasks/?id=${val.cellValue}`,
+                      `/api/v1/assets/asset-users/tasks/?id=${val.row.id}`,
                       { action: 'test' }
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')

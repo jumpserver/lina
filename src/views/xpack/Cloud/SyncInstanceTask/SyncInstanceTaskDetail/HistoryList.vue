@@ -67,7 +67,7 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    window.open(`/#/ops/celery/task/${val.cellValue}/log/`, '', 'width=900,height=600')
+                    window.open(`/#/ops/celery/task/${val.row.id}/log/`, '', 'width=900,height=600')
                   }
                 }
               ]

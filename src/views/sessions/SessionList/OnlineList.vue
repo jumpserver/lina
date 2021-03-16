@@ -42,9 +42,9 @@ export default {
           can: (row, cellValue) => {
             return row.can_join
           },
-          callback: function({ cellValue, tableData }) {
+          callback: function({ row, tableData }) {
             // 跳转到luna页面
-            const joinUrl = '/luna/join/?shareroom=' + cellValue
+            const joinUrl = '/luna/join/?shareroom=' + row.id
             window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
           }
         }

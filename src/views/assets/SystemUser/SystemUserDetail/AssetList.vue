@@ -77,7 +77,7 @@ export default {
                   title: this.$t('common.Delete'),
                   type: 'danger',
                   callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.cellValue}/`).then(() => {
+                    this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
                     })

@@ -72,7 +72,7 @@ export default {
                   title: this.$t('sessions.test'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
-                    TestCommandStorage(cellValue).then(data => {
+                    TestCommandStorage(row.id).then(data => {
                       if (!data.is_valid) {
                         this.$message.error(data.msg)
                       } else {
