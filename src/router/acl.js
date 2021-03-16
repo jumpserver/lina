@@ -20,7 +20,7 @@ export default [
         path: 'create',
         name: 'AssetAclCreate',
         component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
-        meta: { title: i18n.t('route.AssetAclCreate'), activeMenu: '/acl/assetAcl' },
+        meta: { title: i18n.t('route.AssetAclCreate'), activeMenu: '/acl/asset-acl' },
         hidden: true
       },
       {
