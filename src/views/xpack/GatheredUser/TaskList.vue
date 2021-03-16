@@ -34,6 +34,7 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'GatherUserTaskUpdate',
+              hasClone: false,
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),
