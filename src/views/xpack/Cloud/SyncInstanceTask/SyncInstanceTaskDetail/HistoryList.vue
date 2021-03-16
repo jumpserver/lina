@@ -61,13 +61,14 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               moreActionsTitle: this.$t('xpack.Cloud.Log'),
+              hasClone: false,
               extraActions: [
                 {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    window.open(`/#/ops/celery/task/${val.cellValue}/log/`, '', 'width=900,height=600')
+                    window.open(`/#/ops/celery/task/${val.row.id}/log/`, '', 'width=900,height=600')
                   }
                 }
               ]

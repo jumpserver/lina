@@ -55,6 +55,8 @@ export default {
           actions: {
             prop: 'id',
             formatterArgs: {
+              canClone: true,
+              canUpdate: true,
               canDelete: function(row, cellValue) {
                 return !row.is_default
               },
@@ -86,7 +88,9 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
+        canCreate: true,
+        hasExport: false,
+        hasImport: false,
         hasMoreActions: false
       }
     }

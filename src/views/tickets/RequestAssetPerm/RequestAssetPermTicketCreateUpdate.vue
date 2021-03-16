@@ -42,7 +42,10 @@ export default {
           }
         },
         meta: {
-          fields: ['apply_ip_group', 'apply_hostname_group', 'apply_system_user_group', 'apply_actions', 'apply_date_start', 'apply_date_expired'],
+          fields: [
+            'apply_ip_group', 'apply_hostname_group', 'apply_system_user_group',
+            'apply_actions', 'apply_date_start', 'apply_date_expired'
+          ],
           fieldsMeta: {
             apply_actions: {
               label: this.$t('perms.Actions'),
@@ -64,7 +67,9 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.user_all_orgs
+            options: this.$store.state.users.profile.user_all_orgs.map((item) => {
+              return { label: item.name, value: item.id }
+            })
           },
           on: {
             changeOptions: ([event], updateForm) => {

@@ -101,6 +101,7 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
+              hasClone: false,
               hasDelete: false,
               hasUpdate: false,
               extraActions: this.extraActions

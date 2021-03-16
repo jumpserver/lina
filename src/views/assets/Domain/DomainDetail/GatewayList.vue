@@ -81,7 +81,7 @@ export default {
                       return this.$message.error(this.$t('common.BadRequestErrorMsg'))
                     } else {
                       this.portInput = val.row.port
-                      this.cellValue = val.cellValue
+                      this.cellValue = val.row.id
                     }
                   }.bind(this)
                 }
