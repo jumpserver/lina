@@ -74,6 +74,7 @@ import TreeTable from '@/components/TreeTable'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import Protocols from '@/views/assets/Asset/components/Protocols/index'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -89,6 +90,7 @@ export default {
         showMenu: true,
         showRefresh: true,
         showAssets: false,
+        hasRightMenu: this.currentOrgIsRoot,
         url: '/api/v1/assets/assets/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
@@ -388,8 +390,12 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
+  },
   mounted() {
     this.decorateRMenu()
+    this.treeSetting.hasRightMenu = !this.currentOrgIsRoot
   },
   methods: {
     decorateRMenu() {
