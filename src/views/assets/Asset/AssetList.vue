@@ -159,7 +159,6 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasClone: true,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`

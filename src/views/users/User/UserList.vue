@@ -78,6 +78,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canClone: true,
               hasDelete: hasDelete,
               canUpdate: function(row, cellValue) {
                 return row.can_update

@@ -86,11 +86,6 @@ export default {
                 activeTab: 'RemoteAppPermissionRemoteApp'
               }
             }
-          },
-          actions: {
-            formatterArgs: {
-              hasClone: true
-            }
           }
         }
       },
