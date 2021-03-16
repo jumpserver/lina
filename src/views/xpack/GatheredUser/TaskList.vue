@@ -60,6 +60,7 @@ export default {
         hasImport: false,
         hasRefresh: false,
         hasExport: false,
+        hasMoreActions: false,
         createRoute: 'GatherUserTaskCreate'
       }
     }
