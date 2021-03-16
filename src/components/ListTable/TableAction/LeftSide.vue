@@ -63,13 +63,17 @@ export default {
     moreCreates: {
       type: Object,
       default: null
+    },
+    createTitle: {
+      type: String,
+      default: () => this.$t('common.Create')
     }
   },
   data() {
     const defaultActions = [
       {
         name: 'actionCreate',
-        title: this.$t('common.Create'),
+        title: this.createTitle,
         type: 'primary',
         has: this.hasCreate && !this.moreCreates,
         can: this.canCreate,
@@ -79,7 +83,7 @@ export default {
     if (this.moreCreates) {
       const defaultMoreCreate = {
         name: 'actionMoreCreate',
-        title: this.$t('common.Create'),
+        title: this.createTitle,
         type: 'primary',
         has: true,
         can: true,

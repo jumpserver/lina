@@ -98,8 +98,6 @@ export default {
         hasCreate: false,
         hasMoreActions: false,
         hasBulkDelete: false,
-        // createRoute: 'RemoteAppCreate',
-        moreActionsTitle: this.$t('common.Create'),
         moreActionsType: 'primary',
         moreCreates: {
           callback: (option) => {
