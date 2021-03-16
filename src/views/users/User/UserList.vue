@@ -230,7 +230,7 @@ export default {
         return v.id
       })
       const data = await createSourceIdCache(ids)
-      const url = `${this.tableConfig.url}/remove/?spm=` + data.spm
+      const url = `${this.tableConfig.url}remove/?spm=` + data.spm
       this.$axios.post(url).then(() => {
         reloadTable()
         this.$message.success(this.$t('common.removeSuccessMsg'))
