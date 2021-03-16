@@ -42,7 +42,6 @@ export default {
           },
           actions: {
             formatterArgs: {
-              hasClone: true,
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }})
               },

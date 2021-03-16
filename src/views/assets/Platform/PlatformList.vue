@@ -22,6 +22,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canClone: true,
               canDelete: (row, value) => {
                 return !row.internal
               },
@@ -36,6 +37,7 @@ export default {
         hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
+        canCreate: true,
         createRoute: 'PlatformCreate'
       }
     }
