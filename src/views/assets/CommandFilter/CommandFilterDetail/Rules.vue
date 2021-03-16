@@ -50,6 +50,7 @@ export default {
       headerActions: {
         hasSearch: true,
         hasBulkDelete: false,
+        hasMoreActions: false,
         createRoute: {
           name: 'CommandFilterRulesCreate',
           query: {
