@@ -76,7 +76,6 @@ export default {
             sortable: 'custom'
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               onUpdate: function({ row, col }) {
                 this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type }})

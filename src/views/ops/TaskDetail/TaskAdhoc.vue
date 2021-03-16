@@ -68,7 +68,6 @@ export default {
             }
           },
           actions: {
-            prop: 'id',
             width: '80px',
             formatterArgs: {
               hasEdit: false,

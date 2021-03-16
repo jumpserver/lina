@@ -52,10 +52,10 @@ export default {
           'comment', 'created_by', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'username', 'actions'],
+          min: ['name', 'username', 'id'],
           default: [
             'name', 'username', 'groups_display', 'total_role_display',
-            'source', 'is_valid', 'actions'
+            'source', 'is_valid', 'id'
           ]
         },
         columnsMeta: {

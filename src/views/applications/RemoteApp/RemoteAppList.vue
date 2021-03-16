@@ -21,8 +21,8 @@ export default {
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'type', 'attrs.asset', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'type', 'attrs.asset', 'comment', 'id']
         },
         columnsMeta: {
           type: {
@@ -38,7 +38,6 @@ export default {
             }
           },
           actions: {
-            prop: 'actions',
             formatterArgs: {
               hasClone: false,
               onUpdate: ({ row }) => {

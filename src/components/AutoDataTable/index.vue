@@ -90,7 +90,8 @@ export default {
           break
         case 'actions':
           col = {
-            prop: 'actions',
+            // prop:'actions'
+            prop: 'id',
             label: i18n.t('common.Actions'),
             align: 'center',
             width: '150px',
@@ -220,7 +221,7 @@ export default {
       defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['action', 'id'])
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['name', 'actions', 'id'])
         .filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 应该显示的列

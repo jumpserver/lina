@@ -51,7 +51,6 @@ export default {
             formatter: DateFormatter
           },
           actions: {
-            prop: '',
             formatterArgs: {
               hasUpdate: false,
               onDelete: function({ row, col, cellValue, reload }) {

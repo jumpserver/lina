@@ -109,8 +109,8 @@ export default {
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['hostname', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
+          min: ['hostname', 'ip', 'id'],
+          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'id']
         },
         columnsMeta: {
           hostname: {

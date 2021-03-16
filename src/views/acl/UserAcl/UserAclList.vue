@@ -16,8 +16,8 @@ export default {
         url: `/api/v1/acls/login-acls/?user=${this.$route.params.id}`,
         columns: ['name', 'ip_group', 'priority', 'action', 'is_active', 'comment', 'actions'],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'ip_group', 'priority', 'action', 'is_active', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'ip_group', 'priority', 'action', 'is_active', 'comment', 'id']
         },
         columnsMeta: {
           name: {

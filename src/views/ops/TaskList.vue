@@ -69,7 +69,6 @@ export default {
             }
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               hasUpdate: false,
               extraActions: [

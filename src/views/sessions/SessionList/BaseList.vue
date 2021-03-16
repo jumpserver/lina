@@ -34,10 +34,10 @@ export default {
           'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['index', 'actions'],
+          min: ['index', 'id'],
           default: [
             'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
-            'command_amount', 'date_start', 'duration', 'actions'
+            'command_amount', 'date_start', 'duration', 'id'
           ]
         },
         columnsMeta: {
@@ -95,7 +95,6 @@ export default {
             width: '80px'
           },
           actions: {
-            prop: 'actions',
             label: this.$t('common.Actions'),
             width: '160px',
             formatter: ActionsFormatter,

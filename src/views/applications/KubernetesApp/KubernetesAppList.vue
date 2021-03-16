@@ -18,8 +18,8 @@ export default {
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'type', 'attrs.cluster', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'type', 'attrs.cluster', 'comment', 'id']
         },
         columnsMeta: {
           'attrs.cluster': {
@@ -32,7 +32,6 @@ export default {
             width: '140px'
           },
           actions: {
-            prop: 'actions',
             formatterArgs: {
               hasClone: false,
               performDelete: function({ row, col, cellValue, reload }) {

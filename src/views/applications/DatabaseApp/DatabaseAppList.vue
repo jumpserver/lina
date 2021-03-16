@@ -19,8 +19,8 @@ export default {
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'comment', 'id']
         },
         columnsMeta: {
           type_display: {
@@ -40,7 +40,6 @@ export default {
             showOverflowTooltip: true
           },
           actions: {
-            prop: 'actions',
             formatterArgs: {
               hasClone: false,
               performDelete: function({ row, col, cellValue, reload }) {

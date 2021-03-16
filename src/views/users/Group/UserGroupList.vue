@@ -15,8 +15,8 @@ export default {
         url: '/api/v1/users/groups/',
         columns: ['name', 'users_amount', 'date_created', 'created_by', 'org_name', 'comment', 'actions'],
         columnsShow: {
-          default: ['name', 'users_amount', 'comment', 'actions'],
-          min: ['name', 'action']
+          default: ['name', 'users_amount', 'comment', 'id'],
+          min: ['name', 'id']
         },
         columnsMeta: {
           users_amount: {

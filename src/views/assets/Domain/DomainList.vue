@@ -19,8 +19,8 @@ export default {
           'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'asset_count', 'application_count', 'gateway_count', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'asset_count', 'application_count', 'gateway_count', 'comment', 'id']
         },
         columnsMeta: {
           asset_count: {

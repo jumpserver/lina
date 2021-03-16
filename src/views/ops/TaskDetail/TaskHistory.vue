@@ -81,7 +81,6 @@ export default {
             }
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               hasEdit: false,
               hasDelete: false,

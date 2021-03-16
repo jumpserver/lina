@@ -19,8 +19,8 @@ export default {
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'rules', 'system_users', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'rules', 'system_users', 'comment', 'id']
         },
         columnsMeta: {
           rules: {

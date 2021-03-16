@@ -25,11 +25,11 @@ export default {
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
+          min: ['name', 'id'],
           default: [
             'name', 'category_display', 'users_amount', 'user_groups_amount',
             'applications_amount', 'system_users_amount',
-            'is_valid', 'actions'
+            'is_valid', 'id'
           ]
         },
         columnsMeta: {

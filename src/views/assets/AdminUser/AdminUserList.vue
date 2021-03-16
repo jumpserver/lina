@@ -18,8 +18,8 @@ export default {
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'actions'],
-          default: ['name', 'username', 'assets_amount', 'comment', 'actions']
+          min: ['name', 'id'],
+          default: ['name', 'username', 'assets_amount', 'comment', 'id']
         },
         columnsMeta: {
           username: {

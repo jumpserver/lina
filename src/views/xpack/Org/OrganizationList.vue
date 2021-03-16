@@ -53,7 +53,6 @@ export default {
             label: this.$t('xpack.Organization.app_perms_amount')
           },
           actions: {
-            prop: 'id',
             formatterArgs: {
               canDelete: function(row, cellValue) {
                 return !row.is_default

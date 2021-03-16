@@ -71,7 +71,6 @@ export default {
             label: this.$t('ops.version')
           },
           actions: {
-            prop: 'id',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
