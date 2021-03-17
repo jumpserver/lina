@@ -10,6 +10,7 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=cloud',
@@ -34,7 +35,9 @@ export default {
           actions: {
             prop: 'actions',
             formatterArgs: {
-              hasClone: false,
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'KubernetesAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`

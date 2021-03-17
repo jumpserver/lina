@@ -40,7 +40,9 @@ export default {
           actions: {
             prop: 'actions',
             formatterArgs: {
-              hasClone: false,
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'RemoteAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
               },
@@ -62,8 +64,6 @@ export default {
         hasCreate: false,
         hasMoreActions: false,
         hasBulkDelete: false,
-        hasExport: false,
-        hasImport: false,
         // createRoute: 'RemoteAppCreate',
         moreCreates: {
           dropdown: this.getCreateAppType(),
@@ -84,7 +84,6 @@ export default {
         item.has = true
         extraMoreActions.push(item)
       }
-      console.log('core', extraMoreActions)
       return extraMoreActions
     }
   }
