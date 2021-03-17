@@ -126,6 +126,10 @@ export default {
             if (treeNode.id === 'root') {
               return
             }
+            if (!treeNode.valid) {
+              this.$message.error('不可用')
+              return
+            }
             this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}`
           }.bind(this)
         }
