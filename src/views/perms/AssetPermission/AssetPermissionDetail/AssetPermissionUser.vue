@@ -56,13 +56,10 @@ export default {
       headerActions: {
         hasSearch: true,
         hasRefresh: true,
-        hasLeftActions: true,
-        hasRightActions: true,
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasMoreActions: false
       },
       userRelationConfig: {
         icon: 'fa-user',

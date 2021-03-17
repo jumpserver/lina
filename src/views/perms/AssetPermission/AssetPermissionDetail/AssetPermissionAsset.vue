@@ -64,8 +64,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasMoreActions: false
       },
       assetRelationConfig: {
         icon: 'fa-edit',
