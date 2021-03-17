@@ -7,10 +7,7 @@ export const CUSTOM = 'custom'
 export const REMOTEAPP_CATEGORY = 'remote_app'
 
 function hasValidLicense() {
-  if (store.getters.publicSettings.XPACK_ENABLED) {
-    return store.getters.publicSettings.XPACK_LICENSE_IS_VALID
-  }
-  return false
+  return store.getters.hasValidLicense
 }
 
 export const REMOTE_APP = [

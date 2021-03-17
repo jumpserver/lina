@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading">
-    <el-alert v-if="!isValidateLicense" type="success">
+    <el-alert v-if="!hasValidLicense" type="success">
       {{ this.$t('setting.ImportLicenseTip') }}
     </el-alert>
     <el-row :gutter="20">
@@ -77,14 +77,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'publicSettings'
+      'publicSettings', 'publicSettings'
     ]),
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return false
-    },
     cardTitle() {
       return ''
     },

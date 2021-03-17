@@ -7,7 +7,7 @@ export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 
 function getPropOrg() {
   const userAdminOrgList = store.getters.userAdminOrgList
-  const defaultOrg = userAdminOrgList.find((item) => item.id === DEFAULT_ORG_ID)
+  const defaultOrg = userAdminOrgList.find((item) => item.is_default)
   if (defaultOrg) {
     return defaultOrg
   }

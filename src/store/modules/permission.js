@@ -19,7 +19,7 @@ function hasPermission(roles, route) {
 }
 
 function hasLicense(route, rootState) {
-  const licenseIsValid = rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID
+  const licenseIsValid = rootState.settings.hasValidLicense
   const licenseRequired = route.meta ? route.meta.licenseRequired : false
   if (!licenseIsValid && licenseRequired) {
     return false

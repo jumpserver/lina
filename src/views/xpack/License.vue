@@ -2,7 +2,7 @@
   <div>
     <GenericDetailPage :object.sync="licenseData" v-bind="config">
       <div>
-        <el-alert v-if="!isValidateLicense" type="success">
+        <el-alert v-if="!hasValidLicense" type="success">
           {{ this.$t('xpack.ImportLicenseTip') }}
         </el-alert>
         <el-row :gutter="20">
@@ -90,11 +90,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'publicSettings'
+      'publicSettings', 'hasValidLicense'
     ]),
-    isValidateLicense() {
-      return this.publicSettings.XPACK_LICENSE_IS_VALID
-    },
     cardTitle() {
       return ''
     },
