@@ -98,25 +98,25 @@ export default {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',
-              has: this.isValidateLicense
+              has: this.hasValidLicense
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.isValidateLicense
+              has: this.hasValidLicense
             },
             {
               name: 'Oracle',
               title: 'Oracle',
               type: 'primary',
-              has: this.isValidateLicense
+              has: this.hasValidLicense
             },
             {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',
-              has: this.isValidateLicense,
+              has: this.hasValidLicense,
               group: this.$t('assets.OtherProtocol')
             }
           ]
@@ -126,15 +126,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings', 'currentOrg'])
+    ...mapGetters(['publicSettings', 'currentOrg', 'hasValidLicense'])
   },
   methods: {
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return false
-    }
   }
 }
 </script>

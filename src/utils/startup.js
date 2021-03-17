@@ -144,11 +144,11 @@ export async function startup({ to, from, next }) {
   initial = true
 
   // set page title
+  await getPublicSetting({ to, from, next })
   await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
   await changeCurrentRoleIfNeed({ to, from, next })
-  await getPublicSetting({ to, from, next })
   await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
