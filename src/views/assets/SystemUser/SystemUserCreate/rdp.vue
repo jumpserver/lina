@@ -23,6 +23,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$t('assets.AutoPush'), ['auto_push']],
         [this.$t('common.Auth'), ['update_password', 'password', 'ad_domain']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -70,6 +71,22 @@ export default {
           },
           el: {
             disabled: false
+          }
+        },
+        auto_push: {
+          type: 'switch',
+          el: {
+            disabled: false
+          },
+          hidden: form => {
+            if (form.login_mode === 'manual') { this.fieldsMeta.auto_push.el.disabled = true }
+          },
+          on: {
+            input: ([value], updateForm) => {
+              if (!value) {
+                updateForm({ auto_generate_key: value })
+              }
+            }
           }
         },
         protocol: {
