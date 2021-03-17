@@ -647,6 +647,7 @@
     "systemCpuLoad": "cpu load",
     "systemDiskUsedPercent": "disk used percent",
     "systemMemoryUsedPercent": "memory used percent",
+    "EsDisabled": "Node is unavailable, please contact administrator",
     "go": "Go",
     "goto": "Goto",
     "hosts": "Hosts",
