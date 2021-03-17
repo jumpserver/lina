@@ -69,6 +69,7 @@ export default {
             formatterArgs: {
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'log',
@@ -96,6 +97,7 @@ export default {
         hasRefresh: true,
         hasRightActions: true,
         hasLeftActions: true,
+        hasMoreActions: false,
         hasExport: false,
         hasImport: false,
         hasCreate: false,

@@ -239,10 +239,10 @@ export default {
     },
     handleInviteDialogClose() {
       this.InviteDialogSetting.InviteDialogVisible = false
-      this.$refs.GenericListPage.$refs.ListTable.reloadTable()
+      this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     },
     handleDialogUpdate() {
-      this.$refs.GenericListPage.$refs.ListTable.reloadTable()
+      this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
     }
   }
 }
