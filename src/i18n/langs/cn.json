@@ -662,6 +662,7 @@
     "name": "名称",
     "protocol": "协议",
     "region": "地域",
+    "EsDisabled": "节点不可用, 请联系管理员",
     "sessionActiveCount": "在线会话数量",
     "systemCpuLoad": "CPU负载",
     "systemDiskUsedPercent": "硬盘使用率",
