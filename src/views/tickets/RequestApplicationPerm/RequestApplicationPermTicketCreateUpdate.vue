@@ -30,7 +30,7 @@ export default {
           apply_date_start: date_start,
           apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
         },
-        org_id: '00000000-0000-0000-0000-000000000001',
+        org_id: '00000000-0000-0000-0000-000000000002', // 默认为Default 组织
         type: 'apply_application'
 
       },
