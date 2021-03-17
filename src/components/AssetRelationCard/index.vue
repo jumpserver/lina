@@ -3,7 +3,7 @@
     <table style="width: 100%">
       <tr>
         <td colspan="2">
-          <AssetSelect ref="assetSelect" :can-select="canSelect" />
+          <AssetSelect ref="assetSelect" :disabled="disabled" :can-select="canSelect" />
         </td>
       </tr>
       <tr>
@@ -37,6 +37,10 @@ export default {
     type: {
       type: String,
       default: 'primary'
+    },
+    disabled: {
+      type: [Boolean, Function],
+      default: false
     },
     value: {
       type: [Array, Number, String],
