@@ -227,7 +227,7 @@ export default {
           {
             name: 'updateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot,
+            can: ({ selectedRows }) => selectedRows.length > 0,
             callback: ({ selectedRows, reloadTable }) => {
               vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
@@ -240,7 +240,7 @@ export default {
               if (!this.$route.query.node) {
                 return false
               }
-              return selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot
+              return selectedRows.length > 0
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []
