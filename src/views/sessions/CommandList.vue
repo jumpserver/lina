@@ -120,10 +120,23 @@ export default {
         showAssets: false,
         // ?assets=0不显示资产. =1显示资产
         treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}`,
+        view: {
+          // 添加禁用颜色区分
+          fontCss: (treeId, treeNode) => {
+            if (treeNode.chkDisabled) {
+              return { opacity: '0.4' }
+            }
+            return {}
+          }
+        },
         callback: {
           onSelected: function(event, treeNode) {
             // 禁止点击根节点
             if (treeNode.id === 'root') {
+              return
+            }
+            if (!treeNode.valid) {
+              this.$message.error(this.$t('sessions.EsDisabled'))
               return
             }
             this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}`

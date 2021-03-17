@@ -11,6 +11,7 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
@@ -42,7 +43,9 @@ export default {
           actions: {
             prop: 'actions',
             formatterArgs: {
-              hasClone: false,
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'DatabaseAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
@@ -76,21 +79,21 @@ export default {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',
-              has: this.isValidateLicense,
+              has: this.hasValidLicense,
               callback: this.createPostgreSQL.bind(this)
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.isValidateLicense,
+              has: this.hasValidLicense,
               callback: this.createMariaDB.bind(this)
             },
             {
               name: 'Oracle',
               title: 'Oracle',
               type: 'primary',
-              has: this.isValidateLicense,
+              has: this.hasValidLicense,
               callback: this.createOracle.bind(this)
             }
           ]
@@ -99,7 +102,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings', 'currentOrg'])
+    ...mapGetters(['publicSettings', 'currentOrg', 'hasValidLicense'])
   },
   methods: {
     createMysql() {
@@ -113,12 +116,6 @@ export default {
     },
     createOracle() {
       this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
-    },
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return false
     }
   }
 }

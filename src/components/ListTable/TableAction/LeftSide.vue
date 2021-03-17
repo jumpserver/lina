@@ -8,12 +8,13 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
 import DataActions from '@/components/DataActions'
 import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
 
-const defaultTrue = { type: Boolean, default: true }
-const defaultFalse = { type: Boolean, default: false }
+const defaultTrue = { type: [Boolean, Function], default: true }
+const defaultFalse = { type: [Boolean, Function], default: false }
 export default {
   name: 'LeftSide',
   components: {
@@ -66,7 +67,7 @@ export default {
     },
     createTitle: {
       type: String,
-      default: () => this.$t('common.Create')
+      default: () => i18n.t('common.Create')
     }
   },
   data() {

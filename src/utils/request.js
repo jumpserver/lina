@@ -86,8 +86,8 @@ export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     let msg = error.message
     const data = response.data
-    if (data && (data.error || data.msg)) {
-      msg = data.error || data.msg
+    if (data && (data.error || data.msg || data.detail)) {
+      msg = data.error || data.msg || data.detail
     }
     Message({
       message: msg,

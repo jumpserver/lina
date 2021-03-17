@@ -8,7 +8,8 @@ const state = {
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
-  publicSettings: null
+  publicSettings: null,
+  hasValidLicense: false
 }
 
 const mutations = {
@@ -19,6 +20,10 @@ const mutations = {
   },
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
+
+    if (settings['XPACK_ENABLED']) {
+      state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
+    }
   }
 }
 
