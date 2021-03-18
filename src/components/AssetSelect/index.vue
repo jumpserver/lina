@@ -40,6 +40,10 @@ export default {
       default(row, index) {
         return true
       }
+    },
+    disabled: {
+      type: [Boolean, Function],
+      default: false
     }
   },
   data() {

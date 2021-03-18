@@ -3,13 +3,15 @@
     <table style="width: 100%;table-layout:fixed;" class="CardTable">
       <tr>
         <td colspan="2">
-          <Select2 ref="select2" v-model="select2.value" v-bind="select2" />
+          <Select2 ref="select2" v-model="select2.value" :disabled="iDisabled" v-bind="select2" />
         </td>
       </tr>
       <slot />
       <tr>
         <td colspan="2">
-          <el-button :type="type" size="small" :loading="submitLoading" @click="addObjects">{{ $t('common.Add') }}</el-button>
+          <el-button :type="type" size="small" :loading="submitLoading" :disabled="iDisabled" @click="addObjects">
+            {{ $t('common.Add') }}
+          </el-button>
         </td>
       </tr>
       <template v-if="showHasObjects">
@@ -20,7 +22,7 @@
             </el-tooltip>
           </td>
           <td>
-            <el-button size="mini" type="danger" style="float: right" @click="removeObject(obj)">
+            <el-button size="mini" :disabled="iDisabled" type="danger" style="float: right" @click="removeObject(obj)">
               <i class="fa fa-minus" />
             </el-button>
           </td>
@@ -28,7 +30,7 @@
       </template>
       <tr v-if="params.hasMore && showHasMore" class="item">
         <td colspan="2">
-          <el-button :type="type" size="small" style="width: 100%" @click="loadMore">
+          <el-button :type="type" :disabled="iDisabled" size="small" style="width: 100%" @click="loadMore">
             <i class="fa fa-arrow-down" />
             {{ $t('common.More') }}
           </el-button>
@@ -42,6 +44,7 @@
 import Select2 from '../Select2'
 import IBox from '../IBox'
 import { createSourceIdCache } from '@/api/common'
+import { mapGetters } from 'vuex'
 export default {
   name: 'RelationCard',
   components: {
@@ -86,6 +89,10 @@ export default {
     value: {
       type: [Array, Number, String],
       default: () => []
+    },
+    disabled: {
+      type: [Boolean, Function],
+      default: null
     },
     showHasMore: {
       type: Boolean,
@@ -138,11 +145,13 @@ export default {
         ajax: this.objectsAjax,
         options: this.objects,
         value: this.value,
+        disabled: this.disabled,
         disabledValues: []
       }
     }
   },
   computed: {
+    ...mapGetters(['currentOrgIsRoot']),
     iAjax() {
       return this.$refs.select2.iAjax
     },
@@ -151,6 +160,12 @@ export default {
     },
     hasObjectLeftLength() {
       return this.totalHasObjectsLength - this.iHasObjects.length
+    },
+    iDisabled() {
+      if (this.disabled !== null) {
+        return this.disabled
+      }
+      return this.currentOrgIsRoot
     }
   },
   watch: {
