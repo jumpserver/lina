@@ -141,7 +141,8 @@ export default {
           },
           actions: {
             formatterArgs: {
-              hasClone: false
+              hasClone: false,
+              canUpdate: true
             }
           }
         }
