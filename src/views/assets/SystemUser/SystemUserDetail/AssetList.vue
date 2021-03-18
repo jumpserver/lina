@@ -190,6 +190,7 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        disabled: this.$store.getters.currentOrgIsRoot,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/assets/system-users-assets-relations/`
           const data = [
