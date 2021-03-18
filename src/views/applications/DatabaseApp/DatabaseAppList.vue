@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -67,58 +66,34 @@ export default {
         hasMoreActions: false,
         createRoute: 'DatabaseAppCreate',
         moreCreates: {
+          callback: (item) => {
+            vm.$router.push({ name: 'DatabaseAppCreate', query: { type: item.name.toLowerCase() }})
+          },
           dropdown: [
             {
               name: 'MySQL',
               title: 'MySQL',
-              type: 'primary',
-              has: true,
-              callback: this.createMysql.bind(this)
+              has: true
             },
             {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
-              type: 'primary',
-              has: this.hasLicence,
-              callback: this.createPostgreSQL.bind(this)
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.hasLicence,
-              callback: this.createMariaDB.bind(this)
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'Oracle',
               title: 'Oracle',
-              type: 'primary',
-              has: this.hasLicence,
-              callback: this.createOracle.bind(this)
+              has: this.$store.getters.hasValidLicense
             }
           ]
         }
       }
-    }
-  },
-  computed: {
-    ...mapGetters(['publicSettings', 'currentOrg', 'hasValidLicense'])
-  },
-  methods: {
-    createMysql() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mysql' }})
-    },
-    createPostgreSQL() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'postgresql' }})
-    },
-    createMariaDB() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mariadb' }})
-    },
-    createOracle() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
-    },
-    hasLicense() {
-      return this.hasLicence
     }
   }
 }
