@@ -6,8 +6,8 @@ export const VMWARE_CLIENT = 'vmware_client'
 export const CUSTOM = 'custom'
 export const REMOTEAPP_CATEGORY = 'remote_app'
 
-function hasValidLicense() {
-  return store.getters.hasValidLicense
+function hasLicence() {
+  return store.getters.hasLicence
 }
 
 export const REMOTE_APP = [
@@ -17,28 +17,28 @@ export const REMOTE_APP = [
     type: 'primary',
     group: i18n.t('applications.RemoteApp'),
     category: REMOTEAPP_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   },
   {
     name: MYSQL_WORKBENCH,
     title: i18n.t(`applications.applicationsType.${MYSQL_WORKBENCH}`),
     type: 'primary',
     category: REMOTEAPP_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   },
   {
     name: VMWARE_CLIENT,
     title: i18n.t(`applications.applicationsType.${VMWARE_CLIENT}`),
     type: 'primary',
     category: REMOTEAPP_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   },
   {
     name: CUSTOM,
     title: i18n.t(`applications.applicationsType.${CUSTOM}`),
     type: 'primary',
     category: REMOTEAPP_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   }
 ]
 
@@ -62,21 +62,21 @@ export const DATABASE = [
     title: i18n.t(`applications.applicationsType.${ORACLE}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   },
   {
     name: POSTGRESQL,
     title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   },
   {
     name: MARIADB,
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
-    has: hasValidLicense
+    has: hasLicence
   }
 ]
 
