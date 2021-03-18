@@ -77,13 +77,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'publicSettings', 'publicSettings'
+      'publicSettings', 'hasValidLicense'
     ]),
     cardTitle() {
       return ''
     },
     detailItems() {
-      if (!this.publicSettings.XPACK_ENABLED) {
+      if (!this.hasValidLicense) {
         return [
           {
             key: this.$t('setting.License'),
