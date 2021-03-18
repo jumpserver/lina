@@ -63,6 +63,7 @@ export default {
       remoteAppRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('perms.addApplicationToThisPermission'),
+        disabled: this.$store.getters.currentOrgIsRoot,
         objectsAjax: {
           url: `/api/v1/applications/applications/?category=${this.object.category}&type=${this.object.type}`,
           transformOption: (item) => {

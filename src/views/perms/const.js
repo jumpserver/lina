@@ -7,7 +7,7 @@ export const CUSTOM = 'custom'
 export const REMOTEAPP_CATEGORY = 'remote_app'
 
 function hasLicence() {
-  return store.getters.hasLicence
+  return store.getters.hasValidLicense
 }
 
 export const REMOTE_APP = [
