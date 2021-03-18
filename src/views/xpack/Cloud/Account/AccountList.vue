@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, vmware } from '../const'
+import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, azure_international, vmware } from '../const'
 import { BooleanFormatter, DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
@@ -101,6 +101,10 @@ export default {
             {
               name: azure,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title
+            },
+            {
+              name: azure_international,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[azure_international].title
             },
             {
               name: vmware,
