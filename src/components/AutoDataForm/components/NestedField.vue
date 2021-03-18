@@ -43,12 +43,16 @@ export default {
     iFields() {
       const fields = this.fields
       if (this.errors && typeof this.errors === 'object') {
-        for (const [name, error] of Object.entries(this.errors)) {
+        // eslint-disable-next-line prefer-const
+        for (let [name, error] of Object.entries(this.errors)) {
           const field = fields.find((v) => v.prop === name)
           if (!field) {
             continue
           }
           this.$log.debug(`${name}: ${error}`)
+          if (typeof error === 'object' && !Array.isArray(error)) {
+            error = this.objectToString(error)
+          }
           field.attrs.error = error.toString()
         }
       }
@@ -57,15 +61,16 @@ export default {
     }
   },
   methods: {
-    setFieldError(name, error) {
-      const field = this.totalFields.find((v) => v.prop === name)
-      if (!field) {
-        return
+    objectToString(obj) {
+      let data = ''
+      // eslint-disable-next-line prefer-const
+      for (let [key, value] of Object.entries(obj)) {
+        if (typeof value === 'object') {
+          value = this.objectToString(value)
+        }
+        data += ` ${key}: ${value} `
       }
-      if (field.attrs.error === error) {
-        error += '.'
-      }
-      field.attrs.error = error
+      return data
     }
   }
 }
