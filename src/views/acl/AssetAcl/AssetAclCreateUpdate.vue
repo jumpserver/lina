@@ -68,7 +68,7 @@ export default {
       const params = this.$route.params
       let url = `/api/v1/acls/login-asset-acls/`
       if (params.id) {
-        url = `${url}${params.id}`
+        url = `${url}${params.id}/`
       } else {
         url = `${url}`
       }
