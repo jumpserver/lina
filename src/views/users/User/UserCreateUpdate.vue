@@ -9,7 +9,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/UserPassword'
 import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
-import { mapGetters } from 'vuex'
 import rules from '@/components/DataForm/rules'
 
 export default {
@@ -82,7 +81,7 @@ export default {
         role: {
           label: this.$t('users.SuperRole'),
           hidden: () => {
-            return !this.currentOrgIsRoot && this.publicSettings.role === 'Admin'
+            return !this.$store.getters.currentUserIsSuperAdmin
           }
         },
         org_roles: {
@@ -90,10 +89,10 @@ export default {
           label: this.$t('users.OrgRole'),
           component: RoleCheckbox,
           hidden: () => {
-            return !this.publicSettings.XPACK_LICENSE_IS_VALID
+            return !this.$store.getters.hasValidLicense
           },
           el: {
-            disabled: false,
+            disabled: this.$store.getters.currentOrgIsRoot,
             rule: []
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
@@ -108,14 +107,6 @@ export default {
           }
         }
       }
-    }
-  },
-  computed: {
-    ...mapGetters(['publicSettings', 'currentOrgIsRoot'])
-  },
-  mounted() {
-    if (this.currentOrgIsRoot) {
-      this.fieldsMeta.org_roles.el.disabled = true
     }
   },
   methods: {
