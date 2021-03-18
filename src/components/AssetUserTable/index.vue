@@ -199,6 +199,7 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
+                  can: !this.$store.getters.currentOrgIsRoot,
                   callback: function(val) {
                     this.showDialog = true
                     this.dialogInfo.asset = val.row.asset
