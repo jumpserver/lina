@@ -122,7 +122,7 @@ export default {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
       }).catch(() => {
-        // this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+        // this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {

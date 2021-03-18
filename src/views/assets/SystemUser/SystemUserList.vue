@@ -98,25 +98,25 @@ export default {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',
-              has: this.hasValidLicense
+              has: this.hasLicence
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.hasValidLicense
+              has: this.hasLicence
             },
             {
               name: 'Oracle',
               title: 'Oracle',
               type: 'primary',
-              has: this.hasValidLicense
+              has: this.hasLicence
             },
             {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',
-              has: this.hasValidLicense,
+              has: this.hasLicence,
               group: this.$t('assets.OtherProtocol')
             }
           ]
@@ -129,6 +129,9 @@ export default {
     ...mapGetters(['publicSettings', 'currentOrg', 'hasValidLicense'])
   },
   methods: {
+    hasLicence() {
+      return this.hasValidLicense
+    }
   }
 }
 </script>

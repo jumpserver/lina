@@ -53,7 +53,7 @@ export default {
                   this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable.reloadTable()
                   // this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
                 })
               }.bind(this)
             }
@@ -79,21 +79,21 @@ export default {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',
-              has: this.hasValidLicense,
+              has: this.hasLicence,
               callback: this.createPostgreSQL.bind(this)
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.hasValidLicense,
+              has: this.hasLicence,
               callback: this.createMariaDB.bind(this)
             },
             {
               name: 'Oracle',
               title: 'Oracle',
               type: 'primary',
-              has: this.hasValidLicense,
+              has: this.hasLicence,
               callback: this.createOracle.bind(this)
             }
           ]
@@ -116,6 +116,9 @@ export default {
     },
     createOracle() {
       this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
+    },
+    hasLicense() {
+      return this.hasLicence
     }
   }
 }
