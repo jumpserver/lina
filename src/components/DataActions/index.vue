@@ -3,6 +3,7 @@
     <template v-for="action in iActions">
       <el-dropdown
         v-if="action.dropdown"
+        v-show="action.dropdown.length > 0"
         :key="action.name"
         class="action-item"
         trigger="click"
