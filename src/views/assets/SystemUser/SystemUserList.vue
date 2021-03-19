@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -98,39 +97,31 @@ export default {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',
-              has: this.hasLicence
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.hasLicence
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'Oracle',
               title: 'Oracle',
               type: 'primary',
-              has: this.hasLicence
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',
-              has: this.hasLicence,
+              has: this.$store.getters.hasValidLicense,
               group: this.$t('assets.OtherProtocol')
             }
           ]
         }
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')
-    }
-  },
-  computed: {
-    ...mapGetters(['publicSettings', 'currentOrg', 'hasValidLicense'])
-  },
-  methods: {
-    hasLicence() {
-      return this.hasValidLicense
     }
   }
 }

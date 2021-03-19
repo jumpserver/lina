@@ -77,6 +77,7 @@ export default {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   type: 'danger',
+                  can: !this.$store.getters.currentOrgIsRoot,
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
@@ -190,6 +191,7 @@ export default {
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        disabled: this.$store.getters.currentOrgIsRoot,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/assets/system-users-assets-relations/`
           const data = [

@@ -6,6 +6,7 @@ export const aws_china = 'aws_china'
 export const huaweicloud = 'huaweicloud'
 export const qcloud = 'qcloud'
 export const azure = 'azure'
+export const azure_international = 'azure_international'
 export const vmware = 'vmware'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
@@ -37,6 +38,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [azure]: {
     name: azure,
     title: i18n.t('xpack.Cloud.Azure'),
+    attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id']
+  },
+  [azure_international]: {
+    name: azure_international,
+    title: i18n.t('xpack.Cloud.Azure_Int'),
     attrs: ['client_id', 'client_secret', 'tenant_id', 'subscription_id']
   },
   [vmware]: {

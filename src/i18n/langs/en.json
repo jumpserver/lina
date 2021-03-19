@@ -1028,6 +1028,7 @@
       "AWS_Int": "AWS(International)",
       "HuaweiCloud": "Huawei Cloud",
       "Azure":"Azure(China)",
+      "Azure_Int": "Azure(International)",
       "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",
       "IsAlwaysUpdate": "Asset info is kept up-to-date",
       "AccountCreate": "Create account",

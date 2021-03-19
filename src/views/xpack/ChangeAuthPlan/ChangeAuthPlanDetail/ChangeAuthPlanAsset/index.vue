@@ -68,12 +68,12 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasMoreActions: false
       },
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
           return this.object.assets.indexOf(row.id) === -1
         },
@@ -100,6 +100,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
+        disabled: this.$store.getters.currentOrgIsRoot,
         hasObjectsId: this.object.nodes,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/`
