@@ -57,9 +57,11 @@ export default {
       ],
       fieldsMeta: {
         AUTH_LDAP_USER_ATTR_MAP: {
+          component: 'el-input',
           el: {
             type: 'textarea'
-          }
+          },
+          label: this.$t('setting.authLdapUserAttrMap')
         }
       },
       url: '/api/v1/settings/setting/?category=ldap',
