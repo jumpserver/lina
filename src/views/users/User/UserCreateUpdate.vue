@@ -10,6 +10,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/UserPassword'
 import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
 import rules from '@/components/DataForm/rules'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -107,6 +108,14 @@ export default {
           }
         }
       }
+    }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
+  },
+  mounted() {
+    if (this.currentOrgIsRoot) {
+      this.fieldsMeta.groups.el.disabled = true
     }
   },
   methods: {
