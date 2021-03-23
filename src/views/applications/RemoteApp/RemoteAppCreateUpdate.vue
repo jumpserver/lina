@@ -19,7 +19,9 @@ export default {
     return {
       initial: {
         type: appTypeMeta.name,
-        path: pathInitial
+        attrs: {
+          path: pathInitial
+        }
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
