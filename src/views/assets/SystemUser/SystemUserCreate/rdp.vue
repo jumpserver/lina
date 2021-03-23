@@ -23,7 +23,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('assets.AutoPush'), ['auto_push']],
+        [this.$t('assets.AutoPush'), ['auto_push', 'system_groups']],
         [this.$t('common.Auth'), ['update_password', 'password', 'ad_domain']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -133,6 +133,11 @@ export default {
             }
             return !form.update_password
           }
+        },
+        system_groups: {
+          label: this.$t('assets.LinuxUserAffiliateGroup'),
+          hidden: (item) => ['ssh', 'rdp'].indexOf(item.protocol) === -1 || !item.auto_push || item.username_same_with_user,
+          helpText: this.$t('assets.GroupsHelpMessage')
         }
       },
       url: '/api/v1/assets/system-users/',
