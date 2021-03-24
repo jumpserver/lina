@@ -1,14 +1,14 @@
 <template>
   <Page>
     <el-row :gutter="40">
-      <el-col :lg="{span:10,offset:2 }" :md="24" class="monitorCard">
-        <MonitorCard type="koko" />
+      <el-col :lg="12" :md="24">
+        <MonitorCard type="koko" class="monitorCard" />
       </el-col>
-      <el-col :lg="10" :md="24" class="monitorCard">
-        <MonitorCard type="guacamole" />
+      <el-col :lg="12" :md="24">
+        <MonitorCard type="guacamole" class="monitorCard" />
       </el-col>
-      <el-col :lg="{span:10,offset:2 }" :md="24" class="monitorCard">
-        <MonitorCard type="omnidb" />
+      <el-col :lg="12" :md="24">
+        <MonitorCard type="omnidb" class="monitorCard" />
       </el-col>
     </el-row>
   </Page>
@@ -26,18 +26,17 @@ export default {
   },
   data() {
     return {
-
     }
   },
   computed: {
-
   }
 }
 </script>
 
 <style lang='less' scoped>
 .monitorCard{
-  margin-bottom: 20px
+  //margin-bottom: 20px;
+  padding: 20px 30px;
 }
 @media (min-width: 768px){
   .illo-desktop-header {

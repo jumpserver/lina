@@ -72,14 +72,15 @@ export default {
             prop: 'id',
             formatterArgs: {
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'run',
                   title: this.$t('ops.run'),
                   type: 'primary',
-                  callback: function({ cellValue, tableData }) {
+                  callback: function({ row, tableData }) {
                     this.$axios.get(
-                      `/api/v1/ops/tasks/${cellValue}/run/`
+                      `/api/v1/ops/tasks/${row.id}/run/`
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
                     })

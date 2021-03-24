@@ -30,7 +30,8 @@ export default {
         url: this.url,
         columns: [
           'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
-          'command_amount', 'date_start', 'date_end', 'duration', 'actions'
+          'command_amount', 'date_start', 'date_end', 'duration',
+          'org_name', 'actions'
         ],
         columnsShow: {
           min: ['index', 'actions'],
@@ -100,6 +101,7 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
+              hasClone: false,
               hasDelete: false,
               hasUpdate: false,
               extraActions: this.extraActions

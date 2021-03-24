@@ -4,7 +4,6 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -15,7 +14,11 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/system-users/',
-        columns: ['name', 'username', 'username_same_with_user', 'protocol', 'login_mode', 'assets_amount', 'priority', 'date_created', 'comment', 'actions'],
+        columns: [
+          'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
+          'assets_amount', 'priority',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'username', 'protocol', 'login_mode', 'assets_amount', 'comment', 'actions']
@@ -38,7 +41,6 @@ export default {
           },
           actions: {
             formatterArgs: {
-              hasClone: true,
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }})
               },
@@ -95,42 +97,31 @@ export default {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',
-              has: this.isValidateLicense
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.isValidateLicense
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'Oracle',
               title: 'Oracle',
               type: 'primary',
-              has: this.isValidateLicense
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',
-              has: this.isValidateLicense,
+              has: this.$store.getters.hasValidLicense,
               group: this.$t('assets.OtherProtocol')
             }
           ]
         }
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')
-    }
-  },
-  computed: {
-    ...mapGetters(['publicSettings', 'currentOrg'])
-  },
-  methods: {
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return false
     }
   }
 }

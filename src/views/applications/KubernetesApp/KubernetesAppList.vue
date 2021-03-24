@@ -10,11 +10,13 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=cloud',
         columns: [
-          'name', 'type', 'attrs.cluster', 'date_created', 'comment', 'actions'
+          'name', 'type', 'attrs.cluster',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -33,15 +35,17 @@ export default {
           actions: {
             prop: 'actions',
             formatterArgs: {
-              hasClone: false,
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'KubernetesAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
                 ).then(res => {
-                  this.$refs.GenericListTable.$refs.ListTable.reloadTable()
+                  this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable.reloadTable()
                   // this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
                 })
               }.bind(this)
             }

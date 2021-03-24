@@ -4,18 +4,19 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
         columns: [
-          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'date_created', 'comment', 'actions'
+          'name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -41,15 +42,17 @@ export default {
           actions: {
             prop: 'actions',
             formatterArgs: {
-              hasClone: false,
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'DatabaseAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
                 ).then(res => {
-                  this.$refs.GenericListTable.$refs.ListTable.reloadTable()
+                  this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable.reloadTable()
                   // this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
                 })
               }.bind(this)
             }
@@ -63,61 +66,34 @@ export default {
         hasMoreActions: false,
         createRoute: 'DatabaseAppCreate',
         moreCreates: {
+          callback: (item) => {
+            vm.$router.push({ name: 'DatabaseAppCreate', query: { type: item.name.toLowerCase() }})
+          },
           dropdown: [
             {
               name: 'MySQL',
               title: 'MySQL',
-              type: 'primary',
-              has: true,
-              callback: this.createMysql.bind(this)
+              has: true
             },
             {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
-              type: 'primary',
-              has: this.isValidateLicense,
-              callback: this.createPostgreSQL.bind(this)
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'MariaDB',
               title: 'MariaDB',
               type: 'primary',
-              has: this.isValidateLicense,
-              callback: this.createMariaDB.bind(this)
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'Oracle',
               title: 'Oracle',
-              type: 'primary',
-              has: this.isValidateLicense,
-              callback: this.createOracle.bind(this)
+              has: this.$store.getters.hasValidLicense
             }
           ]
         }
       }
-    }
-  },
-  computed: {
-    ...mapGetters(['publicSettings', 'currentOrg'])
-  },
-  methods: {
-    createMysql() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mysql' }})
-    },
-    createPostgreSQL() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'postgresql' }})
-    },
-    createMariaDB() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'mariadb' }})
-    },
-    createOracle() {
-      this.$router.push({ name: 'DatabaseAppCreate', query: { type: 'oracle' }})
-    },
-    isValidateLicense() {
-      if (this.publicSettings.XPACK_ENABLED) {
-        return this.publicSettings.XPACK_LICENSE_IS_VALID
-      }
-      return false
     }
   }
 }

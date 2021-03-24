@@ -10,8 +10,8 @@
       :after-get-form-value="changeFormValue"
       :clean-form-value="cleanFormValue"
     />
-    <ImportDialog :show.sync="dialogLdapUserImport" />
-    <TestLoginDialog :show.sync="dialogTest" />
+    <ImportDialog :visible.sync="dialogLdapUserImport" />
+    <TestLoginDialog :visible.sync="dialogTest" />
   </IBox>
 </template>
 <script>
@@ -57,9 +57,11 @@ export default {
       ],
       fieldsMeta: {
         AUTH_LDAP_USER_ATTR_MAP: {
+          component: 'el-input',
           el: {
             type: 'textarea'
-          }
+          },
+          label: this.$t('setting.authLdapUserAttrMap')
         }
       },
       url: '/api/v1/settings/setting/?category=ldap',

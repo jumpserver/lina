@@ -6,11 +6,8 @@ export const VMWARE_CLIENT = 'vmware_client'
 export const CUSTOM = 'custom'
 export const REMOTEAPP_CATEGORY = 'remote_app'
 
-function hasValidLicense() {
-  if (store.getters.publicSettings.XPACK_ENABLED) {
-    return store.getters.publicSettings.XPACK_LICENSE_IS_VALID
-  }
-  return false
+function hasLicence() {
+  return store.getters.hasValidLicense
 }
 
 export const REMOTE_APP = [
@@ -19,25 +16,29 @@ export const REMOTE_APP = [
     title: i18n.t(`applications.applicationsType.${CHROME}`),
     type: 'primary',
     group: i18n.t('applications.RemoteApp'),
-    has: hasValidLicense
+    category: REMOTEAPP_CATEGORY,
+    has: hasLicence
   },
   {
     name: MYSQL_WORKBENCH,
     title: i18n.t(`applications.applicationsType.${MYSQL_WORKBENCH}`),
     type: 'primary',
-    has: hasValidLicense
+    category: REMOTEAPP_CATEGORY,
+    has: hasLicence
   },
   {
     name: VMWARE_CLIENT,
     title: i18n.t(`applications.applicationsType.${VMWARE_CLIENT}`),
     type: 'primary',
-    has: hasValidLicense
+    category: REMOTEAPP_CATEGORY,
+    has: hasLicence
   },
   {
     name: CUSTOM,
     title: i18n.t(`applications.applicationsType.${CUSTOM}`),
     type: 'primary',
-    has: hasValidLicense
+    category: REMOTEAPP_CATEGORY,
+    has: hasLicence
   }
 ]
 
@@ -52,6 +53,7 @@ export const DATABASE = [
     name: MYSQL,
     title: i18n.t(`applications.applicationsType.${MYSQL}`),
     type: 'primary',
+    category: DATABASE_CATEGORY,
     has: true,
     group: i18n.t('applications.Database')
   },
@@ -59,19 +61,22 @@ export const DATABASE = [
     name: ORACLE,
     title: i18n.t(`applications.applicationsType.${ORACLE}`),
     type: 'primary',
-    has: hasValidLicense
+    category: DATABASE_CATEGORY,
+    has: hasLicence
   },
   {
     name: POSTGRESQL,
     title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
     type: 'primary',
-    has: hasValidLicense
+    category: DATABASE_CATEGORY,
+    has: hasLicence
   },
   {
     name: MARIADB,
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
-    has: hasValidLicense
+    category: DATABASE_CATEGORY,
+    has: hasLicence
   }
 ]
 
@@ -84,6 +89,7 @@ export const CLOUD = [
     title: i18n.t(`applications.applicationsType.${KUBERNETES}`),
     group: i18n.t('applications.Cloud'),
     type: 'primary',
+    category: CLOUD_CATEGORY,
     has: true
   }
 ]

@@ -19,6 +19,7 @@ export default {
           ['', ['name', 'comment']]
           // [this.$t('common.Members'), ['admins', 'auditors', 'users']],
         ],
+        hasSaveContinue: false,
         fieldsMeta: {
           // admins: {
           //   label: this.$t('xpack.Admin'),

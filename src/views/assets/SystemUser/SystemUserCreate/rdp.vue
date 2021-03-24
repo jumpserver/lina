@@ -13,7 +13,6 @@ export default {
     return {
       initial: {
         login_mode: 'auto',
-        priority: '20',
         protocol: this.$route.query.protocol,
         username_same_with_user: false,
         auto_generate_key: false,
@@ -24,6 +23,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$t('assets.AutoPush'), ['auto_push']],
         [this.$t('common.Auth'), ['update_password', 'password', 'ad_domain']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -73,6 +73,22 @@ export default {
             disabled: false
           }
         },
+        auto_push: {
+          type: 'switch',
+          el: {
+            disabled: false
+          },
+          hidden: form => {
+            if (form.login_mode === 'manual') { this.fieldsMeta.auto_push.el.disabled = true }
+          },
+          on: {
+            input: ([value], updateForm) => {
+              if (!value) {
+                updateForm({ auto_generate_key: value })
+              }
+            }
+          }
+        },
         protocol: {
           rules: [Required],
           el: {
@@ -92,10 +108,6 @@ export default {
           label: this.$t('assets.AdDomain'),
           hidden: (form) => ['rdp'].indexOf(form.protocol) === -1,
           helpText: this.$t('assets.AdDomainHelpText')
-        },
-        priority: {
-          rules: [Required],
-          helpText: this.$t('assets.PriorityHelpMessage')
         },
         update_password: {
           label: this.$t('users.UpdatePassword'),

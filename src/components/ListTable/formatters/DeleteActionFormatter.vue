@@ -1,5 +1,5 @@
 <template>
-  <el-button ref="deleteButton" size="mini" type="danger" :disabled="canDelete" @click="onDelete(col, row, cellValue, reload)">
+  <el-button ref="deleteButton" size="mini" type="danger" :disabled="iDisabled" @click="onDelete(col, row, cellValue, reload)">
     <i class="fa fa-minus" />
   </el-button>
 </template>
@@ -11,8 +11,9 @@ export default {
   name: 'DeleteActionFormatter',
   extends: BaseFormatter,
   computed: {
-    canDelete() {
-      return this.iCanDelete()
+    iDisabled() {
+      // 禁用
+      return (this.disabled() || this.$store.getters.currentOrgIsRoot)
     }
   },
   methods: {
@@ -22,7 +23,7 @@ export default {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
         reload()
       }).catch(error => {
-        this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+        this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
       })
     },
     onDelete(col, row, cellValue, reload) {
@@ -32,7 +33,7 @@ export default {
         this.defaultOnDelete(col, row, cellValue, reload)
       }
     },
-    iCanDelete() {
+    disabled() {
       if (this.col.objects === 'all') {
         return false
       }

@@ -15,7 +15,6 @@ export default {
     return {
       initial: {
         login_mode: 'auto',
-        priority: '20',
         protocol: this.$route.query.protocol,
         username_same_with_user: false
       },
@@ -70,10 +69,6 @@ export default {
               }
             }
           }
-        },
-        priority: {
-          rules: [Required],
-          helpText: this.$t('assets.PriorityHelpMessage')
         },
         update_password: {
           label: this.$t('users.UpdatePassword'),

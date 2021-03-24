@@ -1,11 +1,12 @@
 <template>
   <Dialog
-    :visible.sync="show"
+    v-bind="$attrs"
     :title="$t('setting.testLdapLoginTitle') "
     :destroy-on-close="true"
     :loading-status="testLdapLoginStatus"
+    :show-cancel="false"
+    v-on="$listeners"
     @confirm="testUserLoginClick()"
-    @cancel="dialogVisible = false"
   >
     <el-form
       :model="userLoginForm"
@@ -32,13 +33,16 @@
 </template>
 
 <script>
+import Dialog from '@/components/Dialog'
 import { testLdapUserLogin } from '@/api/settings'
 
 export default {
   name: 'TestLoginDialog',
+  components: {
+    Dialog
+  },
   data() {
     return {
-      show: false,
       testLdapLoginStatus: false,
       userLoginForm: {
         username: '',

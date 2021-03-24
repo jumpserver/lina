@@ -13,7 +13,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/admin-users/',
-        columns: ['name', 'username', 'assets_amount', 'date_created', 'comment', 'actions'],
+        columns: [
+          'name', 'username', 'assets_amount',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
+        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'username', 'assets_amount', 'comment', 'actions']

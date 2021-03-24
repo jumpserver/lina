@@ -67,13 +67,14 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, BooleanFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/ListTable/formatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import Protocols from '@/views/assets/Asset/components/Protocols/index'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -89,6 +90,7 @@ export default {
         showMenu: true,
         showRefresh: true,
         showAssets: false,
+        hasRightMenu: this.currentOrgIsRoot,
         url: '/api/v1/assets/assets/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
@@ -98,8 +100,20 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'admin_user_display', 'hardware_info', 'number', 'connectivity', 'actions'
+          'hostname', 'ip', 'public_ip', 'admin_user_display',
+          'protocols',
+          'platform', 'hardware_info', 'model',
+          'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
+          'disk_info', 'disk_total', 'memory',
+          'os', 'os_arch', 'os_version',
+          'number', 'vendor', 'sn',
+          'connectivity',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
+        columnsShow: {
+          min: ['hostname', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
+        },
         columnsMeta: {
           hostname: {
             formatter: DetailFormatter,
@@ -115,9 +129,18 @@ export default {
           hardware_info: {
             showOverflowTooltip: true
           },
+          cpu_model: {
+            showOverflowTooltip: true
+          },
+          sn: {
+            showOverflowTooltip: true
+          },
+          comment: {
+            showOverflowTooltip: true
+          },
           connectivity: {
             label: this.$t('assets.Reachable'),
-            formatter: BooleanFormatter,
+            formatter: ChoicesFormatter,
             formatterArgs: {
               iconChoices: {
                 0: 'fa-times text-danger',
@@ -138,7 +161,6 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasClone: true,
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
@@ -156,10 +178,6 @@ export default {
               ]
             }
           }
-        },
-        columnsShow: {
-          min: ['hostname', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
         }
       },
       headerActions: {
@@ -209,7 +227,7 @@ export default {
           {
             name: 'updateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot,
             callback: ({ selectedRows, reloadTable }) => {
               vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
@@ -222,7 +240,7 @@ export default {
               if (!this.$route.query.node) {
                 return false
               }
-              return selectedRows.length > 0
+              return selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []
@@ -371,8 +389,12 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
+  },
   mounted() {
     this.decorateRMenu()
+    this.treeSetting.hasRightMenu = !this.currentOrgIsRoot
   },
   methods: {
     decorateRMenu() {

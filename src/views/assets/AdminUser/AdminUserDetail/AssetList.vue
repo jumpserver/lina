@@ -16,7 +16,7 @@
 import QuickActions from '@/components/QuickActions/index'
 import ListTable from '@/components/ListTable'
 import RelationCard from '@/components/RelationCard'
-import { BooleanFormatter } from '@/components/ListTable/formatters'
+import { ChoicesFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'AssetList',
@@ -44,7 +44,7 @@ export default {
           },
           connectivity: {
             label: this.$t('assets.Reachable'),
-            formatter: BooleanFormatter,
+            formatter: ChoicesFormatter,
             formatterArgs: {
               iconChoices: {
                 0: 'fa-times text-danger',

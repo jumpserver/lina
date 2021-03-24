@@ -1,6 +1,6 @@
 <template>
-  <DataZTree ref="dataztree" :setting="treeSetting">
-    <slot slot="rMenu">
+  <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
+    <slot v-if="treeSetting.hasRightMenu" slot="rMenu">
       <li id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
         <i class="fa fa-plus-square-o" />  {{ this.$t('tree.CreateNode') }}
       </li>
@@ -55,7 +55,8 @@ export default {
           // beforeDrag
           // onDrag
           // beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
-        }
+        },
+        hasRightMenu: true
       },
       currentNode: '',
       currentNodeId: ''
@@ -63,6 +64,7 @@ export default {
   },
   computed: {
     treeSetting() {
+      this.$log.debug('Settings: ', this.setting)
       return _.merge(this.defaultSetting, this.setting)
     },
     zTree() {
@@ -120,7 +122,7 @@ export default {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
       }).catch(() => {
-        // this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+        // this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
@@ -244,12 +246,18 @@ export default {
     },
     getSelectedNodes: function() {
       return this.zTree.getSelectedNodes()
+    },
+    getNodes: function() {
+      return this.zTree.getNodes()
+    },
+    selectNode: function(node) {
+      return this.zTree.selectNode(node)
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style scoped>
   .rmenu {
     font-size: 12px;
     padding: 0 16px;
@@ -271,5 +279,9 @@ export default {
   }
   .rmenu:hover{
     background-color: #f5f7fa;
+  }
+
+  .data-z-tree >>> .fa {
+    width: 10px;
   }
 </style>

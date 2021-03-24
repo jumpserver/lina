@@ -17,7 +17,8 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=remote_app',
         columns: [
-          'name', 'type', 'attrs.asset', 'date_created', 'comment', 'actions'
+          'name', 'type', 'attrs.asset',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -39,7 +40,9 @@ export default {
           actions: {
             prop: 'actions',
             formatterArgs: {
-              hasClone: false,
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'RemoteAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
               },
@@ -47,10 +50,10 @@ export default {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
                 ).then(res => {
-                  this.$refs.GenericListTable.$refs.ListTable.reloadTable()
+                  this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable.reloadTable()
                   // this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
                 })
               }.bind(this)
             }
@@ -61,8 +64,6 @@ export default {
         hasCreate: false,
         hasMoreActions: false,
         hasBulkDelete: false,
-        hasExport: false,
-        hasImport: false,
         // createRoute: 'RemoteAppCreate',
         moreCreates: {
           dropdown: this.getCreateAppType(),
@@ -83,7 +84,6 @@ export default {
         item.has = true
         extraMoreActions.push(item)
       }
-      console.log('core', extraMoreActions)
       return extraMoreActions
     }
   }

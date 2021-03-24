@@ -30,7 +30,7 @@ export default {
           apply_date_start: date_start,
           apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
         },
-        org_id: '00000000-0000-0000-0000-000000000001',
+        org_id: '00000000-0000-0000-0000-000000000002', // 默认为Default 组织
         type: 'apply_application'
 
       },
@@ -138,7 +138,9 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.user_all_orgs
+            options: this.$store.state.users.profile.user_all_orgs.map((item) => {
+              return { label: item.name, value: item.id }
+            })
           },
           on: {
             changeOptions: ([event], updateForm) => {

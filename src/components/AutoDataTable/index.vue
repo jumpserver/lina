@@ -64,9 +64,11 @@ export default {
   },
   methods: {
     async optionUrlMetaAndGenCols() {
+      if (this.config.url === '') { return }
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
-        this.meta = data.actions[this.method.toUpperCase()] || {}
+        const method = this.method.toUpperCase()
+        this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
         this.generateTotalColumns()
       }).then(() => {
         //  根据当前列重新生成最终渲染表格

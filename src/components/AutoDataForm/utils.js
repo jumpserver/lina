@@ -44,10 +44,12 @@ export class FormFieldGenerator {
         type = 'checkbox'
         break
       case 'nested object':
+        type = 'nestedField'
         field.component = NestedField
         field.label = ''
         field.labelWidth = 0
         field.el.fields = this.generateNestFields(field, fieldMeta, fieldRemoteMeta)
+        field.el.errors = {}
         Vue.$log.debug('All fields in generate: ', field.el.allFields)
         break
       default:
@@ -119,6 +121,7 @@ export class FormFieldGenerator {
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)
     const el = Object.assign(field.el || {}, fieldMeta.el || {})
     field = Object.assign(field, fieldMeta || {}, { el: el })
+    _.set(field, 'attrs.error', '')
     return field
   }
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {

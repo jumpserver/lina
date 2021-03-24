@@ -17,7 +17,6 @@ export default {
   data() {
     return {
       initial: {
-        priority: '20',
         protocol: this.$route.query.protocol
       },
       fields: [

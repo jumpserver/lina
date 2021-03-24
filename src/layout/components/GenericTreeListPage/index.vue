@@ -1,7 +1,13 @@
 <template>
   <Page>
     <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
-    <TreeTable ref="TreeTable" :table-config="tableConfig" :header-actions="iHeaderActions" :tree-setting="treeSetting">
+    <TreeTable
+      ref="TreeTable"
+      :table-config="tableConfig"
+      :header-actions="iHeaderActions"
+      :tree-setting="treeSetting"
+      v-on="$listeners"
+    >
       <template #table>
         <slot name="table" />
       </template>
@@ -33,6 +39,7 @@ export default {
     iHeaderActions() {
       const attrs = _.cloneDeep(this.headerActions)
       const canCreate = _.get(attrs, 'canCreate', null)
+      // this.$log.debug('Current org: ', this.currentOrg)
       if (canCreate === null && this.currentOrg && this.currentOrg.is_root) {
         _.set(attrs, 'canCreate', false)
       }
@@ -45,6 +52,12 @@ export default {
     },
     getSelectedNodes: function() {
       return this.$refs.TreeTable.getSelectedNodes()
+    },
+    getNodes: function() {
+      return this.$refs.TreeTable.getNodes()
+    },
+    selectNode: function(node) {
+      return this.$refs.TreeTable.selectNode(node)
     }
   }
 }

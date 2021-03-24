@@ -15,48 +15,34 @@ export default {
         hasExport: false,
         hasImport: false,
         hasRefresh: false,
-        hasBulkDelete: false,
-        hasCreate: false,
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary',
-        extraMoreActions: [
-          {
-            name: 'S3',
-            title: 'S3',
-            type: 'primary',
-            can: true,
-            callback: this.createS3.bind(this)
+        hasMoreActions: false,
+        moreCreates: {
+          callback: (item) => {
+            this.$router.push({ name: 'CreateReplayStorage', query: { type: item.name.toLowerCase() }})
           },
-          {
-            name: 'Ceph',
-            title: 'Ceph',
-            type: 'primary',
-            can: true,
-            callback: this.createCeph.bind(this)
-          },
-          {
-            name: 'Swift',
-            title: 'Swift',
-            type: 'primary',
-            can: true,
-            callback: this.createSwift.bind(this)
-          },
-          {
-            name: 'OSS',
-            title: 'OSS',
-            type: 'primary',
-            can: true,
-            callback: this.createOSS.bind(this)
-          },
-          {
-            name: 'Azure',
-            title: 'Azure',
-            type: 'primary',
-            can: true,
-            callback: this.createAzure.bind(this)
-          }
-
-        ]
+          dropdown: [
+            {
+              name: 'S3',
+              title: 'S3'
+            },
+            {
+              name: 'Ceph',
+              title: 'Ceph'
+            },
+            {
+              name: 'swift',
+              title: 'Swift'
+            },
+            {
+              name: 'OSS',
+              title: 'OSS'
+            },
+            {
+              name: 'Azure',
+              title: 'Azure'
+            }
+          ]
+        }
       },
       replayTableConfig: {
         url: '/api/v1/terminal/replay-storages/',
@@ -93,7 +79,7 @@ export default {
                   title: this.$t('sessions.test'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
-                    TestReplayStorage(cellValue).then(data => {
+                    TestReplayStorage(row.id).then(data => {
                       if (!data.is_valid) {
                         this.$message.error(data.msg)
                       } else {
@@ -110,21 +96,6 @@ export default {
     }
   },
   methods: {
-    createS3() {
-      this.$router.push({ name: 'CreateReplayStorage', query: { type: 's3' }})
-    },
-    createCeph() {
-      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'ceph' }})
-    },
-    createSwift() {
-      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'swift' }})
-    },
-    createOSS() {
-      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'oss' }})
-    },
-    createAzure() {
-      this.$router.push({ name: 'CreateReplayStorage', query: { type: 'azure' }})
-    }
   }
 }
 </script>

@@ -15,7 +15,8 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columns: [
-          'name', 'asset_count', 'application_count', 'gateway_count', 'date_created', 'comment', 'actions'
+          'name', 'asset_count', 'application_count', 'gateway_count', 'date_created',
+          'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],

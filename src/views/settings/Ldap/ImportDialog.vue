@@ -1,8 +1,10 @@
 <template>
   <Dialog
     :title="$t('setting.importLdapUserTitle')"
-    :visible.sync="show"
+    v-bind="$attrs"
     :destroy-on-close="true"
+    :show-cancel="false"
+    v-on="$listeners"
   >
     <el-alert type="success"> {{ $t('setting.importLdapUserTip') }}</el-alert>
     <ListTable
@@ -30,15 +32,9 @@ export default {
     ListTable,
     Dialog
   },
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
   data() {
     return {
-      dialogLdapUserImportLoginStatus: true,
+      dialogLdapUserImportLoginStatus: false,
       headerActions: {
         hasCreate: false,
         hasBulkDelete: false,

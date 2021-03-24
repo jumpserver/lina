@@ -29,6 +29,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              hasClone: false,
               onUpdate: ({ row }) => {
                 this.$router.push({ name: 'SyncInstanceTaskUpdate', params: { id: row.id }})
               },

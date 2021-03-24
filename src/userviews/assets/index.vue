@@ -128,7 +128,7 @@ export default {
                   name: 'favor',
                   type: 'info',
                   fa: function(row, cellValue) {
-                    if (this.checkFavorite(cellValue)) {
+                    if (this.checkFavorite(row.id)) {
                       return 'fa-star'
                     }
                     return 'fa-star-o'

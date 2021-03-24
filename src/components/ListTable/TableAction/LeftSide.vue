@@ -8,12 +8,13 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
 import DataActions from '@/components/DataActions'
 import { createSourceIdCache } from '@/api/common'
 import { cleanActions } from './utils'
 
-const defaultTrue = { type: Boolean, default: true }
-const defaultFalse = { type: Boolean, default: false }
+const defaultTrue = { type: [Boolean, Function], default: true }
+const defaultFalse = { type: [Boolean, Function], default: false }
 export default {
   name: 'LeftSide',
   components: {
@@ -63,26 +64,30 @@ export default {
     moreCreates: {
       type: Object,
       default: null
+    },
+    createTitle: {
+      type: String,
+      default: () => i18n.t('common.Create')
     }
   },
   data() {
     const defaultActions = [
       {
         name: 'actionCreate',
-        title: this.$t('common.Create'),
+        title: this.createTitle,
         type: 'primary',
         has: this.hasCreate && !this.moreCreates,
-        can: true,
+        can: this.canCreate,
         callback: this.handleCreate
       }
     ]
     if (this.moreCreates) {
       const defaultMoreCreate = {
         name: 'actionMoreCreate',
-        title: this.$t('common.Create'),
+        title: this.createTitle,
         type: 'primary',
         has: true,
-        can: true,
+        can: this.canCreate,
         dropdown: [],
         callback: this.handleCreate
       }

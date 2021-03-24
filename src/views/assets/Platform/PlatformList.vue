@@ -13,7 +13,8 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/platforms/',
         columns: [
-          'name', 'base', 'comment', 'actions'
+          'name', 'base',
+          'comment', 'actions'
         ],
         columnsMeta: {
           base: {
@@ -21,6 +22,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canClone: true,
               canDelete: (row, value) => {
                 return !row.internal
               },
@@ -32,13 +34,10 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
-        hasExport: false,
-        hasImport: false,
-        hasRefresh: false,
-        hasSearch: false,
+        hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
+        canCreate: true,
         createRoute: 'PlatformCreate'
       }
     }
