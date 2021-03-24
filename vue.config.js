@@ -1,6 +1,9 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = /\.(js|css|json|txt|ico|svg)(\?.*)?$/i
+
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -82,7 +85,15 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    plugins: [
+      new CompressionWebpackPlugin({
+        algorithm: 'gzip',
+        test: productionGzipExtensions, // 处理所有匹配此 {RegExp} 的资源
+        threshold: 10240, // 只处理比这个值大的资源。按字节计算(楼主设置10K以上进行压缩)
+        minRatio: 0.8 // 只有压缩率比这个值小的资源才会被处理
+      })
+    ]
   },
   chainWebpack(config) {
     // it can improve the speed of the first screen, it is recommended to turn on preload
