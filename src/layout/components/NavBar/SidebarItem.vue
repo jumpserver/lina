@@ -1,7 +1,7 @@
 <template>
   <div v-if="!item.hidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
+      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)" class="singleMenu">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
@@ -93,3 +93,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.el-submenu-sidebar ::v-deep .el-submenu__title{
+  background-color: #2f4050 !important;
+}
+.singleMenu ::v-deep .el-menu-item {
+  background-color: #2f4050 !important;
+}
+</style>
