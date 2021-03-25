@@ -11,6 +11,8 @@
         <template v-if="currentOrgRoles.length > 1 || hasAdminOrg ">
           <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
           <el-dropdown-item v-else icon="el-icon-guide" command="adminPage">{{ $t('common.nav.AdminPage') }}</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-guide" command="changeTheme">{{ '特权账号' }}</el-dropdown-item>
+
         </template>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
@@ -24,6 +26,7 @@
 import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
 import rolec from '@/utils/role'
+import { toggleClass } from '@/utils'
 import orgUtil from '@/utils/org'
 
 export default {
@@ -85,6 +88,9 @@ export default {
             // console.log('Switch to: ', rolec.USER)
             window.location.href = `/ui/`
           }
+          break
+        case 'changeTheme':
+          toggleClass(document.body, 'custom-theme')
           break
         case 'logout':
           this.logout()
