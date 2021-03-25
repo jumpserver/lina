@@ -19,7 +19,7 @@ export default {
         url: '/api/v1/audits/ftp-logs/',
         columns: [
           'user', 'asset', 'system_user', 'remote_addr', 'operate',
-          'filename', 'is_success', 'date_start'
+          'filename', 'is_success', 'date_start', 'actions'
         ],
         columnsMeta: {
           user: {
@@ -42,6 +42,33 @@ export default {
           },
           is_success: {
             width: '80px'
+          },
+          actions: {
+            prop: '',
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'download',
+                  title: this.$t('sessions.download'),
+                  type: 'primary',
+                  can: (row, cellValue) => {
+                    return row.has_file_record
+                  },
+                  callback: function({ row }) {
+                    // 跳转下载页面
+                    const downloadUrl = `/api/v1/audits/ftp-logs/${row.id}/file/download/`
+
+                    const a = document.createElement('a')
+                    a.href = downloadUrl
+                    a.click()
+                    window.URL.revokeObjectURL(downloadUrl)
+                  }
+                }
+              ]
+            }
           }
         },
         extraQuery: {
