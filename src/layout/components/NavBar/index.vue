@@ -8,7 +8,7 @@
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
-        :background-color="variables.menuBg"
+        class="menu-el"
         :text-color="variables.menuText"
         :text-weigth="variables.menuTextWeight"
         :unique-opened="true"
@@ -60,5 +60,14 @@ export default {
 <style scoped>
   .nav-header {
     background-image: url('~@/assets/img/header-profile.png');
+  }
+  .custom-theme .nav-header{
+    background-image: url('~@/assets/img/pa.jpeg');
+  }
+  .menu-el{
+    background-color:#2f4050;
+  }
+  .custom-theme .menu-el{
+    background-color:#262729;
   }
 </style>
