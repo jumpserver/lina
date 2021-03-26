@@ -4,6 +4,7 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     :has-detail-in-msg="false"
+    :after-get-form-value="afterGetFormValue"
     :perform-submit="performSubmit"
   />
 </template>
@@ -59,6 +60,10 @@ export default {
 
   },
   methods: {
+    afterGetFormValue(validValues) {
+      validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
+      return validValues
+    },
     performSubmit(validValues) {
       const method = this.getMethod()
       validValues.meta.HOSTS = validValues.meta.HOSTS.split(',').map(item => (item.trim()))
