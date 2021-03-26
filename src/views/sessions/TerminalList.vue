@@ -94,8 +94,8 @@ export default {
         url: '/api/v1/terminal/terminals/',
         columns: [
           'name', 'remote_addr', 'session_online',
-          'state.session_active_count', 'state.system_cpu_load_1',
-          'state.system_disk_used_percent', 'state.system_memory_used_percent',
+          'stat.session_online', 'stat.cpu_load',
+          'stat.disk_used', 'stat.memory_used',
           'status_display',
           'is_active', 'is_alive', 'actions'
         ],
@@ -103,19 +103,19 @@ export default {
           name: {
             sortable: 'custom'
           },
-          'state.session_active_count': {
+          'stat.session_online': {
             label: this.$t('sessions.sessionActiveCount'),
             width: '120px'
           },
-          'state.system_cpu_load_1': {
+          'stat.cpu_load': {
             label: this.$t('sessions.systemCpuLoad'),
             width: '120px'
           },
-          'state.system_disk_used_percent': {
+          'stat.disk_used': {
             label: this.$t('sessions.systemDiskUsedPercent'),
             width: '120px'
           },
-          'state.system_memory_used_percent': {
+          'stat.memory_used': {
             label: this.$t('sessions.systemMemoryUsedPercent'),
             width: '120px'
           },
