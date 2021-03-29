@@ -893,14 +893,21 @@ export default {
         return this.getListFromRemote({ loading: loading })
       }
       if (this.totalData) {
-        // page
-        const pageOffset = this.firstPage - defaultFirstPage
-        const page = this.page === 0 ? 1 : this.page
-        const start = (page + pageOffset - 1) * this.size
-        const end = (page + pageOffset) * this.size
-        console.log(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
-        this.data = this.totalData.slice(start, end)
+        this.getListFromStaticData()
       }
+    },
+    getListFromStaticData() {
+      if (!this.hasPagination) {
+        this.data = this.totalData
+        return
+      }
+      // page
+      const pageOffset = this.firstPage - defaultFirstPage
+      const page = this.page === 0 ? 1 : this.page
+      const start = (page + pageOffset - 1) * this.size
+      const end = (page + pageOffset) * this.size
+      console.log(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
+      this.data = this.totalData.slice(start, end)
     },
     /**
      * 手动刷新列表数据，选项的默认值为: { loading: true }

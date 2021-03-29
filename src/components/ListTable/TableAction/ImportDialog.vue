@@ -1,26 +1,30 @@
 <template>
   <Dialog
-    :title="$t('common.Import')"
+    :title="importTitle"
     :visible.sync="showImportDialog"
     :destroy-on-close="true"
+    :close-on-click-modal="false"
     :loading-status="loadStatus"
     width="80%"
-    @confirm="handleImportConfirm"
-    @cancel="handleImportCancel()"
+    class="importDialog"
+    :confirm-title="confirmTitle"
+    :show-cancel="false"
+    :show-confirm="false"
+    @close="handleImportCancel"
   >
-    <el-form label-position="left" style="padding-left: 50px">
+    <el-form v-if="!showTable" label-position="left" style="padding-left: 50px">
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
-        <el-radio v-model="importOption" class="export-item" label="1">{{ this.$t('common.Create') }}</el-radio>
-        <el-radio v-model="importOption" class="export-item" label="2">{{ this.$t('common.Update') }}</el-radio>
+        <el-radio v-model="importOption" class="export-item" label="create">{{ this.$t('common.Create') }}</el-radio>
+        <el-radio v-model="importOption" class="export-item" label="update">{{ this.$t('common.Update') }}</el-radio>
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
             {{ downloadTemplateTitle }}
-            <el-link type="success" :underline="false" :href="getDownloadTemplateUrl('csv')" style="padding-left: 10px"> CSV </el-link>
-            <el-link type="success" :underline="false" :href="getDownloadTemplateUrl('xlsx')" style="padding-left: 10px"> XLSX </el-link>
+            <el-link type="success" :underline="false" style="padding-left: 10px" @click="downloadTemplateFile('csv')"> CSV </el-link>
+            <el-link type="success" :underline="false" style="padding-left: 10px" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
           </span>
         </div>
       </el-form-item>
-      <el-form-item v-if="!showTable" :label="$t('common.Upload' )" :label-width="'100px'" class="file-uploader">
+      <el-form-item :label="$t('common.Upload' )" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           drag
@@ -29,30 +33,42 @@
           :limit="1"
           :auto-upload="false"
           :on-change="onFileChange"
+          :before-upload="beforeUpload"
           accept=".csv,.xlsx"
         >
           <i class="el-icon-upload" />
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          <div class="el-upload__text">{{ $t('common.imExport.dragUploadFileInfo') }}</div>
+          <div slot="tip" class="el-upload__tip">
+            <span :class="{'hasError': hasFileFormatOrSizeError }">{{ $t('common.imExport.uploadCsvLth10MHelpText') }}</span>
+            <div v-if="renderError" class="hasError">{{ renderError }}</div>
+          </div>
         </el-upload>
       </el-form-item>
-      <div v-else>
-        <DataTable :config="tableConfig" class="importTable" />
-      </div>
     </el-form>
+    <div v-else class="importTableZone">
+      <ImportTable
+        ref="importTable"
+        :json-data="jsonData"
+        :import-option="importOption"
+        :url="url"
+        @cancel="cancelUpload"
+        @finish="closeDialog"
+      />
+    </div>
   </Dialog>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
-// import { createSourceIdCache } from '@/api/common'
-import DataTable from '@/components/DataTable'
+import ImportTable from '@/components/ListTable/TableAction/ImportTable'
+import { getErrorResponseMsg } from '@/utils/common'
+import { createSourceIdCache } from '@/api/common'
 
 export default {
   name: 'ImportDialog',
   components: {
     Dialog,
-    DataTable
+    ImportTable
   },
   props: {
     selectedRows: {
@@ -67,27 +83,20 @@ export default {
   data() {
     return {
       showImportDialog: false,
-      importOption: '1',
+      importOption: 'create',
       errorMsg: '',
       loadStatus: false,
       importTypeOption: 'csv',
       importTypeIsCsv: true,
       showTable: false,
-      tableConfig: {
-        paginationSizes: [10],
-        paginationSize: 10,
-        hasSelection: false,
-        columns: [],
-        totalData: []
-      }
+      renderError: '',
+      hasFileFormatOrSizeError: false,
+      jsonData: {}
     }
   },
   computed: {
     hasSelected() {
       return this.selectedRows.length > 0
-    },
-    upLoadUrl() {
-      return this.url
     },
     uploadHelpTextClass() {
       const cls = ['el-upload__tip']
@@ -97,11 +106,21 @@ export default {
       return cls
     },
     downloadTemplateTitle() {
-      if (this.importOption === '1') {
+      if (this.importOption === 'create') {
         return this.$t('common.imExport.downloadImportTemplateMsg')
       } else {
         return this.$t('common.imExport.downloadUpdateTemplateMsg')
       }
+    },
+    importTitle() {
+      if (this.importOption === 'create') {
+        return this.$t('common.Import') + this.$t('common.Create')
+      } else {
+        return this.$t('common.Import') + this.$t('common.Update')
+      }
+    },
+    confirmTitle() {
+      return '导入'
     }
   },
   watch: {
@@ -115,87 +134,64 @@ export default {
     })
   },
   methods: {
+    closeDialog() {
+      this.showImportDialog = false
+    },
+    cancelUpload() {
+      this.showTable = false
+      this.renderError = ''
+      this.jsonData = {}
+    },
     onFileChange(file, fileList) {
+      fileList.splice(0, fileList.length)
       if (file.status !== 'ready') {
         return
       }
       // const isCsv = file.raw.type = 'text/csv'
+      if (!this.beforeUpload(file)) {
+        return
+      }
       const isCsv = file.name.indexOf('csv') > -1
-      this.tableConfig.columns = []
+      const renderToJsonUrl = this.url + 'render-to-json/'
       this.$axios.post(
-        this.upLoadUrl + 'render-to-json/',
+        renderToJsonUrl,
         file.raw,
         { headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
-      ).then((data) => {
-        const tableTitle = data['title']
-        const tableData = data['data']
-        this.tableConfig.columns.push({
-          prop: 'success',
-          label: '状态',
-          width: '80px',
-          fixed: true
-        })
-        tableTitle.forEach(item => {
-          this.tableConfig.columns.push({
-            prop: item[1],
-            label: item[0],
-            minWidth: '100px',
-            showOverflowTooltip: true
-          })
-        })
+      ).then(data => {
+        this.jsonData = data
         this.showTable = true
-        console.log(tableData)
-        this.tableConfig.totalData = []
-        setTimeout(() => {
-          tableData.forEach((item, index) => {
-            item.id = index
-            item.success = ''
-          })
-          this.tableConfig.totalData = tableData
-        }, 300)
       }).catch(error => {
-        console.log(error)
+        fileList.splice(0, fileList.length)
+        this.renderError = getErrorResponseMsg(error)
       }).finally(() => {
         this.loadStatus = false
       })
     },
-    getDownloadTemplateUrl(tp) {
-      const template = this.importOption === '1' ? 'import' : 'update'
-      const query = tp === 'csv' ? `format=csv&template=${template}&limit=1` : `format=xlsx&template=${template}&limit=1`
-      return (this.url.indexOf('?') === -1) ? `${this.url}?${query}` : `${this.url}&${query}`
+    beforeUpload(file) {
+      const isLt30M = file.size / 1024 / 1024 < 30
+      if (!isLt30M) {
+        this.hasFileFormatOrSizeError = true
+      }
+      return isLt30M
     },
-    performUpdate() {
-      this.tableConfig.totalData.forEach(item => {
-        this.$axios.put(
-          this.upLoadUrl,
-          item,
-          { disableFlashErrorMsg: true }
-        ).then((data) => {
-          const msg = this.$t('common.imExport.updateSuccessMsg', { count: data.length })
-          this.onSuccess(msg)
-        }).catch(error => {
-          this.catchError(error)
-        }).finally(() => {
-          this.loadStatus = false
-        })
-      })
+    async downloadTemplateFile(tp) {
+      const downloadUrl = await this.getDownloadTemplateUrl(tp)
+      window.open(downloadUrl)
     },
-    performCreate() {
-      this.tableConfig.totalData.forEach(item => {
-        this.$axios.post(
-          this.upLoadUrl,
-          item,
-          { disableFlashErrorMsg: true }
-        ).then((data) => {
-          item.id = data['id']
-          item.FALSE = 'TRUE'
-        }).catch(error => {
-          item.FALSE = 'FALSE'
-          console.log(error)
-        }).finally(() => {
-          this.loadStatus = false
-        })
-      })
+    async getDownloadTemplateUrl(tp) {
+      const template = this.importOption === 'create' ? 'import' : 'update'
+      let query = `format=${tp}&template=${template}`
+      if (this.importOption === 'update' && this.selectedRows.length > 0) {
+        const resources = []
+        for (const item of this.selectedRows) {
+          resources.push(item.id)
+        }
+        const resp = await createSourceIdCache(resources)
+        query += `&spm=${resp.spm}`
+      } else {
+        query += '&limit=1'
+      }
+      return this.url.indexOf('?') === -1 ? `${this.url}?${query}` : `${this.url}&${query}`
     },
     catchError(error) {
       console.log(error)
@@ -211,17 +207,13 @@ export default {
       window.URL.revokeObjectURL(url)
     },
     async handleImportConfirm() {
-      if (this.importOption === '1') {
-        this.performCreate()
-      } else {
-        this.performUpdate()
-      }
+      this.$refs['importTable'].performUpload()
     },
     handleImportCancel() {
       this.showImportDialog = false
       this.showTable = false
-      this.tableConfig.columns = []
-      this.tableConfig.totalData = []
+      this.renderError = ''
+      this.jsonData = {}
     }
   }
 }
@@ -237,14 +229,50 @@ export default {
     max-height: 200px;
     overflow: auto
   }
-  .file-uploader >>> .el-upload-dragger, .file-uploader >>> .el-upload {
-    width: 100%;
+
+  .importDialog >>> .el-form-item.file-uploader {
     padding-right: 150px;
   }
 
-  .importTable {
-    padding-right: 50px;
-    overflow: auto;
+  .file-uploader >>> .el-upload {
+    width: 100%;
+    //padding-right: 150px;
   }
 
+  .file-uploader >>> .el-upload-dragger {
+    width: 100%;
+  }
+
+  .importTableZone {
+    padding: 0 20px;
+
+    .importTable {
+      overflow: auto;
+    }
+
+    .tableFilter {
+      padding-bottom: 10px;
+    }
+  }
+
+  .importTable >>> .el-dialog__body {
+    padding-bottom: 20px;
+  }
+
+  .export-item {
+    margin-left: 80px;
+  }
+
+  .export-item:first-child {
+    margin-left: 0;
+  }
+
+  .hasError {
+    color: $--color-danger;
+  }
+
+  .el-upload__tip {
+    line-height: 1.5;
+    padding-top: 0;
+  }
 </style>

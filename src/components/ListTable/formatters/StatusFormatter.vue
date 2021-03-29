@@ -1,7 +1,17 @@
 <template>
   <div>
     <el-tooltip v-if="formatterArgs.hasTips" placement="bottom" effect="dark">
-      <div slot="content">{{ tips }}</div>
+      <div slot="content">
+        <template v-if="tipsIsArray">
+          <div v-for="tip of tips" :key="tip">
+            <span>{{ tip }}</span>
+            <br>
+          </div>
+        </template>
+        <span v-else>
+          {{ tips }}
+        </span>
+      </div>
       <i :class="'fa ' + iconClass" />
     </el-tooltip>
     <i v-else :class="'fa ' + iconClass" />
@@ -40,11 +50,14 @@ export default {
   computed: {
     iconClass() {
       const key = this.formatterArgs.getChoicesKey(this.cellValue)
-      return this.formatterArgs.iconChoices[key]
+      return this.formatterArgs.iconChoices[key] + ' ' + key + 'Status'
     },
     tips() {
       const vm = this
       return this.formatterArgs.getTip(this.cellValue, vm)
+    },
+    tipsIsArray() {
+      return Array.isArray(this.tips)
     }
   }
 }

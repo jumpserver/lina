@@ -1,6 +1,7 @@
 import axios from 'axios'
 import i18n from '@/i18n/i18n'
 import { getTokenFromCookie } from '@/utils/auth'
+import { getErrorResponseMsg } from '@/utils/common'
 import { refreshSessionIdAge } from '@/api/users'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
@@ -84,11 +85,8 @@ function ifBadRequest({ response, error }) {
 
 export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
-    let msg = error.message
-    const data = response.data
-    if (data && (data.error || data.msg || data.detail)) {
-      msg = data.error || data.msg || data.detail
-    }
+    const responseErrorMsg = getErrorResponseMsg(error)
+    const msg = responseErrorMsg || error.message
     Message({
       message: msg,
       type: 'error',

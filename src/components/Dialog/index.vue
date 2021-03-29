@@ -73,4 +73,8 @@ export default {
     /*padding-top: 10px;*/
   }
 
+  .dialog-footer {
+    padding-right: 50px;
+  }
+
 </style>
