@@ -1,9 +1,7 @@
 <template>
   <div>
     <div style="font-size: 24px;font-weight: 300">
-      <span v-if="type === 'omnidb'">{{ `OmniDB ( ${serviceData.total} )` }}</span>
-      <span v-else-if="type === 'guacamole'">{{ `Guacamole ( ${serviceData.total} )` }}</span>
-      <span v-else>{{ `KoKo ( ${serviceData.total} )` }}</span>
+      <span>{{ componentName }} ( {{ componentMetric.total }} )</span>
     </div>
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">
@@ -14,40 +12,40 @@
               <div
                 class="progress-bar progress-bar-success"
                 role="progressbar"
-                :style="{'width':toPercent(serviceData.normal) }"
+                :style="{'width':toPercent(componentMetric.normal) }"
               />
               <div
                 class="progress-bar progress-bar-warning"
                 role="progressbar"
-                :style="{'width':toPercent(serviceData.high) }"
+                :style="{'width':toPercent(componentMetric.high) }"
               />
               <div
                 class="progress-bar progress-bar-danger"
                 role="progressbar"
-                :style="{'width':toPercent(serviceData.critical) }"
+                :style="{'width':toPercent(componentMetric.critical) }"
               />
               <div
                 class="progress-bar progress-bar-offline"
                 role="progressbar"
-                :style="{'width':toPercent(serviceData.offline) }"
+                :style="{'width':toPercent(componentMetric.offline) }"
               />
             </div>
             <div style="display: flex;justify-content: space-around;font-size: 14px;">
               <span>
                 <i class="el-icon-circle-check" style="color: #13CE66;" />
-                {{ $t('xpack.NormalLoad') }}: {{ serviceData.normal }}
+                {{ $t('xpack.NormalLoad') }}: {{ componentMetric.normal }}
               </span>
               <span>
                 <i class="el-icon-bell" style="color: #E6A23C;" />
-                {{ $t('xpack.HighLoad') }}: {{ serviceData.high }}
+                {{ $t('xpack.HighLoad') }}: {{ componentMetric.high }}
               </span>
               <span>
                 <i class="el-icon-message-solid" style="color: #FF4949;" />
-                {{ $t('xpack.CriticalLoad') }}: {{ serviceData.critical }}
+                {{ $t('xpack.CriticalLoad') }}: {{ componentMetric.critical }}
               </span>
               <span>
                 <i class="el-icon-circle-close" style="color: #bfbaba;" />
-                {{ $t('xpack.Offline') }}: {{ serviceData.offline }}
+                {{ $t('xpack.Offline') }}: {{ componentMetric.offline }}
               </span>
             </div>
           </div>
@@ -56,7 +54,7 @@
           <div style="height: 100%;width: 100%;padding-top: 8px;">
             <h2 style="text-align: center;font-weight: 350">{{ $t('dashboard.OnlineSessions') }}</h2>
             <div style="text-align: center;font-size: 30px;">
-              {{ serviceData.session_active }}
+              {{ componentMetric.session_active }}
             </div>
           </div>
         </el-col>
@@ -70,7 +68,6 @@
 export default {
   name: 'MonitorCard',
   components: {
-
   },
   props: {
     // koko/guacamole/omnidb/core
@@ -78,29 +75,25 @@ export default {
       type: String,
       default: 'koko',
       required: true
-    }
-  },
-  data() {
-    return {
-      baseUrl: `/api/v1/terminal/components/metrics/?type=`,
-      serviceData: {
-
-      }
+    },
+    componentMetric: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {
-
-  },
-  mounted() {
-    this.getServiceData()
+    componentName() {
+      const nameMapper = {
+        koko: 'KoKo',
+        guacamole: 'Guacamole',
+        omnidb: 'OmniDB'
+      }
+      return nameMapper[this.componentMetric.type]
+    }
   },
   methods: {
-    async getServiceData() {
-      const url = `${this.baseUrl}${this.type}`
-      this.serviceData = await this.$axios.get(url)
-    },
     toPercent(num) {
-      return (Math.round(num / this.serviceData.total * 10000) / 100.00 + '%')// 小数点后两位百分比
+      return (Math.round(num / this.componentMetric.total * 10000) / 100.00 + '%')// 小数点后两位百分比
     }
   }
 }
