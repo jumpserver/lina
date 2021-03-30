@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, azure_international, vmware } from '../const'
+import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, azure_international, vmware, nutanix } from '../const'
 import { BooleanFormatter, DetailFormatter } from '@/components/ListTable/formatters'
 
 export default {
@@ -109,6 +109,10 @@ export default {
             {
               name: vmware,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
+            },
+            {
+              name: nutanix,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
             }
           ]
         }
