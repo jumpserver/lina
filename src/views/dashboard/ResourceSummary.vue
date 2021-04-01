@@ -56,7 +56,7 @@ export default {
             type: 'primary'
           },
           body: {
-            route: `/terminal/session`,
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_users,
             comment: 'Online users'
           }
@@ -68,7 +68,7 @@ export default {
             type: 'danger'
           },
           body: {
-            route: `/terminal/session`,
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_sessions,
             comment: 'Online sessions'
           }
