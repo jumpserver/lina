@@ -179,7 +179,7 @@
     "TestAssetsConnective": "测试资产可连接性",
     "TestConnection": "测试连接",
     "Type": "类型",
-    "UnselectedAssets": "未选择资产",
+    "UnselectedAssets": "未选择资产或所选择的资产不支持SSH协议连接",
     "UnselectedNodes": "未选择节点",
     "UpdateAssetUserToken": "更新资产用户认证信息",
     "Username": "用户名",
