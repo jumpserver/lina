@@ -178,7 +178,7 @@
     "TestAssetsConnective": "Test assets connective",
     "TestConnection": "Test connection",
     "Type": "Type",
-    "UnselectedAssets": "Unselected assets",
+    "UnselectedAssets": "No asset selected or the selected asset does not support SSH protocol connection",
     "UnselectedNodes": "Unselected nodes",
     "UpdateAssetUserToken": "Update asset user auth",
     "Username": "Username",
