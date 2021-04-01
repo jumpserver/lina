@@ -42,6 +42,12 @@ export default {
             return this.$route.params.id
           }
         },
+        email: {
+          rules: [
+            rules.EmailCheck,
+            rules.Required
+          ]
+        },
         update_password: {
           label: this.$t('users.UpdatePassword'),
           type: 'checkbox',

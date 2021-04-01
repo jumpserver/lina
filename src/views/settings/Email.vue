@@ -4,6 +4,7 @@
       :fields="fields"
       :url="url"
       :get-method="getMethod"
+      :fields-meta="fieldsMeta"
       :more-buttons="moreButtons"
       :has-detail-in-msg="false"
     />
@@ -14,6 +15,7 @@
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testEmailSetting } from '@/api/settings'
 import { IBox } from '@/components'
+import rules from '@/components/DataForm/rules'
 
 export default {
   name: 'Email',
@@ -51,6 +53,24 @@ export default {
           ]
         ]
       ],
+      fieldsMeta: {
+        EMAIL_HOST_USER: {
+          rules: [
+            rules.EmailCheck,
+            rules.Required
+          ]
+        },
+        EMAIL_FROM: {
+          rules: [
+            rules.EmailCheck
+          ]
+        },
+        EMAIL_RECIPIENT: {
+          rules: [
+            rules.EmailCheck
+          ]
+        }
+      },
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
