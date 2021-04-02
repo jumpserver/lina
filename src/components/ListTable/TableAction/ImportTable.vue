@@ -306,7 +306,7 @@ export default {
           return
         }
         await this.performUploadObject(item)
-        await sleep(300)
+        await sleep(100)
       }
       this.importTaskStatus = 'done'
       if (this.failedCount > 0) {
