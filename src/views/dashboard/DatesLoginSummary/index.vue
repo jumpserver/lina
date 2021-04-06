@@ -1,5 +1,5 @@
 <template>
-  <div class="white-bg dashboard-header">
+  <div class="white-bg dashboard-header print-margin">
     <el-row>
       <el-col :span="12">
         <h2>{{ $t('dashboard.LoginOverview') }}</h2>
@@ -64,6 +64,17 @@ export default {
     background-image: none;
     border: 1px solid #d2d2d2;
     -webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+  }
+  @media print {
+    .disabled-when-print{
+      display: none;
+    }
+    .enabled-when-print{
+      display: inherit !important;
+    }
+    .print-margin{
+      margin-top: 20px;
+    }
   }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <PageHeading>
+    <PageHeading class="disabled-when-print">
       <slot name="title">{{ iTitle }}</slot>
       <template #rightSide>
         <slot name="headingRightSide" />
@@ -42,5 +42,15 @@ export default {
 </script>
 
 <style scoped>
-
+@media print {
+  .disabled-when-print{
+    display: none;
+  }
+  .enabled-when-print{
+    display: inherit !important;
+  }
+  .print-margin{
+    margin-top: 10px;
+  }
+}
 </style>

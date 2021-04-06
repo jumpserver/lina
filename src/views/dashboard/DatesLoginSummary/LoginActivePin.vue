@@ -1,12 +1,28 @@
 <template>
   <div class="statistic-box">
     <h4>{{ $t('dashboard.ActiveUserAssetsRatioTitle') }}</h4>
-    <el-row :gutter="10">
-      <el-col :md="12" :sm="24">
+    <el-row :gutter="2">
+      <el-col :md="12" :sm="10">
         <echarts :options="userOption" :autoresize="true" />
+        <div style="" class="print-display">
+          <div style="width: 14px;height: 14px;background: #1ab394; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <label>{{ $t('dashboard.ActiveUser') }}</label>
+          <div style="width: 14px;height: 14px;background: #1C84C6; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <label>{{ $t('dashboard.DisabledUser') }}</label>
+          <div style="width: 14px;height: 14px;background: #9CC3DA; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <label>{{ $t('dashboard.InActiveUser') }}</label>
+        </div>
       </el-col>
-      <el-col :md="12" :sm="24">
+      <el-col :md="12" :sm="10">
         <echarts :options="AssetOption" :autoresize="true" />
+        <div style="" class="print-display">
+          <div style="width: 14px;height: 14px;background: #1ab394; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <label>{{ $t('dashboard.ActiveAsset') }}</label>
+          <div style="width: 14px;height: 14px;background: #1C84C6; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <label>{{ $t('dashboard.DisabledAsset') }}</label>
+          <div style="width: 14px;height: 14px;background: #9CC3DA; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <label>{{ $t('dashboard.InActiveAsset') }}</label>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -152,5 +168,16 @@ export default {
   .echarts {
     width: 100%;
     height: 250px;
+  }
+  .print-display {
+    display: none;
+  }
+  @media print {
+    .el-col-24{
+      width: 50% !important;
+    }
+    .print-display {
+      display: inherit;
+    }
   }
 </style>
