@@ -21,7 +21,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
+        [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions', 'domains']],
         [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'admin_user', 'is_always_update']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
@@ -31,6 +31,11 @@ export default {
         account: {
           on: {
             change: ([event], updateForm) => {
+              if (event.length > 0) {
+                vm.account_id_value = event
+              } else {
+                vm.account_id_value = null
+              }
               vm.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${event}`
               updateForm({ regions: '' })
             }
@@ -77,6 +82,14 @@ export default {
         },
         regions: {
           component: Select2,
+          on: {
+            change: ([event], updateForm) => {
+              if (vm.account_id_value) {
+                vm.fieldsMeta.domains.el.ajax.url = `/api/v1/xpack/cloud/domains/?account_id=${vm.account_id_value}&region=${event}`
+                updateForm({ domains: [] })
+              }
+            }
+          },
           el: {
             multiple: true,
             value: [],
@@ -86,6 +99,25 @@ export default {
                 const results = data.regions.map((item) => {
                   return { label: item.name, value: item.id }
                 })
+                const more = !!data.next
+                return { results: results, pagination: more, total: data.count }
+              }
+            }
+          }
+        },
+        domains: {
+          component: Select2,
+          label: this.$t('assets.Domain'),
+          el: {
+            multiple: true,
+            value: [],
+            ajax: {
+              url: '/api/v1/xpack/cloud/domains/',
+              processResults(data) {
+                const results = data.domains.map((item) => {
+                  return { label: item.name, value: item.id }
+                })
+                vm.domainsLength = results.length
                 const more = !!data.next
                 return { results: results, pagination: more, total: data.count }
               }
@@ -120,6 +152,8 @@ export default {
     if (params.id) {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
       this.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${form.account}`
+      this.fieldsMeta.domains.el.ajax.url = `/api/v1/xpack/cloud/domains/?account_id=${form.account}&region=${form.regions}`
+      this.account_id_value = form.account
     }
   }
 }
