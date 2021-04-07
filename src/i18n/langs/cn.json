@@ -179,7 +179,7 @@
     "TestAssetsConnective": "测试资产可连接性",
     "TestConnection": "测试连接",
     "Type": "类型",
-    "UnselectedAssets": "未选择资产",
+    "UnselectedAssets": "未选择资产或所选择的资产不支持SSH协议连接",
     "UnselectedNodes": "未选择节点",
     "UpdateAssetUserToken": "更新资产用户认证信息",
     "Username": "用户名",
@@ -320,6 +320,7 @@
     "fieldRequiredError": "这个字段是必填项",
     "getErrorMsg": "获取失败",
     "MFAErrorMsg": "MFA错误，请检查",
+    "InputEmailAddress": "请输入正确的邮箱地址",
     "imExport": {
       "ExportAll": "导出所有",
       "ExportOnlyFiltered": "仅导出搜索结果",

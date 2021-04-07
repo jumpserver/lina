@@ -38,9 +38,15 @@ export default {
       url: '/api/v1/users/users/',
       fieldsMeta: {
         password_strategy: {
-          hidden: () => {
-            return this.$route.params.id
+          hidden: (formValue) => {
+            return this.$route.params.id || formValue.source !== 'local'
           }
+        },
+        email: {
+          rules: [
+            rules.EmailCheck,
+            rules.Required
+          ]
         },
         update_password: {
           label: this.$t('users.UpdatePassword'),
@@ -58,7 +64,7 @@ export default {
             if (formValue.password_strategy) {
               return false
             }
-            return !formValue.update_password
+            return !formValue.update_password || formValue.source !== 'local'
           },
           el: {
             required: false
@@ -71,12 +77,12 @@ export default {
             if (formValue.set_public_key) {
               return true
             }
-            return this.$route.meta.action !== 'update'
+            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
           }
         },
         public_key: {
           hidden: (formValue) => {
-            return !formValue.set_public_key
+            return !formValue.set_public_key || formValue.source !== 'local'
           }
         },
         role: {
