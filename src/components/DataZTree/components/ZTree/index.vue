@@ -24,7 +24,6 @@
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
 import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
-import '@/styles/ztree.css'
 import axiosRetry from 'axios-retry'
 
 const defaultObject = {
