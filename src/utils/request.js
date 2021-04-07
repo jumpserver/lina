@@ -4,6 +4,7 @@ import { getTokenFromCookie } from '@/utils/auth'
 import { refreshSessionIdAge } from '@/api/users'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
+import axiosRetry from 'axios-retry'
 
 // create an axios instance
 const service = axios.create({
@@ -75,14 +76,18 @@ function ifBadRequest({ response, error }) {
   if (response.status === 403) {
     error.message = i18n.t('common.BadRoleErrorMsg')
   }
+  if (response.status === 409) {
+    error.response.status = 409
+    error.message = i18n.t('common.BadConflictErrorMsg')
+  }
 }
 
 export function flashErrorMsg({ response, error }) {
   if (!response.config.disableFlashErrorMsg) {
     let msg = error.message
     const data = response.data
-    if (data && (data.error || data.msg)) {
-      msg = data.error || data.msg
+    if (data && (data.error || data.msg || data.detail)) {
+      msg = data.error || data.msg || data.detail
     }
     Message({
       message: msg,
@@ -102,7 +107,7 @@ function refreshSessionAgeDelay(response) {
   }
   timer = setTimeout(function() {
     refreshSessionIdAge()
-  }, 60 * 10 * 1000)
+  }, 30 * 1000)
 }
 
 // response interceptor
@@ -140,5 +145,10 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+axiosRetry(service, {
+  // 默认不开启请求重试
+  retries: 0
+})
 
 export default service

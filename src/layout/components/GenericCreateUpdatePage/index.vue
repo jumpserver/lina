@@ -1,5 +1,5 @@
 <template>
-  <Page>
+  <Page v-bind="$attrs">
     <IBox>
       <GenericCreateUpdateForm ref="createUpdateForm" v-bind="$attrs" v-on="$listeners" />
     </IBox>

@@ -1,5 +1,5 @@
 <template>
-  <ZTree ref="ztree" :setting="treeSetting">
+  <ZTree ref="ztree" :setting="treeSetting" v-on="$listeners">
     <!--Slot透传-->
     <div slot="rMenu" slot-scope="{data}">
       <slot name="rMenu" :data="data" />
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     defaultCallback: function(action) {
-      console.log(action)
+      // console.log(action)
     }
   }
 }

@@ -1,14 +1,14 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
   name: 'ChangeAuthPlanExecutionTaskList',
   components: {
-    ListTable
+    GenericListTable
   },
   props: {
     object: {
@@ -51,9 +51,9 @@ export default {
                   name: 'retry',
                   type: 'info',
                   title: this.$t('xpack.ChangeAuthPlan.Retry'),
-                  callback: function({ cellValue, tableData }) {
+                  callback: function({ row, tableData }) {
                     this.$axios.put(
-                      `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${cellValue}/`,
+                      `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${row.id}/`,
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                     })

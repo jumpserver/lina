@@ -11,6 +11,7 @@
         v-bind="tableAttrs"
         :data="data"
         :row-class-name="rowClassName"
+        v-on="$listeners"
         @selection-change="selectStrategy.onSelectionChange"
         @select="selectStrategy.onSelect"
         @select-all="selectStrategy.onSelectAll($event, canSelect)"
@@ -95,6 +96,9 @@
             v-for="col in columns"
             :key="col.prop"
             :formatter="typeof col.formatter === 'function' ? col.formatter : null"
+            :filters="col.filters || null"
+            :filter-multiple="false"
+            :filter-method="typeof col.filterMethod === 'function' ? col.filterMethod : null"
             v-bind="{align: columnsAlign, ...col}"
           >
             <template v-if="col.formatter && typeof col.formatter !== 'function'" v-slot:default="{row, column, index}">
@@ -422,7 +426,7 @@ export default {
     onEdit: {
       type: Function,
       default(row) {
-        console.log('On delete row')
+        // console.log('On delete row')
       }
     },
     /**
@@ -1006,7 +1010,7 @@ export default {
     },
     handleSizeChange(val) {
       if (this.size === val) return
-
+      this.$emit('sizeChange', val)
       this.page = defaultFirstPage
       this.size = val
       this.getList()

@@ -3,11 +3,11 @@
     <el-col :md="8" :sm="12">
       <TopUser />
     </el-col>
-    <el-col :md="8" :sm="12">
+    <el-col :md="8" :sm="12" class="print-margin-top">
       <TopAssets />
     </el-col>
     <el-col :md="8" :sm="12">
-      <Latest10Sessions class="card-item" />
+      <Latest10Sessions class="card-item print-margin-top" />
     </el-col>
   </el-row>
 </template>
@@ -28,5 +28,9 @@ export default {
 </script>
 
 <style scoped>
-
+@media print {
+  .print-margin-top{
+    margin-top: 10px;
+  }
+}
 </style>

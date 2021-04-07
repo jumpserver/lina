@@ -3,8 +3,11 @@ const getters = {
   device: state => state.app.device,
   token: state => state.users.token,
   currentOrg: state => state.users.currentOrg,
+  currentOrgIsDefault: state => state.users.currentOrg.is_default,
+  currentOrgIsRoot: state => {
+    return state.users.currentOrg && state.users.currentOrg.is_root
+  },
   currentRole: state => state.users.currentRole,
-  userAdminOrgList: state => state.users.orgs,
   currentUser: state => state.users.profile,
   permission_routes: state => state.permission.routes,
   visitedViews: state => state.tagsView.visitedViews,
@@ -13,6 +16,18 @@ const getters = {
   currentOrgRoles: state => state.users.roles,
   currentOrgPerms: state => state.users.perms,
   MFAVerifyAt: state => state.users.MFAVerifyAt,
-  MFA_TTl: state => state.settings.publicSettings.SECURITY_MFA_VERIFY_TTL
+  MFA_TTl: state => state.settings.publicSettings.SECURITY_MFA_VERIFY_TTL,
+  tableConfig: state => state.table.tableConfig,
+  currentUserIsSuperAdmin: state => {
+    return state.users.sysRole === 'Admin'
+  },
+  hasValidLicense: state => state.settings.hasValidLicense,
+  userAdminOrgList: (state, getters) => {
+    let orgs = state.users.orgs
+    if (!getters.hasValidLicense) {
+      orgs = orgs.filter(org => !org.is_root)
+    }
+    return orgs
+  }
 }
 export default getters

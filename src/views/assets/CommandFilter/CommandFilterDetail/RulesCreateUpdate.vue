@@ -4,6 +4,7 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    :has-detail-in-msg="false"
     :get-next-route="getNextRoute"
   />
 </template>
@@ -24,7 +25,6 @@ export default {
       initial: {
         filter: filterId,
         type: 'regex',
-        priority: 50,
         action: 0
       },
       fields: [
@@ -65,7 +65,7 @@ export default {
         },
         priority: {
           // helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
-          helpText: this.$t('assets.CommandFilterRulePriorityHelpText')
+          // helpText: this.$t('assets.CommandFilterRulePriorityHelpText')
         }
       },
       getNextRoute(res, method) {

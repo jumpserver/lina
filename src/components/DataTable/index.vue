@@ -1,9 +1,17 @@
 <template>
-  <ElDatableTable ref="table" class="el-table" v-bind="tableConfig" @update="onUpdate" v-on="iListeners" />
+  <ElDatableTable
+    ref="table"
+    class="el-table"
+    v-bind="tableConfig"
+    @update="onUpdate"
+    v-on="iListeners"
+    @sizeChange="handleSizeChange"
+  />
 </template>
 
 <script>
 import { default as ElDatableTable } from './compenents/el-data-table'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'DataTable',
@@ -58,7 +66,6 @@ export default {
         pageCount: 5,
         paginationLayout: 'total, sizes, prev, pager, next',
         paginationSizes: [15, 30, 50, 100],
-        paginationSize: 15,
         paginationBackground: true,
         transformQuery: query => {
           if (query.page && query.size) {
@@ -85,12 +92,17 @@ export default {
   },
   computed: {
     tableConfig() {
-      const config = Object.assign(this.defaultConfig, this.config)
+      const tableDefaultConfig = this.defaultConfig
+      tableDefaultConfig.paginationSize = _.get(this.globalTableConfig, 'paginationSize', 15)
+      const config = Object.assign(tableDefaultConfig, this.config)
       return config
     },
     iListeners() {
       return Object.assign({}, this.$listeners, this.tableConfig.listeners)
-    }
+    },
+    ...mapGetters({
+      'globalTableConfig': 'tableConfig'
+    })
   },
   watch: {
     config: {
@@ -131,6 +143,14 @@ export default {
           this.toggleRowSelection(row, true)
         }
       }
+    },
+    handleSizeChange(val) {
+      this.$store.commit('table/SET_TABLE_CONFIG',
+        {
+          key: 'paginationSize',
+          value: val
+        }
+      )
     }
   }
 }

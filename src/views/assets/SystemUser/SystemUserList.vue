@@ -4,75 +4,121 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter, ActionsFormatter } from '@/components/ListTable/formatters/index'
 
 export default {
   components: {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/assets/system-users/',
         columns: [
-          {
-            prop: 'name',
-            label: this.$t('common.Name'),
-            formatter: DetailFormatter,
-            showOverflowTooltip: true,
-            sortable: true,
-            formatterArgs: {
-              route: 'SystemUserDetail'
-            }
+          'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
+          'assets_amount', 'priority',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
+        ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'username', 'protocol', 'login_mode', 'assets_amount', 'comment', 'actions']
+        },
+        columnsMeta: {
+          username: {
+            showOverflowTooltip: true
           },
-          {
-            prop: 'username',
-            label: this.$t('common.Username'),
-            showOverflowTooltip: true,
-            sortable: 'custom'
-          },
-          {
-            prop: 'protocol',
-            label: this.$t('assets.Protocol'),
-            sortable: 'custom',
+          protocol: {
             width: '100px'
           },
-          {
-            prop: 'login_mode_display',
-            label: this.$t('assets.LoginModel'),
+          username_same_with_user: {
+            width: '150px'
+          },
+          login_mode: {
             width: '120px'
           },
-          {
-            prop: 'assets_amount',
-            label: this.$t('assets.Assets'),
+          assets_amount: {
             width: '80px'
           },
-          {
-            prop: 'comment',
-            showOverflowTooltip: true,
-            label: this.$t('common.Comment')
-          },
-          {
-            prop: 'id',
-            align: 'center',
-            formatter: ActionsFormatter,
-            width: '200px',
-            label: this.$t('common.Action'),
-            updateRoute: 'SystemUserUpdate',
+          actions: {
             formatterArgs: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/assets/system-users/${id}/`
-                return this.$axios.delete(url)
+              onUpdate: ({ row }) => {
+                vm.$router.push({ name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }})
+              },
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'SystemUserCreate', query: { protocol: row.protocol, clone_from: row.id }})
               }
             }
           }
-        ]
+        }
+
       },
       headerActions: {
-        hasBulkDelete: false,
         hasMoreActions: false,
-        createRoute: 'SystemUserCreate'
+        hasCreate: false,
+        createRoute: 'SystemUserCreate',
+        moreCreates: {
+          callback: (option) => {
+            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.title.toLowerCase() }})
+          },
+          dropdown: [
+            {
+              title: 'SSH',
+              name: 'SSH',
+              type: 'primary',
+              group: this.$t('assets.HostProtocol'),
+              has: true
+            },
+            {
+              title: 'Telnet',
+              name: 'Telnet',
+              type: 'primary',
+              has: true
+            },
+            {
+              title: 'RDP',
+              name: 'RDP',
+              type: 'primary',
+              has: true
+            },
+            {
+              title: 'VNC',
+              name: 'VNC',
+              type: 'primary',
+              has: true
+            },
+            {
+              name: 'MySQL',
+              title: 'MySQL',
+              type: 'primary',
+              has: true,
+              group: this.$t('assets.DatabaseProtocol')
+            },
+            {
+              name: 'PostgreSQL',
+              title: 'PostgreSQL',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'MariaDB',
+              title: 'MariaDB',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'Oracle',
+              title: 'Oracle',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'K8S',
+              title: 'K8S',
+              type: 'primary',
+              group: this.$t('assets.OtherProtocol')
+            }
+          ]
+        }
       },
       helpMessage: this.$t('assets.SystemUserListHelpMessage')
     }

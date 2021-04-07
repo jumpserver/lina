@@ -1,14 +1,14 @@
 <template>
-  <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'HistoryList',
-  components: { ListTable },
+  components: { GenericListTable },
   props: {
     object: {
       type: Object,
@@ -61,13 +61,14 @@ export default {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               moreActionsTitle: this.$t('xpack.Cloud.Log'),
+              hasClone: false,
               extraActions: [
                 {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    window.open(`/#/ops/celery/task/${val.cellValue}/log/`, '', 'width=900,height=600')
+                    window.open(`/#/ops/celery/task/${val.row.id}/log/`, '', 'width=900,height=600')
                   }
                 }
               ]

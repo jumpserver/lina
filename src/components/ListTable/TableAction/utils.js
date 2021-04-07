@@ -5,7 +5,9 @@ export function cleanActions(actions, canDefaults, { selectedRows, reloadTable }
   cloneActions.forEach((action) => {
     action.has = cleanBoolean(action, 'has', true, { selectedRows, reloadTable })
     action.can = cleanBoolean(action, 'can', true, { selectedRows, reloadTable })
-    action.callback = cleanCallback(action, { selectedRows, reloadTable })
+    if (!action.dropdown) {
+      action.callback = cleanCallback(action, { selectedRows, reloadTable })
+    }
     cleanedActions.push(action)
   })
   return cleanedActions

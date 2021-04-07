@@ -4,7 +4,7 @@
       <i class="fa fa-comments" /> {{ $t('common.Message') }}
     </div>
     <template v-if="comments">
-      <div v-for="item in comments" :key="item.user_display + item.body" class="feed-activity-list">
+      <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
             <el-avatar :src="imageUrl" class="header-avatar" />
@@ -13,8 +13,8 @@
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <pre style="padding-top: 10px">
-              {{ item.body }}
+            <pre style="padding-top: 10px; overflow: auto">
+{{ item.body }}
             </pre>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default {
     },
     getComment() {
       this.loading = true
-      const url = `/api/v1/tickets/tickets/${this.object.id}/comments/`
+      const url = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       this.$axios.get(url).then(res => {
         this.comments = res
       }).catch(err => {
@@ -130,25 +130,22 @@ export default {
     defaultApprove() {
       this.createComment(function() {
       })
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { action: 'approve' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const url = `/api/v1/tickets/tickets/${this.object.id}/approve/`
+      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     defaultReject() {
       this.createComment(function() {})
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { action: 'reject' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const url = `/api/v1/tickets/tickets/${this.object.id}/reject/`
+      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     defaultClose() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/`
-      const data = { status: 'closed' }
-      this.$axios.patch(url, data).then(res => this.reloadPage()).catch(err => this.$message.error(err))
+      const url = `/api/v1/tickets/tickets/${this.object.id}/close/`
+      this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     createComment(successCallback) {
       const commentText = this.form.comments
       const ticketId = this.object.id
-      const commentUrl = `/api/v1/tickets/tickets/${ticketId}/comments/`
+      const commentUrl = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
       if (!commentText) { return }
       const body = {
         body: commentText,

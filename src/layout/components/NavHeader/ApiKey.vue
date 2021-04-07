@@ -61,7 +61,7 @@ export default {
                   this.$refs.ListTable.reloadTable()
                   this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
                 })
               }.bind(this),
               extraActions: [

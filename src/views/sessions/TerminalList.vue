@@ -86,15 +86,38 @@ export default {
                 }
               }
             })
-          }.bind(this)
+          }.bind(this),
+          hasSaveContinue: false
         }
       },
       tableConfig: {
         url: '/api/v1/terminal/terminals/',
-        columns: ['name', 'remote_addr', 'session_online', 'is_active', 'is_alive', 'actions'],
+        columns: [
+          'name', 'remote_addr', 'session_online',
+          'stat.cpu_load',
+          'stat.disk_used', 'stat.memory_used',
+          'status_display',
+          'is_active', 'is_alive', 'actions'
+        ],
         columnsMeta: {
           name: {
             sortable: 'custom'
+          },
+          'stat.cpu_load': {
+            label: this.$t('sessions.systemCpuLoad'),
+            width: '120px'
+          },
+          'stat.disk_used': {
+            label: this.$t('sessions.systemDiskUsedPercent'),
+            width: '120px'
+          },
+          'stat.memory_used': {
+            label: this.$t('sessions.systemMemoryUsedPercent'),
+            width: '120px'
+          },
+          'status_display': {
+            label: this.$t('xpack.LoadStatus'),
+            width: '120px'
           },
           remote_addr: {
             sortable: 'custom'
@@ -111,6 +134,12 @@ export default {
           session_online: {
             label: this.$t('sessions.session'),
             width: '80px'
+          },
+          actions: {
+            formatterArgs: {
+              hasClone: false,
+              canUpdate: true
+            }
           }
         }
       },

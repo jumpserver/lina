@@ -30,10 +30,19 @@ export default {
         url: this.url,
         columns: [
           'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
-          'command_amount', 'date_start', 'duration', 'actions'
+          'command_amount', 'date_start', 'date_end', 'duration',
+          'org_name', 'actions'
         ],
+        columnsShow: {
+          min: ['index', 'actions'],
+          default: [
+            'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+            'command_amount', 'date_start', 'duration', 'actions'
+          ]
+        },
         columnsMeta: {
           index: {
+            prop: 'index',
             label: this.$t('sessions.id'),
             align: 'center',
             width: '40px',
@@ -75,6 +84,9 @@ export default {
           date_start: {
             width: '100px'
           },
+          date_end: {
+            width: '100px'
+          },
           duration: {
             label: this.$t('sessions.duration'),
             formatter: function(row) {
@@ -83,12 +95,13 @@ export default {
             width: '80px'
           },
           actions: {
-            prop: 'id',
+            prop: 'actions',
             label: this.$t('common.Actions'),
             width: '160px',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasEdit: false,
+              hasClone: false,
               hasDelete: false,
               hasUpdate: false,
               extraActions: this.extraActions

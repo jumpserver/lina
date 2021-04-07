@@ -1,10 +1,10 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard type="primary" v-bind="memberRelationConfig">
+      <RelationCard type="primary" v-bind="memberRelationConfig" class="RelationCard">
         <el-radio-group v-model="defaultOrgRole" style="padding: 8px">
           <el-radio v-for="item in group" :key="item.value" :label="item.value">{{ item.label }}</el-radio>
         </el-radio-group>
@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'OrganizationMembershipList',
   components: {
-    ListTable,
+    GenericListTable,
     RelationCard
   },
   props: {
@@ -46,7 +46,7 @@ export default {
         }
       ],
       tableConfig: {
-        url: `/api/v1/orgs/org-memeber-relation/?org_id=${this.object.id}`,
+        url: `/api/v1/orgs/org-member-relation/?org_id=${this.object.id}`,
         columns: [
           'user_display', 'role_display', 'delete_action'
         ],
@@ -65,7 +65,7 @@ export default {
             objects: 'all',
             formatter: DeleteActionFormatter,
             hasBackSlash: true,
-            deleteUrl: `/api/v1/orgs/org-memeber-relation/?id=`
+            deleteUrl: `/api/v1/orgs/org-member-relation/?id=`
           }
         },
         tableAttrs: {
@@ -96,7 +96,7 @@ export default {
         hasObjectsId: this.object.users,
         showHasObjects: false,
         performAdd: (items) => {
-          const relationUrl = `/api/v1/orgs/org-memeber-relation/`
+          const relationUrl = `/api/v1/orgs/org-member-relation/`
           const data = []
           for (const user of items) {
             data.push({ org: this.object.id, user: user.value, role: this.defaultOrgRole })
@@ -108,7 +108,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
+          this.$refs.GenericListTable.reloadTable()
           window.location.reload()
         }
       }
@@ -131,5 +131,7 @@ export default {
 </script>
 
 <style scoped>
-
+.RelationCard ::v-deep .CardTable{
+  table-layout:inherit !important;
+}
 </style>

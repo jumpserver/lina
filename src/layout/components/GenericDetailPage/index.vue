@@ -19,6 +19,7 @@ import TabPage from '../TabPage'
 import { flashErrorMsg } from '@/utils/request'
 import { getApiPath } from '@/utils/common'
 import ActionsGroup from '@/components/ActionsGroup'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'GenericDetailPage',
@@ -80,22 +81,27 @@ export default {
     }
   },
   data() {
+    const vm = this
     const defaultActions = {
       canDelete: true,
       deleteCallback: function(item) { this.defaultDelete(item) },
       deleteApiUrl: getApiPath(this),
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
-      canUpdate: true,
+      canUpdate: () => {
+        return !vm.currentOrgIsRoot
+      },
       updateCallback: function(item) { this.defaultUpdate(item) },
       updateRoute: this.$route.name.replace('Detail', 'Update'),
       detailApiUrl: getApiPath(this)
     }
     return {
+      defaultActions: defaultActions,
       loading: true,
       validActions: Object.assign(defaultActions, this.actions)
     }
   },
   computed: {
+    ...mapGetters(['currentOrgIsRoot']),
     pageActions() {
       return [
         {
@@ -158,7 +164,7 @@ export default {
             this.$message.success(this.$t('common.deleteSuccessMsg'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
-            this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+            this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
           } finally {
             instance.confirmButtonLoading = false
           }

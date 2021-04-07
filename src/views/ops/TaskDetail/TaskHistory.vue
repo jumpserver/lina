@@ -86,13 +86,14 @@ export default {
               hasEdit: false,
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'detail',
                   title: this.$t('ops.detail'),
                   type: 'primary',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: cellValue }})
+                  callback: function({ row, tableData }) {
+                    return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]

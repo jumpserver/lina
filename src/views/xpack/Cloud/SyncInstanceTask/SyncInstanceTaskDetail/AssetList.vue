@@ -1,14 +1,14 @@
 <template>
-  <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable/index'
 import { DateFormatter } from '@/components/ListTable/formatters'
 
 export default {
   name: 'AssetList',
-  components: { ListTable },
+  components: { GenericListTable },
   props: {
     object: {
       type: Object,
@@ -63,7 +63,7 @@ export default {
       this.$axios.delete(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/released-assets/`).then(
         res => {
           this.$message.success(this.$t('common.deleteSuccessMsg'))
-          this.$refs.ListTable.reloadTable()
+          this.$refs.GenericListTable.$refs.ListTable.reloadTable()
         }
       ).catch(() => {
         this.$message.error(this.$t('common.deleteErrorMsg'))

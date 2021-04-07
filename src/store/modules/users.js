@@ -16,9 +16,11 @@ const getDefaultState = () => {
     currentRole: getCurrentRoleFromCookie(),
     profile: {},
     roles: {},
+    sysRole: '',
     orgs: [],
     perms: 0b00000000,
-    MFAVerifyAt: null
+    MFAVerifyAt: null,
+    isSuperAdmin: false
   }
 }
 
@@ -38,7 +40,6 @@ const mutations = {
     state.orgs = orgs
   },
   MODIFY_ORG: (state, org) => {
-    console.log(state.orgs)
     state.orgs = state.orgs.map(oldOrg => {
       if (oldOrg.id === org.id) {
         oldOrg.name = org.name
@@ -52,6 +53,9 @@ const mutations = {
   },
   SET_ROLES(state, roles) {
     state.roles = roles
+  },
+  SET_SYS_ROLE(state, role) {
+    state.sysRole = role
   },
   SET_PERMS(state, perms) {
     state.perms = perms
@@ -99,7 +103,7 @@ const actions = {
         commit('SET_PROFILE', response)
         resolve(response)
       }).catch(error => {
-        console.log(error)
+        // console.log(error)
         reject(error)
       })
     })
@@ -112,6 +116,7 @@ const actions = {
       return dispatch('getProfile').then((profile) => {
         const { current_org_roles: currentOrgRoles, role } = profile
         const roles = rolec.parseUserRoles(currentOrgRoles, role)
+        commit('SET_SYS_ROLE', role)
         commit('SET_ROLES', roles)
         commit('SET_PERMS', rolec.sumPerms(roles))
         resolve(roles)

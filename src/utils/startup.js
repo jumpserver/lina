@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import rolec from '@/utils/role'
 import orgUtil from '@/utils/org'
+import { getCurrentOrg } from '@/api/orgs'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -34,9 +35,12 @@ async function checkLogin({ to, from, next }) {
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
-    setTimeout(() => {
-      window.location = process.env.VUE_APP_LOGIN_PATH
-    }, 100)
+    const status = e.response.status
+    if (status === 401 || status === 403) {
+      setTimeout(() => {
+        window.location = process.env.VUE_APP_LOGIN_PATH
+      }, 100)
+    }
     return reject('No profile get: ' + e)
   }
 }
@@ -49,22 +53,29 @@ async function getPublicSetting({ to, from, next }) {
   }
 }
 
+async function refreshCurrentOrg() {
+  getCurrentOrg().then(org => {
+    store.dispatch('users/setCurrentOrg', org)
+  })
+}
+
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getInOrgs')
   const adminOrgs = store.getters.userAdminOrgList
   if (!adminOrgs || adminOrgs.length === 0) {
     return
   }
+  await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
-    console.log('Not has current org')
+    // console.log('Not has current org')
     orgUtil.change2PropOrg()
-    return reject('change prop org')
+    return reject('Change prop org')
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
     console.debug('Not has current org permission')
     orgUtil.change2PropOrg()
-    return reject('change prop org')
+    return reject('Change prop org')
   }
 }
 
@@ -133,11 +144,11 @@ export async function startup({ to, from, next }) {
   initial = true
 
   // set page title
+  await getPublicSetting({ to, from, next })
   await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
   await changeCurrentRoleIfNeed({ to, from, next })
-  await getPublicSetting({ to, from, next })
   await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true

@@ -104,6 +104,27 @@ export default [
         hidden: true
       },
       {
+        path: 'tickets/login-asset-confirm/:id',
+        name: 'loginAssetTicketDetail',
+        component: () => import('@/views/tickets/LoginAssetConfirm/Detail/index'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
+        path: 'tickets/request-application-perm/create',
+        name: 'RequestApplicationPermTicketCreateUpdate',
+        component: () => import('@/views/tickets/RequestApplicationPerm/RequestApplicationPermTicketCreateUpdate'),
+        meta: { title: i18n.t('route.TicketCreate'), activeMenu: '/tickets/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
+        path: 'tickets/request-application-perm/:id',
+        name: 'AppsTicketDetail',
+        component: () => import('@/views/tickets/RequestApplicationPerm/Detail/index'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
         path: 'tickets/:id',
         name: 'TicketDetail',
         component: () => import('@/views/tickets/TicketDetail/index'),

@@ -1,12 +1,28 @@
 <template>
   <div class="statistic-box">
     <h4>{{ $t('dashboard.ActiveUserAssetsRatioTitle') }}</h4>
-    <el-row :gutter="10">
-      <el-col :md="12" :sm="24">
+    <el-row :gutter="2">
+      <el-col :md="12" :sm="10">
         <echarts :options="userOption" :autoresize="true" />
+        <div style="" class="print-display">
+          <div class="circle-icon" style="background: #1ab394;" />
+          <label>{{ $t('dashboard.ActiveUser') }}</label>
+          <div class="circle-icon" style="background: #1C84C6;" />
+          <label>{{ $t('dashboard.DisabledUser') }}</label>
+          <div class="circle-icon" style="background: #9CC3DA;" />
+          <label>{{ $t('dashboard.InActiveUser') }}</label>
+        </div>
       </el-col>
-      <el-col :md="12" :sm="24">
+      <el-col :md="12" :sm="10">
         <echarts :options="AssetOption" :autoresize="true" />
+        <div style="" class="print-display">
+          <div class="circle-icon" style="background: #1ab394;" />
+          <label>{{ $t('dashboard.ActiveAsset') }}</label>
+          <div class="circle-icon" style="background: #1C84C6;" />
+          <label>{{ $t('dashboard.DisabledAsset') }}</label>
+          <div class="circle-icon" style="background: #9CC3DA;" />
+          <label>{{ $t('dashboard.InActiveAsset') }}</label>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -152,5 +168,24 @@ export default {
   .echarts {
     width: 100%;
     height: 250px;
+  }
+  .print-display {
+    display: none;
+  }
+  .circle-icon {
+    width: 14px;
+    height: 14px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
+    display:inline-block;
+  }
+  @media print {
+    .el-col-24{
+      width: 50% !important;
+    }
+    .print-display {
+      display: inherit;
+    }
   }
 </style>

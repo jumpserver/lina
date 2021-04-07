@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
     <Dialog
       v-if="dialogVisible"
       :title="this.$t('assets.TestGatewayTestConnection')"
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable/index'
 import DisplayFormatter from '@/components/ListTable/formatters/DisplayFormatter'
 import Dialog from '@/components/Dialog'
 export default {
   components: {
-    ListTable,
+    GenericListTable,
     Dialog
   },
   props: {
@@ -81,7 +81,7 @@ export default {
                       return this.$message.error(this.$t('common.BadRequestErrorMsg'))
                     } else {
                       this.portInput = val.row.port
-                      this.cellValue = val.cellValue
+                      this.cellValue = val.row.id
                     }
                   }.bind(this)
                 }
@@ -92,7 +92,6 @@ export default {
         }
       },
       headerActions: {
-        hasBulkDelete: false,
         hasSearch: true,
         createRoute: {
           name: 'GatewayCreate',
@@ -110,7 +109,14 @@ export default {
   methods: {
     dialogConfirm() {
       this.buttonLoading = true
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: parseInt(this.portInput) }).then(
+
+      const port = parseInt(this.portInput)
+
+      if (isNaN(port)) {
+        this.buttonLoading = false
+        return this.$message.error(this.$t('common.TestPortErrorMsg'))
+      }
+      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port }).then(
         res => {
           return this.$message.success(this.$t('common.TestSuccessMsg'))
         }

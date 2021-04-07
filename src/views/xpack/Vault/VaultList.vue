@@ -82,7 +82,7 @@ import * as queryUtil from '@/components/DataTable/compenents/el-data-table/util
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Vault',
+  name: 'VaultList',
   components: {
     GenericTreeListPage,
     AssetUserTable,
@@ -105,6 +105,7 @@ export default {
       assetUserConfig: {
         hasLeftActions: true,
         hasCreate: true,
+        hasClone: false,
         url: '/api/v1/assets/asset-users/',
         handleImport: function({ selectedRows }) {
           this.selectedRows = selectedRows

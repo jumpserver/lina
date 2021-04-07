@@ -1,5 +1,5 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  <GenericListPage ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
 </template>
 
 <script type="text/jsx">
@@ -15,27 +15,47 @@ export default {
     return {
       helpMessage: this.$t('assets.RemoteAppListHelpMessage'),
       tableConfig: {
-        url: '/api/v1/applications/remote-apps/',
+        url: '/api/v1/applications/applications/?category=remote_app',
         columns: [
-          'name', 'type', 'asset', 'comment', 'actions'
+          'name', 'type', 'attrs.asset',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'type', 'attrs.asset', 'comment', 'actions']
+        },
         columnsMeta: {
           type: {
             displayKey: 'get_type_display',
             width: '140px'
           },
-          asset: {
+          'attrs.asset': {
+            label: this.$t('assets.Assets'),
             showOverflowTooltip: true,
             formatter: function(row, column, cellValue, index) {
               const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
-              return <router-link{...{ attrs: route }} >{ row.asset_info.hostname }</router-link>
+              return <router-link{...{ attrs: route }} >{ row.attrs.asset_info.hostname }</router-link>
             }
           },
           actions: {
+            prop: 'actions',
             formatterArgs: {
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'RemoteAppCreate', query: { type: row.type, clone_from: row.id }})
+              },
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'RemoteAppUpdate', params: { id: row.id }, query: { type: row.type }})
-              }
+              },
+              performDelete: function({ row, col, cellValue, reload }) {
+                this.$axios.delete(
+                  `/api/v1/applications/applications/${row.id}/`
+                ).then(res => {
+                  this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable.reloadTable()
+                  // this.$message.success(this.$t('common.deleteSuccessMsg'))
+                }).catch(error => {
+                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+                })
+              }.bind(this)
             }
           }
         }
@@ -45,23 +65,23 @@ export default {
         hasMoreActions: false,
         hasBulkDelete: false,
         // createRoute: 'RemoteAppCreate',
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary',
-        extraMoreActions: this.genExtraMoreActions()
+        moreCreates: {
+          dropdown: this.getCreateAppType(),
+          callback: (app) => {
+            console.log('App: ', app)
+            vm.$router.push({ name: 'RemoteAppCreate', query: { type: app.name }})
+          }
+        }
       }
     }
   },
   methods: {
-    onCallback(type) {
-      this.$router.push({ name: 'RemoteAppCreate', query: { type: type }})
-    },
-    genExtraMoreActions() {
+    getCreateAppType() {
       const extraMoreActions = []
       for (const value of ALL_TYPES) {
         const item = { ...REMOTE_APP_TYPE_META_MAP[value] }
-        item.type = 'primary'
         item.can = true
-        item.callback = this.onCallback.bind(this, value)
+        item.has = true
         extraMoreActions.push(item)
       }
       return extraMoreActions

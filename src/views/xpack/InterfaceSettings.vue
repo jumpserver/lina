@@ -9,6 +9,7 @@
         :fields-meta="fieldsMeta"
         :on-submit="submitForm"
         :more-buttons="moreButtons"
+        :has-save-continue="hasSaveContinue"
       />
     </IBox>
   </Page>
@@ -32,6 +33,7 @@ export default {
       loading: true,
       files: {},
       interfaceInfo: {},
+      hasSaveContinue: false,
       successUrl: { name: 'Settings' },
       fields: [
         ['', ['login_title']],

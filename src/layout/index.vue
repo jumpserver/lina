@@ -1,14 +1,14 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <NavBar class="sidebar-container" />
+    <NavBar class="sidebar-container disabled-when-print" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
+      <div :class="{'fixed-header':fixedHeader}" class="disabled-when-print">
         <NavHeader />
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
-      <Footer />
+      <Footer class="disabled-when-print" />
     </div>
   </div>
 </template>
@@ -97,5 +97,29 @@ export default {
 
   .mobile .fixed-header {
     width: 100%;
+  }
+  @media print {
+    .disabled-when-print{
+      display: none;
+      width: 100%;
+    }
+    .enabled-when-print{
+      display: inherit !important;
+    }
+    .print-margin{
+      margin-top: 10px;
+    }
+    .drawer-bg{
+      display: none;
+    }
+    .main-container{
+      margin-left: 0px !important;
+    }
+    //.fixed-header{
+    //  width: 100% !important;
+    //}
+    //.hideSidebar .fixed-header{
+    //  width: 100% !important;
+    //}
   }
 </style>

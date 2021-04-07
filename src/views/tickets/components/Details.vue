@@ -1,7 +1,7 @@
 <template>
   <IBox class="box">
     <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-info-circle" /> {{ $t('common.BasicInfo') }}
+      <i class="fa fa-info-circle" /> {{ title }}
     </div>
     <div class="content">
       <el-row :gutter="10">
@@ -54,6 +54,10 @@ export default {
     detailCardItems: {
       type: Array,
       default: () => ([])
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   data() {

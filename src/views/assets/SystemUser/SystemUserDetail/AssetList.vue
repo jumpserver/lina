@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="16">
-        <AssetUserTable ref="ListTable" :url="assetUserUrl" :other-actions="otherActions" :has-import="false" />
+        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
       </el-col>
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
@@ -17,15 +17,16 @@
 import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
 import AssetRelationCard from '@/components/AssetRelationCard'
-import { AssetUserTable } from '@/components'
+import ListTable from '@/components/ListTable'
+import { ActionsFormatter } from '@/components/ListTable/formatters'
 
 export default {
-  name: 'Detail',
+  name: 'AssetList',
   components: {
     QuickActions,
     RelationCard,
-    AssetUserTable,
-    AssetRelationCard
+    AssetRelationCard,
+    ListTable
   },
   props: {
     object: {
@@ -36,58 +37,118 @@ export default {
   data() {
     const vm = this
     return {
-      assetUserUrl: `/api/v1/assets/asset-users/?prefer_id=${this.object.id}&prefer=system_user&latest=1`,
-      otherActions: [
-        {
-          name: 'Push',
-          title: this.$t('common.Push'),
-          can: () => vm.object.auto_push,
-          callback: function({ row }) {
-            const assetId = row.asset
-            const username = row.username
-            const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/?username=${username}`
-            const data = { action: 'push', asset: assetId }
-            this.$axios.post(theUrl, data).then(resp => {
-              window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
-            })
-          }
-        }
-      ],
-      AutoPushConfig: {
-        icon: 'fa-info',
-        title: this.$t('assets.QuickUpdate'),
-        url: `/api/v1/assets/system-users/${this.object.id}/`,
-        content: [
+      tableConfig: {
+        url: `/api/v1/assets/system-users-assets-relations/?systemuser=${this.object.id}`,
+        columns: [
           {
-            name: this.$t('assets.AutoPush'),
-            auto_push: this.object.auto_push
+            prop: 'asset_display',
+            label: this.$t('assets.Hostname')
+          },
+          {
+            prop: 'systemuser_display',
+            label: this.$t('assets.SystemUsers')
+          },
+          {
+            prop: 'id',
+            label: this.$t('common.Action'),
+            align: 'center',
+            width: 150,
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false, // can set function(row, value)
+              hasDelete: false, // can set function(row, value)
+              hasClone: false,
+              moreActionsTitle: this.$t('common.More'),
+              extraActions: [
+                {
+                  name: 'Push',
+                  title: this.$t('common.Push'),
+                  type: 'primary',
+                  can: this.object.auto_push,
+                  callback: ({ row }) => {
+                    const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/`
+                    const data = { action: 'push', assets: [row.asset] }
+                    this.$axios.post(theUrl, data).then(resp => {
+                      window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+                    })
+                  }
+                },
+                {
+                  name: 'Delete',
+                  title: this.$t('common.Delete'),
+                  type: 'danger',
+                  can: !this.$store.getters.currentOrgIsRoot,
+                  callback: (val) => {
+                    this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.row.id}/`).then(() => {
+                      this.$message.success(this.$t('common.deleteSuccessMsg'))
+                      this.$refs.ListTable.reloadTable()
+                    })
+                  }
+                }
+              ]
+            }
           }
         ]
       },
-      assetRelationConfig: {
-        icon: 'fa-edit',
-        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
-        performAdd: (items, that) => {
-          const relationUrl = `/api/v1/assets/system-users-assets-relations/`
-          const data = [
-
-          ]
-          items.map(v =>
-            data.push({
-              asset: v,
-              systemuser: this.object.id
-            })
-          )
+      headerActions: {
+        hasLeftActions: true,
+        hasBulkDelete: false,
+        hasImport: false,
+        hasExport: true,
+        hasCreate: false,
+        hasSearch: true,
+        hasMoreActions: false,
+        moreActionsTitle: this.$t('common.More'),
+        moreActionsType: 'primary',
+        extraMoreActions: [
+          {
+            title: this.$t('common.PushSelected'),
+            name: 'PushSelected',
+            can({ selectedRows }) {
+              return selectedRows.length > 0 && vm.object.auto_push
+            },
+            callback: this.bulkPushCallback.bind(this)
+          },
+          {
+            title: this.$t('assets.TestAssetsConnective'),
+            name: 'TestSelected',
+            can({ selectedRows }) {
+              return selectedRows.length > 0
+            },
+            callback: this.bulkTestCallback.bind(this)
+          }
+        ]
+      },
+      nodeRelationConfig: {
+        icon: 'fa-info',
+        title: this.$t('perms.addNodeToThisPermission'),
+        objectsAjax: {
+          url: '/api/v1/assets/nodes/',
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
+          }
+        },
+        hasObjectsId: [],
+        hasObjects: [],
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/assets/system-users-nodes-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              systemuser: objectId,
+              node: v.value
+            }
+          })
           if (data.length === 0) {
-            return this.$message.error(this.$t('assets.UnselectedAssets'))
+            return this.$message.error(this.$t('assets.UnselectedNodes'))
           }
           return this.$axios.post(relationUrl, data)
         },
-        onAddSuccess: (items, that) => {
-          this.$log.debug('AssetSelect value', that.assets)
-          this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.ListTable.$refs.ListTable.reloadTable()
-          that.$refs.assetSelect.$refs.select2.clearSelected()
+        performDelete: (item) => {
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
+          return this.$axios.delete(relationUrl)
         }
       },
       quickActions: [
@@ -127,59 +188,55 @@ export default {
           }
         }
       ],
-      nodeRelationConfig: {
-        icon: 'fa-info',
-        title: this.$t('perms.addNodeToThisPermission'),
-        objectsAjax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: item.full_value, value: item.id }
-          }
-        },
-        hasObjectsId: [],
-        hasObjects: [],
-        performAdd: (items) => {
-          const relationUrl = `/api/v1/assets/system-users-nodes-relations/`
-          const objectId = this.object.id
-          const data = items.map(v => {
-            return {
-              systemuser: objectId,
-              node: v.value
-            }
-          })
+      assetRelationConfig: {
+        icon: 'fa-edit',
+        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        disabled: this.$store.getters.currentOrgIsRoot,
+        performAdd: (items, that) => {
+          const relationUrl = `/api/v1/assets/system-users-assets-relations/`
+          const data = [
+
+          ]
+          items.map(v =>
+            data.push({
+              asset: v,
+              systemuser: this.object.id
+            })
+          )
           if (data.length === 0) {
-            return this.$message.error(this.$t('assets.UnselectedNodes'))
+            return this.$message.error(this.$t('assets.UnselectedAssets'))
           }
           return this.$axios.post(relationUrl, data)
         },
-        performDelete: (item) => {
-          const itemId = item.value
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
-          return this.$axios.delete(relationUrl)
+        onAddSuccess: (items, that) => {
+          this.$log.debug('AssetSelect value', that.assets)
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          vm.$refs.ListTable.reloadTable()
+          that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       }
     }
   },
-  computed: {
-  },
-  mounted() {
-    this.getNodeList()
-  },
   methods: {
-    getNodeList() {
-      this.$axios.get(
-        `/api/v1/assets/system-users-nodes-relations/?systemuser=${this.object.id}&draw=1&limit=15&offset=0`
-      ).then(data => {
-        for (const x in data.results) {
-          this.nodeRelationConfig.hasObjectsId.push(data.results[x].node)
-          this.nodeRelationConfig.hasObjects.push({
-            value: data.results[x].node,
-            label: data.results[x].node_display
-          })
-        }
-      }
-      )
+    bulkPushCallback({ selectedRows }) {
+      const theUrl = `/api/v1/assets/system-users/${this.object.id}/tasks/`
+      const assets = selectedRows.map((v) => {
+        return v.asset
+      })
+      const data = { action: 'push', assets: assets }
+      this.$axios.post(theUrl, data).then(resp => {
+        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+      })
+    },
+    bulkTestCallback({ selectedRows }) {
+      const theUrl = `/api/v1/assets/system-users/${this.object.id}/tasks/`
+      const assets = selectedRows.map((v) => {
+        return v.asset
+      })
+      const data = { action: 'test', assets: assets }
+      this.$axios.post(theUrl, data).then(resp => {
+        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+      })
     }
   }
 }

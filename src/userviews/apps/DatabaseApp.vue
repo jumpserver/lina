@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/database-apps/`,
+        url: `/api/v1/perms/users/applications/?category=db`,
         columns: [
           {
             prop: 'name',
@@ -30,12 +30,12 @@ export default {
             sortable: true
           },
           {
-            prop: 'get_type_display',
+            prop: 'type_display',
             align: 'center',
             label: this.$t('assets.Type')
           },
           {
-            prop: 'database',
+            prop: 'attrs.database',
             align: 'center',
             label: this.$t('assets.Database')
           },
@@ -53,13 +53,14 @@ export default {
             formatterArgs: {
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
-                  callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=database_app&login_to=${cellValue}`, '_blank')
+                  callback: function({ row }) {
+                    window.open(`/luna/?type=database_app&login_to=${row.id}`, '_blank')
                   }
                 }
               ]

@@ -9,9 +9,8 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/UserPassword'
 import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
-import { getDayFuture } from '@/utils/common'
-import { mapGetters } from 'vuex'
 import rules from '@/components/DataForm/rules'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -20,25 +19,34 @@ export default {
   data() {
     return {
       initial: {
-        password_strategy: 0,
-        mfa_level: 0,
-        source: 'local',
-        role: 'User',
-        org_roles: ['User'],
-        date_expired: getDayFuture(36500, new Date()).toISOString()
+        // password_strategy: 0,
+        // mfa_level: 0,
+        // role: 'User',
+        // source: 'local',
+        // org_roles: ['User'],
+        // date_expired: getDayFuture(36500, new Date()).toISOString()
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
-        [this.$t('users.Authentication'), ['password_strategy', 'update_password', 'password', 'set_public_key', 'public_key', 'mfa_level', 'source']],
+        [this.$t('users.Authentication'), [
+          'password_strategy', 'update_password', 'password', 'set_public_key',
+          'public_key', 'mfa_level', 'source'
+        ]],
         [this.$t('users.Secure'), ['role', 'org_roles', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
       fieldsMeta: {
         password_strategy: {
-          hidden: () => {
-            return this.$route.params.id
+          hidden: (formValue) => {
+            return this.$route.params.id || formValue.source !== 'local'
           }
+        },
+        email: {
+          rules: [
+            rules.EmailCheck,
+            rules.Required
+          ]
         },
         update_password: {
           label: this.$t('users.UpdatePassword'),
@@ -56,7 +64,7 @@ export default {
             if (formValue.password_strategy) {
               return false
             }
-            return !formValue.update_password
+            return !formValue.update_password || formValue.source !== 'local'
           },
           el: {
             required: false
@@ -69,18 +77,18 @@ export default {
             if (formValue.set_public_key) {
               return true
             }
-            return this.$route.meta.action !== 'update'
+            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
           }
         },
         public_key: {
           hidden: (formValue) => {
-            return !formValue.set_public_key
+            return !formValue.set_public_key || formValue.source !== 'local'
           }
         },
         role: {
           label: this.$t('users.SuperRole'),
           hidden: () => {
-            return !this.currentOrgIsDefault && this.publicSettings.role === 'Admin'
+            return !this.$store.getters.currentUserIsSuperAdmin
           }
         },
         org_roles: {
@@ -88,10 +96,10 @@ export default {
           label: this.$t('users.OrgRole'),
           component: RoleCheckbox,
           hidden: () => {
-            return (!this.publicSettings.XPACK_LICENSE_IS_VALID)
+            return !this.$store.getters.hasValidLicense
           },
           el: {
-            disabled: false,
+            disabled: this.$store.getters.currentOrgIsRoot,
             rule: []
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
@@ -109,14 +117,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['publicSettings', 'currentOrg']),
-    currentOrgIsDefault() {
-      return this.currentOrg.id === 'DEFAULT' || this.currentOrg.id === ''
-    }
+    ...mapGetters(['currentOrgIsRoot'])
   },
   mounted() {
-    if (this.currentOrgIsDefault) {
-      this.fieldsMeta.org_roles.el.disabled = true
+    if (this.currentOrgIsRoot) {
+      this.fieldsMeta.groups.el.disabled = true
     }
   },
   methods: {

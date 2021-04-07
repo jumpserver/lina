@@ -9,6 +9,7 @@
 
 <script>
 import { getTicketOpenCount } from '@/api/ticket'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'WebTerminal',
@@ -17,13 +18,17 @@ export default {
       assignedTicketCount: 0
     }
   },
+  computed: {
+    ...mapGetters([
+      'currentUser'
+    ])
+  },
   created() {
     this.ticketsOpenedCount()
   },
   methods: {
-
     ticketsOpenedCount() {
-      getTicketOpenCount(1).then(data => {
+      getTicketOpenCount(this.currentUser.id).then(data => {
         this.assignedTicketCount = data.count
       })
     },

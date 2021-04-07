@@ -1,14 +1,14 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import ListTable from '@/components/ListTable'
+import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
   name: 'ChangeAuthPlanExecution',
   components: {
-    ListTable
+    GenericListTable
   },
   props: {
     object: {
@@ -69,21 +69,22 @@ export default {
             formatterArgs: {
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'log',
                   type: 'primary',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
-                  callback: function({ cellValue, tableData }) {
-                    window.open(`/#/ops/celery/task/${cellValue}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                  callback: function({ row }) {
+                    window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  callback: function({ cellValue, tableData }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: cellValue }})
+                  callback: function({ row }) {
+                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
@@ -96,6 +97,7 @@ export default {
         hasRefresh: true,
         hasRightActions: true,
         hasLeftActions: true,
+        hasMoreActions: false,
         hasExport: false,
         hasImport: false,
         hasCreate: false,

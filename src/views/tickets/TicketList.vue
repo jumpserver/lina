@@ -9,6 +9,7 @@
 
 <script>
 import { TabPage } from '@/layout/components'
+import { mapGetters } from 'vuex'
 import AssignedTicketList from './AssignedTicketList'
 import MyTicketList from './MyTicketList'
 import { getTicketOpenCount } from '@/api/ticket'
@@ -38,12 +39,17 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'currentUser'
+    ])
+  },
   mounted() {
     this.getTicketOpenCount()
   },
   methods: {
     getTicketOpenCount() {
-      getTicketOpenCount(1).then(data => {
+      getTicketOpenCount(this.currentUser.id).then(data => {
         this.assignedTicketCount = data.count
       })
     },

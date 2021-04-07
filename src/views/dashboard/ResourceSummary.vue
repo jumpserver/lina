@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="10">
-    <el-col v-for="item of summaryItems" :key="item.title" :md="6" :sm="12">
+    <el-col v-for="item of summaryItems" :key="item.title" :md="6" :sm="12" :xs="12">
       <SummaryCard :title="item.title" :right-side-label="item.rightSideLabel" :body="item.body" />
     </el-col>
   </el-row>
@@ -93,6 +93,12 @@ export default {
   &:last-child {
      margin-bottom: 0;
    }
+  }
+
+  @media print {
+    .el-col-24{
+      width: 50% !important;
+    }
   }
 
 </style>

@@ -19,7 +19,7 @@ function hasPermission(roles, route) {
 }
 
 function hasLicense(route, rootState) {
-  const licenseIsValid = rootState.settings.publicSettings.XPACK_LICENSE_IS_VALID
+  const licenseIsValid = rootState.settings.hasValidLicense
   const licenseRequired = route.meta ? route.meta.licenseRequired : false
   if (!licenseIsValid && licenseRequired) {
     return false
@@ -113,7 +113,7 @@ const actions = {
       accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
       accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
       if (accessedRoutes.length === 0) {
-        console.log('No route find')
+        // console.log('No route find')
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)

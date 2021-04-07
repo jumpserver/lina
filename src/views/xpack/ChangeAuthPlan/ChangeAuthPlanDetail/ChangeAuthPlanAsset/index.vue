@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <ListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable ref="listTable" :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
     <el-col :md="10" :sm="24">
       <AssetRelationCard type="primary" v-bind="assetRelationConfig" />
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard/index'
 import AssetRelationCard from '@/components/AssetRelationCard'
 import { DeleteActionFormatter } from '@/components/ListTable/formatters'
@@ -19,7 +19,7 @@ import { DeleteActionFormatter } from '@/components/ListTable/formatters'
 export default {
   name: 'ChangeAuthPlanAsset',
   components: {
-    ListTable, RelationCard, AssetRelationCard
+    GenericListTable, RelationCard, AssetRelationCard
   },
   props: {
     object: {
@@ -51,7 +51,7 @@ export default {
                 this.$message.success(this.$t('common.deleteSuccessMsg'))
                 reload()
               }).catch(error => {
-                this.$message.error(this.$t('common.deleteErrorMsg' + ' ' + error))
+                this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
           }
@@ -68,12 +68,15 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasMoreActions: false
       },
       assetRelationConfig: {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        disabled: this.$store.getters.currentOrgIsRoot,
+        canSelect: (row, index) => {
+          return this.object.assets.indexOf(row.id) === -1
+        },
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/asset/add/`
           const data = {
@@ -97,6 +100,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
+        disabled: this.$store.getters.currentOrgIsRoot,
         hasObjectsId: this.object.nodes,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/`

@@ -99,7 +99,7 @@ export default {
         this.$axios
           .get(` /api/v1/users/users/suggestion/?search=${query}`)
           .then(result => {
-            console.log(result)
+            // console.log(result)
             for (let i = 0; i < result.length; i++) {
               this.InviteOptions.push({
                 value: result[i].id,

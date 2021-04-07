@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       KubernetesApp: {
-        name: '', type_display: '', cluster: '', date_created: '', created_by: '', comment: ''
+        name: '', type_display: '', cluster: '', date_created: '', created_by: '', comment: '', attrs: ''
       },
       config: {
         activeMenu: 'KubernetesAppDetail',
@@ -30,8 +30,8 @@ export default {
           }
         ],
         actions: {
-          detailApiUrl: `/api/v1/applications/k8s-apps/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/applications/k8s-apps/${this.$route.params.id}/`
+          detailApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`
         }
       }
     }

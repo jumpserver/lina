@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/remote-apps/`,
+        url: `/api/v1/perms/users/applications/?category=remote_app`,
         columns: [
           {
             prop: 'name',
@@ -29,12 +29,12 @@ export default {
             sortable: true
           },
           {
-            prop: 'get_type_display',
+            prop: 'type_display',
             align: 'center',
-            label: this.$t('assets.RemoteType')
+            label: this.$t('assets.Type')
           },
           {
-            prop: 'asset_info.hostname',
+            prop: 'attrs.asset_info.hostname',
             align: 'center',
             label: this.$t('assets.Asset')
           },
@@ -52,13 +52,14 @@ export default {
             formatterArgs: {
               hasDelete: false,
               hasUpdate: false,
+              hasClone: false,
               extraActions: [
                 {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
-                  callback: function({ row, col, cellValue, reload }) {
-                    window.open(`/luna/?type=remote_app&login_to=${cellValue}`, '_blank')
+                  callback: function({ row }) {
+                    window.open(`/luna/?type=remote_app&login_to=${row.id}`, '_blank')
                   }
                 }
               ]

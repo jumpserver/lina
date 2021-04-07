@@ -17,9 +17,10 @@ export default {
     TabPage
   },
   data() {
+    const vm = this
     return {
       RemoteApp: {
-        name: '', asset: '', get_type_display: '', path: '', date_created: '', created_by: '', comment: ''
+        name: '', asset: '', get_type_display: '', path: '', date_created: '', created_by: '', comment: '', attrs: ''
       },
       config: {
         activeMenu: 'RemoteAppDetail',
@@ -28,7 +29,14 @@ export default {
             title: this.$t('route.RemoteAppDetail'),
             name: 'RemoteAppDetail'
           }
-        ]
+        ],
+        actions: {
+          detailApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
+          updateCallback: function(item) {
+            vm.$router.push({ name: 'RemoteAppUpdate', params: { id: vm.RemoteApp.id }, query: { type: vm.RemoteApp.type }})
+          }
+        }
       }
     }
   }

@@ -23,7 +23,16 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
-        columns: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions'],
+        columns: [
+          'name',
+          'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount',
+          'date_expired', 'is_valid', 'is_expired', 'is_active',
+          'created_by', 'date_created', 'comment', 'org_name', 'actions'
+        ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions']
+        },
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -85,7 +94,12 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AssetPermissionUpdate'
+              updateRoute: 'AssetPermissionUpdate',
+              performDelete: ({ row, col }) => {
+                const id = row.id
+                const url = `/api/v1/perms/asset-permissions/${id}/`
+                return this.$axios.delete(url)
+              }
             }
           }
         }
@@ -101,6 +115,19 @@ export default {
             { label: this.$t('common.Name'), value: 'name' },
             {
               label: this.$t('perms.isValid'), value: 'is_valid',
+              children: [
+                {
+                  value: '1',
+                  label: this.$t('common.Yes')
+                },
+                {
+                  value: '0',
+                  label: this.$t('common.No')
+                }
+              ]
+            },
+            {
+              label: this.$t('perms.isEffective'), value: 'is_effective',
               children: [
                 {
                   value: '1',

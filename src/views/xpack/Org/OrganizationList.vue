@@ -17,11 +17,49 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/orgs/orgs/',
-        columns: ['name', 'comment', 'actions'],
+        columns: ['name',
+          'resource_statistics.users_amount',
+          'resource_statistics.groups_amount',
+          'resource_statistics.assets_amount',
+          'resource_statistics.admin_users_amount',
+          'resource_statistics.system_users_amount',
+          'resource_statistics.applications_amount',
+          'resource_statistics.asset_perms_amount',
+          'resource_statistics.app_perms_amount',
+          'comment', 'actions'],
         columnsMeta: {
+          'resource_statistics.users_amount': {
+            label: this.$t('xpack.Organization.users_amount')
+          },
+          'resource_statistics.groups_amount': {
+            label: this.$t('xpack.Organization.groups_amount')
+          },
+          'resource_statistics.assets_amount': {
+            label: this.$t('xpack.Organization.assets_amount')
+          },
+          'resource_statistics.admin_users_amount': {
+            label: this.$t('xpack.Organization.admin_users_amount')
+          },
+          'resource_statistics.system_users_amount': {
+            label: this.$t('xpack.Organization.system_users_amount')
+          },
+          'resource_statistics.applications_amount': {
+            label: this.$t('xpack.Organization.applications_amount')
+          },
+          'resource_statistics.asset_perms_amount': {
+            label: this.$t('xpack.Organization.asset_perms_amount')
+          },
+          'resource_statistics.app_perms_amount': {
+            label: this.$t('xpack.Organization.app_perms_amount')
+          },
           actions: {
-            prop: '',
+            prop: 'id',
             formatterArgs: {
+              canClone: true,
+              canUpdate: true,
+              canDelete: function(row, cellValue) {
+                return !row.is_default
+              },
               onDelete: function({ row, col, cellValue, reload }) {
                 const msg = this.$t('xpack.Organization.DeleteOrgMsg')
                 const title = this.$t('xpack.Organization.DeleteOrgTitle')
@@ -50,8 +88,10 @@ export default {
         }
       },
       headerActions: {
-        hasRightActions: false,
-        hasBulkDelete: false
+        canCreate: true,
+        hasExport: false,
+        hasImport: false,
+        hasMoreActions: false
       }
     }
   }

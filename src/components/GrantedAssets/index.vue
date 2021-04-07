@@ -65,22 +65,24 @@ export default {
             sortable: true,
             formatterArgs: {
               route: 'AssetDetail'
-            }
+            },
+            showOverflowTooltip: true
           },
           {
             prop: 'ip',
             label: this.$t('assets.IP'),
+            width: '140px',
             sortable: 'custom'
           },
           {
             prop: 'systemUsers',
             label: this.$t('assets.SystemUsers'),
             align: 'center',
-            width: '200px',
             formatter: SystemUserFormatter,
             formatterArgs: {
               getUrl: this.getShowUrl.bind(this)
-            }
+            },
+            showOverflowTooltip: true
           }
         ]
       },

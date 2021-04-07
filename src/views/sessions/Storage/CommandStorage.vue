@@ -22,19 +22,18 @@ export default {
         hasExport: false,
         hasImport: false,
         hasRefresh: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false,
-        hasCreate: false,
-        extraMoreActions: [
-          {
-            name: 'Elasticsearch',
-            title: 'Elasticsearch',
-            type: 'primary',
-            callback: this.createEs.bind(this)
-          }
-        ],
-        moreActionsTitle: this.$t('common.Create'),
-        moreActionsType: 'primary'
+        hasMoreActions: false,
+        moreCreates: {
+          callback: (item) => {
+            this.$router.push({ name: 'CreateCommandStorage', query: { type: item.name }})
+          },
+          dropdown: [
+            {
+              name: 'es',
+              title: 'Elasticsearch'
+            }
+          ]
+        }
       },
       commandTableConfig: {
         title: 'command',
@@ -72,16 +71,12 @@ export default {
                   title: this.$t('sessions.test'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
-                    TestCommandStorage(cellValue).then(data => {
-                      let success = 'success'
+                    TestCommandStorage(row.id).then(data => {
                       if (!data.is_valid) {
-                        success = 'error'
+                        this.$message.error(data.msg)
+                      } else {
+                        this.$message.success(data.msg)
                       }
-                      this.$notify({
-                        message: data.msg,
-                        type: success,
-                        duration: 4500
-                      })
                     })
                   }
                 }

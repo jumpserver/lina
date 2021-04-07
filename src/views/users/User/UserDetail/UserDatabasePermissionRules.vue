@@ -28,16 +28,20 @@ export default {
             }
           },
           users_amount: {
-            label: this.$t('users.Users')
+            label: this.$t('users.Users'),
+            width: '110px'
           },
           user_groups_amount: {
-            label: this.$t('users.UserGroups')
+            label: this.$t('users.UserGroups'),
+            width: '110px'
           },
           database_apps_amount: {
-            label: this.$t('assets.RemoteApps')
+            label: this.$t('assets.RemoteApps'),
+            width: '110px'
           },
           system_users_amount: {
-            label: this.$t('assets.SystemUsers')
+            label: this.$t('assets.SystemUsers'),
+            width: '110px'
           },
           actions: {
             formatterArgs: {

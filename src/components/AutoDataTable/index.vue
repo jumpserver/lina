@@ -1,19 +1,33 @@
 <template>
-  <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" />
+  <div>
+    <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
+    <ColumnSettingPopover
+      :current-columns="popoverColumns.currentCols"
+      :total-columns-list="popoverColumns.totalColumnsList"
+      :min-columns="popoverColumns.minCols"
+      @columnsUpdate="handlePopoverColumnsChange"
+    />
+  </div>
 </template>
 
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/ListTable/formatters'
 import i18n from '@/i18n/i18n'
+import ColumnSettingPopover from './components/ColumnSettingPopover'
 export default {
   name: 'AutoDataTable',
   components: {
-    DataTable
+    DataTable,
+    ColumnSettingPopover
   },
   props: {
     config: {
       type: Object,
+      default: () => ({})
+    },
+    filterTable: {
+      type: Function,
       default: () => ({})
     }
   },
@@ -23,8 +37,18 @@ export default {
       method: 'get',
       autoConfig: {},
       iConfig: {},
-      meta: {}
+      meta: {},
+      cleanedColumnsShow: {},
+      totalColumns: [],
+      popoverColumns: {
+        totalColumnsList: [],
+        minCols: [],
+        currentCols: []
+      }
     }
+  },
+  computed: {
+
   },
   watch: {
     config: {
@@ -40,10 +64,18 @@ export default {
   },
   methods: {
     async optionUrlMetaAndGenCols() {
+      if (this.config.url === '') { return }
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
-        this.meta = data.actions[this.method.toUpperCase()] || {}
-        this.generateColumns()
+        const method = this.method.toUpperCase()
+        this.meta = data.actions && data.actions[method] ? data.actions[method] : {}
+        this.generateTotalColumns()
+      }).then(() => {
+        //  根据当前列重新生成最终渲染表格
+        this.filterShowColumns()
+      }).then(() => {
+        // 生成给子组件使用的TotalColList
+        this.generatePopoverColumns()
       }).catch((error) => {
         this.$log.error('Error occur: ', error)
       }).finally(() => {
@@ -59,7 +91,7 @@ export default {
           break
         case 'actions':
           col = {
-            prop: 'id',
+            prop: 'actions',
             label: i18n.t('common.Actions'),
             align: 'center',
             width: '150px',
@@ -118,6 +150,37 @@ export default {
       }
       return col
     },
+    addFilterIfNeed(col) {
+      if (col.prop) {
+        const column = this.meta[col.prop] || {}
+        if (!column.filter) {
+          return col
+        }
+        if (column.type === 'boolean') {
+          col.filters = [
+            { text: this.$t('common.Yes'), value: true },
+            { text: this.$t('common.No'), value: false }
+          ]
+          col.sortable = false
+          col['column-key'] = col.prop
+        }
+        if (column.type === 'choice' && column.choices) {
+          col.filters = column.choices.map(item => {
+            if (typeof (item.value) === 'boolean') {
+              if (item.value) {
+                return { text: item.display_name, value: 'True' }
+              } else {
+                return { text: item.display_name, value: 'False' }
+              }
+            }
+            return { text: item.display_name, value: item.value }
+          })
+          col.sortable = false
+          col['column-key'] = col.prop
+        }
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
@@ -127,9 +190,10 @@ export default {
       col = this.generateColumnByType(colMeta.type, col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
+      col = this.addFilterIfNeed(col)
       return col
     },
-    generateColumns() {
+    generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       const columns = []
       for (let col of config.columns) {
@@ -140,8 +204,83 @@ export default {
           columns.push(col)
         }
       }
+      // 第一次初始化时记录 totalColumns
+      this.totalColumns = columns
       config.columns = columns
       this.iConfig = config
+    },
+    // 生成给子组件使用的TotalColList
+    cleanColumnsShow() {
+      const totalColumnsNames = this.totalColumns.map(obj => obj.prop)
+      // 默认列
+      let defaultColumnsNames = _.get(this.iConfig, 'columnsShow.default', [])
+      if (defaultColumnsNames.length === 0) {
+        defaultColumnsNames = totalColumnsNames
+      }
+      // Clean it
+      defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
+
+      // 最小列
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['action', 'id'])
+        .filter(n => defaultColumnsNames.indexOf(n) > -1)
+
+      // 应该显示的列
+      const _tableConfig = localStorage.getItem('tableConfig')
+        ? JSON.parse(localStorage.getItem('tableConfig'))
+        : {}
+      const configShowColumnsNames = _.get(_tableConfig[this.$route.name], 'showColumns', null)
+      let showColumnsNames = configShowColumnsNames || defaultColumnsNames
+      if (showColumnsNames.length === 0) {
+        showColumnsNames = totalColumnsNames
+      }
+      // 校对显示的列，是不是包含最小列
+      minColumnsNames.forEach((v, i) => {
+        if (showColumnsNames.indexOf(v) === -1) {
+          showColumnsNames.push(v)
+        }
+      })
+      // Clean it
+      showColumnsNames = totalColumnsNames.filter(n => showColumnsNames.indexOf(n) > -1)
+
+      this.cleanedColumnsShow = {
+        default: defaultColumnsNames,
+        show: showColumnsNames,
+        min: minColumnsNames,
+        configShow: configShowColumnsNames
+      }
+      this.$log.debug('Cleaned colums show: ', this.cleanedColumnsShow)
+    },
+    filterShowColumns() {
+      this.cleanColumnsShow()
+      this.iConfig.columns = this.totalColumns.filter(obj => {
+        return this.cleanedColumnsShow.show.indexOf(obj.prop) > -1
+      })
+    },
+    generatePopoverColumns() {
+      this.popoverColumns.totalColumnsList = this.totalColumns.map(obj => {
+        return { prop: obj.prop, label: obj.label }
+      })
+      this.popoverColumns.currentCols = this.cleanedColumnsShow.show
+      this.popoverColumns.minCols = this.cleanedColumnsShow.min
+      this.$log.debug('Popover cols: ', this.popoverColumns)
+    },
+    handlePopoverColumnsChange(columns) {
+      // this.$log.debug('Columns change: ', columns)
+      this.popoverColumns.currentCols = columns
+      const _tableConfig = localStorage.getItem('tableConfig')
+        ? JSON.parse(localStorage.getItem('tableConfig'))
+        : {}
+      _tableConfig[this.$route.name] = {
+        'showColumns': columns
+      }
+      localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
+      this.filterShowColumns()
+    },
+    filterChange(filters) {
+      const key = Object.keys(filters)[0]
+      const attr = {}
+      attr[key] = filters[key][0]
+      this.filterTable(attr)
     }
   }
 }
