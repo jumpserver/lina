@@ -5,22 +5,22 @@
       <el-col :md="12" :sm="10">
         <echarts :options="userOption" :autoresize="true" />
         <div style="" class="print-display">
-          <div style="width: 14px;height: 14px;background: #1ab394; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <div class="circle-icon" style="background: #1ab394;" />
           <label>{{ $t('dashboard.ActiveUser') }}</label>
-          <div style="width: 14px;height: 14px;background: #1C84C6; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <div class="circle-icon" style="background: #1C84C6;" />
           <label>{{ $t('dashboard.DisabledUser') }}</label>
-          <div style="width: 14px;height: 14px;background: #9CC3DA; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <div class="circle-icon" style="background: #9CC3DA;" />
           <label>{{ $t('dashboard.InActiveUser') }}</label>
         </div>
       </el-col>
       <el-col :md="12" :sm="10">
         <echarts :options="AssetOption" :autoresize="true" />
         <div style="" class="print-display">
-          <div style="width: 14px;height: 14px;background: #1ab394; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <div class="circle-icon" style="background: #1ab394;" />
           <label>{{ $t('dashboard.ActiveAsset') }}</label>
-          <div style="width: 14px;height: 14px;background: #1C84C6; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <div class="circle-icon" style="background: #1C84C6;" />
           <label>{{ $t('dashboard.DisabledAsset') }}</label>
-          <div style="width: 14px;height: 14px;background: #9CC3DA; -moz-border-radius: 7px; -webkit-border-radius: 7px; border-radius: 7px;display:inline-block;" />
+          <div class="circle-icon" style="background: #9CC3DA;" />
           <label>{{ $t('dashboard.InActiveAsset') }}</label>
         </div>
       </el-col>
@@ -171,6 +171,14 @@ export default {
   }
   .print-display {
     display: none;
+  }
+  .circle-icon {
+    width: 14px;
+    height: 14px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
+    display:inline-block;
   }
   @media print {
     .el-col-24{
