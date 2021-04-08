@@ -10,6 +10,8 @@ import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
 import ShowKeyFormatter from '@/components/ListTable/formatters/ShowKeyFormatter'
 import DialogDetailFormatter from './DialogDetailFormatter'
 import LoadingActionsFormatter from './LoadingActionsFormatter'
+import EditableInputFormatter from './EditableInputFormatter'
+import StatusFormatter from './StatusFormatter'
 
 export default {
   DetailFormatter,
@@ -23,7 +25,9 @@ export default {
   ShowKeyFormatter,
   DialogDetailFormatter,
   LoadingActionsFormatter,
-  ArrayFormatter
+  ArrayFormatter,
+  EditableInputFormatter,
+  StatusFormatter
 }
 
 export {
@@ -38,5 +42,7 @@ export {
   ShowKeyFormatter,
   DialogDetailFormatter,
   LoadingActionsFormatter,
-  ArrayFormatter
+  ArrayFormatter,
+  EditableInputFormatter,
+  StatusFormatter
 }

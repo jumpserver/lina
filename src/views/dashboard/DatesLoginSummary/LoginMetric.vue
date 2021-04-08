@@ -1,5 +1,8 @@
 <template>
-  <echarts :options="options" :autoresize="true" theme="light" />
+  <div>
+    <echarts ref="echarts" :options="options" :autoresize="true" theme="light" class="disabled-when-print" @finished="getDataUrl" />
+    <img v-if="dataUrl" :src="dataUrl" class="enabled-when-print" style="display: none;width: 100%;">
+  </div>
 </template>
 
 <script>
@@ -15,6 +18,7 @@ export default {
   },
   data: function() {
     return {
+      dataUrl: '',
       metricsData: {
         dates_metrics_date: [],
         dates_metrics_total_count_active_assets: [],
@@ -106,6 +110,11 @@ export default {
         url = `${url}&monthly=1`
       }
       this.metricsData = await this.$axios.get(url)
+    },
+    getDataUrl() {
+      this.dataUrl = this.$refs.echarts.getDataURL({
+
+      })
     }
   }
 }
@@ -115,5 +124,16 @@ export default {
   .echarts {
     width: 100%;
     height: 300px;
+  }
+  @media print {
+    .disabled-when-print{
+      display: none;
+    }
+    .enabled-when-print{
+      display: inherit !important;
+    }
+    .print-margin{
+      margin-top: 10px;
+    }
   }
 </style>

@@ -8,6 +8,7 @@ export const qcloud = 'qcloud'
 export const azure = 'azure'
 export const azure_international = 'azure_international'
 export const vmware = 'vmware'
+export const nutanix = 'nutanix'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
@@ -49,5 +50,10 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: vmware,
     title: 'VMware',
     attrs: ['host', 'port', 'username', 'password']
+  },
+  [nutanix]: {
+    name: nutanix,
+    title: 'Nutanix',
+    attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
   }
 }

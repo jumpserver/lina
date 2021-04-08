@@ -115,7 +115,6 @@ export default {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',
-              has: this.$store.getters.hasValidLicense,
               group: this.$t('assets.OtherProtocol')
             }
           ]

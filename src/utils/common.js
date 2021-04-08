@@ -187,6 +187,19 @@ export function getDayFuture(days, now) {
   return new Date(now.getTime() + 3600 * 1000 * 24 * days)
 }
 
+export function getErrorResponseMsg(error) {
+  let msg = ''
+  const data = error.response && error.response.data || {}
+  if (data && (data.error || data.msg || data.detail)) {
+    msg = data.error || data.msg || data.detail
+  }
+  return msg
+}
+
+export function sleep(time) {
+  return new Promise((resolve) => setTimeout(resolve, time))
+}
+
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
 const BASE_URL = scheme + '//' + document.location.hostname + port

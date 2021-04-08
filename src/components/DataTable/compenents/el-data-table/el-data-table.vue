@@ -723,6 +723,10 @@ export default {
       default(row, index) {
         return true
       }
+    },
+    totalData: {
+      type: Array,
+      default: null
     }
   },
   data() {
@@ -828,6 +832,12 @@ export default {
        * @property {array} rows - 已选中的行数据的数组
        */
       this.$emit('selection-change', val)
+    },
+    totalData(val) {
+      if (val) {
+        this.total = val.length
+        this.getList()
+      }
     }
   },
   mounted() {
@@ -877,12 +887,34 @@ export default {
       }
       return query
     },
+    getList({ loading = true } = {}) {
+      const { url } = this
+      if (url) {
+        return this.getListFromRemote({ loading: loading })
+      }
+      if (this.totalData) {
+        this.getListFromStaticData()
+      }
+    },
+    getListFromStaticData() {
+      if (!this.hasPagination) {
+        this.data = this.totalData
+        return
+      }
+      // page
+      const pageOffset = this.firstPage - defaultFirstPage
+      const page = this.page === 0 ? 1 : this.page
+      const start = (page + pageOffset - 1) * this.size
+      const end = (page + pageOffset) * this.size
+      console.log(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
+      this.data = this.totalData.slice(start, end)
+    },
     /**
      * 手动刷新列表数据，选项的默认值为: { loading: true }
      * @public
      * @param {object} options 方法选项
      */
-    getList({ loading = true } = {}) {
+    getListFromRemote({ loading = true } = {}) {
       const { url } = this
       if (!url) {
         return
