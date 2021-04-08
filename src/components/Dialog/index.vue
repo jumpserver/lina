@@ -55,7 +55,6 @@ export default {
   },
   data() {
     return {
-
     }
   },
   methods: {
@@ -72,6 +71,10 @@ export default {
 <style lang="scss" scoped>
   .dialog >>> .el-dialog__header {
     /*padding-top: 10px;*/
+  }
+
+  .dialog-footer {
+    padding-right: 50px;
   }
 
 </style>

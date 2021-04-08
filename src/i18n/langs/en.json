@@ -257,6 +257,10 @@
     "EnterForSearch": "Press enter to search",
     "Export": "Export",
     "Import": "Import",
+    "ContinueImport": "ContinueImport",
+    "Continue": "Continue",
+    "Stop": "Stop",
+    "Finished": "Finished",
     "Refresh": "Refresh",
     "Info": "Info",
     "MFAConfirm": "MFA Confirm",
@@ -319,6 +323,11 @@
     "fieldRequiredError": "This field is required",
     "getErrorMsg": "Get failed",
     "fileType": "File type",
+    "Status": "Status",
+    "Total": "Total",
+    "Success": "Success",
+    "Failed": "Failed",
+    "Pending": "Pending",
     "imExport": {
       "ExportAll": "Export all",
       "ExportOnlyFiltered": "Export only filtered",
@@ -328,7 +337,10 @@
       "downloadImportTemplateMsg": "Download import template",
       "downloadUpdateTemplateMsg": "Download update template",
       "onlyCSVFilesTips": "Only csv supported",
-      "updateSuccessMsg": "Update success, total: {count}"
+      "updateSuccessMsg": "Update success, total: {count}",
+      "dragUploadFileInfo": "Drag file here or click to upload",
+      "uploadCsvLth10MHelpText": "csv/xlsx files with a size less than 10m",
+      "hasImportErrorItemMsg": "Has import failed item, click to edit it and continue upload"
     },
     "isValid": "Is valid",
     "nav": {
