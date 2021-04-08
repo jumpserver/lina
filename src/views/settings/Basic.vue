@@ -7,6 +7,7 @@
       :create-success-next-route="successUrl"
       :get-method="getMethod"
       :has-detail-in-msg="false"
+      :on-perform-success="onPerformSuccess"
     />
   </IBox>
 </template>
@@ -23,7 +24,7 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL']]
+        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL', 'GLOBAL_ORG_DISPLAY_NAME']]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
       url: '/api/v1/settings/setting/?category=basic'
@@ -32,6 +33,9 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    onPerformSuccess() {
+      setTimeout(() => window.location.reload(), 500)
     }
   }
 }
