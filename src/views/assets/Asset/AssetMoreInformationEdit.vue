@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-bind="$data" :perform-submit="performSubmit" />
 </template>
 
 <script>
@@ -93,6 +93,19 @@ export default {
       url: '/api/v1/assets/assets/',
       updateSuccessNextRoute: { name: 'AssetList' },
       createSuccessNextRoute: { name: 'AssetList' }
+    }
+  },
+  methods: {
+    getUrl() {
+      const params = this.$route.params
+      let url = this.url
+      if (params.id) {
+        url = `${url}${params.id}/`
+      }
+      return url
+    },
+    performSubmit(validValues) {
+      return this.$axios['patch'](this.getUrl(), validValues)
     }
   }
 }

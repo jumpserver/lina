@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",
     "@ztree/ztree_v3": "3.5.44",
-    "axios": "0.18.1",
+    "axios": "0.21.1",
     "axios-retry": "^3.1.9",
     "deepmerge": "^4.2.2",
     "echarts": "^4.7.0",
@@ -76,6 +76,7 @@
     "babel-eslint": "10.0.1",
     "babel-jest": "23.6.0",
     "chalk": "2.4.2",
+    "compression-webpack-plugin": "^6.1.1",
     "connect": "3.6.6",
     "element-theme-chalk": "^2.13.1",
     "eslint": "^5.15.3",

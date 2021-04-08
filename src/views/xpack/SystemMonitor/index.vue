@@ -1,18 +1,12 @@
 <template>
   <Page>
-    <el-row :gutter="40">
-      <el-col :lg="12" :md="24">
-        <MonitorCard type="koko" class="monitorCard" />
-      </el-col>
-      <el-col :lg="12" :md="24">
-        <MonitorCard type="guacamole" class="monitorCard" />
-      </el-col>
-      <el-col :lg="12" :md="24">
-        <MonitorCard type="omnidb" class="monitorCard" />
+    <el-row v-if="loaded" :gutter="40">
+      <el-col v-for="metric of metricsData" :key="metric.type" :lg="12" :md="24">
+        <MonitorCard :type="metric.type" :component-metric="metric" class="monitorCard" />
       </el-col>
     </el-row>
   </Page>
-</template>lg
+</template>
 
 <script>
 import Page from '@/layout/components/Page/index'
@@ -26,9 +20,24 @@ export default {
   },
   data() {
     return {
+      metricsData: [],
+      loaded: false
     }
   },
   computed: {
+  },
+  mounted() {
+    this.getMetricsData()
+  },
+  methods: {
+    async getMetricsData() {
+      const url = '/api/v1/terminal/components/metrics/'
+      this.$axios.get(url).then((data) => {
+        this.metricsData = data
+      }).finally(() => {
+        this.loaded = true
+      })
+    }
   }
 }
 </script>
