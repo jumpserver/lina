@@ -97,7 +97,7 @@ export default {
             click: function() {
               const warnMsg = vm.$t('users.quickUpdate.resetWechatLoginWarningMsg')
               const warnTitle = vm.$t('common.Info')
-              const url = `/api/authentication/wecom/qr/unbind/${vm.object.id}/`
+              const url = `/api/v1/authentication/wecom/qr/unbind/${vm.object.id}/`
               const successMsg = vm.$t('users.quickUpdate.resetWechatLoginSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',

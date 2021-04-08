@@ -286,6 +286,8 @@
     "TestSuccessMsg": "Test Success",
     "To": "To",
     "Update": "Update",
+    "bind": "Bind",
+    "unbind": "Unbind",
     "Upload": "Upload",
     "Clone": "Clone",
     "Username": "Username",
@@ -893,6 +895,8 @@
     "DateJoined": "Date joined",
     "DateLastLogin": "Date last login",
     "DatePasswordLastUpdated": "Date password last updated",
+    "setWechat": "Set wechat login",
+    "UserAclListRule": "User acl list",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",
     "Email": "Email",
@@ -974,8 +978,8 @@
       "ApplicationPermissionRules": "Application permission rules",
       "remoteAppPermissionRules": "Remote app permission rules"
     },
-    "UpdatePassword": "",
-    "UpdatePublicKey": "",
+    "UpdatePassword": "Update password",
+    "UpdatePublicKey": "Update publicKey",
     "passwordExpired": "Password expired",
     "passwordWillExpiredPrefixMsg": "The password will expire in ",
     "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible."

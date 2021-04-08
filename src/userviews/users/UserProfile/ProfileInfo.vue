@@ -59,10 +59,10 @@ export default {
       passwordInput: '',
       quickActions: [
         {
-          title: this.$t('设置企业微信认证'),
+          title: this.$t('users.setWechat'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_wecom_bound ? `解绑` : `绑定`,
+            label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind'),
             disabled: this.$store.state.users.profile.source !== 'local' && this.$store.state.publicSettings.AUTH_WECOM
           },
           callbacks: {
@@ -227,6 +227,8 @@ export default {
           })
         }
       })
+      this.passwordInput = ''
+      this.showPasswordDialog = false
     }
   }
 }
