@@ -8,8 +8,8 @@
     </template>
 
     <div>
-      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="iActiveMenu" class="page-submenu" @tab-click="handleTabClick">
-        <template v-for="item in submenu">
+      <el-tabs v-if="isubMenu && isubMenu.length > 0" slot="submenu" v-model="iActiveMenu" class="page-submenu" @tab-click="handleTabClick">
+        <template v-for="item in isubMenu">
           <el-tab-pane :key="item.name" :label-content="item.labelContent" :name="item.name">
             <span slot="label">
               {{ item.title }}
@@ -61,6 +61,9 @@ export default {
         map[v.name] = i
       })
       return map
+    },
+    isubMenu() {
+      return this.cleanActions(this.submenu)
     }
   },
   mounted() {
@@ -96,6 +99,24 @@ export default {
       }
 
       return this.submenu[0].name
+    },
+    cleanBoolean(item, attr) {
+      const ok = item[attr]
+      if (typeof ok !== 'function') {
+        return ok === undefined ? true : ok
+      }
+      return ok()
+    },
+    cleanActions(actions) {
+      const cleanedActions = []
+      const cloneActions = _.cloneDeep(actions)
+      cloneActions.forEach((action) => {
+        action.has = this.cleanBoolean(action, 'has')
+        if (action.has) {
+          cleanedActions.push(action)
+        }
+      })
+      return cleanedActions
     }
   }
 }

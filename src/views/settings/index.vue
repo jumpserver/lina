@@ -1,10 +1,13 @@
 <template>
   <div>
-    <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
-      <keep-alive>
-        <component :is="activeMenu" :object="componentData" />
-      </keep-alive>
-    </TabPage>
+    <div>
+      <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+        <keep-alive>
+          <component :is="activeMenu" :object="componentData" />
+        </keep-alive>
+      </TabPage>
+    </div>
+
   </div>
 </template>
 
@@ -19,6 +22,7 @@ import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
 import License from './License'
+import Auth from './Auth'
 export default {
   components: {
     IBox,
@@ -30,11 +34,11 @@ export default {
     Ldap,
     Terminal,
     Security,
-    License
+    License,
+    Auth
   },
   data() {
     return {
-      loading: true,
       activeMenu: 'Basic',
       settingsData: {},
       submenu: [
@@ -53,6 +57,11 @@ export default {
         {
           title: this.$t('setting.Ldap'),
           name: 'Ldap'
+        },
+        {
+          title: this.$t('setting.loginMethod'),
+          name: 'Auth',
+          has: this.$store.getters.publicSettings.AUTH_WECOM
         },
         {
           title: this.$t('setting.Terminal'),
@@ -76,8 +85,6 @@ export default {
     componentData() {
       return {}
     }
-  },
-  mounted() {
   },
   methods: {
     initial() {
@@ -103,6 +110,9 @@ export default {
           break
         case 'License':
           this.activeMenu = 'License'
+          break
+        case 'Auth':
+          this.activeMenu = 'Auth'
           break
         default:
           this.activeMenu = 'Basic'

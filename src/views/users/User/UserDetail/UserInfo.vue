@@ -87,6 +87,38 @@ export default {
           }
         },
         {
+          title: this.$t('users.quickUpdate.resetWechat'),
+          attrs: {
+            type: 'primary',
+            disabled: !this.object.is_wecom_bound,
+            label: this.$t('users.quickUpdate.unbind')
+          },
+          callbacks: {
+            click: function() {
+              const warnMsg = vm.$t('users.quickUpdate.resetWechatLoginWarningMsg')
+              const warnTitle = vm.$t('common.Info')
+              const url = `/api/v1/authentication/wecom/qr/unbind/${vm.object.id}/`
+              const successMsg = vm.$t('users.quickUpdate.resetWechatLoginSuccessMsg')
+              vm.$confirm(warnMsg, warnTitle, {
+                type: 'warning',
+                confirmButtonClass: 'el-button--warning',
+                showCancelButton: true,
+                beforeClose: async(action, instance, done) => {
+                  if (action !== 'confirm') return done()
+                  instance.confirmButtonLoading = true
+                  try {
+                    await vm.$axios.post(url)
+                    done()
+                    vm.$message.success(successMsg)
+                  } finally {
+                    instance.confirmButtonLoading = false
+                  }
+                }
+              })
+            }
+          }
+        },
+        {
           title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
