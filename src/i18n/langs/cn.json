@@ -961,7 +961,11 @@
       "resetSSHKey": "重置SSH密钥",
       "resetSSHKeySuccessMsg": "发送邮件任务已提交, 用户稍后会收到重置密钥邮件",
       "resetSSHKeyWarningMsg": "你确定要发送重置用户的SSH Key的邮件吗?",
+      "resetWechat": "解绑企业微信",
+      "resetWechatLoginWarningMsg": "你确定要解绑用户的 企业微信 吗?",
+      "resetWechatLoginSuccessMsg": "重置成功, 用户可以重新绑定企业微信了",
       "send": "发送",
+      "unbind": "解绑",
       "unblock": "解锁",
       "unblockSuccessMsg": "解锁成功",
       "unblockUser": "解锁用户"

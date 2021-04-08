@@ -213,7 +213,6 @@ export default {
   },
   methods: {
     passConfirm() {
-      console.log(this.$route.fullPath)
       this.$axios.post(
         `/api/v1/authentication/password/verify/`, {
           password: this.passwordInput
@@ -222,7 +221,8 @@ export default {
         if (!this.object.is_wecom_bound) {
           window.location.href = `/core/auth/wecom/qr/bind/?redirect_url=${this.$route.fullPath}`
         } else {
-          this.$axios.post(`/authentication/wecom/qr/unbind/`).then(res => {
+          this.$axios.post(`/api/v1/authentication/wecom/qr/unbind/`).then(res => {
+            this.$message.success(this.$t('common.updateSuccessMsg'))
             this.$store.dispatch('users/getProfile')
           })
         }
