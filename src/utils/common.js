@@ -205,3 +205,4 @@ const port = document.location.port ? ':' + document.location.port : ''
 const BASE_URL = scheme + '//' + document.location.hostname + port
 
 export { BASE_URL }
+

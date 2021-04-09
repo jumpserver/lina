@@ -167,7 +167,7 @@ import getLocatedSlotKeys from './utils/extract-keys'
 import transformSearchImmediatelyItem from './utils/search-immediately-item'
 import isFalsey from './utils/is-falsey'
 import merge from 'deepmerge'
-const defaultFirstPage = 0
+const defaultFirstPage = 1
 const noPaginationDataPath = 'payload'
 
 export default {
@@ -814,6 +814,13 @@ export default {
     },
     _searchForm() {
       return transformSearchImmediatelyItem(this.collapseForm, this)
+    },
+    lastPageNum() {
+      // page
+      const pageOffset = this.firstPage - defaultFirstPage
+      const pageCount = Math.ceil(this.total / this.size)
+      const lastPageNum = pageCount + pageOffset
+      return lastPageNum
     }
   },
   watch: {
@@ -835,6 +842,7 @@ export default {
     },
     totalData(val) {
       if (val) {
+        this.page = defaultFirstPage
         this.total = val.length
         this.getList()
       }
@@ -887,27 +895,47 @@ export default {
       }
       return query
     },
+    getPageData() {
+      return this.data
+    },
+    async gotoNextPage() {
+      if (!this.hasNextPage()) {
+        return false
+      }
+      this.page += 1
+      await this.getList({ loading: true })
+    },
+    hasNextPage() {
+      return this.page < this.lastPageNum
+    },
     getList({ loading = true } = {}) {
       const { url } = this
       if (url) {
         return this.getListFromRemote({ loading: loading })
       }
       if (this.totalData) {
-        this.getListFromStaticData()
+        return this.getListFromStaticData({ loading: true })
       }
+      // this.$log.debug("last page is: ", this.lastPageNum)
     },
-    getListFromStaticData() {
+    getListFromStaticData({ loading = true } = {}) {
+      if (loading) {
+        this.loading = true
+      }
       if (!this.hasPagination) {
         this.data = this.totalData
-        return
+        this.loading = false
+        return this.data
       }
       // page
       const pageOffset = this.firstPage - defaultFirstPage
       const page = this.page === 0 ? 1 : this.page
       const start = (page + pageOffset - 1) * this.size
       const end = (page + pageOffset) * this.size
-      console.log(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
+      this.$log.debug(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
       this.data = this.totalData.slice(start, end)
+      this.loading = false
+      return this.data
     },
     /**
      * 手动刷新列表数据，选项的默认值为: { loading: true }
