@@ -23,7 +23,6 @@ import Terminal from './Terminal'
 import Security from './Security'
 import License from './License'
 import Auth from './Auth'
-import request from '@/utils/request'
 export default {
   components: {
     IBox,
@@ -39,7 +38,6 @@ export default {
     Auth
   },
   data() {
-    const vm = this
     return {
       activeMenu: 'Basic',
       settingsData: {},
@@ -76,18 +74,6 @@ export default {
         {
           title: this.$t('setting.License'),
           name: 'License'
-        }
-      ],
-      moreButtons: [
-        {
-          title: this.$t('setting.TestConnective'),
-          callback: function(value, form) {
-            vm.testWechatSetting(value).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(res => {
-              vm.$message.error(res['response']['data']['error'])
-            })
-          }
         }
       ]
     }
@@ -132,14 +118,6 @@ export default {
           this.activeMenu = 'Basic'
           break
       }
-    },
-    testWechatSetting(data) {
-      return request({
-        disableFlashErrorMsg: true,
-        url: '/api/v1/settings/wecom/testing/',
-        method: 'post',
-        data: data
-      })
     }
   }
 }
