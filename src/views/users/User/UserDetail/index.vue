@@ -15,7 +15,7 @@ import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
 import UserGrantedDatabases from './UserGrantedDatabases'
 import UserGrantedK8Ss from './UserGrantedK8Ss'
 import UserK8SPermissionRules from './UserK8SPermissionRules'
-import UserAclList from '@/views/acl/UserAcl/UserAclList'
+import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLDetail/UserLoginACLList'
 import UserDatabasePermissionRules from './UserDatabasePermissionRules'
 import UserInfo from './UserInfo'
 
@@ -31,7 +31,7 @@ export default {
     UserDatabasePermissionRules,
     UserK8SPermissionRules,
     UserGrantedK8Ss,
-    UserAclList
+    UserLoginACLList
   },
   data() {
     const vm = this
@@ -65,8 +65,8 @@ export default {
             name: 'UserApplicationPermissionRules'
           },
           {
-            title: this.$t('route.UserAclLists'),
-            name: 'UserAclList'
+            title: this.$t('acls.UserLoginACL'),
+            name: 'UserLoginACLList'
           }
         ]
       }

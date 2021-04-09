@@ -1,5 +1,9 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :perform-submit="performSubmit"
+    :after-get-form-value="afterGetFormValue"
+  />
 </template>
 
 <script>

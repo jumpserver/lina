@@ -38,5 +38,36 @@ export default [
         hidden: true
       }
     ]
+  },
+  {
+    path: 'user-login-acl',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.UserLoginACL'),
+      licenseRequired: true
+    },
+    children: [
+      {
+        path: '',
+        name: 'UserLoginACLList',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLUserList'),
+        meta: { title: i18n.t('route.UserLoginACL'), activeMenu: '/acl/user-login-acl' }
+      },
+      {
+        path: 'users/:id',
+        name: 'UserLoginACLDetail',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLDetail'),
+        meta: { title: i18n.t('route.UserLoginACL'), activeMenu: '/acl/user-login-acl' },
+        hidden: true
+      },
+      {
+        path: 'users/:id/create',
+        name: 'UserLoginACLCreate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLDetail'), activeMenu: '/acl/user-login-acl' },
+        hidden: true
+      }
+    ]
   }
 ]

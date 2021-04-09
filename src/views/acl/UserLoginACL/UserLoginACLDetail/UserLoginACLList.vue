@@ -49,7 +49,7 @@ export default {
         }
       },
       headerActions: {
-        createRoute: { name: 'UserAclCreate', query: { user: this.$route.params.id }},
+        createRoute: { name: 'UserLoginACLCreate', query: { user: this.$route.params.id }},
         hasRefresh: true,
         hasExport: false,
         hasImport: false,

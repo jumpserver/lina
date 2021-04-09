@@ -698,7 +698,8 @@
     "WebFTP": "文件管理",
     "WebTerminal": "Web终端",
     "Notifications": "通知",
-    "SiteMessageList": "站内信"
+    "SiteMessageList": "站内信",
+    "UserLoginACL": "用户登录"
   },
   "sessions": {
     "SetToDefaultStorage": "设置为默认存储",

@@ -681,7 +681,8 @@
     "WebFTP": "WebFTP",
     "WebTerminal": "Web Terminal",
     "Notifications": "Notifications",
-    "SiteMessageList": "Site message"
+    "SiteMessageList": "Site message",
+    "UserLoginACL": "User Login ACL"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",
