@@ -74,7 +74,7 @@ export default {
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
-          title: this.$t('setting.emailTest'),
+          title: this.$t('setting.TestConnective'),
           callback: function(value, form) {
             if (value['EMAIL_HOST_PASSWORD'] === undefined) {
               value['EMAIL_HOST_PASSWORD'] = ''

@@ -1,10 +1,13 @@
 <template>
   <div>
-    <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
-      <keep-alive>
-        <component :is="activeMenu" :object="componentData" />
-      </keep-alive>
-    </TabPage>
+    <div>
+      <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+        <keep-alive>
+          <component :is="activeMenu" :object="componentData" />
+        </keep-alive>
+      </TabPage>
+    </div>
+
   </div>
 </template>
 
@@ -19,6 +22,8 @@ import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
 import License from './License'
+import Auth from './Auth'
+import request from '@/utils/request'
 export default {
   components: {
     IBox,
@@ -30,11 +35,12 @@ export default {
     Ldap,
     Terminal,
     Security,
-    License
+    License,
+    Auth
   },
   data() {
+    const vm = this
     return {
-      loading: true,
       activeMenu: 'Basic',
       settingsData: {},
       submenu: [
@@ -55,6 +61,11 @@ export default {
           name: 'Ldap'
         },
         {
+          title: this.$t('setting.loginMethod'),
+          name: 'Auth',
+          has: this.$store.getters.publicSettings.AUTH_WECOM
+        },
+        {
           title: this.$t('setting.Terminal'),
           name: 'Terminal'
         },
@@ -66,6 +77,18 @@ export default {
           title: this.$t('setting.License'),
           name: 'License'
         }
+      ],
+      moreButtons: [
+        {
+          title: this.$t('setting.TestConnective'),
+          callback: function(value, form) {
+            vm.testWechatSetting(value).then(res => {
+              vm.$message.success(res['msg'])
+            }).catch(res => {
+              vm.$message.error(res['response']['data']['error'])
+            })
+          }
+        }
       ]
     }
   },
@@ -76,8 +99,6 @@ export default {
     componentData() {
       return {}
     }
-  },
-  mounted() {
   },
   methods: {
     initial() {
@@ -104,10 +125,21 @@ export default {
         case 'License':
           this.activeMenu = 'License'
           break
+        case 'Auth':
+          this.activeMenu = 'Auth'
+          break
         default:
           this.activeMenu = 'Basic'
           break
       }
+    },
+    testWechatSetting(data) {
+      return request({
+        disableFlashErrorMsg: true,
+        url: '/api/v1/settings/wecom/testing/',
+        method: 'post',
+        data: data
+      })
     }
   }
 }

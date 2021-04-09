@@ -11,7 +11,7 @@
     <Dialog
       width="50"
       top="20vh"
-      :title="this.$t('common.MFAConfirm')"
+      :title="this.$t('common.PasswordConfirm')"
       :visible.sync="showPasswordDialog"
       :show-confirm="false"
       :show-cancel="false"
@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="14">
           <el-input v-model="passwordInput" type="password" />
-          <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
+          <span class="help-tips help-block">{{ $t('common.PasswordRequireForSecurity') }}</span>
         </el-col>
         <el-col :span="4">
           <el-button size="mini" type="primary" style="line-height:20px " @click="passConfirm">{{ this.$t('common.Confirm') }}</el-button>
@@ -63,8 +63,9 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.$store.state.users.profile.source !== 'local' && this.$store.state.publicSettings.AUTH_WECOM
+            disabled: this.$store.state.users.profile.source !== 'local'
           },
+          has: this.$store.state.publicSettings.AUTH_WECOM,
           callbacks: {
             click: function() {
               this.showPasswordDialog = true
