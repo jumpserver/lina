@@ -65,7 +65,7 @@ export default {
             label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind'),
             disabled: this.$store.state.users.profile.source !== 'local'
           },
-          has: this.$store.state.publicSettings.AUTH_WECOM,
+          has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
             click: function() {
               this.showPasswordDialog = true
