@@ -122,6 +122,11 @@ export default {
             },
             showOverflowTooltip: true
           },
+          protocols: {
+            formatter: function(row) {
+              return <span> {row.protocols.toString()} </span>
+            }
+          },
           ip: {
             sortable: 'custom',
             width: '140px'
