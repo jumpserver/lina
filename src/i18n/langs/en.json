@@ -631,7 +631,8 @@
     "UserUpdate": "User update",
     "Users": "Users",
     "WebFTP": "WebFTP",
-    "WebTerminal": "Web terminal"
+    "WebTerminal": "Web terminal",
+    "UserLoginACL": "User Login ACL"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",

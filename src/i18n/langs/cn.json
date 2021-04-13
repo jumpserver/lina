@@ -638,7 +638,8 @@
     "UserUpdate": "更新用户",
     "Users": "用户管理",
     "WebFTP": "文件管理",
-    "WebTerminal": "Web终端"
+    "WebTerminal": "Web终端",
+    "UserLoginACL": "用户登录"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",

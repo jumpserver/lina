@@ -9,20 +9,22 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import Detail from './Detail.vue'
+import UserLoginACLList from './UserLoginACLList'
 export default {
   components: {
     GenericDetailPage,
-    Detail
+    Detail,
+    UserLoginACLList
   },
   data() {
     return {
       TaskDetail: {},
       config: {
-        activeMenu: 'Detail',
+        activeMenu: 'UserLoginACLList',
         submenu: [
           {
-            title: this.$t('acl.RuleDetail'),
-            name: 'Detail'
+            title: this.$t('acl.Rules'),
+            name: 'UserLoginACLList'
           }
         ],
         hasRightSide: false,
