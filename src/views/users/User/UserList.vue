@@ -187,7 +187,7 @@ export default {
           fieldsMeta: {
             groups: {
               label: this.$t('users.UserGroups'),
-              hidden: () => false,
+              hidden: () => vm.currentOrgIsRoot,
               el: {
                 multiple: true,
                 ajax: {

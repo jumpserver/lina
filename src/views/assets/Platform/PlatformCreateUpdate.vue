@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :perform-submit="performSubmit.bind(this)" />
+  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
 </template>
 
 <script>
@@ -17,65 +17,48 @@ export default {
         charset: 'utf8'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'base', 'charset', 'security', 'console', 'comment']]
+        [this.$t('common.Basic'), ['name', 'base', 'charset', 'meta', 'comment']]
       ],
       fieldsMeta: {
-        security: {
-          type: 'select',
-          label: 'RDP security',
-          options: [{
-            label: 'RDP',
-            value: 'rdp'
+        meta: {
+          fields: ['security', 'console'],
+          fieldsMeta: {
+            security: {
+              prop: 'meta.security',
+              type: 'select',
+              label: 'RDP security',
+              options: [{
+                label: 'RDP',
+                value: 'rdp'
+              },
+              {
+                label: 'NLA',
+                value: 'nla'
+              },
+              {
+                label: 'TLS',
+                value: 'tls'
+              },
+              {
+                label: 'Any',
+                value: 'any'
+              }]
+            },
+            console: {
+              type: 'select',
+              label: 'RDP console',
+              options: [{
+                label: this.$t('common.Yes'),
+                value: 'true'
+              }, {
+                label: this.$t('common.No'),
+                value: 'false'
+              }]
+            }
           },
-          {
-            label: 'NLA',
-            value: 'nla'
-          },
-          {
-            label: 'TLS',
-            value: 'tls'
-          },
-          {
-            label: 'Any',
-            value: 'any'
-          }],
-          hidden: form => form.base !== 'Windows'
-        },
-        console: {
-          type: 'select',
-          label: 'RDP console',
-          options: [{
-            label: '是',
-            value: 'true'
-          }, {
-            label: '否',
-            value: 'false'
-          }],
           hidden: form => form.base !== 'Windows'
         }
-      },
-      performSubmit: function(formdata) {
-        var postData = {}
-        if (formdata.base === 'Windows') {
-          postData.meta = {}
-          postData.meta.security = formdata.security
-          postData.meta.console = (formdata.console === 'true')
-        }
-        postData.name = formdata.name
-        postData.base = formdata.base
-        postData.charset = formdata.charset
-        postData.comment = formdata.comment || ''
 
-        const params = this.$route.params
-        if (params.id) {
-          return this.$axios.put(
-            `${this.url}${params.id}/`, postData
-          )
-        } else {
-          return this.$axios.post(
-            this.url, postData
-          )
-        }
       },
       url: '/api/v1/assets/platforms/'
     }
