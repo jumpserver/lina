@@ -1,51 +1,52 @@
-<template><div>
+<template>
   <div>
-    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
-      <div v-if="MFAConfirmed">
-        <el-form label-position="right" label-width="80px" :model="MFAInfo">
+    <div>
+      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
+        <div v-if="MFAConfirmed">
+          <el-form label-position="right" label-width="80px" :model="MFAInfo">
+            <el-form-item :label="this.$t('assets.Hostname')">
+              <el-input v-model="MFAInfo.hostname" disabled />
+            </el-form-item>
+            <el-form-item :label="this.$t('assets.Username')">
+              <el-input v-model="MFAInfo.username" disabled />
+            </el-form-item>
+            <el-form-item :label="this.$t('assets.Password')">
+              <el-input v-model="MFAInfo.password" type="password" show-password />
+            </el-form-item>
+          </el-form>
+        </div>
+        <el-row v-else :gutter="20">
+          <el-col :span="4">
+            <div style="line-height: 34px;text-align: center">MFA</div>
+          </el-col>
+          <el-col :span="14">
+            <el-input v-model="MFAInput" />
+            <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
+          </el-col>
+          <el-col :span="4">
+            <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
+          </el-col>
+        </el-row>
+      </Dialog>
+      <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
+        <el-form label-position="right" label-width="80px" :model="dialogInfo">
           <el-form-item :label="this.$t('assets.Hostname')">
-            <el-input v-model="MFAInfo.hostname" disabled />
+            <el-input v-model="dialogInfo.hostname" disabled />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="MFAInfo.username" disabled />
+            <el-input v-model="dialogInfo.username" disabled />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Password')">
-            <el-input v-model="MFAInfo.password" type="password" show-password />
+            <el-input v-model="dialogInfo.password" type="password" />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.sshkey')">
+            <input type="file" @change="Onchange">
           </el-form-item>
         </el-form>
-      </div>
-      <el-row v-else :gutter="20">
-        <el-col :span="4">
-          <div style="line-height: 34px;text-align: center">MFA</div>
-        </el-col>
-        <el-col :span="14">
-          <el-input v-model="MFAInput" />
-          <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
-        </el-col>
-        <el-col :span="4">
-          <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
-        </el-col>
-      </el-row>
-    </Dialog>
-    <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
-      <el-form label-position="right" label-width="80px" :model="dialogInfo">
-        <el-form-item :label="this.$t('assets.Hostname')">
-          <el-input v-model="dialogInfo.hostname" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Username')">
-          <el-input v-model="dialogInfo.username" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Password')">
-          <el-input v-model="dialogInfo.password" type="password" />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.sshkey')">
-          <input type="file" @change="Onchange">
-        </el-form-item>
-      </el-form>
-    </Dialog>
+      </Dialog>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -111,7 +112,7 @@ export default {
         username: '',
         hostname: '',
         password: '',
-        key: ''
+        private_key: ''
       },
       tableConfig: {
         url: this.url,
@@ -316,7 +317,7 @@ export default {
         username: '',
         hostname: '',
         password: '',
-        key: ''
+        private_key: ''
       }
       this.showDialog = false
       this.$refs.ListTable.reloadTable()
@@ -326,7 +327,7 @@ export default {
       // TODO 校验文件类型
       const reader = new FileReader()
       reader.onload = function() {
-        vm.dialogInfo.key = this.result
+        vm.dialogInfo.private_key = this.result
       }
       reader.readAsText(
         e.target.files[0]
@@ -340,8 +341,8 @@ export default {
       if (this.dialogInfo.password !== '') {
         data.password = this.dialogInfo.password
       }
-      if (this.dialogInfo.key !== '') {
-        data.key = this.dialogInfo.key
+      if (this.dialogInfo.private_key !== '') {
+        data.private_key = this.dialogInfo.private_key
       }
       this.$axios.post(
         `/api/v1/assets/asset-users/`,
@@ -356,7 +357,7 @@ export default {
         username: '',
         hostname: '',
         password: '',
-        key: ''
+        private_key: ''
       }
       this.showDialog = false
       this.$refs.ListTable.reloadTable()

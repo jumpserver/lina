@@ -15,12 +15,13 @@
         <span class="summary-item summary-total"> {{ $t('common.Total') }}: {{ totalCount }}</span>
         <span class="summary-item summary-success"> {{ $t('common.Success') }}: {{ successCount }}</span>
         <span class="summary-item summary-failed"> {{ $t('common.Failed') }}: {{ failedCount }}</span>
+        <span class="summary-item summary-pending"> {{ $t('common.Pending') }}: {{ pendingCount }}</span>
       </el-col>
     </el-row>
     <div class="row">
       <el-progress :percentage="processedPercent" />
     </div>
-    <DataTable v-if="tableGenDone" id="importTable" :config="tableConfig" class="importTable" />
+    <DataTable v-if="tableGenDone" id="importTable" ref="dataTable" :config="tableConfig" class="importTable" />
     <div class="row" style="padding-top: 20px">
       <div style="float: right">
         <el-button size="small" @click="performCancel">{{ $t('common.Cancel') }}</el-button>
@@ -60,15 +61,16 @@ export default {
       iTotalData: [],
       tableConfig: {
         hasSelection: false,
-        hasPagination: false,
+        // hasPagination: false,
         columns: [],
         totalData: [],
+        paginationSize: 10,
+        paginationSizes: [10],
         tableAttrs: {
           stripe: true, // 斑马纹表格
           border: true, // 表格边框
           fit: true, // 宽度自适应,
-          tooltipEffect: 'dark',
-          height: '60vh'
+          tooltipEffect: 'dark'
         }
       },
       tableGenDone: false,
@@ -143,6 +145,9 @@ export default {
         return 0
       }
       return Math.round(this.processedCount / this.totalCount * 100)
+    },
+    elDataTable() {
+      return this.$refs['dataTable'].dataTable
     }
   },
   watch: {
@@ -150,9 +155,7 @@ export default {
       if (val === 'all') {
         this.tableConfig.totalData = this.iTotalData
       } else if (val === 'error') {
-        this.tableConfig.totalData = this.iTotalData.filter((item) => {
-          return item['@status'].name === 'error'
-        })
+        this.tableConfig.totalData = this.failedData
       } else {
         this.tableConfig.totalData = this.iTotalData.filter((item) => {
           return item['@status'] === val
@@ -184,7 +187,7 @@ export default {
             }
             return 'error'
           },
-          getTip(val, col) {
+          getTip(val) {
             if (val === 'ok') {
               return vm.$t('common.Success')
             } else if (val === 'pending') {
@@ -220,7 +223,15 @@ export default {
           label: item[0],
           minWidth: colMaxWidth + 'px',
           showOverflowTooltip: true,
-          formatter: EditableInputFormatter
+          formatter: EditableInputFormatter,
+          formatterArgs: {
+            onEnter: ({ row, col, oldValue, newValue }) => {
+              const prop = col.prop
+              row['@status'] = 'pending'
+              this.$log.debug(`Set value ${oldValue} => ${newValue}`)
+              this.$set(row, prop, newValue)
+            }
+          }
         })
       }
       return columns
@@ -271,10 +282,15 @@ export default {
       return data
     },
     performCancel() {
+      this.performStop()
       this.$emit('cancel')
     },
     performFinish() {
+      this.performStop()
       this.$emit('finish')
+    },
+    taskIsStopped() {
+      return this.importTaskStatus === 'stopped'
     },
     performImportAction() {
       switch (this.importAction) {
@@ -289,9 +305,13 @@ export default {
       }
     },
     performContinue() {
-      for (const item of this.failedData) {
-        item['@status'] = 'pending'
+      if (this.importTaskStatus === 'done') {
+        for (const item of this.failedData) {
+          item['@status'] = 'pending'
+        }
+        this.tableConfig.totalData = this.pendingData
       }
+      this.importTaskStatus = 'started'
       setTimeout(() => {
         this.performUpload()
       }, 100)
@@ -299,16 +319,35 @@ export default {
     performStop() {
       this.importTaskStatus = 'stopped'
     },
-    async performUpload() {
-      this.importTaskStatus = 'started'
-      for (const item of this.pendingData) {
-        if (this.importTaskStatus === 'stopped') {
+    async performUploadCurrentPageData() {
+      const currentData = this.elDataTable.getPageData()
+      for (const item of currentData) {
+        if (item['@status'] !== 'pending') {
+          continue
+        }
+        if (this.taskIsStopped()) {
           return
         }
         await this.performUploadObject(item)
         await sleep(100)
       }
-      this.importTaskStatus = 'done'
+    },
+    async performUpload() {
+      this.importTaskStatus = 'started'
+      this.importStatusFilter = 'pending'
+      while (!this.taskIsStopped()) {
+        await this.performUploadCurrentPageData()
+        const hasNextPage = this.elDataTable.hasNextPage()
+        if (hasNextPage && !this.taskIsStopped()) {
+          await this.elDataTable.gotoNextPage()
+          await sleep(100)
+        } else {
+          break
+        }
+      }
+      if (this.pendingCount === 0) {
+        this.importTaskStatus = 'done'
+      }
       if (this.failedCount > 0) {
         this.$message.error(this.$t('common.imExport.hasImportErrorItemMsg') + '')
       }
@@ -336,15 +375,6 @@ export default {
           name: 'error',
           error: _error
         }
-      } finally {
-        const tableRef = document.getElementById('importTable')
-        const pendingRef = tableRef?.getElementsByClassName('pendingStatus')[0]
-        if (pendingRef) {
-          const parentTdRef = pendingRef.parentElement.parentElement.parentElement.parentElement
-          if (!this.isElementInViewport(parentTdRef)) {
-            parentTdRef.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' })
-          }
-        }
       }
     },
     async performCreateObject(item) {
@@ -354,15 +384,24 @@ export default {
         { disableFlashErrorMsg: true }
       )
     },
-    isElementInViewport(el) {
-      const rect = el.getBoundingClientRect()
+    keepElementInViewport() {
+      const tableRef = document.getElementById('importTable')
+      const pendingRef = tableRef?.getElementsByClassName('pendingStatus')[0]
+      if (!pendingRef) {
+        return
+      }
+      const parentTdRef = pendingRef.parentElement.parentElement.parentElement.parentElement
+      const rect = parentTdRef.getBoundingClientRect()
       let windowInnerHeight = window.innerHeight || document.documentElement.clientHeight
       windowInnerHeight = windowInnerHeight * 0.97 - 150
-      return (
+      const inViewport = (
         rect.top >= 0 &&
         rect.left >= 0 &&
         rect.bottom <= windowInnerHeight
       )
+      if (!inViewport) {
+        parentTdRef.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' })
+      }
     }
   }
 }
@@ -380,6 +419,11 @@ export default {
 
 .summary-failed {
   color: $--color-danger;
+}
+
+.importTable >>> .cell {
+  min-height: 20px;
+  height: 100%;
 }
 
 </style>

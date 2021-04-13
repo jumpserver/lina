@@ -339,8 +339,8 @@
       "onlyCSVFilesTips": "Only csv supported",
       "updateSuccessMsg": "Update success, total: {count}",
       "dragUploadFileInfo": "Drag file here or click to upload",
-      "uploadCsvLth10MHelpText": "csv/xlsx files with a size less than 10m",
-      "hasImportErrorItemMsg": "Has import failed item, click to edit it and continue upload"
+      "uploadCsvLth10MHelpText": "csv/xlsx files with a size less than 10M",
+      "hasImportErrorItemMsg": "There is an error item, click the x icon to view the details, and continue to import after editing"
     },
     "isValid": "Is valid",
     "nav": {
@@ -600,6 +600,10 @@
     "RemoteAppPermissionCreate": "Remote apps permission create",
     "RemoteAppPermissionDetail": "Remote apps permissions detail",
     "RemoteAppPermissionUpdate": "Remote app permission update",
+    "ApplicationDetail": "Application detail",
+    "ApplicationPermissionCreate": "Application permission create",
+    "ApplicationPermissionDetail": "Application permission detail",
+    "ApplicationPermissionUpdate": "Application permission update",
     "RemoteAppUpdate": "Remote app update",
     "ReplayStorageUpdate": "Replay storage update",
     "SessionDetail": "Sessions detail",
