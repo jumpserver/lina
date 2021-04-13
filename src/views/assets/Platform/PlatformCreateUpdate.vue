@@ -48,10 +48,10 @@ export default {
               type: 'select',
               label: 'RDP console',
               options: [{
-                label: '是',
+                label: this.$t('common.Yes'),
                 value: 'true'
               }, {
-                label: '否',
+                label: this.$t('common.No'),
                 value: 'false'
               }]
             }
