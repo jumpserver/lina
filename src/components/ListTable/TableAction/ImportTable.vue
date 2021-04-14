@@ -227,10 +227,7 @@ export default {
     },
     generateTableData(tableTitles, tableData) {
       const totalData = []
-      tableData.forEach((item, index) => {
-        if (!item.id) {
-          item.id = index
-        }
+      tableData.forEach(item => {
         this.$set(item, '@status', 'pending')
         totalData.push(item)
       })
