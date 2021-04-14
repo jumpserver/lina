@@ -567,6 +567,7 @@
     "Acl": "访问控制",
     "UserAclList": "用户登录",
     "UserAclCreate": "创建用户登录规则",
+    "UserAclLists": "用户登录规则",
     "UserAclUpdate": "更新用户登录规则",
     "UserAclDetail": "用户登录规则详情",
     "AssetAclList": "登录资产",

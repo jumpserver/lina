@@ -65,7 +65,7 @@ export default {
             name: 'UserApplicationPermissionRules'
           },
           {
-            title: '用户登录规则',
+            title: this.$t('route.UserAclLists'),
             name: 'UserAclList'
           }
         ]
