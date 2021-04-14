@@ -55,14 +55,14 @@ export default {
           key: this.$t('sessions.remoteAddr'),
           value: this.terminalData.remote_addr
         },
-        {
-          key: this.$t('sessions.sshPort'),
-          value: this.terminalData.ssh_port
-        },
-        {
-          key: this.$t('sessions.httpPort'),
-          value: this.terminalData.http_port
-        },
+        // {
+        //   key: this.$t('sessions.sshPort'),
+        //   value: this.terminalData.ssh_port
+        // },
+        // {
+        //   key: this.$t('sessions.httpPort'),
+        //   value: this.terminalData.http_port
+        // },
         {
           key: this.$t('sessions.dateCreated'),
           value: this.terminalData.date_created
