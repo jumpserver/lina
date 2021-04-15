@@ -1,64 +1,24 @@
-<template><div>
+<template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
-      <div v-if="MFAConfirmed">
-        <el-form label-position="right" label-width="80px" :model="MFAInfo">
-          <el-form-item :label="this.$t('assets.Hostname')">
-            <el-input v-model="MFAInfo.hostname" disabled />
-          </el-form-item>
-          <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="MFAInfo.username" disabled />
-          </el-form-item>
-          <el-form-item :label="this.$t('assets.Password')">
-            <el-input v-model="MFAInfo.password" type="password" show-password />
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-row v-else :gutter="20">
-        <el-col :span="4">
-          <div style="line-height: 34px;text-align: center">MFA</div>
-        </el-col>
-        <el-col :span="14">
-          <el-input v-model="MFAInput" />
-          <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
-        </el-col>
-        <el-col :span="4">
-          <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">{{ this.$t('common.Confirm') }}</el-button>
-        </el-col>
-      </el-row>
-    </Dialog>
-    <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
-      <el-form label-position="right" label-width="80px" :model="dialogInfo">
-        <el-form-item :label="this.$t('assets.Hostname')">
-          <el-input v-model="dialogInfo.hostname" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Username')">
-          <el-input v-model="dialogInfo.username" disabled />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.Password')">
-          <el-input v-model="dialogInfo.password" type="password" />
-        </el-form-item>
-        <el-form-item :label="this.$t('assets.sshkey')">
-          <input type="file" @change="Onchange">
-        </el-form-item>
-      </el-form>
-    </Dialog>
+    <ShowSecretInfo :show-dialog="showViewSecretDialog" :asset-user="assetUser" />
+    <UpdateSecretInfo :show="showUpdateSecretDialog" :asset-user="assetUser" />
   </div>
-</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import ListTable from '@/components/ListTable/index'
-import Dialog from '@/components/Dialog'
 import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
+import ShowSecretInfo from './ShowSecretInfo'
+import UpdateSecretInfo from './UpdateSecretInfo'
 
 export default {
   name: 'Detail',
   components: {
     ListTable,
-    Dialog
+    UpdateSecretInfo,
+    ShowSecretInfo
   },
   props: {
     url: {
@@ -73,22 +33,6 @@ export default {
       type: Array,
       default: null
     },
-    handleExport: {
-      type: Function,
-      default: null
-    },
-    handleImport: {
-      type: Function,
-      default: null
-    },
-    hasImport: {
-      type: Boolean,
-      default: true
-    },
-    hasExport: {
-      type: Boolean,
-      default: true
-    },
     hasClone: {
       type: Boolean,
       default: true
@@ -96,23 +40,9 @@ export default {
   },
   data() {
     return {
-      MFAConfirmed: false,
-      MFAInput: '',
-      MFAInfo: {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: ''
-      },
-      showDialog: false,
-      showMFADialog: false,
-      dialogInfo: {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      },
+      showViewSecretDialog: false,
+      showUpdateSecretDialog: false,
+      assetUser: {},
       tableConfig: {
         url: this.url,
         columns: [
@@ -158,19 +88,8 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    this.MFAInfo.asset = val.row.id
-                    if (!this.needMFAVerify) {
-                      this.showMFADialog = true
-                      this.MFAConfirmed = true
-                      this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
-                        this.MFAConfirmed = true
-                        this.MFAInfo.hostname = res.hostname
-                        this.MFAInfo.password = res.password
-                        this.MFAInfo.username = res.username
-                      })
-                    } else {
-                      this.showMFADialog = true
-                    }
+                    this.$log.debug('Click view')
+                    this.showViewSecretDialog = true
                   }.bind(this)
                 },
                 {
@@ -279,88 +198,6 @@ export default {
     }
   },
   methods: {
-    MFAConfirm() {
-      if (this.MFAInput.length !== 6) {
-        return this.$message.error(this.$t('common.MFAErrorMsg'))
-      }
-      this.$axios.post(
-        `/api/v1/authentication/otp/verify/`, {
-          code: this.MFAInput
-        }
-      ).then(
-        res => {
-          this.$store.dispatch('users/setMFAVerify')
-          this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
-            this.MFAConfirmed = true
-            this.MFAInfo.hostname = res.hostname
-            this.MFAInfo.password = res.password
-            this.MFAInfo.username = res.username
-          })
-        }
-      )
-    },
-    handleMFAConfirm() {
-      this.MFAInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: ''
-      }
-      this.MFAInput = ''
-      this.showMFADialog = false
-      this.MFAConfirmed = false
-    },
-    handleCancel() {
-      this.dialogInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      }
-      this.showDialog = false
-      this.$refs.ListTable.reloadTable()
-    },
-    Onchange(e) {
-      const vm = this
-      // TODO 校验文件类型
-      const reader = new FileReader()
-      reader.onload = function() {
-        vm.dialogInfo.key = this.result
-      }
-      reader.readAsText(
-        e.target.files[0]
-      )
-    },
-    handleConfirm() {
-      const data = {
-        asset: this.dialogInfo.asset,
-        username: this.dialogInfo.username
-      }
-      if (this.dialogInfo.password !== '') {
-        data.password = this.dialogInfo.password
-      }
-      if (this.dialogInfo.key !== '') {
-        data.key = this.dialogInfo.key
-      }
-      this.$axios.post(
-        `/api/v1/assets/asset-users/`,
-        data
-      ).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(err => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-      })
-      this.dialogInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: '',
-        key: ''
-      }
-      this.showDialog = false
-      this.$refs.ListTable.reloadTable()
-    }
   }
 }
 </script>
