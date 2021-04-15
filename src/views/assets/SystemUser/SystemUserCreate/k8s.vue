@@ -26,10 +26,17 @@ export default {
       ],
       fieldsMeta: {
         token: {
-          rules: [Required],
+          rules: [Object.assign({}, Required)],
           el: {
             type: 'textarea',
             autosize: { minRows: 3 }
+          },
+          hidden: form => {
+            const params = this.$route.params
+            const method = params.id ? 'update' : 'create'
+            if (method === 'update') {
+              this.fieldsMeta.token.rules[0].required = false
+            }
           }
         },
         protocol: {
@@ -40,18 +47,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/assets/system-users/',
-      authHiden: false
-    }
-  },
-  method: {
-
-  },
-  mounted() {
-    const params = this.$route.params
-    const method = params.id ? 'update' : 'create'
-    if (method === 'update') {
-      this.fieldsMeta.token.rules[0].required = false
+      url: '/api/v1/assets/system-users/'
     }
   }
 }

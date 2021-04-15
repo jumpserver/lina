@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Select2 from '@/components/Select2'
 import NestedField from '@/components/AutoDataForm/components/NestedField'
 import rules from '@/components/DataForm/rules'
+import { assignIfNot } from '@/utils/common'
 
 export class FormFieldGenerator {
   constructor() {
@@ -109,19 +110,21 @@ export class FormFieldGenerator {
     return field
   }
   generateField(name, fieldsMeta, remoteFieldsMeta) {
-    let field = { id: name, prop: name, el: {}, attrs: {}}
+    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [] }
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
-    Vue.$log.debug('FieldsMeta: ', fieldsMeta, name)
     const fieldMeta = fieldsMeta[name] || {}
-    Vue.$log.debug('FieldMeta is: ', fieldMeta)
     field.label = remoteFieldMeta.label
     field.helpText = remoteFieldMeta.help_text
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)
-    const el = Object.assign(field.el || {}, fieldMeta.el || {})
-    field = Object.assign(field, fieldMeta || {}, { el: el })
+    const el = assignIfNot(fieldMeta.el || {}, field.el)
+    const rules = fieldMeta.rules || field.rules
+    field = Object.assign(field, fieldMeta)
+    field.el = el
+    field.rules = rules
     _.set(field, 'attrs.error', '')
+    Vue.$log.debug('Generate field: ', name, field)
     return field
   }
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {
