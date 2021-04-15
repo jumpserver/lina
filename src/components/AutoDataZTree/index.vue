@@ -100,15 +100,19 @@ export default {
       if (this.setting.url.indexOf('?') !== -1) {
         combinator = '&'
       }
+      let url = ''
+      const query = Object.assign({}, this.$route.query)
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.node.id
-        this.$route.query['node'] = this.currentNodeId
-        this.$emit('urlChange', `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
+        query['node'] = this.currentNodeId
+        url = `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`
       } else if (treeNode.meta.type === 'asset') {
-        this.$route.query['asset'] = treeNode.meta.asset.id
-        this.$emit('urlChange', `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
+        query['asset'] = treeNode.meta.asset.id
+        url = `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`
       }
+      this.$router.push({ query })
+      this.$emit('urlChange', url)
     },
     removeTreeNode: function() {
       this.hideRMenu()
@@ -242,7 +246,6 @@ export default {
       })
     },
     refresh: function() {
-
     },
     getSelectedNodes: function() {
       return this.zTree.getSelectedNodes()
