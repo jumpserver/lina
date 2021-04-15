@@ -36,11 +36,6 @@ export default {
       fieldsMeta: {
         login_mode: {
           helpText: this.$t('assets.LoginModeHelpMessage'),
-          hidden: (form) => {
-            if (form.protocol === 'k8s') {
-              return true
-            }
-          },
           on: {
             input: ([value], updateForm) => {
               if (value === 'manual') {
@@ -59,22 +54,14 @@ export default {
               updateForm({ home: `/home/${value}` })
             }
           },
-          rules: [Required],
+          rules: [Object.assign({}, Required)],
           hidden: (form) => {
-            if (form.login_mode === 'auto') {
-              this.fieldsMeta.username.rules = [Required]
-            } else {
+            if (form.login_mode === 'manual' || form.username_same_with_user) {
               this.fieldsMeta.username.rules[0].required = false
-            }
-            if (!form.username_same_with_user) {
-              this.fieldsMeta.username.rules = [Required]
             } else {
-              this.fieldsMeta.username.rules[0].required = false
-            }
-            if (['mysql', 'postgresql', 'mariadb', 'oracle'].indexOf(form.protocol) !== -1) {
-              this.fieldsMeta.username.rules = [Required]
               this.fieldsMeta.username.rules[0].required = true
             }
+            this.fieldsMeta.username.el.disabled = form.username_same_with_user
           }
         },
         private_key: {
@@ -83,19 +70,12 @@ export default {
             if (form.login_mode !== 'auto') {
               return true
             }
-            if (form.protocol === 'k8s') {
-              return true
-            }
             return form.auto_generate_key === true
           }
         },
         username_same_with_user: {
           type: 'switch',
           helpText: this.$t('assets.UsernameHelpMessage'),
-          hidden: (form) => {
-            this.fieldsMeta.username.el.disabled = form.username_same_with_user
-            return form.protocol === 'k8s'
-          },
           el: {
             disabled: false
           }
@@ -103,8 +83,11 @@ export default {
         auto_generate_key: {
           type: 'switch',
           label: this.$t('assets.AutoGenerateKey'),
+          on: {
+            input: ([value], updateForm) => {
+            }
+          },
           hidden: form => {
-            this.fieldsMeta.auto_generate_key.el.disabled = ['ssh', 'rdp'].indexOf(form.protocol) === -1 || form.login_mode === 'manual'
             if (JSON.stringify(this.$route.params) !== '{}') {
               return true
             }
@@ -223,8 +206,7 @@ export default {
           helpText: this.$t('assets.GroupsHelpMessage')
         }
       },
-      url: '/api/v1/assets/system-users/',
-      authHiden: false
+      url: '/api/v1/assets/system-users/'
     }
   },
   method: {

@@ -40,18 +40,16 @@ export default {
           }
         }
       },
-      url: '/api/v1/assets/system-users/',
-      authHiden: false
+      url: '/api/v1/assets/system-users/'
     }
   },
   method: {
-
   },
   mounted() {
     const params = this.$route.params
     const method = params.id ? 'update' : 'create'
     if (method === 'update') {
-      this.fieldsMeta.token.rules[0].required = false
+      this.fieldsMeta.token.rules = []
     }
   }
 }

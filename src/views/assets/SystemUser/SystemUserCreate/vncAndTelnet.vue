@@ -36,12 +36,20 @@ export default {
             if (form.login_mode === 'auto') {
               this.fieldsMeta.username.rules = [Required]
             } else {
-              this.fieldsMeta.username.rules[0].required = false
+              this.fieldsMeta.username.rules = []
             }
             if (!form.username_same_with_user) {
               this.fieldsMeta.username.rules = [Required]
             } else {
-              this.fieldsMeta.username.rules[0].required = false
+              this.fieldsMeta.username.rules = []
+            }
+
+            // 用户名隐藏，如果是动态
+            if (form.username_same_with_user) {
+              console.log('Username same with user')
+              this.fieldsMeta.username.el.disabled = true
+            } else {
+              console.log('Username not same with user')
             }
           }
         },
@@ -96,8 +104,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/assets/system-users/',
-      authHiden: false
+      url: '/api/v1/assets/system-users/'
     }
   },
   method: {

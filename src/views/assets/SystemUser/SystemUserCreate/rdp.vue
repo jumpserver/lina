@@ -53,12 +53,12 @@ export default {
             if (form.login_mode === 'auto') {
               this.fieldsMeta.username.rules = [Required]
             } else {
-              this.fieldsMeta.username.rules[0].required = false
+              this.fieldsMeta.username.rules = []
             }
             if (!form.username_same_with_user) {
               this.fieldsMeta.username.rules = [Required]
             } else {
-              this.fieldsMeta.username.rules[0].required = false
+              this.fieldsMeta.username.rules = []
             }
           }
         },
@@ -67,7 +67,6 @@ export default {
           helpText: this.$t('assets.UsernameHelpMessage'),
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
-            return form.protocol === 'k8s'
           },
           el: {
             disabled: false
@@ -140,8 +139,7 @@ export default {
           helpText: this.$t('assets.GroupsHelpMessage')
         }
       },
-      url: '/api/v1/assets/system-users/',
-      authHiden: false
+      url: '/api/v1/assets/system-users/'
     }
   },
   method: {

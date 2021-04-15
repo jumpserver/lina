@@ -27,11 +27,6 @@ export default {
       fieldsMeta: {
         login_mode: {
           helpText: this.$t('assets.LoginModeHelpMessage'),
-          hidden: (form) => {
-            if (form.protocol === 'k8s') {
-              return true
-            }
-          },
           on: {
             input: ([value], updateForm) => {
               if (value === 'manual') {
@@ -45,23 +40,7 @@ export default {
           el: {
             disabled: false
           },
-          rules: [Required],
-          hidden: (form) => {
-            if (form.login_mode === 'auto') {
-              this.fieldsMeta.username.rules = [Required]
-            } else {
-              this.fieldsMeta.username.rules[0].required = false
-            }
-            if (!form.username_same_with_user) {
-              this.fieldsMeta.username.rules = [Required]
-            } else {
-              this.fieldsMeta.username.rules[0].required = false
-            }
-            if (['mysql', 'postgresql', 'mariadb', 'oracle'].indexOf(form.protocol) !== -1) {
-              this.fieldsMeta.username.rules = [Required]
-              this.fieldsMeta.username.rules[0].required = true
-            }
-          }
+          rules: [Required]
         },
         private_key: {
           component: UploadKey,
@@ -80,7 +59,12 @@ export default {
           helpText: this.$t('assets.UsernameHelpMessage'),
           hidden: (form) => {
             this.fieldsMeta.username.el.disabled = form.username_same_with_user
-            return form.protocol === 'k8s'
+            if (form.username_same_with_user) {
+              // this.fieldsMeta.username.rules.pop()
+              console.log(this.fieldsMeta.username)
+            } else {
+              this.fieldsMeta.username.rules = [Required]
+            }
           },
           el: {
             disabled: false
@@ -127,8 +111,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/assets/system-users/',
-      authHiden: false
+      url: '/api/v1/assets/system-users/'
     }
   },
   method: {
