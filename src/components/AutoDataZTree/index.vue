@@ -78,6 +78,10 @@ export default {
     $('body').unbind('mousedown')
   },
   methods: {
+    refreshTree: function() {
+      const refreshIconRef = $('#tree-refresh')
+      refreshIconRef.click()
+    },
     editTreeNode: function() {
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
@@ -125,6 +129,7 @@ export default {
       ).then(() => {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
+        this.refreshTree()
       }).catch(() => {
         // this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
       })
@@ -145,7 +150,7 @@ export default {
         treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$t('common.updateSuccessMsg'))
-      })
+      }).finally(() => { this.refreshTree() })
     },
     onBodyMouseDown: function(event) {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
@@ -214,7 +219,7 @@ export default {
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      })
+      }).finally(() => this.refreshTree())
     },
     createTreeNode: function() {
       this.hideRMenu()
