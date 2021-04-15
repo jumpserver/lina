@@ -164,7 +164,7 @@ export default {
           {
             name: 'updateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 && vm.currentOrgIsRoot,
+            can: ({ selectedRows }) => selectedRows.length > 0 && !vm.currentOrgIsRoot,
             callback: ({ selectedRows, reloadTable }) => {
               vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
               vm.updateSelectedDialogSetting.selectedRows = selectedRows

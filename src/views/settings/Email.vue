@@ -3,6 +3,7 @@
     <GenericCreateUpdateForm
       :fields="fields"
       :url="url"
+      :perform-submit="performSubmit"
       :get-method="getMethod"
       :fields-meta="fieldsMeta"
       :more-buttons="moreButtons"
@@ -92,7 +93,19 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    performSubmit(validValues) {
+      Object.keys(validValues).forEach(
+        function(key) {
+          if (validValues[key] === null) {
+            delete validValues[key]
+          }
+        }
+      )
+
+      return this.$axios['put'](`/api/v1/settings/setting/?category=email`, validValues)
     }
+
   }
 
 }

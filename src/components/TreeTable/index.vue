@@ -72,7 +72,6 @@ export default {
   watch: {
     treeConfig: {
       handler(val) {
-
       },
       deep: true
     }

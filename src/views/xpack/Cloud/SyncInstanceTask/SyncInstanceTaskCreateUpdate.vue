@@ -119,7 +119,7 @@ export default {
     // 更新获取链接
     if (params.id) {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
-      this.fieldsMeta.regions.el.ajax.url = `/api/v1/xpack/cloud/regions/?account_id=${form.account}`
+      this.fieldsMeta.regions.el.ajax.url = form.account ? `/api/v1/xpack/cloud/regions/?account_id=${form.account}` : `/api/v1/xpack/cloud/regions/`
     }
   }
 }
