@@ -32,7 +32,7 @@ export default {
           this.$t('common.Auth'),
           [
             'SECURITY_MFA_AUTH', 'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
-            'SECURITY_PASSWORD_EXPIRATION_TIME'
+            'SECURITY_PASSWORD_EXPIRATION_TIME', 'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
           ]
         ],
         [
