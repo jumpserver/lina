@@ -24,7 +24,9 @@ export default {
   data() {
     return {
       fields: [
-        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL', 'GLOBAL_ORG_DISPLAY_NAME']]
+        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL',
+          this.$store.getters.hasValidLicense ? 'GLOBAL_ORG_DISPLAY_NAME' : null]
+        ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
       url: '/api/v1/settings/setting/?category=basic'
