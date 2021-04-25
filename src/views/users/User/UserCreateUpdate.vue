@@ -2,6 +2,7 @@
   <GenericCreateUpdatePage
     v-bind="$data"
     :clean-form-value="cleanFormValue"
+    @getObjectDone="afterGetUser"
   />
 </template>
 
@@ -19,12 +20,9 @@ export default {
   data() {
     return {
       initial: {
-        // password_strategy: 0,
-        // mfa_level: 0,
-        // role: 'User',
-        // source: 'local',
-        // org_roles: ['User'],
-        // date_expired: getDayFuture(36500, new Date()).toISOString()
+      },
+      user: {
+        'can_public_key_auth': false
       },
       fields: [
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
@@ -64,7 +62,7 @@ export default {
             if (formValue.password_strategy) {
               return false
             }
-            return !formValue.update_password || formValue.source !== 'local'
+            return !formValue.update_password || !formValue.can_public_key_auth
           },
           el: {
             required: false
@@ -77,12 +75,16 @@ export default {
             if (formValue.set_public_key) {
               return true
             }
-            return this.$route.meta.action !== 'update' || formValue.source !== 'local'
+            return this.$route.meta.action !== 'update' || !this.user.can_public_key_auth
           }
         },
         public_key: {
+          type: 'input',
+          el: {
+            type: 'textarea'
+          },
           hidden: (formValue) => {
-            return !formValue.set_public_key || formValue.source !== 'local'
+            return !formValue.set_public_key
           }
         },
         role: {
@@ -139,6 +141,9 @@ export default {
       } else {
         return 'post'
       }
+    },
+    afterGetUser(user) {
+      this.user = user
     }
   }
 }
