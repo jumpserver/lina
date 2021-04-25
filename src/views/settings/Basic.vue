@@ -22,10 +22,13 @@ export default {
     IBox
   },
   data() {
+    const globalOrgName = this.$store.getters.hasValidLicense ? 'GLOBAL_ORG_DISPLAY_NAME' : null
     return {
       fields: [
-        [this.$t('common.BasicInfo'), ['SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL',
-          this.$store.getters.hasValidLicense ? 'GLOBAL_ORG_DISPLAY_NAME' : null]
+        [
+          this.$t('common.BasicInfo'), [
+            'SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL', globalOrgName
+          ]
         ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
