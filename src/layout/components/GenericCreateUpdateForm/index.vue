@@ -282,6 +282,7 @@ export default {
       if (object) {
         object = _.cloneDeep(object)
         this.$emit('update:object', object)
+        this.$emit('getObjectDone', object)
       }
       return object
     },
