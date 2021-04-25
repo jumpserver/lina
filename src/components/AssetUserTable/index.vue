@@ -139,6 +139,9 @@ export default {
         hasMoreActions: false,
         hasImport: this.hasImport,
         hasExport: this.hasExport,
+        exportOptions: {
+          url: '/api/v1/assets/asset-user-auth-infos/'
+        },
         hasSearch: true,
         searchConfig: {
           options: [

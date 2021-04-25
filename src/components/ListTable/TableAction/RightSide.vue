@@ -1,7 +1,12 @@
 <template>
   <div>
     <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
-    <ImExportDialog :selected-rows="selectedRows" :url="tableUrl" v-bind="$attrs" />
+    <ImExportDialog
+      :selected-rows="selectedRows"
+      :export-options="iExportOptions"
+      :import-options="iImportOptions"
+      v-bind="$attrs"
+    />
   </div>
 </template>
 
@@ -24,21 +29,29 @@ export default {
       default: ''
     },
     hasExport: defaultTrue,
-    handleExport: {
+    exportOptions: {
+      type: Object,
+      default: null
+    },
+    handleExportClick: {
       type: Function,
       default: function({ selectedRows }) {
         this.$eventBus.$emit('showExportDialog', { selectedRows })
       }
     },
     hasImport: defaultTrue,
-    handleImport: {
+    importOptions: {
+      type: Object,
+      default: null
+    },
+    handleImportClick: {
       type: Function,
       default: function({ selectedRows }) {
         this.$eventBus.$emit('showImportDialog', { selectedRows })
       }
     },
     hasColumnSetting: defaultTrue,
-    handleColumnConfig: {
+    handleTableSettingClick: {
       type: Function,
       default: function() {
         this.$eventBus.$emit('showColumnSettingPopover')
@@ -61,13 +74,12 @@ export default {
   data() {
     return {
       defaultRightSideActions: [
-        { name: 'actionColumnSetting', fa: 'fa-cog', tip: this.$t('common.CustomCol'), has: this.hasColumnSetting, callback: this.handleColumnConfig.bind(this) },
-        { name: 'actionExport', fa: 'fa-download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExport.bind(this) },
-        { name: 'actionImport', fa: 'fa-upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImport.bind(this) },
+        { name: 'actionColumnSetting', fa: 'fa-cog', tip: this.$t('common.CustomCol'), has: this.hasColumnSetting, callback: this.handleTableSettingClick.bind(this) },
+        { name: 'actionExport', fa: 'fa-download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExportClick.bind(this) },
+        { name: 'actionImport', fa: 'fa-upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImportClick.bind(this) },
         { name: 'actionRefresh', fa: 'fa-refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefresh }
       ],
-      dialogExportVisible: false,
-      exportValue: 2
+      dialogExportVisible: false
     }
   },
   computed: {
@@ -81,18 +93,18 @@ export default {
     },
     hasSelectedRows() {
       return this.selectedRows.length > 0
+    },
+    iImportOptions() {
+      return this.importOptions || { url: this.tableUrl }
+    },
+    iExportOptions() {
+      return this.exportOptions || { url: this.tableUrl }
     }
   },
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
     },
-    // handleExport({ selectedRows }) {
-    //   this.$eventBus.$emit('showExportDialog', { selectedRows })
-    // },
-    // handleImport({ selectedRows }) {
-    //   this.$eventBus.$emit('showImportDialog', { selectedRows })
-    // },
     handleRefresh() {
       this.reloadTable()
     }

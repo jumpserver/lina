@@ -51,6 +51,11 @@ export default {
     canExportFiltered: {
       type: Boolean,
       default: true
+    },
+    exportUrl: {
+      type: String,
+      default: () => {
+      }
     }
   },
   data() {
@@ -137,11 +142,6 @@ export default {
         }
         const spm = await createSourceIdCache(resources)
         query['spm'] = spm.spm
-      } else if (exportOption === 'filtered') {
-        // console.log(listTableRef)
-        // console.log(listTableRef.dataTable)
-        // delete query['limit']
-        // delete query['offset']
       }
       query['format'] = this.exportTypeOption
       const queryStr =
