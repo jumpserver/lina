@@ -104,6 +104,20 @@ export default [
         hidden: true
       },
       {
+        path: 'tickets/enhance-asset-perm/create',
+        name: 'EnhanceAssetPermTicketCreateUpdate',
+        component: () => import('@/views/tickets/EnhanceAssetPerm/EnhanceAssetPermTicketCreateUpdate'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
+        path: 'tickets/enhance-asset-perm/:id',
+        name: 'EnhanceAssetTicketDetail',
+        component: () => import('@/views/tickets/EnhanceAssetPerm/Detail/index'),
+        meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
         path: 'tickets/login-asset-confirm/:id',
         name: 'loginAssetTicketDetail',
         component: () => import('@/views/tickets/LoginAssetConfirm/Detail/index'),

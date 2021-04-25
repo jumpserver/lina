@@ -882,6 +882,7 @@
     "SystemUser": "系统用户",
     "RequestAssetPerm": "申请资产授权",
     "RequestApplicationPerm": "申请应用授权",
+    "EnhanceAssetPerm": "提升资产权限",
     "Applicant": "申请人",
     "Pending": "待处理",
     "Approved": "已同意",

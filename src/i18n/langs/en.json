@@ -878,6 +878,7 @@
     "Applicant": "Applicant",
     "RequestAssetPerm": "Request asset perm",
     "RequestApplicationPerm": "Request application perm",
+    "EnhanceAssetPerm": "Elevate asset perm",
     "Pending": "Open",
     "Approved": "Approved",
     "Rejected": "Rejected",
