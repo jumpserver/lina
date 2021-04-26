@@ -11,7 +11,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import Select2 from '@/components/Select2'
+import Select2 from '@/components/FormFields/Select2'
 export default {
   name: 'RulesCreateUpdate',
   components: { GenericCreateUpdatePage },

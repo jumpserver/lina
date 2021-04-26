@@ -20,7 +20,7 @@
 <script>
 import AutoDataSearch from '@/components/AutoDataSearch'
 import LeftSide from './LeftSide'
-import DatetimeRangePicker from '@/components/DatetimeRangePicker'
+import DatetimeRangePicker from '@/components/FormFields/DatetimeRangePicker'
 import RightSide from './RightSide'
 
 const defaultTrue = { type: Boolean, default: true }

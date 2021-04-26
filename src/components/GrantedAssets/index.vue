@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import { DetailFormatter, SystemUserFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, SystemUserFormatter } from '@/components/TableFormatters'
 import TreeTable from '../TreeTable'
 
 export default {

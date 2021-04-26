@@ -8,7 +8,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import Select2 from '@/components/Select2'
+import Select2 from '@/components/FormFields/Select2'
 import { DEFAULT_ORG_ID } from '@/utils/org'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
