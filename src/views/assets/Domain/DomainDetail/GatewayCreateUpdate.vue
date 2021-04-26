@@ -11,8 +11,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import Uploadkey from '@/components/UploadKey/'
-import { Select2 } from '@/components'
+import { Select2, UploadKey } from '@/components'
 export default {
   name: 'GatewayCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -72,7 +71,7 @@ export default {
           type: 'switch'
         },
         private_key: {
-          component: Uploadkey
+          component: UploadKey
         }
       },
       updateSuccessNextRoute: {

@@ -1,7 +1,6 @@
 import { Required } from '@/components/DataForm/rules'
-import UploadKey from '@/components/UploadKey'
 import i18n from '@/i18n/i18n'
-import { Select2 } from '@/components'
+import { Select2, UploadKey } from '@/components'
 
 function getFields() {
   const login_mode = {

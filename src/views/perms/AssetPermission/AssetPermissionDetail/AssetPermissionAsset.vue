@@ -14,7 +14,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import RelationCard from '@/components/RelationCard'
-import { DeleteActionFormatter } from '@/components/ListTable/formatters/index'
+import { DeleteActionFormatter } from '@/components/TableFormatters'
 import AssetRelationCard from '@/components/AssetRelationCard'
 
 export default {

@@ -7,7 +7,7 @@
 <script>
 import ListTable from '@/components/ListTable/index'
 import Page from '@/layout/components/Page/index'
-import { ActionsFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'RemoteApp',

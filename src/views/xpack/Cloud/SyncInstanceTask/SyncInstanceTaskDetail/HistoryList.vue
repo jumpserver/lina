@@ -4,7 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'HistoryList',

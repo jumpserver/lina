@@ -34,7 +34,7 @@
 <script>
 import DataTable from '@/components/DataTable'
 import { sleep } from '@/utils/common'
-import { EditableInputFormatter, StatusFormatter } from '@/components/ListTable/formatters'
+import { EditableInputFormatter, StatusFormatter } from '@/components/TableFormatters'
 export default {
   name: 'ImportTable',
   components: {

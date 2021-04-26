@@ -16,7 +16,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard'
-import { DeleteActionFormatter } from '@/components/ListTable/formatters'
+import { DeleteActionFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'OrganizationMembershipList',

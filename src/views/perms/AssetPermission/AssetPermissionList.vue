@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { DetailFormatter } from '@/components/ListTable/formatters/index'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {

@@ -8,7 +8,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import UserPassword from '@/components/UserPassword'
+import UserPassword from '@/components/FormFields/UserPassword'
 import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
 import rules from '@/components/DataForm/rules'
 import { mapGetters } from 'vuex'

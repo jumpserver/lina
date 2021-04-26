@@ -4,8 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import Uploadkey from '@/components/UploadKey'
-import Select2 from '@/components/Select2'
+import { UploadKey, Select2 } from '@/components'
 export default {
   name: 'VaultCreate',
   components: {
@@ -48,7 +47,7 @@ export default {
           helpText: this.$t('common.passwordOrPassphrase')
         },
         private_key: {
-          component: Uploadkey
+          component: UploadKey
         }
       }
     }

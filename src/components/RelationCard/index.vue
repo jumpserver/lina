@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Select2 from '../Select2'
+import Select2 from '../FormFields/Select2'
 import IBox from '../IBox'
 import { createSourceIdCache } from '@/api/common'
 import { mapGetters } from 'vuex'
