@@ -891,7 +891,13 @@
       "ips": "请输入逗号分割的IP地址组",
       "fuzzySearch": "支持模糊搜索",
       "application": "请输入逗号分割的应用名称组"
-    }
+    },
+    "ApplyRunUser": "申请运行的用户",
+    "ApplyRunAsset": "申请运行的资产",
+    "ApplyRunSystemUser": "申请运行的系统用户",
+    "ApplyRunCommand": "申请运行的命令",
+    "ApplyFromSession": "会话",
+    "ApplyFromCMDFilterRule": "命令过滤规则"
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",

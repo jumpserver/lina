@@ -886,7 +886,13 @@
       "ips": "Enter the IP address group, separated by commas",
       "fuzzySearch": "Support for fuzzy search",
       "application": "Enter the application group, separated by commas"
-    }
+    },
+    "ApplyRunUser": "Apply run user",
+    "ApplyRunAsset": "Apply run asset",
+    "ApplyRunSystemUser": "Apply run system user",
+    "ApplyRunCommand": "Apply run command",
+    "ApplyFromSession": "Session",
+    "ApplyFromCMDFilterRule": "Command filter rule"
   },
   "tree": {
     "AddAssetToNode": "Add asset to node",
