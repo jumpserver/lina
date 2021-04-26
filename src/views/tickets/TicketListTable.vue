@@ -38,6 +38,8 @@ export default {
                   return 'AppsTicketDetail'
                 } else if (row.type === 'login_asset_confirm') {
                   return 'loginAssetTicketDetail'
+                } else if (row.type === 'command_confirm') {
+                  return 'CommandConfirmDetail'
                 } else {
                   return 'TicketDetail'
                 }
