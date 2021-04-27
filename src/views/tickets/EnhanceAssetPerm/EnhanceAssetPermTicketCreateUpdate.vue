@@ -32,7 +32,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
-        [this.$t('tickets.RequestPerm'), ['meta']]
+        [this.$t('tickets.ElevatedPrivileges'), ['meta']]
       ],
       fieldsMeta: {
         type: {
@@ -65,7 +65,7 @@ export default {
               },
               on: {
                 changeOptions: ([event], updateForm) => {
-                  this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/perms/users/assets/${event[0].value}/system-users/`
+                  this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users-assets-relations/?asset=${event[0].value}`
                 }
               }
             },
@@ -80,7 +80,7 @@ export default {
                     if (!item.username) {
                       item.username = 'dynamic'
                     }
-                    return { label: item.name + '(' + item.username + ')', value: item.id }
+                    return { label: item.systemuser_display, value: item.systemuser }
                   }
                 }
               }

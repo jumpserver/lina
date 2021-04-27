@@ -147,7 +147,7 @@ export default {
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.enchange_system_users_display.toString()
+          value: this.object.meta.enchance_system_users_display.toString()
         },
         {
           key: this.$t('common.dateStart'),
@@ -156,6 +156,10 @@ export default {
         {
           key: this.$t('common.dateExpired'),
           value: toSafeLocalDateStr(this.object.meta.apply_date_expired)
+        },
+        {
+          key: this.$t('common.enchance_actions'),
+          value: this.object.meta.apply_actions_display.join(', ')
         }
       ]
     },
@@ -176,6 +180,10 @@ export default {
         {
           key: this.$t('common.dateExpired'),
           value: toSafeLocalDateStr(this.object.meta.approve_date_expired)
+        },
+        {
+          key: this.$t('common.enchance_actions'),
+          value: this.object.meta.approve_actions_display.join(', ')
         }
       ]
     },
