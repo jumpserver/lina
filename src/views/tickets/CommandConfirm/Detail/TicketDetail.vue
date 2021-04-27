@@ -61,6 +61,7 @@ export default {
       ]
     },
     specialCardItems() {
+      const vm = this
       return [
         {
           key: this.$t('tickets.ApplyRunUser'),
@@ -80,11 +81,26 @@ export default {
         },
         {
           key: this.$t('tickets.ApplyFromSession'),
-          value: this.object.meta.apply_from_session_id
+          value: this.object.meta.apply_from_session_id,
+          formatter: function(item, value) {
+            const to = { name: 'SessionDetail', params: { id: value }}
+            return <router-link to={to}>{vm.$t('sessions.session')}</router-link>
+          }
         },
         {
           key: this.$t('tickets.ApplyFromCMDFilterRule'),
-          value: this.object.meta.apply_from_cmd_filter_rule_id
+          value: {
+            cmdFilterRuleId: this.object.meta.apply_from_cmd_filter_rule_id,
+            cmdFilterId: this.object.meta.apply_from_cmd_filter_id
+          },
+          formatter: function(item, value) {
+            const to = {
+              name: 'CommandFilterRulesUpdate',
+              params: { id: value.cmdFilterRuleId },
+              query: { filter: value.cmdFilterId }
+            }
+            return <router-link to={to}>{vm.$t('assets.CommandFilterRules')}</router-link>
+          }
         }
       ]
     }

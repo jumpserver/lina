@@ -516,6 +516,7 @@
   "route": {
     "": "",
     "Ticket": "Tickets",
+    "CommandConfirm": "Command confirm",
     "AdminUserCreate": "Admin user create",
     "AdminUserDetail": "Admin user detail",
     "AdminUserList": "Admin Users",
