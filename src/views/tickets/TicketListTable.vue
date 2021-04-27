@@ -36,6 +36,8 @@ export default {
                   return 'AssetsTicketDetail'
                 } else if (row.type === 'apply_application') {
                   return 'AppsTicketDetail'
+                } else if (row.type === 'enhance_asset') {
+                  return 'EnhanceAssetTicketDetail'
                 } else if (row.type === 'login_asset_confirm') {
                   return 'loginAssetTicketDetail'
                 } else {
@@ -125,6 +127,11 @@ export default {
               name: 'RequestApplicationPerm',
               title: this.$t('tickets.RequestApplicationPerm'),
               callback: () => this.$router.push({ name: 'RequestApplicationPermTicketCreateUpdate' })
+            },
+            {
+              name: 'EnhanceAssetPerm',
+              title: this.$t('tickets.EnhanceAssetPerm'),
+              callback: () => this.$router.push({ name: 'EnhanceAssetPermTicketCreateUpdate' })
             }
           ]
         }

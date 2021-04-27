@@ -48,5 +48,19 @@ export default [
     component: () => import('@/views/tickets/RequestApplicationPerm/Detail/index'),
     meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
     hidden: true
+  },
+  {
+    path: 'tickets/enhance-asset-perm/create',
+    name: 'EnhanceAssetPermTicketCreateUpdate',
+    component: () => import('@/views/tickets/EnhanceAssetPerm/EnhanceAssetPermTicketCreateUpdate'),
+    meta: { title: i18n.t('route.TicketCreate'), activeMenu: '/tickets/tickets' },
+    hidden: true
+  },
+  {
+    path: 'tickets/enhance-asset-perm/:id',
+    name: 'EnhanceAssetTicketDetail',
+    component: () => import('@/views/tickets/EnhanceAssetPerm/Detail/index'),
+    meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
+    hidden: true
   }
 ]
