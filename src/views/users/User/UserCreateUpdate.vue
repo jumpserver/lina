@@ -30,7 +30,7 @@ export default {
         [this.$t('users.Account'), ['name', 'username', 'email', 'groups']],
         [this.$t('users.Authentication'), [
           'password_strategy', 'update_password', 'password', 'set_public_key',
-          'public_key', 'mfa_level', 'source', 'require_password_update'
+          'public_key', 'mfa_level', 'source', 'need_password_update'
         ]],
         [this.$t('users.Secure'), ['role', 'org_roles', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
@@ -48,7 +48,7 @@ export default {
             rules.Required
           ]
         },
-        require_password_update: {
+        need_password_update: {
           label: this.$t('users.isUpdatePassword'),
           type: 'checkbox',
           hidden: (formValue) => {
