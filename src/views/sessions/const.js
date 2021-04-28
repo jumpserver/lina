@@ -4,6 +4,7 @@ export const S3 = 's3'
 export const CEPH = 'ceph'
 export const SWIFT = 'swift'
 export const OSS = 'oss'
+export const OBS = 'obs'
 export const AZURE = 'azure'
 
 export const STORAGE_TYPE_META_MAP = {
@@ -28,6 +29,12 @@ export const STORAGE_TYPE_META_MAP = {
     title: 'Oss',
     meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'],
     endpointHelpText: i18n.t('sessions.helpText.ossEndpoint')
+  },
+  [OBS]: {
+    name: OBS,
+    title: 'Obs',
+    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'],
+    endpointHelpText: i18n.t('sessions.helpText.obsEndpoint')
   },
   [AZURE]: {
     name: AZURE,
