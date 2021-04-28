@@ -78,6 +78,10 @@ export default {
     $('body').unbind('mousedown')
   },
   methods: {
+    refreshTree: function() {
+      const refreshIconRef = $('#tree-refresh')
+      refreshIconRef.click()
+    },
     editTreeNode: function() {
       this.hideRMenu()
       const currentNode = this.zTree.getSelectedNodes()[0]
@@ -100,15 +104,19 @@ export default {
       if (this.setting.url.indexOf('?') !== -1) {
         combinator = '&'
       }
+      let url = ''
+      const query = Object.assign({}, this.$route.query)
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.node.id
-        this.$route.query['node'] = this.currentNodeId
-        this.$emit('urlChange', `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`)
+        query['node'] = this.currentNodeId
+        url = `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`
       } else if (treeNode.meta.type === 'asset') {
-        this.$route.query['asset'] = treeNode.meta.asset.id
-        this.$emit('urlChange', `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`)
+        query['asset'] = treeNode.meta.asset.id
+        url = `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`
       }
+      this.$router.push({ query })
+      this.$emit('urlChange', url)
     },
     removeTreeNode: function() {
       this.hideRMenu()
@@ -121,6 +129,7 @@ export default {
       ).then(() => {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
+        this.refreshTree()
       }).catch(() => {
         // this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
       })
@@ -141,7 +150,7 @@ export default {
         treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$t('common.updateSuccessMsg'))
-      })
+      }).finally(() => { this.refreshTree() })
     },
     onBodyMouseDown: function(event) {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
@@ -210,7 +219,7 @@ export default {
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      })
+      }).finally(() => this.refreshTree())
     },
     createTreeNode: function() {
       this.hideRMenu()
@@ -242,7 +251,6 @@ export default {
       })
     },
     refresh: function() {
-
     },
     getSelectedNodes: function() {
       return this.zTree.getSelectedNodes()

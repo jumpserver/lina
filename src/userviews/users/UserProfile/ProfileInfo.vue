@@ -79,7 +79,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('common.Update'),
-            disabled: this.$store.state.users.profile.source !== 'local'
+            disabled: !this.$store.state.users.profile.can_public_key_auth
           },
           callbacks: {
             click: function() {
@@ -91,7 +91,8 @@ export default {
           title: this.$t('users.ResetPublicKeyAndDownload'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Reset')
+            label: this.$t('common.Reset'),
+            disabled: !this.$store.state.users.profile.can_public_key_auth
           },
           callbacks: {
             click: function() {

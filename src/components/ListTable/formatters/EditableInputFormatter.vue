@@ -1,5 +1,5 @@
 <template>
-  <div @click.stop="editCell">
+  <div style="width: 100%;min-height: 20px" @click.stop="editCell">
     <el-input
       v-if="inEditMode"
       v-model="value"
@@ -30,7 +30,8 @@ export default {
           trigger: 'click',
           onEnter: ({ row, col, oldValue, newValue }) => {
             const prop = col.prop
-            row[prop] = newValue
+            this.$log.debug(`Set value ${oldValue} => ${newValue}`)
+            this.$set(row, prop, newValue)
           }
         }
       }
@@ -38,10 +39,10 @@ export default {
   },
   data() {
     const valueIsString = typeof this.cellValue === 'string'
-    const jsonValue = JSON.stringify(this.cellValue)
+    const jsonValue = this.cellValue ? JSON.stringify(this.cellValue) : ''
     return {
       inEditMode: false,
-      value: valueIsString ? this.cellValue : jsonValue,
+      value: valueIsString ? this.cellValue || '' : jsonValue,
       valueIsString: valueIsString,
       formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
@@ -51,11 +52,11 @@ export default {
       this.inEditMode = true
     },
     onInputEnter() {
-      let validValue = ''
-      if (this.valueIsString) {
-        validValue = this.value
-      } else {
+      let validValue = this.value
+      try {
         validValue = JSON.parse(validValue)
+      } catch (e) {
+        // pass
       }
       this.formatterArgs.onEnter({
         row: this.row, col: this.col,

@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 function getTimeUnits(u) {
   const units = {
     'd': '天',
@@ -200,8 +202,15 @@ export function sleep(time) {
   return new Promise((resolve) => setTimeout(resolve, time))
 }
 
+function customizer(objValue, srcValue) {
+  return _.isUndefined(objValue) ? srcValue : objValue
+}
+
+export const assignIfNot = _.partialRight(_.assignInWith, customizer)
+
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
 const BASE_URL = scheme + '//' + document.location.hostname + port
 
 export { BASE_URL }
+

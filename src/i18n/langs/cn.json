@@ -340,9 +340,9 @@
       "downloadUpdateTemplateMsg": "下载更新模板",
       "onlyCSVFilesTips": "仅支持csv文件导入",
       "updateSuccessMsg": "导入更新成功，总共：{count}",
-      "uploadCsvLth10MHelpText": "只能上传 csv/xlsx, 且不超过 10m",
+      "uploadCsvLth10MHelpText": "只能上传 csv/xlsx, 且不超过 10M",
       "dragUploadFileInfo": "将文件拖到此处，或点击上传",
-      "hasImportErrorItemMsg": "存在导入失败项，点击表格编辑后，可以继续导入失败项"
+      "hasImportErrorItemMsg": "存在导入失败项，点击左侧 x 查看失败原因，点击表格编辑后，可以继续导入失败项"
     },
     "fileType": "文件类型",
     "isValid": "有效",
@@ -518,6 +518,7 @@
   "route": {
     "": "",
     "Ticket":"工单",
+    "CommandConfirm": "命令复核",
     "AdminUserCreate": "创建管理用户",
     "AdminUserDetail": "管理用户详情",
     "AdminUserList": "管理用户",
@@ -567,6 +568,7 @@
     "Acl": "访问控制",
     "UserAclList": "用户登录",
     "UserAclCreate": "创建用户登录规则",
+    "UserAclLists": "用户登录规则",
     "UserAclUpdate": "更新用户登录规则",
     "UserAclDetail": "用户登录规则详情",
     "AssetAclList": "登录资产",
@@ -890,7 +892,13 @@
       "ips": "请输入逗号分割的IP地址组",
       "fuzzySearch": "支持模糊搜索",
       "application": "请输入逗号分割的应用名称组"
-    }
+    },
+    "ApplyRunUser": "申请运行的用户",
+    "ApplyRunAsset": "申请运行的资产",
+    "ApplyRunSystemUser": "申请运行的系统用户",
+    "ApplyRunCommand": "申请运行的命令",
+    "ApplyFromSession": "会话",
+    "ApplyFromCMDFilterRule": "命令过滤规则"
   },
   "tree": {
     "AddAssetToNode": "添加资产到节点",

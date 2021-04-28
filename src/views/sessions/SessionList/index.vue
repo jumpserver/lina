@@ -41,6 +41,17 @@ export default {
     Title() {
       return this.$t('route.Sessions')
     }
+  },
+  mounted() {
+    const params = this.$route.params
+    switch (params.activeMenu) {
+      case 'OnlineList':
+        this.config.activeMenu = 'OnlineList'
+        break
+      case 'OfflineList':
+        this.config.activeMenu = 'OfflineList'
+        break
+    }
   }
 }
 </script>

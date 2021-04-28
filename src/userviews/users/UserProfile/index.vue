@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     getSubmenu() {
-      let submenu = [
+      return [
         {
           title: this.$t('common.BasicInfo'),
           name: 'ProfileInfo'
@@ -45,21 +45,18 @@ export default {
         {
           title: this.$t('users.ProfileSetting'),
           name: 'ProfileUpdate'
+        },
+        {
+          title: this.$t('users.LoginPasswordSetting'),
+          name: 'PasswordUpdate',
+          disabled: this.$store.state.users.profile.source !== 'local'
+        },
+        {
+          title: this.$t('users.SSHKeySetting'),
+          name: 'SSHUpdate',
+          disabled: !this.$store.state.users.profile.can_public_key_auth
         }
       ]
-      if (this.$store.state.users.profile.source === 'local') {
-        submenu = submenu.concat([
-          {
-            title: this.$t('users.LoginPasswordSetting'),
-            name: 'PasswordUpdate'
-          },
-          {
-            title: this.$t('users.SSHKeySetting'),
-            name: 'SSHUpdate'
-          }
-        ])
-      }
-      return submenu
     },
     handleUpdate(value) {
       this.config.activeMenu = value

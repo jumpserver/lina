@@ -28,7 +28,7 @@ export default {
         action: 0
       },
       fields: [
-        [this.$t('common.Basic'), ['filter', 'type', 'content', 'priority', 'action', 'comment']]
+        [this.$t('common.Basic'), ['filter', 'type', 'content', 'priority', 'action', 'reviewers', 'comment']]
       ],
       fieldsMeta: {
         filter: {
@@ -66,6 +66,18 @@ export default {
         priority: {
           // helpText: '优先级可选范围为1-100，1最低优先级，100最高优先级'
           // helpText: this.$t('assets.CommandFilterRulePriorityHelpText')
+        },
+        reviewers: {
+          hidden: (item) => item.action !== 2,
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/users/users/?fields_size=mini',
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            }
+          }
         }
       },
       getNextRoute(res, method) {

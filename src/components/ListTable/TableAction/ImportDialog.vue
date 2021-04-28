@@ -152,7 +152,9 @@ export default {
         return
       }
       const isCsv = file.name.indexOf('csv') > -1
-      const renderToJsonUrl = this.url + 'render-to-json/'
+      const url = new URL(this.url, 'http://localhost')
+      url.pathname += 'render-to-json/'
+      const renderToJsonUrl = url.toString().replace('http://localhost', '')
       this.$axios.post(
         renderToJsonUrl,
         file.raw,
