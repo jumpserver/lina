@@ -995,6 +995,7 @@
       "ApplicationPermissionRules": "Application permission rules",
       "remoteAppPermissionRules": "Remote app permission rules"
     },
+    "isUpdatePassword": "Whether to force users to update their passwords",
     "UpdatePassword": "",
     "UpdatePublicKey": "",
     "passwordExpired": "Password expired",

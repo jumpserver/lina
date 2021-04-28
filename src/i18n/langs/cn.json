@@ -1000,6 +1000,7 @@
       "remoteAppPermissionRules": "远程应用授权规则"
     },
     "dateLastLogin": "最后登录日期",
+    "isUpdatePassword": "是否强制用户更新密码",
     "UpdatePassword": "更新密码",
     "SetPublicKey": "设置SSH公钥",
     "passwordExpired": "密码过期了",
