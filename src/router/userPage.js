@@ -125,6 +125,13 @@ export default [
         hidden: true
       },
       {
+        path: 'tickets/command-confirm/:id',
+        name: 'CommandConfirmDetail',
+        component: () => import('@/views/tickets/CommandConfirm/Detail/index'),
+        meta: { title: i18n.t('route.CommandConfirm'), activeMenu: '/tickets/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
         path: 'tickets/:id',
         name: 'TicketDetail',
         component: () => import('@/views/tickets/TicketDetail/index'),
