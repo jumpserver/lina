@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import PasswordInput from '../PasswordInput'
+import PasswordInput from './PasswordInput'
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import i18n from '@/i18n/i18n'
