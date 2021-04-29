@@ -30,7 +30,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import DisplayFormatter from '@/components/ListTable/formatters/DisplayFormatter'
+import DisplayFormatter from '@/components/TableFormatters/DisplayFormatter'
 import Dialog from '@/components/Dialog'
 export default {
   components: {

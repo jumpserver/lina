@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 import { ApplicationTypes } from '../const'
 
 export default {

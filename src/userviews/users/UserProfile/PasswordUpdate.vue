@@ -14,8 +14,8 @@
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import UserPassword from '@/components/UserPassword'
-import AdminUserPassword from '@/components/AdminUserPassword'
+import UserPassword from '@/components/FormFields/UserPassword'
+import AdminUserPassword from '@/components/FormFields/AdminUserPassword'
 import { IBox } from '@/components'
 
 export default {

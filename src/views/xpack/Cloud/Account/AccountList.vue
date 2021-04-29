@@ -5,7 +5,7 @@
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, azure_international, vmware, nutanix } from '../const'
-import { BooleanFormatter, DetailFormatter } from '@/components/ListTable/formatters'
+import { BooleanFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {

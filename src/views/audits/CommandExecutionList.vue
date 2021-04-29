@@ -11,7 +11,7 @@
 import GenericListPage from '@/layout/components/GenericListPage'
 import { getDayEnd, getDaysAgo } from '@/utils/common'
 import { Dialog, ListTable } from '@/components'
-import { DisplayFormatter } from '@/components/ListTable/formatters'
+import { DisplayFormatter } from '@/components/TableFormatters'
 import { setUrlParam } from '@/utils/common'
 
 export default {

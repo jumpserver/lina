@@ -4,7 +4,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter } from '@/components/ListTable/formatters/index'
+import { ActionsFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {

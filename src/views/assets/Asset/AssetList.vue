@@ -67,7 +67,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'

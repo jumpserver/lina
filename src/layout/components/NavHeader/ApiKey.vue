@@ -12,7 +12,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import ListTable from '@/components/ListTable'
-import { DateFormatter, ShowKeyFormatter } from '@/components/ListTable/formatters'
+import { DateFormatter, ShowKeyFormatter } from '@/components/TableFormatters'
 export default {
   name: 'ApiKey',
   components: {
