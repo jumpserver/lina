@@ -14,7 +14,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard/index'
 import AssetRelationCard from '@/components/AssetRelationCard'
-import { DeleteActionFormatter } from '@/components/ListTable/formatters'
+import { DeleteActionFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'ChangeAuthPlanAsset',

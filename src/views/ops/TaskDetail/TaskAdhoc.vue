@@ -5,7 +5,7 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { DetailFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 export default {
   name: 'TaskAdhoc',
   components: {

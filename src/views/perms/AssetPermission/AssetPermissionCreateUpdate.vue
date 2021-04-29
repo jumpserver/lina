@@ -35,7 +35,7 @@ export default {
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
         [this.$t('common.action'), ['actions']],
-        [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'date_cron', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       fieldsMeta: {

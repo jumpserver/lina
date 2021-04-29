@@ -5,7 +5,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import Uploadkey from '@/components/UploadKey'
+import { UploadKey } from '@/components'
 export default {
   name: 'AdminUserCreateUpdate',
   components: {
@@ -51,7 +51,7 @@ export default {
           }
         },
         private_key: {
-          component: Uploadkey
+          component: UploadKey
         }
       },
       url: '/api/v1/assets/admin-users/'

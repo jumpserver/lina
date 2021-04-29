@@ -53,7 +53,7 @@
 import { mapGetters } from 'vuex'
 import ListTable from '@/components/ListTable/index'
 import Dialog from '@/components/Dialog'
-import { ActionsFormatter, DateFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'Detail',

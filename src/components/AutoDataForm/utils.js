@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Select2 from '@/components/Select2'
+import Select2 from '@/components/FormFields/Select2'
 import NestedField from '@/components/AutoDataForm/components/NestedField'
 import rules from '@/components/DataForm/rules'
 import { assignIfNot } from '@/utils/common'
