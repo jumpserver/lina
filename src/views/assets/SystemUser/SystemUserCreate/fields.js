@@ -30,6 +30,10 @@ function getFields() {
         this.fieldsMeta.username.rules[0].required = true
         return
       }
+      if (['vnc'].includes(form.protocol)) {
+        this.fieldsMeta.username.rules[0].required = false
+        return
+      }
       this.fieldsMeta.username.rules[0].required = !(form.login_mode === 'manual' || form.username_same_with_user)
 
       this.fieldsMeta.username.el.disabled = !!form.username_same_with_user
