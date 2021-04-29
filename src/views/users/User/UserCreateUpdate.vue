@@ -62,7 +62,7 @@ export default {
             if (formValue.password_strategy) {
               return false
             }
-            return !formValue.update_password || !this.user.can_public_key_auth
+            return !formValue.update_password
           },
           el: {
             required: false
