@@ -15,6 +15,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import UserPassword from '@/components/UserPassword'
+import AdminUserPassword from '@/components/AdminUserPassword'
 import { IBox } from '@/components'
 
 export default {
@@ -42,7 +43,7 @@ export default {
         },
         new_password: {
           label: this.$t('users.NewPassword'),
-          component: UserPassword,
+          component: this.$store.getters.currentUserIsSuperAdmin ? AdminUserPassword : UserPassword,
           rules: []
         },
         new_password_again: {
