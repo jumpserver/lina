@@ -31,14 +31,14 @@ export default {
         [
           this.$t('common.Auth'),
           [
-            'SECURITY_MFA_AUTH', 'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
-            'SECURITY_PASSWORD_EXPIRATION_TIME', 'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
+            'SECURITY_MFA_AUTH', 'ADMIN_USER_SECURITY_MFA_AUTH', 'SECURITY_LOGIN_LIMIT_COUNT',
+            'SECURITY_LOGIN_LIMIT_TIME', 'SECURITY_PASSWORD_EXPIRATION_TIME', 'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
           ]
         ],
         [
           this.$t('setting.PasswordCheckRule'),
           [
-            'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
+            'ADMIN_USER_SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
             'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
           ]
         ],
@@ -50,6 +50,11 @@ export default {
         ]
       ],
       fieldsMeta: {
+        ADMIN_USER_SECURITY_MFA_AUTH: {
+          hidden: (formValue) => {
+            return formValue.SECURITY_MFA_AUTH
+          }
+        }
       },
       url: '/api/v1/settings/setting/?category=security'
     }
