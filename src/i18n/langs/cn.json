@@ -640,7 +640,8 @@
     "UserUpdate": "更新用户",
     "Users": "用户管理",
     "WebFTP": "文件管理",
-    "WebTerminal": "Web终端"
+    "WebTerminal": "Web终端",
+    "Notifications": "通知"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -849,6 +850,9 @@
   },
   "settings": {
     "setting": "设置"
+  },
+  "notifications": {
+    "Subscription": "消息订阅"
   },
   "tickets": {
     "Accept": "同意",

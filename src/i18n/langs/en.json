@@ -638,7 +638,8 @@
     "UserUpdate": "User update",
     "Users": "Users",
     "WebFTP": "WebFTP",
-    "WebTerminal": "Web Terminal"
+    "WebTerminal": "Web Terminal",
+    "Notifications": "Notifications"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
@@ -844,6 +845,9 @@
   },
   "settings": {
     "setting": "Setting"
+  },
+  "notifications": {
+    "Subscription": "消息订阅"
   },
   "tickets": {
     "Accept": "Accept",

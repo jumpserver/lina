@@ -37,6 +37,7 @@ import TicketsRoutes from './tickets'
 import AuditsRoutes from './audits'
 import commonRoutes from './common'
 import aclRoutes from './acl'
+import NotificationsRoutes from './notifications'
 
 /**
  * constantRoutes
@@ -182,6 +183,14 @@ export const allRoleRoutes = [
         meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
       }
     ]
+  },
+  {
+    path: '/notifications/',
+    component: Layout,
+    redirect: '/notifications/',
+    name: 'Notifications',
+    meta: { title: i18n.t('route.Notifications'), icon: 'history', permissions: [rolec.PERM_AUDIT] },
+    children: NotificationsRoutes
   },
   ...userPageRoutes,
   { path: '*', redirect: '/404', hidden: true, meta: { roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }}
