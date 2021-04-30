@@ -996,7 +996,8 @@
       "remoteAppPermissionRules": "Remote app permission rules"
     },
     "needUpdatePasswordNextLogin": "Update password next login",
-    "UpdatePassword": "",
+    "UpdatePassword": "Update password",
+    "SetPublicKey": "Set public key",
     "UpdatePublicKey": "",
     "passwordExpired": "Password expired",
     "passwordWillExpiredPrefixMsg": "The password will expire in ",
