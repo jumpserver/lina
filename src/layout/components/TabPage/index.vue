@@ -80,22 +80,23 @@ export default {
     },
     getPropActiveTab() {
       let activeTab = ''
-      let tabObj = null
 
-      const activeTabs = [
+      const preActiveTabs = [
         this.$route.query[ACTIVE_TAB_KEY],
         this.$cookie.get(ACTIVE_TAB_KEY),
         this.activeMenu
       ]
 
-      for (activeTab of activeTabs) {
-        tabObj = this.tabIndices[activeTab]
-        if (tabObj !== undefined) {
-          return activeTab
+      for (const preTab of preActiveTabs) {
+        for (const tabName in this.tabIndices) {
+          if (preTab.toLowerCase() === tabName.toLowerCase()) {
+            return tabName
+          }
         }
       }
 
-      return this.submenu[0].name
+      activeTab = this.submenu[0].name
+      return activeTab
     }
   }
 }
