@@ -31,6 +31,7 @@
     "install": "^0.13.0",
     "jquery": "^3.5.0",
     "js-cookie": "2.2.0",
+    "krry-transfer": "^1.7.3",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lodash": "^4.17.15",

@@ -1,23 +1,49 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="14">
-      <DetailCard :items="detailCardItems" />
-    </el-col>
-    <el-col :span="10">
-      <QuickActions type="primary" :actions="quickActions" />
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="20">
+      <el-col :span="14">
+        <DetailCard :items="detailCardItems" />
+      </el-col>
+      <el-col :span="10">
+        <QuickActions type="primary" :actions="quickActions" />
+      </el-col>
+    </el-row>
+    <Dialog
+      width="50"
+      top="20vh"
+      :title="this.$t('common.PasswordConfirm')"
+      :visible.sync="showPasswordDialog"
+      :show-confirm="false"
+      :show-cancel="false"
+      :destroy-on-close="true"
+    >
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <div style="line-height: 34px;text-align: center">{{ $t('assets.Password') }}</div>
+        </el-col>
+        <el-col :span="14">
+          <el-input v-model="passwordInput" type="password" />
+          <span class="help-tips help-block">{{ $t('common.PasswordRequireForSecurity') }}</span>
+        </el-col>
+        <el-col :span="4">
+          <el-button size="mini" type="primary" style="line-height:20px " @click="passConfirm">{{ this.$t('common.Confirm') }}</el-button>
+        </el-col>
+      </el-row>
+    </Dialog>
+  </div>
 </template>
 
 <script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
+import Dialog from '@/components/Dialog'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'ProfileInfo',
   components: {
     DetailCard,
-    QuickActions
+    QuickActions,
+    Dialog
   },
   props: {
     object: {
@@ -28,7 +54,40 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
+      showPasswordDialog: false,
+      passwordInput: '',
+      currentEdit: '',
       quickActions: [
+        {
+          title: this.$t('users.setWeCom'),
+          attrs: {
+            type: 'primary',
+            label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.$store.state.users.profile.source !== 'local'
+          },
+          has: this.$store.getters.publicSettings.AUTH_WECOM,
+          callbacks: {
+            click: function() {
+              this.currentEdit = 'wecom'
+              this.showPasswordDialog = true
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('users.setDingTalk'),
+          attrs: {
+            type: 'primary',
+            label: this.$store.state.users.profile.is_dingtalk_bound ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.$store.state.users.profile.source !== 'local'
+          },
+          has: this.$store.getters.publicSettings.AUTH_DINGTALK,
+          callbacks: {
+            click: function() {
+              this.currentEdit = 'dingtalk'
+              this.showPasswordDialog = true
+            }.bind(this)
+          }
+        },
         {
           title: this.$t('users.SetMFA'),
           attrs: {
@@ -171,6 +230,24 @@ export default {
     }
   },
   methods: {
+    passConfirm() {
+      this.$axios.post(
+        `/api/v1/authentication/password/verify/`, {
+          password: this.passwordInput
+        }
+      ).then(res => {
+        if (!this.object[`is_${this.currentEdit}_bound`]) {
+          window.location.href = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
+        } else {
+          this.$axios.post(`/api/v1/authentication/${this.currentEdit}/qr/unbind/`).then(res => {
+            this.$message.success(this.$t('common.updateSuccessMsg'))
+            this.$store.dispatch('users/getProfile')
+          })
+        }
+      })
+      this.passwordInput = ''
+      this.showPasswordDialog = false
+    }
   }
 }
 </script>

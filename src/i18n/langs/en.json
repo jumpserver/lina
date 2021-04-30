@@ -265,6 +265,8 @@
     "Info": "Info",
     "MFAConfirm": "MFA Confirm",
     "MFARequireForSecurity": "MFA required for security",
+    "PasswordConfirm": "MFA Confirm",
+    "PasswordRequireForSecurity": "MFA required for security",
     "Members": "Members",
     "More": "More",
     "Message": "Message",
@@ -276,6 +278,7 @@
     "Other": "Other",
     "Others": "Others",
     "Push": "Push",
+    "Receivers": "Receivers",
     "QuickUpdate": "Quick update",
     "RemoveSuccessMsg": "Remove success",
     "Reset": "Reset",
@@ -291,6 +294,8 @@
     "TestSuccessMsg": "Test Success",
     "To": "To",
     "Update": "Update",
+    "bind": "Bind",
+    "unbind": "Unbind",
     "Upload": "Upload",
     "Clone": "Clone",
     "Username": "Username",
@@ -638,7 +643,8 @@
     "UserUpdate": "User update",
     "Users": "Users",
     "WebFTP": "WebFTP",
-    "WebTerminal": "Web Terminal"
+    "WebTerminal": "Web Terminal",
+    "Notifications": "Notifications"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
@@ -731,6 +737,8 @@
     "Security": "Security setting",
     "SecuritySetting": "Security setting",
     "SubscriptionID": "Subscription ID",
+    "SystemMessageSubscription": "System messages",
+    "insecureCommandEmailUpdate": "Setting",
     "Terminal": "Terminal setting",
     "all": "All",
     "authLdap": "Enable LDAP auth",
@@ -840,11 +848,12 @@
     "refreshLdapCache":"Refreshing Ldap cache ",
     "LicenseExpired": "License expired",
     "LicenseWillBe": "License will expire at ",
-    "Expire": ""
-  },
-  "settings": {
+    "Expire": "",
+    "WeCom": "WeCom",
+    "DingTalk": "DingTalk",
     "setting": "Setting"
   },
+
   "tickets": {
     "Accept": "Accept",
     "AssignedMe": "Assigned me",
@@ -918,6 +927,8 @@
     "DateJoined": "Date joined",
     "DateLastLogin": "Date last login",
     "DatePasswordLastUpdated": "Date password last updated",
+    "setWeCom": "Set wecom login",
+    "setDingTalk": "Set dingtalk login",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",
     "Email": "Email",
@@ -977,7 +988,11 @@
       "resetSSHKey": "Reset SSH key",
       "resetSSHKeySuccessMsg": "An e-mail has been sent to the user`s mailbox",
       "resetSSHKeyWarningMsg": "This will reset the user public key and send a reset mail",
+      "resetWechat": "Reset Wechat",
+      "resetWechatLoginWarningMsg": "This will reset the user Wechat setting, user can reset it",
+      "resetWechatLoginSuccessMsg": "Reset Wechat success",
       "send": "Send",
+      "unbind": "Unbind",
       "unblock": "Unblock",
       "unblockSuccessMsg": "Account has unblocked",
       "unblockUser": "Unblock login"
@@ -1002,6 +1017,12 @@
     "passwordExpired": "Password expired",
     "passwordWillExpiredPrefixMsg": "The password will expire in ",
     "passwordWillExpiredSuffixMsg": " days.Please change your password as soon as possible."
+  },
+  "notifications": {
+    "MessageType": "Message Type",
+    "Receivers": "Receivers",
+    "Subscription": "Subscription",
+    "ChangeReceiver": "Change Receivers"
   },
   "xpack": {
     "Admin": "Admin",
