@@ -59,13 +59,27 @@ export default {
       passwordInput: '',
       quickActions: [
         {
-          title: this.$t('users.setWechat'),
+          title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
             label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind'),
             disabled: this.$store.state.users.profile.source !== 'local'
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
+          callbacks: {
+            click: function() {
+              this.showPasswordDialog = true
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('users.setDingTalk'),
+          attrs: {
+            type: 'primary',
+            label: this.$store.state.users.profile.is_dingtalk_bound ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.$store.state.users.profile.source !== 'local'
+          },
+          has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
             click: function() {
               this.showPasswordDialog = true

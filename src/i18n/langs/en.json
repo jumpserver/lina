@@ -733,6 +733,7 @@
     "consult": "Consult",
     "createUserSetting": "Create User setting",
     "wechatSetting": "Wechat setting",
+    "dingtalkSetting": "DingTalk setting",
     "emailCustomUserCreatedBody": "Create user email content",
     "emailCustomUserCreatedHonorific": "Create user honorific",
     "emailCustomUserCreatedSignature": "Signature",
