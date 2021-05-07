@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import Switcher from '../FormFields/Swicher'
+import Switch from '../FormFields/Switch'
 export default {
   name: 'ActionItem',
   components: {
-    Switcher
+    Switch
   },
   props: {
     action: {
@@ -31,7 +31,7 @@ export default {
     iType() {
       switch (this.action.type) {
         case 'switcher':
-          return 'Switcher'
+          return 'Switch'
         default:
           return 'el-button'
       }

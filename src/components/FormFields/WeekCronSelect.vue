@@ -2,14 +2,11 @@
   <div>
     <div class="hours-container">
       <div v-for="(item, index) in hours" :key="index" class="hours-item">
-        <div class="hours-item-header">{{ compItem(item) }}</div>
-        <div class="hours-item-value">
-          <div
-            :class="compClass(2 * item)"
-            @click="handleClick(2 * item)"
-            @mouseover="handleHover(2 * item)"
-          />
-        </div>
+        <div
+          :class="compClass(item)"
+          @click="handleClick(item)"
+          @mouseover="handleHover( item)"
+        />
       </div>
     </div>
     <div class="tips">{{ tips }}</div>
@@ -22,8 +19,7 @@ export default {
   },
   props: {
     sendTimeList: {
-      type: Object,
-      required: true,
+      type: Array,
       default: () => []
     },
     readonly: {
@@ -34,6 +30,7 @@ export default {
   data() {
     return {
       hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // 选项
+      weeks: ['星期一', '星期二', '星期三', '星期四', '星期五'],
       selectStart: false, // 开始
       startIndex: '', // 开始下标
       timeRangeList: [], // 选择的时间段
@@ -97,16 +94,19 @@ export default {
     // 下标区间转换成时间区间
     transformedSection() {
       this.timeRangeList = []
-      let startTime = ''; let endTime = ''; const len = this.hours.length
+      let startTime = ''
+      let endTime = ''
+      const len = this.hours.length
+      console.log('timeRangeListIndex: ', this.timeRangeListIndex)
       for (let index = this.hours[0] * 2; index < 2 * (len + 1); index++) {
         if (this.timeRangeListIndex.indexOf(index) > -1) {
           if (startTime) { // 如果有开始时间，直接确定结束时间
             const endHour = Math.floor((index + 1) / 2)
-            const endMin = (index + 1) % 2 === 0 ? '00' : '30'
+            const endMin = '00'
             endTime = `${endHour < 10 ? '0' + endHour : endHour}:${endMin}`
           } else { // 没有开始时间，确定当前点为开始时间
             const startHour = Math.floor(index / 2)
-            const startMin = index % 2 === 0 ? '00' : '30'
+            const startMin = '00'
             startTime = `${startHour < 10 ? '0' + startHour : startHour}:${startMin}`
           }
           if (index === 2 * this.hours.length + 1) { // 如果是最后一格，直接结束
@@ -122,7 +122,7 @@ export default {
             endTime = ''
           } else if (startTime && !endTime) { // 这里可能只选半个小时
             const endHour = Math.floor(index / 2)
-            const endMin = index % 2 === 0 ? '00' : '30'
+            const endMin = '30'
             endTime = `${endHour < 10 ? '0' + endHour : endHour}:${endMin}`
             this.timeRangeList.push(`${startTime}-${endTime}`)
             startTime = ''
@@ -183,18 +183,18 @@ export default {
     // 是否选中，计算className
     compClass(index) {
       if (index === this.startIndex) {
-        return 'hours-item-left preSelected'
+        return 'hours-item preSelected'
       }
       if (index >= this.startIndex) {
         if (this.tempRangeIndex.indexOf(index) > -1) {
-          return 'hours-item-left preSelected'
+          return 'hours-item preSelected'
         }
       } else {
         if (this.tempRangeIndex.indexOf(index) > -1) {
-          return 'hours-item-left unSelected'
+          return 'hours-item unSelected'
         }
       }
-      return this.timeRangeListIndex.indexOf(index) > -1 ? 'hours-item-left selected' : 'hours-item-left'
+      return this.timeRangeListIndex.indexOf(index) > -1 ? 'hours-item selected' : 'hours-item'
     },
     compItem(item) { // 不足10前面补0
       return item < 10 ? `0${item}` : item
@@ -209,8 +209,8 @@ export default {
   display: flex;
   cursor: pointer;
   .hours-item {
-    width: 30px;
-    height: 60px;
+    width: 15px;
+    height: 30px;
     border: 1px solid #c2d0f3;
     border-right: none;
     text-align: center;

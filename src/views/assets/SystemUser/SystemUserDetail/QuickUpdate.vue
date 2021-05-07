@@ -9,7 +9,7 @@
         <el-table-column prop="name" />
         <el-table-column prop="auto_push" align="right">
           <template slot-scope="scope">
-            <Switcher
+            <Switch
               v-model="scope.row.auto_push"
               @change="HandleChangeAction(scope.$index, scope.row)"
             />
@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import { Switcher } from '@/components'
+import { Switch } from '@/components/FormFields'
 
 export default {
   name: 'AutoPushCard',
   components: {
-    Switcher
+    Switch
   },
   props: {
     title: {
