@@ -86,7 +86,10 @@ export default {
         labels: {
           el: {
             ajax: {
-              url: '/api/v1/assets/labels/'
+              url: '/api/v1/assets/labels/',
+              transformOption: (item) => {
+                return { label: `${item.name}:${item.value}`, value: item.id }
+              }
             }
           }
         },
