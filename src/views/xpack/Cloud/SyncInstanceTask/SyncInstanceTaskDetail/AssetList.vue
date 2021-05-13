@@ -4,7 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import { DateFormatter } from '@/components/ListTable/formatters'
+import { DateFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetList',

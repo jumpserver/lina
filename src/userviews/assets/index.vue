@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { LoadingActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/ListTable/formatters'
+import { LoadingActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericTreeListPage

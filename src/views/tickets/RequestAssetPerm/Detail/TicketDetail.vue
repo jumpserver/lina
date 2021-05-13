@@ -48,7 +48,7 @@
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
-import Select2 from '@/components/Select2'
+import Select2 from '@/components/FormFields/Select2'
 import IBox from '@/components/IBox'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'

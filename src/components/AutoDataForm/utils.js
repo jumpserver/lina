@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Select2 from '@/components/Select2'
+import Select2 from '@/components/FormFields/Select2'
 import NestedField from '@/components/AutoDataForm/components/NestedField'
 import rules from '@/components/DataForm/rules'
 import { assignIfNot } from '@/utils/common'
@@ -124,7 +124,7 @@ export class FormFieldGenerator {
     field.el = el
     field.rules = rules
     _.set(field, 'attrs.error', '')
-    Vue.$log.debug('Generate field: ', name, field)
+    // Vue.$log.debug('Generate field: ', name, field)
     return field
   }
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {

@@ -3,7 +3,7 @@
 </template>
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { DetailFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'TicketListTable',
@@ -38,6 +38,8 @@ export default {
                   return 'AppsTicketDetail'
                 } else if (row.type === 'login_asset_confirm') {
                   return 'loginAssetTicketDetail'
+                } else if (row.type === 'command_confirm') {
+                  return 'CommandConfirmDetail'
                 } else {
                   return 'TicketDetail'
                 }

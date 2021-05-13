@@ -5,7 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { DEFAULT_ORG_ID } from '@/utils/org'
-import Select2 from '@/components/Select2'
+import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
 export default {

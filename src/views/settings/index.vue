@@ -19,6 +19,10 @@ import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
 import License from './License'
+import WeCom from './WeCom'
+import DingTalk from './DingTalk'
+import SystemMessageSubscription from './SystemMessageSubscription/Subscription'
+
 export default {
   components: {
     IBox,
@@ -30,7 +34,10 @@ export default {
     Ldap,
     Terminal,
     Security,
-    License
+    License,
+    WeCom,
+    DingTalk,
+    SystemMessageSubscription
   },
   data() {
     return {
@@ -55,6 +62,14 @@ export default {
           name: 'Ldap'
         },
         {
+          title: this.$t('setting.WeCom'),
+          name: 'WeCom'
+        },
+        {
+          title: this.$t('setting.DingTalk'),
+          name: 'DingTalk'
+        },
+        {
           title: this.$t('setting.Terminal'),
           name: 'Terminal'
         },
@@ -71,7 +86,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$t('settings.setting')
+      return this.$t('setting.setting')
     },
     componentData() {
       return {}

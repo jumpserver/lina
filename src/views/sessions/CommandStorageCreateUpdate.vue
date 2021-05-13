@@ -32,7 +32,7 @@ export default {
           disabled: true
         },
         meta: {
-          fields: ['HOSTS', 'INDEX'],
+          fields: ['HOSTS', 'INDEX', 'IGNORE_VERIFY_CERTS'],
           fieldsMeta: {
             HOSTS: {
               helpText: this.$t('sessions.helpText.esUrl')

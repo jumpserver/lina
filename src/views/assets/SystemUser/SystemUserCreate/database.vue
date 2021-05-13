@@ -15,12 +15,11 @@ export default {
       initial: {
         login_mode: 'auto',
         protocol: this.$route.query.protocol,
-        username_same_with_user: false,
         auto_generate_key: false,
         auto_push: false
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'priority', 'protocol']],
         [this.$t('common.Auth'), ['update_password', 'password']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -28,7 +27,6 @@ export default {
         login_mode: fields.login_mode,
         username: fields.username,
         private_key: fields.private_key,
-        username_same_with_user: fields.username_same_with_user,
         protocol: fields.protocol,
         update_password: fields.update_password,
         password: fields.password

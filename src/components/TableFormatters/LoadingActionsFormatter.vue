@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ActionsGroup from '@/components/ActionsGroup/index'
+import ActionsGroup from '@/components/ActionsGroup'
 import BaseFormatter from './base'
 
 export default {

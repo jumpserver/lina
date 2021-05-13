@@ -18,7 +18,7 @@ import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
 import AssetRelationCard from '@/components/AssetRelationCard'
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetList',

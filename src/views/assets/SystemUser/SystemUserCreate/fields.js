@@ -1,7 +1,6 @@
 import { Required } from '@/components/DataForm/rules'
-import UploadKey from '@/components/UploadKey'
 import i18n from '@/i18n/i18n'
-import { Select2 } from '@/components'
+import { Select2, UploadKey } from '@/components'
 
 function getFields() {
   const login_mode = {
@@ -27,17 +26,17 @@ function getFields() {
     },
     rules: [Object.assign({}, Required)],
     hidden: (form) => {
-      if (form.login_mode === 'manual' || form.username_same_with_user) {
-        this.fieldsMeta.username.rules[0].required = false
-      } else {
+      if (['mysql', 'postgresql', 'mariadb', 'oracle'].includes(form.protocol)) {
         this.fieldsMeta.username.rules[0].required = true
+        return
       }
+      if (['vnc'].includes(form.protocol)) {
+        this.fieldsMeta.username.rules[0].required = false
+        return
+      }
+      this.fieldsMeta.username.rules[0].required = !(form.login_mode === 'manual' || form.username_same_with_user)
 
-      if (form.username_same_with_user) {
-        this.fieldsMeta.username.el.disabled = true
-      } else {
-        this.fieldsMeta.username.el.disabled = false
-      }
+      this.fieldsMeta.username.el.disabled = !!form.username_same_with_user
     }
   }
 

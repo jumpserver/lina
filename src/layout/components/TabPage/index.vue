@@ -10,7 +10,7 @@
     <div>
       <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="iActiveMenu" class="page-submenu" @tab-click="handleTabClick">
         <template v-for="item in submenu">
-          <el-tab-pane :key="item.name" :label-content="item.labelContent" :name="item.name">
+          <el-tab-pane :key="item.name" :label-content="item.labelContent" :name="item.name" :disabled="item.disabled">
             <span slot="label">
               {{ item.title }}
               <slot name="badge" :tab="item.name" />
@@ -80,22 +80,23 @@ export default {
     },
     getPropActiveTab() {
       let activeTab = ''
-      let tabObj = null
 
-      const activeTabs = [
+      const preActiveTabs = [
         this.$route.query[ACTIVE_TAB_KEY],
         this.$cookie.get(ACTIVE_TAB_KEY),
         this.activeMenu
       ]
 
-      for (activeTab of activeTabs) {
-        tabObj = this.tabIndices[activeTab]
-        if (tabObj !== undefined) {
-          return activeTab
+      for (const preTab of preActiveTabs) {
+        for (const tabName in this.tabIndices) {
+          if (preTab.toLowerCase() === tabName.toLowerCase()) {
+            return tabName
+          }
         }
       }
 
-      return this.submenu[0].name
+      activeTab = this.submenu[0].name
+      return activeTab
     }
   }
 }

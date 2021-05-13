@@ -65,7 +65,7 @@ export default [
         path: '',
         name: 'CommandExecutions',
         component: () => import('@/views/ops/CommandExecution'),
-        meta: { title: i18n.t('route.CommandExecutions'), icon: 'terminal', permissions: [rolec.PERM_USE] }
+        meta: { title: i18n.t('route.BatchCommand'), icon: 'terminal', permissions: [rolec.PERM_USE] }
       }
     ]
   },
@@ -125,6 +125,13 @@ export default [
         hidden: true
       },
       {
+        path: 'tickets/command-confirm/:id',
+        name: 'CommandConfirmDetail',
+        component: () => import('@/views/tickets/CommandConfirm/Detail/index'),
+        meta: { title: i18n.t('route.CommandConfirm'), activeMenu: '/tickets/tickets', permissions: [rolec.PERM_USE] },
+        hidden: true
+      },
+      {
         path: 'tickets/:id',
         name: 'TicketDetail',
         component: () => import('@/views/tickets/TicketDetail/index'),
@@ -155,7 +162,7 @@ export default [
     children: [
       {
         path: `${BASE_URL}/koko/elfinder/sftp/`,
-        meta: { title: i18n.t('route.WebFTP'), icon: 'file', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
+        meta: { title: i18n.t('route.FileManager'), icon: 'file', activeMenu: '/assets', permissions: [rolec.PERM_USE] }
       }
     ]
   }

@@ -4,7 +4,7 @@
       <DetailCard :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <AutoPushCard v-bind="AutoPushConfig" />
+      <QuickUpdate v-bind="AutoPushConfig" />
       <RelationCard v-if="object.protocol === 'ssh'" ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
     </el-col>
   </el-row>
@@ -12,7 +12,7 @@
 
 <script>
 import DetailCard from '@/components/DetailCard'
-import AutoPushCard from './AutoPushCard'
+import QuickUpdate from './QuickUpdate'
 import RelationCard from '@/components/RelationCard/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 
@@ -20,7 +20,7 @@ export default {
   name: 'Detail',
   components: {
     DetailCard,
-    AutoPushCard,
+    QuickUpdate,
     RelationCard
   },
   props: {

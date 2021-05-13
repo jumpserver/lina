@@ -5,7 +5,7 @@
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
 import { timeOffset, getDaysAgo, getDayEnd } from '@/utils/common'
-import { ActionsFormatter } from '@/components/ListTable/formatters'
+import { ActionsFormatter } from '@/components/TableFormatters'
 export default {
   name: 'BaseList',
   components: {

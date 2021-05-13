@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BaseFormatter from '@/components/ListTable/formatters/base'
+import BaseFormatter from '@/components/TableFormatters/base'
 
 export default {
   name: 'OutputExpandFormatter',

@@ -12,6 +12,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+
 export default {
   name: 'Security',
   components: {
@@ -32,7 +33,7 @@ export default {
           this.$t('common.Auth'),
           [
             'SECURITY_MFA_AUTH', 'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
-            'SECURITY_PASSWORD_EXPIRATION_TIME'
+            'SECURITY_PASSWORD_EXPIRATION_TIME', 'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
           ]
         ],
         [
@@ -50,6 +51,15 @@ export default {
         ]
       ],
       fieldsMeta: {
+        // 'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER': {
+        //   component: Link,
+        //   helpText: '',
+        //   label: this.$t('common.Receivers'),
+        //   el: {
+        //     href: '/ui/#/settings?activeTab=SystemMessageSubscription',
+        //     title: this.$t('setting.insecureCommandEmailUpdate')
+        //   }
+        // }
       },
       url: '/api/v1/settings/setting/?category=security'
     }

@@ -4,7 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
-import { DetailFormatter } from '@/components/ListTable/formatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {

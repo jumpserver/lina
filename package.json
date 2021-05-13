@@ -15,7 +15,9 @@
     "test:ci": "npm run lint && npm run test:unit",
     "svgo": "svgo -f src/icons/svg --config=src/icas/svgo.yml",
     "vue-i18n-extract": "vue-i18n-extract",
-    "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'"
+    "vue-i18n-report": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json'",
+    "vue-i18n-report-json": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -o /tmp/abc.json",
+    "vue-i18n-report-add-miss": "vue-i18n-extract report -v './src/**/*.?(js|vue)' -l './src/i18n/langs/**/*.json' -a"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",
@@ -29,6 +31,7 @@
     "install": "^0.13.0",
     "jquery": "^3.5.0",
     "js-cookie": "2.2.0",
+    "krry-transfer": "^1.7.3",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lodash": "^4.17.15",

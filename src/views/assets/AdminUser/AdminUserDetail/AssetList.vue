@@ -16,7 +16,7 @@
 import QuickActions from '@/components/QuickActions/index'
 import ListTable from '@/components/ListTable'
 import RelationCard from '@/components/RelationCard'
-import { ChoicesFormatter } from '@/components/ListTable/formatters'
+import { ChoicesFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetList',

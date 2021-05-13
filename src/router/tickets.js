@@ -48,5 +48,12 @@ export default [
     component: () => import('@/views/tickets/RequestApplicationPerm/Detail/index'),
     meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets' },
     hidden: true
+  },
+  {
+    path: 'tickets/command-confirm/:id',
+    name: 'CommandConfirmDetail',
+    component: () => import('@/views/tickets/CommandConfirm/Detail/index'),
+    meta: { title: i18n.t('route.CommandConfirm'), activeMenu: '/tickets/tickets' },
+    hidden: true
   }
 ]
