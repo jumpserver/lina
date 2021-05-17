@@ -38,7 +38,7 @@ export default {
       ],
       fieldsMeta: {
         public_key_comment: {
-          label: this.$t('users.Name'),
+          label: this.$t('common.Name'),
           disabled: true
         },
         public_key_hash_md5: {
