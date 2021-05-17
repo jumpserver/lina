@@ -150,6 +150,9 @@ export default {
       const method = this.getMethod()
       if (method === 'post' && !value.password_strategy) {
         delete value['password']
+        if (this.currentOrgIsRoot) {
+          delete value['groups']
+        }
       }
       if (value.update_password !== undefined) {
         delete value.update_password
@@ -166,6 +169,9 @@ export default {
     },
     afterGetUser(user) {
       this.user = user
+      if (this.$route.query.clone_from) {
+        this.user.groups = []
+      }
     }
   }
 }
