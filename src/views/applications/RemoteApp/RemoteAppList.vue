@@ -64,6 +64,8 @@ export default {
         hasCreate: false,
         hasMoreActions: false,
         hasBulkDelete: false,
+        hasExport: false,
+        hasImport: false,
         // createRoute: 'RemoteAppCreate',
         moreCreates: {
           dropdown: this.getCreateAppType(),
