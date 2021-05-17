@@ -89,7 +89,7 @@ export default {
 
       for (const preTab of preActiveTabs) {
         for (const tabName in this.tabIndices) {
-          if (preTab.toLowerCase() === tabName.toLowerCase()) {
+          if (preTab && tabName && preTab.toLowerCase() === tabName.toLowerCase()) {
             return tabName
           }
         }
