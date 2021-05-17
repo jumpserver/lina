@@ -17,10 +17,6 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       url: '/api/v1/xpack/gathered-user/tasks/',
-      initial: {
-        is_periodic: true,
-        interval: 24
-      },
       hasDetailInMsg: false,
       fieldsMeta: {
         crontab: {
@@ -48,12 +44,16 @@ export default {
             }
           }
         },
-        'is_periodic': {
+        is_periodic: {
           type: 'switch'
         }
       },
       createSuccessNextRoute: { name: 'GatherUserListIndex' },
-      updateSuccessNextRoute: { name: 'GatherUserListIndex' }
+      updateSuccessNextRoute: { name: 'GatherUserListIndex' },
+      cleanFormValue(values) {
+        values.interval = values.interval || null
+        return values
+      }
     }
   }
 }
