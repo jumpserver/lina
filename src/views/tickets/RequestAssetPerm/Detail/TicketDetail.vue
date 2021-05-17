@@ -169,10 +169,15 @@ export default {
       ]
     },
     assignedCardItems() {
+      const vm = this
       return [
         {
           key: this.$t('tickets.PermissionName'),
-          value: this.object.meta.approve_permission_name
+          value: this.object.meta.approve_permission_name,
+          formatter: function(item, value) {
+            const to = { name: 'AssetPermissionDetail', params: { id: vm.object.id }}
+            return <router-link to={to}>{ value }</router-link>
+          }
         },
         {
           key: this.$t('assets.Asset'),
