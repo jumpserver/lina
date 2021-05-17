@@ -155,6 +155,10 @@ export default {
           value: this.object.meta.apply_system_user_group.toString()
         },
         {
+          key: this.$t('assets.Action'),
+          value: this.object.meta.apply_actions_display.toString()
+        },
+        {
           key: this.$t('common.dateStart'),
           value: toSafeLocalDateStr(this.object.meta.apply_date_start)
         },
@@ -167,12 +171,20 @@ export default {
     assignedCardItems() {
       return [
         {
+          key: this.$t('tickets.PermissionName'),
+          value: this.object.meta.approve_permission_name
+        },
+        {
           key: this.$t('assets.Asset'),
-          value: this.object.meta.approve_assets_display
+          value: this.object.meta.approve_assets_display.toString()
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.approve_system_users_display
+          value: this.object.meta.approve_system_users_display.toString()
+        },
+        {
+          key: this.$t('assets.Action'),
+          value: this.object.meta.approve_actions_display.toString()
         },
         {
           key: this.$t('common.dateStart'),
