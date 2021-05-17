@@ -14,10 +14,14 @@ export default {
 
     return {
       tableConfig: {
+        name: 'TaskListTable',
         url: '/api/v1/xpack/gathered-user/tasks/',
         columns: [
           'name', 'nodes', 'periodic_display', 'executed_times', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'nodes', 'periodic_display', 'executed_times', 'actions']
+        },
         columnsMeta: {
           name: {
             formatter: null
@@ -61,7 +65,8 @@ export default {
         hasRefresh: false,
         hasExport: false,
         hasMoreActions: false,
-        createRoute: 'GatherUserTaskCreate'
+        createRoute: 'GatherUserTaskCreate',
+        hasColumnSetting: false
       }
     }
   }
