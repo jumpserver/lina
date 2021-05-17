@@ -855,6 +855,7 @@
   },
 
   "tickets": {
+    "PermissionName": "Permission name",
     "Accept": "Accept",
     "AssignedMe": "Assigned me",
     "Assignee": "Assignee",

@@ -859,6 +859,7 @@
     "setting": "设置"
   },
   "tickets": {
+    "PermissionName": "授权规则名称",
     "Accept": "同意",
     "AssignedMe": "待我审批",
     "Assignee": "处理人",
