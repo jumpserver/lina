@@ -228,7 +228,8 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      const configShowColumnsNames = _.get(_tableConfig[this.$route.name], 'showColumns', null)
+      const tableName = this.config.name || this.$route.name
+      const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
         showColumnsNames = totalColumnsNames
@@ -270,7 +271,8 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      _tableConfig[this.$route.name] = {
+      const tableName = this.config.name || this.$route.name
+      _tableConfig[tableName] = {
         'showColumns': columns
       }
       localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
