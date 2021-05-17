@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :object.sync="systemUser" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="systemUser" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -20,8 +20,9 @@ export default {
     AccountList
   },
   data() {
+    const vm = this
     return {
-      TaskDetail: {},
+      systemUser: {},
       config: {
         activeMenu: 'Detail',
         submenu: [
@@ -37,9 +38,19 @@ export default {
             title: this.$t('assets.AccountList'),
             name: 'AccountList'
           }
-
         ],
-        hasRightSide: true
+        hasRightSide: true,
+        actions: {
+          updateCallback: () => {
+            const id = this.$route.params.id
+            const routeName = 'SystemUserUpdate'
+            this.$router.push({
+              name: routeName,
+              params: { id: id },
+              query: { protocol: vm.systemUser.protocol }
+            })
+          }
+        }
       }
     }
   }
