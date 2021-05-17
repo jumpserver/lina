@@ -851,6 +851,8 @@
     "Expire": "",
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",
+    "dingTalkTest": "Test",
+    "weComTest": "Test",
     "setting": "Setting"
   },
 
