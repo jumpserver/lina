@@ -265,8 +265,8 @@
     "Info": "Info",
     "MFAConfirm": "MFA Confirm",
     "MFARequireForSecurity": "MFA required for security",
-    "PasswordConfirm": "MFA Confirm",
-    "PasswordRequireForSecurity": "MFA required for security",
+    "PasswordConfirm": "Password Confirm",
+    "PasswordRequireForSecurity": "Password required for security",
     "Members": "Members",
     "More": "More",
     "Message": "Message",
@@ -851,6 +851,8 @@
     "Expire": "",
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",
+    "dingTalkTest": "Test",
+    "weComTest": "Test",
     "setting": "Setting"
   },
 

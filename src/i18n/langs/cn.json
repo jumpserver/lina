@@ -269,7 +269,7 @@
     "MFAConfirm": "MFA 认证",
     "MFARequireForSecurity": "为了安全请输入MFA",
     "PasswordConfirm": "密码认证",
-    "PasswordRequireForSecurity": "为了安全请输入MFA",
+    "PasswordRequireForSecurity": "为了安全请输入密码",
     "Members": "成员",
     "More": "更多",
     "Message": "消息",
@@ -856,6 +856,8 @@
     "Expire": " 过期",
     "WeCom": "企业微信",
     "DingTalk": "钉钉",
+    "dingTalkTest": "测试",
+    "weComTest": "测试",
     "setting": "设置"
   },
   "tickets": {
