@@ -5,6 +5,7 @@
       :current-columns="popoverColumns.currentCols"
       :total-columns-list="popoverColumns.totalColumnsList"
       :min-columns="popoverColumns.minCols"
+      :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
   </div>
@@ -15,6 +16,7 @@ import DataTable from '../DataTable'
 import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
+import { newURL } from '@/utils/common'
 export default {
   name: 'AutoDataTable',
   components: {
@@ -228,7 +230,7 @@ export default {
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      const tableName = this.config.name || this.$route.name
+      const tableName = this.config.name || this.$route.name + '_' + newURL(this.iConfig.url).pathname
       const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
@@ -249,7 +251,7 @@ export default {
         min: minColumnsNames,
         configShow: configShowColumnsNames
       }
-      this.$log.debug('Cleaned colums show: ', this.cleanedColumnsShow)
+      this.$log.debug('Cleaned columns show: ', this.cleanedColumnsShow)
     },
     filterShowColumns() {
       this.cleanColumnsShow()
@@ -265,13 +267,13 @@ export default {
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
       this.$log.debug('Popover cols: ', this.popoverColumns)
     },
-    handlePopoverColumnsChange(columns) {
-      // this.$log.debug('Columns change: ', columns)
+    handlePopoverColumnsChange({ columns, url }) {
+      this.$log.debug('Columns change: ', columns)
       this.popoverColumns.currentCols = columns
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      const tableName = this.config.name || this.$route.name
+      const tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
       _tableConfig[tableName] = {
         'showColumns': columns
       }
