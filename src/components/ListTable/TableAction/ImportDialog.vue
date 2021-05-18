@@ -7,7 +7,6 @@
     :loading-status="loadStatus"
     width="80%"
     class="importDialog"
-    :confirm-title="confirmTitle"
     :show-cancel="false"
     :show-confirm="false"
     @close="handleImportCancel"
@@ -118,9 +117,6 @@ export default {
       } else {
         return this.$t('common.Import') + this.$t('common.Update')
       }
-    },
-    confirmTitle() {
-      return '导入'
     }
   },
   watch: {
@@ -129,8 +125,10 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showImportDialog', (row) => {
-      this.showImportDialog = true
+    this.$eventBus.$on('showImportDialog', ({ url }) => {
+      if (url === this.url) {
+        this.showImportDialog = true
+      }
     })
   },
   methods: {

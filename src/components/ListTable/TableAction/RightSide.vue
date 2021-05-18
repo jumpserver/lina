@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ActionsGroup :is-fa="true" :actions="rightSideActions" class="right-side-actions right-side-item" />
+    <ActionsGroup :is-fa="true" :actions="rightSideActions" :url="tableUrl" class="right-side-actions right-side-item" />
     <ImExportDialog :selected-rows="selectedRows" :url="tableUrl" v-bind="$attrs" />
   </div>
 </template>
@@ -27,21 +27,21 @@ export default {
     handleExport: {
       type: Function,
       default: function({ selectedRows }) {
-        this.$eventBus.$emit('showExportDialog', { selectedRows })
+        this.$eventBus.$emit('showExportDialog', { selectedRows, url: this.tableUrl })
       }
     },
     hasImport: defaultTrue,
     handleImport: {
       type: Function,
       default: function({ selectedRows }) {
-        this.$eventBus.$emit('showImportDialog', { selectedRows })
+        this.$eventBus.$emit('showImportDialog', { selectedRows, url: this.tableUrl })
       }
     },
     hasColumnSetting: defaultTrue,
     handleColumnConfig: {
       type: Function,
-      default: function() {
-        this.$eventBus.$emit('showColumnSettingPopover')
+      default: function({ selectedRows }) {
+        this.$eventBus.$emit('showColumnSettingPopover', { url: this.tableUrl })
       }
     },
     hasRefresh: defaultTrue,

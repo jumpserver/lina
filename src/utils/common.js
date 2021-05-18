@@ -206,6 +206,16 @@ function customizer(objValue, srcValue) {
   return _.isUndefined(objValue) ? srcValue : objValue
 }
 
+export function newURL(url) {
+  let obj
+  if (url.indexOf('//') > -1) {
+    obj = new URL(url)
+  } else {
+    obj = new URL(url, 'http://localhost')
+  }
+  return obj
+}
+
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)
 
 const scheme = document.location.protocol
