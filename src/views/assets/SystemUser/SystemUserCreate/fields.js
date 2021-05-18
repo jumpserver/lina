@@ -28,15 +28,15 @@ function getFields() {
     hidden: (form) => {
       if (['mysql', 'postgresql', 'mariadb', 'oracle'].includes(form.protocol)) {
         this.fieldsMeta.username.rules[0].required = true
-        return
-      }
-      if (['vnc'].includes(form.protocol)) {
+      } else if (['vnc'].includes(form.protocol)) {
         this.fieldsMeta.username.rules[0].required = false
-        return
+      } else {
+        this.fieldsMeta.username.rules[0].required = !(form.login_mode === 'manual' || form.username_same_with_user)
       }
-      this.fieldsMeta.username.rules[0].required = !(form.login_mode === 'manual' || form.username_same_with_user)
-
-      this.fieldsMeta.username.el.disabled = !!form.username_same_with_user
+      if (form.username_same_with_user) {
+        this.fieldsMeta.username.el.disabled = true
+        form.username = ''
+      }
     }
   }
 
