@@ -4,6 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -24,7 +25,13 @@ export default {
         },
         columnsMeta: {
           name: {
-            formatter: null
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'GatherUserTaskDetail',
+              routeQuery: {
+                activeTab: 'Detail'
+              }
+            }
           },
           nodes: {
             formatter: function(row, column, cellValue, index) {
@@ -34,6 +41,15 @@ export default {
           periodic_display: {
             showOverflowTooltip: true,
             width: 150
+          },
+          executed_times: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'GatherUserTaskDetail',
+              routeQuery: {
+                activeTab: 'TaskExecutionList'
+              }
+            }
           },
           actions: {
             formatterArgs: {
