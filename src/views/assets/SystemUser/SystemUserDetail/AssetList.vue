@@ -91,15 +91,9 @@ export default {
         ]
       },
       headerActions: {
-        hasLeftActions: true,
         hasBulkDelete: false,
         hasImport: false,
-        hasExport: true,
         hasCreate: false,
-        hasSearch: true,
-        hasMoreActions: false,
-        moreActionsTitle: this.$t('common.More'),
-        moreActionsType: 'primary',
         extraMoreActions: [
           {
             title: this.$t('common.PushSelected'),

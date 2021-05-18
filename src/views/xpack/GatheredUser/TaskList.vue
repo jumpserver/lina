@@ -4,6 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -14,13 +15,23 @@ export default {
 
     return {
       tableConfig: {
+        name: 'TaskListTable',
         url: '/api/v1/xpack/gathered-user/tasks/',
         columns: [
           'name', 'nodes', 'periodic_display', 'executed_times', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'nodes', 'periodic_display', 'executed_times', 'actions']
+        },
         columnsMeta: {
           name: {
-            formatter: null
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'GatherUserTaskDetail',
+              routeQuery: {
+                activeTab: 'Detail'
+              }
+            }
           },
           nodes: {
             formatter: function(row, column, cellValue, index) {
@@ -30,6 +41,15 @@ export default {
           periodic_display: {
             showOverflowTooltip: true,
             width: 150
+          },
+          executed_times: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'GatherUserTaskDetail',
+              routeQuery: {
+                activeTab: 'TaskExecutionList'
+              }
+            }
           },
           actions: {
             formatterArgs: {
@@ -61,7 +81,8 @@ export default {
         hasRefresh: false,
         hasExport: false,
         hasMoreActions: false,
-        createRoute: 'GatherUserTaskCreate'
+        createRoute: 'GatherUserTaskCreate',
+        hasColumnSetting: false
       }
     }
   }

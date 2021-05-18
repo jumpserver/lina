@@ -87,7 +87,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.listTable.reloadTable()
+          this.$refs.listTable.$refs.ListTable.reloadTable()
           that.$refs.assetSelect.$refs.select2.clearSelected()
         }
       },
@@ -115,7 +115,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.listTable.reloadTable()
+          this.$refs.listTable.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
           const nodes = this.object.nodes

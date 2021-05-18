@@ -51,10 +51,12 @@ export default {
                 try {
                   await performDelete.bind(this)()
                   this.$message.success(this.$t('common.deleteSuccessMsg'))
+                  this.$router.push('/xpack/orgs/') // 返回列表
                   return done()
+                } catch (error) {
+                  this.$log.error(error)
                 } finally {
                   instance.confirmButtonLoading = false
-                  this.$router.push('/xpack/orgs/') // 返回列表
                 }
               }
             }).catch(() => {

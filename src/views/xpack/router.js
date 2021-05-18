@@ -128,7 +128,7 @@ export default {
       meta: { title: i18n.t('xpack.InterfaceSettings'), permissions: [rolec.PERM_SUPER] }
     },
     {
-      path: 'gathered-users',
+      path: 'gathered-user',
       component: empty,
       redirect: '',
       meta: { title: i18n.t('xpack.GatherUser.GatherUserList') },
@@ -137,34 +137,41 @@ export default {
           path: '',
           component: () => import('@/views/xpack/GatheredUser/index'),
           name: 'GatherUserListIndex',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/xpack/gathered-users' }
+          meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/xpack/gathered-user' }
         },
         {
           path: '',
           component: () => import('@/views/xpack/GatheredUser/GatheredUserList'),
           name: 'GatherUserList',
           hidden: true,
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserList'), activeMenu: '/xpack/gathered-users' }
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserList'), activeMenu: '/xpack/gathered-user' }
         },
         {
           path: 'tasks',
           component: () => import('@/views/xpack/GatheredUser/TaskList'),
           name: 'GatherUserTaskList',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskList'), activeMenu: '/xpack/gathered-users' },
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskList'), activeMenu: '/xpack/gathered-user' },
+          hidden: true
+        },
+        {
+          path: 'tasks/:id',
+          component: () => import('@/views/xpack/GatheredUser/TaskDetail/index'),
+          name: 'GatherUserTaskDetail',
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'), activeMenu: '/xpack/gathered-user' },
           hidden: true
         },
         {
           path: 'tasks/create',
           component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
           name: 'GatherUserTaskCreate',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'), activeMenu: '/xpack/gathered-users' },
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'), activeMenu: '/xpack/gathered-user' },
           hidden: true
         },
         {
           path: 'tasks/:id/update',
           component: () => import('@/views/xpack/GatheredUser/TaskCreateUpdate'),
           name: 'GatherUserTaskUpdate',
-          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'), action: 'update', activeMenu: '/xpack/gathered-users' },
+          meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'), action: 'update', activeMenu: '/xpack/gathered-user' },
           hidden: true
         }
       ]

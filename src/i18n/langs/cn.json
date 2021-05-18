@@ -269,7 +269,7 @@
     "MFAConfirm": "MFA 认证",
     "MFARequireForSecurity": "为了安全请输入MFA",
     "PasswordConfirm": "密码认证",
-    "PasswordRequireForSecurity": "为了安全请输入MFA",
+    "PasswordRequireForSecurity": "为了安全请输入密码",
     "Members": "成员",
     "More": "更多",
     "Message": "消息",
@@ -856,9 +856,12 @@
     "Expire": " 过期",
     "WeCom": "企业微信",
     "DingTalk": "钉钉",
+    "dingTalkTest": "测试",
+    "weComTest": "测试",
     "setting": "设置"
   },
   "tickets": {
+    "PermissionName": "授权规则名称",
     "Accept": "同意",
     "AssignedMe": "待我审批",
     "Assignee": "处理人",
@@ -1136,7 +1139,9 @@
       "GatherUserList": "收集用户",
       "GatherUserTaskCreate": "创建任务",
       "GatherUserTaskList": "任务列表",
-      "GatherUserTaskUpdate": "更新任务"
+      "GatherUserTaskUpdate": "更新任务",
+      "GatherUserTaskDetail": "任务详情",
+      "GatherUserTaskExecutionList": "任务执行列表"
     },
     "Import": "导入",
     "ImportLicense": "导入许可证",

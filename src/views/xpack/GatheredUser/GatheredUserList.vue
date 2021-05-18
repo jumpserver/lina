@@ -24,7 +24,8 @@ export default {
         url: '/api/v1/assets/gathered-users/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated'
+          'hostname', 'ip', 'username', 'date_last_login', 'present',
+          'ip_last_login', 'date_updated'
         ],
         columnsMeta: {
           hostname: {

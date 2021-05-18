@@ -5,6 +5,7 @@
       :url="url"
       :get-method="getMethod"
       :fields-meta="fieldsMeta"
+      :more-buttons="moreButtons"
       :has-detail-in-msg="false"
     />
   </IBox>
@@ -21,8 +22,24 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
+    const vm = this
     return {
       url: '/api/v1/settings/setting/?category=wecom',
+      moreButtons: [
+        {
+          title: this.$t('setting.weComTest'),
+          callback: function(value, form) {
+            vm.$axios.post(
+              '/api/v1/settings/wecom/testing/',
+              value
+            ).then(res => {
+              vm.$message.success(res['msg'])
+            }).catch(err => {
+              vm.$message.error(err['response']['data']['error'])
+            })
+          }
+        }
+      ],
       fields: [
         [
           this.$t('common.BasicInfo'),
