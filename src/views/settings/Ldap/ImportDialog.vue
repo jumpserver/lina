@@ -108,7 +108,7 @@ export default {
       }
     },
     hiddenDialog() {
-      this.$emit('update:show', false)
+      this.$emit('update:visible', false)
     }
   }
 }
