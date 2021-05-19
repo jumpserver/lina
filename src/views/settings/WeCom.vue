@@ -7,6 +7,7 @@
       :fields-meta="fieldsMeta"
       :more-buttons="moreButtons"
       :has-detail-in-msg="false"
+      :clean-form-value="cleanFormValue"
     />
   </IBox>
 </template>
@@ -56,6 +57,13 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    // 不清理的话，编辑secret，在删除提交会报错
+    cleanFormValue(data) {
+      if (!data['WECOM_SECRET']) {
+        delete data['WECOM_SECRET']
+      }
+      return data
     }
   }
 }

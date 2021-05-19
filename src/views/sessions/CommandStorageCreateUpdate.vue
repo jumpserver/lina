@@ -53,21 +53,23 @@ export default {
         return `${url}?type=${commandType}`
       },
       url: '/api/v1/terminal/command-storages/'
-
     }
   },
   computed: {
-
   },
   methods: {
     afterGetFormValue(validValues) {
+      if (!validValues?.meta?.HOSTS) {
+        return validValues
+      }
       validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
       return validValues
     },
     performSubmit(validValues) {
       const method = this.getMethod()
       validValues.meta.HOSTS = validValues.meta.HOSTS.split(',').map(item => (item.trim()))
-      return this.$axios[method](`${this.getUrl()}`, validValues)
+      const url = this.getUrl()
+      return this.$axios[method](url, validValues)
     },
     getMethod() {
       const params = this.$route.params
