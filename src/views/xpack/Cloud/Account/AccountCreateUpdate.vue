@@ -40,8 +40,8 @@ export default {
           }
         }
       },
-      updateSuccessNextRoute: { name: 'AccountList' },
-      createSuccessNextRoute: { name: 'AccountList' },
+      updateSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'AccountList' }},
+      createSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'AccountList' }},
       getUrl() {
         const params = this.$route.params
         let url = `/api/v1/xpack/cloud/accounts/`
