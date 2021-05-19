@@ -3,7 +3,7 @@
     <GenericCreateUpdateForm
       :fields="fields"
       :url="url"
-      :perform-submit="performSubmit"
+      :clean-form-value="cleanFormValue"
       :get-method="getMethod"
       :fields-meta="fieldsMeta"
       :more-buttons="moreButtons"
@@ -94,18 +94,13 @@ export default {
     getMethod() {
       return 'put'
     },
-    performSubmit(validValues) {
-      Object.keys(validValues).forEach(
-        function(key) {
-          if (validValues[key] === null) {
-            delete validValues[key]
-          }
-        }
-      )
-
-      return this.$axios['put'](`/api/v1/settings/setting/?category=email`, validValues)
+    // 不清理的话，编辑secret，在删除提交会报错
+    cleanFormValue(data) {
+      if (!data['EMAIL_HOST_PASSWORD']) {
+        delete data['EMAIL_HOST_PASSWORD']
+      }
+      return data
     }
-
   }
 
 }
