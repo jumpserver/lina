@@ -524,6 +524,7 @@
     "": "",
     "Accounts": "账号管理",
     "AssetAccount": "资产账号",
+    "ApplicationAccount": "应用账号",
     "Ticket":"工单",
     "CommandConfirm": "命令复核",
     "AdminUserCreate": "创建管理用户",

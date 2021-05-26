@@ -22,15 +22,15 @@ export default [
     ]
   },
   {
-    path: 'asset-accounts2',
+    path: 'application-accounts',
     component: empty,
     meta: { title: i18n.t('route.AssetAccount') },
     children: [
       {
         path: '',
-        name: 'AssetAccountList2',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
-        meta: { title: i18n.t('route.AssetAccount') }
+        name: 'ApplicationAccountList',
+        component: () => import('@/views/accounts/ApplicationAccount/ApplicationAccountList'),
+        meta: { title: i18n.t('route.ApplicationAccount') }
       }
     ]
   }
