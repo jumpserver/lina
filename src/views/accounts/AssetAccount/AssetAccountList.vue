@@ -15,6 +15,7 @@
         </div>
         <GenericListTable
           ref="LeftTable"
+          class="asset-table"
           :header-actions="leftTable.headerActions"
           :table-config="leftTable.tableConfig"
           @row-click="leftTable.tableConfig.rowClick"
@@ -23,6 +24,7 @@
       <el-col :span="iShowTree?8:10">
         <AssetUserTable
           ref="RightTable"
+          class="asset-user-table"
           :url="rightTable.url"
           :has-left-actions="true"
           :table-config="rightTable.tableConfig"
@@ -49,6 +51,7 @@ export default {
   data() {
     const vm = this
     return {
+      clickedRow: {},
       iShowTree: true,
       treeSetting: {
         showMenu: false,
@@ -83,8 +86,21 @@ export default {
               showOverflowTooltip: true
             }
           },
+          tableAttrs: {
+            stripe: false, // 斑马纹表格
+            border: true, // 表格边框
+            fit: true, // 宽度自适应,
+            tooltipEffect: 'dark',
+            rowClassName({ row, rowIndex }) {
+              if (row === vm.clickedRow) {
+                return 'row-clicked'
+              }
+              return ''
+            }
+          },
           rowClick: function(row, column, event) {
             vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}&latest=1`
+            vm.clickedRow = row
           }
         },
         headerActions: {
@@ -103,6 +119,15 @@ export default {
           columnsShow: {
             min: ['username', 'actions'],
             default: ['username', 'version', 'date_created', 'actions']
+          },
+          tableAttrs: {
+            stripe: false, // 斑马纹表格
+            border: false, // 表格边框
+            fit: true, // 宽度自适应,
+            tooltipEffect: 'dark',
+            rowClassName({ row, rowIndex }) {
+              return 'row-background-color'
+            }
           }
         }
       }
@@ -112,6 +137,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
+    background-color: #f5f7fa;
+  }
   .mini-button{
     width: 12px;
     float: left;
