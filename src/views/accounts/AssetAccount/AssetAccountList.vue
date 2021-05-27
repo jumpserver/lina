@@ -1,13 +1,18 @@
 <template>
   <Page>
     <el-row>
-      <el-col :span="4">
+      <el-col v-show="iShowTree" :span="iShowTree?4:0">
         <AutoDataZTree
           ref="AUtoDataZTree"
           :setting="treeSetting"
         />
       </el-col>
-      <el-col :span="12">
+      <el-col :span="iShowTree?12:14">
+        <div class="mini">
+          <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+          </div>
+        </div>
         <GenericListTable
           ref="LeftTable"
           :header-actions="leftTable.headerActions"
@@ -15,7 +20,7 @@
           @row-click="leftTable.tableConfig.rowClick"
         />
       </el-col>
-      <el-col :span="8">
+      <el-col :span="iShowTree?8:10">
         <AssetUserTable
           ref="RightTable"
           :url="rightTable.url"
@@ -34,6 +39,7 @@ import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
 import AutoDataZTree from '@/components/AutoDataZTree/index'
 import { AssetUserTable } from '@/components'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
@@ -43,6 +49,7 @@ export default {
   data() {
     const vm = this
     return {
+      iShowTree: true,
       treeSetting: {
         showMenu: false,
         showRefresh: false,
@@ -68,13 +75,20 @@ export default {
             default: ['hostname', 'ip', 'connectivity', 'platform']
           },
           columnsMeta: {
+            hostname: {
+              formatter: DetailFormatter,
+              formatterArgs: {
+                route: 'AssetDetail'
+              },
+              showOverflowTooltip: true
+            }
           },
           rowClick: function(row, column, event) {
             vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}&latest=1`
           }
         },
         headerActions: {
-          hasLeftActions: false,
+          hasLeftActions: true,
           hasCreate: false,
           hasExport: false,
           hasImport: false,
@@ -83,7 +97,7 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/asset-users/?asset_id=&latest=1`,
+        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated&latest=1`,
         tableConfig: {
           columns: ['name', 'username', 'version', 'date_created', 'actions'],
           columnsShow: {
@@ -97,6 +111,17 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  .mini-button{
+    width: 12px;
+    float: left;
+    text-align: center;
+    padding: 5px 0;
+    background-color: #1ab394;
+    border-color: #1ab394;
+    color: #FFFFFF;
+    border-radius: 3px;
+    line-height: 1.428;
+    cursor:pointer;
+  }
 </style>
