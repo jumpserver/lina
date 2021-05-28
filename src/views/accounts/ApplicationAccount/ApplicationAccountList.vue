@@ -98,6 +98,25 @@ export default {
             min: ['name', 'username', 'actions'],
             default: ['name', 'username', 'date_created', 'actions']
           },
+          columnsMeta: {
+            name: {
+              formatter: DetailFormatter,
+              formatterArgs: {
+                route: 'SystemUserDetail'
+              },
+              showOverflowTooltip: true
+            },
+            actions: {
+              formatterArgs: {
+                hasUpdate: true, // can set function(row, value)
+                hasDelete: false, // can set function(row, value)
+                hasClone: false,
+                onUpdate({ row, col }) {
+                  vm.$router.push({ name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }})
+                }
+              }
+            }
+          },
           tableAttrs: {
             stripe: false, // 斑马纹表格
             border: false, // 表格边框
