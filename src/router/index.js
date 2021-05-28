@@ -84,17 +84,6 @@ export const allRoleRoutes = [
     ]
   },
   {
-    path: '/accounts',
-    component: Layout,
-    redirect: '/accounts/asset-accounts/',
-    name: 'Accounts',
-    meta: {
-      title: i18n.t('route.Accounts'),
-      icon: 'address-book'
-    },
-    children: AccountRoutes
-  },
-  {
     path: '/users',
     component: Layout,
     redirect: '/users/users/',
@@ -121,6 +110,18 @@ export const allRoleRoutes = [
     alwaysShow: true,
     meta: { title: i18n.t('route.Applications'), icon: 'th' },
     children: ApplicationsRoute
+  },
+  {
+    path: '/accounts',
+    component: Layout,
+    redirect: '/accounts/asset-accounts/',
+    name: 'Accounts',
+    meta: {
+      licenseRequired: true,
+      title: i18n.t('route.Accounts'),
+      icon: 'address-book'
+    },
+    children: AccountRoutes
   },
   {
     path: '/perms/',
