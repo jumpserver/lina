@@ -163,27 +163,6 @@ export default {
       ]
     },
     {
-      path: 'vault',
-      component: empty,
-      redirect: '',
-      meta: { },
-      children: [
-        {
-          path: '',
-          component: () => import('@/views/xpack/Vault/VaultList.vue'),
-          name: 'VaultList',
-          meta: { title: i18n.t('xpack.Vault.Vault'), activeMenu: '/xpack/vault' }
-        },
-        {
-          path: 'create',
-          component: () => import('@/views/xpack/Vault/VaultCreate'),
-          name: 'VaultCreate',
-          meta: { title: i18n.t('xpack.Vault.Create'), activeMenu: '/xpack/vault' },
-          hidden: true
-        }
-      ]
-    },
-    {
       path: 'system-monitor',
       component: () => import('@/views/xpack/SystemMonitor/index.vue'),
       name: 'SystemMonitor',
