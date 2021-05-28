@@ -4,6 +4,7 @@
       <el-col :span="14">
         <GenericListTable
           ref="LeftTable"
+          class="application-table"
           :header-actions="leftTable.headerActions"
           :table-config="leftTable.tableConfig"
           @row-click="leftTable.tableConfig.rowClick"
@@ -12,6 +13,7 @@
       <el-col :span="10">
         <GenericListTable
           ref="RightTable"
+          class="application-user-table"
           :header-actions="rightTable.headerActions"
           :table-config="rightTable.tableConfig"
         />
@@ -23,6 +25,7 @@
 <script>
 import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
@@ -32,6 +35,7 @@ export default {
   data() {
     const vm = this
     return {
+      clickedRow: {},
       leftTable: {
         tableConfig: {
           url: '/api/v1/applications/applications/',
@@ -44,9 +48,33 @@ export default {
             default: ['name', 'category_display', 'type_display']
           },
           columnsMeta: {
+            name: {
+              formatter: DetailFormatter,
+              formatterArgs: {
+                getRoute({ row, col, cellValue }) {
+                  return {
+                    'db': 'DatabaseAppDetail', 'remote_app': 'RemoteAppDetail', 'cloud': 'KubernetesAppDetail'
+                  }[row.category]
+                }
+              },
+              showOverflowTooltip: true
+            }
+          },
+          tableAttrs: {
+            stripe: false, // 斑马纹表格
+            border: true, // 表格边框
+            fit: true, // 宽度自适应,
+            tooltipEffect: 'dark',
+            rowClassName({ row, rowIndex }) {
+              if (row === vm.clickedRow) {
+                return 'row-clicked'
+              }
+              return ''
+            }
           },
           rowClick: function(row, column, event) {
             vm.rightTable.tableConfig.url = `/api/v1/applications/application-users/?application_id=${row.id}`
+            vm.clickedRow = row
           }
         },
         headerActions: {
@@ -69,6 +97,15 @@ export default {
           columnsShow: {
             min: ['name', 'username', 'actions'],
             default: ['name', 'username', 'date_created', 'actions']
+          },
+          tableAttrs: {
+            stripe: false, // 斑马纹表格
+            border: false, // 表格边框
+            fit: true, // 宽度自适应,
+            tooltipEffect: 'dark',
+            rowClassName({ row, rowIndex }) {
+              return 'row-background-color'
+            }
           }
         },
         headerActions: {
@@ -82,5 +119,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .application-table ::v-deep .row-clicked, .application-user-table ::v-deep .row-background-color {
+    background-color: #f5f7fa;
+  }
 </style>
