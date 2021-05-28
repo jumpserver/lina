@@ -11,47 +11,6 @@ export default {
   meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true },
   children: [
     {
-      path: 'change-auth-plan',
-      component: empty,
-      meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan/plan' },
-      children: [
-        {
-          path: 'plan',
-          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanList.vue'),
-          name: 'ChangeAuthPlanList',
-          meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan/plan' }
-        },
-        {
-          path: 'plan/create',
-          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-          name: 'ChangeAuthPlanCreate',
-          meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanCreate'), activeMenu: '/xpack/change-auth-plan/plan', action: 'create' },
-          hidden: true
-        },
-        {
-          path: 'plan/:id/update',
-          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-          name: 'ChangeAuthPlanUpdate',
-          meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanUpdate'), activeMenu: '/xpack/change-auth-plan/plan', action: 'update' },
-          hidden: true
-        },
-        {
-          path: 'plan/:id',
-          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
-          name: 'ChangeAuthPlanDetail',
-          meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/xpack/change-auth-plan/plan' },
-          hidden: true
-        },
-        {
-          path: 'plan-execution/:id',
-          component: () => import('@/views/xpack/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
-          name: 'ChangeAuthPlanExecutionDetail',
-          meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/xpack/change-auth-plan/plan' },
-          hidden: true
-        }
-      ]
-    },
-    {
       path: 'cloud',
       component: empty,
       redirect: '',
