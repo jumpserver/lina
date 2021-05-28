@@ -81,7 +81,10 @@ export default {
             hostname: {
               formatter: DetailFormatter,
               formatterArgs: {
-                route: 'AssetDetail'
+                route: 'AssetDetail',
+                routeQuery: {
+                  activeTab: 'Detail'
+                }
               },
               showOverflowTooltip: true
             }

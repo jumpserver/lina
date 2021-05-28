@@ -33,5 +33,54 @@ export default [
         meta: { title: i18n.t('route.ApplicationAccount') }
       }
     ]
+  },
+  {
+    path: 'gathered-user',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('xpack.GatherUser.GatherUserList') },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/accounts/GatheredUser/index'),
+        name: 'GatherUserListIndex',
+        meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/accounts/gathered-user' }
+      },
+      {
+        path: '',
+        component: () => import('@/views/accounts/GatheredUser/GatheredUserList'),
+        name: 'GatherUserList',
+        hidden: true,
+        meta: { title: i18n.t('xpack.GatherUser.GatherUserList'), activeMenu: '/accounts/gathered-user' }
+      },
+      {
+        path: 'tasks',
+        component: () => import('@/views/accounts/GatheredUser/TaskList'),
+        name: 'GatherUserTaskList',
+        meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskList'), activeMenu: '/accounts/gathered-user' },
+        hidden: true
+      },
+      {
+        path: 'tasks/:id',
+        component: () => import('@/views/accounts/GatheredUser/TaskDetail/index'),
+        name: 'GatherUserTaskDetail',
+        meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'), activeMenu: '/accounts/gathered-user' },
+        hidden: true
+      },
+      {
+        path: 'tasks/create',
+        component: () => import('@/views/accounts/GatheredUser/TaskCreateUpdate'),
+        name: 'GatherUserTaskCreate',
+        meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'), activeMenu: '/accounts/gathered-user' },
+        hidden: true
+      },
+      {
+        path: 'tasks/:id/update',
+        component: () => import('@/views/accounts/GatheredUser/TaskCreateUpdate'),
+        name: 'GatherUserTaskUpdate',
+        meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'), action: 'update', activeMenu: '/accounts/gathered-user' },
+        hidden: true
+      }
+    ]
   }
 ]
