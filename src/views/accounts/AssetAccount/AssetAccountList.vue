@@ -118,14 +118,19 @@ export default {
       rightTable: {
         url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated&latest=1`,
         tableConfig: {
-          columns: ['name', 'username', 'version', 'date_created', 'actions'],
+          columns: ['name', 'username', 'version', 'backend', 'backend_display', 'date_created', 'actions'],
           columnsShow: {
             min: ['username', 'actions'],
-            default: ['username', 'version', 'date_created', 'actions']
+            default: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions']
+          },
+          columnsMeta: {
+            name: {
+              formatter: null
+            }
           },
           tableAttrs: {
             stripe: false, // 斑马纹表格
-            border: false, // 表格边框
+            border: true, // 表格边框
             fit: true, // 宽度自适应,
             tooltipEffect: 'dark',
             rowClassName({ row, rowIndex }) {
