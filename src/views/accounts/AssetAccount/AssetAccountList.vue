@@ -41,7 +41,7 @@ import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
 import AutoDataZTree from '@/components/AutoDataZTree/index'
 import { AssetUserTable } from '@/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
@@ -87,6 +87,26 @@ export default {
                 }
               },
               showOverflowTooltip: true
+            },
+            connectivity: {
+              label: this.$t('assets.Reachable'),
+              formatter: ChoicesFormatter,
+              formatterArgs: {
+                iconChoices: {
+                  0: 'fa-times text-danger',
+                  1: 'fa-check text-primary',
+                  2: 'fa-circle text-warning'
+                },
+                typeChange: function(val) {
+                  if (!val) {
+                    return 2
+                  }
+                  return val.status
+                },
+                hasTips: true
+              },
+              width: '90px',
+              align: 'center'
             }
           },
           tableAttrs: {
@@ -125,7 +145,8 @@ export default {
           },
           columnsMeta: {
             name: {
-              formatter: null
+              formatter: null,
+              showOverflowTooltip: true
             }
           },
           tableAttrs: {
