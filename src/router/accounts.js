@@ -16,7 +16,7 @@ export default [
         path: 'create',
         component: () => import('@/views/accounts/AssetAccount/AssetAccountCreate'),
         name: 'AssetAccountCreate',
-        meta: { title: i18n.t('accounts.Create'), activeMenu: '/accounts/asset-accounts/' },
+        meta: { title: i18n.t('common.Create'), activeMenu: '/accounts/asset-accounts/' },
         hidden: true
       }
     ]
