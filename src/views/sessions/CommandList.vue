@@ -1,17 +1,16 @@
 <template>
-  <div v-loading="loading">
-    <GenericTreeListPage
-      ref="GenericTreeListPage"
-      :table-config="tableConfig"
-      :header-actions="headerActions"
-      :tree-setting="treeSetting"
-      class="command-list-table"
-      @TreeInitFinish="checkFirstNode"
-      @TagSearch="handleTagChange"
-      @TagFilter="handleFilterChange"
-      @TagDateChange="handleDateChange"
-    />
-  </div>
+  <GenericTreeListPage
+    ref="GenericTreeListPage"
+    v-loading="loading"
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+    :tree-setting="treeSetting"
+    class="command-list-table"
+    @TreeInitFinish="checkFirstNode"
+    @TagSearch="handleTagChange"
+    @TagFilter="handleFilterChange"
+    @TagDateChange="handleDateChange"
+  />
 </template>
 
 <script>
@@ -60,7 +59,7 @@ export default {
           expandCol: {
             type: 'expand',
             prop: 'output',
-            label: '>',
+            label: '',
             formatter: OutputExpandFormatter
           },
           risk_level: {
