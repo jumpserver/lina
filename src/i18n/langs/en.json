@@ -644,7 +644,8 @@
     "Users": "Users",
     "WebFTP": "WebFTP",
     "WebTerminal": "Web Terminal",
-    "Notifications": "Notifications"
+    "Notifications": "Notifications",
+    "SiteMessageList": "Site message"
   },
   "sessions": {
     "StorageConfiguration": "Storage configuration",
@@ -1025,7 +1026,12 @@
     "MessageType": "Message Type",
     "Receivers": "Receivers",
     "Subscription": "Subscription",
-    "ChangeReceiver": "Change Receivers"
+    "ChangeReceiver": "Change Receivers",
+    "Subject": "Subject",
+    "Message": "Message",
+    "DeliveryTime": "Delivery time",
+    "HasRead": "Has read",
+    "Sender": "Sender"
   },
   "xpack": {
     "Admin": "Admin",

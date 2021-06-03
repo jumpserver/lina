@@ -646,7 +646,8 @@
     "Users": "用户管理",
     "WebFTP": "文件管理",
     "WebTerminal": "Web终端",
-    "Notifications": "通知"
+    "Notifications": "通知",
+    "SiteMessageList": "站内信"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -1031,7 +1032,12 @@
     "MessageType": "消息类型",
     "Receivers": "接收人",
     "Subscription": "消息订阅",
-    "ChangeReceiver": "修改消息接收人"
+    "ChangeReceiver": "修改消息接收人",
+    "Subject": "主题",
+    "Message": "消息",
+    "DeliveryTime": "发送时间",
+    "HasRead": "是否已读",
+    "Sender": "发送人"
   },
   "xpack": {
     "Admin": "管理员",

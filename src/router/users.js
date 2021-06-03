@@ -91,5 +91,28 @@ export default [
         hidden: true
       }
     ]
+  },
+  {
+    path: 'site-msg',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('route.SiteMessage') },
+    hidden: true,
+    children: [
+      {
+        path: '',
+        name: 'SiteMessageList',
+        component: () => import('@/views/users/SiteMsg/SiteMsgList'),
+        meta: { title: i18n.t('route.SiteMessageList'), activeMenu: '/users/users' },
+        hidden: true
+      },
+      {
+        path: ':id',
+        name: 'SiteMessageDetail',
+        component: () => import('@/views/users/SiteMsg/SiteMsgDetail'),
+        meta: { title: i18n.t('route.SiteMessageDetail'), activeMenu: '/users/users' },
+        hidden: true
+      }
+    ]
   }
 ]
