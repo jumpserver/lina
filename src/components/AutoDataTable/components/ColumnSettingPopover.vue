@@ -58,6 +58,10 @@ export default {
     minColumns: {
       type: Array,
       default: () => []
+    },
+    url: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -67,15 +71,17 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showColumnSettingPopover', () => {
-      this.showColumnSettingPopover = true
-      this.iCurrentColumns = this.currentColumns
+    this.$eventBus.$on('showColumnSettingPopover', ({ url }) => {
+      if (url === this.url) {
+        this.showColumnSettingPopover = true
+        this.iCurrentColumns = this.currentColumns
+      }
     })
   },
   methods: {
     handleColumnConfirm() {
       this.showColumnSettingPopover = false
-      this.$emit('columnsUpdate', this.iCurrentColumns)
+      this.$emit('columnsUpdate', { columns: this.iCurrentColumns, url: this.url })
     }
   }
 }

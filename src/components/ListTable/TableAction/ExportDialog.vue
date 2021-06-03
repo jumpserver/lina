@@ -115,8 +115,10 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showExportDialog', (row) => {
-      this.showExportDialog = true
+    this.$eventBus.$on('showExportDialog', ({ selectedRows, url }) => {
+      if (url === this.url) {
+        this.showExportDialog = true
+      }
     })
   },
   methods: {

@@ -1,4 +1,4 @@
-import getPageTitle from '@/utils/get-page-title'
+// import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
 import router from '@/router'
 import { Message } from 'element-ui'
@@ -15,9 +15,9 @@ function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
 }
 
-function setHeadTitle({ to, from, next }) {
-  document.title = getPageTitle(to.meta.title)
-}
+// function setHeadTitle({ to, from, next }) {
+//   document.title = getPageTitle(to.meta.title)
+// }
 
 async function checkLogin({ to, from, next }) {
   if (whiteList.indexOf(to.path) !== -1) {
@@ -145,7 +145,7 @@ export async function startup({ to, from, next }) {
 
   // set page title
   await getPublicSetting({ to, from, next })
-  await setHeadTitle({ to, from, next })
+  // await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
   await changeCurrentRoleIfNeed({ to, from, next })

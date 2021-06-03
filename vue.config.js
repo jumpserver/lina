@@ -4,12 +4,11 @@ const defaultSettings = require('./src/settings.js')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|ico|svg)(\?.*)?$/i
 
-
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'JumpServer' // page title
+const name = '' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.

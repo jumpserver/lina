@@ -1133,7 +1133,9 @@
       "GatherUserList": "Gather user",
       "GatherUserTaskCreate": "Create gather user task",
       "GatherUserTaskList": "Gather user task list",
-      "GatherUserTaskUpdate": "Update gather user task"
+      "GatherUserTaskUpdate": "Update gather user task",
+      "GatherUserTaskDetail": "Gather user detail",
+      "GatherUserTaskExecutionList": "Gather user task execution list"
     },
     "Import": "Import",
     "ImportLicense": "Import license",

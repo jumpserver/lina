@@ -1139,7 +1139,9 @@
       "GatherUserList": "收集用户",
       "GatherUserTaskCreate": "创建任务",
       "GatherUserTaskList": "任务列表",
-      "GatherUserTaskUpdate": "更新任务"
+      "GatherUserTaskUpdate": "更新任务",
+      "GatherUserTaskDetail": "任务详情",
+      "GatherUserTaskExecutionList": "任务执行列表"
     },
     "Import": "导入",
     "ImportLicense": "导入许可证",

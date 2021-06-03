@@ -207,7 +207,7 @@ export default {
           if (!d) {
             return 0
           }
-          if (!itemColData || !itemColData.length) {
+          if (typeof itemColData !== 'number' && (!itemColData || !itemColData.length)) {
             return 0
           }
           return itemColData.length
