@@ -46,7 +46,7 @@ export default {
           return callback(new Error(msg))
         }
       }
-      const secureLength = passwordRule ? passwordRule.ADMIN_USER_SECURITY_PASSWORD_MIN_LENGTH : 7
+      const secureLength = passwordRule ? passwordRule.SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH : 7
       console.log('adminuser', secureLength)
       if (value.length < secureLength) {
         return callback(new Error(i18n.t('common.password.MIN_LENGTH_ERROR', [secureLength])))
@@ -69,7 +69,7 @@ export default {
   },
   created() {
     const passwordRule = this.publicSettings.PASSWORD_RULE || {}
-    this.attrs.secureLength = passwordRule ? passwordRule.ADMIN_USER_SECURITY_PASSWORD_MIN_LENGTH : 7
+    this.attrs.secureLength = passwordRule ? passwordRule.SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH : 7
   },
   methods: {
     handleInput(value) {
