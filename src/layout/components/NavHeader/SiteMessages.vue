@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-badge :value="10" :max="99" size="mini" type="primary">
+    <el-badge :value="unread_msg_count" :max="99" size="mini" type="primary">
       <a style="color: #606266 !important; width: 30px" @click="toggleDrawer">
         <i class="el-icon-message" style="font-size: 18px" />
       </a>
@@ -28,7 +28,7 @@
             <span v-if="hoverMsgId !== msg.id" class="msg-item-head-time">
               {{ formatDate(msg.date_created) }}
             </span>
-            <div v-else class="msg-item-read-btn" @click.stop="markAsRead">
+            <div v-else class="msg-item-read-btn" @click.stop="markAsRead(msg)">
               <a>标记已读</a>
             </div>
           </div>
@@ -76,8 +76,12 @@ export default {
       messages: [],
       hoverMsgId: '',
       msgDetailVisible: false,
-      currentMsg: null
+      currentMsg: null,
+      unread_msg_count: 10
     }
+  },
+  mounted() {
+    this.enableWS()
   },
   methods: {
     handleClose() {
@@ -91,9 +95,10 @@ export default {
       this.msgDetailVisible = true
     },
     getMessages() {
-      const url = '/api/v1/notifications/site-message/?offset=0&limit=15'
+      const url = '/api/v1/notifications/site-message/?offset=0&limit=15&has_read=false'
       this.$axios.get(url).then(resp => {
         this.messages = [...resp.results]
+        this.unread_msg_count = resp.count
       })
     },
     formatDate(s) {
@@ -109,12 +114,36 @@ export default {
       }
     },
     markAsRead(msg) {
-      // Todo: 调用api，标记为已读
-      this.msgDetailVisible = false
-      this.getMessages()
+      console.log(`${msg}`)
+      const url = `/api/v1/notifications/site-message/mark_as_read/`
+      this.$axios.patch(url, { ids: [msg.id] }).then(res => {
+        this.msgDetailVisible = false
+        this.getMessages()
+      }).catch(err => {
+        this.$message(err.detail)
+      })
     },
     cancelRead() {
       this.msgDetailVisible = false
+    },
+    enableWS() {
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = '/ws/notifications/site-msg/unread-count/'
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+      this.ws = new WebSocket(wsURL)
+      this.ws.onerror = (e) => {
+        this.$messages('Connect websocket server error')
+      }
+      this.ws.onmessage = (e) => {
+        console.log(e.data)
+        const data = JSON.parse(e.data)
+        this.unread_msg_count = data.unread_count
+      }
+      this.ws.onopen = (e) => {
+        const msg = { 'refresh_every_seconds': 5 }
+        this.ws.send(JSON.stringify(msg))
+      }
     }
   }
 }
