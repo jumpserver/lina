@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-badge :value="unread_msg_count" :max="99" size="mini" type="primary">
+    <el-badge :value="unreadMsgCount" :hidden="unreadMsgCount === 0" :max="99" size="mini" type="primary">
       <a style="color: #606266 !important; width: 30px" @click="toggleDrawer">
         <i class="el-icon-message" style="font-size: 18px" />
       </a>
@@ -9,12 +9,12 @@
       :visible.sync="show"
       :before-close="handleClose"
       :modal="false"
-      title="站内信"
+      :title="$t('notifications.SiteMessage')"
       custom-class="site-msg"
       size="25%"
       @open="getMessages"
     >
-      <div class="msg-list">
+      <div v-if="unreadMsgCount !== 0" class="msg-list">
         <div
           v-for="msg of messages"
           :key="msg.id"
@@ -29,13 +29,16 @@
               {{ formatDate(msg.date_created) }}
             </span>
             <div v-else class="msg-item-read-btn" @click.stop="markAsRead(msg)">
-              <a>标记已读</a>
+              <a>{{ $t('notifications.MarkAsRead') }}</a>
             </div>
           </div>
           <div class="msg-item-txt">
             {{ msg.message }}
           </div>
         </div>
+      </div>
+      <div v-else class="no-msg">
+        {{ $t('notifications.NoUnreadMsg') }}
       </div>
     </el-drawer>
 
@@ -44,7 +47,7 @@
       :visible.sync="msgDetailVisible"
       :title="''"
       :close-on-click-modal="false"
-      :confirm-title="'标为已读'"
+      :confirm-title="$t('notifications.MarkAsRead')"
       @confirm="markAsRead(currentMsg)"
       @cancel="cancelRead"
     >
@@ -77,7 +80,7 @@ export default {
       hoverMsgId: '',
       msgDetailVisible: false,
       currentMsg: null,
-      unread_msg_count: 10
+      unreadMsgCount: 0
     }
   },
   mounted() {
@@ -98,7 +101,7 @@ export default {
       const url = '/api/v1/notifications/site-message/?offset=0&limit=15&has_read=false'
       this.$axios.get(url).then(resp => {
         this.messages = [...resp.results]
-        this.unread_msg_count = resp.count
+        this.unreadMsgCount = resp.count
       })
     },
     formatDate(s) {
@@ -129,7 +132,7 @@ export default {
     pullMsgCount() {
       const url = '/api/v1/notifications/site-message/unread-total/'
       this.$axios.get(url).then(res => {
-        this.unread_msg_count = res.total
+        this.unreadMsgCount = res.total
       }).catch(err => {
         this.$message(err.detail)
       })
@@ -233,4 +236,10 @@ export default {
   }
 }
 
+.no-msg {
+  padding-top: 20px;
+  text-align: center;
+}
+
+>>> :focus{ outline:0; }
 </style>

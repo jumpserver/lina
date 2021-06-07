@@ -1037,7 +1037,10 @@
     "Message": "消息",
     "DeliveryTime": "发送时间",
     "HasRead": "是否已读",
-    "Sender": "发送人"
+    "Sender": "发送人",
+    "MarkAsRead": "标记已读",
+    "NoUnreadMsg": "暂无未读消息",
+    "SiteMessage": "站内信"
   },
   "xpack": {
     "Admin": "管理员",

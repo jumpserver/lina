@@ -1031,7 +1031,10 @@
     "Message": "Message",
     "DeliveryTime": "Delivery time",
     "HasRead": "Has read",
-    "Sender": "Sender"
+    "Sender": "Sender",
+    "MarkAsRead": "Mark as read",
+    "NoUnreadMsg": "No unread messages",
+    "SiteMessage": "Site messages"
   },
   "xpack": {
     "Admin": "Admin",
