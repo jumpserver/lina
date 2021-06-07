@@ -81,7 +81,7 @@ export default {
     }
   },
   mounted() {
-    this.enableWS()
+    this.enablePullMsgCount()
   },
   methods: {
     handleClose() {
@@ -115,7 +115,7 @@ export default {
     },
     markAsRead(msg) {
       console.log(`${msg}`)
-      const url = `/api/v1/notifications/site-message/mark_as_read/`
+      const url = `/api/v1/notifications/site-message/mark-as-read/`
       this.$axios.patch(url, { ids: [msg.id] }).then(res => {
         this.msgDetailVisible = false
         this.getMessages()
@@ -126,24 +126,19 @@ export default {
     cancelRead() {
       this.msgDetailVisible = false
     },
-    enableWS() {
-      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
-      const port = document.location.port ? ':' + document.location.port : ''
-      const url = '/ws/notifications/site-msg/unread-count/'
-      const wsURL = scheme + '://' + document.location.hostname + port + url
-      this.ws = new WebSocket(wsURL)
-      this.ws.onerror = (e) => {
-        this.$messages('Connect websocket server error')
-      }
-      this.ws.onmessage = (e) => {
-        console.log(e.data)
-        const data = JSON.parse(e.data)
-        this.unread_msg_count = data.unread_count
-      }
-      this.ws.onopen = (e) => {
-        const msg = { 'refresh_every_seconds': 5 }
-        this.ws.send(JSON.stringify(msg))
-      }
+    pullMsgCount() {
+      const url = '/api/v1/notifications/site-message/unread-total/'
+      this.$axios.get(url).then(res => {
+        this.unread_msg_count = res.total
+      }).catch(err => {
+        this.$message(err.detail)
+      })
+    },
+    enablePullMsgCount() {
+      this.pullMsgCount()
+      setInterval(() => {
+        this.pullMsgCount()
+      }, 10000)
     }
   }
 }
