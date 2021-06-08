@@ -17,7 +17,7 @@ export default {
       tableConfig: {
         url: '/api/v1/xpack/change-auth-plan/plan/',
         columns: [
-          'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
+          'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display', 'ssh_key_strategy_display',
           'periodic_display', 'run_times', 'comment', 'actions'
         ],
         columnsMeta: {
@@ -34,6 +34,11 @@ export default {
           },
           password_strategy_display: {
             label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+            width: '220px',
+            showOverflowTooltip: true
+          },
+          ssh_key_strategy_display: {
+            label: vm.$t('xpack.ChangeAuthPlan.SSH_KEYStrategy'),
             width: '220px',
             showOverflowTooltip: true
           },
