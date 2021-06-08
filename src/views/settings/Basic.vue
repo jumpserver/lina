@@ -27,7 +27,8 @@ export default {
       fields: [
         [
           this.$t('common.BasicInfo'), [
-            'SITE_URL', 'USER_GUIDE_URL', 'FORGOT_PASSWORD_URL', globalOrgName
+            'SITE_URL', 'RDP_ADDR', 'USER_GUIDE_URL',
+            'FORGOT_PASSWORD_URL', globalOrgName
           ]
         ]
       ],
