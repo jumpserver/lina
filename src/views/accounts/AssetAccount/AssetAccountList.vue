@@ -7,10 +7,11 @@
           :setting="treeSetting"
         />
       </el-col>
-      <el-col :span="iShowTree?12:14">
+      <el-col :span="iShowTree?9:11">
         <div class="mini">
           <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
-            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" />
+            <i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
         <GenericListTable
@@ -21,12 +22,12 @@
           @row-click="leftTable.tableConfig.rowClick"
         />
       </el-col>
-      <el-col :span="iShowTree?8:10">
+      <el-col :span="iShowTree?11:13">
         <AssetUserTable
           ref="RightTable"
           class="asset-user-table"
           :url="rightTable.url"
-          :has-left-actions="true"
+          :has-left-actions="rightTable.hasLeftActions"
           :table-config="rightTable.tableConfig"
           :has-clone="false"
           :has-import="false"
@@ -41,7 +42,7 @@ import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
 import AutoDataZTree from '@/components/AutoDataZTree/index'
 import { AssetUserTable } from '@/components'
-import { ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
@@ -69,13 +70,11 @@ export default {
         tableConfig: {
           url: '/api/v1/assets/assets/',
           columns: [
-            'hostname', 'ip', 'public_ip', 'admin_user_display',
-            'protocols', 'platform', 'connectivity',
-            'created_by', 'date_created', 'comment', 'org_name'
+            'hostname', 'ip', 'protocols', 'platform', 'comment'
           ],
           columnsShow: {
-            min: ['hostname', 'ip', 'platform'],
-            default: ['hostname', 'ip', 'connectivity', 'platform']
+            min: ['hostname', 'ip'],
+            default: ['hostname', 'ip', 'platform']
           },
           columnsMeta: {
             hostname: {
@@ -88,25 +87,8 @@ export default {
               },
               showOverflowTooltip: true
             },
-            connectivity: {
-              label: this.$t('assets.Reachable'),
-              formatter: ChoicesFormatter,
-              formatterArgs: {
-                iconChoices: {
-                  0: 'fa-times text-danger',
-                  1: 'fa-check text-primary',
-                  2: 'fa-circle text-warning'
-                },
-                typeChange: function(val) {
-                  if (!val) {
-                    return 2
-                  }
-                  return val.status
-                },
-                hasTips: true
-              },
-              width: '90px',
-              align: 'center'
+            ip: {
+              showOverflowTooltip: true
             }
           },
           tableAttrs: {
@@ -127,18 +109,20 @@ export default {
           }
         },
         headerActions: {
-          hasLeftActions: true,
+          hasLeftActions: false,
           hasCreate: false,
           hasExport: false,
           hasImport: false,
           hasBulkDelete: false,
+          hasColumnSetting: true,
+          hasRefresh: true,
           hasBulkUpdate: false
         }
       },
       rightTable: {
         url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated&latest=1`,
         tableConfig: {
-          columns: ['name', 'username', 'version', 'backend', 'backend_display', 'date_created', 'actions'],
+          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions'],
           columnsShow: {
             min: ['username', 'actions'],
             default: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions']
@@ -146,11 +130,12 @@ export default {
           columnsMeta: {
             name: {
               formatter: null,
-              showOverflowTooltip: true
+              showOverflowTooltip: true,
+              sortable: false
             }
           },
           tableAttrs: {
-            stripe: false, // 斑马纹表格
+            stripe: true, // 斑马纹表格
             border: true, // 表格边框
             fit: true, // 宽度自适应,
             tooltipEffect: 'dark',
@@ -158,7 +143,8 @@ export default {
               return 'row-background-color'
             }
           }
-        }
+        },
+        hasLeftActions: false
       }
     }
   }
@@ -169,15 +155,21 @@ export default {
   .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
     background-color: #f5f7fa;
   }
+  .asset-table {
+    & >>> .table-content {
+      margin-left: 21px;
+    }
+  }
   .mini-button{
     width: 12px;
     float: left;
+    margin-right: 10px;
     text-align: center;
-    padding: 5px 0;
+    padding: 9px 0;
     background-color: #1ab394;
     border-color: #1ab394;
     color: #FFFFFF;
-    border-radius: 3px;
+    border-radius: 5px;
     line-height: 1.428;
     cursor:pointer;
   }

@@ -257,7 +257,10 @@ export default {
       return !(this.MFAVerifyAt && (now - this.MFAVerifyAt) < ttl * 1000)
     },
     iTableConfig() {
-      return Object.assign(this.defaultTableConfig, this.tableConfig)
+      const columnsMeta = Object.assign({}, this.defaultTableConfig.columnsMeta, this.tableConfig.columnsMeta || {})
+      const config = Object.assign(this.defaultTableConfig, this.tableConfig)
+      config.columnsMeta = columnsMeta
+      return config
     }
   },
   watch: {

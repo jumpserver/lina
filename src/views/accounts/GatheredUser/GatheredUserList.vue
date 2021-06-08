@@ -7,10 +7,11 @@
           :setting="treeSetting"
         />
       </el-col>
-      <el-col :span="iShowTree?12:14">
+      <el-col :span="iShowTree?9:11">
         <div class="mini">
           <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
-            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" />
+            <i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
         <GenericListTable
@@ -21,15 +22,12 @@
           @row-click="leftTable.tableConfig.rowClick"
         />
       </el-col>
-      <el-col :span="iShowTree?8:10">
-        <AssetUserTable
+      <el-col :span="iShowTree?11:13">
+        <GenericListTable
           ref="RightTable"
           class="asset-user-table"
-          :url="rightTable.url"
-          :has-left-actions="true"
+          :header-actions="rightTable.headerActions"
           :table-config="rightTable.tableConfig"
-          :has-clone="false"
-          :has-import="false"
         />
       </el-col>
     </el-row>
@@ -39,13 +37,12 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import AutoDataZTree from '@/components/AutoDataZTree/index'
-import { AssetUserTable } from '@/components'
 import { ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    AutoDataZTree, GenericListTable, AssetUserTable
+    AutoDataZTree, GenericListTable
   },
   data() {
     const vm = this
@@ -121,12 +118,12 @@ export default {
             }
           },
           rowClick: function(row, column, event) {
-            vm.rightTable.url = `/api/v1/assets/gathered-users/?asset_id=${row.id}`
+            vm.rightTable.tableConfig.url = `/api/v1/assets/gathered-users/?asset_id=${row.id}`
             vm.clickedRow = row
           }
         },
         headerActions: {
-          hasLeftActions: true,
+          hasLeftActions: false,
           hasCreate: false,
           hasExport: false,
           hasImport: false,
@@ -135,8 +132,8 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/gathered-users/?asset__hostname=ShowFirstAssetRelated`,
         tableConfig: {
+          url: `/api/v1/assets/gathered-users/?asset__hostname=ShowFirstAssetRelated`,
           columns: [
             'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated'
           ],
@@ -158,7 +155,7 @@ export default {
             }
           },
           tableAttrs: {
-            stripe: false, // 斑马纹表格
+            stripe: true, // 斑马纹表格
             border: true, // 表格边框
             fit: true, // 宽度自适应,
             tooltipEffect: 'dark',
@@ -166,6 +163,14 @@ export default {
               return 'row-background-color'
             }
           }
+        },
+        headerActions: {
+          hasLeftActions: false,
+          hasCreate: false,
+          hasExport: true,
+          hasImport: false,
+          hasBulkDelete: false,
+          hasBulkUpdate: false
         }
       }
     }
@@ -177,15 +182,21 @@ export default {
   .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
     background-color: #f5f7fa;
   }
+  .asset-table {
+    & >>> .table-content {
+      margin-left: 21px;
+    }
+  }
   .mini-button{
     width: 12px;
     float: left;
+    margin-right: 10px;
     text-align: center;
-    padding: 5px 0;
+    padding: 9px 0;
     background-color: #1ab394;
     border-color: #1ab394;
     color: #FFFFFF;
-    border-radius: 3px;
+    border-radius: 5px;
     line-height: 1.428;
     cursor:pointer;
   }

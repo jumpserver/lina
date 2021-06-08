@@ -11,13 +11,6 @@ export default [
         name: 'AssetAccountList',
         component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
         meta: { title: i18n.t('route.AssetAccount') }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountCreate'),
-        name: 'AssetAccountCreate',
-        meta: { title: i18n.t('common.Create'), activeMenu: '/accounts/asset-accounts/' },
-        hidden: true
       }
     ]
   },
