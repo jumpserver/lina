@@ -1067,6 +1067,7 @@
       "NodeAmount": "Node",
       "PasswordLength": "Password length",
       "PasswordStrategy": "Password strategy",
+      "SSH_KEYStrategy": "SSH_KEY strategy",
       "RegularlyPerform": "Regularly perform",
       "Result": "Result",
       "Retry": "Retry",
