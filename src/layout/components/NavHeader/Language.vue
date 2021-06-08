@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'Language',
   data() {
@@ -47,11 +46,22 @@ export default {
     }
   },
   mounted() {
-    if (this.currentLang.code !== this.$i18n.locale) {
-      this.changeLangTo(this.currentLang)
-    }
+    this.changeLang()
+    this.changeMomentLang()
   },
   methods: {
+    changeLang() {
+      if (this.currentLang.code !== this.$i18n.locale) {
+        this.changeLangTo(this.currentLang)
+      }
+    },
+    changeMomentLang() {
+      if (this.currentLang.code.indexOf('en') > -1) {
+        this.$moment.locale('en')
+      } else {
+        this.$moment.locale('zh-cn')
+      }
+    },
     changeLangTo(item) {
       this.$i18n.locale = item.code
       localStorage.setItem('lang', item.code)

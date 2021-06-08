@@ -64,7 +64,7 @@ export default {
     const selectedUsers = this.selectedUsers.map(item => {
       return {
         id: item.id,
-        label: `${item.name}(${item.username})`
+        label: item.name
       }
     })
     setTimeout(() => {
