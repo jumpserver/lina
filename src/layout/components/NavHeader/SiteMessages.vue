@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="msg-item-txt">
-            {{ msg.message }}
+            <span v-html="msg.message" />
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@
           </h5>
         </div>
         <div class="msg-detail-txt">
-          {{ currentMsg.message }}
+          <span v-html="currentMsg.message" />
         </div>
       </div>
     </Dialog>
