@@ -712,6 +712,7 @@
     },
     "Monitor": "Monitor",
     "sessionMonitor": "Session Monitor",
+    "XRDPNotSupport": "RDP Client session not support now",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",

@@ -713,6 +713,7 @@
       "common": "普通"
     },
     "Monitor": "监控",
+    "XRDPNotSupport": "RDP 客户端会话, 暂不支持监控",
     "sessionMonitor": "监控",
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {

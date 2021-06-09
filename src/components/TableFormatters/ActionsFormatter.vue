@@ -144,10 +144,11 @@ export default {
       let actions = [...this.defaultActions, ...this.extraActions]
       actions = _.cloneDeep(actions)
       actions = actions.map((v) => {
-        v.has = this.cleanBoolean(v, 'has')
-        v.can = this.cleanBoolean(v, 'can')
-        v.callback = this.cleanCallback(v)
+        v.has = this.cleanBoolean(v, 'has', true)
+        v.can = this.cleanBoolean(v, 'can', true)
+        v.callback = this.cleanCallback(v, 'callback')
         v.order = v.order || 100
+        v.tip = this.cleanValue(v, 'tip')
         return v
       })
       actions = actions.filter((v) => v.has)
@@ -168,15 +169,15 @@ export default {
     }
   },
   methods: {
-    cleanBoolean(item, attr) {
+    cleanBoolean(item, attr, defaults) {
       const ok = item[attr]
       if (typeof ok !== 'function') {
-        return ok === undefined ? true : ok
+        return ok === undefined ? defaults : ok
       }
-      return ok(this.row, this.cellValue)
+      return this.cleanValue(item, attr)
     },
-    cleanCallback(item) {
-      const callback = item.callback
+    cleanCallback(item, attr) {
+      const callback = item[attr]
       const attrs = {
         reload: this.reload,
         row: this.row,
@@ -185,6 +186,20 @@ export default {
         tableData: this.tableData
       }
       return () => { return callback.bind(this)(attrs) }
+    },
+    cleanValue(item, attr) {
+      const value = item[attr]
+      if (!value || typeof value !== 'function') {
+        return value
+      }
+      const attrs = {
+        reload: this.reload,
+        row: this.row,
+        col: this.col,
+        cellValue: this.cellValue,
+        tableData: this.tableData
+      }
+      return value(attrs)
     }
   }
 }
