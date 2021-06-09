@@ -14,7 +14,7 @@
       size="25%"
       @open="getMessages"
     >
-      <div v-if="unreadMsgCount !== 0" class="msg-list">
+      <div v-if="totalMsgCount !== 0" class="msg-list">
         <div
           v-for="msg of messages"
           :key="msg.id"
@@ -80,7 +80,8 @@ export default {
       hoverMsgId: '',
       msgDetailVisible: false,
       currentMsg: null,
-      unreadMsgCount: 0
+      unreadMsgCount: 0,
+      totalMsgCount: 0
     }
   },
   mounted() {
@@ -98,10 +99,11 @@ export default {
       this.msgDetailVisible = true
     },
     getMessages() {
-      const url = '/api/v1/notifications/site-message/?offset=0&limit=15&has_read=false'
+      const url = '/api/v1/notifications/site-message/?offset=0&limit=15&order=has_read,-date_created'
+      this.pullMsgCount()
       this.$axios.get(url).then(resp => {
         this.messages = [...resp.results]
-        this.unreadMsgCount = resp.count
+        this.totalMsgCount = resp.count
       })
     },
     formatDate(s) {
