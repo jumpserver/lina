@@ -67,7 +67,7 @@ export default {
       }
 
       this.$axios.patch(
-        `/api/v1/notifications/system/subscriptions/${sub.id}/`,
+        `/api/v1/notifications/system-msg-subscription/${sub.id}/`,
         { receive_backends: backends }
       ).catch(err => {
         this.$log.error(err)
@@ -78,11 +78,10 @@ export default {
     onDialogSelectSubmit(userIds) {
       this.dialogVisible = false
       this.$axios.patch(
-        `/api/v1/notifications/system/subscriptions/${this.currentEditSub.id}/`,
+        `/api/v1/notifications/system-msg-subscription/${this.currentEditSub.id}/`,
         { users: userIds }
       ).then(newSub => {
-        const msgType = this.idMessageTypeMapper[newSub.id]
-        msgType.users = newSub.users
+        const msgType = this.idMessageTypeMapper[newSub.message_type]
         msgType.receivers = newSub.receivers
       }).catch(err => {
         console.log(err)
@@ -97,40 +96,37 @@ export default {
       this.receiveBackends = await this.$axios.get('/api/v1/notifications/backends/')
     },
     async initSubscriptions() {
-      const subscriptions = await this.$axios.get('/api/v1/notifications/system/subscriptions/')
+      const subscriptions = await this.$axios.get('/api/v1/notifications/system-msg-subscription/')
 
-      // 根据 app 分组
-      const appMessageTypesMapper = {}
-      subscriptions.forEach(sub => {
-        if (!(sub.message_category in appMessageTypesMapper)) {
-          appMessageTypesMapper[sub.message_category] = {
-            id: sub.message_category,
-            value: sub.message_category_label,
-            children: [sub]
-          }
-        } else {
-          appMessageTypesMapper[sub.message_category].children.push(sub)
-        }
-      })
+      const trans_subscriptions = []
 
-      // sub 改成需要的数据结构
-      for (const app of Object.values(appMessageTypesMapper)) {
-        app.children = app.children.map(sub => {
+      for (const category of subscriptions) {
+        const children = []
+        trans_subscriptions.push({
+          id: category.category,
+          value: category.category_label,
+          children: children
+        })
+
+        for (const sub of category.children) {
           const backendsChecked = {}
           this.receiveBackends.forEach(backend => {
             backendsChecked[backend.name] = sub.receive_backends.indexOf(backend.name) > -1
           })
-          const subObj = {
-            id: sub.id,
-            value: sub.message_label,
+
+          const trans_sub = {
+            id: sub.message_type,
+            value: sub.message_type_label,
             receivers: sub.receivers,
             receive_backends: backendsChecked
           }
-          this.idMessageTypeMapper[sub.id] = subObj
-          return subObj
-        })
+          children.push(trans_sub)
+
+          this.idMessageTypeMapper[trans_sub.id] = trans_sub
+        }
       }
-      this.tableData = Object.values(appMessageTypesMapper)
+
+      this.tableData = trans_subscriptions
     }
   }
 }

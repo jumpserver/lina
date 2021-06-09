@@ -3,30 +3,26 @@
     <div class="navbar-header">
       <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     </div>
-    <div class="navbar-right">
-      <div class="header-item">
+    <ul class="navbar-right">
+      <li class="header-item header-icon">
+        <SiteMessages />
+      </li>
+      <li class="header-item" style="margin-left: 10px">
         <Help />
-      </div>
-      <div class="header-item">
+      </li>
+      <li class="header-item">
         <Language />
-      </div>
-      <div
-        v-if="
-          publicSettings.TICKETS_ENABLED
-            && publicSettings.XPACK_LICENSE_IS_VALID
-            && !isOrgAuditor
-        "
-        class="header-item"
-      >
+      </li>
+      <li v-if="showTickets" class="header-item">
         <Tickets />
-      </div>
-      <div class="header-item">
+      </li>
+      <li class="header-item">
         <WebTerminal />
-      </div>
-      <div class="header-item header-profile">
+      </li>
+      <li class="header-item header-profile">
         <AccountDropdown />
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -34,6 +30,7 @@
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
+import SiteMessages from './SiteMessages'
 import Help from './Help'
 import Language from './Language'
 import WebTerminal from './WebTerminal'
@@ -48,7 +45,8 @@ export default {
     Language,
     Help,
     Tickets,
-    WebTerminal
+    WebTerminal,
+    SiteMessages
   },
   data() {
     return {
@@ -60,13 +58,17 @@ export default {
     ]),
     isOrgAuditor() {
       return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') || rolc.getRolesDisplay(this.currentOrgRoles).includes('Auditor')
+    },
+    showTickets() {
+      return this.publicSettings.TICKETS_ENABLED &&
+        this.publicSettings.XPACK_LICENSE_IS_VALID &&
+        !this.isOrgAuditor
     }
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     }
-
   }
 }
 </script>
@@ -91,12 +93,19 @@ export default {
     .navbar-right {
       float: right;
       margin-right: 10px;
-    }
 
-    .header-item {
-      line-height: 50px;
-      display: inline-block;
-      padding-right: 20px;
+      .header-item {
+        line-height: 50px;
+        display: inline-block;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+
+      .header-icon {
+        &:hover {
+          background-color: #e6e6e6;
+        }
+      }
     }
 
     .breadcrumb-container {
@@ -107,6 +116,10 @@ export default {
   }
   .el-header {
     background-color: #ffffff;
+  }
+
+  ul {
+    margin: 0;
   }
 </style>
 

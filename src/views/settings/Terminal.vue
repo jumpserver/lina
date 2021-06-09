@@ -43,11 +43,22 @@ export default {
       url: '/api/v1/settings/setting/?category=terminal'
     }
   },
+  mounted() {
+    if (this.$store.getters.hasValidLicense) {
+      const xRDPFields = [
+        'XRDP', [
+          'TERMINAL_RDP_ADDR'
+        ]
+      ]
+      this.selectFields.splice(1, 0, xRDPFields)
+    }
+  },
   methods: {
     getMethod() {
       return 'put'
     }
   }
+
 }
 </script>
 

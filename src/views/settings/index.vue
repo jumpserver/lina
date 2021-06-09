@@ -70,6 +70,10 @@ export default {
           name: 'DingTalk'
         },
         {
+          title: this.$t('setting.SystemMessageSubscription'),
+          name: 'SystemMessageSubscription'
+        },
+        {
           title: this.$t('setting.Terminal'),
           name: 'Terminal'
         },
@@ -118,6 +122,9 @@ export default {
           break
         case 'License':
           this.activeMenu = 'License'
+          break
+        case 'SystemMessageSubscription':
+          this.activeMenu = 'SystemMessageSubscription'
           break
         default:
           this.activeMenu = 'Basic'
