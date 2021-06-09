@@ -40,10 +40,6 @@ export default {
           title: this.$t('sessions.Monitor'),
           type: 'primary',
           can: (row, cellValue) => {
-            if (row.protocol === 'rdp' ||
-            row.protocol === 'vnc') {
-              return true
-            }
             return row.can_join
           },
           callback: function({ row, tableData }) {
