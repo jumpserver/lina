@@ -92,7 +92,7 @@ export default {
                   name: 'remove',
                   type: 'warning',
                   has: hasRemove,
-                  can: function(row, cellValue) {
+                  can: ({ row }) => {
                     return row.can_delete
                   },
                   callback: this.removeUserFromOrg

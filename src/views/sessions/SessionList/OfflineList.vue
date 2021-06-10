@@ -17,7 +17,7 @@ export default {
           name: 'replay',
           title: this.$t('sessions.replay'),
           type: 'warning',
-          can: (row, cellValue) => {
+          can: ({ row, cellValue }) => {
             return row.can_replay
           },
           callback: function({ row, tableData }) {
@@ -30,7 +30,7 @@ export default {
           name: 'download',
           title: this.$t('sessions.download'),
           type: 'primary',
-          can: (row, cellValue) => {
+          can: ({ row, cellValue }) => {
             return row.can_replay
           },
           callback: function({ row, tableData }) {

@@ -19,13 +19,17 @@
           v-for="msg of messages"
           :key="msg.id"
           class="msg-item"
+          :class="msg.has_read ? 'msg-read' : 'msg-unread'"
           @mouseover="hoverMsgId = msg.id"
           @mouseleave="hoverMsgId = ''"
           @click="showMsgDetail(msg)"
         >
           <div class="msg-item-head">
-            <span class="msg-item-head-type">{{ msg.subject }}</span>
-            <span v-if="hoverMsgId !== msg.id" class="msg-item-head-time">
+            <span class="msg-item-head-type">
+              <i :class="msg.has_read ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
+              {{ msg.subject }}
+            </span>
+            <span v-if="hoverMsgId !== msg.id || msg.has_read" class="msg-item-head-time">
               {{ formatDate(msg.date_created) }}
             </span>
             <div v-else class="msg-item-read-btn" @click.stop="markAsRead(msg)">
@@ -33,7 +37,7 @@
             </div>
           </div>
           <div class="msg-item-txt">
-            {{ msg.message }}
+            <span v-html="msg.message" />
           </div>
         </div>
       </div>
@@ -59,7 +63,7 @@
           </h5>
         </div>
         <div class="msg-detail-txt">
-          {{ currentMsg.message }}
+          <span v-html="currentMsg.message" />
         </div>
       </div>
     </Dialog>
@@ -153,18 +157,20 @@ export default {
 }
 
 .msg-list {
-  padding: 0 20px 20px;
-}
-
->>> .site-msg .el-drawer__header {
-  border-bottom: solid 1px rgb(231, 234, 239);
-  margin-bottom: 0;
-  padding-top: 10px;
-  font-size: 16px;
+  padding: 0 25px 20px;
 }
 
 >>> .site-msg {
-  margin-top: 50px;
+  .el-drawer__header {
+    border-bottom: solid 1px rgb(231, 234, 239);
+    margin-bottom: 0;
+    padding-top: 10px;
+    font-size: 16px;
+  }
+
+  .el-drawer__body {
+    overflow-y: auto;
+  }
 }
 
 .msg-item {
@@ -179,6 +185,17 @@ export default {
     padding: 15px 20px 10px;
     margin: 0 -20px;
     border-bottom: 1px solid #fff;
+  }
+
+  .msg-icon {
+    font-size: 13px;
+    line-height: 13px;
+  }
+
+  &.msg-unread {
+    .msg-item-txt {
+      font-weight: bolder;
+    }
   }
 }
 
