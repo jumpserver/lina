@@ -102,41 +102,6 @@ export default [
     ]
   },
   {
-    path: 'admin-users',
-    component: empty,
-    redirect: '',
-    meta: { title: i18n.t('route.AdminUserList') },
-    children: [
-      {
-        path: '',
-        name: 'AdminUserList',
-        component: () => import('@/views/assets/AdminUser/AdminUserList'),
-        meta: { title: i18n.t('route.AdminUserList'), activeMenu: '/assets/admin-users' }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/assets/AdminUser/AdminUserCreateUpdate.vue'), // Parent router-view
-        name: 'AdminUserCreate',
-        meta: { title: i18n.t('route.AdminUserCreate'), activeMenu: '/assets/admin-users' },
-        hidden: true
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/assets/AdminUser/AdminUserCreateUpdate.vue'), // Parent router-view
-        name: 'AdminUserUpdate',
-        meta: { title: i18n.t('route.AdminUserUpdate'), activeMenu: '/assets/admin-users' },
-        hidden: true
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/assets/AdminUser/AdminUserDetail/index.vue'), // Parent router-view
-        name: 'AdminUserDetail',
-        meta: { title: i18n.t('route.AdminUserDetail'), activeMenu: '/assets/admin-users' },
-        hidden: true
-      }
-    ]
-  },
-  {
     path: 'system-users',
     component: empty,
     redirect: '',

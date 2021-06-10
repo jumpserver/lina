@@ -35,7 +35,7 @@ function getFields() {
       }
       if (form.username_same_with_user) {
         this.fieldsMeta.username.el.disabled = true
-        form.username = ''
+        form.username = '*'
       } else {
         this.fieldsMeta.username.el.disabled = false
       }

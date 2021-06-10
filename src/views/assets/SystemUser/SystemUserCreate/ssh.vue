@@ -24,11 +24,12 @@ export default {
         shell: '/bin/bash'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'protocol', 'type', 'username']],
+        [this.$t('assets.LoginOption'), ['login_mode', 'priority', 'sftp_root']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
         [this.$t('common.Auth'), ['auto_generate_key', 'update_password', 'password', 'private_key']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('common.Other'), ['sftp_root', 'comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         login_mode: fields.login_mode,

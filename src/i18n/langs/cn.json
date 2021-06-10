@@ -151,6 +151,7 @@
     "PriorityHelpMessage": "1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户",
     "Protocol": "协议",
     "Protocols": "协议组",
+    "LoginOption": "登录选项",
     "PublicIp": "公网IP",
     "Push": "推送",
     "PushSystemUserNow": "推送系统用户",

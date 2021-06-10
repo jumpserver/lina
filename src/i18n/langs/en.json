@@ -87,6 +87,7 @@
     "HardwareInfo": "Hardware info",
     "Hardware": "Hardware",
     "AccountList": "Account list",
+    "LoginOption": "Login option",
     "AssetDetail": "Asset detail",
     "AssetList": "Asset list",
     "AssetListHelpMessage": "The left side is the asset tree, right click to create, delete, and change the tree node, authorization asset is also organized as a node, and the right side is the asset under that node\n",

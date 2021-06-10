@@ -14,7 +14,6 @@ export default {
   components: { SSH, RDP, VncAndTelnet, DATABASE },
   data() {
     return {
-
     }
   },
   method: {
