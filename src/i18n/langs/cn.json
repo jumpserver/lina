@@ -385,7 +385,8 @@
       "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
     },
-    "lastCannotBeDeleteMsg": "最后一项，不能被删除"
+    "lastCannotBeDeleteMsg": "最后一项，不能被删除",
+    "InvalidJson": "不是合法 JSON"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
