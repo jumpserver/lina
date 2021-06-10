@@ -198,12 +198,14 @@
     "ipDomain": "IP(Domain)",
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
-    "Other Protocol": "Database Protocol"
+    "OtherProtocol": "Other Protocol"
   },
   "audits": {
     "Hosts": "Host",
     "RunUser": "Run user",
     "User": "User",
+    "Username": "Username",
+    "SystemUserName": "System username",
     "View": "View"
   },
   "auth": {
@@ -712,8 +714,8 @@
       "common": "common"
     },
     "Monitor": "Monitor",
-    "sessionMonitor": "Session Monitor",
     "XRDPNotSupport": "RDP Client session not support now",
+    "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",
@@ -927,6 +929,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "UserName": "Name",
     "Account": "Account",
     "Existing":"Existing",
     "Authentication": "Account",
