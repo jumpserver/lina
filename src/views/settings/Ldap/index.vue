@@ -20,6 +20,7 @@ import { testLdapSetting } from '@/api/settings'
 import ImportDialog from './ImportDialog'
 import TestLoginDialog from './TestLoginDialog'
 import { IBox } from '@/components'
+import { JsonRequired } from '@/components/DataForm/rules'
 
 export default {
   name: 'Ldap',
@@ -61,7 +62,8 @@ export default {
           el: {
             type: 'textarea'
           },
-          label: this.$t('setting.authLdapUserAttrMap')
+          label: this.$t('setting.authLdapUserAttrMap'),
+          rules: [JsonRequired]
         }
       },
       url: '/api/v1/settings/setting/?category=ldap',
@@ -121,7 +123,7 @@ export default {
 
 <style scoped>
 .listTable ::v-deep .table-action-right-side{
-  padding-top: 0px !important;
+  padding-top: 0 !important;
 }
 
 </style>

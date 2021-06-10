@@ -19,3 +19,16 @@ export default {
   RequiredChange,
   EmailCheck
 }
+
+export const JsonRequired = {
+  required: true,
+  trigger: 'change',
+  validator: (rule, value, callback) => {
+    try {
+      JSON.parse(value)
+      callback()
+    } catch (e) {
+      callback(new Error(i18n.t('common.InvalidJson')))
+    }
+  }
+}

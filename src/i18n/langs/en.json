@@ -383,7 +383,8 @@
       "SPECIAL_CHAR_REQUIRED": "Special char required",
       "MIN_LENGTH_ERROR": "Password minimum length {}"
     },
-    "lastCannotBeDeleteMsg": "The last one can't be delete"
+    "lastCannotBeDeleteMsg": "The last one can't be delete",
+    "InvalidJson": "Not a valid json format"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
