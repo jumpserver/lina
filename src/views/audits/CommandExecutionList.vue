@@ -45,12 +45,14 @@ export default {
             showOverflowTooltip: true
           },
           user: {
+            label: this.$t('common.User'),
             formatter: DisplayFormatter,
             showOverflowTooltip: true
           },
           run_as: {
             formatter: DisplayFormatter,
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            label: this.$t('assets.SystemUser')
           },
           is_finished: {
             width: '100px'
@@ -99,12 +101,12 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('audits.User'),
-              value: 'user__name'
+              label: this.$t('audits.Username'),
+              value: 'user__username'
             },
             {
-              label: this.$t('audits.RunUser'),
-              value: 'run_as__name'
+              label: this.$t('audits.RunUsername'),
+              value: 'run_as__username'
             }
           ]
         },
