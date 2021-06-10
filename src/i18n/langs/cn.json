@@ -200,13 +200,14 @@
     "HostProtocol": "主机协议",
     "DatabaseProtocol": "数据库协议",
     "OtherProtocol": "其它协议"
-
   },
   "audits": {
     "Hosts": "主机",
     "RunUser": "运行用户",
     "User": "用户",
-    "View": "查看"
+    "Username": "用户名",
+    "View": "查看",
+    "SystemUserName": "系统用户名"
   },
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
@@ -303,6 +304,7 @@
     "View": "查看",
     "Yes": "是",
     "action": "动作",
+    "User": "用户",
     "activateSelected": "激活所选",
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
@@ -385,7 +387,8 @@
       "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
     },
-    "lastCannotBeDeleteMsg": "最后一项，不能被删除"
+    "lastCannotBeDeleteMsg": "最后一项，不能被删除",
+    "InvalidJson": "不是合法 JSON"
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
@@ -930,6 +933,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "UserName": "姓名",
     "Account": "账户",
     "Authentication": "认证",
     "Comment": "备注",
