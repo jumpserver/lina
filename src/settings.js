@@ -1,6 +1,5 @@
 module.exports = {
-
-  title: 'JumpServer',
+  title: '.',
 
   /**
    * @type {boolean} true | false

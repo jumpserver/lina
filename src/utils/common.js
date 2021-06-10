@@ -88,11 +88,14 @@ export function toSafeLocalDateStr(d) {
 }
 
 export function getApiPath(that) {
-  const pagePath = that.$route.path
-  const isOrgPath = pagePath.split('/').indexOf('orgs') !== -1
-  if (isOrgPath) {
-    return `/api/v1/orgs/orgs/${pagePath.split('/').pop()}/`
+  let pagePath = that.$route.path
+  const pagePathArray = pagePath.split('/')
+  if (pagePathArray.indexOf('orgs') !== -1) {
+    pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
+  } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
+    pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
   }
+  pagePath = pagePathArray.join('/')
   return `/api/v1${pagePath}/`
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+      <ListTable ref="ListTable" :table-config="iTableConfig" :header-actions="headerActions" />
       <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
         <div v-if="MFAConfirmed">
           <el-form label-position="right" label-width="80px" :model="MFAInfo">
@@ -93,6 +93,10 @@ export default {
     hasClone: {
       type: Boolean,
       default: true
+    },
+    tableConfig: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -114,36 +118,31 @@ export default {
         password: '',
         private_key: ''
       },
-      tableConfig: {
+      defaultTableConfig: {
         url: this.url,
-        columns: [
-          {
-            prop: 'hostname',
+        columns: ['hostname', 'ip', 'username', 'version', 'date_created', 'actions'],
+        columnsMeta: {
+          'hostname': {
             label: this.$t('assets.Hostname'),
             showOverflowTooltip: true
           },
-          {
-            prop: 'ip',
+          'ip': {
             label: this.$t('assets.ip'),
             width: '120px'
           },
-          {
-            prop: 'username',
+          'username': {
             label: this.$t('assets.Username'),
             showOverflowTooltip: true
           },
-          {
-            prop: 'version',
+          'version': {
             label: this.$t('assets.Version'),
             width: '70px'
           },
-          {
-            prop: 'date_created',
+          'date_created': {
             label: this.$t('assets.date_joined'),
             formatter: DateFormatter
           },
-          {
-            prop: 'id',
+          'actions': {
             label: this.$t('common.Action'),
             align: 'center',
             width: 150,
@@ -211,7 +210,7 @@ export default {
               ]
             }
           }
-        ],
+        },
         extraQuery: {
           latest: 1
         }
@@ -256,16 +255,22 @@ export default {
       const ttl = this.publicSettings.SECURITY_MFA_VERIFY_TTL
       const now = new Date()
       return !(this.MFAVerifyAt && (now - this.MFAVerifyAt) < ttl * 1000)
+    },
+    iTableConfig() {
+      const columnsMeta = Object.assign({}, this.defaultTableConfig.columnsMeta, this.tableConfig.columnsMeta || {})
+      const config = Object.assign(this.defaultTableConfig, this.tableConfig)
+      config.columnsMeta = columnsMeta
+      return config
     }
   },
   watch: {
     url(iNew) {
-      this.$set(this.tableConfig, 'url', iNew)
+      this.$set(this.iTableConfig, 'url', iNew)
     }
   },
   mounted() {
     if (this.otherActions) {
-      const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
+      const actionColumn = this.iTableConfig.columns[this.iTableConfig.columns.length - 1]
       for (const item of this.otherActions) {
         actionColumn.formatterArgs.extraActions.push(item)
       }

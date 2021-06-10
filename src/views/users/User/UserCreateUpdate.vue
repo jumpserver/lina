@@ -59,7 +59,7 @@ export default {
         password: {
           component: UserPassword,
           hidden: (formValue) => {
-            if (formValue.password_strategy) {
+            if (formValue.password_strategy === 'custom') {
               return false
             }
             return !formValue.update_password
@@ -81,7 +81,7 @@ export default {
             }
           ],
           hidden: (formValue) => {
-            if (formValue.password_strategy) {
+            if (formValue.password_strategy === 'custom') {
               return false
             }
             return !formValue.update_password || !this.user.can_public_key_auth
@@ -148,7 +148,7 @@ export default {
   methods: {
     cleanFormValue(value) {
       const method = this.getMethod()
-      if (method === 'post' && !value.password_strategy) {
+      if (method === 'post' && value.password_strategy === 'email') {
         delete value['password']
         if (this.currentOrgIsRoot) {
           delete value['groups']

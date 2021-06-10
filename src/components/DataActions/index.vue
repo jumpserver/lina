@@ -37,12 +37,11 @@
         class="action-item"
         @click="handleClick(action)"
       >
-        <el-tooltip v-if="action.tip" effect="dark" :content="action.tip" placement="top">
-          <i v-if="action.fa" :class="'fa ' + action.fa" />{{ action.title }}
+        <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
+          <span>
+            <i v-if="action.fa" :class="'fa ' + action.fa" />{{ action.title }}
+          </span>
         </el-tooltip>
-        <span v-else>
-          <i v-if="action.fa" :class="'fa ' + action.fa" />{{ action.title }}
-        </span>
       </el-button>
     </template>
 

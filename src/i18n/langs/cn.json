@@ -522,6 +522,9 @@
   },
   "route": {
     "": "",
+    "Accounts": "账号管理",
+    "AssetAccount": "资产账号",
+    "ApplicationAccount": "应用账号",
     "Ticket":"工单",
     "CommandConfirm": "命令复核",
     "AdminUserCreate": "创建管理用户",
@@ -646,7 +649,8 @@
     "Users": "用户管理",
     "WebFTP": "文件管理",
     "WebTerminal": "Web终端",
-    "Notifications": "通知"
+    "Notifications": "通知",
+    "SiteMessageList": "站内信"
   },
   "sessions": {
     "StorageConfiguration": "存储配置",
@@ -709,6 +713,7 @@
       "common": "普通"
     },
     "Monitor": "监控",
+    "XRDPNotSupport": "RDP 客户端会话, 暂不支持监控",
     "sessionMonitor": "监控",
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {
@@ -1031,7 +1036,15 @@
     "MessageType": "消息类型",
     "Receivers": "接收人",
     "Subscription": "消息订阅",
-    "ChangeReceiver": "修改消息接收人"
+    "ChangeReceiver": "修改消息接收人",
+    "Subject": "主题",
+    "Message": "消息",
+    "DeliveryTime": "发送时间",
+    "HasRead": "是否已读",
+    "Sender": "发送人",
+    "MarkAsRead": "标记已读",
+    "NoUnreadMsg": "暂无未读消息",
+    "SiteMessage": "站内信"
   },
   "xpack": {
     "Admin": "管理员",

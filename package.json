@@ -46,6 +46,7 @@
     "lodash.set": "^4.3.2",
     "lodash.topairs": "^4.3.0",
     "lodash.values": "^4.3.0",
+    "moment": "^2.29.1",
     "moment-parseformat": "^3.0.0",
     "normalize.css": "7.0.0",
     "npm": "^7.8.0",

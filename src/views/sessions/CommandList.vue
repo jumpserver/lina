@@ -1,16 +1,16 @@
 <template>
-  <div v-loading="loading">
-    <GenericTreeListPage
-      ref="GenericTreeListPage"
-      :table-config="tableConfig"
-      :header-actions="headerActions"
-      :tree-setting="treeSetting"
-      @TreeInitFinish="checkFirstNode"
-      @TagSearch="handleTagChange"
-      @TagFilter="handleFilterChange"
-      @TagDateChange="handleDateChange"
-    />
-  </div>
+  <GenericTreeListPage
+    ref="GenericTreeListPage"
+    v-loading="loading"
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+    :tree-setting="treeSetting"
+    class="command-list-table"
+    @TreeInitFinish="checkFirstNode"
+    @TagSearch="handleTagChange"
+    @TagFilter="handleFilterChange"
+    @TagDateChange="handleDateChange"
+  />
 </template>
 
 <script>
@@ -39,6 +39,14 @@ export default {
       loading: true,
       tableConfig: {
         url: '',
+        tableAttrs: {
+          rowClassName: ({ row }) => {
+            if (row.risk_level === 5) {
+              return 'risk-command'
+            }
+            return 'command'
+          }
+        },
         columns: [
           'expandCol', 'input', 'risk_level', 'user',
           'asset', 'system_user', 'session', 'timestamp'
@@ -51,7 +59,7 @@ export default {
           expandCol: {
             type: 'expand',
             prop: 'output',
-            label: '>',
+            label: '',
             formatter: OutputExpandFormatter
           },
           risk_level: {
@@ -151,7 +159,6 @@ export default {
     }
   },
   watch: {
-
   },
   methods: {
     checkFirstNode(obj) {
@@ -203,6 +210,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.command-list-table >>> .risk-command {
+  background-color: oldlace;
+
+  tr {
+    color: white;
+  }
+}
 
 </style>
