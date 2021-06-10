@@ -85,9 +85,10 @@ export default {
     componentName() {
       const nameMapper = {
         koko: 'KoKo',
-        guacamole: 'Guacamole',
         omnidb: 'OmniDB',
-        lion: 'Lion'
+        guacamole: 'Guacamole',
+        lion: 'Lion',
+        xrdp: 'XRDP'
       }
       return nameMapper[this.componentMetric.type]
     }
