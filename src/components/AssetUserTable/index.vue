@@ -512,6 +512,14 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
+  .export-item {
+    width: 100%;
+    display: block;
+    padding: 10px 20px;
+  }
 
+  .export-form >>> .el-form-item__label {
+    line-height: 2
+  }
 </style>
