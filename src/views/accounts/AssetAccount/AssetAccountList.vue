@@ -27,6 +27,7 @@
           ref="RightTable"
           class="asset-user-table"
           :url="rightTable.url"
+          :search-exclude="rightTable.searchExclude"
           :extra-query="rightTable.extraQuery"
           :has-left-actions="rightTable.hasLeftActions"
           :table-config="rightTable.tableConfig"
@@ -149,7 +150,8 @@ export default {
             }
           }
         },
-        hasLeftActions: false
+        hasLeftActions: false,
+        searchExclude: ['hostname', 'id', 'ip']
       }
     }
   }

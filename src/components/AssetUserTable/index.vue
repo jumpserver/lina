@@ -82,6 +82,10 @@ export default {
       type: String,
       required: true
     },
+    searchExclude: {
+      type: Array,
+      default: () => []
+    },
     extraQuery: {
       type: Object,
       default: () => ({})
@@ -258,6 +262,7 @@ export default {
         hasExport: this.hasExport,
         hasSearch: true,
         searchConfig: {
+          exclude: this.searchExclude,
           options: [
             {
               label: this.$t('assets.OnlyLatestVersion'),
