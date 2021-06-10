@@ -45,6 +45,20 @@
           </el-form-item>
         </el-form>
       </Dialog>
+      <Dialog :title="$t('common.Export')" :visible.sync="showExportDialog" :destroy-on-close="true" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
+        <el-form label-position="left" style="padding-left: 50px">
+          <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
+            <el-radio-group v-model="exportTypeOption">
+              <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+            <el-radio-group v-model="exportOption">
+              <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -53,6 +67,8 @@
 import { mapGetters } from 'vuex'
 import ListTable from '@/components/ListTable/index'
 import Dialog from '@/components/Dialog'
+import { createSourceIdCache } from '@/api/common'
+import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 
 export default {
@@ -65,6 +81,22 @@ export default {
     url: {
       type: String,
       required: true
+    },
+    extraQuery: {
+      type: Object,
+      default: () => ({})
+    },
+    canExportAll: {
+      type: Boolean,
+      default: true
+    },
+    canExportSelected: {
+      type: Boolean,
+      default: true
+    },
+    canExportFiltered: {
+      type: Boolean,
+      default: true
     },
     hasLeftActions: {
       type: Boolean,
@@ -118,6 +150,11 @@ export default {
         password: '',
         private_key: ''
       },
+      selectedRows: '',
+      dialogStatus: '',
+      showExportDialog: false,
+      exportOption: 'all',
+      exportTypeOption: 'csv',
       defaultTableConfig: {
         url: this.url,
         columns: ['hostname', 'ip', 'username', 'version', 'date_created', 'actions'],
@@ -158,6 +195,7 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
+                    this.dialogStatus = 'viewAutoInfo'
                     this.MFAInfo.asset = val.row.id
                     if (!this.needMFAVerify) {
                       this.showMFADialog = true
@@ -211,9 +249,7 @@ export default {
             }
           }
         },
-        extraQuery: {
-          latest: 1
-        }
+        extraQuery: this.extraQuery || { latest: 1 }
       },
       headerActions: {
         hasLeftActions: this.hasLeftActions,
@@ -261,6 +297,39 @@ export default {
       const config = Object.assign(this.defaultTableConfig, this.tableConfig)
       config.columnsMeta = columnsMeta
       return config
+    },
+    exportOptions() {
+      return [
+        {
+          label: this.$t('common.imExport.ExportAll'),
+          value: 'all',
+          can: this.canExportAll
+        },
+        {
+          label: this.$t('common.imExport.ExportOnlySelectedItems'),
+          value: 'selected',
+          can: this.selectedRows.length > 0 && this.canExportSelected
+        },
+        {
+          label: this.$t('common.imExport.ExportOnlyFiltered'),
+          value: 'filtered',
+          can: this.tableHasQuery() && this.canExportFiltered
+        }
+      ]
+    },
+    exportTypeOptions() {
+      return [
+        {
+          label: 'CSV',
+          value: 'csv',
+          can: true
+        },
+        {
+          label: 'Excel',
+          value: 'xlsx',
+          can: true
+        }
+      ]
     }
   },
   watch: {
@@ -277,9 +346,7 @@ export default {
     }
   },
   created() {
-    if (this.handleExport) {
-      this.headerActions.handleExport = this.handleExport
-    }
+    this.headerActions.handleExport = this.handleExport || this.defaultHandleExport
     if (this.handleImport) {
       this.headerActions.handleImport = this.handleImport
     }
@@ -296,12 +363,17 @@ export default {
       ).then(
         res => {
           this.$store.dispatch('users/setMFAVerify')
-          this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
-            this.MFAConfirmed = true
-            this.MFAInfo.hostname = res.hostname
-            this.MFAInfo.password = res.password
-            this.MFAInfo.username = res.username
-          })
+          if (this.dialogStatus === 'export') {
+            this.showMFADialog = false
+            this.showExportDialog = true
+          } else {
+            this.$axios.get(`/api/v1/assets/asset-user-auth-infos/${this.MFAInfo.asset}/`).then(res => {
+              this.MFAConfirmed = true
+              this.MFAInfo.hostname = res.hostname
+              this.MFAInfo.password = res.password
+              this.MFAInfo.username = res.username
+            })
+          }
         }
       )
     },
@@ -366,6 +438,75 @@ export default {
       }
       this.showDialog = false
       this.$refs.ListTable.reloadTable()
+    },
+    tableQuery() {
+      const listTableRef = this.$refs.ListTable
+      if (!listTableRef) {
+        return {}
+      }
+      const query = listTableRef.dataTable.getQuery()
+      delete query['limit']
+      delete query['offset']
+      delete query['date_from']
+      delete query['date_to']
+      return query
+    },
+    tableHasQuery() {
+      return Object.keys(this.tableQuery()).length > 0
+    },
+    defaultHandleExport({ selectedRows }) {
+      this.selectedRows = selectedRows
+      this.dialogStatus = 'export'
+      if (!this.needMFAVerify) {
+        this.showMFADialog = false
+        this.showExportDialog = true
+      } else {
+        this.showMFADialog = true
+      }
+    },
+    downloadCsv(url) {
+      const a = document.createElement('a')
+      a.href = url
+      a.click()
+      window.URL.revokeObjectURL(url)
+    },
+    async performExport(selectRows, exportOption, q) {
+      const url = `/api/v1/assets/asset-user-auth-infos/`
+      const query = Object.assign({}, q)
+      if (exportOption === 'selected') {
+        const resources = []
+        const data = selectRows
+        for (let index = 0; index < data.length; index++) {
+          resources.push(data[index].id)
+        }
+        const spm = await createSourceIdCache(resources)
+        query['spm'] = spm.spm
+      } else if (exportOption === 'filtered') {
+        // console.log(listTableRef)
+        // console.log(listTableRef.dataTable)
+        // delete query['limit']
+        // delete query['offset']
+      }
+      query['format'] = this.exportTypeOption
+      // '/api/v1/assets/asset-users/?asset_id=940d82dd-0b84-4f61-b452-a6e08049e61c'
+      const queryStr =
+        (url.indexOf('?') > -1 ? '&' : '?') +
+        queryUtil.stringify(query, '=', '&')
+      return this.downloadCsv(url + queryStr)
+    },
+    async performExportConfirm() {
+      const listTableRef = this.$refs.ListTable
+      const query = listTableRef.dataTable.getQuery()
+      delete query['limit']
+      delete query['offset']
+      return this.performExport(this.selectedRows, this.exportOption, query)
+    },
+    async handleExportConfirm() {
+      await this.performExportConfirm()
+      this.showExportDialog = false
+    },
+    handleExportCancel() {
+      this.showExportDialog = false
     }
   }
 }

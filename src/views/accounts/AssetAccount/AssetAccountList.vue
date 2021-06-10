@@ -27,6 +27,7 @@
           ref="RightTable"
           class="asset-user-table"
           :url="rightTable.url"
+          :extra-query="rightTable.extraQuery"
           :has-left-actions="rightTable.hasLeftActions"
           :table-config="rightTable.tableConfig"
           :has-clone="false"
@@ -104,7 +105,8 @@ export default {
             }
           },
           rowClick: function(row, column, event) {
-            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}&latest=1`
+            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}`
+            vm.rightTable.extraQuery.asset_id = row.id
             vm.clickedRow = row
           }
         },
@@ -120,7 +122,10 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated&latest=1`,
+        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated`,
+        extraQuery: {
+          latest: 1
+        },
         tableConfig: {
           columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions'],
           columnsShow: {
