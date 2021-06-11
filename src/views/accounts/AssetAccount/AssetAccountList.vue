@@ -72,7 +72,7 @@ export default {
         tableConfig: {
           url: '/api/v1/assets/assets/',
           columns: [
-            'hostname', 'ip', 'protocols', 'platform', 'comment'
+            'hostname', 'ip', 'protocols', 'platform', 'comment', 'org_name'
           ],
           columnsShow: {
             min: ['hostname', 'ip'],
@@ -128,7 +128,7 @@ export default {
           latest: 1
         },
         tableConfig: {
-          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions'],
+          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'org_name', 'actions'],
           columnsShow: {
             min: ['username', 'actions'],
             default: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions']

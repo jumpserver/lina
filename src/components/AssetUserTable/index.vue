@@ -493,7 +493,6 @@ export default {
         // delete query['offset']
       }
       query['format'] = this.exportTypeOption
-      // '/api/v1/assets/asset-users/?asset_id=940d82dd-0b84-4f61-b452-a6e08049e61c'
       const queryStr =
         (url.indexOf('?') > -1 ? '&' : '?') +
         queryUtil.stringify(query, '=', '&')

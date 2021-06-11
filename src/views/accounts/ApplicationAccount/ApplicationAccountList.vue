@@ -2,21 +2,10 @@
   <Page>
     <el-row>
       <el-col :span="11">
-        <GenericListTable
-          ref="LeftTable"
-          class="application-table"
-          :header-actions="leftTable.headerActions"
-          :table-config="leftTable.tableConfig"
-          @row-click="leftTable.tableConfig.rowClick"
-        />
+        <GenericListTable ref="LeftTable" class="application-table" :header-actions="leftTable.headerActions" :table-config="leftTable.tableConfig" @row-click="leftTable.tableConfig.rowClick" />
       </el-col>
       <el-col :span="13">
-        <GenericListTable
-          ref="RightTable"
-          class="application-user-table"
-          :header-actions="rightTable.headerActions"
-          :table-config="rightTable.tableConfig"
-        />
+        <GenericListTable ref="RightTable" class="application-user-table" :header-actions="rightTable.headerActions" :table-config="rightTable.tableConfig" />
       </el-col>
     </el-row>
     <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
@@ -46,6 +35,20 @@
         </el-col>
       </el-row>
     </Dialog>
+    <Dialog :title="$t('common.Export')" :visible.sync="showExportDialog" :destroy-on-close="true" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
+      <el-form label-position="left" style="padding-left: 50px">
+        <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
+          <el-radio-group v-model="exportTypeOption">
+            <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+          <el-radio-group v-model="exportOption">
+            <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+    </Dialog>
   </Page>
 </template>
 
@@ -55,6 +58,8 @@ import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
+import { createSourceIdCache } from '@/api/common'
+import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 
 export default {
   name: 'AssetAccountList',
@@ -73,12 +78,17 @@ export default {
         username: '',
         password: ''
       },
+      selectedRows: '',
+      showExportDialog: false,
+      dialogStatus: '',
+      exportOption: 'all',
+      exportTypeOption: 'csv',
       clickedRow: {},
       leftTable: {
         tableConfig: {
           url: '/api/v1/applications/applications/',
           columns: [
-            'name', 'category_display', 'type_display', 'comment'
+            'name', 'category_display', 'type_display', 'comment', 'org_name'
           ],
           columnsShow: {
             min: ['name'],
@@ -112,6 +122,7 @@ export default {
           },
           rowClick: function(row, column, event) {
             vm.rightTable.tableConfig.url = `/api/v1/applications/application-users/?application_id=${row.id}`
+            vm.rightTable.tableConfig.extraQuery.application_id = row.id
             vm.clickedRow = row
             vm.MFAInfo.application = row.name
           }
@@ -128,8 +139,11 @@ export default {
       rightTable: {
         tableConfig: {
           url: `/api/v1/applications/application-users/?application_id=`,
+          extraQuery: {
+            application_id: ''
+          },
           columns: [
-            'name', 'username', 'username_same_with_user', 'protocol', 'login_mode', 'priority', 'comment', 'actions'
+            'name', 'username', 'username_same_with_user', 'protocol', 'login_mode', 'priority', 'comment', 'org_name', 'actions'
           ],
           columnsShow: {
             min: ['name', 'username', 'actions'],
@@ -166,6 +180,7 @@ export default {
                     title: this.$t('common.View'),
                     type: 'primary',
                     callback: function(val) {
+                      this.dialogStatus = 'viewAuthInfo'
                       this.MFAInfo.systemUser = val.row
                       if (!this.needMFAVerify) {
                         this.showMFADialog = true
@@ -196,7 +211,17 @@ export default {
         },
         headerActions: {
           hasLeftActions: false,
-          hasImport: false
+          hasImport: false,
+          handleExport({ selectedRows }) {
+            vm.selectedRows = selectedRows
+            vm.dialogStatus = 'export'
+            if (!vm.needMFAVerify) {
+              vm.showMFADialog = false
+              vm.showExportDialog = true
+            } else {
+              vm.showMFADialog = true
+            }
+          }
         }
       }
     }
@@ -214,6 +239,34 @@ export default {
       const ttl = this.publicSettings.SECURITY_MFA_VERIFY_TTL
       const now = new Date()
       return !(this.MFAVerifyAt && (now - this.MFAVerifyAt) < ttl * 1000)
+    },
+    exportOptions() {
+      return [
+        {
+          label: this.$t('common.imExport.ExportAll'),
+          value: 'all',
+          can: true
+        },
+        {
+          label: this.$t('common.imExport.ExportOnlySelectedItems'),
+          value: 'selected',
+          can: this.selectedRows.length > 0
+        }
+      ]
+    },
+    exportTypeOptions() {
+      return [
+        {
+          label: 'CSV',
+          value: 'csv',
+          can: true
+        },
+        {
+          label: 'Excel',
+          value: 'xlsx',
+          can: true
+        }
+      ]
     }
   },
   methods: {
@@ -228,13 +281,61 @@ export default {
       ).then(
         res => {
           this.$store.dispatch('users/setMFAVerify')
-          this.$axios.get(`/api/v1/assets/system-users/${this.MFAInfo.systemUser.id}/auth-info/`).then(res => {
-            this.MFAConfirmed = true
-            this.MFAInfo.username = res.username
-            this.MFAInfo.password = res.password
-          })
+          if (this.dialogStatus === 'export') {
+            this.showMFADialog = false
+            this.showExportDialog = true
+          } else {
+            this.$axios.get(`/api/v1/assets/system-users/${this.MFAInfo.systemUser.id}/auth-info/`).then(res => {
+              this.MFAConfirmed = true
+              this.MFAInfo.username = res.username
+              this.MFAInfo.password = res.password
+            })
+          }
         }
       )
+    },
+    downloadCsv(url) {
+      const a = document.createElement('a')
+      a.href = url
+      a.click()
+      window.URL.revokeObjectURL(url)
+    },
+    async performExport(selectRows, exportOption, q) {
+      const url = `/api/v1/applications/application-user-auth-infos/`
+      const query = Object.assign({}, q)
+      if (exportOption === 'selected') {
+        const resources = []
+        const data = selectRows
+        for (let index = 0; index < data.length; index++) {
+          resources.push(data[index].id)
+        }
+        const spm = await createSourceIdCache(resources)
+        query['spm'] = spm.spm
+      } else if (exportOption === 'filtered') {
+        // console.log(listTableRef)
+        // console.log(listTableRef.dataTable)
+        // delete query['limit']
+        // delete query['offset']
+      }
+      query['format'] = this.exportTypeOption
+      const queryStr =
+        (url.indexOf('?') > -1 ? '&' : '?') +
+        queryUtil.stringify(query, '=', '&')
+      return this.downloadCsv(url + queryStr)
+    },
+    async performExportConfirm() {
+      const listTableRef = this.$refs.RightTable.$refs.ListTable
+      const query = listTableRef.dataTable.getQuery()
+      delete query['limit']
+      delete query['offset']
+      return this.performExport(this.selectedRows, this.exportOption, query)
+    },
+    async handleExportConfirm() {
+      await this.performExportConfirm()
+      this.showExportDialog = false
+    },
+    handleExportCancel() {
+      this.showExportDialog = false
     }
   }
 }
@@ -243,5 +344,15 @@ export default {
 <style lang="scss" scoped>
   .application-table ::v-deep .row-clicked, .application-user-table ::v-deep .row-background-color {
     background-color: #f5f7fa;
+  }
+
+  .export-item {
+    width: 100%;
+    display: block;
+    padding: 10px 20px;
+  }
+
+  .export-form >>> .el-form-item__label {
+    line-height: 2
   }
 </style>
