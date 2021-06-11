@@ -213,6 +213,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",
     "CustomCol":"Custom table col",
