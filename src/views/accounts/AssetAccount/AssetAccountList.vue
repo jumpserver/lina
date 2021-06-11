@@ -54,7 +54,7 @@ export default {
   data() {
     const vm = this
     return {
-      clickedRow: {},
+      clickedRow: null,
       iShowTree: true,
       treeSetting: {
         showMenu: false,
@@ -142,7 +142,7 @@ export default {
           },
           tableAttrs: {
             stripe: true, // 斑马纹表格
-            border: true, // 表格边框
+            border: false, // 表格边框
             fit: true, // 宽度自适应,
             tooltipEffect: 'dark',
             rowClassName({ row, rowIndex }) {
@@ -163,6 +163,9 @@ export default {
     background-color: #f5f7fa;
   }
   .asset-table {
+    &:hover {
+      cursor: pointer;
+    }
     & >>> .table-content {
       margin-left: 21px;
     }
