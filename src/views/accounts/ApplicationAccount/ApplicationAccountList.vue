@@ -346,6 +346,12 @@ export default {
     background-color: #f5f7fa;
   }
 
+  .application-table {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   .export-item {
     width: 100%;
     display: block;
