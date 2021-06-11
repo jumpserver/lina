@@ -214,6 +214,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ConnectWebSocketError": "连接 WebSocket 失败",
     "Action": "动作",
     "RequestTickets": "申请工单",
     "Actions": "操作",

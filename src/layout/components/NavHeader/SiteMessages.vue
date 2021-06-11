@@ -121,7 +121,6 @@ export default {
       }
     },
     markAsRead(msg) {
-      console.log(`${msg}`)
       const url = `/api/v1/notifications/site-message/mark-as-read/`
       this.$axios.patch(url, { ids: [msg.id] }).then(res => {
         this.msgDetailVisible = false
@@ -133,19 +132,27 @@ export default {
     cancelRead() {
       this.msgDetailVisible = false
     },
-    pullMsgCount() {
-      const url = '/api/v1/notifications/site-message/unread-total/'
-      this.$axios.get(url).then(res => {
-        this.unreadMsgCount = res.total
-      }).catch(err => {
-        this.$message(err.detail)
-      })
-    },
     enablePullMsgCount() {
-      this.pullMsgCount()
-      setInterval(() => {
-        this.pullMsgCount()
-      }, 10000)
+      const ws = new WebSocket(`ws://localhost:9528/ws/notifications/site-msg/`)
+      ws.onopen = (event) => {
+        this.$log.debug('Websocket connected: ', event)
+      }
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          this.$log.debug('Data: ', data)
+          const unreadCount = data['unread_count']
+          if (unreadCount !== undefined) {
+            this.unreadMsgCount = unreadCount
+          }
+        } catch (e) {
+          this.$log.debug('Recv site message error')
+        }
+      }
+      ws.onerror = (error) => {
+        this.$message.error(this.$t('common.ConnectWebSocketError'))
+        this.$log.debug('site message ws error: ', error)
+      }
     }
   }
 }
