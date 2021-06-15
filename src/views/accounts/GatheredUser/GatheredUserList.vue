@@ -183,6 +183,9 @@ export default {
     background-color: #f5f7fa;
   }
   .asset-table {
+    &:hover {
+      cursor: pointer;
+    }
     & >>> .table-content {
       margin-left: 21px;
     }

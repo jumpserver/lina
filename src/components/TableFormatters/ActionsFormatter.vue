@@ -1,5 +1,5 @@
 <template>
-  <ActionsGroup :size="'mini'" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" />
+  <ActionsGroup v-loading="loadingStatus" :size="'mini'" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" />
 </template>
 
 <script>
@@ -147,6 +147,7 @@ export default {
         v.has = this.cleanBoolean(v, 'has', true)
         v.can = this.cleanBoolean(v, 'can', true)
         v.callback = this.cleanCallback(v, 'callback')
+        v.fa = this.cleanValue(v, 'fa')
         v.order = v.order || 100
         v.tip = this.cleanValue(v, 'tip')
         return v
@@ -166,6 +167,9 @@ export default {
         return []
       }
       return this.cleanedActions.slice(1, this.cleanedActions.length)
+    },
+    loadingStatus() {
+      return this.col.formatterArgs.loading
     }
   },
   methods: {

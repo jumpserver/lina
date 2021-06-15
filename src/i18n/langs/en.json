@@ -198,12 +198,14 @@
     "ipDomain": "IP(Domain)",
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
-    "Other Protocol": "Database Protocol"
+    "OtherProtocol": "Other Protocol"
   },
   "audits": {
     "Hosts": "Host",
     "RunUser": "Run user",
     "User": "User",
+    "Username": "Username",
+    "SystemUserName": "System username",
     "View": "View"
   },
   "auth": {
@@ -211,6 +213,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",
     "CustomCol":"Custom table col",
@@ -383,7 +386,8 @@
       "SPECIAL_CHAR_REQUIRED": "Special char required",
       "MIN_LENGTH_ERROR": "Password minimum length {}"
     },
-    "lastCannotBeDeleteMsg": "The last one can't be delete"
+    "lastCannotBeDeleteMsg": "The last one can't be delete",
+    "InvalidJson": "Not a valid json format"
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
@@ -711,8 +715,8 @@
       "common": "common"
     },
     "Monitor": "Monitor",
-    "sessionMonitor": "Session Monitor",
     "XRDPNotSupport": "RDP Client session not support now",
+    "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",
@@ -926,6 +930,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "UserName": "Name",
     "Account": "Account",
     "Existing":"Existing",
     "Authentication": "Account",

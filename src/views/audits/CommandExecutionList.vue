@@ -99,12 +99,12 @@ export default {
         searchConfig: {
           options: [
             {
-              label: this.$t('audits.User'),
-              value: 'user__name'
+              label: this.$t('audits.Username'),
+              value: 'user__username'
             },
             {
-              label: this.$t('audits.RunUser'),
-              value: 'run_as__name'
+              label: this.$t('audits.SystemUserName'),
+              value: 'run_as__username'
             }
           ]
         },
