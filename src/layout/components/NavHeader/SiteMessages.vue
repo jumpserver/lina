@@ -133,7 +133,12 @@ export default {
       this.msgDetailVisible = false
     },
     enablePullMsgCount() {
-      const ws = new WebSocket(`ws://localhost:9528/ws/notifications/site-msg/`)
+      const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
+      const port = document.location.port ? ':' + document.location.port : ''
+      const url = '/ws/notifications/site-msg/'
+      const wsURL = scheme + '://' + document.location.hostname + port + url
+
+      const ws = new WebSocket(wsURL)
       ws.onopen = (event) => {
         this.$log.debug('Websocket connected: ', event)
       }
