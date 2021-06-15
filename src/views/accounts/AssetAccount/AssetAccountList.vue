@@ -27,6 +27,8 @@
           ref="RightTable"
           class="asset-user-table"
           :url="rightTable.url"
+          :search-exclude="rightTable.searchExclude"
+          :extra-query="rightTable.extraQuery"
           :has-left-actions="rightTable.hasLeftActions"
           :table-config="rightTable.tableConfig"
           :has-clone="false"
@@ -52,7 +54,7 @@ export default {
   data() {
     const vm = this
     return {
-      clickedRow: {},
+      clickedRow: null,
       iShowTree: true,
       treeSetting: {
         showMenu: false,
@@ -70,7 +72,7 @@ export default {
         tableConfig: {
           url: '/api/v1/assets/assets/',
           columns: [
-            'hostname', 'ip', 'protocols', 'platform', 'comment'
+            'hostname', 'ip', 'protocols', 'platform', 'comment', 'org_name'
           ],
           columnsShow: {
             min: ['hostname', 'ip'],
@@ -104,7 +106,8 @@ export default {
             }
           },
           rowClick: function(row, column, event) {
-            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}&latest=1`
+            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}`
+            vm.rightTable.extraQuery.asset_id = row.id
             vm.clickedRow = row
           }
         },
@@ -120,9 +123,12 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated&latest=1`,
+        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated`,
+        extraQuery: {
+          latest: 1
+        },
         tableConfig: {
-          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions'],
+          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'org_name', 'actions'],
           columnsShow: {
             min: ['username', 'actions'],
             default: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions']
@@ -136,7 +142,7 @@ export default {
           },
           tableAttrs: {
             stripe: true, // 斑马纹表格
-            border: true, // 表格边框
+            border: false, // 表格边框
             fit: true, // 宽度自适应,
             tooltipEffect: 'dark',
             rowClassName({ row, rowIndex }) {
@@ -144,7 +150,8 @@ export default {
             }
           }
         },
-        hasLeftActions: false
+        hasLeftActions: false,
+        searchExclude: ['hostname', 'id', 'ip']
       }
     }
   }
@@ -156,6 +163,9 @@ export default {
     background-color: #f5f7fa;
   }
   .asset-table {
+    &:hover {
+      cursor: pointer;
+    }
     & >>> .table-content {
       margin-left: 21px;
     }
