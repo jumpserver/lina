@@ -524,6 +524,11 @@
     "userGroupCount": "用户组数量",
     "usersAndUserGroups": "用户或用户组"
   },
+  "accounts": {
+    "PleaseClickLeftAssetToViewAssetAccount": "资产账号列表，点击左侧资产进行查看",
+    "PleaseClickLeftApplicationToViewApplicationAccount": "应用账号列表，点击左侧应用进行查看",
+    "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看"
+  },
   "route": {
     "": "",
     "Accounts": "账号管理",
