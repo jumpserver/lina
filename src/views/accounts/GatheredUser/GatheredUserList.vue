@@ -135,7 +135,7 @@ export default {
         tableConfig: {
           url: `/api/v1/assets/gathered-users/?asset__hostname=ShowFirstAssetRelated`,
           columns: [
-            'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated'
+            'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated', 'org_name'
           ],
           columnsShow: {
             min: ['username'],
