@@ -729,6 +729,7 @@
     }
   },
   "setting": {
+    "InsecureCommandNotifyToSubscription": "危险命令通知已升级到消息订阅中，支持更多通知方式",
     "ApiKeyList": "API Key 列表",
     "AssetCount": "资产数量",
     "Basic": "基本设置",

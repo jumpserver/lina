@@ -12,6 +12,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import { Link } from '@/components/FormFields'
 
 export default {
   name: 'Security',
@@ -46,20 +47,20 @@ export default {
         [
           this.$t('setting.InsecureCommandAlert'),
           [
-            'SECURITY_INSECURE_COMMAND', 'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER'
+            'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER'
           ]
         ]
       ],
       fieldsMeta: {
-        // 'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER': {
-        //   component: Link,
-        //   helpText: '',
-        //   label: this.$t('common.Receivers'),
-        //   el: {
-        //     href: '/ui/#/settings?activeTab=SystemMessageSubscription',
-        //     title: this.$t('setting.insecureCommandEmailUpdate')
-        //   }
-        // }
+        'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER': {
+          component: Link,
+          helpText: this.$t('setting.InsecureCommandNotifyToSubscription'),
+          label: this.$t('common.Receivers'),
+          el: {
+            href: '/ui/#/settings?activeTab=SystemMessageSubscription',
+            title: this.$t('setting.insecureCommandEmailUpdate')
+          }
+        }
       },
       url: '/api/v1/settings/setting/?category=security'
     }

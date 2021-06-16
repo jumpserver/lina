@@ -727,6 +727,7 @@
     }
   },
   "setting": {
+    "InsecureCommandNotifyToSubscription": "Insecure command notification setting, change to system message subscription, support more notify method",
     "ApiKeyList": "Api key list",
     "AssetCount": "Asset count",
     "Basic": "Basic setting",
