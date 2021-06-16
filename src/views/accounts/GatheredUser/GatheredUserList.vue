@@ -22,13 +22,25 @@
           @row-click="leftTable.tableConfig.rowClick"
         />
       </el-col>
-      <el-col :span="iShowTree?11:13">
+      <el-col :span="1">
+        <div v-show="isShowArrow" class="midArrow">
+          <div class="arrowWrap" :style="{top:`${top}px`}">
+            <div class="arrowR" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="iShowTree?(isShowArrow ? 10 : 11):(isShowArrow ? 12 : 13)">
         <GenericListTable
+          v-if="!isInit"
           ref="RightTable"
           class="asset-user-table"
           :header-actions="rightTable.headerActions"
           :table-config="rightTable.tableConfig"
         />
+        <div v-else class="noDataR">
+          <div>用户收集列表</div>
+          <div>点击左侧资产进行查看</div>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -47,6 +59,9 @@ export default {
   data() {
     const vm = this
     return {
+      isShowArrow: false,
+      top: '',
+      isInit: true,
       clickedRow: {},
       iShowTree: true,
       treeSetting: {
@@ -58,6 +73,8 @@ export default {
         callback: {
           onSelected: function(event, treeNode) {
             vm.leftTable.tableConfig.url = `/api/v1/assets/assets/?node_id=${treeNode.meta.node.id}`
+            vm.isShowArrow = false
+            vm.isInit = true
           }
         }
       },
@@ -83,6 +100,9 @@ export default {
                 }
               },
               showOverflowTooltip: true
+            },
+            ip: {
+              minWidth: '100px'
             },
             connectivity: {
               label: this.$t('assets.Reachable'),
@@ -120,6 +140,9 @@ export default {
           rowClick: function(row, column, event) {
             vm.rightTable.tableConfig.url = `/api/v1/assets/gathered-users/?asset_id=${row.id}`
             vm.clickedRow = row
+            vm.isShowArrow = true
+            vm.isInit = false
+            vm.top = 40 * row.index + 46
           }
         },
         headerActions: {
@@ -189,6 +212,12 @@ export default {
     & >>> .table-content {
       margin-left: 21px;
     }
+    & ::v-deep .el-table__row{
+      height: 40px;
+      & > td{
+        padding: 0;
+      }
+    }
   }
   .mini-button{
     width: 12px;
@@ -202,5 +231,36 @@ export default {
     border-radius: 5px;
     line-height: 1.428;
     cursor:pointer;
+  }
+  .midArrow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //margin-top: 30vh;
+    width: 40px;
+    height: 120px;
+    position: relative;
+    .arrowWrap{
+      position: absolute;
+      left: 6px;
+      top: 20px;
+      background: linear-gradient(to left,#f3f3f4,#999);
+      .arrowR{
+        width: 0;
+        height: 0;
+        border-top:60px solid #f3f3f4 ;
+        border-right:40px solid transparent ;
+        border-bottom:60px solid #f3f3f4 ;
+      }
+    }
+  }
+  .noDataR{
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-direction: column;
   }
 </style>

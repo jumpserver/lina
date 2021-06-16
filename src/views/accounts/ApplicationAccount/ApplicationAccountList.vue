@@ -4,8 +4,19 @@
       <el-col :span="11">
         <GenericListTable ref="LeftTable" class="application-table" :header-actions="leftTable.headerActions" :table-config="leftTable.tableConfig" @row-click="leftTable.tableConfig.rowClick" />
       </el-col>
-      <el-col :span="13">
-        <GenericListTable ref="RightTable" class="application-user-table" :header-actions="rightTable.headerActions" :table-config="rightTable.tableConfig" />
+      <el-col :span="1">
+        <div v-show="isShowArrow" class="midArrow">
+          <div class="arrowWrap" :style="{top:`${top}px`}">
+            <div class="arrowR" />
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <GenericListTable v-if="isShowArrow" ref="RightTable" class="application-user-table" :header-actions="rightTable.headerActions" :table-config="rightTable.tableConfig" />
+        <div v-else class="noDataR">
+          <div>资产账号列表</div>
+          <div>点击左侧资产进行查看</div>
+        </div>
       </el-col>
     </el-row>
     <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
@@ -69,6 +80,8 @@ export default {
   data() {
     const vm = this
     return {
+      top: '',
+      isShowArrow: false,
       showMFADialog: false,
       MFAConfirmed: false,
       MFAInput: '',
@@ -125,6 +138,8 @@ export default {
             vm.rightTable.tableConfig.extraQuery.application_id = row.id
             vm.clickedRow = row
             vm.MFAInfo.application = row.name
+            vm.isShowArrow = true
+            vm.top = 40 * row.index + 47
           }
         },
         headerActions: {
@@ -350,6 +365,12 @@ export default {
     &:hover {
       cursor: pointer;
     }
+    & ::v-deep .el-table__row{
+      height: 40px;
+      & > td{
+        padding: 0;
+      }
+    }
   }
 
   .export-item {
@@ -361,4 +382,36 @@ export default {
   .export-form >>> .el-form-item__label {
     line-height: 2
   }
+  .midArrow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //margin-top: 30vh;
+    width: 40px;
+    height: 120px;
+    position: relative;
+    .arrowWrap{
+      position: absolute;
+      left: 6px;
+      top: 20px;
+      background: linear-gradient(to left,#f3f3f4,#999);
+      .arrowR{
+        width: 0;
+        height: 0;
+        border-top:60px solid #f3f3f4 ;
+        border-right:40px solid transparent ;
+        border-bottom:60px solid #f3f3f4 ;
+      }
+    }
+  }
+  .noDataR{
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 20px;
+  }
+
 </style>

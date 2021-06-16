@@ -1237,6 +1237,7 @@ export default {
       return tmp
     },
     rowClassName(...args) {
+      args[0].row.index = args[0].rowIndex
       let rcn =
         this.tableAttrs.rowClassName || this.tableAttrs['row-class-name'] || ''
       if (typeof rcn === 'function') rcn = rcn(...args)
