@@ -9,6 +9,8 @@ export const azure = 'azure'
 export const azure_international = 'azure_international'
 export const vmware = 'vmware'
 export const nutanix = 'nutanix'
+export const qingyun_private = 'qingyun_private'
+export const huawei_private = 'huawei_private'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
@@ -55,5 +57,15 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: nutanix,
     title: 'Nutanix',
     attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
+  },
+  [qingyun_private]: {
+    name: qingyun_private,
+    title: i18n.t('xpack.Cloud.QingyunPrivatecloud'),
+    attrs: ['access_key_id', 'access_key_secret', 'api_endpoint']
+  },
+  [huawei_private]: {
+    name: huawei_private,
+    title: i18n.t('xpack.Cloud.HuaweiPrivatecloud'),
+    attrs: ['sc_username', 'sc_password', 'domain_name', 'oc_username', 'oc_password', 'api_endpoint']
   }
 }

@@ -1107,6 +1107,8 @@
     "Cloud": {
       "Aliyun": "阿里云",
       "Qcloud": "腾讯云",
+      "QingyunPrivatecloud": "青云私有云",
+      "HuaweiPrivatecloud": "华为私有云",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",
       "HuaweiCloud": "华为云",
