@@ -49,14 +49,8 @@ export default {
             return ''
           },
           callback: function({ row, tableData }) {
-            // 跳转到luna页面
-            if (row.protocol === 'rdp' || row.protocol === 'vnc') {
-              const rdpUrl = '/lion/monitor/?session=' + row.id
-              window.open(rdpUrl, '_blank', 'location=no')
-              return true
-            }
-            const joinUrl = '/luna/join/?shareroom=' + row.id
-            window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+            const monitorUrl = '/luna/monitor/' + row.id + '/'
+            window.open(monitorUrl, '_blank', 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
           }
         }
       ]
