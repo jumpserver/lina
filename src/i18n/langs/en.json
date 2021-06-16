@@ -21,6 +21,12 @@
     "apply_login_user": "Apply login user",
     "RuleDetail": "Rule detail"
   },
+  "accounts": {
+    "AssetAccountList": "Asset account list",
+    "PleaseClickOnTheLeftAssetLineToView": "Please click on the left asset line to view",
+    "GatherUserList": "Gather user list",
+    "ApplicationAccountList": "Application account list"
+  },
   "applications": {
     "": "",
     "RemoteApp": "Remote app",
