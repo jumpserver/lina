@@ -170,7 +170,10 @@ export default {
           hasExport: true,
           hasImport: false,
           hasBulkDelete: false,
-          hasBulkUpdate: false
+          hasBulkUpdate: false,
+          searchConfig: {
+            exclude: ['asset']
+          }
         }
       }
     }
