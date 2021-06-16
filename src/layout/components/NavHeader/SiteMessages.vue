@@ -225,7 +225,7 @@ export default {
 
   .msg-item-head-type {
     float: left;
-    width: 120px;
+    width: 240px;
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: middle;
