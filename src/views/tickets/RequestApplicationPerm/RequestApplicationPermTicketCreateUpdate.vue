@@ -1,5 +1,6 @@
 <template>
   <GenericCreateUpdatePage
+    v-if="!loading"
     v-bind="$data"
     :perform-submit="performSubmit"
     :create-success-next-route="createSuccessNextRoute"
@@ -23,6 +24,7 @@ export default {
     const date_start = now.toISOString()
     return {
       hasDetailInMsg: false,
+      loading: true,
       initial: {
         ips_or_not: true,
         meta: {
@@ -30,14 +32,13 @@ export default {
           apply_date_start: date_start,
           apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
         },
-        org_id: '00000000-0000-0000-0000-000000000002', // 默认为Default 组织
+        org_id: '',
         type: 'apply_application'
 
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
         [this.$t('tickets.RequestPerm'), ['meta']]
-
       ],
       fieldsMeta: {
         type: {
@@ -166,6 +167,12 @@ export default {
         name: 'TicketList'
       }
     }
+  },
+  mounted() {
+    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
+      this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
+    }
+    this.loading = false
   },
   methods: {
     performSubmit(validValues) {

@@ -18,7 +18,7 @@ export default {
         url: '/api/v1/xpack/change-auth-plan/plan/',
         columns: [
           'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
-          'periodic_display', 'run_times', 'comment', 'actions'
+          'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
         ],
         columnsMeta: {
           username: {
