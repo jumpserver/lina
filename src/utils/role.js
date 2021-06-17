@@ -80,6 +80,11 @@ export function hasUserPagePerm(userPerm) {
 }
 
 export function hasPerm(source, target) {
+  if (target === null) {
+    return true
+  } else if (source === null) {
+    return false
+  }
   if (typeof source !== 'object') {
     source = [source]
   }
