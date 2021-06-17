@@ -1,5 +1,10 @@
 {
   "": "",
+  "accounts": {
+    "PleaseClickLeftAssetToViewAssetAccount": "Asset account list, please click on the assets on the left to view",
+    "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
+    "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list， please click on the assets on the left to view"
+  },
   "acl": {
     "name": "Name",
     "username": "Username",

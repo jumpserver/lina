@@ -5,7 +5,12 @@
         <GenericListTable ref="LeftTable" class="application-table" :header-actions="leftTable.headerActions" :table-config="leftTable.tableConfig" @row-click="leftTable.tableConfig.rowClick" />
       </el-col>
       <el-col :span="13">
-        <GenericListTable ref="RightTable" class="application-user-table" :header-actions="rightTable.headerActions" :table-config="rightTable.tableConfig" />
+        <GenericListTable v-if="!isInit" ref="RightTable" class="application-user-table" :header-actions="rightTable.headerActions" :table-config="rightTable.tableConfig" />
+        <div v-else class="noDataR">
+          <div class="hintWrap">
+            <div>{{ $t('accounts.PleaseClickLeftApplicationToViewApplicationAccount') }}</div>
+          </div>
+        </div>
       </el-col>
     </el-row>
     <Dialog v-if="showMFADialog" width="50" :title="this.$t('common.MFAConfirm')" :visible.sync="showMFADialog" :show-confirm="false" :show-cancel="false" :destroy-on-close="true">
@@ -69,6 +74,7 @@ export default {
   data() {
     const vm = this
     return {
+      isInit: true,
       showMFADialog: false,
       MFAConfirmed: false,
       MFAInput: '',
@@ -125,6 +131,7 @@ export default {
             vm.rightTable.tableConfig.extraQuery.application_id = row.id
             vm.clickedRow = row
             vm.MFAInfo.application = row.name
+            vm.isInit = false
           }
         },
         headerActions: {
@@ -319,8 +326,8 @@ export default {
       }
       query['format'] = this.exportTypeOption
       const queryStr =
-        (url.indexOf('?') > -1 ? '&' : '?') +
-        queryUtil.stringify(query, '=', '&')
+          (url.indexOf('?') > -1 ? '&' : '?') +
+          queryUtil.stringify(query, '=', '&')
       return this.downloadCsv(url + queryStr)
     },
     async performExportConfirm() {
@@ -350,6 +357,12 @@ export default {
     &:hover {
       cursor: pointer;
     }
+    & ::v-deep .el-table__row{
+      height: 40px;
+      & > td{
+        padding: 0;
+      }
+    }
   }
 
   .export-item {
@@ -361,4 +374,24 @@ export default {
   .export-form >>> .el-form-item__label {
     line-height: 2
   }
+  .application-user-table{
+    padding-left:20px ;
+  }
+  .noDataR {
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-direction: column;
+    .hintWrap {
+      color: #D4D6E6;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+
 </style>
