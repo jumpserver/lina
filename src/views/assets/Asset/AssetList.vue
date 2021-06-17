@@ -188,8 +188,8 @@ export default {
       headerActions: {
         createRoute: () => {
           return {
-            name: 'AdminUserCreate',
-            query: this.$route.query || {}
+            name: 'AssetCreate',
+            query: this.$route.query
           }
         },
         searchConfig: {
