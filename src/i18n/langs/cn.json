@@ -204,7 +204,8 @@
     "ipDomain": "IP(域名)",
     "HostProtocol": "主机协议",
     "DatabaseProtocol": "数据库协议",
-    "OtherProtocol": "其它协议"
+    "OtherProtocol": "其它协议",
+    "PasswordOrToken": "密码 / 令牌"
   },
   "audits": {
     "Hosts": "主机",
