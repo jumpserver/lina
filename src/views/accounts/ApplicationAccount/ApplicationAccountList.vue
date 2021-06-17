@@ -22,7 +22,7 @@
           <el-form-item :label="this.$t('assets.Username')">
             <el-input v-model="MFAInfo.username" disabled />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.Password')">
+          <el-form-item :label="this.$t('assets.PasswordOrToken')">
             <el-input v-model="MFAInfo.password" type="password" show-password />
           </el-form-item>
         </el-form>
@@ -195,7 +195,11 @@ export default {
                         this.$axios.get(`/api/v1/assets/system-users/${this.MFAInfo.systemUser.id}/auth-info/`).then(res => {
                           this.MFAConfirmed = true
                           this.MFAInfo.username = res.username
-                          this.MFAInfo.password = res.password
+                          if (res.protocol === 'k8s') {
+                            this.MFAInfo.password = res.token
+                          } else {
+                            this.MFAInfo.password = res.password
+                          }
                         })
                       } else {
                         this.showMFADialog = true

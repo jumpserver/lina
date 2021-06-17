@@ -186,10 +186,11 @@ export default {
         }
       },
       headerActions: {
-        // canCreate: false,
-        createRoute: {
-          name: 'AssetCreate',
-          query: this.$route.query
+        createRoute: () => {
+          return {
+            name: 'AdminUserCreate',
+            query: this.$route.query || {}
+          }
         },
         searchConfig: {
           options: [
