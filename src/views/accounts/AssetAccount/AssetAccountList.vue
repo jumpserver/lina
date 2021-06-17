@@ -24,6 +24,7 @@
       </el-col>
       <el-col :span="iShowTree?11:13">
         <AssetUserTable
+          v-if="!isInit"
           ref="RightTable"
           class="asset-user-table"
           :url="rightTable.url"
@@ -34,6 +35,13 @@
           :has-clone="false"
           :has-import="false"
         />
+        <div v-else class="noDataR">
+          <div class="hintWrap">
+            <div>
+              {{ $t('accounts.PleaseClickLeftAssetToViewAssetAccount') }}
+            </div>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </Page>
@@ -54,6 +62,7 @@ export default {
   data() {
     const vm = this
     return {
+      isInit: true,
       clickedRow: null,
       iShowTree: true,
       treeSetting: {
@@ -65,6 +74,7 @@ export default {
         callback: {
           onSelected: function(event, treeNode) {
             vm.leftTable.tableConfig.url = `/api/v1/assets/assets/?node_id=${treeNode.meta.node.id}`
+            vm.isInit = true
           }
         }
       },
@@ -109,6 +119,7 @@ export default {
             vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}`
             vm.rightTable.extraQuery.asset_id = row.id
             vm.clickedRow = row
+            vm.isInit = false
           }
         },
         headerActions: {
@@ -169,6 +180,12 @@ export default {
     & >>> .table-content {
       margin-left: 21px;
     }
+    & ::v-deep .el-table__row{
+      height: 40px;
+      & > td{
+        padding: 0;
+      }
+    }
   }
   .mini-button{
     width: 12px;
@@ -182,5 +199,24 @@ export default {
     border-radius: 5px;
     line-height: 1.428;
     cursor:pointer;
+  }
+  .noDataR{
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-direction: column;
+    .hintWrap{
+      color: #D4D6E6;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+  .asset-user-table{
+    padding-left: 20px;
   }
 </style>
