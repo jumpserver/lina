@@ -32,7 +32,7 @@ export default {
       default: ''
     },
     createRoute: {
-      type: [String, Object],
+      type: [String, Object, Function],
       default: function() {
         return this.$route.name.replace('List', 'Create')
       }
@@ -149,10 +149,13 @@ export default {
   },
   methods: {
     handleCreate() {
-      let route = {}
+      let route
       if (typeof this.createRoute === 'string') {
+        route = { name: this.createRoute }
         route.name = this.createRoute
-      } else {
+      } else if (typeof this.createRoute === 'function') {
+        route = this.createRoute()
+      } else if (typeof this.createRoute === 'object') {
         route = this.createRoute
       }
       this.$router.push(route)
