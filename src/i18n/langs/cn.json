@@ -1,5 +1,10 @@
 {
   "": "",
+  "accounts": {
+    "PleaseClickLeftAssetToViewAssetAccount": "资产账号列表，点击左侧资产进行查看",
+    "PleaseClickLeftApplicationToViewApplicationAccount": "应用账号列表，点击左侧应用进行查看",
+    "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看"
+  },
   "acl": {
     "name": "名称",
     "username": "用户名",
