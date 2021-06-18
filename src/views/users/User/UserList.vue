@@ -80,10 +80,10 @@ export default {
             formatterArgs: {
               canClone: true,
               hasDelete: hasDelete,
-              canUpdate: function(row, cellValue) {
+              canUpdate: function({ row }) {
                 return row.can_update
               },
-              canDelete: function(row, cellValue) {
+              canDelete: function({ row }) {
                 return row.can_delete
               },
               extraActions: [
