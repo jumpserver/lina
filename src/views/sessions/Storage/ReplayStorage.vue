@@ -67,10 +67,10 @@ export default {
               onUpdate: function({ row, col }) {
                 this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type }})
               },
-              canUpdate: function(row, cellValue) {
+              canUpdate: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
-              canDelete: function(row, cellValue) {
+              canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
               extraActions: [

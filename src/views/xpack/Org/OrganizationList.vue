@@ -57,7 +57,7 @@ export default {
             formatterArgs: {
               canClone: true,
               canUpdate: true,
-              canDelete: function(row, cellValue) {
+              canDelete: function({ row }) {
                 return !row.is_default
               },
               onDelete: function({ row, col, cellValue, reload }) {
