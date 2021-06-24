@@ -24,11 +24,17 @@
       </el-col>
       <el-col :span="iShowTree?11:13">
         <GenericListTable
+          v-if="!isInit"
           ref="RightTable"
           class="asset-user-table"
           :header-actions="rightTable.headerActions"
           :table-config="rightTable.tableConfig"
         />
+        <div v-else class="noDataR">
+          <div class="hintWrap">
+            <div>{{ $t('accounts.PleaseClickLeftAssetToViewGatheredUser') }}</div>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -47,6 +53,7 @@ export default {
   data() {
     const vm = this
     return {
+      isInit: true,
       clickedRow: {},
       iShowTree: true,
       treeSetting: {
@@ -58,6 +65,7 @@ export default {
         callback: {
           onSelected: function(event, treeNode) {
             vm.leftTable.tableConfig.url = `/api/v1/assets/assets/?node_id=${treeNode.meta.node.id}`
+            vm.isInit = true
           }
         }
       },
@@ -120,6 +128,7 @@ export default {
           rowClick: function(row, column, event) {
             vm.rightTable.tableConfig.url = `/api/v1/assets/gathered-users/?asset_id=${row.id}`
             vm.clickedRow = row
+            vm.isInit = false
           }
         },
         headerActions: {
@@ -135,7 +144,7 @@ export default {
         tableConfig: {
           url: `/api/v1/assets/gathered-users/?asset__hostname=ShowFirstAssetRelated`,
           columns: [
-            'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated'
+            'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated', 'org_name'
           ],
           columnsShow: {
             min: ['username'],
@@ -170,7 +179,10 @@ export default {
           hasExport: true,
           hasImport: false,
           hasBulkDelete: false,
-          hasBulkUpdate: false
+          hasBulkUpdate: false,
+          searchConfig: {
+            exclude: ['asset']
+          }
         }
       }
     }
@@ -183,8 +195,17 @@ export default {
     background-color: #f5f7fa;
   }
   .asset-table {
+    &:hover {
+      cursor: pointer;
+    }
     & >>> .table-content {
       margin-left: 21px;
+    }
+    & ::v-deep .el-table__row{
+      height: 40px;
+      & > td{
+        padding: 0;
+      }
     }
   }
   .mini-button{
@@ -199,5 +220,30 @@ export default {
     border-radius: 5px;
     line-height: 1.428;
     cursor:pointer;
+  }
+  .noDataR{
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-direction: column;
+    .hintWrap{
+      color: #D4D6E6;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+  .asset-user-table{
+    padding-left: 20px;
+    & ::v-deep .el-table__header-wrapper thead tr{
+      height: 40px;
+      & > th{
+        padding: 0;
+      }
+    }
   }
 </style>

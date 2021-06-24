@@ -1,5 +1,10 @@
 {
   "": "",
+  "accounts": {
+    "PleaseClickLeftAssetToViewAssetAccount": "Asset account list, please click on the assets on the left to view",
+    "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
+    "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list， please click on the assets on the left to view"
+  },
   "acl": {
     "name": "Name",
     "username": "Username",
@@ -199,7 +204,8 @@
     "ipDomain": "IP(Domain)",
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
-    "OtherProtocol": "Other Protocol"
+    "OtherProtocol": "Other Protocol",
+    "PasswordOrToken": "Password / Token"
   },
   "audits": {
     "Hosts": "Host",
@@ -214,6 +220,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",
     "CustomCol":"Custom table col",
@@ -727,6 +734,7 @@
     }
   },
   "setting": {
+    "InsecureCommandNotifyToSubscription": "Insecure command notification setting, change to system message subscription, support more notify method",
     "ApiKeyList": "Api key list",
     "AssetCount": "Asset count",
     "Basic": "Basic setting",

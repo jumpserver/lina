@@ -1,5 +1,10 @@
 {
   "": "",
+  "accounts": {
+    "PleaseClickLeftAssetToViewAssetAccount": "资产账号列表，点击左侧资产进行查看",
+    "PleaseClickLeftApplicationToViewApplicationAccount": "应用账号列表，点击左侧应用进行查看",
+    "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看"
+  },
   "acl": {
     "name": "名称",
     "username": "用户名",
@@ -200,7 +205,8 @@
     "ipDomain": "IP(域名)",
     "HostProtocol": "主机协议",
     "DatabaseProtocol": "数据库协议",
-    "OtherProtocol": "其它协议"
+    "OtherProtocol": "其它协议",
+    "PasswordOrToken": "密码 / 令牌"
   },
   "audits": {
     "Hosts": "主机",
@@ -215,6 +221,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ConnectWebSocketError": "连接 WebSocket 失败",
     "Action": "动作",
     "RequestTickets": "申请工单",
     "Actions": "操作",
@@ -729,6 +736,7 @@
     }
   },
   "setting": {
+    "InsecureCommandNotifyToSubscription": "危险命令通知已升级到消息订阅中，支持更多通知方式",
     "ApiKeyList": "API Key 列表",
     "AssetCount": "资产数量",
     "Basic": "基本设置",

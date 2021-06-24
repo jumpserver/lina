@@ -56,13 +56,13 @@ export default {
           actions: {
             prop: 'id',
             formatterArgs: {
-              canUpdate: function(row, cellValue) {
+              canUpdate: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
-              onUpdate: function({ row, col }) {
+              onUpdate: function({ row }) {
                 this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
               },
-              canDelete: function(row, cellValue) {
+              canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
               extraActions: [

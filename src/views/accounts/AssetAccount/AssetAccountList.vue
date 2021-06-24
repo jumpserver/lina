@@ -24,14 +24,24 @@
       </el-col>
       <el-col :span="iShowTree?11:13">
         <AssetUserTable
+          v-if="!isInit"
           ref="RightTable"
           class="asset-user-table"
           :url="rightTable.url"
+          :search-exclude="rightTable.searchExclude"
+          :extra-query="rightTable.extraQuery"
           :has-left-actions="rightTable.hasLeftActions"
           :table-config="rightTable.tableConfig"
           :has-clone="false"
           :has-import="false"
         />
+        <div v-else class="noDataR">
+          <div class="hintWrap">
+            <div>
+              {{ $t('accounts.PleaseClickLeftAssetToViewAssetAccount') }}
+            </div>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </Page>
@@ -52,7 +62,8 @@ export default {
   data() {
     const vm = this
     return {
-      clickedRow: {},
+      isInit: true,
+      clickedRow: null,
       iShowTree: true,
       treeSetting: {
         showMenu: false,
@@ -63,6 +74,7 @@ export default {
         callback: {
           onSelected: function(event, treeNode) {
             vm.leftTable.tableConfig.url = `/api/v1/assets/assets/?node_id=${treeNode.meta.node.id}`
+            vm.isInit = true
           }
         }
       },
@@ -70,7 +82,7 @@ export default {
         tableConfig: {
           url: '/api/v1/assets/assets/',
           columns: [
-            'hostname', 'ip', 'protocols', 'platform', 'comment'
+            'hostname', 'ip', 'protocols', 'platform', 'comment', 'org_name'
           ],
           columnsShow: {
             min: ['hostname', 'ip'],
@@ -104,8 +116,10 @@ export default {
             }
           },
           rowClick: function(row, column, event) {
-            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}&latest=1`
+            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}`
+            vm.rightTable.extraQuery.asset_id = row.id
             vm.clickedRow = row
+            vm.isInit = false
           }
         },
         headerActions: {
@@ -120,9 +134,12 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated&latest=1`,
+        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated`,
+        extraQuery: {
+          latest: 1
+        },
         tableConfig: {
-          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions'],
+          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'org_name', 'actions'],
           columnsShow: {
             min: ['username', 'actions'],
             default: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions']
@@ -136,7 +153,7 @@ export default {
           },
           tableAttrs: {
             stripe: true, // 斑马纹表格
-            border: true, // 表格边框
+            border: false, // 表格边框
             fit: true, // 宽度自适应,
             tooltipEffect: 'dark',
             rowClassName({ row, rowIndex }) {
@@ -144,7 +161,8 @@ export default {
             }
           }
         },
-        hasLeftActions: false
+        hasLeftActions: false,
+        searchExclude: ['hostname', 'id', 'ip']
       }
     }
   }
@@ -156,8 +174,17 @@ export default {
     background-color: #f5f7fa;
   }
   .asset-table {
+    &:hover {
+      cursor: pointer;
+    }
     & >>> .table-content {
       margin-left: 21px;
+    }
+    & ::v-deep .el-table__row{
+      height: 40px;
+      & > td{
+        padding: 0;
+      }
     }
   }
   .mini-button{
@@ -172,5 +199,24 @@ export default {
     border-radius: 5px;
     line-height: 1.428;
     cursor:pointer;
+  }
+  .noDataR{
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-direction: column;
+    .hintWrap{
+      color: #D4D6E6;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+  .asset-user-table{
+    padding-left: 20px;
   }
 </style>

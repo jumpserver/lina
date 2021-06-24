@@ -65,7 +65,8 @@ export default {
       validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
       return validValues
     },
-    performSubmit(validValues) {
+    performSubmit(formValues) {
+      const validValues = _.cloneDeep(formValues)
       const method = this.getMethod()
       validValues.meta.HOSTS = validValues.meta.HOSTS.split(',').map(item => (item.trim()))
       const url = this.getUrl()

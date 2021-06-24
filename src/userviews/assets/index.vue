@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { LoadingActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericTreeListPage
@@ -104,7 +104,7 @@ export default {
           {
             prop: 'id',
             align: 'center',
-            formatter: LoadingActionsFormatter,
+            formatter: ActionsFormatter,
             width: '100px',
             label: this.$t('common.action'),
             formatterArgs: {
@@ -117,7 +117,7 @@ export default {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
-                  can: ({ row, cellValue }) => {
+                  can: function({ row, cellValue }) {
                     return row.is_active
                   },
                   callback: function({ row, col, cellValue, reload }) {
@@ -127,7 +127,7 @@ export default {
                 {
                   name: 'favor',
                   type: 'info',
-                  fa: function(row, cellValue) {
+                  fa: function({ row, cellValue }) {
                     if (this.checkFavorite(row.id)) {
                       return 'fa-star'
                     }
@@ -160,20 +160,25 @@ export default {
   },
   methods: {
     refreshAllFavorites() {
-      this.tableConfig.columns[this.tableConfig.columns.length - 1].formatterArgs.loading = true
+      const actionsIndex = this.tableConfig.columns.length - 1
+      this.tableConfig.columns[actionsIndex].formatterArgs.loading = true
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
-        this.tableConfig.columns[this.tableConfig.columns.length - 1].formatterArgs.loading = false
+        this.tableConfig.columns[actionsIndex].formatterArgs.loading = false
       })
     },
     addOrDeleteFavorite(assetId) {
       if (this.checkFavorite(assetId)) {
-        this.$axios.delete(`/api/v1/assets/favorite-assets/?asset=${assetId}`).then(res => this.removeFavorite(assetId))
+        this.$axios.delete(`/api/v1/assets/favorite-assets/?asset=${assetId}`).then(
+          res => this.removeFavorite(assetId)
+        )
       } else {
         const data = {
           asset: assetId
         }
-        this.$axios.post('/api/v1/assets/favorite-assets/', data).then(res => this.addFavorite(assetId))
+        this.$axios.post('/api/v1/assets/favorite-assets/', data).then(
+          res => this.addFavorite(assetId)
+        )
       }
     },
     checkFavorite(assetId) {

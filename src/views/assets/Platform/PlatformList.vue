@@ -23,10 +23,10 @@ export default {
           actions: {
             formatterArgs: {
               canClone: true,
-              canDelete: (row, value) => {
+              canDelete: ({ row }) => {
                 return !row.internal
               },
-              canUpdate: (row, value) => {
+              canUpdate: ({ row }) => {
                 return !row.internal
               }
             }
