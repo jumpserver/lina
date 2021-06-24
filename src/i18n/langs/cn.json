@@ -639,6 +639,7 @@
     "SystemUserDetail": "系统用户详情",
     "SystemUserList": "系统用户",
     "SystemUserUpdate": "更新系统用户",
+    "AssetUserList": "资产用户",
     "TaskDetail": "任务详情",
     "TaskList": "任务列表",
     "TaskMonitor": "任务监控",

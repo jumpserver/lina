@@ -109,9 +109,9 @@ export default [
     children: [
       {
         path: '',
-        name: 'SystemUserList',
-        component: () => import('@/views/assets/SystemUser/SystemUserList.vue'),
-        meta: { title: i18n.t('route.SystemUserList'), activeMenu: '/assets/system-users' }
+        name: 'AssetUserList',
+        component: () => import('@/views/assets/SystemUser/AssetUserList.vue'),
+        meta: { title: i18n.t('route.AssetUserList'), activeMenu: '/assets/system-users' }
       },
       {
         path: 'create',
