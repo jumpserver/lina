@@ -663,6 +663,9 @@
     "SiteMessageList": "站内信"
   },
   "sessions": {
+    "SetToDefault": "设为默认",
+    "SetSuccess": "设置成功",
+    "SetFailed": "设置失败",
     "StorageConfiguration": "存储配置",
     "accountKey": "账户密钥",
     "accountName": "账户名称",
