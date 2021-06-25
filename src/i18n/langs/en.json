@@ -661,6 +661,9 @@
     "SiteMessageList": "Site message"
   },
   "sessions": {
+    "SetToDefault": "Set to default",
+    "SetSuccess": "Set success",
+    "SetFailed": "Set failed",
     "StorageConfiguration": "Storage configuration",
     "accountKey": "Account key",
     "accountName": "Account name",
