@@ -663,6 +663,7 @@
     "SiteMessageList": "站内信"
   },
   "sessions": {
+    "SetToDefaultStorage": "设置为默认存储",
     "SetToDefault": "设为默认",
     "SetSuccess": "设置成功",
     "SetFailed": "设置失败",

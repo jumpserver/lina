@@ -661,6 +661,7 @@
     "SiteMessageList": "Site message"
   },
   "sessions": {
+    "SetToDefaultStorage": "Set to default storage",
     "SetToDefault": "Set to default",
     "SetSuccess": "Set success",
     "SetFailed": "Set failed",
