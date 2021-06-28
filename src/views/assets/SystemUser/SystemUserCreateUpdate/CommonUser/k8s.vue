@@ -4,6 +4,7 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    v-bind="$attrs"
   />
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :title="title" />
+  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" v-bind="$attrs" />
 </template>
 
 <script>
@@ -11,7 +11,6 @@ export default {
   components: { GenericCreateUpdatePage },
   data() {
     return {
-      title: this.$t('route.SystemUserCreate') + ' - ' + this.$t('assets.AdminUser'),
       initial: {
       },
       fields: [

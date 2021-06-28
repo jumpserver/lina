@@ -1,5 +1,5 @@
 <template>
-  <component :is="systemUserProtocolComponent" />
+  <component :is="systemUserProtocolComponent" :title="title" />
 </template>
 
 <script>
@@ -14,6 +14,7 @@ export default {
   components: { SSH, RDP, VncOrTelnet, Database },
   data() {
     return {
+      title: this.$t('route.SystemUserCreate') + ' - ' + this.$t('assets.CommonUser')
     }
   },
   method: {

@@ -1,10 +1,16 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+    v-bind="$attrs"
+  />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import getFields from '@/views/assets/SystemUser/SystemUserCreateUpdate/CommonUser/fields'
+import getFields from './fields'
 
 // const asciiProtocols = ['ssh', 'telnet', 'mysql']
 
