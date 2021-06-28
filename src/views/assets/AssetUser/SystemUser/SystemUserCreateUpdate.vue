@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import SSH from './SystemUserCreate/ssh'
-import RDP from './SystemUserCreate/rdp'
-import VncAndTelnet from './SystemUserCreate/vncAndTelnet'
-import DATABASE from './SystemUserCreate/database'
-import K8S from './SystemUserCreate/k8s'
+import SSH from './components/ssh'
+import RDP from './components/rdp'
+import VncAndTelnet from './components/vncAndTelnet'
+import DATABASE from './components/database'
+import K8S from './components/k8s'
 
 export default {
   name: 'SystemUserCreateUpdate',
@@ -17,7 +17,6 @@ export default {
     }
   },
   method: {
-
   },
   computed: {
     activePage() {

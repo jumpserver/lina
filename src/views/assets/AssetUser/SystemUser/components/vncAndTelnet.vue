@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import getFields from '@/views/assets/SystemUser/SystemUserCreate/fields'
+import getFields from '@/views/assets/AssetUser/SystemUser/components/fields'
 
 // const asciiProtocols = ['ssh', 'telnet', 'mysql']
 

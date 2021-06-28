@@ -102,7 +102,7 @@ export default [
     ]
   },
   {
-    path: 'system-users',
+    path: 'asset-users',
     component: empty,
     redirect: '',
     meta: { },
@@ -110,28 +110,28 @@ export default [
       {
         path: '',
         name: 'AssetUserList',
-        component: () => import('@/views/assets/SystemUser/AssetUserList.vue'),
-        meta: { title: i18n.t('route.AssetUserList'), activeMenu: '/assets/system-users' }
+        component: () => import('@/views/assets/AssetUser/AssetUserList.vue'),
+        meta: { title: i18n.t('route.AssetUserList'), activeMenu: '/assets/asset-users' }
       },
       {
-        path: 'create',
+        path: 'system-user-create',
         name: 'SystemUserCreate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
-        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
+        component: () => import('@/views/assets/AssetUser/SystemUser/SystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/asset-users' },
         hidden: true
       },
       {
         path: ':id/update',
-        name: 'SystemUserUpdate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate.vue'),
-        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
+        name: 'AssetUserUpdate',
+        component: () => import('@/views/assets/AssetUser/SystemUser/SystemUserCreateUpdate.vue'),
+        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/asset-users' },
         hidden: true
       },
       {
         path: ':id',
         name: 'SystemUserDetail',
-        component: () => import('@/views/assets/SystemUser/SystemUserDetail/index.vue'),
-        meta: { title: i18n.t('route.SystemUserDetail'), activeMenu: '/assets/system-users' },
+        component: () => import('@/views/assets/AssetUser/AssetUserDetail/index.vue'),
+        meta: { title: i18n.t('route.SystemUserDetail'), activeMenu: '/assets/asset-users' },
         hidden: true
       }
     ]

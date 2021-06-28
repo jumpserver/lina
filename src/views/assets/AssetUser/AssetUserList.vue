@@ -8,8 +8,8 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-import SystemUserList from './SystemUserList'
-import AdminUserList from './AdminUserList'
+import SystemUserList from './SystemUser/SystemUserList'
+import AdminUserList from './AdminUser/AdminUserList'
 export default {
   name: 'Index',
   components: {
