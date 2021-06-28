@@ -16,12 +16,11 @@ export default {
   },
   data() {
     return {
-      helpMessage: this.$t('assets.AdminUserListHelpMessage'),
       tableConfig: {
-        url: '/api/v1/assets/admin-users/',
+        url: '/api/v1/assets/system-users/?type=admin',
         columns: [
-          'name', 'username', 'assets_amount', 'comment',
-          'created_by', 'date_created', 'date_updated', 'org_name', 'actions'
+          'name', 'username', 'assets_amount',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -36,10 +35,18 @@ export default {
           }
         }
       },
+      updateRoute: 'AdminUserUpdate',
       headerActions: {
-        createRoute: 'AdminUserCreate',
-        updateRoute: 'AdminUserUpdate'
-      }
+        createRoute: () => {
+          return {
+            name: 'SystemUserCreate',
+            query: {
+              type: 'admin'
+            }
+          }
+        }
+      },
+      helpMessage: this.$t('assets.AdminUserListHelpMessage')
     }
   }
 }

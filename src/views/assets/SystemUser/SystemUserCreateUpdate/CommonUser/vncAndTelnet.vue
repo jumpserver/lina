@@ -4,12 +4,12 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import getFields from '@/views/assets/AssetUser/SystemUser/components/fields'
+import getFields from '@/views/assets/SystemUser/SystemUserCreateUpdate/CommonUser/fields'
 
 // const asciiProtocols = ['ssh', 'telnet', 'mysql']
 
 export default {
-  name: 'SystemUserCreateUpdate',
+  name: 'CommonUserVNC',
   components: { GenericCreateUpdatePage },
   data() {
     const fields = getFields.bind(this)()

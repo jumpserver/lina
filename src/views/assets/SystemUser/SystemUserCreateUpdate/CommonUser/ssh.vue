@@ -8,7 +8,7 @@ import { Required } from '@/components/DataForm/rules'
 import getFields from './fields'
 
 export default {
-  name: 'SystemUserCreateUpdate',
+  name: 'CommonUserSSH',
   components: { GenericCreateUpdatePage },
   data() {
     const fields = getFields.bind(this)()

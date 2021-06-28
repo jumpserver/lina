@@ -102,36 +102,36 @@ export default [
     ]
   },
   {
-    path: 'asset-users',
+    path: 'system-users',
     component: empty,
     redirect: '',
     meta: { },
     children: [
       {
         path: '',
-        name: 'AssetUserList',
-        component: () => import('@/views/assets/AssetUser/AssetUserList.vue'),
-        meta: { title: i18n.t('route.AssetUserList'), activeMenu: '/assets/asset-users' }
+        name: 'SystemUserList',
+        component: () => import('@/views/assets/SystemUser/SystemUserList/index.vue'),
+        meta: { title: i18n.t('route.SystemUserList'), activeMenu: '/assets/system-users' }
       },
       {
-        path: 'system-user-create',
+        path: 'create',
         name: 'SystemUserCreate',
-        component: () => import('@/views/assets/AssetUser/SystemUser/SystemUserCreateUpdate.vue'),
-        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/asset-users' },
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/index.vue'),
+        meta: { title: i18n.t('route.SystemUserCreate'), activeMenu: '/assets/system-users' },
         hidden: true
       },
       {
         path: ':id/update',
-        name: 'AssetUserUpdate',
-        component: () => import('@/views/assets/AssetUser/SystemUser/SystemUserCreateUpdate.vue'),
-        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/asset-users' },
+        name: 'SystemUserUpdate',
+        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate/index.vue'),
+        meta: { title: i18n.t('route.SystemUserUpdate'), activeMenu: '/assets/system-users' },
         hidden: true
       },
       {
         path: ':id',
         name: 'SystemUserDetail',
-        component: () => import('@/views/assets/AssetUser/AssetUserDetail/index.vue'),
-        meta: { title: i18n.t('route.SystemUserDetail'), activeMenu: '/assets/asset-users' },
+        component: () => import('@/views/assets/SystemUser/SystemUserDetail/index.vue'),
+        meta: { title: i18n.t('route.SystemUserDetail'), activeMenu: '/assets/system-users' },
         hidden: true
       }
     ]

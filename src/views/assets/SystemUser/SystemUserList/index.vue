@@ -8,26 +8,26 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-import SystemUserList from './SystemUser/SystemUserList'
-import AdminUserList from './AdminUser/AdminUserList'
+import CommonUserList from './CommonUserList'
+import AdminUserList from './AdminUserList'
 export default {
   name: 'Index',
   components: {
     TabPage,
-    SystemUserList,
+    CommonUserList,
     AdminUserList
   },
   data() {
     return {
       config: {
-        activeMenu: 'SystemUserList',
+        activeMenu: 'CommonUserList',
         submenu: [
           {
-            title: this.$t('assets.SystemUser'),
-            name: 'SystemUserList'
+            title: this.$t('assets.CommonUser'),
+            name: 'CommonUserList'
           },
           {
-            title: this.$t('route.AdminUserList'),
+            title: this.$t('assets.AdminUser'),
             name: 'AdminUserList'
           }
         ]

@@ -12,7 +12,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { Required } from '@/components/DataForm/rules'
 
 export default {
-  name: 'SystemUserCreateUpdate',
+  name: 'CommonUserSSH',
   components: { GenericCreateUpdatePage },
   data() {
     return {

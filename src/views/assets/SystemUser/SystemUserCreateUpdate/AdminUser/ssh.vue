@@ -1,19 +1,18 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :title="title" />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { UploadKey } from '@/components'
+
 export default {
-  name: 'AdminUserCreateUpdate',
-  components: {
-    GenericCreateUpdatePage
-  },
+  name: 'AdminUserSSH',
+  components: { GenericCreateUpdatePage },
   data() {
     return {
+      title: this.$t('route.SystemUserCreate') + ' - ' + this.$t('assets.AdminUser'),
       initial: {
-
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'update_password', 'password', 'private_key']],
@@ -53,12 +52,14 @@ export default {
           component: UploadKey
         }
       },
-      url: '/api/v1/assets/admin-users/'
+      url: '/api/v1/assets/system-users/'
     }
+  },
+  method: {
   }
 }
 </script>
 
-<style>
+<style lang='less' scoped>
 
 </style>

@@ -7,7 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import getFields from './fields'
 
 export default {
-  name: 'SystemUserCreateUpdate',
+  name: 'CommonUserDatabase',
   components: { GenericCreateUpdatePage },
   data() {
     const fields = getFields.bind(this)()

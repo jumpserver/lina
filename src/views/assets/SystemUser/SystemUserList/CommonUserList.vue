@@ -3,12 +3,12 @@
     <el-alert v-if="helpMessage" type="success">
       <span v-html="helpMessage" />
     </el-alert>
-    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
   </div>
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   components: {
@@ -17,12 +17,11 @@ export default {
   data() {
     const vm = this
     return {
-      helpMessage: this.$t('assets.SystemUserListHelpMessage'),
       tableConfig: {
         url: '/api/v1/assets/system-users/?type=common',
         columns: [
-          'name', 'username', 'username_same_with_user', 'protocol',
-          'login_mode', 'assets_amount', 'priority',
+          'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
+          'assets_amount', 'priority',
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
@@ -58,6 +57,8 @@ export default {
         }
       },
       headerActions: {
+        hasMoreActions: false,
+        hasCreate: false,
         createRoute: 'SystemUserCreate',
         moreCreates: {
           callback: (option) => {
@@ -122,7 +123,8 @@ export default {
             }
           ]
         }
-      }
+      },
+      helpMessage: this.$t('assets.SystemUserListHelpMessage')
     }
   }
 }
