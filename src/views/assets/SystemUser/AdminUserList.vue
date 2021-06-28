@@ -1,5 +1,10 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  <div>
+    <el-alert v-if="helpMessage" type="success">
+      <span v-html="helpMessage" />
+    </el-alert>
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  </div>
 </template>
 
 <script>
@@ -11,11 +16,12 @@ export default {
   },
   data() {
     return {
+      helpMessage: this.$t('assets.AdminUserListHelpMessage'),
       tableConfig: {
-        url: '/api/v1/assets/system-users/?type=admin',
+        url: '/api/v1/assets/admin-users/',
         columns: [
-          'name', 'username', 'assets_amount',
-          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
+          'name', 'username', 'assets_amount', 'comment',
+          'created_by', 'date_created', 'date_updated', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -30,11 +36,10 @@ export default {
           }
         }
       },
-      updateRoute: 'AdminUserUpdate',
       headerActions: {
-        createRoute: 'AdminUserCreate'
-      },
-      helpMessage: this.$t('assets.AdminUserListHelpMessage')
+        createRoute: 'AdminUserCreate',
+        updateRoute: 'AdminUserUpdate'
+      }
     }
   }
 }

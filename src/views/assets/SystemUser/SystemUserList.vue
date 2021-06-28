@@ -19,7 +19,7 @@ export default {
     return {
       helpMessage: this.$t('assets.SystemUserListHelpMessage'),
       tableConfig: {
-        url: '/api/v1/assets/system-users/',
+        url: '/api/v1/assets/system-users/?type=common',
         columns: [
           'name', 'username', 'username_same_with_user', 'protocol',
           'login_mode', 'assets_amount', 'priority',
@@ -123,7 +123,6 @@ export default {
           ]
         }
       }
-
     }
   }
 }
