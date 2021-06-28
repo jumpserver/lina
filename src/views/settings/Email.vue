@@ -94,11 +94,17 @@ export default {
     getMethod() {
       return 'put'
     },
-    // 不清理的话，编辑secret，在删除提交会报错
     cleanFormValue(data) {
       if (!data['EMAIL_HOST_PASSWORD']) {
         delete data['EMAIL_HOST_PASSWORD']
       }
+      Object.keys(data).forEach(
+        function(key) {
+          if (data[key] === null) {
+            delete data[key]
+          }
+        }
+      )
       return data
     }
   }
