@@ -30,7 +30,7 @@ export default {
         shell: '/bin/bash'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'protocol', 'type']],
+        [this.$t('common.Basic'), ['name', 'protocol']],
         [this.$t('common.Auth'), ['login_mode', 'username', 'auto_generate_key', 'update_password', 'password', 'private_key']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
         [this.$t('assets.LoginOption'), ['priority', 'sftp_root']],
