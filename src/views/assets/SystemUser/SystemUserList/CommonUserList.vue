@@ -73,12 +73,6 @@ export default {
               has: true
             },
             {
-              title: 'Telnet',
-              name: 'Telnet',
-              type: 'primary',
-              has: true
-            },
-            {
               title: 'RDP',
               name: 'RDP',
               type: 'primary',
@@ -87,6 +81,12 @@ export default {
             {
               title: 'VNC',
               name: 'VNC',
+              type: 'primary',
+              has: true
+            },
+            {
+              title: 'Telnet',
+              name: 'Telnet',
               type: 'primary',
               has: true
             },

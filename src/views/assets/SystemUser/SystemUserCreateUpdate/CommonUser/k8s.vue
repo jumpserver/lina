@@ -21,9 +21,9 @@ export default {
         protocol: this.$route.query.protocol
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'protocol']],
         [this.$t('common.Auth'), ['token']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
         token: {

@@ -181,6 +181,7 @@
     "SystemUser": "系统用户",
     "SystemUserDetail": "系统用户详情",
     "SystemUserListHelpMessage": "<b>系统用户</b> 是JumpServer 登录资产时使用的账号，如 root `ssh root@host`，而不是使用该用户名登录资产（ssh admin@host)`;<br><b>管理系统用户</b> 是资产已存在的, 并且拥有 高级权限 的系统用户， JumpServer 使用该用户来 `推送系统用户`、`获取资产硬件信息` 等;</br><b>普通系统用户</b>，可以资产预先上存在，也可以由 管理系统用户 来自动创建。",
+    "DynamicUsername": "动态用户名",
     "SystemUsers": "系统用户",
     "Test": "测试",
     "TestAssetsConnective": "测试资产可连接性",

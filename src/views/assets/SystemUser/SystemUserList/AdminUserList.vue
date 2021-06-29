@@ -32,10 +32,14 @@ export default {
           },
           assets_amount: {
             width: '80px'
+          },
+          actions: {
+            formatterArgs: {
+              updateRoute: { name: 'SystemUserUpdate', query: { type: 'admin' }}
+            }
           }
         }
       },
-      updateRoute: 'AdminUserUpdate',
       headerActions: {
         createRoute: () => {
           return {

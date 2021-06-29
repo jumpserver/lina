@@ -87,6 +87,7 @@
     "AdminUser": "Admin user",
     "ReplaceNodeAssetsAdminUser":"Replace node assets admin user with this",
     "AdminUserDetail": "Admin user detail",
+    "DynamicUsername": "Dynamic username",
     "AdminUserListHelpMessage": "Admin users are asset (charged server) on the root, or have NOPASSWD: ALL sudo permissions users, JumpServer users of the system using the user to `push system user`, `get assets hardware information`, etc.\n",
     "Asset": "Asset",
     "HardwareInfo": "Hardware info",

@@ -30,12 +30,11 @@ export default {
         shell: '/bin/bash'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'protocol']],
-        [this.$t('common.Auth'), ['login_mode', 'username', 'auto_generate_key', 'update_password', 'password', 'private_key']],
+        [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
+        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'update_password', 'password', 'private_key']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
-        [this.$t('assets.LoginOption'), ['priority', 'sftp_root']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
       fieldsMeta: {
         login_mode: fields.login_mode,

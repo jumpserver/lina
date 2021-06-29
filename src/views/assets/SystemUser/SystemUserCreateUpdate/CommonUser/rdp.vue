@@ -24,15 +24,14 @@ export default {
         username_same_with_user: false,
         auto_generate_key: false,
         auto_push: false,
-        sftp_root: 'tmp',
         sudo: '/bin/whoami',
         shell: '/bin/bash'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
+        [this.$t('common.Auth'), ['login_mode', 'update_password', 'password', 'ad_domain']],
         [this.$t('assets.AutoPush'), ['auto_push', 'system_groups']],
-        [this.$t('common.Auth'), ['update_password', 'password', 'ad_domain']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
         login_mode: fields.login_mode,

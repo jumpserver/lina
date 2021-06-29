@@ -12,8 +12,6 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import getFields from './fields'
 
-// const asciiProtocols = ['ssh', 'telnet', 'mysql']
-
 export default {
   name: 'CommonUserVNC',
   components: { GenericCreateUpdatePage },
@@ -26,9 +24,9 @@ export default {
         username_same_with_user: false
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'username_same_with_user', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['update_password', 'password']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
+        [this.$t('common.Auth'), ['login_mode', 'update_password', 'password']],
+        [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
         login_mode: fields.login_mode,

@@ -1,5 +1,11 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" v-bind="$attrs" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+    v-bind="$attrs"
+  />
 </template>
 
 <script>
@@ -14,7 +20,8 @@ export default {
       initial: {
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'username', 'update_password', 'password', 'private_key']],
+        [this.$t('common.Basic'), ['name', 'protocol', 'username']],
+        [this.$t('common.Auth'), ['update_password', 'password', 'private_key']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
@@ -26,6 +33,12 @@ export default {
         username: {
           el: {
             placeholder: this.$t('common.Username')
+          }
+        },
+        protocol: {
+          el: {
+            style: 'width:100%',
+            disabled: true
           }
         },
         update_password: {

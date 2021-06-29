@@ -1,10 +1,8 @@
 import { Required } from '@/components/DataForm/rules'
-import i18n from '@/i18n/i18n'
 import { Select2, UploadKey } from '@/components'
 
 function getFields() {
   const login_mode = {
-    helpText: i18n.t('assets.LoginModeHelpMessage'),
     on: {
       input: ([value], updateForm) => {
         if (value === 'manual') {
@@ -54,6 +52,7 @@ function getFields() {
 
   const username_same_with_user = {
     type: 'switch',
+    label: this.$t('assets.DynamicUsername'),
     helpText: this.$t('assets.UsernameHelpMessage'),
     el: {
       disabled: false
