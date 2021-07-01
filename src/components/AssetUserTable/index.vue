@@ -35,12 +35,12 @@
             <el-input v-model="dialogInfo.hostname" disabled />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="dialogInfo.username" disabled />
+            <el-input v-model="dialogInfo.usernameDisplay" disabled />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Password')">
             <el-input v-model="dialogInfo.password" type="password" />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.sshkey')">
+          <el-form-item :label="this.$t('assets.SSHKey')">
             <input type="file" @change="Onchange">
           </el-form-item>
         </el-form>
@@ -72,7 +72,7 @@ import * as queryUtil from '@/components/DataTable/compenents/el-data-table/util
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 
 export default {
-  name: 'Detail',
+  name: 'AccountListTable',
   components: {
     ListTable,
     Dialog
@@ -149,7 +149,7 @@ export default {
       showMFADialog: false,
       dialogInfo: {
         asset: '',
-        username: '',
+        usernameDisplay: '',
         hostname: '',
         password: '',
         private_key: ''
@@ -161,29 +161,26 @@ export default {
       exportTypeOption: 'csv',
       defaultTableConfig: {
         url: this.url,
-        columns: ['hostname', 'ip', 'username', 'version', 'date_created', 'actions'],
+        columns: ['hostname', 'ip', 'username_display', 'version', 'date_created', 'actions'],
         columnsMeta: {
-          'hostname': {
-            label: this.$t('assets.Hostname'),
+          hostname: {
             showOverflowTooltip: true
           },
-          'ip': {
-            label: this.$t('assets.ip'),
+          ip: {
             width: '120px'
           },
-          'username': {
-            label: this.$t('assets.Username'),
+          username_display: {
             showOverflowTooltip: true
           },
-          'version': {
+          version: {
             label: this.$t('assets.Version'),
             width: '70px'
           },
-          'date_created': {
+          date_created: {
             label: this.$t('assets.date_joined'),
             formatter: DateFormatter
           },
-          'actions': {
+          actions: {
             label: this.$t('common.Action'),
             align: 'center',
             width: 150,
@@ -246,7 +243,7 @@ export default {
                     this.showDialog = true
                     this.dialogInfo.asset = val.row.asset
                     this.dialogInfo.hostname = val.row.hostname
-                    this.dialogInfo.username = val.row.username
+                    this.dialogInfo.usernameDisplay = val.row.username_display
                   }.bind(this)
                 }
               ]
@@ -359,7 +356,7 @@ export default {
   methods: {
     MFAConfirm() {
       if (this.MFAInput.length !== 6) {
-        return this.$message.error(this.$t('common.MFAErrorMsg'))
+        return this.$message.error(this.$tc('common.MFAErrorMsg'))
       }
       this.$axios.post(
         `/api/v1/authentication/otp/verify/`, {

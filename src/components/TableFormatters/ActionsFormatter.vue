@@ -8,9 +8,12 @@ import BaseFormatter from './base'
 
 const defaultPerformDelete = function({ row, col }) {
   const id = row.id
-  const url = `${this.url}${id}/`
-  return this.$axios.delete(url)
+  const url = new URL(this.url, location.origin)
+  url.pathname += `${id}/`
+  const deleteUrl = url.href
+  return this.$axios.delete(deleteUrl)
 }
+
 const defaultUpdateCallback = function({ row, col }) {
   const id = row.id
   let route = { params: { id: id }}

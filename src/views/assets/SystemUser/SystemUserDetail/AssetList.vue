@@ -113,38 +113,6 @@ export default {
           }
         ]
       },
-      nodeRelationConfig: {
-        icon: 'fa-info',
-        title: this.$t('perms.addNodeToThisPermission'),
-        objectsAjax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: item.full_value, value: item.id }
-          }
-        },
-        hasObjectsId: [],
-        hasObjects: [],
-        performAdd: (items) => {
-          const relationUrl = `/api/v1/assets/system-users-nodes-relations/`
-          const objectId = this.object.id
-          const data = items.map(v => {
-            return {
-              systemuser: objectId,
-              node: v.value
-            }
-          })
-          if (data.length === 0) {
-            return this.$message.error(this.$t('assets.UnselectedNodes'))
-          }
-          return this.$axios.post(relationUrl, data)
-        },
-        performDelete: (item) => {
-          const itemId = item.value
-          const objectId = this.object.id
-          const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
-          return this.$axios.delete(relationUrl)
-        }
-      },
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
@@ -182,23 +150,52 @@ export default {
           }
         }
       ],
+      nodeRelationConfig: {
+        icon: 'fa-link',
+        title: this.$t('assets.AssociateNodes'),
+        objectsAjax: {
+          url: '/api/v1/assets/nodes/',
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
+          }
+        },
+        hasObjectsId: [],
+        hasObjects: [],
+        performAdd: (items) => {
+          const relationUrl = `/api/v1/assets/system-users-nodes-relations/`
+          const objectId = this.object.id
+          const data = items.map(v => {
+            return {
+              systemuser: objectId,
+              node: v.value
+            }
+          })
+          if (data.length === 0) {
+            return this.$message.error(this.$t('assets.UnselectedNodes'))
+          }
+          return this.$axios.post(relationUrl, data)
+        },
+        performDelete: (item) => {
+          const itemId = item.value
+          const objectId = this.object.id
+          const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
+          return this.$axios.delete(relationUrl)
+        }
+      },
       assetRelationConfig: {
-        icon: 'fa-edit',
-        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        icon: 'fa-link',
+        title: this.$t('assets.AssociateAssets'),
         disabled: this.$store.getters.currentOrgIsRoot,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/assets/system-users-assets-relations/`
-          const data = [
-
-          ]
-          items.map(v =>
-            data.push({
-              asset: v,
-              systemuser: this.object.id
-            })
-          )
+          const data = items.map((i) => {
+            return {
+              'asset': i,
+              'systemuser': this.object.id
+            }
+          })
           if (data.length === 0) {
-            return this.$message.error(this.$t('assets.UnselectedAssets'))
+            return this.$message.error(this.$tc('assets.UnselectedAssets'))
           }
           return this.$axios.post(relationUrl, data)
         },

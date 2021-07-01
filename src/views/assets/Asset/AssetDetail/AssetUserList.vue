@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="24">
       <el-col :span="16">
-        <AssetUserTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" />
+        <AccountListTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" />
       </el-col>
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
@@ -13,12 +13,12 @@
 
 <script>
 import QuickActions from '@/components/QuickActions'
-import { AssetUserTable } from '@/components'
+import { AccountListTable } from '@/components'
 
 export default {
   name: 'Detail',
   components: {
-    AssetUserTable,
+    AccountListTable,
     QuickActions
   },
   props: {

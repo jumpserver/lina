@@ -82,6 +82,8 @@
     "DBInfo": "Database Info"
   },
   "assets": {
+    "AssociateAssets": "Associate assets",
+    "AssociateNodes": "Associate nodes",
     "Action": "Action",
     "ActiveSelected": "Active selected",
     "AdminUser": "Admin user",

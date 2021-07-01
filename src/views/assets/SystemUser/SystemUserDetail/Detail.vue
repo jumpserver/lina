@@ -112,6 +112,10 @@ export default {
           value: this.object.name
         },
         {
+          key: this.$t('assets.Type'),
+          value: this.object.type_display
+        },
+        {
           key: this.$t('assets.Username'),
           value: this.object.username
         },

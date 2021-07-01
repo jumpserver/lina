@@ -23,7 +23,7 @@
         />
       </el-col>
       <el-col :span="iShowTree?11:13">
-        <AssetUserTable
+        <AccountListTable
           v-if="!isInit"
           ref="RightTable"
           class="asset-user-table"
@@ -51,13 +51,13 @@
 import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
 import AutoDataZTree from '@/components/AutoDataZTree/index'
-import { AssetUserTable } from '@/components'
+import { AccountListTable } from '@/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    AutoDataZTree, GenericListTable, Page, AssetUserTable
+    AutoDataZTree, GenericListTable, Page, AccountListTable
   },
   data() {
     const vm = this
