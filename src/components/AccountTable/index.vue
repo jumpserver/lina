@@ -29,13 +29,13 @@
           </el-col>
         </el-row>
       </Dialog>
-      <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirm()" @cancel="handleCancel()">
+      <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" :visible.sync="showDialog" @confirm="handleConfirmUpdateAuthInfo()" @cancel="handleCancel()">
         <el-form label-position="right" label-width="80px" :model="dialogInfo">
           <el-form-item :label="this.$t('assets.Hostname')">
-            <el-input v-model="dialogInfo.hostname" disabled />
+            <el-input v-model="dialogInfo.hostname" readonly />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="dialogInfo.usernameDisplay" disabled />
+            <el-input v-model="dialogInfo.usernameDisplay" readonly />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Password')">
             <el-input v-model="dialogInfo.password" type="password" />
@@ -148,6 +148,7 @@ export default {
       showDialog: false,
       showMFADialog: false,
       dialogInfo: {
+        id: '',
         asset: '',
         usernameDisplay: '',
         hostname: '',
@@ -217,8 +218,8 @@ export default {
                   title: this.$t('common.Delete'),
                   type: 'primary',
                   callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/asset-users/${val.row.id}/`).then(() => {
-                      this.$message.success(this.$t('common.deleteSuccessMsg'))
+                    this.$axios.delete(`/api/v1/assets/accounts/${val.row.id}/`).then(() => {
+                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
                     })
                   }
@@ -228,7 +229,7 @@ export default {
                   title: this.$t('common.Test'),
                   callback: (val) => {
                     this.$axios.post(
-                      `/api/v1/assets/asset-users/tasks/?id=${val.row.id}`,
+                      `/api/v1/assets/accounts/tasks/?id=${val.row.id}`,
                       { action: 'test' }
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
@@ -240,10 +241,11 @@ export default {
                   title: this.$t('common.Update'),
                   can: !this.$store.getters.currentOrgIsRoot,
                   callback: function(val) {
-                    this.showDialog = true
+                    this.dialogInfo.id = val.row.id
                     this.dialogInfo.asset = val.row.asset
                     this.dialogInfo.hostname = val.row.hostname
                     this.dialogInfo.usernameDisplay = val.row.username_display
+                    this.showDialog = true
                   }.bind(this)
                 }
               ]
@@ -412,10 +414,8 @@ export default {
         e.target.files[0]
       )
     },
-    handleConfirm() {
+    handleConfirmUpdateAuthInfo() {
       const data = {
-        asset: this.dialogInfo.asset,
-        username: this.dialogInfo.username
       }
       if (this.dialogInfo.password !== '') {
         data.password = this.dialogInfo.password
@@ -423,13 +423,13 @@ export default {
       if (this.dialogInfo.private_key !== '') {
         data.private_key = this.dialogInfo.private_key
       }
-      this.$axios.post(
-        `/api/v1/assets/asset-users/`,
+      this.$axios.patch(
+        `/api/v1/assets/accounts/${this.dialogInfo.id}/`,
         data
       ).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(err => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
       })
       this.dialogInfo = {
         asset: '',
