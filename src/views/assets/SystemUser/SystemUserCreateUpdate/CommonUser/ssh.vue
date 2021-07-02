@@ -11,7 +11,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { Required } from '@/components/DataForm/rules'
-import getFields from './fields'
+import getFields from '../fields'
 
 export default {
   name: 'CommonUserSSH',

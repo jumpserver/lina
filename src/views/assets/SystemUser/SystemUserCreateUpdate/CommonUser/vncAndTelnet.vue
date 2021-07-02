@@ -10,7 +10,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import getFields from './fields'
+import getFields from '../fields'
 
 export default {
   name: 'CommonUserVNC',

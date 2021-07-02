@@ -4,25 +4,31 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    :clean-form-value="cleanFormValue"
     v-bind="$attrs"
   />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import getFields from '../fields'
 import { UploadKey } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'AdminUserSSH',
   components: { GenericCreateUpdatePage },
   data() {
+    const fields = getFields.bind(this)()
     return {
+      url: '/api/v1/assets/system-users/',
       initial: {
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'protocol', 'username']],
+        [this.$t('common.Basic'), ['name', 'protocol', 'username', 'type']],
         [this.$t('common.Auth'), ['update_password', 'password', 'private_key']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Command filter'), ['cmd_filters']],
+        [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
       fieldsMeta: {
         name: {
@@ -30,10 +36,16 @@ export default {
             placeholder: this.$t('common.Name')
           }
         },
+        type: {
+          hidden() {
+            return true
+          }
+        },
         username: {
           el: {
             placeholder: this.$t('common.Username')
-          }
+          },
+          rules: [Required]
         },
         protocol: {
           el: {
@@ -62,9 +74,18 @@ export default {
         },
         private_key: {
           component: UploadKey
+        },
+        cmd_filters: fields.cmd_filters,
+        home: {
+          label: this.$t('assets.Home'),
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push || item.username_same_with_user,
+          helpText: this.$t('assets.HomeHelpMessage')
         }
       },
-      url: '/api/v1/assets/system-users/'
+      cleanFormValue: (values) => {
+        values['type'] = 'admin'
+        return values
+      }
     }
   },
   method: {

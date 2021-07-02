@@ -69,7 +69,7 @@ import ListTable from '@/components/ListTable/index'
 import Dialog from '@/components/Dialog'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
-import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AccountListTable',
@@ -162,7 +162,10 @@ export default {
       exportTypeOption: 'csv',
       defaultTableConfig: {
         url: this.url,
-        columns: ['hostname', 'ip', 'username_display', 'version', 'date_created', 'actions'],
+        columns: [
+          'hostname', 'ip', 'username_display', 'version',
+          'date_created', 'date_updated', 'actions'
+        ],
         columnsMeta: {
           hostname: {
             showOverflowTooltip: true
@@ -176,10 +179,6 @@ export default {
           version: {
             label: this.$t('assets.Version'),
             width: '70px'
-          },
-          date_created: {
-            label: this.$t('assets.date_joined'),
-            formatter: DateFormatter
           },
           actions: {
             label: this.$t('common.Action'),
@@ -263,20 +262,6 @@ export default {
         searchConfig: {
           exclude: this.searchExclude,
           options: [
-            {
-              label: this.$t('assets.OnlyLatestVersion'),
-              value: 'latest',
-              children: [
-                {
-                  label: this.$t('common.Yes'),
-                  value: 1
-                },
-                {
-                  label: this.$t('common.No'),
-                  value: 0
-                }
-              ]
-            }
           ]
         }
       }
@@ -300,6 +285,7 @@ export default {
       const columnsMeta = Object.assign({}, this.defaultTableConfig.columnsMeta, this.tableConfig.columnsMeta || {})
       const config = Object.assign(this.defaultTableConfig, this.tableConfig)
       config.columnsMeta = columnsMeta
+      console.log('Itable config: ', config)
       return config
     },
     exportOptions() {
@@ -415,8 +401,7 @@ export default {
       )
     },
     handleConfirmUpdateAuthInfo() {
-      const data = {
-      }
+      const data = {}
       if (this.dialogInfo.password !== '') {
         data.password = this.dialogInfo.password
       }
@@ -428,6 +413,7 @@ export default {
         data
       ).then(res => {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$refs.ListTable.reloadTable()
       }).catch(err => {
         this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
       })
@@ -439,7 +425,6 @@ export default {
         private_key: ''
       }
       this.showDialog = false
-      this.$refs.ListTable.reloadTable()
     },
     tableQuery() {
       const listTableRef = this.$refs.ListTable
