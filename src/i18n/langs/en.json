@@ -224,6 +224,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "MFAVerify": "Verify MFA",
     "ViewSecret": "View secret",
     "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",

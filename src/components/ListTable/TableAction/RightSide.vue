@@ -14,6 +14,7 @@
 import ActionsGroup from '@/components/ActionsGroup'
 import ImExportDialog from './ImExportDialog'
 import { cleanActions } from './utils'
+import { assignIfNot } from '@/utils/common'
 
 const defaultTrue = { type: Boolean, default: true }
 
@@ -31,30 +32,30 @@ export default {
     hasExport: defaultTrue,
     exportOptions: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     handleExportClick: {
       type: Function,
       default: function({ selectedRows }) {
-        this.$eventBus.$emit('showExportDialog', { selectedRows })
+        this.$eventBus.$emit('showExportDialog', { selectedRows, url: this.tableUrl, name: this.name })
       }
     },
     hasImport: defaultTrue,
     importOptions: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     handleImportClick: {
       type: Function,
       default: function({ selectedRows }) {
-        this.$eventBus.$emit('showImportDialog', { selectedRows })
+        this.$eventBus.$emit('showImportDialog', { selectedRows, url: this.tableUrl, name: this.name })
       }
     },
     hasColumnSetting: defaultTrue,
     handleTableSettingClick: {
       type: Function,
-      default: function() {
-        this.$eventBus.$emit('showColumnSettingPopover')
+      default: function({ selectedRows }) {
+        this.$eventBus.$emit('showColumnSettingPopover', { url: this.tableUrl, row: selectedRows, name: this.name })
       }
     },
     hasRefresh: defaultTrue,
@@ -95,10 +96,12 @@ export default {
       return this.selectedRows.length > 0
     },
     iImportOptions() {
-      return this.importOptions || { url: this.tableUrl }
+      return assignIfNot(this.importOptions, { url: this.tableUrl })
     },
     iExportOptions() {
-      return this.exportOptions || { url: this.tableUrl }
+      const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
+      console.log('Options: ', options)
+      return options
     }
   },
   methods: {

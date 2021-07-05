@@ -1,7 +1,7 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ShowSecretInfo :visible.sync="showViewSecretDialog" :account="account" />
+    <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
     <UpdateSecretInfo :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
@@ -45,9 +45,13 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'hostname', 'ip', 'username', 'version',
+          'hostname', 'ip', 'username_display', 'version',
           'date_created', 'date_updated', 'actions'
         ],
+        columnsShow: {
+          min: ['username_display', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'username_display', 'version', 'actions']
+        },
         columnsMeta: {
           hostname: {
             prop: 'hostname',
@@ -57,14 +61,13 @@ export default {
           ip: {
             width: '120px'
           },
-          username: {
+          username_display: {
             showOverflowTooltip: true
           },
           version: {
             width: '70px'
           },
           actions: {
-            prop: 'id',
             formatter: ActionsFormatter,
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
@@ -124,7 +127,10 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport,
         exportOptions: {
-          url: '/api/v1/assets/account-infos/'
+          url: '/api/v1/assets/account-secrets/',
+          beforeExport: () => {
+
+          }
         },
         hasSearch: true
       }
@@ -141,14 +147,6 @@ export default {
       for (const item of this.otherActions) {
         actionColumn.formatterArgs.extraActions.push(item)
       }
-    }
-  },
-  created() {
-    if (this.handleExport) {
-      this.headerActions.handleExport = this.handleExport
-    }
-    if (this.handleImport) {
-      this.headerActions.handleImport = this.handleImport
     }
   },
   methods: {

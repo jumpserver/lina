@@ -32,7 +32,11 @@ export default {
     },
     url: {
       type: String,
-      default: () => ''
+      default: ''
+    },
+    beforeExport: {
+      type: Function,
+      default: () => {}
     },
     performExport: {
       type: Function,
@@ -51,11 +55,6 @@ export default {
     canExportFiltered: {
       type: Boolean,
       default: true
-    },
-    exportUrl: {
-      type: String,
-      default: () => {
-      }
     }
   },
   data() {
@@ -120,8 +119,9 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showExportDialog', ({ selectedRows, url }) => {
-      if (url === this.url) {
+    this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
+      // Todo: 没有时间了，只能先这么处理了
+      if (url === this.url || url.indexOf('account') > -1) {
         this.showExportDialog = true
       }
     })
@@ -156,6 +156,7 @@ export default {
       const query = listTableRef.dataTable.getQuery()
       delete query['limit']
       delete query['offset']
+      await this.beforeExport()
       return this.performExport(this.selectedRows, this.exportOption, query)
     },
     async handleExportConfirm() {

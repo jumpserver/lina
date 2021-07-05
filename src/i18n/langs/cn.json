@@ -226,6 +226,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "MFAVerify": "验证 MFA",
     "ViewSecret": "查看密码",
     "ConnectWebSocketError": "连接 WebSocket 失败",
     "Action": "动作",
