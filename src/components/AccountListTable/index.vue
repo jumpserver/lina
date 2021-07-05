@@ -100,7 +100,7 @@ export default {
                   title: this.$t('common.Test'),
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/assets/accounts/${row.id}/tasks/`,
+                      `/api/v1/assets/accounts/${row.id}/verify/`,
                       { action: 'test' }
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
