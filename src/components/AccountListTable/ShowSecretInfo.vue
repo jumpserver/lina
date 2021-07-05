@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     getAuthInfo() {
-      const url = `/api/v1/assets/accounts/${this.account.id}/auth-info/`
+      const url = `/api/v1/assets/account-secrets/${this.account.id}/`
       this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
         this.authInfo = resp
         this.showAuthInfo = true

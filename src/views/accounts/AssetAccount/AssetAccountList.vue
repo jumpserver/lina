@@ -116,7 +116,7 @@ export default {
             }
           },
           rowClick: function(row, column, event) {
-            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}`
+            vm.rightTable.url = `/api/v1/assets/accounts/?asset_id=${row.id}`
             vm.rightTable.extraQuery.asset_id = row.id
             vm.clickedRow = row
             vm.isInit = false
@@ -134,7 +134,7 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated`,
+        url: `/api/v1/assets/accounts/?hostname=ShowFirstAssetRelated`,
         extraQuery: {
           latest: 1
         },

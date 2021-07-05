@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      assetUserUrl: `/api/v1/assets/asset-users/?asset_id=${this.object.id}&latest=1`,
+      assetUserUrl: `/api/v1/assets/accounts/?asset_id=${this.object.id}&latest=1`,
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
@@ -40,7 +40,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/asset-users/tasks/?asset_id=${this.object.id}&latest=1`,
+                `/api/v1/assets/accounts/tasks/?asset_id=${this.object.id}&latest=1`,
                 { action: 'test' }
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')

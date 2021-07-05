@@ -50,7 +50,7 @@ export default {
         hasLeftActions: true,
         hasCreate: true,
         hasClone: false,
-        url: '/api/v1/assets/asset-users/'
+        url: '/api/v1/assets/accounts/'
         // handleImport: function({ selectedRows }) {
         //   this.selectedRows = selectedRows
         //   this.dialogStatus = 'import'
@@ -76,7 +76,7 @@ export default {
         showMenu: false,
         showRefresh: false,
         showAssets: true,
-        url: '/api/v1/assets/asset-users/',
+        url: '/api/v1/assets/accounts/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
         callback: {
           onSelected: function(event, treeNode) {
@@ -123,7 +123,7 @@ export default {
   methods: {
     performUpdate(item) {
       this.$axios.put(
-        `/api/v1/assets/asset-users/`,
+        `/api/v1/assets/accounts/`,
         item.file,
         { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {
@@ -135,7 +135,7 @@ export default {
     },
     performCreate(item) {
       this.$axios.post(
-        `/api/v1/assets/asset-users/`,
+        `/api/v1/assets/accounts/`,
         item.file,
         { headers: { 'Content-Type': 'text/csv' }, disableFlashErrorMsg: true }
       ).then((data) => {

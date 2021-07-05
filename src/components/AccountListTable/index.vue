@@ -85,8 +85,8 @@ export default {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   type: 'primary',
-                  callback: (val) => {
-                    this.$axios.delete(`/api/v1/assets/accounts/${val.row.id}/`).then(() => {
+                  callback: ({ row }) => {
+                    this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
                       this.$message.success(this.$tc('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
                     })
@@ -95,9 +95,9 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  callback: (val) => {
+                  callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/assets/accounts/tasks/?id=${val.row.id}`,
+                      `/api/v1/assets/accounts/${row.id}/tasks/`,
                       { action: 'test' }
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
