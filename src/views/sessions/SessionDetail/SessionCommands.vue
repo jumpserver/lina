@@ -11,7 +11,7 @@ import ListTable from '@/components/ListTable'
 import { OutputExpandFormatter } from '../formatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
-  name: 'SessionCommandList',
+  name: 'SessionCommands',
   components: {
     ListTable
   },

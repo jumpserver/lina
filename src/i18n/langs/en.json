@@ -667,6 +667,10 @@
     "SiteMessageList": "Site message"
   },
   "sessions": {
+    "SetToDefaultStorage": "Set to default storage",
+    "SetToDefault": "Set to default",
+    "SetSuccess": "Set success",
+    "SetFailed": "Set failed",
     "StorageConfiguration": "Storage configuration",
     "accountKey": "Account key",
     "accountName": "Account name",
@@ -1107,6 +1111,8 @@
     "Cloud": {
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
+      "QingyunPrivatecloud": "Qingyun Private Cloud",
+      "HuaweiPrivatecloud": "Huawei Private Cloud",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",
       "HuaweiCloud": "Huawei Cloud",

@@ -24,12 +24,15 @@ export default {
 
       initial: { type: commandType, doc_type: 'command' },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'meta', 'comment']]
+        [this.$t('common.Basic'), ['name', 'type', 'meta', 'is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {
           type: 'select',
           disabled: true
+        },
+        is_default: {
+          helpText: this.$t('sessions.SetToDefaultStorage')
         },
         meta: {
           fields: ['HOSTS', 'INDEX', 'IGNORE_VERIFY_CERTS'],
