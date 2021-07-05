@@ -128,9 +128,7 @@ export default {
         hasExport: this.hasExport,
         exportOptions: {
           url: '/api/v1/assets/account-secrets/',
-          beforeExport: () => {
-
-          }
+          mfaVerifyRequired: true
         },
         hasSearch: true
       }

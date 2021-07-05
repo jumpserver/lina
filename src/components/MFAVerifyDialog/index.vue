@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { Dialog } from '@/components'
+import Dialog from '@/components/Dialog'
 
 export default {
   name: 'MFAVerifyDialog',

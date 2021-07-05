@@ -3,7 +3,6 @@
     <MFAVerifyDialog
       @MFAVerifyDone="getAuthInfo"
       @MFAVerifyCancel="exit"
-      v-on="$listeners"
     />
     <Dialog
       :title="dialogTitle"
