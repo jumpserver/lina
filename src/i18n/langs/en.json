@@ -224,6 +224,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "ViewSecret": "View secret",
     "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",

@@ -1,5 +1,13 @@
 <template>
-  <Dialog width="50" :title="this.$t('assets.UpdateAssetUserToken')" v-bind="$attrs" @confirm="handleConfirm()" @cancel="handleCancel()" v-on="$listeners">
+  <Dialog
+    width="50"
+    :title="this.$t('assets.UpdateAssetUserToken')"
+    :destroy-on-close="true"
+    v-bind="$attrs"
+    @confirm="handleConfirm()"
+    @cancel="handleCancel()"
+    v-on="$listeners"
+  >
     <el-form label-position="right" label-width="80px">
       <el-form-item :label="this.$t('assets.Hostname')">
         <el-input v-model="account.hostname" readonly />
@@ -45,7 +53,7 @@ export default {
         data.password = this.authInfo.password
       }
       if (this.authInfo.private_key !== '') {
-        data.pivate_key = this.authInfo.private_key
+        data.private_key = this.authInfo.private_key
       }
       this.$axios.patch(
         `/api/v1/assets/accounts/${this.account.id}/`,

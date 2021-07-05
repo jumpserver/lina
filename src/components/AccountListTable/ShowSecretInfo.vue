@@ -2,56 +2,56 @@
   <div>
     <Dialog
       :title="dialogTitle"
-      :visible.sync="showDialog"
       :show-confirm="false"
       :show-cancel="false"
       :destroy-on-close="true"
       :width="'50'"
+      v-bind="$attrs"
+      @opened="getAuthInfo"
+      v-on="$listeners"
     >
-      <div v-if="MFAConfirmed">
-        <el-form label-position="right" label-width="80px" :model="MFAInfo">
-          <el-form-item :label="this.$t('assets.Hostname')">
-            <el-input v-model="assetUser.hostname" disabled />
-          </el-form-item>
-          <el-form-item :label="this.$t('assets.Username')">
-            <el-input v-model="assetUser.username" disabled />
-          </el-form-item>
-          <el-form-item :label="this.$t('assets.Password')">
-            <el-input v-model="password" type="password" show-password />
-          </el-form-item>
-        </el-form>
-      </div>
-      <el-row v-else :gutter="20">
+      <el-row v-if="requireMFAVerify" :gutter="20">
         <el-col :span="4">
           <div style="line-height: 34px;text-align: center">MFA</div>
         </el-col>
         <el-col :span="14">
-          <el-input v-model="MFAInput" />
+          <el-input v-model="MFAToken" />
           <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
         </el-col>
         <el-col :span="4">
-          <el-button size="mini" type="primary" style="line-height:20px " @click="MFAConfirm">
+          <el-button size="mini" type="primary" style="line-height:20px " @click="verifyMFA">
             {{ this.$t('common.Confirm') }}
           </el-button>
         </el-col>
       </el-row>
+      <div v-if="showAuthInfo">
+        <el-form label-position="right" label-width="80px" :model="authInfo">
+          <el-form-item :label="this.$t('assets.Hostname')">
+            <el-input v-model="account.hostname" readonly />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.Username')">
+            <el-input v-model="account['username_display']" readonly />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.Password')">
+            <el-input v-model="authInfo.password" type="password" show-password />
+          </el-form-item>
+          <el-form-item :label="this.$t('assets.SSHKey')">
+            <el-input v-model="authInfo['private_key']" type="password" show-password />
+          </el-form-item>
+        </el-form>
+      </div>
     </Dialog>
   </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
-import { mapGetters } from 'vuex'
 export default {
   name: 'ShowSecretInfo',
   components: {
     Dialog
   },
   props: {
-    showDialog: {
-      type: Boolean,
-      default: false
-    },
     account: {
       type: Object,
       default: () => ({})
@@ -59,55 +59,41 @@ export default {
   },
   data() {
     return {
-      MFAConfirmed: false,
-      MFAInput: '',
       dialogTitle: this.$t('common.ViewSecret'),
-      password: ''
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'MFA_TTl',
-      'MFAVerifyAt',
-      'publicSettings'
-    ]),
-    needMFAVerify() {
-      if (!this.publicSettings.SECURITY_VIEW_AUTH_NEED_MFA) {
-        return false
-      }
-      const ttl = this.publicSettings.SECURITY_MFA_VERIFY_TTL
-      const now = new Date()
-      return !(this.MFAVerifyAt && (now - this.MFAVerifyAt) < ttl * 1000)
+      authInfo: {},
+      MFAToken: '',
+      requireMFAVerify: false,
+      showAuthInfo: false
     }
   },
   methods: {
-    MFAConfirm() {
-      if (this.MFAInput.length !== 6) {
-        return this.$message.error(this.$t('common.MFAErrorMsg'))
+    getAuthInfo() {
+      const url = `/api/v1/assets/accounts/${this.account.id}/auth-info/`
+      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
+        this.authInfo = resp
+        this.showAuthInfo = true
+      }).catch(err => {
+        const errorCode = _.get(err, 'response.data.code')
+        if (errorCode === 'mfa_verify_required') {
+          this.requireMFAVerify = true
+        } else {
+          this.showAuthInfo = true
+          this.$message.error(this.$tc('common.GetAccountAuthInfoFailed') + ': ' + err)
+        }
+      })
+    },
+    verifyMFA() {
+      if (this.MFAToken.length !== 6) {
+        return this.$message.error(this.$tc('common.MFAErrorMsg'))
       }
       this.$axios.post(
         `/api/v1/authentication/otp/verify/`, {
-          code: this.MFAInput
+          code: this.MFAToken
         }
       ).then(res => {
-        this.$store.dispatch('users/setMFAVerify')
-        const authInfoUrl = `/api/v1/assets/asset-user-auth-infos/${this.assetUser.asset}/`
-        this.$axios.get(authInfoUrl).then(res => {
-          this.MFAConfirmed = true
-          this.password = res['password']
-        })
+        this.requireMFAVerify = false
+        this.getAuthInfo()
       })
-    },
-    handleMFAConfirm() {
-      this.MFAInfo = {
-        asset: '',
-        username: '',
-        hostname: '',
-        password: ''
-      }
-      this.MFAInput = ''
-      this.showMFADialog = false
-      this.MFAConfirmed = false
     }
   }
 }

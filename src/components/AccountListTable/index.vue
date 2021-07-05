@@ -1,7 +1,7 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ShowSecretInfo :show-dialog="showViewSecretDialog" :account="account" />
+    <ShowSecretInfo :visible.sync="showViewSecretDialog" :account="account" />
     <UpdateSecretInfo :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
@@ -76,8 +76,8 @@ export default {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
-                  callback: function(val) {
-                    this.$log.debug('Click view')
+                  callback: function({ row }) {
+                    this.account = row
                     this.showViewSecretDialog = true
                   }.bind(this)
                 },
@@ -116,9 +116,6 @@ export default {
               ]
             }
           }
-        },
-        extraQuery: {
-          latest: 1
         }
       },
       headerActions: {
@@ -127,27 +124,9 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport,
         exportOptions: {
-          url: '/api/v1/assets/asset-user-auth-infos/'
+          url: '/api/v1/assets/account-infos/'
         },
-        hasSearch: true,
-        searchConfig: {
-          options: [
-            {
-              label: this.$t('assets.OnlyLatestVersion'),
-              value: 'latest',
-              children: [
-                {
-                  label: this.$t('common.Yes'),
-                  value: 1
-                },
-                {
-                  label: this.$t('common.No'),
-                  value: 0
-                }
-              ]
-            }
-          ]
-        }
+        hasSearch: true
       }
     }
   },
