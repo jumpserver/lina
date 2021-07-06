@@ -50,7 +50,7 @@ export default {
           'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
-          min: ['username', 'ip', 'actions'],
+          min: ['username', 'actions'],
           default: ['hostname', 'ip', 'username', 'version', 'actions']
         },
         columnsMeta: {
