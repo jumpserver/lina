@@ -8,9 +8,10 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
+import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'Detail',
@@ -45,27 +46,63 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'hostname', 'ip', 'username_display', 'version',
+          'hostname', 'ip', 'username', 'version', 'connectivity',
           'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
-          min: ['username_display', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'username_display', 'version', 'actions']
+          min: ['username', 'ip', 'actions'],
+          default: ['hostname', 'ip', 'username', 'version', 'actions']
         },
         columnsMeta: {
           hostname: {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.asset }
+                }
+              }
+            }
           },
           ip: {
             width: '120px'
           },
-          username_display: {
+          username: {
             showOverflowTooltip: true
           },
           version: {
             width: '70px'
+          },
+          connectivity: {
+            label: this.$t('assets.Reachable'),
+            formatter: ChoicesFormatter,
+            formatterArgs: {
+              iconChoices: {
+                ok: 'fa-check text-primary',
+                failed: 'fa-times text-danger',
+                unknown: 'fa-circle text-warning'
+              },
+              hasTips: true,
+              getTips: ({ row, cellValue }) => {
+                const mapper = {
+                  'ok': this.$t('assets.Reachable'),
+                  'failed': this.$t('assets.Unreachable'),
+                  'unknown': this.$t('assets.Unknown')
+                }
+                let tips = mapper[cellValue]
+                if (row['date_verified']) {
+                  const datetime = toSafeLocalDateStr(row['date_verified'])
+                  tips += '<br> ' + datetime
+                }
+                return tips
+              }
+            },
+            width: '90px',
+            align: 'center'
           },
           actions: {
             formatter: ActionsFormatter,

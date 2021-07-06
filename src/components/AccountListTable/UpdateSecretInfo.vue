@@ -13,7 +13,7 @@
         <el-input v-model="account.hostname" readonly />
       </el-form-item>
       <el-form-item :label="this.$t('assets.Username')">
-        <el-input v-model="account['username_display']" readonly />
+        <el-input v-model="account['username']" readonly />
       </el-form-item>
       <el-form-item :label="this.$t('assets.Password')">
         <el-input v-model="authInfo.password" type="password" />

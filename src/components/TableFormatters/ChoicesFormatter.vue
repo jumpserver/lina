@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-tooltip v-if="formatterArgs.hasTips" placement="bottom" effect="dark">
-      <div slot="content">{{ tipStatus }}<br>{{ tipTime }}</div>
+      <div slot="content" v-html="tips" />
       <i :class="'fa ' + iconClass" />
     </el-tooltip>
     <i v-else :class="'fa ' + iconClass" />
@@ -10,7 +10,6 @@
 
 <script>
 import BaseFormatter from './base'
-import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'ChoicesFormatter',
   extends: BaseFormatter,
@@ -23,21 +22,12 @@ export default {
             true: 'fa-check text-primary',
             false: 'fa-times text-danger'
           },
-          typeChange(val) {
-            return !!val
+          getIconKey({ row, cellValue }) {
+            return cellValue
           },
           hasTips: false,
-          tipStatus(val, vm) {
-            if (!val) {
-              return vm.$t('assets.Unknown')
-            }
-            if (val.status === 0) {
-              return vm.$t('assets.Unreachable')
-            } else if (val.status === 1) {
-              return vm.$t('assets.Reachable')
-            } else if (val.status === 2) {
-              return vm.$t('assets.Unknown')
-            }
+          getTips: ({ row, cellValue }) => {
+            return cellValue
           }
         }
       }
@@ -50,18 +40,12 @@ export default {
   },
   computed: {
     iconClass() {
-      const key = this.formatterArgs.typeChange(this.cellValue)
+      const key = this.formatterArgs.getIconKey({ row: this.row, cellValue: this.cellValue })
+      console.log('What key: ', key)
       return this.formatterArgs.iconChoices[key]
     },
-    tipStatus() {
-      const vm = this
-      return this.formatterArgs.tipStatus(this.cellValue, vm)
-    },
-    tipTime() {
-      if (!this.cellValue) {
-        return ''
-      }
-      return toSafeLocalDateStr(this.cellValue.datetime)
+    tips() {
+      return this.formatterArgs.getTips({ cellValue: this.cellValue, row: this.row })
     }
   }
 }
