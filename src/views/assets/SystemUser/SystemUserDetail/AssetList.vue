@@ -18,7 +18,7 @@ import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
 import AssetRelationCard from '@/components/AssetRelationCard'
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetList',
@@ -42,11 +42,17 @@ export default {
         columns: [
           {
             prop: 'asset_display',
-            label: this.$t('assets.Hostname')
-          },
-          {
-            prop: 'systemuser_display',
-            label: this.$t('assets.SystemUsers')
+            label: this.$t('assets.Hostname'),
+            showOverflowTooltip: true,
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.asset }
+                }
+              }
+            }
           },
           {
             prop: 'id',

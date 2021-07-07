@@ -20,6 +20,10 @@ export default {
           'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
           'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'username', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
+        },
         columnsMeta: {
           username: {
             showOverflowTooltip: true
