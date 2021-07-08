@@ -9,14 +9,14 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
-import AssetUserList from './AssetUserList.vue'
+import Account from './Account.vue'
 export default {
   name: 'AssetListDetail',
   components: {
     GenericDetailPage,
     TabPage,
     Detail,
-    AssetUserList
+    Account
   },
   data() {
     return {
@@ -29,8 +29,8 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('assets.AssetUserList'),
-            name: 'AssetUserList'
+            title: this.$t('assets.AccountList'),
+            name: 'Account'
           }
         ],
         hasRightSide: true,
