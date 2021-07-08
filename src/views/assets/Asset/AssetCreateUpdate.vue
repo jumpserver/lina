@@ -63,7 +63,7 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/admin-users/',
+              url: '/api/v1/assets/system-users/?type=admin',
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }

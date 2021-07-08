@@ -4,6 +4,7 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    v-bind="$attrs"
   />
 </template>
 
@@ -12,7 +13,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { Required } from '@/components/DataForm/rules'
 
 export default {
-  name: 'SystemUserCreateUpdate',
+  name: 'CommonUserSSH',
   components: { GenericCreateUpdatePage },
   data() {
     return {
@@ -20,9 +21,9 @@ export default {
         protocol: this.$route.query.protocol
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'protocol']],
         [this.$t('common.Auth'), ['token']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
         token: {

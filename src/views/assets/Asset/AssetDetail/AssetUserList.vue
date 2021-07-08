@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="24">
       <el-col :span="16">
-        <AssetUserTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" />
+        <AccountListTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" />
       </el-col>
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
@@ -13,12 +13,12 @@
 
 <script>
 import QuickActions from '@/components/QuickActions'
-import { AssetUserTable } from '@/components'
+import { AccountListTable } from '@/components'
 
 export default {
   name: 'Detail',
   components: {
-    AssetUserTable,
+    AccountListTable,
     QuickActions
   },
   props: {
@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      assetUserUrl: `/api/v1/assets/asset-users/?asset_id=${this.object.id}&latest=1`,
+      assetUserUrl: `/api/v1/assets/accounts/?asset_id=${this.object.id}&latest=1`,
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
@@ -40,7 +40,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/asset-users/tasks/?asset_id=${this.object.id}&latest=1`,
+                `/api/v1/assets/accounts/tasks/?asset_id=${this.object.id}&latest=1`,
                 { action: 'test' }
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')

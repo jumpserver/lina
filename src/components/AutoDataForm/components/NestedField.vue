@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { DataForm } from '@/components'
+import DataForm from '@/components/DataForm'
 
 export default {
   name: 'NestedField',

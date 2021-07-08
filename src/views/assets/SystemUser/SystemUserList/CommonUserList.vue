@@ -1,19 +1,24 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  <div>
+    <el-alert v-if="helpMessage" type="success">
+      <span v-html="helpMessage" />
+    </el-alert>
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/system-users/',
+        url: '/api/v1/assets/system-users/?type=common',
         columns: [
           'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
           'assets_amount', 'priority',
@@ -50,7 +55,6 @@ export default {
             }
           }
         }
-
       },
       headerActions: {
         hasMoreActions: false,
@@ -69,12 +73,6 @@ export default {
               has: true
             },
             {
-              title: 'Telnet',
-              name: 'Telnet',
-              type: 'primary',
-              has: true
-            },
-            {
               title: 'RDP',
               name: 'RDP',
               type: 'primary',
@@ -83,6 +81,12 @@ export default {
             {
               title: 'VNC',
               name: 'VNC',
+              type: 'primary',
+              has: true
+            },
+            {
+              title: 'Telnet',
+              name: 'Telnet',
               type: 'primary',
               has: true
             },

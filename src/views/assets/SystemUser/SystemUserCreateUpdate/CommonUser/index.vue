@@ -1,27 +1,26 @@
 <template>
-  <component :is="activePage" />
+  <component :is="systemUserProtocolComponent" :title="title" />
 </template>
 
 <script>
-import SSH from './SystemUserCreate/ssh'
-import RDP from './SystemUserCreate/rdp'
-import VncAndTelnet from './SystemUserCreate/vncAndTelnet'
-import DATABASE from './SystemUserCreate/database'
-import K8S from './SystemUserCreate/k8s'
+import SSH from './ssh'
+import RDP from './rdp'
+import VncOrTelnet from './vncAndTelnet'
+import Database from './database'
+import K8S from './k8s'
 
 export default {
   name: 'SystemUserCreateUpdate',
-  components: { SSH, RDP, VncAndTelnet, DATABASE },
+  components: { SSH, RDP, VncOrTelnet, Database },
   data() {
     return {
-
+      title: this.$t('route.SystemUserCreate') + ' - ' + this.$t('assets.CommonUser')
     }
   },
   method: {
-
   },
   computed: {
-    activePage() {
+    systemUserProtocolComponent() {
       const query = this.$route.query
       const protocol = query.protocol
       switch (protocol) {
@@ -31,12 +30,12 @@ export default {
           return RDP
         case 'vnc':
         case 'telnet':
-          return VncAndTelnet
+          return VncOrTelnet
         case 'mysql':
         case 'oracle':
         case 'postgresql':
         case 'mariadb':
-          return DATABASE
+          return Database
         case 'k8s':
           return K8S
         default:

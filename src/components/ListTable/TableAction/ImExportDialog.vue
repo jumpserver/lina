@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ExportDialog :selected-rows="selectedRows" :url="url" v-bind="$attrs" v-on="$listeners" />
-    <ImportDialog :selected-rows="selectedRows" :url="url" v-bind="$attrs" v-on="$listeners" />
+    <ExportDialog :selected-rows="selectedRows" v-bind="exportOptions" v-on="$listeners" />
+    <ImportDialog :selected-rows="selectedRows" v-bind="importOptions" v-on="$listeners" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import ExportDialog from './ExportDialog'
 import ImportDialog from './ImportDialog'
 
 export default {
-  name: 'DialogAction',
+  name: 'ImExportDialog',
   components: {
     ExportDialog,
     ImportDialog
@@ -20,9 +20,13 @@ export default {
       type: Array,
       default: () => []
     },
-    url: {
-      type: String,
-      default: () => ''
+    exportOptions: {
+      type: Object,
+      default: () => ({})
+    },
+    importOptions: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {

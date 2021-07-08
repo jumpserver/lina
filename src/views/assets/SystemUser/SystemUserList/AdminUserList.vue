@@ -1,18 +1,23 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  <div>
+    <el-alert v-if="helpMessage" type="success">
+      <span v-html="helpMessage" />
+    </el-alert>
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" :help-message="helpMessage" />
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/admin-users/',
+        url: '/api/v1/assets/system-users/?type=admin',
         columns: [
           'name', 'username', 'assets_amount',
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
@@ -27,12 +32,23 @@ export default {
           },
           assets_amount: {
             width: '80px'
+          },
+          actions: {
+            formatterArgs: {
+              updateRoute: { name: 'SystemUserUpdate', query: { type: 'admin' }}
+            }
           }
         }
       },
-      updateRoute: 'AdminUserUpdate',
       headerActions: {
-        createRoute: 'AdminUserCreate'
+        createRoute: () => {
+          return {
+            name: 'SystemUserCreate',
+            query: {
+              type: 'admin'
+            }
+          }
+        }
       },
       helpMessage: this.$t('assets.AdminUserListHelpMessage')
     }

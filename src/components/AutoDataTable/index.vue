@@ -170,12 +170,12 @@ export default {
           col.filters = column.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { text: item.display_name, value: 'True' }
+                return { text: item['display_name'], value: 'True' }
               } else {
-                return { text: item.display_name, value: 'False' }
+                return { text: item['display_name'], value: 'False' }
               }
             }
-            return { text: item.display_name, value: item.value }
+            return { text: item['display_name'], value: item.value }
           })
           col.sortable = false
           col['column-key'] = col.prop
@@ -223,7 +223,7 @@ export default {
       defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['action', 'id'])
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
         .filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 应该显示的列
