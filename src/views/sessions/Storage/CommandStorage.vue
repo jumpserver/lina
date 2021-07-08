@@ -1,10 +1,11 @@
 <template>
-  <ListTable :table-config="commandTableConfig" :header-actions="commandActions" />
+  <ListTable ref="ListTable" :table-config="commandTableConfig" :header-actions="commandActions" />
 </template>
 
 <script>
 import ListTable from '@/components/ListTable'
-import { TestCommandStorage } from '@/api/sessions'
+import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
+import { BooleanFormatter } from '@/components/TableFormatters'
 export default {
   name: 'CommandStorage',
   components: {
@@ -17,11 +18,12 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       commandActions: {
         hasExport: false,
         hasImport: false,
-        hasRefresh: false,
+        hasRefresh: true,
         hasMoreActions: false,
         moreCreates: {
           callback: (item) => {
@@ -38,7 +40,7 @@ export default {
       commandTableConfig: {
         title: 'command',
         url: '/api/v1/terminal/command-storages/',
-        columns: ['name', 'type', 'comment', 'actions'],
+        columns: ['name', 'type', 'comment', 'is_default', 'actions'],
         columnsMeta: {
           comment: {
             sortable: 'custom'
@@ -53,16 +55,27 @@ export default {
               return row.type
             }
           },
+          is_default: {
+            formatter: BooleanFormatter,
+            formatterArgs: {
+              iconChoices: {
+                true: 'fa-check text-primary',
+                false: ''
+              }
+            },
+            align: 'center',
+            width: '100px'
+          },
           actions: {
             prop: 'id',
             formatterArgs: {
-              canUpdate: function(row, cellValue) {
+              canUpdate: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
-              onUpdate: function({ row, col }) {
+              onUpdate: function({ row }) {
                 this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
               },
-              canDelete: function(row, cellValue) {
+              canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
               extraActions: [
@@ -77,6 +90,19 @@ export default {
                       } else {
                         this.$message.success(data.msg)
                       }
+                    })
+                  }
+                },
+                {
+                  name: 'set_to_default',
+                  title: this.$t('sessions.SetToDefault'),
+                  type: 'primary',
+                  callback: function({ row, col, cellValue, reload }) {
+                    SetToDefaultCommandStorage(row.id).then(data => {
+                      vm.$refs.ListTable.reloadTable()
+                      this.$message.success(this.$t('sessions.SetSuccess'))
+                    }).catch(() => {
+                      this.$message.error(this.$t('sessions.SetFailed'))
                     })
                   }
                 }

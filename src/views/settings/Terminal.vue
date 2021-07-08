@@ -6,6 +6,7 @@
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
       :has-detail-in-msg="false"
+      :clean-form-value="cleanFormValue"
     />
   </IBox>
 </template>
@@ -56,9 +57,18 @@ export default {
   methods: {
     getMethod() {
       return 'put'
+    },
+    cleanFormValue(data) {
+      Object.keys(data).forEach(
+        function(key) {
+          if (data[key] === null) {
+            delete data[key]
+          }
+        }
+      )
+      return data
     }
   }
-
 }
 </script>
 

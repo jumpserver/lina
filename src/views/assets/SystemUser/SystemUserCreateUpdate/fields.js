@@ -1,10 +1,8 @@
 import { Required } from '@/components/DataForm/rules'
-import i18n from '@/i18n/i18n'
 import { Select2, UploadKey } from '@/components'
 
 function getFields() {
   const login_mode = {
-    helpText: i18n.t('assets.LoginModeHelpMessage'),
     on: {
       input: ([value], updateForm) => {
         if (value === 'manual') {
@@ -35,7 +33,7 @@ function getFields() {
       }
       if (form.username_same_with_user) {
         this.fieldsMeta.username.el.disabled = true
-        form.username = ''
+        form.username = '*'
       } else {
         this.fieldsMeta.username.el.disabled = false
       }
@@ -54,6 +52,7 @@ function getFields() {
 
   const username_same_with_user = {
     type: 'switch',
+    label: this.$t('assets.DynamicUsername'),
     helpText: this.$t('assets.UsernameHelpMessage'),
     el: {
       disabled: false
@@ -75,6 +74,10 @@ function getFields() {
         return true
       }
       if (form.protocol === 'k8s') {
+        return true
+      }
+      if (form.type === 'admin') {
+        form.auto_generate_key = false
         return true
       }
 
@@ -114,7 +117,7 @@ function getFields() {
       disabled: false
     },
     hidden: form => {
-      if (form.login_mode === 'manual') {
+      if (form.login_mode === 'manual' || form.type === 'admin') {
         this.fieldsMeta.auto_push.el.disabled = true
       } else {
         this.fieldsMeta.auto_push.el.disabled = false
@@ -162,6 +165,9 @@ function getFields() {
     helpText: this.$t('assets.GroupsHelpMessage')
   }
 
+  const type = {
+  }
+
   return {
     login_mode: login_mode,
     username: username,
@@ -173,7 +179,8 @@ function getFields() {
     auto_push: auto_push,
     update_password: update_password,
     password: password,
-    system_groups: system_groups
+    system_groups: system_groups,
+    type: type
   }
 }
 

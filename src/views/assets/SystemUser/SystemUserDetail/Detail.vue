@@ -44,7 +44,7 @@ export default {
           attrs: {
             label: this.$t('assets.AutoPush'),
             model: this.object.auto_push,
-            disabled: ['rdp', 'ssh'].indexOf(this.object.protocol) === -1
+            disabled: ['rdp', 'ssh'].indexOf(this.object.protocol) === -1 || this.object.type === 'admin'
           },
           callbacks: {
             change: function(val) {
@@ -110,6 +110,10 @@ export default {
         {
           key: this.$t('assets.Name'),
           value: this.object.name
+        },
+        {
+          key: this.$t('assets.Type'),
+          value: this.object.type_display
         },
         {
           key: this.$t('assets.Username'),

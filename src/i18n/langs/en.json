@@ -1,9 +1,9 @@
 {
   "": "",
   "accounts": {
-    "PleaseClickLeftAssetToViewAssetAccount": "Asset account list, please click on the assets on the left to view",
+    "PleaseClickLeftAssetToViewAssetAccount": "Asset account list,  please click on the assets on the left to view",
     "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
-    "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list， please click on the assets on the left to view"
+    "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list, please click on the assets on the left to view"
   },
   "acl": {
     "name": "Name",
@@ -82,16 +82,20 @@
     "DBInfo": "Database Info"
   },
   "assets": {
+    "AssociateAssets": "Associate assets",
+    "AssociateNodes": "Associate nodes",
     "Action": "Action",
     "ActiveSelected": "Active selected",
     "AdminUser": "Admin user",
     "ReplaceNodeAssetsAdminUser":"Replace node assets admin user with this",
     "AdminUserDetail": "Admin user detail",
+    "DynamicUsername": "Dynamic username",
     "AdminUserListHelpMessage": "Admin users are asset (charged server) on the root, or have NOPASSWD: ALL sudo permissions users, JumpServer users of the system using the user to `push system user`, `get assets hardware information`, etc.\n",
     "Asset": "Asset",
     "HardwareInfo": "Hardware info",
     "Hardware": "Hardware",
     "AccountList": "Account list",
+    "LoginOption": "Login option",
     "AssetDetail": "Asset detail",
     "AssetList": "Asset list",
     "AssetListHelpMessage": "The left side is the asset tree, right click to create, delete, and change the tree node, authorization asset is also organized as a node, and the right side is the asset under that node\n",
@@ -115,6 +119,7 @@
     "CommandFilterRules": "Command filter rules",
     "Comment": "Comment",
     "Cpu": "Cpu",
+    "CommonUser": "Common user",
     "CreatedBy": "Created by",
     "Database": "Database",
     "DateJoined": "Date joined",
@@ -173,11 +178,11 @@
     "Rules": "Rules",
     "SFTPHelpMessage": "SFTP root dir, tmp, home or custom",
     "SerialNumber": "Serial number",
-    "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami,/bin/ifconfig",
+    "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami, /bin/ifconfig",
     "PasswordHelpMessage": "Password or private key password",
     "SystemUser": "System user",
     "SystemUserDetail": "System user detail",
-    "SystemUserListHelpMessage": "System user is JumpServer jump login assets used by the users, can be understood as the user login assets, such as web, sa, the dba (` ssh web@some-host `), rather than using a user the username login server jump (` ssh xiaoming@some-host `); In simple terms, users log into JumpServer using their own username, and JumpServer uses system users to log into assets. When system users are created, if you choose auto push JumpServer to use Ansible push system users into the asset, if the asset (Switch) does not support ansible, please manually fill in the account password.\n",
+    "SystemUserListHelpMessage": "<b>System user</b> is the account JumpServer used to log into the asset, such as using root `ssh root@host`, rather than the current user username（ssh admin@host)`;<br><b>Admin user</b> is the account that already exists on an asset, and have privileged permissions, JumpServer using this create common system user, and gather hardware Etc;</br><b>Common user</b> can pre-exist assets or created automatically by the admin user.",
     "SystemUsers": "System users",
     "Test": "Test",
     "TestAssetsConnective": "Test assets connective",
@@ -219,6 +224,8 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "MFAVerify": "Verify MFA",
+    "ViewSecret": "View secret",
     "ConnectWebSocketError": "Connect Websocket failed",
     "Nothing": "Nothing",
     "Action": "Action",
@@ -250,7 +257,7 @@
     "Confirm": "Confirm",
     "Create": "Create",
     "CreatedBy": "Created by",
-    "CrontabHelpTips": "eg: Every Sunday 03:05 run <5 3 * * 0> <br>Tips:Using 5 digits linux crontab expressions<min hour day month week> (<a href='https://tool.lu/crontab/' target='_blank'>Online tools</a>) <br>Note:If both Regularly perform and Cycle perform are set,give priority to Regularly perform",
+    "CrontabHelpTips": "eg: Every Sunday 03:05 run <5 3 * * 0> <br>Tips:Using 5 digits linux crontab expressions<min hour day month week> (<a href='https://tool.lu/crontab/' target='_blank'>Online tools</a>) <br>Note:If both Regularly perform and Cycle perform are set, give priority to Regularly perform",
     "DateEnd": "End date",
     "Resource": "Resource",
     "DateLast24Hours": "Last 24 hours",
@@ -292,7 +299,7 @@
     "RemoveSuccessMsg": "Remove success",
     "Reset": "Reset",
     "Search": "Search",
-    "MFAErrorMsg": "MFA Error，please check",
+    "MFAErrorMsg": "MFA Error, please check",
     "InputEmailAddress": "Please enter your email address",
     "Select": "Select",
     "SelectFile": "Select file",
@@ -661,6 +668,10 @@
     "SiteMessageList": "Site message"
   },
   "sessions": {
+    "SetToDefaultStorage": "Set to default storage",
+    "SetToDefault": "Set to default",
+    "SetSuccess": "Set success",
+    "SetFailed": "Set failed",
     "StorageConfiguration": "Storage configuration",
     "accountKey": "Account key",
     "accountName": "Account name",
@@ -725,7 +736,7 @@
     "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
     "helpText": {
-      "esUrl": "Tip: If you have multiple hosts, use comma (,) to split (eg: http://www.jumpserver.a.com,http://www.jumpserver.b.com)",
+      "esUrl": "Tip: If you have multiple hosts, use comma (, ) to split (eg: http://www.jumpserver.a.com, http://www.jumpserver.b.com)",
       "esIndex":"Es provides the default index: jumpserver",
       "esDocType": "Es provides the default document type: command",
       "s3Endpoint": "S3: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China): http://s3.{REGION_NAME}.amazonaws.com.cn<br>Example: http://s3.cn-north-1.amazonaws.com.cn",
@@ -792,7 +803,7 @@
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
       "authLdapSearchFilter": "Choice may be (cn|uid|sAMAccountName)=%(user)s)",
       "authLdapSearchOu": "Use | split User OUs",
-      "authLdapUserAttrMap": "User attr map present how to map LDAP user attr to jumpserver, username,name,email is jumpserver attr",
+      "authLdapUserAttrMap": "User attr map present how to map LDAP user attr to jumpserver, username, name, email is jumpserver attr",
       "emailCustomUserCreatedBody": "Tips:When creating a user, send the content of the email",
       "emailCustomUserCreatedHonorific": "Tips: When creating a user, send the honorific of the email (eg:Hello)",
       "emailCustomUserCreatedSignature": "Tips: Email signature (eg:jumpserver)",
@@ -1101,6 +1112,8 @@
     "Cloud": {
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
+      "QingyunPrivatecloud": "Qingyun Private Cloud",
+      "HuaweiPrivatecloud": "Huawei Private Cloud",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",
       "HuaweiCloud": "Huawei Cloud",

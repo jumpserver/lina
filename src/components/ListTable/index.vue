@@ -113,15 +113,6 @@ export default {
   & >>> .el-table__header thead > tr > th {
     background-color: white;
   }
-
-  /*& >>> .el-table--striped .el-table__body tr.el-table__row--striped td {*/
-  /*background: white;*/
-  /*}*/
-
-  /*& >>> .el-table th, .el-table tr  {*/
-  /*background-color: red;*/
-  /*!*background-color: #FAFAFA;*!*/
-  /*}*/
 }
 
 //修改颜色

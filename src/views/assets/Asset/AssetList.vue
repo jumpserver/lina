@@ -74,6 +74,7 @@ import TreeTable from '@/components/TreeTable'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import Protocols from '@/views/assets/Asset/components/Protocols/index'
+import { toSafeLocalDateStr } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -101,12 +102,10 @@ export default {
         hasTree: true,
         columns: [
           'hostname', 'ip', 'public_ip', 'admin_user_display',
-          'protocols',
-          'platform', 'hardware_info', 'model',
+          'protocols', 'platform', 'hardware_info', 'model',
           'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
-          'disk_info', 'disk_total', 'memory',
-          'os', 'os_arch', 'os_version',
-          'number', 'vendor', 'sn',
+          'disk_info', 'disk_total', 'memory', 'os', 'os_arch',
+          'os_version', 'number', 'vendor', 'sn',
           'connectivity',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
@@ -148,17 +147,24 @@ export default {
             formatter: ChoicesFormatter,
             formatterArgs: {
               iconChoices: {
-                0: 'fa-times text-danger',
-                1: 'fa-check text-primary',
-                2: 'fa-circle text-warning'
+                ok: 'fa-times text-danger',
+                failed: 'fa-check text-primary',
+                unknown: 'fa-circle text-warning'
               },
-              typeChange: function(val) {
-                if (!val) {
-                  return 2
+              hasTips: true,
+              getTips: ({ row, cellValue }) => {
+                const mapper = {
+                  'ok': this.$t('assets.Reachable'),
+                  'failed': this.$t('assets.Unreachable'),
+                  'unknown': this.$t('assets.Unknown')
                 }
-                return val.status
-              },
-              hasTips: true
+                let tips = mapper[cellValue]
+                if (row['date_verified']) {
+                  const datetime = toSafeLocalDateStr(row['date_verified'])
+                  tips += '<br> ' + datetime
+                }
+                return tips
+              }
             },
             width: '90px',
             align: 'center'

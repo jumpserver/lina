@@ -1,29 +1,45 @@
 <template>
-  <Dialog v-if="showExportDialog" :title="$t('common.Export')" :visible.sync="showExportDialog" :destroy-on-close="true" @confirm="handleExportConfirm()" @cancel="handleExportCancel()">
-    <el-form label-position="left" style="padding-left: 50px">
-      <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
-        <el-radio-group v-model="exportTypeOption">
-          <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item class="export-form" :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
-        <el-radio-group v-model="exportOption">
-          <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-    </el-form>
-  </Dialog>
+  <div>
+    <MFAVerifyDialog
+      v-if="mfaDialogShow"
+      @MFAVerifyDone="showExportDialog"
+      @MFAVerifyCancel="handleExportCancel"
+    />
+    <Dialog
+      v-if="exportDialogShow"
+      :title="$t('common.Export')"
+      :visible.sync="exportDialogShow"
+      :destroy-on-close="true"
+      @confirm="handleExportConfirm()"
+      @cancel="handleExportCancel()"
+    >
+      <el-form label-position="left" style="padding-left: 50px">
+        <el-form-item :label="$t('common.fileType' )" :label-width="'100px'">
+          <el-radio-group v-model="exportTypeOption">
+            <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item class="export-form" :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+          <el-radio-group v-model="exportOption">
+            <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+    </Dialog>
+  </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
+import MFAVerifyDialog from '@/components/MFAVerifyDialog'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 
 export default {
   name: 'ExportDialog',
   components: {
-    Dialog
+    Dialog,
+    MFAVerifyDialog
   },
   props: {
     selectedRows: {
@@ -32,7 +48,15 @@ export default {
     },
     url: {
       type: String,
-      default: () => ''
+      default: ''
+    },
+    beforeExport: {
+      type: Function,
+      default: () => {}
+    },
+    mfaVerifyRequired: {
+      type: Boolean,
+      default: false
     },
     performExport: {
       type: Function,
@@ -55,10 +79,12 @@ export default {
   },
   data() {
     return {
-      showExportDialog: false,
+      exportDialogShow: false,
       exportOption: 'all',
       exportTypeOption: 'csv',
-      meta: {}
+      meta: {},
+      mfaVerified: false,
+      mfaDialogShow: false
     }
   },
   computed: {
@@ -115,13 +141,26 @@ export default {
     }
   },
   mounted() {
-    this.$eventBus.$on('showExportDialog', ({ selectedRows, url }) => {
-      if (url === this.url) {
-        this.showExportDialog = true
+    this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
+      // Todo: 没有时间了，只能先这么处理了
+      if (url === this.url || url.indexOf('account') > -1) {
+        this.showExportDialog()
       }
     })
   },
   methods: {
+    showExportDialog() {
+      if (!this.mfaVerifyRequired) {
+        this.exportDialogShow = true
+        return
+      }
+      // 这是需要校验 MFA 的
+      if (!this.mfaDialogShow) {
+        this.mfaDialogShow = true
+      } else {
+        this.exportDialogShow = true
+      }
+    },
     downloadCsv(url) {
       const a = document.createElement('a')
       a.href = url
@@ -139,11 +178,6 @@ export default {
         }
         const spm = await createSourceIdCache(resources)
         query['spm'] = spm.spm
-      } else if (exportOption === 'filtered') {
-        // console.log(listTableRef)
-        // console.log(listTableRef.dataTable)
-        // delete query['limit']
-        // delete query['offset']
       }
       query['format'] = this.exportTypeOption
       const queryStr =
@@ -156,14 +190,17 @@ export default {
       const query = listTableRef.dataTable.getQuery()
       delete query['limit']
       delete query['offset']
+      await this.beforeExport()
       return this.performExport(this.selectedRows, this.exportOption, query)
     },
     async handleExportConfirm() {
       await this.handleExport()
-      this.showExportDialog = false
+      this.exportDialogShow = false
+      this.mfaDialogShow = false
     },
     handleExportCancel() {
-      this.showExportDialog = false
+      this.exportDialogShow = false
+      this.mfaDialogShow = false
     }
   }
 }

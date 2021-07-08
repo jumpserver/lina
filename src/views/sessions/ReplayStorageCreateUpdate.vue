@@ -39,7 +39,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
         [storageTypeMeta.title, ['meta']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {
@@ -47,6 +47,9 @@ export default {
         },
         meta: {
           fields: storageTypeMeta.meta
+        },
+        is_default: {
+          helpText: this.$t('sessions.SetToDefaultStorage')
         }
       }
     }

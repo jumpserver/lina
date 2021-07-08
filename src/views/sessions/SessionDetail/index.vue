@@ -14,27 +14,27 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import SessionCommandList from './SessionCommandList'
-import SessionDetailCard from './SessionDetailCard'
+import SessionCommands from './SessionCommands'
+import SessionDetailInfo from './SessionDetailInfo'
 export default {
   name: 'SessionDetail',
   components: {
     GenericDetailPage,
-    SessionCommandList,
-    SessionDetailCard
+    SessionCommands,
+    SessionDetailInfo
   },
   data() {
     return {
       sessionData: {},
-      activeSubMenu: 'SessionDetailCard',
+      activeSubMenu: 'SessionDetailInfo',
       submenu: [
         {
           title: this.$t('route.SessionDetail'),
-          name: 'SessionDetailCard'
+          name: 'SessionDetailInfo'
         },
         {
           title: this.$t('sessions.command'),
-          name: 'SessionCommandList'
+          name: 'SessionCommands'
         }
       ]
     }

@@ -17,31 +17,16 @@
         <GenericListTable
           ref="LeftTable"
           class="asset-table"
-          :header-actions="leftTable.headerActions"
-          :table-config="leftTable.tableConfig"
+          v-bind="leftTable"
           @row-click="leftTable.tableConfig.rowClick"
         />
       </el-col>
       <el-col :span="iShowTree?11:13">
-        <AssetUserTable
-          v-if="!isInit"
+        <AccountListTable
           ref="RightTable"
           class="asset-user-table"
-          :url="rightTable.url"
-          :search-exclude="rightTable.searchExclude"
-          :extra-query="rightTable.extraQuery"
-          :has-left-actions="rightTable.hasLeftActions"
-          :table-config="rightTable.tableConfig"
-          :has-clone="false"
-          :has-import="false"
+          v-bind="rightTable"
         />
-        <div v-else class="noDataR">
-          <div class="hintWrap">
-            <div>
-              {{ $t('accounts.PleaseClickLeftAssetToViewAssetAccount') }}
-            </div>
-          </div>
-        </div>
       </el-col>
     </el-row>
   </Page>
@@ -51,13 +36,13 @@
 import Page from '@/layout/components/Page'
 import GenericListTable from '@/layout/components/GenericListTable'
 import AutoDataZTree from '@/components/AutoDataZTree/index'
-import { AssetUserTable } from '@/components'
+import { AccountListTable } from '@/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    AutoDataZTree, GenericListTable, Page, AssetUserTable
+    AutoDataZTree, GenericListTable, Page, AccountListTable
   },
   data() {
     const vm = this
@@ -116,8 +101,8 @@ export default {
             }
           },
           rowClick: function(row, column, event) {
-            vm.rightTable.url = `/api/v1/assets/asset-users/?asset_id=${row.id}`
-            vm.rightTable.extraQuery.asset_id = row.id
+            vm.rightTable.url = `/api/v1/assets/accounts/?asset=${row.id}`
+            vm.rightTable.extraQuery.asset = row.id
             vm.clickedRow = row
             vm.isInit = false
           }
@@ -134,32 +119,10 @@ export default {
         }
       },
       rightTable: {
-        url: `/api/v1/assets/asset-users/?hostname=ShowFirstAssetRelated`,
+        url: `/api/v1/assets/accounts/`,
+        name: 'AssetAccountListTable',
         extraQuery: {
           latest: 1
-        },
-        tableConfig: {
-          columns: ['name', 'username', 'version', 'backend_display', 'date_created', 'org_name', 'actions'],
-          columnsShow: {
-            min: ['username', 'actions'],
-            default: ['name', 'username', 'version', 'backend_display', 'date_created', 'actions']
-          },
-          columnsMeta: {
-            name: {
-              formatter: null,
-              showOverflowTooltip: true,
-              sortable: false
-            }
-          },
-          tableAttrs: {
-            stripe: true, // 斑马纹表格
-            border: false, // 表格边框
-            fit: true, // 宽度自适应,
-            tooltipEffect: 'dark',
-            rowClassName({ row, rowIndex }) {
-              return 'row-background-color'
-            }
-          }
         },
         hasLeftActions: false,
         searchExclude: ['hostname', 'id', 'ip']

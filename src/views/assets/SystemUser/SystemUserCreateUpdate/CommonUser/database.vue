@@ -1,13 +1,19 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+    v-bind="$attrs"
+  />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import getFields from './fields'
+import getFields from '../fields'
 
 export default {
-  name: 'SystemUserCreateUpdate',
+  name: 'CommonUserDatabase',
   components: { GenericCreateUpdatePage },
   data() {
     const fields = getFields.bind(this)()

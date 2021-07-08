@@ -91,6 +91,9 @@ export default {
               // const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
               url: this.$route.query.category === 'remote_app' ? `/api/v1/assets/system-users/?protocol=rdp` : `/api/v1/assets/system-users/?protocol=${this.$route.query.type}`,
               transformOption: (item) => {
+                if (this.$route.query.type === 'k8s') {
+                  return { label: item.name, value: item.id }
+                }
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }

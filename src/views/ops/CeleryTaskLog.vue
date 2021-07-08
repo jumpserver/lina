@@ -1,5 +1,5 @@
 <template>
-  <div id="terminal" ref="terminal" class="xterm" style="height: 100%;width: 100%;background-color:#676a6c" />
+  <div id="terminal" ref="terminal" class="xterm" />
 </template>
 
 <script>
@@ -21,7 +21,6 @@ export default {
     }
   },
   computed: {
-
   },
   mounted() {
     this.initTermAndWs()
@@ -52,6 +51,9 @@ export default {
       this.xterm.loadAddon(fitAddon)
       this.xterm.open(terminalContainer)
       fitAddon.fit()
+      window.onresize = function() {
+        fitAddon.fit()
+      }
       this.xterm.scrollToBottom()
       this.enableWS()
     },
@@ -86,4 +88,10 @@ export default {
 </script>
 
 <style scoped>
+#terminal {
+  height: 100%;
+  width: 100%;
+  background-color: #1f1b1b;
+  padding: 10px
+}
 </style>
