@@ -23,18 +23,10 @@
       </el-col>
       <el-col :span="iShowTree?11:13">
         <AccountListTable
-          v-if="!isInit"
           ref="RightTable"
           class="asset-user-table"
           v-bind="rightTable"
         />
-        <div v-else class="noDataR">
-          <div class="hintWrap">
-            <div>
-              {{ $t('accounts.PleaseClickLeftAssetToViewAssetAccount') }}
-            </div>
-          </div>
-        </div>
       </el-col>
     </el-row>
   </Page>
