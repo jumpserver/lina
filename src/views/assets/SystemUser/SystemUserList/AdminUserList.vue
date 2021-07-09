@@ -35,7 +35,8 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: { name: 'SystemUserUpdate', query: { type: 'admin' }}
+              updateRoute: { name: 'SystemUserUpdate', query: { type: 'admin' }},
+              cloneRoute: { name: 'SystemUserCreate', query: { type: 'admin' }}
             }
           }
         }
