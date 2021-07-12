@@ -67,15 +67,15 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, ChoicesFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, ActionsFormatter } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import TreeTable from '@/components/TreeTable'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import Protocols from '@/views/assets/Asset/components/Protocols/index'
-import { toSafeLocalDateStr } from '@/utils/common'
 import { mapGetters } from 'vuex'
+import { connectivityMeta } from '@/components/AccountListTable/const'
 
 export default {
   components: {
@@ -142,33 +142,7 @@ export default {
           comment: {
             showOverflowTooltip: true
           },
-          connectivity: {
-            label: this.$t('assets.Reachable'),
-            formatter: ChoicesFormatter,
-            formatterArgs: {
-              iconChoices: {
-                ok: 'fa-check text-primary',
-                failed: 'fa-times text-danger',
-                unknown: 'fa-circle text-warning'
-              },
-              hasTips: true,
-              getTips: ({ row, cellValue }) => {
-                const mapper = {
-                  'ok': this.$t('assets.Reachable'),
-                  'failed': this.$t('assets.Unreachable'),
-                  'unknown': this.$t('assets.Unknown')
-                }
-                let tips = mapper[cellValue]
-                if (row['date_verified']) {
-                  const datetime = toSafeLocalDateStr(row['date_verified'])
-                  tips += '<br> ' + datetime
-                }
-                return tips
-              }
-            },
-            width: '90px',
-            align: 'center'
-          },
+          connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
