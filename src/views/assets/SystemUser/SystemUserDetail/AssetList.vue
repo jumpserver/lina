@@ -18,7 +18,8 @@ import QuickActions from '@/components/QuickActions/index'
 import RelationCard from '@/components/RelationCard'
 import AssetRelationCard from '@/components/AssetRelationCard'
 import ListTable from '@/components/ListTable'
-import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/TableFormatters'
+import { connectivityMeta } from '@/components/AccountListTable/const'
 
 export default {
   name: 'AssetList',
@@ -39,9 +40,9 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/system-users-assets-relations/?systemuser=${this.object.id}`,
-        columns: [
-          {
-            prop: 'asset_display',
+        columns: ['asset_display', 'connectivity', 'actions'],
+        columnsMeta: {
+          asset_display: {
             label: this.$t('assets.Hostname'),
             showOverflowTooltip: true,
             formatter: DetailFormatter,
@@ -54,12 +55,8 @@ export default {
               }
             }
           },
-          {
-            prop: 'id',
-            label: this.$t('common.Action'),
-            align: 'center',
-            width: 150,
-            formatter: ActionsFormatter,
+          connectivity: connectivityMeta,
+          actions: {
             formatterArgs: {
               hasUpdate: false, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
@@ -94,7 +91,7 @@ export default {
               ]
             }
           }
-        ]
+        }
       },
       headerActions: {
         hasBulkDelete: false,
