@@ -24,16 +24,18 @@ function getFields() {
     },
     rules: [Object.assign({}, Required)],
     hidden: (form) => {
-      if (['mysql', 'postgresql', 'mariadb', 'oracle'].includes(form.protocol)) {
-        this.fieldsMeta.username.rules[0].required = true
-      } else if (['vnc'].includes(form.protocol)) {
+      if (['vnc'].includes(form.protocol)) {
+        this.fieldsMeta.username.rules[0].required = false
+      } else if (form.login_mode === 'manual') {
+        this.fieldsMeta.username.rules[0].required = false
+      } else if (form.username_same_with_user) {
         this.fieldsMeta.username.rules[0].required = false
       } else {
-        this.fieldsMeta.username.rules[0].required = !(form.login_mode === 'manual' || form.username_same_with_user)
+        this.fieldsMeta.username.rules[0].required = true
       }
       if (form.username_same_with_user) {
         this.fieldsMeta.username.el.disabled = true
-        form.username = '*'
+        form.username = ''
       } else {
         this.fieldsMeta.username.el.disabled = false
       }
