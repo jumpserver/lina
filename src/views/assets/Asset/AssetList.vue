@@ -147,8 +147,8 @@ export default {
             formatter: ChoicesFormatter,
             formatterArgs: {
               iconChoices: {
-                ok: 'fa-times text-danger',
-                failed: 'fa-check text-primary',
+                ok: 'fa-check text-primary',
+                failed: 'fa-times text-danger',
                 unknown: 'fa-circle text-warning'
               },
               hasTips: true,
