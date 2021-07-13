@@ -214,9 +214,20 @@ export function newURL(url) {
   if (url.indexOf('//') > -1) {
     obj = new URL(url)
   } else {
-    obj = new URL(url, 'http://localhost')
+    obj = new URL(url, location.origin)
   }
   return obj
+}
+
+export function getUpdateObjURL(url, objId) {
+  const urlObj = new URL(url, location.origin)
+  let pathname = urlObj.pathname
+  if (!pathname.endsWith('/')) {
+    pathname += '/'
+  }
+  pathname += `${objId}/`
+  urlObj.pathname = pathname
+  return urlObj.href
 }
 
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)

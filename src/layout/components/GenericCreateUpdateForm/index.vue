@@ -15,6 +15,7 @@
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
+import { getUpdateObjURL } from '@/utils/common'
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -129,7 +130,7 @@ export default {
         const params = this.$route.params
         let url = this.url
         if (params.id) {
-          url = `${url}${params.id}/`
+          url = getUpdateObjURL(url, params.id)
         }
         return url
       }
