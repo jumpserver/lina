@@ -75,12 +75,11 @@ export default {
         private_key: {
           component: UploadKey
         },
-        cmd_filters: fields.cmd_filters,
-        home: {
-          label: this.$t('assets.Home'),
-          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push || item.username_same_with_user,
-          helpText: this.$t('assets.HomeHelpMessage')
-        }
+        sftp_root: {
+          rules: [Required],
+          helpText: this.$t('assets.SFTPHelpMessage')
+        },
+        cmd_filters: fields.cmd_filters
       },
       cleanFormValue: (values) => {
         values['type'] = 'admin'
