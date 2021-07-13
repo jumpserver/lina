@@ -10,7 +10,10 @@
     </div>
     <slot>
       <h1 class="no-margins">
-        <router-link :to="body.route">
+        <span v-if="body.noLink">
+          {{ body.count }}
+        </span>
+        <router-link v-else :to="body.route">
           <span>{{ body.count }}</span>
         </router-link>
       </h1>
