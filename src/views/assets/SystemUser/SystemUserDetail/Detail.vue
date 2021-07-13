@@ -120,12 +120,16 @@ export default {
           value: this.object.username
         },
         {
+          key: this.$t('assets.sshKeyFingerprint'),
+          value: this.object['ssh_key_fingerprint']
+        },
+        {
           key: this.$t('assets.Protocol'),
           value: this.object.protocol
         },
         {
           key: this.$t('assets.LoginModel'),
-          value: this.object.login_mode_display
+          value: this.object['login_mode_display']
         },
         {
           key: 'Sudo',
