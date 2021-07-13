@@ -36,6 +36,7 @@
       title="修改消息接受人"
       :selected-users="dialogSelectedUsers"
       @submit="onDialogSelectSubmit"
+      @cancel="dialogVisible=false"
     />
   </div>
 </template>
