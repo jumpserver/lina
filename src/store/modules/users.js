@@ -20,7 +20,9 @@ const getDefaultState = () => {
     orgs: [],
     perms: 0b00000000,
     MFAVerifyAt: null,
-    isSuperAdmin: false
+    isSuperAdmin: false,
+    hasAdminPerm: false,
+    hasAuditPerm: false
   }
 }
 
@@ -53,12 +55,15 @@ const mutations = {
   },
   SET_ROLES(state, roles) {
     state.roles = roles
+    // rolec.PERM_ADMIN &
   },
   SET_SYS_ROLE(state, role) {
     state.sysRole = role
   },
   SET_PERMS(state, perms) {
     state.perms = perms
+    state.hasAdmin = (perms & rolec.PERM_ADMIN) === rolec.PERM_ADMIN
+    state.hasAudit = (perms & rolec.PERM_AUDIT) === rolec.PERM_AUDIT
   },
   SET_CURRENT_ORG(state, org) {
     saveCurrentOrgToCookie(org)

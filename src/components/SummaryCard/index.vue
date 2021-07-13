@@ -4,15 +4,15 @@
       <span class="header-title">{{ title }}</span>
       <span class="pull-right right-side">
         <slot name="header-right">
-          <el-tag :type="rightSideLabel.type || 'success'" effect="dark" size="mini">{{ rightSideLabel.title }}</el-tag>
+          <el-tag :type="rightSideLabel.type || 'success'" effect="dark" size="mini">
+            {{ rightSideLabel.title }}
+          </el-tag>
         </slot>
       </span>
     </div>
     <slot>
       <h1 class="no-margins">
-        <span v-if="body.noLink">
-          {{ body.count }}
-        </span>
+        <span v-if="body.disabled" class="disabled-link">{{ body.count }}</span>
         <router-link v-else :to="body.route">
           <span>{{ body.count }}</span>
         </router-link>
@@ -76,5 +76,9 @@ export default {
   }
   .no-margins {
     margin: 0 !important;
+  }
+
+  .disabled-link {
+    color: #428bca;
   }
 </style>
