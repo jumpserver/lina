@@ -8,6 +8,8 @@
 
 <script>
 import SummaryCard from '@/components/SummaryCard'
+import rolc from '@/utils/role'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ResourceSummary',
@@ -23,6 +25,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'currentOrgRoles'
+    ]),
+    isOrgAuditor() {
+      return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') || rolc.getRolesDisplay(this.currentOrgRoles).includes('Auditor')
+    },
     summaryItems() {
       return [
         {
@@ -34,7 +42,8 @@ export default {
           body: {
             route: `/users/users`,
             count: this.counter.total_count_users,
-            comment: 'All users'
+            comment: 'All users',
+            noLink: this.isOrgAuditor
           }
         },
         {
@@ -46,7 +55,8 @@ export default {
           body: {
             route: `/assets/assets`,
             count: this.counter.total_count_assets,
-            comment: 'All assets'
+            comment: 'All assets',
+            noLink: this.isOrgAuditor
           }
         },
         {
