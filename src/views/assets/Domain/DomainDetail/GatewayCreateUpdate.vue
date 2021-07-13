@@ -6,6 +6,7 @@
     :fields-meta="fieldsMeta"
     :url="url"
     :get-next-route="getNextRoute"
+    :clean-form-value="cleanFormValue"
   />
 </template>
 
@@ -101,6 +102,12 @@ export default {
         }
       }
       return route
+    },
+    cleanFormValue(values) {
+      if (!values.update_password) {
+        delete values['password']
+      }
+      return values
     }
   }
 }

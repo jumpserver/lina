@@ -57,7 +57,6 @@ export default {
         }
       },
       headerActions: {
-        hasMoreActions: false,
         hasCreate: false,
         createRoute: 'SystemUserCreate',
         moreCreates: {

@@ -34,7 +34,8 @@ export default {
           body: {
             route: `/users/users`,
             count: this.counter.total_count_users,
-            comment: 'All users'
+            comment: 'All users',
+            disabled: !this.$store.state.users.hasAdmin
           }
         },
         {
@@ -46,7 +47,8 @@ export default {
           body: {
             route: `/assets/assets`,
             count: this.counter.total_count_assets,
-            comment: 'All assets'
+            comment: 'All assets',
+            disabled: !this.$store.state.users.hasAdmin
           }
         },
         {
