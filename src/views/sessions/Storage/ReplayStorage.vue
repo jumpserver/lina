@@ -86,6 +86,7 @@ export default {
               canDelete: function({ row }) {
                 return (row.name !== 'default' && row.name !== 'null')
               },
+              hasClone: false,
               extraActions: [
                 {
                   name: 'test',
@@ -93,7 +94,7 @@ export default {
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     TestReplayStorage(row.id).then(data => {
-                      if (!data.is_valid) {
+                      if (!data['is_valid']) {
                         this.$message.error(data.msg)
                       } else {
                         this.$message.success(data.msg)
