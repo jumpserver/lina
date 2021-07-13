@@ -25,6 +25,12 @@ export default {
       type: String,
       required: true
     },
+    exportUrl: {
+      type: String,
+      default() {
+        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+      }
+    },
     hasLeftActions: {
       type: Boolean,
       default: false
@@ -138,7 +144,7 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport,
         exportOptions: {
-          url: '/api/v1/assets/account-secrets/',
+          url: this.exportUrl,
           mfaVerifyRequired: true
         },
         hasSearch: true
