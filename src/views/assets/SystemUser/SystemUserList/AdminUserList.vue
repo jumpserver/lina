@@ -15,6 +15,7 @@ export default {
     GenericListTable
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/assets/system-users/?type=admin',
@@ -35,8 +36,19 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: { name: 'SystemUserUpdate', query: { type: 'admin' }},
-              cloneRoute: { name: 'SystemUserCreate', query: { type: 'admin' }}
+              onUpdate: ({ row }) => {
+                vm.$router.push({
+                  name: 'SystemUserUpdate',
+                  params: { id: row.id },
+                  query: { protocol: row.protocol, type: 'admin' }
+                })
+              },
+              onClone: ({ row }) => {
+                vm.$router.push({
+                  name: 'SystemUserCreate',
+                  query: { protocol: row.protocol, type: 'admin', clone_from: row.id }
+                })
+              }
             }
           }
         }
