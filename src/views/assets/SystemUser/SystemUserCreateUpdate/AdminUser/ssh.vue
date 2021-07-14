@@ -21,7 +21,7 @@ export default {
   data() {
     const fields = getFields.bind(this)()
     return {
-      url: '/api/v1/assets/system-users/',
+      url: '/api/v1/assets/admin-users/',
       initial: {
       },
       fields: [
