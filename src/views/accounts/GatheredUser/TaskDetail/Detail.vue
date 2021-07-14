@@ -34,7 +34,7 @@ export default {
         },
         {
           key: this.$t('xpack.Cloud.PeriodicPerform'),
-          value: this.object.is_periodic ? (this.$t('xpack.GatherUser.True')) : (this.$t('xpack.GatherUser.False'))
+          value: this.object.is_periodic ? (this.$t('xpack.Cloud.True')) : (this.$t('xpack.Cloud.False'))
         },
         {
           key: this.$t('xpack.Cloud.Periodic'),
