@@ -166,6 +166,7 @@ export default {
         }
       },
       headerActions: {
+        hasImport: !this.$store.getters.currentOrgIsRoot,
         createRoute: () => {
           return {
             name: 'AssetCreate',
