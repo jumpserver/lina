@@ -47,7 +47,10 @@ export default {
             this.$router.push({
               name: routeName,
               params: { id: id },
-              query: { protocol: vm.systemUser.protocol }
+              query: {
+                protocol: vm.systemUser.protocol,
+                type: vm.systemUser.type
+              }
             })
           }
         }
