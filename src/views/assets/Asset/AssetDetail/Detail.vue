@@ -91,24 +91,6 @@ export default {
             }.bind(this)
           }
         }
-        // {
-        //   title: this.$t('assets.PushSystemUserNow'),
-        //   attrs: {
-        //     type: 'primary',
-        //     label: this.$t('assets.Push')
-        //   },
-        //   callbacks: {
-        //     click: function() {
-        //       this.$axios.post(
-        //         `api/v1/assets/system-users/${this.object.id}/tasks/`,
-        //         { action: 'push' }
-        //       ).then(res => {
-        //         window.open(`/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-        //       }
-        //       )
-        //     }.bind(this)
-        //   }
-        // }
       ],
       nodeRelationConfig: {
         icon: 'fa-info',

@@ -48,8 +48,8 @@ export default {
               name: routeName,
               params: { id: id },
               query: {
-                protocol: vm.systemUser.protocol,
-                type: vm.systemUser.type
+                type: vm.systemUser.type,
+                protocol: vm.systemUser.protocol
               }
             })
           }
