@@ -8,7 +8,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import { connectivityMeta } from './const'
@@ -53,7 +53,7 @@ export default {
         url: this.url,
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
-          'date_created', 'date_updated', 'actions'
+          'systemuser', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['username', 'actions'],
@@ -79,6 +79,9 @@ export default {
           },
           username: {
             showOverflowTooltip: true
+          },
+          systemuser: {
+            formatter: DisplayFormatter
           },
           version: {
             width: '70px'
