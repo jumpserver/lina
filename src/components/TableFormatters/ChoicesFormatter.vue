@@ -41,7 +41,6 @@ export default {
   computed: {
     iconClass() {
       const key = this.formatterArgs.getIconKey({ row: this.row, cellValue: this.cellValue })
-      console.log('What key: ', key)
       return this.formatterArgs.iconChoices[key]
     },
     tips() {

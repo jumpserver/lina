@@ -8,7 +8,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, ChoicesFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, ChoicesFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import { toSafeLocalDateStr } from '@/utils/common'
@@ -47,7 +47,7 @@ export default {
         url: this.url,
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
-          'date_created', 'date_updated', 'actions'
+          'systemuser', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['username', 'actions'],
@@ -73,6 +73,9 @@ export default {
           },
           username: {
             showOverflowTooltip: true
+          },
+          systemuser: {
+            formatter: DisplayFormatter
           },
           version: {
             width: '70px'
