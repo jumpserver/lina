@@ -1,5 +1,14 @@
 <template>
-  <Dialog ref="myDialog" :destroy-on-close="true" width="770px" height="700px" v-bind="$attrs" @confirm="submit" v-on="$listeners">
+  <Dialog
+    ref="myDialog"
+    :destroy-on-close="true"
+    width="770px"
+    height="700px"
+    v-bind="$attrs"
+    @confirm="submit"
+    @cancel="cancel"
+    v-on="$listeners"
+  >
     <krryPaging ref="pageTransfer" v-bind="pagingTransfer" class="transfer" />
   </Dialog>
 </template>
@@ -75,8 +84,6 @@ export default {
     submit() {
       const selectedUsersId = this.$refs.pageTransfer.getSelectedData()
       this.$emit('submit', selectedUsersId)
-
-      console.log('Selected user ids: ', selectedUsersId)
     }
   }
 }

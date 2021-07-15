@@ -15,7 +15,7 @@
       <el-option
         v-for="item in userAdminOrgList"
         :key="item.id"
-        selected="item.id == currentOrg.id"
+        :selected="item.id === currentOrg.id"
         :label="item.name"
         :value="item.id"
       />
@@ -48,10 +48,8 @@ export default {
   },
   methods: {
     needShow() {
-      const otherOrgs = this.userAdminOrgList.filter(org => {
-        return !org.is_root && !org.is_default
-      })
-      return !this.isCollapse && otherOrgs.length > 0 && this.inAdminPage
+      const hasValidLicense = this.$store.getters.hasValidLicense
+      return !this.isCollapse && this.inAdminPage && hasValidLicense
     },
     changeOrg(orgId) {
       orgUtil.changeOrg(orgId)

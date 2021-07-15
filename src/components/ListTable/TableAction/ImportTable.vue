@@ -33,7 +33,7 @@
 
 <script>
 import DataTable from '@/components/DataTable'
-import { sleep } from '@/utils/common'
+import { sleep, getUpdateObjURL } from '@/utils/common'
 import { EditableInputFormatter, StatusFormatter } from '@/components/TableFormatters'
 export default {
   name: 'ImportTable',
@@ -350,7 +350,7 @@ export default {
       }
     },
     async performUpdateObject(item) {
-      const updateUrl = `${this.url}${item.id}/`
+      const updateUrl = getUpdateObjURL(this.url, item.id)
       return this.$axios.put(
         updateUrl,
         item,

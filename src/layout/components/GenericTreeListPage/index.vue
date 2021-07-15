@@ -32,6 +32,9 @@ export default {
     if (headerActions.canCreate === undefined && this.currentOrgIsRoot) {
       _.set(this.$attrs, 'header-actions.canCreate', false)
     }
+    if (headerActions.hasImport === undefined && this.currentOrgIsRoot) {
+      _.set(this.$attrs, 'header-actions.hasImport', false)
+    }
   },
   methods: {
     hideRMenu() {

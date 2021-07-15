@@ -100,7 +100,6 @@ export default {
     },
     iExportOptions() {
       const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
-      console.log('Options: ', options)
       return options
     }
   },

@@ -8,10 +8,10 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, ChoicesFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { connectivityMeta } from './const'
 
 export default {
   name: 'Detail',
@@ -24,6 +24,12 @@ export default {
     url: {
       type: String,
       required: true
+    },
+    exportUrl: {
+      type: String,
+      default() {
+        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+      }
     },
     hasLeftActions: {
       type: Boolean,
@@ -80,33 +86,7 @@ export default {
           version: {
             width: '70px'
           },
-          connectivity: {
-            label: this.$t('assets.Reachable'),
-            formatter: ChoicesFormatter,
-            formatterArgs: {
-              iconChoices: {
-                ok: 'fa-check text-primary',
-                failed: 'fa-times text-danger',
-                unknown: 'fa-circle text-warning'
-              },
-              hasTips: true,
-              getTips: ({ row, cellValue }) => {
-                const mapper = {
-                  'ok': this.$t('assets.Reachable'),
-                  'failed': this.$t('assets.Unreachable'),
-                  'unknown': this.$t('assets.Unknown')
-                }
-                let tips = mapper[cellValue]
-                if (row['date_verified']) {
-                  const datetime = toSafeLocalDateStr(row['date_verified'])
-                  tips += '<br> ' + datetime
-                }
-                return tips
-              }
-            },
-            width: '90px',
-            align: 'center'
-          },
+          connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -167,7 +147,7 @@ export default {
         hasImport: this.hasImport,
         hasExport: this.hasExport,
         exportOptions: {
-          url: '/api/v1/assets/account-secrets/',
+          url: this.exportUrl,
           mfaVerifyRequired: true
         },
         hasSearch: true
