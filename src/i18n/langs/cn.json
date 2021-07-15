@@ -1211,7 +1211,7 @@
       "users_amount": "用户数量",
       "groups_amount": "用户组数量",
       "assets_amount": "资产数量",
-      "admin_users_amount": "管理用户数量",
+      "admin_users_amount": "特权用户数量",
       "system_users_amount": "系统用户数量",
       "applications_amount": "应用数量",
       "asset_perms_amount": "资产授权数量",
