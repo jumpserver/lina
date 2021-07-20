@@ -83,6 +83,7 @@
     "DBInfo": "数据库信息"
   },
   "assets": {
+    "AssociateSystemUsers": "关联系统用户",
     "AssociateAssets": "关联资产",
     "AssociateNodes": "关联节点",
     "Action": "动作",
@@ -163,6 +164,7 @@
     "PublicIp": "公网IP",
     "Push": "推送",
     "PushSystemUserNow": "推送系统用户",
+    "PushAllSystemUsersToAsset": "推送所有系统用户到资产",
     "QuickUpdate": "快速更新",
     "Reachable": "可连接",
     "Unreachable": "不可连接",
@@ -187,6 +189,7 @@
     "SystemUsers": "系统用户",
     "Test": "测试",
     "TestAssetsConnective": "测试资产可连接性",
+    "TestAllSystemUsersConnective": "测试所有系统用户可连接性",
     "TestConnection": "测试连接",
     "Type": "类型",
     "UnselectedAssets": "未选择资产或所选择的资产不支持SSH协议连接",
@@ -246,6 +249,9 @@
     "bind": "绑定",
     "unbind": "解绑",
     "PushSelected":"推送所选",
+    "PushSelectedSystemUsersToAsset": "推送所选系统用户到资产",
+    "TestSelected": "测试所选",
+    "TestSelectedSystemUsersConnective": "测试所选系统用户可连接性",
     "BadRequestErrorMsg": "请求错误，请检查填写内容",
     "BadRoleErrorMsg": "请求错误，无该操作权限",
     "BadConflictErrorMsg": "正在刷新中，请稍后再试",
