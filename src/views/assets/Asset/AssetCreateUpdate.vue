@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -97,7 +97,8 @@ export default {
           type: 'switch'
         }
       },
-      url: '/api/v1/assets/assets/'
+      url: '/api/v1/assets/assets/',
+      createSuccessNextRoute: { name: 'AssetDetail' }
     }
   }
 }
