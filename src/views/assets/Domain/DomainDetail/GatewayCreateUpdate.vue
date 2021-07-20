@@ -104,7 +104,7 @@ export default {
       return route
     },
     cleanFormValue(values) {
-      if (!values.update_password) {
+      if (this.$route.params.id && !values.update_password) {
         delete values['password']
       }
       return values
