@@ -24,18 +24,22 @@ export default {
     hasLeftActions: defaultTrue,
     hasCreate: defaultTrue,
     canCreate: defaultTrue,
+    createRoute: {
+      type: [String, Object, Function],
+      default: function() {
+        return this.$route.name.replace('List', 'Create')
+      }
+    },
+    createInNewPage: {
+      type: Boolean,
+      default: false
+    },
     hasBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
     hasMoreActions: defaultTrue,
     tableUrl: {
       type: String,
       default: ''
-    },
-    createRoute: {
-      type: [String, Object, Function],
-      default: function() {
-        return this.$route.name.replace('List', 'Create')
-      }
     },
     reloadTable: {
       type: Function,
@@ -158,8 +162,13 @@ export default {
       } else if (typeof this.createRoute === 'object') {
         route = this.createRoute
       }
-      this.$router.push(route)
       this.$log.debug('handle create')
+      if (this.createInNewPage) {
+        const { href } = this.$router.resolve(route)
+        window.open(href, '_blank')
+      } else {
+        this.$router.push(route)
+      }
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
       const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'

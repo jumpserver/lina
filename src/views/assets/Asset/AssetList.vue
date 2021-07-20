@@ -166,13 +166,13 @@ export default {
         }
       },
       headerActions: {
-        hasImport: !this.$store.getters.currentOrgIsRoot,
         createRoute: () => {
           return {
             name: 'AssetCreate',
             query: this.$route.query
           }
         },
+        createInNewPage: true,
         searchConfig: {
           options: [
             { label: this.$t('assets.Label'), value: 'label' }
