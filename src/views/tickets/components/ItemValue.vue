@@ -1,4 +1,7 @@
-<script type="text/jsx">
+<template>
+  <p class="item-value">{{ iValue }}</p>
+</template>
+<script>
 export default {
   name: 'ItemValue',
   props: {
@@ -15,15 +18,21 @@ export default {
       default: null
     }
   },
-  render(h) {
-    if (typeof this.formatter === 'function') {
-      return this.formatter(this.item, this.value)
+  computed: {
+    iValue() {
+      let value = this.value
+      if (typeof this.formatter === 'function') {
+        value = this.formatter(this.item, this.value)
+      }
+      return value
     }
-    return <span>{this.value}</span>
   }
 }
 </script>
 
 <style scoped>
+.item-value {
+  word-break: break-word;
+}
 
 </style>
