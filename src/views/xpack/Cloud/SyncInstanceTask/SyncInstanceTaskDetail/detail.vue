@@ -69,6 +69,14 @@ export default {
           value: this.object.admin_user_display
         },
         {
+          key: this.$t('assets.Protocols'),
+          value: this.object.protocols.join(', ')
+        },
+        {
+          key: this.$t('xpack.Cloud.IPNetworkSegment'),
+          value: this.object.ip_network_segment_group.join(', ')
+        },
+        {
           key: this.$t('xpack.Cloud.IsAlwaysUpdate'),
           value: (this.object.is_always_update) ? (this.$t('xpack.Cloud.True')) : (this.$t('xpack.Cloud.False'))
         },

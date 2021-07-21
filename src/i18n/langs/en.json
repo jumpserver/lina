@@ -1116,6 +1116,7 @@
       "Username": "Username"
     },
     "Cloud": {
+      "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
       "QingyunPrivatecloud": "Qingyun Private Cloud",

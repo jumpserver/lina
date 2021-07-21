@@ -1,11 +1,12 @@
 <template>
-  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" />
+  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" :perform-submit="performSubmit" :after-get-form-value="afterGetFormValue" />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Select2 } from '@/components'
 import rules from '@/components/DataForm/rules'
+import Protocols from '@/views/assets/Asset/components/Protocols/index'
 
 export default {
   components: {
@@ -17,12 +18,13 @@ export default {
       initial: {
         is_periodic: true,
         interval: 24,
-        hostname_strategy: 'instance_name_partial_ip'
+        hostname_strategy: 'instance_name_partial_ip',
+        ip_network_segment_group: '*'
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'admin_user', 'is_always_update']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'admin_user', 'protocols', 'ip_network_segment_group', 'is_always_update']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -69,6 +71,9 @@ export default {
               url: '/api/v1/assets/admin-users/'
             }
           }
+        },
+        protocols: {
+          component: Protocols
         },
         is_always_update: {
           type: 'switch',
@@ -120,6 +125,37 @@ export default {
     if (params.id) {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
       this.fieldsMeta.regions.el.ajax.url = form.account ? `/api/v1/xpack/cloud/regions/?account_id=${form.account}` : `/api/v1/xpack/cloud/regions/`
+    }
+  },
+  methods: {
+    afterGetFormValue(formValue) {
+      formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
+      return formValue
+    },
+    getUrl() {
+      const params = this.$route.params
+      let url = `/api/v1/xpack/cloud/sync-instance-tasks/`
+      if (params.id) {
+        url = `${url}${params.id}/`
+      } else {
+        url = `${url}`
+      }
+      return url
+    },
+    getMethod() {
+      const params = this.$route.params
+      if (params.id) {
+        return 'put'
+      } else {
+        return 'post'
+      }
+    },
+    performSubmit(validValues) {
+      if (!Array.isArray(validValues.ip_network_segment_group)) {
+        validValues.ip_network_segment_group = validValues.ip_network_segment_group ? validValues.ip_network_segment_group.split(',') : []
+      }
+      const method = this.getMethod()
+      return this.$axios[method](`${this.getUrl()}`, validValues)
     }
   }
 }

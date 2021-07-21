@@ -1124,6 +1124,7 @@
       "Username": "用户名"
     },
     "Cloud": {
+      "IPNetworkSegment": "IP网段",
       "Aliyun": "阿里云",
       "Qcloud": "腾讯云",
       "QingyunPrivatecloud": "青云私有云",
