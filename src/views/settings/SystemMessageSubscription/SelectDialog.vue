@@ -6,7 +6,6 @@
     height="700px"
     v-bind="$attrs"
     @confirm="submit"
-    @cancel="cancel"
     v-on="$listeners"
   >
     <krryPaging ref="pageTransfer" v-bind="pagingTransfer" class="transfer" />
@@ -32,12 +31,6 @@ export default {
   },
   data() {
     return {
-      tableConfig: {
-        url: '/api/v1/users/users/',
-        columns: ['username', 'name', 'email'],
-        paginationSize: 10,
-        paginationSizes: [10]
-      },
       pagingTransfer: {
         pageSize: 10,
         filterable: true,
@@ -46,19 +39,9 @@ export default {
         getPageData: async function(pageIndex, pageSize) {
           const limit = pageSize
           const offset = (pageIndex - 1) * pageSize
-          const url = `/api/v1/users/users/?limit=${limit}&offset=${offset}`
+          const url = `/api/v1/users/users/?limit=${limit}&offset=${offset}&oid=ROOT`
           const data = await this.$axios.get(url)
-          const results = data.results.map(item => {
-            return { id: item.id, label: `${item.name}(${item.username})` }
-          })
-          return results
-        },
-        getSearchData: async function(keyword, pageIndex, pageSize) {
-          const limit = pageSize
-          const offset = (pageIndex - 1) * pageSize
-          const url = `/api/v1/users/users/?limit=${limit}&offset=${offset}&search=${keyword}`
-          const data = await this.$axios.get(url)
-          const results = data.results.map(item => {
+          const results = data['results'].map(item => {
             return { id: item.id, label: `${item.name}(${item.username})` }
           })
           return results
@@ -69,7 +52,6 @@ export default {
     }
   },
   mounted() {
-    console.log('users: ', this.selectedUsers)
     const selectedUsers = this.selectedUsers.map(item => {
       return {
         id: item.id,
