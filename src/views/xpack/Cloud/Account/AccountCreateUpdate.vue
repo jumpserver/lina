@@ -2,7 +2,6 @@
   <GenericCreateUpdatePage
     v-bind="$data"
     :initial="initial"
-    :perform-submit="performSubmit"
   />
 </template>
 

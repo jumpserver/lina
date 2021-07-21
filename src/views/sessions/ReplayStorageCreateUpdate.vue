@@ -4,7 +4,6 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     :has-detail-in-msg="false"
-    :perform-submit="performSubmit"
   />
 </template>
 
