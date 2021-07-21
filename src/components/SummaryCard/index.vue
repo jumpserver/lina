@@ -2,13 +2,6 @@
   <el-card shadow="never">
     <div slot="header" class="summary-header">
       <span class="header-title">{{ title }}</span>
-      <span class="pull-right right-side">
-        <slot name="header-right">
-          <el-tag :type="rightSideLabel.type || 'success'" effect="dark" size="mini">
-            {{ rightSideLabel.title }}
-          </el-tag>
-        </slot>
-      </span>
     </div>
     <slot>
       <h1 class="no-margins">
