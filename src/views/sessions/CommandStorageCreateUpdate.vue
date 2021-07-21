@@ -5,7 +5,7 @@
     :update-success-next-route="successUrl"
     :has-detail-in-msg="false"
     :after-get-form-value="afterGetFormValue"
-    :perform-submit="performSubmit"
+    :clean-form-value="cleanFormValue"
   />
 </template>
 
@@ -68,20 +68,9 @@ export default {
       validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
       return validValues
     },
-    performSubmit(formValues) {
-      const validValues = _.cloneDeep(formValues)
-      const method = this.getMethod()
-      validValues.meta.HOSTS = validValues.meta.HOSTS.split(',').map(item => (item.trim()))
-      const url = this.getUrl()
-      return this.$axios[method](url, validValues)
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
+    cleanFormValue(value) {
+      value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
+      return value
     }
   }
 }

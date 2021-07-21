@@ -2,9 +2,7 @@
 <template>
   <GenericCreateUpdatePage
     v-bind="$data"
-    :perform-submit="performSubmit"
     :after-get-form-value="afterGetFormValue"
-    :get-url="getUrl"
   />
 </template>
 
@@ -53,34 +51,15 @@ export default {
     }
   },
   methods: {
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    },
-    getUrl() {
-      const params = this.$route.params
-      let url = this.url
-      if (params.id) {
-        url = `${url}${params.id}/?user=${this.$route.query.user}`
-      } else {
-        url = `${url}?user=${this.$route.query.user}`
-      }
-      return url
-    },
     afterGetFormValue(validValues) {
       validValues.ip_group = validValues.ip_group.toString()
       return validValues
     },
-    performSubmit(validValues) {
-      if (!Array.isArray(validValues.ip_group)) {
-        validValues.ip_group = validValues.ip_group ? validValues.ip_group.split(',') : []
+    cleanFormValue(value) {
+      if (!Array.isArray(value.ip_group)) {
+        value.ip_group = value.ip_group ? value.ip_group.split(',') : []
       }
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
+      return value
     }
   }
 }

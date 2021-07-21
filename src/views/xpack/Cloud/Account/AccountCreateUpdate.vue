@@ -2,7 +2,6 @@
   <GenericCreateUpdatePage
     v-bind="$data"
     :initial="initial"
-    :perform-submit="performSubmit"
   />
 </template>
 
@@ -55,18 +54,6 @@ export default {
   computed: {
   },
   methods: {
-    performSubmit(validValues) {
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 
