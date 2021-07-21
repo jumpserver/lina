@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" :perform-submit="performSubmit" :after-get-form-value="afterGetFormValue" />
+  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" :clean-form-value="cleanFormValue" :after-get-form-value="afterGetFormValue" />
 </template>
 
 <script>
@@ -132,30 +132,11 @@ export default {
       formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
       return formValue
     },
-    getUrl() {
-      const params = this.$route.params
-      let url = `/api/v1/xpack/cloud/sync-instance-tasks/`
-      if (params.id) {
-        url = `${url}${params.id}/`
-      } else {
-        url = `${url}`
+    cleanFormValue(value) {
+      if (!Array.isArray(value.ip_network_segment_group)) {
+        value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
       }
-      return url
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    },
-    performSubmit(validValues) {
-      if (!Array.isArray(validValues.ip_network_segment_group)) {
-        validValues.ip_network_segment_group = validValues.ip_network_segment_group ? validValues.ip_network_segment_group.split(',') : []
-      }
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
+      return value
     }
   }
 }
