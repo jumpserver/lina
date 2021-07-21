@@ -35,8 +35,8 @@ export default {
               value
             ).then(res => {
               vm.$message.success(res['msg'])
-            }).catch(err => {
-              vm.$message.error(err['response']['data']['error'])
+            }).catch(() => {
+              this.$log.error('err occur')
             })
           }
         }
