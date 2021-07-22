@@ -17,6 +17,7 @@ import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import LabelCard from './components/LabelCard'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
@@ -67,7 +68,7 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/tasks/`,
                 { action: 'refresh' }
               ).then(res => {
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                openTaskPage(res['task'])
               }
               )
             }.bind(this)
@@ -85,7 +86,7 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                openTaskPage(res['task'])
               }
               )
             }.bind(this)

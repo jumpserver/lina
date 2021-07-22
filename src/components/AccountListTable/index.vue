@@ -12,6 +12,7 @@ import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/component
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import { connectivityMeta } from './const'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
@@ -123,7 +124,7 @@ export default {
                       `/api/v1/assets/accounts/${row.id}/verify/`,
                       { action: 'test' }
                     ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      openTaskPage(res['task'])
                     })
                   }
                 },

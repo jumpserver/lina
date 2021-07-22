@@ -5,6 +5,7 @@
 <script type="text/jsx">
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -82,7 +83,7 @@ export default {
                     this.$axios.get(
                       `/api/v1/ops/tasks/${row.id}/run/`
                     ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                      openTaskPage(res['task'])
                     })
                   }
                 }

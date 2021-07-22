@@ -76,6 +76,7 @@ import rules from '@/components/DataForm/rules'
 import Protocols from '@/views/assets/Asset/components/Protocols/index'
 import { mapGetters } from 'vuex'
 import { connectivityMeta } from '@/components/AccountListTable/const'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -418,7 +419,7 @@ export default {
         `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
         { 'action': 'refresh' }
       ).then((res) => {
-        window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+        openTaskPage(res['task'])
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
@@ -433,7 +434,7 @@ export default {
         `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
         { 'action': 'test' }
       ).then((res) => {
-        window.open(`/core/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+        openTaskPage(res['task'])
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
@@ -484,7 +485,7 @@ export default {
       this.$axios.post(
         `/api/v1/assets/nodes/check_assets_amount_task/`
       ).then(res => {
-        window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+        openTaskPage(res['task'])
       }).catch(error => {
         this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
       })
