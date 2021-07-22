@@ -5,6 +5,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'HistoryList',
@@ -68,7 +69,7 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: function(val) {
-                    window.open(`/#/ops/celery/task/${val.row.id}/log/`, '', 'width=900,height=600')
+                    openTaskPage(val.row.id)
                   }
                 }
               ]

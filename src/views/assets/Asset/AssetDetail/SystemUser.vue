@@ -18,6 +18,7 @@ import RelationCard from '@/components/RelationCard'
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { connectivityMeta } from '@/components/AccountListTable/const'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'SystemUserList',
@@ -68,7 +69,7 @@ export default {
                     const theUrl = `/api/v1/assets/system-users/${row.systemuser}/tasks/`
                     const data = { action: 'test', assets: [this.object.id] }
                     this.$axios.post(theUrl, data).then(resp => {
-                      window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+                      openTaskPage(resp['task'])
                     })
                   }
                 },
@@ -80,7 +81,7 @@ export default {
                     const theUrl = `/api/v1/assets/system-users/${row.systemuser}/tasks/`
                     const data = { action: 'push', assets: [this.object.id] }
                     this.$axios.post(theUrl, data).then(resp => {
-                      window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+                      openTaskPage(resp['task'])
                     })
                   }
                 },
@@ -136,7 +137,7 @@ export default {
               const theUrl = `/api/v1/assets/assets/${this.object.id}/tasks/`
               const data = { action: 'test_system_user' }
               this.$axios.post(theUrl, data).then(resp => {
-                window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+                openTaskPage(resp['task'])
               })
             }.bind(this)
           }
@@ -152,7 +153,7 @@ export default {
               const theUrl = `/api/v1/assets/assets/${this.object.id}/tasks/`
               const data = { action: 'push_system_user' }
               this.$axios.post(theUrl, data).then(resp => {
-                window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+                openTaskPage(resp['task'])
               })
             }.bind(this)
           }
@@ -194,7 +195,7 @@ export default {
       })
       const data = { action: 'push_system_user', system_users: systemUsers }
       this.$axios.post(theUrl, data).then(resp => {
-        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+        openTaskPage(resp['task'])
       })
     },
     bulkTestCallback({ selectedRows }) {
@@ -204,7 +205,7 @@ export default {
       })
       const data = { action: 'test_system_user', system_users: systemUsers }
       this.$axios.post(theUrl, data).then(resp => {
-        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+        openTaskPage(resp['task'])
       })
     }
   }

@@ -20,6 +20,7 @@ import AssetRelationCard from '@/components/AssetRelationCard'
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { connectivityMeta } from '@/components/AccountListTable/const'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AssetList',
@@ -72,7 +73,7 @@ export default {
                     const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/`
                     const data = { action: 'push', assets: [row.asset] }
                     this.$axios.post(theUrl, data).then(resp => {
-                      window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+                      openTaskPage(resp['task'])
                     })
                   }
                 },
@@ -129,9 +130,8 @@ export default {
                 `/api/v1/assets/system-users/${this.object.id}/tasks/`,
                 { action: 'test' }
               ).then(res => {
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
-              }
-              )
+                openTaskPage(res['task'])
+              })
             }.bind(this)
           }
         },
@@ -147,7 +147,7 @@ export default {
               const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/`
               const data = { action: 'push' }
               this.$axios.post(theUrl, data).then(resp => {
-                window.open(`/#/ops/celery/task/${resp.task}/log/`, '', 'width=900,height=600')
+                openTaskPage(resp['task'])
               })
             }.bind(this)
           }
@@ -219,7 +219,7 @@ export default {
       })
       const data = { action: 'push', assets: assets }
       this.$axios.post(theUrl, data).then(resp => {
-        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+        openTaskPage(resp['task'])
       })
     },
     bulkTestCallback({ selectedRows }) {
@@ -229,7 +229,7 @@ export default {
       })
       const data = { action: 'test', assets: assets }
       this.$axios.post(theUrl, data).then(resp => {
-        window.open(`/#/ops/task/task/${resp.task}/log/`, '', 'width=900,height=600')
+        openTaskPage(resp['task'])
       })
     }
   }
