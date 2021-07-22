@@ -151,6 +151,9 @@ export default {
           url: this.exportUrl,
           mfaVerifyRequired: true
         },
+        searchConfig: {
+          exclude: ['systemuser', 'asset']
+        },
         hasSearch: true
       }
     }
