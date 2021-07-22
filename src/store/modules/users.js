@@ -1,10 +1,10 @@
 import { logout, getProfile } from '@/api/users'
 import {
+  getCurrentOrgLocal,
+  getCurrentRoleLocal,
   getTokenFromCookie,
-  getCurrentOrgFromCookie,
-  saveCurrentOrgToCookie,
-  getCurrentRoleFromCookie,
-  saveCurrentRoleToCookie
+  saveCurrentOrgLocal,
+  saveCurrentRoleLocal
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import rolec from '@/utils/role'
@@ -12,9 +12,10 @@ import rolec from '@/utils/role'
 const getDefaultState = () => {
   return {
     token: getTokenFromCookie(),
-    currentOrg: getCurrentOrgFromCookie(),
-    currentRole: getCurrentRoleFromCookie(),
+    currentOrg: '',
+    currentRole: '',
     profile: {},
+    username: '',
     roles: {},
     sysRole: '',
     orgs: [],
@@ -37,6 +38,10 @@ const mutations = {
   },
   SET_PROFILE: (state, profile) => {
     state.profile = profile
+    const username = profile.username
+    state.username = username
+    state.currentOrg = getCurrentOrgLocal(username)
+    state.currentRole = getCurrentRoleLocal(username)
   },
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
@@ -66,12 +71,12 @@ const mutations = {
     state.hasAudit = (perms & rolec.PERM_AUDIT) === rolec.PERM_AUDIT
   },
   SET_CURRENT_ORG(state, org) {
-    saveCurrentOrgToCookie(org)
     state.currentOrg = org
+    saveCurrentOrgLocal(state.username, org)
   },
   SET_CURRENT_ROLE(state, role) {
-    saveCurrentRoleToCookie(role)
     state.currentRole = role
+    saveCurrentRoleLocal(state.username, role)
   },
   SET_MFA_VERIFY(state) {
     state.MFAVerifyAt = (new Date()).valueOf()

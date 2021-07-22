@@ -82,7 +82,6 @@ export default {
         case 'userPage':
           if (this.currentOrgUsePagePerm) {
             this.$store.dispatch('users/setCurrentRole', rolec.USER)
-            // console.log('Switch to: ', rolec.USER)
             window.location.href = `/ui/`
           }
           break
@@ -96,11 +95,6 @@ export default {
       }
     },
     logout() {
-      // Clean Status
-      const statusList = ['currentOrg', 'currentRole', 'jms_current_org', 'jms_current_role', 'sidebarStatus', 'X-JMS-ORG', 'activeTab']
-      for (const i in statusList) {
-        this.$cookie.delete(statusList[i])
-      }
     }
   }
 }

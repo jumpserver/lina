@@ -35,7 +35,7 @@ const actions = {
   getPublicSettings({ commit, state }) {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
-        const faviconURL = response.data.LOGO_URLS.favicon
+        const faviconURL = response.data['LOGO_URLS'].favicon
         let link = document.querySelector("link[rel*='icon']")
         if (!link) {
           link = document.createElement('link')
@@ -46,7 +46,7 @@ const actions = {
         link.href = faviconURL
 
         // 动态修改Title
-        document.title = response.data.LOGIN_TITLE
+        document.title = response.data['LOGIN_TITLE']
         commit('SET_PUBLIC_SETTINGS', response.data)
         resolve(response)
       }).catch(error => {

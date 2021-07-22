@@ -35,6 +35,7 @@ async function checkLogin({ to, from, next }) {
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
+    console.log(e)
     const status = e.response.status
     if (status === 401 || status === 403) {
       setTimeout(() => {
