@@ -1,24 +1,28 @@
 
 import Vue from 'vue'
 
-function getTableConfigfromCookie() {
-  return localStorage.getItem('tableConfig') ? JSON.parse(localStorage.getItem('tableConfig')) : {}
+function getTableConfigFromLocal() {
+  const configs = localStorage.getItem('tableConfig')
+  try {
+    return JSON.parse(configs)
+  } catch (e) {
+    return {}
+  }
 }
 
 const state = {
-  tableConfig: getTableConfigfromCookie()
+  tableConfig: getTableConfigFromLocal()
 }
 
 const mutations = {
-  SET_TABLE_CONFIG: (state, tableConfig) => {
-    const _tableConfig = localStorage.getItem('tableConfig') ? JSON.parse(localStorage.getItem('tableConfig')) : {}
-    Vue.set(_tableConfig, tableConfig.key, tableConfig.value)
+  SET_TABLE_CONFIG: (state, item) => {
+    const _tableConfig = getTableConfigFromLocal()
+    Vue.set(_tableConfig, item.key, item.value)
     localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))
   }
 }
 
 const actions = {
-
 }
 
 export default {

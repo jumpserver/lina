@@ -8,34 +8,32 @@ export function getTokenFromCookie() {
   return VueCookie.get(TOKEN_KEY)
 }
 
-export function getCurrentRoleFromCookie() {
-  const role = VueCookie.get(CURRENT_ROLE_KEY)
+export function getCurrentRoleLocal(username) {
+  const key = CURRENT_ROLE_KEY + '_' + username
+  const role = localStorage.getItem(key)
   if (role) {
     return parseInt(role) || null
   }
   return role
 }
 
-export function saveCurrentRoleToCookie(role) {
-  // console.log('Save current role to cookie: ', role)
-  return VueCookie.set(CURRENT_ROLE_KEY, role, 14)
+export function saveCurrentRoleLocal(username, role) {
+  const key = CURRENT_ROLE_KEY + '_' + username
+  return localStorage.setItem(key, role)
 }
 
-export function getCurrentOrgFromCookie() {
-  let org = null
+export function getCurrentOrgLocal(username) {
+  const key = CURRENT_ORG_KEY + '_' + username
+  const value = localStorage.getItem(key)
   try {
-    org = JSON.parse(VueCookie.get(CURRENT_ORG_KEY))
+    return JSON.parse(value)
   } catch (e) {
-    // console.log('Current org in cookie: ', org)
+    return null
   }
-  return org
 }
 
-export function saveCurrentOrgToCookie(org) {
-  VueCookie.set(CURRENT_ORG_KEY, JSON.stringify(org), 14)
+export function saveCurrentOrgLocal(username, org) {
+  const key = CURRENT_ORG_KEY + '_' + username
+  localStorage.setItem(key, JSON.stringify(org))
   VueCookie.set('X-JMS-ORG', org.id)
-}
-
-export function removeCurrentOrg() {
-  return VueCookie.remove(CURRENT_ORG_KEY)
 }
