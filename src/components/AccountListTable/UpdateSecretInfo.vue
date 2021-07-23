@@ -64,8 +64,9 @@ export default {
         this.$emit('updateAuthDone', res)
         this.$emit('update:visible', false)
       }).catch(err => {
-        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
-        this.$emit('update:visible', false)
+        const errMsg = Object.values(err.response.data).join(', ')
+        this.$message.error(this.$tc('common.updateErrorMsg') + ' ' + errMsg)
+        this.$emit('update:visible', true)
       })
     },
     handleCancel() {
