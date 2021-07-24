@@ -98,6 +98,7 @@ export default {
           {
             prop: 'platform',
             label: this.$t('assets.Platform')
+            sortable: true,
           },
           {
             prop: 'protocols',
