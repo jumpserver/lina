@@ -3,9 +3,9 @@
     <GenericCreateUpdateForm
       :fields="fields"
       :url="url"
+      :fields-meta="fieldsMeta"
       :clean-form-value="cleanFormValue"
       :get-method="getMethod"
-      :fields-meta="fieldsMeta"
       :more-buttons="moreButtons"
       :has-detail-in-msg="false"
     />
@@ -80,6 +80,15 @@ export default {
             if (value['EMAIL_HOST_PASSWORD'] === undefined) {
               value['EMAIL_HOST_PASSWORD'] = ''
             }
+            if (value['EMAIL_USE_SSL'] === undefined) {
+              value['EMAIL_USE_SSL'] = false
+            }
+            if (value['EMAIL_USE_TLS'] === undefined) {
+              value['EMAIL_USE_TLS'] = false
+            }
+            if (value['EMAIL_FROM'] === undefined) {
+              value['EMAIL_FROM'] = value['EMAIL_HOST_USER']
+            }
             testEmailSetting(value).then(res => {
               vm.$message.success(res['msg'])
             }).catch(res => {
@@ -97,6 +106,15 @@ export default {
     cleanFormValue(data) {
       if (!data['EMAIL_HOST_PASSWORD']) {
         delete data['EMAIL_HOST_PASSWORD']
+      }
+      if (!data['EMAIL_USE_SSL']) {
+        data['EMAIL_USE_SSL'] = false
+      }
+      if (!data['EMAIL_USE_TLS']) {
+        data['EMAIL_USE_TLS'] = false
+      }
+      if (!data['EMAIL_FROM']) {
+        data['EMAIL_FROM'] = data['EMAIL_HOST_USER']
       }
       Object.keys(data).forEach(
         function(key) {

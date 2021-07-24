@@ -1,7 +1,7 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
-      :fields="selectFields"
+      :fields="fields"
       :url="url"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      selectFields: [
+      fields: [
         [
           'KoKo', [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
@@ -51,7 +51,7 @@ export default {
           'TERMINAL_RDP_ADDR'
         ]
       ]
-      this.selectFields.splice(1, 0, xRDPFields)
+      this.fields.splice(1, 0, xRDPFields)
     }
   },
   methods: {
