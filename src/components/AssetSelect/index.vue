@@ -97,13 +97,11 @@ export default {
           },
           {
             prop: 'platform',
-            label: this.$t('assets.Platform'),
-            sortable: 'custom'
+            label: this.$t('assets.Platform')
           },
           {
             prop: 'protocols',
-            label: this.$t('assets.Protocols'),
-            sortable: 'custom'
+            label: this.$t('assets.Protocols')
           }
         ],
         listeners: {
