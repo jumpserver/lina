@@ -94,6 +94,16 @@ export default {
             prop: 'ip',
             label: this.$t('assets.ipDomain'),
             sortable: 'custom'
+          },
+          {
+            prop: 'platform',
+            label: this.$t('assets.Platform'),
+            sortable: 'custom'
+          },
+          {
+            prop: 'protocols',
+            label: this.$t('assets.Protocols'),
+            sortable: 'custom'
           }
         ],
         listeners: {
