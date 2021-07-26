@@ -1,7 +1,7 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
-      :fields="selectFields"
+      :fields="fields"
       :url="url"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      selectFields: [
+      fields: [
         [
           this.$t('setting.createUserSetting'),
           [
