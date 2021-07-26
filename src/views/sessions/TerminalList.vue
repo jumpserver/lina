@@ -37,7 +37,7 @@ export default {
           fieldsMeta: {
             command_storage: {
               component: Select2,
-              rules: [{ required: true }],
+              rules: [{ required: true, message: this.$t('common.fieldRequiredError') }],
               el: {
                 ajax: {
                   url: `/api/v1/terminal/command-storages/`
@@ -47,7 +47,7 @@ export default {
             },
             replay_storage: {
               component: Select2,
-              rules: [{ required: true }],
+              rules: [{ required: true, message: this.$t('common.fieldRequiredError') }],
               el: {
                 ajax: {
                   url: `/api/v1/terminal/replay-storages/`
