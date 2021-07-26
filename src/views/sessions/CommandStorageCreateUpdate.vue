@@ -3,9 +3,6 @@
     v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    :has-detail-in-msg="false"
-    :after-get-form-value="afterGetFormValue"
-    :clean-form-value="cleanFormValue"
   />
 </template>
 
@@ -55,23 +52,24 @@ export default {
         }
         return `${url}?type=${commandType}`
       },
-      url: '/api/v1/terminal/command-storages/'
+      url: '/api/v1/terminal/command-storages/',
+      hasDetailInMsg: false,
+      afterGetFormValue(validValues) {
+        if (!validValues?.meta?.HOSTS) {
+          return validValues
+        }
+        validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
+        return validValues
+      },
+      cleanFormValue(value) {
+        value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
+        return value
+      }
     }
   },
   computed: {
   },
   methods: {
-    afterGetFormValue(validValues) {
-      if (!validValues?.meta?.HOSTS) {
-        return validValues
-      }
-      validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
-      return validValues
-    },
-    cleanFormValue(value) {
-      value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
-      return value
-    }
   }
 }
 </script>

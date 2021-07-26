@@ -1,13 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :get-method="getMethod"
-      :has-detail-in-msg="false"
-      :clean-form-value="cleanFormValue"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 <script>
@@ -41,7 +34,21 @@ export default {
           type: 'input'
         }
       },
-      url: '/api/v1/settings/setting/?category=terminal'
+      url: '/api/v1/settings/setting/?category=terminal',
+      hasDetailInMsg: false,
+      getMethod() {
+        return 'put'
+      },
+      cleanFormValue(data) {
+        Object.keys(data).forEach(
+          function(key) {
+            if (data[key] === null) {
+              delete data[key]
+            }
+          }
+        )
+        return data
+      }
     }
   },
   mounted() {
@@ -55,19 +62,6 @@ export default {
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    cleanFormValue(data) {
-      Object.keys(data).forEach(
-        function(key) {
-          if (data[key] === null) {
-            delete data[key]
-          }
-        }
-      )
-      return data
-    }
   }
 }
 </script>

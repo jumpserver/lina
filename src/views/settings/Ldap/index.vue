@@ -1,15 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :get-method="getMethod"
-      :more-buttons="moreButtons"
-      :has-detail-in-msg="false"
-      :after-get-form-value="changeFormValue"
-      :clean-form-value="cleanFormValue"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
     <ImportDialog :visible.sync="dialogLdapUserImport" />
     <TestLoginDialog :visible.sync="dialogTest" />
   </IBox>
@@ -83,6 +74,7 @@ export default {
         }
       },
       url: '/api/v1/settings/setting/?category=ldap',
+      hasDetailInMsg: false,
       moreButtons: [
         {
           title: this.$t('setting.ldapConnectTest'),
@@ -110,29 +102,29 @@ export default {
             this.dialogLdapUserImport = true
           }.bind(this)
         }
-      ]
+      ],
+      getMethod() {
+        return 'put'
+      },
+      afterGetFormValue(obj) {
+        obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
+        return obj
+      },
+      cleanFormValue(data) {
+        if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
+          delete data['AUTH_LDAP_BIND_PASSWORD']
+        }
+        if (data['AUTH_LDAP_USER_ATTR_MAP']) {
+          data['AUTH_LDAP_USER_ATTR_MAP'] = JSON.parse(data['AUTH_LDAP_USER_ATTR_MAP'])
+        }
+        return data
+      }
     }
   },
   mounted() {
     this.loading = false
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    changeFormValue(obj) {
-      obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
-      return obj
-    },
-    cleanFormValue(data) {
-      if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
-        delete data['AUTH_LDAP_BIND_PASSWORD']
-      }
-      if (data['AUTH_LDAP_USER_ATTR_MAP']) {
-        data['AUTH_LDAP_USER_ATTR_MAP'] = JSON.parse(data['AUTH_LDAP_USER_ATTR_MAP'])
-      }
-      return data
-    }
   }
 }
 </script>

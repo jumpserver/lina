@@ -1,9 +1,5 @@
-
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    :after-get-form-value="afterGetFormValue"
-  />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -47,20 +43,38 @@ export default {
       }},
       createSuccessNextRoute: { name: 'UserDetail', params: {
         id: this.$route.query.user
-      }}
+      }},
+      onPerformError(error, method, vm) {
+        this.$emit('submitError', error)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          for (const key of Object.keys(data)) {
+            let value = data[key]
+            if (key === 'ip_group') {
+              value = Object.values(data[key])
+            }
+            if (value instanceof Array) {
+              value = value.join(';')
+            }
+            this.$refs.form.setFieldError(key, value)
+          }
+        }
+      },
+      afterGetFormValue(validValues) {
+        validValues.ip_group = validValues.ip_group.toString()
+        return validValues
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.ip_group)) {
+          value.ip_group = value.ip_group ? value.ip_group.split(',') : []
+        }
+        console.log('>>>>>>>>: ', value)
+        return value
+      }
     }
   },
   methods: {
-    afterGetFormValue(validValues) {
-      validValues.ip_group = validValues.ip_group.toString()
-      return validValues
-    },
-    cleanFormValue(value) {
-      if (!Array.isArray(value.ip_group)) {
-        value.ip_group = value.ip_group ? value.ip_group.split(',') : []
-      }
-      return value
-    }
   }
 }
 </script>

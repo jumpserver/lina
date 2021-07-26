@@ -1,14 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :clean-form-value="cleanFormValue"
-      :get-method="getMethod"
-      :more-buttons="moreButtons"
-      :has-detail-in-msg="false"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 
@@ -72,6 +64,7 @@ export default {
           ]
         }
       },
+      hasDetailInMsg: false,
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
@@ -96,35 +89,35 @@ export default {
             })
           }
         }
-      ]
+      ],
+      cleanFormValue(data) {
+        if (!data['EMAIL_HOST_PASSWORD']) {
+          delete data['EMAIL_HOST_PASSWORD']
+        }
+        if (!data['EMAIL_USE_SSL']) {
+          data['EMAIL_USE_SSL'] = false
+        }
+        if (!data['EMAIL_USE_TLS']) {
+          data['EMAIL_USE_TLS'] = false
+        }
+        if (!data['EMAIL_FROM']) {
+          data['EMAIL_FROM'] = data['EMAIL_HOST_USER']
+        }
+        Object.keys(data).forEach(
+          function(key) {
+            if (data[key] === null) {
+              delete data[key]
+            }
+          }
+        )
+        return data
+      },
+      getMethod() {
+        return 'put'
+      }
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    cleanFormValue(data) {
-      if (!data['EMAIL_HOST_PASSWORD']) {
-        delete data['EMAIL_HOST_PASSWORD']
-      }
-      if (!data['EMAIL_USE_SSL']) {
-        data['EMAIL_USE_SSL'] = false
-      }
-      if (!data['EMAIL_USE_TLS']) {
-        data['EMAIL_USE_TLS'] = false
-      }
-      if (!data['EMAIL_FROM']) {
-        data['EMAIL_FROM'] = data['EMAIL_HOST_USER']
-      }
-      Object.keys(data).forEach(
-        function(key) {
-          if (data[key] === null) {
-            delete data[key]
-          }
-        }
-      )
-      return data
-    }
   }
 
 }

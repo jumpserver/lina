@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :clean-form-value="cleanFormValue" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -92,21 +92,21 @@ export default {
             { validator: validatorInterval }
           ]
         }
+      },
+      cleanFormValue(data) {
+        if (data['password_strategy'] === 'custom') {
+          delete data['password_rules']
+        } else {
+          delete data['password']
+        }
+        if (data['interval'] === '') {
+          delete data['interval']
+        }
+        return data
       }
     }
   },
   methods: {
-    cleanFormValue(data) {
-      if (data['password_strategy'] === 'custom') {
-        delete data['password_rules']
-      } else {
-        delete data['password']
-      }
-      if (data['interval'] === '') {
-        delete data['interval']
-      }
-      return data
-    },
     generatePasswordRulesItemsFields() {
       const itemsFields = []
       const items = [

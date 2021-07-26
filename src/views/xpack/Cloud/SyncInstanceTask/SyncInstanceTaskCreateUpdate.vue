@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" :clean-form-value="cleanFormValue" :after-get-form-value="afterGetFormValue" />
+  <GenericCreateUpdatePage ref="createUpdatePage" v-bind="$data" />
 </template>
 
 <script>
@@ -116,7 +116,17 @@ export default {
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
-      createSuccessNextRoute: { name: 'CloudCenter' }
+      createSuccessNextRoute: { name: 'CloudCenter' },
+      afterGetFormValue(formValue) {
+        formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
+        return formValue
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.ip_network_segment_group)) {
+          value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
+        }
+        return value
+      }
     }
   },
   async mounted() {
@@ -128,16 +138,6 @@ export default {
     }
   },
   methods: {
-    afterGetFormValue(formValue) {
-      formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
-      return formValue
-    },
-    cleanFormValue(value) {
-      if (!Array.isArray(value.ip_network_segment_group)) {
-        value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
-      }
-      return value
-    }
   }
 }
 
