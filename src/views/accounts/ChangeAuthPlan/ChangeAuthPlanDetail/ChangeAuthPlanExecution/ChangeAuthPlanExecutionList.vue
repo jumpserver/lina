@@ -23,7 +23,7 @@ export default {
         url: `/api/v1/xpack/change-auth-plan/plan-execution/?plan_id=${this.object.id}`,
         columns: [
           'username', 'assets_amount', 'nodes_amount', 'result_summary', 'password_strategy_display',
-          'timedelta', 'date_start', 'actions'
+          'timedelta', 'trigger_display', 'date_start', 'actions'
         ],
         columnsMeta: {
           username: {
