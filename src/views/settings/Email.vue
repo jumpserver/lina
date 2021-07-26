@@ -1,14 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :clean-form-value="cleanFormValue"
-      :get-method="getMethod"
-      :fields-meta="fieldsMeta"
-      :more-buttons="moreButtons"
-      :has-detail-in-msg="false"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 
@@ -72,6 +64,7 @@ export default {
           ]
         }
       },
+      hasDetailInMsg: false,
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {
@@ -87,26 +80,26 @@ export default {
             })
           }
         }
-      ]
+      ],
+      cleanFormValue(data) {
+        if (!data['EMAIL_HOST_PASSWORD']) {
+          delete data['EMAIL_HOST_PASSWORD']
+        }
+        Object.keys(data).forEach(
+          function(key) {
+            if (data[key] === null) {
+              delete data[key]
+            }
+          }
+        )
+        return data
+      },
+      getMethod() {
+        return 'put'
+      }
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    cleanFormValue(data) {
-      if (!data['EMAIL_HOST_PASSWORD']) {
-        delete data['EMAIL_HOST_PASSWORD']
-      }
-      Object.keys(data).forEach(
-        function(key) {
-          if (data[key] === null) {
-            delete data[key]
-          }
-        }
-      )
-      return data
-    }
   }
 
 }

@@ -176,7 +176,9 @@ export default {
       type: Function,
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
-        route['params'] = { 'id': res.id }
+        if (!(route.params && route.params.id)) {
+          route['params'] = { 'id': res.id }
+        }
         this.$emit('submitSuccess', res)
 
         this.emitPerformSuccessMsg(method, res, addContinue)
