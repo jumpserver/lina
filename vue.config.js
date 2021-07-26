@@ -51,7 +51,7 @@ module.exports = {
         changeOrigin: true
       },
       '/ws/': {
-        target: 'ws://127.0.0.1:8080',
+        target: process.env.VUE_APP_CORE_WS,
         changeOrigin: true,
         ws: true
       },

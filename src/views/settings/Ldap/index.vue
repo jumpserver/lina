@@ -1,7 +1,7 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
-      :fields="selectFields"
+      :fields="fields"
       :url="url"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
@@ -20,6 +20,7 @@ import { testLdapSetting } from '@/api/settings'
 import ImportDialog from './ImportDialog'
 import TestLoginDialog from './TestLoginDialog'
 import { IBox } from '@/components'
+import rules from '@/components/DataForm/rules'
 import { JsonRequired } from '@/components/DataForm/rules'
 
 export default {
@@ -36,7 +37,7 @@ export default {
       object: {},
       dialogTest: false,
       dialogLdapUserImport: false,
-      selectFields: [
+      fields: [
         [
           this.$t('setting.LDAPServerInfo'),
           [
@@ -57,6 +58,21 @@ export default {
         ]
       ],
       fieldsMeta: {
+        AUTH_LDAP_BIND_DN: {
+          rules: [
+            rules.Required
+          ]
+        },
+        AUTH_LDAP_BIND_PASSWORD: {
+          rules: [
+            rules.Required
+          ]
+        },
+        AUTH_LDAP_SEARCH_OU: {
+          rules: [
+            rules.Required
+          ]
+        },
         AUTH_LDAP_USER_ATTR_MAP: {
           component: 'el-input',
           el: {
