@@ -1,14 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :get-method="getMethod"
-      :fields-meta="fieldsMeta"
-      :more-buttons="moreButtons"
-      :has-detail-in-msg="false"
-      :clean-form-value="cleanFormValue"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 
@@ -26,6 +18,7 @@ export default {
     const vm = this
     return {
       url: '/api/v1/settings/setting/?category=wecom',
+      hasDetailInMsg: false,
       moreButtons: [
         {
           title: this.$t('setting.weComTest'),
@@ -51,20 +44,20 @@ export default {
         ]
       ],
       fieldsMeta: {
+      },
+      // 不清理的话，编辑secret，在删除提交会报错
+      cleanFormValue(data) {
+        if (!data['WECOM_SECRET']) {
+          delete data['WECOM_SECRET']
+        }
+        return data
+      },
+      getMethod() {
+        return 'put'
       }
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    // 不清理的话，编辑secret，在删除提交会报错
-    cleanFormValue(data) {
-      if (!data['WECOM_SECRET']) {
-        delete data['WECOM_SECRET']
-      }
-      return data
-    }
   }
 }
 </script>

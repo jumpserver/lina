@@ -1,6 +1,5 @@
-
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :clean-form-value="cleanFormValue" :after-get-form-value="afterGetFormValue" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -60,40 +59,40 @@ export default {
           }
         }
       },
-      url: '/api/v1/acls/login-asset-acls/'
+      url: '/api/v1/acls/login-asset-acls/',
+      afterGetFormValue(formValue) {
+        formValue.assets.ip_group = formValue.assets.ip_group.toString()
+        formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
+        formValue.system_users.name_group = formValue.system_users.name_group.toString()
+        formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
+        formValue.system_users.username_group = formValue.system_users.username_group.toString()
+        formValue.users.username_group = formValue.users.username_group.toString()
+        return formValue
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.assets.ip_group)) {
+          value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
+        }
+        if (!Array.isArray(value.assets.hostname_group)) {
+          value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.protocol_group)) {
+          value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.name_group)) {
+          value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.username_group)) {
+          value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
+        }
+        if (!Array.isArray(value.users.username_group)) {
+          value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
+        }
+        return value
+      }
     }
   },
   methods: {
-    afterGetFormValue(formValue) {
-      formValue.assets.ip_group = formValue.assets.ip_group.toString()
-      formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
-      formValue.system_users.name_group = formValue.system_users.name_group.toString()
-      formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
-      formValue.system_users.username_group = formValue.system_users.username_group.toString()
-      formValue.users.username_group = formValue.users.username_group.toString()
-      return formValue
-    },
-    cleanFormValue(value) {
-      if (!Array.isArray(value.assets.ip_group)) {
-        value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
-      }
-      if (!Array.isArray(value.assets.hostname_group)) {
-        value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
-      }
-      if (!Array.isArray(value.system_users.protocol_group)) {
-        value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
-      }
-      if (!Array.isArray(value.system_users.name_group)) {
-        value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
-      }
-      if (!Array.isArray(value.system_users.username_group)) {
-        value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
-      }
-      if (!Array.isArray(value.users.username_group)) {
-        value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
-      }
-      return value
-    }
   }
 }
 </script>

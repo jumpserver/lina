@@ -51,26 +51,6 @@ export default {
         hasCreate: true,
         hasClone: false,
         url: '/api/v1/assets/accounts/'
-        // handleImport: function({ selectedRows }) {
-        //   this.selectedRows = selectedRows
-        //   this.dialogStatus = 'import'
-        //   if (!this.needMFAVerify) {
-        //     this.showMFADialog = false
-        //     this.showImportDialog = true
-        //   } else {
-        //     this.showMFADialog = true
-        //   }
-        // }.bind(this),
-        // handleExport: function({ selectedRows }) {
-        //   this.selectedRows = selectedRows
-        //   this.dialogStatus = 'export'
-        //   if (!this.needMFAVerify) {
-        //     this.showMFADialog = false
-        //     this.showExportDialog = true
-        //   } else {
-        //     this.showMFADialog = true
-        //   }
-        // }.bind(this)
       },
       treeSetting: {
         showMenu: false,

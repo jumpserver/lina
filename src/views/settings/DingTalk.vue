@@ -1,14 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :get-method="getMethod"
-      :fields-meta="fieldsMeta"
-      :more-buttons="moreButtons"
-      :has-detail-in-msg="false"
-      :clean-form-value="cleanFormValue"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 
@@ -51,20 +43,21 @@ export default {
         ]
       ],
       fieldsMeta: {
+      },
+      hasDetailInMsg: false,
+      getMethod() {
+        return 'put'
+      },
+      // 不清理的话，编辑secret，在删除提交会报错
+      cleanFormValue(data) {
+        if (!data['DINGTALK_APPSECRET']) {
+          delete data['DINGTALK_APPSECRET']
+        }
+        return data
       }
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    // 不清理的话，编辑secret，在删除提交会报错
-    cleanFormValue(data) {
-      if (!data['DINGTALK_APPSECRET']) {
-        delete data['DINGTALK_APPSECRET']
-      }
-      return data
-    }
   }
 }
 </script>

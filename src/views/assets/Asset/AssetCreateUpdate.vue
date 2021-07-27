@@ -69,8 +69,7 @@ export default {
                 return { label: item.name + '(' + username + ')', value: item.id }
               }
             }
-          },
-          rules: [rules.RequiredChange]
+          }
         },
         nodes: {
           rules: [rules.RequiredChange],

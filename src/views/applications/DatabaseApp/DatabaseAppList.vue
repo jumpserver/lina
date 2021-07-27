@@ -63,7 +63,7 @@ export default {
         hasCreate: false,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
+        hasBulkDelete: true,
         createRoute: 'DatabaseAppCreate',
         moreCreates: {
           callback: (item) => {

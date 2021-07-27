@@ -3,6 +3,7 @@
     <GenericCreateUpdateForm
       :fields="fields"
       :url="url"
+      :fields-meta="fieldsMeta"
       :update-success-next-route="successUrl"
       :create-success-next-route="successUrl"
       :get-method="getMethod"
@@ -15,6 +16,8 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
+import rules from '@/components/DataForm/rules'
+
 export default {
   name: 'Basic',
   components: {
@@ -32,6 +35,13 @@ export default {
           ]
         ]
       ],
+      fieldsMeta: {
+        SITE_URL: {
+          rules: [
+            rules.Required
+          ]
+        }
+      },
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
       url: '/api/v1/settings/setting/?category=basic'
     }

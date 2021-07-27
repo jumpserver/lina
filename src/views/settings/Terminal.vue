@@ -1,13 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="selectFields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :get-method="getMethod"
-      :has-detail-in-msg="false"
-      :clean-form-value="cleanFormValue"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 <script>
@@ -21,7 +14,7 @@ export default {
   },
   data() {
     return {
-      selectFields: [
+      fields: [
         [
           'KoKo', [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
@@ -41,7 +34,21 @@ export default {
           type: 'input'
         }
       },
-      url: '/api/v1/settings/setting/?category=terminal'
+      url: '/api/v1/settings/setting/?category=terminal',
+      hasDetailInMsg: false,
+      getMethod() {
+        return 'put'
+      },
+      cleanFormValue(data) {
+        Object.keys(data).forEach(
+          function(key) {
+            if (data[key] === null) {
+              delete data[key]
+            }
+          }
+        )
+        return data
+      }
     }
   },
   mounted() {
@@ -51,23 +58,10 @@ export default {
           'TERMINAL_RDP_ADDR'
         ]
       ]
-      this.selectFields.splice(1, 0, xRDPFields)
+      this.fields.splice(1, 0, xRDPFields)
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    cleanFormValue(data) {
-      Object.keys(data).forEach(
-        function(key) {
-          if (data[key] === null) {
-            delete data[key]
-          }
-        }
-      )
-      return data
-    }
   }
 }
 </script>

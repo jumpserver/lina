@@ -120,7 +120,7 @@ export default {
         },
         {
           key: this.$t('tickets.Assignees'),
-          value: this.object.assignees_display
+          value: this.object.assignees_display.join(', ')
         },
         {
           key: this.$t('tickets.Assignee'),

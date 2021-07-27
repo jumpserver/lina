@@ -29,6 +29,7 @@
   },
   "applications": {
     "": "",
+    "updateAccountMsg": "请更新系统用户的账号信息",
     "RemoteApp": "远程应用",
     "Database": "数据库",
     "Cloud": "云",
