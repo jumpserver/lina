@@ -86,11 +86,15 @@ export default {
       },
       systemuser_select2: {
         multiple: true,
-        value: this.object.meta.recommend_system_users,
+        value: this.object.meta['recommend_system_users'],
         ajax: {
-          url: `/api/v1/assets/system-users/?oid=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: (function(object) {
+            const oid = object.org_id === '' ? 'DEFAULT' : object.org_id
+            return `/api/v1/assets/system-users/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
+          }(this.object)),
           transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
+            const username = item.username || '*'
+            return { label: item.name + '(' + username + ')', value: item.id }
           }
         }
       }

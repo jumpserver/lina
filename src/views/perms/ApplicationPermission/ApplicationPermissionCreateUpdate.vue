@@ -94,7 +94,8 @@ export default {
                 if (this.$route.query.type === 'k8s') {
                   return { label: item.name, value: item.id }
                 }
-                return { label: item.name + '(' + item.username + ')', value: item.id }
+                const username = item.username || '*'
+                return { label: item.name + '(' + username + ')', value: item.id }
               }
             }
           }
