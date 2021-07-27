@@ -1,20 +1,20 @@
 <template>
   <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting">
     <template #table>
-      <AccountListTable ref="table" :url="accountsUrl" />
+      <AppAccountListTable ref="table" :url="accountsUrl" />
     </template>
   </GenericTreeListPage>
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import AccountListTable from '@/components/AccountListTable'
+import AppAccountListTable from '@/components/AppAccountListTable'
 import { setUrlParam } from '@/utils/common'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    GenericTreeListPage, AccountListTable
+    GenericTreeListPage, AppAccountListTable
   },
   data() {
     const vm = this
@@ -22,25 +22,27 @@ export default {
       isInit: true,
       clickedRow: null,
       iShowTree: true,
-      accountsUrl: '/api/v1/assets/accounts/',
+      accountsUrl: '/api/v1/applications/accounts/',
       treeSetting: {
         async: false,
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/assets/accounts/',
-        treeUrl: '/api/v1/applications/applications/tree/',
+        treeUrl: '/api/v1/applications/applications/tree/?show_count=0',
         callback: {
           onSelected: function(event, treeNode) {
-            let url = '/api/v1/assets/accounts/'
-            if (treeNode.meta.type === 'node') {
-              const nodeId = treeNode.meta.node.id
-              url = setUrlParam(url, 'asset', '')
-              url = setUrlParam(url, 'node', nodeId)
-            } else if (treeNode.meta.type === 'asset') {
-              const assetId = treeNode.meta.asset.id
-              url = setUrlParam(url, 'node', '')
-              url = setUrlParam(url, 'asset', assetId)
+            let url = '/api/v1/applications/accounts/'
+            const nodeId = treeNode.id
+            if (treeNode.meta.type === 'category') {
+              url = setUrlParam(url, 'app_category', nodeId)
+              url = setUrlParam(url, 'app_type', '')
+            } else if (treeNode.meta.type === 'type') {
+              url = setUrlParam(url, 'app_category', '')
+              url = setUrlParam(url, 'app_type', nodeId)
+            } else if (treeNode.meta.type === 'application') {
+              url = setUrlParam(url, 'app_category', '')
+              url = setUrlParam(url, 'app_type', '')
+              url = setUrlParam(url, 'app', nodeId)
             }
             setTimeout(() => {
               vm.accountsUrl = url
