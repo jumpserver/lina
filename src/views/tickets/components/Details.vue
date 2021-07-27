@@ -14,13 +14,13 @@
             </el-col>
             <el-col :span="18">
               <div class="item-text">
-                <ItemValue :value="item.value" v-bind="item" />
+                <ItemValue v-bind="item" />
               </div>
             </el-col>
           </el-row>
         </el-col>
       </el-row>
-      <el-divider v-if="specialCardItems.length>0" />
+      <el-divider v-if="specialCardItems.length > 0" />
       <el-row :gutter="10">
         <el-col v-for="item in specialCardItems" :key="'card-' + item.key" :span="12">
           <el-row class="item">
@@ -31,7 +31,7 @@
             </el-col>
             <el-col :span="18">
               <div class="item-text">
-                <ItemValue :value="item.value" v-bind="item" />
+                <ItemValue v-bind="item" />
               </div>
             </el-col>
           </el-row>
@@ -41,7 +41,7 @@
   </IBox>
 </template>
 <script>
-import ItemValue from './ItemValue'
+import ItemValue from '@/components/DetailCard/ItemValue'
 import IBox from '@/components/IBox'
 export default {
   name: 'Details',
