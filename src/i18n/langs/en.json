@@ -28,6 +28,7 @@
   },
   "applications": {
     "": "",
+    "updateAccountMsg": "Please update system user account info",
     "RemoteApp": "Remote app",
     "Database": "Database",
     "Cloud": "Cloud",
