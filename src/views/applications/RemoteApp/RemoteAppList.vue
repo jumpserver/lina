@@ -62,8 +62,7 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasMoreActions: false,
-        hasBulkDelete: false,
+        hasBulkDelete: true,
         hasExport: false,
         hasImport: false,
         // createRoute: 'RemoteAppCreate',

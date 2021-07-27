@@ -91,8 +91,7 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasMoreActions: false,
-        hasBulkDelete: false,
+        hasBulkDelete: true,
         moreActionsType: 'primary',
         moreCreates: {
           callback: (option) => {
