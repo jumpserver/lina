@@ -105,6 +105,7 @@ export default {
         }
       },
       headerActions: {
+        hasBulkDelete: true,
         createRoute() {
           return {
             name: 'AssetPermissionCreate',
