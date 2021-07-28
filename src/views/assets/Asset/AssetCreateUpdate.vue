@@ -65,7 +65,8 @@ export default {
             ajax: {
               url: '/api/v1/assets/system-users/?type=admin',
               transformOption: (item) => {
-                return { label: `${item.name}(${item.username})`, value: item.id }
+                const username = item.username || '*'
+                return { label: item.name + '(' + username + ')', value: item.id }
               }
             }
           }

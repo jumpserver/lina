@@ -28,13 +28,20 @@ export default {
       return this.formatter(this.item, this.value)
     }
     if (typeof this.value === 'boolean') {
-      return <span>{this.toChoicesDisplay(this.value)}</span>
+      return (
+        <span class='item-value'>{this.toChoicesDisplay(this.value)}</span>
+      )
     }
-    return <span>{this.value}</span>
+    return (
+      <span class='item-value'>{this.value}</span>
+    )
   }
 }
 </script>
 
 <style scoped>
+.item-value {
+  word-break: break-word;
+}
 
 </style>

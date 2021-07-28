@@ -33,7 +33,7 @@ export default {
       return [
         {
           key: this.$t('tickets.Applicant'),
-          value: this.object.applicant_display
+          value: this.object['applicant_display']
         },
         {
           key: this.$t('tickets.type'),
@@ -52,7 +52,7 @@ export default {
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: this.object.processor_display
+          value: this.object['processor_display']
         },
         {
           key: this.$t('common.dateCreated'),
@@ -67,15 +67,15 @@ export default {
         // apply_login_user: "Administrator(admin)"
         {
           key: this.$t('acl.apply_login_asset'),
-          value: this.object.meta.apply_login_asset
+          value: this.object.meta['apply_login_asset']
         },
         {
           key: this.$t('acl.apply_login_system_user'),
-          value: this.object.meta.apply_login_system_user
+          value: this.object.meta['apply_login_system_user']
         },
         {
           key: this.$t('acl.apply_login_user'),
-          value: this.object.meta.apply_login_user
+          value: this.object.meta['apply_login_user']
         }
       ]
     }

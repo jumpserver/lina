@@ -145,7 +145,8 @@ export default {
         objectsAjax: {
           url: '/api/v1/assets/system-users/?protocol__in=rdp,ssh,vnc,telnet',
           transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
+            const username = item.username || '*'
+            return { label: item.name + '(' + username + ')', value: item.id }
           }
         },
         hasObjectsId: this.object.system_users,

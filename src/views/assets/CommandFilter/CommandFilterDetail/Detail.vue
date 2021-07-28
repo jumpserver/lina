@@ -33,7 +33,8 @@ export default {
         objectsAjax: {
           url: '/api/v1/assets/system-users/',
           transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
+            const username = item.username || '*'
+            return { label: item.name + '(' + username + ')', value: item.id }
           }
           // processResults: (data) => {
           //   let results = data.results
