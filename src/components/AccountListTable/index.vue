@@ -42,7 +42,7 @@ export default {
     },
     hasClone: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
