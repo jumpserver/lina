@@ -76,7 +76,7 @@ export default {
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/assets/assets/?fields_size=mini',
         hasTree: true,
         canSelect: this.canSelect,
         columns: [
