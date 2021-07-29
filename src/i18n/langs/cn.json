@@ -1115,6 +1115,7 @@
       "NodeAmount": "节点数量",
       "PasswordLength": "密码长度",
       "PasswordStrategy": "密码策略",
+      "SecretKeyStrategy": "密钥策略",
       "RegularlyPerform": "定期执行",
       "Result": "结果",
       "Retry": "重试",
