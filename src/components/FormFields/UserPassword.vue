@@ -29,26 +29,29 @@ export default {
       }
       const patterns = []
       if (passwordRule.SECURITY_PASSWORD_UPPER_CASE) {
-        patterns.push([/[A-Z]/, i18n.t('common.password.UPPER_CASE_REQUIRED')])
+        patterns.push([/[A-Z]/, i18n.tc('common.password.UPPER_CASE_REQUIRED')])
       }
       if (passwordRule.SECURITY_PASSWORD_LOWER_CASE) {
-        patterns.push([/[a-z]/, i18n.t('common.password.LOWER_CASE_REQUIRED')])
+        patterns.push([/[a-z]/, i18n.tc('common.password.LOWER_CASE_REQUIRED')])
       }
       if (passwordRule.SECURITY_PASSWORD_NUMBER) {
-        patterns.push([/\d/, i18n.t('common.password.NUMBER_REQUIRED')])
+        patterns.push([/\d/, i18n.tc('common.password.NUMBER_REQUIRED')])
       }
       if (passwordRule.SECURITY_PASSWORD_SPECIAL_CHAR) {
         const pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]")
-        patterns.push([pattern, i18n.t('common.password.SPECIAL_CHAR_REQUIRED')])
+        patterns.push([pattern, i18n.tc('common.password.SPECIAL_CHAR_REQUIRED')])
       }
       for (const [pattern, msg] of patterns) {
         if (!pattern.test(value)) {
           return callback(new Error(msg))
         }
       }
-      const secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
+      let secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
+      if (this.$store.getters.currentUserIsSuperAdmin) {
+        secureLength = passwordRule ? passwordRule.SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH : 7
+      }
       if (value.length < secureLength) {
-        return callback(new Error(i18n.t('common.password.MIN_LENGTH_ERROR', [secureLength])))
+        return callback(new Error(i18n.tc('common.password.MIN_LENGTH_ERROR', [secureLength])))
       }
       callback()
     }
@@ -59,16 +62,11 @@ export default {
   data() {
     return {
       attrs: {
-        secureLength: 7
       }
     }
   },
   computed: {
     ...mapGetters(['publicSettings'])
-  },
-  created() {
-    const passwordRule = this.publicSettings.PASSWORD_RULE || {}
-    this.attrs.secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
   },
   methods: {
     handleInput(value) {

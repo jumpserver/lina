@@ -16,7 +16,8 @@ const getters = {
   MFAVerifyAt: state => state.users.MFAVerifyAt,
   MFA_TTl: state => state.settings.publicSettings['SECURITY_MFA_VERIFY_TTL'],
   tableConfig: state => state.table.tableConfig,
-  currentUserIsSuperAdmin: state => state.users.sysRole === 'Admin',
+  currentUserIsSuperAdmin: state => state.users.isSuperAdmin,
+  currentUserIsAdmin: state => state.users.isAdmin,
   hasValidLicense: state => state.settings.hasValidLicense,
   userAdminOrgList: (state, getters) => {
     let orgs = state.users.orgs

@@ -22,6 +22,7 @@ const getDefaultState = () => {
     perms: 0b00000000,
     MFAVerifyAt: null,
     isSuperAdmin: false,
+    isAdmin: false,
     hasAdminPerm: false,
     hasAuditPerm: false
   }
