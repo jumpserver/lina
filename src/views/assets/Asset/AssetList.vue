@@ -112,7 +112,7 @@ export default {
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
+          default: ['hostname', 'ip', 'platform', 'protocols', 'hardware_info', 'connectivity', 'actions']
         },
         columnsMeta: {
           hostname: {
