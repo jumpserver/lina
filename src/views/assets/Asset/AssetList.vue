@@ -112,7 +112,7 @@ export default {
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'hardware_info', 'connectivity', 'actions']
+          default: ['hostname', 'ip', 'platform', 'protocols', 'hardware_info', 'connectivity', 'actions']
         },
         columnsMeta: {
           hostname: {
@@ -120,7 +120,11 @@ export default {
             formatterArgs: {
               route: 'AssetDetail'
             },
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            sortable: true
+          },
+          platform: {
+            sortable: true
           },
           protocols: {
             formatter: function(row) {
