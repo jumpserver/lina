@@ -24,13 +24,17 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
-        [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules']],
+        [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['is_password', 'password_strategy', 'password', 'password_rules']],
+        [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'private_key']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
       initial: {
         password_strategy: 'custom',
+        ssh_key_strategy: 'add',
         is_periodic: true,
+        is_password: true,
+        is_ssh_key: true,
         password_rules: {
           length: 30
         },
@@ -50,7 +54,7 @@ export default {
         },
         password: {
           hidden: (formValue) => {
-            return formValue.password_strategy !== 'custom'
+            return formValue.password_strategy !== 'custom' || formValue.is_password === false
           },
           rules: [
             { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
@@ -59,6 +63,19 @@ export default {
         password_rules: {
           type: 'group',
           items: this.generatePasswordRulesItemsFields()
+        },
+        private_key: {
+          el: {
+            type: 'textarea',
+            placeholder: '-----BEGIN OPENSSH PRIVATE KEY-----',
+            autosize: { minRows: 3 }
+          },
+          hidden: (formValue) => {
+            return formValue.is_ssh_key === false
+          },
+          rules: [
+            { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
+          ]
         },
         nodes: {
           label: this.$t('xpack.Node'),
@@ -74,6 +91,24 @@ export default {
         },
         is_periodic: {
           type: 'switch'
+        },
+        is_password: {
+          type: 'switch'
+        },
+        is_ssh_key: {
+          type: 'switch'
+        },
+        password_strategy: {
+          label: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+          hidden: (formValue) => {
+            return formValue.is_password === false
+          }
+        },
+        ssh_key_strategy: {
+          label: this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
+          hidden: (formValue) => {
+            return formValue.is_ssh_key === false
+          }
         },
         crontab: {
           label: this.$t('xpack.RegularlyPerform'),
@@ -115,7 +150,7 @@ export default {
       items.forEach((item, index, array) => {
         itemsFields.push({
           id: item.id, prop: item.prop, el: {}, attrs: {}, type: 'input', label: item.label, rules: [Required],
-          hidden: (formValue) => { return ['random_one', 'random_all'].indexOf(formValue.password_strategy) === -1 }
+          hidden: (formValue) => { return ['random_one', 'random_all'].indexOf(formValue.password_strategy) === -1 || formValue.is_password === false }
         })
       })
       return itemsFields
