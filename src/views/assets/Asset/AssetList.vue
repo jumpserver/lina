@@ -120,7 +120,11 @@ export default {
             formatterArgs: {
               route: 'AssetDetail'
             },
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            sortable: true
+          },
+          platform: {
+            sortable: true
           },
           protocols: {
             formatter: function(row) {
