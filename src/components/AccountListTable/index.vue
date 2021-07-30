@@ -145,8 +145,8 @@ export default {
       headerActions: {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: false,
-        hasImport: this.hasImport,
-        hasExport: this.hasExport,
+        hasImport: false,
+        hasExport: true,
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
