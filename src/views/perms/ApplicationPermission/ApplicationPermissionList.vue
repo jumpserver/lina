@@ -29,16 +29,17 @@ export default {
           onSelected: function(event, treeNode) {
             let url = '/api/v1/perms/application-permissions/'
             const nodeId = treeNode.id
+            const value = treeNode.meta.data?.value
             if (treeNode.meta.type === 'category') {
-              url = setUrlParam(url, 'category', nodeId)
+              url = setUrlParam(url, 'category', value)
               url = setUrlParam(url, 'type', '')
             } else if (treeNode.meta.type === 'type') {
               url = setUrlParam(url, 'category', '')
-              url = setUrlParam(url, 'type', nodeId)
+              url = setUrlParam(url, 'type', value)
             } else if (treeNode.meta.type === 'application') {
               url = setUrlParam(url, 'category', '')
               url = setUrlParam(url, 'type', '')
-              url = setUrlParam(url, 'application_id', nodeId)
+              url = setUrlParam(url, 'app', nodeId)
             }
             setTimeout(() => {
               vm.tableConfig.url = url

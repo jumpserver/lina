@@ -48,8 +48,8 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'app_name', 'username', 'app_category_display',
-          'app_type_display', 'systemuser', 'actions'
+          'app_name', 'username', 'category_display',
+          'type_display', 'systemuser', 'actions'
         ],
         columnsMeta: {
           app_name: {
