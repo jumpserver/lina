@@ -28,7 +28,7 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        treeUrl: '/api/v1/applications/applications/tree/?show_count=0',
+        treeUrl: '/api/v1/applications/applications/tree/',
         callback: {
           onSelected: function(event, treeNode) {
             let url = '/api/v1/applications/accounts/'
