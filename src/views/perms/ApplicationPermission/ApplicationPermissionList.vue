@@ -1,20 +1,51 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :title="title" />
+  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import { setUrlParam } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
-import { ApplicationTypes } from '../const'
+import { ApplicationTypes } from '@/views/perms/const'
 
 export default {
+  name: 'AssetAccountList',
   components: {
-    GenericListPage
+    GenericTreeListPage
   },
   data() {
     const vm = this
     return {
-      title: this.$t('route.ApplicationPermission'),
+      isInit: true,
+      clickedRow: null,
+      iShowTree: true,
+      treeSetting: {
+        async: false,
+        showMenu: false,
+        showRefresh: true,
+        showAssets: false,
+        treeUrl: '/api/v1/applications/applications/tree/',
+        callback: {
+          onSelected: function(event, treeNode) {
+            let url = '/api/v1/perms/application-permissions/'
+            const nodeId = treeNode.id
+            if (treeNode.meta.type === 'category') {
+              url = setUrlParam(url, 'category', nodeId)
+              url = setUrlParam(url, 'type', '')
+            } else if (treeNode.meta.type === 'type') {
+              url = setUrlParam(url, 'category', '')
+              url = setUrlParam(url, 'type', nodeId)
+            } else if (treeNode.meta.type === 'application') {
+              url = setUrlParam(url, 'category', '')
+              url = setUrlParam(url, 'type', '')
+              url = setUrlParam(url, 'application_id', nodeId)
+            }
+            setTimeout(() => {
+              vm.tableConfig.url = url
+            }, 100)
+          }
+        }
+      },
       tableConfig: {
         url: '/api/v1/perms/application-permissions/',
         columns: [
@@ -104,12 +135,6 @@ export default {
         }
       }
     }
-  },
-  methods: {
   }
 }
 </script>
-
-<style>
-
-</style>
