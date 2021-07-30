@@ -33,15 +33,16 @@ export default {
           onSelected: function(event, treeNode) {
             let url = '/api/v1/applications/accounts/'
             const nodeId = treeNode.id
+            const value = treeNode.meta.data?.value
             if (treeNode.meta.type === 'category') {
-              url = setUrlParam(url, 'app_category', nodeId)
-              url = setUrlParam(url, 'app_type', '')
+              url = setUrlParam(url, 'category', value)
+              url = setUrlParam(url, 'type', '')
             } else if (treeNode.meta.type === 'type') {
-              url = setUrlParam(url, 'app_category', '')
-              url = setUrlParam(url, 'app_type', nodeId)
+              url = setUrlParam(url, 'category', '')
+              url = setUrlParam(url, 'type', value)
             } else if (treeNode.meta.type === 'application') {
-              url = setUrlParam(url, 'app_category', '')
-              url = setUrlParam(url, 'app_type', '')
+              url = setUrlParam(url, 'category', '')
+              url = setUrlParam(url, 'type', '')
               url = setUrlParam(url, 'app', nodeId)
             }
             setTimeout(() => {
