@@ -43,6 +43,8 @@ const mutations = {
     state.username = username
     state.currentOrg = getCurrentOrgLocal(username)
     state.currentRole = getCurrentRoleLocal(username)
+    state.isAdmin = profile['is_org_admin']
+    state.isSuperAdmin = profile['is_superuser']
   },
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
