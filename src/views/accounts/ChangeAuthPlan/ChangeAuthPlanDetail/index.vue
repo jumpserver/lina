@@ -24,21 +24,39 @@ export default {
       plan: { name: '', username: '', comment: '' },
       config: {
         activeMenu: 'ChangeAuthPlanInfo',
-        submenu: [
-          {
-            title: this.$t('common.BasicInfo'),
-            name: 'ChangeAuthPlanInfo'
-          },
+        submenu: this.getSubmenu(),
+        actions: {
+          updateCallback: () => {
+            if (!this.$route.params.type === 'assets') {
+              this.$router.push({ name: 'ChangeAuthPlanUpdate', params: { id: this.plan.id }})
+            } else {
+              this.$router.push({ name: 'ChangeDatabaseAuthPlanUpdate', params: { id: this.plan.id }})
+            }
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    getSubmenu() {
+      const submenu = [
+        {
+          title: this.$t('common.BasicInfo'),
+          name: 'ChangeAuthPlanInfo'
+        },
+        {
+          title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
+          name: 'ChangeAuthPlanExecutionList'
+        }
+      ]
+      if (this.$route.params.type === 'assets') {
+        submenu.splice(1, 0,
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
             name: 'ChangeAuthPlanAsset'
-          },
-          {
-            title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'ChangeAuthPlanExecutionList'
-          }
-        ]
+          })
       }
+      return submenu
     }
   }
 }

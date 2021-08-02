@@ -1072,9 +1072,13 @@
   "xpack": {
     "Admin": "Admin",
     "Asset": "Asset",
+    "Database": "Database",
+    "SystemUser": "System user",
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
     "ChangeAuthPlan": {
+      "ChangeAssetPassword": "Asset Password Change Plan",
+      "ChangeDatabasePassword": "Database Password Change Plan",
       "AddAsset": "Add asset",
       "AddNode": "Add node",
       "Asset": "Asset",

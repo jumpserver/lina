@@ -95,9 +95,23 @@ export default [
         hidden: true
       },
       {
+        path: 'database-plan/create',
+        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeDatabaseAuthPlanCreateUpdate.vue'),
+        name: 'ChangeDatabaseAuthPlanCreate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeDatabasePassword'), activeMenu: '/accounts/change-auth-plan/plan', action: 'create' },
+        hidden: true
+      },
+      {
         path: 'plan/:id/update',
         component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
         name: 'ChangeAuthPlanUpdate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanUpdate'), activeMenu: '/accounts/change-auth-plan/plan', action: 'update' },
+        hidden: true
+      },
+      {
+        path: 'database-plan/:id/update',
+        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeDatabaseAuthPlanCreateUpdate.vue'),
+        name: 'ChangeDatabaseAuthPlanUpdate',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanUpdate'), activeMenu: '/accounts/change-auth-plan/plan', action: 'update' },
         hidden: true
       },

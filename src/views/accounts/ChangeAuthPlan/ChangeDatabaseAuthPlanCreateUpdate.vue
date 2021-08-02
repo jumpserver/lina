@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" :clean-form-value="cleanFormValue" />
+  <GenericCreateUpdatePage v-bind="$data" :clean-form-value="cleanFormValue" :create-success-next-route="createUpdateSuccessNextRoute" :update-success-next-route="createUpdateSuccessNextRoute" />
 </template>
 
 <script>
@@ -7,17 +7,17 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import getFields from '@/views/accounts/ChangeAuthPlan/fields'
 
 export default {
-  name: 'ChangeAuthPlanCreateUpdate',
+  name: 'ChangeDatabaseAuthPlanCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
     const fields = getFields.bind(this)()
     return {
-      url: '/api/v1/xpack/change-auth-plan/plan/',
+      url: '/api/v1/xpack/change-auth-plan/plan/?action=database',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
+        [this.$t('xpack.Asset'), ['database', 'systemuser']],
         [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
@@ -31,14 +31,16 @@ export default {
         interval: 24
       },
       fieldsMeta: {
-        username: fields.username,
-        assets: fields.assets,
+        database: fields.database,
+        systemuser: fields.systemuser,
         password: fields.password,
         password_rules: fields.password_rules,
-        nodes: fields.nodes,
         is_periodic: fields.is_periodic,
         crontab: fields.crontab,
         interval: fields.interval
+      },
+      createUpdateSuccessNextRoute: {
+        name: 'ChangeAuthPlanList'
       }
     }
   },

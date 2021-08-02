@@ -1080,9 +1080,13 @@
   "xpack": {
     "Admin": "管理员",
     "Asset": "资产",
+    "Database": "数据库",
+    "SystemUser": "系统用户",
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "ChangeAuthPlan": {
+      "ChangeAssetPassword": "资产改密计划",
+      "ChangeDatabasePassword": "数据库改密计划",
       "AddAsset": "添加资产",
       "AddNode": "添加节点",
       "Asset": "资产",

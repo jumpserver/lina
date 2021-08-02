@@ -43,7 +43,7 @@ export default {
       let detailRoute = {}
       if (typeof route === 'string') {
         detailRoute.name = route
-        detailRoute.params = { id: this.row.id }
+        detailRoute.params = { id: this.row.id, type: this.row.type }
       } else {
         detailRoute = route
       }

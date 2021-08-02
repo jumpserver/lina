@@ -28,8 +28,16 @@ export default {
           asset: {
             label: this.$t('xpack.ChangeAuthPlan.Asset'),
             formatter: function(row, column, cellValue, index) {
-              const url = `/assets/assets/${cellValue}`
-              return <router-link to={ url } >{ row.asset_info.hostname }</router-link>
+              if (row.asset_info) {
+                const url = `/assets/assets/${cellValue}`
+                return <router-link to={ url } >{ row.asset_info.hostname }</router-link>
+              } else {
+                const to = {
+                  name: 'DatabaseAppDetail',
+                  params: { id: row.database_info.id }
+                }
+                return <router-link to={ to } >{ row.database_info.name }</router-link>
+              }
             }
           },
           is_success: {

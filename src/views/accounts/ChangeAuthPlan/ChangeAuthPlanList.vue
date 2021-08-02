@@ -5,6 +5,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
+import { CHANGE_PASSWORD_TYPE_META_MAP, ALL_TYPES, ASSET } from '@/views/accounts/ChangeAuthPlan/const'
 
 export default {
   name: 'ChangeAuthPlanList',
@@ -63,6 +64,13 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
+              onUpdate: ({ row }) => {
+                if (row.database) {
+                  vm.$router.push({ name: 'ChangeDatabaseAuthPlanUpdate', params: { id: row.id }})
+                } else {
+                  vm.$router.push({ name: 'ChangeAuthPlanUpdate', params: { id: row.id }})
+                }
+              },
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),
@@ -86,8 +94,30 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false
+        hasMoreActions: false,
+        moreCreates: {
+          dropdown: this.getCreateType(),
+          callback: (app) => {
+            if (app.name === ASSET) {
+              vm.$router.push({ name: 'ChangeAuthPlanCreate' })
+            } else {
+              vm.$router.push({ name: 'ChangeDatabaseAuthPlanCreate' })
+            }
+          }
+        }
       }
+    }
+  },
+  methods: {
+    getCreateType() {
+      const extraMoreActions = []
+      for (const value of ALL_TYPES) {
+        const item = { ...CHANGE_PASSWORD_TYPE_META_MAP[value] }
+        item.can = true
+        item.has = true
+        extraMoreActions.push(item)
+      }
+      return extraMoreActions
     }
   }
 }
