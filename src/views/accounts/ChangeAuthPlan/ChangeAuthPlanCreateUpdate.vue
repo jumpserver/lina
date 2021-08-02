@@ -25,7 +25,7 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
         [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['is_password', 'password_strategy', 'password', 'password_rules']],
-        [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'private_key']],
+        [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'public_key', 'private_key']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -65,6 +65,19 @@ export default {
           items: this.generatePasswordRulesItemsFields()
         },
         private_key: {
+          el: {
+            type: 'textarea',
+            placeholder: '-----BEGIN OPENSSH PRIVATE KEY-----',
+            autosize: { minRows: 3 }
+          },
+          hidden: (formValue) => {
+            return formValue.is_ssh_key === false
+          },
+          rules: [
+            { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
+          ]
+        },
+        public_key: {
           el: {
             type: 'textarea',
             placeholder: 'ssh-rsa AAAA...',
