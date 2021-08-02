@@ -112,13 +112,13 @@ export default {
           type: 'switch'
         },
         password_strategy: {
-          label: this.$t('xpack.RegularlyPerform'),
+          label: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
           hidden: (formValue) => {
             return formValue.is_password === false
           }
         },
         ssh_key_strategy: {
-          label: this.$t('xpack.RegularlyPerform'),
+          label: this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
           hidden: (formValue) => {
             return formValue.is_ssh_key === false
           }
