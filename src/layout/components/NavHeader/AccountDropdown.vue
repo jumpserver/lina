@@ -8,10 +8,8 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <template v-if="currentOrgRoles.length > 1 || hasAdminOrg ">
-          <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
-          <el-dropdown-item v-else icon="el-icon-guide" command="adminPage">{{ $t('common.nav.AdminPage') }}</el-dropdown-item>
-        </template>
+        <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
+        <el-dropdown-item v-else icon="el-icon-guide" command="adminPage">{{ $t('common.nav.AdminPage') }}</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>

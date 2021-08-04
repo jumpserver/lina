@@ -1,8 +1,5 @@
 <template>
   <div class="navbar">
-    <div class="navbar-header">
-      <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    </div>
     <ul class="navbar-right">
       <li class="header-item header-icon">
         <SiteMessages />
@@ -23,12 +20,29 @@
         <AccountDropdown />
       </li>
     </ul>
+    <div class="navbar-left">
+      <el-menu
+        default-active="activeIndex"
+        class="menu-main"
+        mode="horizontal"
+        @select="handleSelectView"
+      >
+        <el-submenu index="2">
+          <template slot="title">
+            <span style="font-size: 17px"><i class="fa fa-bars" /> 管理视图</span>
+          </template>
+          <el-menu-item index="admin-view">管理视图</el-menu-item>
+          <el-menu-item index="audits-view">审计视图</el-menu-item>
+          <el-menu-item index="user-view">用户视图</el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Hamburger from '@/components/Hamburger'
+// import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
 import SiteMessages from './SiteMessages'
 import Help from './Help'
@@ -40,7 +54,7 @@ import rolc from '@/utils/role'
 export default {
   components: {
     // Breadcrumb,
-    Hamburger,
+    // Hamburger,
     AccountDropdown,
     Language,
     Help,
@@ -68,6 +82,9 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    handleSelectView(key, keyPath) {
+      console.log('Key: ', key)
     }
   }
 }
@@ -80,14 +97,16 @@ export default {
     background: #f3f3f4;
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
-    .hamburger-container {
-      line-height: 46px;
-      height: 100%;
-      float: left;
-      cursor: pointer;
-      transition: background .3s;
-      -webkit-tap-highlight-color: transparent;
-      padding-left: 20px;
+    .navbar-left {
+      width: 100px;
+
+      .menu-main.el-menu {
+        background-color: transparent;
+
+        .el-submenu.is-opened {
+          background-color: transparent;
+        }
+      }
     }
 
     .navbar-right {
@@ -107,16 +126,10 @@ export default {
         }
       }
     }
-
-    .breadcrumb-container {
-      float: left;
-      padding-left: 20px;
-    }
-
   }
-  .el-header {
-    background-color: #ffffff;
-  }
+  //.el-header {
+  //  background-color: #ffffff;
+  //}
 
   ul {
     margin: 0;
