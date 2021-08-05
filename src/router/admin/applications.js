@@ -31,7 +31,7 @@ export default [
       {
         path: ':id',
         name: 'RemoteAppDetail',
-        component: () => import('@/views/applications/RemoteApp/RemoteAppDetail/index'),
+        component: () => import('@/views/applications/RemoteApp/RemoteAppDetail'),
         meta: { title: i18n.t('route.RemoteAppDetail'), activeMenu: '/applications/remote-apps' },
         hidden: true
       }
@@ -39,7 +39,6 @@ export default [
   },
   {
     path: 'databases',
-    name: 'DatabaseAppList',
     component: empty,
     meta: { title: i18n.t('route.DatabaseApp') },
     children: [
@@ -66,7 +65,7 @@ export default [
       {
         path: ':id',
         name: 'DatabaseAppDetail',
-        component: () => import('@/views/applications/DatabaseApp/DatabaseAppDetail/index'),
+        component: () => import('@/views/applications/DatabaseApp/DatabaseAppDetail'),
         meta: { title: i18n.t('route.DatabaseAppDetail'), activeMenu: '/applications/databases' },
         hidden: true
       }
@@ -74,7 +73,6 @@ export default [
   },
   {
     path: 'kubernetes',
-    name: 'KubernetesAppList',
     component: empty,
     meta: { title: i18n.t('route.KubernetesApp') },
     children: [
@@ -101,7 +99,7 @@ export default [
       {
         path: ':id',
         name: 'KubernetesAppDetail',
-        component: () => import('@/views/applications/KubernetesApp/KubernetesAppDetail/index'),
+        component: () => import('@/views/applications/KubernetesApp/KubernetesAppDetail'),
         meta: { title: i18n.t('route.KubernetesAppDetail'), activeMenu: '/applications/kubernetes' },
         hidden: true
       }

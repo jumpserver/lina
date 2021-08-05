@@ -14,7 +14,7 @@ export default [
       {
         path: '',
         name: 'UserProfile',
-        component: () => import('@/userviews/users/UserProfile/index'),
+        component: () => import('@/views/userviews/users/UserProfile/index'),
         meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
       }
     ]
@@ -26,13 +26,13 @@ export default [
     children: [
       {
         path: 'personal-information-improvement/',
-        component: () => import('@/userviews/users/UserFirstLogin/PersonalInformationImprovement/index'),
+        component: () => import('@/views/userviews/users/UserFirstLogin/PersonalInformationImprovement/index'),
         name: 'PersonalInformationImprovement',
         meta: { title: i18n.t('route.PersonalInformationImprovement') }
       },
       {
         path: 'guide/',
-        component: () => import('@/userviews/users/UserFirstLogin/UserGuide/index'),
+        component: () => import('@/views/userviews/users/UserFirstLogin/UserGuide/index'),
         name: 'UserGuide',
         meta: { title: i18n.t('route.UserGuide') }
       }

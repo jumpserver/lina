@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
-import Page from '@/layout/components/Page/index'
+import ListTable from '@/components/ListTable'
+import Page from '@/layout/components/Page'
 import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {

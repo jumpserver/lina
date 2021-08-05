@@ -11,21 +11,21 @@ export default [
   },
   {
     path: 'tasks/:id',
-    component: () => import('@/views/ops/TaskDetail/index'),
+    component: () => import('@/views/ops/TaskDetail'),
     name: 'TaskDetail',
     hidden: true,
     meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/ops/tasks' }
   },
   {
     path: 'adhoc/:id',
-    component: () => import('@/views/ops/TaskDetail/AdhocDetail/index'),
+    component: () => import('@/views/ops/TaskDetail/AdhocDetail'),
     name: 'AdhocDetail',
     hidden: true,
     meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/ops/tasks' }
   },
   {
     path: 'executions/:id',
-    component: () => import('@/views/ops/TaskDetail/HistoryExecutionDetail/index'),
+    component: () => import('@/views/ops/TaskDetail/HistoryExecutionDetail'),
     name: 'HistoryExecutionDetail',
     hidden: true,
     meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/ops/tasks' }
@@ -36,13 +36,6 @@ export default [
     component: () => import('@/views/ops/CommandExecution'),
     meta: { title: i18n.t('route.BatchCommand'), hidden: ({ settings }) => !settings.SECURITY_COMMAND_EXECUTION }
   },
-  // {
-  //   path: 'celery/task/:id',
-  //   component: () => import('@/views/ops/CeleryTaskLog'),
-  //   name: 'CeleryTaskLog',
-  //   hidden: true,
-  //   meta: { title: i18n.t('route.CeleryTaskLog') }
-  // },
   {
     path: `${BASE_URL}/core/flower/?_=${Date.now()}`,
     name: 'TaskMonitor',

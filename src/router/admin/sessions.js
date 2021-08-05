@@ -7,7 +7,7 @@ export default [
   {
     path: 'session',
     name: 'SessionList',
-    component: () => import('@/views/sessions/SessionList/index'),
+    component: () => import('@/views/sessions/SessionList'),
     meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] }
   },
   {
@@ -19,7 +19,7 @@ export default [
   {
     path: 'sessions/:id',
     name: 'SessionDetail',
-    component: () => import('@/views/sessions/SessionDetail/index'),
+    component: () => import('@/views/sessions/SessionDetail'),
     meta: { title: i18n.t('route.SessionDetail'), activeMenu: '/terminal/session', permissions: [rolec.PERM_AUDIT] },
     hidden: true
   },
@@ -67,7 +67,7 @@ export default [
   {
     path: 'storages',
     name: 'Storage',
-    component: () => import('@/views/sessions/Storage/index'),
+    component: () => import('@/views/sessions/Storage'),
     meta: { activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
     hidden: true
   },

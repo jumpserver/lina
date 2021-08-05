@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm/index'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
 import { Required } from '@/components/DataForm/rules'
 

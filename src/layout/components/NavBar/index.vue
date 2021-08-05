@@ -9,15 +9,20 @@
         class="left-menu"
         :default-active="activeMenu"
         :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :text-weigth="variables.menuTextWeight"
+        :background-color="variables['menuBg']"
+        :text-color="variables['menuText']"
+        :text-weigth="variables['menuTextWeight']"
+        :active-text-color="variables['menuActiveText']"
         :unique-opened="true"
-        :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item
+          v-for="route in currentViewRoute.children"
+          :key="route.path"
+          :item="route"
+          :base-path="route.path"
+        />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -34,17 +39,28 @@ export default {
   components: { SidebarItem, Logo, Organization },
   computed: {
     ...mapGetters([
-      'permission_routes',
+      'currentViewRoute',
       'sidebar'
     ]),
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
-      if (meta.activeMenu) {
-        return meta.activeMenu
+      if (!meta.activeMenu) {
+        return path
       }
-      return path
+      if (meta.activeMenu.startsWith('/')) {
+        return meta.activeMenu
+      } else {
+        const { location } = this.$router.resolve(meta.activeMenu)
+        let path = location.path
+        // Todo: 因为在我们通用 view 中，点击创建按钮时，都会向 routes 中注入 params
+        // 这里先出此下策
+        if (location.params?.id) {
+          path = path.replace('/' + location.params.id, '')
+        }
+        return path
+      }
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
@@ -55,6 +71,9 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  mounted() {
+    console.log('... ', this.currentViewRoute.children)
   }
 }
 </script>

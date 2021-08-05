@@ -2,15 +2,16 @@
   <Page>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
   </Page>
+
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
-import Page from '@/layout/components/Page/index'
+import ListTable from '@/components/ListTable'
+import Page from '@/layout/components/Page'
 import { ActionsFormatter } from '@/components/TableFormatters'
 
 export default {
-  name: 'RemoteApp',
+  name: 'DatabaseApp',
   components: {
     ListTable,
     Page
@@ -20,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/perms/users/applications/?category=remote_app`,
+        url: `/api/v1/perms/users/applications/?category=db`,
         columns: [
           {
             prop: 'name',
@@ -34,9 +35,9 @@ export default {
             label: this.$t('assets.Type')
           },
           {
-            prop: 'attrs.asset_info.hostname',
+            prop: 'attrs.database',
             align: 'center',
-            label: this.$t('assets.Asset')
+            label: this.$t('assets.Database')
           },
           {
             prop: 'comment',
@@ -59,7 +60,7 @@ export default {
                   fa: 'fa-terminal',
                   type: 'primary',
                   callback: function({ row }) {
-                    window.open(`/luna/?type=remote_app&login_to=${row.id}`, '_blank')
+                    window.open(`/luna/?type=database_app&login_to=${row.id}`, '_blank')
                   }
                 }
               ]

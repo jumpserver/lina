@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { ActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {

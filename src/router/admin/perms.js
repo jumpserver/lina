@@ -24,7 +24,7 @@ const assetPermissionRoutes = [
   },
   {
     path: 'asset-permissions/:id',
-    component: () => import('@/views/perms/AssetPermission/AssetPermissionDetail/index'),
+    component: () => import('@/views/perms/AssetPermission/AssetPermissionDetail'),
     name: 'AssetPermissionDetail',
     hidden: true,
     meta: { title: i18n.t('route.AssetPermissionDetail'), activeMenu: '/perms/asset-permissions' }
@@ -53,7 +53,7 @@ const ApplicationPermissionRoutes = [
       },
       {
         path: ':id',
-        component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionDetail/index'),
+        component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionDetail'),
         name: 'ApplicationPermissionDetail',
         hidden: true,
         meta: { title: i18n.t('route.ApplicationPermissionDetail'), activeMenu: '/perms/app-permissions' }

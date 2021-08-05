@@ -1,5 +1,5 @@
 import {
-  allRoleRoutes,
+  allRoutes,
   constantRoutes
 } from '@/router'
 import rolec from '@/utils/role'
@@ -96,26 +96,47 @@ export function filterAsyncRoutes(routes, roles) {
 
 const state = {
   routes: [],
+  currentViewRoute: {},
   addRoutes: []
 }
 
 const mutations = {
-  SET_ROUTES: (state, routes) => {
-    state.addRoutes = routes
-    state.routes = routes.concat(constantRoutes)
+  SET_ROUTES: (state, { accessedRoutes, viewRoute }) => {
+    state.addRoutes = accessedRoutes
+    state.routes = accessedRoutes.concat(constantRoutes)
+    state.currentViewRoute = viewRoute
   }
 }
 
 const actions = {
-  generateRoutes({ commit, rootState }, roles) {
+  generateRoutes({ commit, rootState }, { to, from }) {
     return new Promise(resolve => {
-      let accessedRoutes = filterAsyncRoutes(allRoleRoutes, roles)
-      accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
-      accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
-      if (accessedRoutes.length === 0) {
-        // console.log('No route find')
+      const path = to.path
+      const re = new RegExp('/(\\w+)/.*')
+      const matched = path.match(re)
+      if (!matched) {
+        console.log('Not match path', path)
+        return resolve([])
       }
-      commit('SET_ROUTES', accessedRoutes)
+      const viewName = matched[1]
+      console.log('View: ', viewName)
+      // const view = matched[1]
+      // let accessedRoutes = filterAsyncRoutes(viewRoutes, {})
+      // accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
+      // accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
+      // if (accessedRoutes.length === 0) {
+      //   console.log('No route find')
+      // }
+      const accessedRoutes = allRoutes
+      let viewRoute = {}
+      for (const route of accessedRoutes) {
+        if (route.meta.view === viewName) {
+          viewRoute = route
+        }
+      }
+      console.log('Current view route: ', viewRoute)
+      commit('SET_ROUTES', { accessedRoutes, viewRoute })
+      console.log('Routes: ', accessedRoutes)
       resolve(accessedRoutes)
     })
   }

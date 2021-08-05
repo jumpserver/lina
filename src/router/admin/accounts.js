@@ -35,7 +35,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/GatheredUser/index'),
+        component: () => import('@/views/accounts/GatheredUser'),
         name: 'GatherUserListIndex',
         meta: { title: i18n.t('xpack.GatherUser.GatherUser'), activeMenu: '/accounts/gathered-user' }
       },
@@ -55,7 +55,7 @@ export default [
       },
       {
         path: 'tasks/:id',
-        component: () => import('@/views/accounts/GatheredUser/TaskDetail/index'),
+        component: () => import('@/views/accounts/GatheredUser/TaskDetail'),
         name: 'GatherUserTaskDetail',
         meta: { title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'), activeMenu: '/accounts/gathered-user' },
         hidden: true
@@ -103,14 +103,14 @@ export default [
       },
       {
         path: 'plan/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
+        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanDetail'),
         name: 'ChangeAuthPlanDetail',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan/plan' },
         hidden: true
       },
       {
         path: 'plan-execution/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail'),
         name: 'ChangeAuthPlanExecutionDetail',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/accounts/change-auth-plan/plan' },
         hidden: true
