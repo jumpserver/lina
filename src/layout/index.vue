@@ -1,6 +1,5 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <!--    <div v-if="device==='mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />-->
     <NavBar class="sidebar-container disabled-when-print" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}" class="disabled-when-print">
@@ -14,13 +13,13 @@
 </template>
 
 <script>
-import { NavHeader, NavBar, AppMain, Footer, TagsView } from './components'
+import { NavHeader, NavLeft, AppMain, Footer, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
   components: {
-    NavBar,
+    NavBar: NavLeft,
     NavHeader,
     AppMain,
     Footer,

@@ -1,4 +1,4 @@
-export { default as NavBar } from './NavBar'
+export { default as NavLeft } from './NavLeft'
 export { default as NavHeader } from './NavHeader'
 export { default as AppMain } from './AppMain'
 export { default as Page } from './Page'
