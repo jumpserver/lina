@@ -34,7 +34,7 @@ export default {
         ssh_key_strategy: 'add',
         is_periodic: true,
         is_password: true,
-        is_ssh_key: true,
+        is_ssh_key: false,
         password_rules: {
           length: 30
         },
