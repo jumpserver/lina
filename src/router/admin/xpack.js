@@ -17,59 +17,72 @@ export default [
       },
       {
         path: 'account',
-        component: () => import('@/views/xpack/Cloud/Account/AccountList'),
+        component: empty,
         name: 'AccountList',
         hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.AccountList') }
-      },
-      {
-        path: 'account/create',
-        component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
-        name: 'AccountCreate',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create', activeMenu: '/xpack/cloud' }
-      },
-      {
-        path: 'account/:id/update',
-        component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
-        name: 'AccountUpdate',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update', activeMenu: '/xpack/cloud' }
-      },
-      {
-        path: 'accounts/:id/',
-        component: () => import('@/views/xpack/Cloud/Account/AccountDetail/index'),
-        name: 'AccountDetail',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.AccountDetail'), activeMenu: '/xpack/cloud' }
+        meta: { title: i18n.t('xpack.Cloud.AccountList') },
+        children: [
+          {
+            path: '',
+            component: () => import('@/views/xpack/Cloud/Account/AccountList'),
+            name: 'AccountList',
+            hidden: true,
+            meta: { title: i18n.t('xpack.Cloud.AccountList') }
+          },
+          {
+            path: 'create',
+            component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
+            name: 'AccountCreate',
+            hidden: true,
+            meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create', activeMenu: '/admin/xpack/cloud' }
+          },
+          {
+            path: ':id/update',
+            component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
+            name: 'AccountUpdate',
+            hidden: true,
+            meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update', activeMenu: '/admin/xpack/cloud' }
+          },
+          {
+            path: ':id/',
+            component: () => import('@/views/xpack/Cloud/Account/AccountDetail/index'),
+            name: 'AccountDetail',
+            hidden: true,
+            meta: { title: i18n.t('xpack.Cloud.AccountDetail'), activeMenu: '/admin/xpack/cloud' }
+          }
+        ]
       },
       {
         path: 'sync-instance-tasks',
-        component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
-        name: 'SyncInstanceTaskList',
+        component: empty,
         hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList'), activeMenu: '/xpack/cloud' }
-      },
-      {
-        path: 'sync-instance-tasks/create',
-        component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
-        name: 'SyncInstanceTaskCreate',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'), activeMenu: '/xpack/cloud' }
-      },
-      {
-        path: 'sync-instance-tasks/:id/update',
-        component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
-        name: 'SyncInstanceTaskUpdate',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'), activeMenu: '/xpack/cloud' }
-      },
-      {
-        path: 'sync-instance-tasks/:id',
-        component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskDetail/index'),
-        name: 'SyncInstanceTaskDetail',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail'), activeMenu: '/xpack/cloud' }
+        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList'), activeMenu: '/admin/xpack/cloud' },
+        children: [
+          {
+            path: '',
+            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
+            name: 'SyncInstanceTaskList',
+            meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList'), activeMenu: '/admin/xpack/cloud', hidden: true }
+          },
+          {
+            path: 'create',
+            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
+            name: 'SyncInstanceTaskCreate',
+            meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'), activeMenu: '/admin/xpack/cloud', hidden: true }
+          },
+          {
+            path: ':id/update',
+            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
+            name: 'SyncInstanceTaskUpdate',
+            meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'), activeMenu: '/admin/xpack/cloud', hidden: true }
+          },
+          {
+            path: ':id',
+            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskDetail/index'),
+            name: 'SyncInstanceTaskDetail',
+            meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail'), activeMenu: '/admin/xpack/cloud', hidden: true }
+          }
+        ]
       }
     ]
   },
@@ -89,28 +102,26 @@ export default [
         path: '',
         component: () => import('@/views/xpack/Org/OrganizationList'),
         name: 'OrganizationList',
-        meta: { title: i18n.t('xpack.Organization.OrganizationList'), activeMenu: '/xpack/orgs' }
+        meta: { title: i18n.t('xpack.Organization.OrganizationList') }
       },
       {
         path: 'create',
         component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
         name: 'OrganizationCreate',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Organization.OrganizationCreate'), activeMenu: '/xpack/orgs', action: 'create' }
+        meta: { title: i18n.t('xpack.Organization.OrganizationCreate'), hidden: true, action: 'create' }
       },
       {
         path: ':id/update',
         component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
         name: 'OrganizationUpdate',
         hidden: true,
-        meta: { title: i18n.t('xpack.Organization.OrganizationUpdate'), activeMenu: '/xpack/orgs', action: 'update' }
+        meta: { title: i18n.t('xpack.Organization.OrganizationUpdate'), hidden: true, action: 'update' }
       },
       {
         path: ':id',
         component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
         name: 'OrganizationDetail',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Organization.OrganizationDetail'), activeMenu: '/xpack/orgs' }
+        meta: { title: i18n.t('xpack.Organization.OrganizationDetail'), hidden: true }
       }
     ]
   },

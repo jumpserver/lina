@@ -29,10 +29,10 @@
       >
         <el-submenu index="2">
           <template slot="title">
-            <span style="font-size: 17px"><i class="fa fa-bars" /> 管理视图</span>
+            <span style="font-size: 14px"><i class="fa fa-bars" /> 管理视图</span>
           </template>
           <el-menu-item index="admin-view">管理视图</el-menu-item>
-          <el-menu-item index="audits-view">审计视图</el-menu-item>
+          <el-menu-item index="audit-view">审计视图</el-menu-item>
           <el-menu-item index="user-view">用户视图</el-menu-item>
         </el-submenu>
       </el-menu>
@@ -127,9 +127,6 @@ export default {
       }
     }
   }
-  //.el-header {
-  //  background-color: #ffffff;
-  //}
 
   ul {
     margin: 0;

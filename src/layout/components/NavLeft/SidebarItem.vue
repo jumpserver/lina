@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden">
+  <div v-if="!itemHidden">
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
@@ -14,7 +14,7 @@
       </template>
       <sidebar-item
         v-for="child in item.children"
-        :key="child.path"
+        :key="child.path + child.name"
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.path)"
@@ -57,10 +57,15 @@ export default {
       onlyOneChild: {}
     }
   },
+  computed: {
+    itemHidden() {
+      return this.item.hidden || this.item.meta?.hidden
+    }
+  },
   methods: {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
-        if (item.hidden) {
+        if (item.hidden || item.meta?.hidden) {
           return false
         } else {
           // Temp set(will be used if only has one showing child)

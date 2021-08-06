@@ -14,28 +14,25 @@ export default [
         path: '',
         name: 'AssetAclList',
         component: () => import('@/views/acl/AssetAcl/AssetAclList'),
-        meta: { title: i18n.t('route.AssetAclList'), activeMenu: '/acl/asset-acl' }
+        meta: { title: i18n.t('route.AssetAclList') }
       },
       {
         path: 'create',
         name: 'AssetAclCreate',
         component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
-        meta: { title: i18n.t('route.AssetAclCreate'), activeMenu: '/acl/asset-acl' },
-        hidden: true
+        meta: { title: i18n.t('route.AssetAclCreate'), hidden: true }
       },
       {
         path: ':id',
         name: 'AssetAclDetail',
         component: () => import('@/views/acl/AssetAcl/AssetAclDetail'),
-        meta: { title: i18n.t('route.AssetAclDetail'), activeMenu: '/acl/asset-acl' },
-        hidden: true
+        meta: { title: i18n.t('route.AssetAclDetail'), hidden: true }
       },
       {
         path: ':id/update',
         name: 'AssetAclUpdate',
         component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
-        meta: { title: i18n.t('route.AssetAclUpdate'), activeMenu: '/acl/asset-acl' },
-        hidden: true
+        meta: { title: i18n.t('route.AssetAclUpdate'), hidden: true }
       }
     ]
   }

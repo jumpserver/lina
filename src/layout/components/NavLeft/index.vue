@@ -43,24 +43,27 @@ export default {
       'sidebar'
     ]),
     activeMenu() {
+      console.log('>>>>>>>>>>>>>>>> active menu')
       const route = this.$route
       const { meta, path } = route
       // if set path, the sidebar will highlight the path you set
-      if (!meta.activeMenu) {
+      if (!meta.activeMenu && !meta.hidden) {
         return path
       }
-      if (meta.activeMenu.startsWith('/')) {
+      if (meta.activeMenu) {
         return meta.activeMenu
-      } else {
-        const { location } = this.$router.resolve(meta.activeMenu)
-        let path = location.path
-        // Todo: 因为在我们通用 view 中，点击创建按钮时，都会向 routes 中注入 params
-        // 这里先出此下策
-        if (location.params?.id) {
-          path = path.replace('/' + location.params.id, '')
-        }
-        return path
       }
+      const { location } = this.$router.resolve('_Mark_')
+      let locPath = location.path.replace('_Mark_', '')
+      const parmaId = location.params?.id || route.params?.id
+      if (parmaId) {
+        locPath = locPath.replace('/' + parmaId, '')
+      }
+      if (locPath.endsWith('/')) {
+        locPath = locPath.slice(0, locPath.length - 1)
+      }
+      this.$log.debug('Active menu path3: ', locPath)
+      return locPath
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
@@ -71,9 +74,6 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
-  },
-  mounted() {
-    console.log('... ', this.currentViewRoute.children)
   }
 }
 </script>

@@ -11,29 +11,26 @@ export default [
       {
         path: '',
         name: 'RemoteAppList',
-        meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps' },
+        meta: { title: i18n.t('route.RemoteApp') },
         component: () => import('@/views/applications/RemoteApp/RemoteAppList')
       },
       {
         path: 'create',
         name: 'RemoteAppCreate',
         component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
-        meta: { title: i18n.t('route.RemoteApp'), activeMenu: '/applications/remote-apps', action: 'create' },
-        hidden: true
+        meta: { title: i18n.t('route.RemoteApp'), action: 'create', hidden: true }
       },
       {
         path: ':id/update',
         name: 'RemoteAppUpdate',
         component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
-        meta: { title: i18n.t('route.RemoteAppUpdate'), activeMenu: '/applications/remote-apps', action: 'update' },
-        hidden: true
+        meta: { title: i18n.t('route.RemoteAppUpdate'), action: 'update', hidden: true }
       },
       {
         path: ':id',
         name: 'RemoteAppDetail',
         component: () => import('@/views/applications/RemoteApp/RemoteAppDetail'),
-        meta: { title: i18n.t('route.RemoteAppDetail'), activeMenu: '/applications/remote-apps' },
-        hidden: true
+        meta: { title: i18n.t('route.RemoteAppDetail'), hidden: true }
       }
     ]
   },
@@ -52,22 +49,19 @@ export default [
         path: 'create',
         name: 'DatabaseAppCreate',
         component: () => import('@/views/applications/DatabaseApp/DatabaseAppCreateUpdate'),
-        meta: { title: i18n.t('route.DatabaseAppCreate'), activeMenu: '/applications/databases', action: 'create' },
-        hidden: true
+        meta: { title: i18n.t('route.DatabaseAppCreate'), action: 'create', hidden: true }
       },
       {
         path: ':id/update',
         name: 'DatabaseAppUpdate',
         component: () => import('@/views/applications/DatabaseApp/DatabaseAppCreateUpdate'),
-        meta: { title: i18n.t('route.DatabaseAppUpdate'), activeMenu: '/applications/databases', action: 'update' },
-        hidden: true
+        meta: { title: i18n.t('route.DatabaseAppUpdate'), action: 'update', hidden: true }
       },
       {
         path: ':id',
         name: 'DatabaseAppDetail',
         component: () => import('@/views/applications/DatabaseApp/DatabaseAppDetail'),
-        meta: { title: i18n.t('route.DatabaseAppDetail'), activeMenu: '/applications/databases' },
-        hidden: true
+        meta: { title: i18n.t('route.DatabaseAppDetail'), hidden: true }
       }
     ]
   },
@@ -86,22 +80,19 @@ export default [
         path: 'create',
         name: 'KubernetesAppCreate',
         component: () => import('@/views/applications/KubernetesApp/KubernetesAppCreateUpdate'),
-        meta: { title: i18n.t('route.KubernetesAppCreate'), activeMenu: '/applications/kubernetes', action: 'create' },
-        hidden: true
+        meta: { title: i18n.t('route.KubernetesAppCreate'), action: 'create', hidden: true }
       },
       {
         path: ':id/update',
         name: 'KubernetesAppUpdate',
         component: () => import('@/views/applications/KubernetesApp/KubernetesAppCreateUpdate'),
-        meta: { title: i18n.t('route.KubernetesAppUpdate'), activeMenu: '/applications/kubernetes', action: 'update' },
-        hidden: true
+        meta: { title: i18n.t('route.KubernetesAppUpdate'), action: 'update', hidden: true }
       },
       {
         path: ':id',
         name: 'KubernetesAppDetail',
         component: () => import('@/views/applications/KubernetesApp/KubernetesAppDetail'),
-        meta: { title: i18n.t('route.KubernetesAppDetail'), activeMenu: '/applications/kubernetes' },
-        hidden: true
+        meta: { title: i18n.t('route.KubernetesAppDetail'), hidden: true }
       }
     ]
   }

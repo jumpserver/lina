@@ -10,6 +10,7 @@ import PermsRoute from './perms'
 import OpsRoutes from './ops'
 import AclRoutes from './acls'
 import AccountRoutes from './accounts'
+import XPackRoutes from './xpack'
 
 export default {
   path: '/admin',
@@ -50,8 +51,7 @@ export default {
     {
       path: '/admin/assets',
       component: empty,
-      redirect: 'assets',
-      name: 'assets',
+      name: 'Assets',
       meta: { title: i18n.t('route.Assets'), icon: 'inbox' },
       children: AssetsRoute
     },
@@ -99,6 +99,14 @@ export default {
       alwaysShow: true,
       meta: { title: i18n.t('route.JobCenter'), icon: 'coffee' },
       children: OpsRoutes
+    },
+    {
+      path: '/admin/xpack',
+      component: empty,
+      redirect: '/applications/remote-apps/',
+      name: 'Xpack',
+      meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true },
+      children: XPackRoutes
     },
     {
       path: '/admin/settings',
