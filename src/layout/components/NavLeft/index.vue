@@ -43,7 +43,6 @@ export default {
       'sidebar'
     ]),
     activeMenu() {
-      console.log('>>>>>>>>>>>>>>>> active menu')
       const route = this.$route
       const { meta, path } = route
       // if set path, the sidebar will highlight the path you set

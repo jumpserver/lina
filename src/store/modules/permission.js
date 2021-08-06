@@ -101,26 +101,39 @@ const state = {
 }
 
 const mutations = {
-  SET_ROUTES: (state, { accessedRoutes, viewRoute }) => {
+  SET_ROUTES: (state, { accessedRoutes }) => {
     state.addRoutes = accessedRoutes
     state.routes = accessedRoutes.concat(constantRoutes)
+  },
+  SET_VIEW_ROUTE: (state, viewRoute) => {
     state.currentViewRoute = viewRoute
   }
 }
 
 const actions = {
-  generateRoutes({ commit, rootState }, { to, from }) {
+  generateViewRoutes({ commit, rootState }, { to, from }) {
+    console.log('>>>>>>>>>>>>>>>: generate view routes')
     return new Promise(resolve => {
       const path = to.path
-      const re = new RegExp('/(\\w+)/.*')
+      const re = new RegExp('/(\\w+)/?.*')
       const matched = path.match(re)
       if (!matched) {
         console.log('Not match path', path)
         return resolve([])
       }
       const viewName = matched[1]
+      let viewRoute = {}
       console.log('View: ', viewName)
-      // const view = matched[1]
+      for (const route of state.routes) {
+        if (route.meta?.view === viewName) {
+          viewRoute = route
+        }
+      }
+      commit('SET_VIEW_ROUTE', viewRoute)
+    })
+  },
+  generateRoutes({ commit, dispatch, rootState }, { to, from }) {
+    return new Promise(resolve => {
       // let accessedRoutes = filterAsyncRoutes(viewRoutes, {})
       // accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
       // accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
@@ -128,15 +141,8 @@ const actions = {
       //   console.log('No route find')
       // }
       const accessedRoutes = allRoutes
-      let viewRoute = {}
-      for (const route of accessedRoutes) {
-        if (route.meta.view === viewName) {
-          viewRoute = route
-        }
-      }
-      console.log('Current view route: ', viewRoute)
-      commit('SET_ROUTES', { accessedRoutes, viewRoute })
-      console.log('Routes: ', accessedRoutes)
+      commit('SET_ROUTES', { accessedRoutes })
+      dispatch('generateViewRoutes', { from, to })
       resolve(accessedRoutes)
     })
   }

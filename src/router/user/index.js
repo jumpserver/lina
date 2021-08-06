@@ -6,8 +6,9 @@ import empty from '@/layout/empty'
 
 export default {
   path: '/user/',
-  component: empty,
-  redirect: 'assets',
+  component: Layout,
+  name: 'UserView',
+  redirect: '/user/assets',
   meta: {
     view: 'user',
     roles: [rolec.USER],
@@ -17,28 +18,19 @@ export default {
     // 404 page must be placed at the end !!!
     {
       path: '/user/assets',
-      component: Layout,
+      name: 'MyAssets',
+      component: () => import('@/views/userviews/assets'),
       meta: {
         roles: [rolec.USER],
-        permissions: [rolec.PERM_USE]
-      },
-      children: [
-        {
-          path: '',
-          name: 'MyAssets',
-          component: () => import('@/views/userviews/assets'),
-          meta: {
-            title: i18n.t('route.MyAssets'),
-            icon: 'files-o',
-            permissions: [rolec.PERM_USE]
-          }
-        }
-      ]
+        permissions: [rolec.PERM_USE],
+        icon: 'files-o',
+        title: i18n.t('route.MyAssets')
+      }
     },
     {
       path: '/user/apps',
       name: 'Apps',
-      component: Layout,
+      component: empty,
       redirect: 'remoteapp',
       alwaysShow: true,
       meta: { title: i18n.t('route.MyApps'), icon: 'th', permissions: [rolec.PERM_USE] },
@@ -65,10 +57,10 @@ export default {
     },
     {
       path: '/user/ops',
-      component: Layout,
+      component: empty,
       meta: {
         permissions: [rolec.PERM_USE],
-        hidden: ({ settings }) => !settings.SECURITY_COMMAND_EXECUTION
+        hidden: ({ settings }) => !settings['SECURITY_COMMAND_EXECUTION']
       },
       children: [
         {
@@ -81,7 +73,7 @@ export default {
     },
     {
       path: `external-luna`,
-      component: Layout,
+      component: empty,
       meta: {
         permissions: [rolec.PERM_USE]
       },
@@ -94,7 +86,7 @@ export default {
     },
     {
       path: 'external-elfinder',
-      component: Layout,
+      component: empty,
       meta: {
         permissions: [rolec.PERM_USE]
       },

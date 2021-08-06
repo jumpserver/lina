@@ -15,6 +15,7 @@ import XPackRoutes from './xpack'
 export default {
   path: '/admin',
   component: Layout,
+  name: 'AdminView',
   redirect: '',
   meta: {
     title: i18n.t('route.AdminPage'),

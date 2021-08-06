@@ -1,8 +1,8 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <NavBar class="sidebar-container disabled-when-print" />
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}" class="disabled-when-print">
+    <NavLeft class="sidebar-container disabled-when-print" />
+    <div :class="{hasTagsView: needTagsView}" class="main-container">
+      <div :class="{'fixed-header': fixedHeader}" class="disabled-when-print">
         <NavHeader />
         <tags-view v-if="needTagsView" />
       </div>
@@ -19,7 +19,7 @@ import ResizeMixin from './mixin/ResizeHandler'
 export default {
   name: 'Layout',
   components: {
-    NavBar: NavLeft,
+    NavLeft,
     NavHeader,
     AppMain,
     Footer,

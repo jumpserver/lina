@@ -31,9 +31,9 @@
           <template slot="title">
             <span style="font-size: 14px"><i class="fa fa-bars" /> 管理视图</span>
           </template>
-          <el-menu-item index="admin-view">管理视图</el-menu-item>
-          <el-menu-item index="audit-view">审计视图</el-menu-item>
-          <el-menu-item index="user-view">用户视图</el-menu-item>
+          <el-menu-item index="admin">管理视图</el-menu-item>
+          <el-menu-item index="audit">审计视图</el-menu-item>
+          <el-menu-item index="user">用户视图</el-menu-item>
         </el-submenu>
       </el-menu>
     </div>
@@ -50,6 +50,7 @@ import Language from './Language'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import rolc from '@/utils/role'
+import store from '@/store'
 
 export default {
   components: {
@@ -71,11 +72,12 @@ export default {
       'sidebar', 'publicSettings', 'currentOrgRoles'
     ]),
     isOrgAuditor() {
-      return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') || rolc.getRolesDisplay(this.currentOrgRoles).includes('Auditor')
+      return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') ||
+        rolc.getRolesDisplay(this.currentOrgRoles).includes('Auditor')
     },
     showTickets() {
-      return this.publicSettings.TICKETS_ENABLED &&
-        this.publicSettings.XPACK_LICENSE_IS_VALID &&
+      return this.publicSettings['TICKETS_ENABLED'] &&
+        this.publicSettings['XPACK_LICENSE_IS_VALID'] &&
         !this.isOrgAuditor
     }
   },
@@ -84,6 +86,15 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     handleSelectView(key, keyPath) {
+      const mapper = {
+        admin: 'AdminView',
+        user: 'UserView',
+        audit: 'AuditView'
+      }
+      const fromRoute = this.$route
+      this.$router.push({ name: mapper[key] || 'AdminView' }, () => {
+        store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
+      })
       console.log('Key: ', key)
     }
   }

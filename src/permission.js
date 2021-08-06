@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import store from '@/store'
 import router from './router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
