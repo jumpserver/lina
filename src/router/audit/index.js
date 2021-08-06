@@ -18,14 +18,14 @@ export default {
   children: [
     // 404 page must be placed at the end !!!
     {
-      path: 'sessions',
+      path: '/audits/sessions',
       component: empty,
       name: 'Sessions',
       meta: { title: i18n.t('route.Sessions'), icon: 'rocket', permissions: [rolec.PERM_AUDIT] },
       children: SessionRoutes
     },
     {
-      path: 'logs',
+      path: '/audits/logs',
       component: empty,
       redirect: '',
       name: 'Audits',

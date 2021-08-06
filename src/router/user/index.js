@@ -5,18 +5,18 @@ import { BASE_URL } from '@/utils/common'
 import empty from '@/layout/empty'
 
 export default {
-  path: '/console',
+  path: '/user/',
   component: empty,
   redirect: 'assets',
   meta: {
-    view: 'console',
+    view: 'user',
     roles: [rolec.USER],
     permissions: [rolec.PERM_USE]
   },
   children: [
     // 404 page must be placed at the end !!!
     {
-      path: 'assets',
+      path: '/user/assets',
       component: Layout,
       meta: {
         roles: [rolec.USER],
@@ -36,7 +36,7 @@ export default {
       ]
     },
     {
-      path: 'apps',
+      path: '/user/apps',
       name: 'Apps',
       component: Layout,
       redirect: 'remoteapp',
@@ -64,7 +64,7 @@ export default {
       ]
     },
     {
-      path: 'ops',
+      path: '/user/ops',
       component: Layout,
       meta: {
         permissions: [rolec.PERM_USE],
