@@ -29,11 +29,9 @@
       >
         <el-submenu index="2">
           <template slot="title">
-            <span style="font-size: 14px"><i class="fa fa-bars" /> 管理视图</span>
+            <span style="font-size: 14px"><i class="fa fa-bars" /> {{ viewName }}</span>
           </template>
-          <el-menu-item index="admin">管理视图</el-menu-item>
-          <el-menu-item index="audit">审计视图</el-menu-item>
-          <el-menu-item index="user">用户视图</el-menu-item>
+          <el-menu-item v-for="view of views" :key="view.name" :index="view.name">{{ view.label }}</el-menu-item>
         </el-submenu>
       </el-menu>
     </div>
@@ -65,11 +63,28 @@ export default {
   },
   data() {
     return {
+      views: [
+        {
+          name: 'admin',
+          label: '管理视图',
+          route: 'AdminView'
+        },
+        {
+          name: 'audit',
+          label: '审计视图',
+          route: 'AuditView'
+        },
+        {
+          name: 'user',
+          label: '用户视图',
+          route: 'UserView'
+        }
+      ]
     }
   },
   computed: {
     ...mapGetters([
-      'sidebar', 'publicSettings', 'currentOrgRoles'
+      'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute'
     ]),
     isOrgAuditor() {
       return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') ||
@@ -79,6 +94,19 @@ export default {
       return this.publicSettings['TICKETS_ENABLED'] &&
         this.publicSettings['XPACK_LICENSE_IS_VALID'] &&
         !this.isOrgAuditor
+    },
+    viewsMapper() {
+      const mapper = {}
+      for (const view of this.views) {
+        mapper[view.name] = view
+      }
+      return mapper
+    },
+    viewName() {
+      const viewName = this.currentViewRoute?.meta.view
+      console.log('View name: ', viewName)
+      const name = this.viewsMapper[viewName]?.label
+      return name
     }
   },
   methods: {
@@ -86,16 +114,11 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     handleSelectView(key, keyPath) {
-      const mapper = {
-        admin: 'AdminView',
-        user: 'UserView',
-        audit: 'AuditView'
-      }
+      const routeName = this.viewsMapper[key]?.route || 'AdminView'
       const fromRoute = this.$route
-      this.$router.push({ name: mapper[key] || 'AdminView' }, () => {
+      this.$router.push({ name: routeName }, () => {
         store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
       })
-      console.log('Key: ', key)
     }
   }
 }

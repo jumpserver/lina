@@ -7,25 +7,27 @@ import LogRoutes from './logs'
 import empty from '@/layout/empty'
 
 export default {
-  path: '/audits/',
+  path: '/audit/',
   name: 'AuditView',
   component: Layout,
+  redirect: '/audit/sessions',
   meta: {
     roles: [rolec.USER],
     permissions: [rolec.PERM_USE],
-    view: 'audits'
+    view: 'audit'
   },
   children: [
     // 404 page must be placed at the end !!!
     {
-      path: '/audits/sessions',
+      path: '/audit/sessions',
       component: empty,
       name: 'Sessions',
+      redirect: '/audit/sessions/sessions',
       meta: { title: i18n.t('route.Sessions'), icon: 'rocket', permissions: [rolec.PERM_AUDIT] },
       children: SessionRoutes
     },
     {
-      path: '/audits/logs',
+      path: '/audit/logs',
       component: empty,
       redirect: '',
       name: 'Audits',

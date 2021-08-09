@@ -3,7 +3,7 @@ import rolec from '@/utils/role'
 
 export default [
   {
-    path: 'session',
+    path: 'sessions',
     name: 'SessionList',
     component: () => import('@/views/sessions/SessionList'),
     meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] },

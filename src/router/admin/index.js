@@ -16,7 +16,7 @@ export default {
   path: '/admin',
   component: Layout,
   name: 'AdminView',
-  redirect: '',
+  redirect: '/admin/dashboard',
   meta: {
     title: i18n.t('route.AdminPage'),
     icon: 'users',
@@ -24,20 +24,10 @@ export default {
   },
   children: [
     {
-      path: '/',
-      component: empty,
-      redirect: 'dashboard',
-      meta: {
-        permissions: []
-      },
-      children: [
-        {
-          path: 'dashboard',
-          name: 'dashboard',
-          component: () => import('@/views/dashboard/index'),
-          meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard', permissions: [rolec.PERM_AUDIT] }
-        }
-      ]
+      path: '/admin/dashboard',
+      name: 'dashboard',
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard', permissions: [rolec.PERM_AUDIT] }
     },
     {
       path: '/admin/users',
