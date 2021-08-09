@@ -20,14 +20,15 @@ export default {
   meta: {
     title: i18n.t('route.AdminPage'),
     icon: 'users',
-    view: 'admin'
+    view: 'admin',
+    permissions: ['rbac.view_adminview']
   },
   children: [
     {
       path: '/admin/dashboard',
       name: 'dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard', permissions: [rolec.PERM_AUDIT] }
+      meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
     },
     {
       path: '/admin/users',
@@ -109,7 +110,7 @@ export default {
           path: '',
           name: 'Settings',
           component: () => import('@/views/settings/index'),
-          meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
+          meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [] }
         }
       ]
     }

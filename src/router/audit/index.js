@@ -12,8 +12,7 @@ export default {
   component: Layout,
   redirect: '/audit/sessions',
   meta: {
-    roles: [rolec.USER],
-    permissions: [rolec.PERM_USE],
+    permissions: ['rbac.view_auditview'],
     view: 'audit'
   },
   children: [

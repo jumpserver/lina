@@ -19,44 +19,38 @@ export default [
         path: 'account',
         component: empty,
         name: 'AccountList',
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.AccountList') },
+        meta: { title: i18n.t('xpack.Cloud.AccountList'), hidden: true },
         children: [
           {
             path: '',
             component: () => import('@/views/xpack/Cloud/Account/AccountList'),
             name: 'AccountList',
-            hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountList') }
+            meta: { title: i18n.t('xpack.Cloud.AccountList'), hidden: true }
           },
           {
             path: 'create',
             component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
             name: 'AccountCreate',
-            hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create', activeMenu: '/admin/xpack/cloud' }
+            meta: { title: i18n.t('xpack.Cloud.AccountCreate'), action: 'create', activeMenu: '/admin/xpack/cloud', hidden: true }
           },
           {
             path: ':id/update',
             component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
             name: 'AccountUpdate',
-            hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update', activeMenu: '/admin/xpack/cloud' }
+            meta: { title: i18n.t('xpack.Cloud.AccountUpdate'), action: 'update', activeMenu: '/admin/xpack/cloud', hidden: true }
           },
           {
             path: ':id/',
             component: () => import('@/views/xpack/Cloud/Account/AccountDetail/index'),
             name: 'AccountDetail',
-            hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountDetail'), activeMenu: '/admin/xpack/cloud' }
+            meta: { title: i18n.t('xpack.Cloud.AccountDetail'), activeMenu: '/admin/xpack/cloud', hidden: true }
           }
         ]
       },
       {
         path: 'sync-instance-tasks',
         component: empty,
-        hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList'), activeMenu: '/admin/xpack/cloud' },
+        meta: { title: i18n.t('xpack.Cloud.SyncInstanceTaskList'), activeMenu: '/admin/xpack/cloud', hidden: true },
         children: [
           {
             path: '',

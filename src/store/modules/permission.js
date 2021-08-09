@@ -2,25 +2,26 @@ import {
   allRoutes,
   constantRoutes
 } from '@/router'
-import rolec from '@/utils/role'
 /**
  * Use meta.role to determine if the current user has permission
- * @param roles
+ * @param perms
  * @param route
  */
-function hasPermission(roles, route) {
-  let requirePerms = route.meta ? route.meta.permissions : null
-  if (!requirePerms) {
-    requirePerms = [rolec.PERM_ADMIN]
+function hasPermission(perms, route) {
+  const permsRequired = route.meta?.permissions
+  if (!permsRequired) {
+    return true
   }
-  const has = rolec.hasPerm(roles, requirePerms)
-  // console.log('Has route permission: ', route.path, requirePermsSum, userRolesSum, ' => ', has, roles)
-  return has
+  const hasPermission = perms.some(perm => {
+    return permsRequired.includes(perm)
+  })
+  console.log('Has route permission: ', route.name, ' => ', hasPermission, permsRequired)
+  return hasPermission
 }
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
-  const licenseRequired = route.meta ? route.meta.licenseRequired : false
+  const licenseRequired = route.meta?.licenseRequired
   if (!licenseIsValid && licenseRequired) {
     return false
   }
@@ -71,22 +72,18 @@ export function filterHiddenRoutes(routes, rootState) {
   return res
 }
 
-/**
- * Filter asynchronous routing tables by recursion
- * @param routes asyncRoutes
- * @param roles
- */
-export function filterAsyncRoutes(routes, roles) {
+export function filterAsyncRoutes(routes, rootState, permsCache) {
   const res = []
+  const perms = permsCache || rootState.users.perms
 
   for (const route of routes) {
     const tmp = {
       ...route
     }
 
-    if (hasPermission(roles, tmp)) {
+    if (hasPermission(perms, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+        tmp.children = filterAsyncRoutes(tmp.children, rootState, perms)
       }
       res.push(tmp)
     }
@@ -134,13 +131,15 @@ const actions = {
   },
   generateRoutes({ commit, dispatch, rootState }, { to, from }) {
     return new Promise(resolve => {
-      // let accessedRoutes = filterAsyncRoutes(viewRoutes, {})
-      // accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
-      // accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
-      // if (accessedRoutes.length === 0) {
-      //   console.log('No route find')
-      // }
-      const accessedRoutes = allRoutes
+      let accessedRoutes = filterAsyncRoutes(allRoutes, rootState)
+      accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
+      accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
+      if (accessedRoutes.length === 0) {
+        console.log('No route find')
+      } else {
+        console.log('Routes: ', accessedRoutes)
+      }
+      // const accessedRoutes = allRoutes
       commit('SET_ROUTES', { accessedRoutes })
       dispatch('generateViewRoutes', { from, to })
       resolve(accessedRoutes)

@@ -5,13 +5,15 @@ export default [
     path: 'users',
     component: empty, // Parent router-view
     redirect: '',
-    meta: {},
+    meta: {
+      permissions: ['users.view_user']
+    },
     children: [
       {
         path: '',
         component: () => import('@/views/users/User/UserList.vue'), // Parent router-view
         name: 'UserList',
-        meta: { title: i18n.t('route.UserList') }
+        meta: { title: i18n.t('route.UserList'), permissions: ['users.view_user'] }
       },
       {
         path: 'create',

@@ -1,5 +1,4 @@
 import i18n from '@/i18n/i18n'
-import rolec from '@/utils/role'
 import { BASE_URL } from '@/utils/common'
 import empty from '@/layout/empty'
 
@@ -46,6 +45,6 @@ export default [
     path: `${BASE_URL}/core/flower/?_=${Date.now()}`,
     name: 'TaskMonitor',
     // component: () => window.open(`/core/flower?_=${Date.now()}`),
-    meta: { title: i18n.t('route.TaskMonitor'), permissions: [rolec.PERM_SUPER] }
+    meta: { title: i18n.t('route.TaskMonitor'), permissions: [] }
   }
 ]

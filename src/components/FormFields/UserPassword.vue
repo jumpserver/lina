@@ -22,22 +22,22 @@ export default {
     }
   },
   rules(item) {
-    const passwordRule = store.getters.publicSettings.PASSWORD_RULE
+    const passwordRule = store.getters.publicSettings['PASSWORD_RULE']
     const validatePassword = (rule, value, callback) => {
       if (!value) {
         return callback()
       }
       const patterns = []
-      if (passwordRule.SECURITY_PASSWORD_UPPER_CASE) {
+      if (passwordRule['SECURITY_PASSWORD_UPPER_CASE']) {
         patterns.push([/[A-Z]/, i18n.t('common.password.UPPER_CASE_REQUIRED')])
       }
-      if (passwordRule.SECURITY_PASSWORD_LOWER_CASE) {
+      if (passwordRule['SECURITY_PASSWORD_LOWER_CASE']) {
         patterns.push([/[a-z]/, i18n.t('common.password.LOWER_CASE_REQUIRED')])
       }
-      if (passwordRule.SECURITY_PASSWORD_NUMBER) {
+      if (passwordRule['SECURITY_PASSWORD_NUMBER']) {
         patterns.push([/\d/, i18n.t('common.password.NUMBER_REQUIRED')])
       }
-      if (passwordRule.SECURITY_PASSWORD_SPECIAL_CHAR) {
+      if (passwordRule['SECURITY_PASSWORD_SPECIAL_CHAR']) {
         const pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]")
         patterns.push([pattern, i18n.t('common.password.SPECIAL_CHAR_REQUIRED')])
       }
@@ -46,7 +46,7 @@ export default {
           return callback(new Error(msg))
         }
       }
-      const secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
+      const secureLength = passwordRule ? passwordRule['SECURITY_PASSWORD_MIN_LENGTH'] : 7
       if (value.length < secureLength) {
         return callback(new Error(i18n.t('common.password.MIN_LENGTH_ERROR', [secureLength])))
       }
@@ -67,8 +67,8 @@ export default {
     ...mapGetters(['publicSettings'])
   },
   created() {
-    const passwordRule = this.publicSettings.PASSWORD_RULE || {}
-    this.attrs.secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
+    const passwordRule = this.publicSettings['PASSWORD_RULE'] || {}
+    this.attrs.secureLength = passwordRule ? passwordRule['SECURITY_PASSWORD_MIN_LENGTH'] : 7
   },
   methods: {
     handleInput(value) {

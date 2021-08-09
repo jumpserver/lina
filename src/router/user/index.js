@@ -11,8 +11,7 @@ export default {
   redirect: '/user/assets',
   meta: {
     view: 'user',
-    roles: [rolec.USER],
-    permissions: [rolec.PERM_USE]
+    permissions: ['rbac.view_userview']
   },
   children: [
     // 404 page must be placed at the end !!!
@@ -21,8 +20,6 @@ export default {
       name: 'MyAssets',
       component: () => import('@/views/userviews/assets'),
       meta: {
-        roles: [rolec.USER],
-        permissions: [rolec.PERM_USE],
         icon: 'files-o',
         title: i18n.t('route.MyAssets')
       }
