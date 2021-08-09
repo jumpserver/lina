@@ -40,7 +40,7 @@ export default {
       'currentUser',
       'currentRole',
       'currentOrgRoles',
-      'userAdminOrgList',
+      'orgs',
       'currentOrgPerms'
     ]),
     isInAdminRole() {
@@ -48,7 +48,7 @@ export default {
       return inAdmin
     },
     hasAdminOrg() {
-      return this.userAdminOrgList.length > 0
+      return this.orgs.length > 0
     },
     adminPageRequirePerm() {
       return rolec.PERM_SUPER | rolec.PERM_ADMIN | rolec.PERM_AUDIT

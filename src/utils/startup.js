@@ -62,7 +62,7 @@ async function refreshCurrentOrg() {
 
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getInOrgs')
-  const adminOrgs = store.getters.userAdminOrgList
+  const adminOrgs = store.getters.orgs
   if (!adminOrgs || adminOrgs.length === 0) {
     return
   }
@@ -90,7 +90,7 @@ async function changeCurrentRoleIfNeed({ to, from, next }) {
     return
   }
 
-  const adminOrgs = store.getters.userAdminOrgList
+  const adminOrgs = store.getters.orgs
   if (!adminOrgs || adminOrgs.length === 0) {
     currentRole = rolec.USER_PAGE_REQUIRE_PERM_MIN
     await store.dispatch('users/setCurrentRole', currentRole)

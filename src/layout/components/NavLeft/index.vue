@@ -1,8 +1,7 @@
 <template>
-  <div :class="{'has-logo': showLogo}">
+  <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
     <div class="nav-header">
       <Logo v-if="showLogo" :collapse="isCollapse" />
-      <Organization :is-collapse="isCollapse" />
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -37,12 +36,11 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
-import Organization from './Organization'
 import variables from '@/styles/variables.scss'
 import Hamburger from '@/components/Hamburger'
 
 export default {
-  components: { SidebarItem, Logo, Organization, Hamburger },
+  components: { SidebarItem, Logo, Hamburger },
   computed: {
     ...mapGetters([
       'currentViewRoute',
@@ -72,6 +70,10 @@ export default {
     },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
+    },
+    showOrgs() {
+      return this.$store.getters.hasValidLicense
+      // return !this.isCollapse && this.inAdminPage && hasValidLicense
     },
     variables() {
       return variables
@@ -112,11 +114,11 @@ export default {
     }
 
     .toggle-bar:hover {
-      background-color: rgb(47, 64, 80);
+      background-color: rgb(59, 76, 91);
     }
 
     .hamburger-container {
-      left: 0;
+      left: 2px;
       top: 13px;
       position: absolute;
     }

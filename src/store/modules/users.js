@@ -39,6 +39,7 @@ const mutations = {
     state.currentOrg = getCurrentOrgLocal(username)
     state.currentRole = getCurrentRoleLocal(username)
     state.perms = profile.perms
+    state.orgs = profile.orgs
   },
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
@@ -139,9 +140,9 @@ const actions = {
         return resolve(state.roles)
       }
       dispatch('getProfile').then(profile => {
-        const { admin_or_audit_orgs: inOrgs } = profile
-        commit('SET_ORGS', inOrgs)
-        resolve(inOrgs)
+        const { orgs } = profile
+        commit('SET_ORGS', orgs)
+        resolve(orgs)
       }).catch((e) => reject(e))
     })
   },
