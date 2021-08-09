@@ -15,6 +15,7 @@ import i18n from './i18n/i18n'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import '@/directive'
 
 /**
  * If you don't want to use mock-server

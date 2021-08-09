@@ -31,7 +31,12 @@
           <template slot="title">
             <span style="font-size: 14px"><i class="fa fa-bars" /> {{ viewName }}</span>
           </template>
-          <el-menu-item v-for="view of views" :key="view.name" :index="view.name">{{ view.label }}</el-menu-item>
+          <el-menu-item
+            v-for="view of views"
+            :key="view.name"
+            v-perms="view.perms"
+            :index="view.name"
+          >{{ view.label }}</el-menu-item>
         </el-submenu>
       </el-menu>
     </div>
@@ -67,17 +72,20 @@ export default {
         {
           name: 'admin',
           label: '管理视图',
-          route: 'AdminView'
+          route: 'AdminView',
+          perms: ['admin']
         },
         {
           name: 'audit',
           label: '审计视图',
-          route: 'AuditView'
+          route: 'AuditView',
+          perms: ['assets.add_systemuser']
         },
         {
           name: 'user',
           label: '用户视图',
-          route: 'UserView'
+          route: 'UserView',
+          perms: ['use']
         }
       ]
     }
@@ -103,8 +111,7 @@ export default {
       return mapper
     },
     viewName() {
-      const viewName = this.currentViewRoute?.meta.view
-      console.log('View name: ', viewName)
+      const viewName = this.currentViewRoute?.meta?.view
       const name = this.viewsMapper[viewName]?.label
       return name
     }

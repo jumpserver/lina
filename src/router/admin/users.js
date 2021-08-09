@@ -5,6 +5,7 @@ export default [
     path: 'users',
     component: empty, // Parent router-view
     redirect: '',
+    meta: {},
     children: [
       {
         path: '',
@@ -34,7 +35,7 @@ export default [
         path: 'user-acl',
         component: empty,
         redirect: '',
-        meta: { title: i18n.t('route.UserAclList') },
+        meta: { title: i18n.t('route.UserAclList'), hidden: true },
         hidden: true,
         children: [
           {

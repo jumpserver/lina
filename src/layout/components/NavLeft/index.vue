@@ -1,7 +1,7 @@
 <template>
-  <div :class="{'has-logo':showLogo}">
+  <div :class="{'has-logo': showLogo}">
     <div class="nav-header">
-      <logo v-if="showLogo" :collapse="isCollapse" />
+      <Logo v-if="showLogo" :collapse="isCollapse" />
       <Organization :is-collapse="isCollapse" />
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -25,6 +25,11 @@
         />
       </el-menu>
     </el-scrollbar>
+    <div class="nav-footer">
+      <div class="toggle-bar">
+        <Hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,9 +39,10 @@ import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import Organization from './Organization'
 import variables from '@/styles/variables.scss'
+import Hamburger from '@/components/Hamburger'
 
 export default {
-  components: { SidebarItem, Logo, Organization },
+  components: { SidebarItem, Logo, Organization, Hamburger },
   computed: {
     ...mapGetters([
       'currentViewRoute',
@@ -73,11 +79,46 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  methods: {
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar')
+    }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .nav-header {
     background-image: url('~@/assets/img/header-profile.png');
+    height: 50px;
+  }
+
+  .nav-footer {
+    display: block;
+    width: 100%;
+    height: 45px;
+    background-color: #293846;
+
+    .toggle-bar {
+      width: 55px;
+      height: 100%;
+      bottom: 0;
+      left: 0;
+      top: auto;
+      border: 0;
+      z-index: 1000;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-bar:hover {
+      background-color: rgb(47, 64, 80);
+    }
+
+    .hamburger-container {
+      left: 0;
+      top: 13px;
+      position: absolute;
+    }
   }
 </style>

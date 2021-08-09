@@ -13,7 +13,7 @@
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
       <sidebar-item
-        v-for="child in item.children"
+        v-for="child of item.children"
         :key="child.path + child.name"
         :is-nest="true"
         :item="child"
@@ -59,13 +59,13 @@ export default {
   },
   computed: {
     itemHidden() {
-      return this.item.hidden || this.item.meta?.hidden
+      return this.item.meta?.hidden
     }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
-        if (item.hidden || item.meta?.hidden) {
+        if (item.meta?.hidden) {
           return false
         } else {
           // Temp set(will be used if only has one showing child)
