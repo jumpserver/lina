@@ -1,23 +1,10 @@
+import Vue from 'vue'
 import {
   allRoutes,
   constantRoutes
 } from '@/router'
-/**
- * Use meta.role to determine if the current user has permission
- * @param perms
- * @param route
- */
-function hasPermission(perms, route) {
-  const permsRequired = route.meta?.permissions
-  if (!permsRequired) {
-    return true
-  }
-  const hasPermission = perms.some(perm => {
-    return permsRequired.includes(perm)
-  })
-  console.log('Has route permission: ', route.name, ' => ', hasPermission, permsRequired)
-  return hasPermission
-}
+import empty from '@/layout/empty'
+import Layout from '@/layout/index'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -72,18 +59,112 @@ export function filterHiddenRoutes(routes, rootState) {
   return res
 }
 
-export function filterAsyncRoutes(routes, rootState, permsCache) {
+function hasPermission(perms, route) {
+  console.log('>>> Route: ', route)
+  const permsRequired = route.meta?.permissions
+  Vue.$log.debug('Route permissions required: ', route.path, permsRequired)
+  let has
+  if (!permsRequired || permsRequired.length === 0) {
+    has = true
+  } else {
+    has = perms.some(perm => {
+      return permsRequired.includes(perm)
+    })
+  }
+  Vue.$log.debug('Has permission: ', route.path, ' => ', has)
+  return has
+}
+
+const actionMapper = {
+  create: 'add',
+  update: 'change',
+  list: 'view',
+  destroy: 'del',
+  retrieve: 'view'
+}
+
+function getRouteDefaultPerms(route) {
+  if (route.component === empty || route.component === Layout) {
+    return []
+  }
+
+  const permAction = actionMapper[route.meta.action] || 'view'
+  const resource = route.meta.resource
+  const app = route.meta.app
+  return [`${app}.${permAction}_${resource}`]
+}
+
+function cleanRouteAction(route) {
+  let action = ''
+  if (route.path.indexOf('create') > -1) {
+    action = 'create'
+  } else if (route.path.indexOf('update') > -1) {
+    action = 'update'
+  } else if (route.path.indexOf('delete') > -1) {
+    action = 'destroy'
+  } else if (route.path.indexOf(':id') > -1) {
+    action = 'retrieve'
+  } else {
+    action = 'list'
+  }
+  return action
+}
+
+function cleanRoute(tmp, parent) {
+  if (!parent) {
+    parent = { meta: { level: 0 }}
+  }
+  if (!parent.meta) {
+    parent.meta = {}
+  }
+  if (!tmp.meta) {
+    tmp.meta = {}
+  }
+  if (!tmp.meta.level) {
+    tmp.meta.level = parent.meta.level + 1
+  }
+  const typeMapper = { 1: 'view', 2: 'app', 3: 'resource', 4: 'curd' }
+  if (!tmp.meta.type) {
+    tmp.meta.type = typeMapper[tmp.meta.level]
+  }
+
+  const pathSlice = tmp.path.split('/')
+  const pathValue = pathSlice[pathSlice.length - 1]
+  if (!tmp.meta.view) {
+    tmp.meta.view = tmp.meta.level === 1 ? pathValue : parent.meta?.view
+  }
+  if (!tmp.meta.app) {
+    tmp.meta.app = tmp.meta.level === 2 ? pathValue : parent.meta?.app
+  }
+  if (!tmp.meta.resource) {
+    let resource = pathValue.replaceAll('-', '')
+    if (resource[resource.length - 1] === 's') {
+      resource = resource.slice(0, resource.length - 1)
+    }
+    tmp.meta.resource = tmp.meta.level === 3 ? resource : parent.meta?.resource
+  }
+  if (!tmp.meta.action) {
+    tmp.meta.action = cleanRouteAction(tmp)
+  }
+  if (!tmp.meta.permissions) {
+    tmp.meta.permissions = getRouteDefaultPerms(tmp)
+  }
+  return tmp
+}
+
+export function filterPermedRoutes(routes, rootState, permsCache, parent) {
   const res = []
   const perms = permsCache || rootState.users.perms
 
   for (const route of routes) {
-    const tmp = {
+    let tmp = {
       ...route
     }
+    tmp = cleanRoute(tmp, parent)
 
     if (hasPermission(perms, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, rootState, perms)
+        tmp.children = filterPermedRoutes(tmp.children, rootState, perms, tmp)
       }
       res.push(tmp)
     }
@@ -98,9 +179,9 @@ const state = {
 }
 
 const mutations = {
-  SET_ROUTES: (state, { accessedRoutes }) => {
-    state.addRoutes = accessedRoutes
-    state.routes = accessedRoutes.concat(constantRoutes)
+  SET_ROUTES: (state, { routes }) => {
+    state.addRoutes = routes
+    state.routes = routes.concat(constantRoutes)
   },
   SET_VIEW_ROUTE: (state, viewRoute) => {
     state.currentViewRoute = viewRoute
@@ -109,18 +190,17 @@ const mutations = {
 
 const actions = {
   generateViewRoutes({ commit, rootState }, { to, from }) {
-    console.log('>>>>>>>>>>>>>>>: generate view routes')
+    Vue.$log.debug('>>>>>>>>>>>>>>>: generate view routes')
     return new Promise(resolve => {
       const path = to.path
       const re = new RegExp('/(\\w+)/?.*')
       const matched = path.match(re)
       if (!matched) {
-        console.log('Not match path', path)
+        Vue.$log.error('Not match path', path)
         return resolve([])
       }
       const viewName = matched[1]
       let viewRoute = {}
-      console.log('View: ', viewName)
       for (const route of state.routes) {
         if (route.meta?.view === viewName) {
           viewRoute = route
@@ -131,18 +211,18 @@ const actions = {
   },
   generateRoutes({ commit, dispatch, rootState }, { to, from }) {
     return new Promise(resolve => {
-      let accessedRoutes = filterAsyncRoutes(allRoutes, rootState)
-      accessedRoutes = filterHiddenRoutes(accessedRoutes, rootState)
-      accessedRoutes = filterLicenseRequiredRoutes(accessedRoutes, rootState)
-      if (accessedRoutes.length === 0) {
+      let routes = filterPermedRoutes(allRoutes, rootState)
+      routes = filterHiddenRoutes(routes, rootState)
+      routes = filterLicenseRequiredRoutes(routes, rootState)
+      if (routes.length === 0) {
         console.log('No route find')
       } else {
-        console.log('Routes: ', accessedRoutes)
+        console.log('Routes: ', routes)
       }
-      // const accessedRoutes = allRoutes
-      commit('SET_ROUTES', { accessedRoutes })
+      // const routes = allRoutes
+      commit('SET_ROUTES', { routes })
       dispatch('generateViewRoutes', { from, to })
-      resolve(accessedRoutes)
+      resolve(routes)
     })
   }
 }

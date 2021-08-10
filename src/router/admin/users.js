@@ -13,7 +13,7 @@ export default [
         path: '',
         component: () => import('@/views/users/User/UserList.vue'), // Parent router-view
         name: 'UserList',
-        meta: { title: i18n.t('route.UserList'), permissions: ['users.view_user'] }
+        meta: { title: i18n.t('route.UserList') }
       },
       {
         path: 'create',
@@ -72,12 +72,15 @@ export default [
     path: 'groups',
     component: empty, // Parent router-view
     redirect: '',
+    meta: {
+      permissions: ['users.view_usergroup']
+    },
     children: [
       {
         path: '',
         component: () => import('@/views/users/Group/UserGroupList.vue'), // Parent router-view
         name: 'UserGroupList',
-        meta: { title: i18n.t('route.UserGroupList') }
+        meta: { title: i18n.t('route.UserGroupList'), permissions: ['users.view_group'] }
       },
       {
         path: ':id/update',

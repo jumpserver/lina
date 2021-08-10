@@ -11,31 +11,31 @@ export default [
         path: '',
         name: 'AssetList',
         component: () => import('@/views/assets/Asset/AssetList.vue'),
-        meta: { title: i18n.t('route.AssetList'), permissions: ['assets.view_asset'] }
+        meta: { title: i18n.t('route.AssetList') }
       },
       {
         path: 'create',
         name: 'AssetCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
-        meta: { title: i18n.t('route.AssetCreate'), hidden: true, permissions: ['assets.add_asset'] }
+        meta: { title: i18n.t('route.AssetCreate'), hidden: true }
       },
       {
         path: ':id',
         name: 'AssetDetail',
         component: () => import('@/views/assets/Asset/AssetDetail'),
-        meta: { title: i18n.t('route.AssetDetail'), hidden: true, permissions: ['assets.view_asset'] }
+        meta: { title: i18n.t('route.AssetDetail'), hidden: true }
       },
       {
         path: ':id/update',
         name: 'AssetUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
-        meta: { title: i18n.t('route.AssetUpdate'), hidden: true, permissions: ['assets.change_asset'] }
+        meta: { title: i18n.t('route.AssetUpdate'), hidden: true }
       },
       {
         path: 'detail/:id/update',
         name: 'AssetMoreInformationEdit',
         component: () => import('@/views/assets/Asset/AssetMoreInformationEdit.vue'),
-        meta: { title: i18n.t('common.UpdateAssetDetail'), hidden: true, action: 'update', permissions: ['assets.change_asset'] }
+        meta: { title: i18n.t('common.UpdateAssetDetail'), hidden: true, action: 'update' }
       }
     ]
   },
@@ -49,26 +49,26 @@ export default [
         path: '',
         name: 'DomainList',
         component: () => import('@/views/assets/Domain/DomainList.vue'),
-        meta: { title: i18n.t('route.DomainList'), permissions: ['assets.view_domain'] }
+        meta: { title: i18n.t('route.DomainList') }
       },
       {
         path: 'create',
         name: 'DomainCreate',
         component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
-        meta: { title: i18n.t('route.DomainCreate'), hidden: true, permissions: ['assets.add_domain'] }
+        meta: { title: i18n.t('route.DomainCreate'), hidden: true }
       },
       {
         path: ':id/update',
         name: 'DomainUpdate',
         component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
-        meta: { title: i18n.t('route.DomainUpdate'), hidden: true, permissions: ['assets.change_domain'] },
+        meta: { title: i18n.t('route.DomainUpdate'), hidden: true },
         hidden: true
       },
       {
         path: ':id',
         name: 'DomainDetail',
         component: () => import('@/views/assets/Domain/DomainDetail'),
-        meta: { title: i18n.t('route.DomainDetail'), hidden: true, permissions: ['assets.view_domain'] },
+        meta: { title: i18n.t('route.DomainDetail'), hidden: true },
         hidden: true
       }
     ]
@@ -105,13 +105,13 @@ export default [
         path: '',
         name: 'SystemUserList',
         component: () => import('@/views/assets/SystemUser/SystemUserList'),
-        meta: { title: i18n.t('route.SystemUserList'), permissions: ['assets.view_systemuser'] }
+        meta: { title: i18n.t('route.SystemUserList') }
       },
       {
         path: 'create',
         name: 'SystemUserCreate',
         component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate'),
-        meta: { title: i18n.t('route.SystemUserCreate'), hidden: true, permissions: ['assets.add_systemuser'] }
+        meta: { title: i18n.t('route.SystemUserCreate'), hidden: true }
       },
       {
         path: ':id/update',
@@ -128,7 +128,7 @@ export default [
     ]
   },
   {
-    path: 'cmd-filters',
+    path: 'command-filters',
     component: empty,
     redirect: '',
     meta: { },

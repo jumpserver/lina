@@ -40,7 +40,7 @@ export default {
     ])
   },
   mounted() {
-    console.log('Orgs: ', this.orgs)
+    this.$log.debug('Organizations: ', this.orgs)
   },
   methods: {
     changeOrg(orgId) {
@@ -71,5 +71,4 @@ export default {
       }
     }
   }
-
 </style>

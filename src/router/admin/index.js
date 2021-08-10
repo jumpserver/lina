@@ -21,6 +21,7 @@ export default {
     title: i18n.t('route.AdminPage'),
     icon: 'users',
     view: 'admin',
+    type: 'view',
     permissions: ['rbac.view_adminview']
   },
   children: [
@@ -28,7 +29,10 @@ export default {
       path: '/admin/dashboard',
       name: 'dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard' }
+      meta: {
+        title: i18n.t('route.Dashboard'),
+        icon: 'dashboard'
+      }
     },
     {
       path: '/admin/users',
@@ -36,7 +40,9 @@ export default {
       name: 'Users',
       meta: {
         title: i18n.t('route.Users'),
-        icon: 'users'
+        icon: 'users',
+        app: 'users',
+        type: 'app'
       },
       children: UsersRoute
     },
@@ -44,7 +50,12 @@ export default {
       path: '/admin/assets',
       component: empty,
       name: 'Assets',
-      meta: { title: i18n.t('route.Assets'), icon: 'inbox' },
+      meta: {
+        title: i18n.t('route.Assets'),
+        icon: 'inbox',
+        app: 'assets',
+        type: 'app'
+      },
       children: AssetsRoute
     },
     {
@@ -52,7 +63,12 @@ export default {
       component: empty,
       name: 'applications',
       alwaysShow: true,
-      meta: { title: i18n.t('route.Applications'), icon: 'th' },
+      meta: {
+        title: i18n.t('route.Applications'),
+        icon: 'th',
+        app: 'applications',
+        type: 'app'
+      },
       children: ApplicationsRoute
     },
     {
@@ -62,7 +78,9 @@ export default {
       meta: {
         licenseRequired: true,
         title: i18n.t('route.Accounts'),
-        icon: 'address-book'
+        icon: 'address-book',
+        app: 'assets',
+        type: 'app'
       },
       children: AccountRoutes
     },
@@ -70,7 +88,12 @@ export default {
       path: '/admin/perms',
       component: empty,
       name: 'Perms',
-      meta: { title: i18n.t('route.Perms'), icon: 'edit' },
+      meta: {
+        title: i18n.t('route.Perms'),
+        icon: 'edit',
+        app: 'perms',
+        type: 'app'
+      },
       children: PermsRoute
     },
     {
@@ -80,7 +103,9 @@ export default {
       meta: {
         licenseRequired: true,
         title: i18n.t('route.Acl'),
-        icon: 'fort-awesome'
+        icon: 'fort-awesome',
+        app: 'acls',
+        type: 'app'
       },
       children: AclRoutes
     },
@@ -89,7 +114,12 @@ export default {
       component: empty,
       name: 'JobCenter',
       alwaysShow: true,
-      meta: { title: i18n.t('route.JobCenter'), icon: 'coffee' },
+      meta: {
+        title: i18n.t('route.JobCenter'),
+        icon: 'coffee',
+        type: 'app',
+        app: 'ops'
+      },
       children: OpsRoutes
     },
     {
@@ -97,7 +127,7 @@ export default {
       component: empty,
       redirect: '/applications/remote-apps/',
       name: 'Xpack',
-      meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true },
+      meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true, type: 'app', app: 'xpack' },
       children: XPackRoutes
     },
     {
@@ -110,7 +140,7 @@ export default {
           path: '',
           name: 'Settings',
           component: () => import('@/views/settings/index'),
-          meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [] }
+          meta: { title: i18n.t('route.Settings'), icon: 'gears', app: 'settings' }
         }
       ]
     }
