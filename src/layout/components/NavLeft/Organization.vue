@@ -53,7 +53,7 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/element-variables.scss";
   .org-select {
-    padding: 0 10px 7px 18px;
+    padding: 0 10px 0 18px;
     line-height: 55px;
     background-color: #293846;
     color: white;
