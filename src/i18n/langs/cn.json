@@ -230,6 +230,8 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "DateUpdated": "更新日期",
+    "ApprovaLevel": "审批信息",
     "MFAVerify": "验证 MFA",
     "ViewSecret": "查看密码",
     "ConnectWebSocketError": "连接 WebSocket 失败",
@@ -547,6 +549,9 @@
   },
   "route": {
     "": "",
+    "TicketFlow": "工单流",
+    "TicketFlowCreate": "创建审批流",
+    "TicketFlowUpdate": "更新审批流",
     "Accounts": "账号管理",
     "AssetAccount": "资产账号",
     "ApplicationAccount": "应用账号",
@@ -661,6 +666,10 @@
     "TicketDetail": "工单详情",
     "TicketCreate": "创建工单",
     "Tickets": "工单管理",
+    "Templates": "模版管理",
+    "TemplateDetail": "模版详情",
+    "TemplateCreate": "创建模版",
+    "TemplateUpdate": "更新模版",
     "UserCreate": "创建用户",
     "UserDetail": "用户详情",
     "UserFirstLogin": "首次登录",
@@ -899,6 +908,12 @@
     "setting": "设置"
   },
   "tickets": {
+    "OneAssigneeType": "一级受理人类型",
+    "OneAssignee": "一级受理人",
+    "TwoAssigneeType": "二级受理人类型",
+    "TwoAssignee": "二级受理人",
+    "ApprovalLevel": "审批级别",
+    "FlowDetail": "流程详情",
     "PermissionName": "授权规则名称",
     "Accept": "同意",
     "AssignedMe": "待我审批",
@@ -916,7 +931,6 @@
     "status": "状态",
     "title": "标题",
     "action": "动作",
-    "IPGroup": "IP 组",
     "type": "类型",
     "user": "用户",
     "Status": "状态",
@@ -937,11 +951,6 @@
     "Approved": "已同意",
     "Rejected": "已拒绝",
     "Closed": "已完成",
-    "helpText": {
-      "ips": "请输入逗号分割的IP地址组",
-      "fuzzySearch": "支持模糊搜索",
-      "application": "请输入逗号分割的应用名称组"
-    },
     "ApplyRunUser": "申请运行的用户",
     "ApplyRunAsset": "申请运行的资产",
     "ApplyRunSystemUser": "申请运行的系统用户",
@@ -1182,6 +1191,9 @@
       "Log": "日志",
       "DeleteReleasedAssets": "删除已释放资产"
     },
+    "Template": {
+        "Template": "模版管理"
+     },
     "Corporation": "公司",
     "Edition": "版本",
     "Execute": "执行",
