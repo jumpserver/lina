@@ -21,8 +21,12 @@
       </li>
     </ul>
     <ul class="navbar-left">
-      <li class="header-item"><ViewSwitcher /></li>
-      <li class="header-item"><Organization /></li>
+      <li class="header-item">
+        <ViewSwitcher />
+      </li>
+      <li class="header-item">
+        <Organization />
+      </li>
     </ul>
   </div>
 </template>
@@ -80,14 +84,17 @@ export default {
 </script>
 <style lang="scss" scoped>
   .navbar {
-    height: 50px;
+    height: 55px;
     overflow: hidden;
-    position: relative;
+    position: fixed;
+    top: 0;
     background: #f3f3f4;
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+    width: calc(100% - 220px);
+    z-index: 999;
 
     .header-item {
-      line-height: 50px;
+      line-height: 55px;
       display: inline-block;
       padding-right: 10px;
       padding-left: 10px;

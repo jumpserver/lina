@@ -83,8 +83,8 @@ export default {
   background-color: transparent;
 
   ::v-deep .el-submenu .el-submenu__title {
-    height: 50px;
-    line-height: 50px;
+    height: 55px;
+    line-height: 55px;
   }
 
 }

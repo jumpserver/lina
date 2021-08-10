@@ -4,16 +4,15 @@
     <div :class="{hasTagsView: needTagsView}" class="main-container">
       <div :class="{'fixed-header': fixedHeader}" class="disabled-when-print">
         <NavHeader />
-        <tags-view v-if="needTagsView" />
       </div>
-      <app-main />
+      <app-main style="margin-top: 55px" />
       <Footer class="disabled-when-print" />
     </div>
   </div>
 </template>
 
 <script>
-import { NavHeader, NavLeft, AppMain, Footer, TagsView } from './components'
+import { NavHeader, NavLeft, AppMain, Footer } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -22,8 +21,7 @@ export default {
     NavLeft,
     NavHeader,
     AppMain,
-    Footer,
-    TagsView
+    Footer
   },
   mixins: [ResizeMixin],
   computed: {

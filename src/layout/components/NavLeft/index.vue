@@ -92,7 +92,7 @@ export default {
 <style lang="scss" scoped>
   .nav-header {
     background-image: url('~@/assets/img/header-profile.png');
-    height: 50px;
+    height: 55px;
   }
 
   .nav-footer {
