@@ -4,6 +4,7 @@
       <Logo v-if="showLogo" :collapse="isCollapse" />
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
+      <Organization v-if="showOrgs" class="organizations" />
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
@@ -36,11 +37,12 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
+import Organization from './Organization'
 import variables from '@/styles/variables.scss'
 import Hamburger from '@/components/Hamburger'
 
 export default {
-  components: { SidebarItem, Logo, Hamburger },
+  components: { Organization, SidebarItem, Logo, Hamburger },
   computed: {
     ...mapGetters([
       'currentViewRoute',
@@ -92,6 +94,10 @@ export default {
 <style lang="scss" scoped>
   .nav-header {
     background-image: url('~@/assets/img/header-profile.png');
+    height: 55px;
+  }
+
+  .organizations {
     height: 55px;
   }
 

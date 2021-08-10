@@ -5,7 +5,7 @@
       <div :class="{'fixed-header': fixedHeader}" class="disabled-when-print">
         <NavHeader />
       </div>
-      <app-main style="margin-top: 55px" />
+      <app-main />
       <Footer class="disabled-when-print" />
     </div>
   </div>
@@ -32,7 +32,8 @@ export default {
       return this.$store.state.app.device
     },
     fixedHeader() {
-      return this.$store.state.settings.fixedHeader
+      return true
+      // return this.$store.state.settings.fixedHeader
     },
     needTagsView() {
       return false
@@ -89,7 +90,7 @@ export default {
   }
 
   .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
+    width: calc(100% - 55px)
   }
 
   .mobile .fixed-header {
@@ -110,7 +111,7 @@ export default {
       display: none;
     }
     .main-container{
-      margin-left: 0px !important;
+      margin-left: 0 !important;
     }
     //.fixed-header{
     //  width: 100% !important;

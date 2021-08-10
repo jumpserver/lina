@@ -43,7 +43,6 @@ export default {
     console.log('Orgs: ', this.orgs)
   },
   methods: {
-
     changeOrg(orgId) {
       orgUtil.changeOrg(orgId)
     }
@@ -52,29 +51,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  //.org-select {
-  //  padding: 0 10px 7px 18px;
-  //  transition: opacity 0s;
-  //}
-  //
-  .org-select >>> input.el-input__inner {
-    background: none;
-    border: none;
-    font-size: 13px;
-    margin: auto 5px;
-  }
-  .org-select >>> .el-input__prefix {
-    line-height: 34px;
-    //margin: auto 5px;
+  @import "~@/styles/element-variables.scss";
+  .org-select {
+    padding: 0 10px 7px 18px;
+    line-height: 55px;
+    background-color: #293846;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    //border-top: solid 1px rgb(47, 64, 80);
+
+    ::v-deep .el-input {
+
+      input.el-input__inner {
+        line-height: 55px;
+        height: 55px;
+        background: none;
+        border: none;
+      }
+    }
   }
 
-  .org-select >>> .el-input__suffix {
-    //margin: auto 5px;
-    line-height: 34px;
-  }
-  //
-  //.sidebarLogoFade-enter,
-  //.sidebarLogoFade-leave-to {
-  //  opacity: 0;
-  //}
 </style>
