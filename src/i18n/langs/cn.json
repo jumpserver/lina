@@ -230,6 +230,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ApprovaLevel": "审批级别",
     "MFAVerify": "验证 MFA",
     "ViewSecret": "查看密码",
     "ConnectWebSocketError": "连接 WebSocket 失败",
@@ -661,6 +662,10 @@
     "TicketDetail": "工单详情",
     "TicketCreate": "创建工单",
     "Tickets": "工单管理",
+    "Templates": "模版管理",
+    "TemplateDetail": "模版详情",
+    "TemplateCreate": "创建模版",
+    "TemplateUpdate": "更新模版",
     "UserCreate": "创建用户",
     "UserDetail": "用户详情",
     "UserFirstLogin": "首次登录",
@@ -1179,6 +1184,9 @@
       "Log": "日志",
       "DeleteReleasedAssets": "删除已释放资产"
     },
+    "Template": {
+        "Template": "模版管理"
+     },
     "Corporation": "公司",
     "Edition": "版本",
     "Execute": "执行",
