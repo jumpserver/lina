@@ -24,7 +24,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'admin_user', 'protocols', 'ip_network_segment_group', 'is_always_update']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'unix_admin_user', 'windows_admin_user', 'protocols', 'ip_network_segment_group', 'is_always_update']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -62,8 +62,16 @@ export default {
             }
           }
         },
-        admin_user: {
-          rules: [rules.RequiredChange],
+        unix_admin_user: {
+          el: {
+            multiple: false,
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/admin-users/'
+            }
+          }
+        },
+        windows_admin_user: {
           el: {
             multiple: false,
             value: [],
