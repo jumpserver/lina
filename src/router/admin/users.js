@@ -69,18 +69,17 @@ export default [
     ]
   },
   {
-    path: 'groups',
+    path: 'user-groups',
     component: empty, // Parent router-view
     redirect: '',
     meta: {
-      permissions: ['users.view_usergroup']
     },
     children: [
       {
         path: '',
         component: () => import('@/views/users/Group/UserGroupList.vue'), // Parent router-view
         name: 'UserGroupList',
-        meta: { title: i18n.t('route.UserGroupList'), permissions: ['users.view_group'] }
+        meta: { title: i18n.t('route.UserGroupList') }
       },
       {
         path: ':id/update',

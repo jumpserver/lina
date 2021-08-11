@@ -1,23 +1,10 @@
-import store from '@/store'
+import { hasPermission } from '@/utils/jms'
 
 function checkPermission(el, binding) {
   const { value } = binding
-  const perms = store.getters?.currentOrgPerms || []
 
-  if (value && value instanceof Array) {
-    if (value.length > 0) {
-      const permsRequired = value
-
-      const hasPermission = perms.some(perm => {
-        return permsRequired.includes(perm)
-      })
-
-      if (!hasPermission) {
-        el.parentNode && el.parentNode.removeChild(el)
-      }
-    }
-  } else {
-    throw new Error(`need perms! Like v-permission="['assets.add_asset','assets.view_asset']"`)
+  if (!hasPermission(value)) {
+    el.parentNode && el.parentNode.removeChild(el)
   }
 }
 

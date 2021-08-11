@@ -162,7 +162,7 @@ export default [
   {
     path: 'command-filter-rules',
     component: empty,
-    hidden: true,
+    meta: { hidden: true },
     children: [
       {
         path: 'create',

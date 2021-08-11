@@ -5,6 +5,7 @@ import {
 } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
+import { getResourceNameByPath } from '@/utils/jms'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -137,10 +138,7 @@ function cleanRoute(tmp, parent) {
     tmp.meta.app = tmp.meta.level === 2 ? pathValue : parent.meta?.app
   }
   if (!tmp.meta.resource) {
-    let resource = pathValue.replaceAll('-', '')
-    if (resource[resource.length - 1] === 's') {
-      resource = resource.slice(0, resource.length - 1)
-    }
+    const resource = getResourceNameByPath(pathValue)
     tmp.meta.resource = tmp.meta.level === 3 ? resource : parent.meta?.resource
   }
   if (!tmp.meta.action) {

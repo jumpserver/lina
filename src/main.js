@@ -14,7 +14,7 @@ import router from './router'
 import i18n from './i18n/i18n'
 
 import '@/icons' // icon
-import '@/permission' // permission control
+import '@/guards' // permission control
 import '@/directive'
 
 /**

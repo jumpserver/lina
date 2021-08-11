@@ -40,9 +40,7 @@ export default {
       name: 'Users',
       meta: {
         title: i18n.t('route.Users'),
-        icon: 'users',
-        app: 'users',
-        type: 'app'
+        icon: 'users'
       },
       children: UsersRoute
     },
@@ -52,9 +50,7 @@ export default {
       name: 'Assets',
       meta: {
         title: i18n.t('route.Assets'),
-        icon: 'inbox',
-        app: 'assets',
-        type: 'app'
+        icon: 'inbox'
       },
       children: AssetsRoute
     },
@@ -65,9 +61,7 @@ export default {
       alwaysShow: true,
       meta: {
         title: i18n.t('route.Applications'),
-        icon: 'th',
-        app: 'applications',
-        type: 'app'
+        icon: 'th'
       },
       children: ApplicationsRoute
     },
@@ -78,9 +72,7 @@ export default {
       meta: {
         licenseRequired: true,
         title: i18n.t('route.Accounts'),
-        icon: 'address-book',
-        app: 'assets',
-        type: 'app'
+        icon: 'address-book'
       },
       children: AccountRoutes
     },
@@ -90,9 +82,7 @@ export default {
       name: 'Perms',
       meta: {
         title: i18n.t('route.Perms'),
-        icon: 'edit',
-        app: 'perms',
-        type: 'app'
+        icon: 'edit'
       },
       children: PermsRoute
     },
@@ -103,9 +93,7 @@ export default {
       meta: {
         licenseRequired: true,
         title: i18n.t('route.Acl'),
-        icon: 'fort-awesome',
-        app: 'acls',
-        type: 'app'
+        icon: 'fort-awesome'
       },
       children: AclRoutes
     },
@@ -116,9 +104,7 @@ export default {
       alwaysShow: true,
       meta: {
         title: i18n.t('route.JobCenter'),
-        icon: 'coffee',
-        type: 'app',
-        app: 'ops'
+        icon: 'coffee'
       },
       children: OpsRoutes
     },
@@ -127,7 +113,7 @@ export default {
       component: empty,
       redirect: '/applications/remote-apps/',
       name: 'Xpack',
-      meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true, type: 'app', app: 'xpack' },
+      meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true },
       children: XPackRoutes
     },
     {
@@ -140,7 +126,7 @@ export default {
           path: '',
           name: 'Settings',
           component: () => import('@/views/settings/index'),
-          meta: { title: i18n.t('route.Settings'), icon: 'gears', app: 'settings' }
+          meta: { title: i18n.t('route.Settings'), icon: 'gears' }
         }
       ]
     }
