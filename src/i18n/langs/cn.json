@@ -935,6 +935,7 @@
     "Approved": "已同意",
     "Rejected": "已拒绝",
     "Closed": "已完成",
+    "StateClosed": "已关闭",
     "helpText": {
       "ips": "请输入逗号分割的IP地址组",
       "fuzzySearch": "支持模糊搜索",
