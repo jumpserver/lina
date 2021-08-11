@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div style="height: 350px;">
+    <div style="height: 480px;">
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.type_display}`"
@@ -12,15 +12,20 @@
           </div>
         </el-step>
         <el-step
-          :title="`${this.$t('tickets.HandleTicket')}`"
-          :description="`${this.$t('tickets.Assignees')}：${object.assignees_display}`"
-        />
+          v-for="(item, i) in process"
+          :key="i"
+          :title="`${thisCopy.$t('tickets.HandleTicket')}`"
+        >
+          <div v-if="item.action!=='open'" slot="description">
+            <div>{{ `${thisCopy.$t('tickets.Assignee')}：${item.processor_display}` }}</div>
+            <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
+          </div>
+          <div slot="description">{{ `${thisCopy.$t('tickets.Assignees')}：${item.assignees_display}` }}</div>
+        </el-step>
         <el-step
           :title="`${this.$t('tickets.FinishedTicket')}`"
-          :description="ticketSteps===STATUS.close ? `${this.$t('tickets.Assignee')}：${object.assignee_display}`:'' "
         >
-          <div v-if="ticketSteps===STATUS.close" slot="description">
-            <div>{{ `${this.$t('tickets.Assignee')}：${object.processor_display}` }}</div>
+          <div slot="description">
             <div>{{ `${this.$t('common.dateFinished')}:  ${toSafeLocalDateStr(object.date_updated)}` }}</div>
           </div>
         </el-step>
@@ -44,12 +49,27 @@ export default {
   },
   data() {
     return {
-      STATUS: { open: 2, close: 3 }
+      countAll: this.object.process.length + 2,
+      STATUS: { open: 2, close: 3 },
+      process: this.object.process,
+      thisCopy: this
     }
   },
   computed: {
     ticketSteps() {
-      return this.object.status === 'open' ? this.STATUS.open : this.STATUS.close
+      if (this.object.status === 'closed') {
+        return this.countAll
+      } else if (this.object.process.length === 1) {
+        return this.STATUS.open
+      } else {
+        this.object.process.forEach(i => {
+          if (i.action !== 'open') {
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+            this.STATUS.open = this.STATUS.open + 1
+          }
+        })
+        return this.STATUS.open
+      }
     }
   },
   methods: {

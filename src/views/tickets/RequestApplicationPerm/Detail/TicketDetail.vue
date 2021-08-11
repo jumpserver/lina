@@ -7,50 +7,17 @@
     :approve="handleApprove"
     :close="handleClose"
     :reject="handleReject"
-  >
-    <IBox v-if="hasActionPerm&&object.status !== 'closed'" class="box">
-      <div slot="header" class="clearfix ibox-title">
-        <i class="fa fa-edit" /> {{ $t('common.Actions') }}
-      </div>
-      <template>
-        <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
-          <el-form-item :label="$t('perms.PermName')" required>
-            <el-input v-model="requestForm.name" />
-          </el-form-item>
-          <el-form-item :label="$t('assets.Applications')" required>
-            <Select2 v-model="requestForm.application" v-bind="appsSelect2" style="width: 50% !important" />
-          </el-form-item>
-          <el-form-item :label="$t('tickets.SystemUser')" required>
-            <Select2 v-model="requestForm.systemuser" v-bind="systemuserSelect2" style="width: 50% !important" />
-          </el-form-item>
-          <el-form-item :label="$t('common.dateStart')" required>
-            <el-date-picker
-              v-model="requestForm.apply_date_start"
-              type="datetime"
-            />
-          </el-form-item>
-          <el-form-item :label="$t('common.dateExpired')" required>
-            <el-date-picker
-              v-model="requestForm.apply_date_expired"
-              type="datetime"
-            />
-          </el-form-item>
-        </el-form>
-      </template>
-    </IBox>
-  </GenericTicketDetail>
+  />
 </template>
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
-import Select2 from '@/components/FormFields/Select2'
-import IBox from '@/components/IBox'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2 },
+  components: { GenericTicketDetail },
   props: {
     object: {
       type: Object,
@@ -62,41 +29,13 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         name: this.object.meta.approve_permission_name,
-        application: this.object.meta['recommend_applications'],
-        systemuser: this.object.meta['recommend_system_users'],
+        application: this.object.meta['apply_applications'],
+        systemuser: this.object.meta['apply_system_users'],
         apply_date_expired: this.object.meta.apply_date_expired,
         apply_date_start: this.object.meta.apply_date_start
       },
       comments: '',
-      assets: [],
-      appsSelect2: {
-        multiple: true,
-        value: this.object.meta['recommend_applications'],
-        ajax: {
-          url: function() {
-            const oid = this.object.org_id === '' ? 'DEFAULT' : this.object.org_id
-            return `/api/v1/applications/applications/?oid=${oid}&type=${this.object.meta.apply_type}`
-          }.bind(this)(),
-          transformOption: (item) => {
-            return { label: item.name, value: item.id }
-          }
-        }
-      },
-      systemuserSelect2: {
-        multiple: true,
-        value: this.object.meta['recommend_system_users'],
-        ajax: {
-          url: function() {
-            const oid = this.object.org_id === '' ? 'DEFAULT' : this.object.org_id
-            const protocol = this.object.meta.apply_category === 'remote_app' ? 'rdp' : this.object.meta.apply_type
-            return `/api/v1/assets/system-users/?oid=${oid}&protocol=${protocol}`
-          }.bind(this)(),
-          transformOption: (item) => {
-            const username = item.username || '*'
-            return { label: item.name + '(' + username + ')', value: item.id }
-          }
-        }
-      }
+      assets: []
     }
   },
   computed: {
@@ -118,14 +57,6 @@ export default {
           value: this.object['applicant_display']
         },
         {
-          key: this.$t('tickets.Assignees'),
-          value: this.object['assignees_display']
-        },
-        {
-          key: this.$t('tickets.Assignee'),
-          value: (this.object['processor_display'] === 'No') ? '' : this.object['processor_display']
-        },
-        {
           key: this.$t('tickets.OrgName'),
           value: this.object['org_name']
         },
@@ -141,21 +72,17 @@ export default {
     },
     specialCardItems() {
       return [
-        // {
-        //   key: this.$t('tickets.Assignee'),
-        //   value: this.object.assignee_display
-        // },
         {
           key: this.$t('applications.appType'),
           value: `${this.object.meta['apply_category_display']} / ${this.object.meta['apply_type_display']} `
         },
         {
           key: this.$t('applications.appName'),
-          value: this.object.meta.apply_application_group.toString()
+          value: this.object.meta.apply_applications_display.toString()
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.apply_system_user_group.toString()
+          value: this.object.meta.apply_system_users_display.toString()
         },
         {
           key: this.$t('common.dateStart'),
@@ -171,19 +98,19 @@ export default {
       return [
         {
           key: this.$t('applications.appName'),
-          value: this.object.meta['approve_applications_display']
+          value: this.object.meta['apply_applications_display']
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta['approve_system_users_display']
+          value: this.object.meta['apply_system_users_display']
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(this.object.meta.approve_date_start)
+          value: toSafeLocalDateStr(this.object.meta.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(this.object.meta.approve_date_expired)
+          value: toSafeLocalDateStr(this.object.meta.apply_date_expired)
         }
       ]
     },
@@ -206,13 +133,7 @@ export default {
         return this.$message.error(this.$tc('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
-          meta: {
-            approve_permission_name: this.requestForm.name,
-            approve_system_users: this.requestForm.systemuser,
-            approve_applications: this.requestForm.application,
-            approve_date_start: this.requestForm.apply_date_start,
-            approve_date_expired: this.requestForm.apply_date_expired
-          }
+          meta: {}
         }).then(
           () => {
             this.$message.success(this.$tc('common.updateSuccessMsg'))
