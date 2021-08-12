@@ -4,8 +4,6 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import Select2 from '@/components/FormFields/Select2'
-import Protocols from './components/Protocols'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -14,34 +12,14 @@ export default {
     return {
       loading: true,
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id']],
-        [this.$t('common.ApprovaLevel'), ['templated_approves']]
+        [this.$t('common.Basic'), ['title', 'type']],
+        [this.$t('common.ApprovalLevel'), ['templated_approves']]
       ],
       fieldsMeta: {
-        type: {
-          type: 'select',
-          options: [{
-            label: 'MySQL',
-            value: 'mysql'
-          }],
-          disabled: true
-        },
-        org_id: {
-          component: Select2,
-          el: {
-            multiple: false,
-            options: this.$store.state.users.profile.user_all_orgs.map((item) => {
-              return { label: item.name, value: item.id }
-            })
-          }
-        },
-        templated_approves: {
-          component: Protocols
-        }
       },
       getUrl() {
         const params = this.$route.params
-        let url = `/api/v1/tickets/templates/`
+        let url = `/api/v1/tickets/flows/`
         if (params.id) {
           url = `${url}${params.id}/`
         }

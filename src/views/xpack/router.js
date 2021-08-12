@@ -126,41 +126,6 @@ export default {
       component: () => import('@/views/xpack/SystemMonitor/index.vue'),
       name: 'SystemMonitor',
       meta: { title: i18n.t('xpack.SystemMonitor'), permissions: [rolec.PERM_SUPER] }
-    },
-    {
-      path: 'template',
-      component: empty,
-      redirect: '',
-      meta: { title: i18n.t('xpack.Template.Template') },
-      children: [
-        {
-          path: '',
-          name: 'TemplateList',
-          meta: { title: i18n.t('route.Templates'), activeMenu: '/xpack/template' },
-          component: () => import('@/views/xpack/Template/TemplateList')
-        },
-        {
-          path: 'create',
-          name: 'TemplateCreate',
-          component: () => import('@/views/xpack/Template/TemplateCreateUpdate'),
-          meta: { title: i18n.t('route.TemplateCreate'), activeMenu: '/xpack/template', action: 'create' },
-          hidden: true
-        },
-        {
-          path: ':id/update',
-          name: 'TemplateUpdate',
-          component: () => import('@/views/xpack/Template/TemplateCreateUpdate'),
-          meta: { title: i18n.t('route.TemplateUpdate'), activeMenu: '/xpack/template', action: 'update' },
-          hidden: true
-        },
-        {
-          path: ':id',
-          name: 'TemplateDetail',
-          component: () => import('@/views/xpack/Template/TemplateDetail/index'),
-          meta: { title: i18n.t('route.TemplateDetail'), activeMenu: '/xpack/template' },
-          hidden: true
-        }
-      ]
     }
   ]
 }
