@@ -21,6 +21,7 @@ import Security from './Security'
 import License from './License'
 import WeCom from './WeCom'
 import DingTalk from './DingTalk'
+import FeiShu from './FeiShu.vue'
 import SystemMessageSubscription from './SystemMessageSubscription/Subscription'
 
 export default {
@@ -37,6 +38,7 @@ export default {
     License,
     WeCom,
     DingTalk,
+    FeiShu,
     SystemMessageSubscription
   },
   data() {
@@ -68,6 +70,10 @@ export default {
         {
           title: this.$t('setting.DingTalk'),
           name: 'DingTalk'
+        },
+        {
+          title: this.$t('setting.FeiShu'),
+          name: 'FeiShu'
         },
         {
           title: this.$t('setting.SystemMessageSubscription'),
