@@ -135,31 +135,26 @@ export default {
         return url
       }
     },
-    onPerformSuccess: {
+    emitPerformSuccessMsg: {
       type: Function,
-      default(res, method, vm, addContinue) {
+      default(method, res, addContinue) {
         let msg = method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
-        let msgLinkName = this.$t('common.Resource')
+        let msgLinkName = this.$tc('common.Resource')
         if (res.name) {
           msgLinkName = res.name
         } else if (res.hostname) {
           msgLinkName = res.hostname
         }
-        const detailRoute = this.objectDetailRoute
-        detailRoute['params'] = { 'id': res.id }
-        const route = this.getNextRoute(res, method)
-        this.$emit('submitSuccess', res)
         const h = this.$createElement
-        this.$log.debug('router is: ', detailRoute)
         if (this.hasDetailInMsg) {
           this.$message({
             message: h('p', null, [
               h('el-link', {
                 on: {
-                  click: () => this.$router.push(detailRoute)
+                  click: () => this.$router.push(this.objectDetailRoute)
                 },
                 style: { 'vertical-align': 'top' }
               }, msgLinkName),
@@ -175,6 +170,18 @@ export default {
         } else {
           this.$message.success(msg)
         }
+      }
+    },
+    onPerformSuccess: {
+      type: Function,
+      default(res, method, vm, addContinue) {
+        const route = this.getNextRoute(res, method)
+        if (!(route.params && route.params.id)) {
+          route['params'] = { 'id': res.id }
+        }
+        this.$emit('submitSuccess', res)
+
+        this.emitPerformSuccessMsg(method, res, addContinue)
         if (!addContinue) {
           setTimeout(() => this.$router.push(route), 100)
         }

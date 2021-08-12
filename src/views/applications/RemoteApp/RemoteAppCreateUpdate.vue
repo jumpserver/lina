@@ -59,26 +59,13 @@ export default {
         }
         return `${url}?type=${this.$route.query.type}`
       },
-      performSubmit(validValues) {
-        this.$log.debug('Validated data: ', validValues)
-        const params = this.$route.params
-        const baseUrl = `/api/v1/applications/applications/`
-        const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
-        const method = this.getMethod()
-        validValues.category = 'remote_app'
-        return this.$axios[method](`${url}?type=${validValues.type}`, validValues)
+      cleanFormValue(value) {
+        value.category = 'remote_app'
+        return value
       }
     }
   },
   computed: {
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 

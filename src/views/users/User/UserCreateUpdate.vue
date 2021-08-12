@@ -1,9 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    :clean-form-value="cleanFormValue"
-    @getObjectDone="afterGetUser"
-  />
+  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="afterGetUser" />
 </template>
 
 <script>
@@ -134,6 +130,27 @@ export default {
             value: []
           }
         }
+      },
+      getMethod() {
+        const params = this.$route.params
+        if (params.id) {
+          return 'put'
+        } else {
+          return 'post'
+        }
+      },
+      cleanFormValue(value) {
+        const method = this.getMethod()
+        if (method === 'post' && value.password_strategy === 'email') {
+          delete value['password']
+          if (this.currentOrgIsRoot) {
+            delete value['groups']
+          }
+        }
+        if (value.update_password !== undefined) {
+          delete value.update_password
+        }
+        return value
       }
     }
   },
@@ -146,27 +163,6 @@ export default {
     }
   },
   methods: {
-    cleanFormValue(value) {
-      const method = this.getMethod()
-      if (method === 'post' && value.password_strategy === 'email') {
-        delete value['password']
-        if (this.currentOrgIsRoot) {
-          delete value['groups']
-        }
-      }
-      if (value.update_password !== undefined) {
-        delete value.update_password
-      }
-      return value
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    },
     afterGetUser(user) {
       this.user = user
       if (this.$route.query.clone_from) {

@@ -2,23 +2,18 @@
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
-import UpdateSecretInfo from './UpdateSecretInfo'
-import { connectivityMeta } from './const'
-import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AccountListTable',
+  name: 'Detail',
   components: {
     ListTable,
-    UpdateSecretInfo,
     ShowSecretInfo
   },
   props: {
@@ -29,7 +24,7 @@ export default {
     exportUrl: {
       type: String,
       default() {
-        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+        return this.url.replace('/applications/accounts/', '/applications/account-secrets/')
       }
     },
     hasLeftActions: {
@@ -53,41 +48,53 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'hostname', 'ip', 'username', 'version', 'connectivity',
-          'systemuser', 'date_created', 'date_updated', 'actions'
+          'app_name', 'username', 'category_display',
+          'type_display', 'systemuser', 'actions'
         ],
-        columnsShow: {
-          min: ['username', 'actions'],
-          default: ['hostname', 'ip', 'username', 'version', 'actions']
-        },
         columnsMeta: {
-          hostname: {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+          app_name: {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute({ row }) {
-                return {
-                  name: 'AssetDetail',
-                  params: { id: row.asset }
+                switch (row['app_category']) {
+                  case 'remote_app':
+                    return {
+                      name: 'RemoteAppDetail',
+                      params: { id: row.app }
+                    }
+                  case 'db':
+                    return {
+                      name: 'DatabaseAppDetail',
+                      params: { id: row.app }
+                    }
+                  default:
+                    return {
+                      name: 'KubernetesAppDetail',
+                      params: { id: row.app }
+                    }
                 }
               }
             }
-          },
-          ip: {
-            width: '120px'
           },
           username: {
             showOverflowTooltip: true
           },
           systemuser: {
-            formatter: DisplayFormatter
+            showOverflowTooltip: true,
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getTitle({ row }) {
+                return row.systemuser_display
+              },
+              getRoute({ row }) {
+                return {
+                  name: 'SystemUserDetail',
+                  params: { id: row.systemuser }
+                }
+              }
+            }
           },
-          version: {
-            width: '70px'
-          },
-          connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -106,35 +113,11 @@ export default {
                   }.bind(this)
                 },
                 {
-                  name: 'Delete',
-                  title: this.$t('common.Delete'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
-                      this.$refs.ListTable.reloadTable()
-                    })
-                  }
-                },
-                {
-                  name: 'Test',
-                  title: this.$t('common.Test'),
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/accounts/${row.id}/verify/`,
-                      { action: 'test' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                },
-                {
                   name: 'Update',
                   title: this.$t('common.Update'),
                   can: !this.$store.getters.currentOrgIsRoot,
                   callback: function({ row }) {
-                    this.account = row
-                    this.showUpdateSecretDialog = true
+                    this.$message.success(this.$tc('applications.updateAccountMsg'))
                   }.bind(this)
                 }
               ]

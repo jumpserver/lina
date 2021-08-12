@@ -1,13 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
-    :fields="fields"
-    :has-detail-in-msg="false"
-    :initial="initial"
-    :fields-meta="fieldsMeta"
-    :url="url"
-    :get-next-route="getNextRoute"
-    :clean-form-value="cleanFormValue"
-  />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -86,29 +78,30 @@ export default {
         params: {
         }
       },
-      url: `/api/v1/assets/gateways/`
+      url: `/api/v1/assets/gateways/`,
+      hasDetailInMsg: false,
+      getNextRoute(res, method) {
+        const domain = res.domain
+        const route = {
+          name: 'DomainDetail',
+          params: {
+            id: domain
+          },
+          query: {
+            activeTab: 'GatewayList'
+          }
+        }
+        return route
+      },
+      cleanFormValue(values) {
+        if (this.$route.params.id && !values.update_password) {
+          delete values['password']
+        }
+        return values
+      }
     }
   },
   methods: {
-    getNextRoute(res, method) {
-      const domain = res.domain
-      const route = {
-        name: 'DomainDetail',
-        params: {
-          id: domain
-        },
-        query: {
-          activeTab: 'GatewayList'
-        }
-      }
-      return route
-    },
-    cleanFormValue(values) {
-      if (!values.update_password) {
-        delete values['password']
-      }
-      return values
-    }
   }
 }
 </script>

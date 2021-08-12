@@ -76,7 +76,7 @@ export default {
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/assets/assets/?fields_size=mini',
         hasTree: true,
         canSelect: this.canSelect,
         columns: [
@@ -94,6 +94,15 @@ export default {
             prop: 'ip',
             label: this.$t('assets.ipDomain'),
             sortable: 'custom'
+          },
+          {
+            prop: 'platform',
+            label: this.$t('assets.Platform'),
+            sortable: true
+          },
+          {
+            prop: 'protocols',
+            label: this.$t('assets.Protocols')
           }
         ],
         listeners: {

@@ -1,7 +1,7 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
-      :fields="selectFields"
+      :fields="fields"
       :url="url"
       :fields-meta="fieldsMeta"
       :get-method="getMethod"
@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      selectFields: [
+      fields: [
         [
           this.$t('common.Basic'),
           [
@@ -40,7 +40,7 @@ export default {
         [
           this.$t('setting.PasswordCheckRule'),
           [
-            'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
+            'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
             'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
           ]
         ],
@@ -52,7 +52,7 @@ export default {
         ]
       ],
       fieldsMeta: {
-        'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER': {
+        SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER: {
           component: Link,
           helpText: this.$t('setting.InsecureCommandNotifyToSubscription'),
           label: this.$t('common.Receivers'),

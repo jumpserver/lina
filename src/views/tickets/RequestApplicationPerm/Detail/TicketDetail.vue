@@ -18,10 +18,10 @@
             <el-input v-model="requestForm.name" />
           </el-form-item>
           <el-form-item :label="$t('assets.Applications')" required>
-            <Select2 v-model="requestForm.application" v-bind="apps_select2" style="width: 50% !important" />
+            <Select2 v-model="requestForm.application" v-bind="appsSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" required>
-            <Select2 v-model="requestForm.systemuser" v-bind="systemuser_select2" style="width: 50% !important" />
+            <Select2 v-model="requestForm.systemuser" v-bind="systemuserSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('common.dateStart')" required>
             <el-date-picker
@@ -62,38 +62,38 @@ export default {
       statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
       requestForm: {
         name: this.object.meta.approve_permission_name,
-        application: this.object.meta.recommend_applications,
-        systemuser: this.object.meta.recommend_system_users,
+        application: this.object.meta['recommend_applications'],
+        systemuser: this.object.meta['recommend_system_users'],
         apply_date_expired: this.object.meta.apply_date_expired,
         apply_date_start: this.object.meta.apply_date_start
       },
       comments: '',
       assets: [],
-      apps_select2: {
+      appsSelect2: {
         multiple: true,
-        value: this.object.meta.recommend_applications,
+        value: this.object.meta['recommend_applications'],
         ajax: {
-          url: `/api/v1/applications/applications/?oid=${(this.object.org_id === '')
-            ? 'DEFAULT'
-            : this.object.org_id}&category=${this.object.meta.apply_category}&type=${this.object.meta.apply_type}`,
+          url: function() {
+            const oid = this.object.org_id === '' ? 'DEFAULT' : this.object.org_id
+            return `/api/v1/applications/applications/?oid=${oid}&type=${this.object.meta.apply_type}`
+          }.bind(this)(),
           transformOption: (item) => {
             return { label: item.name, value: item.id }
           }
         }
       },
-      systemuser_select2: {
+      systemuserSelect2: {
         multiple: true,
-        value: this.object.meta.recommend_system_users,
+        value: this.object.meta['recommend_system_users'],
         ajax: {
-          url: `/api/v1/assets/system-users/?oid=${(this.object.org_id === '')
-            ? 'DEFAULT'
-            : this.object.org_id
-          }&protocol=${(this.object.meta.apply_category === 'remote_app')
-            ? 'rdp'
-            : this.object.meta.apply_type
-          }`,
+          url: function() {
+            const oid = this.object.org_id === '' ? 'DEFAULT' : this.object.org_id
+            const protocol = this.object.meta.apply_category === 'remote_app' ? 'rdp' : this.object.meta.apply_type
+            return `/api/v1/assets/system-users/?oid=${oid}&protocol=${protocol}`
+          }.bind(this)(),
           transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
+            const username = item.username || '*'
+            return { label: item.name + '(' + username + ')', value: item.id }
           }
         }
       }
@@ -115,19 +115,19 @@ export default {
         },
         {
           key: this.$t('tickets.user'),
-          value: this.object.applicant_display
+          value: this.object['applicant_display']
         },
         {
           key: this.$t('tickets.Assignees'),
-          value: this.object.assignees_display
+          value: this.object['assignees_display']
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: (this.object.processor_display === 'No') ? '' : this.object.processor_display
+          value: (this.object['processor_display'] === 'No') ? '' : this.object['processor_display']
         },
         {
           key: this.$t('tickets.OrgName'),
-          value: this.object.org_name
+          value: this.object['org_name']
         },
         {
           key: this.$t('common.dateCreated'),
@@ -147,7 +147,7 @@ export default {
         // },
         {
           key: this.$t('applications.appType'),
-          value: `${this.object.meta.apply_category_display} / ${this.object.meta.apply_type_display} `
+          value: `${this.object.meta['apply_category_display']} / ${this.object.meta['apply_type_display']} `
         },
         {
           key: this.$t('applications.appName'),
@@ -171,11 +171,11 @@ export default {
       return [
         {
           key: this.$t('applications.appName'),
-          value: this.object.meta.approve_applications_display
+          value: this.object.meta['approve_applications_display']
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.approve_system_users_display
+          value: this.object.meta['approve_system_users_display']
         },
         {
           key: this.$t('common.dateStart'),
@@ -203,7 +203,7 @@ export default {
     },
     handleApprove() {
       if (this.requestForm.application.length === 0 || this.requestForm.systemuser.length === 0) {
-        return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
+        return this.$message.error(this.$tc('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {
@@ -215,11 +215,11 @@ export default {
           }
         }).then(
           () => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
+            this.$message.success(this.$tc('common.updateSuccessMsg'))
             this.reloadPage()
           }
         ).catch(
-          () => this.$message.success(this.$t('common.updateErrorMsg'))
+          () => this.$message.success(this.$tc('common.updateErrorMsg'))
         )
       }
     },

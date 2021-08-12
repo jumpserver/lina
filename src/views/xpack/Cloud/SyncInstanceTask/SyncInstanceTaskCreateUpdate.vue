@@ -6,6 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Select2 } from '@/components'
 import rules from '@/components/DataForm/rules'
+import Protocols from '@/views/assets/Asset/components/Protocols/index'
 
 export default {
   components: {
@@ -17,12 +18,13 @@ export default {
       initial: {
         is_periodic: true,
         interval: 24,
-        hostname_strategy: 'instance_name_partial_ip'
+        hostname_strategy: 'instance_name_partial_ip',
+        ip_network_segment_group: '*'
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'admin_user', 'is_always_update']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'unix_admin_user', 'windows_admin_user', 'protocols', 'ip_network_segment_group', 'is_always_update']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -60,8 +62,7 @@ export default {
             }
           }
         },
-        admin_user: {
-          rules: [rules.RequiredChange],
+        unix_admin_user: {
           el: {
             multiple: false,
             value: [],
@@ -69,6 +70,18 @@ export default {
               url: '/api/v1/assets/admin-users/'
             }
           }
+        },
+        windows_admin_user: {
+          el: {
+            multiple: false,
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/admin-users/'
+            }
+          }
+        },
+        protocols: {
+          component: Protocols
         },
         is_always_update: {
           type: 'switch',
@@ -111,7 +124,17 @@ export default {
         }
       },
       updateSuccessNextRoute: { name: 'CloudCenter' },
-      createSuccessNextRoute: { name: 'CloudCenter' }
+      createSuccessNextRoute: { name: 'CloudCenter' },
+      afterGetFormValue(formValue) {
+        formValue.ip_network_segment_group = formValue.ip_network_segment_group.toString()
+        return formValue
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.ip_network_segment_group)) {
+          value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
+        }
+        return value
+      }
     }
   },
   async mounted() {
@@ -121,6 +144,8 @@ export default {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
       this.fieldsMeta.regions.el.ajax.url = form.account ? `/api/v1/xpack/cloud/regions/?account_id=${form.account}` : `/api/v1/xpack/cloud/regions/`
     }
+  },
+  methods: {
   }
 }
 

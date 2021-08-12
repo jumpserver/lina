@@ -4,7 +4,6 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     :has-detail-in-msg="false"
-    :perform-submit="performSubmit"
   />
 </template>
 
@@ -61,18 +60,6 @@ export default {
 
   },
   methods: {
-    performSubmit(validValues) {
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 </script>

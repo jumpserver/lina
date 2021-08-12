@@ -88,7 +88,9 @@ export default {
         omnidb: 'OmniDB',
         guacamole: 'Guacamole',
         lion: 'Lion',
-        xrdp: 'XRDP'
+        xrdp: 'XRDP',
+        core: 'Core',
+        celery: 'Celery'
       }
       return nameMapper[this.componentMetric.type]
     }

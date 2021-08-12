@@ -5,6 +5,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'ChangeAuthPlanList',
@@ -73,7 +74,7 @@ export default {
                       `/api/v1/xpack/change-auth-plan/plan-execution/`,
                       { plan: row.id }
                     ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                      openTaskPage(res['task'])
                     })
                   }.bind(this)
                 }

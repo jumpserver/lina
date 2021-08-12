@@ -76,9 +76,12 @@ export default {
       assets: [],
       asset_select2: {
         multiple: true,
-        value: this.object.meta.recommend_assets,
+        value: this.object.meta['recommend_assets'],
         ajax: {
-          url: `/api/v1/assets/assets/?oid=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: (function(object) {
+            const oid = object.org_id === '' ? 'DEFAULT' : object.org_id
+            return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
+          }(this.object)),
           transformOption: (item) => {
             return { label: item.hostname, value: item.id }
           }
@@ -86,11 +89,15 @@ export default {
       },
       systemuser_select2: {
         multiple: true,
-        value: this.object.meta.recommend_system_users,
+        value: this.object.meta['recommend_system_users'],
         ajax: {
-          url: `/api/v1/assets/system-users/?oid=${(this.object.org_id === '') ? 'DEFAULT' : this.object.org_id}&protocol__in=rdp,vnc,ssh,telnet`,
+          url: (function(object) {
+            const oid = object.org_id === '' ? 'DEFAULT' : object.org_id
+            return `/api/v1/assets/system-users/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
+          }(this.object)),
           transformOption: (item) => {
-            return { label: item.name + '(' + item.username + ')', value: item.id }
+            const username = item.username || '*'
+            return { label: item.name + '(' + username + ')', value: item.id }
           }
         }
       }
@@ -112,15 +119,15 @@ export default {
         },
         {
           key: this.$t('tickets.user'),
-          value: this.object.applicant_display
+          value: this.object['applicant_display']
         },
         {
           key: this.$t('tickets.Assignees'),
-          value: this.object.assignees_display
+          value: this.object.assignees_display.join(', ')
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: (this.object.processor_display === 'No') ? '' : this.object.processor_display
+          value: (this.object['processor_display'] === 'No') ? '' : this.object.processor_display
         },
         {
           key: this.$t('tickets.OrgName'),
@@ -156,7 +163,7 @@ export default {
         },
         {
           key: this.$t('assets.Action'),
-          value: this.object.meta.apply_actions_display.toString()
+          value: this.object.meta['apply_actions_display'].toString()
         },
         {
           key: this.$t('common.dateStart'),
@@ -181,15 +188,15 @@ export default {
         },
         {
           key: this.$t('assets.Asset'),
-          value: this.object.meta.approve_assets_display.toString()
+          value: this.object.meta['approve_assets_display'].toString()
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.approve_system_users_display.toString()
+          value: this.object.meta['approve_system_users_display'].toString()
         },
         {
           key: this.$t('assets.Action'),
-          value: this.object.meta.approve_actions_display.toString()
+          value: this.object.meta['approve_actions_display'].toString()
         },
         {
           key: this.$t('common.dateStart'),
@@ -217,7 +224,7 @@ export default {
     },
     handleApprove() {
       if (this.requestForm.asset.length === 0 || this.requestForm.systemuser.length === 0) {
-        return this.$message.error(this.$t('common.NeedAssetsAndSystemUserErrMsg'))
+        return this.$message.error(this.$tc('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {
@@ -228,14 +235,12 @@ export default {
             approve_date_start: this.requestForm.apply_date_start,
             approve_date_expired: this.requestForm.apply_date_expired
           }
-        }).then(
-          () => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-            this.reloadPage()
-          }
-        ).catch(
-          () => this.$message.success(this.$t('common.updateErrorMsg'))
-        )
+        }).then(() => {
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
+          this.reloadPage()
+        }).catch(() => {
+          this.$message.success(this.$tc('common.updateErrorMsg'))
+        })
       }
     },
     handleClose() {

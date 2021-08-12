@@ -50,25 +50,13 @@ export default {
         }
         return `${url}?type=k8s`
       },
-      performSubmit(validValues) {
-        const params = this.$route.params
-        const baseUrl = `/api/v1/applications/applications/`
-        const url = (params.id) ? `${baseUrl}${params.id}/` : baseUrl
-        const method = this.getMethod()
-        validValues.category = 'cloud'
-        return this.$axios[method](`${url}?type=${validValues.type}`, validValues)
+      cleanFormValue(value) {
+        value.category = 'cloud'
+        return value
       }
     }
   },
   computed: {
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 </script>

@@ -23,7 +23,7 @@ export default {
   },
   rules(item) {
     const passwordRule = store.getters.publicSettings.PASSWORD_RULE
-    const validatePassword = (rule, value, callback) => {
+    const validatePassword = function(rule, value, callback) {
       if (!value) {
         return callback()
       }
@@ -46,7 +46,10 @@ export default {
           return callback(new Error(msg))
         }
       }
-      const secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
+      let secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
+      if (store.getters.currentUserIsAdmin) {
+        secureLength = passwordRule ? passwordRule.SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH : 7
+      }
       if (value.length < secureLength) {
         return callback(new Error(i18n.t('common.password.MIN_LENGTH_ERROR', [secureLength])))
       }
@@ -59,16 +62,11 @@ export default {
   data() {
     return {
       attrs: {
-        secureLength: 7
       }
     }
   },
   computed: {
     ...mapGetters(['publicSettings'])
-  },
-  created() {
-    const passwordRule = this.publicSettings.PASSWORD_RULE || {}
-    this.attrs.secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
   },
   methods: {
     handleInput(value) {

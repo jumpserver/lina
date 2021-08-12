@@ -1,6 +1,5 @@
-
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" :perform-submit="performSubmit" :after-get-form-value="afterGetFormValue" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -60,59 +59,40 @@ export default {
           }
         }
       },
-      url: '/api/v1/acls/login-asset-acls/'
+      url: '/api/v1/acls/login-asset-acls/',
+      afterGetFormValue(formValue) {
+        formValue.assets.ip_group = formValue.assets.ip_group.toString()
+        formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
+        formValue.system_users.name_group = formValue.system_users.name_group.toString()
+        formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
+        formValue.system_users.username_group = formValue.system_users.username_group.toString()
+        formValue.users.username_group = formValue.users.username_group.toString()
+        return formValue
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.assets.ip_group)) {
+          value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
+        }
+        if (!Array.isArray(value.assets.hostname_group)) {
+          value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.protocol_group)) {
+          value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.name_group)) {
+          value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.username_group)) {
+          value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
+        }
+        if (!Array.isArray(value.users.username_group)) {
+          value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
+        }
+        return value
+      }
     }
   },
   methods: {
-    getUrl() {
-      const params = this.$route.params
-      let url = `/api/v1/acls/login-asset-acls/`
-      if (params.id) {
-        url = `${url}${params.id}/`
-      } else {
-        url = `${url}`
-      }
-      return url
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    },
-    afterGetFormValue(validValues) {
-      validValues.assets.ip_group = validValues.assets.ip_group.toString()
-      validValues.assets.hostname_group = validValues.assets.hostname_group.toString()
-      validValues.system_users.name_group = validValues.system_users.name_group.toString()
-      validValues.system_users.protocol_group = validValues.system_users.protocol_group.toString()
-      validValues.system_users.username_group = validValues.system_users.username_group.toString()
-      validValues.users.username_group = validValues.users.username_group.toString()
-      return validValues
-    },
-    performSubmit(validValues) {
-      if (!Array.isArray(validValues.assets.ip_group)) {
-        validValues.assets.ip_group = validValues.assets.ip_group ? validValues.assets.ip_group.split(',') : []
-      }
-      if (!Array.isArray(validValues.assets.hostname_group)) {
-        validValues.assets.hostname_group = validValues.assets.hostname_group ? validValues.assets.hostname_group.split(',') : []
-      }
-      if (!Array.isArray(validValues.system_users.protocol_group)) {
-        validValues.system_users.protocol_group = validValues.system_users.protocol_group ? validValues.system_users.protocol_group.split(',') : []
-      }
-      if (!Array.isArray(validValues.system_users.name_group)) {
-        validValues.system_users.name_group = validValues.system_users.name_group ? validValues.system_users.name_group.split(',') : []
-      }
-      if (!Array.isArray(validValues.system_users.username_group)) {
-        validValues.system_users.username_group = validValues.system_users.username_group ? validValues.system_users.username_group.split(',') : []
-      }
-      if (!Array.isArray(validValues.users.username_group)) {
-        validValues.users.username_group = validValues.users.username_group ? validValues.users.username_group.split(',') : []
-      }
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    }
   }
 }
 </script>

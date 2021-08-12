@@ -12,8 +12,8 @@ RUN npm config set sass_binary_site=${SASS_BINARY_SITE}
 RUN npm config set registry ${NPM_REGISTRY}
 RUN yarn config set registry ${NPM_REGISTRY}
 COPY package.json yarn.lock /data/
-COPY utils /data/utils/
-RUN ls && cd utils && bash -xieu build.sh dep
+RUN yarn install
+RUN npm rebuild node-sass
 
 ADD . /data
 RUN cd utils && bash -xieu build.sh build

@@ -28,6 +28,7 @@
   },
   "applications": {
     "": "",
+    "updateAccountMsg": "Please update system user account info",
     "RemoteApp": "Remote app",
     "Database": "Database",
     "Cloud": "Cloud",
@@ -82,6 +83,7 @@
     "DBInfo": "Database Info"
   },
   "assets": {
+    "AssociateSystemUsers": "Associate system users",
     "AssociateAssets": "Associate assets",
     "AssociateNodes": "Associate nodes",
     "Action": "Action",
@@ -163,6 +165,7 @@
     "PublicIp": "Public ip",
     "Push": "Push",
     "PushSystemUserNow": "Push system user now",
+    "PushAllSystemUsersToAsset": "Push all system users to asset",
     "QuickUpdate": "Quick update",
     "Reachable": "Reachable",
     "Unreachable": "Unreachable",
@@ -186,6 +189,7 @@
     "SystemUsers": "System users",
     "Test": "Test",
     "TestAssetsConnective": "Test assets connective",
+    "TestAllSystemUsersConnective": "Test all system users connective",
     "TestConnection": "Test connection",
     "Type": "Type",
     "UnselectedAssets": "No asset selected or the selected asset does not support SSH protocol connection",
@@ -241,6 +245,9 @@
     "Add": "Add",
     "PleaseAgreeToTheTerms": "Please agree to the terms",
     "PushSelected":"Push selected",
+    "PushSelectedSystemUsersToAsset": "Push selected system users to asset",
+    "TestSelected": "Test selected",
+    "TestSelectedSystemUsersConnective": "Test selected system users connective",
     "UpdateAssetDetail": "Update more detail",
     "AddSuccessMsg": "Add success",
     "Auth": "Authorization",
@@ -1110,6 +1117,7 @@
       "Username": "Username"
     },
     "Cloud": {
+      "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
       "QingyunPrivatecloud": "Qingyun Private Cloud",

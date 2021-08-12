@@ -15,6 +15,7 @@ import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 import RunInfoCard from '../../RunInfoCard'
 import { toLastFailureDisplay, toLastSucessDisplay } from '../business'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'HistoryExecutionDetail',
@@ -77,7 +78,7 @@ export default {
           value: this.object.id,
           formatter: function(row, value) {
             const onClick = function() {
-              window.open(`/#/ops/task/task/${value}/log/?type=ansible`, '', 'width=900,height=600')
+              openTaskPage(value)
             }
             const title = this.$t('common.View')
             return <a onClick={onClick} >{ title }</a>

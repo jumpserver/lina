@@ -105,9 +105,12 @@ export default {
         }
       },
       headerActions: {
-        createRoute: {
-          name: 'AssetPermissionCreate',
-          query: this.$route.query
+        hasBulkDelete: true,
+        createRoute() {
+          return {
+            name: 'AssetPermissionCreate',
+            query: this.$route.query
+          }
         },
         searchConfig: {
           url: '',
@@ -160,7 +163,6 @@ export default {
             }
           ]
         },
-        hasBulkDelete: false,
         hasBulkUpdate: false,
         extraMoreActions: [
           {
