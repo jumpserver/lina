@@ -3,7 +3,7 @@
     <el-col :span="17">
       <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
       <Details v-if="specialCardItems.length > 0" :detail-card-items="specialCardItems" :title="$t('common.ApplyInfo')" />
-      <Details v-if="object.action === 'approve' && assignedCardItems.length > 0" :detail-card-items="assignedCardItems" :title="$t('tickets.AssignedInfo')" />
+      <Details v-if="object.state === 'approved' && assignedCardItems.length > 0" :detail-card-items="assignedCardItems" :title="$t('tickets.AssignedInfo')" />
       <slot id="MoreDetails" />
       <Comments :object="object" v-bind="$attrs" />
     </el-col>

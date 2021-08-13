@@ -95,7 +95,16 @@ export default {
       ]
     },
     assignedCardItems() {
+      const vm = this
       return [
+        {
+          key: this.$t('tickets.PermissionName'),
+          value: this.object.meta.apply_permission_name,
+          formatter: function(item, value) {
+            const to = { name: 'AssetPermissionDetail', params: { id: vm.object.id }}
+            return <router-link to={to}>{ value }</router-link>
+          }
+        },
         {
           key: this.$t('applications.appName'),
           value: this.object.meta['apply_applications_display']

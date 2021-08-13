@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
+      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.state],
       requestForm: {
         asset: this.object.meta.apply_assets,
         systemuser: this.object.meta.apply_system_users
@@ -40,7 +40,7 @@ export default {
       return [
         {
           key: this.$t('tickets.status'),
-          value: this.object.status,
+          value: this.object.state,
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
@@ -96,7 +96,7 @@ export default {
       return [
         {
           key: this.$t('tickets.PermissionName'),
-          value: this.object.meta.approve_permission_name,
+          value: this.object.meta.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'AssetPermissionDetail', params: { id: vm.object.id }}
             return <router-link to={to}>{ value }</router-link>

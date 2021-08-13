@@ -1,9 +1,9 @@
 import i18n from '@/i18n/i18n'
 
-export const OPEN = 'open'
-export const APPROVE = 'approve'
-export const REJECT = 'reject'
-export const OTHER = 'close'
+export const OPEN = 'notified'
+export const APPROVE = 'approved'
+export const REJECT = 'rejected'
+export const OTHER = 'closed'
 
 export const STATUS_MAP = {
   [OPEN]: {
