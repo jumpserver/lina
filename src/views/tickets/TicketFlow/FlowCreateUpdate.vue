@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import FlowRuleField from './FlowRuleField'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -13,9 +14,20 @@ export default {
       loading: true,
       fields: [
         [this.$t('common.Basic'), ['title', 'type']],
-        [this.$t('common.ApprovalLevel'), ['templated_approves']]
+        [this.$t('common.Approval'), ['approval_level', 'test']]
       ],
       fieldsMeta: {
+        test: {
+          label: '审批流程',
+          component: FlowRuleField,
+          el: {
+            level: 1
+          },
+          hidden: (form) => {
+            this.fieldsMeta.test.el.level = form['approval_level']
+            console.log('>>>>>>>>>>', form['approval_level'])
+          }
+        }
       },
       getUrl() {
         const params = this.$route.params
