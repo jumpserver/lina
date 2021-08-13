@@ -887,6 +887,8 @@
     "DingTalk": "DingTalk",
     "dingTalkTest": "Test",
     "weComTest": "Test",
+    "FeiShu": "FeiShu",
+    "feiShuTest": "Test",
     "setting": "Setting"
   },
 
@@ -967,6 +969,7 @@
     "DatePasswordLastUpdated": "Date password last updated",
     "setWeCom": "Set wecom login",
     "setDingTalk": "Set dingtalk login",
+    "setFeiShu": "Set feishu login",
     "DatePasswordUpdated": "Date password updated",
     "DescribeOfGuide": "Welcome to JumpServer. Click here for more information",
     "Email": "Email",

@@ -89,6 +89,21 @@ export default {
           }
         },
         {
+          title: this.$t('users.setFeiShu'),
+          attrs: {
+            type: 'primary',
+            label: this.$store.state.users.profile.is_feishu_bound ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.$store.state.users.profile.source !== 'local'
+          },
+          has: this.$store.getters.publicSettings.AUTH_FEISHU,
+          callbacks: {
+            click: function() {
+              this.currentEdit = 'feishu'
+              this.showPasswordDialog = true
+            }.bind(this)
+          }
+        },
+        {
           title: this.$t('users.SetMFA'),
           attrs: {
             type: 'primary',
