@@ -14,17 +14,17 @@ export default {
       loading: true,
       fields: [
         [this.$t('common.Basic'), ['title', 'type']],
-        [this.$t('common.Approval'), ['approval_level', 'test']]
+        [this.$t('common.Approval'), ['approval_level', 'rules']]
       ],
       fieldsMeta: {
-        test: {
+        rules: {
           label: '审批流程',
           component: FlowRuleField,
           el: {
             level: 1
           },
           hidden: (form) => {
-            this.fieldsMeta.test.el.level = form['approval_level']
+            this.fieldsMeta.rules.el.level = form['approval_level']
             console.log('>>>>>>>>>>', form['approval_level'])
           }
         }
@@ -36,6 +36,9 @@ export default {
           url = `${url}${params.id}/`
         }
         return `${url}?type=${this.$route.query.type}`
+      },
+      onSubmit(form) {
+        console.log('Form: ', form)
       }
     }
   },
