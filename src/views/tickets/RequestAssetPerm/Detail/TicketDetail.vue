@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
       requestForm: {
         asset: this.object.meta.apply_assets,
         systemuser: this.object.meta.apply_system_users
@@ -104,11 +104,11 @@ export default {
         },
         {
           key: this.$t('assets.Asset'),
-          value: this.object.meta['apply_assets']
+          value: this.object.meta['apply_assets_display']
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta['apply_system_users']
+          value: this.object.meta['apply_system_users_display']
         },
         {
           key: this.$t('assets.Action'),

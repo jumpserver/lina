@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
       requestForm: {
         name: this.object.meta.approve_permission_name,
         application: this.object.meta['apply_applications'],

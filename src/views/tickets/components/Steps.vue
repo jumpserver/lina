@@ -32,7 +32,7 @@
         <el-step
           :title="`${this.$t('tickets.FinishedTicket')}`"
         >
-          <div v-if="thisCopy.isFinish===1" slot="description">
+          <div v-if="thisCopy.isFinish" slot="description">
             <div>{{ `${this.$t('common.dateFinished')}:  ${toSafeLocalDateStr(object.date_updated)}` }}</div>
           </div>
         </el-step>
@@ -61,7 +61,7 @@ export default {
       process: this.object.process_map,
       thisCopy: this,
       statusMap: STATE_MAP,
-      isFinish: 0
+      isFinish: false
     }
   },
   computed: {
@@ -76,7 +76,7 @@ export default {
       })
       if (countApprove === process.length) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.isFinish = 1
+        this.isFinish = true
         return process.length + 2
       } else {
         return this.STATUS.open + countApprove
