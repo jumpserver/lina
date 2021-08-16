@@ -12,7 +12,6 @@ import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'RemoteAppDetail',
   components: {
     DetailCard
   },
