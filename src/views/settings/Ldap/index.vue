@@ -24,8 +24,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      object: {},
       dialogTest: false,
       dialogLdapUserImport: false,
       fields: [
@@ -122,7 +120,7 @@ export default {
     }
   },
   mounted() {
-    this.loading = false
+    // this.loading = false
   },
   methods: {
   }
