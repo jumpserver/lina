@@ -16,7 +16,7 @@ import RelationCard from '@/components/RelationCard'
 import { DeleteActionFormatter } from '@/components/TableFormatters'
 
 export default {
-  name: 'RemoteAppPermissionUser',
+  name: 'ApplicationsPermission',
   components: {
     ListTable,
     RelationCard

@@ -85,7 +85,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionUser'
+                activeTab: 'ApplicationPermissionUser'
               }
             }
           },
@@ -95,7 +95,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionUser'
+                activeTab: 'ApplicationPermissionUser'
               }
             }
           },
@@ -105,7 +105,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionRemoteApp'
+                activeTab: 'ApplicationsPermission'
               }
             }
           },
@@ -115,7 +115,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionRemoteApp'
+                activeTab: 'ApplicationsPermission'
               }
             }
           }

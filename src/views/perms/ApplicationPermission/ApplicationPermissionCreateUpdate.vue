@@ -1,5 +1,4 @@
 <template>
-
   <GenericCreateUpdatePage
     ref="createUpdatePage"
     :fields="fields"
@@ -7,7 +6,6 @@
     :fields-meta="fieldsMeta"
     :url="url"
   />
-
 </template>
 
 <script>
@@ -54,22 +52,10 @@ export default {
         },
         category: {
           type: 'select',
-          // options: [
-          //   {
-          //     label: this.$t(`applications.applicationsCategory.${this.$route.query.category}`),
-          //     value: this.$route.query.category
-          //   }
-          // ],
           disabled: true
         },
         type: {
           type: 'select',
-          // options: [
-          //   {
-          //     label: this.$t(`applications.applicationsType.${this.$route.query.type}`),
-          //     value: this.$route.query.type
-          //   }
-          // ],
           disabled: true
         },
         applications: {
@@ -88,8 +74,17 @@ export default {
           el: {
             value: [],
             ajax: {
-              // const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
               url: this.$route.query.category === 'remote_app' ? `/api/v1/assets/system-users/?protocol=rdp` : `/api/v1/assets/system-users/?protocol=${this.$route.query.type}`,
+              url2: (function() {
+                let url = '/api/v1/assets/system-users/'
+                const queryType = this.$router.query.type
+                if (this.$route.query.category === 'remote_app') {
+                  url += `?protocol=rdp`
+                } else if (queryType) {
+                  url += `?protocol=${queryType}`
+                }
+                return url
+              }()),
               transformOption: (item) => {
                 if (this.$route.query.type === 'k8s') {
                   return { label: item.name, value: item.id }
