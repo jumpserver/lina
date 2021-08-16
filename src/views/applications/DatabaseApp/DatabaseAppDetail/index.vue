@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :object.sync="DatabaseApp" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :object.sync="app" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="DatabaseApp" />
+      <component :is="config.activeMenu" :object="app" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      DatabaseApp: {
+      app: {
         name: '', get_type_display: '', host: '', port: '', database: '', date_created: '', created_by: '', comment: '', attrs: ''
       },
       config: {
@@ -31,7 +31,10 @@ export default {
         ],
         actions: {
           detailApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`
+          deleteApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
+          updateCallback: (item) => {
+            this.$router.push({ name: 'DatabaseAppUpdate', params: { id: this.app.id }, query: { type: this.app.type }})
+          }
         }
       }
     }
