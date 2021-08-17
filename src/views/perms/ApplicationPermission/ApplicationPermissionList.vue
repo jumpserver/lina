@@ -118,6 +118,25 @@ export default {
                 activeTab: 'ApplicationsPermission'
               }
             }
+          },
+          actions: {
+            formatterArgs: {
+              onUpdate: ({ row }) => {
+                const route = {
+                  name: 'ApplicationPermissionUpdate',
+                  params: { id: row.id },
+                  query: { type: row.type, category: row.category }
+                }
+                this.$router.push(route)
+              },
+              onClone: ({ row }) => {
+                const route = {
+                  name: 'ApplicationPermissionCreate',
+                  query: { type: row.type, category: row.category, clone_from: row.id }
+                }
+                this.$router.push(route)
+              }
+            }
           }
         }
       },
