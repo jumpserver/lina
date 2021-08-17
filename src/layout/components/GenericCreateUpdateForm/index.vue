@@ -226,6 +226,7 @@ export default {
       return this.getMethod(this)
     },
     iUrl() {
+      // 更新或创建的url
       return this.getUrl()
     },
     iHasSaveContinue() {
@@ -273,7 +274,7 @@ export default {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
-      if (!object) {
+      if (!object || Object.keys(object).length === 0) {
         if (cloneFrom) {
           this.$log.debug('Clone from: ', cloneFrom)
           const url = `${this.url}${cloneFrom}/`

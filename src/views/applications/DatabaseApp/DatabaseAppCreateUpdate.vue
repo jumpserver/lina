@@ -42,6 +42,7 @@ export default {
           }
         }
       },
+      url: '/api/v1/applications/applications/',
       getUrl() {
         const params = this.$route.params
         let url = `/api/v1/applications/applications/`

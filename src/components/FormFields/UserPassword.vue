@@ -22,6 +22,10 @@ export default {
     }
   },
   rules(item) {
+    let userIsOrgAdmin = item.el.userIsOrgAdmin
+    // undefined 个人信息更新或用户更改密码页面，使用当前用户；否则使用更新用户表单中传递的值
+    userIsOrgAdmin = userIsOrgAdmin === undefined ? store.getters.currentUserIsAdmin : userIsOrgAdmin
+
     const passwordRule = store.getters.publicSettings.PASSWORD_RULE
     const validatePassword = function(rule, value, callback) {
       if (!value) {
@@ -47,7 +51,7 @@ export default {
         }
       }
       let secureLength = passwordRule ? passwordRule.SECURITY_PASSWORD_MIN_LENGTH : 7
-      if (store.getters.currentUserIsAdmin) {
+      if (userIsOrgAdmin) {
         secureLength = passwordRule ? passwordRule.SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH : 7
       }
       if (value.length < secureLength) {

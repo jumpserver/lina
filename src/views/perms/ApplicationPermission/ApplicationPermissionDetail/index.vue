@@ -8,13 +8,13 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
-import ApplicationPermissionRemoteApp from './ApplicationsPermission'
+import ApplicationsPermission from './ApplicationsPermission'
 import ApplicationPermissionDetail from './AppliactionPermissionDetail'
 import ApplicationPermissionUser from './ApplicationPermissionUser'
 
 export default {
   components: {
-    ApplicationPermissionRemoteApp,
+    ApplicationsPermission,
     ApplicationPermissionDetail,
     ApplicationPermissionUser,
     GenericDetailPage,
@@ -36,7 +36,7 @@ export default {
           },
           {
             title: this.$t('perms.appsList'),
-            name: 'ApplicationPermissionRemoteApp'
+            name: 'ApplicationsPermission'
           }
         ],
         actions: {
