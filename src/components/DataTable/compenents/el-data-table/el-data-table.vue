@@ -840,7 +840,7 @@ export default {
       this.$emit('selection-change', val)
     },
     totalData(val) {
-      if (val) {
+      if (val && val.length !== this.total) {
         this.page = defaultFirstPage
         this.total = val.length
         this.getList()
