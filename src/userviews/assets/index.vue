@@ -24,7 +24,7 @@ export default {
           refresh: () => {},
           onSelected: function(event, treeNode) {
             if (treeNode.meta.type === 'node') {
-              const currentNodeId = treeNode.meta.node.id
+              const currentNodeId = treeNode.meta.data.id
               this.tableConfig.url = `/api/v1/perms/users/nodes/${currentNodeId}/assets/?cache_policy=1`
             }
           }.bind(this)

@@ -33,11 +33,11 @@ export default {
           onSelected: function(event, treeNode) {
             let url = '/api/v1/assets/accounts/'
             if (treeNode.meta.type === 'node') {
-              const nodeId = treeNode.meta.node.id
+              const nodeId = treeNode.meta.data.id
               url = setUrlParam(url, 'asset', '')
               url = setUrlParam(url, 'node', nodeId)
             } else if (treeNode.meta.type === 'asset') {
-              const assetId = treeNode.meta.asset.id
+              const assetId = treeNode.meta.data.id
               url = setUrlParam(url, 'node', '')
               url = setUrlParam(url, 'asset', assetId)
             }
