@@ -2,6 +2,7 @@
   <el-select
     ref="select"
     v-model="iValue"
+    v-loading="!initialized"
     v-loadmore="loadMore"
     :options="iOptions"
     :remote="remote"
@@ -97,7 +98,7 @@ export default {
     return {
       loading: false,
       initialized: false,
-      iValue: this.value ? this.value : [],
+      iValue: this.multiple ? [] : '',
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
@@ -161,11 +162,14 @@ export default {
       this.iValue = iNew
     }
   },
-  mounted() {
+  async mounted() {
     // this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
-      this.initialSelect()
-      this.initialized = true
+      await this.initialSelect()
+      setTimeout(() => {
+        this.initialized = true
+        this.iValue = this.value
+      })
     }
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
@@ -243,9 +247,13 @@ export default {
       // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
         if (this.value && this.value.length !== 0) {
-          this.$log.debug('Start init select2 value')
-          const data = await createSourceIdCache(this.value)
-          this.params.spm = data.spm
+          this.$log.debug('Start init select2 value, ', this.value)
+          let value = this.value
+          if (!Array.isArray(value)) {
+            value = [value]
+          }
+          const data = await createSourceIdCache(value)
+          this.params.spm = data['spm']
           await this.getInitialOptions()
         }
         await this.getOptions()
