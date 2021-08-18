@@ -420,7 +420,7 @@ export default {
         return
       }
       this.$axios.post(
-        `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
+        `/api/v1/assets/nodes/${currentNode.meta.data.id}/tasks/`,
         { 'action': 'refresh' }
       ).then((res) => {
         openTaskPage(res['task'])
@@ -435,7 +435,7 @@ export default {
         return
       }
       this.$axios.post(
-        `/api/v1/assets/nodes/${currentNode.meta.node.id}/tasks/`,
+        `/api/v1/assets/nodes/${currentNode.meta.data.id}/tasks/`,
         { 'action': 'test' }
       ).then((res) => {
         openTaskPage(res['task'])
@@ -451,7 +451,7 @@ export default {
       }
       this.$cookie.set('show_current_asset', '1', 1)
       this.decorateRMenu()
-      const url = `${this.treeSetting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=1`
+      const url = `${this.treeSetting.url}?node_id=${currentNode.meta.data.id}&show_current_asset=1`
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
     },
     rMenuShowAssetAllChildrenNode: function() {
@@ -462,7 +462,7 @@ export default {
       }
       this.$cookie.set('show_current_asset', '0', 1)
       this.decorateRMenu()
-      const url = `${this.treeSetting.url}?node_id=${currentNode.meta.node.id}&show_current_asset=0`
+      const url = `${this.treeSetting.url}?node_id=${currentNode.meta.data.id}&show_current_asset=0`
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
     },
     rMenuShowNodeInfo: function() {
@@ -472,7 +472,7 @@ export default {
         return
       }
       this.$axios.get(
-        `/api/v1/assets/nodes/${currentNode.meta.node.id}/`
+        `/api/v1/assets/nodes/${currentNode.meta.data.id}/`
       ).then(res => {
         this.nodeInfoDialogSetting.dialogVisible = true
         this.nodeInfoDialogSetting.items = [
@@ -512,9 +512,9 @@ export default {
       if (!currentNode || assetsSelected.length === 0) {
         return
       }
-      let url = `/api/v1/assets/nodes/${currentNode.meta.node.id}/assets/add/`
+      let url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/add/`
       if (this.assetTreeTableDialogSetting.action === 'move') {
-        url = `/api/v1/assets/nodes/${currentNode.meta.node.id}/assets/replace/`
+        url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/replace/`
       }
       this.$axios.put(
         url, { assets: assetsSelected }
