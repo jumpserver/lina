@@ -175,8 +175,12 @@ export default {
     },
     defaultUpdate() {
       const id = this.$route.params.id
-      const routeName = this.validActions.updateRoute
-      this.$router.push({ name: routeName, params: { id: id }})
+      let route = this.validActions.updateRoute
+      if (typeof route === 'string') {
+        route = { name: route, params: {}}
+      }
+      route.params.id = id
+      this.$router.push(route)
     },
     getObject() {
       const url = this.validActions.detailApiUrl

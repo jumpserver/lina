@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :object.sync="RemoteAppPermission" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
+  <GenericDetailPage :object.sync="app" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners" @tab-click="TabClick">
     <keep-alive>
-      <component :is="config.activeMenu" :object="RemoteAppPermission" />
+      <component :is="config.activeMenu" :object="app" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      RemoteAppPermission: {},
+      app: { type: '', category: '', id: '' },
       config: {
         activeMenu: 'ApplicationPermissionDetail',
         submenu: [
@@ -41,7 +41,20 @@ export default {
         ],
         actions: {
           detailApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`
+          deleteApiUrl: `/api/v1/perms/application-permissions/${this.$route.params.id}/`,
+          updateCallback: () => {
+            const route = {
+              name: 'ApplicationPermissionUpdate',
+              query: {
+                type: this.app.type,
+                category: this.app.category
+              },
+              params: {
+                id: this.app.id
+              }
+            }
+            this.$router.push(route)
+          }
         }
       }
     }
