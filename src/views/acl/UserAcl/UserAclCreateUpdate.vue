@@ -37,7 +37,18 @@ export default {
           }
         }
       },
-      url: `/api/v1/acls/login-acls/`,
+      getUrl() {
+        const query = this.$route.query
+        const params = this.$route.params
+        let url = `/api/v1/acls/login-acls/`
+        if (params.id) {
+          url = `${url}${params.id}/`
+        }
+        if (query.user) {
+          url = `${url}?user=${query.user}`
+        }
+        return url
+      },
       updateSuccessNextRoute: { name: 'UserDetail', params: {
         id: this.$route.query.user
       }},
@@ -69,7 +80,6 @@ export default {
         if (!Array.isArray(value.ip_group)) {
           value.ip_group = value.ip_group ? value.ip_group.split(',') : []
         }
-        console.log('>>>>>>>>: ', value)
         return value
       }
     }

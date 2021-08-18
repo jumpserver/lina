@@ -27,7 +27,7 @@ export default {
           vm.tableConfig.initialUrl = vm.tableConfig.url
         }
         const initialUrl = vm.tableConfig.initialUrl
-        const nodeId = node.meta.node.id
+        const nodeId = node.meta.data.id
         const url = initialUrl.replace('/assets/', `/nodes/${nodeId}/assets/`)
         vm.tableConfig.url = url
       }

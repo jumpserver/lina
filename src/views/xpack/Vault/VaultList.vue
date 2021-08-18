@@ -62,11 +62,11 @@ export default {
           onSelected: function(event, treeNode) {
             let url = vm.assetUserConfig.url
             if (treeNode.meta.type === 'node') {
-              const nodeId = treeNode.meta.node.id
+              const nodeId = treeNode.meta.data.id
               url = setUrlParam(url, 'asset_id', '')
               url = setUrlParam(url, 'node_id', nodeId)
             } else if (treeNode.meta.type === 'asset') {
-              const assetId = treeNode.meta.asset.id
+              const assetId = treeNode.meta.data.id
               url = setUrlParam(url, 'node_id', '')
               url = setUrlParam(url, 'asset_id', assetId)
             }
