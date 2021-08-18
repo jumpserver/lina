@@ -33,7 +33,7 @@
     <SelectDialog
       v-if="dialogVisible"
       :visible.sync="dialogVisible"
-      title="修改消息接受人"
+      :title="$t('notifications.ChangeReceiver')"
       :selected-users="dialogSelectedUsers"
       @submit="onDialogSelectSubmit"
       @cancel="dialogVisible=false"

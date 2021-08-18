@@ -15,6 +15,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { krryPaging } from 'krry-transfer'
+import { getUserList } from '@/api/users'
 export default {
   name: 'ListSelect',
   components: {
@@ -39,8 +40,27 @@ export default {
         getPageData: async function(pageIndex, pageSize) {
           const limit = pageSize
           const offset = (pageIndex - 1) * pageSize
-          const url = `/api/v1/users/users/?limit=${limit}&offset=${offset}&oid=ROOT`
-          const data = await this.$axios.get(url)
+          const params = {
+            'limit': limit,
+            'offset': offset,
+            'oid': 'ROOT'
+          }
+          const data = await getUserList(params)
+          const results = data['results'].map(item => {
+            return { id: item.id, label: `${item.name}(${item.username})` }
+          })
+          return results
+        },
+        getSearchData: async function(keyword, pageIndex, pageSize) {
+          const limit = pageSize
+          const offset = (pageIndex - 1) * pageSize
+          const params = {
+            'limit': limit,
+            'offset': offset,
+            'oid': 'ROOT',
+            'search': keyword
+          }
+          const data = await getUserList(params)
           const results = data['results'].map(item => {
             return { id: item.id, label: `${item.name}(${item.username})` }
           })
