@@ -57,7 +57,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute({ row }) {
-                switch (row['app_category']) {
+                switch (row['category']) {
                   case 'remote_app':
                     return {
                       name: 'RemoteAppDetail',
