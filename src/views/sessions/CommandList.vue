@@ -175,7 +175,7 @@ export default {
               this.$message.error(this.$t('sessions.EsDisabled'))
               return
             }
-            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}`
+            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
           }
         }
       }
