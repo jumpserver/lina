@@ -50,6 +50,9 @@ export default {
       this.$log.debug('Header actions', this.headerActions)
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
+    },
+    tableUrl() {
+      return this.iTableConfig.url
     }
   },
   watch: {
