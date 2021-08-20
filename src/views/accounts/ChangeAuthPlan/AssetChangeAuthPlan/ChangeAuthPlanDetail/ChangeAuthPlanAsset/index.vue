@@ -103,7 +103,7 @@ export default {
         disabled: this.$store.getters.currentOrgIsRoot,
         hasObjectsId: this.object.nodes,
         performAdd: (items, that) => {
-          const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/`
+          const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/nodes/?action=add`
           const nodes = items.map(v => v.value)
           const iHasObjects = that.iHasObjects.map(v => v.value)
           const data = {
@@ -118,13 +118,10 @@ export default {
           this.$refs.listTable.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
-          const nodes = this.object.nodes
-          const deleteNode = item.value
-          nodes.splice(nodes.indexOf(deleteNode), 1)
           const data = {
-            nodes: nodes
+            nodes: [item.value]
           }
-          const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/`
+          const relationUrl = `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/nodes/?action=remove`
           return this.$axios.patch(relationUrl, data)
         },
         onDeleteSuccess: (obj, that) => {

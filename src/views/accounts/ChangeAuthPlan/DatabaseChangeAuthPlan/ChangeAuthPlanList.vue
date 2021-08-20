@@ -1,41 +1,41 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'ChangeAuthPlanList',
+  name: 'DatabaseChangeAuthPlanList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/xpack/change-auth-plan/plan/',
+        url: '/api/v1/xpack/change-auth-plan/database-plan/',
         columns: [
-          'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
+          'name', 'database', 'systemuser_display', 'password_strategy_display',
           'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'username', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
+          default: ['name', 'systemuser_display', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
         },
         columnsMeta: {
-          username: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'DatabaseChangeAuthPlanDetail'
+            }
+          },
+          systemuser_display: {
+            label: vm.$t('xpack.ChangeAuthPlan.SystemUser'),
+            width: '300px',
             showOverflowTooltip: true
-          },
-          assets_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
-            width: '80px'
-          },
-          nodes_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.NodeAmount'),
-            width: '80px'
           },
           password_strategy_display: {
             label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
@@ -52,9 +52,9 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeAuthPlanDetail',
+              route: 'DatabaseChangeAuthPlanDetail',
               routeQuery: {
-                activeTab: 'ChangeAuthPlanExecutionList'
+                activeTab: 'DatabaseChangeAuthPlanExecutionList'
               }
             }
           },
@@ -64,6 +64,12 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'DatabaseChangeAuthPlanCreate', query: { clone_from: row.id }})
+              },
+              onUpdate: ({ row }) => {
+                vm.$router.push({ name: 'DatabaseChangeAuthPlanUpdate', params: { id: row.id }})
+              },
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),
@@ -71,7 +77,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/xpack/change-auth-plan/plan-execution/`,
+                      `/api/v1/xpack/change-auth-plan/database-plan-execution/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])
@@ -87,7 +93,12 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false
+        hasMoreActions: false,
+        createRoute: () => {
+          return {
+            name: 'DatabaseChangeAuthPlanCreate'
+          }
+        }
       }
     }
   }
