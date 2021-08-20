@@ -236,7 +236,7 @@ export default {
           name: data['value'],
           pId: parentNode.id,
           meta: {
-            'node': data
+            data: data
           }
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
