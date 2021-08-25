@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -48,11 +48,11 @@ export default {
         },
         {
           key: this.$t('tickets.Assignees'),
-          value: this.object.assignees_display
+          value: this.object.process_map[this.object.approval_step - 1].assignees_display.join(',')
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: this.object.processor_display
+          value: this.object.process_map[this.object.approval_step - 1].processor_display
         },
         {
           key: this.$t('common.dateCreated'),

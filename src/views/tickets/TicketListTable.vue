@@ -80,10 +80,10 @@ export default {
               if (row.status === 'open') {
                 return <el-tag type='success' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Pending') }</el-tag>
               }
-              switch (row.action) {
-                case 'approve':
+              switch (row.state) {
+                case 'approved':
                   return <el-tag type='primary' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Approved') }</el-tag>
-                case 'reject':
+                case 'rejected':
                   return <el-tag type='danger' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Rejected') }</el-tag>
                 default :
                   return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>

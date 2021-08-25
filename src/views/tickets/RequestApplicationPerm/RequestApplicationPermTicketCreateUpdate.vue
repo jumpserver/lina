@@ -10,7 +10,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
-import { DEFAULT_ORG_ID } from '@/utils/org'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 export default {
@@ -37,7 +36,7 @@ export default {
 
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
+        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
         [this.$t('tickets.RequestPerm'), ['meta']]
       ],
       fieldsMeta: {
@@ -48,7 +47,9 @@ export default {
           }
         },
         meta: {
-          fields: ['apply_category_type', 'apply_application_group', 'apply_system_user_group', 'apply_date_start', 'apply_date_expired'],
+          fields: [
+            'apply_category_type', 'apply_applications', 'apply_system_users',
+            'apply_date_start', 'apply_date_expired'],
           fieldsMeta: {
             apply_date_start: {
               label: this.$t('common.DateStart'),
@@ -57,11 +58,37 @@ export default {
                 type: 'datetime'
               }
             },
-            apply_application_group: {
-              helpText: this.$t('tickets.helpText.application')
+            apply_applications: {
+              type: 'assetSelect',
+              component: Select2,
+              label: this.$t('perms.Asset'),
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    return { label: item.name + ' (' + item.type_display + ')', value: item.id }
+                  }
+                }
+              }
             },
-            apply_system_user_group: {
-              helpText: this.$t('tickets.helpText.fuzzySearch')
+            apply_system_users: {
+              type: 'systemUserSelect',
+              component: Select2,
+              label: '系统用户',
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    if (this.$route.query.type === 'k8s') {
+                      return { label: item.name, value: item.id }
+                    }
+                    const username = item.username || '*'
+                    return { label: item.name + '(' + username + ')', value: item.id }
+                  }
+                }
+              }
             },
             apply_date_expired: {
               label: this.$t('common.DateEnd'),
@@ -131,6 +158,12 @@ export default {
                     ]
                   }
                 ]
+              },
+              on: {
+                change: ([event], updateForm) => {
+                  this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/?category=${event[0]}&type=${event[1]}`
+                  this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/?protocol=rdp` : `/api/v1/assets/system-users/?protocol=${event[1]}`
+                }
               }
             }
           }
@@ -146,18 +179,6 @@ export default {
           on: {
             changeOptions: ([event], updateForm) => {
               this.fieldsMeta.assignees.el.ajax.url = `/api/v1/tickets/assignees/?org_id=${event[0].value}`
-            }
-          }
-        },
-        assignees: {
-          el: {
-            multiple: true,
-            value: [],
-            ajax: {
-              url: `/api/v1/tickets/assignees/?org_id=${DEFAULT_ORG_ID}`,
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
             }
           }
         }
@@ -179,12 +200,6 @@ export default {
       validValues.meta.apply_category = validValues.meta.apply_category_type[0]
       validValues.meta.apply_type = validValues.meta.apply_category_type[1]
       delete validValues.meta['apply_category_type']
-      if (validValues.meta.apply_application_group) {
-        validValues.meta.apply_application_group = validValues.meta.apply_application_group.split(',')
-      }
-      if (validValues.meta.apply_system_user_group) {
-        validValues.meta.apply_system_user_group = validValues.meta.apply_system_user_group.split(',')
-      }
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }
   }
