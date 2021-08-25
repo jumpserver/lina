@@ -12,6 +12,7 @@
         <template v-for="item in submenu">
           <el-tab-pane :key="item.name" :label-content="item.labelContent" :name="item.name" :disabled="item.disabled">
             <span slot="label">
+              <i v-if="item.icon" class="fa " :class="item.icon" />
               {{ item.title }}
               <slot name="badge" :tab="item.name" />
             </span>
