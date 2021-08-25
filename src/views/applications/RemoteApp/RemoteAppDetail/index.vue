@@ -1,7 +1,7 @@
 <template>
-  <GenericDetailPage :object.sync="RemoteApp" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :object.sync="app" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="RemoteApp" />
+      <component :is="config.activeMenu" :object="app" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -17,9 +17,8 @@ export default {
     TabPage
   },
   data() {
-    const vm = this
     return {
-      RemoteApp: {
+      app: {
         name: '', asset: '', get_type_display: '', path: '', date_created: '', created_by: '', comment: '', attrs: ''
       },
       config: {
@@ -33,8 +32,8 @@ export default {
         actions: {
           detailApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
           deleteApiUrl: `/api/v1/applications/applications/${this.$route.params.id}/`,
-          updateCallback: function(item) {
-            vm.$router.push({ name: 'RemoteAppUpdate', params: { id: vm.RemoteApp.id }, query: { type: vm.RemoteApp.type }})
+          updateCallback: (item) => {
+            this.$router.push({ name: 'RemoteAppUpdate', params: { id: this.app.id }, query: { type: this.app.type }})
           }
         }
       }

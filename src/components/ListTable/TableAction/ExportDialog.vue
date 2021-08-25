@@ -60,8 +60,8 @@ export default {
     },
     performExport: {
       type: Function,
-      default(selectedRows, exportOptions, query) {
-        return this.defaultPerformExport(selectedRows, exportOptions, query)
+      default(selectedRows, exportOptions, query, exportType) {
+        return this.defaultPerformExport(selectedRows, exportOptions, query, exportType)
       }
     },
     canExportAll: {
@@ -143,7 +143,7 @@ export default {
   mounted() {
     this.$eventBus.$on('showExportDialog', ({ selectedRows, url, name }) => {
       // Todo: 没有时间了，只能先这么处理了
-      if (url === this.url || url.indexOf('account') > -1) {
+      if (url === this.url || url.indexOf(this.url) > -1 || url.indexOf('account') > -1) {
         this.showExportDialog()
       }
     })
@@ -167,7 +167,7 @@ export default {
       a.click()
       window.URL.revokeObjectURL(url)
     },
-    async defaultPerformExport(selectRows, exportOption, q) {
+    async defaultPerformExport(selectRows, exportOption, q, exportTypeOption) {
       const url = (process.env.VUE_APP_ENV === 'production') ? (`${this.url}`) : (`${process.env.VUE_APP_BASE_API}${this.url}`)
       const query = Object.assign({}, q)
       if (exportOption === 'selected') {
@@ -179,7 +179,7 @@ export default {
         const spm = await createSourceIdCache(resources)
         query['spm'] = spm.spm
       }
-      query['format'] = this.exportTypeOption
+      query['format'] = exportTypeOption
       const queryStr =
           (url.indexOf('?') > -1 ? '&' : '?') +
           queryUtil.stringify(query, '=', '&')
@@ -187,11 +187,11 @@ export default {
     },
     async handleExport() {
       const listTableRef = this.$parent.$parent.$parent.$parent
-      const query = listTableRef.dataTable.getQuery()
+      const query = listTableRef['dataTable'].getQuery()
       delete query['limit']
       delete query['offset']
       await this.beforeExport()
-      return this.performExport(this.selectedRows, this.exportOption, query)
+      return this.performExport(this.selectedRows, this.exportOption, query, this.exportTypeOption)
     },
     async handleExportConfirm() {
       await this.handleExport()

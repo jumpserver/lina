@@ -77,9 +77,9 @@ export default {
     }
   },
   methods: {
-    handleUrlChange(_url) {
-      this.$set(this.iTableConfig, 'url', _url)
-      this.$emit('urlChange', _url)
+    handleUrlChange(url) {
+      this.$set(this.iTableConfig, 'url', url)
+      this.$emit('urlChange', url)
       this.forceRerender()
     },
     forceRerender() {
