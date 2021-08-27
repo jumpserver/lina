@@ -7,13 +7,13 @@
           <span>{{ i + 1 + '级审批' }}</span>
         </div>
         <el-radio-group v-model="item.strategy" @change="onChange()">
-          <el-radio label="super">超级管理员</el-radio>
-          <el-radio label="admin">组织用户</el-radio>
-          <el-radio label="super_admin">超级管理员+组织用户</el-radio>
-          <el-radio label="custom">自定义</el-radio>
+          <el-radio label="super_admin">超级管理员</el-radio>
+          <el-radio label="org_admin">组织管理员</el-radio>
+          <el-radio label="super_org_admin">超级管理员+组织管理员</el-radio>
+          <el-radio label="custom_user">自定义用户</el-radio>
         </el-radio-group>
         <br>
-        <Select2 v-show="item.strategy === 'custom'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
+        <Select2 v-show="item.strategy === 'custom_user'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
       </el-card>
     </div>
   </div>
@@ -42,11 +42,11 @@ export default {
       data: [],
       initData: [
         {
-          strategy: 'super',
+          strategy: 'super_admin',
           assignees_read_only: []
         },
         {
-          strategy: 'super',
+          strategy: 'super_admin',
           assignees_read_only: []
         }
       ],
