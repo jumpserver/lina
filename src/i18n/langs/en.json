@@ -1122,11 +1122,13 @@
       "Username": "Username"
     },
     "Cloud": {
+      "ServerAccountKey": "Server Account Key",
       "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
       "QingyunPrivatecloud": "Qingyun Private Cloud",
       "HuaweiPrivatecloud": "Huawei Private Cloud",
+      "GCP": "Google Cloud Platform",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",
       "HuaweiCloud": "Huawei Cloud",

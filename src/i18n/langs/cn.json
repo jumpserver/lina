@@ -1145,11 +1145,13 @@
       "Username": "用户名"
     },
     "Cloud": {
+      "ServerAccountKey": "服务账号密钥",
       "IPNetworkSegment": "IP网段",
       "Aliyun": "阿里云",
       "Qcloud": "腾讯云",
       "QingyunPrivatecloud": "青云私有云",
       "HuaweiPrivatecloud": "华为私有云",
+      "GCP": "谷歌云",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",
       "HuaweiCloud": "华为云",
