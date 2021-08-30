@@ -134,6 +134,23 @@ export default {
           value.ip_network_segment_group = value.ip_network_segment_group ? value.ip_network_segment_group.split(',') : []
         }
         return value
+      },
+      onPerformError(error, method, vm) {
+        this.$emit('submitError', error)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          for (const key of Object.keys(data)) {
+            let value = data[key]
+            if (key === 'protocols') {
+              value = Object.values(data[key])
+            }
+            if (value instanceof Array) {
+              value = value.join(';')
+            }
+            this.$refs.form.setFieldError(key, value)
+          }
+        }
       }
     }
   },

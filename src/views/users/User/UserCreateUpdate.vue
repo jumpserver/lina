@@ -61,7 +61,8 @@ export default {
             return !formValue.update_password
           },
           el: {
-            required: false
+            required: false,
+            userIsOrgAdmin: false
           }
         },
         need_update_password: {
@@ -165,6 +166,7 @@ export default {
   methods: {
     afterGetUser(user) {
       this.user = user
+      this.fieldsMeta.password.el.userIsOrgAdmin = user.role === 'Admin' || user.org_roles.indexOf('Admin') !== -1
       if (this.$route.query.clone_from) {
         this.user.groups = []
       }

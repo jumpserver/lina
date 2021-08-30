@@ -38,7 +38,7 @@ export default {
             value: [],
             ajax: {
               transformOption: (item) => {
-                return { label: item.full_value, value: item.id }
+                return { label: item['full_value'], value: item.id }
               },
               url: '/api/v1/assets/nodes/'
             }

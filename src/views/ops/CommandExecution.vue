@@ -142,7 +142,7 @@ export default {
     },
     onClick(event, treeId, treeNode, clickFlag) {
       // if (treeNode.meta.type === 'asset') {
-      //   const protocolsStr = treeNode.meta.asset.protocols + ''
+      //   const protocolsStr = treeNode.meta.data.protocols + ''
       //   if (protocolsStr.indexOf('ssh/') === -1) {
       //     // Don't Support SSH
       //   }
@@ -162,7 +162,7 @@ export default {
       const assetsNode = []
       nodes.forEach(function(node) {
         if (node.meta.type === 'asset' && !node.isHidden) {
-          const protocolsStr = node.meta.asset.protocols + ''
+          const protocolsStr = node.meta.data.protocols + ''
           if (assetsNodeId.indexOf(node.id) === -1 && protocolsStr.indexOf('ssh') > -1) {
             assetsNodeId.push(node.id)
             assetsNode.push(node)

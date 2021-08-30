@@ -21,6 +21,7 @@ import { DetailFormatter } from '@/components/TableFormatters'
 import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
 import deepmerge from 'deepmerge'
 import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
+import { createSourceIdCache } from '@/api/common'
 
 export default {
   components: {
@@ -66,7 +67,7 @@ export default {
             label: this.$t('sessions.riskLevel'),
             width: '105px',
             formatter: (row, col, cellValue) => {
-              const display = row.risk_level_display
+              const display = row['risk_level_display']
               if (cellValue === 0) {
                 return display
               } else {
@@ -117,6 +118,33 @@ export default {
         hasImport: false,
         hasDatePicker: true,
         canExportSelected: true,
+        exportOptions: {
+          // Todo: 优化这里，和抽象组件重复了
+          performExport: async(selectRows, exportOption, q, exportTypeOption) => {
+            let url = this.tableConfig.url
+            url = (process.env.VUE_APP_ENV === 'production') ? (`${url}`) : (`${process.env.VUE_APP_BASE_API}${url}`)
+            const query = Object.assign({}, q)
+            if (exportOption === 'selected') {
+              const resources = []
+              const data = selectRows
+              for (let index = 0; index < data.length; index++) {
+                resources.push(data[index].id)
+              }
+              const spm = await createSourceIdCache(resources)
+              query['spm'] = spm.spm
+            }
+            query['format'] = exportTypeOption
+            const queryStr =
+              (url.indexOf('?') > -1 ? '&' : '?') +
+              queryUtil.stringify(query, '=', '&')
+            url = url + queryStr
+            this.$log.debug('Export url: ', this.url, '=>', url)
+            const a = document.createElement('a')
+            a.href = url
+            a.click()
+            window.URL.revokeObjectURL(url + queryStr)
+          }
+        },
         datePicker: {
           dateStart: dateFrom,
           dateEnd: dateTo
@@ -138,7 +166,7 @@ export default {
           }
         },
         callback: {
-          onSelected: function(event, treeNode) {
+          onSelected: (event, treeNode) => {
             // 禁止点击根节点
             if (treeNode.id === 'root') {
               return
@@ -147,8 +175,8 @@ export default {
               this.$message.error(this.$t('sessions.EsDisabled'))
               return
             }
-            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}`
-          }.bind(this)
+            this.tableConfig.url = `/api/v1/terminal/commands/?command_storage_id=${treeNode.id}&order=-timestamp`
+          }
         }
       }
     }
