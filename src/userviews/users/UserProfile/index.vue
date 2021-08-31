@@ -12,6 +12,7 @@ import ProfileInfo from './ProfileInfo'
 import ProfileUpdate from './ProfileUpdate'
 import PasswordUpdate from './PasswordUpdate'
 import SSHUpdate from './SSHUpdate'
+import MessageSubscription from './MessageSubscription'
 
 export default {
   components: {
@@ -19,7 +20,8 @@ export default {
     ProfileInfo,
     ProfileUpdate,
     PasswordUpdate,
-    SSHUpdate
+    SSHUpdate,
+    MessageSubscription
   },
   data() {
     return {
@@ -55,6 +57,10 @@ export default {
           title: this.$t('users.SSHKeySetting'),
           name: 'SSHUpdate',
           disabled: !this.$store.state.users.profile.can_public_key_auth
+        },
+        {
+          title: this.$t('users.MessageSubscription'),
+          name: 'MessageSubscription'
         }
       ]
     },
