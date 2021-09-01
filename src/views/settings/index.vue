@@ -22,6 +22,7 @@ import License from './License'
 import WeCom from './WeCom'
 import DingTalk from './DingTalk'
 import FeiShu from './FeiShu.vue'
+import Senior from './Senior.vue'
 import SystemMessageSubscription from './SystemMessageSubscription/Subscription'
 
 export default {
@@ -39,6 +40,7 @@ export default {
     WeCom,
     DingTalk,
     FeiShu,
+    Senior,
     SystemMessageSubscription
   },
   data() {
@@ -90,6 +92,10 @@ export default {
         {
           title: this.$t('setting.License'),
           name: 'License'
+        },
+        {
+          title: this.$t('setting.Senior'),
+          name: 'Senior'
         }
       ]
     }
