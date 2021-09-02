@@ -8,21 +8,21 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import DatabaseChangeAuthPlanExecutionInfo from './ChangeAuthPlanExecutionInfo'
-import DatabaseChangeAuthPlanExecutionTaskList from './ChangeAuthPlanExecutionTaskList'
+import AppChangeAuthPlanExecutionInfo from './ChangeAuthPlanExecutionInfo'
+import AppChangeAuthPlanExecutionTaskList from './ChangeAuthPlanExecutionTaskList'
 
 export default {
-  name: 'DatabaseChangeAuthPlanExecutionDetail',
+  name: 'AppChangeAuthPlanExecutionDetail',
   components: {
     GenericDetailPage,
-    DatabaseChangeAuthPlanExecutionInfo,
-    DatabaseChangeAuthPlanExecutionTaskList
+    AppChangeAuthPlanExecutionInfo,
+    AppChangeAuthPlanExecutionTaskList
   },
   data() {
     return {
       execution: { id: '' },
       config: {
-        activeMenu: 'DatabaseChangeAuthPlanExecutionInfo',
+        activeMenu: 'AppChangeAuthPlanExecutionInfo',
         actions: {
           hasUpdate: false,
           hasDelete: false
@@ -30,11 +30,11 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'DatabaseChangeAuthPlanExecutionInfo'
+            name: 'AppChangeAuthPlanExecutionInfo'
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.TaskList'),
-            name: 'DatabaseChangeAuthPlanExecutionTaskList'
+            name: 'AppChangeAuthPlanExecutionTaskList'
           }
         ],
         getTitle: this.getExecutionTitle

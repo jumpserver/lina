@@ -14,7 +14,7 @@ import { DetailCard, QuickActions } from '@/components'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'DatabaseChangeAuthPlanInfo',
+  name: 'AppChangeAuthPlanInfo',
   components: {
     DetailCard,
     QuickActions

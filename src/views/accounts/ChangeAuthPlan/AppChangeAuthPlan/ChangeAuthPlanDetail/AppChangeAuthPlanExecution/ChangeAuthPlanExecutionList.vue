@@ -6,7 +6,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'DatabaseChangeAuthPlanExecutionList',
+  name: 'AppChangeAuthPlanExecutionList',
   components: {
     GenericListTable
   },
@@ -92,7 +92,7 @@ export default {
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'DatabaseChangeAuthPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AppChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]

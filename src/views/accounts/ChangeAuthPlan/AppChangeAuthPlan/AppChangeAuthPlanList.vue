@@ -6,9 +6,10 @@
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import { DATABASE } from '@/views/perms/const'
 
 export default {
-  name: 'DatabaseChangeAuthPlanList',
+  name: 'AppChangeAuthPlanList',
   components: {
     GenericListTable
   },
@@ -16,20 +17,20 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/xpack/change-auth-plan/database-plan/',
+        url: '/api/v1/xpack/change-auth-plan/app-plan/',
         columns: [
-          'name', 'database', 'systemuser_display', 'password_strategy_display',
+          'name', 'password_strategy_display',
           'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'systemuser_display', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
+          default: ['name', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
         },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'DatabaseChangeAuthPlanDetail'
+              route: 'AppChangeAuthPlanDetail'
             }
           },
           systemuser_display: {
@@ -52,9 +53,9 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'DatabaseChangeAuthPlanDetail',
+              route: 'AppChangeAuthPlanDetail',
               routeQuery: {
-                activeTab: 'DatabaseChangeAuthPlanExecutionList'
+                activeTab: 'AppChangeAuthPlanExecutionList'
               }
             }
           },
@@ -65,10 +66,15 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'DatabaseChangeAuthPlanCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'AppChangeAuthPlanCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'DatabaseChangeAuthPlanUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'AppChangeAuthPlanUpdate', params: { id: row.id },
+                  query: {
+                    category: row.category.toLowerCase(),
+                    type: row.type.toLowerCase()
+                  }
+                })
               },
               extraActions: [
                 {
@@ -77,7 +83,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/xpack/change-auth-plan/database-plan-execution/`,
+                      `/api/v1/xpack/change-auth-plan/app-plan-execution/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])
@@ -94,10 +100,14 @@ export default {
         hasExport: false,
         hasImport: false,
         hasMoreActions: false,
-        createRoute: () => {
-          return {
-            name: 'DatabaseChangeAuthPlanCreate'
-          }
+        moreCreates: {
+          callback: (option) => {
+            vm.$router.push({ name: 'AppChangeAuthPlanCreate', query: {
+              category: option.category.toLowerCase(),
+              type: option.name.toLowerCase()
+            }})
+          },
+          dropdown: DATABASE
         }
       }
     }

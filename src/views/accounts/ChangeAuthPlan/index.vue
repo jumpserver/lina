@@ -9,13 +9,13 @@
 <script>
 import { TabPage } from '@/layout/components'
 import AssetChangeAuthPlanList from './AssetChangeAuthPlan/ChangeAuthPlanList'
-import DatabaseChangeAuthPlanList from './DatabaseChangeAuthPlan/ChangeAuthPlanList'
+import AppChangeAuthPlanList from './AppChangeAuthPlan/AppChangeAuthPlanList'
 export default {
   name: 'Index',
   components: {
     TabPage,
     AssetChangeAuthPlanList,
-    DatabaseChangeAuthPlanList
+    AppChangeAuthPlanList
   },
   data() {
     return {
@@ -27,8 +27,8 @@ export default {
             name: 'AssetChangeAuthPlanList'
           },
           {
-            title: this.$t('xpack.ChangeAuthPlan.DatabaseChangeAuthPlan'),
-            name: 'DatabaseChangeAuthPlanList'
+            title: this.$t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
+            name: 'AppChangeAuthPlanList'
           }
         ]
       }

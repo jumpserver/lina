@@ -6,7 +6,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'DatabaseChangeAuthPlanExecutionTaskList',
+  name: 'AppChangeAuthPlanExecutionTaskList',
   components: {
     GenericListTable
   },

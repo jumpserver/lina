@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/xpack/change-auth-plan/database-plan/${this.object.id}/systemusers/`,
+        url: `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/system_users/`,
         columns: [
           'name', 'username', 'delete_action'
         ],

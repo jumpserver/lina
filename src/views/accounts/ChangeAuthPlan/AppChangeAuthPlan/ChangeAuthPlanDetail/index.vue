@@ -8,27 +8,27 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ChangeAuthPlanDatabase from './ChangeAuthPlanDatabase/index'
-import DatabaseChangeAuthPlanInfo from './ChangeAuthPlanInfo'
-import DatabaseChangeAuthPlanExecutionList from './ChangeAuthPlanExecution/ChangeAuthPlanExecutionList'
+import ChangeAuthPlanDatabase from './ChangeAuthPlanApp/index'
+import AppChangeAuthPlanInfo from './AppChangeAuthPlanInfo'
+import AppChangeAuthPlanExecutionList from './AppChangeAuthPlanExecution/ChangeAuthPlanExecutionList'
 
 export default {
-  name: 'DatabaseChangeAuthPlanDetail',
+  name: 'AppChangeAuthPlanDetail',
   components: {
     GenericDetailPage,
     ChangeAuthPlanDatabase,
-    DatabaseChangeAuthPlanInfo,
-    DatabaseChangeAuthPlanExecutionList
+    AppChangeAuthPlanInfo,
+    AppChangeAuthPlanExecutionList
   },
   data() {
     return {
       plan: { name: '', comment: '' },
       config: {
-        activeMenu: 'DatabaseChangeAuthPlanInfo',
+        activeMenu: 'AppChangeAuthPlanInfo',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'DatabaseChangeAuthPlanInfo'
+            name: 'AppChangeAuthPlanInfo'
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.SystemUser'),
@@ -36,7 +36,7 @@ export default {
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'DatabaseChangeAuthPlanExecutionList'
+            name: 'AppChangeAuthPlanExecutionList'
           }
         ]
       }
