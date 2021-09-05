@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/xpack/change-auth-plan/database-plan-execution-subtask/?plan_execution_id=${this.object.id}`,
+        url: `/api/v1/xpack/change-auth-plan/app-plan-execution-subtask/?plan_execution_id=${this.object.id}`,
         columns: [
           'database', 'systemuser_display', 'is_success', 'reason', 'timedelta', 'date_start', 'actions'
         ],

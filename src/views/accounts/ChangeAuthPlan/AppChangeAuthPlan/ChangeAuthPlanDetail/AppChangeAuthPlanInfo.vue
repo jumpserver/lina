@@ -38,7 +38,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/xpack/change-auth-plan/database-plan-execution/`,
+                `/api/v1/xpack/change-auth-plan/app-plan-execution/`,
                 { plan: this.object.id }
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')

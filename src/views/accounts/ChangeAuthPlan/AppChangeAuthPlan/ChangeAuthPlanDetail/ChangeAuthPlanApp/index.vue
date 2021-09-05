@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/system_users/`,
+        url: `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/systemusers/`,
         columns: [
           'name', 'username', 'delete_action'
         ],
@@ -43,7 +43,7 @@ export default {
             formatter: DeleteActionFormatter,
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.patch(
-                `/api/v1/xpack/change-auth-plan/database-plan/${this.object.id}/systemusers/?action=remove`,
+                `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/systemusers/?action=remove`,
                 { systemuser: [row.id] }
               ).then(res => {
                 this.$message.success(this.$t('common.deleteSuccessMsg'))
@@ -72,7 +72,7 @@ export default {
         icon: 'fa-edit',
         title: this.$t('xpack.ChangeAuthPlan.AddSystemUser'),
         objectsAjax: {
-          url: `/api/v1/assets/system-users/?protocol=${this.object.protocol}`,
+          url: `/api/v1/assets/system-users/?protocol=${this.object.type}`,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
@@ -80,7 +80,7 @@ export default {
         hasObjectsId: this.object.systemuser,
         showHasObjects: false,
         performAdd: (items, that) => {
-          const relationUrl = `/api/v1/xpack/change-auth-plan/database-plan/${this.object.id}/systemusers/?action=add`
+          const relationUrl = `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/systemusers/?action=add`
           const systemusers = items.map(v => v.value)
           const iHasObjects = that.iHasObjects.map(v => v.value)
           const data = {

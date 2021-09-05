@@ -124,35 +124,35 @@ export default [
         hidden: true
       },
       {
-        path: 'apps-plan',
+        path: 'app-plan',
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue'),
         name: 'AppChangeAuthPlanList',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' },
         hidden: true
       },
       {
-        path: 'apps-plan/create',
+        path: 'app-plan/create',
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
         name: 'AppChangeAuthPlanCreate',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'), activeMenu: '/accounts/change-auth-plan', action: 'create' },
         hidden: true
       },
       {
-        path: 'apps-plan/:id',
+        path: 'app-plan/:id',
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
         name: 'AppChangeAuthPlanDetail',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' },
         hidden: true
       },
       {
-        path: 'apps-plan/:id/update',
+        path: 'app-plan/:id/update',
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
         name: 'AppChangeAuthPlanUpdate',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanUpdate'), activeMenu: '/accounts/change-auth-plan', action: 'update' },
         hidden: true
       },
       {
-        path: 'apps-plan-execution/:id',
+        path: 'app-plan-execution/:id',
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/AppChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
         name: 'AppChangeAuthPlanExecutionDetail',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/accounts/change-auth-plan' },

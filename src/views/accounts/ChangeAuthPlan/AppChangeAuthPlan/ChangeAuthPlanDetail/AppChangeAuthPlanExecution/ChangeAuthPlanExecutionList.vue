@@ -20,30 +20,30 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/xpack/change-auth-plan/database-plan-execution/?plan_id=${this.object.id}`,
+        url: `/api/v1/xpack/change-auth-plan/app-plan-execution/?plan_id=${this.object.id}`,
         columns: [
-          'database_name', 'database_id', 'systemusers', 'systemuser_ids', 'result_summary',
-          'password_strategy_display', 'timedelta', 'trigger_display', 'date_start', 'actions'
+          'username', 'result_summary', 'password_strategy_display', 'timedelta', 'trigger_display',
+          'apps_amount', 'system_users_amount', 'date_start', 'actions'
         ],
         columnsShow: {
-          min: ['database_name', 'actions'],
+          min: ['actions'],
           default: [
-            'database_name', 'systemusers', 'result_summary', 'password_strategy_display',
-            'timedelta', 'trigger_display', 'date_start', 'actions'
+            'username', 'password_strategy_display',
+            'timedelta', 'trigger_display', 'date_start', 'actions', 'result_summary'
           ]
         },
         columnsMeta: {
-          database_name: {
-            label: this.$t('xpack.ChangeAuthPlan.Database')
+          username: {
+            label: this.$t('xpack.ChangeAuthPlan.Username')
           },
-          database_id: {
-            label: this.$t('xpack.ChangeAuthPlan.DatabaseId')
+          apps_amount: {
+            label: this.$t('xpack.ChangeAuthPlan.AppAmount')
+          },
+          system_users_amount: {
+            label: this.$t('xpack.ChangeAuthPlan.SystemUserAmount')
           },
           systemusers: {
             label: this.$t('xpack.ChangeAuthPlan.SystemUser')
-          },
-          systemuser_ids: {
-            label: this.$t('xpack.ChangeAuthPlan.SystemUserId')
           },
           result_summary: {
             label: this.$t('xpack.ChangeAuthPlan.Result'),

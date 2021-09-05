@@ -1094,6 +1094,8 @@
       "Asset": "资产",
       "Database": "数据库",
       "DatabaseId": "数据库Id",
+      "AppAmount": "应用数量",
+      "SystemUserAmount": "系统用户数量",
       "SystemUser": "系统用户",
       "SystemUserId": "系统用户Id",
       "AssetAmount": "资产数量",

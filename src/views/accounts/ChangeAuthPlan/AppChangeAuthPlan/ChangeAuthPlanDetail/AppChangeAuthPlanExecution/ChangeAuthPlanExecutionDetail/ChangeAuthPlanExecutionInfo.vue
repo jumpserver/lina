@@ -30,11 +30,19 @@ export default {
       return [
         {
           key: this.$t('xpack.ChangeAuthPlan.Database'),
-          value: this.object.database_name
+          value: this.object.apps_display.join(', ')
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.SystemUser'),
-          value: this.object.systemusers.join(', ')
+          value: this.object.system_users_display.join(', ')
+        },
+        {
+          key: this.$t('xpack.ChangeAuthPlan.AppAmount'),
+          value: this.object.apps_amount
+        },
+        {
+          key: this.$t('xpack.ChangeAuthPlan.SystemUserAmount'),
+          value: this.object.system_users_amount
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
