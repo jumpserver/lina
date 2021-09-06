@@ -22,20 +22,20 @@ export default {
       tableConfig: {
         url: `/api/v1/xpack/change-auth-plan/app-plan-execution-subtask/?plan_execution_id=${this.object.id}`,
         columns: [
-          'database', 'systemuser_display', 'is_success', 'reason', 'timedelta', 'date_start', 'actions'
+          'app_display', 'system_user_display', 'is_success', 'reason', 'timedelta', 'date_start', 'actions'
         ],
         columnsMeta: {
-          database: {
+          app_display: {
             label: this.$t('xpack.ChangeAuthPlan.Database'),
             formatter: function(row, column, cellValue, index) {
               const to = {
                 name: 'DatabaseAppDetail',
-                params: { id: row.database_info.id }
+                params: { id: row.app }
               }
-              return <router-link to={ to } >{ row.database_info.name }</router-link>
+              return <router-link to={ to } >{ row.app_display }</router-link>
             }
           },
-          systemuser_display: {
+          system_user_display: {
             label: this.$t('xpack.ChangeAuthPlan.SystemUser')
           },
           is_success: {
@@ -60,7 +60,7 @@ export default {
                   title: this.$t('xpack.ChangeAuthPlan.Retry'),
                   callback: function({ row, tableData }) {
                     this.$axios.put(
-                      `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${row.id}/`,
+                      `/api/v1/xpack/change-auth-plan/app-plan-execution-subtask/${row.id}/`,
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                     })
