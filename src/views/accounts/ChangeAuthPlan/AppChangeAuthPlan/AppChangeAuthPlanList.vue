@@ -66,10 +66,19 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'AppChangeAuthPlanCreate', query: { clone_from: row.id }})
+                vm.$router.push({
+                  name: 'AppChangeAuthPlanCreate',
+                  query: {
+                    clone_from: row.id,
+                    category: row.category.toLowerCase(),
+                    type: row.type.toLowerCase()
+                  }
+                })
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AppChangeAuthPlanUpdate', params: { id: row.id },
+                vm.$router.push({
+                  name: 'AppChangeAuthPlanUpdate',
+                  params: { id: row.id },
                   query: {
                     category: row.category.toLowerCase(),
                     type: row.type.toLowerCase()
