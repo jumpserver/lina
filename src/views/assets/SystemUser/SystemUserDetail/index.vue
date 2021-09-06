@@ -11,13 +11,18 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import AssetList from './AssetList.vue'
 import AccountList from './AccountList.vue'
+import AppList from './AppList'
+import AppAccountList from './AppAccountList'
+
 export default {
   components: {
     GenericDetailPage,
     TabPage,
     Detail,
     AssetList,
-    AccountList
+    AccountList,
+    AppList,
+    AppAccountList
   },
   data() {
     const vm = this
@@ -32,11 +37,31 @@ export default {
           },
           {
             title: this.$t('assets.AssetList'),
-            name: 'AssetList'
+            name: 'AssetList',
+            hidden: () => {
+              return !vm.systemUser['is_asset_protocol']
+            }
           },
           {
             title: this.$t('assets.AccountList'),
-            name: 'AccountList'
+            name: 'AccountList',
+            hidden: () => {
+              return !vm.systemUser['is_asset_protocol']
+            }
+          },
+          {
+            title: this.$t('assets.AppList'),
+            name: 'AppList',
+            hidden: () => {
+              return vm.systemUser['is_asset_protocol']
+            }
+          },
+          {
+            title: this.$t('assets.AccountList'),
+            name: 'AppAccountList',
+            hidden: () => {
+              return vm.systemUser['is_asset_protocol']
+            }
           }
         ],
         hasRightSide: true,

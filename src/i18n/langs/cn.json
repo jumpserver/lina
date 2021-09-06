@@ -30,9 +30,11 @@
   "applications": {
     "": "",
     "updateAccountMsg": "请更新系统用户的账号信息",
+    "associateApplication": "关联应用",
     "RemoteApp": "远程应用",
     "Database": "数据库",
     "Cloud": "云",
+    "App": "应用",
     "applicationsType": {
       "chrome": "Chrome",
       "mysql_workbench": "MySQL Workbench",
@@ -84,6 +86,7 @@
     "DBInfo": "数据库信息"
   },
   "assets": {
+    "AppList": "应用列表",
     "AssociateSystemUsers": "关联系统用户",
     "AssociateAssets": "关联资产",
     "AssociateNodes": "关联节点",
@@ -1102,11 +1105,11 @@
       "AssetAndNode": "资产和节点",
       "ChangeAuthPlan": "改密计划",
       "AssetChangeAuthPlan": "资产改密计划",
-      "DatabaseChangeAuthPlan": "数据库改密计划",
+      "AppChangeAuthPlan": "应用改密计划",
       "AssetChangeAuthPlanCreate": "创建资产改密计划",
-      "AppChangeAuthPlanCreate": "创建数据库改密计划",
+      "AppChangeAuthPlanCreate": "创建应用改密计划",
       "AssetChangeAuthPlanUpdate": "更新资产改密计划",
-      "AppChangeAuthPlanUpdate": "更新数据库改密计划",
+      "AppChangeAuthPlanUpdate": "更新应用改密计划",
       "SymbolSet": "特殊符号集合",
       "SymbolSetHelpText": "请输入此类型数据库支持的特殊符号集合，若生成的随机密码中有此类数据库不支持的特殊字符，改密计划将会失败",
       "CyclePerform": "周期执行",
