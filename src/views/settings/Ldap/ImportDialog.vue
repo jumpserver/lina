@@ -56,6 +56,17 @@ export default {
                 StartLdapUserCache()
               })
             }.bind(this)
+          },
+          {
+            name: 'setting',
+            title: this.$t('setting.syncSetting'),
+            type: 'default',
+            callback: function() {
+              refreshLdapUserCache().then(res => {
+                this.$message.success(this.$t('setting.refreshLdapCache'))
+                StartLdapUserCache()
+              })
+            }.bind(this)
           }
         ]
       },

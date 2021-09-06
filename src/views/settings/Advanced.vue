@@ -16,14 +16,15 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/settings/setting/?category=senior',
+      url: '/api/v1/settings/setting/?category=advanced',
       hasDetailInMsg: false,
       fields: [
         [
           this.$t('setting.Ldap'),
           [
             'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE',
-            'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL', 'AUTH_LDAP_USER_LOGIN_ONLY_IN_USERS'
+            'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL',
+            'AUTH_LDAP_USER_LOGIN_ONLY_IN_USERS'
           ]
         ],
         [

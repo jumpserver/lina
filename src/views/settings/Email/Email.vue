@@ -8,6 +8,7 @@
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testEmailSetting } from '@/api/settings'
 import { IBox } from '@/components'
+import EmailContent from './EmailContent'
 import rules from '@/components/DataForm/rules'
 
 export default {
@@ -40,6 +41,12 @@ export default {
           ]
         ],
         [
+          this.$t('setting.EmailContent'),
+          [
+            'CREATE_USER_MSG'
+          ]
+        ],
+        [
           this.$t('common.Other'),
           [
             'EMAIL_RECIPIENT'
@@ -62,6 +69,10 @@ export default {
           rules: [
             rules.EmailCheck
           ]
+        },
+        CREATE_USER_MSG: {
+          label: '创建用户内容',
+          component: EmailContent
         }
       },
       hasDetailInMsg: false,

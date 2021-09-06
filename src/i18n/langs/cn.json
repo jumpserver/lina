@@ -230,6 +230,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "BasicInfo": "基本信息",
     "DateUpdated": "更新日期",
     "ApprovaLevel": "审批信息",
     "MFAVerify": "验证 MFA",
@@ -767,6 +768,7 @@
     }
   },
   "setting": {
+    "Advanced": "高级设置",
     "InsecureCommandNotifyToSubscription": "危险命令通知已升级到消息订阅中，支持更多通知方式",
     "ApiKeyList": "API Key 列表",
     "AssetCount": "资产数量",
@@ -867,7 +869,7 @@
     "import": "导入",
     "importLdapUserTip": "请先提交LDAP配置再进行导入",
     "importLdapUserTitle": "LDAP 用户列表",
-    "ldapBulkImport": "一键导入",
+    "ldapBulkImport": "用户导入",
     "ldapConnectTest": "测试连接",
     "ldapLoginTest": "测试登录",
     "password": "密码",

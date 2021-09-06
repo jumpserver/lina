@@ -13,8 +13,7 @@ import TabPage from '@/layout/components/TabPage'
 import AutoDataForm from '@/components/AutoDataForm'
 import IBox from '@/components/IBox'
 import Basic from './Basic'
-import Email from './Email'
-import EmailContent from './EmailContent'
+import { Email } from './Email/index'
 import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
@@ -22,7 +21,7 @@ import License from './License'
 import WeCom from './WeCom'
 import DingTalk from './DingTalk'
 import FeiShu from './FeiShu.vue'
-import Senior from './Senior.vue'
+import Advanced from './Advanced.vue'
 import SystemMessageSubscription from './SystemMessageSubscription/Subscription'
 
 export default {
@@ -32,7 +31,6 @@ export default {
     AutoDataForm,
     Basic,
     Email,
-    EmailContent,
     Ldap,
     Terminal,
     Security,
@@ -40,7 +38,7 @@ export default {
     WeCom,
     DingTalk,
     FeiShu,
-    Senior,
+    Advanced,
     SystemMessageSubscription
   },
   data() {
@@ -56,10 +54,6 @@ export default {
         {
           title: this.$t('setting.Email'),
           name: 'Email'
-        },
-        {
-          title: this.$t('setting.EmailContent'),
-          name: 'EmailContent'
         },
         {
           title: this.$t('setting.Ldap'),
@@ -94,8 +88,8 @@ export default {
           name: 'License'
         },
         {
-          title: this.$t('setting.Senior'),
-          name: 'Senior'
+          title: this.$t('setting.Advanced'),
+          name: 'Advanced'
         }
       ]
     }
