@@ -228,6 +228,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Params": "Params",
     "MFAVerify": "Verify MFA",
     "ViewSecret": "View secret",
     "ConnectWebSocketError": "Connect Websocket failed",
@@ -751,6 +752,9 @@
     }
   },
   "setting": {
+    "CASSetting": "CAS setting",
+    "Auth": "Auth",
+    "SyncSetting": "Sync setting",
     "Advanced": "Advanced",
     "InsecureCommandNotifyToSubscription": "Insecure command notification setting, change to system message subscription, support more notify method",
     "ApiKeyList": "Api key list",

@@ -63,7 +63,7 @@ export default {
           helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
         }
       },
-      getMethod() {
+      submitMethod() {
         return 'put'
       }
     }

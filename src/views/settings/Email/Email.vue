@@ -123,7 +123,7 @@ export default {
         )
         return data
       },
-      getMethod() {
+      submitMethod() {
         return 'put'
       }
     }

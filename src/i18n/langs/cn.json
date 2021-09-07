@@ -230,6 +230,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "Params": "参数",
     "BasicInfo": "基本信息",
     "DateUpdated": "更新日期",
     "ApprovaLevel": "审批信息",
@@ -768,6 +769,9 @@
     }
   },
   "setting": {
+    "CASSetting": "CAS 配置",
+    "Auth": "统一认证",
+    "SyncSetting": "同步设置",
     "Advanced": "高级设置",
     "InsecureCommandNotifyToSubscription": "危险命令通知已升级到消息订阅中，支持更多通知方式",
     "ApiKeyList": "API Key 列表",

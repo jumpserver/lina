@@ -4,7 +4,7 @@
       :fields="fields"
       :url="url"
       :fields-meta="fieldsMeta"
-      :get-method="getMethod"
+      :submit-method="submitMethod"
       :has-detail-in-msg="false"
     />
   </IBox>
@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    getMethod() {
+    submitMethod() {
       return 'put'
     }
   }

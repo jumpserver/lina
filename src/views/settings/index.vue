@@ -14,6 +14,7 @@ import AutoDataForm from '@/components/AutoDataForm'
 import IBox from '@/components/IBox'
 import Basic from './Basic'
 import { Email } from './Email/index'
+import Auth from './Auth'
 import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
@@ -32,6 +33,7 @@ export default {
     Basic,
     Email,
     Ldap,
+    Auth,
     Terminal,
     Security,
     License,
@@ -58,6 +60,10 @@ export default {
         {
           title: this.$t('setting.Ldap'),
           name: 'Ldap'
+        },
+        {
+          title: this.$t('setting.Auth'),
+          name: 'Auth'
         },
         {
           title: this.$t('setting.WeCom'),

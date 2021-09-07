@@ -45,7 +45,7 @@ export default {
       fieldsMeta: {
       },
       hasDetailInMsg: false,
-      getMethod() {
+      submitMethod() {
         return 'put'
       },
       // 不清理的话，编辑secret，在删除提交会报错
