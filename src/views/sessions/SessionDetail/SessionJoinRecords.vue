@@ -22,7 +22,7 @@ export default {
         url: `/api/v1/terminal/session-join-records/?session=${this.object.id}`,
         columns: [
           'joiner_display', 'verify_code', 'is_success', 'reason', 'is_finished',
-          'sharing', 'session', 'org_name', 'date_joined', 'date_left'
+          'date_joined', 'date_left', 'org_name'
         ],
         columnsShow: {
           min: ['joiner_display', 'is_success', 'reason'],
