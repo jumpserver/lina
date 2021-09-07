@@ -1,0 +1,52 @@
+<template>
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+</template>
+
+<script>
+import ListTable from '@/components/ListTable'
+
+export default {
+  name: 'SessionJoinRecords',
+  components: {
+    ListTable
+  },
+  props: {
+    object: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      tableConfig: {
+        url: `/api/v1/terminal/session-join-records/?session=${this.object.id}`,
+        columns: [
+          'joiner_display', 'verify_code', 'is_success', 'reason', 'is_finished',
+          'sharing', 'session', 'org_name', 'date_joined', 'date_left'
+        ],
+        columnsShow: {
+          min: ['joiner_display', 'is_success', 'reason'],
+          default: [
+            'joiner_display', 'verify_code', 'is_success', 'reason', 'is_finished', 'date_joined', 'date_left'
+          ]
+        },
+        columnsMeta: {
+          'sharing': {
+          }
+        }
+      },
+      headerActions: {
+        hasImport: false,
+        hasLeftActions: false,
+        searchConfig: {
+          exclude: ['session', 'date_joined', 'date_left']
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
