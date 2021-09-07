@@ -752,7 +752,10 @@
     }
   },
   "setting": {
+    "MessageSub": "Message subscription",
+    "Cleaning": "Period clean",
     "CASSetting": "CAS setting",
+    "Other": "More...",
     "Auth": "Auth",
     "SyncSetting": "Sync setting",
     "Advanced": "Advanced",

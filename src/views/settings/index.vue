@@ -19,11 +19,9 @@ import Ldap from './Ldap'
 import Terminal from './Terminal'
 import Security from './Security'
 import License from './License'
-import WeCom from './WeCom'
-import DingTalk from './DingTalk'
-import FeiShu from './FeiShu.vue'
-import Advanced from './Advanced.vue'
-import SystemMessageSubscription from './SystemMessageSubscription/Subscription'
+import Other from './Other.vue'
+import Clean from './Clean'
+import SysMessageSub from './SystemMessageSubscription/Subscription'
 
 export default {
   components: {
@@ -37,11 +35,9 @@ export default {
     Terminal,
     Security,
     License,
-    WeCom,
-    DingTalk,
-    FeiShu,
-    Advanced,
-    SystemMessageSubscription
+    Other,
+    SysMessageSub,
+    Clean
   },
   data() {
     return {
@@ -66,20 +62,8 @@ export default {
           name: 'Auth'
         },
         {
-          title: this.$t('setting.WeCom'),
-          name: 'WeCom'
-        },
-        {
-          title: this.$t('setting.DingTalk'),
-          name: 'DingTalk'
-        },
-        {
-          title: this.$t('setting.FeiShu'),
-          name: 'FeiShu'
-        },
-        {
-          title: this.$t('setting.SystemMessageSubscription'),
-          name: 'SystemMessageSubscription'
+          title: this.$t('setting.MessageSub'),
+          name: 'SysMessageSub'
         },
         {
           title: this.$t('setting.Terminal'),
@@ -90,12 +74,16 @@ export default {
           name: 'Security'
         },
         {
-          title: this.$t('setting.License'),
-          name: 'License'
+          title: this.$t('setting.Cleaning'),
+          name: 'Clean'
         },
         {
-          title: this.$t('setting.Advanced'),
-          name: 'Advanced'
+          title: this.$t('setting.Other'),
+          name: 'Other'
+        },
+        {
+          title: this.$t('setting.License'),
+          name: 'License'
         }
       ]
     }
@@ -111,38 +99,6 @@ export default {
   mounted() {
   },
   methods: {
-    initial() {
-      const params = this.$route.params
-      switch (params.activeMenu) {
-        case 'Basic':
-          this.activeMenu = 'Basic'
-          break
-        case 'Email':
-          this.activeMenu = 'Email'
-          break
-        case 'EmailContent':
-          this.activeMenu = 'EmailContent'
-          break
-        case 'Ldap':
-          this.activeMenu = 'Ldap'
-          break
-        case 'Terminal':
-          this.activeMenu = 'Terminal'
-          break
-        case 'Security':
-          this.activeMenu = 'Security'
-          break
-        case 'License':
-          this.activeMenu = 'License'
-          break
-        case 'SystemMessageSubscription':
-          this.activeMenu = 'SystemMessageSubscription'
-          break
-        default:
-          this.activeMenu = 'Basic'
-          break
-      }
-    }
   }
 }
 </script>

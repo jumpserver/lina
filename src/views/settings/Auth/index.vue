@@ -10,6 +10,9 @@ import IBox from '@/components/IBox'
 import CAS from './CAS'
 import OIDC from './OIDC'
 import Radius from './Radius'
+import DingTalk from './DingTalk'
+import FeiShu from './FeiShu'
+import WeCom from './WeCom'
 
 export default {
   name: 'Auth',
@@ -26,6 +29,9 @@ export default {
           '集中认证', ['AUTH_CAS', 'AUTH_OPENID']
         ],
         [
+          'APP 认证', ['AUTH_WECOM', 'AUTH_DINGTALK', 'AUTH_FEISHU']
+        ],
+        [
           '其它认证', ['AUTH_RADIUS']
         ]
       ],
@@ -38,6 +44,15 @@ export default {
         },
         AUTH_RADIUS: {
           component: Radius
+        },
+        AUTH_WECOM: {
+          component: WeCom
+        },
+        AUTH_DINGTALK: {
+          component: DingTalk
+        },
+        AUTH_FEISHU: {
+          component: FeiShu
         }
       },
       submitMethod() {

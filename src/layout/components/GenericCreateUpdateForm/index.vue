@@ -142,7 +142,7 @@ export default {
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
-        let msgLinkName = this.$tc('common.Resource')
+        let msgLinkName = ''
         if (res.name) {
           msgLinkName = res.name
         } else if (res.hostname) {

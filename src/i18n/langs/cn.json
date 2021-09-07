@@ -769,6 +769,9 @@
     }
   },
   "setting": {
+    "MessageSub": "消息订阅",
+    "Cleaning": "定期清理",
+    "Other": "其它设置",
     "CASSetting": "CAS 配置",
     "Auth": "统一认证",
     "SyncSetting": "同步设置",
@@ -786,7 +789,7 @@
     "Hostname": "主机名",
     "ImportLicense": "导入许可证",
     "ImportLicenseTip": "请导入许可证",
-    "Ldap": "LDAP设置",
+    "Ldap": "LDAP",
     "License": "许可证",
     "Senior": "高级",
     "LicenseFile": "许可证文件",

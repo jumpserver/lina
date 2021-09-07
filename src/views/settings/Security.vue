@@ -57,7 +57,7 @@ export default {
           helpText: this.$t('setting.InsecureCommandNotifyToSubscription'),
           label: this.$t('common.Receivers'),
           el: {
-            href: '/ui/#/settings?activeTab=SystemMessageSubscription',
+            href: '/ui/#/settings?activeTab=SysMessageSub',
             title: this.$t('setting.insecureCommandEmailUpdate')
           }
         }
