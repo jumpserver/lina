@@ -22,6 +22,7 @@ import License from './License'
 import Other from './Other.vue'
 import Clean from './Clean'
 import SysMessageSub from './MessageSub/Subscription'
+import SMS from './SMS'
 
 export default {
   components: {
@@ -37,7 +38,8 @@ export default {
     License,
     Other,
     SysMessageSub,
-    Clean
+    Clean,
+    SMS
   },
   data() {
     return {
@@ -64,6 +66,10 @@ export default {
         {
           title: this.$t('setting.MessageSub'),
           name: 'SysMessageSub'
+        },
+        {
+          title: this.$t('setting.SMS'),
+          name: 'SMS'
         },
         {
           title: this.$t('setting.Terminal'),

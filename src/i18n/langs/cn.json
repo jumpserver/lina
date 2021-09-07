@@ -826,6 +826,7 @@
     "authLdapSearchOu": "用户OU",
     "authLdapServerUri": "LDAP地址",
     "authLdapUserAttrMap": "LDAP属性映射",
+    "SignaturesAndTemplates": "Signatures and Templates",
     "unselectedUser": "没有选择用户",
     "auto": "自动",
     "basicSetting": "基本设置",
@@ -935,6 +936,7 @@
     "dingTalkTest": "测试",
     "weComTest": "测试",
     "FeiShu": "飞书",
+    "SMS": "短信",
     "feiShuTest": "测试",
     "setting": "设置"
   },
