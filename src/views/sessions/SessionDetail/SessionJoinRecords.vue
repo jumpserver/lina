@@ -31,15 +31,13 @@ export default {
           ]
         },
         columnsMeta: {
-          'sharing': {
-          }
         }
       },
       headerActions: {
         hasImport: false,
         hasLeftActions: false,
         searchConfig: {
-          exclude: ['session', 'date_joined', 'date_left']
+          exclude: ['date_joined', 'date_left']
         }
       }
     }
