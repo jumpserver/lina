@@ -13,6 +13,7 @@ import Radius from './Radius'
 import DingTalk from './DingTalk'
 import FeiShu from './FeiShu'
 import WeCom from './WeCom'
+import SSO from './SSO'
 
 export default {
   name: 'Auth',
@@ -23,16 +24,20 @@ export default {
   data() {
     return {
       url: '/api/v1/settings/setting/?category=auth',
-      defaultButton: false,
       fields: [
         [
-          '集中认证', ['AUTH_CAS', 'AUTH_OPENID']
+          this.$t('setting.AuthMethod'), [
+            'AUTH_CAS', 'AUTH_OPENID',
+            'AUTH_WECOM', 'AUTH_DINGTALK', 'AUTH_FEISHU',
+            'AUTH_RADIUS', 'AUTH_SSO'
+          ]
         ],
         [
-          'APP 认证', ['AUTH_WECOM', 'AUTH_DINGTALK', 'AUTH_FEISHU']
-        ],
-        [
-          '其它认证', ['AUTH_RADIUS']
+          this.$t('common.Other'),
+          [
+            'FORGOT_PASSWORD_URL', 'HEALTH_CHECK_TOKEN',
+            'LOGIN_REDIRECT_MSG_ENABLED'
+          ]
         ]
       ],
       fieldsMeta: {
@@ -53,10 +58,24 @@ export default {
         },
         AUTH_FEISHU: {
           component: FeiShu
+        },
+        AUTH_SSO: {
+          component: SSO
         }
       },
       submitMethod() {
         return 'patch'
+      },
+      cleanFormValue(data) {
+        // 这个页面不去提交auth这些
+        const removeFields = [
+          'AUTH_CAS', 'AUTH_OPENID', 'AUTH_WECOM', 'AUTH_DINGTALK',
+          'AUTH_FEISHU', 'AUTH_RADIUS', 'AUTH_SSO'
+        ]
+        for (const i of removeFields) {
+          delete data[i]
+        }
+        return data
       }
     }
   },

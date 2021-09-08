@@ -13,15 +13,15 @@ import TabPage from '@/layout/components/TabPage'
 import AutoDataForm from '@/components/AutoDataForm'
 import IBox from '@/components/IBox'
 import Basic from './Basic'
-import { Email } from './Email/index'
+import Email from './Email/index'
 import Auth from './Auth'
 import Ldap from './Ldap'
 import Terminal from './Terminal'
-import Security from './Security'
+import Security from './Security/index'
 import License from './License'
 import Other from './Other.vue'
 import Clean from './Clean'
-import SysMessageSub from './SystemMessageSubscription/Subscription'
+import SysMessageSub from './MessageSub/Subscription'
 
 export default {
   components: {

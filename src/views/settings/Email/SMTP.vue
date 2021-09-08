@@ -2,7 +2,7 @@
   <div>
     <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
     <Dialog
-      :title="$t('setting.CreateUserSetting')"
+      :title="$t('setting.SMTP')"
       :visible.sync="visible"
       :destroy-on-close="true"
       :show-cancel="false"
@@ -22,7 +22,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { Dialog } from '@/components'
 
 export default {
-  name: 'EmailContent',
+  name: 'SMTP',
   components: {
     GenericCreateUpdateForm,
     Dialog
@@ -31,8 +31,19 @@ export default {
     return {
       visible: false,
       fields: [
-        'EMAIL_CUSTOM_USER_CREATED_SUBJECT', 'EMAIL_CUSTOM_USER_CREATED_HONORIFIC',
-        'EMAIL_CUSTOM_USER_CREATED_BODY', 'EMAIL_CUSTOM_USER_CREATED_SIGNATURE'
+        [
+          this.$t('common.BasicInfo'),
+          [
+            'EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER',
+            'EMAIL_HOST_PASSWORD'
+          ]
+        ],
+        [
+          this.$t('setting.Security'),
+          [
+            'EMAIL_USE_SSL', 'EMAIL_USE_TLS'
+          ]
+        ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
@@ -43,12 +54,11 @@ export default {
           }
         }
       },
-      url: '/api/v1/settings/setting/?category=email_content',
+      url: '/api/v1/settings/setting/?category=email',
       submitMethod() {
         return 'patch'
       },
-      onConfirm() {
-      }
+      onConfirm() {}
     }
   },
   methods: {

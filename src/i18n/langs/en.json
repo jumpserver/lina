@@ -228,6 +228,8 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Logging": "Logging",
+    "Database": "Database",
     "Params": "Params",
     "MFAVerify": "Verify MFA",
     "ViewSecret": "View secret",
@@ -752,6 +754,12 @@
     }
   },
   "setting": {
+    "SMTP": "SMTP server",
+    "Setting": "Setting",
+    "AuthMethod": "Auth methods",
+    "AuthLimit": "登录限制",
+    "Ops": "Task",
+    "OTP": "OTP(MFA)",
     "MessageSub": "Message subscription",
     "Cleaning": "Period clean",
     "CASSetting": "CAS setting",
@@ -795,7 +803,7 @@
     "basicSetting": "Basic setting",
     "communityEdition": "Community edition",
     "consult": "Consult",
-    "createUserSetting": "Create User setting",
+    "CreateUserSetting": "Create User setting",
     "emailCustomUserCreatedBody": "Create user email content",
     "emailCustomUserCreatedHonorific": "Create user honorific",
     "emailCustomUserCreatedSignature": "Signature",

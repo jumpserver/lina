@@ -1,8 +1,10 @@
 <template>
   <div>
-    <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
+    <el-button size="mini" type="primary" @click="visible = !visible">
+      {{ $t('setting.Setting') }}
+    </el-button>
     <Dialog
-      :title="$t('setting.CreateUserSetting')"
+      :title="$t('setting.AuthLimit')"
       :visible.sync="visible"
       :destroy-on-close="true"
       :show-cancel="false"
@@ -11,7 +13,13 @@
       top="10%"
       @confirm="onConfirm()"
     >
-      <GenericCreateUpdateForm v-bind="$data" />
+      <GenericCreateUpdateForm
+        :fields="fields"
+        :url="url"
+        :fields-meta="fieldsMeta"
+        :submit-method="submitMethod"
+        :has-detail-in-msg="false"
+      />
     </Dialog>
   </div>
 
@@ -31,27 +39,21 @@ export default {
     return {
       visible: false,
       fields: [
-        'EMAIL_CUSTOM_USER_CREATED_SUBJECT', 'EMAIL_CUSTOM_USER_CREATED_HONORIFIC',
-        'EMAIL_CUSTOM_USER_CREATED_BODY', 'EMAIL_CUSTOM_USER_CREATED_SIGNATURE'
+        'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
+        'USER_LOGIN_SINGLE_MACHINE_ENABLED', 'ONLY_ALLOW_EXIST_USER_AUTH',
+        'ONLY_ALLOW_AUTH_FROM_SOURCE'
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
-        'EMAIL_CUSTOM_USER_CREATED_BODY': {
-          el: {
-            type: 'textarea',
-            rows: 3
-          }
-        }
       },
-      url: '/api/v1/settings/setting/?category=email_content',
-      submitMethod() {
-        return 'patch'
-      },
-      onConfirm() {
-      }
+      url: '/api/v1/settings/setting/?category=security'
     }
   },
   methods: {
+    submitMethod() {
+      return 'patch'
+    },
+    onConfirm() {}
   }
 }
 </script>

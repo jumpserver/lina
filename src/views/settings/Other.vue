@@ -16,14 +16,19 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/settings/setting/?category=advanced',
+      url: '/api/v1/settings/setting/?category=other',
       hasDetailInMsg: false,
       fields: [
         [
-          this.$t('common.Other'),
+          this.$t('setting.OTP'),
           [
-            'AUTH_SSO', 'AUTH_SSO_AUTHKEY_TTL', 'OTP_VALID_WINDOW', 'OTP_ISSUER_NAME',
-            'SECURITY_INSECURE_COMMAND_LEVEL'
+            'OTP_ISSUER_NAME', 'OTP_VALID_WINDOW'
+          ]
+        ],
+        [
+          this.$t('setting.Ops'),
+          [
+            'PERIOD_TASK_ENABLED', 'WINDOWS_SSH_DEFAULT_SHELL'
           ]
         ]
       ],

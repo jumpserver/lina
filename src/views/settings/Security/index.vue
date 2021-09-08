@@ -11,6 +11,8 @@
 </template>
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import PasswordRule from './PasswordRule'
+import AuthLimit from './AuthLimit'
 import { IBox } from '@/components'
 import { Link } from '@/components/FormFields'
 
@@ -33,15 +35,13 @@ export default {
         [
           this.$t('common.Auth'),
           [
-            'SECURITY_MFA_AUTH', 'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
-            'SECURITY_PASSWORD_EXPIRATION_TIME', 'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
-          ]
-        ],
-        [
-          this.$t('setting.PasswordCheckRule'),
-          [
-            'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
-            'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
+            'SECURITY_MFA_AUTH',
+            'SECURITY_PASSWORD_EXPIRATION_TIME',
+            'OLD_PASSWORD_HISTORY_LIMIT_COUNT',
+            'SECURITY_MFA_VERIFY_TTL',
+            'SECURITY_LOGIN_CAPTCHA_ENABLED',
+            'AuthLimit',
+            'PasswordRule'
           ]
         ],
         [
@@ -60,6 +60,14 @@ export default {
             href: '/ui/#/settings?activeTab=SysMessageSub',
             title: this.$t('setting.insecureCommandEmailUpdate')
           }
+        },
+        PasswordRule: {
+          label: this.$t('setting.PasswordCheckRule'),
+          component: PasswordRule
+        },
+        AuthLimit: {
+          label: this.$t('setting.AuthLimit'),
+          component: AuthLimit
         }
       },
       url: '/api/v1/settings/setting/?category=security'
@@ -67,7 +75,7 @@ export default {
   },
   methods: {
     submitMethod() {
-      return 'put'
+      return 'patch'
     }
   }
 }
