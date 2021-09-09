@@ -14,6 +14,7 @@ import DingTalk from './DingTalk'
 import FeiShu from './FeiShu'
 import WeCom from './WeCom'
 import SSO from './SSO'
+import SMS from '../SMS'
 
 export default {
   name: 'Auth',
@@ -29,7 +30,7 @@ export default {
           this.$t('setting.AuthMethod'), [
             'AUTH_CAS', 'AUTH_OPENID',
             'AUTH_WECOM', 'AUTH_DINGTALK', 'AUTH_FEISHU',
-            'AUTH_RADIUS', 'AUTH_SSO'
+            'AUTH_RADIUS', 'AUTH_SSO', 'SMS_ENABLED'
           ]
         ],
         [
@@ -61,6 +62,9 @@ export default {
         },
         AUTH_SSO: {
           component: SSO
+        },
+        SMS_ENABLED: {
+          component: SMS
         }
       },
       submitMethod() {
@@ -70,7 +74,7 @@ export default {
         // 这个页面不去提交auth这些
         const removeFields = [
           'AUTH_CAS', 'AUTH_OPENID', 'AUTH_WECOM', 'AUTH_DINGTALK',
-          'AUTH_FEISHU', 'AUTH_RADIUS', 'AUTH_SSO'
+          'AUTH_FEISHU', 'AUTH_RADIUS', 'AUTH_SSO', 'SMS_ENABLED'
         ]
         for (const i of removeFields) {
           delete data[i]
