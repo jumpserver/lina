@@ -6,7 +6,7 @@
       :fields-meta="fieldsMeta"
       :update-success-next-route="successUrl"
       :create-success-next-route="successUrl"
-      :get-method="getMethod"
+      :submit-method="submitMethod"
       :has-detail-in-msg="false"
       :on-perform-success="onPerformSuccess"
     />
@@ -47,8 +47,8 @@ export default {
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
+    submitMethod() {
+      return 'patch'
     },
     onPerformSuccess() {
       setTimeout(() => window.location.reload(), 500)

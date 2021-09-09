@@ -48,11 +48,11 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'app_name', 'username', 'category_display',
+          'app_display', 'username', 'category_display',
           'type_display', 'systemuser', 'actions'
         ],
         columnsMeta: {
-          app_name: {
+          app_display: {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {

@@ -1,0 +1,38 @@
+<template>
+  <el-row>
+    <el-col :span="17">
+      <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
+      <Details v-if="specialCardItems.length > 0" :detail-card-items="specialCardItems" :title="$t('common.ApprovaLevel')" />
+      <slot id="MoreDetails" />
+    </el-col>
+  </el-row>
+</template>
+
+<script>
+import Details from './Details'
+export default {
+  name: 'GenericTicketDetail',
+  components: { Details },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    },
+    specialCardItems: {
+      type: Array,
+      default: () => ([])
+    },
+    detailCardItems: {
+      type: Array,
+      default: () => ([])
+    }
+  },
+  data() {
+    return {}
+  }
+}
+</script>
+
+<style lang='less' scoped>
+
+</style>

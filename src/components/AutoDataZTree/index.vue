@@ -40,7 +40,7 @@ export default {
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {
-            'X-JMS-ORG': this.$store.getters.currentOrg.id
+            'X-JMS-ORG': this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
           }
         },
         callback: {
@@ -236,7 +236,7 @@ export default {
           name: data['value'],
           pId: parentNode.id,
           meta: {
-            'node': data
+            data: data
           }
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked

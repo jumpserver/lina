@@ -8,10 +8,23 @@
     </template>
 
     <div>
-      <el-tabs v-if="submenu.length > 0" slot="submenu" v-model="iActiveMenu" class="page-submenu" @tab-click="handleTabClick">
+      <el-tabs
+        v-if="submenu.length > 0"
+        slot="submenu"
+        v-model="iActiveMenu"
+        class="page-submenu"
+        @tab-click="handleTabClick"
+      >
         <template v-for="item in submenu">
-          <el-tab-pane :key="item.name" :label-content="item.labelContent" :name="item.name" :disabled="item.disabled">
+          <el-tab-pane
+            v-if="checkShow(item)"
+            :key="item.name"
+            :label-content="item.labelContent"
+            :name="item.name"
+            :disabled="item.disabled"
+          >
             <span slot="label">
+              <i v-if="item.icon" class="fa " :class="item.icon" />
               {{ item.title }}
               <slot name="badge" :tab="item.name" />
             </span>
@@ -67,6 +80,13 @@ export default {
     this.iActiveMenu = this.getPropActiveTab()
   },
   methods: {
+    checkShow(item) {
+      let hidden = item.hidden
+      if (typeof hidden === 'function') {
+        hidden = hidden()
+      }
+      return !hidden
+    },
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
@@ -103,15 +123,16 @@ export default {
 </script>
 
 <style scoped>
-  .page-submenu >>> .el-tabs__header {
-    background-color: white;
-    margin-left: -25px;
-    padding-left: 25px;
-    margin-right: -25px;
-    padding-right: 25px;
-    margin-top: -30px;
-  }
-  .page-submenu >>> .el-tabs__nav-wrap {
-    position: static;
-  }
+.page-submenu >>> .el-tabs__header {
+  background-color: white;
+  margin-left: -25px;
+  padding-left: 25px;
+  margin-right: -25px;
+  padding-right: 25px;
+  margin-top: -30px;
+}
+
+.page-submenu >>> .el-tabs__nav-wrap {
+  position: static;
+}
 </style>

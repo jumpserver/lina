@@ -1,30 +1,36 @@
 <template>
-  <IBox>
+  <BaseAuth v-model="value" :title="$t('setting.FeiShu')">
     <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  </BaseAuth>
 </template>
 
 <script>
-import { IBox } from '@/components'
+import BaseAuth from './Base'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
   name: 'Wecom',
   components: {
-    IBox,
+    BaseAuth,
     GenericCreateUpdateForm
+  },
+  props: {
+    value: {
+      type: Boolean,
+      required: true
+    }
   },
   data() {
     const vm = this
     return {
-      url: '/api/v1/settings/setting/?category=wecom',
+      url: '/api/v1/settings/setting/?category=feishu',
       hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('setting.weComTest'),
+          title: this.$t('setting.feiShuTest'),
           callback: function(value, form) {
             vm.$axios.post(
-              '/api/v1/settings/wecom/testing/',
+              '/api/v1/settings/feishu/testing/',
               value
             ).then(res => {
               vm.$message.success(res['msg'])
@@ -38,8 +44,7 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID',
-            'WECOM_SECRET'
+            'AUTH_FEISHU', 'FEISHU_APP_ID', 'FEISHU_APP_SECRET'
           ]
         ]
       ],
@@ -47,12 +52,12 @@ export default {
       },
       // 不清理的话，编辑secret，在删除提交会报错
       cleanFormValue(data) {
-        if (!data['WECOM_SECRET']) {
-          delete data['WECOM_SECRET']
+        if (!data['FEISHU_APP_SECRET']) {
+          delete data['FEISHU_APP_SECRET']
         }
         return data
       },
-      getMethod() {
+      submitMethod() {
         return 'put'
       }
     }

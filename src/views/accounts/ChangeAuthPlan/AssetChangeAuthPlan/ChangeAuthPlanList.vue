@@ -1,16 +1,16 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'ChangeAuthPlanList',
+  name: 'AssetChangeAuthPlanList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this
@@ -26,6 +26,12 @@ export default {
           default: ['name', 'username', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
         },
         columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AssetChangeAuthPlanDetail'
+            }
+          },
           username: {
             showOverflowTooltip: true
           },
@@ -52,9 +58,9 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeAuthPlanDetail',
+              route: 'AssetChangeAuthPlanDetail',
               routeQuery: {
-                activeTab: 'ChangeAuthPlanExecutionList'
+                activeTab: 'AssetChangeAuthPlanExecutionList'
               }
             }
           },
@@ -64,6 +70,12 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
+              onClone: ({ row }) => {
+                vm.$router.push({ name: 'AssetChangeAuthPlanCreate', query: { clone_from: row.id }})
+              },
+              onUpdate: ({ row }) => {
+                vm.$router.push({ name: 'AssetChangeAuthPlanUpdate', params: { id: row.id }})
+              },
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),
@@ -87,7 +99,12 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false
+        hasMoreActions: false,
+        createRoute: () => {
+          return {
+            name: 'AssetChangeAuthPlanCreate'
+          }
+        }
       }
     }
   }

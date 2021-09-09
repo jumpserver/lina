@@ -132,7 +132,7 @@ export default {
           }
         }
       },
-      getMethod() {
+      submitMethod() {
         const params = this.$route.params
         if (params.id) {
           return 'put'
@@ -141,7 +141,7 @@ export default {
         }
       },
       cleanFormValue(value) {
-        const method = this.getMethod()
+        const method = this.submitMethod()
         if (method === 'post' && value.password_strategy === 'email') {
           delete value['password']
           if (this.currentOrgIsRoot) {

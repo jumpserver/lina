@@ -4,13 +4,15 @@
       :fields="fields"
       :url="url"
       :fields-meta="fieldsMeta"
-      :get-method="getMethod"
+      :submit-method="submitMethod"
       :has-detail-in-msg="false"
     />
   </IBox>
 </template>
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import PasswordRule from './PasswordRule'
+import AuthLimit from './AuthLimit'
 import { IBox } from '@/components'
 import { Link } from '@/components/FormFields'
 
@@ -26,22 +28,23 @@ export default {
         [
           this.$t('common.Basic'),
           [
-            'SECURITY_COMMAND_EXECUTION', 'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
-            'SECURITY_MAX_IDLE_TIME', 'SECURITY_WATERMARK_ENABLED'
+            'SECURITY_COMMAND_EXECUTION',
+            'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
+            'SECURITY_MAX_IDLE_TIME',
+            'SECURITY_WATERMARK_ENABLED',
+            'SECURITY_SESSION_SHARE'
           ]
         ],
         [
           this.$t('common.Auth'),
           [
-            'SECURITY_MFA_AUTH', 'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
-            'SECURITY_PASSWORD_EXPIRATION_TIME', 'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
-          ]
-        ],
-        [
-          this.$t('setting.PasswordCheckRule'),
-          [
-            'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
-            'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
+            'SECURITY_MFA_AUTH',
+            'SECURITY_PASSWORD_EXPIRATION_TIME',
+            'OLD_PASSWORD_HISTORY_LIMIT_COUNT',
+            'SECURITY_MFA_VERIFY_TTL',
+            'SECURITY_LOGIN_CAPTCHA_ENABLED',
+            'AuthLimit',
+            'PasswordRule'
           ]
         ],
         [
@@ -57,17 +60,25 @@ export default {
           helpText: this.$t('setting.InsecureCommandNotifyToSubscription'),
           label: this.$t('common.Receivers'),
           el: {
-            href: '/ui/#/settings?activeTab=SystemMessageSubscription',
+            href: '/ui/#/settings?activeTab=SysMessageSub',
             title: this.$t('setting.insecureCommandEmailUpdate')
           }
+        },
+        PasswordRule: {
+          label: this.$t('setting.PasswordCheckRule'),
+          component: PasswordRule
+        },
+        AuthLimit: {
+          label: this.$t('setting.AuthLimit'),
+          component: AuthLimit
         }
       },
       url: '/api/v1/settings/setting/?category=security'
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
+    submitMethod() {
+      return 'patch'
     }
   }
 }

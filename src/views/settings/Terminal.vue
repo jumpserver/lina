@@ -36,7 +36,7 @@ export default {
       },
       url: '/api/v1/settings/setting/?category=terminal',
       hasDetailInMsg: false,
-      getMethod() {
+      submitMethod() {
         return 'put'
       },
       cleanFormValue(data) {
@@ -55,7 +55,7 @@ export default {
     if (this.$store.getters.hasValidLicense) {
       const xRDPFields = [
         'XRDP', [
-          'TERMINAL_RDP_ADDR'
+          'TERMINAL_RDP_ADDR', 'XRDP_ENABLED'
         ]
       ]
       this.fields.splice(1, 0, xRDPFields)
