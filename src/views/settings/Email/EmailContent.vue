@@ -8,7 +8,6 @@
       :show-cancel="false"
       :show-confirm="false"
       width="70%"
-      top="10%"
       @confirm="onConfirm()"
     >
       <GenericCreateUpdateForm v-bind="$data" />

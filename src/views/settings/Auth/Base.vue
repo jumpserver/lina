@@ -3,6 +3,7 @@
     <el-button v-if="!value" type="default" size="mini" @click="visible=true">{{ $t('setting.Enable') }}</el-button>
     <el-button v-else type="primary" size="mini" @click="visible=true">{{ $t('setting.Setting') }}</el-button>
     <Dialog
+      v-if="visible"
       :visible.sync="visible"
       :title="title"
       :destroy-on-close="true"
