@@ -754,14 +754,17 @@
     }
   },
   "setting": {
+    "Enable": "Enable",
+    "Perm": "Permission",
     "SMTP": "SMTP server",
     "Setting": "Setting",
     "AuthMethod": "Auth methods",
-    "AuthLimit": "登录限制",
+    "AuthLimit": "Auth limit",
     "Ops": "Task",
     "OTP": "OTP(MFA)",
     "MessageSub": "Message subscription",
     "Cleaning": "Period clean",
+    "Perms": "授权",
     "CASSetting": "CAS setting",
     "Other": "More...",
     "Auth": "Auth",

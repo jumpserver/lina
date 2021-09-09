@@ -20,6 +20,12 @@ export default {
       hasDetailInMsg: false,
       fields: [
         [
+          this.$t('common.Basic'),
+          [
+            'EMAIL_SUFFIX', 'TICKETS_ENABLED'
+          ]
+        ],
+        [
           this.$t('setting.OTP'),
           [
             'OTP_ISSUER_NAME', 'OTP_VALID_WINDOW'
@@ -30,12 +36,21 @@ export default {
           [
             'PERIOD_TASK_ENABLED', 'WINDOWS_SSH_DEFAULT_SHELL'
           ]
+        ],
+        [
+          this.$t('setting.Perm'),
+          [
+            'PERM_SINGLE_ASSET_TO_UNGROUP_NODE'
+          ]
         ]
       ],
       fieldsMeta: {
         AUTH_LDAP_SYNC_CRONTAB: {
           label: this.$t('xpack.RegularlyPerform'),
           helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
+        },
+        TICKETS_ENABLED: {
+          hidden: () => !this.$store.getters.hasValidLicense
         }
       },
       submitMethod() {

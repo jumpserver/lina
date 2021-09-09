@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button v-if="!value" type="default" size="mini" @click="visible=true">启用</el-button>
+    <el-button v-if="!value" type="default" size="mini" @click="visible=true">{{ $t('setting.Enable') }}</el-button>
     <el-button v-else type="primary" size="mini" @click="visible=true">{{ $t('setting.Setting') }}</el-button>
     <Dialog
       :visible.sync="visible"
