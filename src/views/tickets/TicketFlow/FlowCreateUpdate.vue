@@ -18,6 +18,9 @@ export default {
         [this.$t('common.ApprovaLevel'), ['approval_level', 'rules']]
       ],
       fieldsMeta: {
+        type: {
+          disabled: true
+        },
         rules: {
           label: '审批流程',
           component: FlowRuleField,

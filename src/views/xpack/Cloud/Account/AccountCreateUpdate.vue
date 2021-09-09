@@ -9,6 +9,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
+import { UploadKey } from '@/components'
 
 export default {
   components: {
@@ -30,7 +31,16 @@ export default {
       ],
       fieldsMeta: {
         attrs: {
-          fields: accountProviderAttrs.attrs
+          fields: accountProviderAttrs.attrs,
+          fieldsMeta: {
+            service_account_key: {
+              label: this.$t('xpack.Cloud.ServerAccountKey'),
+              component: UploadKey,
+              el: {
+                toFormat: 'object'
+              }
+            }
+          }
         },
         provider: {
           rules: [Required],
