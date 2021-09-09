@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     getMethod() {
-      return 'put'
+      return 'patch'
     }
   }
 }
