@@ -1,29 +1,36 @@
 <template>
-  <IBox>
+  <BaseAuth v-model="value" :title="$t('setting.WecCom')">
     <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  </BaseAuth>
 </template>
 
 <script>
-import { IBox } from '@/components'
+import BaseAuth from './Base'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
-  name: 'DingTalk',
+  name: 'Wecom',
   components: {
-    IBox,
+    BaseAuth,
     GenericCreateUpdateForm
+  },
+  props: {
+    value: {
+      type: Boolean,
+      required: true
+    }
   },
   data() {
     const vm = this
     return {
-      url: '/api/v1/settings/setting/?category=dingtalk',
+      url: '/api/v1/settings/setting/?category=wecom',
+      hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('setting.dingTalkTest'),
+          title: this.$t('setting.weComTest'),
           callback: function(value, form) {
             vm.$axios.post(
-              '/api/v1/settings/dingtalk/testing/',
+              '/api/v1/settings/wecom/testing/',
               value
             ).then(res => {
               vm.$message.success(res['msg'])
@@ -37,23 +44,22 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_DINGTALK', 'DINGTALK_AGENTID',
-            'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
+            'AUTH_WECOM', 'WECOM_CORPID', 'WECOM_AGENTID',
+            'WECOM_SECRET'
           ]
         ]
       ],
       fieldsMeta: {
       },
-      hasDetailInMsg: false,
-      getMethod() {
-        return 'put'
-      },
       // 不清理的话，编辑secret，在删除提交会报错
       cleanFormValue(data) {
-        if (!data['DINGTALK_APPSECRET']) {
-          delete data['DINGTALK_APPSECRET']
+        if (!data['WECOM_SECRET']) {
+          delete data['WECOM_SECRET']
         }
         return data
+      },
+      submitMethod() {
+        return 'put'
       }
     }
   },

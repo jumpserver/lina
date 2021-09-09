@@ -112,7 +112,7 @@ export default {
       }
     },
     // 获取提交的方法
-    getMethod: {
+    submitMethod: {
       type: Function,
       default: function() {
         const params = this.$route.params
@@ -142,7 +142,7 @@ export default {
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
-        let msgLinkName = this.$tc('common.Resource')
+        let msgLinkName = ''
         if (res.name) {
           msgLinkName = res.name
         } else if (res.hostname) {
@@ -223,7 +223,7 @@ export default {
   },
   computed: {
     method() {
-      return this.getMethod(this)
+      return this.submitMethod(this)
     },
     iUrl() {
       // 更新或创建的url
@@ -239,7 +239,7 @@ export default {
       if (this.hasReset != null) {
         return this.hasReset
       }
-      return this.method === 'put'
+      return this.isUpdateMethod()
     }
   },
   async created() {
@@ -255,6 +255,9 @@ export default {
     }
   },
   methods: {
+    isUpdateMethod() {
+      return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
+    },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
@@ -270,7 +273,7 @@ export default {
     },
     async getFormValue() {
       const cloneFrom = this.$route.query['clone_from']
-      if (this.method !== 'put' && !cloneFrom) {
+      if (!this.isUpdateMethod() && !cloneFrom) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
