@@ -348,7 +348,6 @@ export default {
           backendList.push(name)
         }
       }
-      console.log(backendList)
       return backendList
     },
     passConfirm() {
