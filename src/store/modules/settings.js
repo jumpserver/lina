@@ -35,7 +35,9 @@ const actions = {
   getPublicSettings({ commit, state }) {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
-        const faviconURL = response.data['LOGO_URLS'].favicon
+        const data = response.data || {}
+        console.log('Public: ', data)
+        const faviconURL = data['LOGO_URLS']?.favicon
         let link = document.querySelector("link[rel*='icon']")
         if (!link) {
           link = document.createElement('link')
@@ -43,11 +45,13 @@ const actions = {
           link.rel = 'shortcut icon'
           document.getElementsByTagName('head')[0].appendChild(link)
         }
-        link.href = faviconURL
+        if (faviconURL) {
+          link.href = faviconURL
+        }
 
         // 动态修改Title
-        document.title = response.data['LOGIN_TITLE']
-        commit('SET_PUBLIC_SETTINGS', response.data)
+        document.title = data['LOGIN_TITLE']
+        commit('SET_PUBLIC_SETTINGS', data)
         resolve(response)
       }).catch(error => {
         reject(error)
