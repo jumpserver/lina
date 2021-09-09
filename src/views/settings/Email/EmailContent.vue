@@ -2,9 +2,9 @@
   <div>
     <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
     <Dialog
+      v-if="visible"
       :title="$t('setting.CreateUserSetting')"
       :visible.sync="visible"
-      :destroy-on-close="true"
       :show-cancel="false"
       :show-confirm="false"
       width="70%"

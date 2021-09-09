@@ -2,6 +2,7 @@
   <div>
     <el-button size="mini" type="primary" @click="visible = !visible"> {{ $t("setting.Setting") }} </el-button>
     <Dialog
+      v-if="visible"
       :title="$t('setting.SMTP')"
       :visible.sync="visible"
       :destroy-on-close="true"
