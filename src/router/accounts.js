@@ -79,40 +79,83 @@ export default [
   {
     path: 'change-auth-plan',
     component: empty,
-    meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan/plan' },
+    redirect: '',
+    meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan') },
     children: [
       {
+        path: '',
+        component: () => import('@/views/accounts/ChangeAuthPlan/index.vue'),
+        name: 'ChangeAuthPlanIndex',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' }
+      },
+      {
         path: 'plan',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanList.vue'),
-        name: 'ChangeAuthPlanList',
-        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan/plan' }
+        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanList.vue'),
+        name: 'AssetChangeAuthPlanList',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' },
+        hidden: true
       },
       {
         path: 'plan/create',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-        name: 'ChangeAuthPlanCreate',
-        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanCreate'), activeMenu: '/accounts/change-auth-plan/plan', action: 'create' },
+        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
+        name: 'AssetChangeAuthPlanCreate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'), activeMenu: '/accounts/change-auth-plan', action: 'create' },
         hidden: true
       },
       {
         path: 'plan/:id/update',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-        name: 'ChangeAuthPlanUpdate',
-        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlanUpdate'), activeMenu: '/accounts/change-auth-plan/plan', action: 'update' },
+        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
+        name: 'AssetChangeAuthPlanUpdate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'), activeMenu: '/accounts/change-auth-plan', action: 'update' },
         hidden: true
       },
       {
         path: 'plan/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
-        name: 'ChangeAuthPlanDetail',
-        meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan/plan' },
+        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
+        name: 'AssetChangeAuthPlanDetail',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' },
         hidden: true
       },
       {
         path: 'plan-execution/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
         name: 'ChangeAuthPlanExecutionDetail',
-        meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/accounts/change-auth-plan/plan' },
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/accounts/change-auth-plan' },
+        hidden: true
+      },
+      {
+        path: 'app-plan',
+        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue'),
+        name: 'AppChangeAuthPlanList',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' },
+        hidden: true
+      },
+      {
+        path: 'app-plan/create',
+        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
+        name: 'AppChangeAuthPlanCreate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'), activeMenu: '/accounts/change-auth-plan', action: 'create' },
+        hidden: true
+      },
+      {
+        path: 'app-plan/:id',
+        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
+        name: 'AppChangeAuthPlanDetail',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'), activeMenu: '/accounts/change-auth-plan' },
+        hidden: true
+      },
+      {
+        path: 'app-plan/:id/update',
+        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
+        name: 'AppChangeAuthPlanUpdate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanUpdate'), activeMenu: '/accounts/change-auth-plan', action: 'update' },
+        hidden: true
+      },
+      {
+        path: 'app-plan-execution/:id',
+        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/AppChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
+        name: 'AppChangeAuthPlanExecutionDetail',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/accounts/change-auth-plan' },
         hidden: true
       }
     ]
