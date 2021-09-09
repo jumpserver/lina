@@ -1011,6 +1011,8 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "MessageSubscription": "消息订阅",
+    "AuthSettings": "认证配置",
     "UserName": "姓名",
     "Account": "账户",
     "Authentication": "认证",
@@ -1127,7 +1129,8 @@
     "Sender": "发送人",
     "MarkAsRead": "标记已读",
     "NoUnreadMsg": "暂无未读消息",
-    "SiteMessage": "站内信"
+    "SiteMessage": "站内信",
+    "SMS": "短信"
   },
   "xpack": {
     "Admin": "管理员",
