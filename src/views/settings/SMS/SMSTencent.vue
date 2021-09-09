@@ -42,7 +42,7 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_SMS', 'SMS_TEST_PHONE',
+            'SMS_ENABLED', 'SMS_TEST_PHONE',
             'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID', 'TENCENT_SMS_SIGN_AND_TEMPLATES'
           ]
         ]
