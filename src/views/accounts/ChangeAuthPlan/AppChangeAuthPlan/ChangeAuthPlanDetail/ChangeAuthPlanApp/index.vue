@@ -39,12 +39,12 @@ export default {
             label: this.$t('common.Actions'),
             align: 'center',
             width: 150,
-            objects: this.object.systemuser,
+            objects: this.object.system_users,
             formatter: DeleteActionFormatter,
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.patch(
                 `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/systemusers/?action=remove`,
-                { systemuser: [row.id] }
+                { system_users: [row.id] }
               ).then(res => {
                 this.$message.success(this.$t('common.deleteSuccessMsg'))
                 reload()
@@ -77,14 +77,14 @@ export default {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
         },
-        hasObjectsId: this.object.systemuser,
+        // hasObjectsId: this.object.systemuser,
         showHasObjects: false,
         performAdd: (items, that) => {
           const relationUrl = `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/systemusers/?action=add`
           const systemusers = items.map(v => v.value)
           const iHasObjects = that.iHasObjects.map(v => v.value)
           const data = {
-            systemuser: Array.from(new Set([...iHasObjects, ...systemusers]))
+            system_users: Array.from(new Set([...iHasObjects, ...systemusers]))
           }
           return this.$axios.patch(relationUrl, data)
         },
