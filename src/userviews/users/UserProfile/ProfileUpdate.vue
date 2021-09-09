@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     submitMethod() {
-      return 'put'
+      return 'patch'
     }
   }
 }
