@@ -42,7 +42,7 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_SMS', 'SMS_TEST_PHONE',
+            'SMS_ENABLED', 'SMS_TEST_PHONE',
             'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET', 'ALIBABA_SMS_SIGN_AND_TEMPLATES'
           ]
         ]
