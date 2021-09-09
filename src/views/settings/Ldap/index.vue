@@ -42,7 +42,7 @@ export default {
         [
           this.$t('common.Other'),
           [
-            'AUTH_LDAP'
+            'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE', 'AUTH_LDAP'
           ]
         ]
       ],
@@ -101,9 +101,7 @@ export default {
           }.bind(this)
         }
       ],
-      getMethod() {
-        return 'put'
-      },
+      submitMethod: () => 'patch',
       afterGetFormValue(obj) {
         obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
         return obj

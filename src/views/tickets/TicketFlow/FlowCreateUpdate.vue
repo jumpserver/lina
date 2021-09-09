@@ -1,0 +1,63 @@
+<template>
+  <GenericCreateUpdatePage :initial="initial" v-bind="$data" />
+</template>
+
+<script>
+import { GenericCreateUpdatePage } from '@/layout/components'
+import FlowRuleField from './FlowRuleField'
+export default {
+  name: 'FlowCreateUpdate',
+  components: {
+    GenericCreateUpdatePage
+  },
+  data() {
+    return {
+      loading: true,
+      fields: [
+        [this.$t('common.Basic'), ['type']],
+        [this.$t('common.ApprovaLevel'), ['approval_level', 'rules']]
+      ],
+      fieldsMeta: {
+        type: {
+          disabled: true
+        },
+        rules: {
+          label: '审批流程',
+          component: FlowRuleField,
+          el: {
+            level: 1
+          },
+          hidden: (form) => {
+            this.fieldsMeta.rules.el.level = form['approval_level']
+          }
+        }
+      },
+      getUrl() {
+        const params = this.$route.params
+        let url = `/api/v1/tickets/flows/`
+        if (params.id) {
+          url = `${url}${params.id}/`
+        }
+        return `${url}`
+      },
+      updateSuccessNextRoute: { name: 'TicketList' },
+      createSuccessNextRoute: { name: 'TicketList' }
+    }
+  },
+  computed: {
+    initial() {
+      return this.$route.query
+    }
+  },
+  mounted() {
+    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
+      this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
+    }
+    this.loading = false
+  }
+}
+</script>
+
+<style lang="less" scoped>
+
+</style>

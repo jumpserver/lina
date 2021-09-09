@@ -54,7 +54,7 @@ export default {
               }
             }
           },
-          getMethod: () => 'post',
+          submitMethod: () => 'post',
           cleanFormValue: function(value) {
             const formValue = []
             let object = {}

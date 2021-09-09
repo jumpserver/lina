@@ -80,7 +80,7 @@ export default {
     getDefaultFormSetting() {
       const vm = this
       return {
-        getMethod: () => 'post',
+        submitMethod: () => 'post',
         cleanFormValue: function(value) {
           const filterValue = {}
           Object.keys(value).filter((key) => vm.checkedFields.includes(key)).forEach((key) => {

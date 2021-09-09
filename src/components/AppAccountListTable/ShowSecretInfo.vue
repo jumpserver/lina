@@ -17,7 +17,7 @@
       <div>
         <el-form label-position="right" label-width="80px" :model="authInfo">
           <el-form-item :label="this.$t('applications.appName')">
-            <el-input v-model="account['app_name']" readonly />
+            <el-input v-model="account['app_display']" readonly />
           </el-form-item>
           <el-form-item :label="this.$t('assets.Username')">
             <el-input v-model="account['username']" readonly />
@@ -62,8 +62,7 @@ export default {
   },
   methods: {
     getAuthInfo() {
-      console.log(this.account)
-      const url = `/api/v1/applications/account-secrets/${this.account.uid}/`
+      const url = `/api/v1/applications/account-secrets/${this.account.id}/`
       this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
         this.authInfo = resp
         this.showAuthInfo = true

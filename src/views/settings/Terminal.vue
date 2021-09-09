@@ -36,7 +36,7 @@ export default {
       },
       url: '/api/v1/settings/setting/?category=terminal',
       hasDetailInMsg: false,
-      getMethod() {
+      submitMethod() {
         return 'put'
       },
       cleanFormValue(data) {

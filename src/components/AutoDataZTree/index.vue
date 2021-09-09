@@ -40,7 +40,7 @@ export default {
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {
-            'X-JMS-ORG': this.$store.getters.currentOrg.id
+            'X-JMS-ORG': this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
           }
         },
         callback: {

@@ -59,6 +59,12 @@ export default {
       }
     },
     hasRefresh: defaultTrue,
+    handleRefreshClick: {
+      type: Function,
+      default: function() {
+        this.reloadTable()
+      }
+    },
     selectedRows: {
       type: Array,
       default: () => []
@@ -78,7 +84,7 @@ export default {
         { name: 'actionColumnSetting', fa: 'fa-cog', tip: this.$t('common.CustomCol'), has: this.hasColumnSetting, callback: this.handleTableSettingClick.bind(this) },
         { name: 'actionImport', fa: 'fa-upload', tip: this.$t('common.Import'), has: this.hasImport, callback: this.handleImportClick.bind(this) },
         { name: 'actionExport', fa: 'fa-download', tip: this.$t('common.Export'), has: this.hasExport, callback: this.handleExportClick.bind(this) },
-        { name: 'actionRefresh', fa: 'fa-refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefresh }
+        { name: 'actionRefresh', fa: 'fa-refresh', tip: this.$t('common.Refresh'), has: this.hasRefresh, callback: this.handleRefreshClick.bind(this) }
       ],
       dialogExportVisible: false
     }
@@ -106,9 +112,6 @@ export default {
   methods: {
     handleTagSearch(val) {
       this.searchTable(val)
-    },
-    handleRefresh() {
-      this.reloadTable()
     }
   }
 }

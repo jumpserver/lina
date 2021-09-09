@@ -4,7 +4,9 @@ const getters = {
   token: state => state.users.token,
   currentOrg: state => state.users.currentOrg,
   currentOrgIsDefault: state => state.users.currentOrg['is_default'],
-  currentOrgIsRoot: state => state.users.currentOrg['is_root'],
+  currentOrgIsRoot: state => {
+    return state.users.currentOrg && state.users.currentOrg['is_root']
+  },
   currentRole: state => state.users.currentRole,
   currentUser: state => state.users.profile,
   permission_routes: state => state.permission.routes,

@@ -8,6 +8,8 @@
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { testEmailSetting } from '@/api/settings'
 import { IBox } from '@/components'
+import EmailContent from './EmailContent'
+import SMTP from './SMTP'
 import rules from '@/components/DataForm/rules'
 
 export default {
@@ -21,22 +23,21 @@ export default {
     return {
       fields: [
         [
-          this.$t('common.BasicInfo'),
+          this.$t('setting.SMTP'),
           [
-            'EMAIL_HOST', 'EMAIL_PORT', 'EMAIL_HOST_USER',
-            'EMAIL_HOST_PASSWORD'
-          ]
-        ],
-        [
-          this.$t('setting.Security'),
-          [
-            'EMAIL_USE_SSL', 'EMAIL_USE_TLS'
+            'SMTP'
           ]
         ],
         [
           this.$t('setting.MailSend'),
           [
             'EMAIL_FROM', 'EMAIL_SUBJECT_PREFIX'
+          ]
+        ],
+        [
+          this.$t('setting.EmailContent'),
+          [
+            'CREATE_USER_MSG'
           ]
         ],
         [
@@ -62,6 +63,14 @@ export default {
           rules: [
             rules.EmailCheck
           ]
+        },
+        CREATE_USER_MSG: {
+          label: this.$t('setting.CreateUserSetting'),
+          component: EmailContent
+        },
+        SMTP: {
+          label: this.$t('setting.SMTP'),
+          component: SMTP
         }
       },
       hasDetailInMsg: false,
@@ -112,7 +121,7 @@ export default {
         )
         return data
       },
-      getMethod() {
+      submitMethod() {
         return 'put'
       }
     }
