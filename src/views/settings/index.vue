@@ -69,7 +69,10 @@ export default {
         },
         {
           title: this.$t('setting.SMS'),
-          name: 'SMS'
+          name: 'SMS',
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
         },
         {
           title: this.$t('setting.Terminal'),
