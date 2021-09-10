@@ -780,6 +780,7 @@
     "SMTP": "邮件服务器",
     "Perm": "授权",
     "Setting": "设置",
+    "Config": "配置",
     "AuthMethod": "认证方式",
     "SSO": "单点认证",
     "AppAuth": "App认证",
