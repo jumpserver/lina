@@ -1,18 +1,20 @@
 <template>
-  <BaseAuth v-model="value" :title="$t('setting.DingTalk')">
-    <GenericCreateUpdateForm v-bind="$data" />
-  </BaseAuth>
+  <BaseAuth
+    :value="value"
+    :config="settings"
+    :title="$t('setting.DingTalk')"
+    enable-field="AUTH_DINGTALK"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
 import BaseAuth from './Base'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
   name: 'DingTalk',
   components: {
-    BaseAuth,
-    GenericCreateUpdateForm
+    BaseAuth
   },
   props: {
     value: {
@@ -23,43 +25,45 @@ export default {
   data() {
     const vm = this
     return {
-      url: '/api/v1/settings/setting/?category=dingtalk',
-      moreButtons: [
-        {
-          title: this.$t('setting.dingTalkTest'),
-          callback: function(value, form) {
-            vm.$axios.post(
-              '/api/v1/settings/dingtalk/testing/',
-              value
-            ).then(res => {
-              vm.$message.success(res['msg'])
-            }).catch(() => {
-              this.$log.error('err occur')
-            })
+      settings: {
+        url: '/api/v1/settings/setting/?category=dingtalk',
+        moreButtons: [
+          {
+            title: this.$t('setting.dingTalkTest'),
+            callback: function(value, form) {
+              vm.$axios.post(
+                '/api/v1/settings/dingtalk/testing/',
+                value
+              ).then(res => {
+                vm.$message.success(res['msg'])
+              }).catch(() => {
+                this.$log.error('err occur')
+              })
+            }
           }
-        }
-      ],
-      fields: [
-        [
-          this.$t('common.BasicInfo'),
+        ],
+        fields: [
           [
-            'AUTH_DINGTALK', 'DINGTALK_AGENTID',
-            'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
+            this.$t('common.BasicInfo'),
+            [
+              'AUTH_DINGTALK', 'DINGTALK_AGENTID',
+              'DINGTALK_APPKEY', 'DINGTALK_APPSECRET'
+            ]
           ]
-        ]
-      ],
-      fieldsMeta: {
-      },
-      hasDetailInMsg: false,
-      submitMethod() {
-        return 'put'
-      },
-      // 不清理的话，编辑secret，在删除提交会报错
-      cleanFormValue(data) {
-        if (!data['DINGTALK_APPSECRET']) {
-          delete data['DINGTALK_APPSECRET']
+        ],
+        fieldsMeta: {
+        },
+        hasDetailInMsg: false,
+        submitMethod() {
+          return 'put'
+        },
+        // 不清理的话，编辑secret，在删除提交会报错
+        cleanFormValue(data) {
+          if (!data['DINGTALK_APPSECRET']) {
+            delete data['DINGTALK_APPSECRET']
+          }
+          return data
         }
-        return data
       }
     }
   },

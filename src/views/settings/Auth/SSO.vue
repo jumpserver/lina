@@ -1,17 +1,19 @@
 <template>
-  <BaseAuth v-model="value" :title="$t('setting.SSO')">
-    <GenericCreateUpdateForm v-bind="settings" />
-  </BaseAuth>
+  <BaseAuth
+    :value="value"
+    :config="settings"
+    :title="$t('setting.SSO')"
+    enable-field="AUTH_SSO"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
 import BaseAuth from './Base'
-import { GenericCreateUpdateForm } from '@/layout/components'
 export default {
   name: 'SSO',
   components: {
-    BaseAuth,
-    GenericCreateUpdateForm
+    BaseAuth
   },
   props: {
     value: {
@@ -21,7 +23,6 @@ export default {
   },
   data() {
     return {
-      visible: false,
       settings: {
         url: '/api/v1/settings/setting/?category=sso',
         fields: [
