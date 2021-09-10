@@ -1,17 +1,19 @@
 <template>
-  <BaseAuth v-model="value" :title="$t('setting.CASSetting')">
-    <GenericCreateUpdateForm v-bind="settings" />
-  </BaseAuth>
+  <BaseAuth
+    :value="value"
+    :config="settings"
+    :title="$t('setting.CASSetting')"
+    enable-field="AUTH_CAS"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
 import BaseAuth from './Base'
-import { GenericCreateUpdateForm } from '@/layout/components'
 export default {
   name: 'Cas',
   components: {
-    BaseAuth,
-    GenericCreateUpdateForm
+    BaseAuth
   },
   props: {
     value: {
@@ -21,7 +23,6 @@ export default {
   },
   data() {
     return {
-      visible: false,
       settings: {
         url: '/api/v1/settings/setting/?category=cas',
         fields: [

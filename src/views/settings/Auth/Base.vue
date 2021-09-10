@@ -11,19 +11,20 @@
       :show-confirm="false"
       width="70%"
       v-on="$listeners"
-      @confirm="onConfirm()"
     >
-      <slot />
+      <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
     </Dialog>
   </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
+import { GenericCreateUpdateForm } from '@/layout/components'
 export default {
   name: 'Base',
   components: {
-    Dialog
+    Dialog,
+    GenericCreateUpdateForm
   },
   props: {
     title: {
@@ -33,6 +34,14 @@ export default {
     value: {
       type: Boolean,
       required: true
+    },
+    config: {
+      type: Object,
+      default: () => ({})
+    },
+    enableField: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -40,8 +49,15 @@ export default {
       visible: false
     }
   },
+  computed: {
+    iConfig() {
+      return this.config
+    }
+  },
   methods: {
-    onConfirm() {
+    submitSuccess(res) {
+      console.log('Valid: is', res[this.enableField])
+      this.$emit('input', !!res[this.enableField])
     }
   }
 }
