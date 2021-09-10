@@ -759,6 +759,7 @@
     }
   },
   "setting": {
+    "Radius": "Radius",
     "Enable": "Enable",
     "Perm": "Permission",
     "SMTP": "SMTP server",
