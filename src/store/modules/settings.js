@@ -36,7 +36,6 @@ const actions = {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
         const data = response.data || {}
-        console.log('Public: ', data)
         const faviconURL = data['LOGO_URLS']?.favicon
         let link = document.querySelector("link[rel*='icon']")
         if (!link) {
