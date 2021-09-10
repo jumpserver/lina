@@ -58,12 +58,6 @@ export default {
     }
   },
   computed: {
-
-  },
-  watch: {
-    level(value) {
-      console.log('Value is: ', value)
-    }
   },
   mounted() {
     this.data = this.value.concat(this.initData)
