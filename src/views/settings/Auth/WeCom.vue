@@ -1,5 +1,5 @@
 <template>
-  <BaseAuth v-model="value" :title="$t('setting.WecCom')">
+  <BaseAuth v-model="value" :title="$t('setting.WeCom')">
     <GenericCreateUpdateForm v-bind="$data" />
   </BaseAuth>
 </template>
