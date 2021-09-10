@@ -1,18 +1,20 @@
 <template>
-  <BaseAuth v-model="value" title="OIDC">
-    <GenericCreateUpdateForm v-bind="settings" />
-  </BaseAuth>
+  <BaseAuth
+    :value="value"
+    :config="settings"
+    title="OIDC"
+    enable-field="AUTH_OPENID"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
 import BaseAuth from './Base'
-import { GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'OIDC',
   components: {
-    BaseAuth,
-    GenericCreateUpdateForm
+    BaseAuth
   },
   props: {
     value: {
@@ -22,7 +24,6 @@ export default {
   },
   data() {
     return {
-      visible: false,
       settings: {
         url: '/api/v1/settings/setting/?category=oidc',
         fields: [
