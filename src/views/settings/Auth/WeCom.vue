@@ -2,7 +2,7 @@
   <BaseAuth
     :value="value"
     :config="settings"
-    :title="$t('setting.WecCom')"
+    :title="$t('setting.WeCom')"
     enable-field="AUTH_WECOM"
     v-on="$listeners"
   />

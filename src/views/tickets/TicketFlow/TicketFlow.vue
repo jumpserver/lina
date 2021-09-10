@@ -50,7 +50,8 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasRightActions: false
+        hasRightActions: false,
+        hasSearch: false
       }
     }
   }

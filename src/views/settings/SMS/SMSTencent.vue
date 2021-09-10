@@ -6,7 +6,6 @@
 
 <script>
 import { IBox } from '@/components'
-import { JsonRequired } from '@/components/DataForm/rules'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
@@ -22,11 +21,8 @@ export default {
       hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('setting.SMS'),
+          title: this.$t('common.Test'),
           callback: function(value, form) {
-            if (value['TENCENT_SMS_SIGN_AND_TEMPLATES']) {
-              value['TENCENT_SMS_SIGN_AND_TEMPLATES'] = JSON.parse(value['TENCENT_SMS_SIGN_AND_TEMPLATES'])
-            }
             vm.$axios.post(
               `/api/v1/settings/tencent/testing/`,
               value
@@ -42,30 +38,19 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_SMS', 'SMS_TEST_PHONE',
-            'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID', 'TENCENT_SMS_SIGN_AND_TEMPLATES'
+            'SMS_TEST_PHONE', 'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID', 'TENCENT_SMS_SIGN_AND_TEMPLATES'
           ]
         ]
       ],
       fieldsMeta: {
         TENCENT_SMS_SIGN_AND_TEMPLATES: {
-          component: 'el-input',
-          el: {
-            type: 'textarea'
-          },
-          label: this.$t('setting.SignaturesAndTemplates'),
-          rules: [JsonRequired]
+          fields: ['verification_code'],
+          fieldsMeta: {
+            verification_code: {
+              fields: ['sign_name', 'template_code']
+            }
+          }
         }
-      },
-      afterGetFormValue(obj) {
-        obj.TENCENT_SMS_SIGN_AND_TEMPLATES = JSON.stringify(obj.TENCENT_SMS_SIGN_AND_TEMPLATES)
-        return obj
-      },
-      cleanFormValue(data) {
-        if (data['TENCENT_SMS_SIGN_AND_TEMPLATES']) {
-          data['TENCENT_SMS_SIGN_AND_TEMPLATES'] = JSON.parse(data['TENCENT_SMS_SIGN_AND_TEMPLATES'])
-        }
-        return data
       },
       submitMethod() {
         return 'put'

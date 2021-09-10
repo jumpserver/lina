@@ -19,7 +19,7 @@
           v-for="msg of messages"
           :key="msg.id"
           class="msg-item"
-          :class="msg.has_read ? 'msg-read' : 'msg-unread'"
+          :class="msg['has_read'] ? 'msg-read' : 'msg-unread'"
           @mouseover="hoverMsgId = msg.id"
           @mouseleave="hoverMsgId = ''"
           @click="showMsgDetail(msg)"

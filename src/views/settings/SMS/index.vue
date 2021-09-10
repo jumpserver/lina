@@ -1,34 +1,62 @@
 <template>
-  <div>
-    <IBox>
-      <el-radio v-model="smsType" label="alibaba">阿里</el-radio>
-      <el-radio v-model="smsType" label="tencent">腾讯</el-radio>
-    </IBox>
-    <SMSAlibaba v-if="smsType === 'alibaba'" />
-    <SMSTencent v-if="smsType === 'tencent'" />
-  </div>
+  <IBox>
+    <GenericCreateUpdateForm v-bind="$data" />
+  </IBox>
 </template>
-<script>
 
-import { IBox } from '@/components'
-import SMSAlibaba from './SMSAlibaba'
-import SMSTencent from './SMSTencent'
+<script>
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import IBox from '@/components/IBox'
+import SMS from './SMS'
 
 export default {
-  name: 'SMS',
+  name: 'Auth',
   components: {
     IBox,
-    SMSAlibaba,
-    SMSTencent
+    GenericCreateUpdateForm
   },
   data() {
     return {
-      smsType: 'alibaba'
+      url: '/api/v1/settings/setting/?category=sms',
+      fields: [
+        [
+          this.$t('setting.SMS'), [
+            'SMS_ENABLED',
+            'SMS_BACKEND',
+            'SET_UP'
+          ]
+        ]
+      ],
+      fieldsMeta: {
+        SET_UP: {
+          component: SMS,
+          el: {
+            smsType: 'alibaba'
+          },
+          hidden: (form) => {
+            this.fieldsMeta.SET_UP.el.smsType = form['SMS_BACKEND']
+          }
+        }
+      },
+      submitMethod() {
+        return 'patch'
+      },
+      cleanFormValue(data) {
+        // 这个页面不去提交auth这些
+        const removeFields = [
+          'SET_UP'
+        ]
+        for (const i of removeFields) {
+          delete data[i]
+        }
+        return data
+      }
     }
   },
-  mounted() {
-  },
-  methods: {
-  }
+  methods: {}
 }
 </script>
+
+<style scoped>
+
+</style>

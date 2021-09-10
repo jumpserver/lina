@@ -6,7 +6,6 @@
 
 <script>
 import { IBox } from '@/components'
-import { JsonRequired } from '@/components/DataForm/rules'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
@@ -22,11 +21,8 @@ export default {
       hasDetailInMsg: false,
       moreButtons: [
         {
-          title: this.$t('setting.SMS'),
+          title: this.$t('common.Test'),
           callback: function(value, form) {
-            if (value['ALIBABA_SMS_SIGN_AND_TEMPLATES']) {
-              value['ALIBABA_SMS_SIGN_AND_TEMPLATES'] = JSON.parse(value['ALIBABA_SMS_SIGN_AND_TEMPLATES'])
-            }
             vm.$axios.post(
               `/api/v1/settings/alibaba/testing/`,
               value
@@ -42,30 +38,19 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_SMS', 'SMS_TEST_PHONE',
-            'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET', 'ALIBABA_SMS_SIGN_AND_TEMPLATES'
+            'SMS_TEST_PHONE', 'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET', 'ALIBABA_SMS_SIGN_AND_TEMPLATES'
           ]
         ]
       ],
       fieldsMeta: {
         ALIBABA_SMS_SIGN_AND_TEMPLATES: {
-          component: 'el-input',
-          el: {
-            type: 'textarea'
-          },
-          label: this.$t('setting.SignaturesAndTemplates'),
-          rules: [JsonRequired]
+          fields: ['verification_code'],
+          fieldsMeta: {
+            verification_code: {
+              fields: ['sign_name', 'template_code']
+            }
+          }
         }
-      },
-      afterGetFormValue(obj) {
-        obj.ALIBABA_SMS_SIGN_AND_TEMPLATES = JSON.stringify(obj.ALIBABA_SMS_SIGN_AND_TEMPLATES)
-        return obj
-      },
-      cleanFormValue(data) {
-        if (data['ALIBABA_SMS_SIGN_AND_TEMPLATES']) {
-          data['ALIBABA_SMS_SIGN_AND_TEMPLATES'] = JSON.parse(data['ALIBABA_SMS_SIGN_AND_TEMPLATES'])
-        }
-        return data
       },
       submitMethod() {
         return 'patch'
