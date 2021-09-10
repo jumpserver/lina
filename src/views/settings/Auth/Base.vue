@@ -56,8 +56,8 @@ export default {
   },
   methods: {
     submitSuccess(res) {
-      console.log('Valid: is', res[this.enableField])
       this.$emit('input', !!res[this.enableField])
+      this.visible = false
     }
   }
 }
