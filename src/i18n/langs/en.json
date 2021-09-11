@@ -1247,7 +1247,7 @@
     "Organization": {
       "OrganizationCreate": "Create organization",
       "OrganizationDetail": "Org detail",
-      "OrganizationList": "Organlizations",
+      "OrganizationList": "Organizations",
       "OrganizationUpdate": "Update org",
       "OrganizationMembership": "Organization membership",
       "DeleteOrgTitle":"Please ensure that the following information in the organization has been deleted",
