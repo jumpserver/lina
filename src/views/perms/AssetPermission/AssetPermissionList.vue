@@ -26,12 +26,12 @@ export default {
         columns: [
           'name',
           'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount',
-          'date_expired', 'is_valid', 'is_expired', 'is_active',
+          'date_expired', 'is_valid', 'is_expired', 'is_active', 'from_ticket',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'actions']
+          default: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'from_ticket', 'actions']
         },
         columnsMeta: {
           name: {

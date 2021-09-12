@@ -40,6 +40,10 @@ export default {
         }
         return `${url}`
       },
+      cleanFormValue(data) {
+        data['rules'] = data['rules'].slice(0, data['approval_level'])
+        return data
+      },
       updateSuccessNextRoute: { name: 'TicketList' },
       createSuccessNextRoute: { name: 'TicketList' }
     }
