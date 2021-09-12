@@ -5,7 +5,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
-import AssetSelect from '@/components/AssetSelect'
 import { getDaysFuture } from '@/utils/common'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
 export default {
@@ -55,10 +54,16 @@ export default {
             },
             apply_assets: {
               type: 'assetSelect',
-              component: AssetSelect,
               label: this.$t('perms.Asset'),
+              component: Select2,
               el: {
-                value: []
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    return { label: item.hostname + '(' + item.protocols + ')', value: item.id }
+                  }
+                }
               }
             },
             apply_system_users: {
@@ -68,7 +73,7 @@ export default {
               el: {
                 value: [],
                 ajax: {
-                  url: '/api/v1/assets/system-users/?protocol__in=rdp,ssh,vnc,telnet',
+                  url: '',
                   transformOption: (item) => {
                     const username = item.username || '*'
                     return { label: item.name + '(' + username + ')', value: item.id }
@@ -85,6 +90,10 @@ export default {
             options: this.$store.state.users.profile.user_all_orgs.map((item) => {
               return { label: item.name, value: item.id }
             })
+          },
+          hidden: (form) => {
+            this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
+            this.fieldsMeta.meta.fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
           }
         }
       },

@@ -18,9 +18,14 @@ export default {
   },
 
   data() {
+    const vm = this
     const now = new Date()
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
+    // eslint-disable-next-line no-unused-vars
+    var org_id = ''
+    // eslint-disable-next-line no-unused-vars
+    var apply_category_type = []
     return {
       hasDetailInMsg: false,
       loading: true,
@@ -67,7 +72,7 @@ export default {
                 ajax: {
                   url: '',
                   transformOption: (item) => {
-                    return { label: item.name + ' (' + item.type_display + ')', value: item.id }
+                    return { label: item.name, value: item.id }
                   }
                 }
               }
@@ -161,8 +166,9 @@ export default {
               },
               on: {
                 change: ([event], updateForm) => {
-                  this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/?category=${event[0]}&type=${event[1]}`
-                  this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/?protocol=rdp` : `/api/v1/assets/system-users/?protocol=${event[1]}`
+                  this.apply_category_type = event
+                  this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
+                  this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`
                 }
               }
             }
@@ -176,9 +182,12 @@ export default {
               return { label: item.name, value: item.id }
             })
           },
-          on: {
-            changeOptions: ([event], updateForm) => {
-              this.fieldsMeta.assignees.el.ajax.url = `/api/v1/tickets/assignees/?org_id=${event[0].value}`
+          hidden: (form) => {
+            this.org_id = form['org_id']
+            apply_category_type = this.apply_category_type
+            if (apply_category_type) {
+              this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
+              this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = apply_category_type[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=${apply_category_type[1]}`
             }
           }
         }
