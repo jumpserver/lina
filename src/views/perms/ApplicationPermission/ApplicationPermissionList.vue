@@ -53,7 +53,7 @@ export default {
           'name', 'type_display', 'category_display',
           'users_amount', 'user_groups_amount',
           'applications_amount', 'system_users_amount',
-          'date_expired', 'is_valid',
+          'date_expired', 'is_valid', 'from_ticket',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
@@ -116,6 +116,15 @@ export default {
             formatterArgs: {
               routeQuery: {
                 activeTab: 'ApplicationsPermission'
+              }
+            }
+          },
+          from_ticket: {
+            formatter(row) {
+              if (row.from_ticket) {
+                return vm.$t('common.Yes')
+              } else {
+                return vm.$t('common.No')
               }
             }
           },

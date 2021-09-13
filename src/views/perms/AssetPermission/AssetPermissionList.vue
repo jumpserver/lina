@@ -11,6 +11,7 @@ export default {
     GenericTreeListPage
   },
   data() {
+    const vm = this
     return {
       treeSetting: {
         showMenu: false,
@@ -31,7 +32,10 @@ export default {
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount', 'is_valid', 'from_ticket', 'actions']
+          default: [
+            'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount',
+            'is_valid', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -49,6 +53,15 @@ export default {
             formatterArgs: {
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
+              }
+            }
+          },
+          from_ticket: {
+            formatter(row) {
+              if (row.from_ticket) {
+                return vm.$t('common.Yes')
+              } else {
+                return vm.$t('common.No')
               }
             }
           },
@@ -118,6 +131,19 @@ export default {
             { label: this.$t('common.Name'), value: 'name' },
             {
               label: this.$t('perms.isValid'), value: 'is_valid',
+              children: [
+                {
+                  value: '1',
+                  label: this.$t('common.Yes')
+                },
+                {
+                  value: '0',
+                  label: this.$t('common.No')
+                }
+              ]
+            },
+            {
+              label: this.$t('perms.fromTicket'), value: 'from_ticket',
               children: [
                 {
                   value: '1',
