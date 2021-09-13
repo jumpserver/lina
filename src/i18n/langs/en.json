@@ -527,6 +527,7 @@
     "downloadFile": "Download file",
     "hostName": "Hostname",
     "isValid": "Validity",
+    "fromTicket": "From ticket",
     "isEffective": "Effective",
     "nodeCount": "Node count",
     "refreshFail": "Refresh fail",
