@@ -122,7 +122,7 @@ export default {
         return data
       },
       submitMethod() {
-        return 'put'
+        return 'patch'
       }
     }
   },

@@ -759,6 +759,9 @@
     }
   },
   "setting": {
+    "AlibabaCloud": "Alibaba Cloud",
+    "TencentCloud": "Tencent Cloud",
+    "VerifySignTmpl": "Verification code template",
     "Radius": "Radius",
     "Enable": "Enable",
     "Perm": "Permission",

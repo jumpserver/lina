@@ -1,17 +1,17 @@
 <template>
-  <IBox>
+  <BaseSMS :title="$t('setting.TencentCloud')">
     <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  </BaseSMS>
 </template>
 
 <script>
-import { IBox } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import BaseSMS from './Base'
 
 export default {
   name: 'SMSTencent',
   components: {
-    IBox,
+    BaseSMS,
     GenericCreateUpdateForm
   },
   data() {
@@ -38,17 +38,26 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'SMS_TEST_PHONE', 'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID', 'TENCENT_SMS_SIGN_AND_TEMPLATES'
+            'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID'
+          ]
+        ],
+        [
+          this.$t('setting.VerifySignTmpl'),
+          [
+            'TENCENT_VERIFY_SIGN_TMPL'
+          ]
+        ],
+        [
+          this.$t('common.Other'),
+          [
+            'SMS_TEST_PHONE'
           ]
         ]
       ],
       fieldsMeta: {
-        TENCENT_SMS_SIGN_AND_TEMPLATES: {
-          fields: ['verification_code'],
+        TENCENT_VERIFY_SIGN_TMPL: {
+          fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
           fieldsMeta: {
-            verification_code: {
-              fields: ['sign_name', 'template_code']
-            }
           }
         }
       },

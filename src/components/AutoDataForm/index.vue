@@ -1,6 +1,13 @@
 <template>
   <DataForm ref="dataForm" v-loading="loading" :fields="totalFields" :form="iForm" v-bind="$attrs" v-on="$listeners">
-    <FormGroupHeader v-for="(group, i) in groups" :slot="'id:'+group.name" :key="'group-'+group.name" :title="group.title" :line="i !== 0" />
+    <FormGroupHeader
+      v-for="(group, i) in groups"
+      :slot="'id:'+group.name"
+      :key="'group-'+group.name"
+      :group="group"
+      :index="i"
+      :line="i !== 0"
+    />
   </DataForm>
 </template>
 
@@ -44,7 +51,8 @@ export default {
       totalFields: [],
       loading: true,
       groups: [],
-      iForm: this.form
+      iForm: this.form,
+      errors: {}
     }
   },
   mounted() {

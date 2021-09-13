@@ -1,13 +1,14 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
+    <GenericCreateUpdateForm v-bind="$data" class="form" />
   </IBox>
 </template>
 
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import IBox from '@/components/IBox'
-import SMS from './SMS'
+import SMSAlibaba from './SMSAlibaba'
+import SMSTencent from './SMSTencent'
 
 export default {
   name: 'Auth',
@@ -20,21 +21,29 @@ export default {
       url: '/api/v1/settings/setting/?category=sms',
       fields: [
         [
-          this.$t('setting.SMS'), [
-            'SMS_ENABLED',
-            'SMS_BACKEND',
-            'SET_UP'
+          this.$t('setting.Basic'), [
+            'SMS_ENABLED', 'SMS_BACKEND'
+          ]
+        ],
+        [
+          this.$t('setting.SMSProvider'), [
+            'ALIYUN', 'QCLOUD'
           ]
         ]
       ],
       fieldsMeta: {
-        SET_UP: {
-          component: SMS,
-          el: {
-            smsType: 'alibaba'
-          },
+        ALIYUN: {
+          label: '阿里云',
+          component: SMSAlibaba,
           hidden: (form) => {
-            this.fieldsMeta.SET_UP.el.smsType = form['SMS_BACKEND']
+            return form['SMS_BACKEND'] !== 'alibaba'
+          }
+        },
+        QCLOUD: {
+          label: '腾讯云',
+          component: SMSTencent,
+          hidden: (form) => {
+            return form['SMS_BACKEND'] !== 'tencent'
           }
         }
       },
@@ -58,5 +67,8 @@ export default {
 </script>
 
 <style scoped>
+.form >>> .form-buttons {
+  padding-top: 50px;
+}
 
 </style>
