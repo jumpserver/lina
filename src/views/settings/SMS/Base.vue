@@ -12,22 +12,28 @@
       v-on="$listeners"
       @confirm="onConfirm()"
     >
-      <slot />
+      <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
     </Dialog>
   </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 export default {
   name: 'Base',
   components: {
-    Dialog
+    Dialog,
+    GenericCreateUpdateForm
   },
   props: {
     title: {
       type: String,
       default: ''
+    },
+    config: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -35,8 +41,17 @@ export default {
       visible: false
     }
   },
+  computed: {
+    iConfig() {
+      return this.config
+    }
+  },
   methods: {
     onConfirm() {
+    },
+    submitSuccess(res) {
+      this.$emit('input', !!res[this.enableField])
+      this.visible = false
     }
   }
 }

@@ -1,17 +1,13 @@
 <template>
-  <BaseSMS :title="$t('setting.AlibabaCloud')">
-    <GenericCreateUpdateForm v-bind="$data" />
-  </BaseSMS>
+  <BaseSMS :title="$t('setting.AlibabaCloud')" :config="$data" />
 </template>
 
 <script>
 import BaseSMS from './Base'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
   name: 'SMSAlibaba',
   components: {
-    GenericCreateUpdateForm,
     BaseSMS
   },
   data() {
@@ -19,6 +15,7 @@ export default {
     return {
       url: `/api/v1/settings/setting/?category=alibaba`,
       hasDetailInMsg: false,
+      visible: false,
       moreButtons: [
         {
           title: this.$t('common.Test'),
