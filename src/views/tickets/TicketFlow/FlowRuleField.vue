@@ -1,16 +1,16 @@
 <template>
   <!-- 自定义组件 my-input -->
   <div>
-    <div v-for="(item, i) of data.slice(0, level)" :key="i" style="margin-bottom: 10px">
+    <div v-for="(item, i) of approveData" :key="i" style="margin-bottom: 10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>{{ i + 1 + '级审批' }}</span>
         </div>
         <el-radio-group v-model="item.strategy" @change="onChange()">
-          <el-radio label="super_admin">超级管理员</el-radio>
-          <el-radio label="org_admin">组织管理员</el-radio>
-          <el-radio label="super_org_admin">超级管理员+组织管理员</el-radio>
-          <el-radio label="custom_user">自定义用户</el-radio>
+          <el-radio label="super_admin">{{ vm.$t('tickets.SuperAdmin') }}</el-radio>
+          <el-radio label="org_admin">{{ vm.$t('tickets.OrgAdmin') }}</el-radio>
+          <el-radio label="super_org_admin">{{ vm.$t('tickets.SuperOrgAdmin') }}</el-radio>
+          <el-radio label="custom_user">{{ vm.$t('tickets.CustomUser') }}</el-radio>
         </el-radio-group>
         <br>
         <Select2 v-show="item.strategy === 'custom_user'" v-model="item.assignees" v-bind="select2Option" @change="onChange()" />
@@ -39,12 +39,7 @@ export default {
   data() {
     return {
       vm: this,
-      data: [],
-      initData: [
-        {
-          strategy: 'super_admin',
-          assignees_read_only: []
-        },
+      defaultRule: [
         {
           strategy: 'super_admin',
           assignees_read_only: []
@@ -58,24 +53,30 @@ export default {
     }
   },
   computed: {
-
-  },
-  watch: {
-    level(value) {
-      console.log('Value is: ', value)
+    approveData() {
+      let rules = []
+      if (this.value.length === 2 && this.level === 1) {
+        rules = this.value.slice(0, this.level)
+      } else if (this.value.length === 1 && this.level === 2) {
+        rules = this.value.concat(this.defaultRule)
+      } else {
+        rules = this.value
+      }
+      rules.forEach(rule => {
+        if (rule.assignees_read_only) {
+          rule['assignees'] = rule.assignees_read_only
+          delete rule.assignees_read_only
+        }
+      })
+      return rules.sort((a, b) => a.level - b.level)
     }
   },
   mounted() {
-    this.data = this.value.concat(this.initData)
-    this.data.forEach(item => {
-      item.assignees = item.assignees_read_only
-      delete item.assignees_read_only
-    })
-    this.$emit('input', this.data.slice(0, this.level))
+    this.$emit('input', this.approveData)
   },
   methods: {
     onChange() {
-      this.$emit('input', this.data.slice(0, this.level))
+      this.$emit('input', this.approveData)
     }
   }
 }

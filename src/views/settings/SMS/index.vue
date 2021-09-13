@@ -1,34 +1,74 @@
 <template>
-  <div>
-    <IBox>
-      <el-radio v-model="smsType" label="alibaba">阿里</el-radio>
-      <el-radio v-model="smsType" label="tencent">腾讯</el-radio>
-    </IBox>
-    <SMSAlibaba v-if="smsType === 'alibaba'" />
-    <SMSTencent v-if="smsType === 'tencent'" />
-  </div>
+  <IBox>
+    <GenericCreateUpdateForm v-bind="$data" class="form" />
+  </IBox>
 </template>
-<script>
 
-import { IBox } from '@/components'
+<script>
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import IBox from '@/components/IBox'
 import SMSAlibaba from './SMSAlibaba'
 import SMSTencent from './SMSTencent'
 
 export default {
-  name: 'SMS',
+  name: 'Auth',
   components: {
     IBox,
-    SMSAlibaba,
-    SMSTencent
+    GenericCreateUpdateForm
   },
   data() {
     return {
-      smsType: 'alibaba'
+      url: '/api/v1/settings/setting/?category=sms',
+      fields: [
+        [
+          this.$t('setting.Basic'), [
+            'SMS_ENABLED', 'SMS_BACKEND'
+          ]
+        ],
+        [
+          this.$t('setting.SMSProvider'), [
+            'ALIYUN', 'QCLOUD'
+          ]
+        ]
+      ],
+      fieldsMeta: {
+        ALIYUN: {
+          label: this.$t('setting.AlibabaCloud'),
+          component: SMSAlibaba,
+          hidden: (form) => {
+            return form['SMS_BACKEND'] !== 'alibaba'
+          }
+        },
+        QCLOUD: {
+          label: this.$t('setting.TencentCloud'),
+          component: SMSTencent,
+          hidden: (form) => {
+            return form['SMS_BACKEND'] !== 'tencent'
+          }
+        }
+      },
+      submitMethod() {
+        return 'patch'
+      },
+      cleanFormValue(data) {
+        // 这个页面不去提交auth这些
+        const removeFields = [
+          'SET_UP'
+        ]
+        for (const i of removeFields) {
+          delete data[i]
+        }
+        return data
+      }
     }
   },
-  mounted() {
-  },
-  methods: {
-  }
+  methods: {}
 }
 </script>
+
+<style scoped>
+.form >>> .form-buttons {
+  padding-top: 50px;
+}
+
+</style>

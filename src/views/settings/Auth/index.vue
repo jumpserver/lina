@@ -35,7 +35,7 @@ export default {
         [
           this.$t('common.Other'),
           [
-            'FORGOT_PASSWORD_URL', 'HEALTH_CHECK_TOKEN',
+            'FORGOT_PASSWORD_URL', // 'HEALTH_CHECK_TOKEN',
             'LOGIN_REDIRECT_MSG_ENABLED'
           ]
         ]

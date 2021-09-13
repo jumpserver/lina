@@ -1,32 +1,25 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <BaseSMS :title="$t('setting.TencentCloud')" :config="$data" />
 </template>
 
 <script>
-import { IBox } from '@/components'
-import { JsonRequired } from '@/components/DataForm/rules'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import BaseSMS from './Base'
 
 export default {
   name: 'SMSTencent',
   components: {
-    IBox,
-    GenericCreateUpdateForm
+    BaseSMS
   },
   data() {
     const vm = this
     return {
       url: `/api/v1/settings/setting/?category=tencent`,
       hasDetailInMsg: false,
+      visible: false,
       moreButtons: [
         {
-          title: this.$t('setting.SMS'),
+          title: this.$t('common.Test'),
           callback: function(value, form) {
-            if (value['TENCENT_SMS_SIGN_AND_TEMPLATES']) {
-              value['TENCENT_SMS_SIGN_AND_TEMPLATES'] = JSON.parse(value['TENCENT_SMS_SIGN_AND_TEMPLATES'])
-            }
             vm.$axios.post(
               `/api/v1/settings/tencent/testing/`,
               value
@@ -42,30 +35,28 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'AUTH_SMS', 'SMS_TEST_PHONE',
-            'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID', 'TENCENT_SMS_SIGN_AND_TEMPLATES'
+            'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID'
+          ]
+        ],
+        [
+          this.$t('setting.VerifySignTmpl'),
+          [
+            'TENCENT_VERIFY_SIGN_NAME', 'TENCENT_VERIFY_TEMPLATE_CODE'
+          ]
+        ],
+        [
+          this.$t('common.Other'),
+          [
+            'SMS_TEST_PHONE'
           ]
         ]
       ],
       fieldsMeta: {
-        TENCENT_SMS_SIGN_AND_TEMPLATES: {
-          component: 'el-input',
-          el: {
-            type: 'textarea'
-          },
-          label: this.$t('setting.SignaturesAndTemplates'),
-          rules: [JsonRequired]
+        TENCENT_VERIFY_SIGN_TMPL: {
+          fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
+          fieldsMeta: {
+          }
         }
-      },
-      afterGetFormValue(obj) {
-        obj.TENCENT_SMS_SIGN_AND_TEMPLATES = JSON.stringify(obj.TENCENT_SMS_SIGN_AND_TEMPLATES)
-        return obj
-      },
-      cleanFormValue(data) {
-        if (data['TENCENT_SMS_SIGN_AND_TEMPLATES']) {
-          data['TENCENT_SMS_SIGN_AND_TEMPLATES'] = JSON.parse(data['TENCENT_SMS_SIGN_AND_TEMPLATES'])
-        }
-        return data
       },
       submitMethod() {
         return 'put'

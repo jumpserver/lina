@@ -43,6 +43,7 @@ export default {
             'OLD_PASSWORD_HISTORY_LIMIT_COUNT',
             'SECURITY_MFA_VERIFY_TTL',
             'SECURITY_LOGIN_CAPTCHA_ENABLED',
+            'LOGIN_CONFIRM_ENABLE',
             'AuthLimit',
             'PasswordRule'
           ]

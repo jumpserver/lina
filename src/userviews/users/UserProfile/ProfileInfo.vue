@@ -211,18 +211,6 @@ export default {
           }
         },
         {
-          title: this.$t('notifications.SMS'),
-          type: 'switcher',
-          has: this.$store.getters.publicSettings,
-          attrs: {
-            name: 'sms',
-            model: this.object.receive_backends.indexOf('sms') !== -1
-          },
-          callbacks: {
-            change: this.updateUserReceiveBackends
-          }
-        },
-        {
           title: this.$t('setting.WeCom'),
           type: 'switcher',
           attrs: {
@@ -348,7 +336,6 @@ export default {
           backendList.push(name)
         }
       }
-      console.log(backendList)
       return backendList
     },
     passConfirm() {

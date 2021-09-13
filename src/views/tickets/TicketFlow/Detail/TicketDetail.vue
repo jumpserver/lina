@@ -69,7 +69,6 @@ export default {
           value: ''
         }]
       this.object.rules.forEach((item, index) => {
-        console.log(item, index)
         if (index === 0) {
           approvalData[0].value = item.strategy_display
           approvalData[1].value = item.assignees_display.join(',')

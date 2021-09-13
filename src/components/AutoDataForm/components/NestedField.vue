@@ -35,7 +35,7 @@ export default {
       kwargs: {
         hasReset: false,
         hasSaveContinue: false,
-        defaultButton: false
+        hasButtons: false
       }
     }
   },

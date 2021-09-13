@@ -1,7 +1,6 @@
 <template>
   <div>
-    <el-button v-if="!value" type="default" size="mini" @click="visible=true">{{ $t('setting.Enable') }}</el-button>
-    <el-button v-else type="primary" size="mini" @click="visible=true">{{ $t('setting.Setting') }}</el-button>
+    <el-button type="primary" size="mini" @click="visible=true">{{ $t('setting.Setting') }}</el-button>
     <Dialog
       v-if="visible"
       :visible.sync="visible"
@@ -11,6 +10,7 @@
       :show-confirm="false"
       width="70%"
       v-on="$listeners"
+      @confirm="onConfirm()"
     >
       <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
     </Dialog>
@@ -19,7 +19,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import { GenericCreateUpdateForm } from '@/layout/components'
+import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 export default {
   name: 'Base',
   components: {
@@ -31,17 +31,9 @@ export default {
       type: String,
       default: ''
     },
-    value: {
-      type: Boolean,
-      required: true
-    },
     config: {
       type: Object,
       default: () => ({})
-    },
-    enableField: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -55,6 +47,8 @@ export default {
     }
   },
   methods: {
+    onConfirm() {
+    },
     submitSuccess(res) {
       this.$emit('input', !!res[this.enableField])
       this.visible = false
