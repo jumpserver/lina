@@ -1,24 +1,21 @@
 <template>
-  <BaseSMS :title="$t('setting.TencentCloud')">
-    <GenericCreateUpdateForm v-bind="$data" />
-  </BaseSMS>
+  <BaseSMS :title="$t('setting.TencentCloud')" :config="$data" />
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import BaseSMS from './Base'
 
 export default {
   name: 'SMSTencent',
   components: {
-    BaseSMS,
-    GenericCreateUpdateForm
+    BaseSMS
   },
   data() {
     const vm = this
     return {
       url: `/api/v1/settings/setting/?category=tencent`,
       hasDetailInMsg: false,
+      visible: false,
       moreButtons: [
         {
           title: this.$t('common.Test'),
