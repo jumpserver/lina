@@ -12,7 +12,7 @@
     <slot v-for="item in fields" :slot="`id:${item.id}`" :name="`id:${item.id}`" />
     <slot v-for="item in fields" :slot="`$id:${item.id}`" :name="`$id:${item.id}`" />
 
-    <el-form-item>
+    <el-form-item v-if="hasButtons" class="form-buttons">
       <el-button v-for="button in moreButtons" :key="button.title" size="small" v-bind="button" @click="handleClick(button)">{{ button.title }}</el-button>
       <el-button v-if="defaultButton && hasReset" size="small" @click="resetForm('form')">{{ $t('common.Reset') }}</el-button>
       <el-button v-if="defaultButton && hasSaveContinue" size="small" @click="submitForm('form', true)">{{ $t('common.SaveAndAddAnother') }}</el-button>
@@ -29,6 +29,10 @@ export default {
   },
   props: {
     defaultButton: {
+      type: Boolean,
+      default: true
+    },
+    hasButtons: {
       type: Boolean,
       default: true
     },

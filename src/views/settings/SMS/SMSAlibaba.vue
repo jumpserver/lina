@@ -1,18 +1,18 @@
 <template>
-  <IBox>
+  <BaseSMS :title="$t('setting.AlibabaCloud')">
     <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  </BaseSMS>
 </template>
 
 <script>
-import { IBox } from '@/components'
+import BaseSMS from './Base'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
   name: 'SMSAlibaba',
   components: {
-    IBox,
-    GenericCreateUpdateForm
+    GenericCreateUpdateForm,
+    BaseSMS
   },
   data() {
     const vm = this
@@ -38,17 +38,26 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'SMS_TEST_PHONE', 'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET', 'ALIBABA_SMS_SIGN_AND_TEMPLATES'
+            'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET'
+          ]
+        ],
+        [
+          this.$t('setting.VerifySignTmpl'),
+          [
+            'ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE'
+          ]
+        ],
+        [
+          this.$t('common.Other'),
+          [
+            'SMS_TEST_PHONE'
           ]
         ]
       ],
       fieldsMeta: {
-        ALIBABA_SMS_SIGN_AND_TEMPLATES: {
-          fields: ['verification_code'],
+        ALIBABA_VERIFY_SIGN_TMPL: {
+          fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
           fieldsMeta: {
-            verification_code: {
-              fields: ['sign_name', 'template_code']
-            }
           }
         }
       },

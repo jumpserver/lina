@@ -775,7 +775,10 @@
     }
   },
   "setting": {
+    "AlibabaCloud": "阿里云",
+    "TencentCloud": "腾讯云",
     "Radius": "Radius",
+    "VerifySignTmpl": "验证码短信模板",
     "Enable": "启用",
     "AuthLimit": "登录限制",
     "SMTP": "邮件服务器",
@@ -938,9 +941,10 @@
     "dingTalkTest": "测试",
     "weComTest": "测试",
     "FeiShu": "飞书",
-    "SMS": "短信",
+    "SMS": "短信设置",
     "feiShuTest": "测试",
-    "setting": "设置"
+    "setting": "设置",
+    "SMSProvider": "短信服务商"
   },
   "tickets": {
     "OneAssigneeType": "一级受理人类型",
