@@ -44,7 +44,7 @@ export default {
         [
           this.$t('setting.VerifySignTmpl'),
           [
-            'ALIBABA_VERIFY_SIGN_TMPL'
+            'ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [

@@ -33,14 +33,14 @@ export default {
       ],
       fieldsMeta: {
         ALIYUN: {
-          label: '阿里云',
+          label: this.$t('setting.AlibabaCloud'),
           component: SMSAlibaba,
           hidden: (form) => {
             return form['SMS_BACKEND'] !== 'alibaba'
           }
         },
         QCLOUD: {
-          label: '腾讯云',
+          label: this.$t('setting.TencentCloud'),
           component: SMSTencent,
           hidden: (form) => {
             return form['SMS_BACKEND'] !== 'tencent'

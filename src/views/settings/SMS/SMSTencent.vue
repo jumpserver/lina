@@ -44,7 +44,7 @@ export default {
         [
           this.$t('setting.VerifySignTmpl'),
           [
-            'TENCENT_VERIFY_SIGN_TMPL'
+            'TENCENT_VERIFY_SIGN_NAME', 'TENCENT_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [

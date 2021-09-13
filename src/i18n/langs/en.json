@@ -759,8 +759,10 @@
     }
   },
   "setting": {
-    "AlibabaCloud": "Alibaba Cloud",
-    "TencentCloud": "Tencent Cloud",
+    "SMSProvider": "SMS provider",
+    "SMS": "SMS setting",
+    "AlibabaCloud": "Alibaba cloud",
+    "TencentCloud": "Tencent cloud",
     "VerifySignTmpl": "Verification code template",
     "Radius": "Radius",
     "Enable": "Enable",
