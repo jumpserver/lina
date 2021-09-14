@@ -551,6 +551,7 @@
   },
   "route": {
     "": "",
+    "SessionDetail": "SessionDetail",
     "Accounts": "Accounts",
     "AssetAccount": "Asset account",
     "ApplicationAccount": "Application account",
