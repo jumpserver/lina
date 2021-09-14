@@ -10,6 +10,7 @@
 
 <script>
 import BaseAuth from './Base'
+import { JsonRequired } from '@/components/DataForm/rules'
 export default {
   name: 'Cas',
   components: {
@@ -26,14 +27,34 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=cas',
         fields: [
-          [this.$t('common.Basic'), ['AUTH_CAS', 'CAS_SERVER_URL', 'CAS_VERSION']],
+          [this.$t('common.Basic'), ['AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION']],
           [this.$t('common.Other'), [
             'CAS_LOGOUT_COMPLETELY', 'CAS_USERNAME_ATTRIBUTE',
             'CAS_APPLY_ATTRIBUTES_TO_USER', 'CAS_RENAME_ATTRIBUTES',
             'CAS_CREATE_USER'
           ]]
         ],
-        submitMethod: () => 'patch'
+        fieldsMeta: {
+          CAS_RENAME_ATTRIBUTES: {
+            component: 'el-input',
+            el: {
+              type: 'textarea'
+            },
+            label: this.$t('setting.authCASAttrMap'),
+            rules: [JsonRequired]
+          }
+        },
+        submitMethod: () => 'patch',
+        afterGetFormValue(obj) {
+          obj.CAS_RENAME_ATTRIBUTES = JSON.stringify(obj.CAS_RENAME_ATTRIBUTES)
+          return obj
+        },
+        cleanFormValue(data) {
+          if (data['CAS_RENAME_ATTRIBUTES']) {
+            data['CAS_RENAME_ATTRIBUTES'] = JSON.parse(data['CAS_RENAME_ATTRIBUTES'])
+          }
+          return data
+        }
       }
     }
   },

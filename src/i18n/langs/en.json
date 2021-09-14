@@ -813,6 +813,7 @@
     "authLdapSearchOu": "User OU",
     "authLdapServerUri": "LDAP server",
     "authLdapUserAttrMap": "User attr map",
+    "authCASAttrMap": "User attr map",
     "unselectedUser": "Unselected user",
     "auto": "Auto",
     "basicSetting": "Basic setting",
