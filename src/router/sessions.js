@@ -75,37 +75,40 @@ export default [
   {
     path: 'storages',
     name: 'Storage',
-    component: () => import('@/views/sessions/Storage/index'),
+    component: empty,
     meta: { activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
+    redirect: '',
     hidden: true,
     children: [
+      {
+        path: '',
+        name: 'Storage',
+        component: () => import('@/views/sessions/Storage/index'),
+        meta: { activeMenu: '/terminal/terminal' }
+      },
       {
         path: 'replay-storage/create',
         name: 'CreateReplayStorage',
         component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
-        meta: { title: i18n.t('route.CreateReplayStorage'), activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
-        hidden: true
+        meta: { title: i18n.t('route.CreateReplayStorage'), activeMenu: '/terminal/terminal' }
       },
       {
         path: 'replay-storage/:id/update',
         name: 'ReplayStorageUpdate',
         component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
-        meta: { title: i18n.t('route.ReplayStorageUpdate'), activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
-        hidden: true
+        meta: { title: i18n.t('route.ReplayStorageUpdate'), activeMenu: '/terminal/terminal' }
       },
       {
         path: 'command-storage/create',
         name: 'CreateCommandStorage',
         component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
-        meta: { title: i18n.t('route.CreateCommandStorage'), activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
-        hidden: true
+        meta: { title: i18n.t('route.CreateCommandStorage'), activeMenu: '/terminal/terminal' }
       },
       {
         path: 'command-storage/:id/update',
         name: 'CommandStorageUpdate',
         component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
-        meta: { title: i18n.t('route.CommandStorageUpdate'), activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
-        hidden: true
+        meta: { title: i18n.t('route.CommandStorageUpdate'), activeMenu: '/terminal/terminal' }
       }
     ]
   }
