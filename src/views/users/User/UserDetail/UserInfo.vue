@@ -58,7 +58,7 @@ export default {
           title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
-            disabled: !this.object.mfa_enabled,
+            disabled: !this.object.mfa_enabled || this.object.id === this.$store.state.users.profile.id,
             label: this.$t('common.Reset')
           },
           callbacks: {
