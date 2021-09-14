@@ -101,7 +101,7 @@ export default {
           key: this.$t('tickets.PermissionName'),
           value: this.object.meta.apply_permission_name,
           formatter: function(item, value) {
-            const to = { name: 'AssetPermissionDetail', params: { id: vm.object.id }}
+            const to = { name: 'ApplicationPermissionDetail', params: { id: vm.object.id }, query: { oid: vm.object.org_id }}
             return <router-link to={to}>{ value }</router-link>
           }
         },
