@@ -31,6 +31,7 @@ export default {
     TicketFlow
   },
   data() {
+    const vm = this
     return {
       assignedTicketCount: 0,
       config: {
@@ -47,7 +48,10 @@ export default {
           {
             title: '流程设置',
             icon: 'fa-gear',
-            name: 'TicketFlow'
+            name: 'TicketFlow',
+            hidden: () => {
+              return !(vm.$store.getters.currentUserIsSuperAdmin || vm.$store.getters.currentUserIsAdmin)
+            }
           }
         ]
       }
