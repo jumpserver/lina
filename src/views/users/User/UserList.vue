@@ -8,7 +8,7 @@
     <GenericUpdateFormDialog
       :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
-      :dialog-setting="updateSelectedDialogSetting.dialogSetting"
+      :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
     <InviteUsersDialog :setting="InviteDialogSetting" @close="handleInviteDialogClose" />
@@ -166,7 +166,7 @@ export default {
             title: this.$t('common.updateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0 && !vm.currentOrgIsRoot,
             callback: ({ selectedRows, reloadTable }) => {
-              vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
+              vm.updateSelectedDialogSetting.visible = true
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
             }
           }
@@ -174,9 +174,7 @@ export default {
       },
       updateSelectedDialogSetting: {
         selectedRows: [],
-        dialogSetting: {
-          dialogVisible: false
-        },
+        visible: false,
         formSetting: {
           initial: {
             date_expired: getDayFuture(36500, new Date()).toISOString()

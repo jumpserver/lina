@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { ActionsFormatter, SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
+import { SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericTreeListPage
@@ -99,8 +99,6 @@ export default {
             width: '180px'
           },
           actions: {
-            formatter: ActionsFormatter,
-            label: this.$t('common.action'),
             formatterArgs: {
               hasDelete: false,
               loading: true,

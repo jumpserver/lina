@@ -38,29 +38,13 @@
         <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
       </el-row>
     </Dialog>
-    <div class="asset-select-dialog">
-      <Dialog
-        v-if="assetTreeTableDialogSetting.dialogVisible"
-        :title="this.$t('assets.Assets')"
-        :visible.sync="assetTreeTableDialogSetting.dialogVisible"
-        width="70%"
-        top="1vh"
-        @confirm="assetTreeTableDialogHandleConfirm"
-        @cancel="assetTreeTableDialogHandleCancel"
-      >
-        <TreeTable
-          ref="TreeTable"
-          :tree-setting="assetTreeTableDialogSetting.treeSetting"
-          :table-config="assetTreeTableDialogSetting.tableConfig"
-          :header-actions="assetTreeTableDialogSetting.headerActions"
-        />
-      </Dialog>
-    </div>
-    <GenericUpdateFormDialog
-      v-if="updateSelectedDialogSetting.dialogSetting.dialogVisible"
-      :selected-rows="updateSelectedDialogSetting.selectedRows"
-      :form-setting="updateSelectedDialogSetting.formSetting"
-      :dialog-setting="updateSelectedDialogSetting.dialogSetting"
+    <AssetBulkUpdateDialog
+      :visible.sync="updateSelectedDialogSetting.visible"
+      v-bind="updateSelectedDialogSetting"
+    />
+    <NodeAssetsUpdateDialog
+      :visible.sync="nodeAssetsUpdateDialog.visible"
+      v-bind="nodeAssetsUpdateDialog"
     />
   </div>
 </template>
@@ -70,20 +54,18 @@ import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
 import { DetailFormatter, ActionsFormatter } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
-import TreeTable from '@/components/TreeTable'
-import { GenericUpdateFormDialog } from '@/layout/components'
-import rules from '@/components/DataForm/rules'
-import Protocols from '@/views/assets/Asset/components/Protocols/index'
 import { mapGetters } from 'vuex'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import { openTaskPage } from '@/utils/jms'
+import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
+import NodeAssetsUpdateDialog from './NodeAssetsUpdateDialog'
 
 export default {
   components: {
     GenericTreeListPage,
     Dialog,
-    TreeTable,
-    GenericUpdateFormDialog
+    AssetBulkUpdateDialog,
+    NodeAssetsUpdateDialog
   },
   data() {
     const vm = this
@@ -220,9 +202,9 @@ export default {
             name: 'updateSelected',
             title: this.$t('common.updateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot,
-            callback: ({ selectedRows, reloadTable }) => {
-              vm.updateSelectedDialogSetting.dialogSetting.dialogVisible = true
+            callback: ({ selectedRows }) => {
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.visible = true
             }
           },
           {
@@ -259,125 +241,14 @@ export default {
         dialogVisible: false,
         items: []
       },
-      assetTreeTableDialogSetting: {
-        dialogVisible: false,
-        assetsSelected: [],
-        action: '',
-        treeSetting: {
-          showMenu: false,
-          showRefresh: true,
-          showAssets: false,
-          url: '/api/v1/assets/assets/?fields_size=mini',
-          nodeUrl: '/api/v1/assets/nodes/',
-          // ?assets=0不显示资产. =1显示资产
-          treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
-        },
-        tableConfig: {
-          url: '/api/v1/assets/assets/',
-          hasTree: true,
-          columns: [
-            {
-              prop: 'hostname',
-              label: this.$t('assets.Hostname'),
-              sortable: true,
-              formatter: DetailFormatter,
-              formatterArgs: {
-                route: 'AssetDetail'
-              }
-            },
-            {
-              prop: 'ip',
-              label: this.$t('assets.ip'),
-              sortable: 'custom'
-            }
-          ],
-          listeners: {
-            'toggle-row-selection': (isSelected, row) => {
-              if (isSelected) {
-                this.addRowToAssetsSelected(row)
-              } else {
-                this.removeRowFromAssetsSelected(row)
-              }
-            }
-          }
-        },
-        headerActions: {
-          hasLeftActions: false,
-          hasRightActions: false
-        }
-      },
       updateSelectedDialogSetting: {
-        selectedRows: [],
-        dialogSetting: {
-          dialogVisible: false
-        },
-        formSetting: {
-          url: '/api/v1/assets/assets/',
-          hasSaveContinue: false,
-          initial: {
-            platform: 'Linux',
-            protocols: ['ssh/22']
-          },
-          fields: [
-            'platform', 'protocols', 'domain', 'admin_user', 'labels', 'comment'
-          ],
-          fieldsMeta: {
-            platform: {
-              label: this.$t('assets.Platform'),
-              hidden: () => false,
-              el: {
-                multiple: false,
-                ajax: {
-                  url: '/api/v1/assets/platforms/',
-                  transformOption: (item) => {
-                    return { label: `${item.name}`, value: item.name }
-                  }
-                }
-              }
-            },
-            protocols: {
-              label: this.$t('assets.Protocols'),
-              component: Protocols
-            },
-            domain: {
-              label: this.$t('assets.Domain'),
-              hidden: () => false,
-              el: {
-                multiple: false,
-                ajax: {
-                  url: '/api/v1/assets/domains/'
-                }
-              }
-            },
-            admin_user: {
-              rules: [rules.RequiredChange],
-              label: this.$t('assets.AdminUser'),
-              hidden: () => false,
-              el: {
-                multiple: false,
-                ajax: {
-                  url: '/api/v1/assets/admin-users/',
-                  transformOption: (item) => {
-                    return { label: `${item.name}(${item.username})`, value: item.id }
-                  }
-                }
-              }
-            },
-            labels: {
-              label: this.$t('assets.Label'),
-              hidden: () => false,
-              el: {
-                ajax: {
-                  url: '/api/v1/assets/labels/'
-                }
-              }
-            },
-            comment: {
-              label: this.$t('common.Comment'),
-              hidden: () => false
-            }
-          }
-        }
+        visible: false,
+        selectedRows: []
+      },
+      nodeAssetsUpdateDialog: {
+        visible: false,
+        action: 'add',
+        selectNode: null
       }
     }
   },
@@ -405,13 +276,15 @@ export default {
     getSelectedNodes() {
       return this.$refs.TreeList.getSelectedNodes()
     },
-    rMenuAddAssetToNode: function() {
-      this.assetTreeTableDialogSetting.dialogVisible = true
-      this.assetTreeTableDialogSetting.action = 'add'
+    rMenuAddAssetToNode() {
+      this.nodeAssetsUpdateDialog.visible = true
+      this.nodeAssetsUpdateDialog.action = 'add'
+      this.nodeAssetsUpdateDialog.selectNode = this.getSelectedNodes()[0]
     },
-    rMenuMoveAssetToNode: function() {
-      this.assetTreeTableDialogSetting.dialogVisible = true
-      this.assetTreeTableDialogSetting.action = 'move'
+    rMenuMoveAssetToNode() {
+      this.nodeAssetsUpdateDialog.visible = true
+      this.nodeAssetsUpdateDialog.action = 'move'
+      this.nodeAssetsUpdateDialog.selectNode = this.getSelectedNodes()[0]
     },
     rMenuUpdateNodeAssetHardwareInfo: function() {
       this.hideRMenu()
@@ -493,43 +366,6 @@ export default {
       }).catch(error => {
         this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))
       })
-    },
-    addRowToAssetsSelected(row) {
-      const selectValueIndex = this.assetTreeTableDialogSetting.assetsSelected.indexOf(row.id)
-      if (selectValueIndex === -1) {
-        this.assetTreeTableDialogSetting.assetsSelected.push(row.id)
-      }
-    },
-    removeRowFromAssetsSelected(row) {
-      const selectValueIndex = this.assetTreeTableDialogSetting.assetsSelected.indexOf(row.id)
-      if (selectValueIndex > -1) {
-        this.assetTreeTableDialogSetting.assetsSelected.splice(selectValueIndex, 1)
-      }
-    },
-    assetTreeTableDialogHandleConfirm() {
-      const currentNode = this.getSelectedNodes()[0]
-      const assetsSelected = this.assetTreeTableDialogSetting.assetsSelected
-      if (!currentNode || assetsSelected.length === 0) {
-        return
-      }
-      let url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/add/`
-      if (this.assetTreeTableDialogSetting.action === 'move') {
-        url = `/api/v1/assets/nodes/${currentNode.meta.data.id}/assets/replace/`
-      }
-      this.$axios.put(
-        url, { assets: assetsSelected }
-      ).then(res => {
-        this.assetTreeTableDialogSetting.dialogVisible = false
-        this.assetTreeTableDialogSetting.assetsSelected = []
-        $('#tree-refresh').trigger('click')
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      })
-    },
-    assetTreeTableDialogHandleCancel() {
-      this.assetTreeTableDialogSetting.dialogVisible = false
-      this.assetTreeTableDialogSetting.assetsSelected = []
     }
   }
 }

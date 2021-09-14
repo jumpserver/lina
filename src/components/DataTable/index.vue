@@ -94,9 +94,9 @@ export default {
     tableConfig() {
       const tableDefaultConfig = this.defaultConfig
       tableDefaultConfig.paginationSize = _.get(this.globalTableConfig, 'paginationSize', 15)
-      let tableAttrs = {}
+      let tableAttrs = tableDefaultConfig.tableAttrs
       if (this.config.tableAttrs) {
-        tableAttrs = Object.assign(tableDefaultConfig.tableAttrs, this.config.tableAttrs)
+        tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
       }
       const config = Object.assign(tableDefaultConfig, this.config)
       config.tableAttrs = tableAttrs
