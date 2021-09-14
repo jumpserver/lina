@@ -33,8 +33,9 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/users/assets/',
         hasTree: true,
-        columns: [
-          {
+        columns: ['hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'],
+        columnsMeta: {
+          hostname: {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
             formatter: DialogDetailFormatter,
@@ -72,14 +73,11 @@ export default {
             },
             sortable: true
           },
-          {
-            prop: 'ip',
-            label: this.$t('assets.ip'),
+          ip: {
             sortable: 'custom',
             width: '180px'
           },
-          {
-            prop: 'SystemUsers',
+          system_users: {
             align: 'center',
             label: this.$t('assets.SystemUsers'),
             width: '200px',
@@ -90,22 +88,18 @@ export default {
               }
             }
           },
-          {
-            prop: 'platform',
+          platform: {
             label: this.$t('assets.Platform'),
             width: '120px'
           },
-          {
+          comment: {
             prop: 'comment',
             label: this.$t('assets.Comment'),
             showOverflowTooltip: true,
             width: '180px'
           },
-          {
-            prop: 'id',
-            align: 'center',
+          actions: {
             formatter: ActionsFormatter,
-            width: '100px',
             label: this.$t('common.action'),
             formatterArgs: {
               hasDelete: false,
@@ -117,30 +111,23 @@ export default {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
-                  can: function({ row, cellValue }) {
-                    return row.is_active
-                  },
-                  callback: function({ row, col, cellValue, reload }) {
+                  can: ({ row }) => row.is_active,
+                  callback: ({ row }) => {
                     window.open(`/luna/?login_to=${row.id}`, '_blank')
                   }
                 },
                 {
                   name: 'favor',
                   type: 'info',
-                  fa: function({ row, cellValue }) {
-                    if (this.checkFavorite(row.id)) {
-                      return 'fa-star'
-                    }
-                    return 'fa-star-o'
-                  }.bind(this),
-                  callback: function({ row, col, cellValue, reload }) {
-                    this.addOrDeleteFavorite(row.id)
-                  }.bind(this)
+                  fa: ({ row }) => {
+                    return this.checkFavorite(row.id) ? 'fa-star' : 'fa-star-o'
+                  },
+                  callback: ({ row }) => this.toggleFavorite(row.id)
                 }
               ]
             }
           }
-        ],
+        },
         tableAttrs: {
           rowClassName({ row }) {
             return !row.is_active ? 'row_disabled' : ''
@@ -160,25 +147,32 @@ export default {
   },
   methods: {
     refreshAllFavorites() {
-      const actionsIndex = this.tableConfig.columns.length - 1
-      this.tableConfig.columns[actionsIndex].formatterArgs.loading = true
+      const formatterArgs = this.tableConfig.columnsMeta.actions.formatterArgs
+      formatterArgs.loading = true
       this.$axios.get('/api/v1/assets/favorite-assets/').then(resp => {
         this.allFavorites = resp
-        this.tableConfig.columns[actionsIndex].formatterArgs.loading = false
+        formatterArgs.loading = false
       })
     },
-    addOrDeleteFavorite(assetId) {
-      if (this.checkFavorite(assetId)) {
-        this.$axios.delete(`/api/v1/assets/favorite-assets/?asset=${assetId}`).then(
-          res => this.removeFavorite(assetId)
-        )
+    favor(assetId) {
+      const data = { asset: assetId }
+      const url = '/api/v1/assets/favorite-assets/'
+      this.$axios.post(url, data).then(
+        () => this.allFavorites.push({ asset: assetId })
+      )
+    },
+    disfavor(assetId) {
+      const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
+      this.$axios.delete(url).then(() => {
+        this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
+      })
+    },
+    toggleFavorite(assetId) {
+      const favorite = this.checkFavorite(assetId)
+      if (favorite) {
+        this.disfavor(assetId)
       } else {
-        const data = {
-          asset: assetId
-        }
-        this.$axios.post('/api/v1/assets/favorite-assets/', data).then(
-          res => this.addFavorite(assetId)
-        )
+        this.favor(assetId)
       }
     },
     checkFavorite(assetId) {
@@ -189,12 +183,6 @@ export default {
         }
       })
       return ok
-    },
-    removeFavorite(assetId) {
-      this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
-    },
-    addFavorite(assetId) {
-      this.allFavorites.push({ asset: assetId })
     }
   }
 }
