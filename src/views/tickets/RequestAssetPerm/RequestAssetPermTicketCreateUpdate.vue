@@ -43,9 +43,6 @@ export default {
           }
         },
         meta: {
-          hidden: (form) => {
-            console.log('Form is: ', form)
-          },
           fields: [
             'apply_assets', 'apply_system_users', 'apply_actions',
             'apply_date_start', 'apply_date_expired'
