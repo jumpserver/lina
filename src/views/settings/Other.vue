@@ -34,7 +34,7 @@ export default {
         [
           this.$t('setting.Ops'),
           [
-            'PERIOD_TASK_ENABLED', 'WINDOWS_SSH_DEFAULT_SHELL'
+            'WINDOWS_SSH_DEFAULT_SHELL'
           ]
         ],
         [
