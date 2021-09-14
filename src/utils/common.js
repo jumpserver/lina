@@ -87,6 +87,15 @@ export function toSafeLocalDateStr(d) {
   return date_s
 }
 
+export function forMatAction(vm, d) {
+  d.forEach(function(item, index, arr) {
+    if ([vm.$t('perms.clipboardCopyPaste'), vm.$t('perms.upDownload'), vm.$t('perms.all')].includes(item)) {
+      arr.splice(index, 1)
+    }
+  })
+  return d.join(', ')
+}
+
 export function getApiPath(that) {
   let pagePath = that.$route.path
   const pagePathArray = pagePath.split('/')

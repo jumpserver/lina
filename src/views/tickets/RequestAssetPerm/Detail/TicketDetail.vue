@@ -12,7 +12,7 @@
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr, forMatAction } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 export default {
@@ -79,7 +79,7 @@ export default {
         },
         {
           key: this.$t('assets.Action'),
-          value: this.object.meta['apply_actions_display']
+          value: forMatAction(this, this.object.meta['apply_actions_display'])
         },
         {
           key: this.$t('common.dateStart'),
@@ -112,7 +112,7 @@ export default {
         },
         {
           key: this.$t('assets.Action'),
-          value: this.object.meta['apply_actions_display']
+          value: forMatAction(this, this.object.meta['apply_actions_display'])
         },
         {
           key: this.$t('common.dateStart'),
