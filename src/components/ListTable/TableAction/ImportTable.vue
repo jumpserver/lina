@@ -421,6 +421,7 @@ export default {
 .importTable >>> .cell {
   min-height: 20px;
   height: 100%;
+  overflow: auto;
 }
 
 </style>
