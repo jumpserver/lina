@@ -94,7 +94,12 @@ export default {
       this.dialogVisible = true
     },
     async initBackends() {
-      this.receiveBackends = await this.$axios.get('/api/v1/notifications/backends/')
+      const backends = await this.$axios.get('/api/v1/notifications/backends/')
+      backends.forEach(backend => {
+        if (backend.name !== 'site_msg') {
+          this.receiveBackends.push(backend)
+        }
+      })
     },
     async initSubscriptions() {
       const subscriptions = await this.$axios.get('/api/v1/notifications/system-msg-subscription/')
