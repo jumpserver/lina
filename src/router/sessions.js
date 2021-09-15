@@ -8,13 +8,14 @@ export default [
     path: 'sessions',
     name: 'SessionList',
     component: empty,
+    redirect: '',
     meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] },
     children: [
       {
         path: '',
         name: 'SessionList',
         component: () => import('@/views/sessions/SessionList/index'),
-        meta: { title: i18n.t('route.Sessions') }
+        meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] }
       },
       {
         path: ':id',

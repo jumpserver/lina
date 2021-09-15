@@ -5,6 +5,7 @@ export default [
     path: 'asset-accounts',
     component: empty,
     meta: { title: i18n.t('route.AssetAccount') },
+    redirect: '',
     children: [
       {
         path: '',
@@ -17,6 +18,7 @@ export default [
   {
     path: 'application-accounts',
     component: empty,
+    redirect: '',
     meta: { title: i18n.t('route.AssetAccount') },
     children: [
       {
