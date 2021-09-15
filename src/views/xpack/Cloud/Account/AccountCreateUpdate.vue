@@ -39,6 +39,9 @@ export default {
               el: {
                 toFormat: 'object'
               }
+            },
+            password: {
+              rules: this.$route.params.id ? [] : [Required]
             }
           }
         },
