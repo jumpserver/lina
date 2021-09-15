@@ -240,6 +240,22 @@ export default {
           value: this.object.email
         },
         {
+          key: this.$t('users.Phone'),
+          value: this.object.phone
+        },
+        {
+          key: this.$t('users.WeCom'),
+          value: this.object.wecom_id
+        },
+        {
+          key: this.$t('users.DingTalk'),
+          value: this.object.dingtalk_id
+        },
+        {
+          key: this.$t('users.FeiShu'),
+          value: this.object.feishu_id
+        },
+        {
           key: this.$t('users.Role'),
           value: this.object.total_role_display
         },
