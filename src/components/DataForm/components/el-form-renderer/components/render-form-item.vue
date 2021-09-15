@@ -97,24 +97,18 @@ export default {
     }
   },
   props: {
-    data: {
-      type: Object,
-      default: null
-    },
+    // eslint-disable-next-line vue/require-default-prop
+    data: Object,
     prop: {
       type: String,
       default() {
         return this.data.id
       }
     },
-    itemValue: {
-      type: Object,
-      default: null
-    },
-    value: {
-      type: Object,
-      default: null
-    },
+    // eslint-disable-next-line vue/require-prop-types,vue/require-default-prop
+    itemValue: {},
+    // eslint-disable-next-line vue/require-default-prop
+    value: Object,
     disabled: Boolean,
     readonly: Boolean,
     options: {
