@@ -6,6 +6,7 @@
       :fields-meta="fieldsMeta"
       :submit-method="submitMethod"
       :has-detail-in-msg="false"
+      @submitSuccess="onSubmitSuccess()"
     />
   </IBox>
 </template>
@@ -86,6 +87,9 @@ export default {
   methods: {
     submitMethod() {
       return 'patch'
+    },
+    onSubmitSuccess() {
+      window.location.reload()
     }
   }
 }

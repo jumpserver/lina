@@ -6,7 +6,6 @@ import { BASE_URL } from '@/utils/common'
 export default [
   {
     path: 'sessions',
-    name: 'SessionList',
     component: empty,
     redirect: '',
     meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] },
@@ -75,7 +74,6 @@ export default [
   },
   {
     path: 'storages',
-    name: 'Storage',
     component: empty,
     meta: { activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
     redirect: '',
