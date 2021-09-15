@@ -44,6 +44,8 @@ export default {
         data['rules'] = data['rules'].slice(0, data['approval_level'])
         return data
       },
+      onPerformError() {
+      },
       updateSuccessNextRoute: { name: 'TicketList' },
       createSuccessNextRoute: { name: 'TicketList' }
     }

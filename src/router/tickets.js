@@ -61,6 +61,7 @@ export default [
     path: 'flows',
     name: 'TicketFlowList',
     component: empty,
+    redirect: '',
     meta: { title: i18n.t('route.TicketFlow'), icon: 'check-square-o', activeMenu: '/tickets/tickets' },
     hidden: true,
     children: [

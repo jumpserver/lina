@@ -39,8 +39,8 @@ export default [
   },
   {
     path: 'databases',
-    name: 'DatabaseAppList',
     component: empty,
+    redirect: '',
     meta: { title: i18n.t('route.DatabaseApp') },
     children: [
       {
@@ -74,7 +74,6 @@ export default [
   },
   {
     path: 'kubernetes',
-    name: 'KubernetesAppList',
     component: empty,
     meta: { title: i18n.t('route.KubernetesApp') },
     children: [

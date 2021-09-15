@@ -6,6 +6,7 @@
       :fields-meta="fieldsMeta"
       :submit-method="submitMethod"
       :has-detail-in-msg="false"
+      @submitSuccess="onSubmitSuccess()"
     />
   </IBox>
 </template>
@@ -65,6 +66,16 @@ export default {
             title: this.$t('setting.insecureCommandEmailUpdate')
           }
         },
+        LOGIN_CONFIRM_ENABLE: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
+        SECURITY_WATERMARK_ENABLED: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
         PasswordRule: {
           label: this.$t('setting.PasswordCheckRule'),
           component: PasswordRule
@@ -80,6 +91,9 @@ export default {
   methods: {
     submitMethod() {
       return 'patch'
+    },
+    onSubmitSuccess() {
+      window.location.reload()
     }
   }
 }

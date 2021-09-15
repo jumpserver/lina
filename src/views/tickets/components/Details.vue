@@ -7,12 +7,12 @@
       <el-row :gutter="10">
         <el-col v-for="item in detailCardItems" :key="'card-' + item.key" :span="12">
           <el-row class="item">
-            <el-col :span="6">
+            <el-col :span="4">
               <div :style="{ 'text-align': 'align' }" class="item-label">
                 <label>{{ item.key }}: </label>
               </div>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="20">
               <div class="item-text">
                 <ItemValue v-bind="item" />
               </div>
@@ -24,12 +24,12 @@
       <el-row :gutter="10">
         <el-col v-for="item in specialCardItems" :key="'card-' + item.key" :span="12">
           <el-row class="item">
-            <el-col :span="6">
+            <el-col :span="4">
               <div :style="{ 'text-align': 'align' }" class="item-label">
                 <label>{{ item.key }}: </label>
               </div>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="20">
               <div class="item-text">
                 <ItemValue v-bind="item" />
               </div>

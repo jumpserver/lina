@@ -61,6 +61,15 @@ export default {
         },
         AUTH_SSO: {
           component: SSO
+        },
+        FORGOT_PASSWORD_URL: {
+          on: {
+            change([value], updateForm) {
+              if (value && !value.startsWith('http')) {
+                updateForm({ FORGOT_PASSWORD_URL: 'http://' + value })
+              }
+            }
+          }
         }
       },
       submitMethod() {

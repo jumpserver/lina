@@ -25,7 +25,8 @@ export default {
         meta: {
           apply_date_expired: date_expired,
           apply_date_start: date_start,
-          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
+          apply_assets: []
         },
         org_id: '',
         type: 'apply_asset'
@@ -87,13 +88,15 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.user_all_orgs.map((item) => {
+            options: this.$store.state.users.profile['user_all_orgs'].map((item) => {
               return { label: item.name, value: item.id }
             })
           },
           hidden: (form) => {
-            this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
-            this.fieldsMeta.meta.fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
+            const fieldsMeta = this.fieldsMeta.meta.fieldsMeta
+            fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
+            fieldsMeta.apply_assets.el.value = []
+            fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
           }
         }
       },
@@ -104,8 +107,8 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
-      this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
+    if (this.$store.state.users.profile['user_all_orgs'].length > 0) {
+      this.initial.org_id = this.$store.state.users.profile['user_all_orgs'][0].id
     }
     this.loading = false
   },

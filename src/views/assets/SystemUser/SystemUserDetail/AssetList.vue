@@ -162,8 +162,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: [],
-        hasObjects: [],
+        hasObjectsId: this.object.nodes,
         performAdd: (items) => {
           const relationUrl = `/api/v1/assets/system-users-nodes-relations/`
           const objectId = this.object.id

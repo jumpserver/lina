@@ -8,8 +8,8 @@
     :remote="remote"
     :remote-method="filterOptions"
     :multiple="multiple"
-    filterable
     :clearable="clearable"
+    filterable
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
@@ -98,7 +98,6 @@ export default {
     return {
       loading: false,
       initialized: false,
-      iValue: this.multiple ? [] : '',
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
@@ -112,6 +111,14 @@ export default {
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
+    },
+    iValue: {
+      set(val) {
+        this.$emit('input', val)
+      },
+      get() {
+        return this.value
+      }
     },
     iAjax() {
       const defaultPageSize = 10
