@@ -75,12 +75,13 @@ export default {
           },
           ip: {
             sortable: 'custom',
-            width: '180px'
+            width: '150px'
           },
           system_users: {
+            showOverflowTooltip: true,
             align: 'center',
             label: this.$t('assets.SystemUsers'),
-            width: '200px',
+            width: '150px',
             formatter: SystemUserFormatter,
             formatterArgs: {
               getUrl: ({ row }) => {
@@ -89,14 +90,11 @@ export default {
             }
           },
           platform: {
-            label: this.$t('assets.Platform'),
             width: '120px'
           },
           comment: {
-            prop: 'comment',
-            label: this.$t('assets.Comment'),
             showOverflowTooltip: true,
-            width: '180px'
+            width: '100px'
           },
           actions: {
             formatterArgs: {
