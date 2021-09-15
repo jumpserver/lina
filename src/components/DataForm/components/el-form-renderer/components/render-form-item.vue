@@ -97,18 +97,30 @@ export default {
     }
   },
   props: {
-    data: Object,
+    data: {
+      type: Object,
+      default: null
+    },
     prop: {
       type: String,
       default() {
         return this.data.id
       }
     },
-    itemValue: {},
-    value: Object,
+    itemValue: {
+      type: Object,
+      default: null
+    },
+    value: {
+      type: Object,
+      default: null
+    },
     disabled: Boolean,
     readonly: Boolean,
-    options: Array
+    options: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
