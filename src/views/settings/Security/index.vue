@@ -32,7 +32,7 @@ export default {
             'SECURITY_COMMAND_EXECUTION',
             'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
             'SECURITY_MAX_IDLE_TIME',
-            // 'SECURITY_WATERMARK_ENABLED',
+            'SECURITY_WATERMARK_ENABLED',
             'SECURITY_SESSION_SHARE'
           ]
         ],
@@ -66,6 +66,16 @@ export default {
             title: this.$t('setting.insecureCommandEmailUpdate')
           }
         },
+        LOGIN_CONFIRM_ENABLE: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
+        SECURITY_WATERMARK_ENABLED: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
         PasswordRule: {
           label: this.$t('setting.PasswordCheckRule'),
           component: PasswordRule
@@ -76,12 +86,6 @@ export default {
         }
       },
       url: '/api/v1/settings/setting/?category=security'
-    }
-  },
-  mounted() {
-    if (this.$store.getters.hasValidLicense) {
-      const securityWatermarkEnabled = 'SECURITY_WATERMARK_ENABLED'
-      this.fields[0][1].splice(3, 0, securityWatermarkEnabled)
     }
   },
   methods: {
