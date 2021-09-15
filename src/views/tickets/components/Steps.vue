@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div style="height: 660px;">
+    <div style="height: 540px;">
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.type_display}`"
@@ -17,17 +17,17 @@
           :title="`${thisCopy.$t('tickets.HandleTicket')}`"
         >
           <div slot="description">
-            <el-tag :type="`${thisCopy.statusMap[item.state].type}`"> {{ `${thisCopy.statusMap[item.state].title}` }} </el-tag>
+            <el-tag size="medium" :type="`${thisCopy.statusMap[item.state].type}`"> {{ `${thisCopy.statusMap[item.state].title}` }} </el-tag>
           </div>
-          <div v-if="item.state==='closed'" slot="description" style="color: blue">
+          <div slot="description"><el-button type="text" style="color: blue" @click="lookOver(item.assignees_display)">点击查看 受理人</el-button></div>
+          <div v-if="item.state==='closed'" slot="description">
             <div>{{ `${thisCopy.$t('tickets.Assignee')}：${object.applicant_display}` }}</div>
             <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
           </div>
-          <div v-if="item.state!=='notified' && item.state!=='closed'" slot="description" style="color: blue">
+          <div v-if="item.state!=='notified' && item.state!=='closed'" slot="description">
             <div>{{ `${thisCopy.$t('tickets.Assignee')}：${item.processor_display}` }}</div>
             <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
           </div>
-          <div slot="description">{{ `${thisCopy.$t('tickets.Assignees')}：${item.assignees_display}` }}</div>
         </el-step>
         <el-step
           :title="`${this.$t('tickets.FinishedTicket')}`"
@@ -89,6 +89,19 @@ export default {
     },
     toSafeLocalDateStr(dataStr) {
       return toSafeLocalDateStr(dataStr)
+    },
+    lookOver(assignees_display) {
+      const h = this.$createElement
+      const content = []
+      assignees_display.forEach(item => {
+        content.push(h('p', null, item),)
+      })
+      this.$msgbox({
+        title: '相关受理人',
+        message: h('p', null, content),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
     }
   }
 }

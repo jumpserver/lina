@@ -102,7 +102,11 @@ export default {
           value: this.object.meta.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'ApplicationPermissionDetail', params: { id: vm.object.id }, query: { oid: vm.object.org_id }}
-            return <router-link to={to}>{ value }</router-link>
+            if (vm.object.status === 'closed' && vm.object.state === 'approved') {
+              return <router-link to={to}>{ value }</router-link>
+            } else {
+              return <span>{ value }</span>
+            }
           }
         },
         {
