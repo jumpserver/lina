@@ -111,10 +111,8 @@ export default {
     value: Object,
     disabled: Boolean,
     readonly: Boolean,
-    options: {
-      type: Array,
-      default: () => []
-    }
+    // eslint-disable-next-line vue/require-default-prop
+    options: Array
   },
   data() {
     return {
