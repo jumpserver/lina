@@ -1,5 +1,5 @@
 <template>
-  <component :is="systemUserProtocolComponent" :title="title" />
+  <component :is="systemUserProtocolComponent" :title="iTitle" />
 </template>
 
 <script>
@@ -14,12 +14,21 @@ export default {
   components: { SSH, RDP, VncOrTelnet, Database },
   data() {
     return {
-      title: this.$t('route.SystemUserCreate') + ' - ' + this.$t('assets.CommonUser')
     }
   },
   method: {
   },
   computed: {
+    iTitle() {
+      const params = this.$route.params
+      let title = ''
+      if (params.id) {
+        title = this.$t('route.SystemUserUpdate')
+      } else {
+        title = this.$t('route.SystemUserCreate')
+      }
+      return title + '-' + this.$t('assets.CommonUser')
+    },
     systemUserProtocolComponent() {
       const query = this.$route.query
       const protocol = query.protocol
