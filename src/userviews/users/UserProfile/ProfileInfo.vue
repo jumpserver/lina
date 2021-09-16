@@ -142,7 +142,11 @@ export default {
           has: this.object.mfa_enabled,
           callbacks: {
             click: function() {
-              window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
+              if (this.$store.state.users.profile.is_otp_secret_key_bound) {
+                window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
+              } else {
+                window.location.href = `/core/auth/profile/otp/enable/start/?next=${this.$route.fullPath}`
+              }
             }.bind(this)
           }
         },
