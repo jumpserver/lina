@@ -45,6 +45,11 @@ export default {
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
+        LOGIN_CONFIRM_ENABLE: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        }
       },
       url: '/api/v1/settings/setting/?category=security'
     }

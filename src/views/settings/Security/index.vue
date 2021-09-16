@@ -82,7 +82,10 @@ export default {
         },
         AuthLimit: {
           label: this.$t('setting.AuthLimit'),
-          component: AuthLimit
+          component: AuthLimit,
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
         }
       },
       url: '/api/v1/settings/setting/?category=security'
