@@ -14,7 +14,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard/index'
 import AssetRelationCard from '@/components/AssetRelationCard'
-import { DeleteActionFormatter } from '@/components/TableFormatters'
+import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'ChangeAuthPlanAsset',
@@ -36,6 +36,12 @@ export default {
           'hostname', 'ip', 'delete_action'
         ],
         columnsMeta: {
+          hostname: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'AssetDetail'
+            }
+          },
           delete_action: {
             prop: 'id',
             label: this.$t('common.Actions'),
@@ -87,8 +93,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.listTable.$refs.ListTable.reloadTable()
-          that.$refs.assetSelect.$refs.select2.clearSelected()
+          window.location.reload()
         }
       },
       nodeRelationConfig: {
@@ -115,7 +120,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$refs.listTable.$refs.ListTable.reloadTable()
+          window.location.reload()
         },
         performDelete: (item) => {
           const data = {
