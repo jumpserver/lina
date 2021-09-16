@@ -66,12 +66,17 @@ export default {
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.RegularlyPerform'),
-          value: this.object.crontab
+          value: this.object.crontab,
+          formatter: (item, val) => {
+            return <span>{this.object.is_periodic ? val : ''}</span>
+          }
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
-          value: this.object.interval
-
+          value: this.object.interval,
+          formatter: (item, val) => {
+            return <span>{this.object.is_periodic ? val : ''}</span>
+          }
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.DateJoined'),

@@ -12,7 +12,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import RelationCard from '@/components/RelationCard/index'
-import { DeleteActionFormatter } from '@/components/TableFormatters'
+import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'ChangeAuthPlanDatabase',
@@ -34,6 +34,12 @@ export default {
           'name', 'username', 'delete_action'
         ],
         columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'SystemUserDetail'
+            }
+          },
           delete_action: {
             prop: 'id',
             label: this.$t('common.Actions'),
@@ -92,6 +98,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
+          window.location.reload()
           this.$refs.listTable.$refs.ListTable.reloadTable()
         }
       }

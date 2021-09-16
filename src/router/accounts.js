@@ -136,7 +136,7 @@ export default [
         path: 'app-plan/create',
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
         name: 'AppChangeAuthPlanCreate',
-        meta: { title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'), activeMenu: '/accounts/change-auth-plan', action: 'create' },
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanCreate'), activeMenu: '/accounts/change-auth-plan', action: 'create' },
         hidden: true
       },
       {

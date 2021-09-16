@@ -114,6 +114,9 @@ export default {
     },
     iValue: {
       set(val) {
+        if (!val) {
+          return
+        }
         this.$emit('input', val)
       },
       get() {
