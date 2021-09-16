@@ -1063,7 +1063,7 @@
       "resetMFAWarningMsg": "This will reset the user MFA setting, user can reset it",
       "resetMFAdSuccessMsg": "Reset MFA success",
       "resetPassword": "Reset password",
-      "resetPasswordSuccessMsg": "An e-mail has been sent to the user`s mailbox",
+      "resetPasswordSuccessMsg": "A password reset message has been sent to the user",
       "resetPasswordWarningMsg": "This will reset the user password and send a reset mail",
       "resetSSHKey": "Reset SSH key",
       "resetSSHKeySuccessMsg": "An e-mail has been sent to the user`s mailbox",
