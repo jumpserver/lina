@@ -25,8 +25,16 @@ export default {
   data() {
     const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     return {
-      formatterArgs: formatterArgs,
-      iTitle: formatterArgs.getTitle({ col: this.col, row: this.row, cellValue: this.cellValue })
+      formatterArgs: formatterArgs
+    }
+  },
+  computed: {
+    iTitle() {
+      return this.formatterArgs.getTitle({
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue
+      })
     }
   },
   methods: {
