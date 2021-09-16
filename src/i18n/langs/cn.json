@@ -1097,7 +1097,7 @@
       "resetMFAWarningMsg": "你确定要重置用户的 MFA 吗?",
       "resetMFAdSuccessMsg": "重置MFA成功, 用户可以重新设置MFA了",
       "resetPassword": "重置密码",
-      "resetPasswordSuccessMsg": "发送邮件任务已提交, 用户稍后会收到重置密码邮件",
+      "resetPasswordSuccessMsg": "已向用户发送重置密码消息",
       "resetPasswordWarningMsg": "你确定要发送重置用户密码的邮件吗",
       "resetSSHKey": "重置SSH密钥",
       "resetSSHKeySuccessMsg": "发送邮件任务已提交, 用户稍后会收到重置密钥邮件",
