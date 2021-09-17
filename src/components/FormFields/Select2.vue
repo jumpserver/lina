@@ -114,9 +114,10 @@ export default {
     },
     iValue: {
       set(val) {
-        if (!val) {
+        if (!val || val.length === 0) {
           return
         }
+        console.log('What is val: ', val)
         this.$emit('input', val)
       },
       get() {
