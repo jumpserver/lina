@@ -22,7 +22,7 @@
     </template>
     <slot />
     <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item v-if="hasActionPerm" :label="$t('tickets.reply')">
+      <el-form-item :label="$t('tickets.reply')">
         <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
       </el-form-item>
       <el-form-item style="float: right">
@@ -54,7 +54,6 @@
           <i class="fa fa-times" /> {{ $t('tickets.Close') }}
         </el-button>
         <el-button
-          v-if="hasActionPerm"
           :disabled="object.status === 'closed'"
           type="info"
           size="small"
