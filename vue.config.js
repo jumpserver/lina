@@ -86,9 +86,7 @@ module.exports = {
         elementCss: resolve('node_modules/element-ui/lib/theme-chalk/index.css'),
         elementLocale: resolve('node_modules/element-ui/lib/locale/lang/en.js'),
       },
-      resolve: {
-        extensions: ['.vue', '.js', '.json'], 
-      },
+      extensions: ['.vue', '.js', '.json'], 
     },
     plugins: [
       new CompressionWebpackPlugin({
