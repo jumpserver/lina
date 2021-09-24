@@ -10,6 +10,7 @@
     "username": "用户名",
     "ip_group": "IP 组",
     "action": "动作",
+    "Rules": "规则",
     "priority": "优先级",
     "date_created": "创建时间",
     "created_by": "创建者",
@@ -25,6 +26,7 @@
     "apply_login_asset": "申请登录资产",
     "apply_login_system_user": "申请登录系统用户",
     "apply_login_user": "申请登录用户",
+    "login_confirm_user": "登录复核 受理人",
     "RuleDetail": "规则详情"
   },
   "applications": {
@@ -618,9 +620,9 @@
     "KubernetesAppUpdate": "更新Kubernetes",
     "Acl": "访问控制",
     "UserAclList": "用户登录",
-    "UserAclCreate": "创建用户登录规则",
+    "UserLoginACLCreate": "创建用户登录规则",
     "UserAclLists": "用户登录规则",
-    "UserAclUpdate": "更新用户登录规则",
+    "UserLoginACLUpdate": "更新用户登录规则",
     "UserAclDetail": "用户登录规则详情",
     "AssetAclList": "登录资产",
     "AssetAclCreate": "创建资产登录规则",

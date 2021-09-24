@@ -1,63 +1,54 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :title="title" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/ListTable/formatters'
+
 export default {
-  name: 'UserLoginACLList',
   components: {
     GenericListPage
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/acls/login-acls/users/',
-        columns: ['name', 'username', 'login_acls'],
+        url: `/api/v1/acls/login-acls/`,
+        columns: [
+          'name', 'ip_group', 'reviewers', 'priority', 'user_display', 'is_active', 'comment', 'actions'
+        ],
         columnsShow: {
-          min: ['name', 'login_acls', 'actions'],
-          default: ['name', 'username', 'login_acls']
+          min: ['name', 'actions'],
+          default: [
+            'name', 'priority', 'is_active', 'user_display', 'comment', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
             formatterArgs: {
-              getRoute: ({ row }) => {
-                return {
-                  name: 'UserLoginACLDetail',
-                  params: { id: row.id }
-                }
+              route: 'UserLoginACLDetail',
+              routeQuery: {
+                user: this.$route.params.id
               }
             }
           },
-          login_acls: {
-            label: this.$t('assets.Rules'),
-            formatter: DetailFormatter,
-            formatterArgs: {
-              getTitle: ({ cellValue }) => {
-                return cellValue.length
-              },
-              getRoute: ({ row }) => {
-                return {
-                  name: 'UserLoginACLDetail',
-                  params: { id: row.id }
-                }
-              }
-            }
+          reviewers: {
+            prop: 'reviewers_amount'
           }
         }
       },
+      updateRoute: 'UserLoginACLUpdate',
       headerActions: {
-        hasImport: false,
+        createRoute: 'UserLoginACLCreate',
+        hasRefresh: true,
         hasExport: false,
+        hasImport: false,
         hasMoreActions: false
-      },
-      title: '用户登录控制'
+      }
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>

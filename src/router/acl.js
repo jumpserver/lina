@@ -55,17 +55,52 @@ export default [
         meta: { title: i18n.t('route.UserLoginACL'), activeMenu: '/acl/user-login-acl' }
       },
       {
-        path: 'users/:id',
+        path: 'create',
+        name: 'UserLoginACLCreate',
+        component: () => import('@/views/acl/UserLoginACL/User/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLCreate'), activeMenu: '/acl/user-login-acl' },
+        hidden: true
+      },
+      {
+        path: ':id',
         name: 'UserLoginACLDetail',
-        component: () => import('@/views/acl/UserLoginACL/UserLoginACLDetail'),
+        component: () => import('@/views/acl/UserLoginACL/User/UserLoginACL'),
         meta: { title: i18n.t('route.UserLoginACL'), activeMenu: '/acl/user-login-acl' },
         hidden: true
       },
       {
-        path: 'users/:id/create',
-        name: 'UserLoginACLCreate',
-        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate'),
-        meta: { title: i18n.t('route.UserLoginACLDetail'), activeMenu: '/acl/user-login-acl' },
+        path: ':id/update',
+        name: 'UserLoginACLUpdate',
+        component: () => import('@/views/acl/UserLoginACL/User/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLUpdate'), activeMenu: '/acl/user-login-acl' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: 'single-user-login-acl',
+    component: empty,
+    redirect: '',
+    children: [
+      {
+        path: 'create',
+        name: 'SingleUserLoginACLCreate',
+        component: () => import('@/views/acl/UserLoginACL/User/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLCreate'), activeMenu: '/users/users' },
+        hidden: true
+      },
+      {
+        path: ':id',
+        name: 'SingleUserLoginACLDetail',
+        component: () => import('@/views/acl/UserLoginACL/User/UserLoginACL'),
+        meta: { title: i18n.t('route.UserLoginACL'), activeMenu: '/users/users' },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        name: 'SingleUserLoginACLUpdate',
+        component: () => import('@/views/acl/UserLoginACL/User/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLUpdate'), activeMenu: '/users/users' },
         hidden: true
       }
     ]
