@@ -114,7 +114,8 @@ export default {
     },
     iValue: {
       set(val) {
-        if (!val || val.length === 0) {
+        const noValue = !this.value || this.value.length === 0
+        if (noValue && !this.initialized) {
           return
         }
         this.$emit('input', val)
