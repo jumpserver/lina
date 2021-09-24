@@ -1,6 +1,13 @@
 <template>
   <div class="asset-select-dialog">
-    <Select2 ref="select2" v-bind="select2Config" @input="onInputChange" @focus.stop="handleFocus" v-on="$listeners" />
+    <Select2
+      ref="select2"
+      v-model="select2Config.value"
+      v-bind="select2Config"
+      @input="onInputChange"
+      @focus.stop="handleFocus"
+      v-on="$listeners"
+    />
     <Dialog
       v-if="dialogVisible"
       :title="this.$t('assets.Assets')"
