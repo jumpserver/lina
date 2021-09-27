@@ -239,6 +239,21 @@ export function getUpdateObjURL(url, objId) {
   return urlObj.href
 }
 
+export function truncateCenter(s, l) {
+  if (s.length <= l) {
+    return s
+  }
+  const centerIndex = Math.ceil(l / 2)
+  return s.slice(0, centerIndex - 2) + '...' + s.slice(centerIndex + 1, l)
+}
+
+export function truncateEnd(s, l) {
+  if (s.length <= l) {
+    return s
+  }
+  return s.slice(0, l - 3) + '...'
+}
+
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)
 
 const scheme = document.location.protocol
