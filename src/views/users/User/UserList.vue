@@ -46,8 +46,8 @@ export default {
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
           'groups_display', 'total_role_display', 'source',
-          'is_valid', 'login_blocked', 'mfa_enabled', 'is_expired',
-          'mfa_force_enabled',
+          'is_valid', 'login_blocked', 'mfa_enabled',
+          'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
           'comment', 'created_by', 'actions'
         ],
@@ -72,6 +72,22 @@ export default {
             label: this.$t('users.Role'),
             showOverflowTooltip: true
           },
+          mfa_enabled: {
+            label: 'MFA',
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          mfa_force_enabled: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          is_expired: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
           groups_display: {
             width: '200px',
             showOverflowTooltip: true
@@ -81,10 +97,10 @@ export default {
               canClone: true,
               hasDelete: hasDelete,
               canUpdate: function({ row }) {
-                return row.can_update
+                return row['can_update']
               },
               canDelete: function({ row }) {
-                return row.can_delete
+                return row['can_delete']
               },
               extraActions: [
                 {

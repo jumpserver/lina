@@ -36,7 +36,10 @@ export default {
             width: '100px'
           },
           username_same_with_user: {
-            width: '150px'
+            width: '150px',
+            formatterArgs: {
+              showFalse: false
+            }
           },
           login_mode: {
             width: '120px'

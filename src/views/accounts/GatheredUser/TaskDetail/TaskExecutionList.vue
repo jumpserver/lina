@@ -4,7 +4,6 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import { BooleanFormatter, DateFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'TaskExecutionList',
@@ -26,33 +25,24 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/xpack/gathered-user/task-executions/?task=${this.object.id}`,
-        columns: [
-          {
-            prop: 'timedelta',
+        columns: ['timedelta', 'date_start', 'success'],
+        columnsMeta: {
+          timedelta: {
             label: this.$t('ops.timeDelta'),
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
-            }
+            },
+            width: null
           },
-          {
-            prop: 'date_start',
-            label: this.$t('common.DateStart'),
-            formatter: DateFormatter
+          date_start: {
+            width: null
           },
-          {
-            prop: 'success',
-            label: this.$t('common.Success'),
-            width: '90px',
-            align: 'center',
-            formatter: BooleanFormatter,
-            formatterArgs: {
-              iconChoices: {
-                false: 'fa-times text-danger',
-                true: 'fa-check text-primary'
-              }
-            }
+          success: {
+            width: null,
+            label: this.$t('common.Success')
           }
-        ]
+        }
+
       }
     }
   }
