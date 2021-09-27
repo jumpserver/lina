@@ -17,7 +17,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
-        columns: ['username', 'type', 'backend', 'ip', 'city', 'user_agent', 'mfa', 'reason', 'status', 'datetime'],
+        columns: [
+          'username', 'type', 'backend', 'ip', 'city',
+          'user_agent', 'mfa', 'reason', 'status', 'datetime'
+        ],
         columnsMeta: {
           username: {
             showOverflowTooltip: true
@@ -33,7 +36,13 @@ export default {
             width: '90px'
           },
           status: {
-            width: '85px'
+            width: '85px',
+            formatterArgs: {
+              classChoices: {
+                true: 'text-primary',
+                false: 'text-danger'
+              }
+            }
           },
           mfa: {
             label: 'MFA',
