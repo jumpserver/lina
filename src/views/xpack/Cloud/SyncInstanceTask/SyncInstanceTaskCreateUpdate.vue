@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Select2 } from '@/components'
+import { Select2, CronTab } from '@/components'
 import rules from '@/components/DataForm/rules'
 import Protocols from '@/views/assets/Asset/components/Protocols/index'
 
@@ -109,6 +109,7 @@ export default {
           type: 'switch'
         },
         crontab: {
+          component: CronTab,
           label: this.$t('xpack.RegularlyPerform'),
           hidden: (formValue) => {
             return formValue.is_periodic === false
