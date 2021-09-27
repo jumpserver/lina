@@ -1,5 +1,5 @@
 <template>
-  <span>{{ display }}</span>
+  <span :class="cls"> {{ value }}</span>
 </template>
 
 <script>
@@ -19,19 +19,27 @@ export default {
   },
   data() {
     return {
-      display: this.getValue()
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
     }
   },
-  methods: {
-    getValue() {
-      const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
-      const displayKey = formatterArgs.displayKey
+  computed: {
+    value() {
+      const displayKey = this.formatterArgs.displayKey
       let value = this.row[displayKey]
       if (value === undefined) {
         value = this.row[this.col.prop]
       }
       return value
+    },
+    cls() {
+      const classChoices = this.formatterArgs?.classChoices
+      if (!classChoices) {
+        return ''
+      }
+      return classChoices[this.cellValue]
     }
+  },
+  methods: {
   }
 }
 </script>
