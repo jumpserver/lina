@@ -3145,6 +3145,13 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cron-parser@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.nlark.com/cron-parser/download/cron-parser-4.0.0.tgz#2198c42c0a8a57ccbe55d3c377867b1fec336a13"
+  integrity sha1-IZjELAqKV8y+VdPDd4Z7H+wzahM=
+  dependencies:
+    luxon "^1.26.0"
+
 cross-spawn@^5.0.1, cross-spawn@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -6901,6 +6908,11 @@ lru-cache@^6.0.0:
   integrity sha1-bW/mVw69lqr5D8rR2vo7JWbbOpQ=
   dependencies:
     yallist "^4.0.0"
+
+luxon@^1.26.0:
+  version "1.28.0"
+  resolved "https://registry.nlark.com/luxon/download/luxon-1.28.0.tgz#e7f96daad3938c06a62de0fb027115d251251fbf"
+  integrity sha1-5/ltqtOTjAamLeD7AnEV0lElH78=
 
 make-dir@^1.0.0:
   version "1.3.0"

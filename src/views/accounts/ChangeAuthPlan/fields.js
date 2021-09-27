@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import { AssetSelect } from '@/components'
+import { AssetSelect, CronTab } from '@/components'
 import Select2 from '@/components/FormFields/Select2'
 import { Required } from '@/components/DataForm/rules'
 
@@ -183,11 +183,21 @@ function getFields() {
     type: 'switch'
   }
 
+  // const crontab = {
+  //   label: i18n.t('xpack.RegularlyPerform'),
+  //   hidden: (formValue) => {
+  //     return formValue.is_periodic === false
+  //   },
+  //   helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
+  // }
+
   const crontab = {
+    type: 'cronTab',
+    component: CronTab,
+    rules: [
+      { required: false }
+    ],
     label: i18n.t('xpack.RegularlyPerform'),
-    hidden: (formValue) => {
-      return formValue.is_periodic === false
-    },
     helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
   }
 

@@ -42,6 +42,7 @@ import ListTable from '@/components/ListTable'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
+import { CronTab } from '@/components'
 
 export default {
   name: 'ImportDialog',
@@ -107,6 +108,7 @@ export default {
         fields: ['AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_INTERVAL', 'AUTH_LDAP_SYNC_CRONTAB'],
         fieldsMeta: {
           AUTH_LDAP_SYNC_CRONTAB: {
+            component: CronTab,
             helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
           }
         },
