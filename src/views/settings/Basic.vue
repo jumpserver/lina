@@ -25,21 +25,23 @@ export default {
     IBox
   },
   data() {
-    const globalOrgName = this.$store.getters.hasValidLicense ? 'GLOBAL_ORG_DISPLAY_NAME' : null
     return {
       fields: [
         [
           this.$t('common.BasicInfo'), [
             'SITE_URL', 'USER_GUIDE_URL',
-            'FORGOT_PASSWORD_URL', globalOrgName
+            'GLOBAL_ORG_DISPLAY_NAME'
           ]
         ]
       ],
       fieldsMeta: {
         SITE_URL: {
-          rules: [
-            rules.Required
-          ]
+          rules: [rules.Required]
+        },
+        GLOBAL_ORG_DISPLAY_NAME: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
         }
       },
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
