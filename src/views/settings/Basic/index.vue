@@ -9,6 +9,7 @@
       :submit-method="submitMethod"
       :has-detail-in-msg="false"
       :on-perform-success="onPerformSuccess"
+      class="form"
     />
   </IBox>
 </template>
@@ -17,6 +18,7 @@
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { IBox } from '@/components'
 import rules from '@/components/DataForm/rules'
+import Announcement from './announcement'
 
 export default {
   name: 'Basic',
@@ -32,6 +34,11 @@ export default {
             'SITE_URL', 'USER_GUIDE_URL',
             'GLOBAL_ORG_DISPLAY_NAME'
           ]
+        ],
+        [
+          '功能', [
+            'TICKETS_ENABLED', 'ANNOUNCEMENT_ENABLED'
+          ]
         ]
       ],
       fieldsMeta: {
@@ -42,6 +49,10 @@ export default {
           hidden: () => {
             return !this.$store.getters.hasValidLicense
           }
+        },
+        ANNOUNCEMENT_ENABLED: {
+          // label: '公告',
+          component: Announcement
         }
       },
       successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
@@ -60,5 +71,8 @@ export default {
 </script>
 
 <style scoped>
+.form >>> .form-buttons {
+  padding-top: 30px;
+}
 
 </style>

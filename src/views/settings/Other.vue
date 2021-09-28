@@ -22,7 +22,7 @@ export default {
         [
           this.$t('common.Basic'),
           [
-            'EMAIL_SUFFIX', 'TICKETS_ENABLED'
+            'EMAIL_SUFFIX'
           ]
         ],
         [
