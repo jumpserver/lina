@@ -3,12 +3,15 @@
     v-if="enabled && !isViewed()"
     type="success"
     :center="false"
-    :title="this.$t('common.Announcement') + ': ' + announcement.subject"
+    :title="title"
     @close="onClose"
   >
     <span> {{ announcement.content }}</span>
     <span v-if="announcement.link">
-      <el-link :href="announcement.link" target="_blank" class="link-more"> 查看更多</el-link> <i class="fa fa-share-square-o" />
+      <el-link :href="announcement.link" target="_blank" class="link-more">
+        {{ $t('common.ViewMore') }}
+      </el-link>
+      <i class="fa fa-share-square-o" />
     </span>
   </el-alert>
 </template>
@@ -33,6 +36,9 @@ export default {
     },
     enabled() {
       return this.publicSettings.ANNOUNCEMENT_ENABLED
+    },
+    title() {
+      return this.$t('common.Announcement') + ': ' + this.announcement.subject
     }
   },
   methods: {

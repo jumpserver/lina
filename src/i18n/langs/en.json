@@ -231,6 +231,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
     "Database": "Database",
@@ -762,6 +763,7 @@
     }
   },
   "setting": {
+    "Feature": "Feature",
     "SMSProvider": "SMS provider",
     "SMS": "SMS setting",
     "AlibabaCloud": "Alibaba cloud",

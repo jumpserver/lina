@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      title: '公告',
+      title: this.$t('common.Announcement'),
       visible: false,
       config: {
         fields: [
@@ -45,6 +45,11 @@ export default {
               'SUBJECT', 'CONTENT', 'LINK'
             ],
             fieldsMeta: {
+              CONTENT: {
+                el: {
+                  rows: 5
+                }
+              }
             }
           }
         },

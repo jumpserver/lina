@@ -36,7 +36,7 @@ export default {
           ]
         ],
         [
-          '功能', [
+          this.$t('setting.Feature'), [
             'TICKETS_ENABLED', 'ANNOUNCEMENT_ENABLED'
           ]
         ]
