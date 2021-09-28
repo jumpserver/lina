@@ -29,7 +29,7 @@ export default {
     ]),
     announcement() {
       const ann = this.publicSettings.ANNOUNCEMENT
-      return { subject: ann['SUBJECT'], content: ann['CONTENT'], link: ann['LINK'] }
+      return { id: ann['ID'], subject: ann['SUBJECT'], content: ann['CONTENT'], link: ann['LINK'] }
     },
     enabled() {
       return this.publicSettings.ANNOUNCEMENT_ENABLED
@@ -37,11 +37,11 @@ export default {
   },
   methods: {
     onClose() {
-      localStorage.setItem(this.viewedKey, this.announcement.subject)
+      localStorage.setItem(this.viewedKey, this.announcement.id)
     },
     isViewed() {
       const viewedId = localStorage.getItem(this.viewedKey)
-      return viewedId === this.announcement.subject
+      return viewedId === this.announcement.id
     }
   }
 }
