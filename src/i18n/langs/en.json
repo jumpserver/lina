@@ -231,6 +231,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Announcement": "Announcement",
     "Logging": "Logging",
     "Database": "Database",
     "Params": "Params",

@@ -233,6 +233,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "Announcement": "公告",
     "Logging": "日志记录",
     "Database": "数据库记录",
     "Params": "参数",
