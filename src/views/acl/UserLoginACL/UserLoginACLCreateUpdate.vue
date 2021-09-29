@@ -1,7 +1,6 @@
 <template>
   <GenericCreateUpdatePage
     v-bind="$data"
-    :perform-submit="performSubmit"
     :after-get-form-value="afterGetFormValue"
   />
 </template>
@@ -18,7 +17,6 @@ export default {
       initial: {
         action: 'reject',
         ip_group: '*',
-        is_login_confirm: true,
         user: this.$route.query.user,
         users: {
           username_group: ''
@@ -28,8 +26,8 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['user', 'users']],
-        [this.$t('acl.Rules'), ['action', 'ip_group']],
-        [this.$t('users.LoginConfirm'), ['is_login_confirm', 'reviewers']],
+        [this.$t('acl.Rules'), ['ip_group']],
+        [this.$t('acl.Action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
@@ -57,9 +55,6 @@ export default {
 
           }
         },
-        is_login_confirm: {
-          type: 'switch'
-        },
         reviewers: {
           el: {
             value: [],
@@ -71,7 +66,7 @@ export default {
             }
           },
           hidden: (formValue) => {
-            return formValue.is_login_confirm === false
+            return formValue.action !== 'confirm'
           }
         }
       },
@@ -128,7 +123,7 @@ export default {
         } else {
           delete value.users
         }
-        if (!value.is_login_confirm) {
+        if (value.action !== 'confirm') {
           value.reviewers = []
         }
         return value

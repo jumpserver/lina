@@ -15,7 +15,7 @@ import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
 import UserGrantedDatabases from './UserGrantedDatabases'
 import UserGrantedK8Ss from './UserGrantedK8Ss'
 import UserK8SPermissionRules from './UserK8SPermissionRules'
-import UserLoginACLList from '@/views/acl/UserLoginACL/SingleUser/UserLoginACL/UserLoginACLList'
+import UserLoginACLList from '@/views/acl/UserLoginACL/SingleUserLoginACLList'
 import UserDatabasePermissionRules from './UserDatabasePermissionRules'
 import UserInfo from './UserInfo'
 

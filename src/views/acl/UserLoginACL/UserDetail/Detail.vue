@@ -91,7 +91,7 @@ export default {
         },
         {
           key: this.$t('acl.login_confirm_user'),
-          value: this.object.is_login_confirm ? this.object.reviewers_display : ''
+          value: this.object.action === 'confirm' ? this.object.reviewers_display : ''
         }
       ]
     }
