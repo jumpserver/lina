@@ -13,6 +13,7 @@
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
@@ -40,7 +41,7 @@ export default {
               this.$axios.get(
                 `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/run/`
               ).then(res => {
-                window.open(`/#/ops/celery/task/${res.task}/log/`, '', 'width=900,height=600')
+                openTaskPage(res['task'])
               }
               )
             }.bind(this)
@@ -67,6 +68,14 @@ export default {
         {
           key: this.$t('xpack.Cloud.AdminUser'),
           value: this.object.admin_user_display
+        },
+        {
+          key: this.$t('assets.Protocols'),
+          value: this.object.protocols.join(', ')
+        },
+        {
+          key: this.$t('xpack.Cloud.IPNetworkSegment'),
+          value: this.object.ip_network_segment_group.join(', ')
         },
         {
           key: this.$t('xpack.Cloud.IsAlwaysUpdate'),

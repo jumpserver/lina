@@ -15,6 +15,7 @@
 </template>
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
+import { getUpdateObjURL } from '@/utils/common'
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -111,7 +112,7 @@ export default {
       }
     },
     // 获取提交的方法
-    getMethod: {
+    submitMethod: {
       type: Function,
       default: function() {
         const params = this.$route.params
@@ -129,36 +130,31 @@ export default {
         const params = this.$route.params
         let url = this.url
         if (params.id) {
-          url = `${url}${params.id}/`
+          url = getUpdateObjURL(url, params.id)
         }
         return url
       }
     },
-    onPerformSuccess: {
+    emitPerformSuccessMsg: {
       type: Function,
-      default(res, method, vm, addContinue) {
+      default(method, res, addContinue) {
         let msg = method === 'post' ? this.createSuccessMsg : this.updateSuccessMsg
         if (addContinue) {
           msg = this.saveSuccessContinueMsg
         }
-        let msgLinkName = this.$t('common.Resource')
+        let msgLinkName = ''
         if (res.name) {
           msgLinkName = res.name
         } else if (res.hostname) {
           msgLinkName = res.hostname
         }
-        const detailRoute = this.objectDetailRoute
-        detailRoute['params'] = { 'id': res.id }
-        const route = this.getNextRoute(res, method)
-        this.$emit('submitSuccess', res)
         const h = this.$createElement
-        this.$log.debug('router is: ', detailRoute)
         if (this.hasDetailInMsg) {
           this.$message({
             message: h('p', null, [
               h('el-link', {
                 on: {
-                  click: () => this.$router.push(detailRoute)
+                  click: () => this.$router.push(this.objectDetailRoute)
                 },
                 style: { 'vertical-align': 'top' }
               }, msgLinkName),
@@ -174,6 +170,18 @@ export default {
         } else {
           this.$message.success(msg)
         }
+      }
+    },
+    onPerformSuccess: {
+      type: Function,
+      default(res, method, vm, addContinue) {
+        const route = this.getNextRoute(res, method)
+        if (!(route.params && route.params.id)) {
+          route['params'] = { 'id': res.id }
+        }
+        this.$emit('submitSuccess', res)
+
+        this.emitPerformSuccessMsg(method, res, addContinue)
         if (!addContinue) {
           setTimeout(() => this.$router.push(route), 100)
         }
@@ -215,9 +223,10 @@ export default {
   },
   computed: {
     method() {
-      return this.getMethod(this)
+      return this.submitMethod(this)
     },
     iUrl() {
+      // 更新或创建的url
       return this.getUrl()
     },
     iHasSaveContinue() {
@@ -230,7 +239,7 @@ export default {
       if (this.hasReset != null) {
         return this.hasReset
       }
-      return this.method === 'put'
+      return this.isUpdateMethod()
     }
   },
   async created() {
@@ -246,6 +255,9 @@ export default {
     }
   },
   methods: {
+    isUpdateMethod() {
+      return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
+    },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
@@ -261,11 +273,11 @@ export default {
     },
     async getFormValue() {
       const cloneFrom = this.$route.query['clone_from']
-      if (this.method !== 'put' && !cloneFrom) {
+      if (!this.isUpdateMethod() && !cloneFrom) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
-      if (!object) {
+      if (!object || Object.keys(object).length === 0) {
         if (cloneFrom) {
           this.$log.debug('Clone from: ', cloneFrom)
           const url = `${this.url}${cloneFrom}/`

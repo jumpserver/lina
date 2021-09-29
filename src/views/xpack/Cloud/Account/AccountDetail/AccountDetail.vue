@@ -37,7 +37,7 @@ export default {
         },
         {
           key: this.$t('xpack.Cloud.Validity'),
-          value: this.object.validity_display
+          value: this.object.validity ? this.$t('common.Validity') : this.$t('common.Invalidity')
         },
         {
           key: this.$t('common.Comment'),

@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -63,13 +63,13 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/admin-users/',
+              url: '/api/v1/assets/system-users/?type=admin',
               transformOption: (item) => {
-                return { label: `${item.name}(${item.username})`, value: item.id }
+                const username = item.username || '*'
+                return { label: item.name + '(' + username + ')', value: item.id }
               }
             }
-          },
-          rules: [rules.RequiredChange]
+          }
         },
         nodes: {
           rules: [rules.RequiredChange],
@@ -86,7 +86,10 @@ export default {
         labels: {
           el: {
             ajax: {
-              url: '/api/v1/assets/labels/'
+              url: '/api/v1/assets/labels/',
+              transformOption: (item) => {
+                return { label: `${item.name}:${item.value}`, value: item.id }
+              }
             }
           }
         },
@@ -94,7 +97,8 @@ export default {
           type: 'switch'
         }
       },
-      url: '/api/v1/assets/assets/'
+      url: '/api/v1/assets/assets/',
+      createSuccessNextRoute: { name: 'AssetDetail' }
     }
   }
 }

@@ -70,7 +70,7 @@ export default {
   components: {
   },
   props: {
-    // koko/guacamole/omnidb/core
+    // koko/guacamole/omnidb/lion/core
     type: {
       type: String,
       default: 'koko',
@@ -85,8 +85,12 @@ export default {
     componentName() {
       const nameMapper = {
         koko: 'KoKo',
+        omnidb: 'OmniDB',
         guacamole: 'Guacamole',
-        omnidb: 'OmniDB'
+        lion: 'Lion',
+        xrdp: 'XRDP',
+        core: 'Core',
+        celery: 'Celery'
       }
       return nameMapper[this.componentMetric.type]
     }

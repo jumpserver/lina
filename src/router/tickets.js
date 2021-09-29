@@ -1,4 +1,5 @@
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty'
 export default [
   {
     path: 'tickets',
@@ -54,6 +55,37 @@ export default [
     name: 'CommandConfirmDetail',
     component: () => import('@/views/tickets/CommandConfirm/Detail/index'),
     meta: { title: i18n.t('route.CommandConfirm'), activeMenu: '/tickets/tickets' },
+    hidden: true
+  },
+  {
+    path: 'flows',
+    name: 'TicketFlowList',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('route.TicketFlow'), icon: 'check-square-o', activeMenu: '/tickets/tickets' },
+    hidden: true,
+    children: [
+      {
+        path: 'create',
+        name: 'TicketFlowCreate',
+        component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
+        meta: { title: i18n.t('route.TicketFlowCreate') },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        name: 'TicketFlowUpdate',
+        component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
+        meta: { title: i18n.t('route.TicketFlowUpdate') },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: 'tickets/flow/:id',
+    name: 'FlowDetail',
+    component: () => import('@/views/tickets/TicketFlow/Detail/index'),
+    meta: { title: i18n.t('route.TicketFlow'), activeMenu: '/tickets/tickets' },
     hidden: true
   }
 ]

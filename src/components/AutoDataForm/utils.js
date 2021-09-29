@@ -33,11 +33,11 @@ export class FormFieldGenerator {
         break
       case 'string':
         type = 'input'
-        if (!fieldRemoteMeta.max_length) {
+        if (!fieldRemoteMeta['max_length']) {
           field.el.type = 'textarea'
           field.el.rows = 3
         }
-        if (fieldRemoteMeta.write_only) {
+        if (fieldRemoteMeta['write_only']) {
           field.el.type = 'password'
         }
         break
@@ -124,7 +124,7 @@ export class FormFieldGenerator {
     field.el = el
     field.rules = rules
     _.set(field, 'attrs.error', '')
-    Vue.$log.debug('Generate field: ', name, field)
+    // Vue.$log.debug('Generate field: ', name, field)
     return field
   }
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {
@@ -132,7 +132,8 @@ export class FormFieldGenerator {
     this.groups.push({
       id: groupTitle,
       title: groupTitle,
-      name: fields[0]
+      name: fields[0],
+      fields: fields
     })
     return this.generateFields(fields, fieldsMeta, remoteFieldsMeta)
   }
@@ -146,7 +147,9 @@ export class FormFieldGenerator {
         field = this.generateField(field, fieldsMeta, remoteFieldsMeta)
         fields.push(field)
       } else if (field instanceof Object) {
-        this.errors[field.prop] = ''
+        if (this.errors) {
+          this.errors[field.prop] = ''
+        }
         fields.push(field)
       }
     }

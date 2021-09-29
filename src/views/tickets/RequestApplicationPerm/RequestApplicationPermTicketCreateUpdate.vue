@@ -1,5 +1,6 @@
 <template>
   <GenericCreateUpdatePage
+    v-if="!loading"
     v-bind="$data"
     :perform-submit="performSubmit"
     :create-success-next-route="createSuccessNextRoute"
@@ -9,7 +10,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
-import { DEFAULT_ORG_ID } from '@/utils/org'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 export default {
@@ -18,11 +18,17 @@ export default {
   },
 
   data() {
+    const vm = this
     const now = new Date()
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
+    // eslint-disable-next-line no-unused-vars
+    var org_id = ''
+    // eslint-disable-next-line no-unused-vars
+    var apply_category_type = []
     return {
       hasDetailInMsg: false,
+      loading: true,
       initial: {
         ips_or_not: true,
         meta: {
@@ -30,14 +36,13 @@ export default {
           apply_date_start: date_start,
           apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
         },
-        org_id: '00000000-0000-0000-0000-000000000002', // 默认为Default 组织
+        org_id: '',
         type: 'apply_application'
 
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
+        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
         [this.$t('tickets.RequestPerm'), ['meta']]
-
       ],
       fieldsMeta: {
         type: {
@@ -47,7 +52,9 @@ export default {
           }
         },
         meta: {
-          fields: ['apply_category_type', 'apply_application_group', 'apply_system_user_group', 'apply_date_start', 'apply_date_expired'],
+          fields: [
+            'apply_category_type', 'apply_applications', 'apply_system_users',
+            'apply_date_start', 'apply_date_expired'],
           fieldsMeta: {
             apply_date_start: {
               label: this.$t('common.DateStart'),
@@ -56,11 +63,37 @@ export default {
                 type: 'datetime'
               }
             },
-            apply_application_group: {
-              helpText: this.$t('tickets.helpText.application')
+            apply_applications: {
+              type: 'assetSelect',
+              component: Select2,
+              label: this.$t('perms.Asset'),
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    return { label: item.name, value: item.id }
+                  }
+                }
+              }
             },
-            apply_system_user_group: {
-              helpText: this.$t('tickets.helpText.fuzzySearch')
+            apply_system_users: {
+              type: 'systemUserSelect',
+              component: Select2,
+              label: '系统用户',
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    if (this.$route.query.type === 'k8s') {
+                      return { label: item.name, value: item.id }
+                    }
+                    const username = item.username || '*'
+                    return { label: item.name + '(' + username + ')', value: item.id }
+                  }
+                }
+              }
             },
             apply_date_expired: {
               label: this.$t('common.DateEnd'),
@@ -130,6 +163,13 @@ export default {
                     ]
                   }
                 ]
+              },
+              on: {
+                change: ([event], updateForm) => {
+                  this.apply_category_type = event
+                  this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
+                  this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`
+                }
               }
             }
           }
@@ -142,21 +182,12 @@ export default {
               return { label: item.name, value: item.id }
             })
           },
-          on: {
-            changeOptions: ([event], updateForm) => {
-              this.fieldsMeta.assignees.el.ajax.url = `/api/v1/tickets/assignees/?org_id=${event[0].value}`
-            }
-          }
-        },
-        assignees: {
-          el: {
-            multiple: true,
-            value: [],
-            ajax: {
-              url: `/api/v1/tickets/assignees/?org_id=${DEFAULT_ORG_ID}`,
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
+          hidden: (form) => {
+            this.org_id = form['org_id']
+            apply_category_type = this.apply_category_type
+            if (apply_category_type) {
+              this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
+              this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = apply_category_type[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=${apply_category_type[1]}`
             }
           }
         }
@@ -167,17 +198,17 @@ export default {
       }
     }
   },
+  mounted() {
+    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
+      this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
+    }
+    this.loading = false
+  },
   methods: {
     performSubmit(validValues) {
       validValues.meta.apply_category = validValues.meta.apply_category_type[0]
       validValues.meta.apply_type = validValues.meta.apply_category_type[1]
       delete validValues.meta['apply_category_type']
-      if (validValues.meta.apply_application_group) {
-        validValues.meta.apply_application_group = validValues.meta.apply_application_group.split(',')
-      }
-      if (validValues.meta.apply_system_user_group) {
-        validValues.meta.apply_system_user_group = validValues.meta.apply_system_user_group.split(',')
-      }
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }
   }

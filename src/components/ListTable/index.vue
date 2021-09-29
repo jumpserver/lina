@@ -1,8 +1,21 @@
 <template>
   <div>
-    <TableAction :table-url="iTableConfig.url" :search-table="search" :date-pick="handleDateChange" v-bind="headerActions" :selected-rows="selectedRows" :reload-table="reloadTable" />
+    <TableAction
+      :table-url="tableUrl"
+      :search-table="search"
+      :date-pick="handleDateChange"
+      :selected-rows="selectedRows"
+      :reload-table="reloadTable"
+      v-bind="headerActions"
+    />
     <IBox class="table-content">
-      <AutoDataTable ref="dataTable" :filter-table="filter" :config="iTableConfig" @selection-change="handleSelectionChange" v-on="$listeners" />
+      <AutoDataTable
+        ref="dataTable"
+        :filter-table="filter"
+        :config="iTableConfig"
+        @selection-change="handleSelectionChange"
+        v-on="$listeners"
+      />
     </IBox>
   </div>
 </template>
@@ -50,6 +63,9 @@ export default {
       this.$log.debug('Header actions', this.headerActions)
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
+    },
+    tableUrl() {
+      return this.iTableConfig.url
     }
   },
   watch: {
@@ -113,15 +129,6 @@ export default {
   & >>> .el-table__header thead > tr > th {
     background-color: white;
   }
-
-  /*& >>> .el-table--striped .el-table__body tr.el-table__row--striped td {*/
-  /*background: white;*/
-  /*}*/
-
-  /*& >>> .el-table th, .el-table tr  {*/
-  /*background-color: red;*/
-  /*!*background-color: #FAFAFA;*!*/
-  /*}*/
 }
 
 //修改颜色

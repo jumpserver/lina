@@ -4,15 +4,21 @@
       <DetailCard :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <QuickUpdate v-bind="AutoPushConfig" />
-      <RelationCard v-if="object.protocol === 'ssh'" ref="RelationCard" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <QuickActions type="primary" :actions="quickActions" />
+      <RelationCard
+        v-if="object.protocol === 'ssh'"
+        ref="RelationCard"
+        v-bind="nodeRelationConfig"
+        type="info"
+        style="margin-top: 15px"
+      />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
-import QuickUpdate from './QuickUpdate'
+import QuickActions from '@/components/QuickActions'
 import RelationCard from '@/components/RelationCard/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 
@@ -20,7 +26,7 @@ export default {
   name: 'Detail',
   components: {
     DetailCard,
-    QuickUpdate,
+    QuickActions,
     RelationCard
   },
   props: {
@@ -31,17 +37,29 @@ export default {
   },
   data() {
     return {
-      AutoPushConfig: {
-        icon: 'fa-info',
-        title: this.$t('assets.QuickUpdate'),
-        url: `/api/v1/assets/system-users/${this.object.id}/`,
-        content: [
-          {
-            name: this.$t('assets.AutoPush'),
-            auto_push: this.object.auto_push
+      quickActions: [
+        {
+          title: this.$t('assets.AutoPush'),
+          type: 'switcher',
+          attrs: {
+            label: this.$t('assets.AutoPush'),
+            model: this.object.auto_push,
+            disabled: ['rdp', 'ssh'].indexOf(this.object.protocol) === -1 || this.object.type === 'admin'
+          },
+          callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/assets/system-users/${this.object.id}/`,
+                { auto_push: val }
+              ).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
           }
-        ]
-      },
+        }
+      ],
       nodeRelationConfig: {
         icon: 'fa-info',
         hasObjectsId: this.object.cmd_filters,
@@ -94,12 +112,24 @@ export default {
           value: this.object.name
         },
         {
+          key: this.$t('assets.Type'),
+          value: this.object.type_display
+        },
+        {
           key: this.$t('assets.Username'),
           value: this.object.username
         },
         {
+          key: this.$t('assets.sshKeyFingerprint'),
+          value: this.object['ssh_key_fingerprint']
+        },
+        {
+          key: this.$t('assets.Protocol'),
+          value: this.object.protocol
+        },
+        {
           key: this.$t('assets.LoginModel'),
-          value: this.object.login_mode_display
+          value: this.object['login_mode_display']
         },
         {
           key: 'Sudo',

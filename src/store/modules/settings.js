@@ -35,16 +35,22 @@ const actions = {
   getPublicSettings({ commit, state }) {
     return new Promise((resolve, reject) => {
       getPublicSettings().then(response => {
-        const link = document.querySelector("link[rel*='icon']") || document.createElement('link')
-        link.type = 'image/x-icon'
-        link.rel = 'shortcut icon'
-        link.href = response.data.LOGO_URLS.favicon
-        document.getElementsByTagName('head')[0].appendChild(link)
+        const data = response.data || {}
+        const faviconURL = data['LOGO_URLS']?.favicon
+        let link = document.querySelector("link[rel*='icon']")
+        if (!link) {
+          link = document.createElement('link')
+          link.type = 'image/x-icon'
+          link.rel = 'shortcut icon'
+          document.getElementsByTagName('head')[0].appendChild(link)
+        }
+        if (faviconURL) {
+          link.href = faviconURL
+        }
 
         // 动态修改Title
-        if (response.data.LOGIN_TITLE) { document.title = response.data.LOGIN_TITLE }
-
-        commit('SET_PUBLIC_SETTINGS', response.data)
+        document.title = data['LOGIN_TITLE']
+        commit('SET_PUBLIC_SETTINGS', data)
         resolve(response)
       }).catch(error => {
         reject(error)

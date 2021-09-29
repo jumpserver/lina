@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="10">
     <el-col v-for="item of summaryItems" :key="item.title" :md="6" :sm="12" :xs="12">
-      <SummaryCard :title="item.title" :right-side-label="item.rightSideLabel" :body="item.body" />
+      <SummaryCard :title="item.title" :body="item.body" />
     </el-col>
   </el-row>
 </template>
@@ -27,34 +27,24 @@ export default {
       return [
         {
           title: this.$t('dashboard.UsersTotal'),
-          rightSideLabel: {
-            title: 'Users',
-            type: 'success'
-          },
           body: {
             route: `/users/users`,
             count: this.counter.total_count_users,
-            comment: 'All users'
+            comment: 'All users',
+            disabled: !this.$store.state.users.hasAdmin
           }
         },
         {
           title: this.$t('dashboard.AssetsTotal'),
-          rightSideLabel: {
-            title: 'Assets',
-            type: 'info'
-          },
           body: {
             route: `/assets/assets`,
             count: this.counter.total_count_assets,
-            comment: 'All assets'
+            comment: 'All assets',
+            disabled: !this.$store.state.users.hasAdmin
           }
         },
         {
           title: this.$t('dashboard.OnlineUsers'),
-          rightSideLabel: {
-            title: 'Online',
-            type: 'primary'
-          },
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_users,
@@ -63,10 +53,6 @@ export default {
         },
         {
           title: this.$t('dashboard.OnlineSessions'),
-          rightSideLabel: {
-            title: 'Connected',
-            type: 'danger'
-          },
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_sessions,

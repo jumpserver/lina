@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Switch from '../FormFields/Switch'
+import Switch from '../FormFields/Swicher'
 export default {
   name: 'ActionItem',
   components: {

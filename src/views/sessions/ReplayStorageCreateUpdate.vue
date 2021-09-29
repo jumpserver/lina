@@ -4,7 +4,6 @@
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
     :has-detail-in-msg="false"
-    :perform-submit="performSubmit"
   />
 </template>
 
@@ -39,7 +38,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'type']],
         [storageTypeMeta.title, ['meta']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {
@@ -47,6 +46,9 @@ export default {
         },
         meta: {
           fields: storageTypeMeta.meta
+        },
+        is_default: {
+          helpText: this.$t('sessions.SetToDefaultStorage')
         }
       }
     }
@@ -58,18 +60,6 @@ export default {
 
   },
   methods: {
-    performSubmit(validValues) {
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 </script>

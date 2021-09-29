@@ -1,9 +1,5 @@
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    :clean-form-value="cleanFormValue"
-    @getObjectDone="afterGetUser"
-  />
+  <GenericCreateUpdatePage v-bind="$data" @getObjectDone="afterGetUser" />
 </template>
 
 <script>
@@ -59,13 +55,14 @@ export default {
         password: {
           component: UserPassword,
           hidden: (formValue) => {
-            if (formValue.password_strategy) {
+            if (formValue.password_strategy === 'custom') {
               return false
             }
             return !formValue.update_password
           },
           el: {
-            required: false
+            required: false,
+            userIsOrgAdmin: false
           }
         },
         need_update_password: {
@@ -81,7 +78,7 @@ export default {
             }
           ],
           hidden: (formValue) => {
-            if (formValue.password_strategy) {
+            if (formValue.password_strategy === 'custom') {
               return false
             }
             return !formValue.update_password || !this.user.can_public_key_auth
@@ -134,6 +131,27 @@ export default {
             value: []
           }
         }
+      },
+      submitMethod() {
+        const params = this.$route.params
+        if (params.id) {
+          return 'put'
+        } else {
+          return 'post'
+        }
+      },
+      cleanFormValue(value) {
+        const method = this.submitMethod()
+        if (method === 'post' && value.password_strategy === 'email') {
+          delete value['password']
+          if (this.currentOrgIsRoot) {
+            delete value['groups']
+          }
+        }
+        if (value.update_password !== undefined) {
+          delete value.update_password
+        }
+        return value
       }
     }
   },
@@ -146,26 +164,12 @@ export default {
     }
   },
   methods: {
-    cleanFormValue(value) {
-      const method = this.getMethod()
-      if (method === 'post' && !value.password_strategy) {
-        delete value['password']
-      }
-      if (value.update_password !== undefined) {
-        delete value.update_password
-      }
-      return value
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    },
     afterGetUser(user) {
       this.user = user
+      this.fieldsMeta.password.el.userIsOrgAdmin = user.role === 'Admin' || user.org_roles.indexOf('Admin') !== -1
+      if (this.$route.query.clone_from) {
+        this.user.groups = []
+      }
     }
   }
 }

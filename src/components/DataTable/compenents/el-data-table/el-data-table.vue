@@ -426,7 +426,6 @@ export default {
     onEdit: {
       type: Function,
       default(row) {
-        // console.log('On delete row')
       }
     },
     /**
@@ -841,7 +840,7 @@ export default {
       this.$emit('selection-change', val)
     },
     totalData(val) {
-      if (val) {
+      if (val && val.length !== this.total) {
         this.page = defaultFirstPage
         this.total = val.length
         this.getList()
@@ -861,6 +860,9 @@ export default {
           this.$refs.searchForm.updateForm(query)
         }
       }
+    }
+    if (this.totalData) {
+      this.getList()
     }
   },
   methods: {
@@ -925,6 +927,9 @@ export default {
       if (!this.hasPagination) {
         this.data = this.totalData
         this.loading = false
+        if (this.isTree) {
+          this.data = this.tree2Array(this.data, this.expandAll)
+        }
         return this.data
       }
       // page
@@ -935,6 +940,7 @@ export default {
       this.$log.debug(`page: ${page}, size: ${this.size}, start: ${start}, end: ${end}`)
       this.data = this.totalData.slice(start, end)
       this.loading = false
+      this.data = this.tree2Array(this.data, this.expandAll)
       return this.data
     },
     /**

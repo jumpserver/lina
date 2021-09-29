@@ -1,5 +1,5 @@
 <template>
-  <ListTable ref="ListTable" v-bind="iAttrs" v-on="$listeners" />
+  <ListTable ref="ListTable" v-bind="$attrs" v-on="$listeners" />
 </template>
 
 <script>
@@ -11,16 +11,15 @@ export default {
     ListTable
   },
   computed: {
-    ...mapGetters(['currentOrgIsRoot']),
-    iAttrs() {
-      const attrs = _.cloneDeep(this.$attrs)
-      const canCreate = _.get(attrs, 'header-actions.canCreate', null)
-      this.$log.debug('Can create: ', canCreate)
-      if (canCreate === null && this.currentOrgIsRoot) {
-        _.set(attrs, 'header-actions.canCreate', false)
-      }
-      this.$log.debug('List table Attrs: ', attrs)
-      return attrs
+    ...mapGetters(['currentOrgIsRoot'])
+  },
+  created() {
+    const headerActions = this.$attrs['header-actions'] || {}
+    if (headerActions.canCreate === undefined && this.currentOrgIsRoot) {
+      _.set(this.$attrs, 'header-actions.canCreate', false)
+    }
+    if (headerActions.hasImport === undefined && this.currentOrgIsRoot) {
+      _.set(this.$attrs, 'header-actions.hasImport', false)
     }
   }
 }

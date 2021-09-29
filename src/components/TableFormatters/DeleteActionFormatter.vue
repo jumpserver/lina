@@ -20,7 +20,7 @@ export default {
     defaultOnDelete(col, row, cellValue, reload) {
       const url = col.deleteUrl + cellValue
       this.$axios.delete(url).then(res => {
-        this.$message.success(this.$t('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('common.deleteSuccessMsg'))
         reload()
       }).catch(error => {
         this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)

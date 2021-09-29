@@ -45,6 +45,9 @@ export default {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'DatabaseAppCreate', query: { type: row.type, clone_from: row.id }})
               },
+              onUpdate: ({ row }) => {
+                vm.$router.push({ name: 'DatabaseAppUpdate', params: { id: row.id }, query: { type: row.type }})
+              },
               performDelete: function({ row, col, cellValue, reload }) {
                 this.$axios.delete(
                   `/api/v1/applications/applications/${row.id}/`
@@ -63,7 +66,7 @@ export default {
         hasCreate: false,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
+        hasBulkDelete: true,
         createRoute: 'DatabaseAppCreate',
         moreCreates: {
           callback: (item) => {

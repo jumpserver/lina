@@ -1,20 +1,24 @@
 <template>
   <div class="form-group-header">
     <div v-if="line" class="hr-line-dashed" />
-    <h3>{{ title }}</h3>
+    <h3>{{ group.title }}</h3>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    title: {
-      type: String,
-      default: 'Title'
-    },
     line: {
       type: Boolean,
       default: true
+    },
+    index: {
+      type: Number,
+      default: 1
+    },
+    group: {
+      type: Object,
+      default: () => ({})
     }
   }
 }

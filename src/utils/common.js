@@ -87,12 +87,24 @@ export function toSafeLocalDateStr(d) {
   return date_s
 }
 
+export function forMatAction(vm, d) {
+  d.forEach(function(item, index, arr) {
+    if ([vm.$t('perms.clipboardCopyPaste'), vm.$t('perms.upDownload'), vm.$t('perms.all')].includes(item)) {
+      arr.splice(index, 1)
+    }
+  })
+  return d.join(', ')
+}
+
 export function getApiPath(that) {
-  const pagePath = that.$route.path
-  const isOrgPath = pagePath.split('/').indexOf('orgs') !== -1
-  if (isOrgPath) {
-    return `/api/v1/orgs/orgs/${pagePath.split('/').pop()}/`
+  let pagePath = that.$route.path
+  const pagePathArray = pagePath.split('/')
+  if (pagePathArray.indexOf('orgs') !== -1) {
+    pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
+  } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
+    pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
   }
+  pagePath = pagePathArray.join('/')
   return `/api/v1${pagePath}/`
 }
 
@@ -204,6 +216,42 @@ export function sleep(time) {
 
 function customizer(objValue, srcValue) {
   return _.isUndefined(objValue) ? srcValue : objValue
+}
+
+export function newURL(url) {
+  let obj
+  if (url.indexOf('//') > -1) {
+    obj = new URL(url)
+  } else {
+    obj = new URL(url, location.origin)
+  }
+  return obj
+}
+
+export function getUpdateObjURL(url, objId) {
+  const urlObj = new URL(url, location.origin)
+  let pathname = urlObj.pathname
+  if (!pathname.endsWith('/')) {
+    pathname += '/'
+  }
+  pathname += `${objId}/`
+  urlObj.pathname = pathname
+  return urlObj.href
+}
+
+export function truncateCenter(s, l) {
+  if (s.length <= l) {
+    return s
+  }
+  const centerIndex = Math.ceil(l / 2)
+  return s.slice(0, centerIndex - 2) + '...' + s.slice(centerIndex + 1, l)
+}
+
+export function truncateEnd(s, l) {
+  if (s.length <= l) {
+    return s
+  }
+  return s.slice(0, l - 3) + '...'
 }
 
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)

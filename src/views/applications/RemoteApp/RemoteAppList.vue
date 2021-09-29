@@ -62,13 +62,13 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasMoreActions: false,
-        hasBulkDelete: false,
+        hasBulkDelete: true,
+        hasExport: false,
+        hasImport: false,
         // createRoute: 'RemoteAppCreate',
         moreCreates: {
           dropdown: this.getCreateAppType(),
           callback: (app) => {
-            console.log('App: ', app)
             vm.$router.push({ name: 'RemoteAppCreate', query: { type: app.name }})
           }
         }

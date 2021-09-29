@@ -1,11 +1,5 @@
-
 <template>
-  <GenericCreateUpdatePage
-    v-bind="$data"
-    :perform-submit="performSubmit"
-    :after-get-form-value="afterGetFormValue"
-    :get-url="getUrl"
-  />
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
@@ -43,45 +37,54 @@ export default {
           }
         }
       },
-      url: `/api/v1/acls/login-acls/`,
+      getUrl() {
+        const query = this.$route.query
+        const params = this.$route.params
+        let url = `/api/v1/acls/login-acls/`
+        if (params.id) {
+          url = `${url}${params.id}/`
+        }
+        if (query.user) {
+          url = `${url}?user=${query.user}`
+        }
+        return url
+      },
       updateSuccessNextRoute: { name: 'UserDetail', params: {
         id: this.$route.query.user
       }},
       createSuccessNextRoute: { name: 'UserDetail', params: {
         id: this.$route.query.user
-      }}
+      }},
+      onPerformError(error, method, vm) {
+        this.$emit('submitError', error)
+        const response = error.response
+        const data = response.data
+        if (response.status === 400) {
+          for (const key of Object.keys(data)) {
+            let value = data[key]
+            if (key === 'ip_group') {
+              value = Object.values(data[key])
+            }
+            if (value instanceof Array) {
+              value = value.join(';')
+            }
+            this.$refs.form.setFieldError(key, value)
+          }
+        }
+      },
+      afterGetFormValue(validValues) {
+        validValues.ip_group = validValues.ip_group.toString()
+        return validValues
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.ip_group)) {
+          value.ip_group = value.ip_group ? value.ip_group.split(',') : []
+        }
+        return value
+      }
     }
   },
   methods: {
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    },
-    getUrl() {
-      const params = this.$route.params
-      let url = this.url
-      if (params.id) {
-        url = `${url}${params.id}/?user=${this.$route.query.user}`
-      } else {
-        url = `${url}?user=${this.$route.query.user}`
-      }
-      return url
-    },
-    afterGetFormValue(validValues) {
-      validValues.ip_group = validValues.ip_group.toString()
-      return validValues
-    },
-    performSubmit(validValues) {
-      if (!Array.isArray(validValues.ip_group)) {
-        validValues.ip_group = validValues.ip_group ? validValues.ip_group.split(',') : []
-      }
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    }
   }
 }
 </script>

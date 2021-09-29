@@ -1,15 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="selectFields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :get-method="getMethod"
-      :more-buttons="moreButtons"
-      :has-detail-in-msg="false"
-      :after-get-form-value="changeFormValue"
-      :clean-form-value="cleanFormValue"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
     <ImportDialog :visible.sync="dialogLdapUserImport" />
     <TestLoginDialog :visible.sync="dialogTest" />
   </IBox>
@@ -20,6 +11,8 @@ import { testLdapSetting } from '@/api/settings'
 import ImportDialog from './ImportDialog'
 import TestLoginDialog from './TestLoginDialog'
 import { IBox } from '@/components'
+import rules from '@/components/DataForm/rules'
+import { JsonRequired } from '@/components/DataForm/rules'
 
 export default {
   name: 'Ldap',
@@ -31,11 +24,9 @@ export default {
   },
   data() {
     return {
-      loading: true,
-      object: {},
       dialogTest: false,
       dialogLdapUserImport: false,
-      selectFields: [
+      fields: [
         [
           this.$t('setting.LDAPServerInfo'),
           [
@@ -51,20 +42,37 @@ export default {
         [
           this.$t('common.Other'),
           [
-            'AUTH_LDAP'
+            'AUTH_LDAP_CONNECT_TIMEOUT', 'AUTH_LDAP_SEARCH_PAGED_SIZE', 'AUTH_LDAP'
           ]
         ]
       ],
       fieldsMeta: {
+        AUTH_LDAP_BIND_DN: {
+          rules: [
+            rules.Required
+          ]
+        },
+        AUTH_LDAP_BIND_PASSWORD: {
+          rules: [
+            rules.Required
+          ]
+        },
+        AUTH_LDAP_SEARCH_OU: {
+          rules: [
+            rules.Required
+          ]
+        },
         AUTH_LDAP_USER_ATTR_MAP: {
           component: 'el-input',
           el: {
             type: 'textarea'
           },
-          label: this.$t('setting.authLdapUserAttrMap')
+          label: this.$t('setting.authLdapUserAttrMap'),
+          rules: [JsonRequired]
         }
       },
       url: '/api/v1/settings/setting/?category=ldap',
+      hasDetailInMsg: false,
       moreButtons: [
         {
           title: this.$t('setting.ldapConnectTest'),
@@ -92,36 +100,34 @@ export default {
             this.dialogLdapUserImport = true
           }.bind(this)
         }
-      ]
+      ],
+      submitMethod: () => 'patch',
+      afterGetFormValue(obj) {
+        obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
+        return obj
+      },
+      cleanFormValue(data) {
+        if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
+          delete data['AUTH_LDAP_BIND_PASSWORD']
+        }
+        if (data['AUTH_LDAP_USER_ATTR_MAP']) {
+          data['AUTH_LDAP_USER_ATTR_MAP'] = JSON.parse(data['AUTH_LDAP_USER_ATTR_MAP'])
+        }
+        return data
+      }
     }
   },
   mounted() {
-    this.loading = false
+    // this.loading = false
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    changeFormValue(obj) {
-      obj.AUTH_LDAP_USER_ATTR_MAP = JSON.stringify(obj.AUTH_LDAP_USER_ATTR_MAP)
-      return obj
-    },
-    cleanFormValue(data) {
-      if (data['AUTH_LDAP_BIND_PASSWORD'] === '') {
-        delete data['AUTH_LDAP_BIND_PASSWORD']
-      }
-      if (data['AUTH_LDAP_USER_ATTR_MAP']) {
-        data['AUTH_LDAP_USER_ATTR_MAP'] = JSON.parse(data['AUTH_LDAP_USER_ATTR_MAP'])
-      }
-      return data
-    }
   }
 }
 </script>
 
 <style scoped>
 .listTable ::v-deep .table-action-right-side{
-  padding-top: 0px !important;
+  padding-top: 0 !important;
 }
 
 </style>

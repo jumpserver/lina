@@ -97,6 +97,7 @@ export default {
     }
   },
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     data: Object,
     prop: {
       type: String,
@@ -104,10 +105,13 @@ export default {
         return this.data.id
       }
     },
+    // eslint-disable-next-line vue/require-prop-types,vue/require-default-prop
     itemValue: {},
+    // eslint-disable-next-line vue/require-default-prop
     value: Object,
     disabled: Boolean,
     readonly: Boolean,
+    // eslint-disable-next-line vue/require-default-prop
     options: Array
   },
   data() {

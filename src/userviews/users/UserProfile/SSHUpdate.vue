@@ -6,7 +6,7 @@
       :fields-meta="fieldsMeta"
       :initial="object"
       :url="url"
-      :get-method="getMethod"
+      :submit-method="submitMethod"
       :more-buttons="moreButtons"
       :on-perform-success="onPerformSuccess"
     />
@@ -38,7 +38,7 @@ export default {
       ],
       fieldsMeta: {
         public_key_comment: {
-          label: this.$t('users.Name'),
+          label: this.$t('common.Name'),
           disabled: true
         },
         public_key_hash_md5: {
@@ -65,7 +65,7 @@ export default {
     }
   },
   methods: {
-    getMethod() {
+    submitMethod() {
       return 'put'
     },
     onPerformSuccess() {

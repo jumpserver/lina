@@ -4,12 +4,11 @@ const defaultSettings = require('./src/settings.js')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|ico|svg)(\?.*)?$/i
 
-
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'JumpServer' // page title
+const name = '' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -52,7 +51,7 @@ module.exports = {
         changeOrigin: true
       },
       '/ws/': {
-        target: 'ws://127.0.0.1:8080',
+        target: process.env.VUE_APP_CORE_WS,
         changeOrigin: true,
         ws: true
       },
@@ -83,8 +82,11 @@ module.exports = {
     name: name,
     resolve: {
       alias: {
-        '@': resolve('src')
-      }
+        '@': resolve('src'),
+        elementCss: resolve('node_modules/element-ui/lib/theme-chalk/index.css'),
+        elementLocale: resolve('node_modules/element-ui/lib/locale/lang/en.js'),
+      },
+      extensions: ['.vue', '.js', '.json'], 
     },
     plugins: [
       new CompressionWebpackPlugin({

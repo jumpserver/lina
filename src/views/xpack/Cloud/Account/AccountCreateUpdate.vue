@@ -2,7 +2,6 @@
   <GenericCreateUpdatePage
     v-bind="$data"
     :initial="initial"
-    :perform-submit="performSubmit"
   />
 </template>
 
@@ -10,6 +9,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
+import { UploadKey } from '@/components'
 
 export default {
   components: {
@@ -31,7 +31,19 @@ export default {
       ],
       fieldsMeta: {
         attrs: {
-          fields: accountProviderAttrs.attrs
+          fields: accountProviderAttrs.attrs,
+          fieldsMeta: {
+            service_account_key: {
+              label: this.$t('xpack.Cloud.ServerAccountKey'),
+              component: UploadKey,
+              el: {
+                toFormat: 'object'
+              }
+            },
+            password: {
+              rules: this.$route.params.id ? [] : [Required]
+            }
+          }
         },
         provider: {
           rules: [Required],
@@ -40,8 +52,8 @@ export default {
           }
         }
       },
-      updateSuccessNextRoute: { name: 'CloudCenter' },
-      createSuccessNextRoute: { name: 'CloudCenter' },
+      updateSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'AccountList' }},
+      createSuccessNextRoute: { name: 'CloudCenter', params: { activeMenu: 'AccountList' }},
       getUrl() {
         const params = this.$route.params
         let url = `/api/v1/xpack/cloud/accounts/`
@@ -55,18 +67,6 @@ export default {
   computed: {
   },
   methods: {
-    performSubmit(validValues) {
-      const method = this.getMethod()
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 

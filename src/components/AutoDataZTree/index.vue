@@ -40,7 +40,7 @@ export default {
           autoParam: ['id=key', 'name=n', 'level=lv'],
           type: 'get',
           headers: {
-            'X-JMS-ORG': JSON.parse(this.$cookie.get('jms_current_org')) ? JSON.parse(this.$cookie.get('jms_current_org')).id : ''
+            'X-JMS-ORG': this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : ''
           }
         },
         callback: {
@@ -89,7 +89,7 @@ export default {
         return
       }
       if (currentNode) {
-        currentNode.name = currentNode.meta.node.value
+        currentNode.name = currentNode.meta.data.value
       }
       this.zTree.editName(currentNode)
     },
@@ -108,12 +108,12 @@ export default {
       const query = Object.assign({}, this.$route.query)
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
-        this.currentNodeId = treeNode.meta.node.id
+        this.currentNodeId = treeNode.meta.data.id
         query['node'] = this.currentNodeId
-        url = `${this.setting.url}${combinator}node_id=${treeNode.meta.node.id}&show_current_asset=${show_current_asset}`
+        url = `${this.setting.url}${combinator}node_id=${treeNode.meta.data.id}&show_current_asset=${show_current_asset}`
       } else if (treeNode.meta.type === 'asset') {
-        query['asset'] = treeNode.meta.asset.id
-        url = `${this.setting.url}${combinator}asset_id=${treeNode.meta.asset.id}&show_current_asset=${show_current_asset}`
+        query['asset'] = treeNode.meta.data.id
+        url = `${this.setting.url}${combinator}asset_id=${treeNode.meta.data.id}&show_current_asset=${show_current_asset}`
       }
       this.$router.push({ query })
       this.$emit('urlChange', url)
@@ -125,7 +125,7 @@ export default {
         return
       }
       this.$axios.delete(
-        `${this.treeSetting.nodeUrl}${currentNode.meta.node.id}/`
+        `${this.treeSetting.nodeUrl}${currentNode.meta.data.id}/`
       ).then(() => {
         this.$message.success(this.$t('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
@@ -143,7 +143,7 @@ export default {
         url,
         { 'value': treeNode.name }
       ).then(res => {
-        let assetsAmount = treeNode.meta.node.assetsAmount
+        let assetsAmount = treeNode.meta.data.assetsAmount
         if (!assetsAmount) {
           assetsAmount = 0
         }
@@ -208,9 +208,9 @@ export default {
     onDrop: function(event, treeId, treeNodes, targetNode, moveType) {
       const treeNodesIds = []
       $.each(treeNodes, function(index, value) {
-        treeNodesIds.push(value.meta.node.id)
+        treeNodesIds.push(value.meta.data.id)
       })
-      const theUrl = `${this.treeSetting.nodeUrl}${targetNode.meta.node.id}/children/add/`
+      const theUrl = `${this.treeSetting.nodeUrl}${targetNode.meta.data.id}/children/add/`
       this.$axios.put(
         theUrl, {
           nodes: treeNodesIds
@@ -229,21 +229,21 @@ export default {
       }
       this.zTree.expandNode(parentNode, true, false, true, false)
       // http://localhost/api/v1/assets/nodes/85aa4ee2-0bd9-41db-9079-aa3646448d0c/children/
-      const url = `${this.treeSetting.nodeUrl}${parentNode.meta.node.id}/children/`
+      const url = `${this.treeSetting.nodeUrl}${parentNode.meta.data.id}/children/`
       this.$axios.post(url, {}).then(data => {
         const newNode = {
           id: data['key'],
           name: data['value'],
           pId: parentNode.id,
           meta: {
-            'node': data
+            data: data
           }
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
         // vm.$refs.dataztree.refresh()
         const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
-        this.currentNodeId = node.meta.node.id || newNode.id
+        this.currentNodeId = node.meta.data.id || newNode.id
         this.zTree.editName(node)
         this.$message.success(this.$t('common.createSuccessMsg'))
       }).catch(error => {

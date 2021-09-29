@@ -1,16 +1,15 @@
 <template>
-  <div>
-    <el-tooltip v-if="formatterArgs.hasTips" placement="bottom" effect="dark">
-      <div slot="content">{{ tipStatus }}<br>{{ tipTime }}</div>
-      <i :class="'fa ' + iconClass" />
-    </el-tooltip>
-    <i v-else :class="'fa ' + iconClass" />
-  </div>
+  <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
+    <div slot="content" v-html="tips" />
+    <span :class="classes">
+      <i v-if="formatterArgs.useIcon" :class="'fa ' + icon" />
+      <span v-if="formatterArgs.useText">{{ text }}</span>
+    </span>
+  </el-tooltip>
 </template>
 
 <script>
 import BaseFormatter from './base'
-import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'ChoicesFormatter',
   extends: BaseFormatter,
@@ -20,24 +19,26 @@ export default {
       default() {
         return {
           iconChoices: {
-            true: 'fa-check text-primary',
-            false: 'fa-times text-danger'
+            true: 'fa-check',
+            false: 'fa-times'
           },
-          typeChange(val) {
-            return !!val
+          classChoices: {
+            true: 'text-primary',
+            false: 'text-danger'
+          },
+          textChoices: {
+            true: this.$t('common.Yes'),
+            false: this.$t('common.No')
+          },
+          getKey({ row, cellValue }) {
+            return cellValue
           },
           hasTips: false,
-          tipStatus(val, vm) {
-            if (!val) {
-              return vm.$t('assets.Unknown')
-            }
-            if (val.status === 0) {
-              return vm.$t('assets.Unreachable')
-            } else if (val.status === 1) {
-              return vm.$t('assets.Reachable')
-            } else if (val.status === 2) {
-              return vm.$t('assets.Unknown')
-            }
+          useIcon: true,
+          useText: false,
+          showFalse: true,
+          getTips: ({ row, cellValue }) => {
+            return cellValue
           }
         }
       }
@@ -49,19 +50,28 @@ export default {
     }
   },
   computed: {
-    iconClass() {
-      const key = this.formatterArgs.typeChange(this.cellValue)
-      return this.formatterArgs.iconChoices[key]
+    key() {
+      return this.formatterArgs.getKey(
+        { row: this.row, cellValue: this.cellValue }
+      )
     },
-    tipStatus() {
-      const vm = this
-      return this.formatterArgs.tipStatus(this.cellValue, vm)
+    icon() {
+      return this.formatterArgs.iconChoices[this.key]
     },
-    tipTime() {
-      if (!this.cellValue) {
-        return ''
+    classes() {
+      return this.formatterArgs.classChoices[this.key]
+    },
+    text() {
+      return this.formatterArgs.textChoices[this.key]
+    },
+    tips() {
+      return this.formatterArgs.getTips({ cellValue: this.cellValue, row: this.row })
+    },
+    shown() {
+      if (!this.formatterArgs.showFalse && !this.key) {
+        return false
       }
-      return toSafeLocalDateStr(this.cellValue.datetime)
+      return true
     }
   }
 }

@@ -1,10 +1,19 @@
 <template>
   <div>
-    <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
+    <DataTable
+      v-if="!loading"
+      ref="dataTable"
+      v-loading="loading"
+      :config="iConfig"
+      v-bind="$attrs"
+      v-on="$listeners"
+      @filter-change="filterChange"
+    />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
       :total-columns-list="popoverColumns.totalColumnsList"
       :min-columns="popoverColumns.minCols"
+      :url="config.url"
       @columnsUpdate="handlePopoverColumnsChange"
     />
   </div>
@@ -12,9 +21,16 @@
 
 <script type="text/jsx">
 import DataTable from '../DataTable'
-import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/TableFormatters'
+import {
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
+  ActionsFormatter,
+  ChoicesFormatter
+} from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
+import { newURL } from '@/utils/common'
 export default {
   name: 'AutoDataTable',
   components: {
@@ -101,7 +117,7 @@ export default {
           break
         case 'is_valid':
           col.label = i18n.t('common.Validity')
-          col.formatter = BooleanFormatter
+          col.formatter = ChoicesFormatter
           col.align = 'center'
           col.width = '80px'
           break
@@ -121,7 +137,7 @@ export default {
           col.formatter = DisplayFormatter
           break
         case 'boolean':
-          col.formatter = BooleanFormatter
+          col.formatter = ChoicesFormatter
           col.align = 'center'
           col.width = '80px'
           break
@@ -168,12 +184,12 @@ export default {
           col.filters = column.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { text: item.display_name, value: 'True' }
+                return { text: item['display_name'], value: 'True' }
               } else {
-                return { text: item.display_name, value: 'False' }
+                return { text: item['display_name'], value: 'False' }
               }
             }
-            return { text: item.display_name, value: item.value }
+            return { text: item['display_name'], value: item.value }
           })
           col.sortable = false
           col['column-key'] = col.prop
@@ -221,14 +237,15 @@ export default {
       defaultColumnsNames = totalColumnsNames.filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 最小列
-      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['action', 'id'])
+      const minColumnsNames = _.get(this.iConfig, 'columnsShow.min', ['actions', 'id'])
         .filter(n => defaultColumnsNames.indexOf(n) > -1)
 
       // 应该显示的列
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      const configShowColumnsNames = _.get(_tableConfig[this.$route.name], 'showColumns', null)
+      const tableName = this.config.name || this.$route.name + '_' + newURL(this.iConfig.url).pathname
+      const configShowColumnsNames = _.get(_tableConfig[tableName], 'showColumns', null)
       let showColumnsNames = configShowColumnsNames || defaultColumnsNames
       if (showColumnsNames.length === 0) {
         showColumnsNames = totalColumnsNames
@@ -248,7 +265,7 @@ export default {
         min: minColumnsNames,
         configShow: configShowColumnsNames
       }
-      this.$log.debug('Cleaned colums show: ', this.cleanedColumnsShow)
+      this.$log.debug('Cleaned columns show: ', this.cleanedColumnsShow)
     },
     filterShowColumns() {
       this.cleanColumnsShow()
@@ -264,13 +281,14 @@ export default {
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
       this.$log.debug('Popover cols: ', this.popoverColumns)
     },
-    handlePopoverColumnsChange(columns) {
-      // this.$log.debug('Columns change: ', columns)
+    handlePopoverColumnsChange({ columns, url }) {
+      this.$log.debug('Columns change: ', columns)
       this.popoverColumns.currentCols = columns
       const _tableConfig = localStorage.getItem('tableConfig')
         ? JSON.parse(localStorage.getItem('tableConfig'))
         : {}
-      _tableConfig[this.$route.name] = {
+      const tableName = this.config.name || this.$route.name + '_' + newURL(url).pathname
+      _tableConfig[tableName] = {
         'showColumns': columns
       }
       localStorage.setItem('tableConfig', JSON.stringify(_tableConfig))

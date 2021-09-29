@@ -2,15 +2,11 @@
   <el-card shadow="never">
     <div slot="header" class="summary-header">
       <span class="header-title">{{ title }}</span>
-      <span class="pull-right right-side">
-        <slot name="header-right">
-          <el-tag :type="rightSideLabel.type || 'success'" effect="dark" size="mini">{{ rightSideLabel.title }}</el-tag>
-        </slot>
-      </span>
     </div>
     <slot>
       <h1 class="no-margins">
-        <router-link :to="body.route">
+        <span v-if="body.disabled" class="disabled-link">{{ body.count }}</span>
+        <router-link v-else :to="body.route">
           <span>{{ body.count }}</span>
         </router-link>
       </h1>
@@ -73,5 +69,9 @@ export default {
   }
   .no-margins {
     margin: 0 !important;
+  }
+
+  .disabled-link {
+    color: #428bca;
   }
 </style>

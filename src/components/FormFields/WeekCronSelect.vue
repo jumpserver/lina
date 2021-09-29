@@ -1,12 +1,25 @@
 <template>
   <div>
-    <div class="hours-container">
+    <!-- <div class="hours-container">
       <div v-for="(item, index) in hours" :key="index" class="hours-item">
         <div
           :class="compClass(item)"
           @click="handleClick(item)"
-          @mouseover="handleHover( item)"
+          @mouseover="handleHover(item)"
         />
+      </div>
+    </div> -->
+    <div class="con">
+      <div v-for="(i, wIndex) in weeks" :key="wIndex" class="week">
+        <div class="week-title">{{ i }}</div>
+        <div v-for="(item, hIndex) in hours" :key="hIndex" class="hour">
+          <div
+            :class="compClass(item)"
+            @click="handleClick(item)"
+            @mouseover="handleHover(item, i)"
+          />
+          <div v-if="wIndex === 4 && hIndex % 2" class="hour-title">{{ hIndex }}</div>
+        </div>
       </div>
     </div>
     <div class="tips">{{ tips }}</div>
@@ -135,6 +148,9 @@ export default {
     // 点击事件
     handleClick(index) {
       if (this.selectStart) {
+        console.log(this.selectStart, 'his.selectStart')
+        console.log(index, '.index')
+        console.log(this.startIndex, 'his.startIndex')
         if (index === this.startIndex) { // 双击取反
           if (this.timeRangeListIndex.indexOf(index) > -1) {
             this.timeRangeListIndex.splice(this.timeRangeListIndex.indexOf(index), 1)
@@ -147,6 +163,7 @@ export default {
             this.startIndex++
           }
           this.timeRangeListIndex = Array.from(new Set(this.timeRangeListIndex))
+          console.log(this.timeRangeListIndex, 'this.timeRangeListIndex')
         } else { // 删除数据
           while (this.startIndex >= index) {
             if (this.timeRangeListIndex.indexOf(index) > -1) {
@@ -164,7 +181,7 @@ export default {
       this.selectStart = !this.selectStart
     },
     // 预选区间
-    handleHover(index) {
+    handleHover(index, type) {
       if (this.selectStart) {
         this.tempRangeIndex = []
         if (index > this.startIndex) { // 选取数据--向右添加，向左取消
@@ -242,9 +259,85 @@ export default {
       border-bottom: 1px solid #c2d0f3;
     }
   }
+  .week-item {
+    display: inline-block;
+    border: 1px solid red;
+    width: 100%;
+  }
+}
+.hours-item {
+  cursor: pointer;
+  height: 100%;
+  border: 1px solid #c2d0f3;
+  border-right: none;
+  text-align: center;
+  &:last-child {
+    border-right: 1px solid #c2d0f3;
+  }
+}
+.hours-item-header {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #c2d0f3;
+}
+.hours-item-value {
+  width: 100%;
+  height: 30px;
+  box-sizing: border-box;
+  display: flex;
+}
+.selected {
+  background-color: #4e84fe;
+}
+.preSelected {
+  background-color: #8eaffc;
+}
+.unSelected {
+  background-color: #ffffff;
 }
 .tips {
   width: 100%;
-  line-height: 30px;
+  line-height: 13px;
+}
+.con {
+  width: 100%;
+  // border: 1px solid red;
+  .week {
+    display: flex;
+    width: 100%;
+    // border: 1px solid blue;
+    height: 24px;
+    font-size: 0;
+    border-bottom: 3px solid #F9F8FF;
+    &:nth-child(5) {
+      margin-bottom: 26px;
+    }
+    .week-title {
+      font-size: 13px;
+      line-height: 24px;
+      margin-right: 6px;
+    }
+    .hour {
+      display: inline-block;
+      flex: 1;
+      font-size: 0;
+      height: 100%;
+      // border: 1px solid #c2d0f3;
+      // background-color: #428BCA;;
+      &:nth-child(n -1) {
+        margin-right: 2px;
+      }
+      &:last-child {
+        border-right: 1px solid #c2d0f3;
+      }
+      .hour-title {
+        position: relative;
+        top: 14px;
+        left: -5px;
+        font-size: 13px;
+      }
+    }
+  }
 }
 </style>

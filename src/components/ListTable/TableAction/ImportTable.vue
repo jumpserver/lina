@@ -33,7 +33,7 @@
 
 <script>
 import DataTable from '@/components/DataTable'
-import { sleep } from '@/utils/common'
+import { sleep, getUpdateObjURL } from '@/utils/common'
 import { EditableInputFormatter, StatusFormatter } from '@/components/TableFormatters'
 export default {
   name: 'ImportTable',
@@ -207,7 +207,7 @@ export default {
           if (!d) {
             return 0
           }
-          if (!itemColData || !itemColData.length) {
+          if (typeof itemColData !== 'number' && (!itemColData || !itemColData.length)) {
             return 0
           }
           return itemColData.length
@@ -350,7 +350,7 @@ export default {
       }
     },
     async performUpdateObject(item) {
-      const updateUrl = `${this.url}${item.id}/`
+      const updateUrl = getUpdateObjURL(this.url, item.id)
       return this.$axios.put(
         updateUrl,
         item,
@@ -421,6 +421,7 @@ export default {
 .importTable >>> .cell {
   min-height: 20px;
   height: 100%;
+  overflow: auto;
 }
 
 </style>

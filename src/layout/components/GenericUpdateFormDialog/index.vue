@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :title="this.$t('common.updateSelected')"
-    :visible.sync="dialogSetting.dialogVisible"
+    :visible.sync="iVisible"
     width="70%"
     top="1vh"
     :show-cancel="false"
@@ -45,13 +45,13 @@ export default {
       type: Array,
       default: () => ([])
     },
-    dialogSetting: {
-      type: Object,
-      default: () => ({})
-    },
     formSetting: {
       type: Object,
       default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data: function() {
@@ -60,6 +60,16 @@ export default {
       selectPropertiesLabel: this.$t('common.SelectProperties'),
       checkedFields: [],
       iFormSetting: {}
+    }
+  },
+  computed: {
+    iVisible: {
+      set(val) {
+        this.$emit('update:visible', val)
+      },
+      get() {
+        return this.visible
+      }
     }
   },
   mounted() {
@@ -80,7 +90,7 @@ export default {
     getDefaultFormSetting() {
       const vm = this
       return {
-        getMethod: () => 'post',
+        submitMethod: () => 'post',
         cleanFormValue: function(value) {
           const filterValue = {}
           Object.keys(value).filter((key) => vm.checkedFields.includes(key)).forEach((key) => {
@@ -100,7 +110,7 @@ export default {
           this.$axios.patch(url, validValues).then((res) => {
             vm.$emit('update')
             this.$message.success(msg)
-            vm.dialogSetting.dialogVisible = false
+            this.iVisible = false
           }).catch(error => {
             this.$emit('submitError', error)
             const response = error.response

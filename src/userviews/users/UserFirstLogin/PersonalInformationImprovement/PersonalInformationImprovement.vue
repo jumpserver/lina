@@ -1,16 +1,6 @@
 <template>
   <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :fields-meta="fieldsMeta"
-      :initial="object"
-      :url="url"
-      :update-success-next-route="updateSuccessNextRoute"
-      :clean-form-value="cleanFormValue"
-      :get-method="getMethod"
-      :on-perform-success="onPerformSuccess"
-      :perform-submit="performSubmit"
-    />
+    <GenericCreateUpdateForm v-bind="$data" />
   </IBox>
 </template>
 
@@ -82,24 +72,24 @@ export default {
           delete value['mfa_level']
         }
         return value
+      },
+      performSubmit(validValues) {
+        if (!validValues.terms) {
+          this.$message.error(this.$t('common.PleaseAgreeToTheTerms'))
+          return Promise.reject()
+        }
+        return this.$axios['put'](this.url, validValues)
+      },
+      onPerformSuccess() {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+        setTimeout(() => this.$router.push({ name: 'UserGuide' }), 100)
+      },
+      submitMethod() {
+        return 'put'
       }
     }
   },
   methods: {
-    getMethod() {
-      return 'put'
-    },
-    performSubmit(validValues) {
-      if (!validValues.terms) {
-        this.$message.error(this.$t('common.PleaseAgreeToTheTerms'))
-        return Promise.reject()
-      }
-      return this.$axios['put'](this.url, validValues)
-    },
-    onPerformSuccess() {
-      this.$message.success(this.$t('common.updateSuccessMsg'))
-      setTimeout(() => this.$router.push({ name: 'UserGuide' }), 100)
-    }
   }
 }
 </script>

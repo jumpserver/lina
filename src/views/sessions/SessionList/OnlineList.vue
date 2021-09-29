@@ -19,8 +19,8 @@ export default {
           name: 'terminate',
           title: this.$t('sessions.terminate'),
           type: 'danger',
-          can: (row, cellValue) => {
-            return row.can_terminate
+          can: ({ row, cellValue }) => {
+            return row['can_terminate']
           },
           callback: function({ reload, row }) {
             // 终断 session reload
@@ -39,13 +39,18 @@ export default {
           name: 'join',
           title: this.$t('sessions.Monitor'),
           type: 'primary',
-          can: (row, cellValue) => {
-            return row.can_join
+          can: ({ row, cellValue }) => {
+            return row['can_join']
+          },
+          tip: ({ row }) => {
+            if (row.login_from === 'RT') {
+              return this.$t('sessions.XRDPNotSupport')
+            }
+            return ''
           },
           callback: function({ row, tableData }) {
-            // 跳转到luna页面
-            const joinUrl = '/luna/join/?shareroom=' + row.id
-            window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
+            const monitorUrl = '/luna/monitor/' + row.id
+            window.open(monitorUrl, '_blank', 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
           }
         }
       ]

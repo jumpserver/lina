@@ -45,6 +45,7 @@
           </el-button>
         </template>
         <el-button
+          v-if="isSelfTicket"
           :disabled="object.status === 'closed'"
           type="danger"
           size="small"
@@ -102,7 +103,10 @@ export default {
   },
   computed: {
     hasActionPerm() {
-      return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      return this.object.process_map[this.object.approval_step - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
+    },
+    isSelfTicket() {
+      return this.object.applicant === this.$store.state.users.profile.id
     }
   },
   mounted() {

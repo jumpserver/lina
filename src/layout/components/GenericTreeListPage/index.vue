@@ -1,11 +1,8 @@
 <template>
-  <Page>
-    <el-alert v-if="helpMessage" type="success"> {{ helpMessage }} </el-alert>
+  <Page v-bind="$attrs">
     <TreeTable
       ref="TreeTable"
-      :table-config="tableConfig"
-      :header-actions="iHeaderActions"
-      :tree-setting="treeSetting"
+      v-bind="$attrs"
       v-on="$listeners"
     >
       <template #table>
@@ -27,23 +24,16 @@ export default {
   components: {
     Page, TreeTable
   },
-  props: {
-    ...TreeTable.props,
-    helpMessage: {
-      type: String,
-      default: null
-    }
-  },
   computed: {
-    ...mapGetters(['currentOrg']),
-    iHeaderActions() {
-      const attrs = _.cloneDeep(this.headerActions)
-      const canCreate = _.get(attrs, 'canCreate', null)
-      // this.$log.debug('Current org: ', this.currentOrg)
-      if (canCreate === null && this.currentOrg && this.currentOrg.is_root) {
-        _.set(attrs, 'canCreate', false)
-      }
-      return attrs
+    ...mapGetters(['currentOrgIsRoot'])
+  },
+  created() {
+    const headerActions = this.$attrs['header-actions'] || {}
+    if (headerActions.canCreate === undefined && this.currentOrgIsRoot) {
+      _.set(this.$attrs, 'header-actions.canCreate', false)
+    }
+    if (headerActions.hasImport === undefined && this.currentOrgIsRoot) {
+      _.set(this.$attrs, 'header-actions.hasImport', false)
     }
   },
   methods: {

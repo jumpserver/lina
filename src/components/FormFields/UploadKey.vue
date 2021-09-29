@@ -8,13 +8,17 @@
 <script>
 export default {
   props: {
-    value: {
-      type: String,
-      default: () => ''
-    },
+    // value: {
+    //   type: String,
+    //   default: () => ''
+    // },
     tip: {
       type: String,
       default: () => ''
+    },
+    toFormat: {
+      type: String,
+      default: () => 'string'
     }
   },
   methods: {
@@ -25,7 +29,11 @@ export default {
       const vm = this
       const reader = new FileReader()
       reader.onload = function() {
-        vm.$emit('input', this.result)
+        let result = this.result
+        if (vm.toFormat === 'object') {
+          result = JSON.parse(result)
+        }
+        vm.$emit('input', result)
       }
       reader.readAsText(
         e.target.files[0]

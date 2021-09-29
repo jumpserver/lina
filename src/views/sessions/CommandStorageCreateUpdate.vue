@@ -3,9 +3,6 @@
     v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
-    :has-detail-in-msg="false"
-    :after-get-form-value="afterGetFormValue"
-    :perform-submit="performSubmit"
   />
 </template>
 
@@ -24,15 +21,18 @@ export default {
 
       initial: { type: commandType, doc_type: 'command' },
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'meta', 'comment']]
+        [this.$t('common.Basic'), ['name', 'type', 'meta', 'is_default', 'comment']]
       ],
       fieldsMeta: {
         type: {
           type: 'select',
           disabled: true
         },
+        is_default: {
+          helpText: this.$t('sessions.SetToDefaultStorage')
+        },
         meta: {
-          fields: ['HOSTS', 'INDEX'],
+          fields: ['HOSTS', 'INDEX', 'IGNORE_VERIFY_CERTS'],
           fieldsMeta: {
             HOSTS: {
               helpText: this.$t('sessions.helpText.esUrl')
@@ -52,31 +52,24 @@ export default {
         }
         return `${url}?type=${commandType}`
       },
-      url: '/api/v1/terminal/command-storages/'
-
+      url: '/api/v1/terminal/command-storages/',
+      hasDetailInMsg: false,
+      afterGetFormValue(validValues) {
+        if (!validValues?.meta?.HOSTS) {
+          return validValues
+        }
+        validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
+        return validValues
+      },
+      cleanFormValue(value) {
+        value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
+        return value
+      }
     }
   },
   computed: {
-
   },
   methods: {
-    afterGetFormValue(validValues) {
-      validValues.meta.HOSTS = validValues.meta.HOSTS.toString()
-      return validValues
-    },
-    performSubmit(validValues) {
-      const method = this.getMethod()
-      validValues.meta.HOSTS = validValues.meta.HOSTS.split(',').map(item => (item.trim()))
-      return this.$axios[method](`${this.getUrl()}`, validValues)
-    },
-    getMethod() {
-      const params = this.$route.params
-      if (params.id) {
-        return 'put'
-      } else {
-        return 'post'
-      }
-    }
   }
 }
 </script>

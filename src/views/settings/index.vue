@@ -13,12 +13,17 @@ import TabPage from '@/layout/components/TabPage'
 import AutoDataForm from '@/components/AutoDataForm'
 import IBox from '@/components/IBox'
 import Basic from './Basic'
-import Email from './Email'
-import EmailContent from './EmailContent'
+import Email from './Email/index'
+import Auth from './Auth'
 import Ldap from './Ldap'
 import Terminal from './Terminal'
-import Security from './Security'
+import Security from './Security/index'
 import License from './License'
+import Other from './Other.vue'
+import Clean from './Clean'
+import SysMessageSub from './MessageSub/Subscription'
+import SMS from './SMS'
+
 export default {
   components: {
     IBox,
@@ -26,11 +31,15 @@ export default {
     AutoDataForm,
     Basic,
     Email,
-    EmailContent,
     Ldap,
+    Auth,
     Terminal,
     Security,
-    License
+    License,
+    Other,
+    SysMessageSub,
+    Clean,
+    SMS
   },
   data() {
     return {
@@ -47,12 +56,23 @@ export default {
           name: 'Email'
         },
         {
-          title: this.$t('setting.EmailContent'),
-          name: 'EmailContent'
-        },
-        {
           title: this.$t('setting.Ldap'),
           name: 'Ldap'
+        },
+        {
+          title: this.$t('setting.Auth'),
+          name: 'Auth'
+        },
+        {
+          title: this.$t('setting.MessageSub'),
+          name: 'SysMessageSub'
+        },
+        {
+          title: this.$t('setting.SMS'),
+          name: 'SMS',
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
         },
         {
           title: this.$t('setting.Terminal'),
@@ -63,6 +83,14 @@ export default {
           name: 'Security'
         },
         {
+          title: this.$t('setting.Cleaning'),
+          name: 'Clean'
+        },
+        {
+          title: this.$t('setting.Other'),
+          name: 'Other'
+        },
+        {
           title: this.$t('setting.License'),
           name: 'License'
         }
@@ -71,7 +99,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$t('settings.setting')
+      return this.$t('setting.setting')
     },
     componentData() {
       return {}
@@ -80,35 +108,6 @@ export default {
   mounted() {
   },
   methods: {
-    initial() {
-      const params = this.$route.params
-      switch (params.activeMenu) {
-        case 'Basic':
-          this.activeMenu = 'Basic'
-          break
-        case 'Email':
-          this.activeMenu = 'Email'
-          break
-        case 'EmailContent':
-          this.activeMenu = 'EmailContent'
-          break
-        case 'Ldap':
-          this.activeMenu = 'Ldap'
-          break
-        case 'Terminal':
-          this.activeMenu = 'Terminal'
-          break
-        case 'Security':
-          this.activeMenu = 'Security'
-          break
-        case 'License':
-          this.activeMenu = 'License'
-          break
-        default:
-          this.activeMenu = 'Basic'
-          break
-      }
-    }
   }
 }
 </script>
