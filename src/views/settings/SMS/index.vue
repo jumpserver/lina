@@ -68,7 +68,7 @@ export default {
 
 <style scoped>
 .form >>> .form-buttons {
-  padding-top: 50px;
+  padding-top: 30px;
 }
 
 </style>
