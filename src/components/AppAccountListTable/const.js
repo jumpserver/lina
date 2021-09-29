@@ -14,9 +14,9 @@ export const connectivityMeta = {
     hasTips: true,
     getTips: ({ row, cellValue }) => {
       const mapper = {
-        'ok': i18n.tc('assets.Reachable'),
-        'failed': i18n.tc('assets.Unreachable'),
-        'unknown': i18n.tc('assets.Unknown')
+        'ok': i18n.t('assets.Reachable'),
+        'failed': i18n.t('assets.Unreachable'),
+        'unknown': i18n.t('assets.Unknown')
       }
       let tips = mapper[cellValue]
       if (row['date_verified']) {

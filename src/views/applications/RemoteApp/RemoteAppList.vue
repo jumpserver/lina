@@ -69,7 +69,6 @@ export default {
         moreCreates: {
           dropdown: this.getCreateAppType(),
           callback: (app) => {
-            console.log('App: ', app)
             vm.$router.push({ name: 'RemoteAppCreate', query: { type: app.name }})
           }
         }

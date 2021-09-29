@@ -71,6 +71,9 @@ export default {
   methods: {
     handleCheckChange(data, obj) {
       const checkedKeys = obj.checkedKeys
+      if (checkedKeys.length !== 0) {
+        checkedKeys.push('connect')
+      }
       this.$emit('input', checkedKeys)
     }
   }

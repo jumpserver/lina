@@ -37,6 +37,7 @@ export default [
   {
     path: 'databases',
     component: empty,
+    redirect: '',
     meta: { title: i18n.t('route.DatabaseApp') },
     children: [
       {

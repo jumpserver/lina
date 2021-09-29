@@ -16,12 +16,15 @@
 import { GenericDetailPage } from '@/layout/components'
 import SessionCommands from './SessionCommands'
 import SessionDetailInfo from './SessionDetailInfo'
+import SessionJoinRecords from './SessionJoinRecords'
+
 export default {
   name: 'SessionDetail',
   components: {
     GenericDetailPage,
     SessionCommands,
-    SessionDetailInfo
+    SessionDetailInfo,
+    SessionJoinRecords
   },
   data() {
     return {
@@ -29,12 +32,16 @@ export default {
       activeSubMenu: 'SessionDetailInfo',
       submenu: [
         {
-          title: this.$t('route.SessionDetail'),
+          title: this.$t('route.Detail'),
           name: 'SessionDetailInfo'
         },
         {
           title: this.$t('sessions.command'),
           name: 'SessionCommands'
+        },
+        {
+          title: this.$t('sessions.Activity'),
+          name: 'SessionJoinRecords'
         }
       ]
     }

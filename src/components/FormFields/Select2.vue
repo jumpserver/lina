@@ -2,13 +2,14 @@
   <el-select
     ref="select"
     v-model="iValue"
+    v-loading="!initialized"
     v-loadmore="loadMore"
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
     :multiple="multiple"
-    filterable
     :clearable="clearable"
+    filterable
     popper-append-to-body
     class="select2"
     v-bind="$attrs"
@@ -97,7 +98,6 @@ export default {
     return {
       loading: false,
       initialized: false,
-      iValue: this.value ? this.value : [],
       defaultParams: _.cloneDeep(defaultParams),
       params: _.cloneDeep(defaultParams),
       iOptions: this.options || [],
@@ -111,6 +111,18 @@ export default {
     },
     optionsValues() {
       return this.iOptions.map((v) => v.value)
+    },
+    iValue: {
+      set(val) {
+        const noValue = !this.value || this.value.length === 0
+        if (noValue && !this.initialized) {
+          return
+        }
+        this.$emit('input', val)
+      },
+      get() {
+        return this.value
+      }
     },
     iAjax() {
       const defaultPageSize = 10
@@ -161,11 +173,14 @@ export default {
       this.iValue = iNew
     }
   },
-  mounted() {
+  async mounted() {
     // this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
-      this.initialSelect()
-      this.initialized = true
+      await this.initialSelect()
+      setTimeout(() => {
+        this.initialized = true
+        this.iValue = this.value
+      })
     }
     this.$nextTick(() => {
       // 因为elform存在问题，这个来清楚验证
@@ -243,9 +258,13 @@ export default {
       // this.$log.debug('Select ajax config', this.iAjax)
       if (this.iAjax.url) {
         if (this.value && this.value.length !== 0) {
-          this.$log.debug('Start init select2 value')
-          const data = await createSourceIdCache(this.value)
-          this.params.spm = data.spm
+          this.$log.debug('Start init select2 value, ', this.value)
+          let value = this.value
+          if (!Array.isArray(value)) {
+            value = [value]
+          }
+          const data = await createSourceIdCache(value)
+          this.params.spm = data['spm']
           await this.getInitialOptions()
         }
         await this.getOptions()

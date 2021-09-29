@@ -5,7 +5,7 @@
       :fields-meta="fieldsMeta"
       :initial="object"
       :url="url"
-      :get-method="getMethod"
+      :submit-method="submitMethod"
       class="password-update"
       :update-success-next-route="updateSuccessNextRoute"
     />
@@ -59,7 +59,7 @@ export default {
     }
   },
   methods: {
-    getMethod() {
+    submitMethod() {
       return 'put'
     }
   }

@@ -87,6 +87,15 @@ export function toSafeLocalDateStr(d) {
   return date_s
 }
 
+export function forMatAction(vm, d) {
+  d.forEach(function(item, index, arr) {
+    if ([vm.$t('perms.clipboardCopyPaste'), vm.$t('perms.upDownload'), vm.$t('perms.all')].includes(item)) {
+      arr.splice(index, 1)
+    }
+  })
+  return d.join(', ')
+}
+
 export function getApiPath(that) {
   let pagePath = that.$route.path
   const pagePathArray = pagePath.split('/')
@@ -228,6 +237,21 @@ export function getUpdateObjURL(url, objId) {
   pathname += `${objId}/`
   urlObj.pathname = pathname
   return urlObj.href
+}
+
+export function truncateCenter(s, l) {
+  if (s.length <= l) {
+    return s
+  }
+  const centerIndex = Math.ceil(l / 2)
+  return s.slice(0, centerIndex - 2) + '...' + s.slice(centerIndex + 1, l)
+}
+
+export function truncateEnd(s, l) {
+  if (s.length <= l) {
+    return s
+  }
+  return s.slice(0, l - 3) + '...'
 }
 
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)

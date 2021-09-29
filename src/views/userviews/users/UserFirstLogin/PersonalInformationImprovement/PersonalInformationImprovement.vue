@@ -84,7 +84,7 @@ export default {
         this.$message.success(this.$t('common.updateSuccessMsg'))
         setTimeout(() => this.$router.push({ name: 'UserGuide' }), 100)
       },
-      getMethod() {
+      submitMethod() {
         return 'put'
       }
     }

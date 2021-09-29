@@ -48,16 +48,16 @@ export default {
       tableConfig: {
         url: this.url,
         columns: [
-          'app_name', 'username', 'app_category_display',
-          'app_type_display', 'systemuser', 'actions'
+          'app_display', 'username', 'category_display',
+          'type_display', 'systemuser', 'actions'
         ],
         columnsMeta: {
-          app_name: {
+          app_display: {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
               getRoute({ row }) {
-                switch (row['app_category']) {
+                switch (row['category']) {
                   case 'remote_app':
                     return {
                       name: 'RemoteAppDetail',
@@ -128,8 +128,8 @@ export default {
       headerActions: {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: false,
-        hasImport: this.hasImport,
-        hasExport: this.hasExport,
+        hasImport: false,
+        hasExport: true,
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true

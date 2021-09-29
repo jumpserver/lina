@@ -16,10 +16,17 @@ export default {
     return {
       fields: [
         [
-          'KoKo', [
+          'KoKo',
+          [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
             'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_ASSET_LIST_PAGE_SIZE',
             'TERMINAL_TELNET_REGEX'
+          ]
+        ],
+        [
+          'XRDP',
+          [
+            'XRDP_ENABLED', 'TERMINAL_RDP_ADDR'
           ]
         ],
         [
@@ -32,11 +39,24 @@ export default {
       fieldsMeta: {
         TERMINAL_TELNET_REGEX: {
           type: 'input'
+        },
+        TERMINAL_RDP_ADDR: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
+        XRDP_ENABLED: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          },
+          el: {
+            hiddenGroup: true
+          }
         }
       },
       url: '/api/v1/settings/setting/?category=terminal',
       hasDetailInMsg: false,
-      getMethod() {
+      submitMethod() {
         return 'put'
       },
       cleanFormValue(data) {
@@ -52,14 +72,6 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.getters.hasValidLicense) {
-      const xRDPFields = [
-        'XRDP', [
-          'TERMINAL_RDP_ADDR'
-        ]
-      ]
-      this.fields.splice(1, 0, xRDPFields)
-    }
   },
   methods: {
   }

@@ -19,17 +19,17 @@
           v-for="msg of messages"
           :key="msg.id"
           class="msg-item"
-          :class="msg.has_read ? 'msg-read' : 'msg-unread'"
+          :class="msg['has_read'] ? 'msg-read' : 'msg-unread'"
           @mouseover="hoverMsgId = msg.id"
           @mouseleave="hoverMsgId = ''"
           @click="showMsgDetail(msg)"
         >
           <div class="msg-item-head">
             <span class="msg-item-head-type">
-              <i :class="msg.has_read ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
+              <i :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
               {{ msg.subject }}
             </span>
-            <span v-if="hoverMsgId !== msg.id || msg.has_read" class="msg-item-head-time">
+            <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
               {{ formatDate(msg.date_created) }}
             </span>
             <div v-else class="msg-item-read-btn" @click.stop="markAsRead(msg)">
@@ -225,7 +225,7 @@ export default {
 
   .msg-item-head-type {
     float: left;
-    width: 240px;
+    width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: middle;

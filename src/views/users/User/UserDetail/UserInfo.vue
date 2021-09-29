@@ -58,7 +58,7 @@ export default {
           title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
-            disabled: !this.object.mfa_enabled,
+            disabled: !this.object.mfa_enabled || this.object.id === this.$store.state.users.profile.id,
             label: this.$t('common.Reset')
           },
           callbacks: {
@@ -238,6 +238,22 @@ export default {
         {
           key: this.$t('users.Email'),
           value: this.object.email
+        },
+        {
+          key: this.$t('users.Phone'),
+          value: this.object.phone
+        },
+        {
+          key: this.$t('users.WeCom'),
+          value: this.object.wecom_id
+        },
+        {
+          key: this.$t('users.DingTalk'),
+          value: this.object.dingtalk_id
+        },
+        {
+          key: this.$t('users.FeiShu'),
+          value: this.object.feishu_id
         },
         {
           key: this.$t('users.Role'),

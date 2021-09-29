@@ -1,27 +1,59 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :title="title" />
+  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting" :header-actions="headerActions" :table-config="tableConfig" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import { setUrlParam } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
-import { ApplicationTypes } from '../const'
+import { ApplicationTypes } from '@/views/perms/const'
 
 export default {
+  name: 'AssetAccountList',
   components: {
-    GenericListPage
+    GenericTreeListPage
   },
   data() {
     const vm = this
     return {
-      title: this.$t('route.ApplicationPermission'),
+      isInit: true,
+      clickedRow: null,
+      iShowTree: true,
+      treeSetting: {
+        async: false,
+        showMenu: false,
+        showRefresh: true,
+        showAssets: false,
+        treeUrl: '/api/v1/applications/applications/tree/',
+        callback: {
+          onSelected: function(event, treeNode) {
+            let url = '/api/v1/perms/application-permissions/'
+            const nodeId = treeNode.id
+            const value = treeNode.meta.data?.value
+            if (treeNode.meta.type === 'category') {
+              url = setUrlParam(url, 'category', value)
+              url = setUrlParam(url, 'type', '')
+            } else if (treeNode.meta.type === 'type') {
+              url = setUrlParam(url, 'category', '')
+              url = setUrlParam(url, 'type', value)
+            } else if (treeNode.meta.type === 'application') {
+              url = setUrlParam(url, 'category', '')
+              url = setUrlParam(url, 'type', '')
+              url = setUrlParam(url, 'app', nodeId)
+            }
+            setTimeout(() => {
+              vm.tableConfig.url = url
+            }, 100)
+          }
+        }
+      },
       tableConfig: {
         url: '/api/v1/perms/application-permissions/',
         columns: [
           'name', 'type_display', 'category_display',
           'users_amount', 'user_groups_amount',
           'applications_amount', 'system_users_amount',
-          'date_expired', 'is_valid',
+          'date_expired', 'is_valid', 'from_ticket',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
@@ -53,7 +85,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionUser'
+                activeTab: 'ApplicationPermissionUser'
               }
             }
           },
@@ -63,7 +95,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionUser'
+                activeTab: 'ApplicationPermissionUser'
               }
             }
           },
@@ -73,7 +105,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionRemoteApp'
+                activeTab: 'ApplicationsPermission'
               }
             }
           },
@@ -83,7 +115,35 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               routeQuery: {
-                activeTab: 'RemoteAppPermissionRemoteApp'
+                activeTab: 'ApplicationsPermission'
+              }
+            }
+          },
+          from_ticket: {
+            formatter(row) {
+              if (row.from_ticket) {
+                return vm.$t('common.Yes')
+              } else {
+                return vm.$t('common.No')
+              }
+            }
+          },
+          actions: {
+            formatterArgs: {
+              onUpdate: ({ row }) => {
+                const route = {
+                  name: 'ApplicationPermissionUpdate',
+                  params: { id: row.id },
+                  query: { type: row.type, category: row.category }
+                }
+                this.$router.push(route)
+              },
+              onClone: ({ row }) => {
+                const route = {
+                  name: 'ApplicationPermissionCreate',
+                  query: { type: row.type, category: row.category, clone_from: row.id }
+                }
+                this.$router.push(route)
               }
             }
           }
@@ -104,12 +164,6 @@ export default {
         }
       }
     }
-  },
-  methods: {
   }
 }
 </script>
-
-<style>
-
-</style>

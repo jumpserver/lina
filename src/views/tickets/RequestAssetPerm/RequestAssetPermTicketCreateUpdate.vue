@@ -4,7 +4,6 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { DEFAULT_ORG_ID } from '@/utils/org'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
@@ -26,13 +25,14 @@ export default {
         meta: {
           apply_date_expired: date_expired,
           apply_date_start: date_start,
-          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
+          apply_assets: []
         },
         org_id: '',
         type: 'apply_asset'
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'assignees', 'comment']],
+        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
         [this.$t('tickets.RequestPerm'), ['meta']]
       ],
       fieldsMeta: {
@@ -44,8 +44,8 @@ export default {
         },
         meta: {
           fields: [
-            'apply_ip_group', 'apply_hostname_group', 'apply_system_user_group',
-            'apply_actions', 'apply_date_start', 'apply_date_expired'
+            'apply_assets', 'apply_system_users', 'apply_actions',
+            'apply_date_start', 'apply_date_expired'
           ],
           fieldsMeta: {
             apply_actions: {
@@ -53,14 +53,34 @@ export default {
               component: AssetPermissionFormActionField,
               helpText: this.$t('common.actionsTips')
             },
-            apply_ip_group: {
-              helpText: this.$t('tickets.helpText.ips')
+            apply_assets: {
+              type: 'assetSelect',
+              label: this.$t('perms.Asset'),
+              component: Select2,
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    return { label: item.hostname + '(' + item.protocols + ')', value: item.id }
+                  }
+                }
+              }
             },
-            apply_hostname_group: {
-              helpText: this.$t('tickets.helpText.fuzzySearch')
-            },
-            apply_system_user_group: {
-              helpText: this.$t('tickets.helpText.fuzzySearch')
+            apply_system_users: {
+              type: 'systemUserSelect',
+              component: Select2,
+              label: '系统用户',
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    const username = item.username || '*'
+                    return { label: item.name + '(' + username + ')', value: item.id }
+                  }
+                }
+              }
             }
           }
         },
@@ -68,26 +88,15 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.user_all_orgs.map((item) => {
+            options: this.$store.state.users.profile['user_all_orgs'].map((item) => {
               return { label: item.name, value: item.id }
             })
           },
-          on: {
-            changeOptions: ([event], updateForm) => {
-              this.fieldsMeta.assignees.el.ajax.url = `/api/v1/tickets/assignees/?org_id=${event[0].value}`
-            }
-          }
-        },
-        assignees: {
-          el: {
-            multiple: true,
-            value: [],
-            ajax: {
-              url: `/api/v1/tickets/assignees/?org_id=${DEFAULT_ORG_ID}`,
-              transformOption: (item) => {
-                return { label: item.name + '(' + item.username + ')', value: item.id }
-              }
-            }
+          hidden: (form) => {
+            const fieldsMeta = this.fieldsMeta.meta.fieldsMeta
+            fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
+            fieldsMeta.apply_assets.el.value = []
+            fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
           }
         }
       },
@@ -98,22 +107,13 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
-      this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
+    if (this.$store.state.users.profile['user_all_orgs'].length > 0) {
+      this.initial.org_id = this.$store.state.users.profile['user_all_orgs'][0].id
     }
     this.loading = false
   },
   methods: {
     performSubmit(validValues) {
-      if (validValues.meta.apply_ip_group) {
-        validValues.meta.apply_ip_group = validValues.meta.apply_ip_group.split(',')
-      }
-      if (validValues.meta.apply_hostname_group) {
-        validValues.meta.apply_hostname_group = validValues.meta.apply_hostname_group.split(',')
-      }
-      if (validValues.meta.apply_system_user_group) {
-        validValues.meta.apply_system_user_group = validValues.meta.apply_system_user_group.split(',')
-      }
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_asset`, validValues)
     }
   }

@@ -1,6 +1,13 @@
 <template>
   <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <el-badge v-if="props.tab === 'AssignedTicketList'" slot="badge" slot-scope="props" :value="getBadgeValue(props)" size="mini" type="primary" />
+    <el-badge
+      v-if="props.tab === 'AssignedTicketList'"
+      slot="badge"
+      slot-scope="props"
+      :value="getBadgeValue(props)"
+      size="mini"
+      type="primary"
+    />
     <keep-alive>
       <component :is="config.activeMenu" />
     </keep-alive>
@@ -10,18 +17,21 @@
 <script>
 import { TabPage } from '@/layout/components'
 import { mapGetters } from 'vuex'
+import { getTicketOpenCount } from '@/api/ticket'
 import AssignedTicketList from './AssignedTicketList'
 import MyTicketList from './MyTicketList'
-import { getTicketOpenCount } from '@/api/ticket'
+import TicketFlow from './TicketFlow/TicketFlow'
 
 export default {
   name: 'Index',
   components: {
     TabPage,
     AssignedTicketList,
-    MyTicketList
+    MyTicketList,
+    TicketFlow
   },
   data() {
+    const vm = this
     return {
       assignedTicketCount: 0,
       config: {
@@ -34,6 +44,14 @@ export default {
           {
             title: this.$t('tickets.AssignedMe'),
             name: 'AssignedTicketList'
+          },
+          {
+            title: '流程设置',
+            icon: 'fa-gear',
+            name: 'TicketFlow',
+            hidden: () => {
+              return !(vm.$store.getters.currentUserIsSuperAdmin || vm.$store.getters.currentUserIsAdmin)
+            }
           }
         ]
       }

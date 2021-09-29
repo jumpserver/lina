@@ -52,7 +52,6 @@ export default {
           }
         },
         password: {
-          helpText: this.$t('assets.PasswordWithoutSpecialCharHelpText'),
           hidden: (formValue) => {
             if (!this.$route.params.id) {
               return false

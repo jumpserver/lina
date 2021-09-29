@@ -1,5 +1,5 @@
-import { ChoicesFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
+import ChoicesFormatter from '@/components/TableFormatters/ChoicesFormatter'
 import i18n from '@/i18n/i18n'
 
 export const connectivityMeta = {
@@ -7,16 +7,21 @@ export const connectivityMeta = {
   formatter: ChoicesFormatter,
   formatterArgs: {
     iconChoices: {
-      ok: 'fa-check text-primary',
-      failed: 'fa-times text-danger',
-      unknown: 'fa-circle text-warning'
+      ok: 'fa-check',
+      failed: 'fa-times',
+      unknown: 'fa-circle-o'
+    },
+    classChoices: {
+      ok: 'text-primary',
+      failed: 'text-danger',
+      unknown: 'text-warning'
     },
     hasTips: true,
     getTips: ({ row, cellValue }) => {
       const mapper = {
-        'ok': i18n.tc('assets.Reachable'),
-        'failed': i18n.tc('assets.Unreachable'),
-        'unknown': i18n.tc('assets.Unknown')
+        'ok': i18n.t('assets.Reachable'),
+        'failed': i18n.t('assets.Unreachable'),
+        'unknown': i18n.t('assets.Unknown')
       }
       let tips = mapper[cellValue]
       if (row['date_verified']) {

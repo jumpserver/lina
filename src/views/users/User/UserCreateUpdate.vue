@@ -61,7 +61,8 @@ export default {
             return !formValue.update_password
           },
           el: {
-            required: false
+            required: false,
+            userIsOrgAdmin: false
           }
         },
         need_update_password: {
@@ -131,7 +132,7 @@ export default {
           }
         }
       },
-      getMethod() {
+      submitMethod() {
         const params = this.$route.params
         if (params.id) {
           return 'put'
@@ -140,7 +141,7 @@ export default {
         }
       },
       cleanFormValue(value) {
-        const method = this.getMethod()
+        const method = this.submitMethod()
         if (method === 'post' && value.password_strategy === 'email') {
           delete value['password']
           if (this.currentOrgIsRoot) {
@@ -165,6 +166,7 @@ export default {
   methods: {
     afterGetUser(user) {
       this.user = user
+      this.fieldsMeta.password.el.userIsOrgAdmin = user.role === 'Admin' || user.org_roles.indexOf('Admin') !== -1
       if (this.$route.query.clone_from) {
         this.user.groups = []
       }

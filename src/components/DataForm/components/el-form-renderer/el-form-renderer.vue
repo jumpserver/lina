@@ -1,7 +1,7 @@
 <template>
   <el-form ref="elForm" v-bind="$attrs" :model="value" class="el-form-renderer">
     <template v-for="item in innerContent">
-      <slot :name="`id:${item.id}`" />
+      <slot v-if="!isHidden(item)" :name="`id:${item.id}`" />
       <component
         :is="item.type === GROUP ? 'render-form-group' : 'render-form-item'"
         :key="item.id"
@@ -13,7 +13,7 @@
         :options="options[item.id]"
         @updateValue="updateValue"
       />
-      <slot :name="`$id:${item.id}`" />
+      <slot v-if="!isHidden(item)" :name="`$id:${item.id}`" />
     </template>
     <slot />
   </el-form>
@@ -202,6 +202,18 @@ export default {
     setOptions(id, options) {
       _set(this.options, id, options)
       this.options = { ...this.options } // 设置之前不存在的 options 时需要重新设置响应式更新
+    },
+    isHidden(item) {
+      if (!item.el || !item.el['hiddenGroup']) {
+        return false
+      }
+      if (item.hidden === true) {
+        return true
+      }
+      if (typeof item.hidden === 'function') {
+        return item.hidden(this.value)
+      }
+      return false
     }
   }
 }

@@ -5,7 +5,18 @@
         <DetailCard :items="detailCardItems" />
       </el-col>
       <el-col :span="10">
-        <QuickActions type="primary" :actions="quickActions" />
+        <QuickActions
+          type="primary"
+          :title="this.$t('users.AuthSettings')"
+          :actions="authQuickActions"
+        />
+        <QuickActions
+          type="info"
+          style="margin-top: 15px"
+          :title="this.$t('users.MessageSubscription')"
+          fa="fa-info-circle"
+          :actions="messageSubscriptionQuickActions"
+        />
       </el-col>
     </el-row>
     <Dialog
@@ -57,7 +68,7 @@ export default {
       showPasswordDialog: false,
       passwordInput: '',
       currentEdit: '',
-      quickActions: [
+      authQuickActions: [
         {
           title: this.$t('users.setWeCom'),
           attrs: {
@@ -84,6 +95,21 @@ export default {
           callbacks: {
             click: function() {
               this.currentEdit = 'dingtalk'
+              this.showPasswordDialog = true
+            }.bind(this)
+          }
+        },
+        {
+          title: this.$t('users.setFeiShu'),
+          attrs: {
+            type: 'primary',
+            label: this.$store.state.users.profile.is_feishu_bound ? this.$t('common.unbind') : this.$t('common.bind'),
+            disabled: this.$store.state.users.profile.source !== 'local'
+          },
+          has: this.$store.getters.publicSettings.AUTH_FEISHU,
+          callbacks: {
+            click: function() {
+              this.currentEdit = 'feishu'
               this.showPasswordDialog = true
             }.bind(this)
           }
@@ -116,7 +142,11 @@ export default {
           has: this.object.mfa_enabled,
           callbacks: {
             click: function() {
-              window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
+              if (this.$store.state.users.profile.is_otp_secret_key_bound) {
+                window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
+              } else {
+                window.location.href = `/core/auth/profile/otp/enable/start/?next=${this.$route.fullPath}`
+              }
             }.bind(this)
           }
         },
@@ -157,6 +187,67 @@ export default {
             click: function() {
               window.open(`/core/auth/profile/pubkey/generate/`, '_blank')
             }
+          }
+        }
+      ],
+      messageSubscriptionQuickActions: [
+        {
+          title: this.$t('notifications.SiteMessage'),
+          type: 'switcher',
+          attrs: {
+            disabled: true,
+            name: 'site_msg',
+            model: this.object.receive_backends.indexOf('site_msg') !== -1
+          },
+          callbacks: {
+            change: this.updateUserReceiveBackends
+          }
+        },
+        {
+          title: this.$t('setting.Email'),
+          type: 'switcher',
+          attrs: {
+            name: 'email',
+            model: this.object.receive_backends.indexOf('email') !== -1
+          },
+          callbacks: {
+            change: this.updateUserReceiveBackends
+          }
+        },
+        {
+          title: this.$t('setting.WeCom'),
+          type: 'switcher',
+          attrs: {
+            name: 'wecom',
+            model: this.object.receive_backends.indexOf('wecom') !== -1
+          },
+          has: this.$store.getters.publicSettings.AUTH_WECOM,
+          callbacks: {
+            change: this.updateUserReceiveBackends
+          }
+        },
+        {
+          title: this.$t('setting.DingTalk'),
+          type: 'switcher',
+          attrs: {
+            name: 'dingtalk',
+            model: this.object.receive_backends.indexOf('dingtalk') !== -1
+          },
+          has: this.$store.getters.publicSettings.AUTH_DINGTALK,
+          callbacks: {
+            change: this.updateUserReceiveBackends
+          }
+        },
+        {
+          title: this.$t('setting.FeiShu'),
+          type: 'switcher',
+          attrs: {
+            name: 'feishu',
+            model: this.object.receive_backends.indexOf('feishu') !== -1
+          },
+          has: this.$store.getters.publicSettings.AUTH_FEISHU,
+          callbacks: {
+            change: this.updateUserReceiveBackends
           }
         }
       ]
@@ -230,6 +321,27 @@ export default {
     }
   },
   methods: {
+    updateUserReceiveBackends(val) {
+      this.$axios.patch(
+        `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,
+        { 'receive_backends': this.getReceiveBackendList() }
+      ).then(res => {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(err => {
+        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+      })
+    },
+    getReceiveBackendList() {
+      const backendList = []
+      for (const backend of this.messageSubscriptionQuickActions) {
+        const name = backend.attrs.name
+        const enabled = backend.attrs.model
+        if (enabled) {
+          backendList.push(name)
+        }
+      }
+      return backendList
+    },
     passConfirm() {
       this.$axios.post(
         `/api/v1/authentication/password/verify/`, {

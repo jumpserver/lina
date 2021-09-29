@@ -19,7 +19,8 @@ const getDefaultState = () => {
     perms: [],
     MFAVerifyAt: null,
     isSuperAdmin: false,
-    hasAdminPerm: false
+    hasAdminPerm: false,
+    hasAuditPerm: false
   }
 }
 

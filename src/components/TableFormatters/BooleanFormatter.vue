@@ -5,7 +5,7 @@
 <script>
 import BaseFormatter from './base'
 export default {
-  name: 'ChoicesFormatter',
+  name: 'BooleanFormatter',
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -16,6 +16,7 @@ export default {
             true: 'fa-check text-primary',
             false: 'fa-times text-danger'
           },
+          showFalse: true,
           typeChange(val) {
             return !!val
           }
@@ -31,6 +32,9 @@ export default {
   computed: {
     iconClass() {
       const key = this.formatterArgs.typeChange(this.cellValue)
+      if (!key && !this.formatterArgs.showFalse) {
+        return ''
+      }
       return this.formatterArgs.iconChoices[key]
     }
   }

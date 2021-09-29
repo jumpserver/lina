@@ -1,6 +1,13 @@
 <template>
   <div class="asset-select-dialog">
-    <Select2 ref="select2" v-bind="select2Config" @input="onInputChange" @focus.stop="handleFocus" v-on="$listeners" />
+    <Select2
+      ref="select2"
+      v-model="select2Config.value"
+      v-bind="select2Config"
+      @input="onInputChange"
+      @focus.stop="handleFocus"
+      v-on="$listeners"
+    />
     <Dialog
       v-if="dialogVisible"
       :title="this.$t('assets.Assets')"
@@ -76,7 +83,7 @@ export default {
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/assets/assets/?fields_size=mini',
         hasTree: true,
         canSelect: this.canSelect,
         columns: [
@@ -102,6 +109,9 @@ export default {
           },
           {
             prop: 'protocols',
+            formatter: function(row) {
+              return <span> {row.protocols.toString()} </span>
+            },
             label: this.$t('assets.Protocols')
           }
         ],

@@ -1,5 +1,5 @@
 <template>
-  <component :is="systemUserProtocolComponent" :title="title" />
+  <component :is="systemUserProtocolComponent" :title="iTitle" />
 </template>
 
 <script>
@@ -9,10 +9,19 @@ export default {
   name: 'AdminUserCreate',
   data() {
     return {
-      title: this.$t('route.SystemUserCreate') + ' - ' + this.$t('assets.AdminUser')
     }
   },
   computed: {
+    iTitle() {
+      const params = this.$route.params
+      let title = ''
+      if (params.id) {
+        title = this.$t('route.SystemUserUpdate')
+      } else {
+        title = this.$t('route.SystemUserCreate')
+      }
+      return title + '-' + this.$t('assets.AdminUser')
+    },
     systemUserProtocolComponent() {
       return SSH
     }

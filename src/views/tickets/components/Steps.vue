@@ -1,6 +1,6 @@
 <template>
   <IBox>
-    <div style="height: 350px;">
+    <div style="height: 540px;">
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.type_display}`"
@@ -12,15 +12,27 @@
           </div>
         </el-step>
         <el-step
-          :title="`${this.$t('tickets.HandleTicket')}`"
-          :description="`${this.$t('tickets.Assignees')}：${object.assignees_display}`"
-        />
+          v-for="(item, i) in process"
+          :key="i"
+          :title="`${thisCopy.$t('tickets.HandleTicket')}`"
+        >
+          <div slot="description">
+            <el-tag size="medium" :type="`${thisCopy.statusMap[item.state].type}`"> {{ `${thisCopy.statusMap[item.state].title}` }} </el-tag>
+          </div>
+          <div slot="description"><el-button type="text" style="color: blue" @click="lookOver(item.assignees_display)">点击查看 受理人</el-button></div>
+          <div v-if="item.state==='closed'" slot="description">
+            <div>{{ `${thisCopy.$t('tickets.Assignee')}：${object.applicant_display}` }}</div>
+            <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
+          </div>
+          <div v-if="item.state!=='notified' && item.state!=='closed'" slot="description">
+            <div>{{ `${thisCopy.$t('tickets.Assignee')}：${item.processor_display}` }}</div>
+            <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
+          </div>
+        </el-step>
         <el-step
           :title="`${this.$t('tickets.FinishedTicket')}`"
-          :description="ticketSteps===STATUS.close ? `${this.$t('tickets.Assignee')}：${object.assignee_display}`:'' "
         >
-          <div v-if="ticketSteps===STATUS.close" slot="description">
-            <div>{{ `${this.$t('tickets.Assignee')}：${object.processor_display}` }}</div>
+          <div v-if="thisCopy.isFinish" slot="description">
             <div>{{ `${this.$t('common.dateFinished')}:  ${toSafeLocalDateStr(object.date_updated)}` }}</div>
           </div>
         </el-step>
@@ -33,6 +45,7 @@
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import IBox from '@/components/IBox'
+import { STATE_MAP } from '../const'
 export default {
   name: 'Steps',
   components: { IBox },
@@ -44,12 +57,30 @@ export default {
   },
   data() {
     return {
-      STATUS: { open: 2, close: 3 }
+      STATUS: { open: 2, close: 3 },
+      process: this.object.process_map,
+      thisCopy: this,
+      statusMap: STATE_MAP,
+      isFinish: false
     }
   },
   computed: {
     ticketSteps() {
-      return this.object.status === 'open' ? this.STATUS.open : this.STATUS.close
+      // eslint-disable-next-line no-unused-vars
+      var countApprove = 0
+      this.process.forEach(item => {
+        // eslint-disable-next-line space-before-blocks
+        if (item.state === 'approved'){
+          countApprove += 1
+        }
+      })
+      if (countApprove === process.length) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.isFinish = true
+        return process.length + 2
+      } else {
+        return this.STATUS.open + countApprove
+      }
     }
   },
   methods: {
@@ -58,6 +89,19 @@ export default {
     },
     toSafeLocalDateStr(dataStr) {
       return toSafeLocalDateStr(dataStr)
+    },
+    lookOver(assignees_display) {
+      const h = this.$createElement
+      const content = []
+      assignees_display.forEach(item => {
+        content.push(h('p', null, item),)
+      })
+      this.$msgbox({
+        title: '相关受理人',
+        message: h('p', null, content),
+        showCancelButton: false,
+        showConfirmButton: false
+      })
     }
   }
 }
