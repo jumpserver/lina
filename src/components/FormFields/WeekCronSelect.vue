@@ -1,39 +1,51 @@
 <template>
-  <div>
-    <!-- <div class="hours-container">
-      <div v-for="(item, index) in hours" :key="index" class="hours-item">
-        <div
-          :class="compClass(item)"
-          @click="handleClick(item)"
-          @mouseover="handleHover(item)"
-        />
-      </div>
-    </div> -->
-    <div class="con">
-      <div v-for="(i, wIndex) in weeks" :key="wIndex" class="week">
-        <div class="week-title">{{ i }}</div>
-        <div v-for="(item, hIndex) in hours" :key="hIndex" class="hour">
-          <div
-            :class="compClass(item)"
-            @click="handleClick(item)"
-            @mouseover="handleHover(item, i)"
-          />
-          <div v-if="wIndex === 4 && hIndex % 2" class="hour-title">{{ hIndex }}</div>
-        </div>
-      </div>
+  <div id="selectContainer" class="grad-table" @mousedown="handleMouseDown">
+    <div v-if="loading" class="loading-box">
+      <span class="el-icon-loading" />
     </div>
-    <div class="tips">{{ tips }}</div>
+    <table v-else bordercolor="#c2d0f3" cellpadding="0" cellspacing="0" class="gridtable" align="center">
+      <tr v-for="(item, index) in tableData" :key="index">
+        <td class="week-first-td">
+          {{ weekEnum[index] }}
+        </td>
+        <td
+          v-for="(temp, key) in item"
+          :key="key"
+          class="week-data-td"
+          :style="`background:${temp.checked ? '#4e84fe' : ''}`"
+          @click="handleClickTimeData(temp, index)"
+        />
+      </tr>
+      <tr>
+        <th class="week-first-name">星期\时</th>
+        <th v-for="(item, index) in timeThArr" :key="index" class="week-first-num">
+          {{ index % 2 === 0 ? item : '' }}
+        </th>
+      </tr>
+    </table>
+    <div
+      v-show="is_show_mask"
+      class="mask"
+      :style="
+        'width:' +
+          maskWidth +
+          'left:' +
+          maskLeft +
+          'height:' +
+          maskHeight +
+          'top:' +
+          maskTop
+      "
+    />
   </div>
 </template>
+
 <script>
 export default {
-  model: {
-    prop: 'sendTimeList'
-  },
   props: {
-    sendTimeList: {
-      type: Array,
-      default: () => []
+    value: {
+      type: Object,
+      default: () => {}
     },
     readonly: {
       type: Boolean,
@@ -42,302 +54,236 @@ export default {
   },
   data() {
     return {
-      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // 选项
-      weeks: ['星期一', '星期二', '星期三', '星期四', '星期五'],
-      selectStart: false, // 开始
-      startIndex: '', // 开始下标
-      timeRangeList: [], // 选择的时间段
-      timeRangeListIndex: [], // 选中的下标
-      tempRangeIndex: [], // 预选下标
-      tips: '向右选中，向左取消选择'
+      weekArr: [1, 2, 3, 4, 5, 6, 0],
+      timeThArr: [],
+      timeTdArr: [],
+      dialogVisible: false,
+      weekEnum: {
+        Monday: '星期一',
+        Tuesday: '星期二',
+        Wednesday: '星期三',
+        Thursday: '星期四',
+        Friday: '星期五',
+        Saterday: '星期六',
+        Sunday: '星期日'
+      },
+      tableData: {
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saterday: [],
+        Sunday: []
+      },
+      loading: false,
+      startX: 0,
+      startY: 0,
+      endX: 0,
+      endY: 0,
+      is_show_mask: false
     }
   },
   computed: {
-  },
-  watch: {
-    timeRangeList: function(value) {
-      this.$emit('change', value)
-      this.$parent.$emit('el.form.change')// 触发父组件的校验规则
+    maskWidth() {
+      return `${Math.abs(this.endX - this.startX)}px;`
     },
-    sendTimeList: {
-      handler() {
-        this.transformedIndex()
-      },
-      deep: true
+
+    maskHeight() {
+      return `${Math.abs(this.endY - this.startY)}px;`
+    },
+
+    maskLeft() {
+      return `${Math.min(this.startX, this.endX) - 490}px;`
+    },
+
+    maskTop() {
+      return `${Math.min(this.startY, this.endY) - 210}px;`
     }
   },
-  mounted() {
-    this.transformedIndex()
+  created() {
+    this.setTableConfig()
   },
   methods: {
-    // 时间区间转换成下标区间
-    transformedIndex() {
-      this.timeRangeListIndex = []
-      this.timeRangeList = this.sendTimeList
-      this.timeRangeList.forEach(element => {
-        const [startTime, endTime] = element.match(/\d+\:\d+/g)
-        if (startTime && endTime) {
-          const [startHour, startMin] = startTime.split(':')
-          const [endHour, endMin] = endTime.split(':')
-          if (startHour && startMin && endHour && endMin) {
-            let startNum, endNum
-            if (startMin === '00') {
-              startNum = 2 * parseInt(startHour)
-            } else {
-              startNum = 2 * parseInt(startHour) + 1
-            }
-            if (endMin === '00') {
-              endNum = 2 * parseInt(endHour) - 1
-            } else {
-              endNum = 2 * parseInt(endHour)
-            }
-            while (endNum >= startNum) {
-              this.timeRangeListIndex.push(startNum)
-              startNum++
-            }
-          } else {
-            this.$message.error('时间段格式不正确')
-          }
-        } else {
-          this.$message.error('没有拿到开始时间或结束时间或者时间段格式不对')
+    setTableConfig() {
+      const timeThArr = Array.from(new Array(24).keys())
+      this.timeThArr = timeThArr
+      const tableList = this.tableData
+      const tableListKey = Object.keys(this.tableData)
+
+      for (let i = 0; i < tableListKey.length; i++) {
+        const cur = tableListKey[i]
+        this.timeThArr.map((temp, key) => {
+          tableList[cur].push({
+            key: key + i * 24,
+            checked: false
+          })
+        })
+      }
+
+      this.tableData = tableList
+    },
+    handleClickTimeData(obj, index) {
+      const tableList = _.clone(this.tableData)
+      _.map(tableList[index], (item) => {
+        if (item.key === obj.key) {
+          item.checked = !item.checked
         }
       })
-      this.tips = this.timeRangeList && this.timeRangeList.length > 0 ? this.timeRangeList : '向右选中，向左取消选择'
+      console.log(tableList, 'tableListpppp')
+      this.tableData = tableList
     },
-    // 下标区间转换成时间区间
-    transformedSection() {
-      this.timeRangeList = []
-      let startTime = ''
-      let endTime = ''
-      const len = this.hours.length
-      console.log('timeRangeListIndex: ', this.timeRangeListIndex)
-      for (let index = this.hours[0] * 2; index < 2 * (len + 1); index++) {
-        if (this.timeRangeListIndex.indexOf(index) > -1) {
-          if (startTime) { // 如果有开始时间，直接确定结束时间
-            const endHour = Math.floor((index + 1) / 2)
-            const endMin = '00'
-            endTime = `${endHour < 10 ? '0' + endHour : endHour}:${endMin}`
-          } else { // 没有开始时间，确定当前点为开始时间
-            const startHour = Math.floor(index / 2)
-            const startMin = '00'
-            startTime = `${startHour < 10 ? '0' + startHour : startHour}:${startMin}`
-          }
-          if (index === 2 * this.hours.length + 1) { // 如果是最后一格，直接结束
-            endTime = `${Math.floor((index + 1) / 2)}:00`
-            this.timeRangeList.push(`${startTime || '23:30'}-${endTime}`)
-            startTime = ''
-            endTime = ''
-          }
-        } else { // 若这个点不在选择区间，确定一个时间段
-          if (startTime && endTime) {
-            this.timeRangeList.push(`${startTime}-${endTime}`)
-            startTime = ''
-            endTime = ''
-          } else if (startTime && !endTime) { // 这里可能只选半个小时
-            const endHour = Math.floor(index / 2)
-            const endMin = '30'
-            endTime = `${endHour < 10 ? '0' + endHour : endHour}:${endMin}`
-            this.timeRangeList.push(`${startTime}-${endTime}`)
-            startTime = ''
-            endTime = ''
-          }
-        }
-      }
-      this.tips = this.timeRangeList && this.timeRangeList.length > 0 ? this.timeRangeList : '向右选中，向左取消选择'
+    reset() {
+      const tableList = _.clone(this.tableData)
+      _.map(tableList, (item) => {
+        _.map(item, (temp) => {
+          temp.checked = false
+        })
+      })
+      this.tableData = tableList
     },
-    // 点击事件
-    handleClick(index) {
-      if (this.selectStart) {
-        console.log(this.selectStart, 'his.selectStart')
-        console.log(index, '.index')
-        console.log(this.startIndex, 'his.startIndex')
-        if (index === this.startIndex) { // 双击取反
-          if (this.timeRangeListIndex.indexOf(index) > -1) {
-            this.timeRangeListIndex.splice(this.timeRangeListIndex.indexOf(index), 1)
-          } else {
-            this.timeRangeListIndex.push(this.startIndex)
-          }
-        } else if (index > this.startIndex) { // 选取数据--向右添加，向左取消
-          while (index >= this.startIndex) {
-            this.timeRangeListIndex.push(this.startIndex)
-            this.startIndex++
-          }
-          this.timeRangeListIndex = Array.from(new Set(this.timeRangeListIndex))
-          console.log(this.timeRangeListIndex, 'this.timeRangeListIndex')
-        } else { // 删除数据
-          while (this.startIndex >= index) {
-            if (this.timeRangeListIndex.indexOf(index) > -1) {
-              this.timeRangeListIndex.splice(this.timeRangeListIndex.indexOf(index), 1)
-            }
-            index++
-          }
-        }
-        this.startIndex = ''
-        this.tempRangeIndex = []
-        this.transformedSection()
-      } else {
-        this.startIndex = index
-      }
-      this.selectStart = !this.selectStart
+    handleMouseDown(e) {
+      e = e || window.event
+      this.is_show_mask = true
+      this.startX = e.x || e.clientX
+      this.startY = e.y || e.clientY
+      this.endX = e.x || e.clientX
+      this.endY = e.y || e.clientY
+      document.body.addEventListener('mousemove', this.handleMouseMove)
+      document.body.addEventListener('mouseup', this.handleMouseUp)
+      e.preventDefault()
+      e.stopPropagation()
     },
-    // 预选区间
-    handleHover(index, type) {
-      if (this.selectStart) {
-        this.tempRangeIndex = []
-        if (index > this.startIndex) { // 选取数据--向右添加，向左取消
-          while (index >= this.startIndex) {
-            this.tempRangeIndex.push(index)
-            index--
-          }
-        } else { // 删除数据
-          while (this.startIndex >= index) {
-            this.tempRangeIndex.push(index)
-            index++
-          }
-        }
-      }
+    handleMouseMove(e) {
+      e = e || window.event
+      this.endX = e.x || e.clientX
+      this.endY = e.y || e.clientY
+      this.handleDomSelect('move')
     },
-    // 是否选中，计算className
-    compClass(index) {
-      if (index === this.startIndex) {
-        return 'hours-item preSelected'
-      }
-      if (index >= this.startIndex) {
-        if (this.tempRangeIndex.indexOf(index) > -1) {
-          return 'hours-item preSelected'
-        }
-      } else {
-        if (this.tempRangeIndex.indexOf(index) > -1) {
-          return 'hours-item unSelected'
-        }
-      }
-      return this.timeRangeListIndex.indexOf(index) > -1 ? 'hours-item selected' : 'hours-item'
+    handleMouseUp() {
+      document.body.removeEventListener('mousemove', this.handleMouseMove)
+      document.body.removeEventListener('mouseup', this.handleMouseUp)
+      this.is_show_mask = false
+      this.handleDomSelect('up')
+      this.resetXY()
     },
-    compItem(item) { // 不足10前面补0
-      return item < 10 ? `0${item}` : item
-    }
+    resetXY() {
+      this.startX = 0
+      this.startY = 0
+      this.endX = 0
+      this.endY = 0
+    },
+    handleDomSelect(isType) {
+      const dom_mask = window.document.querySelector('.mask')
+      const rect_select = dom_mask.getClientRects()[0]
+      const tableListKey = Object.keys(this.tableData)
+      // console.log('rect_select', rect_select)
 
+      const selectKeys = []
+      document.querySelectorAll('.week-data-td').forEach((node, index) => {
+        const rects = node.getClientRects()[0]
+        const styles = node.style
+        if (this.collide(rects, rect_select) === true) {
+          selectKeys.push(index)
+          if (isType === 'move') {
+            if (styles.backgroundColor) {
+              if (styles.backgroundColor === 'rgb(78, 132, 254)' && selectKeys.includes(index)) {
+                styles.backgroundColor = 'white'
+              }
+              if (styles.backgroundColor === 'white') {
+                styles.backgroundColor = 'rgb(78, 132, 254)'
+              }
+            } else {
+              styles.backgroundColor = 'rgb(142, 175, 252)'
+            }
+          }
+        } else {
+          if (styles.backgroundColor === 'rgb(142, 175, 252)' && !selectKeys.includes(index)) {
+            styles.backgroundColor = ''
+          }
+        }
+      })
+      if (selectKeys.length < 2) return
+      const tableList = _.clone(this.tableData)
+
+      for (let i = 0; i < tableListKey.length; i++) {
+        const cur = tableListKey[i]
+        _.map(tableList[cur], (temp) => {
+          if (selectKeys.indexOf(temp.key) > -1) {
+            if (isType === 'up') {
+              temp.checked = !temp.checked
+            }
+          }
+          return temp
+        })
+      }
+      this.tableData = tableList
+    },
+
+    collide(rect1, rect2) {
+      const maxX = Math.max(rect1.x + rect1.width, rect2.x + rect2.width)
+      const maxY = Math.max(rect1.y + rect1.height, rect2.y + rect2.height)
+      const minX = Math.min(rect1.x, rect2.x)
+      const minY = Math.min(rect1.y, rect2.y)
+      if (maxX - minX <= rect1.width + rect2.width && maxY - minY <= rect1.height + rect2.height) {
+        return true
+      } else {
+        return false
+      }
+    }
   }
 }
 </script>
 
-<style lang='scss' scoped>
-.hours-container {
-  display: flex;
-  cursor: pointer;
-  .hours-item {
-    width: 15px;
-    height: 30px;
-    border: 1px solid #c2d0f3;
-    border-right: none;
-    text-align: center;
-    &:last-child {
-      border-right: 1px solid #c2d0f3;
-    }
-    .hours-item-header {
-      width: 100%;
-      height: 30px;
-      line-height: 30px;
-      border-bottom: 1px solid #c2d0f3;
-    }
-    .hours-item-value {
-      width: 100%;
-      height: 30px;
-      box-sizing: border-box;
-      display: flex;
-    }
-    .selected {
-      background-color: #4e84fe;
-      border-bottom: 1px solid #c2d0f3;
-    }
-    .preSelected {
-      background-color: #8eaffc;
-      border-bottom: 1px solid #c2d0f3;
-    }
-    .unSelected {
-      background-color: #ffffff;
-      border-bottom: 1px solid #c2d0f3;
-    }
+<style lang="scss" scoped>
+  .grad-table {
+    position: relative;
+    user-select: none;
+    width: 540px;
   }
-  .week-item {
-    display: inline-block;
-    border: 1px solid red;
+  .grad-table .mask {
+    position: absolute;
+    background: #409eff;
+    border: 1px dashed #c2d0f3;
+    opacity: 0.4;
+    z-index: 1000;
+  }
+  .grad-table table.gridtable {
     width: 100%;
+    height: 100%;
+    border: none;
   }
-}
-.hours-item {
-  cursor: pointer;
-  height: 100%;
-  border: 1px solid #c2d0f3;
-  border-right: none;
-  text-align: center;
-  &:last-child {
-    border-right: 1px solid #c2d0f3;
-  }
-}
-.hours-item-header {
-  width: 100%;
-  height: 30px;
-  line-height: 30px;
-  border-bottom: 1px solid #c2d0f3;
-}
-.hours-item-value {
-  width: 100%;
-  height: 30px;
-  box-sizing: border-box;
-  display: flex;
-}
-.selected {
-  background-color: #4e84fe;
-}
-.preSelected {
-  background-color: #8eaffc;
-}
-.unSelected {
-  background-color: #ffffff;
-}
-.tips {
-  width: 100%;
-  line-height: 13px;
-}
-.con {
-  width: 100%;
-  // border: 1px solid red;
-  .week {
-    display: flex;
-    width: 100%;
-    // border: 1px solid blue;
+  .grad-table table.gridtable tr {
     height: 24px;
-    font-size: 0;
-    border-bottom: 3px solid #F9F8FF;
-    &:nth-child(5) {
-      margin-bottom: 26px;
-    }
-    .week-title {
-      font-size: 13px;
-      line-height: 24px;
-      margin-right: 6px;
-    }
-    .hour {
-      display: inline-block;
-      flex: 1;
-      font-size: 0;
-      height: 100%;
-      // border: 1px solid #c2d0f3;
-      // background-color: #428BCA;;
-      &:nth-child(n -1) {
-        margin-right: 2px;
-      }
-      &:last-child {
-        border-right: 1px solid #c2d0f3;
-      }
-      .hour-title {
-        position: relative;
-        top: 14px;
-        left: -5px;
-        font-size: 13px;
-      }
-    }
+    line-height: 21px;
   }
-}
+  .grad-table table.gridtable .week-first-td {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 13px;
+    font-weight: 440;
+  }
+  .grad-table table.gridtable .week-data-td {
+    position: relative;
+    display: inline-block;
+    height: 25px;
+    width: 20px;
+    line-height: 20px;
+    font-size: 10px;
+    border: 1px solid #c2d0f3;
+    cursor: pointer;
+  }
+  .week-first-num {
+    display: inline-block;
+    width: 20px;
+    height: 22px;
+    font-weight: 440!important;
+    margin-top: 2px;
+  }
+  .week-first-name {
+    display: inline-block;
+    margin-right: 3px;
+    font-size: 13px;
+    font-weight: 440;
+  }
 </style>
