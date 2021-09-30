@@ -233,6 +233,8 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ViewMore": "查看更多",
+    "Announcement": "公告",
     "Logging": "日志记录",
     "Database": "数据库记录",
     "Params": "参数",
@@ -778,6 +780,7 @@
     }
   },
   "setting": {
+    "Feature": "功能",
     "AlibabaCloud": "阿里云",
     "TencentCloud": "腾讯云",
     "Radius": "Radius",
