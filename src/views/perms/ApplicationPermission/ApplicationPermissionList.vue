@@ -5,7 +5,7 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { setUrlParam } from '@/utils/common'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, ChoicesFormatter } from '@/components/TableFormatters'
 import { ApplicationTypes } from '@/views/perms/const'
 
 export default {
@@ -120,12 +120,10 @@ export default {
             }
           },
           from_ticket: {
-            formatter(row) {
-              if (row.from_ticket) {
-                return vm.$t('common.Yes')
-              } else {
-                return vm.$t('common.No')
-              }
+            width: 100,
+            formatter: ChoicesFormatter,
+            formatterArgs: {
+              showFalse: false
             }
           },
           actions: {
