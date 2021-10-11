@@ -35,7 +35,7 @@ export default {
       return { id: ann['ID'], subject: ann['SUBJECT'], content: ann['CONTENT'], link: ann['LINK'] }
     },
     enabled() {
-      return this.publicSettings.ANNOUNCEMENT_ENABLED
+      return this.publicSettings.ANNOUNCEMENT_ENABLED && (this.announcement.content || this.announcement.subject)
     },
     title() {
       return this.$t('common.Announcement') + ': ' + this.announcement.subject
