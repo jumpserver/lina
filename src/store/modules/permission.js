@@ -97,13 +97,14 @@ function getRouteDefaultPerms(route) {
 
 function cleanRouteAction(route) {
   let action = ''
-  if (route.path.indexOf('create') > -1) {
+  const path = route.path || ''
+  if (path.indexOf('create') > -1) {
     action = 'create'
-  } else if (route.path.indexOf('update') > -1) {
+  } else if (path.indexOf('update') > -1) {
     action = 'update'
-  } else if (route.path.indexOf('delete') > -1) {
+  } else if (path.indexOf('delete') > -1) {
     action = 'destroy'
-  } else if (route.path.indexOf(':id') > -1) {
+  } else if (path.indexOf(':id') > -1) {
     action = 'retrieve'
   } else {
     action = 'list'
@@ -129,7 +130,8 @@ function cleanRoute(tmp, parent) {
     tmp.meta.type = typeMapper[tmp.meta.level]
   }
 
-  const pathSlice = tmp.path.split('/')
+  const path = tmp.path || ''
+  const pathSlice = path.split('/')
   const pathValue = pathSlice[pathSlice.length - 1]
   if (!tmp.meta.view) {
     tmp.meta.view = tmp.meta.level === 1 ? pathValue : parent.meta?.view
