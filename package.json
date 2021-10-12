@@ -22,7 +22,7 @@
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",
     "@ztree/ztree_v3": "3.5.44",
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "axios-retry": "^3.1.9",
     "cron-parser": "^4.0.0",
     "deepmerge": "^4.2.2",
