@@ -1,289 +1,346 @@
 <template>
-  <div id="selectContainer" class="grad-table" @mousedown="handleMouseDown">
-    <div v-if="loading" class="loading-box">
-      <span class="el-icon-loading" />
-    </div>
-    <table v-else bordercolor="#c2d0f3" cellpadding="0" cellspacing="0" class="gridtable" align="center">
-      <tr v-for="(item, index) in tableData" :key="index">
-        <td class="week-first-td">
-          {{ weekEnum[index] }}
-        </td>
-        <td
-          v-for="(temp, key) in item"
-          :key="key"
-          class="week-data-td"
-          :style="`background:${temp.checked ? '#4e84fe' : ''}`"
-          @click="handleClickTimeData(temp, index)"
-        />
-      </tr>
-      <tr>
-        <th class="week-first-name">星期\时</th>
-        <th v-for="(item, index) in timeThArr" :key="index" class="week-first-num">
-          {{ index % 2 === 0 ? item : '' }}
-        </th>
-      </tr>
+  <div class="c-weektime">
+    <div class="c-schedue" />
+    <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" :style="styleValue" />
+
+    <table class="c-weektime-table" :class="{'c-min-table': colspan < 2}">
+      <thead class="c-weektime-head">
+        <tr>
+          <th rowspan="8" class="week-td">{{ this.$t('common.WeekCronSelect.WeekOrTime') }}</th>
+          <th :colspan="12 * colspan">00:00 - 12:00</th>
+          <th :colspan="12 * colspan">12:00 - 24:00</th>
+        </tr>
+        <tr>
+          <td v-for="t in theadArr" :key="t" :colspan="colspan">{{ t }}</td>
+        </tr>
+      </thead>
+      <tbody class="c-weektime-body">
+        <tr v-for="t in weektimeData" :key="t.row">
+          <td>{{ t.value }}</td>
+          <td
+            v-for="n in t.child"
+            :key="`${n.row}-${n.col}`"
+            :data-week="n.row"
+            :data-time="n.col"
+            :class="selectClasses(n)"
+            class="weektime-atom-item"
+            @mouseenter="cellEnter(n)"
+            @mousedown="cellDown(n)"
+            @mouseup="cellUp(n)"
+          />
+        </tr>
+        <tr>
+          <td colspan="49" class="c-weektime-preview">
+            <div class="g-clearfix c-weektime-con">
+              <span class="g-pull-left">{{ selectState ? '已选择时间段' : this.$t('common.WeekCronSelect.CanDragSelect') }}</span>
+              <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('common.WeekCronSelect.ClearSelection') }}</a>
+            </div>
+            <div v-if="selectState" class="c-weektime-time">
+              <div v-for="t in selectValue" :key="t.id">
+                <p v-if="t.value">
+                  <span class="g-tip-text">{{ t.week }}：</span>
+                  <span>{{ t.value }}</span>
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
-    <div
-      v-show="is_show_mask"
-      class="mask"
-      :style="
-        'width:' +
-          maskWidth +
-          'left:' +
-          maskLeft +
-          'height:' +
-          maskHeight +
-          'top:' +
-          maskTop
-      "
-    />
   </div>
 </template>
-
 <script>
+const createArr = len => {
+  return Array.from(Array(len)).map((ret, id) => id)
+}
 export default {
+  name: 'WeekCronSelect',
   props: {
     value: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => [
+        { id: 0, week: 'Monday', value: '' },
+        { id: 1, week: 'Tuesday', value: '' },
+        { id: 2, week: 'Wednesday', value: '' },
+        { id: 3, week: 'Thursday', value: '' },
+        { id: 4, week: 'Friday', value: '' },
+        { id: 5, week: 'Saturday', value: '' },
+        { id: 6, week: 'Sunday', value: '' }
+      ]
     },
-    readonly: {
-      type: Boolean,
-      default: false
+    colspan: {
+      type: Number,
+      default() {
+        return 2
+      }
     }
   },
   data() {
     return {
-      weekArr: [1, 2, 3, 4, 5, 6, 0],
-      timeThArr: [],
-      timeTdArr: [],
-      dialogVisible: false,
-      weekEnum: {
-        Monday: '星期一',
-        Tuesday: '星期二',
-        Wednesday: '星期三',
-        Thursday: '星期四',
-        Friday: '星期五',
-        Saterday: '星期六',
-        Sunday: '星期日'
-      },
-      tableData: {
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saterday: [],
-        Sunday: []
-      },
-      loading: false,
-      startX: 0,
-      startY: 0,
-      endX: 0,
-      endY: 0,
-      is_show_mask: false
+      width: 0,
+      height: 0,
+      left: 0,
+      top: 0,
+      mode: 0,
+      row: 0,
+      col: 0,
+      theadArr: [],
+      weekArr: [
+        this.$t('common.WeekCronSelect.Monday'),
+        this.$t('common.WeekCronSelect.Tuesday'),
+        this.$t('common.WeekCronSelect.Wednesday'),
+        this.$t('common.WeekCronSelect.Thursday'),
+        this.$t('common.WeekCronSelect.Friday'),
+        this.$t('common.WeekCronSelect.Saturday'),
+        this.$t('common.WeekCronSelect.Sunday')
+      ],
+      weektimeData: []
     }
   },
   computed: {
-    maskWidth() {
-      return `${Math.abs(this.endX - this.startX)}px;`
+    styleValue() {
+      return {
+        width: `${this.width}px`,
+        height: `${this.height}px`,
+        left: `${this.left}px`,
+        top: `${this.top}px`
+      }
     },
-
-    maskHeight() {
-      return `${Math.abs(this.endY - this.startY)}px;`
+    selectValue() {
+      return this.value
     },
-
-    maskLeft() {
-      return `${Math.min(this.startX, this.endX) - 490}px;`
+    selectState() {
+      return this.value.some(ret => ret.value)
     },
-
-    maskTop() {
-      return `${Math.min(this.startY, this.endY) - 210}px;`
+    selectClasses() {
+      return n => n.check ? 'ui-selected' : ''
     }
   },
   created() {
-    this.setTableConfig()
+    this.theadArr = createArr(24)
+    const isData = this.weekArr.map((ret, index) => {
+      const children = (ret, row, max) => {
+        return this.handleCreateArr(max).map((t, col) => {
+          return {
+            week: ret,
+            value: this.formatWeektime(col),
+            begin: this.formatWeektime(col).split('~')[0],
+            end: this.formatWeektime(col).split('~')[1],
+            row: row,
+            col: col
+          }
+        })
+      }
+      return {
+        value: ret,
+        row: index,
+        child: children(ret, index, 48)
+      }
+    })
+    this.weektimeData = isData
   },
   methods: {
-    setTableConfig() {
-      const timeThArr = Array.from(new Array(24).keys())
-      this.timeThArr = timeThArr
-      const tableList = this.tableData
-      const tableListKey = Object.keys(this.tableData)
-
-      for (let i = 0; i < tableListKey.length; i++) {
-        const cur = tableListKey[i]
-        this.timeThArr.map((temp, key) => {
-          tableList[cur].push({
-            key: key + i * 24,
-            checked: false
-          })
-        })
+    formatDate(date, fmt) {
+      const o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds(),
+        'q+': Math.floor((date.getMonth() + 3) / 3),
+        'S': date.getMilliseconds()
       }
-
-      this.tableData = tableList
-    },
-    handleClickTimeData(obj, index) {
-      const tableList = _.clone(this.tableData)
-      _.map(tableList[index], (item) => {
-        if (item.key === obj.key) {
-          item.checked = !item.checked
-        }
-      })
-      console.log(tableList, 'tableListpppp')
-      this.tableData = tableList
-    },
-    reset() {
-      const tableList = _.clone(this.tableData)
-      _.map(tableList, (item) => {
-        _.map(item, (temp) => {
-          temp.checked = false
-        })
-      })
-      this.tableData = tableList
-    },
-    handleMouseDown(e) {
-      e = e || window.event
-      this.is_show_mask = true
-      this.startX = e.x || e.clientX
-      this.startY = e.y || e.clientY
-      this.endX = e.x || e.clientX
-      this.endY = e.y || e.clientY
-      document.body.addEventListener('mousemove', this.handleMouseMove)
-      document.body.addEventListener('mouseup', this.handleMouseUp)
-      e.preventDefault()
-      e.stopPropagation()
-    },
-    handleMouseMove(e) {
-      e = e || window.event
-      this.endX = e.x || e.clientX
-      this.endY = e.y || e.clientY
-      this.handleDomSelect('move')
-    },
-    handleMouseUp() {
-      document.body.removeEventListener('mousemove', this.handleMouseMove)
-      document.body.removeEventListener('mouseup', this.handleMouseUp)
-      this.is_show_mask = false
-      this.handleDomSelect('up')
-      this.resetXY()
-    },
-    resetXY() {
-      this.startX = 0
-      this.startY = 0
-      this.endX = 0
-      this.endY = 0
-    },
-    handleDomSelect(isType) {
-      const dom_mask = window.document.querySelector('.mask')
-      const rect_select = dom_mask.getClientRects()[0]
-      const tableListKey = Object.keys(this.tableData)
-      // console.log('rect_select', rect_select)
-
-      const selectKeys = []
-      document.querySelectorAll('.week-data-td').forEach((node, index) => {
-        const rects = node.getClientRects()[0]
-        const styles = node.style
-        if (this.collide(rects, rect_select) === true) {
-          selectKeys.push(index)
-          if (isType === 'move') {
-            if (styles.backgroundColor) {
-              if (styles.backgroundColor === 'rgb(78, 132, 254)' && selectKeys.includes(index)) {
-                styles.backgroundColor = 'white'
-              }
-              if (styles.backgroundColor === 'white') {
-                styles.backgroundColor = 'rgb(78, 132, 254)'
-              }
-            } else {
-              styles.backgroundColor = 'rgb(142, 175, 252)'
-            }
-          }
-        } else {
-          if (styles.backgroundColor === 'rgb(142, 175, 252)' && !selectKeys.includes(index)) {
-            styles.backgroundColor = ''
-          }
-        }
-      })
-      if (selectKeys.length < 2) return
-      const tableList = _.clone(this.tableData)
-
-      for (let i = 0; i < tableListKey.length; i++) {
-        const cur = tableListKey[i]
-        _.map(tableList[cur], (temp) => {
-          if (selectKeys.indexOf(temp.key) > -1) {
-            if (isType === 'up') {
-              temp.checked = !temp.checked
-            }
-          }
-          return temp
-        })
+      if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
       }
-      this.tableData = tableList
+      for (var k in o) {
+        if (new RegExp('(' + k + ')').test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+        }
+      }
+      return fmt
     },
+    handleCreateArr(len) {
+      return Array.from(Array(len)).map((ret, id) => id)
+    },
+    formatWeektime(col) {
+      const timeStamp = 1542384000000 // '2018-11-17 00:00:00'
+      const beginStamp = timeStamp + col * 1800000 // col * 30 * 60 * 1000
+      const endStamp = beginStamp + 1800000
 
-    collide(rect1, rect2) {
-      const maxX = Math.max(rect1.x + rect1.width, rect2.x + rect2.width)
-      const maxY = Math.max(rect1.y + rect1.height, rect2.y + rect2.height)
-      const minX = Math.min(rect1.x, rect2.x)
-      const minY = Math.min(rect1.y, rect2.y)
-      if (maxX - minX <= rect1.width + rect2.width && maxY - minY <= rect1.height + rect2.height) {
-        return true
+      const begin = this.formatDate(new Date(beginStamp), 'hh:mm')
+      const end = this.formatDate(new Date(endStamp), 'hh:mm')
+      return `${begin}~${end}`
+    },
+    // 清空时间段
+    clearWeektime() {
+      this.weektimeData.forEach(item => {
+        item.child.forEach(t => {
+          this.$set(t, 'check', false)
+        })
+      })
+    },
+    cellEnter(item) {
+      const ele = document.querySelector(`td[data-week='${item.row}'][data-time='${item.col}']`)
+      if (ele && !this.mode) {
+        this.left = ele.offsetLeft
+        this.top = ele.offsetTop
       } else {
-        return false
+        if (item.col <= this.col && item.row <= this.row) {
+          this.width = (this.col - item.col + 1) * ele.offsetWidth
+          this.height = (this.row - item.row + 1) * ele.offsetHeight
+          this.left = ele.offsetLeft
+          this.top = ele.offsetTop
+        } else if (item.col >= this.col && item.row >= this.row) {
+          this.width = (item.col - this.col + 1) * ele.offsetWidth
+          this.height = (item.row - this.row + 1) * ele.offsetHeight
+          if (item.col > this.col && item.row === this.row) this.top = ele.offsetTop
+          if (item.col === this.col && item.row > this.row) this.left = ele.offsetLeft
+        } else if (item.col > this.col && item.row < this.row) {
+          this.width = (item.col - this.col + 1) * ele.offsetWidth
+          this.height = (this.row - item.row + 1) * ele.offsetHeight
+          this.top = ele.offsetTop
+        } else if (item.col < this.col && item.row > this.row) {
+          this.width = (this.col - item.col + 1) * ele.offsetWidth
+          this.height = (item.row - this.row + 1) * ele.offsetHeight
+          this.left = ele.offsetLeft
+        }
       }
+    },
+    cellDown(item) {
+      const ele = document.querySelector(`td[data-week='${item.row}'][data-time='${item.col}']`)
+      this.check = Boolean(item.check)
+      this.mode = 1
+      if (ele) {
+        this.width = ele.offsetWidth
+        this.height = ele.offsetHeight
+      }
+
+      this.row = item.row
+      this.col = item.col
+    },
+    cellUp(item) {
+      if (item.col <= this.col && item.row <= this.row) {
+        this.selectWeek([item.row, this.row], [item.col, this.col], !this.check)
+      } else if (item.col >= this.col && item.row >= this.row) {
+        this.selectWeek([this.row, item.row], [this.col, item.col], !this.check)
+      } else if (item.col > this.col && item.row < this.row) {
+        this.selectWeek([item.row, this.row], [this.col, item.col], !this.check)
+      } else if (item.col < this.col && item.row > this.row) {
+        this.selectWeek([this.row, item.row], [item.col, this.col], !this.check)
+      }
+
+      this.width = 0
+      this.height = 0
+      this.mode = 0
+    },
+    selectWeek(row, col, check) {
+      const [minRow, maxRow] = row
+      const [minCol, maxCol] = col
+      this.weektimeData.forEach(item => {
+        item.child.forEach(t => {
+          if (t.row >= minRow && t.row <= maxRow && t.col >= minCol && t.col <= maxCol) {
+            this.$set(t, 'check', check)
+          }
+        })
+      })
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
-  .grad-table {
-    position: relative;
+
+.c-weektime {
+  min-width: 640px;
+  position: relative;
+  display: inline-block;
+}
+.c-schedue {
+  background: #598fe6;
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: .6;
+  pointer-events: none;
+}
+.c-schedue-notransi {
+  transition: width .12s ease, height .12s ease, top .12s ease, left .12s ease;
+}
+.c-weektime-table {
+  border-collapse: collapse;
+  th {
+    vertical-align: inherit;
+    font-weight: bold;
+  }
+  tr {
+    height: 30px;
+  }
+  tr, td, th {
     user-select: none;
-    width: 540px;
+    border: 1px solid #dee4f5;
+    text-align: center;
+    min-width: 12px;
+    line-height: 1.6em;
+    transition: background .16s ease;
   }
-  .grad-table .mask {
-    position: absolute;
-    background: #409eff;
-    border: 1px dashed #c2d0f3;
-    opacity: 0.4;
-    z-index: 1000;
+  .c-weektime-head {
+    font-size: 12px;
+    .week-td {
+      width: 72px;
+    }
   }
-  .grad-table table.gridtable {
-    width: 100%;
-    height: 100%;
-    border: none;
+  .c-weektime-body {
+    font-size: 12px;
+    td {
+      &.weektime-atom-item {
+        user-select: unset;
+        background-color: #f5f5f5;
+      }
+      &.ui-selected {
+        background-color: #598fe6;
+      }
+    }
   }
-  .grad-table table.gridtable tr {
-    height: 24px;
-    line-height: 21px;
-  }
-  .grad-table table.gridtable .week-first-td {
-    display: inline-block;
-    margin-right: 8px;
+  .c-weektime-preview {
+    line-height: 2.4em;
+    padding: 0 10px;
     font-size: 13px;
-    font-weight: 440;
+    .c-weektime-con {
+      line-height: 42px;
+      user-select: none;
+    }
+    .c-weektime-time {
+      text-align: left;
+      line-height: 2.4em;
+      p {
+        max-width: 625px;
+        line-height: 1.4em;
+        word-break: break-all;
+        margin-bottom: 8px;
+      }
+    }
   }
-  .grad-table table.gridtable .week-data-td {
-    position: relative;
-    display: inline-block;
-    height: 25px;
-    width: 20px;
-    line-height: 20px;
-    font-size: 10px;
-    border: 1px solid #c2d0f3;
-    cursor: pointer;
+}
+.c-min-table {
+  tr, td, th {
+    min-width: 24px;
   }
-  .week-first-num {
-    display: inline-block;
-    width: 20px;
-    height: 22px;
-    font-weight: 440!important;
-    margin-top: 2px;
+}
+.g-clearfix {
+  &:after, &:before {
+    clear: both;
+    content: " ";
+    display: table;
   }
-  .week-first-name {
-    display: inline-block;
-    margin-right: 3px;
-    font-size: 13px;
-    font-weight: 440;
-  }
+}
+.g-pull-left {
+  float: left;
+}
+.g-pull-right {
+  float: right;
+  color: #409eff!important;
+}
+.g-tip-text {
+  color: #999;
+}
 </style>

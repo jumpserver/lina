@@ -413,7 +413,19 @@
       "MIN_LENGTH_ERROR": "Password minimum length {}"
     },
     "lastCannotBeDeleteMsg": "The last one can't be delete",
-    "InvalidJson": "Not a valid json format"
+    "InvalidJson": "Not a valid json format",
+    "WeekCronSelect": {
+      "Monday": "Monday",
+      "Tuesday": "Tuesday",
+      "Wednesday": "Wednesday", 
+      "Thursday": "Thursday",
+      "Friday": "Friday",
+      "Saturday": "Saturday",
+      "Sunday": "Sunday",
+      "ClearSelection": "Clear selection",
+      "CanDragSelect": "Can drag the mouse to select a time period",
+      "WeekOrTime": "Week/Time"
+    }
   },
   "dashboard": {
     "ActiveAsset": "Asset active",
