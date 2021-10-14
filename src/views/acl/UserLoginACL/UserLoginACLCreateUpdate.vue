@@ -7,6 +7,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { WeekCronSelect } from '@/components/FormFields'
+
 export default {
   name: 'AclCreateUpdate',
   components: {
@@ -26,7 +28,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['user', 'users']],
-        [this.$t('acl.Rules'), ['ip_group']],
+        [this.$t('acl.Rules'), ['ip_group', 'date_cron']],
         [this.$t('acl.Action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
@@ -68,6 +70,10 @@ export default {
           hidden: (formValue) => {
             return formValue.action !== 'confirm'
           }
+        },
+        date_cron: {
+          label: this.$t('common.Cycle'),
+          component: WeekCronSelect
         }
       },
       getUrl() {

@@ -425,7 +425,20 @@
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
     },
     "lastCannotBeDeleteMsg": "最后一项，不能被删除",
-    "InvalidJson": "不是合法 JSON"
+    "InvalidJson": "不是合法 JSON",
+    "Cycle": "周期",
+    "WeekCronSelect": {
+      "Monday": "星期一",
+      "Tuesday": "星期二",
+      "Wednesday": "星期三", 
+      "Thursday": "星期四",
+      "Friday": "星期五",
+      "Saturday": "星期六",
+      "Sunday": "星期天",
+      "ClearSelection": "清空选择",
+      "CanDragSelect": "可拖动鼠标选择时间段",
+      "WeekOrTime": "星期/时间"
+    }
   },
   "dashboard": {
     "ActiveAsset": "近期被登录过",
