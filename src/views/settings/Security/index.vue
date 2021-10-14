@@ -40,10 +40,12 @@ export default {
           this.$t('common.Auth'),
           [
             'SECURITY_MFA_AUTH',
+            'SECURITY_MFA_IN_LOGIN_PAGE',
+            'SECURITY_LOGIN_CHALLENGE_ENABLED',
+            'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
             'OLD_PASSWORD_HISTORY_LIMIT_COUNT',
             'SECURITY_MFA_VERIFY_TTL',
-            'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'LOGIN_CONFIRM_ENABLE',
             'AuthLimit',
             'PasswordRule'
@@ -64,6 +66,39 @@ export default {
           el: {
             href: '/ui/#/settings?activeTab=SysMessageSub',
             title: this.$t('setting.insecureCommandEmailUpdate')
+          }
+        },
+        SECURITY_LOGIN_CHALLENGE_ENABLED: {
+          on: {
+            change: ([val], updateForm) => {
+              if (val) {
+                updateForm({ SECURITY_MFA_IN_LOGIN_PAGE: false })
+                updateForm({ SECURITY_LOGIN_CAPTCHA_ENABLED: false })
+              }
+            }
+          }
+        },
+        SECURITY_MFA_IN_LOGIN_PAGE: {
+          hidden: (form) => {
+            return form.SECURITY_MFA_AUTH !== 1
+          },
+          on: {
+            change: ([val], updateForm) => {
+              if (val) {
+                updateForm({ SECURITY_LOGIN_CHALLENGE_ENABLED: false })
+                updateForm({ SECURITY_LOGIN_CAPTCHA_ENABLED: false })
+              }
+            }
+          }
+        },
+        SECURITY_LOGIN_CAPTCHA_ENABLED: {
+          on: {
+            change: ([val], updateForm) => {
+              if (val) {
+                updateForm({ SECURITY_LOGIN_CHALLENGE_ENABLED: false })
+                updateForm({ SECURITY_MFA_IN_LOGIN_PAGE: false })
+              }
+            }
           }
         },
         LOGIN_CONFIRM_ENABLE: {
