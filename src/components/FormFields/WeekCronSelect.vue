@@ -1,250 +1,346 @@
 <template>
-  <div>
-    <div class="hours-container">
-      <div v-for="(item, index) in hours" :key="index" class="hours-item">
-        <div class="hours-item-header">{{ compItem(item) }}</div>
-        <div class="hours-item-value">
-          <div
-            :class="compClass(2 * item)"
-            @click="handleClick(2 * item)"
-            @mouseover="handleHover(2 * item)"
+  <div class="c-weektime">
+    <div class="c-schedue" />
+    <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" :style="styleValue" />
+
+    <table class="c-weektime-table" :class="{'c-min-table': colspan < 2}">
+      <thead class="c-weektime-head">
+        <tr>
+          <th rowspan="8" class="week-td">{{ this.$t('common.WeekCronSelect.WeekOrTime') }}</th>
+          <th :colspan="12 * colspan">00:00 - 12:00</th>
+          <th :colspan="12 * colspan">12:00 - 24:00</th>
+        </tr>
+        <tr>
+          <td v-for="t in theadArr" :key="t" :colspan="colspan">{{ t }}</td>
+        </tr>
+      </thead>
+      <tbody class="c-weektime-body">
+        <tr v-for="t in weektimeData" :key="t.row">
+          <td>{{ t.value }}</td>
+          <td
+            v-for="n in t.child"
+            :key="`${n.row}-${n.col}`"
+            :data-week="n.row"
+            :data-time="n.col"
+            :class="selectClasses(n)"
+            class="weektime-atom-item"
+            @mouseenter="cellEnter(n)"
+            @mousedown="cellDown(n)"
+            @mouseup="cellUp(n)"
           />
-        </div>
-      </div>
-    </div>
-    <div class="tips">{{ tips }}</div>
+        </tr>
+        <tr>
+          <td colspan="49" class="c-weektime-preview">
+            <div class="g-clearfix c-weektime-con">
+              <span class="g-pull-left">{{ selectState ? '已选择时间段' : this.$t('common.WeekCronSelect.CanDragSelect') }}</span>
+              <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('common.WeekCronSelect.ClearSelection') }}</a>
+            </div>
+            <div v-if="selectState" class="c-weektime-time">
+              <div v-for="t in selectValue" :key="t.id">
+                <p v-if="t.value">
+                  <span class="g-tip-text">{{ t.week }}：</span>
+                  <span>{{ t.value }}</span>
+                </p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 <script>
+const createArr = len => {
+  return Array.from(Array(len)).map((ret, id) => id)
+}
 export default {
-  model: {
-    prop: 'sendTimeList'
-  },
+  name: 'WeekCronSelect',
   props: {
-    sendTimeList: {
-      type: Object,
-      required: true,
-      default: () => []
+    value: {
+      type: Array,
+      default: () => [
+        { id: 0, week: 'Monday', value: '' },
+        { id: 1, week: 'Tuesday', value: '' },
+        { id: 2, week: 'Wednesday', value: '' },
+        { id: 3, week: 'Thursday', value: '' },
+        { id: 4, week: 'Friday', value: '' },
+        { id: 5, week: 'Saturday', value: '' },
+        { id: 6, week: 'Sunday', value: '' }
+      ]
     },
-    readonly: {
-      type: Boolean,
-      default: false
+    colspan: {
+      type: Number,
+      default() {
+        return 2
+      }
     }
   },
   data() {
     return {
-      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // 选项
-      selectStart: false, // 开始
-      startIndex: '', // 开始下标
-      timeRangeList: [], // 选择的时间段
-      timeRangeListIndex: [], // 选中的下标
-      tempRangeIndex: [], // 预选下标
-      tips: '向右选中，向左取消选择'
+      width: 0,
+      height: 0,
+      left: 0,
+      top: 0,
+      mode: 0,
+      row: 0,
+      col: 0,
+      theadArr: [],
+      weekArr: [
+        this.$t('common.WeekCronSelect.Monday'),
+        this.$t('common.WeekCronSelect.Tuesday'),
+        this.$t('common.WeekCronSelect.Wednesday'),
+        this.$t('common.WeekCronSelect.Thursday'),
+        this.$t('common.WeekCronSelect.Friday'),
+        this.$t('common.WeekCronSelect.Saturday'),
+        this.$t('common.WeekCronSelect.Sunday')
+      ],
+      weektimeData: []
     }
   },
   computed: {
-  },
-  watch: {
-    timeRangeList: function(value) {
-      this.$emit('change', value)
-      this.$parent.$emit('el.form.change')// 触发父组件的校验规则
+    styleValue() {
+      return {
+        width: `${this.width}px`,
+        height: `${this.height}px`,
+        left: `${this.left}px`,
+        top: `${this.top}px`
+      }
     },
-    sendTimeList: {
-      handler() {
-        this.transformedIndex()
-      },
-      deep: true
+    selectValue() {
+      return this.value
+    },
+    selectState() {
+      return this.value.some(ret => ret.value)
+    },
+    selectClasses() {
+      return n => n.check ? 'ui-selected' : ''
     }
   },
-  mounted() {
-    this.transformedIndex()
+  created() {
+    this.theadArr = createArr(24)
+    const isData = this.weekArr.map((ret, index) => {
+      const children = (ret, row, max) => {
+        return this.handleCreateArr(max).map((t, col) => {
+          return {
+            week: ret,
+            value: this.formatWeektime(col),
+            begin: this.formatWeektime(col).split('~')[0],
+            end: this.formatWeektime(col).split('~')[1],
+            row: row,
+            col: col
+          }
+        })
+      }
+      return {
+        value: ret,
+        row: index,
+        child: children(ret, index, 48)
+      }
+    })
+    this.weektimeData = isData
   },
   methods: {
-    // 时间区间转换成下标区间
-    transformedIndex() {
-      this.timeRangeListIndex = []
-      this.timeRangeList = this.sendTimeList
-      this.timeRangeList.forEach(element => {
-        const [startTime, endTime] = element.match(/\d+\:\d+/g)
-        if (startTime && endTime) {
-          const [startHour, startMin] = startTime.split(':')
-          const [endHour, endMin] = endTime.split(':')
-          if (startHour && startMin && endHour && endMin) {
-            let startNum, endNum
-            if (startMin === '00') {
-              startNum = 2 * parseInt(startHour)
-            } else {
-              startNum = 2 * parseInt(startHour) + 1
-            }
-            if (endMin === '00') {
-              endNum = 2 * parseInt(endHour) - 1
-            } else {
-              endNum = 2 * parseInt(endHour)
-            }
-            while (endNum >= startNum) {
-              this.timeRangeListIndex.push(startNum)
-              startNum++
-            }
-          } else {
-            this.$message.error('时间段格式不正确')
-          }
-        } else {
-          this.$message.error('没有拿到开始时间或结束时间或者时间段格式不对')
-        }
-      })
-      this.tips = this.timeRangeList && this.timeRangeList.length > 0 ? this.timeRangeList : '向右选中，向左取消选择'
-    },
-    // 下标区间转换成时间区间
-    transformedSection() {
-      this.timeRangeList = []
-      let startTime = ''; let endTime = ''; const len = this.hours.length
-      for (let index = this.hours[0] * 2; index < 2 * (len + 1); index++) {
-        if (this.timeRangeListIndex.indexOf(index) > -1) {
-          if (startTime) { // 如果有开始时间，直接确定结束时间
-            const endHour = Math.floor((index + 1) / 2)
-            const endMin = (index + 1) % 2 === 0 ? '00' : '30'
-            endTime = `${endHour < 10 ? '0' + endHour : endHour}:${endMin}`
-          } else { // 没有开始时间，确定当前点为开始时间
-            const startHour = Math.floor(index / 2)
-            const startMin = index % 2 === 0 ? '00' : '30'
-            startTime = `${startHour < 10 ? '0' + startHour : startHour}:${startMin}`
-          }
-          if (index === 2 * this.hours.length + 1) { // 如果是最后一格，直接结束
-            endTime = `${Math.floor((index + 1) / 2)}:00`
-            this.timeRangeList.push(`${startTime || '23:30'}-${endTime}`)
-            startTime = ''
-            endTime = ''
-          }
-        } else { // 若这个点不在选择区间，确定一个时间段
-          if (startTime && endTime) {
-            this.timeRangeList.push(`${startTime}-${endTime}`)
-            startTime = ''
-            endTime = ''
-          } else if (startTime && !endTime) { // 这里可能只选半个小时
-            const endHour = Math.floor(index / 2)
-            const endMin = index % 2 === 0 ? '00' : '30'
-            endTime = `${endHour < 10 ? '0' + endHour : endHour}:${endMin}`
-            this.timeRangeList.push(`${startTime}-${endTime}`)
-            startTime = ''
-            endTime = ''
-          }
+    formatDate(date, fmt) {
+      const o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds(),
+        'q+': Math.floor((date.getMonth() + 3) / 3),
+        'S': date.getMilliseconds()
+      }
+      if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+      }
+      for (var k in o) {
+        if (new RegExp('(' + k + ')').test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
         }
       }
-      this.tips = this.timeRangeList && this.timeRangeList.length > 0 ? this.timeRangeList : '向右选中，向左取消选择'
+      return fmt
     },
-    // 点击事件
-    handleClick(index) {
-      if (this.selectStart) {
-        if (index === this.startIndex) { // 双击取反
-          if (this.timeRangeListIndex.indexOf(index) > -1) {
-            this.timeRangeListIndex.splice(this.timeRangeListIndex.indexOf(index), 1)
-          } else {
-            this.timeRangeListIndex.push(this.startIndex)
-          }
-        } else if (index > this.startIndex) { // 选取数据--向右添加，向左取消
-          while (index >= this.startIndex) {
-            this.timeRangeListIndex.push(this.startIndex)
-            this.startIndex++
-          }
-          this.timeRangeListIndex = Array.from(new Set(this.timeRangeListIndex))
-        } else { // 删除数据
-          while (this.startIndex >= index) {
-            if (this.timeRangeListIndex.indexOf(index) > -1) {
-              this.timeRangeListIndex.splice(this.timeRangeListIndex.indexOf(index), 1)
-            }
-            index++
-          }
-        }
-        this.startIndex = ''
-        this.tempRangeIndex = []
-        this.transformedSection()
-      } else {
-        this.startIndex = index
-      }
-      this.selectStart = !this.selectStart
+    handleCreateArr(len) {
+      return Array.from(Array(len)).map((ret, id) => id)
     },
-    // 预选区间
-    handleHover(index) {
-      if (this.selectStart) {
-        this.tempRangeIndex = []
-        if (index > this.startIndex) { // 选取数据--向右添加，向左取消
-          while (index >= this.startIndex) {
-            this.tempRangeIndex.push(index)
-            index--
-          }
-        } else { // 删除数据
-          while (this.startIndex >= index) {
-            this.tempRangeIndex.push(index)
-            index++
-          }
-        }
-      }
-    },
-    // 是否选中，计算className
-    compClass(index) {
-      if (index === this.startIndex) {
-        return 'hours-item-left preSelected'
-      }
-      if (index >= this.startIndex) {
-        if (this.tempRangeIndex.indexOf(index) > -1) {
-          return 'hours-item-left preSelected'
-        }
-      } else {
-        if (this.tempRangeIndex.indexOf(index) > -1) {
-          return 'hours-item-left unSelected'
-        }
-      }
-      return this.timeRangeListIndex.indexOf(index) > -1 ? 'hours-item-left selected' : 'hours-item-left'
-    },
-    compItem(item) { // 不足10前面补0
-      return item < 10 ? `0${item}` : item
-    }
+    formatWeektime(col) {
+      const timeStamp = 1542384000000 // '2018-11-17 00:00:00'
+      const beginStamp = timeStamp + col * 1800000 // col * 30 * 60 * 1000
+      const endStamp = beginStamp + 1800000
 
+      const begin = this.formatDate(new Date(beginStamp), 'hh:mm')
+      const end = this.formatDate(new Date(endStamp), 'hh:mm')
+      return `${begin}~${end}`
+    },
+    // 清空时间段
+    clearWeektime() {
+      this.weektimeData.forEach(item => {
+        item.child.forEach(t => {
+          this.$set(t, 'check', false)
+        })
+      })
+    },
+    cellEnter(item) {
+      const ele = document.querySelector(`td[data-week='${item.row}'][data-time='${item.col}']`)
+      if (ele && !this.mode) {
+        this.left = ele.offsetLeft
+        this.top = ele.offsetTop
+      } else {
+        if (item.col <= this.col && item.row <= this.row) {
+          this.width = (this.col - item.col + 1) * ele.offsetWidth
+          this.height = (this.row - item.row + 1) * ele.offsetHeight
+          this.left = ele.offsetLeft
+          this.top = ele.offsetTop
+        } else if (item.col >= this.col && item.row >= this.row) {
+          this.width = (item.col - this.col + 1) * ele.offsetWidth
+          this.height = (item.row - this.row + 1) * ele.offsetHeight
+          if (item.col > this.col && item.row === this.row) this.top = ele.offsetTop
+          if (item.col === this.col && item.row > this.row) this.left = ele.offsetLeft
+        } else if (item.col > this.col && item.row < this.row) {
+          this.width = (item.col - this.col + 1) * ele.offsetWidth
+          this.height = (this.row - item.row + 1) * ele.offsetHeight
+          this.top = ele.offsetTop
+        } else if (item.col < this.col && item.row > this.row) {
+          this.width = (this.col - item.col + 1) * ele.offsetWidth
+          this.height = (item.row - this.row + 1) * ele.offsetHeight
+          this.left = ele.offsetLeft
+        }
+      }
+    },
+    cellDown(item) {
+      const ele = document.querySelector(`td[data-week='${item.row}'][data-time='${item.col}']`)
+      this.check = Boolean(item.check)
+      this.mode = 1
+      if (ele) {
+        this.width = ele.offsetWidth
+        this.height = ele.offsetHeight
+      }
+
+      this.row = item.row
+      this.col = item.col
+    },
+    cellUp(item) {
+      if (item.col <= this.col && item.row <= this.row) {
+        this.selectWeek([item.row, this.row], [item.col, this.col], !this.check)
+      } else if (item.col >= this.col && item.row >= this.row) {
+        this.selectWeek([this.row, item.row], [this.col, item.col], !this.check)
+      } else if (item.col > this.col && item.row < this.row) {
+        this.selectWeek([item.row, this.row], [this.col, item.col], !this.check)
+      } else if (item.col < this.col && item.row > this.row) {
+        this.selectWeek([this.row, item.row], [item.col, this.col], !this.check)
+      }
+
+      this.width = 0
+      this.height = 0
+      this.mode = 0
+    },
+    selectWeek(row, col, check) {
+      const [minRow, maxRow] = row
+      const [minCol, maxCol] = col
+      this.weektimeData.forEach(item => {
+        item.child.forEach(t => {
+          if (t.row >= minRow && t.row <= maxRow && t.col >= minCol && t.col <= maxCol) {
+            this.$set(t, 'check', check)
+          }
+        })
+      })
+    }
   }
 }
 </script>
+<style lang="scss" scoped>
 
-<style lang='scss' scoped>
-.hours-container {
-  display: flex;
-  cursor: pointer;
-  .hours-item {
-    width: 30px;
-    height: 60px;
-    border: 1px solid #c2d0f3;
-    border-right: none;
+.c-weektime {
+  min-width: 640px;
+  position: relative;
+  display: inline-block;
+}
+.c-schedue {
+  background: #598fe6;
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: .6;
+  pointer-events: none;
+}
+.c-schedue-notransi {
+  transition: width .12s ease, height .12s ease, top .12s ease, left .12s ease;
+}
+.c-weektime-table {
+  border-collapse: collapse;
+  th {
+    vertical-align: inherit;
+    font-weight: bold;
+  }
+  tr {
+    height: 30px;
+  }
+  tr, td, th {
+    user-select: none;
+    border: 1px solid #dee4f5;
     text-align: center;
-    &:last-child {
-      border-right: 1px solid #c2d0f3;
+    min-width: 12px;
+    line-height: 1.6em;
+    transition: background .16s ease;
+  }
+  .c-weektime-head {
+    font-size: 12px;
+    .week-td {
+      width: 72px;
     }
-    .hours-item-header {
-      width: 100%;
-      height: 30px;
-      line-height: 30px;
-      border-bottom: 1px solid #c2d0f3;
+  }
+  .c-weektime-body {
+    font-size: 12px;
+    td {
+      &.weektime-atom-item {
+        user-select: unset;
+        background-color: #f5f5f5;
+      }
+      &.ui-selected {
+        background-color: #598fe6;
+      }
     }
-    .hours-item-value {
-      width: 100%;
-      height: 30px;
-      box-sizing: border-box;
-      display: flex;
+  }
+  .c-weektime-preview {
+    line-height: 2.4em;
+    padding: 0 10px;
+    font-size: 13px;
+    .c-weektime-con {
+      line-height: 42px;
+      user-select: none;
     }
-    .selected {
-      background-color: #4e84fe;
-      border-bottom: 1px solid #c2d0f3;
-    }
-    .preSelected {
-      background-color: #8eaffc;
-      border-bottom: 1px solid #c2d0f3;
-    }
-    .unSelected {
-      background-color: #ffffff;
-      border-bottom: 1px solid #c2d0f3;
+    .c-weektime-time {
+      text-align: left;
+      line-height: 2.4em;
+      p {
+        max-width: 625px;
+        line-height: 1.4em;
+        word-break: break-all;
+        margin-bottom: 8px;
+      }
     }
   }
 }
-.tips {
-  width: 100%;
-  line-height: 30px;
+.c-min-table {
+  tr, td, th {
+    min-width: 24px;
+  }
+}
+.g-clearfix {
+  &:after, &:before {
+    clear: both;
+    content: " ";
+    display: table;
+  }
+}
+.g-pull-left {
+  float: left;
+}
+.g-pull-right {
+  float: right;
+  color: #409eff!important;
+}
+.g-tip-text {
+  color: #999;
 }
 </style>
