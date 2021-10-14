@@ -72,7 +72,7 @@ export default {
           }
         },
         date_cron: {
-          label: this.$t('common.Cycle'),
+          label: this.$t('common.PeriodLogin'),
           component: WeekCronSelect
         }
       },

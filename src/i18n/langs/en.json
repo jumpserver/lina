@@ -414,7 +414,7 @@
     },
     "lastCannotBeDeleteMsg": "The last one can't be delete",
     "InvalidJson": "Not a valid json format",
-    "Cycle": "Cycle",
+    "PeriodLogin": "Period login",
     "WeekCronSelect": {
       "Monday": "Monday",
       "Tuesday": "Tuesday",
