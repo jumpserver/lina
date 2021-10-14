@@ -11,6 +11,7 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import Account from './Account.vue'
 import SystemUserList from './SystemUser.vue'
+import Permusers from './Permusers.vue'
 
 export default {
   name: 'AssetListDetail',
@@ -19,7 +20,8 @@ export default {
     TabPage,
     Detail,
     Account,
-    SystemUserList
+    SystemUserList,
+    Permusers
   },
   data() {
     return {
@@ -38,6 +40,10 @@ export default {
           {
             title: this.$t('assets.AccountList'),
             name: 'Account'
+          },
+          {
+            title: this.$t('assets.PermUsers'),
+            name: 'Permusers'
           }
         ],
         hasRightSide: true,

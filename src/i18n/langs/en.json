@@ -216,7 +216,8 @@
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
     "OtherProtocol": "Other Protocol",
-    "PasswordOrToken": "Password / Token"
+    "PasswordOrToken": "Password / Token",
+    "PermUsers": "Perm users"
   },
   "audits": {
     "Hosts": "Host",

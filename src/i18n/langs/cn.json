@@ -218,7 +218,8 @@
     "HostProtocol": "主机协议",
     "DatabaseProtocol": "数据库协议",
     "OtherProtocol": "其它协议",
-    "PasswordOrToken": "密码 / 令牌"
+    "PasswordOrToken": "密码 / 令牌",
+    "PermUsers": "授权用户"
   },
   "audits": {
     "Hosts": "主机",
