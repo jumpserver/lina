@@ -44,9 +44,7 @@ export default {
             'SECURITY_LOGIN_CHALLENGE_ENABLED',
             'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
-            'OLD_PASSWORD_HISTORY_LIMIT_COUNT',
             'SECURITY_MFA_VERIFY_TTL',
-            'LOGIN_CONFIRM_ENABLE',
             'AuthLimit',
             'PasswordRule'
           ]
@@ -80,7 +78,7 @@ export default {
         },
         SECURITY_MFA_IN_LOGIN_PAGE: {
           hidden: (form) => {
-            return form.SECURITY_MFA_AUTH !== 1
+            return form['SECURITY_MFA_AUTH'] !== 1
           },
           on: {
             change: ([val], updateForm) => {
