@@ -32,16 +32,8 @@
         <tr>
           <td colspan="49" class="c-weektime-preview">
             <div class="g-clearfix c-weektime-con">
-              <span class="g-pull-left">{{ selectState ? '已选择时间段' : this.$t('common.WeekCronSelect.CanDragSelect') }}</span>
+              <span class="g-pull-left">{{ this.$t('common.WeekCronSelect.CanDragSelect') }}</span>
               <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('common.WeekCronSelect.ClearSelection') }}</a>
-            </div>
-            <div v-if="selectState" class="c-weektime-time">
-              <div v-for="t in selectValue" :key="t.id">
-                <p v-if="t.value">
-                  <span class="g-tip-text">{{ t.week }}：</span>
-                  <span>{{ t.value }}</span>
-                </p>
-              </div>
             </div>
           </td>
         </tr>
@@ -53,19 +45,41 @@
 const createArr = len => {
   return Array.from(Array(len)).map((ret, id) => id)
 }
+function splicing(list) {
+  let same
+  let i = -1
+  const len = list.length
+  const arr = []
+
+  if (!len) return
+  while (++i < len) {
+    const item = list[i]
+    if (item.check) {
+      if (item.check !== Boolean(same)) {
+        arr.push(...['、', item.begin, '~', item.end])
+      } else if (arr.length) {
+        arr.pop()
+        arr.push(item.end)
+      }
+    }
+    same = Boolean(item.check)
+  }
+  arr.shift()
+  return arr.join('')
+}
 export default {
   name: 'WeekCronSelect',
   props: {
     value: {
       type: Array,
       default: () => [
-        { id: 0, week: 'Monday', value: '' },
-        { id: 1, week: 'Tuesday', value: '' },
-        { id: 2, week: 'Wednesday', value: '' },
-        { id: 3, week: 'Thursday', value: '' },
-        { id: 4, week: 'Friday', value: '' },
-        { id: 5, week: 'Saturday', value: '' },
-        { id: 6, week: 'Sunday', value: '' }
+        { id: 1, week: 'Monday', value: '' },
+        { id: 2, week: 'Tuesday', value: '' },
+        { id: 3, week: 'Wednesday', value: '' },
+        { id: 4, week: 'Thursday', value: '' },
+        { id: 5, week: 'Friday', value: '' },
+        { id: 6, week: 'Saturday', value: '' },
+        { id: 0, week: 'Sunday', value: '' }
       ]
     },
     colspan: {
@@ -94,7 +108,8 @@ export default {
         this.$t('common.WeekCronSelect.Saturday'),
         this.$t('common.WeekCronSelect.Sunday')
       ],
-      weektimeData: []
+      weektimeData: [],
+      timeRange: [] // 格式化之后数据
     }
   },
   computed: {
@@ -120,7 +135,7 @@ export default {
     this.theadArr = createArr(24)
     const isData = this.weekArr.map((ret, index) => {
       const children = (ret, row, max) => {
-        return this.handleCreateArr(max).map((t, col) => {
+        return createArr(max).map((t, col) => {
           return {
             week: ret,
             value: this.formatWeektime(col),
@@ -160,9 +175,6 @@ export default {
       }
       return fmt
     },
-    handleCreateArr(len) {
-      return Array.from(Array(len)).map((ret, id) => id)
-    },
     formatWeektime(col) {
       const timeStamp = 1542384000000 // '2018-11-17 00:00:00'
       const beginStamp = timeStamp + col * 1800000 // col * 30 * 60 * 1000
@@ -179,6 +191,17 @@ export default {
           this.$set(t, 'check', false)
         })
       })
+    },
+    setTimeRange() {
+      this.timeRange = this.weektimeData.map(item => {
+        return {
+          id: item.row === 6 ? 0 : item.row + 1,
+          week: item.value,
+          value: splicing(item.child)
+        }
+      })
+      this.$emit('change', this.timeRange)
+      console.log(this.timeRange, 'timeRange-------')
     },
     cellEnter(item) {
       const ele = document.querySelector(`td[data-week='${item.row}'][data-time='${item.col}']`)
@@ -233,6 +256,8 @@ export default {
       this.width = 0
       this.height = 0
       this.mode = 0
+
+      this.setTimeRange()
     },
     selectWeek(row, col, check) {
       const [minRow, maxRow] = row
