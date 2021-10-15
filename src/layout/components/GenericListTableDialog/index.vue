@@ -3,6 +3,7 @@
     :title="title"
     :visible.sync="iVisible"
     top="1vh"
+    :width="width"
     :show-cancel="false"
     :show-confirm="false"
   >
@@ -35,6 +36,10 @@ export default {
     headerActions: {
       type: Object,
       default: () => ({})
+    },
+    width: {
+      type: String,
+      default: '60%'
     }
   },
   computed: {

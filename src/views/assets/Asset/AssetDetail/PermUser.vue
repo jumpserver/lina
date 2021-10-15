@@ -48,7 +48,7 @@ export default {
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'groups_display', 'total_role_display',
+            'name', 'username',
             'source', 'is_valid', 'actions'
           ]
         },
@@ -131,19 +131,18 @@ export default {
       GenericListTableDialogConfig: {
         title: this.$t('perms.Permissions'),
         visible: false,
+        width: '60%',
         tableConfig: {
           url: '',
           columns: [
             'name',
             'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
-            'is_valid', 'is_active', 'date_expired', 'comment', 'org_name'
+            'is_valid', 'is_active', 'date_expired', 'comment', 'org_name', 'created_by', 'date_created'
           ],
           columnsShow: {
             min: ['name'],
             default: [
-              'name',
-              'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
-              'is_valid', 'is_active', 'date_expired', 'comment', 'org_name'
+              'name', 'is_valid', 'created_by', 'date_created'
             ]
           },
           columnsMeta: {
@@ -170,6 +169,9 @@ export default {
               formatterArgs: {
                 showFalse: false
               }
+            },
+            created_by: {
+              showOverflowTooltip: true
             },
             user_groups_amount: {
               label: this.$t('perms.UserGroups'),
