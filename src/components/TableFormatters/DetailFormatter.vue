@@ -60,6 +60,7 @@ export default {
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
       }
+      console.log('>>>>>> ', detailRoute)
       this.$router.push(detailRoute)
       // const routeName = this.formatterArgs.route
       // this.$log.debug('Will go to detail route: ', routeName)
