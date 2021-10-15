@@ -83,7 +83,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   b, strong {
     font-weight: 700;
     font-size: 13px;
@@ -93,10 +93,16 @@ export default {
     line-height: 1.42857;
     padding: 8px;
     vertical-align: top;
+    display: inline;
   }
 
-  tr.item td {
+  tr.item {
     border-bottom: 1px solid #e7eaec;
+    padding: 8px;
+    display: block;
+    &:last-child {
+       border-bottom: 0;
+    }
   }
   .box-margin {
     margin-bottom: 20px;
