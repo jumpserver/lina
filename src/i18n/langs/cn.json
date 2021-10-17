@@ -9,6 +9,7 @@
     "name": "名称",
     "username": "用户名",
     "ip_group": "IP 组",
+    "ip_group_help_text": "格式为逗号分隔的字符串, * 表示匹配所有。例如: 192.168.10.1, 192.168.1.0/24, 10.1.1.1-10.1.1.20, 2001:db8:2de::e13, 2001:db8:1a:1110::/64",
     "action": "动作",
     "Rules": "规则",
     "Action": "动作",
@@ -426,7 +427,7 @@
     },
     "lastCannotBeDeleteMsg": "最后一项，不能被删除",
     "InvalidJson": "不是合法 JSON",
-    "PeriodLogin": "分时段登录",
+    "PeriodLogin": "时段",
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",

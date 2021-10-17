@@ -18,7 +18,9 @@ export default {
     return {
       initial: {
         action: 'reject',
-        ip_group: '*',
+        rules: {
+          ip_group: '*'
+        },
         user: this.$route.query.user,
         users: {
           username_group: ''
@@ -28,7 +30,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['user', 'users']],
-        [this.$t('acl.Rules'), ['ip_group', 'date_cron']],
+        [this.$t('acl.Rules'), ['rules']],
         [this.$t('acl.Action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
@@ -71,9 +73,20 @@ export default {
             return formValue.action !== 'confirm'
           }
         },
-        date_cron: {
-          label: this.$t('common.PeriodLogin'),
-          component: WeekCronSelect
+        rules: {
+          fields: [
+            'ip_group', 'time_period'
+          ],
+          fieldsMeta: {
+            ip_group: {
+              label: this.$t('acl.ip_group'),
+              helpText: this.$t('acl.ip_group_help_text')
+            },
+            time_period: {
+              label: this.$t('common.PeriodLogin'),
+              component: WeekCronSelect
+            }
+          }
         }
       },
       getUrl() {
@@ -112,15 +125,15 @@ export default {
         }
       },
       afterGetFormValue(validValues) {
-        validValues.ip_group = validValues.ip_group.toString()
+        validValues.ip_group = validValues.rules.ip_group.toString()
         if (!this.$route.query.user) {
           validValues.users.username_group = validValues.users.username_group.toString()
         }
         return validValues
       },
       cleanFormValue(value) {
-        if (!Array.isArray(value.ip_group)) {
-          value.ip_group = value.ip_group ? value.ip_group.split(',') : []
+        if (!Array.isArray(value.rules.ip_group)) {
+          value.rules.ip_group = value.rules.ip_group ? value.rules.ip_group.split(',') : []
         }
         if (!this.$route.query.user) {
           if (!Array.isArray(value.users.username_group)) {

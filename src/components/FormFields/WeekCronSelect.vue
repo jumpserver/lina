@@ -201,7 +201,6 @@ export default {
         }
       })
       this.$emit('change', this.timeRange)
-      console.log(this.timeRange, 'timeRange-------')
     },
     cellEnter(item) {
       const ele = document.querySelector(`td[data-week='${item.row}'][data-time='${item.col}']`)
