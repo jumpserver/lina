@@ -860,7 +860,7 @@
     "License": "许可证",
     "Senior": "高级",
     "LicenseFile": "许可证文件",
-    "PasswordCheckRule": "密码复杂度校验",
+    "PasswordCheckRule": "密码强弱规则",
     "Security": "安全设置",
     "SecuritySetting": "安全设置",
     "SystemMessageSubscription": "系统消息订阅",
