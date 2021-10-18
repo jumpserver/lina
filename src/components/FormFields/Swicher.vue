@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'Switch',
+  name: 'Switcher',
   props: {
     type: {
       type: String,
