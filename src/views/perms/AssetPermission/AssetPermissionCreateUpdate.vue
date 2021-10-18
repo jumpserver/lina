@@ -7,7 +7,6 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetPermissionFormActionField from './components/AssetPermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
 import { getDayFuture } from '@/utils/common'
-import { WeekCronSelect } from '@/components/FormFields'
 
 export default {
   components: {
@@ -36,7 +35,7 @@ export default {
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
         [this.$t('common.action'), ['actions']],
-        [this.$t('common.Other'), ['is_active', 'date_cron', 'date_start', 'date_expired', 'comment']]
+        [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
       fieldsMeta: {
@@ -95,10 +94,6 @@ export default {
           label: this.$t('perms.Actions'),
           component: AssetPermissionFormActionField,
           helpText: this.$t('common.actionsTips')
-        },
-        date_cron: {
-          label: '周期',
-          component: WeekCronSelect
         },
         date_start: {
           label: this.$t('common.dateStart')
