@@ -72,15 +72,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => [
-        { id: 1, week: 'Monday', value: '' },
-        { id: 2, week: 'Tuesday', value: '' },
-        { id: 3, week: 'Wednesday', value: '' },
-        { id: 4, week: 'Thursday', value: '' },
-        { id: 5, week: 'Friday', value: '' },
-        { id: 6, week: 'Saturday', value: '' },
-        { id: 0, week: 'Sunday', value: '' }
-      ]
+      default: () => []
     },
     colspan: {
       type: Number,
@@ -121,40 +113,76 @@ export default {
         top: `${this.top}px`
       }
     },
-    selectValue() {
-      return this.value
-    },
-    selectState() {
-      return this.value.some(ret => ret.value)
-    },
     selectClasses() {
       return n => n.check ? 'ui-selected' : ''
     }
   },
   created() {
-    this.theadArr = createArr(24)
-    const isData = this.weekArr.map((ret, index) => {
-      const children = (ret, row, max) => {
-        return createArr(max).map((t, col) => {
-          return {
-            week: ret,
-            value: this.formatWeektime(col),
-            begin: this.formatWeektime(col).split('~')[0],
-            end: this.formatWeektime(col).split('~')[1],
-            row: row,
-            col: col
-          }
-        })
-      }
-      return {
-        value: ret,
-        row: index,
-        child: children(ret, index, 48)
-      }
-    })
-    this.weektimeData = isData
+    this.init()
+    console.log(this.value, 'value')
+    if (this.value.length > 0) this.nextValue()
   },
   methods: {
+    // 初始化数据结构
+    init() {
+      this.theadArr = createArr(24)
+      const isData = this.weekArr.map((ret, index) => {
+        const children = (ret, row, max) => {
+          return createArr(max).map((t, col) => {
+            const curValue = this.formatWeektime(col)
+            return {
+              week: ret,
+              value: curValue,
+              begin: curValue.split('~')[0],
+              end: curValue.split('~')[1],
+              row: row,
+              col: col
+            }
+          })
+        }
+        return {
+          value: ret,
+          row: index,
+          child: children(ret, index, 48)
+        }
+      })
+      this.weektimeData = isData
+    },
+    // 反解析传递过来的默认值
+    nextValue() {
+      const deepValue = _.cloneDeep(this.value)
+      for (let i = 0, len = deepValue.length; i < len; i++) {
+        const cur = deepValue[i]
+        const curValue = cur?.value
+        if (curValue.length > 0) {
+          const childValue = curValue.split('、')
+          for (let j = 0; j < childValue.length; j++) {
+            const curJ = childValue[j]
+            this.renderWeekRange(curJ, cur.id)
+          }
+        }
+      }
+    },
+    // 渲染时间区间
+    renderWeekRange(val, id) {
+      const idNum = id === 0 ? 6 : id - 1
+      const [start, end] = val.split('~')
+      const startVal = this.countIndex(start)
+      const endVal = this.countIndex(end)
+      for (let i = startVal; i < (endVal === 0 ? 48 : endVal); i++) {
+        const curWeek = this.weektimeData[idNum]
+        curWeek.child[i].check = true
+      }
+    },
+    // 计算索引
+    countIndex(val) {
+      const one = val.substr(0, 2)
+      const a1 = one.startsWith('0') ? one.substr(1, 2) : one
+      var reg = RegExp(/30/)
+      const a2 = val.match(reg) ? 1 : 0
+      const curIndex = (a1 * 2) + a2
+      return curIndex
+    },
     formatDate(date, fmt) {
       const o = {
         'M+': date.getMonth() + 1,
@@ -191,12 +219,13 @@ export default {
           this.$set(t, 'check', false)
         })
       })
+      this.timeRange = []
+      this.$emit('change', this.timeRange)
     },
     setTimeRange() {
       this.timeRange = this.weektimeData.map(item => {
         return {
           id: item.row === 6 ? 0 : item.row + 1,
-          week: item.value,
           value: splicing(item.child)
         }
       })

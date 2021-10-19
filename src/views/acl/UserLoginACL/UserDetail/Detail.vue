@@ -67,7 +67,7 @@ export default {
         },
         {
           key: this.$t('acl.ip_group'),
-          value: this.object.ip_group.toString()
+          value: this.object.rules.ip_group.toString()
         },
         {
           key: this.$t('acl.username_group'),
