@@ -19,7 +19,7 @@ export default {
         url: '/api/v1/audits/login-logs/',
         columns: [
           'username', 'type', 'backend', 'ip', 'city',
-          'user_agent', 'mfa', 'reason', 'status', 'datetime'
+          'user_agent', 'mfa', 'reason_display', 'status', 'datetime'
         ],
         columnsMeta: {
           username: {
