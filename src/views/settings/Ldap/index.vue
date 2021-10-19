@@ -52,11 +52,6 @@ export default {
             rules.Required
           ]
         },
-        AUTH_LDAP_BIND_PASSWORD: {
-          rules: [
-            rules.Required
-          ]
-        },
         AUTH_LDAP_SEARCH_OU: {
           rules: [
             rules.Required
