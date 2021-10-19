@@ -11,13 +11,11 @@
 
 <script>
 import DetailCard from '@/components/DetailCard'
-// import RelationCard from '@/components/RelationCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'Detail',
   components: {
     DetailCard
-    // RelationCard
   },
   props: {
     object: {
@@ -71,12 +69,8 @@ export default {
           value: this.object.rules.ip_group.toString()
         },
         {
-          key: this.$t('acl.ip_group'),
+          key: this.$t('common.time_period'),
           value: this.dataVal
-        },
-        {
-          key: this.$t('acl.username_group'),
-          value: this.object.users.username_group.toString()
         },
         {
           key: this.$t('acl.action'),

@@ -22,7 +22,7 @@ export default {
         columnsMeta: {
           name: {
             formatterArgs: {
-              route: 'SingleUserLoginACLDetail',
+              route: 'UserLoginACLDetail',
               routeQuery: {
                 user: this.$route.params.id
               }
@@ -41,7 +41,7 @@ export default {
           actions: {
             formatterArgs: {
               hasClone: false,
-              updateRoute: { name: 'SingleUserLoginACLUpdate', query: { user: this.$route.params.id }},
+              updateRoute: { name: 'UserLoginACLUpdate', query: { user: this.$route.params.id }},
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/acls/login-acls/${id}/?user=${this.$route.params.id}`
@@ -52,7 +52,7 @@ export default {
         }
       },
       headerActions: {
-        createRoute: { name: 'SingleUserLoginACLCreate', query: { user: this.$route.params.id }},
+        createRoute: { name: 'UserLoginACLCreate', query: { user: this.$route.params.id }},
         hasRefresh: true,
         hasExport: false,
         hasImport: false,

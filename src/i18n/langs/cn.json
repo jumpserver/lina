@@ -427,7 +427,7 @@
     },
     "lastCannotBeDeleteMsg": "最后一项，不能被删除",
     "InvalidJson": "不是合法 JSON",
-    "PeriodLogin": "时段",
+    "time_period": "时段",
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",

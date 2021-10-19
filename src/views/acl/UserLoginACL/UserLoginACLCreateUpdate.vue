@@ -29,7 +29,7 @@ export default {
       url: '/api/v1/acls/login-acls/',
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
-        [this.$t('acl.users'), ['user', 'users']],
+        [this.$t('acl.users'), ['user']],
         [this.$t('acl.Rules'), ['rules']],
         [this.$t('acl.Action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
@@ -48,15 +48,6 @@ export default {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             }
-          }
-        },
-        users: {
-          fields: ['username_group'],
-          hidden: (form) => {
-            return this.$route.query.user
-          },
-          fieldsMeta: {
-
           }
         },
         reviewers: {
@@ -83,7 +74,7 @@ export default {
               helpText: this.$t('acl.ip_group_help_text')
             },
             time_period: {
-              label: this.$t('common.PeriodLogin'),
+              label: this.$t('common.time_period'),
               component: WeekCronSelect
             }
           }
