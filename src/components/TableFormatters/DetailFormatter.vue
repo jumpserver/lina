@@ -71,9 +71,8 @@ export default {
 
 <style scoped>
 .detail {
-  font-weight: 400;
   display: inline-block;
-  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
