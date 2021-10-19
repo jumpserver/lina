@@ -78,7 +78,7 @@ export default {
         },
         SECURITY_MFA_IN_LOGIN_PAGE: {
           hidden: (form) => {
-            return form['SECURITY_MFA_AUTH'] !== 1
+            return form['SECURITY_MFA_AUTH'] !== 1 || !this.$store.getters.hasValidLicense
           },
           on: {
             change: ([val], updateForm) => {
