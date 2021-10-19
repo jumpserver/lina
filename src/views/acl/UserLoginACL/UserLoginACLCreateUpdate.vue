@@ -116,7 +116,7 @@ export default {
         }
       },
       afterGetFormValue(validValues) {
-        validValues.ip_group = validValues.rules.ip_group.toString()
+        validValues.rules.ip_group = validValues.rules.ip_group.toString()
         if (!this.$route.query.user) {
           validValues.users.username_group = validValues.users.username_group.toString()
         }
