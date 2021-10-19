@@ -51,7 +51,8 @@ export default {
         onAddSuccess: () => {
           this.$refs.RelationCard.$refs.select2.clearSelected()
         }
-      }
+      },
+      dataVal: []
     }
   },
   computed: {
@@ -68,6 +69,10 @@ export default {
         {
           key: this.$t('acl.ip_group'),
           value: this.object.rules.ip_group.toString()
+        },
+        {
+          key: this.$t('acl.ip_group'),
+          value: this.dataVal
         },
         {
           key: this.$t('acl.username_group'),
@@ -94,6 +99,39 @@ export default {
           value: this.object.action === 'confirm' ? this.object.reviewers_display : ''
         }
       ]
+    }
+  },
+  created() {
+    const arrs = this.object.rules.time_period
+    for (let i = 0; i < arrs.length; i++) {
+      const cur = arrs[i]
+      if (cur.value.length > 0) {
+        let str = ''
+        switch (cur.id) {
+          case 0:
+            str = this.$t('common.WeekCronSelect.Sunday') + ':' + cur.value
+            break
+          case 1:
+            str = this.$t('common.WeekCronSelect.Monday') + ':' + cur.value
+            break
+          case 2:
+            str = this.$t('common.WeekCronSelect.Tuesday') + ':' + cur.value
+            break
+          case 3:
+            str = this.$t('common.WeekCronSelect.Wednesday') + ':' + cur.value
+            break
+          case 4:
+            str = this.$t('common.WeekCronSelect.Thursday') + ':' + cur.value
+            break
+          case 5:
+            str = this.$t('common.WeekCronSelect.Friday') + ':' + cur.value
+            break
+          case 6:
+            str = this.$t('common.WeekCronSelect.Saturday') + ':' + cur.value
+            break
+        }
+        this.dataVal.push(str)
+      }
     }
   }
 }
