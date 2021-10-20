@@ -11,14 +11,11 @@
 
 <script>
 import DetailCard from '@/components/DetailCard'
-// import RelationCard from '@/components/RelationCard'
 import { toSafeLocalDateStr } from '@/utils/common'
-
 export default {
   name: 'Detail',
   components: {
     DetailCard
-    // RelationCard
   },
   props: {
     object: {
@@ -52,7 +49,8 @@ export default {
         onAddSuccess: () => {
           this.$refs.RelationCard.$refs.select2.clearSelected()
         }
-      }
+      },
+      dataVal: []
     }
   },
   computed: {
@@ -68,7 +66,11 @@ export default {
         },
         {
           key: this.$t('acl.ip_group'),
-          value: this.object.ip_group.toString()
+          value: this.object.rules.ip_group.toString()
+        },
+        {
+          key: this.$t('common.time_period'),
+          value: this.dataVal
         },
         {
           key: this.$t('acl.action'),
@@ -85,13 +87,70 @@ export default {
         {
           key: this.$t('acl.created_by'),
           value: this.object.created_by
+        },
+        {
+          key: this.$t('acl.login_confirm_user'),
+          value: this.object.action === 'confirm' ? this.object.reviewers_display : ''
         }
       ]
+    }
+  },
+  created() {
+    const arrs = this.object.rules.time_period
+    for (let i = 0; i < arrs.length; i++) {
+      const cur = arrs[i]
+      if (cur.value.length > 0) {
+        let obj = {}
+        switch (cur.id) {
+          case 0:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Sunday'),
+              value: cur.value
+            }
+            break
+          case 1:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Monday'),
+              value: cur.value
+            }
+            break
+          case 2:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Tuesday'),
+              value: cur.value
+            }
+            break
+          case 3:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Wednesday'),
+              value: cur.value
+            }
+            break
+          case 4:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Thursday'),
+              value: cur.value
+            }
+            break
+          case 5:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Friday'),
+              value: cur.value
+            }
+            break
+          case 6:
+            obj = {
+              key: this.$t('common.WeekCronSelect.Saturday'),
+              value: cur.value
+            }
+            break
+        }
+        this.dataVal.push(obj)
+      }
     }
   }
 }
 </script>
 
 <style lang='less' scoped>
-
 </style>

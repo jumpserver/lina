@@ -418,6 +418,7 @@
     },
     "lastCannotBeDeleteMsg": "The last one can't be delete",
     "InvalidJson": "Not a valid json format",
+    "time_period": "Time period",
     "CronTab": {
       "newCron": "new cron",
       "timeExpression": "time expression",
@@ -452,6 +453,19 @@
       "runningTimes": "last 5 running times",
       "calculationResults": "calculationResults...",
       "failedConditions": "cron expression error"
+    },
+    "Cycle": "Cycle",
+    "WeekCronSelect": {
+      "Monday": "Monday",
+      "Tuesday": "Tuesday",
+      "Wednesday": "Wednesday", 
+      "Thursday": "Thursday",
+      "Friday": "Friday",
+      "Saturday": "Saturday",
+      "Sunday": "Sunday",
+      "ClearSelection": "Clear selection",
+      "CanDragSelect": "Can drag the mouse to select a time period",
+      "WeekOrTime": "Week/Time"
     }
   },
   "dashboard": {
@@ -722,7 +736,8 @@
     "WebFTP": "WebFTP",
     "WebTerminal": "Web Terminal",
     "Notifications": "Notifications",
-    "SiteMessageList": "Site message"
+    "SiteMessageList": "Site message",
+    "UserLoginACL": "User Login ACL"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",
