@@ -11,7 +11,6 @@ export default {
     GenericTreeListPage
   },
   data() {
-    const vm = this
     return {
       treeSetting: {
         showMenu: false,
@@ -57,12 +56,10 @@ export default {
             }
           },
           from_ticket: {
-            formatter(row) {
-              if (row.from_ticket) {
-                return vm.$t('common.Yes')
-              } else {
-                return vm.$t('common.No')
-              }
+            label: this.$t('perms.fromTicket'),
+            width: 100,
+            formatterArgs: {
+              showFalse: false
             }
           },
           user_groups_amount: {

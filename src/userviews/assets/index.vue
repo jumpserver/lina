@@ -1,13 +1,18 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <div>
+    <Announcement />
+    <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  </div>
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import { Announcement } from '@/components'
 import { SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {
-    GenericTreeListPage
+    GenericTreeListPage,
+    Announcement
   },
   data() {
     return {
@@ -191,5 +196,11 @@ export default {
   .row_disabled,.row_disabled:hover,.row_disabled:hover > td{
     cursor: not-allowed;
     background-color:rgba(192,196,204,0.28) !important;
+  }
+
+  .link-more {
+    margin-left: 10px;
+    border-bottom: solid 1px;
+    font-size: 12px
   }
 </style>

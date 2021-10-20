@@ -17,7 +17,6 @@
 import { GenericListPage, GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
-import { BooleanFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericListPage,
@@ -94,7 +93,7 @@ export default {
           'name', 'remote_addr', 'session_online',
           'stat.cpu_load',
           'stat.disk_used', 'stat.memory_used',
-          'status_display',
+          'status',
           'is_active', 'is_alive', 'actions'
         ],
         columnsMeta: {
@@ -113,16 +112,25 @@ export default {
             label: this.$t('sessions.systemMemoryUsedPercent'),
             width: '120px'
           },
-          'status_display': {
+          status: {
             label: this.$t('xpack.LoadStatus'),
-            width: '120px'
+            width: '120px',
+            // formatter: DisplayFormatter,
+            filterable: 'custom',
+            formatterArgs: {
+              classChoices: {
+                offline: 'fa fa-chain-broken text-danger',
+                critical: 'fa fa-bolt text-warning',
+                high: 'fa fa-exclamation-triangle text-info',
+                normal: 'fa fa-check text-primary'
+              }
+            }
           },
           remote_addr: {
             sortable: 'custom'
           },
           is_active: {
             label: this.$t('sessions.active'),
-            formatter: BooleanFormatter,
             width: '80px',
             align: 'center'
           },

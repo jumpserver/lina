@@ -32,6 +32,16 @@ export default {
         <span class='item-value'>{this.toChoicesDisplay(this.value)}</span>
       )
     }
+    if (this.value instanceof Array) {
+      const newArr = this.value || []
+      return (
+        <span class='item-value'>
+          {
+            newArr.map((item, index) => <div key={index}>{item.key}：{item.value} </div>)
+          }
+        </span>
+      )
+    }
     return (
       <span class='item-value'>{this.value}</span>
     )

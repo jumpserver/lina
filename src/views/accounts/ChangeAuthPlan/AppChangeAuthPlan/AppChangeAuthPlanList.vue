@@ -20,11 +20,11 @@ export default {
         url: '/api/v1/xpack/change-auth-plan/app-plan/',
         columns: [
           'name', 'password_strategy_display',
-          'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
+          'is_periodic', 'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'password_strategy_display', 'periodic_display', 'run_times', 'actions']
+          default: ['name', 'password_strategy_display', 'is_periodic', 'periodic_display', 'run_times', 'actions']
         },
         columnsMeta: {
           name: {
@@ -43,8 +43,15 @@ export default {
             width: '220px',
             showOverflowTooltip: true
           },
-          periodic_display: {
+          is_periodic: {
             label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            formatterArgs: {
+              showFalse: false
+            },
+            width: '80px'
+          },
+          periodic_display: {
+            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
             showOverflowTooltip: true,
             width: '150px'
           },

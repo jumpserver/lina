@@ -19,10 +19,10 @@ export default {
         name: 'TaskListTable',
         url: '/api/v1/xpack/gathered-user/tasks/',
         columns: [
-          'name', 'nodes', 'periodic_display', 'executed_times', 'actions'
+          'name', 'nodes', 'is_periodic', 'periodic_display', 'executed_times', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'nodes', 'periodic_display', 'executed_times', 'actions']
+          min: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_times', 'actions']
         },
         columnsMeta: {
           name: {
@@ -39,7 +39,15 @@ export default {
               return cellValue.length
             }
           },
+          is_periodic: {
+            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            formatterArgs: {
+              showFalse: false
+            },
+            width: '80px'
+          },
           periodic_display: {
+            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
             showOverflowTooltip: true,
             width: 150
           },

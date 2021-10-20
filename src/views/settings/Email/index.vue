@@ -79,18 +79,9 @@ export default {
         {
           title: this.$t('setting.emailTest'),
           callback: function(value, form) {
-            if (value['EMAIL_HOST_PASSWORD'] === undefined) {
-              value['EMAIL_HOST_PASSWORD'] = ''
-            }
-            if (value['EMAIL_USE_SSL'] === undefined) {
-              value['EMAIL_USE_SSL'] = false
-            }
-            if (value['EMAIL_USE_TLS'] === undefined) {
-              value['EMAIL_USE_TLS'] = false
-            }
-            if (value['EMAIL_FROM'] === undefined) {
-              value['EMAIL_FROM'] = value['EMAIL_HOST_USER']
-            }
+            const testValue = {}
+            testValue['EMAIL_FROM'] = value['EMAIL_FROM']
+            testValue['EMAIL_RECIPIENT'] = value['EMAIL_RECIPIENT']
             testEmailSetting(value).then(res => {
               vm.$message.success(res['msg'])
             }).catch(res => {
@@ -100,26 +91,18 @@ export default {
         }
       ],
       cleanFormValue(data) {
-        if (!data['EMAIL_HOST_PASSWORD']) {
-          delete data['EMAIL_HOST_PASSWORD']
-        }
-        if (!data['EMAIL_USE_SSL']) {
-          data['EMAIL_USE_SSL'] = false
-        }
-        if (!data['EMAIL_USE_TLS']) {
-          data['EMAIL_USE_TLS'] = false
-        }
-        if (!data['EMAIL_FROM']) {
-          data['EMAIL_FROM'] = data['EMAIL_HOST_USER']
-        }
-        Object.keys(data).forEach(
+        const submitValue = {}
+        submitValue['EMAIL_RECIPIENT'] = data['EMAIL_RECIPIENT']
+        submitValue['EMAIL_FROM'] = data['EMAIL_FROM']
+        submitValue['EMAIL_SUBJECT_PREFIX'] = data['EMAIL_SUBJECT_PREFIX']
+        Object.keys(submitValue).forEach(
           function(key) {
-            if (data[key] === null) {
-              delete data[key]
+            if (submitValue[key] === null) {
+              delete submitValue[key]
             }
           }
         )
-        return data
+        return submitValue
       },
       submitMethod() {
         return 'patch'

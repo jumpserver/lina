@@ -40,7 +40,8 @@ export default {
       visible: false,
       fields: [
         'SECURITY_PASSWORD_MIN_LENGTH', 'SECURITY_ADMIN_USER_PASSWORD_MIN_LENGTH', 'SECURITY_PASSWORD_UPPER_CASE',
-        'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR'
+        'SECURITY_PASSWORD_LOWER_CASE', 'SECURITY_PASSWORD_NUMBER', 'SECURITY_PASSWORD_SPECIAL_CHAR',
+        'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {

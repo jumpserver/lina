@@ -120,12 +120,10 @@ export default {
             }
           },
           from_ticket: {
-            formatter(row) {
-              if (row.from_ticket) {
-                return vm.$t('common.Yes')
-              } else {
-                return vm.$t('common.No')
-              }
+            label: this.$t('perms.fromTicket'),
+            width: 100,
+            formatterArgs: {
+              showFalse: false
             }
           },
           actions: {

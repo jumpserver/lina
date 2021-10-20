@@ -1,6 +1,14 @@
 <template>
   <div>
-    <DataTable v-if="!loading" ref="dataTable" v-loading="loading" :config="iConfig" v-bind="$attrs" v-on="$listeners" @filter-change="filterChange" />
+    <DataTable
+      v-if="!loading"
+      ref="dataTable"
+      v-loading="loading"
+      :config="iConfig"
+      v-bind="$attrs"
+      v-on="$listeners"
+      @filter-change="filterChange"
+    />
     <ColumnSettingPopover
       :current-columns="popoverColumns.currentCols"
       :total-columns-list="popoverColumns.totalColumnsList"
@@ -13,7 +21,13 @@
 
 <script type="text/jsx">
 import DataTable from '../DataTable'
-import { DateFormatter, DetailFormatter, DisplayFormatter, BooleanFormatter, ActionsFormatter } from '@/components/TableFormatters'
+import {
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
+  ActionsFormatter,
+  ChoicesFormatter
+} from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
 import { newURL } from '@/utils/common'
@@ -103,7 +117,7 @@ export default {
           break
         case 'is_valid':
           col.label = i18n.t('common.Validity')
-          col.formatter = BooleanFormatter
+          col.formatter = ChoicesFormatter
           col.align = 'center'
           col.width = '80px'
           break
@@ -123,7 +137,7 @@ export default {
           col.formatter = DisplayFormatter
           break
         case 'boolean':
-          col.formatter = BooleanFormatter
+          col.formatter = ChoicesFormatter
           col.align = 'center'
           col.width = '80px'
           break
