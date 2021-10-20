@@ -426,7 +426,7 @@
       "min": "minute",
       "hour": "hour",
       "day": "day",
-      "mouth": "mouth",
+      "month": "month",
       "week": "week",
       "wildcardsAllowed": "wildcards allowed",
       "from": "from",

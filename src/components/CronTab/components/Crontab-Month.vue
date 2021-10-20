@@ -3,7 +3,7 @@
   <el-form size="small">
     <el-form-item>
       <el-radio v-model="radioValue" :label="1">
-        {{ this.$t('common.CronTab.mouth') }}，{{ this.$t('common.CronTab.wildcardsAllowed') }}[, - * /]
+        {{ this.$t('common.CronTab.month') }}，{{ this.$t('common.CronTab.wildcardsAllowed') }}[, - * /]
       </el-radio>
     </el-form-item>
 
@@ -11,14 +11,14 @@
       <el-radio v-model="radioValue" :label="2">
         {{ this.$t('common.CronTab.from') }}
         <el-input-number v-model="cycle01" :min="1" :max="12" /> -
-        <el-input-number v-model="cycle02" :min="1" :max="12" /> {{ this.$t('common.CronTab.mouth') }}
+        <el-input-number v-model="cycle02" :min="1" :max="12" /> {{ this.$t('common.CronTab.month') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
       <el-radio v-model="radioValue" :label="3">
         {{ this.$t('common.CronTab.every') }}
-        <el-input-number v-model="average02" :min="1" :max="12" /> {{ this.$t('common.CronTab.mouth') }}{{ this.$t('common.CronTab.executeOnce') }}
+        <el-input-number v-model="average02" :min="1" :max="12" /> {{ this.$t('common.CronTab.month') }}{{ this.$t('common.CronTab.executeOnce') }}
       </el-radio>
     </el-form-item>
 
@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  name: 'CrontabMouth',
+  name: 'CrontabMonth',
   props: {
     cron: {
       type: Object,
@@ -107,49 +107,49 @@ export default {
     // 单选按钮值变化时
     radioChange() {
       if (this.radioValue === 1) {
-        this.$emit('update', 'mouth', '*')
+        this.$emit('update', 'month', '*')
       } else {
         if (this.cron.day === '*') {
-          this.$emit('update', 'day', '*', 'mouth')
+          this.$emit('update', 'day', '*', 'month')
         }
         if (this.cron.hour === '*') {
-          this.$emit('update', 'hour', '0', 'mouth')
+          this.$emit('update', 'hour', '0', 'month')
         }
         if (this.cron.min === '*') {
-          this.$emit('update', 'min', '0', 'mouth')
+          this.$emit('update', 'min', '0', 'month')
         }
         if (this.cron.second === '*') {
-          this.$emit('update', 'second', '0', 'mouth')
+          this.$emit('update', 'second', '0', 'month')
         }
       }
       switch (this.radioValue) {
         case 2:
-          this.$emit('update', 'mouth', this.cycle01 + '-' + this.cycle02)
+          this.$emit('update', 'month', this.cycle01 + '-' + this.cycle02)
           break
         case 3:
-          this.$emit('update', 'mouth', '*' + '/' + this.average02)
+          this.$emit('update', 'month', '*' + '/' + this.average02)
           break
         case 4:
-          this.$emit('update', 'mouth', this.checkboxString)
+          this.$emit('update', 'month', this.checkboxString)
           break
       }
     },
     // 周期两个值变化时
     cycleChange() {
       if (this.radioValue === 2) {
-        this.$emit('update', 'mouth', this.cycleTotal)
+        this.$emit('update', 'month', this.cycleTotal)
       }
     },
     // 平均两个值变化时
     averageChange() {
       if (this.radioValue === 3) {
-        this.$emit('update', 'mouth', this.averageTotal)
+        this.$emit('update', 'month', this.averageTotal)
       }
     },
     // checkbox值变化时
     checkboxChange() {
       if (this.radioValue === 4) {
-        this.$emit('update', 'mouth', this.checkboxString)
+        this.$emit('update', 'month', this.checkboxString)
       }
     }
   }
