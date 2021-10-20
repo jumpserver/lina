@@ -5,7 +5,6 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { SetToDefaultCommandStorage, TestCommandStorage } from '@/api/sessions'
-import { BooleanFormatter } from '@/components/TableFormatters'
 export default {
   name: 'CommandStorage',
   components: {
@@ -56,12 +55,8 @@ export default {
             }
           },
           is_default: {
-            formatter: BooleanFormatter,
             formatterArgs: {
-              iconChoices: {
-                true: 'fa-check text-primary',
-                false: ''
-              }
+              showFalse: false
             },
             align: 'center',
             width: '100px'

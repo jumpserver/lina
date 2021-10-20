@@ -113,6 +113,8 @@
     "Assets": "资产",
     "Auth": "认证",
     "AccountList": "账号列表",
+    "PermUserList": "授权用户",
+    "ViewPerm": "查看授权",
     "AutoGenerateKey": "自动生成",
     "AutoPush": "自动推送",
     "BasePlatform": "基础平台",
@@ -237,6 +239,8 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ViewMore": "查看更多",
+    "Announcement": "公告",
     "Logging": "日志记录",
     "Database": "数据库记录",
     "Params": "参数",
@@ -439,6 +443,41 @@
       "ClearSelection": "清空选择",
       "CanDragSelect": "可拖动鼠标选择时间段",
       "WeekOrTime": "星期/时间"
+    },
+    "CronTab": {
+      "newCron": "生成 cron",
+      "timeExpression": "时间表达式",
+      "cronExpression": "crontab完整表达式",
+      "min": "分钟",
+      "hour": "小时",
+      "day": "日",
+      "mouth": "月",
+      "week": "周",
+      "wildcardsAllowed": "允许的通配符",
+      "from": "从",
+      "every": "每",
+      "appoint": "指定",
+      "manyChoose": "可多选",
+      "startEvery": "开始，每",
+      "executeOnce": "执行一次",
+      "lastDay": "本月最后一天",
+      "everyMonth": "每月",
+      "lastWorking": "最近的那个工作日",
+      "lastWeek": "本月最后一个星期",
+      "num": "号",
+      "cycleFromWeek": "周期从星期",
+      "the": "第",
+      "weekOf": "周的星期",
+      "Monday": "周一",
+      "Tuesday": "周二",
+      "Wednesday": "周三",
+      "Thursday": "周四",
+      "Friday": "周五",
+      "Saturday": "周六",
+      "Sunday": "周日",
+      "runningTimes": "最近5次运行时间",
+      "calculationResults": "cron 表达式错误",
+      "failedConditions": "没有达到条件的结果！"
     }
   },
   "dashboard": {
@@ -531,6 +570,7 @@
     "User": "用户",
     "UserGroups": "用户组",
     "PermName":"授权名称",
+    "Permissions": "授权列表",
     "DatabaseAppPermission": "数据库授权",
     "RemoteAppPermission": "远程应用授权",
     "addApplicationToThisPermission": "添加应用",
@@ -796,6 +836,7 @@
     }
   },
   "setting": {
+    "Feature": "功能",
     "AlibabaCloud": "阿里云",
     "TencentCloud": "腾讯云",
     "Radius": "Radius",
@@ -837,7 +878,7 @@
     "License": "许可证",
     "Senior": "高级",
     "LicenseFile": "许可证文件",
-    "PasswordCheckRule": "密码复杂度校验",
+    "PasswordCheckRule": "密码强弱规则",
     "Security": "安全设置",
     "SecuritySetting": "安全设置",
     "SystemMessageSubscription": "系统消息订阅",
@@ -1227,6 +1268,7 @@
       "TaskList": "任务列表",
       "TimeDelta": "运行时间",
       "Timer": "定时执行",
+      "TimerPeriod": "定时执行周期",
       "Username": "用户名"
     },
     "Cloud": {

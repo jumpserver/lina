@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { CronTab } from '@/components'
 
 export default {
   components: {
@@ -20,6 +21,7 @@ export default {
       hasDetailInMsg: false,
       fieldsMeta: {
         crontab: {
+          component: CronTab,
           hidden: (formValue) => {
             return !formValue.is_periodic
           },

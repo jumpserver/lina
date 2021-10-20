@@ -5,7 +5,6 @@
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, azure_international, vmware, nutanix, qingcloud_private, huaweicloud_private, gcp } from '../const'
-import { BooleanFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -21,10 +20,8 @@ export default {
         ],
         columnsMeta: {
           name: {
-            prop: 'name',
             sortable: true,
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
             formatterArgs: {
               route: 'AccountDetail'
             }
@@ -50,17 +47,6 @@ export default {
                   }
                 }
               ]
-            }
-          },
-          validity: {
-            width: '90px',
-            align: 'center',
-            formatter: BooleanFormatter,
-            formatterArgs: {
-              iconChoices: {
-                false: 'fa-times text-danger',
-                true: 'fa-check text-primary'
-              }
             }
           }
         }

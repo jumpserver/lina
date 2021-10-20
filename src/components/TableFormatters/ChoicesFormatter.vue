@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <el-tooltip v-if="formatterArgs.hasTips" placement="bottom" effect="dark">
-      <div slot="content" v-html="tips" />
-      <i :class="'fa ' + iconClass" />
-    </el-tooltip>
-    <i v-else :class="'fa ' + iconClass" />
-  </div>
+  <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
+    <div slot="content" v-html="tips" />
+    <span :class="classes">
+      <i v-if="formatterArgs.useIcon" :class="'fa ' + icon" />
+      <span v-if="formatterArgs.useText">{{ text }}</span>
+    </span>
+  </el-tooltip>
 </template>
 
 <script>
@@ -19,13 +19,24 @@ export default {
       default() {
         return {
           iconChoices: {
-            true: 'fa-check text-primary',
-            false: 'fa-times text-danger'
+            true: 'fa-check',
+            false: 'fa-times'
           },
-          getIconKey({ row, cellValue }) {
+          classChoices: {
+            true: 'text-primary',
+            false: 'text-danger'
+          },
+          textChoices: {
+            true: this.$t('common.Yes'),
+            false: this.$t('common.No')
+          },
+          getKey({ row, cellValue }) {
             return cellValue
           },
           hasTips: false,
+          useIcon: true,
+          useText: false,
+          showFalse: true,
           getTips: ({ row, cellValue }) => {
             return cellValue
           }
@@ -39,12 +50,28 @@ export default {
     }
   },
   computed: {
-    iconClass() {
-      const key = this.formatterArgs.getIconKey({ row: this.row, cellValue: this.cellValue })
-      return this.formatterArgs.iconChoices[key]
+    key() {
+      return this.formatterArgs.getKey(
+        { row: this.row, cellValue: this.cellValue }
+      )
+    },
+    icon() {
+      return this.formatterArgs.iconChoices[this.key]
+    },
+    classes() {
+      return this.formatterArgs.classChoices[this.key]
+    },
+    text() {
+      return this.formatterArgs.textChoices[this.key]
     },
     tips() {
       return this.formatterArgs.getTips({ cellValue: this.cellValue, row: this.row })
+    },
+    shown() {
+      if (!this.formatterArgs.showFalse && !this.key) {
+        return false
+      }
+      return true
     }
   }
 }

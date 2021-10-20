@@ -4,14 +4,13 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, ChoicesFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
     GenericTreeListPage
   },
   data() {
-    const vm = this
     return {
       treeSetting: {
         showMenu: false,
@@ -57,12 +56,10 @@ export default {
             }
           },
           from_ticket: {
-            formatter(row) {
-              if (row.from_ticket) {
-                return vm.$t('common.Yes')
-              } else {
-                return vm.$t('common.No')
-              }
+            width: 100,
+            formatter: ChoicesFormatter,
+            formatterArgs: {
+              showFalse: false
             }
           },
           user_groups_amount: {

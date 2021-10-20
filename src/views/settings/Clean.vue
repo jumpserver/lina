@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { IBox } from '@/components'
+import { IBox, CronTab } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 
 export default {
@@ -35,6 +35,7 @@ export default {
       ],
       fieldsMeta: {
         AUTH_LDAP_SYNC_CRONTAB: {
+          component: CronTab,
           label: this.$t('xpack.RegularlyPerform'),
           helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
         }
