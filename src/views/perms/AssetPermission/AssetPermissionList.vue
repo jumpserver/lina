@@ -4,7 +4,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { DetailFormatter, ChoicesFormatter } from '@/components/TableFormatters'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -56,8 +56,8 @@ export default {
             }
           },
           from_ticket: {
+            label: this.$t('perms.fromTicket'),
             width: 100,
-            formatter: ChoicesFormatter,
             formatterArgs: {
               showFalse: false
             }
