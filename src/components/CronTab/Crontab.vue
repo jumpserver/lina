@@ -29,9 +29,9 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('mouth')" :label="this.$t('common.CronTab.mouth')">
-        <CrontabMouth
-          ref="cronmouth"
+      <el-tab-pane v-if="shouldHide('month')" :label="this.$t('common.CronTab.month')">
+        <CrontabMonth
+          ref="cronmonth"
           :check="checkNumber"
           :cron="contabValueObj"
           @update="updateContabValue"
@@ -81,7 +81,7 @@
             </td>
             <td>
               <el-input
-                v-model.trim="contabValueObj.mouth"
+                v-model.trim="contabValueObj.month"
                 size="small"
                 onkeyup="value=value.replace(/[^\0-9\-\*\,]/g,'')"
               />
@@ -125,7 +125,7 @@
 import CrontabMin from './components/Crontab-Min.vue'
 import CrontabHour from './components/Crontab-Hour.vue'
 import CrontabDay from './components/Crontab-Day.vue'
-import CrontabMouth from './components/Crontab-Mouth.vue'
+import CrontabMonth from './components/Crontab-Month.vue'
 import CrontabWeek from './components/Crontab-Week.vue'
 import CrontabResult from './components/Crontab-Result.vue'
 
@@ -135,7 +135,7 @@ export default {
     CrontabMin,
     CrontabHour,
     CrontabDay,
-    CrontabMouth,
+    CrontabMonth,
     CrontabWeek,
     CrontabResult
   },
@@ -155,7 +155,7 @@ export default {
   },
   data() {
     return {
-      tabTitles: [this.$t('common.CronTab.min'), this.$t('common.CronTab.hour'), this.$t('common.CronTab.day'), this.$t('common.CronTab.mouth'), this.$t('common.CronTab.week')],
+      tabTitles: [this.$t('common.CronTab.min'), this.$t('common.CronTab.hour'), this.$t('common.CronTab.day'), this.$t('common.CronTab.month'), this.$t('common.CronTab.week')],
       tabActive: 0,
       myindex: 0,
       contabValueObj: {
@@ -163,7 +163,7 @@ export default {
         min: '0',
         hour: '*',
         day: '*',
-        mouth: '*',
+        month: '*',
         week: '*'
         // year: "",
       },
@@ -181,7 +181,7 @@ export default {
           ' ' +
           obj.day +
           ' ' +
-          obj.mouth +
+          obj.month +
           ' ' +
           obj.week
         return str
@@ -214,7 +214,7 @@ export default {
             min: arr[0],
             hour: arr[1],
             day: arr[2],
-            mouth: arr[3],
+            month: arr[3],
             week: arr[4]
           }
           this.contabValueObj = {
@@ -244,7 +244,7 @@ export default {
     },
     // 赋值到组件
     changeRadio(name, value) {
-      const arr = ['second', 'min', 'hour', 'mouth']
+      const arr = ['second', 'min', 'hour', 'month']
       const refName = 'cron' + name
       let insVlaue
 
@@ -374,7 +374,7 @@ export default {
         min: '0',
         hour: '0',
         day: '*',
-        mouth: '*',
+        month: '*',
         week: '*'
         // year: "",
       }
