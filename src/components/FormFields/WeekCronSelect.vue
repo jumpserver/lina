@@ -119,7 +119,6 @@ export default {
   },
   created() {
     this.init()
-    console.log(this.value, 'value')
     if (this.value.length > 0) this.nextValue()
   },
   methods: {

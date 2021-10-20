@@ -100,31 +100,52 @@ export default {
     for (let i = 0; i < arrs.length; i++) {
       const cur = arrs[i]
       if (cur.value.length > 0) {
-        let str = ''
+        let obj = {}
         switch (cur.id) {
           case 0:
-            str = this.$t('common.WeekCronSelect.Sunday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Sunday'),
+              value: cur.value
+            }
             break
           case 1:
-            str = this.$t('common.WeekCronSelect.Monday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Monday'),
+              value: cur.value
+            }
             break
           case 2:
-            str = this.$t('common.WeekCronSelect.Tuesday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Tuesday'),
+              value: cur.value
+            }
             break
           case 3:
-            str = this.$t('common.WeekCronSelect.Wednesday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Wednesday'),
+              value: cur.value
+            }
             break
           case 4:
-            str = this.$t('common.WeekCronSelect.Thursday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Thursday'),
+              value: cur.value
+            }
             break
           case 5:
-            str = this.$t('common.WeekCronSelect.Friday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Friday'),
+              value: cur.value
+            }
             break
           case 6:
-            str = this.$t('common.WeekCronSelect.Saturday') + ':' + cur.value
+            obj = {
+              key: this.$t('common.WeekCronSelect.Saturday'),
+              value: cur.value
+            }
             break
         }
-        this.dataVal.push(str)
+        this.dataVal.push(obj)
       }
     }
   }

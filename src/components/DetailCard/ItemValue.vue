@@ -33,7 +33,14 @@ export default {
       )
     }
     if (this.value instanceof Array) {
-      this.value.map((item, index) => <div class='item-value' key={index}>{item} </div>)
+      const newArr = this.value || []
+      return (
+        <span class='item-value'>
+          {
+            newArr.map((item, index) => <div key={index}>{item.key}：{item.value} </div>)
+          }
+        </span>
+      )
     }
     return (
       <span class='item-value'>{this.value}</span>
