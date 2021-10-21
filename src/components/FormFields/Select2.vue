@@ -178,8 +178,8 @@ export default {
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
-        this.initialized = true
         this.iValue = this.value
+        this.initialized = true
       })
     }
     this.$nextTick(() => {
