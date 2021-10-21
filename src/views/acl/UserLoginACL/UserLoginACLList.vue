@@ -14,10 +14,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/acls/login-acls/?user=${this.$route.params.id}`,
-        columns: ['name', 'ip_group', 'reviewers', 'priority', 'user_display', 'is_active', 'comment', 'actions'],
+        columns: ['name', 'reviewers', 'priority', 'user_display', 'action', 'is_active', 'comment', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'priority', 'is_active', 'user_display', 'comment', 'actions']
+          default: ['name', 'priority', 'is_active', 'user_display', 'action', 'comment', 'actions']
         },
         columnsMeta: {
           name: {
