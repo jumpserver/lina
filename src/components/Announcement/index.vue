@@ -1,12 +1,13 @@
 <template>
   <el-alert
     v-if="enabled && !isViewed()"
+    class="is-alert"
     type="success"
     :center="false"
     :title="title"
     @close="onClose"
   >
-    <span> {{ announcement.content }}</span>
+    <span class="alert-main"> {{ announcement.content }}</span>
     <span v-if="announcement.link">
       <el-link :href="announcement.link" target="_blank" class="link-more">
         {{ $t('common.ViewMore') }}
@@ -54,6 +55,12 @@ export default {
 </script>
 
 <style scoped>
+.is-alert >>> .el-alert__content {
+  width: 100%;
+}
+.alert-main {
+  word-wrap:break-word;
+}
 .link-more {
   font-size: 10px;
   margin-left: 10px;
