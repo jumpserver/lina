@@ -4,18 +4,20 @@
       <DetailCard :items="detailCardItems" />
     </el-col>
     <el-col :span="10">
-      <!--      <RelationCard ref="RelationCard" type="info" v-bind="nodeRelationConfig" />-->
+      <QuickActions type="primary" :actions="quickActions" />
     </el-col>
   </el-row>
 </template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
+import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'Detail',
   components: {
-    DetailCard
+    DetailCard,
+    QuickActions
   },
   props: {
     object: {
@@ -50,6 +52,27 @@ export default {
           this.$refs.RelationCard.$refs.select2.clearSelected()
         }
       },
+      quickActions: [
+        {
+          title: this.$t('common.Active'),
+          type: 'switcher',
+          attrs: {
+            model: this.object.is_active
+          },
+          callbacks: {
+            change: function(val) {
+              this.$axios.patch(
+                `/api/v1/acls/login-acls/${this.object.id}/`,
+                { is_active: val }
+              ).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          }
+        }
+      ],
       dataVal: []
     }
   },
@@ -99,49 +122,56 @@ export default {
     const arrs = this.object.rules.time_period
     for (let i = 0; i < arrs.length; i++) {
       const cur = arrs[i]
-      if (cur.value.length > 0) {
+      let timeStr = cur.value
+      if (timeStr.length > 0) {
+        const startTime = timeStr.substr(0, cur.value.length - 5)
+        let lastTime = timeStr.substr(-5, 5)
         let obj = {}
+        if (lastTime.indexOf('00:00') !== -1) {
+          lastTime = '24:00'
+        }
+        timeStr = startTime + lastTime
         switch (cur.id) {
           case 0:
             obj = {
               key: this.$t('common.WeekCronSelect.Sunday'),
-              value: cur.value
+              value: timeStr
             }
             break
           case 1:
             obj = {
               key: this.$t('common.WeekCronSelect.Monday'),
-              value: cur.value
+              value: timeStr
             }
             break
           case 2:
             obj = {
               key: this.$t('common.WeekCronSelect.Tuesday'),
-              value: cur.value
+              value: timeStr
             }
             break
           case 3:
             obj = {
               key: this.$t('common.WeekCronSelect.Wednesday'),
-              value: cur.value
+              value: timeStr
             }
             break
           case 4:
             obj = {
               key: this.$t('common.WeekCronSelect.Thursday'),
-              value: cur.value
+              value: timeStr
             }
             break
           case 5:
             obj = {
               key: this.$t('common.WeekCronSelect.Friday'),
-              value: cur.value
+              value: timeStr
             }
             break
           case 6:
             obj = {
               key: this.$t('common.WeekCronSelect.Saturday'),
-              value: cur.value
+              value: timeStr
             }
             break
         }
