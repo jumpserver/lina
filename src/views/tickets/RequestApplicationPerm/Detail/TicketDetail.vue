@@ -111,11 +111,11 @@ export default {
         },
         {
           key: this.$t('applications.appName'),
-          value: this.object.meta['apply_applications_display']
+          value: this.object.meta.apply_applications_display.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta['apply_system_users_display']
+          value: this.object.meta.apply_system_users_display.join(', ')
         },
         {
           key: this.$t('common.dateStart'),
