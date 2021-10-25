@@ -21,12 +21,14 @@ export default {
         url: '/api/v1/assets/system-users/?type=common',
         columns: [
           'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
-          'assets_amount', 'priority',
+          'assets_amount', 'applications_amount', 'priority',
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'username', 'protocol', 'login_mode', 'assets_amount', 'comment', 'actions']
+          default: [
+            'name', 'username', 'protocol', 'login_mode', 'assets_amount', 'applications_amount', 'comment', 'actions'
+          ]
         },
         columnsMeta: {
           username: {
@@ -45,6 +47,9 @@ export default {
             width: '120px'
           },
           assets_amount: {
+            width: '80px'
+          },
+          applications_amount: {
             width: '80px'
           },
           actions: {
