@@ -71,11 +71,11 @@ export default {
       return [
         {
           key: this.$t('tickets.Asset'),
-          value: this.object.meta.apply_assets_display
+          value: this.object.meta.apply_assets_display.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.apply_system_users_display
+          value: this.object.meta.apply_system_users_display.join(', ')
         },
         {
           key: this.$t('assets.Action'),
@@ -108,11 +108,11 @@ export default {
         },
         {
           key: this.$t('assets.Asset'),
-          value: this.object.meta['apply_assets_display']
+          value: this.object.meta.apply_assets_display.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta['apply_system_users_display']
+          value: this.object.meta.apply_system_users_display.join(', ')
         },
         {
           key: this.$t('assets.Action'),
