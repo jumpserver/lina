@@ -35,6 +35,7 @@ export default {
     return {
       title: this.$t('common.Announcement'),
       visible: false,
+      enableField: 'ANNOUNCEMENT_ENABLED',
       config: {
         fields: [
           ['', ['ANNOUNCEMENT_ENABLED', 'ANNOUNCEMENT']]
