@@ -88,8 +88,19 @@ export default {
         },
         headerActions: {
           hasLeftActions: false,
+          hasColumnSetting: false,
           hasImport: false,
-          hasExport: false
+          hasExport: false,
+          searchConfig: {
+            exclude: ['id', 'asset', 'commandexecution'],
+            options: [
+              {
+                label: this.$t('audits.Hosts'),
+                value: 'asset_display'
+              }
+            ]
+          },
+          hasSearch: true
         }
       },
       headerActions: {
