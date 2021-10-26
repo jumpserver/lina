@@ -1,6 +1,6 @@
 <template>
   <IBox v-bind="$attrs">
-    <div class="ibox-heading">
+    <div v-if="contentHeading" class="ibox-heading">
       <slot name="content-heading">
         <h3 v-if="contentHeading.title"><i v-if="contentHeading.fa" :class="'fa ' + contentHeading.fa" /> {{ contentHeading.title }}</h3>
         <small v-if="contentHeading.content"><i class="fa fa-tim" /> {{ contentHeading.content }}</small>
@@ -18,7 +18,7 @@ export default {
   props: {
     contentHeading: {
       type: Object,
-      default: () => ({})
+      default: null
     }
   }
 }
