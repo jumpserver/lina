@@ -34,9 +34,6 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log('Ticket detail mounted', this.$route)
-  },
   methods: {
     getObjectName() {
       return this.ticket.title

@@ -28,8 +28,7 @@ export default {
         type_display: '',
         status: '',
         assignees_display: '',
-        date_created: '',
-        done: 0
+        date_created: ''
       },
       config: {
         activeMenu: 'TicketDetail',
