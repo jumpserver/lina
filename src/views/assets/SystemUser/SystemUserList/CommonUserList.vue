@@ -67,6 +67,9 @@ export default {
       headerActions: {
         hasCreate: false,
         createRoute: 'SystemUserCreate',
+        searchConfig: {
+          exclude: ['type']
+        },
         moreCreates: {
           callback: (option) => {
             vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.title.toLowerCase() }})
