@@ -167,7 +167,8 @@ export const allRoleRoutes = [
     children: TicketsRoutes,
     hidden: true,
     meta: {
-      licenseRequired: true
+      licenseRequired: true,
+      permissions: [rolec.PERM_AUDIT]
       // hidden: ({ settings }) => {
       //   return !settings.TICKETS_ENABLED
       // }

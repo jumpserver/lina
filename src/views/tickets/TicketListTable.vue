@@ -37,7 +37,7 @@ export default {
                 } else if (row.type === 'apply_application') {
                   return 'AppsTicketDetail'
                 } else if (row.type === 'login_asset_confirm') {
-                  return 'loginAssetTicketDetail'
+                  return 'LoginAssetTicketDetail'
                 } else if (row.type === 'command_confirm') {
                   return 'CommandConfirmDetail'
                 } else {
