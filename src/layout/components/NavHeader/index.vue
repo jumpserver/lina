@@ -61,8 +61,7 @@ export default {
     },
     showTickets() {
       return this.publicSettings.TICKETS_ENABLED &&
-        this.publicSettings.XPACK_LICENSE_IS_VALID &&
-        !this.isOrgAuditor
+        this.publicSettings['XPACK_LICENSE_IS_VALID']
     }
   },
   methods: {

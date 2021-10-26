@@ -105,7 +105,7 @@ export default [
       },
       {
         path: 'tickets/login-asset-confirm/:id',
-        name: 'loginAssetTicketDetail',
+        name: 'LoginAssetTicketDetail',
         component: () => import('@/views/tickets/LoginAssetConfirm/Detail/index'),
         meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [rolec.PERM_USE] },
         hidden: true
