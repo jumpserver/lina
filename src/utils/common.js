@@ -75,7 +75,7 @@ function cleanDateStr(d) {
 }
 
 export function toSafeLocalDateStr(d) {
-  if (d === '') {
+  if (d === '' || d === null) {
     return ''
   }
   const date = safeDate(d)
