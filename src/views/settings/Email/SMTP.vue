@@ -58,7 +58,19 @@ export default {
       submitMethod() {
         return 'patch'
       },
-      onConfirm() {}
+      onConfirm() {},
+      cleanFormValue(data) {
+        if (!data['EMAIL_HOST_PASSWORD']) {
+          delete data['EMAIL_HOST_PASSWORD']
+        }
+        if (data['EMAIL_USE_SSL'] === null) {
+          delete data['EMAIL_USE_SSL']
+        }
+        if (data['EMAIL_USE_TLS'] === null) {
+          delete data['EMAIL_USE_TLS']
+        }
+        return data
+      }
     }
   },
   methods: {
