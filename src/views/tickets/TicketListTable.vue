@@ -71,7 +71,7 @@ export default {
             }
           },
           {
-            prop: 'action',
+            prop: 'state',
             label: this.$t('tickets.action'),
             align: 'center',
             width: '90px',
