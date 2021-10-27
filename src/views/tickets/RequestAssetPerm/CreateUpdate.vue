@@ -7,6 +7,8 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
+import { SystemUserSelect2 } from '@/components/FormFields/default'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -32,8 +34,9 @@ export default {
         type: 'apply_asset'
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
-        [this.$t('tickets.RequestPerm'), ['meta']]
+        [this.$t('common.Basic'), ['title', 'type', 'org_id']],
+        [this.$t('tickets.RequestPerm'), ['meta']],
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         type: {
@@ -67,21 +70,7 @@ export default {
                 }
               }
             },
-            apply_system_users: {
-              type: 'systemUserSelect',
-              component: Select2,
-              label: '系统用户',
-              el: {
-                value: [],
-                ajax: {
-                  url: '',
-                  transformOption: (item) => {
-                    const username = item.username || '*'
-                    return { label: item.name + '(' + username + ')', value: item.id }
-                  }
-                }
-              }
-            }
+            apply_system_users: SystemUserSelect2
           }
         },
         org_id: {

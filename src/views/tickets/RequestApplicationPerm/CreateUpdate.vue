@@ -12,20 +12,19 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
+import { APP_CATEGORY_TYPE_OPTIONS } from '../const'
+import { SystemUserSelect2 } from '@/components/FormFields/default'
+
 export default {
   components: {
     GenericCreateUpdatePage
   },
-
   data() {
     const vm = this
     const now = new Date()
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
-    // eslint-disable-next-line no-unused-vars
-    var org_id = ''
-    // eslint-disable-next-line no-unused-vars
-    var apply_category_type = []
+    let apply_category_type = []
     return {
       hasDetailInMsg: false,
       loading: true,
@@ -41,8 +40,9 @@ export default {
 
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
-        [this.$t('tickets.RequestPerm'), ['meta']]
+        [this.$t('common.Basic'), ['title', 'type', 'org_id']],
+        [this.$t('tickets.RequestPerm'), ['meta']],
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         type: {
@@ -54,7 +54,8 @@ export default {
         meta: {
           fields: [
             'apply_category_type', 'apply_applications', 'apply_system_users',
-            'apply_date_start', 'apply_date_expired'],
+            'apply_date_start', 'apply_date_expired'
+          ],
           fieldsMeta: {
             apply_date_start: {
               label: this.$t('common.DateStart'),
@@ -64,9 +65,8 @@ export default {
               }
             },
             apply_applications: {
-              type: 'assetSelect',
               component: Select2,
-              label: this.$t('perms.Asset'),
+              label: this.$t('applications.App'),
               el: {
                 value: [],
                 ajax: {
@@ -77,24 +77,7 @@ export default {
                 }
               }
             },
-            apply_system_users: {
-              type: 'systemUserSelect',
-              component: Select2,
-              label: '系统用户',
-              el: {
-                value: [],
-                ajax: {
-                  url: '',
-                  transformOption: (item) => {
-                    if (this.$route.query.type === 'k8s') {
-                      return { label: item.name, value: item.id }
-                    }
-                    const username = item.username || '*'
-                    return { label: item.name + '(' + username + ')', value: item.id }
-                  }
-                }
-              }
-            },
+            apply_system_users: SystemUserSelect2,
             apply_date_expired: {
               label: this.$t('common.DateEnd'),
               type: 'date-picker',
@@ -108,61 +91,7 @@ export default {
               rules: [Required],
               el: {
                 multiple: false,
-                options: [
-                  {
-                    label: this.$t(`applications.applicationsCategory.db`),
-                    value: 'db',
-                    children: [
-                      {
-                        label: 'MySQL',
-                        value: 'mysql'
-                      },
-                      {
-                        label: 'Oracle',
-                        value: 'oracle'
-                      },
-                      {
-                        label: 'PostgreSQL',
-                        value: 'postgresql'
-                      },
-                      {
-                        label: 'MariaDB',
-                        value: 'mariadb'
-                      }
-                    ]
-                  },
-                  {
-                    label: this.$t(`applications.applicationsCategory.cloud`),
-                    value: 'cloud',
-                    children: [
-                      {
-                        label: 'Kubernetes',
-                        value: 'k8s'
-                      }
-                    ]
-                  },
-                  {
-                    label: this.$t(`applications.applicationsCategory.remote_app`),
-                    value: 'remote_app',
-                    children: [
-                      {
-                        label: 'MySQL Workbench',
-                        value: 'mysql_workbench'
-                      },
-                      {
-                        label: 'vSphere Client',
-                        value: 'vmware_client'
-                      },
-                      {
-                        label: 'Custom',
-                        value: 'custom'
-                      }, {
-                        label: 'Chrome',
-                        value: 'chrome'
-                      }
-                    ]
-                  }
-                ]
+                options: APP_CATEGORY_TYPE_OPTIONS
               },
               on: {
                 change: ([event], updateForm) => {
@@ -178,7 +107,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.user_all_orgs.map((item) => {
+            options: this.$store.state.users.profile['user_all_orgs'].map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -186,8 +115,17 @@ export default {
             this.org_id = form['org_id']
             apply_category_type = this.apply_category_type
             if (apply_category_type) {
-              this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
-              this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = apply_category_type[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=${apply_category_type[1]}`
+              const meta = this.fieldsMeta.meta.fieldsMeta
+              let appsUrl = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}`
+              appsUrl += `&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
+              let systemUserUrl = `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}`
+              if (apply_category_type[0] === 'remote_app') {
+                systemUserUrl += '&protocol=rdp'
+              } else {
+                systemUserUrl += `&protocol=${apply_category_type[1]}`
+              }
+              meta.apply_applications.el.ajax.url = appsUrl
+              meta.apply_system_users.el.ajax.url = systemUserUrl
             }
           }
         }
@@ -199,7 +137,7 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
+    if (this.$store.state.users.profile['user_all_orgs'].length > 0) {
       this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
     }
     this.loading = false

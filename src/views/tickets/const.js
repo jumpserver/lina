@@ -34,3 +34,59 @@ export const STATE_MAP = {
     type: 'warning', title: i18n.t('tickets.StateClosed')
   }
 }
+
+export const APP_CATEGORY_TYPE_OPTIONS = [
+  {
+    label: this.$t(`applications.applicationsCategory.db`),
+    value: 'db',
+    children: [
+      {
+        label: 'MySQL',
+        value: 'mysql'
+      },
+      {
+        label: 'Oracle',
+        value: 'oracle'
+      },
+      {
+        label: 'PostgreSQL',
+        value: 'postgresql'
+      },
+      {
+        label: 'MariaDB',
+        value: 'mariadb'
+      }
+    ]
+  },
+  {
+    label: this.$t(`applications.applicationsCategory.cloud`),
+    value: 'cloud',
+    children: [
+      {
+        label: 'Kubernetes',
+        value: 'k8s'
+      }
+    ]
+  },
+  {
+    label: this.$t(`applications.applicationsCategory.remote_app`),
+    value: 'remote_app',
+    children: [
+      {
+        label: 'MySQL Workbench',
+        value: 'mysql_workbench'
+      },
+      {
+        label: 'vSphere Client',
+        value: 'vmware_client'
+      },
+      {
+        label: 'Custom',
+        value: 'custom'
+      }, {
+        label: 'Chrome',
+        value: 'chrome'
+      }
+    ]
+  }
+]
