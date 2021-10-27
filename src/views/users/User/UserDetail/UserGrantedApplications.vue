@@ -31,7 +31,7 @@ export default {
             width: '140px'
           },
           asset: {
-            label: '资产',
+            label: this.$t('assets.Asset'),
             formatter(row) {
               return row.attrs.host || row.attrs.hostname
             }
