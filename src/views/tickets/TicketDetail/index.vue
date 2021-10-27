@@ -1,5 +1,11 @@
 <template>
-  <GenericDetailPage :object.sync="ticket" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    :object.sync="ticket"
+    :active-menu.sync="config.activeMenu"
+    v-bind="config"
+    @getObjectDone="afterGetTicket"
+    v-on="$listeners"
+  >
     <component :is="config.activeMenu" :object="ticket" />
   </GenericDetailPage>
 </template>
@@ -40,6 +46,21 @@ export default {
   methods: {
     getObjectName() {
       return this.ticket.title
+    },
+    afterGetTicket(ticket) {
+      const ticketRouteMapper = {
+        'apply_asset': 'AssetsTicketDetail',
+        'apply_application': 'AppsTicketDetail',
+        'login_confirm': 'LoginAssetTicketDetail',
+        'login_asset_confirm': 'CommandConfirmDetail'
+      }
+      const routeName = ticketRouteMapper[ticket.type]
+      setTimeout(() => {
+        this.$router.push({
+          name: routeName,
+          params: { id: this.$route.params['id'] }
+        })
+      })
     }
   }
 }

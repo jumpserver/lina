@@ -66,7 +66,7 @@ export default {
             apply_applications: {
               type: 'assetSelect',
               component: Select2,
-              label: this.$t('perms.Asset'),
+              label: this.$t('applications.App'),
               el: {
                 value: [],
                 ajax: {
@@ -80,7 +80,7 @@ export default {
             apply_system_users: {
               type: 'systemUserSelect',
               component: Select2,
-              label: '系统用户',
+              label: this.$t('assets.SystemUser'),
               el: {
                 value: [],
                 ajax: {

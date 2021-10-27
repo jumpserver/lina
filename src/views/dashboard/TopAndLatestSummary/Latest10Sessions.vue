@@ -1,5 +1,5 @@
 <template>
-  <HeadingIBox :title="title" :content-heading="contentHeading">
+  <HeadingIBox :title="title">
     <div v-if="dates_login_record_top10_sessions.length > 0" class="feed-activity-list">
       <div v-for="(item, index ) of dates_login_record_top10_sessions" :key="item.user + index" class="feed-element">
         <a href="#" class="pull-left">
@@ -26,10 +26,6 @@ export default {
     return {
       title: this.$t('dashboard.LatestSessions10'),
       avatarUrl: require('@/assets/img/admin.png'),
-      contentHeading: {
-        title: this.$t('dashboard.LatestTop10'),
-        content: this.$t('dashboard.LatestSessions')
-      },
       dates_login_record_top10_sessions: []
     }
   },

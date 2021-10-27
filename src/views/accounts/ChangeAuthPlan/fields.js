@@ -183,21 +183,13 @@ function getFields() {
     type: 'switch'
   }
 
-  // const crontab = {
-  //   label: i18n.t('xpack.RegularlyPerform'),
-  //   hidden: (formValue) => {
-  //     return formValue.is_periodic === false
-  //   },
-  //   helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
-  // }
-
   const crontab = {
     type: 'cronTab',
     component: CronTab,
-    rules: [
-      { required: false }
-    ],
     label: i18n.t('xpack.RegularlyPerform'),
+    hidden: (formValue) => {
+      return formValue.is_periodic === false
+    },
     helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
   }
 

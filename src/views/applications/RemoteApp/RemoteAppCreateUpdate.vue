@@ -30,7 +30,12 @@ export default {
       ],
       fieldsMeta: {
         type: {
-          readonly: true
+          type: 'select',
+          options: [{
+            label: appType,
+            value: appType
+          }],
+          disabled: true
         },
         attrs: {
           fields: fieldsMap,

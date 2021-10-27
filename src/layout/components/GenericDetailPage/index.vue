@@ -186,6 +186,7 @@ export default {
       const url = this.validActions.detailApiUrl
       return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
+        this.$emit('getObjectDone', data)
       }).catch(error => {
         if (error.response && error.response.status === 404) {
           const msg = this.$t('common.ObjectNotFoundOrDeletedMsg')
