@@ -441,6 +441,7 @@
       "Saturday": "星期六",
       "Sunday": "星期天",
       "ClearSelection": "清空选择",
+      "SelectAll": "全选",
       "CanDragSelect": "可拖动鼠标选择时间段",
       "WeekOrTime": "星期/时间"
     },
