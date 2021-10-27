@@ -19,7 +19,7 @@ export default [
       {
         path: 'request-asset-perm/create',
         name: 'RequestAssetPermTicketCreateUpdate',
-        component: () => import('@/views/tickets/RequestAssetPerm/RequestAssetPermTicketCreateUpdate'),
+        component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
         meta: { title: i18n.t('route.TicketCreate'), activeMenu: '/tickets/tickets', permissions: [rolec.PERM_AUDIT] },
         hidden: true
       },
@@ -40,7 +40,7 @@ export default [
       {
         path: 'request-application-perm/create',
         name: 'RequestApplicationPermTicketCreateUpdate',
-        component: () => import('@/views/tickets/RequestApplicationPerm/RequestApplicationPermTicketCreateUpdate'),
+        component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),
         meta: { title: i18n.t('route.TicketCreate'), activeMenu: '/tickets/tickets', permissions: [rolec.PERM_AUDIT] },
         hidden: true
       },
