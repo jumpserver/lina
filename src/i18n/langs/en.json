@@ -464,6 +464,7 @@
       "Saturday": "Saturday",
       "Sunday": "Sunday",
       "ClearSelection": "Clear selection",
+      "SelectAll": "Select all",
       "CanDragSelect": "Can drag the mouse to select a time period",
       "WeekOrTime": "Week/Time"
     }
