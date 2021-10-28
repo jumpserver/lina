@@ -26,6 +26,10 @@ export default {
       if (e.target.files.length === 0) {
         return
       }
+      const file_name = e.target.files[0].name
+      if (file_name.substr(-5) !== '.json') {
+        return
+      }
       const vm = this
       const reader = new FileReader()
       reader.onload = function() {
