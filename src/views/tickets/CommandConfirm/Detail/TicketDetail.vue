@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -45,14 +45,6 @@ export default {
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
-        },
-        {
-          key: this.$t('tickets.Assignees'),
-          value: this.object.assignees_display
-        },
-        {
-          key: this.$t('tickets.Assignee'),
-          value: this.object.processor_display
         },
         {
           key: this.$t('common.dateCreated'),
