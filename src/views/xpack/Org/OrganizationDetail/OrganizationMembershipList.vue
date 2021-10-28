@@ -55,13 +55,14 @@ export default {
             label: this.$t('common.Name')
           },
           role_display: {
-            label: this.$t('xpack.Organization.OrgRole')
+            label: this.$t('xpack.Organization.OrgRole'),
+            width: 150
           },
           delete_action: {
             prop: 'id',
             label: this.$t('common.Actions'),
             align: 'center',
-            width: 150,
+            width: 80,
             objects: 'all',
             formatter: DeleteActionFormatter,
             hasBackSlash: true,
@@ -73,15 +74,9 @@ export default {
         }
       },
       headerActions: {
-        hasSearch: true,
-        hasRefresh: true,
-        hasLeftActions: true,
-        hasRightActions: true,
+        hasLeftActions: false,
         hasExport: false,
-        hasImport: false,
-        hasCreate: false,
-        hasBulkDelete: false,
-        hasBulkUpdate: false
+        hasImport: false
       },
       memberRelationConfig: {
         icon: 'fa-user',

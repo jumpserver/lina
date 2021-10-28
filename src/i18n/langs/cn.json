@@ -151,7 +151,7 @@
     "LoginModeHelpMessage": "如果选择手动登录模式，用户名和密码可以不填写",
     "LoginModel": "登录模式",
     "Memory": "内存",
-    "Meta": "源数据",
+    "Meta": "元数据",
     "Model": "型号",
     "Name": "名称",
     "NoInputCommand": "未输入命令",
@@ -435,7 +435,7 @@
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",
-      "Wednesday": "星期三", 
+      "Wednesday": "星期三",
       "Thursday": "星期四",
       "Friday": "星期五",
       "Saturday": "星期六",
