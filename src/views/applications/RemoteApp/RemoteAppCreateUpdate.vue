@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { REMOTE_APP_TYPE_FIELDS_MAP, REMOTE_APP_TYPE_META_MAP, REMOTE_APP_PATH_DEFAULT_MAP } from './const'
+import rules from '@/components/DataForm/rules'
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
           fields: fieldsMap,
           fieldsMeta: {
             asset: {
-              rules: [{ required: true }],
+              rules: [rules.Required],
               el: {
                 multiple: false,
                 ajax: {
