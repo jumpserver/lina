@@ -157,3 +157,7 @@ input[type=file] {
 .el-table__column-filter-trigger i {
   color: #888888 !important;
 }
+
+.el-tooltip__popper.is-dark {
+  max-width: 60% !important;
+}
