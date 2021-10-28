@@ -34,7 +34,8 @@ export default {
         meta: {
           apply_date_expired: date_expired,
           apply_date_start: date_start,
-          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
+          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
+          apply_category_type: ['db', 'mysql']
         },
         org_id: '',
         type: 'apply_application'
@@ -206,8 +207,9 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      validValues.meta.apply_category = validValues.meta.apply_category_type[0]
-      validValues.meta.apply_type = validValues.meta.apply_category_type[1]
+      const applyCategoryType = validValues.meta.apply_category_type
+      validValues.meta.apply_category = applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[0] : ''
+      validValues.meta.apply_type = applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[1] : ''
       delete validValues.meta['apply_category_type']
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }
