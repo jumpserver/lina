@@ -1,4 +1,5 @@
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty'
 export default [
   {
     path: 'users',
@@ -53,5 +54,33 @@ export default [
     name: 'UserGroupDetail',
     hidden: true,
     meta: { title: i18n.t('route.UserGroupDetail'), activeMenu: '/users/groups' }
+  },
+  {
+    path: 'user-login-acl',
+    component: empty,
+    redirect: '',
+    children: [
+      {
+        path: 'create',
+        name: 'UserLoginACLCreate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLCreate'), activeMenu: '/users/users' },
+        hidden: true
+      },
+      {
+        path: ':id',
+        name: 'UserLoginACLDetail',
+        component: () => import('@/views/acl/UserLoginACL/UserDetail'),
+        meta: { title: i18n.t('route.UserLoginACL'), activeMenu: '/users/users' },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        name: 'UserLoginACLUpdate',
+        component: () => import('@/views/acl/UserLoginACL/UserLoginACLCreateUpdate'),
+        meta: { title: i18n.t('route.UserLoginACLUpdate'), activeMenu: '/users/users' },
+        hidden: true
+      }
+    ]
   }
 ]
