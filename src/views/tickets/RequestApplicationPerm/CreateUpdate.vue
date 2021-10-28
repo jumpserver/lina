@@ -34,8 +34,7 @@ export default {
         meta: {
           apply_date_expired: date_expired,
           apply_date_start: date_start,
-          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
-          apply_category_type: ['db', 'mysql']
+          apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file']
         },
         org_id: '',
         type: 'apply_application'
