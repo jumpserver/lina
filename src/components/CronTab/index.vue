@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box">
-      <el-input v-model="input" placeholder @focus="showDialog" />
+      <el-input v-model="input" clearable @focus="showDialog" @clear="onClear" />
     </div>
     <el-dialog :title="this.$t('common.CronTab.newCron')" :visible.sync="showCron" top="8vh" width="580px" append-to-body>
       <Crontab
@@ -39,6 +39,10 @@ export default {
     showDialog() {
       this.expression = this.input
       this.showCron = true
+    },
+    onClear() {
+      this.input = ''
+      this.$emit('change', '')
     }
   }
 }
