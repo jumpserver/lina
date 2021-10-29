@@ -195,9 +195,6 @@ export default {
     }
   },
   computed: {
-    loginConfirmEnabled() {
-      return this.$store.getters.publicSettings.LOGIN_CONFIRM_ENABLE
-    },
     detailItems() {
       return [
         {

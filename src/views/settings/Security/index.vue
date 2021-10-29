@@ -99,26 +99,13 @@ export default {
             }
           }
         },
-        LOGIN_CONFIRM_ENABLE: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
-        },
-        SECURITY_WATERMARK_ENABLED: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
-        },
         PasswordRule: {
           label: this.$t('setting.PasswordCheckRule'),
           component: PasswordRule
         },
         AuthLimit: {
           label: this.$t('setting.AuthLimit'),
-          component: AuthLimit,
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
+          component: AuthLimit
         }
       },
       url: '/api/v1/settings/setting/?category=security'

@@ -39,17 +39,12 @@ export default {
     return {
       visible: false,
       fields: [
-        'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME', 'LOGIN_CONFIRM_ENABLE',
+        'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
         'USER_LOGIN_SINGLE_MACHINE_ENABLED', 'ONLY_ALLOW_EXIST_USER_AUTH',
         'ONLY_ALLOW_AUTH_FROM_SOURCE'
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
-        LOGIN_CONFIRM_ENABLE: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
-        }
       },
       url: '/api/v1/settings/setting/?category=security'
     }
