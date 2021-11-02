@@ -10,6 +10,8 @@
 
 <script>
 import BaseAuth from './Base'
+import { UpdateToken } from '@/components/FormFields'
+
 export default {
   name: 'Cas',
   components: {
@@ -29,6 +31,11 @@ export default {
           [this.$t('common.Basic'), ['AUTH_RADIUS', 'RADIUS_SERVER', 'RADIUS_PORT', 'RADIUS_SECRET']],
           [this.$t('common.Other'), ['OTP_IN_RADIUS']]
         ],
+        fieldsMeta: {
+          RADIUS_SECRET: {
+            component: UpdateToken
+          }
+        },
         submitMethod: () => 'patch'
       }
     }

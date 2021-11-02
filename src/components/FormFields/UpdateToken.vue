@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button v-show="!isShow" type="text" @click="isShow=true">{{ text }}</el-button>
+    <el-button v-show="!isShow" class="btn" type="text" @click="isShow=true">{{ text }}</el-button>
     <el-input v-show="isShow" v-model="curValue" :type="type" :placeholder="placeholder" show-password @change="onChange" />
   </div>
 </template>
@@ -42,4 +42,7 @@ export default {
 </script>
 
 <style scoped>
+  .btn {
+    color: #409eff;
+  }
 </style>
