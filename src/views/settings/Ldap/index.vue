@@ -54,10 +54,7 @@ export default {
           ]
         },
         AUTH_LDAP_BIND_PASSWORD: {
-          component: UpdateToken,
-          el: {
-            // text: '更新'
-          }
+          component: UpdateToken
         },
         AUTH_LDAP_SEARCH_OU: {
           rules: [

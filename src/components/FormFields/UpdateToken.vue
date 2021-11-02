@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button v-show="!isShow" type="text" @click="isShow=true">{{ text }}</el-button>
+    <el-button v-show="!isShow" type="primary" size="small" @click="isShow=true">{{ text }}</el-button>
     <el-input v-show="isShow" v-model="curValue" :type="type" :placeholder="placeholder" show-password @change="onChange" />
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
     text: {
       type: String,
       default() {
-        return this.$t('common.Revise')
+        return this.$t('common.Update')
       }
     },
     placeholder: {
