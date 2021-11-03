@@ -31,7 +31,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
-        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'update_password', 'password', 'private_key']],
+        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'private_key']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
@@ -54,7 +54,6 @@ export default {
           helpText: this.$t('assets.SudoHelpMessage'),
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
         },
-        update_password: fields.update_password,
         password: fields.password,
         shell: {
           hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
