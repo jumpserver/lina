@@ -26,7 +26,7 @@
             <el-input v-model="authInfo.password" type="password" show-password />
           </el-form-item>
           <el-form-item :label="this.$t('assets.SSHKey')">
-            <el-input v-model="authInfo['private_key']" type="password" show-password />
+            <el-input v-model="authInfo['private_key']" class="item-textarea" type="textarea" show-password />
           </el-form-item>
         </el-form>
       </div>
@@ -79,5 +79,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .item-textarea >>> .el-textarea__inner {
+    height: 110px;
+  }
 </style>
