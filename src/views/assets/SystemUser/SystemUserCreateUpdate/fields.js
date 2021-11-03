@@ -1,5 +1,6 @@
 import { Required } from '@/components/DataForm/rules'
 import { Select2, UploadKey } from '@/components'
+import { UpdateToken } from '@/components/FormFields'
 
 function getFields() {
   const login_mode = {
@@ -150,6 +151,7 @@ function getFields() {
 
   const password = {
     helpText: this.$t('assets.PasswordHelpMessage'),
+    component: UpdateToken,
     hidden: form => {
       if (form.login_mode !== 'auto' || form.auto_generate_key) {
         return true
@@ -157,7 +159,6 @@ function getFields() {
       if (!this.$route.params.id) {
         return false
       }
-      return !form.update_password
     }
   }
 
