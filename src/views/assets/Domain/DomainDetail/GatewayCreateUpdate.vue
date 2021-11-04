@@ -5,6 +5,8 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { Select2, UploadKey } from '@/components'
+import { UpdateToken } from '@/components/FormFields'
+
 export default {
   name: 'GatewayCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -18,7 +20,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
-        [this.$t('assets.Auth'), ['username', 'update_password', 'password', 'private_key']],
+        [this.$t('assets.Auth'), ['username', 'password', 'private_key']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
@@ -41,23 +43,8 @@ export default {
         protocol: {
           helpText: this.$t('assets.GatewayProtocolHelpText')
         },
-        update_password: {
-          label: this.$t('users.UpdatePassword'),
-          type: 'checkbox',
-          hidden: (formValue) => {
-            if (formValue.update_password) {
-              return true
-            }
-            return !this.$route.params.id
-          }
-        },
         password: {
-          hidden: (formValue) => {
-            if (!this.$route.params.id) {
-              return false
-            }
-            return !formValue.update_password
-          }
+          component: UpdateToken
         },
         is_active: {
           type: 'switch'
@@ -93,7 +80,7 @@ export default {
         return route
       },
       cleanFormValue(values) {
-        if (this.$route.params.id && !values.update_password) {
+        if (this.$route.params.id && !values.password) {
           delete values['password']
         }
         return values

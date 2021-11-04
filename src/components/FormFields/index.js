@@ -7,6 +7,7 @@ import UploadField from './UploadField'
 import UploadKey from './UploadKey'
 import UserPassword from './UserPassword'
 import WeekCronSelect from './WeekCronSelect'
+import UpdateToken from './UpdateToken'
 import DynamicInputField from './DynamicInputField'
 
 export default {
@@ -19,6 +20,7 @@ export default {
   UploadField,
   UserPassword,
   WeekCronSelect,
+  UpdateToken,
   DynamicInputField
 }
 
@@ -32,5 +34,6 @@ export {
   UploadField,
   UserPassword,
   WeekCronSelect,
+  UpdateToken,
   DynamicInputField
 }
