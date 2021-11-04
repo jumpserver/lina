@@ -1,7 +1,17 @@
 <template>
   <div>
-    <el-button v-show="!isShow" type="text" icon="el-icon-edit" @click="isShow=true">{{ text }}</el-button>
-    <el-input v-show="isShow" v-model="curValue" :type="type" :placeholder="placeholder" show-password @change="onChange" />
+    <el-button v-show="!isShow" type="text" icon="el-icon-edit" @click="isShow=true">
+      {{ text }}
+    </el-button>
+    <el-input
+      v-show="isShow"
+      v-model.trim="curValue"
+      show-password
+      :type="type"
+      autocomplete="new-password"
+      :placeholder="placeholder"
+      @change="onChange"
+    />
   </div>
 </template>
 
@@ -31,6 +41,11 @@ export default {
     return {
       isShow: false,
       curValue: this.value
+    }
+  },
+  created() {
+    if (this.$route.path.indexOf('/create') !== -1) {
+      this.isShow = true
     }
   },
   methods: {
