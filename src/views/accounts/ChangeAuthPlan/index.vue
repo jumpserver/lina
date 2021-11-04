@@ -10,12 +10,14 @@
 import { TabPage } from '@/layout/components'
 import AssetChangeAuthPlanList from './AssetChangeAuthPlan/ChangeAuthPlanList'
 import AppChangeAuthPlanList from './AppChangeAuthPlan/AppChangeAuthPlanList'
+import CustomCommandList from './CustomChangeAuthCommand/CustomCommandList'
 export default {
   name: 'Index',
   components: {
     TabPage,
     AssetChangeAuthPlanList,
-    AppChangeAuthPlanList
+    AppChangeAuthPlanList,
+    CustomCommandList
   },
   data() {
     return {
@@ -29,6 +31,10 @@ export default {
           {
             title: this.$t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
             name: 'AppChangeAuthPlanList'
+          },
+          {
+            title: this.$t('xpack.ChangeAuthPlan.CustomCommand'),
+            name: 'CustomCommandList'
           }
         ]
       }

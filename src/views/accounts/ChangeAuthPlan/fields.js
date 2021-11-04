@@ -145,7 +145,8 @@ function getFields() {
   }
 
   const is_ssh_key = {
-    type: 'switch'
+    type: 'switch',
+    helpText: this.$t('xpack.ChangeAuthPlan.IsSSHKeyHelpText')
   }
 
   const password_strategy = {

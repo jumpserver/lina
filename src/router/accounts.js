@@ -159,6 +159,27 @@ export default [
         name: 'AppChangeAuthPlanExecutionDetail',
         meta: { title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'), activeMenu: '/accounts/change-auth-plan' },
         hidden: true
+      },
+      {
+        path: 'custom-command',
+        component: () => import('@/views/accounts/ChangeAuthPlan/CustomChangeAuthCommand/CustomCommandList.vue'),
+        name: 'CustomAuthCommandList',
+        hidden: true,
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.CustomCommand'), activeMenu: '/accounts/change-auth-plan/plan' }
+      },
+      {
+        path: 'custom-command/create',
+        component: () => import('@/views/accounts/ChangeAuthPlan/CustomChangeAuthCommand/CustomCommandCreateUpdate.vue'),
+        name: 'CustomAuthCommandCreate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.CustomCommandCreate'), activeMenu: '/accounts/change-auth-plan/plan', action: 'create' },
+        hidden: true
+      },
+      {
+        path: 'custom-command/:id',
+        component: () => import('@/views/accounts/ChangeAuthPlan/CustomChangeAuthCommand/CustomCommandCreateUpdate.vue'),
+        name: 'CustomAuthCommandUpdate',
+        meta: { title: i18n.t('xpack.ChangeAuthPlan.CustomCommandUpdate'), activeMenu: '/accounts/change-auth-plan/plan', action: 'update' },
+        hidden: true
       }
     ]
   }
