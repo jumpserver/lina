@@ -167,6 +167,10 @@ export default {
               on: {
                 change: ([event], updateForm) => {
                   this.apply_category_type = event
+                  updateForm({
+                    apply_applications: [],
+                    apply_system_users: []
+                  })
                   this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
                   this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`
                 }
