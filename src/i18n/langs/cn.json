@@ -157,7 +157,7 @@
     "NoInputCommand": "未输入命令",
     "NoSystemUserWasSelected": "未选择系统用户",
     "Node": "节点",
-    "SwitchUser": "切换用户",
+    "UserSwitch": "用户切换",
     "SwitchToUser": "Su 用户",
     "SwitchToUserListTips": "通过以下用户连接资产时，会使用当前系统用户登录再进行切换。",
     "NodeInformation": "节点信息",
