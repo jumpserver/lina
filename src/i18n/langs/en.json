@@ -155,7 +155,7 @@
     "NoInputCommand": "No input command",
     "NoSystemUserWasSelected": "No system user was selected",
     "Node": "Node",
-    "SwitchUser": "Switch user",
+    "UserSwitch": "User switch",
     "SwitchToUser": "Switch to user",
     "SwitchToUserListTips": "When the following users are used to connect to assets, the current system user is used to log in and then switch.",
     "NodeInformation": "Node information",
