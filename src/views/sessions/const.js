@@ -5,6 +5,7 @@ export const CEPH = 'ceph'
 export const SWIFT = 'swift'
 export const OSS = 'oss'
 export const AZURE = 'azure'
+export const OBS = 'obs'
 
 export const STORAGE_TYPE_META_MAP = {
   [S3]: {
@@ -33,5 +34,10 @@ export const STORAGE_TYPE_META_MAP = {
     name: AZURE,
     title: 'Azure',
     meta: ['CONTAINER_NAME', 'ACCOUNT_NAME', 'ACCOUNT_KEY', 'ENDPOINT_SUFFIX']
+  },
+  [OBS]: {
+    name: OBS,
+    title: 'OBS',
+    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
   }
 }
