@@ -155,6 +155,8 @@
     "NoInputCommand": "No input command",
     "NoSystemUserWasSelected": "No system user was selected",
     "Node": "Node",
+    "SwitchUser": "Switch user",
+    "SwitchToUserList": "Switch to user",
     "NodeInformation": "Node information",
     "OnlyLatestVersion": "Only latest version",
     "Os": "Os",
@@ -459,7 +461,7 @@
     "WeekCronSelect": {
       "Monday": "Monday",
       "Tuesday": "Tuesday",
-      "Wednesday": "Wednesday", 
+      "Wednesday": "Wednesday",
       "Thursday": "Thursday",
       "Friday": "Friday",
       "Saturday": "Saturday",

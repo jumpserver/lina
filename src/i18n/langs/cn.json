@@ -157,6 +157,8 @@
     "NoInputCommand": "未输入命令",
     "NoSystemUserWasSelected": "未选择系统用户",
     "Node": "节点",
+    "SwitchUser": "切换用户",
+    "SwitchToUserList": "切换至用户",
     "NodeInformation": "节点信息",
     "OnlyLatestVersion": "仅最新版本",
     "Os": "操作系统",
