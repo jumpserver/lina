@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-alert type="info">
+      <b>{{ Tips.title }}</b>: <span>{{ Tips.body }}</span>
+    </el-alert>
     <el-row :gutter="20">
       <el-col :span="20">
         <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
@@ -25,6 +28,10 @@ export default {
   },
   data() {
     return {
+      Tips: {
+        title: this.$t('common.Info'),
+        body: this.$t('assets.SwitchToUserListTips')
+      },
       tableConfig: {
         url: `/api/v1/assets/system-users/${this.object.id}/su-to/`,
         columns: [

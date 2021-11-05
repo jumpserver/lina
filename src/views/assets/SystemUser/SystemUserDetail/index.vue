@@ -66,7 +66,7 @@ export default {
             }
           },
           {
-            title: this.$t('assets.SwitchToUserList'),
+            title: this.$t('assets.SwitchToUser'),
             name: 'SwitchToUserList',
             hidden: () => {
               return vm.systemUser['protocol'] !== 'ssh'
