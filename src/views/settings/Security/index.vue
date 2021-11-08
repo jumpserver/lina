@@ -45,6 +45,7 @@ export default {
             'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
             'SECURITY_MFA_VERIFY_TTL',
+            'SECURITY_CHECK_DIFFERENT_CITY_LOGIN',
             'AuthLimit',
             'PasswordRule'
           ]
