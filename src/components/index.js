@@ -28,3 +28,5 @@ export { default as AssetRelationCard } from './AssetRelationCard'
 export { default as MFAVerifyDialog } from './MFAVerifyDialog'
 export { default as Announcement } from './Announcement'
 export { default as CronTab } from './CronTab'
+export { default as SelectAttrsRule } from './SelectAttrsRule'
+

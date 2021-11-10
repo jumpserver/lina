@@ -4,6 +4,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import { SelectAttrsRule } from '@/components'
+
 export default {
   name: 'AclCreateUpdate',
   components: {
@@ -35,8 +37,29 @@ export default {
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        // assets: {
+        //   fields: ['hostname_group', 'ip_group']
+        // },
         assets: {
-          fields: ['hostname_group', 'ip_group']
+          component: SelectAttrsRule,
+          el: {
+            assetsChoice: [
+              '全部用户',
+              '用户/用户组',
+              '指定规则'
+            ],
+            assets: {
+              multiple: false,
+              ajax: {
+                url: '/api/v1/assets/platforms/',
+                transformOption: (item) => {
+                  return { label: `${item.name}`, value: item.name }
+                }
+              }
+            },
+            assetsMatch: {
+            }
+          }
         },
         users: {
           fields: ['username_group'],
