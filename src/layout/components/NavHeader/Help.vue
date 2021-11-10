@@ -6,7 +6,7 @@
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="docs">{{ $t('common.nav.Docs') }}</el-dropdown-item>
       <el-dropdown-item command="support">{{ $t('common.nav.Support') }}</el-dropdown-item>
-      <el-dropdown-item v-if="!hasLicence" command="EnterpriseEdition">{{ $t('common.nav.EnterpriseEdition') }}</el-dropdown-item>
+      <el-dropdown-item v-if="!hasLicence" command="enterprise">{{ $t('common.nav.EnterpriseEdition') }}</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -43,7 +43,7 @@ export default {
         case 'support':
           window.open(this.URLSite.HELP_SUPPORT_URL, '_blank')
           break
-        case 'EnterpriseEdition':
+        case 'enterprise':
           window.open('https://jumpserver.org/enterprise.html', '_blank')
           break
         default:
