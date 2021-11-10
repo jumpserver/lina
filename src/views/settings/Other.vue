@@ -62,11 +62,6 @@ export default {
           label: this.$t('xpack.helpSupport'),
           helpText: this.$t('xpack.helpSupportTip'),
           hidden: () => !this.hasValidLicense()
-        },
-        OFFICIAL_WEBSITE_URL: {
-          label: this.$t('xpack.officialWebsite'),
-          helpText: this.$t('xpack.officialWebsiteTip'),
-          hidden: () => !this.hasValidLicense()
         }
       },
       submitMethod() {
@@ -78,7 +73,7 @@ export default {
     if (this.hasValidLicense()) {
       this.fields.push([
         this.$t('xpack.NavHelp'), [
-          'HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL', 'OFFICIAL_WEBSITE_URL'
+          'HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL'
         ]
       ])
     }
