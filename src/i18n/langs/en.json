@@ -1176,6 +1176,13 @@
     "SMS": "SMS"
   },
   "xpack": {
+    "NavHelp": "Navigation (Help)",
+    "helpDocument": "Help (Docs)",
+    "helpSupport": "Help (Support)",
+    "officialWebsite": "Help (Website)",
+    "helpDocumentTip": "You can change the URL of the site navigation bar help -> Docs",
+    "helpSupportTip": "You can change the URL of the site navigation bar help -> Support",
+    "officialWebsiteTip": "You can change the URL of the site navigation bar help -> Website",
     "Admin": "Admin",
     "Asset": "Asset",
     "Database": "Database",
