@@ -1215,6 +1215,13 @@
     "SMS": "短信"
   },
   "xpack": {
+    "NavHelp": "导航栏 (帮助)",
+    "helpDocument": "帮助 (文档)",
+    "helpSupport": "帮助 (支持)",
+    "officialWebsite": "帮助 (官网)",
+    "helpDocumentTip": "可以更改网站导航栏 帮助 -> 文档 的网址",
+    "helpSupportTip": "可以更改网站导航栏 帮助 -> 支持 的网址",
+    "officialWebsiteTip": "可以更改网站导航栏 帮助 -> 官网 的网址",
     "Admin": "管理员",
     "Asset": "资产",
     "Database": "数据库",
