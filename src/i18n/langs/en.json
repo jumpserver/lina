@@ -233,6 +233,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Setting": "Setting",
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
@@ -459,7 +460,7 @@
     "WeekCronSelect": {
       "Monday": "Monday",
       "Tuesday": "Tuesday",
-      "Wednesday": "Wednesday", 
+      "Wednesday": "Wednesday",
       "Thursday": "Thursday",
       "Friday": "Friday",
       "Saturday": "Saturday",
