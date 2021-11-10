@@ -41,52 +41,68 @@ export default {
         },
         vendor: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         model: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
+          }
+        },
+        number: {
+          el: {
+            type: `input`,
+            disabled: true
           }
         },
         cpu_model: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         memory: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         disk_info: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         disk_total: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         sn: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         os: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         os_version: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         },
         os_arch: {
           el: {
-            type: `input`
+            type: `input`,
+            disabled: true
           }
         }
       },
