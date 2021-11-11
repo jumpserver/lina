@@ -6,6 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { REMOTE_APP_TYPE_FIELDS_MAP, REMOTE_APP_TYPE_META_MAP, REMOTE_APP_PATH_DEFAULT_MAP } from './const'
 import rules from '@/components/DataForm/rules'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   components: {
@@ -52,6 +53,9 @@ export default {
                   }
                 }
               }
+            },
+            [`${appType === 'vmware_client' ? 'vmware' : appType}_password`]: {
+              component: UpdateToken
             }
           }
         }
