@@ -1,6 +1,5 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
-import rolec from '@/utils/role'
 
 import SessionRoutes from './sessions'
 import LogRoutes from './logs'
@@ -16,13 +15,17 @@ export default {
     view: 'audit'
   },
   children: [
-    // 404 page must be placed at the end !!!
     {
       path: '/audit/sessions',
       component: empty,
       name: 'Sessions',
       redirect: '/audit/sessions/sessions',
-      meta: { title: i18n.t('route.Sessions'), icon: 'rocket', permissions: [rolec.PERM_AUDIT] },
+      alwaysShow: true,
+      meta: {
+        title: i18n.t('route.SessionsAudit'),
+        icon: 'rocket',
+        permissions: []
+      },
       children: SessionRoutes
     },
     {
@@ -30,7 +33,10 @@ export default {
       component: empty,
       redirect: '',
       name: 'Audits',
-      meta: { title: i18n.t('route.Audits'), icon: 'history', permissions: [rolec.PERM_AUDIT] },
+      meta: {
+        title: i18n.t('route.LogsAudit'),
+        icon: 'history'
+      },
       children: LogRoutes
     }
   ]

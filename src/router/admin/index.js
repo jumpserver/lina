@@ -31,7 +31,8 @@ export default {
       component: () => import('@/views/dashboard/index'),
       meta: {
         title: i18n.t('route.Dashboard'),
-        icon: 'dashboard'
+        icon: 'dashboard',
+        permissions: ['rbac.view_adminview']
       }
     },
     {

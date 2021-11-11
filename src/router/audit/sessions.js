@@ -1,18 +1,17 @@
 import i18n from '@/i18n/i18n'
-import rolec from '@/utils/role'
 
 export default [
   {
     path: 'sessions',
     name: 'SessionList',
     component: () => import('@/views/sessions/SessionList'),
-    meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] },
+    meta: { title: i18n.t('route.Sessions'), permissions: ['terminal.view_session'] },
     children: [
       {
         path: '',
         name: 'SessionList',
         component: () => import('@/views/sessions/SessionList'),
-        meta: { title: i18n.t('route.Sessions') }
+        meta: { title: i18n.t('route.SessionList') }
       },
       {
         path: ':id',
@@ -26,6 +25,9 @@ export default [
     path: 'command',
     name: 'CommandList',
     component: () => import('@/views/sessions/CommandList'),
-    meta: { title: i18n.t('route.Commands'), permissions: [rolec.PERM_AUDIT] }
+    meta: {
+      title: i18n.t('route.Commands'),
+      permissions: ['terminal.view_command']
+    }
   }
 ]
