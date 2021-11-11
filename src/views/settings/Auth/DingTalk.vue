@@ -10,6 +10,7 @@
 
 <script>
 import BaseAuth from './Base'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'DingTalk',
@@ -52,6 +53,9 @@ export default {
           ]
         ],
         fieldsMeta: {
+          DINGTALK_APPSECRET: {
+            component: UpdateToken
+          }
         },
         hasDetailInMsg: false,
         submitMethod() {

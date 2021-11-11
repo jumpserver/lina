@@ -50,12 +50,24 @@ export default {
           actions: {
             formatterArgs: {
               onUpdate: ({ row, col, cellValue }) => {
-                this.$router.push({ name: 'ApplicationPermissionUpdate', params: { id: row.id }})
+                const route = {
+                  name: 'ApplicationPermissionUpdate',
+                  params: { id: row.id },
+                  query: { type: row.type, category: row.category }
+                }
+                this.$router.push(route)
               },
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/perms/application-permissions/${id}/?user_id=${this.object.id}&draw=1`
                 return this.$axios.delete(url)
+              },
+              onClone: ({ row }) => {
+                const route = {
+                  name: 'ApplicationPermissionCreate',
+                  query: { type: row.type, category: row.category, clone_from: row.id }
+                }
+                this.$router.push(route)
               }
             }
           }

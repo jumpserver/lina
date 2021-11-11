@@ -6,7 +6,7 @@
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="docs">{{ $t('common.nav.Docs') }}</el-dropdown-item>
       <el-dropdown-item command="support">{{ $t('common.nav.Support') }}</el-dropdown-item>
-      <el-dropdown-item command="EnterpriseEdition">{{ $t('common.nav.EnterpriseEdition') }}</el-dropdown-item>
+      <el-dropdown-item v-if="!hasLicence" command="enterprise">{{ $t('common.nav.EnterpriseEdition') }}</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -14,17 +14,40 @@
 <script>
 export default {
   name: 'Help',
+  data() {
+    return {
+      URLSite: {
+        HELP_DOCUMENT_URL: '',
+        HELP_SUPPORT_URL: ''
+      }
+    }
+  },
+  computed: {
+    hasLicence() {
+      return this.$store.getters.hasValidLicense
+    }
+  },
+  created() {
+    this.initHelpURL()
+  },
   methods: {
+    initHelpURL() {
+      const url = '/api/v1/settings/setting/?category=other'
+      this.$axios.get(url).then(resp => {
+        this.URLSite.HELP_DOCUMENT_URL = resp.HELP_DOCUMENT_URL
+        this.URLSite.HELP_SUPPORT_URL = resp.HELP_SUPPORT_URL
+      })
+    },
     handleCommand(command) {
       switch (command) {
         case 'support':
-          window.open('http://www.jumpserver.org/support/', '_blank')
+          window.open(this.URLSite.HELP_SUPPORT_URL, '_blank')
           break
-        case 'EnterpriseEdition':
+        case 'enterprise':
           window.open('https://jumpserver.org/enterprise.html', '_blank')
           break
         default:
-          window.open('http://docs.jumpserver.org', '_blank')
+          window.open(this.URLSite.HELP_DOCUMENT_URL, '_blank')
           break
       }
     }

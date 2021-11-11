@@ -10,6 +10,7 @@
 
 <script>
 import BaseAuth from './Base'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'OIDC',
@@ -44,6 +45,9 @@ export default {
           ]]
         ],
         fieldsMeta: {
+          AUTH_OPENID_CLIENT_SECRET: {
+            component: UpdateToken
+          },
           AUTH_OPENID_SERVER_URL: {
             hidden: (form) => !form['AUTH_OPENID_KEYCLOAK']
           },

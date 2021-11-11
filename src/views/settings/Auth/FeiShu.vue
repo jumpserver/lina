@@ -10,6 +10,7 @@
 
 <script>
 import BaseAuth from './Base'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'Wecom',
@@ -52,6 +53,9 @@ export default {
           ]
         ],
         fieldsMeta: {
+          FEISHU_APP_SECRET: {
+            component: UpdateToken
+          }
         },
         // 不清理的话，编辑secret，在删除提交会报错
         cleanFormValue(data) {

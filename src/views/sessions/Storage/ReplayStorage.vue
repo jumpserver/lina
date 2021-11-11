@@ -41,6 +41,10 @@ export default {
             {
               name: 'Azure',
               title: 'Azure'
+            },
+            {
+              name: 'obs',
+              title: 'OBS'
             }
           ]
         }
