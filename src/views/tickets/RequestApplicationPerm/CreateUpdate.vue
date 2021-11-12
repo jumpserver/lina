@@ -199,6 +199,17 @@ export default {
       url: '/api/v1/tickets/tickets/?type=apply_application&action=open',
       createSuccessNextRoute: {
         name: 'TicketList'
+      },
+      cleanFormValue(value) {
+        const applications = value.meta.apply_applications
+        const systemUsers = value.meta.apply_system_users
+        if (applications && Array.isArray(applications) && applications.length < 1) {
+          delete value.meta.apply_applications
+        }
+        if (systemUsers && Array.isArray(systemUsers) && systemUsers.length < 1) {
+          delete value.meta.apply_system_users
+        }
+        return value
       }
     }
   },
