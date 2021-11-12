@@ -121,6 +121,7 @@ export default {
           title: this.$t('users.quickUpdate.resetSSHKey'),
           attrs: {
             type: 'primary',
+            disabled: !this.$store.state.users.profile.can_public_key_auth,
             label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
