@@ -53,7 +53,7 @@ export default {
       ]
     },
     specialCardItems() {
-      return [
+      return this.object.type === 'login_confirm' ? [] : [
         // apply_login_asset: "114.118.2.76(114.118.2.76)"
         // apply_login_system_user: "root()"
         // apply_login_user: "Administrator(admin)"
