@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+
 export default [
   {
     path: 'assets',
@@ -17,25 +18,29 @@ export default [
         path: 'create',
         name: 'AssetCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
-        meta: { title: i18n.t('route.AssetCreate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate') }
       },
       {
         path: ':id',
         name: 'AssetDetail',
         component: () => import('@/views/assets/Asset/AssetDetail'),
-        meta: { title: i18n.t('route.AssetDetail'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.AssetDetail') }
       },
       {
         path: ':id/update',
         name: 'AssetUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
-        meta: { title: i18n.t('route.AssetUpdate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate') }
       },
       {
         path: 'detail/:id/update',
         name: 'AssetMoreInformationEdit',
         component: () => import('@/views/assets/Asset/AssetMoreInformationEdit.vue'),
-        meta: { title: i18n.t('common.UpdateAssetDetail'), hidden: true, action: 'update' }
+        hidden: true,
+        meta: { title: i18n.t('common.UpdateAssetDetail'), action: 'update' }
       }
     ]
   },
@@ -43,7 +48,7 @@ export default [
     path: 'domains',
     component: empty,
     redirect: '',
-    meta: { },
+    meta: {},
     children: [
       {
         path: '',
@@ -55,21 +60,22 @@ export default [
         path: 'create',
         name: 'DomainCreate',
         component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
-        meta: { title: i18n.t('route.DomainCreate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.DomainCreate') }
       },
       {
         path: ':id/update',
         name: 'DomainUpdate',
         component: () => import('@/views/assets/Domain/DomainCreateUpdate.vue'),
-        meta: { title: i18n.t('route.DomainUpdate'), hidden: true },
-        hidden: true
+        hidden: true,
+        meta: { title: i18n.t('route.DomainUpdate') }
       },
       {
         path: ':id',
         name: 'DomainDetail',
         component: () => import('@/views/assets/Domain/DomainDetail'),
-        meta: { title: i18n.t('route.DomainDetail'), hidden: true },
-        hidden: true
+        hidden: true,
+        meta: { title: i18n.t('route.DomainDetail') }
       }
     ]
   },
@@ -85,13 +91,23 @@ export default [
         path: 'create',
         name: 'GatewayCreate',
         component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
-        meta: { title: i18n.t('route.GatewayCreate'), activeMenu: '/admin/assets/domains', hidden: true, permissions: ['assets.view_gateway'] }
+        meta: {
+          title: i18n.t('route.GatewayCreate'),
+          activeMenu: '/admin/assets/domains',
+          hidden: true,
+          permissions: ['assets.view_gateway']
+        }
       },
       {
         path: ':id/update',
         name: 'GatewayUpdate',
         component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
-        meta: { title: i18n.t('route.GatewayUpdate'), activeMenu: '/admin/assets/domains', hidden: true, permissions: ['assets.change_gateway'] }
+        meta: {
+          title: i18n.t('route.GatewayUpdate'),
+          activeMenu: '/admin/assets/domains',
+          hidden: true,
+          permissions: ['assets.change_gateway']
+        }
       }
     ]
   },
@@ -99,7 +115,7 @@ export default [
     path: 'system-users',
     component: empty,
     redirect: '',
-    meta: { },
+    meta: {},
     children: [
       {
         path: '',
@@ -111,19 +127,22 @@ export default [
         path: 'create',
         name: 'SystemUserCreate',
         component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate'),
-        meta: { title: i18n.t('route.SystemUserCreate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.SystemUserCreate') }
       },
       {
         path: ':id/update',
         name: 'SystemUserUpdate',
         component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate'),
-        meta: { title: i18n.t('route.SystemUserUpdate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.SystemUserUpdate') }
       },
       {
         path: ':id',
         name: 'SystemUserDetail',
         component: () => import('@/views/assets/SystemUser/SystemUserDetail'),
-        meta: { title: i18n.t('route.SystemUserDetail'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.SystemUserDetail') }
       }
     ]
   },
@@ -131,7 +150,7 @@ export default [
     path: 'command-filters',
     component: empty,
     redirect: '',
-    meta: { },
+    meta: {},
     children: [
       {
         path: '',
@@ -143,19 +162,22 @@ export default [
         path: ':id/update',
         component: () => import('@/views/assets/CommandFilter/CommandFilterCreateUpdate.vue'), // Parent router-view
         name: 'CommandFilterUpdate',
-        meta: { title: i18n.t('route.CommandFilterUpdate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterUpdate') }
       },
       {
         path: 'create',
         component: () => import('@/views/assets/CommandFilter/CommandFilterCreateUpdate.vue'), // Parent router-view
         name: 'CommandFilterCreate',
-        meta: { title: i18n.t('route.CommandFilterCreate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterCreate') }
       },
       {
         path: ':id',
         component: () => import('@/views/assets/CommandFilter/CommandFilterDetail'), // Parent router-view
         name: 'CommandFilterDetail',
-        meta: { title: i18n.t('route.CommandFilterDetail'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterDetail') }
       }
     ]
   },
@@ -168,13 +190,21 @@ export default [
         path: 'create',
         component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpdate.vue'), // Parent router-view
         name: 'CommandFilterRulesCreate',
-        meta: { title: i18n.t('route.CommandFilterRulesCreate'), activeMenu: '/admin/assets/cmd-filters', hidden: true }
+        meta: {
+          title: i18n.t('route.CommandFilterRulesCreate'),
+          activeMenu: '/admin/assets/cmd-filters',
+          hidden: true
+        }
       },
       {
         path: ':id/update',
         component: () => import('@/views/assets/CommandFilter/CommandFilterDetail/RulesCreateUpdate.vue'), // Parent router-view
         name: 'CommandFilterRulesUpdate',
-        meta: { title: i18n.t('route.CommandFilterRulesUpdate'), activeMenu: '/admin/assets/cmd-filters', hidden: true }
+        meta: {
+          title: i18n.t('route.CommandFilterRulesUpdate'),
+          activeMenu: '/admin/assets/cmd-filters',
+          hidden: true
+        }
 
       }
     ]
@@ -195,19 +225,22 @@ export default [
         path: 'create',
         component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
         name: 'PlatformCreate',
-        meta: { title: i18n.t('route.PlatformCreate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.PlatformCreate') }
       },
       {
         path: ':id/update',
         component: () => import('@/views/assets/Platform/PlatformCreateUpdate.vue'), // Parent router-view
         name: 'PlatformUpdate',
-        meta: { title: i18n.t('route.PlatformUpdate'), permissions: [], hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.PlatformUpdate'), permissions: [] }
       },
       {
         path: ':id',
         component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
         name: 'PlatformDetail',
-        meta: { title: i18n.t('route.PlatformDetail'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.PlatformDetail') }
       }
     ]
   },
@@ -215,7 +248,7 @@ export default [
     path: 'labels',
     component: empty,
     redirect: '',
-    meta: { },
+    meta: {},
     children: [
       {
         path: '',
@@ -227,13 +260,15 @@ export default [
         path: 'create',
         name: 'LabelCreate',
         component: () => import('@/views/assets/Label/LabelCreateUpdate.vue'),
-        meta: { title: i18n.t('route.LabelCreate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.LabelCreate') }
       },
       {
         path: ':id/update',
         name: 'LabelUpdate',
         component: () => import('@/views/assets/Label/LabelCreateUpdate.vue'),
-        meta: { title: i18n.t('route.LabelUpdate'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.LabelUpdate') }
       }
     ]
   }

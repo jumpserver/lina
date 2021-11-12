@@ -27,19 +27,24 @@ export default [
     path: 'adhoc/:id',
     component: () => import('@/views/ops/TaskDetail/AdhocDetail'),
     name: 'AdhocDetail',
-    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/admin/ops/tasks', hidden: true }
+    hidden: true,
+    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/admin/ops/tasks' }
   },
   {
     path: 'executions/:id',
     component: () => import('@/views/ops/TaskDetail/HistoryExecutionDetail'),
     name: 'HistoryExecutionDetail',
-    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/admin/ops/tasks', hidden: true }
+    hidden: true,
+    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/admin/ops/tasks' }
   },
   {
     path: 'command-executions/create',
     name: 'BatchCommand',
     component: () => import('@/views/ops/CommandExecution'),
-    meta: { title: i18n.t('route.BatchCommand'), hidden: ({ settings }) => !settings['SECURITY_COMMAND_EXECUTION'] }
+    meta: {
+      title: i18n.t('route.BatchCommand'),
+      hidden: ({ settings }) => !settings['SECURITY_COMMAND_EXECUTION']
+    }
   },
   {
     path: `${BASE_URL}/core/flower/?_=${Date.now()}`,

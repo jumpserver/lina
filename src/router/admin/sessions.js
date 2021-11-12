@@ -76,7 +76,7 @@ export default [
   {
     path: 'storages',
     component: empty,
-    meta: { activeMenu: '/terminal/terminal', permissions: [rolec.PERM_SUPER] },
+    meta: { activeMenu: '/terminal/terminal', permissions: [] },
     redirect: '',
     hidden: true,
     children: [

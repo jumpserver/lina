@@ -32,19 +32,19 @@ export default {
           name: 'admin',
           label: '管理视图',
           route: 'AdminView',
-          perms: ['admin']
+          perms: ['rbac.view_adminview']
         },
         {
           name: 'audit',
           label: '审计视图',
           route: 'AuditView',
-          perms: ['assets.add_systemuser']
+          perms: ['rbac.view_auditview']
         },
         {
           name: 'user',
           label: '用户视图',
           route: 'UserView',
-          perms: ['use']
+          perms: ['rbac.view_userview']
         }
       ]
     }
@@ -85,6 +85,7 @@ export default {
   ::v-deep .el-submenu .el-submenu__title {
     height: 55px;
     line-height: 55px;
+    border-bottom: none;
   }
 
 }

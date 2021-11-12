@@ -47,7 +47,7 @@ export const constantRoutes = [
 import userViewRoutes from './user'
 import adminViewRoutes from './admin'
 import auditViewRoutes from './audit'
-import ticketsRoutes from './tickets'
+import ticketsRoutes from './tickets/index'
 
 /**
  * admin

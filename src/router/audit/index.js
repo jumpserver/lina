@@ -9,12 +9,22 @@ export default {
   path: '/audit/',
   name: 'AuditView',
   component: Layout,
-  redirect: '/audit/sessions',
+  redirect: '/audit/dashboard',
   meta: {
     permissions: ['rbac.view_auditview'],
     view: 'audit'
   },
   children: [
+    {
+      path: '/audit/dashboard',
+      component: () => import('@/views/audits/Dashboard'),
+      name: 'AuditDashboard',
+      meta: {
+        icon: 'files-o',
+        title: i18n.t('route.Dashboard'),
+        permissions: []
+      }
+    },
     {
       path: '/audit/sessions',
       component: empty,
