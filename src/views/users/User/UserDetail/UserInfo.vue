@@ -57,14 +57,14 @@ export default {
           title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
-            disabled: !this.object.mfa_enabled || this.object.id === this.$store.state.users.profile.id,
+            // disabled: !this.object.mfa_enabled || this.object.id === this.$store.state.users.profile.id,
             label: this.$t('common.Reset')
           },
           callbacks: {
             click: function() {
               const warnMsg = vm.$t('users.quickUpdate.resetMFAWarningMsg')
               const warnTitle = vm.$t('common.Info')
-              const url = `/api/v1/users/users/${vm.object.id}/otp/reset/`
+              const url = `/api/v1/users/users/${vm.object.id}/mfa/reset/`
               const successMsg = vm.$t('users.quickUpdate.resetMFAdSuccessMsg')
               vm.$confirm(warnMsg, warnTitle, {
                 type: 'warning',
