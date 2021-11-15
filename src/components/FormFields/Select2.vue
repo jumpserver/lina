@@ -320,4 +320,8 @@ export default {
   .select2 {
     width: 100%;
   }
+  .select2 >>> .el-tag.el-tag--info {
+    height: auto;
+    white-space: normal;
+  }
 </style>
