@@ -41,8 +41,7 @@ export default [
         component: () => import('@/views/accounts/GatheredUser/index'),
         name: 'GatherUserListIndex',
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUser'),
-          activeMenu: '/accounts/gathered-user'
+          title: i18n.t('xpack.GatherUser.GatherUser')
         }
       },
       {
@@ -61,8 +60,7 @@ export default [
         name: 'GatherUserTaskList',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskList'),
-          activeMenu: '/accounts/gathered-user'
+          title: i18n.t('xpack.GatherUser.GatherUserTaskList')
         }
       },
       {
@@ -71,8 +69,7 @@ export default [
         name: 'GatherUserTaskDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
-          activeMenu: '/accounts/gathered-user'
+          title: i18n.t('xpack.GatherUser.GatherUserTaskDetail')
         }
       },
       {
@@ -81,8 +78,7 @@ export default [
         name: 'GatherUserTaskCreate',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
-          activeMenu: '/accounts/gathered-user'
+          title: i18n.t('xpack.GatherUser.GatherUserTaskCreate')
         }
       },
       {
@@ -130,7 +126,6 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
-          activeMenu: '/accounts/change-auth-plan',
           action: 'create'
         }
       },
@@ -141,7 +136,6 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
-          activeMenu: '/accounts/change-auth-plan',
           action: 'update'
         }
       },
@@ -181,7 +175,6 @@ export default [
         name: 'AppChangeAuthPlanCreate',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanCreate'),
-          activeMenu: '/accounts/change-auth-plan',
           action: 'create'
         },
         hidden: true
@@ -191,8 +184,7 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
         name: 'AppChangeAuthPlanDetail',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan')
         },
         hidden: true
       },
@@ -202,7 +194,6 @@ export default [
         name: 'AppChangeAuthPlanUpdate',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanUpdate'),
-          activeMenu: '/accounts/change-auth-plan',
           action: 'update'
         },
         hidden: true

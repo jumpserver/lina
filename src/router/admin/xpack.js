@@ -35,8 +35,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.AccountCreate'),
-              action: 'create',
-              activeMenu: '/admin/xpack/cloud'
+              action: 'create'
             }
           },
           {
@@ -46,8 +45,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.AccountUpdate'),
-              action: 'update',
-              activeMenu: '/admin/xpack/cloud'
+              action: 'update'
             }
           },
           {
@@ -55,7 +53,7 @@ export default [
             component: () => import('@/views/xpack/Cloud/Account/AccountDetail/index'),
             name: 'AccountDetail',
             hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountDetail'), activeMenu: '/admin/xpack/cloud' }
+            meta: { title: i18n.t('xpack.Cloud.AccountDetail') }
           }
         ]
       },
@@ -64,8 +62,7 @@ export default [
         component: empty,
         hidden: true,
         meta: {
-          title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
-          activeMenu: '/admin/xpack/cloud'
+          title: i18n.t('xpack.Cloud.SyncInstanceTaskList')
         },
         children: [
           {
@@ -74,8 +71,7 @@ export default [
             name: 'SyncInstanceTaskList',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
-              activeMenu: '/admin/xpack/cloud'
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskList')
             }
           },
           {
@@ -84,8 +80,7 @@ export default [
             name: 'SyncInstanceTaskCreate',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'),
-              activeMenu: '/admin/xpack/cloud'
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate')
             }
           },
           {
@@ -94,8 +89,7 @@ export default [
             name: 'SyncInstanceTaskUpdate',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'),
-              activeMenu: '/admin/xpack/cloud'
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate')
             }
           },
           {
@@ -104,8 +98,7 @@ export default [
             name: 'SyncInstanceTaskDetail',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail'),
-              activeMenu: '/admin/xpack/cloud'
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail')
             }
           }
         ]

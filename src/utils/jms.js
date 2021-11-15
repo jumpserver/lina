@@ -41,6 +41,15 @@ export function getResourceFromPath(p) {
   const [path, view, app, resource] = matched
   const resourceCleaned = getResourceNameByPath(resource)
   const data = { path: path, view: view, app: app, resource: resourceCleaned }
-  console.log('Data: ', data)
   return data
+}
+
+export function getRouteRequiredPerms(path, action) {
+  const { app, resource } = getResourceFromPath(path)
+  return [`${app}.${action}_${resource}`]
+}
+
+export function hasActionPerm(route, action) {
+  const permsRequired = getRouteRequiredPerms(route, action)
+  return hasPermission(permsRequired)
 }

@@ -58,10 +58,9 @@ export default {
       path: '/tickets/:id',
       name: 'TicketDetail',
       component: () => import('@/views/tickets/Todo'),
+      hidden: true,
       meta: {
-        hidden: true
-      },
-      hidden: true
+      }
     }
     // {
     //   path: 'request-asset-perm/create',

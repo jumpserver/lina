@@ -23,6 +23,7 @@ export default {
     return {
       group: { name: '', comment: '', users: [] },
       config: {
+        url: '/api/v1/users/groups/',
         activeMenu: 'GroupInfo',
         submenu: [
           {

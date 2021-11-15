@@ -1,5 +1,4 @@
 import i18n from '@/i18n/i18n'
-import rolec from '@/utils/role'
 import empty from '@/layout/empty'
 import { BASE_URL } from '@/utils/common'
 
@@ -9,20 +8,19 @@ export default [
     path: 'sessions',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] },
+    meta: { title: i18n.t('route.Sessions'), permissions: [] },
     children: [
       {
         path: '',
         name: 'SessionList',
         component: () => import('@/views/sessions/SessionList/index'),
-        meta: { title: i18n.t('route.Sessions'), permissions: [rolec.PERM_AUDIT] }
+        meta: { title: i18n.t('route.Sessions'), permissions: [] }
       },
       {
         path: ':id',
         name: 'SessionDetail',
         component: () => import('@/views/sessions/SessionDetail/index'),
-        meta: { title: i18n.t('route.SessionDetail'), activeMenu: '/terminal/sessions' },
-        hidden: true
+        meta: { title: i18n.t('route.SessionDetail') }
       }
     ]
   },
@@ -30,7 +28,7 @@ export default [
     path: 'commands',
     name: 'CommandList',
     component: () => import('@/views/sessions/CommandList'),
-    meta: { title: i18n.t('route.Commands'), permissions: [rolec.PERM_AUDIT] }
+    meta: { title: i18n.t('route.Commands'), permissions: [] }
   },
   {
     path: `${BASE_URL}/luna/?_=${Date.now()}`,
@@ -49,7 +47,7 @@ export default [
     path: 'terminal',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.Terminal'), permissions: [rolec.PERM_SUPER] },
+    meta: { title: i18n.t('route.Terminal'), permissions: [] },
     children: [
       {
         path: '',
@@ -61,55 +59,58 @@ export default [
         path: ':id',
         name: 'TerminalDetail',
         component: () => import('@/views/sessions/TerminalDetail'),
-        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
-        hidden: true
+        meta: {
+          title: i18n.t('route.Terminal'), hidden: true
+        }
       },
       {
         path: ':id/update',
         name: 'TerminalUpdate',
         component: () => import('@/views/sessions/TerminalUpdate'),
-        meta: { title: i18n.t('route.Terminal'), activeMenu: '/terminal/terminal' },
-        hidden: true
+        meta: {
+          title: i18n.t('route.Terminal'), hidden: true
+        }
       }
     ]
   },
   {
     path: 'storages',
     component: empty,
-    meta: { activeMenu: '/terminal/terminal', permissions: [] },
-    redirect: '',
-    hidden: true,
-    children: [
-      {
-        path: '',
-        name: 'Storage',
-        component: () => import('@/views/sessions/Storage/index'),
-        meta: { activeMenu: '/terminal/terminal' }
-      },
-      {
-        path: 'replay-storage/create',
-        name: 'CreateReplayStorage',
-        component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
-        meta: { title: i18n.t('route.CreateReplayStorage'), activeMenu: '/terminal/terminal' }
-      },
-      {
-        path: 'replay-storage/:id/update',
-        name: 'ReplayStorageUpdate',
-        component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
-        meta: { title: i18n.t('route.ReplayStorageUpdate'), activeMenu: '/terminal/terminal' }
-      },
-      {
-        path: 'command-storage/create',
-        name: 'CreateCommandStorage',
-        component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
-        meta: { title: i18n.t('route.CreateCommandStorage'), activeMenu: '/terminal/terminal' }
-      },
-      {
-        path: 'command-storage/:id/update',
-        name: 'CommandStorageUpdate',
-        component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
-        meta: { title: i18n.t('route.CommandStorageUpdate'), activeMenu: '/terminal/terminal' }
-      }
-    ]
+    meta: {
+      redirect: '',
+      hidden: true,
+      children: [
+        {
+          path: '',
+          name: 'Storage',
+          component: () => import('@/views/sessions/Storage/index'),
+          meta: { activeMenu: '/terminal/terminal' }
+        },
+        {
+          path: 'replay-storage/create',
+          name: 'CreateReplayStorage',
+          component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
+          meta: { title: i18n.t('route.CreateReplayStorage') }
+        },
+        {
+          path: 'replay-storage/:id/update',
+          name: 'ReplayStorageUpdate',
+          component: () => import('@/views/sessions/ReplayStorageCreateUpdate'),
+          meta: { title: i18n.t('route.ReplayStorageUpdate') }
+        },
+        {
+          path: 'command-storage/create',
+          name: 'CreateCommandStorage',
+          component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
+          meta: { title: i18n.t('route.CreateCommandStorage') }
+        },
+        {
+          path: 'command-storage/:id/update',
+          name: 'CommandStorageUpdate',
+          component: () => import('@/views/sessions/CommandStorageCreateUpdate'),
+          meta: { title: i18n.t('route.CommandStorageUpdate') }
+        }
+      ]
+    }
   }
 ]

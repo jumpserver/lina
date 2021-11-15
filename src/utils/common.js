@@ -57,7 +57,7 @@ function cleanDateStr(d) {
     if (!isNaN(Date.parse(d))) {
       return d
     }
-    if (!isNaN(Number(d))) {
+    if (!isNaN(Number(d)) || !d) {
       return d
     }
     switch (i) {
@@ -98,14 +98,15 @@ export function forMatAction(vm, d) {
 
 export function getApiPath(that) {
   let pagePath = that.$route.path
+  console.log('CUrrent route: ', that.$route)
   const pagePathArray = pagePath.split('/')
   if (pagePathArray.indexOf('orgs') !== -1) {
     pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
   } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
     pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
   }
-  pagePath = pagePathArray.join('/')
-  return `/api/v1${pagePath}/`
+  pagePath = pagePathArray.slice(2, pagePathArray.length).join('/')
+  return `/api/v1/${pagePath}/`
 }
 
 export function confirm({ msg, title, perform, success, failed, type = 'warning' }) {
@@ -147,6 +148,7 @@ export function formatDate(inputTime) {
 }
 
 const uuidPattern = /[0-9a-zA-Z\-]{36}/
+
 export function hasUUID(s) {
   return s.search(uuidPattern) !== -1
 }

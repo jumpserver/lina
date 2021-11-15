@@ -17,7 +17,8 @@ export default [
         path: ':id',
         name: 'SessionDetail',
         component: () => import('@/views/sessions/SessionDetail'),
-        meta: { title: i18n.t('route.SessionDetail'), hidden: true }
+        hidden: true,
+        meta: { title: i18n.t('route.SessionDetail') }
       }
     ]
   },

@@ -1,6 +1,5 @@
 import Layout from '@/layout/index'
 import i18n from '@/i18n/i18n'
-import rolec from '@/utils/role'
 import empty from '@/layout/empty'
 
 import UsersRoute from './users'
@@ -120,14 +119,15 @@ export default {
     {
       path: '/admin/settings',
       component: empty,
-      redirect: '/settings/',
-      permissions: [rolec.PERM_SUPER],
       children: [
         {
           path: '',
           name: 'Settings',
           component: () => import('@/views/settings/index'),
-          meta: { title: i18n.t('route.Settings'), icon: 'gears' }
+          meta: {
+            title: i18n.t('route.Settings'),
+            icon: 'gears', permissions: ['settings.view_setting']
+          }
         }
       ]
     }

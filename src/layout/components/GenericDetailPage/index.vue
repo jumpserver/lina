@@ -28,6 +28,11 @@ export default {
     ActionsGroup
   },
   props: {
+    url: {
+      type: String,
+      required: false,
+      default: ''
+    },
     object: {
       type: Object,
       required: true
@@ -83,16 +88,17 @@ export default {
   data() {
     const vm = this
     const defaultActions = {
-      canDelete: true,
+      // Delete button
+      canDelete: vm.$hasCurrentResAction('delete'),
       deleteCallback: function(item) { this.defaultDelete(item) },
-      deleteApiUrl: getApiPath(this),
+      deleteApiUrl: vm.detailApiUrl,
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
+      // Update button
       canUpdate: () => {
-        return !vm.currentOrgIsRoot
+        return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
       updateCallback: function(item) { this.defaultUpdate(item) },
-      updateRoute: this.$route.name.replace('Detail', 'Update'),
-      detailApiUrl: getApiPath(this)
+      updateRoute: this.$route.name.replace('Detail', 'Update')
     }
     return {
       defaultActions: defaultActions,
@@ -124,6 +130,13 @@ export default {
     },
     iTitle() {
       return this.title || this.getTitle(this.object)
+    },
+    detailApiUrl() {
+      if (this.url) {
+        return `${this.url}/${this.$route.params.id}`
+      } else {
+        return getApiPath(this)
+      }
     },
     iActiveMenu: {
       get() {
@@ -183,8 +196,7 @@ export default {
       this.$router.push(route)
     },
     getObject() {
-      const url = this.validActions.detailApiUrl
-      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
+      return this.$axios.get(this.detailApiUrl, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
       }).catch(error => {
         if (error.response && error.response.status === 404) {

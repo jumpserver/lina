@@ -83,8 +83,8 @@ export default [
     path: 'gateways',
     component: empty,
     redirect: 'create',
+    hidden: true,
     meta: {
-      hidden: true
     },
     children: [
       {
@@ -93,8 +93,6 @@ export default [
         component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
         meta: {
           title: i18n.t('route.GatewayCreate'),
-          activeMenu: '/admin/assets/domains',
-          hidden: true,
           permissions: ['assets.view_gateway']
         }
       },
@@ -104,8 +102,6 @@ export default [
         component: () => import('@/views/assets/Domain/DomainDetail/GatewayCreateUpdate.vue'),
         meta: {
           title: i18n.t('route.GatewayUpdate'),
-          activeMenu: '/admin/assets/domains',
-          hidden: true,
           permissions: ['assets.change_gateway']
         }
       }
@@ -184,7 +180,8 @@ export default [
   {
     path: 'command-filter-rules',
     component: empty,
-    meta: { hidden: true },
+    hidden: true,
+    meta: { },
     children: [
       {
         path: 'create',
@@ -192,8 +189,7 @@ export default [
         name: 'CommandFilterRulesCreate',
         meta: {
           title: i18n.t('route.CommandFilterRulesCreate'),
-          activeMenu: '/admin/assets/cmd-filters',
-          hidden: true
+          activeMenu: '/admin/assets/cmd-filters'
         }
       },
       {
@@ -202,10 +198,8 @@ export default [
         name: 'CommandFilterRulesUpdate',
         meta: {
           title: i18n.t('route.CommandFilterRulesUpdate'),
-          activeMenu: '/admin/assets/cmd-filters',
-          hidden: true
+          activeMenu: '/admin/assets/cmd-filters'
         }
-
       }
     ]
   },

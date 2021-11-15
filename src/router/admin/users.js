@@ -22,7 +22,6 @@ export default [
         name: 'UserCreate',
         meta: {
           title: i18n.t('route.UserCreate'),
-          activeMenu: 'UserList',
           action: 'create',
           hidden: true
         }
@@ -33,7 +32,6 @@ export default [
         name: 'UserUpdate',
         meta: {
           title: i18n.t('route.UserUpdate'),
-          activeMenu: 'UserList',
           action: 'update',
           hidden: true
         }
@@ -43,7 +41,7 @@ export default [
         component: () => import('@/views/users/User/UserDetail'), // Parent router-view
         name: 'UserDetail',
         hidden: true,
-        meta: { title: i18n.t('route.UserDetail'), activeMenu: 'UserList' }
+        meta: { title: i18n.t('route.UserDetail') }
       },
       {
         path: 'user-acl',
@@ -57,21 +55,21 @@ export default [
             name: 'UserAclList',
             component: () => import('@/views/acl/UserAcl/UserAclList'),
             hidden: true,
-            meta: { title: i18n.t('route.UserAclList'), activeMenu: 'UserList' }
+            meta: { title: i18n.t('route.UserAclList') }
           },
           {
             path: 'create',
             name: 'UserAclCreate',
             component: () => import('@/views/acl/UserAcl/UserAclCreateUpdate'),
             hidden: true,
-            meta: { title: i18n.t('route.UserAclCreate'), activeMenu: 'UserList' }
+            meta: { title: i18n.t('route.UserAclCreate') }
           },
           {
             path: ':id',
             name: 'UserAclDetail',
             component: () => import('@/views/acl/UserAcl/UserAclDetail'),
             hidden: true,
-            meta: { title: i18n.t('route.UserAclDetail'), activeMenu: 'UserList' }
+            meta: { title: i18n.t('route.UserAclDetail') }
           },
           {
             path: ':id/update',
@@ -91,34 +89,33 @@ export default [
     meta: {},
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/users/Group/UserGroupCreateUpdate.vue'), // Parent router-view
-        name: 'UserGroupCreate',
-        meta: {
-          title: i18n.t('route.UserGroupCreate')
-          // activeMenu: 'UserGroupList',
-          // hidden: true
-        }
-      },
-      {
         path: '',
         component: () => import('@/views/users/Group/UserGroupList.vue'), // Parent router-view
         name: 'UserGroupList',
         meta: { title: i18n.t('route.UserGroupList') }
       },
       {
+        path: 'create',
+        component: () => import('@/views/users/Group/UserGroupCreateUpdate.vue'), // Parent router-view
+        name: 'UserGroupCreate',
+        hidden: true,
+        meta: {
+          title: i18n.t('route.UserGroupCreate')
+        }
+      },
+      {
         path: ':id/update',
         component: () => import('@/views/users/Group/UserGroupCreateUpdate.vue'), // Parent router-view
         name: 'UserGroupUpdate',
         hidden: true,
-        meta: { title: i18n.t('route.UserGroupUpdate'), activeMenu: 'UserGroupList' }
+        meta: { title: i18n.t('route.UserGroupUpdate') }
       },
       {
         path: ':id',
         component: () => import('@/views/users/Group/UserGroupDetail'), // Parent router-view
         name: 'UserGroupDetail',
         hidden: true,
-        meta: { title: i18n.t('route.UserGroupDetail'), activeMenu: 'UserGroupList' }
+        meta: { title: i18n.t('route.UserGroupDetail') }
       }
     ]
   }

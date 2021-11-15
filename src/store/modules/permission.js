@@ -68,9 +68,7 @@ function hasPermission(perms, route) {
   if (!permsRequired || permsRequired.length === 0) {
     has = true
   } else {
-    has = perms.some(perm => {
-      return permsRequired.includes(perm)
-    })
+    has = perms.some(perm => permsRequired.includes(perm))
   }
   Vue.$log.debug('Has permission: ', route.path, ' => ', has)
   return has
@@ -113,42 +111,62 @@ function cleanRouteAction(route) {
 }
 
 function cleanRoute(tmp, parent) {
-  if (!parent) {
-    parent = { meta: { level: 0 }}
-  }
-  if (!parent.meta) {
-    parent.meta = {}
-  }
-  if (!tmp.meta) {
-    tmp.meta = {}
-  }
+  if (!parent) { parent = { meta: { level: 0, fullPath: '' }} }
+  if (!parent.meta) { parent.meta = {} }
+  if (!tmp.meta) { tmp.meta = {} }
+
+  // 根据层级来标识 类型是 view, app, resource 还是crud
   if (!tmp.meta.level) {
     tmp.meta.level = parent.meta.level + 1
   }
-  const typeMapper = { 1: 'view', 2: 'app', 3: 'resource', 4: 'curd' }
+  const typeMapper = { 1: 'view', 2: 'app', 3: 'resource', 4: 'crud' }
   if (!tmp.meta.type) {
-    tmp.meta.type = typeMapper[tmp.meta.level]
+    tmp.meta.type = typeMapper[tmp.meta.level] || 'crud'
   }
 
   const path = tmp.path || ''
   const pathSlice = path.split('/')
   const pathValue = pathSlice[pathSlice.length - 1]
+
+  // 标识路由是哪个 view
   if (!tmp.meta.view) {
     tmp.meta.view = tmp.meta.level === 1 ? pathValue : parent.meta?.view
   }
+  // 标识路由是哪个 app(Django)
   if (!tmp.meta.app) {
     tmp.meta.app = tmp.meta.level === 2 ? pathValue : parent.meta?.app
   }
+  // 标识路由是哪个 resource(Model)
   if (!tmp.meta.resource) {
     const resource = getResourceNameByPath(pathValue)
     tmp.meta.resource = tmp.meta.level === 3 ? resource : parent.meta?.resource
   }
+  // 标识路由的动作是哪个
   if (!tmp.meta.action) {
     tmp.meta.action = cleanRouteAction(tmp)
   }
+  // 设置默认的权限
   if (!tmp.meta.permissions) {
     tmp.meta.permissions = getRouteDefaultPerms(tmp)
   }
+
+  // 设置 fullPath
+  const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
+  if (!tmp.meta.fullPath) {
+    if (tmp.path[0] === '/') {
+      tmp.meta['fullPath'] = tmp.path
+    } else {
+      tmp.meta.fullPath = parentFullPath + '/' + tmp.path
+    }
+    console.log('Full path: ', tmp.meta.fullPath)
+  }
+
+  // 设置默认active menu
+  if (tmp.hidden && !tmp.meta.activeMenu) {
+    tmp.meta.activeMenu = parentFullPath
+    // Todo
+  }
+  console.log('TMP is: ', tmp)
   return tmp
 }
 
