@@ -52,7 +52,8 @@ export default {
         'apply_asset': 'AssetsTicketDetail',
         'apply_application': 'AppsTicketDetail',
         'login_confirm': 'LoginAssetTicketDetail',
-        'login_asset_confirm': 'CommandConfirmDetail'
+        'login_asset_confirm': 'LoginAssetTicketDetail',
+        'command_confirm': 'CommandConfirmDetail'
       }
       const routeName = ticketRouteMapper[ticket.type]
       setTimeout(() => {
