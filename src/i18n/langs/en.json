@@ -553,6 +553,9 @@
   },
   "route": {
     "": "",
+    "OrgRole": "Organization roles",
+    "SystemRole": "System roles",
+    "RoleList": "Roles",
     "SessionDetail": "SessionDetail",
     "Accounts": "Accounts",
     "AssetAccount": "Asset account",

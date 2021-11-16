@@ -118,5 +118,43 @@ export default [
         meta: { title: i18n.t('route.UserGroupDetail') }
       }
     ]
+  },
+  {
+    path: 'roles',
+    component: empty,
+    redirect: '',
+    meta: {
+      permissions: ['rbac.view_role']
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/users/Role/RoleList/index'),
+        name: 'RoleList',
+        meta: {
+          title: i18n.t('route.RoleList'),
+          permissions: ['rbac.view_role']
+        }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/users/Role/RoleCreateUpdate'),
+        name: 'RoleCreate',
+        meta: {
+          title: i18n.t('route.RoleCreate'),
+          permissions: ['rbac.add_role']
+        }
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/users/Role/RoleCreateUpdate'),
+        name: 'RoleUpdate',
+        hidden: true,
+        meta: {
+          title: i18n.t('route.RoleUpdate'),
+          permissions: ['rbac.change_role']
+        }
+      }
+    ]
   }
 ]

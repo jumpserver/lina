@@ -98,7 +98,6 @@ export function forMatAction(vm, d) {
 
 export function getApiPath(that) {
   let pagePath = that.$route.path
-  console.log('CUrrent route: ', that.$route)
   const pagePathArray = pagePath.split('/')
   if (pagePathArray.indexOf('orgs') !== -1) {
     pagePathArray[pagePathArray.indexOf('xpack')] = 'orgs'
