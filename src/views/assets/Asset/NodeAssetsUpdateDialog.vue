@@ -128,7 +128,7 @@ export default {
       this.$axios.put(
         url, { assets: assetsSelected }
       ).then(res => {
-        this.dialogVisible = false
+        this.iVisible = false
         this.assetsSelected = []
         $('#tree-refresh').trigger('click')
         this.$message.success(this.$t('common.updateSuccessMsg'))
@@ -137,7 +137,7 @@ export default {
       })
     },
     assetTreeTableDialogHandleCancel() {
-      this.dialogVisible = false
+      this.iVisible = false
       this.assetsSelected = []
     }
   }

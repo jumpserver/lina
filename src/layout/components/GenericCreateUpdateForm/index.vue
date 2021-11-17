@@ -51,6 +51,10 @@ export default {
       type: Function,
       default: null
     },
+    hasReset: {
+      type: Boolean,
+      default: null
+    },
     // 如何提交数据
     performSubmit: {
       type: Function,

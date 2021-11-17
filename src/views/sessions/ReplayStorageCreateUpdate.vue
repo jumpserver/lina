@@ -10,6 +10,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { STORAGE_TYPE_META_MAP } from './const'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'ReplayStorageUpdate',
@@ -45,7 +46,12 @@ export default {
           disabled: true
         },
         meta: {
-          fields: storageTypeMeta.meta
+          fields: storageTypeMeta.meta,
+          fieldsMeta: {
+            ACCESS_KEY: {
+              component: UpdateToken
+            }
+          }
         },
         is_default: {
           helpText: this.$t('sessions.SetToDefaultStorage')

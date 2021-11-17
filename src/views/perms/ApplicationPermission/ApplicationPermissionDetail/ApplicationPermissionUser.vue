@@ -112,9 +112,8 @@ export default {
         performDelete: (item) => {
           const objectId = this.object.id
           const relationUrl = `/api/v1/perms/application-permissions/${objectId}/`
-          const objectOldRelationUserGroups = this.object.user_groups
-          const objectNewRelationUserGroups = objectOldRelationUserGroups.filter(v => v !== item.value)
-          const data = { user_groups: objectNewRelationUserGroups }
+          this.object.user_groups = this.object.user_groups.filter(v => v !== item.value)
+          const data = { user_groups: this.object.user_groups }
           return this.$axios.patch(relationUrl, data)
         },
         onDeleteSuccess: (obj, that) => {

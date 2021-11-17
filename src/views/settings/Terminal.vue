@@ -28,12 +28,6 @@ export default {
           [
             'XRDP_ENABLED', 'TERMINAL_RDP_ADDR'
           ]
-        ],
-        [
-          this.$t('common.Other'),
-          [
-            'TERMINAL_SESSION_KEEP_DURATION'
-          ]
         ]
       ],
       fieldsMeta: {

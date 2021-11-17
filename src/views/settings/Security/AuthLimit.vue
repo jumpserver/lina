@@ -14,6 +14,7 @@
       @confirm="onConfirm()"
     >
       <GenericCreateUpdateForm
+        v-bind="$data"
         :fields="fields"
         :url="url"
         :fields-meta="fieldsMeta"
@@ -37,14 +38,28 @@ export default {
   },
   data() {
     return {
+      initial: {
+        SECURITY_LOGIN_IP_BLACK_LIST: []
+      },
       visible: false,
       fields: [
-        'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME',
+        'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME', 'SECURITY_LOGIN_IP_BLACK_LIST',
         'USER_LOGIN_SINGLE_MACHINE_ENABLED', 'ONLY_ALLOW_EXIST_USER_AUTH',
         'ONLY_ALLOW_AUTH_FROM_SOURCE'
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
+      },
+      afterGetFormValue(validValues) {
+        validValues.SECURITY_LOGIN_IP_BLACK_LIST = validValues.SECURITY_LOGIN_IP_BLACK_LIST.toString()
+        return validValues
+      },
+      cleanFormValue(value) {
+        const ipBlackList = value.SECURITY_LOGIN_IP_BLACK_LIST
+        if (!Array.isArray(ipBlackList)) {
+          value.SECURITY_LOGIN_IP_BLACK_LIST = ipBlackList ? ipBlackList.split(',') : []
+        }
+        return value
       },
       url: '/api/v1/settings/setting/?category=security'
     }
