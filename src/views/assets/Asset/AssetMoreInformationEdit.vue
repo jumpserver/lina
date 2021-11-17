@@ -97,7 +97,8 @@ export default {
       },
       url: '/api/v1/assets/assets/',
       updateSuccessNextRoute: { name: 'AssetList' },
-      createSuccessNextRoute: { name: 'AssetList' }
+      createSuccessNextRoute: { name: 'AssetList' },
+      objectDetailRoute: { name: 'AssetDetail' }
     }
   },
   methods: {
