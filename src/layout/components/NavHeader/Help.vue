@@ -32,11 +32,8 @@ export default {
   },
   methods: {
     initHelpURL() {
-      const url = '/api/v1/settings/setting/?category=other'
-      this.$axios.get(url).then(resp => {
-        this.URLSite.HELP_DOCUMENT_URL = resp.HELP_DOCUMENT_URL
-        this.URLSite.HELP_SUPPORT_URL = resp.HELP_SUPPORT_URL
-      })
+      this.URLSite.HELP_DOCUMENT_URL = this.$store.getters.publicSettings.HELP_DOCUMENT_URL
+      this.URLSite.HELP_SUPPORT_URL = this.$store.getters.publicSettings.HELP_SUPPORT_URL
     },
     handleCommand(command) {
       switch (command) {
