@@ -140,6 +140,7 @@ export default [
         path: 'create',
         component: () => import('@/views/users/Role/RoleCreateUpdate'),
         name: 'RoleCreate',
+        hidden: true,
         meta: {
           title: i18n.t('route.RoleCreate'),
           permissions: ['rbac.add_role']

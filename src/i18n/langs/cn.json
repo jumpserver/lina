@@ -563,6 +563,8 @@
   "route": {
     "": "",
     "RoleList": "角色列表",
+    "RoleCreate": "创建角色",
+    "RoleUpdate": "更新角色",
     "OrgRole": "组织角色",
     "SystemRole": "系统角色",
     "TicketFlow": "工单流",
