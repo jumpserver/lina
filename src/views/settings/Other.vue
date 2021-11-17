@@ -51,7 +51,17 @@ export default {
           helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
         },
         TICKETS_ENABLED: {
-          hidden: () => !this.$store.getters.hasValidLicense
+          hidden: () => this.hasValidLicense()
+        },
+        HELP_DOCUMENT_URL: {
+          label: this.$t('xpack.helpDocument'),
+          helpText: this.$t('xpack.helpDocumentTip'),
+          hidden: () => !this.hasValidLicense()
+        },
+        HELP_SUPPORT_URL: {
+          label: this.$t('xpack.helpSupport'),
+          helpText: this.$t('xpack.helpSupportTip'),
+          hidden: () => !this.hasValidLicense()
         }
       },
       submitMethod() {
@@ -59,7 +69,19 @@ export default {
       }
     }
   },
+  created() {
+    if (this.hasValidLicense()) {
+      this.fields.push([
+        this.$t('xpack.NavHelp'), [
+          'HELP_DOCUMENT_URL', 'HELP_SUPPORT_URL'
+        ]
+      ])
+    }
+  },
   methods: {
+    hasValidLicense() {
+      return this.$store.getters.hasValidLicense
+    }
   }
 }
 </script>

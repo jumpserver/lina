@@ -20,6 +20,7 @@
 <script>
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { Dialog } from '@/components'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'SMTP',
@@ -47,6 +48,9 @@ export default {
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
+        EMAIL_HOST_PASSWORD: {
+          component: UpdateToken
+        },
         'EMAIL_CUSTOM_USER_CREATED_BODY': {
           el: {
             type: 'textarea',
@@ -58,7 +62,19 @@ export default {
       submitMethod() {
         return 'patch'
       },
-      onConfirm() {}
+      onConfirm() {},
+      cleanFormValue(data) {
+        if (!data['EMAIL_HOST_PASSWORD']) {
+          delete data['EMAIL_HOST_PASSWORD']
+        }
+        if (data['EMAIL_USE_SSL'] === null) {
+          delete data['EMAIL_USE_SSL']
+        }
+        if (data['EMAIL_USE_TLS'] === null) {
+          delete data['EMAIL_USE_TLS']
+        }
+        return data
+      }
     }
   },
   methods: {

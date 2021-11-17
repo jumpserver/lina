@@ -171,6 +171,10 @@ export default {
               on: {
                 change: ([event], updateForm) => {
                   this.apply_category_type = event
+                  updateForm({
+                    apply_applications: [],
+                    apply_system_users: []
+                  })
                   this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
                   this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`
                 }
@@ -199,6 +203,17 @@ export default {
       url: '/api/v1/tickets/tickets/?type=apply_application&action=open',
       createSuccessNextRoute: {
         name: 'TicketList'
+      },
+      cleanFormValue(value) {
+        const applications = value.meta.apply_applications
+        const systemUsers = value.meta.apply_system_users
+        if (applications && Array.isArray(applications) && applications.length < 1) {
+          delete value.meta.apply_applications
+        }
+        if (systemUsers && Array.isArray(systemUsers) && systemUsers.length < 1) {
+          delete value.meta.apply_system_users
+        }
+        return value
       }
     }
   },
@@ -210,8 +225,9 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      validValues.meta.apply_category = validValues.meta.apply_category_type[0]
-      validValues.meta.apply_type = validValues.meta.apply_category_type[1]
+      const applyCategoryType = validValues.meta.apply_category_type
+      validValues.meta.apply_category = applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[0] : ''
+      validValues.meta.apply_type = applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[1] : ''
       delete validValues.meta['apply_category_type']
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }

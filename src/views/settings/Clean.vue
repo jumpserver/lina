@@ -23,7 +23,7 @@ export default {
           this.$t('common.Logging'),
           [
             'LOGIN_LOG_KEEP_DAYS', 'TASK_LOG_KEEP_DAYS', 'OPERATE_LOG_KEEP_DAYS',
-            'FTP_LOG_KEEP_DAYS'
+            'FTP_LOG_KEEP_DAYS', 'TERMINAL_SESSION_KEEP_DURATION'
           ]
         ],
         [

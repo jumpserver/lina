@@ -56,6 +56,7 @@ export default {
         },
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
         url: '/api/v1/settings/setting/?category=basic',
+        hasReset: false,
         submitMethod() {
           return 'patch'
         }

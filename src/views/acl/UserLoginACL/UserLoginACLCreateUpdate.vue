@@ -27,6 +27,7 @@ export default {
         }
       },
       url: '/api/v1/acls/login-acls/',
+      hasDetailInMsg: false,
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['user']],

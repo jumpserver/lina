@@ -29,12 +29,13 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
-        [this.$t('common.Auth'), ['login_mode', 'update_password', 'password', 'ad_domain']],
+        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'ad_domain']],
         [this.$t('assets.AutoPush'), ['auto_push', 'system_groups']],
         [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
         login_mode: fields.login_mode,
+        auto_generate_key: fields.auto_generate_key,
         username: fields.username,
         username_same_with_user: fields.username_same_with_user,
         auto_push: fields.auto_push,
@@ -43,7 +44,6 @@ export default {
           label: this.$t('assets.AdDomain'),
           helpText: this.$t('assets.AdDomainHelpText')
         },
-        update_password: fields.update_password,
         password: fields.password,
         system_groups: fields.system_groups
       },

@@ -13,6 +13,7 @@ import TestLoginDialog from './TestLoginDialog'
 import { IBox } from '@/components'
 import rules from '@/components/DataForm/rules'
 import { JsonRequired } from '@/components/DataForm/rules'
+import { UpdateToken } from '@/components/FormFields'
 
 export default {
   name: 'Ldap',
@@ -51,6 +52,9 @@ export default {
           rules: [
             rules.Required
           ]
+        },
+        AUTH_LDAP_BIND_PASSWORD: {
+          component: UpdateToken
         },
         AUTH_LDAP_SEARCH_OU: {
           rules: [

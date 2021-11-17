@@ -13,6 +13,7 @@ import AssetList from './AssetList.vue'
 import AccountList from './AccountList.vue'
 import AppList from './AppList'
 import AppAccountList from './AppAccountList'
+import SwitchToUserList from './SwitchToUserList'
 
 export default {
   components: {
@@ -22,7 +23,8 @@ export default {
     AssetList,
     AccountList,
     AppList,
-    AppAccountList
+    AppAccountList,
+    SwitchToUserList
   },
   data() {
     const vm = this
@@ -61,6 +63,13 @@ export default {
             name: 'AppAccountList',
             hidden: () => {
               return vm.systemUser['is_asset_protocol']
+            }
+          },
+          {
+            title: this.$t('assets.SwitchToUser'),
+            name: 'SwitchToUserList',
+            hidden: () => {
+              return vm.systemUser['protocol'] !== 'ssh'
             }
           }
         ],

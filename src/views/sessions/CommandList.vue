@@ -203,7 +203,6 @@ export default {
       const queryStr = (url.indexOf('?') > -1 ? '&' : '?') + queryUtil.stringify(_query, '=', '&')
       const treeUrl = url + queryStr
       this.$set(this.treeSetting, 'treeUrl', treeUrl)
-      this.treeTable.forceRerenderTree()
     },
     handleFilterChange(query) {
       const _query = this.cleanUrl(query)

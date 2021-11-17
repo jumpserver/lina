@@ -50,6 +50,11 @@ export default {
             return !this.$store.getters.hasValidLicense
           }
         },
+        TICKETS_ENABLED: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
         ANNOUNCEMENT_ENABLED: {
           // label: '公告',
           component: Announcement

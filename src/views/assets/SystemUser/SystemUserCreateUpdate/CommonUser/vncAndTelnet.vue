@@ -25,7 +25,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
-        [this.$t('common.Auth'), ['login_mode', 'update_password', 'password']],
+        [this.$t('common.Auth'), ['login_mode', 'password']],
         [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
@@ -33,7 +33,6 @@ export default {
         username: fields.username,
         username_same_with_user: fields.username_same_with_user,
         protocol: fields.protocol,
-        update_password: fields.update_password,
         password: fields.password
       },
       url: '/api/v1/assets/system-users/'

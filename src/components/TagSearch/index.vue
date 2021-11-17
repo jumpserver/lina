@@ -1,7 +1,13 @@
 <template>
 
   <div class="filter-field">
-    <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
+    <el-cascader
+      v-show="options.length > 0"
+      ref="Cascade"
+      :options="options"
+      :props="config"
+      @change="handleMenuItemChange"
+    />
     <el-tag
       v-for="(v, k) in filterTags"
       :key="k"
@@ -24,6 +30,7 @@
       v-model="filterValue"
       :placeholder="placeholder"
       class="search-input"
+      :class="options.length < 1 ? 'search-input2': ''"
       @blur="focus = false"
       @focus="focus = true"
       @change="handleConfirm"
@@ -182,9 +189,13 @@ export default {
   .filter-field {
     display: flex;
     align-items:  center;
+    min-width: 198px;
     border: 1px solid #dcdee2;
     border-radius: 3px;
     background-color:#fff;
+  }
+  .search-input2 >>> .el-input__inner {
+    text-indent: 5px;
   }
   .search-input >>> .el-input__inner {
     /*max-width:inherit !important;*/
