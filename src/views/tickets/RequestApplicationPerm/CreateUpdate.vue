@@ -128,6 +128,10 @@ export default {
                       {
                         label: 'MariaDB',
                         value: 'mariadb'
+                      },
+                      {
+                        label: 'SQLServer',
+                        value: 'sqlserver'
                       }
                     ]
                   },

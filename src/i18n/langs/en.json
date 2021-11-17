@@ -43,6 +43,7 @@
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
+      "sqlserver": "SQLServer",
       "k8s": "kubernetes"
     },
     "applicationsCategory": {
@@ -458,7 +459,7 @@
     "WeekCronSelect": {
       "Monday": "Monday",
       "Tuesday": "Tuesday",
-      "Wednesday": "Wednesday", 
+      "Wednesday": "Wednesday",
       "Thursday": "Thursday",
       "Friday": "Friday",
       "Saturday": "Saturday",

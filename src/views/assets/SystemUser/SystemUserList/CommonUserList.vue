@@ -126,6 +126,12 @@ export default {
               has: this.$store.getters.hasValidLicense
             },
             {
+              name: 'SQLServer',
+              title: 'SQLServer',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
+            },
+            {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',

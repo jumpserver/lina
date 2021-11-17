@@ -44,6 +44,7 @@ export default {
         case 'oracle':
         case 'postgresql':
         case 'mariadb':
+        case 'sqlserver':
           return Database
         case 'k8s':
           return K8S

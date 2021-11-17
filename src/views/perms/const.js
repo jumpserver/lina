@@ -47,6 +47,7 @@ export const ORACLE = 'oracle'
 export const POSTGRESQL = 'postgresql'
 export const MARIADB = 'mariadb'
 export const DATABASE_CATEGORY = 'db'
+export const SQLSERVER = 'sqlserver'
 
 export const DATABASE = [
   {
@@ -74,6 +75,13 @@ export const DATABASE = [
   {
     name: MARIADB,
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
+  },
+  {
+    name: SQLSERVER,
+    title: i18n.t(`applications.applicationsType.${SQLSERVER}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
