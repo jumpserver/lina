@@ -13,8 +13,8 @@
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
       <sidebar-item
-        v-for="child of item.children"
-        :key="child.path + child.name"
+        v-for="child in item.children"
+        :key="child.path"
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.path)"
@@ -53,11 +53,8 @@ export default {
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
-    return {
-      onlyOneChild: {}
-    }
-  },
-  computed: {
+    this.onlyOneChild = null
+    return {}
   },
   methods: {
     hasOneShowingChild(children = [], parent) {

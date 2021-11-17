@@ -23,7 +23,9 @@ export default {
         },
         columnsMeta: {
           name: {
-            permissions: ['rbac.view_role']
+            formatterArgs: {
+              permissions: ['rbac.view_role']
+            }
           }
         }
       },

@@ -14,11 +14,11 @@ export default {
       tableConfig: {
         url: '/api/v1/rbac/roles/?scope=system',
         columns: [
-          'name', 'builtin', 'created_by', 'date_create',
+          'name', 'users_amount', 'builtin', 'created_by', 'date_create',
           'date_updated', 'comment', 'actions'
         ],
         columnsShow: {
-          default: ['name', 'builtin', 'comment', 'actions'],
+          default: ['name', 'users_amount', 'builtin', 'comment', 'actions'],
           min: ['name', 'action']
         },
         columnsMeta: {
