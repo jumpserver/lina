@@ -11,6 +11,7 @@ export const vmware = 'vmware'
 export const nutanix = 'nutanix'
 export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
+export const openstack = 'openstack'
 export const gcp = 'gcp'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
@@ -68,6 +69,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: huaweicloud_private,
     title: i18n.t('xpack.Cloud.HuaweiPrivatecloud'),
     attrs: ['sc_username', 'sc_password', 'domain_name', 'oc_username', 'oc_password', 'api_endpoint']
+  },
+  [openstack]: {
+    name: openstack,
+    title: i18n.t('xpack.Cloud.OpenStack'),
+    attrs: ['auth_url', 'user_domain_name', 'username', 'password']
   },
   [gcp]: {
     name: gcp,
