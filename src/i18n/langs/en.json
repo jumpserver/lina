@@ -236,6 +236,8 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "UserLoginLimit": "User login limit",
+    "IPLoginLimit": "IP login limit",
     "Setting": "Setting",
     "ViewMore": "View more",
     "Announcement": "Announcement",
