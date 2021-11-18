@@ -100,6 +100,16 @@ export default {
           }
         }
       },
+      cleanFormValue(value) {
+        Object.keys(value.meta).forEach((item, index, arr) => {
+          if (['apply_assets', 'apply_system_users'].includes(item)) {
+            if (value.meta[item].length < 1) {
+              delete value.meta[item]
+            }
+          }
+        })
+        return value
+      },
       url: '/api/v1/tickets/tickets/?type=apply_asset&action=open',
       createSuccessNextRoute: {
         name: 'TicketList'
