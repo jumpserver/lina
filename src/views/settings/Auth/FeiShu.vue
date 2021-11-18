@@ -3,7 +3,7 @@
     :value="value"
     :config="settings"
     :title="$t('setting.FeiShu')"
-    enable-field="AUTH_FIESHU"
+    enable-field="AUTH_FEISHU"
     v-on="$listeners"
   />
 </template>

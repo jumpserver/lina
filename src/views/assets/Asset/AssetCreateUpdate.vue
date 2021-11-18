@@ -98,7 +98,8 @@ export default {
         }
       },
       url: '/api/v1/assets/assets/',
-      createSuccessNextRoute: { name: 'AssetDetail' }
+      createSuccessNextRoute: { name: 'AssetDetail' },
+      hasDetailInMsg: false
     }
   }
 }
