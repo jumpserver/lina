@@ -155,6 +155,16 @@ export default [
           title: i18n.t('route.RoleUpdate'),
           permissions: ['rbac.change_role']
         }
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/users/Role/RoleDetail/index'),
+        name: 'RoleDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('route.RoleDetail'),
+          permissions: ['rbac.change_role']
+        }
       }
     ]
   }
