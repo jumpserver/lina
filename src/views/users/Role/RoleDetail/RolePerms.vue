@@ -1,5 +1,12 @@
 <template>
-  <AutoDataZTree :setting="setting" />
+  <div class="row">
+    <div class="el-col-12">
+      <AutoDataZTree v-if="!loading" :setting="setting" />
+    </div>
+    <div class="el-col-12" style="background-color: white;">
+      <span>Hello</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -18,13 +25,17 @@ export default {
   },
   data() {
     return {
+      loading: true,
       setting: {
         showAssets: false,
         showMenu: false,
         showRefresh: true,
-        treeUrl: '/api/v1/rbac/permissions/tree',
+        treeUrl: '',
         check: {
           enable: true
+        },
+        async: {
+          enable: false
         },
         callback: {
           // onRightClick: this.onRightClick.bind(this),
@@ -41,6 +52,14 @@ export default {
         }
       }
     }
+  },
+  computed: {
+  },
+  mounted() {
+    this.setting.treeUrl = `/api/v1/rbac/permissions/tree/?role=${this.object.id}`
+    setTimeout(() => {
+      this.loading = false
+    })
   }
 }
 </script>
