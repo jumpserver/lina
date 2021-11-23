@@ -54,9 +54,17 @@ import ticketsRoutes from './tickets/index'
  * the routes that need to be dynamically loaded based on admin roles
  */
 export const allRoutes = [
+  // {
+  //   path: '',
+  //   redirect: '/admin/',
+  //   meta: {
+  //     permissions: []
+  //   }
+  // },
   {
     path: '',
-    redirect: '/admin/',
+    redirect: '',
+    component: () => import('@/views/home'),
     meta: {
       permissions: []
     }
