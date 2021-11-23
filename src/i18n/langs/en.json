@@ -553,6 +553,7 @@
   },
   "route": {
     "": "",
+    "Role": "Role",
     "OrgRole": "Organization roles",
     "SystemRole": "System roles",
     "RoleList": "Roles",
@@ -998,6 +999,8 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "RoleInfo": "Role info",
+    "RolePerms": "Role perms",
     "MessageSubscription": "Message Subscription",
     "AuthSettings": "Auth settings",
     "UserName": "Name",

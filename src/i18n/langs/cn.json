@@ -562,6 +562,8 @@
   },
   "route": {
     "": "",
+    "Role": "角色",
+    "RoleDetail": "角色详情",
     "RoleList": "角色列表",
     "RoleCreate": "创建角色",
     "RoleUpdate": "更新角色",
@@ -1038,6 +1040,8 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "RoleInfo": "角色信息",
+    "RolePerms": "角色权限",
     "MessageSubscription": "消息订阅",
     "AuthSettings": "认证配置",
     "UserName": "姓名",

@@ -25,7 +25,7 @@ export default {
         activeMenu: 'RoleInfo',
         submenu: [
           {
-            title: this.$t('common.RoleInfo'),
+            title: this.$t('users.RoleInfo'),
             name: 'RoleInfo'
           },
           {
