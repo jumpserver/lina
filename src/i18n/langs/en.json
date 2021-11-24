@@ -43,6 +43,7 @@
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
+      "sqlserver": "SQLServer",
       "k8s": "kubernetes"
     },
     "applicationsCategory": {
