@@ -32,7 +32,13 @@ export function getResourceNameByPath(path) {
   return resource
 }
 
-export function getResourceFromPath(p) {
+export function getResourceFromRoute(route) {
+  console.log('Route: ', route)
+  const meta = route.meta || {}
+  if (meta.app && meta.resource) {
+    return { path: route.path, view: meta.view, app: meta.app, resource: meta.resource }
+  }
+  const p = route.path
   const re = new RegExp('/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)')
   const matched = p.match(re)
   if (!matched) {
@@ -44,8 +50,8 @@ export function getResourceFromPath(p) {
   return data
 }
 
-export function getRouteRequiredPerms(path, action) {
-  const { app, resource } = getResourceFromPath(path)
+export function getRouteRequiredPerms(route, action) {
+  const { app, resource } = getResourceFromRoute(route)
   return [`${app}.${action}_${resource}`]
 }
 

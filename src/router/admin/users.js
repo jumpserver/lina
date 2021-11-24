@@ -133,7 +133,9 @@ export default [
         name: 'RoleList',
         meta: {
           title: i18n.t('route.RoleList'),
-          permissions: ['rbac.view_role']
+          permissions: ['rbac.view_role'],
+          app: 'rbac',
+          resource: 'role'
         }
       },
       {
@@ -143,7 +145,9 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('route.RoleCreate'),
-          permissions: ['rbac.add_role']
+          permissions: ['rbac.add_role'],
+          app: 'rbac',
+          resource: 'role'
         }
       },
       {
@@ -153,6 +157,8 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('route.RoleUpdate'),
+          app: 'rbac',
+          resource: 'role',
           permissions: ['rbac.change_role']
         }
       },
@@ -163,6 +169,8 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('route.RoleDetail'),
+          app: 'rbac',
+          resource: 'role',
           permissions: ['rbac.change_role']
         }
       }

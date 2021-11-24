@@ -231,6 +231,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Update": "Update",
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
@@ -491,11 +492,13 @@
     "version": "Version",
     "versionDetail": "Version detail",
     "versionRunExecution": "Version run execution",
-    "Unkown": "Unkown"
+    "Unkown": "Unkown",
+    "Unknown": "Unknown"
   },
   "perms": {
     "": "",
-    "Actions": "Permission",
+    "Permissions": "Permissions",
+    "Actions": "Actions",
     "Asset": "Asset",
     "Basic": "Basic",
     "Exclude": "Exclude",

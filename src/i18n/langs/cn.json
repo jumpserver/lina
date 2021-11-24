@@ -233,6 +233,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "Update": "更新",
     "ViewMore": "查看更多",
     "Announcement": "公告",
     "Logging": "日志记录",
@@ -500,11 +501,13 @@
     "version": "版本",
     "versionDetail": "版本详情",
     "versionRunExecution": "执行历史",
-    "Unkown": "未知"
+    "Unkown": "未知",
+    "Unknown": "未知"
   },
   "perms": {
     "": "",
-    "Actions": "权限",
+    "Permissions": "权限",
+    "Actions": "动作",
     "Asset": "资产",
     "Basic": "基本",
     "Exclude": "不包含",

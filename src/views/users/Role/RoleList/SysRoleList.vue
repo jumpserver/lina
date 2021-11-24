@@ -30,6 +30,12 @@ export default {
         }
       },
       headerActions: {
+        createRoute: {
+          name: 'RoleCreate',
+          query: {
+            scope: 'system'
+          }
+        }
       }
     }
   }

@@ -10,11 +10,11 @@ const install = function(Vue) {
   }
 
   Vue.prototype.$getCurrentResActionPerms = function(action) {
-    return getRouteRequiredPerms(this.$route.path, action)
+    return getRouteRequiredPerms(this.$route, action)
   }
 
   Vue.prototype.$hasCurrentResAction = function(action) {
-    const permsRequired = getRouteRequiredPerms(this.$route.path, action)
+    const permsRequired = getRouteRequiredPerms(this.$route, action)
     return hasPermission(permsRequired)
   }
 

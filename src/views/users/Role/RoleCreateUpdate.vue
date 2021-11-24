@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { Text } from '@/components/FormFields'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -12,13 +13,18 @@ export default {
     return {
       config: {
         initial: {
-          users: []
+          scope: this.$route.query.scope
         },
         url: '/api/v1/rbac/roles/',
         fields: [
-          [this.$t('common.Basic'), ['name', 'scope']],
           [
-            this.$t('common.Permissions'), [
+            this.$t('common.Basic'), [
+              'name', 'scope'
+            ]
+          ],
+          [
+            this.$t('perms.Permissions'), [
+              'permissions'
             ]
           ],
           [
@@ -26,14 +32,14 @@ export default {
           ]
         ],
         fieldsMeta: {
-          users: {
+          scope: {
+            type: 'select',
+            readonly: true
+          },
+          permissions: {
+            component: Text,
             el: {
-              ajax: {
-                url: '/api/v1/users/users/?fields_size=mini&order=name',
-                transformOption: (item) => {
-                  return { label: item.name + '(' + item.username + ')', value: item.id }
-                }
-              }
+              text: '添加成功后，详情中添加权限'
             }
           }
         }

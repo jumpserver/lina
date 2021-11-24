@@ -5,7 +5,7 @@
 <script>
 import ListTable from '@/components/ListTable/index'
 import { mapGetters } from 'vuex'
-import { getResourceFromPath, hasPermission } from '@/utils/jms'
+import { getResourceFromRoute, hasPermission } from '@/utils/jms'
 
 export default {
   name: 'GenericListTable',
@@ -20,8 +20,7 @@ export default {
   },
   methods: {
     getRequiredPerms(action) {
-      const path = this.$route.path
-      const { app, resource } = getResourceFromPath(path)
+      const { app, resource } = getResourceFromRoute(this.$route)
       return [`${app}.${action}_${resource}`]
     },
     hasActionPerm(action) {

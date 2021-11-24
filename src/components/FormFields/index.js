@@ -7,6 +7,7 @@ import UploadField from './UploadField'
 import UploadKey from './UploadKey'
 import UserPassword from './UserPassword'
 import WeekCronSelect from './WeekCronSelect'
+import Text from './Text'
 
 export default {
   DatetimeRangePicker,
@@ -17,7 +18,8 @@ export default {
   UploadKey,
   UploadField,
   UserPassword,
-  WeekCronSelect
+  WeekCronSelect,
+  Text
 }
 
 export {
@@ -29,5 +31,6 @@ export {
   UploadKey,
   UploadField,
   UserPassword,
-  WeekCronSelect
+  WeekCronSelect,
+  Text
 }

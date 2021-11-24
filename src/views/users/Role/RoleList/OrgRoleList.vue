@@ -24,12 +24,21 @@ export default {
         columnsMeta: {
           name: {
             formatterArgs: {
-              permissions: ['rbac.view_role']
+            }
+          },
+          actions: {
+            formatterArgs: {
             }
           }
         }
       },
       headerActions: {
+        createRoute: {
+          name: 'RoleCreate',
+          query: {
+            scope: 'org'
+          }
+        }
       }
     }
   }

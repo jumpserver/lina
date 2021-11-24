@@ -1,10 +1,12 @@
 <template>
-  <div class="row">
-    <div class="el-col-12">
-      <AutoDataZTree v-if="!loading" :setting="setting" />
+  <div>
+    <div class="row" style="height: 90%">
+      <div class="el-col-12" style="height: 100%">
+        <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
+      </div>
     </div>
-    <div class="el-col-12" style="background-color: white;">
-      <span>Hello</span>
+    <div style="height: 10%">
+      <el-button @click="updatePermissions">{{ $t('common.Update') }}</el-button>
     </div>
   </div>
 </template>
@@ -45,7 +47,12 @@ export default {
           // onDrop: this.onDrop.bind(this),
           // refresh: this.refresh.bind(this)
           // 尚未定义的函数
-          // beforeClick
+          onCheck(event, treeId, treeNode) {
+            const checked = treeNode.checked
+            console.log('on check click: ', checked)
+          },
+          onSelected() {
+          }
           // beforeDrag
           // onDrag
           // beforeAsync: this.defaultCallback.bind(this, 'beforeAsync')
@@ -56,10 +63,29 @@ export default {
   computed: {
   },
   mounted() {
-    this.setting.treeUrl = `/api/v1/rbac/permissions/tree/?role=${this.object.id}`
+    this.setting.treeUrl = `/api/v1/rbac/roles/${this.object.id}/permissions/tree/`
     setTimeout(() => {
       this.loading = false
     })
+  },
+  methods: {
+    updatePermissions() {
+      const ztree = this.$refs.tree.zTree
+      const checkedNodes = ztree.getCheckedNodes()
+      const permNodes = checkedNodes.filter(node => !node.isParent)
+      const permIds = permNodes.map(node => node.id)
+
+      const roleDetailUrl = `/api/v1/rbac/roles/${this.object.id}/`
+      const data = {
+        permissions: permIds
+      }
+      this.$axios.patch(roleDetailUrl, data).then(() => {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg') + error)
+        this.$log.error(error)
+      })
+    }
   }
 }
 </script>

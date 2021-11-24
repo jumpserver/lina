@@ -1,5 +1,5 @@
 <template>
-  <el-link @click="onClick">
+  <el-link :disabled="disabled" @click="onClick">
     {{ title }}
   </el-link>
 </template>
@@ -15,6 +15,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
