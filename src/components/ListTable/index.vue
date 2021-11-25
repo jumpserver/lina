@@ -98,15 +98,25 @@ export default {
       this.$refs.dataTable.$refs.dataTable.search(attrs, true)
     },
     handleDateChange(attrs) {
-      this.$set(this.extraQuery, 'date_from', attrs[0].toISOString())
-      this.$set(this.extraQuery, 'date_to', attrs[1].toISOString())
-      // this.extraQuery = {
-      //   date_from: attrs[0].toISOString(),
-      //   date_to: attrs[1].toISOString()
-      // }
+      let dateFrom = ''
+      let dateTo = ''
+      try {
+        dateFrom = attrs[0].toISOString()
+        dateTo = attrs[1].toISOString()
+      } catch (e) {
+        this.$log.error('Handle date change error: ', attrs)
+        dateFrom = new Date()
+        dateFrom.setDate(dateFrom.getDate() - 5)
+        dateFrom = dateFrom.toISOString()
+        dateTo = new Date()
+        dateTo.setDate(dateTo.getDate() + 1)
+        dateTo = dateTo.toISOString()
+      }
+      this.$set(this.extraQuery, 'date_from', dateFrom)
+      this.$set(this.extraQuery, 'date_to', dateTo)
       const query = {
-        date_from: attrs[0].toISOString(),
-        date_to: attrs[1].toISOString()
+        date_from: dateFrom,
+        date_to: dateTo
       }
       this.$emit('TagDateChange', attrs)
       return this.dataTable.searchDate(query)
