@@ -7,23 +7,14 @@ export default {
   path: '/user/',
   component: Layout,
   name: 'UserView',
-  redirect: '/user/dashboard',
+  // redirect: '/user/dashboard',
   meta: {
+    title: i18n.t('common.nav.UserPage'),
     view: 'user',
     permissions: ['rbac.view_userview']
   },
   children: [
     // 404 page must be placed at the end !!!
-    {
-      path: '/user/dashboard',
-      component: () => import('@/views/userviews/UserDashboard'),
-      name: 'AuditDashboard',
-      meta: {
-        icon: 'files-o',
-        title: i18n.t('route.Dashboard'),
-        permissions: []
-      }
-    },
     {
       path: '/user/assets',
       name: 'MyAssets',
