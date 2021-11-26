@@ -383,6 +383,8 @@
     "nav": {
       "APIKey": "API Key",
       "AdminPage": "Admin page",
+      "AuditPage": "Audit page",
+      "SwitchPage": "Switch page",
       "Docs": "Docs",
       "Help": "Help",
       "Logout": "Logout",
