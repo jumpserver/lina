@@ -224,7 +224,10 @@
     "User": "User",
     "Username": "Username",
     "SystemUserName": "System username",
-    "View": "View"
+    "View": "View",
+    "LoginIP": "Login IP",
+    "LoginCity": "Login city",
+    "LoginDate": "Login date"
   },
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",

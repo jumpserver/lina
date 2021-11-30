@@ -39,18 +39,8 @@ export default {
     ]),
     viewsMapper() {
       const mapper = {}
-      const addRoutes = this.$store.state.permission.addRoutes || []
-      for (const view of addRoutes) {
-        const child = view.children || []
-        if (child && child.length > 0) {
-          if (child[0].children && child[0].children.length > 0) {
-            mapper[view.meta.view] = child[0].children[0].meta.fullPath
-          } else {
-            mapper[view.meta.view] = view.children[0].meta.fullPath
-          }
-        } else {
-          mapper[view.meta.view] = view.meta.fullPath
-        }
+      for (const view of this.views) {
+        mapper[view.name] = view
       }
       return mapper
     },
@@ -76,9 +66,9 @@ export default {
       })
     },
     handleSelectView(key, keyPath) {
-      const routeName = this.viewsMapper[key] || '/'
+      const routeName = this.viewsMapper[key]?.route || 'Home'
       const fromRoute = this.$route
-      this.$router.push(routeName, () => {
+      this.$router.push({ name: routeName }, () => {
         store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
       })
     }

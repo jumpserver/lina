@@ -249,7 +249,7 @@ const actions = {
     const addRoutes = state.addRoutes
     const routeArr = [
       {
-        name: '/',
+        name: 'Home',
         label: i18n.t('common.nav.HomePage'),
         route: '',
         perms: []
@@ -268,6 +268,9 @@ const actions = {
       }
     })
     return routeArr
+  },
+  getRootPerms({ rootState }) {
+    return rootState.users.perms || []
   }
 }
 

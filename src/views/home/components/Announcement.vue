@@ -1,0 +1,74 @@
+<template>
+  <Hcard v-bind="cardConfig">
+    <ul class="content">
+      <li v-if="announcement.content" class="item">
+        <span class="item-title">【{{ announcement.subject }}】</span>
+        <span>{{ announcement.content }}</span>
+      </li>
+      <li v-else class="other">{{ i18n.t('common.noAnnouncement') }}</li>
+    </ul>
+  </Hcard>
+</template>
+
+<script>
+import Hcard from './Hcard.vue'
+import { mapGetters } from 'vuex'
+import i18n from '@/i18n/i18n'
+
+export default {
+  name: 'Hannouncement',
+  components: {
+    Hcard
+  },
+  data() {
+    return {
+      i18n,
+      cardConfig: {
+        title: i18n.t('common.Announcement')
+      },
+      content: ''
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'publicSettings'
+    ]),
+    announcement() {
+      const ann = this.publicSettings?.ANNOUNCEMENT || {}
+      return {
+        id: ann?.ID,
+        subject: ann?.SUBJECT || '',
+        content: ann?.CONTENT || '',
+        link: ann?.LINK
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+ul,li {
+  padding: 0;
+  margin: 0;
+  list-style: none
+}
+.content {
+  width: 100%;
+  .item {
+    margin-bottom: 16px;
+    cursor: pointer;
+    vertical-align: middle;
+    .item-title {
+      display: inline-block;
+      color: #8b9db6;
+      text-align: center;
+      font-size: 15px;
+      vertical-align: middle;
+    }
+  }
+  .other {
+    text-align: center;
+  }
+}
+
+</style>

@@ -15,6 +15,7 @@ export default {
   path: '/admin',
   component: Layout,
   name: 'AdminView',
+  redirect: '/admin/dashboard',
   meta: {
     title: i18n.t('common.nav.AdminPage'),
     icon: 'users',
@@ -23,6 +24,16 @@ export default {
     permissions: ['rbac.view_adminview']
   },
   children: [
+    {
+      path: '/admin/dashboard',
+      name: 'dashboard',
+      component: () => import('@/views/dashboard/index'),
+      meta: {
+        title: i18n.t('route.Dashboard'),
+        icon: 'dashboard',
+        permissions: ['rbac.view_adminview']
+      }
+    },
     {
       path: '/admin/users',
       component: empty,

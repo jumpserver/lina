@@ -226,7 +226,10 @@
     "User": "用户",
     "Username": "用户名",
     "View": "查看",
-    "SystemUserName": "系统用户名"
+    "SystemUserName": "系统用户名",
+    "LoginIP": "登录IP",
+    "LoginCity": "登录城市",
+    "LoginDate": "登录日期"
   },
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
@@ -426,6 +429,7 @@
       "SPECIAL_CHAR_REQUIRED": "须包含特殊字符",
       "MIN_LENGTH_ERROR": "密码最小长度 {0} 位"
     },
+    "noAnnouncement": "暂无公告",
     "lastCannotBeDeleteMsg": "最后一项，不能被删除",
     "InvalidJson": "不是合法 JSON"
   },
