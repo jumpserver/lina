@@ -63,6 +63,7 @@ export const allRoutes = [
   // },
   {
     path: '',
+    name: 'Home',
     redirect: '',
     component: () => import('@/views/home'),
     meta: {

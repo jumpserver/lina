@@ -1,25 +1,20 @@
 <template>
   <div id="Hcard">
-    <div class="head" :style="{marginBottom: `${title || btnText ? '16px': 0}`}">
-      <el-row class="rows">
-        <el-col :span="12" class="public-height">
-          <div v-show="title" class="head-title">{{ title }}</div>
-        </el-col>
-        <el-col :span="12" class="public-height">
-          <div class="head-right">
-            <el-button
-              v-show="btnText"
-              type="text"
-              size="mini"
-              @click="btnChange"
-            >
-              {{ btnText }}
-            </el-button>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-    <slot />
+    <el-card class="box-card">
+      <div v-if="title || btnText" slot="header" class="clearfix">
+        <span v-show="title" class="head-title">{{ title }}</span>
+        <el-button
+          v-show="btnText"
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="btnChange"
+        >
+          {{ btnText }}
+        </el-button>
+      </div>
+      <slot />
+    </el-card>
+
   </div>
 </template>
 
@@ -38,6 +33,10 @@ export default {
     btnRouteName: {
       type: String,
       default: () => ''
+    },
+    showNumber: {
+      type: String,
+      default: () => ''
     }
   },
   methods: {
@@ -52,31 +51,26 @@ export default {
 
 <style  lang="scss" scoped>
   #Hcard {
-    padding: 20px;
+    width: 100%;
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
-    width: 100%;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    &>>> .el-card__header {
+      padding: 20px 20px 0;
+      border-bottom: 0;
+    }
+    &:hover {
+      box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
+    }
     &:nth-child(n) {
       margin-bottom: 20px;
     }
-    .head {
-      display: flex;
-      .rows {
-        width: 100%;
-        height: 100%;
-        .head-title {
-          display: inline-block;
-          font-size: 14px;
-          font-weight: 700;
-          color: #000;
-        }
-        .head-right {
-          text-align: right;
-          &>>> .el-button--mini {
-            padding: 0;
-          }
-        }
-      }
+    .head-title {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #000;
     }
   }
   .public-height {

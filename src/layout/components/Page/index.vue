@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <PageHeading class="disabled-when-print">
+    <PageHeading v-if="iTitle || helpMessage" class="disabled-when-print">
       <slot name="title">{{ iTitle }}</slot>
       <template #rightSide>
         <slot name="headingRightSide" />

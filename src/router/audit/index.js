@@ -16,6 +16,16 @@ export default {
   },
   children: [
     {
+      path: '/audit/dashboard',
+      component: () => import('@/views/dashboard/index'),
+      name: 'AuditDashboard',
+      meta: {
+        icon: 'files-o',
+        title: i18n.t('route.Dashboard'),
+        permissions: []
+      }
+    },
+    {
       path: '/audit/sessions',
       component: empty,
       name: 'Sessions',

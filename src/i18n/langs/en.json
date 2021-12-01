@@ -224,7 +224,10 @@
     "User": "User",
     "Username": "Username",
     "SystemUserName": "System username",
-    "View": "View"
+    "View": "View",
+    "LoginIP": "Login IP",
+    "LoginCity": "Login city",
+    "LoginDate": "Login date"
   },
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
@@ -385,7 +388,8 @@
       "APIKey": "API Key",
       "AdminPage": "Admin page",
       "AuditPage": "Audit page",
-      "SwitchPage": "Switch page",
+      "HomePage": "Home page",
+      "QuickAccess": "Quick access",
       "Docs": "Docs",
       "Help": "Help",
       "Logout": "Logout",
