@@ -269,8 +269,10 @@ const actions = {
     })
     return routeArr
   },
-  getRootPerms({ rootState }) {
-    return rootState.users.perms || []
+  // 判断是否存在某种权限
+  getRootPerms({ rootState }, rootType) {
+    const perms = rootState.users.perms || []
+    return perms.includes(rootType)
   }
 }
 

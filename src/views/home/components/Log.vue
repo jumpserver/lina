@@ -1,17 +1,13 @@
 <template>
   <Hcard v-bind="cardConfig">
     <div class="content">
-      <ul v-if="dataArr.length > 0">
-        <li v-for="(i, index) in dataArr" :key="index" class="item">
+      <ul>
+        <li v-for="(i, index) in cardConfig.dataArr" :key="index" class="item">
           <span>{{ i18n.t('audits.LoginIP') }} {{ i.ip }}</span>&nbsp;
           <span>{{ i18n.t('audits.LoginCity') }}：{{ i.city }}</span>&nbsp;
-          <span>{{ i18n.t('audits.LoginDate') }}：{{ i.datetime }}</span>
+          <span>{{ i18n.t('audits.LoginDate') }}：{{ moment(i.datetime).format('YY-MM-DD HH:mm:ss') }}</span>
         </li>
       </ul>
-      <div v-else class="other">
-        <i class="icon el-icon-folder-opened" />
-        <div>{{ this.$t('common.NoData') }}</div>
-      </div>
     </div>
   </Hcard>
 </template>
@@ -19,6 +15,7 @@
 <script>
 import Hcard from './Hcard.vue'
 import i18n from '@/i18n/i18n'
+import moment from 'moment'
 
 export default {
   name: 'Hannouncement',
@@ -28,10 +25,12 @@ export default {
   data() {
     return {
       i18n,
+      moment,
       cardConfig: {
-        title: '登录日志'
-      },
-      dataArr: []
+        title: '登录日志',
+        icon: 'fa-history',
+        dataArr: []
+      }
     }
   },
   created() {
@@ -41,7 +40,7 @@ export default {
     init() {
       this.$axios(`/api/v1/audits/login-logs/`).then((res) => {
         if (res && res.length > 0) {
-          this.dataArr = res.slice(0, 5)
+          this.cardConfig.dataArr = res.slice(0, 5)
         }
       })
     }
@@ -82,14 +81,4 @@ ul,li {
     }
   }
 }
-.other {
-  width: 100%;
-  height: auto;
-  text-align: center;
-  .icon {
-    text-align: center;
-    font-size: 30px;
-  }
-}
-
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="Hcard">
     <el-card class="box-card">
-      <div v-if="title || btnText" slot="header" class="clearfix">
+      <div v-show="title || btnText" slot="header" class="clearfix">
         <span v-show="title" class="head-title">{{ title }}</span>
         <el-button
           v-show="btnText"
@@ -12,17 +12,31 @@
           {{ btnText }}
         </el-button>
       </div>
-      <slot />
+      <slot v-if="dataArr.length > 0" />
+      <div v-else class="others">
+        <i class="icon el-icon-folder-opened" />
+        <div>{{ i18n.t('common.NoData') }}</div>
+      </div>
     </el-card>
-
+    <i class="fa fa-5x" :class="icon" />
   </div>
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
+
 export default {
   name: 'Hcard',
   props: {
     title: {
+      type: String,
+      default: () => ''
+    },
+    dataArr: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
       type: String,
       default: () => ''
     },
@@ -39,6 +53,11 @@ export default {
       default: () => ''
     }
   },
+  data() {
+    return {
+      i18n
+    }
+  },
   methods: {
     btnChange() {
       if (this.btnRouteName) {
@@ -51,6 +70,7 @@ export default {
 
 <style  lang="scss" scoped>
   #Hcard {
+    position: relative;
     width: 100%;
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
@@ -66,11 +86,29 @@ export default {
     &:nth-child(n) {
       margin-bottom: 20px;
     }
+    .fa {
+      position: absolute;
+      right: -4px;
+      top: -19px;
+    }
+    .fa:before {
+      font-size: 130px;
+      opacity: .1;
+    }
     .head-title {
       display: inline-block;
       font-size: 14px;
       font-weight: 500;
       color: #000;
+    }
+    .others {
+      width: 100%;
+      height: auto;
+      text-align: center;
+      .icon {
+        text-align: center;
+        font-size: 30px;
+      }
     }
   }
   .public-height {

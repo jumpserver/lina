@@ -1,17 +1,13 @@
 <template>
   <Hcard v-bind="cardConfig">
     <div class="content">
-      <ul v-if="dataArr.length > 0">
-        <li v-for="(i, index) in dataArr" :key="index" class="item">
+      <ul>
+        <li v-for="(i, index) in cardConfig.dataArr" :key="index" class="item">
           <span>{{ i18n.t('tickets.title') }}: {{ i.title }}</span>&nbsp;
           <span>{{ i18n.t('tickets.type') }}：{{ i.type_display }}</span>&nbsp;
           <span>{{ i18n.t('tickets.date') }}：{{ i.date_updated }}</span>
         </li>
       </ul>
-      <div v-else class="other">
-        <i class="icon el-icon-folder-opened" />
-        <div>{{ this.$t('common.NoData') }}</div>
-      </div>
     </div>
   </Hcard>
 </template>
@@ -30,9 +26,10 @@ export default {
     return {
       i18n,
       cardConfig: {
-        title: this.$t('tickets.AssignedMe')
-      },
-      dataArr: []
+        title: this.$t('tickets.AssignedMe'),
+        icon: 'fa-check-square-o',
+        dataArr: []
+      }
     }
   },
   computed: {
@@ -50,7 +47,7 @@ export default {
     init() {
       this.$axios(this.url).then((res) => {
         if (res && res.length > 0) {
-          this.dataArr = res.slice(0, 5)
+          this.cardConfig.dataArr = res.slice(0, 5)
         }
       })
     }
@@ -94,14 +91,4 @@ ul,li {
     }
   }
 }
-.other {
-  width: 100%;
-  height: auto;
-  text-align: center;
-  .icon {
-    text-align: center;
-    font-size: 30px;
-  }
-}
-
 </style>

@@ -6,12 +6,13 @@
         <div class="content">
           <div class="content-body">
             <el-row>
-              <el-col :span="16" class="public-height" style="padding-right: 20px;">
+              <el-col :span="16" style="padding-right: 20px;">
                 <Log />
+                <Session />
                 <Assect />
                 <Ticket />
               </el-col>
-              <el-col :span="8" class="public-height">
+              <el-col :span="8">
                 <User />
                 <Announcement />
               </el-col>
@@ -24,12 +25,14 @@
 </template>
 
 <script>
+import store from '@/store'
 import { NavHeader } from '@/layout/components'
 import User from './components/User'
 import Announcement from './components/Announcement'
 import Ticket from './components/Ticket'
 import Log from './components/Log'
 import Assect from './components/Assect'
+import Session from './components/Session'
 
 export default {
   name: 'Name',
@@ -39,11 +42,27 @@ export default {
     Announcement,
     Ticket,
     Log,
-    Assect
+    Assect,
+    Session
+  },
+  data() {
+    return {
+      rootShow: true
+    }
   },
   computed: {
     getasValidLicense() {
       return this.$store.getters.hasValidLicense
+    }
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    init() {
+      store.dispatch('permission/getRootPerms', 'aaaa').then(res => {
+        this.rootShow = res
+      })
     }
   }
 }
@@ -62,7 +81,11 @@ export default {
     .container {
       position: relative;
       height: calc(100% - 55px);
-      background-color: #f3f4f7;
+      // background-color: #f3f4f7;
+      background: -webkit-linear-gradient(white, #f3f4f7);
+      background: -o-linear-gradient(white, #f3f4f7);
+      background: -moz-linear-gradient(white, #f3f4f7);
+      background: linear-gradient(white, #f3f4f7);
       .main {
         position: relative;
         height: 100%;
@@ -86,7 +109,7 @@ export default {
           top: 50px;
           left: 0;
           width: 100%;
-          height: 100%;
+          height: calc(100% - 50px);
           display: flex;
           flex-direction: column;
           .content-body {
@@ -99,17 +122,4 @@ export default {
       }
     }
   }
-  .public-height {
-    height: 100%;
-  }
-  .public-wigth {
-    width: 100%;
-  }
-  .public-box {
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
-    width: 100%;
-  }
-
 </style>
