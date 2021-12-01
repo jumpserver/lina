@@ -21,6 +21,10 @@ const install = function(Vue) {
   Vue.prototype.$hasLicense = function() {
     return this.$store.getters.hasValidLicense
   }
+
+  Vue.prototype.$isRootOrg = function() {
+    return this.$store.getters.currentOrgIsRoot
+  }
 }
 
 window['permission'] = permission

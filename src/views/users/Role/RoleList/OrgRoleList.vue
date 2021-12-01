@@ -1,45 +1,16 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <BaseRoleList scope="org" />
 </template>
 
 <script>
-import { ListTable } from '@/components'
+import BaseRoleList from './BaseRoleList'
 
 export default {
   components: {
-    ListTable
+    BaseRoleList
   },
   data() {
     return {
-      tableConfig: {
-        url: '/api/v1/rbac/roles/',
-        columns: [
-          'name', 'builtin', 'created_by', 'date_create',
-          'date_updated', 'comment', 'actions'
-        ],
-        columnsShow: {
-          default: ['name', 'builtin', 'comment', 'actions'],
-          min: ['name', 'action']
-        },
-        columnsMeta: {
-          name: {
-            formatterArgs: {
-            }
-          },
-          actions: {
-            formatterArgs: {
-            }
-          }
-        }
-      },
-      headerActions: {
-        createRoute: {
-          name: 'RoleCreate',
-          query: {
-            scope: 'org'
-          }
-        }
-      }
     }
   }
 }
