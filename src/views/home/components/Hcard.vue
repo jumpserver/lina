@@ -1,7 +1,7 @@
 <template>
   <div id="Hcard">
     <el-card class="box-card">
-      <div v-if="title || btnText" slot="header" class="clearfix">
+      <div v-show="title || btnText" slot="header" class="clearfix">
         <span v-show="title" class="head-title">{{ title }}</span>
         <el-button
           v-show="btnText"
@@ -12,17 +12,36 @@
           {{ btnText }}
         </el-button>
       </div>
-      <slot />
+      <ListTable
+        ref="ListTable"
+        class="ListTable"
+        :table-config="tableConfig"
+        :header-actions="headerActions"
+      />
+      <i class="fa fa-5x" :class="icon" />
     </el-card>
-
   </div>
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
+import ListTable from '@/components/ListTable/index'
+
 export default {
   name: 'Hcard',
+  components: {
+    ListTable
+  },
   props: {
     title: {
+      type: String,
+      default: () => ''
+    },
+    dataArr: {
+      type: Array,
+      default: () => []
+    },
+    icon: {
       type: String,
       default: () => ''
     },
@@ -30,13 +49,19 @@ export default {
       type: String,
       default: () => ''
     },
-    btnRouteName: {
-      type: String,
-      default: () => ''
-    },
-    showNumber: {
-      type: String,
-      default: () => ''
+    tableConfig: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      i18n,
+      headerActions: {
+        hasLeftActions: false,
+        hasRightActions: false,
+        hasSearch: false
+      }
     }
   },
   methods: {
@@ -51,6 +76,7 @@ export default {
 
 <style  lang="scss" scoped>
   #Hcard {
+    position: relative;
     width: 100%;
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
@@ -66,14 +92,35 @@ export default {
     &:nth-child(n) {
       margin-bottom: 20px;
     }
+    .fa {
+      position: absolute;
+      right: -4px;
+      top: -19px;
+    }
+    .fa:before {
+      font-size: 130px;
+      opacity: .1;
+    }
     .head-title {
       display: inline-block;
       font-size: 14px;
       font-weight: 500;
       color: #000;
     }
+    .others {
+      width: 100%;
+      height: auto;
+      text-align: center;
+      .icon {
+        text-align: center;
+        font-size: 30px;
+      }
+    }
   }
   .public-height {
     min-height: .1px;
+  }
+  .ListTable >>> .el-data-table .el-pagination {
+    display: none;
   }
 </style>

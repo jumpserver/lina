@@ -1,5 +1,8 @@
 <template>
-  <Hcard v-bind="cardConfig">
+  <el-card class="box-card">
+    <div slot="header" class="title">
+      <span>{{ i18n.t('common.Announcement') }}</span>
+    </div>
     <ul class="content">
       <li v-if="announcement.content" class="item">
         <span class="item-title">【{{ announcement.subject }}】</span>
@@ -7,19 +10,15 @@
       </li>
       <li v-else class="other">{{ i18n.t('common.noAnnouncement') }}</li>
     </ul>
-  </Hcard>
+  </el-card>
 </template>
 
 <script>
-import Hcard from './Hcard.vue'
 import { mapGetters } from 'vuex'
 import i18n from '@/i18n/i18n'
 
 export default {
-  name: 'Hannouncement',
-  components: {
-    Hcard
-  },
+  name: 'Announcement',
   data() {
     return {
       i18n,
@@ -52,6 +51,15 @@ ul,li {
   margin: 0;
   list-style: none
 }
+.box-card {
+  box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
+  &:hover {
+    box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
+  }
+}
+.title {
+  font-weight: 500;
+}
 .content {
   width: 100%;
   .item {
@@ -70,5 +78,4 @@ ul,li {
     text-align: center;
   }
 }
-
 </style>
