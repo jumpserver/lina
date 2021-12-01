@@ -1,12 +1,21 @@
 <template>
   <div>
     <div class="row" style="height: 90%">
+      <div style="height: 10%">
+        <el-button
+          icon="el-icon-circle-check"
+          size="small"
+          type="primary"
+          style="width: 111px;"
+          :disabled="isDisabled"
+          @click="updatePermissions"
+        >
+          {{ $t('common.Update') }}
+        </el-button>
+      </div>
       <div class="el-col-12" style="height: 100%">
         <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
       </div>
-    </div>
-    <div style="height: 10%">
-      <el-button @click="updatePermissions">{{ $t('common.Update') }}</el-button>
     </div>
   </div>
 </template>
@@ -26,8 +35,10 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       loading: true,
+      isDisabled: true,
       setting: {
         showAssets: false,
         showMenu: false,
@@ -49,6 +60,9 @@ export default {
           // 尚未定义的函数
           onCheck(event, treeId, treeNode) {
             const checked = treeNode.checked
+            vm.$nextTick(() => {
+              vm.isDisabled = false
+            })
             console.log('on check click: ', checked)
           },
           onSelected() {
