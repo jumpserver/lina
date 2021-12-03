@@ -1057,6 +1057,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "FileEncryptionPassword": "File encryption password",
     "MessageSubscription": "Message Subscription",
     "AuthSettings": "Auth settings",
     "UserName": "Name",
@@ -1193,7 +1194,9 @@
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
     "ChangeAuthPlan": {
+      "MailRecipient": "Mail recipient",
       "AddAsset": "Add asset",
+      "ContainAttachment": "Contain attachment",
       "AddNode": "Add node",
       "AddSystemUser": "Add systemuser",
       "Asset": "Asset",

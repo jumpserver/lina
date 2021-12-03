@@ -1094,6 +1094,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "FileEncryptionPassword": "文件加密密码",
     "MessageSubscription": "消息订阅",
     "AuthSettings": "认证配置",
     "UserName": "姓名",
@@ -1233,7 +1234,9 @@
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "ChangeAuthPlan": {
+      "ContainAttachment": "含附件",
       "AddAsset": "添加资产",
+      "MailRecipient": "邮件收件人",
       "AddNode": "添加节点",
       "AddSystemUser": "添加系统用户",
       "Asset": "资产",
