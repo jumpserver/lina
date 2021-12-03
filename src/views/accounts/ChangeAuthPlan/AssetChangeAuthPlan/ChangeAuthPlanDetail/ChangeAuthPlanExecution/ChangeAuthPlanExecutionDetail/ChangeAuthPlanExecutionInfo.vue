@@ -51,8 +51,12 @@ export default {
         {
           key: this.$t('xpack.ChangeAuthPlan.DateStart'),
           value: toSafeLocalDateStr(this.object.date_start)
+        },
+        {
+          key: this.$t('xpack.ChangeAuthPlan.MailRecipient'),
+          value: this.object.recipients ? this.object.recipients.map(
+            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('xpack.ChangeAuthPlan.ContainAttachment') : ''}`).join(', ') : ''
         }
-
       ]
     }
   }

@@ -21,7 +21,7 @@ export default {
         [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['is_password', 'password_strategy', 'password', 'password_rules']],
         [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'private_key']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['recipients', 'comment']]
       ],
       initial: {
         password_strategy: 'custom',
@@ -47,7 +47,8 @@ export default {
         password_strategy: fields.password_strategy,
         ssh_key_strategy: fields.ssh_key_strategy,
         crontab: fields.crontab,
-        interval: fields.interval
+        interval: fields.interval,
+        recipients: fields.recipients
       },
       createSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
       updateSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
