@@ -1215,6 +1215,8 @@
     "HasRead": "是否已读",
     "Sender": "发送人",
     "MarkAsRead": "标记已读",
+    "OneClickRead": "一键已读",
+    "OneClickReadMsg": "你确定要将已加载的信息标记为已读吗?",
     "NoUnreadMsg": "暂无未读消息",
     "SiteMessage": "站内信",
     "SMS": "短信"

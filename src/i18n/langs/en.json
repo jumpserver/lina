@@ -1176,6 +1176,8 @@
     "HasRead": "Has read",
     "Sender": "Sender",
     "MarkAsRead": "Mark as read",
+    "OneClickRead": "One Click Read",
+    "OneClickReadMsg": "Are you sure you want to mark the loaded information as read?",
     "NoUnreadMsg": "No unread messages",
     "SiteMessage": "Site messages",
     "SMS": "SMS"
