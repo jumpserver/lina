@@ -81,7 +81,6 @@ export default {
     .container {
       position: relative;
       height: calc(100% - 55px);
-      // background-color: #f3f4f7;
       background: -webkit-linear-gradient(white, #f3f4f7);
       background: -o-linear-gradient(white, #f3f4f7);
       background: -moz-linear-gradient(white, #f3f4f7);

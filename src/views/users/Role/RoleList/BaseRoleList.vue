@@ -35,13 +35,13 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canUpdate: (row) => {
+              canUpdate: ({ row }) => {
                 return this.hasPermNotBuiltinNotRootOrg(row, 'rbac.change_role')
               },
-              canDelete: (row) => {
+              canDelete: ({ row }) => {
                 return this.hasPermNotBuiltinNotRootOrg(row, 'rbac.delete_role')
               },
-              canClone: (row) => {
+              canClone: ({ row }) => {
                 return this.hasPermNotBuiltinNotRootOrg(row, 'rbac.add_role')
               }
             }
@@ -61,8 +61,8 @@ export default {
   methods: {
     hasPermNotBuiltinNotRootOrg(row, perm) {
       return !row['builtin'] &&
-        this.$hasPerm(perm) &&
-        !this.$isRootOrg
+          this.$hasPerm(perm) &&
+          !this.$isRootOrg()
     }
   }
 }

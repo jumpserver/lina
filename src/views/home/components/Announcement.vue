@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card class="box-card">
     <div slot="header" class="title">
       <span>{{ i18n.t('common.Announcement') }}</span>
     </div>
@@ -18,7 +18,7 @@ import { mapGetters } from 'vuex'
 import i18n from '@/i18n/i18n'
 
 export default {
-  name: 'Hannouncement',
+  name: 'Announcement',
   data() {
     return {
       i18n,
@@ -51,6 +51,12 @@ ul,li {
   margin: 0;
   list-style: none
 }
+.box-card {
+  box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
+  &:hover {
+    box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
+  }
+}
 .title {
   font-weight: 500;
 }
@@ -72,5 +78,4 @@ ul,li {
     text-align: center;
   }
 }
-
 </style>

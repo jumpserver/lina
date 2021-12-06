@@ -1,28 +1,24 @@
 <template>
-  <div>
-    <div class="row" style="height: 90%">
-      <div style="height: 10%">
-        <el-button
-          icon="el-icon-circle-check"
-          size="small"
-          type="primary"
-          style="width: 111px;"
-          :disabled="isDisabled"
-          @click="updatePermissions"
-        >
-          {{ $t('common.Update') }}
-        </el-button>
-      </div>
-      <div class="el-col-12" style="height: 100%">
-        <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
-      </div>
+  <div class="row">
+    <div style="height: 10%">
+      <el-button
+        size="small"
+        type="primary"
+        style="width: 220px;"
+        :disabled="isDisabled"
+        @click="updatePermissions"
+      >
+        {{ $t('common.Update') }}
+      </el-button>
+    </div>
+    <div class="el-col-12 perm-tree" style="height: 80%">
+      <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
     </div>
   </div>
 </template>
 
 <script>
 import AutoDataZTree from '@/components/AutoDataZTree'
-
 export default {
   name: 'GroupGrantedAssets',
   components: {
@@ -104,6 +100,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.perm-tree >>> .ztree {
+  //background: white;
+
+  //* {
+  //  background: white;
+  //}
+}
 
 </style>

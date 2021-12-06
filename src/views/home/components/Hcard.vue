@@ -12,21 +12,26 @@
           {{ btnText }}
         </el-button>
       </div>
-      <slot v-if="dataArr.length > 0" />
-      <div v-else class="others">
-        <i class="icon el-icon-folder-opened" />
-        <div>{{ i18n.t('common.NoData') }}</div>
-      </div>
+      <ListTable
+        ref="ListTable"
+        class="ListTable"
+        :table-config="tableConfig"
+        :header-actions="headerActions"
+      />
+      <i class="fa fa-5x" :class="icon" />
     </el-card>
-    <i class="fa fa-5x" :class="icon" />
   </div>
 </template>
 
 <script>
 import i18n from '@/i18n/i18n'
+import ListTable from '@/components/ListTable/index'
 
 export default {
   name: 'Hcard',
+  components: {
+    ListTable
+  },
   props: {
     title: {
       type: String,
@@ -44,18 +49,19 @@ export default {
       type: String,
       default: () => ''
     },
-    btnRouteName: {
-      type: String,
-      default: () => ''
-    },
-    showNumber: {
-      type: String,
-      default: () => ''
+    tableConfig: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      i18n
+      i18n,
+      headerActions: {
+        hasLeftActions: false,
+        hasRightActions: false,
+        hasSearch: false
+      }
     }
   },
   methods: {
@@ -113,5 +119,8 @@ export default {
   }
   .public-height {
     min-height: .1px;
+  }
+  .ListTable >>> .el-data-table .el-pagination {
+    display: none;
   }
 </style>
