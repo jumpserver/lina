@@ -112,6 +112,10 @@ export default {
           }
         },
         {
+          key: this.$t('perms.Node'),
+          value: this.object.meta.apply_nodes_display.join(', ')
+        },
+        {
           key: this.$t('assets.Asset'),
           value: this.object.meta.apply_assets_display.join(', ')
         },
