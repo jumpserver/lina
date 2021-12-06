@@ -1,5 +1,5 @@
 <template>
-  <div id="Hcard">
+  <div id="HomeCard">
     <el-card class="box-card">
       <div v-show="title || btnText" slot="header" class="clearfix">
         <span v-show="title" class="head-title">{{ title }}</span>
@@ -28,7 +28,7 @@ import i18n from '@/i18n/i18n'
 import ListTable from '@/components/ListTable/index'
 
 export default {
-  name: 'Hcard',
+  name: 'HomeCard',
   components: {
     ListTable
   },
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-  #Hcard {
+  #HomeCard {
     position: relative;
     width: 100%;
     background-color: #fff;
@@ -98,7 +98,7 @@ export default {
       top: -19px;
     }
     .fa:before {
-      font-size: 130px;
+      font-size: 110px;
       opacity: .1;
     }
     .head-title {

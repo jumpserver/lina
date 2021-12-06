@@ -1,15 +1,15 @@
 <template>
-  <Hcard v-bind="cardConfig" :table-config="tableConfig" />
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
-import Hcard from './Hcard.vue'
+import HomeCard from './HomeCard.vue'
 import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Log',
   components: {
-    Hcard
+    HomeCard
   },
   data() {
     return {
@@ -24,7 +24,7 @@ export default {
         columns: [
           'ip', 'city', 'datetime'
         ],
-        totalData: [],
+        hasSelection: false,
         paginationSize: 5
       }
     }
