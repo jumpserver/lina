@@ -17,7 +17,10 @@
         :key="view.name"
         v-perms="view.perms"
         :index="view.name"
-      >{{ view.label }}</el-menu-item>
+      >
+        <i class="icons" :class="componentIcon(view.label)" />
+        <span slot="title" class="icons-title">{{ view.label }}</span>
+      </el-menu-item>
     </el-submenu>
   </el-menu>
 </template>
@@ -71,24 +74,30 @@ export default {
   },
   methods: {
     async getRootPage() {
-      const addRoutes = await this.$store.state.permission.addRoutes || []
-      const routeArr = []
-      addRoutes.forEach(i => {
-        const perm = i.meta?.permissions
-        if (perm.length > 0 && perm[0]) {
-          const obj = {
-            name: i.meta.view,
-            label: i.meta.title,
-            route: i.name,
-            perms: perm
-          }
-          routeArr.push(obj)
-        }
+      store.dispatch('permission/getFilterRoutes').then(res => {
+        this.views = res
       })
-      this.views = routeArr
+    },
+    componentIcon(obj) {
+      let isClassIcon = ''
+      switch (obj) {
+        case this.$t('common.nav.UserPage'):
+          isClassIcon = 'el-icon-user-solid'
+          break
+        case this.$t('common.nav.HomePage'):
+          isClassIcon = 'el-icon-s-home'
+          break
+        case this.$t('common.nav.AuditPage'):
+          isClassIcon = 'el-icon-s-claim'
+          break
+        case this.$t('common.nav.AdminPage'):
+          isClassIcon = 'el-icon-s-tools'
+          break
+      }
+      return isClassIcon
     },
     handleSelectView(key, keyPath) {
-      const routeName = this.viewsMapper[key]
+      const routeName = this.viewsMapper[key] || '/'
       const fromRoute = this.$route
       this.$router.push(routeName, () => {
         store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
@@ -99,6 +108,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-menu--popup-bottom-start {
+  margin-top: 0px!important;
+}
+
 .menu-main.el-menu {
   background-color: transparent;
   ::v-deep .el-submenu .el-submenu__title {
@@ -107,11 +120,36 @@ export default {
     border-bottom: none;
   }
 }
+.el-menu--horizontal .el-menu .el-menu-item {
+  display: inline-block!important;
+  text-align: center;
+  padding: 6px 0px 6px 18px;
+  &:hover {
+    color: #303133;
+  }
+  &:last-child {
+    padding: 6px 18px 6px 18px;
+  }
+}
 .el-submenu.is-opened {
   background-color: transparent;
 }
 .title-label {
   font-size: 14px;
   vertical-align: unset;
+}
+.icons {
+  display: block;
+  font-size: 23px;
+  text-align: center;
+  margin-bottom: -5px;
+}
+.icons-title {
+  display: inline-block;
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+.el-menu--popup-bottom-start {
+  margin-top: 0px!important;
 }
 </style>

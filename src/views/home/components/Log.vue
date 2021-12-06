@@ -15,15 +15,39 @@ export default {
     return {
       i18n,
       cardConfig: {
-        title: '登录日志',
-        icon: 'fa-history',
-        dataArr: []
+        title: i18n.t('route.LoginLog'),
+        icon: 'fa-history'
       },
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
         columns: [
-          'ip', 'city', 'datetime'
+          'username', 'ip', 'city',
+          'user_agent', 'reason', 'status', 'datetime'
         ],
+        columnsMeta: {
+          username: {
+            showOverflowTooltip: true
+          },
+          user_agent: {
+            width: '150px',
+            showOverflowTooltip: true
+          },
+          status: {
+            width: '85px',
+            formatterArgs: {
+              classChoices: {
+                true: 'text-primary',
+                false: 'text-danger'
+              }
+            }
+          },
+          datetime: {
+            width: '160px'
+          },
+          reason: {
+            showOverflowTooltip: true
+          }
+        },
         hasSelection: false,
         paginationSize: 5
       }

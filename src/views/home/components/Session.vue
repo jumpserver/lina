@@ -4,7 +4,6 @@
 
 <script>
 import HomeCard from './HomeCard.vue'
-import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Announcement',
@@ -13,16 +12,49 @@ export default {
   },
   data() {
     return {
-      i18n,
       cardConfig: {
         title: this.$t('route.SessionOffline'),
         icon: 'fa-rocket'
       },
       tableConfig: {
-        url: '/api/v1/audits/login-logs/',
+        url: '/api/v1/terminal/sessions/',
         columns: [
-          'ip', 'city', 'datetime'
+          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol'
         ],
+        columnsMeta: {
+          index: {
+            prop: 'index',
+            label: this.$t('sessions.id'),
+            align: 'center',
+            width: '40px',
+            formatter: function(row, column, cellValue, index) {
+              const label = index + 1
+              const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
+              return <router-link {...{ attrs: route }}>{ label }</router-link>
+            }
+          },
+          user: {
+            showOverflowTooltip: true
+          },
+          asset: {
+            label: this.$t('sessions.target'),
+            showOverflowTooltip: true
+          },
+          command_amount: {
+            label: this.$t('sessions.command')
+          },
+          system_user: {
+            showOverflowTooltip: true
+          },
+          remote_addr: {
+            width: '140px'
+          },
+          protocol: {
+            label: this.$t('sessions.protocol'),
+            sortable: false,
+            formatter: null
+          }
+        },
         hasSelection: false,
         paginationSize: 5
       }

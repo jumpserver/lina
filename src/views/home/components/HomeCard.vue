@@ -49,6 +49,16 @@ export default {
       type: String,
       default: () => ''
     },
+    headerActions: {
+      type: Object,
+      default: () => {
+        return {
+          hasLeftActions: false,
+          hasRightActions: false,
+          hasSearch: false
+        }
+      }
+    },
     tableConfig: {
       type: Object,
       default: () => {}
@@ -56,12 +66,7 @@ export default {
   },
   data() {
     return {
-      i18n,
-      headerActions: {
-        hasLeftActions: false,
-        hasRightActions: false,
-        hasSearch: false
-      }
+      i18n
     }
   },
   methods: {

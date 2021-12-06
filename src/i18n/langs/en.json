@@ -390,6 +390,7 @@
       "AuditPage": "Audit page",
       "HomePage": "Home page",
       "QuickAccess": "Quick access",
+      "SwitchPage": "Switch page",
       "Docs": "Docs",
       "Help": "Help",
       "Logout": "Logout",
@@ -421,6 +422,7 @@
       "SPECIAL_CHAR_REQUIRED": "Special char required",
       "MIN_LENGTH_ERROR": "Password minimum length {}"
     },
+    "noAnnouncement": "No announcement",
     "lastCannotBeDeleteMsg": "The last one can't be delete",
     "InvalidJson": "Not a valid json format"
   },

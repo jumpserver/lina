@@ -24,6 +24,16 @@ export default {
   },
   children: [
     {
+      path: '/admin/dashboard',
+      component: () => import('@/views/dashboard/index'),
+      name: 'AdminDashboard',
+      meta: {
+        icon: 'files-o',
+        title: i18n.t('route.Dashboard'),
+        permissions: []
+      }
+    },
+    {
       path: '/admin/users',
       component: empty,
       name: 'Users',
