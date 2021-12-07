@@ -7,7 +7,7 @@ export default {
   path: '/user/',
   component: Layout,
   name: 'UserView',
-  // redirect: '/user/dashboard',
+  redirect: '/user/assets',
   meta: {
     title: i18n.t('common.nav.UserPage'),
     view: 'user',

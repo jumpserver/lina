@@ -44,15 +44,19 @@ export default {
             label: this.$t('sessions.command')
           },
           system_user: {
+            label: this.$t('acl.system_user'),
             showOverflowTooltip: true
           },
           remote_addr: {
+            label: this.$t('sessions.remoteAddr'),
             width: '140px'
           },
           protocol: {
             label: this.$t('sessions.protocol'),
-            sortable: false,
-            formatter: null
+            el: {
+              disabled: false
+            },
+            sortable: false
           }
         },
         hasSelection: false,

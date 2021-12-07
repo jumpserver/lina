@@ -53,6 +53,7 @@ ul,li {
 }
 .box-card {
   box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
+  margin-bottom: 20px;
   &:hover {
     box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
   }

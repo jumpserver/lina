@@ -15,6 +15,7 @@ export default {
   path: '/admin',
   component: Layout,
   name: 'AdminView',
+  redirect: '/admin/dashboard',
   meta: {
     title: i18n.t('common.nav.AdminPage'),
     icon: 'users',
@@ -28,7 +29,7 @@ export default {
       component: () => import('@/views/dashboard/index'),
       name: 'AdminDashboard',
       meta: {
-        icon: 'files-o',
+        icon: 'dashboard',
         title: i18n.t('route.Dashboard'),
         permissions: []
       }

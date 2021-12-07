@@ -6,15 +6,15 @@
         <div class="content">
           <div class="content-body">
             <el-row>
-              <el-col :span="16" style="padding-right: 20px;">
-                <Log />
+              <el-col :md="16" :xs="24" style="padding-right: 20px;">
                 <Session />
                 <Assect />
                 <Ticket />
               </el-col>
-              <el-col :span="8">
+              <el-col :md="8" :xs="24">
                 <User />
                 <Announcement />
+                <Log />
               </el-col>
             </el-row>
           </div>
@@ -98,7 +98,7 @@ export default {
           opacity: 1;
           width: 100%;
           height: 200px;
-          background-image: url("../../assets/img/header-profile.png");
+          background-image: url("../../assets/img/background.jpg");
           background-size: auto 100%;
           background-position: center top;
           background-color: rgb(14, 22, 33);

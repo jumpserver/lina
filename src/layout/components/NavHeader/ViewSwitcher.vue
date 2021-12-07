@@ -58,7 +58,7 @@ export default {
       return mapper
     },
     viewName() {
-      let name = this.$t('common.nav.SwitchPage')
+      let name = this.$t('common.nav.HomePage')
       if (this.$route.fullPath === '/') return name
       const viewName = this.currentViewRoute?.meta?.view
       this.views.forEach(i => {
@@ -137,6 +137,9 @@ export default {
 .title-label {
   font-size: 14px;
   vertical-align: unset;
+  .fa-bars {
+    vertical-align: revert;
+  }
 }
 .icons {
   display: block;

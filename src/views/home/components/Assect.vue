@@ -5,8 +5,7 @@
 <script>
 import HomeCard from './HomeCard.vue'
 import i18n from '@/i18n/i18n'
-import { DetailFormatter } from '@/components/TableFormatters'
-import { connectivityMeta } from '@/components/AccountListTable/const'
+import { SystemUserFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'Assect',
@@ -23,25 +22,55 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         columns: [
-          'hostname', 'ip', 'protocols', 'platform', 'hardware_info', 'connectivity'
+          'hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'
         ],
         columnsMeta: {
           hostname: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AssetDetail'
-            },
+            label: this.$t('perms.hostName'),
             showOverflowTooltip: true
           },
-          protocols: {
-            formatter: function(row) {
-              return <span> {row.protocols.toString()} </span>
+          ip: {
+            sortable: false
+          },
+          system_users: {
+            showOverflowTooltip: true,
+            align: 'center',
+            label: this.$t('assets.SystemUsers'),
+            width: '150px',
+            formatter: SystemUserFormatter,
+            formatterArgs: {
+              getUrl: ({ row }) => {
+                return `/api/v1/perms/users/assets/${row.id}/system-users/?cache_policy=1`
+              }
             }
           },
-          hardware_info: {
+          platform: {
+            label: this.$t('assets.Platform')
+          },
+          comment: {
+            label: this.$t('sessions.comment'),
             showOverflowTooltip: true
           },
-          connectivity: connectivityMeta
+          actions: {
+            width: '70px',
+            formatterArgs: {
+              hasDelete: false,
+              loading: false,
+              hasClone: false,
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'connect',
+                  fa: 'fa-terminal',
+                  type: 'primary',
+                  can: ({ row }) => row.is_active,
+                  callback: ({ row }) => {
+                    window.open(`/luna/?login_to=${row.id}`, '_blank')
+                  }
+                }
+              ]
+            }
+          }
         },
         hasSelection: false,
         paginationSize: 5

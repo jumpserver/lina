@@ -267,6 +267,11 @@ const actions = {
         routeArr.push(obj)
       }
     })
+    if (routeArr.length >= 2) {
+      const item = routeArr?.[1]
+      routeArr[1] = routeArr[2]
+      routeArr[2] = item
+    }
     return routeArr
   },
   // 判断是否存在某种权限

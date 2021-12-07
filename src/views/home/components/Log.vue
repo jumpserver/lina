@@ -1,15 +1,36 @@
 <template>
-  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
+  <el-card class="box-card">
+    <div slot="header" class="title">
+      <span>{{ i18n.t('route.LoginLog') }}</span>
+    </div>
+    <ListTable
+      class="ListTable"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+    />
+  </el-card>
 </template>
 
 <script>
-import HomeCard from './HomeCard.vue'
 import i18n from '@/i18n/i18n'
+import ListTable from '@/components/ListTable/index'
 
 export default {
   name: 'Log',
   components: {
-    HomeCard
+    ListTable
+  },
+  props: {
+    headerActions: {
+      type: Object,
+      default: () => {
+        return {
+          hasLeftActions: false,
+          hasRightActions: false,
+          hasSearch: false
+        }
+      }
+    }
   },
   data() {
     return {
@@ -21,30 +42,14 @@ export default {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
         columns: [
-          'username', 'ip', 'city',
-          'user_agent', 'reason', 'status', 'datetime'
+          'ip', 'datetime'
         ],
         columnsMeta: {
-          username: {
+          ip: {
+            label: this.$t('audits.LoginIP'),
             showOverflowTooltip: true
-          },
-          user_agent: {
-            width: '150px',
-            showOverflowTooltip: true
-          },
-          status: {
-            width: '85px',
-            formatterArgs: {
-              classChoices: {
-                true: 'text-primary',
-                false: 'text-danger'
-              }
-            }
           },
           datetime: {
-            width: '160px'
-          },
-          reason: {
             showOverflowTooltip: true
           }
         },
@@ -57,4 +62,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.box-card {
+  box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
+  margin-bottom: 20px;
+  &:hover {
+    box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
+  }
+  &>>> .el-card__header {
+    margin-bottom: -10px;
+  }
+  .title {
+    font-weight: 500;
+  }
+}
+.ListTable >>> .el-data-table .el-pagination {
+  display: none;
+}
 </style>
