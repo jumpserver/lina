@@ -1,13 +1,13 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
+      ref="GenericCreateUpdateForm"
       :fields="fields"
       :fields-meta="fieldsMeta"
       :initial="object"
       :url="url"
       :submit-method="submitMethod"
-      class="password-update"
-      :update-success-next-route="updateSuccessNextRoute"
+      :on-perform-success="onPerformSuccess"
     />
   </IBox>
 </template>
@@ -45,15 +45,16 @@ export default {
             type: 'password'
           }
         }
-      },
-      updateSuccessNextRoute: {
-        path: '/'
       }
     }
   },
   methods: {
     submitMethod() {
       return 'put'
+    },
+    onPerformSuccess() {
+      this.$refs.GenericCreateUpdateForm.$refs.form.$refs.dataForm.resetForm('form')
+      this.$message.success(this.$t('common.updateSuccessMsg'))
     }
   }
 }
