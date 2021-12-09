@@ -243,6 +243,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "Correlation": "关联",
     "UserLoginLimit": "用户登录限制",
     "IPLoginLimit": "IP 登录限制",
     "Setting": "设置",
