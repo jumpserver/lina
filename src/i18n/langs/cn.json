@@ -239,6 +239,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "Certificate": "证书",
     "ViewMore": "查看更多",
     "Announcement": "公告",
     "Logging": "日志记录",
@@ -435,7 +436,7 @@
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",
-      "Wednesday": "星期三", 
+      "Wednesday": "星期三",
       "Thursday": "星期四",
       "Friday": "星期五",
       "Saturday": "星期六",
@@ -893,7 +894,13 @@
     "authLdapSearchOu": "用户OU",
     "authLdapServerUri": "LDAP地址",
     "authLdapUserAttrMap": "用户属性映射",
-    "authCASAttrMap": "用户属性映射",
+    "authUserAttrMap": "用户属性映射",
+    "authUserAttrMapHelpText": "映射关系 { idp_key: sp_key}",
+    "SAML2": "SAML2",
+    "enableSAML2Auth": "启用 SAML2 认证",
+    "SAML2Auth": "SAML2 认证",
+    "authSAML2Xml": "IDP metadata XML",
+    "authSAML2MetadataUrl": "IDP metadata URL",
     "SignaturesAndTemplates": "Signatures and Templates",
     "unselectedUser": "没有选择用户",
     "auto": "自动",

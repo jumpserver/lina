@@ -14,6 +14,7 @@ import DingTalk from './DingTalk'
 import FeiShu from './FeiShu'
 import WeCom from './WeCom'
 import SSO from './SSO'
+import SAML2 from './SAML2'
 
 export default {
   name: 'Auth',
@@ -29,7 +30,7 @@ export default {
           this.$t('setting.AuthMethod'), [
             'AUTH_CAS', 'AUTH_OPENID',
             'AUTH_WECOM', 'AUTH_DINGTALK', 'AUTH_FEISHU',
-            'AUTH_RADIUS', 'AUTH_SSO'
+            'AUTH_RADIUS', 'AUTH_SSO', 'AUTH_SAML2'
           ]
         ],
         [
@@ -61,6 +62,10 @@ export default {
         },
         AUTH_SSO: {
           component: SSO
+        },
+        AUTH_SAML2: {
+          component: SAML2,
+          label: this.$t('setting.SAML2Auth')
         },
         FORGOT_PASSWORD_URL: {
           on: {

@@ -40,7 +40,7 @@ export default {
             el: {
               type: 'textarea'
             },
-            label: this.$t('setting.authCASAttrMap'),
+            label: this.$t('setting.authUserAttrMap'),
             rules: [JsonRequired]
           }
         },

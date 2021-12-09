@@ -233,6 +233,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Certificate": "Certificate",
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
@@ -458,7 +459,7 @@
     "WeekCronSelect": {
       "Monday": "Monday",
       "Tuesday": "Tuesday",
-      "Wednesday": "Wednesday", 
+      "Wednesday": "Wednesday",
       "Thursday": "Thursday",
       "Friday": "Friday",
       "Saturday": "Saturday",
@@ -871,7 +872,13 @@
     "authLdapSearchOu": "User OU",
     "authLdapServerUri": "LDAP server",
     "authLdapUserAttrMap": "User attr map",
-    "authCASAttrMap": "User attr map",
+    "authUserAttrMap": "User attr map",
+    "authUserAttrMapHelpText": "Mapping relationship { idp_key: sp_key}",
+    "SAML2": "SAML2",
+    "enableSAML2Auth": "Enable SAML2 Auth",
+    "SAML2Auth": "SAML2 Auth",
+    "authSAML2Xml": "IDP metadata XML",
+    "authSAML2MetadataUrl": "IDP metadata URL",
     "unselectedUser": "Unselected user",
     "auto": "Auto",
     "basicSetting": "Basic setting",
