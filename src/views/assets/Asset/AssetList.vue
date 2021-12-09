@@ -51,7 +51,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, ActionsFormatter, TagsFormatter } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
@@ -89,12 +89,15 @@ export default {
           'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
           'disk_info', 'disk_total', 'memory', 'os', 'os_arch',
           'os_version', 'number', 'vendor', 'sn',
-          'connectivity',
+          'connectivity', 'labels_display',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
-          default: ['hostname', 'ip', 'platform', 'protocols', 'hardware_info', 'connectivity', 'actions']
+          default: [
+            'hostname', 'ip', 'platform', 'protocols', 'hardware_info',
+            'connectivity', 'actions'
+          ]
         },
         columnsMeta: {
           hostname: {
@@ -130,6 +133,9 @@ export default {
             showOverflowTooltip: true
           },
           connectivity: connectivityMeta,
+          labels_display: {
+            formatter: TagsFormatter
+          },
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {

@@ -36,14 +36,6 @@ export default {
             const username = item.username || '*'
             return { label: item.name + '(' + username + ')', value: item.id }
           }
-          // processResults: (data) => {
-          //   let results = data.results
-          //   results = results.filter((item) => item.protocol === 'ssh' || item.protocol === 'telnet').map((item) => {
-          //     return { label: item.name + '(' + item.username + ')', value: item.id }
-          //   })
-          //   const more = !!data.next
-          //   return { results: results, pagination: more, total: data.count }
-          // }
         },
         hasObjectsId: this.object.system_users,
         performAdd: (items) => {

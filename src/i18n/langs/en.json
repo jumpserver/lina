@@ -43,6 +43,7 @@
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
+      "sqlserver": "SQLServer",
       "k8s": "kubernetes"
     },
     "applicationsCategory": {
@@ -236,7 +237,13 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "PrivateCloud": "Private cloud",
+    "PublicCloud": "Public cloud",
+    "Correlation": "Correlation",
+    "UserLoginLimit": "User login limit",
+    "IPLoginLimit": "IP login limit",
     "Setting": "Setting",
+    "Certificate": "Certificate",
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
@@ -347,7 +354,8 @@
     "bulkDeleteSuccessMsg": "Bulk delete success",
     "bulkRemoveErrorMsg": "Bulk remove failed: ",
     "bulkRemoveSuccessMsg": "Bulk remove success",
-    "NeedAssetsAndSystemUserErrMsg": "Need assets and systemuser",
+    "SelectAtLeastOneAssetOrNodeErrMsg": "Select at least one asset or node",
+    "RequiredSystemUserErrMsg": "Required systemuser",
     "createBy": "Create by",
     "cloneFrom": "Clone from",
     "createErrorMsg": "Create error",
@@ -877,7 +885,13 @@
     "authLdapSearchOu": "User OU",
     "authLdapServerUri": "LDAP server",
     "authLdapUserAttrMap": "User attr map",
-    "authCASAttrMap": "User attr map",
+    "authUserAttrMap": "User attr map",
+    "authUserAttrMapHelpText": "Mapping relationship { idp_key: sp_key}",
+    "SAML2": "SAML2",
+    "enableSAML2Auth": "Enable SAML2 Auth",
+    "SAML2Auth": "SAML2 Auth",
+    "authSAML2Xml": "IDP metadata XML",
+    "authSAML2MetadataUrl": "IDP metadata URL",
     "unselectedUser": "Unselected user",
     "auto": "Auto",
     "basicSetting": "Basic setting",
@@ -1053,6 +1067,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "FileEncryptionPassword": "File encryption password",
     "MessageSubscription": "Message Subscription",
     "AuthSettings": "Auth settings",
     "UserName": "Name",
@@ -1172,6 +1187,8 @@
     "HasRead": "Has read",
     "Sender": "Sender",
     "MarkAsRead": "Mark as read",
+    "OneClickRead": "One Click Read",
+    "OneClickReadMsg": "Are you sure you want to mark the loaded information as read?",
     "NoUnreadMsg": "No unread messages",
     "SiteMessage": "Site messages",
     "SMS": "SMS"
@@ -1189,7 +1206,9 @@
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
     "ChangeAuthPlan": {
+      "MailRecipient": "Mail recipient",
       "AddAsset": "Add asset",
+      "ContainAttachment": "Contain attachment",
       "AddNode": "Add node",
       "AddSystemUser": "Add systemuser",
       "Asset": "Asset",
@@ -1247,6 +1266,7 @@
       "Qcloud": "Tencent Cloud",
       "QingyunPrivatecloud": "Qingyun Private Cloud",
       "HuaweiPrivatecloud": "Huawei Private Cloud",
+      "OpenStack": "OpenStack",
       "GCP": "Google Cloud Platform",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",

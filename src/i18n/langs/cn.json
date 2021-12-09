@@ -48,6 +48,7 @@
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
+      "sqlserver": "SQLServer",
       "k8s": "Kubernetes"
     },
     "applicationsCategory": {
@@ -242,7 +243,13 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "PrivateCloud": "私有云",
+    "PublicCloud": "公有云",
+    "Correlation": "关联",
+    "UserLoginLimit": "用户登录限制",
+    "IPLoginLimit": "IP 登录限制",
     "Setting": "设置",
+    "Certificate": "证书",
     "ViewMore": "查看更多",
     "Announcement": "公告",
     "Logging": "日志记录",
@@ -356,7 +363,8 @@
     "bulkDeleteErrorMsg": "批量删除失败: ",
     "bulkDeleteSuccessMsg": "批量删除成功",
     "bulkRemoveErrorMsg": "批量移除失败: ",
-    "NeedAssetsAndSystemUserErrMsg": "请先选择授权的系统用户和资产",
+    "SelectAtLeastOneAssetOrNodeErrMsg": "资产或者节点至少选择一项",
+    "RequiredSystemUserErrMsg": "请先选择系统用户",
     "bulkRemoveSuccessMsg": "批量移除成功",
     "createBy": "创建者",
     "cloneFrom": "克隆自",
@@ -899,6 +907,13 @@
     "authLdapSearchOu": "用户OU",
     "authLdapServerUri": "LDAP地址",
     "authLdapUserAttrMap": "用户属性映射",
+    "authUserAttrMap": "用户属性映射",
+    "authUserAttrMapHelpText": "映射关系 {idp：sp}",
+    "SAML2": "SAML2",
+    "enableSAML2Auth": "开启 SAML2 认证",
+    "SAML2Auth": "SAML2 认证",
+    "authSAML2Xml": "IDP metadata XML",
+    "authSAML2MetadataUrl": "IDP metadata URL",
     "authCASAttrMap": "用户属性映射",
     "SignaturesAndTemplates": "Signatures and Templates",
     "unselectedUser": "没有选择用户",
@@ -1090,6 +1105,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "FileEncryptionPassword": "文件加密密码",
     "MessageSubscription": "消息订阅",
     "AuthSettings": "认证配置",
     "UserName": "姓名",
@@ -1211,6 +1227,8 @@
     "HasRead": "是否已读",
     "Sender": "发送人",
     "MarkAsRead": "标记已读",
+    "OneClickRead": "一键已读",
+    "OneClickReadMsg": "你确定要将已加载的信息标记为已读吗?",
     "NoUnreadMsg": "暂无未读消息",
     "SiteMessage": "站内信",
     "SMS": "短信"
@@ -1229,7 +1247,9 @@
     "AssetCount": "资产数量",
     "Auditor": "审计员",
     "ChangeAuthPlan": {
+      "ContainAttachment": "含附件",
       "AddAsset": "添加资产",
+      "MailRecipient": "邮件收件人",
       "AddNode": "添加节点",
       "AddSystemUser": "添加系统用户",
       "Asset": "资产",
@@ -1291,6 +1311,7 @@
       "Qcloud": "腾讯云",
       "QingyunPrivatecloud": "青云私有云",
       "HuaweiPrivatecloud": "华为私有云",
+      "OpenStack": "OpenStack",
       "GCP": "谷歌云",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",

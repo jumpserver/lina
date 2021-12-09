@@ -5,13 +5,14 @@
 <script>
 import SSH from './ssh'
 import RDP from './rdp'
-import VncOrTelnet from './vncAndTelnet'
+import VNC from './vnc'
 import Database from './database'
 import K8S from './k8s'
+import TELNET from './telnet'
 
 export default {
   name: 'SystemUserCreateUpdate',
-  components: { SSH, RDP, VncOrTelnet, Database },
+  components: { SSH, RDP, VNC, Database },
   data() {
     return {
     }
@@ -38,12 +39,14 @@ export default {
         case 'rdp':
           return RDP
         case 'vnc':
+          return VNC
         case 'telnet':
-          return VncOrTelnet
+          return TELNET
         case 'mysql':
         case 'oracle':
         case 'postgresql':
         case 'mariadb':
+        case 'sqlserver':
           return Database
         case 'k8s':
           return K8S

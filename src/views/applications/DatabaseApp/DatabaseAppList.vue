@@ -93,6 +93,11 @@ export default {
               name: 'Oracle',
               title: 'Oracle',
               has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'SQLServer',
+              title: 'SQLServer',
+              has: this.$store.getters.hasValidLicense
             }
           ]
         }

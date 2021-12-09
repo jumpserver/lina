@@ -6,7 +6,6 @@
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
       <RelationCard
-        v-if="object.protocol === 'ssh'"
         ref="RelationCard"
         v-bind="nodeRelationConfig"
         type="info"

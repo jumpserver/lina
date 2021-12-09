@@ -104,6 +104,7 @@ function getFields() {
   }
 
   const cmd_filters = {
+    label: this.$t('assets.CmdFilter'),
     component: Select2,
     el: {
       multiple: true,

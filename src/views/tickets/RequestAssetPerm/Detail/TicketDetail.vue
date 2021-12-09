@@ -28,6 +28,7 @@ export default {
     return {
       statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
       requestForm: {
+        node: this.object.meta.apply_nodes,
         asset: this.object.meta.apply_assets,
         systemuser: this.object.meta.apply_system_users
       },
@@ -70,6 +71,10 @@ export default {
     specialCardItems() {
       return [
         {
+          key: this.$t('perms.Node'),
+          value: this.object.meta.apply_nodes_display.join(', ')
+        },
+        {
           key: this.$t('tickets.Asset'),
           value: this.object.meta.apply_assets_display.join(', ')
         },
@@ -105,6 +110,10 @@ export default {
               return <span>{ value }</span>
             }
           }
+        },
+        {
+          key: this.$t('perms.Node'),
+          value: this.object.meta.apply_nodes_display.join(', ')
         },
         {
           key: this.$t('assets.Asset'),
@@ -143,8 +152,12 @@ export default {
       window.location.reload()
     },
     handleApprove() {
-      if (this.requestForm.asset.length === 0 || this.requestForm.systemuser.length === 0) {
-        return this.$message.error(this.$tc('common.NeedAssetsAndSystemUserErrMsg'))
+      const assetLength = this.requestForm.asset.length
+      const nodeLength = this.requestForm.node.length
+      if (assetLength === 0 && nodeLength === 0) {
+        return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
+      } else if (this.requestForm.systemuser.length === 0) {
+        return this.$message.error(this.$tc('common.RequiredSystemUserErrMsg'))
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
           meta: {}
