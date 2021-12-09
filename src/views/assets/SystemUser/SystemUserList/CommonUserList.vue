@@ -67,6 +67,9 @@ export default {
       headerActions: {
         hasCreate: false,
         createRoute: 'SystemUserCreate',
+        searchConfig: {
+          exclude: ['type']
+        },
         moreCreates: {
           callback: (option) => {
             vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.title.toLowerCase() }})
@@ -119,6 +122,12 @@ export default {
             {
               name: 'Oracle',
               title: 'Oracle',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'SQLServer',
+              title: 'SQLServer',
               type: 'primary',
               has: this.$store.getters.hasValidLicense
             },

@@ -1,7 +1,13 @@
 <template>
 
   <div class="filter-field">
-    <el-cascader ref="Cascade" :options="options" :props="config" @change="handleMenuItemChange" />
+    <el-cascader
+      v-show="options.length > 0"
+      ref="Cascade"
+      :options="options"
+      :props="config"
+      @change="handleMenuItemChange"
+    />
     <el-tag
       v-for="(v, k) in filterTags"
       :key="k"
@@ -24,6 +30,7 @@
       v-model="filterValue"
       :placeholder="placeholder"
       class="search-input"
+      :class="options.length < 1 ? 'search-input2': ''"
       @blur="focus = false"
       @focus="focus = true"
       @change="handleConfirm"
@@ -93,6 +100,25 @@ export default {
     //   },
     //   deep: true
     // }
+    options: {
+      handler(val) {
+        if (val && val.length > 0) {
+          const routeFilter = this.checkInTableColumns()
+          const asFilterTags = _.cloneDeep(this.filterTags)
+          this.filterTags = {
+            ...asFilterTags,
+            ...routeFilter
+          }
+          if (Object.keys(routeFilter).length > 0) {
+            setTimeout(() => {
+              return this.$emit('tagSearch', this.filterMaps)
+            }, 490)
+          }
+        }
+      },
+      immediate: true,
+      deep: true
+    }
   },
   mounted() {
     setTimeout(() => {
@@ -104,6 +130,39 @@ export default {
     // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
   },
   methods: {
+    // 判断url中的查询条件
+    checkInTableColumns() {
+      const routeQuery = this.$route?.query
+      const routeQueryKeys = Object.keys(routeQuery)
+      const keys = {}
+      if (routeQueryKeys.length < 1) return keys
+      if (routeQueryKeys.length > 0) {
+        for (let i = 0; i < routeQueryKeys.length; i++) {
+          const key = routeQueryKeys[i]
+          const valueDecode = decodeURI(routeQuery[key])
+          const isSearch = key !== 'search'
+          for (let k = 0, len = this.options.length; k < len; k++) {
+            const cur = this.options[k]
+            if (key === cur.value || !isSearch) {
+              const curChildren = cur.children || []
+              keys[key] = {
+                key,
+                label: isSearch ? cur.label : '',
+                value: valueDecode
+              }
+              if (isSearch && curChildren.length > 0) {
+                curChildren.forEach(item => {
+                  if (valueDecode === item.value) {
+                    keys[key].valueLabel = item.label
+                  }
+                })
+              }
+            }
+          }
+        }
+      }
+      return keys
+    },
     getValueLabel(key, value) {
       for (const field of this.options) {
         if (field.value !== key) {
@@ -136,6 +195,7 @@ export default {
       this.$nextTick(() => this.$refs.Cascade.handleClear())
     },
     handleTagClose(evt) {
+      this.checkUrlFilds(evt)
       this.$delete(this.filterTags, evt)
       this.$emit('tagSearch', this.filterMaps)
       return true
@@ -147,6 +207,11 @@ export default {
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)
       this.$emit('tagSearch', this.filterMaps)
+
+      let newQuery = _.cloneDeep(this.$route.query)
+      newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
+      this.$router.replace({ query: newQuery })
+
       this.filterKey = ''
       this.filterValue = ''
       this.valueLabel = ''
@@ -173,6 +238,11 @@ export default {
       this.filterKey = v.key
       this.filterValue = v.value
       this.$refs.SearchInput.focus()
+    },
+    // 删除查询条件时改变url
+    checkUrlFilds(evt) {
+      const newQuery = _.omit(this.$route.query, evt)
+      this.$router.replace({ query: newQuery })
     }
   }
 }
@@ -182,9 +252,13 @@ export default {
   .filter-field {
     display: flex;
     align-items:  center;
+    min-width: 198px;
     border: 1px solid #dcdee2;
     border-radius: 3px;
     background-color:#fff;
+  }
+  .search-input2 >>> .el-input__inner {
+    text-indent: 5px;
   }
   .search-input >>> .el-input__inner {
     /*max-width:inherit !important;*/

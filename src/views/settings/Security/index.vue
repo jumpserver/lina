@@ -45,6 +45,7 @@ export default {
             'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
             'SECURITY_MFA_VERIFY_TTL',
+            'SECURITY_CHECK_DIFFERENT_CITY_LOGIN',
             'AuthLimit',
             'PasswordRule'
           ]
@@ -99,26 +100,13 @@ export default {
             }
           }
         },
-        LOGIN_CONFIRM_ENABLE: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
-        },
-        SECURITY_WATERMARK_ENABLED: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
-        },
         PasswordRule: {
           label: this.$t('setting.PasswordCheckRule'),
           component: PasswordRule
         },
         AuthLimit: {
           label: this.$t('setting.AuthLimit'),
-          component: AuthLimit,
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
+          component: AuthLimit
         }
       },
       url: '/api/v1/settings/setting/?category=security'

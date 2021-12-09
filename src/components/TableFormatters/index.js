@@ -10,6 +10,7 @@ import ShowKeyFormatter from '@/components/TableFormatters/ShowKeyFormatter'
 import DialogDetailFormatter from './DialogDetailFormatter'
 import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
+import TagsFormatter from './TagsFormatter'
 
 export default {
   DetailFormatter,
@@ -23,7 +24,8 @@ export default {
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
-  StatusFormatter
+  StatusFormatter,
+  TagsFormatter
 }
 
 export {
@@ -38,5 +40,6 @@ export {
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
-  StatusFormatter
+  StatusFormatter,
+  TagsFormatter
 }

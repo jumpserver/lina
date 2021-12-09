@@ -127,6 +127,18 @@ function getFields() {
     ]
   }
 
+  const recipients = {
+    el: {
+      value: [],
+      ajax: {
+        url: '/api/v1/users/users/?fields_size=mini',
+        transformOption: (item) => {
+          return { label: item.name + '(' + item.username + ')', value: item.id }
+        }
+      }
+    }
+  }
+
   const nodes = {
     label: i18n.t('xpack.Node'),
     el: {
@@ -183,21 +195,13 @@ function getFields() {
     type: 'switch'
   }
 
-  // const crontab = {
-  //   label: i18n.t('xpack.RegularlyPerform'),
-  //   hidden: (formValue) => {
-  //     return formValue.is_periodic === false
-  //   },
-  //   helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
-  // }
-
   const crontab = {
     type: 'cronTab',
     component: CronTab,
-    rules: [
-      { required: false }
-    ],
     label: i18n.t('xpack.RegularlyPerform'),
+    hidden: (formValue) => {
+      return formValue.is_periodic === false
+    },
     helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
   }
 
@@ -228,7 +232,8 @@ function getFields() {
     is_periodic: is_periodic,
     is_ssh_key: is_ssh_key,
     crontab: crontab,
-    interval: interval
+    interval: interval,
+    recipients: recipients
   }
 }
 

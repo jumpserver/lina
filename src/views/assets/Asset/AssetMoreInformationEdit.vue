@@ -23,9 +23,14 @@ export default {
         nodes: nodesInitial
       },
       fields: [
-        [this.$t('common.Basic'), ['hostname', 'ip', 'platform']],
-        [this.$t('assets.Hardware'), ['vendor', 'model', 'number', 'cpu_model', 'memory', 'disk_info', 'disk_total']],
-        [this.$t('assets.Os'), ['sn', 'os', 'os_version', 'os_arch']]
+        [this.$t('common.Basic'), [
+          'hostname', 'ip', 'platform', 'number'
+        ]],
+        [this.$t('assets.Hardware'), [
+          'vendor', 'model', 'sn', 'cpu_model', 'cpu_count', 'cpu_cores',
+          'cpu_vcpus', 'memory', 'disk_total'
+        ]],
+        [this.$t('assets.Os'), ['os', 'os_version', 'os_arch']]
       ],
       fieldsMeta: {
         platform: {
@@ -92,7 +97,8 @@ export default {
       },
       url: '/api/v1/assets/assets/',
       updateSuccessNextRoute: { name: 'AssetList' },
-      createSuccessNextRoute: { name: 'AssetList' }
+      createSuccessNextRoute: { name: 'AssetList' },
+      objectDetailRoute: { name: 'AssetDetail' }
     }
   },
   methods: {

@@ -73,8 +73,7 @@ export default {
           title: this.$t('users.setWeCom'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.$store.state.users.profile.source !== 'local'
+            label: this.$store.state.users.profile.is_wecom_bound ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -88,8 +87,7 @@ export default {
           title: this.$t('users.setDingTalk'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_dingtalk_bound ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.$store.state.users.profile.source !== 'local'
+            label: this.$store.state.users.profile.is_dingtalk_bound ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -103,8 +101,7 @@ export default {
           title: this.$t('users.setFeiShu'),
           attrs: {
             type: 'primary',
-            label: this.$store.state.users.profile.is_feishu_bound ? this.$t('common.unbind') : this.$t('common.bind'),
-            disabled: this.$store.state.users.profile.source !== 'local'
+            label: this.$store.state.users.profile.is_feishu_bound ? this.$t('common.unbind') : this.$t('common.bind')
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -118,36 +115,13 @@ export default {
           title: this.$t('users.SetMFA'),
           attrs: {
             type: 'primary',
-            label: this.object.mfa_enabled ? this.$t('common.Disable') : this.$t('common.Enable'),
+            label: this.$t('common.Setting'),
             disabled: this.object.mfa_force_enabled
           },
           callbacks: {
             click: function() {
-              if (this.object.mfa_enabled) {
-                if (!this.object.mfa_force_enabled) {
-                  window.location.href = `/core/auth/profile/otp/disable/authentication/?next=${this.$route.fullPath}`
-                }
-              } else {
-                window.location.href = `/core/auth/profile/otp/enable/start/?next=${this.$route.fullPath}`
-              }
-            }.bind(this)
-          }
-        },
-        {
-          title: this.$t('users.UpdateMFA'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Update')
-          },
-          has: this.object.mfa_enabled,
-          callbacks: {
-            click: function() {
-              if (this.$store.state.users.profile.is_otp_secret_key_bound) {
-                window.location.href = `/core/auth/profile/otp/update/?next=${this.$route.fullPath}`
-              } else {
-                window.location.href = `/core/auth/profile/otp/enable/start/?next=${this.$route.fullPath}`
-              }
-            }.bind(this)
+              window.location.href = `/core/auth/profile/mfa/`
+            }
           }
         },
         {

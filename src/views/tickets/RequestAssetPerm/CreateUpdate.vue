@@ -44,7 +44,7 @@ export default {
         },
         meta: {
           fields: [
-            'apply_assets', 'apply_system_users', 'apply_actions',
+            'apply_nodes', 'apply_assets', 'apply_system_users', 'apply_actions',
             'apply_date_start', 'apply_date_expired'
           ],
           fieldsMeta: {
@@ -52,6 +52,19 @@ export default {
               label: this.$t('perms.Actions'),
               component: AssetPermissionFormActionField,
               helpText: this.$t('common.actionsTips')
+            },
+            apply_nodes: {
+              component: Select2,
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    return { label: `${item.full_value}`, value: item.id }
+                  }
+                },
+                clearable: true
+              }
             },
             apply_assets: {
               type: 'assetSelect',
@@ -70,7 +83,7 @@ export default {
             apply_system_users: {
               type: 'systemUserSelect',
               component: Select2,
-              label: '系统用户',
+              label: this.$t('assets.SystemUser'),
               el: {
                 value: [],
                 ajax: {
@@ -95,10 +108,20 @@ export default {
           hidden: (form) => {
             const fieldsMeta = this.fieldsMeta.meta.fieldsMeta
             fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
-            fieldsMeta.apply_assets.el.value = []
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
+            fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
           }
         }
+      },
+      cleanFormValue(value) {
+        Object.keys(value.meta).forEach((item, index, arr) => {
+          if (['apply_system_users'].includes(item)) {
+            if (value.meta[item].length < 1) {
+              delete value.meta[item]
+            }
+          }
+        })
+        return value
       },
       url: '/api/v1/tickets/tickets/?type=apply_asset&action=open',
       createSuccessNextRoute: {

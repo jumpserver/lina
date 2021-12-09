@@ -68,7 +68,9 @@ export default {
           delete rule.assignees_read_only
         }
       })
-      return rules.sort((a, b) => a.level - b.level)
+      rules = rules.sort((a, b) => a.level - b.level)
+      this.$emit('input', rules)
+      return rules
     }
   },
   mounted() {

@@ -11,6 +11,9 @@ $--color-info: #23c6c8;
 $--color-warning: #f8ac59;
 $--color-danger: #ed5565;
 
+$--color-link: #1c84c6;
+$--color-link-highlight: #23527c;
+
 $--color-text-primary: #303133;
 /// color|1|Font Color|2
 $--color-text-regular: #606266;
@@ -400,7 +403,7 @@ td .el-button.el-button--mini {
 }
 
 a {
-  color: #428bca !important;
+  color: $--color-link !important;
   text-decoration: none;
 }
 
@@ -480,3 +483,12 @@ a {
   }
 }
 
+.el-button--text {
+  color: $--color-link;
+  padding: 5px;
+}
+
+.el-button--text:hover {
+  color: $--color-link-highlight;
+  background-color: rgba(0,0,0,.05)
+}

@@ -48,7 +48,7 @@ export default {
             width: 150,
             objects: this.object.applications,
             formatter: DeleteActionFormatter,
-            deleteUrl: `/api/v1/perms/application-permissions-applications-relations/?remoteapppermission=${this.$route.params.id}&application=`
+            deleteUrl: `/api/v1/perms/application-permissions-applications-relations/?applicationpermission=${this.$route.params.id}&application=`
           }
         },
         tableAttrs: {

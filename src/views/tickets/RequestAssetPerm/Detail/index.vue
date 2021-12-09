@@ -34,8 +34,6 @@ export default {
       }
     }
   },
-  mounted() {
-  },
   methods: {
     getObjectName() {
       return this.ticket.title

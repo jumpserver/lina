@@ -17,14 +17,14 @@ export default {
       LANG_COOKIE_NAME: 'django_language', // 后端Django需要的COOKIE KEY
       supportLanguages: [
         {
-          title: '中文(简体)',
-          code: 'cn',
-          cookieCode: 'zh-hans' // cookie code是为了让后端知道当前语言
-        },
-        {
           title: 'English',
           code: 'en',
           cookieCode: 'en'
+        },
+        {
+          title: '中文(简体)',
+          code: 'cn',
+          cookieCode: 'zh-hans' // cookie code是为了让后端知道当前语言
         }
       ]
     }
@@ -78,9 +78,7 @@ export default {
       }
       langCode = langCode.substr(0, 2)
       langCode = langCode.replace('zh', 'cn')
-      if (langCode) {
-        return langCode
-      }
+      return langCode
     }
   }
 }

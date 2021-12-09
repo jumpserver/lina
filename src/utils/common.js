@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const moment = require('moment')
 
 function getTimeUnits(u) {
   const units = {
@@ -75,7 +76,7 @@ function cleanDateStr(d) {
 }
 
 export function toSafeLocalDateStr(d) {
-  if (d === '') {
+  if (d === '' || d === null) {
     return ''
   }
   const date = safeDate(d)
@@ -169,7 +170,8 @@ export function getDayEnd(now) {
   if (!now) {
     now = new Date()
   }
-  return new Date(new Date(now.toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1)
+  const zoneTime = moment(now).utc().endOf('month').format('YYYY-MM-DD HH:mm:ss')
+  return moment(zoneTime).utc().toDate()
 }
 
 export function setUrlParam(url, name, value) {

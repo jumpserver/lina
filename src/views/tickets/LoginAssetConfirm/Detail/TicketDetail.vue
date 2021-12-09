@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP[this.object.status] : STATUS_MAP[this.object.action],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -47,21 +47,13 @@ export default {
           }
         },
         {
-          key: this.$t('tickets.Assignees'),
-          value: this.object.assignees_display
-        },
-        {
-          key: this.$t('tickets.Assignee'),
-          value: this.object['processor_display']
-        },
-        {
           key: this.$t('common.dateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         }
       ]
     },
     specialCardItems() {
-      return [
+      return this.object.type === 'login_confirm' ? [] : [
         // apply_login_asset: "114.118.2.76(114.118.2.76)"
         // apply_login_system_user: "root()"
         // apply_login_user: "Administrator(admin)"

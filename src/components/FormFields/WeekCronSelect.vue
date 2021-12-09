@@ -2,7 +2,6 @@
   <div class="c-weektime">
     <div class="c-schedue" />
     <div :class="{'c-schedue': true, 'c-schedue-notransi': mode}" :style="styleValue" />
-
     <table class="c-weektime-table" :class="{'c-min-table': colspan < 2}">
       <thead class="c-weektime-head">
         <tr>
@@ -34,6 +33,7 @@
             <div class="g-clearfix c-weektime-con">
               <span class="g-pull-left">{{ this.$t('common.WeekCronSelect.CanDragSelect') }}</span>
               <a class="g-pull-right" @click.prevent="clearWeektime">{{ this.$t('common.WeekCronSelect.ClearSelection') }}</a>
+              <a class="g-pull-right g-pull-margin" @click.prevent="selectAll">{{ this.$t('common.WeekCronSelect.SelectAll') }}</a>
             </div>
           </td>
         </tr>
@@ -221,6 +221,15 @@ export default {
       this.timeRange = []
       this.$emit('change', this.timeRange)
     },
+    // 全选
+    selectAll() {
+      this.weektimeData.forEach(item => {
+        item.child.forEach(t => {
+          this.$set(t, 'check', true)
+        })
+      })
+      this.setTimeRange()
+    },
     setTimeRange() {
       this.timeRange = this.weektimeData.map(item => {
         return {
@@ -301,7 +310,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
 .c-weektime {
   min-width: 640px;
   position: relative;
@@ -391,6 +399,9 @@ export default {
 .g-pull-right {
   float: right;
   color: #409eff!important;
+}
+.g-pull-margin {
+  margin-right: 12px;
 }
 .g-tip-text {
   color: #999;

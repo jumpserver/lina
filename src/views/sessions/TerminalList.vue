@@ -17,6 +17,14 @@
 import { GenericListPage, GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
+
+const numTotFixed = (row, type) => {
+  const cur = row.stat?.[type] || ''
+  if (cur instanceof Number && !Number.isInteger(cur)) {
+    return cur.toFixed(1)
+  }
+  return cur
+}
 export default {
   components: {
     GenericListPage,
@@ -102,15 +110,18 @@ export default {
           },
           'stat.cpu_load': {
             label: this.$t('sessions.systemCpuLoad'),
-            width: '120px'
+            width: '120px',
+            formatter: (row) => (numTotFixed(row, 'cpu_load'))
           },
           'stat.disk_used': {
             label: this.$t('sessions.systemDiskUsedPercent'),
-            width: '120px'
+            width: '120px',
+            formatter: (row) => (numTotFixed(row, 'disk_used'))
           },
           'stat.memory_used': {
             label: this.$t('sessions.systemMemoryUsedPercent'),
-            width: '120px'
+            width: '120px',
+            formatter: (row) => (numTotFixed(row, 'memory_used'))
           },
           status: {
             label: this.$t('xpack.LoadStatus'),

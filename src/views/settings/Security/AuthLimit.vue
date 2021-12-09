@@ -14,6 +14,7 @@
       @confirm="onConfirm()"
     >
       <GenericCreateUpdateForm
+        v-bind="$data"
         :fields="fields"
         :url="url"
         :fields-meta="fieldsMeta"
@@ -37,19 +38,54 @@ export default {
   },
   data() {
     return {
+      initial: {
+        SECURITY_LOGIN_IP_BLACK_LIST: []
+      },
       visible: false,
       fields: [
-        'SECURITY_LOGIN_LIMIT_COUNT', 'SECURITY_LOGIN_LIMIT_TIME', 'LOGIN_CONFIRM_ENABLE',
-        'USER_LOGIN_SINGLE_MACHINE_ENABLED', 'ONLY_ALLOW_EXIST_USER_AUTH',
-        'ONLY_ALLOW_AUTH_FROM_SOURCE'
+        [
+          this.$t('common.UserLoginLimit'),
+          [
+            'SECURITY_LOGIN_LIMIT_COUNT',
+            'SECURITY_LOGIN_LIMIT_TIME'
+          ]
+        ],
+        [
+          this.$t('common.IPLoginLimit'),
+          [
+            'SECURITY_LOGIN_IP_LIMIT_COUNT',
+            'SECURITY_LOGIN_IP_LIMIT_TIME',
+            'SECURITY_LOGIN_IP_WHITE_LIST',
+            'SECURITY_LOGIN_IP_BLACK_LIST'
+          ]
+        ],
+        [
+          this.$t('common.Other'),
+          [
+            'USER_LOGIN_SINGLE_MACHINE_ENABLED',
+            'ONLY_ALLOW_EXIST_USER_AUTH',
+            'ONLY_ALLOW_AUTH_FROM_SOURCE'
+          ]
+        ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
       fieldsMeta: {
-        LOGIN_CONFIRM_ENABLE: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
+      },
+      afterGetFormValue(validValues) {
+        validValues.SECURITY_LOGIN_IP_BLACK_LIST = validValues.SECURITY_LOGIN_IP_BLACK_LIST.toString()
+        validValues.SECURITY_LOGIN_IP_WHITE_LIST = validValues.SECURITY_LOGIN_IP_WHITE_LIST.toString()
+        return validValues
+      },
+      cleanFormValue(value) {
+        const ipBlackList = value.SECURITY_LOGIN_IP_BLACK_LIST
+        const ipWhiltList = value.SECURITY_LOGIN_IP_WHITE_LIST
+        if (!Array.isArray(ipBlackList)) {
+          value.SECURITY_LOGIN_IP_BLACK_LIST = ipBlackList ? ipBlackList.split(',') : []
         }
+        if (!Array.isArray(ipWhiltList)) {
+          value.SECURITY_LOGIN_IP_WHITE_LIST = ipWhiltList ? ipWhiltList.split(',') : []
+        }
+        return value
       },
       url: '/api/v1/settings/setting/?category=security'
     }

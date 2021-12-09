@@ -36,8 +36,8 @@ export default {
                   return 'AssetsTicketDetail'
                 } else if (row.type === 'apply_application') {
                   return 'AppsTicketDetail'
-                } else if (row.type === 'login_asset_confirm') {
-                  return 'loginAssetTicketDetail'
+                } else if (row.type === 'login_asset_confirm' || row.type === 'login_confirm') {
+                  return 'LoginAssetTicketDetail'
                 } else if (row.type === 'command_confirm') {
                   return 'CommandConfirmDetail'
                 } else {
@@ -71,7 +71,7 @@ export default {
             }
           },
           {
-            prop: 'action',
+            prop: 'state',
             label: this.$t('tickets.action'),
             align: 'center',
             width: '90px',

@@ -35,6 +35,7 @@ export default {
     return {
       title: this.$t('common.Announcement'),
       visible: false,
+      enableField: 'ANNOUNCEMENT_ENABLED',
       config: {
         fields: [
           ['', ['ANNOUNCEMENT_ENABLED', 'ANNOUNCEMENT']]
@@ -55,6 +56,7 @@ export default {
         },
         successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
         url: '/api/v1/settings/setting/?category=basic',
+        hasReset: false,
         submitMethod() {
           return 'patch'
         }
