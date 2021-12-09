@@ -237,6 +237,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "Correlation": "Correlation",
     "UserLoginLimit": "User login limit",
     "IPLoginLimit": "IP login limit",
     "Setting": "Setting",

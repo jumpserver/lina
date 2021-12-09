@@ -15,12 +15,12 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/cmd-filters/',
         columns: [
-          'name', 'rules', 'system_users', 'is_active',
+          'name', 'rules', 'users', 'user_groups', 'assets', 'applications', 'system_users', 'is_active',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'rules', 'system_users', 'comment', 'actions']
+          default: ['name', 'rules', 'comment', 'actions']
         },
         columnsMeta: {
           rules: {
@@ -37,6 +37,26 @@ export default {
           },
           date_created: {
             label: this.$t('users.DateJoined')
+          },
+          users: {
+            formatter: function(row, col, cell) {
+              return cell.length
+            }
+          },
+          user_groups: {
+            formatter: function(row, col, cell) {
+              return cell.length
+            }
+          },
+          assets: {
+            formatter: function(row, col, cell) {
+              return cell.length
+            }
+          },
+          applications: {
+            formatter: function(row, col, cell) {
+              return cell.length
+            }
           },
           system_users: {
             label: this.$t('assets.SystemUsers'),
