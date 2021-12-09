@@ -11,11 +11,13 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { Required } from '@/components/DataForm/rules'
+import getFields from '@/views/assets/SystemUser/SystemUserCreateUpdate/fields'
 
 export default {
   name: 'CommonUserSSH',
   components: { GenericCreateUpdatePage },
   data() {
+    const fields = getFields.bind(this)()
     return {
       initial: {
         protocol: this.$route.query.protocol
@@ -23,9 +25,11 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol']],
         [this.$t('common.Auth'), ['token']],
+        [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
+        cmd_filters: fields.cmd_filters,
         token: {
           rules: [Object.assign({}, Required)],
           el: {
