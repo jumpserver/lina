@@ -64,6 +64,7 @@ export default {
               name: aliyun,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[aliyun].title,
               type: 'primary',
+              group: this.$t('common.PublicCloud'),
               can: true
             },
             {
@@ -71,6 +72,10 @@ export default {
               title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud].title,
               type: 'primary',
               can: true
+            },
+            {
+              name: huaweicloud,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
             },
             {
               name: aws_china,
@@ -81,10 +86,6 @@ export default {
               title: ACCOUNT_PROVIDER_ATTRS_MAP[aws_international].title
             },
             {
-              name: huaweicloud,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
-            },
-            {
               name: azure,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[azure].title
             },
@@ -93,12 +94,13 @@ export default {
               title: ACCOUNT_PROVIDER_ATTRS_MAP[azure_international].title
             },
             {
-              name: vmware,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
+              name: gcp,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[gcp].title
             },
             {
-              name: nutanix,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
+              name: vmware,
+              group: this.$t('common.PrivateCloud'),
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[vmware].title
             },
             {
               name: qingcloud_private,
@@ -113,8 +115,8 @@ export default {
               title: ACCOUNT_PROVIDER_ATTRS_MAP[openstack].title
             },
             {
-              name: gcp,
-              title: ACCOUNT_PROVIDER_ATTRS_MAP[gcp].title
+              name: nutanix,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[nutanix].title
             }
           ]
         }
