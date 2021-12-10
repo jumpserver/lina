@@ -914,6 +914,8 @@
     "SAML2Auth": "SAML2 认证",
     "authSAML2Xml": "IDP metadata XML",
     "authSAML2MetadataUrl": "IDP metadata URL",
+    "authSAML2AdvancedSettings": "高级配置",
+    "IdpMetadataHelpText": "IDP metadata URL 和 IDP metadata XML参数二选一即可，IDP metadata URL的优先级高",
     "authCASAttrMap": "用户属性映射",
     "SignaturesAndTemplates": "Signatures and Templates",
     "unselectedUser": "没有选择用户",
