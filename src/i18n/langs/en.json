@@ -892,6 +892,8 @@
     "SAML2Auth": "SAML2 Auth",
     "authSAML2Xml": "IDP metadata XML",
     "authSAML2MetadataUrl": "IDP metadata URL",
+    "IdpMetadataHelpText": "Choose one of IDP metadata URL and IDP metadata XML parameters. IDP metadata URL has high priority",
+    "authSAML2AdvancedSettings": "Advanced Settings",
     "unselectedUser": "Unselected user",
     "auto": "Auto",
     "basicSetting": "Basic setting",
