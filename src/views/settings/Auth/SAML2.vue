@@ -29,7 +29,7 @@ export default {
         url: '/api/v1/settings/setting/?category=saml2',
         fields: [
           [this.$t('common.Basic'), ['AUTH_SAML2']],
-          [this.$t('common.Params'), ['SAML2_IDP_METADATA_URL', 'SAML2_IDP_METADATA_XML']],
+          [this.$t('common.Params'), ['SAML2_IDP_METADATA_URL', 'SAML2_IDP_METADATA_XML', 'SAML2_SP_ADVANCED_SETTINGS']],
           [this.$t('common.Certificate'), ['SAML2_SP_CERT_CONTENT', 'SAML2_SP_KEY_CONTENT']],
           [this.$t('common.Other'), [
             'SAML2_LOGOUT_COMPLETELY', 'AUTH_SAML2_ALWAYS_UPDATE_USER',
@@ -42,7 +42,8 @@ export default {
           },
           SAML2_IDP_METADATA_URL: {
             component: 'el-input',
-            label: this.$t('setting.authSAML2MetadataUrl')
+            label: this.$t('setting.authSAML2MetadataUrl'),
+            helpText: this.$t('setting.IdpMetadataHelpText')
           },
           SAML2_IDP_METADATA_XML: {
             component: 'el-input',
@@ -51,6 +52,15 @@ export default {
               rows: 8
             },
             label: this.$t('setting.authSAML2Xml')
+          },
+          SAML2_SP_ADVANCED_SETTINGS: {
+            component: 'el-input',
+            el: {
+              type: 'textarea',
+              rows: 3
+            },
+            label: this.$t('setting.authSAML2AdvancedSettings'),
+            rules: [JsonRequired]
           },
           SAML2_SP_CERT_CONTENT: {
             component: UploadKey
@@ -71,10 +81,12 @@ export default {
         submitMethod: () => 'patch',
         afterGetFormValue(obj) {
           obj.SAML2_RENAME_ATTRIBUTES = JSON.stringify(obj.SAML2_RENAME_ATTRIBUTES)
+          obj.SAML2_SP_ADVANCED_SETTINGS = JSON.stringify(obj.SAML2_SP_ADVANCED_SETTINGS)
           return obj
         },
         cleanFormValue(data) {
           if (data['SAML2_RENAME_ATTRIBUTES']) {
+            data['SAML2_SP_ADVANCED_SETTINGS'] = JSON.parse(data['SAML2_SP_ADVANCED_SETTINGS'])
             data['SAML2_RENAME_ATTRIBUTES'] = JSON.parse(data['SAML2_RENAME_ATTRIBUTES'])
           }
           return data

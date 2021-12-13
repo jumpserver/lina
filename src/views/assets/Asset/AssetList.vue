@@ -357,8 +357,7 @@ export default {
         this.nodeInfoDialogSetting.items = [
           { key: 'id', label: 'ID', value: res.id },
           { key: 'name', label: this.$t('assets.Name'), value: res.name },
-          { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value },
-          { key: 'key', label: this.$t('assets.Key'), value: res.key }
+          { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value }
         ]
       }).catch(error => {
         this.$message.error(this.$t('common.getErrorMsg' + ' ' + error))

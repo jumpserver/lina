@@ -55,6 +55,9 @@ export default {
         hasBulkDelete: false,
         hasImport: false,
         hasMoreActions: false,
+        searchConfig: {
+          getUrlQuery: false
+        },
         moreCreates: {
           callback: (option) => {
             vm.$router.push({ name: 'AccountCreate', query: { provider: option.name }})

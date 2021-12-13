@@ -130,8 +130,15 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.users.profile['user_all_orgs'].length > 0) {
-      this.initial.org_id = this.$store.state.users.profile['user_all_orgs'][0].id
+    let userAllOrgIds = this.$store.state.users.profile['user_all_orgs']
+    const currentOrgId = this.$store.getters.currentOrg.id
+    userAllOrgIds = userAllOrgIds ? userAllOrgIds.map(i => i.id) : []
+    if (userAllOrgIds.length > 0) {
+      if (userAllOrgIds.includes(currentOrgId)) {
+        this.initial.org_id = currentOrgId
+      } else {
+        this.initial.org_id = userAllOrgIds[0]
+      }
     }
     this.loading = false
   },

@@ -116,6 +116,9 @@ export default {
         hasExport: false,
         hasImport: false,
         hasMoreActions: false,
+        searchConfig: {
+          getUrlQuery: false
+        },
         moreCreates: {
           callback: (option) => {
             vm.$router.push({ name: 'AppChangeAuthPlanCreate', query: {
