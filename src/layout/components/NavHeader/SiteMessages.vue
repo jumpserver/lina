@@ -270,8 +270,8 @@ export default {
   overflow: hidden;
   color: #000;
   padding: 4px 0 0;
-  line-height: 21px;
-  max-height: 21px;
+  line-height: 25px;
+  max-height: 25px;
   display: -webkit-box;
   font-size: 12px;
   display: block;
