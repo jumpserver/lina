@@ -6,6 +6,7 @@
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
       <RelationCard
+        v-if="!(object.protocol === 'rdp' || object.protocol === 'vnc')"
         ref="RelationCard"
         v-bind="nodeRelationConfig"
         type="info"
