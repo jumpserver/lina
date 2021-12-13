@@ -169,7 +169,6 @@ export default {
             { label: this.$t('perms.UserGroups'), value: 'user_group' },
             { label: this.$t('perms.IP'), value: 'ip' },
             { label: this.$t('perms.hostName'), value: 'hostname' },
-            { label: this.$t('perms.Node'), value: 'node' },
             { label: this.$t('perms.SystemUser'), value: 'system_user' },
             {
               label: this.$t('perms.Inherit'), value: 'all',
