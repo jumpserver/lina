@@ -51,6 +51,10 @@ export default {
       type: Array,
       default: () => []
     },
+    getUrlQuery: {
+      type: Boolean,
+      default: () => true
+    },
     default: {
       type: Object,
       default: null
@@ -132,7 +136,7 @@ export default {
   methods: {
     // 判断url中的查询条件
     checkInTableColumns() {
-      const routeQuery = this.$route?.query
+      const routeQuery = this.getUrlQuery ? this.$route?.query : {}
       const routeQueryKeys = Object.keys(routeQuery)
       const keys = {}
       if (routeQueryKeys.length < 1) return keys
@@ -208,9 +212,11 @@ export default {
       this.$set(this.filterTags, this.filterKey, tag)
       this.$emit('tagSearch', this.filterMaps)
 
-      let newQuery = _.cloneDeep(this.$route.query)
-      newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
-      this.$router.replace({ query: newQuery })
+      if (this.getUrlQuery) {
+        let newQuery = _.cloneDeep(this.$route.query)
+        newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
+        this.$router.replace({ query: newQuery })
+      }
 
       this.filterKey = ''
       this.filterValue = ''

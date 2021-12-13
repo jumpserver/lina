@@ -54,6 +54,9 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          getUrlQuery: false
+        },
         createRoute: () => {
           return {
             name: 'SystemUserCreate',
