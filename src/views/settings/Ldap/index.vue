@@ -13,7 +13,7 @@ import TestLoginDialog from './TestLoginDialog'
 import { IBox } from '@/components'
 import rules from '@/components/DataForm/rules'
 import { JsonRequired } from '@/components/DataForm/rules'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken, JsonEditor } from '@/components/FormFields'
 
 export default {
   name: 'Ldap',
@@ -62,10 +62,7 @@ export default {
           ]
         },
         AUTH_LDAP_USER_ATTR_MAP: {
-          component: 'el-input',
-          el: {
-            type: 'textarea'
-          },
+          component: JsonEditor,
           label: this.$t('setting.authLdapUserAttrMap'),
           rules: [JsonRequired]
         }
