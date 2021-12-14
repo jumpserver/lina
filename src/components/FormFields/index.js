@@ -8,6 +8,7 @@ import UploadKey from './UploadKey'
 import UserPassword from './UserPassword'
 import WeekCronSelect from './WeekCronSelect'
 import UpdateToken from './UpdateToken'
+import JsonEditor from './JsonEditor'
 
 export default {
   DatetimeRangePicker,
@@ -19,7 +20,8 @@ export default {
   UploadField,
   UserPassword,
   WeekCronSelect,
-  UpdateToken
+  UpdateToken,
+  JsonEditor
 }
 
 export {
@@ -32,5 +34,6 @@ export {
   UploadField,
   UserPassword,
   WeekCronSelect,
-  UpdateToken
+  UpdateToken,
+  JsonEditor
 }

@@ -12,6 +12,8 @@
 import BaseAuth from './Base'
 import { JsonRequired } from '@/components/DataForm/rules'
 import { UploadKey } from '@/components'
+import { JsonEditor } from '@/components/FormFields'
+
 export default {
   name: 'SAML2',
   components: {
@@ -54,11 +56,7 @@ export default {
             label: this.$t('setting.authSAML2Xml')
           },
           SAML2_SP_ADVANCED_SETTINGS: {
-            component: 'el-input',
-            el: {
-              type: 'textarea',
-              rows: 3
-            },
+            component: JsonEditor,
             label: this.$t('setting.authSAML2AdvancedSettings'),
             rules: [JsonRequired]
           },
@@ -69,10 +67,7 @@ export default {
             component: UploadKey
           },
           SAML2_RENAME_ATTRIBUTES: {
-            component: 'el-input',
-            el: {
-              type: 'textarea'
-            },
+            component: JsonEditor,
             label: this.$t('setting.authUserAttrMap'),
             rules: [JsonRequired],
             helpText: this.$t('setting.authUserAttrMapHelpText')
