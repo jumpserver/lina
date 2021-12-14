@@ -4,7 +4,7 @@
     <div v-for="(item, i) of approveData" :key="i" style="margin-bottom: 10px">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>{{ i + 1 + '级审批' }}</span>
+          <span>{{ i + 1 + ' ' + vm.$t('tickets.LevelApproval') }}</span>
         </div>
         <el-radio-group v-model="item.strategy" @change="onChange()">
           <el-radio label="super_admin">{{ vm.$t('tickets.SuperAdmin') }}</el-radio>
