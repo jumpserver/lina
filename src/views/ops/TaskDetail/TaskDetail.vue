@@ -102,7 +102,7 @@ export default {
           value: this.object.latest_execution.id,
           formatter: function(row, value) {
             const onClick = function() {
-              openTaskPage(value)
+              openTaskPage(value, 'ansible')
             }
             const title = this.$t('common.View')
             return <a onClick={onClick} >{ title }</a>
