@@ -7,7 +7,7 @@
       <el-col :span="8">
         <QuickActions type="primary" :actions="quickActions" />
         <AssetRelationCard ref="assetSelect" type="primary" style="margin-top: 15px" v-bind="assetRelationConfig" />
-        <RelationCard type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+        <RelationCard ref="nodeRelation" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       </el-col>
     </el-row>
   </div>
@@ -182,6 +182,12 @@ export default {
           const objectId = this.object.id
           const relationUrl = `/api/v1/assets/system-users-nodes-relations/?systemuser=${objectId}&node=${itemId}`
           return this.$axios.delete(relationUrl)
+        },
+        onAddSuccess: (objects, that) => {
+          that.iHasObjects = [...that.iHasObjects, ...objects]
+          vm.$refs.nodeRelation.$refs.select2.clearSelected()
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          vm.$refs.ListTable.reloadTable()
         }
       },
       assetRelationConfig: {
