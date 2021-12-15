@@ -11,6 +11,8 @@
 <script>
 import BaseAuth from './Base'
 import { JsonRequired } from '@/components/DataForm/rules'
+import { JsonEditor } from '@/components/FormFields'
+
 export default {
   name: 'Cas',
   components: {
@@ -36,10 +38,7 @@ export default {
         ],
         fieldsMeta: {
           CAS_RENAME_ATTRIBUTES: {
-            component: 'el-input',
-            el: {
-              type: 'textarea'
-            },
+            component: JsonEditor,
             label: this.$t('setting.authUserAttrMap'),
             rules: [JsonRequired]
           }

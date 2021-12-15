@@ -22,7 +22,7 @@ export default {
           disabled: true
         },
         rules: {
-          label: '审批流程',
+          label: this.$t('tickets.ApprovalProcess'),
           component: FlowRuleField,
           el: {
             level: 1

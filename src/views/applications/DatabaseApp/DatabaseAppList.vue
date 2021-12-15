@@ -68,6 +68,9 @@ export default {
         hasImport: false,
         hasBulkDelete: true,
         createRoute: 'DatabaseAppCreate',
+        searchConfig: {
+          exclude: ['category', 'type']
+        },
         moreCreates: {
           callback: (item) => {
             vm.$router.push({ name: 'DatabaseAppCreate', query: { type: item.name.toLowerCase() }})

@@ -5,6 +5,7 @@
 import ListTable from '@/components/ListTable'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { APPROVE, REJECT, CLOSED } from './const'
 export default {
   name: 'TicketListTable',
   components: {
@@ -105,14 +106,32 @@ export default {
         hasCreate: false,
         hasBulkDelete: false,
         searchConfig: {
-          default: {
-            status: {
-              key: 'status',
+          exclude: ['state'],
+          options: [
+            {
+              value: 'state',
               label: this.$t('tickets.action'),
-              value: 'open',
-              valueLabel: this.$t('tickets.Pending')
+              children: [
+                {
+                  default: true,
+                  value: 'open',
+                  label: this.$t('tickets.Pending')
+                },
+                {
+                  value: APPROVE,
+                  label: this.$t('tickets.Approved')
+                },
+                {
+                  value: REJECT,
+                  label: this.$t('tickets.Rejected')
+                },
+                {
+                  value: CLOSED,
+                  label: this.$t('tickets.Closed')
+                }
+              ]
             }
-          }
+          ]
         },
         createTitle: this.$t('common.RequestTickets'),
         hasMoreActions: false,

@@ -46,7 +46,7 @@ export default {
             name: 'AssignedTicketList'
           },
           {
-            title: '流程设置',
+            title: this.$t('tickets.FlowSetUp'),
             icon: 'fa-gear',
             name: 'TicketFlow',
             hidden: () => {
