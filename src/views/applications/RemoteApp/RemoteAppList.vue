@@ -66,6 +66,9 @@ export default {
         hasExport: false,
         hasImport: false,
         // createRoute: 'RemoteAppCreate',
+        searchConfig: {
+          exclude: ['category', 'type']
+        },
         moreCreates: {
           dropdown: this.getCreateAppType(),
           callback: (app) => {

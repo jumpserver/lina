@@ -56,7 +56,10 @@ export default {
         hasExport: false,
         hasImport: false,
         hasBulkDelete: true,
-        createRoute: 'KubernetesAppCreate'
+        createRoute: 'KubernetesAppCreate',
+        searchConfig: {
+          exclude: ['category', 'type']
+        }
       }
     }
   }
