@@ -106,6 +106,14 @@ export default {
         hasCreate: false,
         hasBulkDelete: false,
         searchConfig: {
+          default: {
+            state: {
+              key: 'state',
+              label: this.$t('tickets.action'),
+              value: 'open',
+              valueLabel: this.$t('tickets.Pending')
+            }
+          },
           exclude: ['state'],
           options: [
             {
