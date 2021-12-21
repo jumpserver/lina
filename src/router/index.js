@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import i18n from '@/i18n/i18n'
 
 Vue.use(Router)
 
@@ -67,6 +68,11 @@ export const allRoutes = [
     redirect: '',
     component: () => import('@/views/home'),
     meta: {
+      title: i18n.t('common.nav.HomePage'),
+      icon: 'el-icon-s-home',
+      view: 'home',
+      type: 'view',
+      showNavSwitcher: true,
       permissions: []
     }
   },

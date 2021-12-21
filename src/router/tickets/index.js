@@ -11,25 +11,16 @@ export default {
     activeMenu: '/tickets',
     view: 'tickets',
     type: 'view',
+    showNavSwitcher: false,
     permissions: []
   },
   children: [
     {
       path: '/tickets/list',
       name: 'TicketList',
-      component: () => import('@/views/tickets/Todo'),
+      component: () => import('@/views/tickets/TicketList'),
       meta: {
         title: i18n.t('route.Tickets'),
-        icon: 'check-square-o',
-        permissions: []
-      }
-    },
-    {
-      path: '/tickets/todo',
-      name: 'TicketTodo',
-      component: () => import('@/views/tickets/Todo'),
-      meta: {
-        title: i18n.t('route.TicketsTodo'),
         icon: 'check-square-o',
         permissions: []
       }
@@ -57,7 +48,7 @@ export default {
     {
       path: '/tickets/:id',
       name: 'TicketDetail',
-      component: () => import('@/views/tickets/Todo'),
+      component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
       hidden: true,
       meta: {
       }

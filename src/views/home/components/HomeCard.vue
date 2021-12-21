@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
 import ListTable from '@/components/ListTable/index'
 
 export default {
@@ -66,7 +65,6 @@ export default {
   },
   data() {
     return {
-      i18n
     }
   },
   methods: {

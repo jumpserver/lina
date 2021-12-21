@@ -4,7 +4,6 @@
 
 <script>
 import HomeCard from './HomeCard.vue'
-import i18n from '@/i18n/i18n'
 import { SystemUserFormatter } from '@/components/TableFormatters'
 
 export default {
@@ -14,13 +13,12 @@ export default {
   },
   data() {
     return {
-      i18n,
       cardConfig: {
         title: this.$t('route.AssetAclList'),
         icon: 'fa-inbox'
       },
       tableConfig: {
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/terminal/sessions/asset/my/?limit=5',
         columns: [
           'hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'
         ],

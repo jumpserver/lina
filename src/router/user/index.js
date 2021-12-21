@@ -11,6 +11,8 @@ export default {
   meta: {
     title: i18n.t('common.nav.UserPage'),
     view: 'user',
+    icon: 'el-icon-user-solid',
+    showNavSwitcher: true,
     permissions: ['rbac.view_userview']
   },
   children: [

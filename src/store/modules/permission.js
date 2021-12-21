@@ -6,7 +6,6 @@ import {
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
 import { getResourceNameByPath } from '@/utils/jms'
-import i18n from '@/i18n/i18n'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -247,22 +246,17 @@ const actions = {
   },
   getFilterRoutes({ state }) {
     const addRoutes = state.addRoutes
-    const routeArr = [
-      {
-        name: 'Home',
-        label: i18n.t('common.nav.HomePage'),
-        route: '',
-        perms: []
-      }
-    ]
+    const routeArr = []
     addRoutes.forEach(i => {
-      const perm = i.meta?.permissions
-      if (perm.length > 0 && perm[0]) {
+      const meta = i.meta
+      const showNavSwitcher = meta?.showNavSwitcher
+      if (showNavSwitcher) {
         const obj = {
-          name: i.meta.view,
-          label: i.meta.title,
+          name: meta.view || '',
+          label: meta.title || '',
           route: i.name,
-          perms: perm
+          icon: meta?.icon || '',
+          perms: meta?.permissions
         }
         routeArr.push(obj)
       }
