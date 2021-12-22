@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
-import AssetPermissionFormActionField from '@/views/perms/AssetPermission/components/AssetPermissionFormActionField'
+import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -50,7 +50,7 @@ export default {
           fieldsMeta: {
             apply_actions: {
               label: this.$t('perms.Actions'),
-              component: AssetPermissionFormActionField,
+              component: PermissionFormActionField,
               helpText: this.$t('common.actionsTips')
             },
             apply_nodes: {

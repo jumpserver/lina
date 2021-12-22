@@ -18,6 +18,9 @@ export class FormFieldGenerator {
           })
         }
         break
+      case 'multiple choice':
+        field.el.choices = fieldRemoteMeta['choices']
+        break
       case 'datetime':
         type = 'date-picker'
         field.el = {
