@@ -91,7 +91,10 @@ export default {
         hasExport: false,
         hasMoreActions: false,
         createRoute: 'GatherUserTaskCreate',
-        hasColumnSetting: false
+        hasColumnSetting: false,
+        searchConfig: {
+          getUrlQuery: false
+        }
       }
     }
   }

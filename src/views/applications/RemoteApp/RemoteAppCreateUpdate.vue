@@ -34,7 +34,7 @@ export default {
         type: {
           type: 'select',
           options: [{
-            label: appType,
+            label: appTypeMeta.title,
             value: appType
           }],
           disabled: true

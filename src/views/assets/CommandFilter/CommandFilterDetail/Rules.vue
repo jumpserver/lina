@@ -20,7 +20,7 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/cmd-filters/${this.object.id}/rules/`,
-        columns: ['type', 'content', 'priority', 'action', 'comment', 'actions'],
+        columns: ['type', 'content', 'action', 'priority', 'pattern', 'comment', 'actions'],
         columnsMeta: {
           type: {
             width: '100px'

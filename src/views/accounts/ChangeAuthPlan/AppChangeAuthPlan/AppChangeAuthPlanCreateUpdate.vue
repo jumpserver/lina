@@ -20,7 +20,7 @@ export default {
         [this.$t('assets.Applications'), ['category', 'type', 'apps', 'system_users']],
         [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['password_strategy', 'password', 'password_rules']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['recipients', 'comment']]
       ],
       initial: {
         type: this.$route.query.type,
@@ -81,7 +81,8 @@ export default {
         is_periodic: fields.is_periodic,
         password_strategy: fields.password_strategy,
         crontab: fields.crontab,
-        interval: fields.interval
+        interval: fields.interval,
+        recipients: fields.recipients
       },
       createSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
       updateSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },

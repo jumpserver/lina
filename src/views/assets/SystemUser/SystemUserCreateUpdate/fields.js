@@ -107,6 +107,7 @@ function getFields() {
   }
 
   const cmd_filters = {
+    label: this.$t('assets.CmdFilter'),
     component: Select2,
     el: {
       multiple: true,
@@ -123,7 +124,7 @@ function getFields() {
       disabled: false
     },
     hidden: form => {
-      if (form.login_mode === 'manual' || form.type === 'admin') {
+      if (form.login_mode === 'manual' || form.type === 'admin' || (form.ad_domain && form.ad_domain !== '')) {
         this.fieldsMeta.auto_push.el.disabled = true
       } else {
         this.fieldsMeta.auto_push.el.disabled = false
@@ -135,7 +136,8 @@ function getFields() {
           updateForm({ auto_generate_key: value })
         }
       }
-    }
+    },
+    helpText: this.$t('assets.SetAdDomainNoDisabled')
   }
 
   const update_password = {

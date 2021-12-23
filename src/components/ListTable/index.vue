@@ -91,7 +91,7 @@ export default {
     },
     search(attrs) {
       this.$emit('TagSearch', attrs)
-      return this.dataTable.search(attrs, true)
+      return this.dataTable?.search(attrs, true)
     },
     filter(attrs) {
       this.$emit('TagFilter', attrs)

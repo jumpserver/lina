@@ -66,8 +66,12 @@ export default {
           value: this.object.node_display
         },
         {
-          key: this.$t('xpack.Cloud.AdminUser'),
-          value: this.object.admin_user_display
+          key: this.$t('xpack.Cloud.LinuxAdminUser'),
+          value: this.object.unix_admin_user_display
+        },
+        {
+          key: this.$t('xpack.Cloud.WindowsAdminUser'),
+          value: this.object.windows_admin_user_display
         },
         {
           key: this.$t('assets.Protocols'),

@@ -14,6 +14,12 @@
       size="25%"
       @open="getMessages"
     >
+      <div slot="title">
+        <span>{{ $t('notifications.SiteMessage') }}</span>
+        <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
+          <a> {{ $t('notifications.OneClickRead') }}</a>
+        </div>
+      </div>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
         <div
           v-for="msg of messages"
@@ -32,7 +38,7 @@
             <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
               {{ formatDate(msg.date_created) }}
             </span>
-            <div v-else class="msg-item-read-btn" @click.stop="markAsRead(msg)">
+            <div v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
               <a>{{ $t('notifications.MarkAsRead') }}</a>
             </div>
           </div>
@@ -52,7 +58,7 @@
       :title="''"
       :close-on-click-modal="false"
       :confirm-title="$t('notifications.MarkAsRead')"
-      @confirm="markAsRead(currentMsg)"
+      @confirm="markAsRead([currentMsg])"
       @cancel="cancelRead"
     >
       <div class="msg-detail">
@@ -120,9 +126,26 @@ export default {
         return this.$moment(d).fromNow()
       }
     },
-    markAsRead(msg) {
+    oneClickRead(msgs) {
+      this.$confirm(this.$t('notifications.OneClickReadMsg'), this.$t('common.Info'), {
+        type: 'warning',
+        confirmButtonClass: 'el-button--danger',
+        beforeClose: async(action, instance, done) => {
+          if (action !== 'confirm') return done()
+          this.markAsRead(msgs)
+          done()
+        }
+      }).catch(() => {
+        /* 取消*/
+      })
+    },
+    markAsRead(msgs) {
       const url = `/api/v1/notifications/site-message/mark-as-read/`
-      this.$axios.patch(url, { ids: [msg.id] }).then(res => {
+      const msgIds = []
+      for (const item of msgs) {
+        msgIds.push(item.id)
+      }
+      this.$axios.patch(url, { ids: msgIds }).then(res => {
         this.msgDetailVisible = false
         this.getMessages()
       }).catch(err => {
@@ -178,6 +201,10 @@ export default {
     margin-bottom: 0;
     padding-top: 10px;
     font-size: 16px;
+    .msg-list-all-read-btn {
+      font-size: 12px;
+      float: right;
+    }
   }
 
   .el-drawer__body {
@@ -243,8 +270,8 @@ export default {
   overflow: hidden;
   color: #000;
   padding: 4px 0 0;
-  line-height: 21px;
-  max-height: 21px;
+  line-height: 25px;
+  max-height: 25px;
   display: -webkit-box;
   font-size: 12px;
   display: block;

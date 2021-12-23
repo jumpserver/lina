@@ -68,7 +68,7 @@ export default {
         hasCreate: false,
         createRoute: 'SystemUserCreate',
         searchConfig: {
-          exclude: ['type']
+          exclude: ['type', 'protocol']
         },
         moreCreates: {
           callback: (option) => {

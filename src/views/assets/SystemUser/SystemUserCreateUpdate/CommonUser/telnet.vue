@@ -13,7 +13,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import getFields from '../fields'
 
 export default {
-  name: 'CommonUserDatabase',
+  name: 'CommonUserTelnet',
   components: { GenericCreateUpdatePage },
   data() {
     const fields = getFields.bind(this)()
@@ -21,19 +21,18 @@ export default {
       initial: {
         login_mode: 'auto',
         protocol: this.$route.query.protocol,
-        auto_generate_key: false,
-        auto_push: false
+        username_same_with_user: false
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'username', 'priority', 'protocol']],
+        [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
         [this.$t('common.Auth'), ['login_mode', 'password']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
         login_mode: fields.login_mode,
         username: fields.username,
-        private_key: fields.private_key,
+        username_same_with_user: fields.username_same_with_user,
         protocol: fields.protocol,
         password: fields.password,
         cmd_filters: fields.cmd_filters

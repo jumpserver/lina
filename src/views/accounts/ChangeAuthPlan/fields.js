@@ -127,6 +127,18 @@ function getFields() {
     ]
   }
 
+  const recipients = {
+    el: {
+      value: [],
+      ajax: {
+        url: '/api/v1/users/users/?fields_size=mini',
+        transformOption: (item) => {
+          return { label: item.name + '(' + item.username + ')', value: item.id }
+        }
+      }
+    }
+  }
+
   const nodes = {
     label: i18n.t('xpack.Node'),
     el: {
@@ -220,7 +232,8 @@ function getFields() {
     is_periodic: is_periodic,
     is_ssh_key: is_ssh_key,
     crontab: crontab,
-    interval: interval
+    interval: interval,
+    recipients: recipients
   }
 }
 
