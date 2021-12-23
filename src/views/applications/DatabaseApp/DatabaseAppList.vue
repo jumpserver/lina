@@ -79,12 +79,8 @@ export default {
             {
               name: 'MySQL',
               title: 'MySQL',
-              has: true
-            },
-            {
-              name: 'Redis',
-              title: 'Redis',
-              has: true
+              has: true,
+              group: this.$t('assets.RDBProtocol')
             },
             {
               name: 'PostgreSQL',
@@ -106,6 +102,12 @@ export default {
               name: 'SQLServer',
               title: 'SQLServer',
               has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'Redis',
+              title: 'Redis',
+              has: true,
+              group: this.$t('assets.NoSQLProtocol')
             }
           ]
         }

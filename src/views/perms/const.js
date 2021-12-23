@@ -57,14 +57,7 @@ export const DATABASE = [
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: true,
-    group: i18n.t('applications.Database')
-  },
-  {
-    name: REDIS,
-    title: i18n.t(`applications.applicationsType.${REDIS}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: true
+    group: i18n.t('applications.RDBProtocol')
   },
   {
     name: ORACLE,
@@ -93,6 +86,14 @@ export const DATABASE = [
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
+  },
+  {
+    name: REDIS,
+    title: i18n.t(`applications.applicationsType.${REDIS}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: true,
+    group: i18n.t('applications.NoSQLProtocol')
   }
 ]
 

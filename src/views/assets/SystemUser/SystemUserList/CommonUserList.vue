@@ -105,19 +105,7 @@ export default {
               title: 'MySQL',
               type: 'primary',
               has: true,
-              group: this.$t('assets.DatabaseProtocol')
-            },
-            {
-              name: 'Redis',
-              title: 'Redis',
-              type: 'primary',
-              has: true
-            },
-            {
-              name: 'Redis_ACL',
-              title: 'Redis_ACL',
-              type: 'primary',
-              has: true
+              group: this.$t('assets.RDBProtocol')
             },
             {
               name: 'PostgreSQL',
@@ -142,6 +130,13 @@ export default {
               title: 'SQLServer',
               type: 'primary',
               has: this.$store.getters.hasValidLicense
+            },
+            {
+              name: 'Redis',
+              title: 'Redis',
+              type: 'primary',
+              has: true,
+              group: this.$t('assets.NoSQLProtocol')
             },
             {
               name: 'K8S',
