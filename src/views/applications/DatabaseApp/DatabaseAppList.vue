@@ -79,6 +79,11 @@ export default {
               has: true
             },
             {
+              name: 'Redis',
+              title: 'Redis',
+              has: true
+            },
+            {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               has: this.$store.getters.hasValidLicense

@@ -45,6 +45,8 @@ export default {
         case 'postgresql':
         case 'mariadb':
         case 'sqlserver':
+        case 'redis':
+        case 'redis_acl':
           return Database
         case 'k8s':
           return K8S

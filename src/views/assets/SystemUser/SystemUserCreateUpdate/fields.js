@@ -40,6 +40,9 @@ function getFields() {
       } else {
         this.fieldsMeta.username.el.disabled = false
       }
+      if (form.protocol === 'redis') {
+        return true
+      }
     }
   }
 

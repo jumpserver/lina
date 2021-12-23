@@ -80,7 +80,11 @@ export default {
                 if (this.$route.query.category === 'remote_app') {
                   url += `?protocol=rdp`
                 } else if (queryType) {
-                  url += `?protocol=${queryType}`
+                  if (queryType === 'redis') {
+                    url += `?protocols=${queryType},redis_acl`
+                  } else {
+                    url += `?protocol=${queryType}`
+                  }
                 }
                 return url
               }.bind(this)()),

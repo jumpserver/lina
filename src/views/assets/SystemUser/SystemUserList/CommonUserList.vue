@@ -108,6 +108,18 @@ export default {
               group: this.$t('assets.DatabaseProtocol')
             },
             {
+              name: 'Redis',
+              title: 'Redis',
+              type: 'primary',
+              has: true
+            },
+            {
+              name: 'Redis_ACL',
+              title: 'Redis_ACL',
+              type: 'primary',
+              has: true
+            },
+            {
               name: 'PostgreSQL',
               title: 'PostgreSQL',
               type: 'primary',

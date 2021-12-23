@@ -40,6 +40,7 @@
       "vmware_client":"Vmware Client",
       "custom":"Custom",
       "mysql": "MySQL",
+      "redis": "Redis",
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",

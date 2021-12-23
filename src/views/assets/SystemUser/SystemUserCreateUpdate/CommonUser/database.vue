@@ -25,8 +25,8 @@ export default {
         auto_push: false
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'login_mode', 'username', 'priority', 'protocol']],
-        [this.$t('common.Auth'), ['password']],
+        [this.$t('common.Basic'), ['name', 'username', 'priority', 'protocol']],
+        [this.$t('common.Auth'), ['login_mode', 'password']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
