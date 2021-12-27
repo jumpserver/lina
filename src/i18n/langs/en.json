@@ -1010,6 +1010,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "RoleUsers": "Role users",
     "RoleInfo": "Role info",
     "RolePerms": "Role perms",
     "MessageSubscription": "Message Subscription",
@@ -1067,8 +1068,8 @@
     "ResetAndDownloadSSHKey": "Reset and download SSH Key",
     "ResetPublicKeyAndDownload": "Reset public key and download",
     "Role": "Role",
-    "SuperRole": "Super role",
-    "OrgRole": "Org role",
+    "SystemRoles": "System roles",
+    "OrgRole": "Org roles",
     "SSHKey": "SSH Key",
     "SSHKeySetting": "SSH Key setting",
     "Secure": "Secure",

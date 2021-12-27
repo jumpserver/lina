@@ -5,7 +5,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import UserPassword from '@/components/FormFields/UserPassword'
-import RoleCheckbox from '@/views/users/User/components/RoleCheckbox'
 import rules from '@/components/DataForm/rules'
 import { mapGetters } from 'vuex'
 
@@ -15,8 +14,7 @@ export default {
   },
   data() {
     return {
-      initial: {
-      },
+      initial: {},
       user: {
         'can_public_key_auth': false
       },
@@ -26,7 +24,7 @@ export default {
           'password_strategy', 'update_password', 'password', 'need_update_password',
           'set_public_key', 'public_key', 'mfa_level', 'source'
         ]],
-        [this.$t('users.Secure'), ['role', 'org_roles', 'date_expired']],
+        [this.$t('users.Secure'), ['system_roles', 'org_roles', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',
@@ -103,22 +101,34 @@ export default {
             return !formValue.set_public_key
           }
         },
-        role: {
-          label: this.$t('users.SuperRole'),
-          hidden: () => {
-            return !this.$store.getters.currentUserIsSuperAdmin
-          }
+        system_roles: {
+          label: this.$t('users.SystemRoles'),
+          el: {
+            multiple: true,
+            ajax: {
+              url: '/api/v1/rbac/roles/?scope=system',
+              transformOption: (item) => {
+                return { label: item.name_display, value: item.id }
+              }
+            }
+          },
+          value: []
         },
         org_roles: {
           rules: [rules.RequiredChange],
-          label: this.$t('users.OrgRole'),
-          component: RoleCheckbox,
+          el: {
+            multiple: true,
+            ajax: {
+              url: '/api/v1/rbac/roles/?scope=org',
+              transformOption: (item) => {
+                return { label: item.name_display, value: item.id }
+              }
+            },
+            disabled: this.$store.getters.currentOrgIsRoot,
+            value: []
+          },
           hidden: () => {
             return !this.$store.getters.hasValidLicense
-          },
-          el: {
-            disabled: this.$store.getters.currentOrgIsRoot,
-            rule: []
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
         },

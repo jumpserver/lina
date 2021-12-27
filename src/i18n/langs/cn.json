@@ -1051,6 +1051,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "RoleUsers": "授权用户",
     "RoleInfo": "角色信息",
     "RolePerms": "角色权限",
     "MessageSubscription": "消息订阅",
@@ -1107,7 +1108,7 @@
     "ResetAndDownloadSSHKey": "重置并下载密钥",
     "ResetPublicKeyAndDownload": "重置并下载SSH密钥",
     "Role": "角色",
-    "SuperRole": "系统角色",
+    "SystemRoles": "系统角色",
     "OrgRole": "组织角色",
     "SSHKey": "SSH公钥",
     "SSHKeySetting": "SSH公钥设置",

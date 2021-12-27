@@ -6,70 +6,23 @@
     custom-class="asset-select-dialog"
     :show-cancel="false"
     :show-confirm="false"
-    width="28%"
+    width="50vw"
     top="15vh"
     after
     :destroy-on-close="true"
     @close="clearSelect"
   >
-    <div>
-      <el-select
-        v-model="InviteValue"
-        multiple
-        filterable
-        remote
-        size="small"
-        reserve-keyword
-        :placeholder="this.$t('setting.usernamePlaceholder')"
-        :remote-method="remoteMethod"
-        :loading="selectLoading"
-      >
-        <el-option
-          v-for="item in InviteOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-collapse-transition>
-        <div
-          v-if="InviteValue.length > 0"
-          style="margin-top:15px;
-                   display: flex;
-                   flex-direction:column;
-                   align-items:center;
-                   justify-content:center;"
-        >
-          <el-checkbox-group
-            v-model="rulesList"
-            size="small"
-            style="display: flex;
-                   flex-direction:row;
-                   justify-content:center;"
-          >
-            <el-checkbox label="User" checked>{{ $t('users.OrgUser') }}</el-checkbox>
-            <el-checkbox label="Auditor">{{ $t('users.OrgAuditor') }}</el-checkbox>
-            <el-checkbox label="Admin">{{ $t('users.OrgAdmin') }}</el-checkbox>
-          </el-checkbox-group>
-
-          <el-button
-            type="primary"
-            :loading="InviteLoading"
-            size="small"
-            style="margin-top: 20px;width: 10vw"
-            @click="InviteConfirm"
-          >{{ $t('users.Invite') }}</el-button>
-        </div>
-      </el-collapse-transition>
-    </div>
+    <AutoDataForm v-bind="formConfig" />
   </Dialog>
 </template>
 <script>
 import Dialog from '@/components/Dialog'
+import { AutoDataForm, Select2 } from '@/components'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    Dialog
+    Dialog,
+    AutoDataForm
   },
   props: {
     setting: {
@@ -85,7 +38,33 @@ export default {
       InviteLoading: false,
       InviteOptions: [],
       InviteValue: [],
-      rulesList: []
+      rulesList: [],
+      formConfig: {
+        url: '/api/v1/users/users/invite/',
+        method: 'post',
+        fields: ['users', 'org_roles'],
+        fieldsMeta: {
+          users: {
+            component: Select2,
+            el: {
+              ajax: {
+                url: '/api/v1/users/users/suggestion/'
+              }
+            }
+          },
+          org_roles: {
+            component: Select2,
+            el: {
+              ajax: {
+                url: '/api/v1/rbac/roles/?scope=org',
+                transformOption: (item) => {
+                  return { label: `${item.name_display}`, value: item.id }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   computed: {

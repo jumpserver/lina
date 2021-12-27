@@ -35,7 +35,7 @@ export default {
       return vm.currentUserIsSuperAdmin
     }
     const hasRemove = () => {
-      if (!vm.publicSettings.XPACK_LICENSE_IS_VALID) {
+      if (!vm.publicSettings['XPACK_LICENSE_IS_VALID']) {
         return false
       }
       return !vm.currentOrgIsRoot
@@ -45,8 +45,8 @@ export default {
         url: '/api/v1/users/users/',
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'total_role_display', 'source',
-          'is_valid', 'login_blocked', 'mfa_enabled',
+          'groups_display', 'system_roles_display', 'org_roles_display',
+          'source', 'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
           'comment', 'created_by', 'actions'

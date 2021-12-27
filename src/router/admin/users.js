@@ -20,20 +20,20 @@ export default [
         path: 'create',
         component: () => import('@/views/users/User/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserCreate',
+        hidden: true,
         meta: {
           title: i18n.t('route.UserCreate'),
-          action: 'create',
-          hidden: true
+          action: 'create'
         }
       },
       {
         path: ':id/update',
         component: () => import('@/views/users/User/UserCreateUpdate.vue'), // Parent router-view
         name: 'UserUpdate',
+        hidden: true,
         meta: {
           title: i18n.t('route.UserUpdate'),
-          action: 'update',
-          hidden: true
+          action: 'update'
         }
       },
       {

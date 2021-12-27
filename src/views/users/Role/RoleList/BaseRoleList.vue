@@ -4,6 +4,7 @@
 
 <script>
 import { ListTable } from '@/components'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -20,17 +21,24 @@ export default {
       tableConfig: {
         url: `/api/v1/rbac/roles/?scope=${this.scope}`,
         columns: [
-          'name', 'users_amount', 'builtin', 'created_by', 'date_create',
+          'name_display', 'users_amount', 'builtin', 'created_by', 'date_create',
           'date_updated', 'comment', 'actions'
         ],
         columnsShow: {
-          default: ['name', 'users_amount', 'builtin', 'comment', 'actions'],
+          default: ['name_display', 'users_amount', 'builtin', 'comment', 'actions'],
           min: ['name', 'action']
         },
         columnsMeta: {
-          name: {
+          name_display: {
+            label: this.$t('common.Name'),
+            formatter: DetailFormatter,
             formatterArgs: {
               permissions: ['rbac.view_role']
+            }
+          },
+          builtin: {
+            formatterArgs: {
+              showFalse: false
             }
           },
           actions: {
