@@ -9,6 +9,7 @@
     </el-col>
     <el-col :span="6" :offset="1">
       <Steps :object="object" />
+      <session />
     </el-col>
   </el-row>
 </template>
@@ -17,9 +18,11 @@
 import Details from './Details'
 import Comments from './Comments'
 import Steps from './Steps'
+import session from './session'
+
 export default {
   name: 'GenericTicketDetail',
-  components: { Steps, Comments, Details },
+  components: { Steps, Comments, Details, session },
   props: {
     object: {
       type: Object,

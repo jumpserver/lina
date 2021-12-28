@@ -72,7 +72,7 @@ export default {
       return [
         {
           key: this.$t('perms.Node'),
-          value: this.object.meta.apply_nodes_display.join(', ')
+          value: this.object.meta.apply_nodes_display?.join(', ')
         },
         {
           key: this.$t('tickets.Asset'),
