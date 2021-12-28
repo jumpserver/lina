@@ -15,7 +15,7 @@
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <template v-for="option in action.dropdown">
-            <div v-if="option.group" :key="'group:'+option.name" class="dropdown-menu-title">
+            <div v-if="option.group" :key="'group:'+option.name" class="dropdown-menu-title" style="width:130px">
               {{ option.group }}
             </div>
             <el-dropdown-item

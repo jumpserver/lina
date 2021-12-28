@@ -43,6 +43,7 @@ export const REMOTE_APP = [
 ]
 
 export const MYSQL = 'mysql'
+export const REDIS = 'redis'
 export const ORACLE = 'oracle'
 export const POSTGRESQL = 'postgresql'
 export const MARIADB = 'mariadb'
@@ -56,7 +57,7 @@ export const DATABASE = [
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: true,
-    group: i18n.t('applications.Database')
+    group: i18n.t('applications.RDBProtocol')
   },
   {
     name: ORACLE,
@@ -85,6 +86,14 @@ export const DATABASE = [
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
+  },
+  {
+    name: REDIS,
+    title: i18n.t(`applications.applicationsType.${REDIS}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: true,
+    group: i18n.t('applications.NoSQLProtocol')
   }
 ]
 
