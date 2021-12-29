@@ -15,12 +15,12 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=cloud',
         columns: [
-          'name', 'type', 'attrs.cluster',
+          'name', 'type_display', 'attrs.cluster',
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'type', 'attrs.cluster', 'comment', 'actions']
+          default: ['name', 'type_display', 'attrs.cluster', 'comment', 'actions']
         },
         columnsMeta: {
           'attrs.cluster': {
@@ -29,8 +29,8 @@ export default {
           comment: {
             width: '340px'
           },
-          type: {
-            width: '140px'
+          type_display: {
+            label: this.$t('applications.type')
           },
           actions: {
             prop: 'actions',
