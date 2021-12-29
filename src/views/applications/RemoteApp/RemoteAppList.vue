@@ -17,17 +17,16 @@ export default {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=remote_app',
         columns: [
-          'name', 'type', 'attrs.asset',
+          'name', 'type_display', 'attrs.asset',
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'type', 'attrs.asset', 'comment', 'actions']
+          default: ['name', 'type_display', 'attrs.asset', 'comment', 'actions']
         },
         columnsMeta: {
-          type: {
-            displayKey: 'get_type_display',
-            width: '140px'
+          type_display: {
+            label: this.$t('applications.type')
           },
           'attrs.asset': {
             label: this.$t('assets.Assets'),
@@ -67,7 +66,14 @@ export default {
         hasImport: false,
         // createRoute: 'RemoteAppCreate',
         searchConfig: {
-          exclude: ['category', 'type']
+          exclude: ['category', 'type'],
+          options: [
+            {
+              value: 'type',
+              label: this.$t('applications.type'),
+              children: this.getCreateAppType()
+            }
+          ]
         },
         moreCreates: {
           dropdown: this.getCreateAppType(),
@@ -85,6 +91,8 @@ export default {
         const item = { ...REMOTE_APP_TYPE_META_MAP[value] }
         item.can = true
         item.has = true
+        item.value = item.name
+        item.label = item.title
         extraMoreActions.push(item)
       }
       return extraMoreActions

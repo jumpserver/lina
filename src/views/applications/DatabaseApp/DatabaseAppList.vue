@@ -11,6 +11,41 @@ export default {
   },
   data() {
     const vm = this
+    const appType = [
+      {
+        name: 'mysql',
+        title: 'MySQL',
+        has: true,
+        group: this.$t('assets.RDBProtocol')
+      },
+      {
+        name: 'postgresql',
+        title: 'PostgreSQL',
+        has: this.$store.getters.hasValidLicense
+      },
+      {
+        name: 'mariadb',
+        title: 'MariaDB',
+        type: 'primary',
+        has: this.$store.getters.hasValidLicense
+      },
+      {
+        name: 'oracle',
+        title: 'Oracle',
+        has: this.$store.getters.hasValidLicense
+      },
+      {
+        name: 'sqlserver',
+        title: 'SQLServer',
+        has: this.$store.getters.hasValidLicense
+      },
+      {
+        name: 'redis',
+        title: 'Redis',
+        has: true,
+        group: this.$t('assets.NoSQLProtocol')
+      }
+    ]
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
@@ -24,8 +59,7 @@ export default {
         },
         columnsMeta: {
           type_display: {
-            label: this.$t('applications.type'),
-            width: '120px'
+            label: this.$t('applications.type')
           },
           'attrs.host': {
             label: this.$t('applications.host'),
@@ -69,49 +103,36 @@ export default {
         hasBulkDelete: true,
         createRoute: 'DatabaseAppCreate',
         searchConfig: {
-          exclude: ['category', 'type']
+          exclude: ['category', 'type'],
+          options: [
+            {
+              value: 'type',
+              label: this.$t('applications.type'),
+              children: this.getAppType(appType)
+            }
+          ]
         },
         moreCreates: {
           callback: (item) => {
             vm.$router.push({ name: 'DatabaseAppCreate', query: { type: item.name.toLowerCase() }})
           },
-          dropdown: [
-            {
-              name: 'MySQL',
-              title: 'MySQL',
-              has: true,
-              group: this.$t('assets.RDBProtocol')
-            },
-            {
-              name: 'PostgreSQL',
-              title: 'PostgreSQL',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'MariaDB',
-              title: 'MariaDB',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'Oracle',
-              title: 'Oracle',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'SQLServer',
-              title: 'SQLServer',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'Redis',
-              title: 'Redis',
-              has: true,
-              group: this.$t('assets.NoSQLProtocol')
-            }
-          ]
+          dropdown: appType
         }
       }
+    }
+  },
+  methods: {
+    getAppType(arr) {
+      const searchAppType = []
+      if (arr.length < 1) return searchAppType
+      arr.forEach((i) => {
+        const option = {
+          value: i.name,
+          label: i.title
+        }
+        searchAppType.push(option)
+      })
+      return searchAppType
     }
   }
 }
