@@ -31,6 +31,8 @@ function getFields() {
         this.fieldsMeta.username.rules[0].required = false
       } else if (form.username_same_with_user) {
         this.fieldsMeta.username.rules[0].required = false
+      } else if (form.protocol === 'redis') {
+        this.fieldsMeta.username.rules[0].required = false
       } else {
         this.fieldsMeta.username.rules[0].required = true
       }

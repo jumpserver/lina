@@ -40,6 +40,7 @@
       "vmware_client":"Vmware Client",
       "custom":"Custom",
       "mysql": "MySQL",
+      "redis": "Redis",
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
@@ -83,7 +84,9 @@
     "cluster": "Cluster",
     "kubernetes":"Kubernetes",
     "clusterHelpTextMessage": "Tips: https://172.16.8.8:8443",
-    "DBInfo": "Database Info"
+    "DBInfo": "Database Info",
+    "RDBProtocol": "RDS Protocol",
+    "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
     "AppList": "Application list",
@@ -222,6 +225,8 @@
     "ipDomain": "IP(Domain)",
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
+    "RDBProtocol": "RDS Protocol",
+    "NoSQLProtocol": "NoSQL Protocol",
     "OtherProtocol": "Other Protocol",
     "PasswordOrToken": "Password / Token"
   },
