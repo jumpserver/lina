@@ -19,7 +19,7 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
         [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['is_password', 'password_strategy', 'password', 'password_rules']],
-        [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'private_key']],
+        [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'private_key', 'passphrase']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['recipients', 'comment']]
       ],
@@ -38,6 +38,7 @@ export default {
         username: fields.username,
         assets: fields.assets,
         password: fields.password,
+        passphrase: fields.passphrase,
         password_rules: fields.asset_password_rules,
         private_key: fields.private_key,
         nodes: fields.nodes,

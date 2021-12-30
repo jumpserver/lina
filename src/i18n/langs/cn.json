@@ -171,6 +171,7 @@
     "Other": "其它",
     "Hardware": "硬件信息",
     "Password": "密码",
+    "Passphrase": "密钥密码",
     "PasswordWithoutSpecialCharHelpText": "不能包含特殊字符",
     "Pending": "等待",
     "Platform": "系统平台",
