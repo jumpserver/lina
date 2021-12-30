@@ -31,7 +31,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
-        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'private_key']],
+        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'private_key', 'passphrase']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('assets.UserSwitch'), ['su_enabled', 'su_from']],
@@ -41,6 +41,7 @@ export default {
         login_mode: fields.login_mode,
         username: fields.username,
         private_key: fields.private_key,
+        passphrase: fields.passphrase,
         username_same_with_user: fields.username_same_with_user,
         auto_generate_key: fields.auto_generate_key,
         protocol: fields.protocol,

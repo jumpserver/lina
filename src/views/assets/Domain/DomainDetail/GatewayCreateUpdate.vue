@@ -20,7 +20,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
-        [this.$t('assets.Auth'), ['username', 'password', 'private_key']],
+        [this.$t('assets.Auth'), ['username', 'password', 'private_key', 'passphrase']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {

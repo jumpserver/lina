@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
-import { AssetSelect, CronTab } from '@/components'
-import Select2 from '@/components/FormFields/Select2'
+import { AssetSelect, CronTab, UploadKey } from '@/components'
+import { Select2 } from '@/components/FormFields/Select2'
 import { Required } from '@/components/DataForm/rules'
 
 var validatorInterval = (rule, value, callback) => {
@@ -103,6 +103,12 @@ function getFields() {
     ]
   }
 
+  const passphrase = {
+    hidden: (formValue) => {
+      return formValue.is_ssh_key === false
+    }
+  }
+
   const asset_password_rules = {
     type: 'group',
     items: generatePasswordRulesItemsFields('asset')
@@ -114,11 +120,7 @@ function getFields() {
   }
 
   const private_key = {
-    el: {
-      type: 'textarea',
-      placeholder: '-----BEGIN OPENSSH PRIVATE KEY-----',
-      autosize: { minRows: 3 }
-    },
+    component: UploadKey,
     hidden: (formValue) => {
       return formValue.is_ssh_key === false
     },
@@ -225,6 +227,7 @@ function getFields() {
     password_strategy: password_strategy,
     ssh_key_strategy: ssh_key_strategy,
     private_key: private_key,
+    passphrase: passphrase,
     asset_password_rules: asset_password_rules,
     database_password_rules: database_password_rules,
     nodes: nodes,

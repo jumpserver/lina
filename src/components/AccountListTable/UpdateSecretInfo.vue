@@ -21,6 +21,9 @@
       <el-form-item :label="this.$t('assets.SSHKey')">
         <input type="file" @change="onPrivateKeyLoaded">
       </el-form-item>
+      <el-form-item :label="this.$t('assets.Passphrase')">
+        <el-input v-model="authInfo.passphrase" type="password" />
+      </el-form-item>
     </el-form>
   </Dialog>
 </template>
@@ -42,7 +45,8 @@ export default {
     return {
       authInfo: {
         password: '',
-        private_key: ''
+        private_key: '',
+        passphrase: ''
       }
     }
   },
@@ -54,6 +58,7 @@ export default {
       }
       if (this.authInfo.private_key !== '') {
         data.private_key = this.authInfo.private_key
+        data.passphrase = this.authInfo.passphrase
       }
       this.$axios.patch(
         `/api/v1/assets/accounts/${this.account.id}/`,

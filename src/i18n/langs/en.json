@@ -168,6 +168,7 @@
     "Os": "Os",
     "Other": "Other",
     "Password": "Password",
+    "Passphrase": "Passphrase",
     "PasswordWithoutSpecialCharHelpText": "Password can't has special chars ",
     "Pending": "Pending",
     "Platform": "Platform",
