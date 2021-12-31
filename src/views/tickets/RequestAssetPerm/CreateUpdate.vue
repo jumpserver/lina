@@ -131,7 +131,7 @@ export default {
   },
   mounted() {
     let userAllOrgIds = this.$store.state.users.profile['user_all_orgs']
-    const currentOrgId = this.$store.getters.currentOrg.id
+    const currentOrgId = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : null
     userAllOrgIds = userAllOrgIds ? userAllOrgIds.map(i => i.id) : []
     if (userAllOrgIds.length > 0) {
       if (userAllOrgIds.includes(currentOrgId)) {
