@@ -88,7 +88,7 @@ export default {
           'protocols', 'platform', 'hardware_info', 'model',
           'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
           'disk_info', 'disk_total', 'memory', 'os', 'os_arch',
-          'os_version', 'number', 'vendor', 'sn',
+          'os_version', 'number', 'vendor', 'sn', 'is_active',
           'connectivity', 'labels_display',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
