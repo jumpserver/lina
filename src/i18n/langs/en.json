@@ -771,6 +771,7 @@
     "accountName": "Account name",
     "active": "active",
     "alive": "alive",
+    "noAlive": "no alive",
     "asset": "Asset",
     "target": "Target",
     "bucket": "Bucket",
