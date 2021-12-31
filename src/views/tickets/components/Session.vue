@@ -7,6 +7,12 @@
     <div class="content">
       <el-row class="item">
         <el-col>
+          <span class="item-label">{{ $t('tickets.status') }}：</span>
+          <span class="item-value">
+            {{ session.is_finished ? $t('sessions.noAlive') : $t('sessions.alive') }}
+          </span>
+        </el-col>
+        <el-col>
           <span class="item-label">{{ $t('sessions.target') }}：</span>
           <span class="item-value">{{ session.asset }}</span>
         </el-col>
