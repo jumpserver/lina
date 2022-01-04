@@ -4,7 +4,7 @@
       Version <strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv2. </span>
     </div>
     <div v-if="!publicSettings.XPACK_LICENSE_IS_VALID" style="padding-left:20px;">
-      <strong>Copyright</strong> FIT2CLOUD 飞致云 © 2014-2021
+      <strong>Copyright</strong> FIT2CLOUD 飞致云 © 2014-{{ curYear }}
     </div>
   </div>
 </template>
@@ -12,6 +12,11 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'Footer',
+  data() {
+    return {
+      curYear: this.$moment().year() || ''
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
