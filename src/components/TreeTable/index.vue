@@ -77,7 +77,6 @@ export default {
     }
   },
   mounted() {
-    console.log('Tree settings: >>>')
     console.log(this.treeSetting)
   },
   methods: {

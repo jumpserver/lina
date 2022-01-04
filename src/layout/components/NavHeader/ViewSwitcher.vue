@@ -75,7 +75,7 @@ export default {
   methods: {
     async getRootPage() {
       store.dispatch('permission/getFilterRoutes').then(res => {
-        this.views = res
+        this.views = res.filter((item) => item)
       })
     },
     componentIcon(obj) {

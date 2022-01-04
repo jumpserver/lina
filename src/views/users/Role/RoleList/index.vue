@@ -27,11 +27,17 @@ export default {
         submenu: [
           {
             title: this.$t('route.OrgRole'),
-            name: 'OrgRoleList'
+            name: 'OrgRoleList',
+            hidden: () => {
+              return !this.$store.getters.hasValidLicense
+            }
           },
           {
             title: this.$t('route.SystemRole'),
-            name: 'SysRoleList'
+            name: 'SysRoleList',
+            hidden: () => {
+              return !this.$hasPerm('rbac.view_systemrole')
+            }
           }
         ]
       }
@@ -43,15 +49,6 @@ export default {
     }
   },
   mounted() {
-    // const params = this.$route.params
-    // switch (params.activeMenu) {
-    //   case 'OnlineList':
-    //     this.config.activeMenu = 'OnlineList'
-    //     break
-    //   case 'OfflineList':
-    //     this.config.activeMenu = 'OfflineList'
-    //     break
-    // }
   }
 }
 </script>

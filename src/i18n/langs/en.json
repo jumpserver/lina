@@ -565,7 +565,7 @@
   "route": {
     "": "",
     "Role": "Role",
-    "OrgRole": "Organization roles",
+    "OrgRoles": "Organization roles",
     "SystemRole": "System roles",
     "RoleList": "Roles",
     "SessionDetail": "SessionDetail",

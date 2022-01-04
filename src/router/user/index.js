@@ -10,6 +10,7 @@ export default {
   redirect: '/user/assets',
   meta: {
     title: i18n.t('common.nav.UserPage'),
+    type: 'view',
     view: 'user',
     permissions: ['rbac.view_userview']
   },
@@ -22,7 +23,7 @@ export default {
       meta: {
         icon: 'files-o',
         title: i18n.t('route.MyAssets'),
-        permissions: []
+        permissions: ['perms.view_myassets']
       }
     },
     {
@@ -34,7 +35,7 @@ export default {
       meta: {
         title: i18n.t('route.MyApps'),
         icon: 'th',
-        permissions: []
+        permissions: ['perms.view_myapps']
       },
       children: [
         {

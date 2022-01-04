@@ -112,6 +112,9 @@ export default {
               }
             }
           },
+          hidden: () => {
+            return !this.$hasPerm('rbac.change_systemrolebinding')
+          },
           value: []
         },
         org_roles: {
@@ -128,7 +131,8 @@ export default {
             value: []
           },
           hidden: () => {
-            return !this.$store.getters.hasValidLicense
+            return !this.$store.getters.hasValidLicense ||
+                !this.$hasPerm('rbac.change_orgrolebinding')
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
         },

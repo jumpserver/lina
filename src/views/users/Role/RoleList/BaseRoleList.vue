@@ -21,8 +21,8 @@ export default {
       tableConfig: {
         url: `/api/v1/rbac/roles/?scope=${this.scope}`,
         columns: [
-          'name_display', 'users_amount', 'builtin', 'created_by', 'date_create',
-          'date_updated', 'comment', 'actions'
+          'name_display', 'users_amount', 'builtin', 'created_by',
+          'date_create', 'date_updated', 'comment', 'actions'
         ],
         columnsShow: {
           default: ['name_display', 'users_amount', 'builtin', 'comment', 'actions'],
@@ -62,15 +62,17 @@ export default {
           query: {
             scope: this.scope
           }
+        },
+        hasMoreActions: false,
+        canCreate: () => {
+          return this.$hasPerm(`rbac.add_${this.scope}role`)
         }
       }
     }
   },
   methods: {
     hasPermNotBuiltinNotRootOrg(row, perm) {
-      return !row['builtin'] &&
-          this.$hasPerm(perm) &&
-          !this.$isRootOrg()
+      return !row['builtin'] && this.$hasPerm(perm) && !this.$isRootOrg()
     }
   }
 }

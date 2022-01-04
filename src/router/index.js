@@ -67,6 +67,7 @@ export const allRoutes = [
     redirect: '',
     component: () => import('@/views/home'),
     meta: {
+      type: 'view',
       permissions: []
     }
   },

@@ -1109,7 +1109,7 @@
     "ResetPublicKeyAndDownload": "重置并下载SSH密钥",
     "Role": "角色",
     "SystemRoles": "系统角色",
-    "OrgRole": "组织角色",
+    "OrgRoles": "组织角色",
     "SSHKey": "SSH公钥",
     "SSHKeySetting": "SSH公钥设置",
     "Secure": "安全",

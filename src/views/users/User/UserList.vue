@@ -68,8 +68,12 @@ export default {
           source: {
             width: '120px'
           },
-          total_role_display: {
-            label: this.$t('users.Role'),
+          system_roles_display: {
+            label: this.$t('users.SystemRoles'),
+            showOverflowTooltip: true
+          },
+          org_roles_display: {
+            label: this.$t('users.OrgRoles'),
             showOverflowTooltip: true
           },
           mfa_enabled: {
@@ -265,9 +269,6 @@ export default {
 <style lang="less" scoped>
 .asset-select-dialog ::v-deep .transition-box:first-child {
   background-color: #f3f3f3;
-}
-.dialog ::v-deep .el-input {
-  width: 25.5vw;
 }
 
 .dialog ::v-deep .el-dialog__footer {

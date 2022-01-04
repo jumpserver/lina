@@ -255,6 +255,13 @@ export function truncateEnd(s, l) {
   return s.slice(0, l - 3) + '...'
 }
 
+if (typeof String.prototype.replaceAll === 'undefined') {
+  // eslint-disable-next-line no-extend-native
+  String.prototype.replaceAll = function(match, replace) {
+    return this.replace(new RegExp(match, 'g'), () => replace)
+  }
+}
+
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)
 
 const scheme = document.location.protocol
