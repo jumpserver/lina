@@ -17,7 +17,7 @@ export default {
         icon: 'fa-rocket'
       },
       tableConfig: {
-        url: '/api/v1/terminal/sessions/',
+        url: '/api/v1/terminal/sessions/my/?limit=5',
         columns: [
           'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol'
         ],

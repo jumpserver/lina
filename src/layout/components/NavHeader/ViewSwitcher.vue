@@ -18,7 +18,7 @@
         v-perms="view.perms"
         :index="view.name"
       >
-        <i class="icons" :class="componentIcon(view.label)" />
+        <i class="icons" :class="view.icon" />
         <span slot="title" class="icons-title">{{ view.label }}</span>
       </el-menu-item>
     </el-submenu>
@@ -78,26 +78,9 @@ export default {
         this.views = res.filter((item) => item)
       })
     },
-    componentIcon(obj) {
-      let isClassIcon = ''
-      switch (obj) {
-        case this.$t('common.nav.UserPage'):
-          isClassIcon = 'el-icon-user-solid'
-          break
-        case this.$t('common.nav.HomePage'):
-          isClassIcon = 'el-icon-s-home'
-          break
-        case this.$t('common.nav.AuditPage'):
-          isClassIcon = 'el-icon-s-claim'
-          break
-        case this.$t('common.nav.AdminPage'):
-          isClassIcon = 'el-icon-s-tools'
-          break
-      }
-      return isClassIcon
-    },
     handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
+      console.log(routeName, 'k')
       const fromRoute = this.$route
       this.$router.push(routeName, () => {
         store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })

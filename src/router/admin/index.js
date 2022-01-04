@@ -18,9 +18,10 @@ export default {
   redirect: '/admin/dashboard',
   meta: {
     title: i18n.t('common.nav.AdminPage'),
-    icon: 'users',
+    icon: 'el-icon-s-tools',
     view: 'admin',
     type: 'view',
+    showNavSwitcher: true,
     permissions: ['rbac.view_adminview']
   },
   children: [

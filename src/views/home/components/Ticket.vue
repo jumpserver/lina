@@ -4,7 +4,6 @@
 
 <script>
 import HomeCard from './HomeCard.vue'
-import i18n from '@/i18n/i18n'
 import { mapGetters } from 'vuex'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
@@ -22,7 +21,6 @@ export default {
   },
   data() {
     return {
-      i18n,
       cardConfig: {
         title: this.$t('tickets.AssignedMe'),
         icon: 'fa-check-square-o',

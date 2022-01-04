@@ -40,7 +40,7 @@ export default {
         icon: 'fa-history'
       },
       tableConfig: {
-        url: '/api/v1/audits/login-logs/',
+        url: '/api/v1/audits/login-logs/my/?limit=5',
         columns: [
           'ip', 'datetime'
         ],
