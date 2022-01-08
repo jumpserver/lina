@@ -130,6 +130,8 @@ function getFields() {
   }
 
   const recipients = {
+    label: i18n.t('xpack.ChangeAuthPlan.Addressee'),
+    helpText: i18n.t('xpack.ChangeAuthPlan.OnlyMailSend'),
     el: {
       value: [],
       ajax: {
@@ -155,10 +157,12 @@ function getFields() {
   }
 
   const is_password = {
+    label: i18n.t('xpack.ChangeAuthPlan.ChangePassword'),
     type: 'switch'
   }
 
   const is_ssh_key = {
+    label: i18n.t('xpack.ChangeAuthPlan.ModifySSHKey'),
     type: 'switch'
   }
 
