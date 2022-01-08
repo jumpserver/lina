@@ -1,8 +1,12 @@
 <template>
   <div>
-    <input type="file" @change="Onchange">
+    <input ref="upLoadFile" type="file" style="display: none" @change="Onchange">
+    <el-button size="mini" @click.native.stop="onUpLoad">
+      {{ this.$t('common.SelectFile') }}
+    </el-button>
+    <span>{{ fileName }}</span>
     <div v-if="tip !== ''">{{ tip }}</div>
-    <input v-model="value" type="text" hidden v-on="$listeners">
+    <el-input v-model="value" type="text" hidden v-on="$listeners" />
     <div>
       <img :src="preview" v-bind="$attrs">
     </div>
@@ -23,6 +27,7 @@ export default {
   },
   data() {
     return {
+      fileName: '',
       initial: this.value,
       preview: this.value
     }
@@ -34,16 +39,21 @@ export default {
     }
   },
   methods: {
+    onUpLoad() {
+      this.$refs.upLoadFile.click()
+    },
     onInput(val) {
       this.$emit('input', val)
     },
     Onchange(e) {
-      if (e.target.files[0] === undefined) {
+      const upLoadFile = e.target.files[0]
+      this.fileName = upLoadFile?.name || ''
+      if (upLoadFile === undefined) {
         this.$emit('input', this.initial)
         return
       }
-      this.$emit('fileChange', e.target.files[0])
-      this.$emit('input', this.getObjectURL(e.target.files[0]))
+      this.$emit('fileChange', upLoadFile)
+      this.$emit('input', this.getObjectURL(upLoadFile))
     },
     getObjectURL(file) {
       let url = null
