@@ -161,5 +161,54 @@ export default [
         hidden: true
       }
     ]
+  },
+  {
+    path: 'escape',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan') },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/accounts/EscapeRoutePlan/index.vue'),
+        name: 'EscapeRoutePlanIndex',
+        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan'), activeMenu: '/accounts/escape' }
+      },
+      {
+        path: '',
+        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanList.vue'),
+        name: 'EscapeRoutePlanList',
+        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan'), activeMenu: '/accounts/escape' },
+        hidden: true
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanCreateUpdate.vue'),
+        name: 'EscapeRoutePlanCreate',
+        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlanCreate'), activeMenu: '/accounts/escape', action: 'create' },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanCreateUpdate.vue'),
+        name: 'EscapeRoutePlanUpdate',
+        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlanUpdate'), activeMenu: '/accounts/escape', action: 'update' },
+        hidden: true
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanDetail/index.vue'),
+        name: 'EscapeRoutePlanDetail',
+        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan'), activeMenu: '/accounts/escape' },
+        hidden: true
+      },
+      {
+        path: 'plan-execution/:id',
+        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanDetail/EscapeRoutePlanExecution/EscapeRoutePlanExecutionDetail/index.vue'),
+        name: 'EscapeRoutePlanExecutionDetail',
+        meta: { title: i18n.t('xpack.EscapeRoutePlan.ExecutionDetail'), activeMenu: '/accounts/escape' },
+        hidden: true
+      }
+    ]
   }
 ]

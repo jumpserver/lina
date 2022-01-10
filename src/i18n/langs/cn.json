@@ -1326,6 +1326,13 @@
       "TimerPeriod": "定时执行周期",
       "Username": "用户名"
     },
+    "EscapeRoutePlan": {
+      "EscapeRoutePlan": "逃生通道",
+      "EscapeRoutePlanCreate": "创建逃生通道",
+      "EscapeRoutePlanUpdate": "更新逃生通道",
+      "ExecutionDetail": "执行详情",
+      "MailRecipient": "邮件收件人"
+    },
     "Cloud": {
       "ServerAccountKey": "服务账号密钥",
       "IPNetworkSegment": "IP网段",
