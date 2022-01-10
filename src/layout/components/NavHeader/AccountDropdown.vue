@@ -8,6 +8,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
+        <el-dropdown-item v-show="showSettings" icon="el-icon-setting" command="settings">{{ $t('route.Settings') }}</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
@@ -21,6 +22,7 @@ import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
 import rolec from '@/utils/role'
 import orgUtil from '@/utils/org'
+import store from '@/store'
 
 export default {
   name: 'AccountDropdown',
@@ -30,6 +32,7 @@ export default {
   data() {
     return {
       avatarUrl: require('@/assets/img/admin.png'),
+      showSettings: false,
       showApiKey: false
     }
   },
@@ -60,11 +63,22 @@ export default {
       return userPageRequireRole & this.currentOrgPerms
     }
   },
+  created() {
+    store.dispatch('permission/getRootPerms', 'settings.change_setting').then(res => {
+      this.showSettings = res
+    })
+  },
   methods: {
     handleClick(val) {
+      const fromRoute = this.$route
       switch (val) {
         case 'profile':
           this.$router.push({ name: 'UserProfile' })
+          break
+        case 'settings':
+          this.$router.push('/settings', () => {
+            store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
+          })
           break
         case 'adminPage':
           if (this.hasCurrentOrgAdminPagePerm) {

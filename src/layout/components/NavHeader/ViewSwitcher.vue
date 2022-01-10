@@ -80,7 +80,6 @@ export default {
     },
     handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
-      console.log(routeName, 'k')
       const fromRoute = this.$route
       this.$router.push(routeName, () => {
         store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
