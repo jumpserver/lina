@@ -6,7 +6,7 @@
     </el-button>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''">{{ tip }}</div>
-    <el-input v-model="value" type="text" hidden v-on="$listeners" />
+    <input v-model="value" type="text" hidden v-on="$listeners">
     <div>
       <img :src="preview" v-bind="$attrs">
     </div>
@@ -47,11 +47,11 @@ export default {
     },
     Onchange(e) {
       const upLoadFile = e.target.files[0]
-      this.fileName = upLoadFile?.name || ''
       if (upLoadFile === undefined) {
         this.$emit('input', this.initial)
         return
       }
+      this.fileName = upLoadFile?.name || ''
       this.$emit('fileChange', upLoadFile)
       this.$emit('input', this.getObjectURL(upLoadFile))
     },
