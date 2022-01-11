@@ -8,7 +8,7 @@ import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'EscapeRoutePlanList',
+  name: 'AccountBackupPlanList',
   components: {
     GenericListTable
   },
@@ -16,9 +16,9 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/escape/',
+        url: '/api/v1/assets/backup/',
         columns: [
-          'name', 'is_periodic', 'periodic_display', 'comment', 'org_name', 'actions'
+          'name', 'is_periodic', 'periodic_display', 'org_name', 'comment', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
@@ -28,7 +28,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'EscapeRoutePlanDetail'
+              route: 'AccountBackupPlanDetail'
             }
           },
           is_periodic: {
@@ -50,10 +50,10 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'EscapeRoutePlanCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'AccountBackupPlanCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'EscapeRoutePlanUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'AccountBackupPlanUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
@@ -62,7 +62,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/escape-execution/`,
+                      `/api/v1/assets/backup-execution/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])
@@ -81,7 +81,7 @@ export default {
         hasMoreActions: false,
         createRoute: () => {
           return {
-            name: 'EscapeRoutePlanCreate'
+            name: 'AccountBackupPlanCreate'
           }
         }
       }

@@ -4,34 +4,40 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import getFields from '@/views/accounts/EscapeRoutePlan/fields'
+import getFields from '@/views/accounts/AccountBackupPlan/fields'
+import FormTypeField from './components/FormTypeField'
 
 export default {
-  name: 'EscapeRoutePlanreateUpdate',
+  name: 'AccountBackupPlanUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
     const fields = getFields.bind(this)()
     return {
-      url: '/api/v1/assets/escape/',
+      url: '/api/v1/assets/backup/',
       fields: [
-        [this.$t('common.Basic'), ['name']],
+        [this.$t('common.Basic'), ['name', 'types']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['recipients', 'comment']]
       ],
       initial: {
         is_periodic: true,
-        interval: 24
+        interval: 24,
+        types: ['all', 'asset', 'application']
       },
       fieldsMeta: {
         is_periodic: fields.is_periodic,
         crontab: fields.crontab,
         interval: fields.interval,
-        recipients: fields.recipients
+        recipients: fields.recipients,
+        types: {
+          label: this.$t('perms.Actions'),
+          component: FormTypeField
+        }
       },
-      createSuccessNextRoute: { name: 'EscapeRoutePlanIndex' },
-      updateSuccessNextRoute: { name: 'EscapeRoutePlanIndex' },
+      createSuccessNextRoute: { name: 'AccountBackupPlanIndex' },
+      updateSuccessNextRoute: { name: 'AccountBackupPlanIndex' },
       cleanFormValue(data) {
         if (data['interval'] === '') {
           delete data['interval']

@@ -8,21 +8,21 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-import EscapeRoutePlanList from './EscapeRoutePlanList'
+import AccountBackupPlanList from './AccountBackupPlanList'
 export default {
   name: 'Index',
   components: {
     TabPage,
-    EscapeRoutePlanList
+    AccountBackupPlanList
   },
   data() {
     return {
       config: {
-        activeMenu: 'EscapeRoutePlanList',
+        activeMenu: 'AccountBackupPlanList',
         submenu: [
           {
-            title: this.$t('xpack.EscapeRoutePlan.EscapeRoutePlan'),
-            name: 'EscapeRoutePlanList'
+            title: this.$t('xpack.AccountBackupPlan.AccountBackupPlan'),
+            name: 'AccountBackupPlanList'
           }
         ]
       }
