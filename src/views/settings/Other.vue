@@ -1,18 +1,14 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
-import { IBox } from '@/components'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { GenericCreateUpdatePage } from '@/layout/components'
 
 export default {
   name: 'Senior',
   components: {
-    IBox,
-    GenericCreateUpdateForm
+    GenericCreateUpdatePage
   },
   data() {
     return {
@@ -57,8 +53,6 @@ export default {
         return 'put'
       }
     }
-  },
-  methods: {
   }
 }
 </script>

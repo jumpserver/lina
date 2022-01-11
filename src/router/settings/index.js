@@ -17,7 +17,7 @@ export default {
   children: [
     {
       path: '/settings/basic',
-      name: 'Settings',
+      name: 'Basic',
       component: () => import('@/views/settings/Basic'),
       meta: {
         title: i18n.t('setting.Basic'),
@@ -27,7 +27,7 @@ export default {
     },
     {
       path: '/settings/email',
-      name: 'Settings',
+      name: 'Email',
       component: () => import('@/views/settings/Email'),
       meta: {
         title: i18n.t('setting.Email'),
