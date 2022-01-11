@@ -37,7 +37,7 @@ export default {
     },
     {
       path: '/tickets/done',
-      name: 'TicketNew',
+      name: 'TicketDone',
       component: () => import('@/views/tickets/TicketList'),
       meta: {
         title: i18n.t('route.TicketsDone'),

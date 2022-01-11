@@ -4,7 +4,6 @@ import empty from '@/layout/empty'
 export default [
   {
     path: 'asset-permissions',
-    name: 'AssetPermissionList',
     component: empty,
     meta: { title: i18n.t('route.AssetPermission') },
     children: [
@@ -40,14 +39,17 @@ export default [
   {
     path: 'app-permissions',
     component: empty,
-    meta: { title: i18n.t('route.ApplicationPermission') },
+    meta: {
+      title: i18n.t('route.ApplicationPermission'),
+      permissions: ['perms.view_applicationpermission']
+    },
     redirect: '',
     children: [
       {
         path: '',
         name: 'ApplicationPermissionList',
         component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionList'),
-        meta: { title: i18n.t('route.ApplicationPermission') }
+        meta: { title: i18n.t('route.ApplicationPermission'), permissions: ['perms.view_applicationpermission'] }
       },
       {
         path: 'create',
