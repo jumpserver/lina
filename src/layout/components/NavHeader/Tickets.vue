@@ -36,9 +36,8 @@ export default {
     goToTickets() {
       // this.$router.push({ name: 'TicketList' })
       const route = this.$route
-      console.log(this.$route, 'nnnn-777')
       this.$router.push('/tickets', () => {
-        store.dispatch('permission/generateViewRoutes', { to: route, from: route })
+        store.dispatch('permission/generateViewRoutes', { to: this.$route, from: route })
       })
     }
   }

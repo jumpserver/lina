@@ -48,7 +48,8 @@ export const constantRoutes = [
 import userViewRoutes from './user'
 import adminViewRoutes from './admin'
 import auditViewRoutes from './audit'
-import ticketsRoutes from './tickets/index'
+import ticketsRoutes from './tickets'
+import settingsRoutes from './settings'
 
 /**
  * admin
@@ -79,7 +80,8 @@ export const allRoutes = [
   userViewRoutes,
   adminViewRoutes,
   auditViewRoutes,
-  ticketsRoutes
+  ticketsRoutes,
+  settingsRoutes
 ]
 
 const createRouter = () => new Router({

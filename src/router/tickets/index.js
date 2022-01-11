@@ -21,7 +21,7 @@ export default {
       component: () => import('@/views/tickets/TicketList'),
       meta: {
         title: i18n.t('route.Tickets'),
-        icon: 'check-square-o',
+        icon: 'file-text-o',
         permissions: []
       }
     },
@@ -31,7 +31,7 @@ export default {
       component: () => import('@/views/tickets/TicketList'),
       meta: {
         title: i18n.t('route.TicketsNew'),
-        icon: 'check-square-o',
+        icon: 'external-link-square',
         permissions: []
       }
     },

@@ -116,21 +116,6 @@ export default {
       name: 'Xpack',
       meta: { title: 'X-Pack', icon: 'sitemap', licenseRequired: true },
       children: XPackRoutes
-    },
-    {
-      path: '/admin/settings',
-      component: empty,
-      children: [
-        {
-          path: '',
-          name: 'Settings',
-          component: () => import('@/views/settings/index'),
-          meta: {
-            title: i18n.t('route.Settings'),
-            icon: 'gears', permissions: ['settings.view_setting']
-          }
-        }
-      ]
     }
   ]
 }
