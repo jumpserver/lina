@@ -11,7 +11,7 @@ import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'EscapeRoutePlanExecutionInfo',
+  name: 'AccountBackupPlanExecutionInfo',
   components: {
     DetailCard
   },
@@ -35,6 +35,14 @@ export default {
         {
           key: this.$t('xpack.ChangeAuthPlan.DateStart'),
           value: toSafeLocalDateStr(this.object.date_start)
+        },
+        {
+          key: this.$t('xpack.AccountBackupPlan.IsSuccess'),
+          value: this.object.is_success
+        },
+        {
+          key: this.$t('xpack.AccountBackupPlan.Reason'),
+          value: this.object.reason
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.MailRecipient'),

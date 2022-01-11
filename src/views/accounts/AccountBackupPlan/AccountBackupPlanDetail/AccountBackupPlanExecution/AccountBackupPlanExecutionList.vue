@@ -6,7 +6,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'EscapeRoutePlanExecutionTaskList',
+  name: 'AccountBackupPlanExecution',
   components: {
     GenericListTable
   },
@@ -20,20 +20,20 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/xpack/assets/escape-execution-subtask/?plan_execution_id=${this.object.id}`,
+        url: `/api/v1/assets/backup-execution/?plan_id=${this.object.id}`,
         columns: [
-          'is_success', 'reason', 'timedelta', 'date_start', 'actions'
+          'timedelta', 'trigger_display', 'date_start', 'is_success', 'reason', 'actions'
         ],
         columnsMeta: {
-          is_success: {
-            label: this.$t('xpack.ChangeAuthPlan.Success')
-          },
           timedelta: {
             label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
+          },
+          date_start: {
+            showOverflowTooltip: true
           },
           actions: {
             formatterArgs: {
@@ -42,16 +42,20 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  name: 'retry',
+                  name: 'log',
+                  type: 'primary',
+                  title: this.$t('xpack.ChangeAuthPlan.Log'),
+                  callback: function({ row }) {
+                    window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                  }
+                },
+                {
+                  name: 'detail',
+                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  title: this.$t('xpack.ChangeAuthPlan.Retry'),
-                  callback: function({ row, tableData }) {
-                    this.$axios.put(
-                      `/api/v1/assets/escape-execution-subtask/${row.id}/`,
-                    ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                    })
-                  }.bind(this)
+                  callback: function({ row }) {
+                    return this.$router.push({ name: 'AccountBackupPlanExecutionDetail', params: { id: row.id }})
+                  }
                 }
               ]
             }
@@ -61,8 +65,9 @@ export default {
       headerActions: {
         hasSearch: true,
         hasRefresh: true,
-        hasLeftActions: true,
         hasRightActions: true,
+        hasLeftActions: true,
+        hasMoreActions: false,
         hasExport: false,
         hasImport: false,
         hasCreate: false,

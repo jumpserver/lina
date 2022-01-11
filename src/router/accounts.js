@@ -163,50 +163,50 @@ export default [
     ]
   },
   {
-    path: 'escape',
+    path: 'backup',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan') },
+    meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') },
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/EscapeRoutePlan/index.vue'),
-        name: 'EscapeRoutePlanIndex',
-        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan'), activeMenu: '/accounts/escape' }
+        component: () => import('@/views/accounts/AccountBackupPlan/index.vue'),
+        name: 'AccountBackupPlanIndex',
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'), activeMenu: '/accounts/backup' }
       },
       {
         path: '',
-        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanList.vue'),
-        name: 'EscapeRoutePlanList',
-        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan'), activeMenu: '/accounts/escape' },
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanList.vue'),
+        name: 'AccountBackupPlanList',
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'), activeMenu: '/accounts/backup' },
         hidden: true
       },
       {
         path: 'create',
-        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanCreateUpdate.vue'),
-        name: 'EscapeRoutePlanCreate',
-        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlanCreate'), activeMenu: '/accounts/escape', action: 'create' },
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
+        name: 'AccountBackupPlanCreate',
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanCreate'), activeMenu: '/accounts/backup', action: 'create' },
         hidden: true
       },
       {
         path: ':id/update',
-        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanCreateUpdate.vue'),
-        name: 'EscapeRoutePlanUpdate',
-        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlanUpdate'), activeMenu: '/accounts/escape', action: 'update' },
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
+        name: 'AccountBackupPlanUpdate',
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanUpdate'), activeMenu: '/accounts/backup', action: 'update' },
         hidden: true
       },
       {
         path: ':id',
-        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanDetail/index.vue'),
-        name: 'EscapeRoutePlanDetail',
-        meta: { title: i18n.t('xpack.EscapeRoutePlan.EscapeRoutePlan'), activeMenu: '/accounts/escape' },
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/index.vue'),
+        name: 'AccountBackupPlanDetail',
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'), activeMenu: '/accounts/backup' },
         hidden: true
       },
       {
         path: 'plan-execution/:id',
-        component: () => import('@/views/accounts/EscapeRoutePlan/EscapeRoutePlanDetail/EscapeRoutePlanExecution/EscapeRoutePlanExecutionDetail/index.vue'),
-        name: 'EscapeRoutePlanExecutionDetail',
-        meta: { title: i18n.t('xpack.EscapeRoutePlan.ExecutionDetail'), activeMenu: '/accounts/escape' },
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        name: 'AccountBackupPlanExecutionDetail',
+        meta: { title: i18n.t('xpack.AccountBackupPlan.ExecutionDetail'), activeMenu: '/accounts/backup' },
         hidden: true
       }
     ]

@@ -8,30 +8,33 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import EscapeRoutePlanInfo from './EscapeRoutePlanInfo'
-import EscapeRoutePlanExecutionList from './EscapeRoutePlanExecution/EscapeRoutePlanExecutionList'
+import AccountBackupPlanInfo from './AccountBackupPlanInfo'
+import AccountBackupPlanExecutionList from './AccountBackupPlanExecution/AccountBackupPlanExecutionList'
 
 export default {
   components: {
     GenericDetailPage,
-    EscapeRoutePlanInfo,
-    EscapeRoutePlanExecutionList
+    AccountBackupPlanInfo,
+    AccountBackupPlanExecutionList
   },
   data() {
     return {
       plan: { name: '', comment: '' },
       config: {
-        activeMenu: 'EscapeRoutePlanInfo',
+        activeMenu: 'AccountBackupPlanInfo',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'EscapeRoutePlanInfo'
+            name: 'AccountBackupPlanInfo'
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'EscapeRoutePlanExecutionList'
+            name: 'AccountBackupPlanExecutionList'
           }
-        ]
+        ],
+        actions: {
+          detailApiUrl: `/api/v1/assets/backup/${this.$route.params.id}/`
+        }
       }
     }
   }

@@ -1278,6 +1278,15 @@
       "TimerPeriod": "Timer period",
       "Username": "Username"
     },
+    "AccountBackupPlan": {
+      "AccountBackupPlan": "Account backup plan",
+      "AccountBackupPlanreate": "Account backup plan",
+      "AccountBackupPlanUpdate": "Account backup plan",
+      "ExecutionDetail": "Execution detail",
+      "MailRecipient": "Mail recipient",
+      "IsSuccess": "Is success",
+      "Reason": "Reason"
+    },
     "Cloud": {
       "ServerAccountKey": "Server Account Key",
       "IPNetworkSegment": "Ip Network Segment",
