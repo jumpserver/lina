@@ -265,8 +265,12 @@ export default {
           key: this.$t('users.Name')
         },
         {
-          value: this.object.role_display,
-          key: this.$t('users.Role')
+          value: this.object.system_roles_display,
+          key: this.$t('users.SystemRoles')
+        },
+        {
+          value: this.object.org_roles_display,
+          key: this.$t('users.OrgRoles')
         },
         {
           value: this.object.email,

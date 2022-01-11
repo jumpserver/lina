@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      user: {},
+      user: this.$store.state.users.profile,
       config: {
         title: this.$t('users.Profile'),
         activeMenu: 'ProfileInfo',
