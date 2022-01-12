@@ -38,66 +38,73 @@ export default {
   },
   computed: {
     detailCardItems() {
+      const obj = this.object || {}
       return [
         {
+          key: this.$t('common.Number'),
+          value: obj.serial_num
+        },
+        {
           key: this.$t('tickets.status'),
-          value: this.object.state,
+          value: obj.state,
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
         },
         {
           key: this.$t('tickets.type'),
-          value: this.object.type_display
+          value: obj.type_display
         },
         {
           key: this.$t('tickets.user'),
-          value: this.object['applicant_display']
+          value: obj['applicant_display']
         },
         {
           key: this.$t('tickets.OrgName'),
-          value: this.object.org_name
+          value: obj.org_name
         },
         {
           key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          value: toSafeLocalDateStr(obj.date_created)
         },
         {
           key: this.$t('common.Comment'),
-          value: this.object.comment
+          value: obj.comment
         }
       ]
     },
     specialCardItems() {
+      const meta = this.object.meta || {}
       return [
         {
           key: this.$t('perms.Node'),
-          value: this.object.meta.apply_nodes_display.join(', ')
+          value: meta?.apply_nodes_display?.join(', ') || ''
         },
         {
           key: this.$t('tickets.Asset'),
-          value: this.object.meta.apply_assets_display.join(', ')
+          value: meta?.apply_assets_display?.join(', ') || ''
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.apply_system_users_display.join(', ')
+          value: meta?.apply_system_users_display?.join(', ') || ''
         },
         {
           key: this.$t('assets.Action'),
-          value: forMatAction(this, this.object.meta['apply_actions_display'])
+          value: forMatAction(this, meta['apply_actions_display'])
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(this.object.meta.apply_date_start)
+          value: toSafeLocalDateStr(meta.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(this.object.meta.apply_date_expired)
+          value: toSafeLocalDateStr(meta.apply_date_expired)
         }
       ]
     },
     assignedCardItems() {
       const vm = this
+      const meta = this.object.meta || {}
       return [
         {
           key: this.$t('tickets.PermissionName'),
@@ -113,27 +120,27 @@ export default {
         },
         {
           key: this.$t('perms.Node'),
-          value: this.object.meta.apply_nodes_display.join(', ')
+          value: meta?.apply_nodes_display?.join(', ') || ''
         },
         {
           key: this.$t('assets.Asset'),
-          value: this.object.meta.apply_assets_display.join(', ')
+          value: meta?.apply_assets_display?.join(', ') || ''
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: this.object.meta.apply_system_users_display.join(', ')
+          value: meta?.apply_system_users_display?.join(', ') || ''
         },
         {
           key: this.$t('assets.Action'),
-          value: forMatAction(this, this.object.meta['apply_actions_display'])
+          value: forMatAction(this, meta['apply_actions_display'])
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(this.object.meta.apply_date_start)
+          value: toSafeLocalDateStr(meta?.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(this.object.meta.apply_date_expired)
+          value: toSafeLocalDateStr(meta?.apply_date_expired)
         }
       ]
     },
