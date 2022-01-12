@@ -27,6 +27,11 @@ export default {
         url: this.url,
         columns: [
           {
+            prop: 'serial_num',
+            label: this.$t('common.Number'),
+            sortable: 'custom'
+          },
+          {
             prop: 'title',
             label: this.$t('tickets.title'),
             formatter: DetailFormatter,
