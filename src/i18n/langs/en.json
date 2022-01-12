@@ -194,6 +194,7 @@
     "ReplaceNodeAssetsAdminUserWithThis": "Replace node assets admin user with this",
     "Rules": "Rules",
     "SFTPHelpMessage": "SFTP root dir, tmp, home or custom",
+    "SuExtraMessage": "eg: super `{username}`，If the user-defined switching command needs to include the `{username}` field, the corresponding account will be replaced when changing the password",
     "SerialNumber": "Serial number",
     "SudoHelpMessage": "Use comma split multi command, ex: /bin/whoami, /bin/ifconfig",
     "PasswordHelpMessage": "Password or private key password",

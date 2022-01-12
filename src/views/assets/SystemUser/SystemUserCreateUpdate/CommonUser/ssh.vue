@@ -34,7 +34,7 @@ export default {
         [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'private_key', 'passphrase']],
         [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
         [this.$t('common.Command filter'), ['cmd_filters']],
-        [this.$t('assets.UserSwitch'), ['su_enabled', 'su_from']],
+        [this.$t('assets.UserSwitch'), ['su_enabled', 'su_type', 'su_extra', 'su_from']],
         [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
       fieldsMeta: {
@@ -70,6 +70,17 @@ export default {
         su_enabled: {
           type: 'switch',
           hidden: (item) => item.protocol !== 'ssh'
+        },
+        su_type: {
+          type: 'select',
+          el: {
+            style: 'width:100%'
+          },
+          hidden: (item) => !item.su_enabled
+        },
+        su_extra: {
+          helpText: this.$t('assets.SuExtraMessage'),
+          hidden: (item) => item.su_type !== 'other'
         },
         su_from: {
           hidden: (item) => !item.su_enabled,

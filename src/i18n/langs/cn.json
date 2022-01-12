@@ -198,6 +198,7 @@
     "ReplaceNodeAssetsAdminUserWithThis": "替换资产的管理员",
     "Rules": "规则",
     "SFTPHelpMessage": "SFTP的起始路径，tmp目录, 用户home目录或者自定义",
+    "SuExtraMessage": "eg: super `{username}`，如果自定义切换命令中需包含 `{username}` 字段，改密时将会进行相应账号的替换",
     "SerialNumber": "序列号",
     "SudoHelpMessage": "使用逗号分隔多个命令，如: /bin/whoami,/sbin/ifconfig",
     "PasswordHelpMessage": "密码或密钥密码",
