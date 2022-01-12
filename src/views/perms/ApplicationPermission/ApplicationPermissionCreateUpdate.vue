@@ -11,6 +11,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getDayFuture } from '@/utils/common'
+import PermissionFormActionField from '../components/PermissionFormActionField'
 
 export default {
   components: {
@@ -29,9 +30,10 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
         [this.$t('assets.Applications'), ['category', 'type', 'applications', 'system_users']],
+        [this.$t('common.action'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
-      url: '/api/v1/perms/application-permissions/',
+      url: `/api/v1/perms/application-permissions/?category=${this.$route.query.category}&type=${this.$route.query.type}`,
       fieldsMeta: {
         users: {
           el: {
@@ -101,7 +103,9 @@ export default {
           label: this.$t('common.dateExpired')
         },
         actions: {
-          label: this.$t('perms.Actions')
+          label: this.$t('perms.Actions'),
+          component: PermissionFormActionField,
+          helpText: this.$t('common.actionsTips')
         },
         is_active: {
           type: 'checkbox'

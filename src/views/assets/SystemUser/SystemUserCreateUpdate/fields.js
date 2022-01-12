@@ -31,6 +31,8 @@ function getFields() {
         this.fieldsMeta.username.rules[0].required = false
       } else if (form.username_same_with_user) {
         this.fieldsMeta.username.rules[0].required = false
+      } else if (form.protocol === 'redis') {
+        this.fieldsMeta.username.rules[0].required = false
       } else {
         this.fieldsMeta.username.rules[0].required = true
       }
@@ -152,7 +154,6 @@ function getFields() {
   }
 
   const password = {
-    helpText: this.$t('assets.PasswordHelpMessage'),
     component: UpdateToken,
     hidden: form => {
       if (form.login_mode !== 'auto' || form.auto_generate_key) {
@@ -161,6 +162,16 @@ function getFields() {
       if (!this.$route.params.id) {
         return false
       }
+    }
+  }
+
+  const passphrase = {
+    component: UpdateToken,
+    hidden: (form) => {
+      if (form.login_mode !== 'auto') {
+        return true
+      }
+      return form.auto_generate_key === true
     }
   }
 
@@ -184,6 +195,7 @@ function getFields() {
     auto_push: auto_push,
     update_password: update_password,
     password: password,
+    passphrase: passphrase,
     system_groups: system_groups,
     type: type
   }

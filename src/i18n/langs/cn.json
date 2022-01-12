@@ -45,6 +45,7 @@
       "vmware_client":"Vmware Client",
       "custom":"Custom",
       "mysql": "MySQL",
+      "redis": "Redis",
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
@@ -88,7 +89,9 @@
     "cluster": "集群",
     "kubernetes":"Kubernetes",
     "clusterHelpTextMessage": "例如：https://172.16.8.8:8443",
-    "DBInfo": "数据库信息"
+    "DBInfo": "数据库信息",
+    "RDBProtocol": "关系型数据库协议",
+    "NoSQLProtocol": "非关系型数据库协议"
   },
   "assets": {
     "AppList": "应用列表",
@@ -168,6 +171,7 @@
     "Other": "其它",
     "Hardware": "硬件信息",
     "Password": "密码",
+    "Passphrase": "密钥密码",
     "PasswordWithoutSpecialCharHelpText": "不能包含特殊字符",
     "Pending": "等待",
     "Platform": "系统平台",
@@ -228,6 +232,8 @@
     "ipDomain": "IP(域名)",
     "HostProtocol": "主机协议",
     "DatabaseProtocol": "数据库协议",
+    "RDBProtocol": "关系型数据库协议",
+    "NoSQLProtocol": "非关系型数据库协议",
     "OtherProtocol": "其它协议",
     "PasswordOrToken": "密码 / 令牌"
   },
@@ -296,6 +302,7 @@
     "Close": "关闭",
     "Command filter": "命令过滤器",
     "Comment": "备注",
+    "Number": "编号",
     "Confirm": "确认",
     "Create": "创建",
     "CreatedBy": "创建者",
@@ -784,6 +791,7 @@
     "accountName": "账户名称",
     "active": "激活中",
     "alive": "在线",
+    "noAlive": "离线",
     "asset": "资产",
     "target": "目标",
     "bucket": "桶名称",
@@ -1302,6 +1310,10 @@
       "Name": "名称",
       "NodeAmount": "节点数量",
       "PasswordLength": "密码长度",
+      "ChangePassword": "更改密码",
+      "ModifySSHKey": "修改 SSH Key",
+      "Addressee": "收件人",
+      "OnlyMailSend": "当前只支持邮件发送",
       "PasswordStrategy": "密码策略",
       "SecretKeyStrategy": "密钥策略",
       "RegularlyPerform": "定期执行",
@@ -1313,6 +1325,15 @@
       "Timer": "定时执行",
       "TimerPeriod": "定时执行周期",
       "Username": "用户名"
+    },
+    "AccountBackupPlan": {
+      "AccountBackupPlan": "账号备份",
+      "AccountBackupPlanCreate": "创建账号备份",
+      "AccountBackupPlanUpdate": "更新账号备份",
+      "ExecutionDetail": "执行详情",
+      "MailRecipient": "邮件收件人",
+      "IsSuccess": "是否成功",
+      "Reason": "原因"
     },
     "Cloud": {
       "ServerAccountKey": "服务账号密钥",

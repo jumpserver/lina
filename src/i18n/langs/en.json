@@ -40,6 +40,7 @@
       "vmware_client":"Vmware Client",
       "custom":"Custom",
       "mysql": "MySQL",
+      "redis": "Redis",
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
@@ -83,7 +84,9 @@
     "cluster": "Cluster",
     "kubernetes":"Kubernetes",
     "clusterHelpTextMessage": "Tips: https://172.16.8.8:8443",
-    "DBInfo": "Database Info"
+    "DBInfo": "Database Info",
+    "RDBProtocol": "RDS Protocol",
+    "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
     "AppList": "Application list",
@@ -165,6 +168,7 @@
     "Os": "Os",
     "Other": "Other",
     "Password": "Password",
+    "Passphrase": "Passphrase",
     "PasswordWithoutSpecialCharHelpText": "Password can't has special chars ",
     "Pending": "Pending",
     "Platform": "Platform",
@@ -222,6 +226,8 @@
     "ipDomain": "IP(Domain)",
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
+    "RDBProtocol": "RDS Protocol",
+    "NoSQLProtocol": "NoSQL Protocol",
     "OtherProtocol": "Other Protocol",
     "PasswordOrToken": "Password / Token"
   },
@@ -283,6 +289,7 @@
     "Close": "Close",
     "Command filter": "Command filter",
     "Comment": "Comment",
+    "Number": "Number",
     "Confirm": "Confirm",
     "Create": "Create",
     "CreatedBy": "Created by",
@@ -765,6 +772,7 @@
     "accountName": "Account name",
     "active": "active",
     "alive": "alive",
+    "noAlive": "no alive",
     "asset": "Asset",
     "target": "Target",
     "bucket": "Bucket",
@@ -1259,6 +1267,10 @@
       "Name": "Name",
       "NodeAmount": "Node",
       "PasswordLength": "Password length",
+      "ChangePassword": "Change password",
+      "ModifySSHKey": "Modify SSH Key",
+      "Addressee": "Addressee",
+      "OnlyMailSend": "Currently only mail sending is supported",
       "PasswordStrategy": "Password strategy",
       "SecretKeyStrategy": "Secret key strategy",
       "RegularlyPerform": "Regularly perform",
@@ -1270,6 +1282,15 @@
       "Timer": "Timer",
       "TimerPeriod": "Timer period",
       "Username": "Username"
+    },
+    "AccountBackupPlan": {
+      "AccountBackupPlan": "Account backup plan",
+      "AccountBackupPlanreate": "Account backup plan",
+      "AccountBackupPlanUpdate": "Account backup plan",
+      "ExecutionDetail": "Execution detail",
+      "MailRecipient": "Mail recipient",
+      "IsSuccess": "Is success",
+      "Reason": "Reason"
     },
     "Cloud": {
       "ServerAccountKey": "Server Account Key",

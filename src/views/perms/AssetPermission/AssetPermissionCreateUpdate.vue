@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import AssetPermissionFormActionField from './components/AssetPermissionFormActionField'
+import PermissionFormActionField from '../components/PermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
 import { getDayFuture } from '@/utils/common'
 
@@ -24,7 +24,6 @@ export default {
     return {
       initial: {
         is_active: true,
-        actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
         date_start: new Date().toISOString(),
         date_expired: getDayFuture(36500, new Date()).toISOString(),
         nodes: nodesInitial,
@@ -92,7 +91,7 @@ export default {
         },
         actions: {
           label: this.$t('perms.Actions'),
-          component: AssetPermissionFormActionField,
+          component: PermissionFormActionField,
           helpText: this.$t('common.actionsTips')
         },
         date_start: {
