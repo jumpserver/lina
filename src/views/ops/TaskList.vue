@@ -15,10 +15,18 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
-        columns: ['name', 'runtimes', 'host_amount', 'is_success', 'date_start', 'time', 'actions'],
+        columns: [
+          'name', 'runtimes', 'host_amount', 'is_success',
+          'date_start', 'time', 'actions'
+        ],
         columnsMeta: {
           name: {
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            formatterArgs: {
+              getTitle({ row }) {
+                return row['display_name']
+              }
+            }
           },
           runtimes: {
             label: this.$t('ops.runTimes'),
