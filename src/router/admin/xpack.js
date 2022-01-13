@@ -6,27 +6,39 @@ export default [
     path: 'cloud',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('xpack.Cloud.Cloud') },
+    meta: {
+      title: i18n.t('xpack.Cloud.Cloud'),
+      permissions: ['xpack.view_account']
+    },
     children: [
       {
         path: '',
         component: () => import('@/views/xpack/Cloud/index.vue'),
         name: 'CloudCenter',
-        meta: { title: i18n.t('xpack.Cloud.CloudCenter') }
+        meta: {
+          title: i18n.t('xpack.Cloud.CloudCenter'),
+          permissions: ['xpack.view_account']
+        }
       },
       {
         path: 'account',
         component: empty,
         name: 'AccountList',
         hidden: true,
-        meta: { title: i18n.t('xpack.Cloud.AccountList') },
+        meta: {
+          title: i18n.t('xpack.Cloud.AccountList'),
+          permissions: ['xpack.view_account']
+        },
         children: [
           {
             path: '',
             component: () => import('@/views/xpack/Cloud/Account/AccountList'),
             name: 'AccountList',
             hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountList') }
+            meta: {
+              title: i18n.t('xpack.Cloud.AccountList'),
+              permissions: ['xpack.view_account']
+            }
           },
           {
             path: 'create',
@@ -35,7 +47,8 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.AccountCreate'),
-              action: 'create'
+              action: 'create',
+              permissions: ['xpack.add_account']
             }
           },
           {
@@ -45,7 +58,8 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.AccountUpdate'),
-              action: 'update'
+              action: 'update',
+              permissions: ['xpack.change_account']
             }
           },
           {
@@ -53,7 +67,10 @@ export default [
             component: () => import('@/views/xpack/Cloud/Account/AccountDetail/index'),
             name: 'AccountDetail',
             hidden: true,
-            meta: { title: i18n.t('xpack.Cloud.AccountDetail') }
+            meta: {
+              title: i18n.t('xpack.Cloud.AccountDetail'),
+              permissions: ['xpack.view_account']
+            }
           }
         ]
       },
@@ -62,7 +79,8 @@ export default [
         component: empty,
         hidden: true,
         meta: {
-          title: i18n.t('xpack.Cloud.SyncInstanceTaskList')
+          title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
+          permissions: ['xpack.view_syncinstancetask']
         },
         children: [
           {
@@ -71,7 +89,8 @@ export default [
             name: 'SyncInstanceTaskList',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskList')
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskList'),
+              permissions: ['xpack.view_syncinstancetask']
             }
           },
           {
@@ -80,7 +99,8 @@ export default [
             name: 'SyncInstanceTaskCreate',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate')
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskCreate'),
+              permissions: ['xpack.add_syncinstancetask']
             }
           },
           {
@@ -89,7 +109,8 @@ export default [
             name: 'SyncInstanceTaskUpdate',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate')
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskUpdate'),
+              permissions: ['xpack.change_syncinstancetask']
             }
           },
           {
@@ -109,40 +130,57 @@ export default [
     path: 'interface-setting',
     component: () => import('@/views/xpack/InterfaceSettings.vue'),
     name: 'InterfaceSetting',
-    meta: { title: i18n.t('xpack.InterfaceSettings'), permissions: [] }
+    meta: {
+      title: i18n.t('xpack.InterfaceSettings'),
+      permissions: ['xpack.view_interface']
+    }
   },
   {
     path: 'orgs',
     component: empty,
     redirect: '',
-    meta: { permissions: [] },
+    meta: { permissions: ['orgs.view_organization'] },
     children: [
       {
         path: '',
         component: () => import('@/views/xpack/Org/OrganizationList'),
         name: 'OrganizationList',
-        meta: { title: i18n.t('xpack.Organization.OrganizationList') }
+        meta: {
+          title: i18n.t('xpack.Organization.OrganizationList'),
+          permissions: ['orgs.view_organization']
+        }
       },
       {
         path: 'create',
         component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
         name: 'OrganizationCreate',
         hidden: true,
-        meta: { title: i18n.t('xpack.Organization.OrganizationCreate'), action: 'create' }
+        meta: {
+          title: i18n.t('xpack.Organization.OrganizationCreate'),
+          action: 'create',
+          permissions: ['orgs.add_organization']
+        }
       },
       {
         path: ':id/update',
         component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
         name: 'OrganizationUpdate',
         hidden: true,
-        meta: { title: i18n.t('xpack.Organization.OrganizationUpdate'), action: 'update' }
+        meta: {
+          title: i18n.t('xpack.Organization.OrganizationUpdate'),
+          action: 'update',
+          permissions: ['orgs.change_organization']
+        }
       },
       {
         path: ':id',
         component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
         name: 'OrganizationDetail',
         hidden: true,
-        meta: { title: i18n.t('xpack.Organization.OrganizationDetail') }
+        meta: {
+          title: i18n.t('xpack.Organization.OrganizationDetail'),
+          permissions: ['orgs.view_organization']
+        }
       }
     ]
   },
@@ -150,6 +188,6 @@ export default [
     path: 'system-monitor',
     component: () => import('@/views/xpack/SystemMonitor/index.vue'),
     name: 'SystemMonitor',
-    meta: { title: i18n.t('xpack.SystemMonitor'), permissions: [] }
+    meta: { title: i18n.t('xpack.SystemMonitor'), permissions: ['terminal.view_terminal'] }
   }
 ]
