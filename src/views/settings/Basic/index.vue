@@ -1,30 +1,22 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :update-success-next-route="successUrl"
-      :create-success-next-route="successUrl"
-      :submit-method="submitMethod"
-      :has-detail-in-msg="false"
-      :on-perform-success="onPerformSuccess"
-      class="form"
-    />
-  </IBox>
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :update-success-next-route="successUrl"
+    :create-success-next-route="successUrl"
+    :has-detail-in-msg="false"
+    :submit-method="submitMethod"
+  />
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { IBox } from '@/components'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import Announcement from './announcement'
 
 export default {
   name: 'Basic',
   components: {
-    GenericCreateUpdateForm,
-    IBox
+    GenericCreateUpdatePage
   },
   data() {
     return {
@@ -55,24 +47,17 @@ export default {
           component: Announcement
         }
       },
-      successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
+      successUrl: { name: 'Basic' },
       url: '/api/v1/settings/setting/?category=basic'
     }
   },
   methods: {
     submitMethod() {
       return 'patch'
-    },
-    onPerformSuccess() {
-      setTimeout(() => window.location.reload(), 500)
     }
   }
 }
 </script>
 
 <style scoped>
-.form >>> .form-buttons {
-  padding-top: 30px;
-}
-
 </style>

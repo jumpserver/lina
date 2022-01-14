@@ -1,27 +1,20 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm
-      :fields="fields"
-      :url="url"
-      :fields-meta="fieldsMeta"
-      :submit-method="submitMethod"
-      :has-detail-in-msg="false"
-      @submitSuccess="onSubmitSuccess()"
-    />
-  </IBox>
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :submit-method="submitMethod"
+    :has-detail-in-msg="false"
+  />
 </template>
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import PasswordRule from './PasswordRule'
 import AuthLimit from './AuthLimit'
-import { IBox } from '@/components'
 import { Link } from '@/components/FormFields'
 
 export default {
   name: 'Security',
   components: {
-    GenericCreateUpdateForm,
-    IBox
+    GenericCreateUpdatePage
   },
   data() {
     return {
@@ -94,9 +87,6 @@ export default {
   methods: {
     submitMethod() {
       return 'patch'
-    },
-    onSubmitSuccess() {
-      window.location.reload()
     }
   }
 }

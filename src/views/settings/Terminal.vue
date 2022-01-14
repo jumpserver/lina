@@ -1,16 +1,13 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { IBox } from '@/components'
+import { GenericCreateUpdatePage } from '@/layout/components'
+
 export default {
   name: 'Terminal',
   components: {
-    GenericCreateUpdateForm,
-    IBox
+    GenericCreateUpdatePage
   },
   data() {
     return {
@@ -70,8 +67,6 @@ export default {
         return data
       }
     }
-  },
-  mounted() {
   },
   methods: {
   }
