@@ -828,6 +828,10 @@
     "riskLevels": {
       "common": "common"
     },
+    "SessionID": "Session ID",
+    "TargetResources": "Target resources",
+    "UseProtocol": "Use protocol",
+    "SessionState": "Session state",
     "Monitor": "Monitor",
     "XRDPNotSupport": "RDP Client session not support now",
     "sessionMonitor": "Session Monitor",
