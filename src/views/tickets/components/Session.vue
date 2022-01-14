@@ -7,22 +7,28 @@
     <div class="content">
       <el-row class="item">
         <el-col>
-          <span class="item-label">{{ $t('tickets.status') }}：</span>
-          <span class="item-value">
-            {{ session.is_finished ? $t('sessions.noAlive') : $t('sessions.alive') }}
-          </span>
+          <span class="item-label">{{ $t('sessions.SessionID') }}：</span>
+          <span class="item-value">{{ session.id }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('sessions.target') }}：</span>
+          <span class="item-label">{{ $t('sessions.TargetResources') }}：</span>
           <span class="item-value">{{ session.asset }}</span>
+        </el-col>
+        <el-col>
+          <span class="item-label">{{ $t('tickets.SystemUser') }}：</span>
+          <span class="item-value">{{ session.system_user }}</span>
+        </el-col>
+        <el-col>
+          <span class="item-label">{{ $t('sessions.UseProtocol') }}：</span>
+          <span class="item-value">{{ session.protocol }}</span>
         </el-col>
         <el-col>
           <span class="item-label">{{ $t('sessions.remoteAddr') }}：</span>
           <span class="item-value">{{ session.remote_addr }}</span>
         </el-col>
         <el-col>
-          <span class="item-label">{{ $t('sessions.protocol') }}：</span>
-          <span class="item-value">{{ session.protocol }}</span>
+          <span class="item-label">{{ $t('sessions.SessionState') }}：</span>
+          <span class="item-value cur-color" :style="{ 'background': session.is_finished ? '#ed5565' : '#1ab394' }" />
         </el-col>
       </el-row>
     </div>
@@ -72,7 +78,7 @@ export default {
       this.init()
     }
   },
-  destroyed() {
+  beforeDestroy() {
     clearTimeout(this.curTimer)
   },
   methods: {
@@ -86,6 +92,9 @@ export default {
       }).then(res => {
         this.session = res || {}
       }).catch(err => {
+        this.curTimer = setTimeout(() => {
+          this.init()
+        }, 1400)
         this.$log.debug('error', err)
       }).finally(() => {
         this.loading = false
@@ -136,5 +145,12 @@ export default {
   }
   .bottom-btn {
     text-align: right;
+  }
+  .cur-color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    vertical-align: text-top;
+    border-radius: 50%;
   }
 </style>

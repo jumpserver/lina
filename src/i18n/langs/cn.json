@@ -847,6 +847,10 @@
     "riskLevels": {
       "common": "普通"
     },
+    "SessionID": "会话ID",
+    "TargetResources": "目标资源",
+    "UseProtocol": "使用协议",
+    "SessionState": "会话状态",
     "Monitor": "监控",
     "XRDPNotSupport": "RDP 客户端会话, 暂不支持监控",
     "sessionMonitor": "监控",
