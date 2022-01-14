@@ -1331,6 +1331,8 @@
       "Username": "用户名"
     },
     "AccountBackupPlan": {
+      "Types": "类型",
+      "Backup": "备份",
       "AccountBackupPlan": "账号备份",
       "AccountBackupPlanCreate": "创建账号备份",
       "AccountBackupPlanUpdate": "更新账号备份",

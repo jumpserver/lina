@@ -1288,6 +1288,8 @@
       "Username": "Username"
     },
     "AccountBackupPlan": {
+      "Types": "Types",
+      "Backup": "Backup",
       "AccountBackupPlan": "Account backup plan",
       "AccountBackupPlanreate": "Account backup plan",
       "AccountBackupPlanUpdate": "Account backup plan",
