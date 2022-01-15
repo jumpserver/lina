@@ -27,7 +27,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'type']],
-        [this.$t('common.Auth'), ['password', 'private_key']],
+        [this.$t('common.Auth'), ['password', 'private_key', 'passphrase']],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
@@ -62,6 +62,9 @@ export default {
               return false
             }
           }
+        },
+        passphrase: {
+          component: UpdateToken
         },
         private_key: {
           component: UploadKey
