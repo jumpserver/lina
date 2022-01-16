@@ -274,8 +274,10 @@ export default {
       })
     },
     generatePopoverColumns() {
-      this.popoverColumns.totalColumnsList = this.totalColumns.map(obj => {
-        return { prop: obj.prop, label: obj.label }
+      this.popoverColumns.totalColumnsList = this.totalColumns.filter(obj => {
+        if (obj.label) {
+          return { prop: obj.prop, label: obj.label }
+        }
       })
       this.popoverColumns.currentCols = this.cleanedColumnsShow.show
       this.popoverColumns.minCols = this.cleanedColumnsShow.min
