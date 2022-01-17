@@ -1,12 +1,13 @@
 <template>
   <GenericDetailPage
-    :object.sync="group"
+    :object.sync="role"
     :active-menu.sync="config.activeMenu"
+    :url="url"
     v-bind="config"
     v-on="$listeners"
   >
     <keep-alive>
-      <component :is="config.activeMenu" :object="group" />
+      <component :is="config.activeMenu" :object="role" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -27,16 +28,15 @@ export default {
   data() {
     const vm = this
     return {
-      group: { name: '', comment: '', users: [] },
+      role: { name: '', comment: '', users: [] },
       config: {
-        url: '/api/v1/rbac/roles/',
         activeMenu: 'RoleInfo',
         actions: {
           canDelete: () => {
-            return vm.hasPermNotBuiltinNotRootOrg(this.group, 'rbac.delete_role')
+            return vm.hasPermNotBuiltinNotRootOrg(this.role, 'rbac.delete_role')
           },
           canUpdate: () => {
-            return vm.hasPermNotBuiltinNotRootOrg(this.group, 'rbac.change_role')
+            return vm.hasPermNotBuiltinNotRootOrg(this.role, 'rbac.change_role')
           }
         },
         submenu: [
@@ -54,6 +54,12 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    url() {
+      const scope = this.$route.query['scope'] || 'org'
+      return `/api/v1/rbac/${scope}-roles`
     }
   },
   methods: {

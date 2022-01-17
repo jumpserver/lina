@@ -21,19 +21,31 @@ export default {
       tableConfig: {
         url: `/api/v1/rbac/roles/?scope=${this.scope}`,
         columns: [
-          'name_display', 'users_amount', 'builtin', 'created_by',
+          'display_name', 'users_amount', 'builtin', 'created_by',
           'date_create', 'date_updated', 'comment', 'actions'
         ],
         columnsShow: {
-          default: ['name_display', 'users_amount', 'builtin', 'comment', 'actions'],
+          default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions'],
           min: ['name', 'action']
         },
         columnsMeta: {
-          name_display: {
+          display_name: {
             label: this.$t('common.Name'),
             formatter: DetailFormatter,
             formatterArgs: {
-              permissions: ['rbac.view_role']
+              permissions: ['rbac.view_role'],
+              getRoute({ row }) {
+                console.log('Base role is: ', row)
+                return {
+                  name: 'RoleDetail',
+                  query: {
+                    scope: row.scope
+                  },
+                  params: {
+                    id: row.id
+                  }
+                }
+              }
             }
           },
           builtin: {

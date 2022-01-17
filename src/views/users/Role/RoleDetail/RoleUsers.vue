@@ -21,8 +21,8 @@ export default {
     return {
       loading: true,
       tableConfig: {
-        url: '/api/v1/users/users/',
-        columns: ['name', 'username']
+        url: `/api/v1/rbac/${this.object.scope}-role-bindings/?role=${this.object.id}`,
+        columns: ['user_display', 'actions']
       },
       headerActions: {
         hasLeftActions: false

@@ -133,7 +133,7 @@ export default {
     },
     detailApiUrl() {
       if (this.url) {
-        return `${this.url}/${this.$route.params.id}`
+        return `${this.url}/${this.$route.params.id}/`
       } else {
         return getApiPath(this)
       }

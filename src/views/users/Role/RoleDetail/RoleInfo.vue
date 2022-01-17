@@ -63,7 +63,7 @@ export default {
       return [
         {
           key: this.$t('common.Name'),
-          value: this.object.name_display
+          value: this.object.display_name
         },
         {
           key: this.$t('common.createdBy'),

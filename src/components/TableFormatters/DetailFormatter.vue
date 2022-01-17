@@ -15,7 +15,7 @@ export default {
         return {
           route: this.$route.name.replace('List', 'Detail'),
           getRoute: null,
-          routeQuery: {},
+          routeQuery: null,
           permissions: this.$getCurrentResActionPerms('view'),
           can: (col) => {
             return this.$hasPerm(this.formatterArgs.permissions)
