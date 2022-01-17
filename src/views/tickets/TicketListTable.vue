@@ -124,6 +124,7 @@ export default {
             {
               value: 'state',
               label: this.$t('tickets.action'),
+              type: 'choice',
               children: [
                 {
                   default: true,
