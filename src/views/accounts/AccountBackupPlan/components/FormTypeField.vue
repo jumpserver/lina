@@ -37,11 +37,11 @@ export default {
           children: [
             {
               id: 'asset',
-              label: this.$t('assets.Assets')
+              label: this.$t('route.AssetAccount')
             },
             {
               id: 'application',
-              label: this.$t('assets.Applications')
+              label: this.$t('route.ApplicationAccount')
             }
           ]
         }

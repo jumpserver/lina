@@ -17,9 +17,11 @@ export default {
     return {
       url: '/api/v1/assets/backup/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'types']],
+        [this.$t('common.Basic'), ['name']],
+        [this.$t('xpack.AccountBackupPlan.Types'), ['types']],
+        [this.$t('xpack.AccountBackupPlan.Backup'), ['recipients']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['recipients', 'comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       initial: {
         is_periodic: true,
@@ -32,7 +34,7 @@ export default {
         interval: fields.interval,
         recipients: fields.recipients,
         types: {
-          label: this.$t('perms.Actions'),
+          label: this.$t('xpack.AccountBackupPlan.Types'),
           component: FormTypeField
         }
       },
