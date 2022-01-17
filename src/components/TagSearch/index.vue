@@ -16,7 +16,7 @@
       size="small"
       class="filter-tag"
       type="info"
-      :disable-transitions="true"
+      :disable-transitions="false"
       @close="handleTagClose(k)"
       @click="handleTagClick(v,k)"
     >
