@@ -22,7 +22,7 @@ export default {
       tableConfig: {
         url: `/api/v1/xpack/change-auth-plan/app-plan-execution-subtask/?plan_execution_id=${this.object.id}`,
         columns: [
-          'app_display', 'system_user_display', 'is_success', 'reason', 'timedelta', 'date_start', 'actions'
+          'app_display', 'system_user_display', 'is_success', 'timedelta', 'date_start', 'reason_display', 'actions'
         ],
         columnsMeta: {
           app_display: {
@@ -34,6 +34,9 @@ export default {
               }
               return <router-link to={ to } >{ row.app_display }</router-link>
             }
+          },
+          reason_display: {
+            label: this.$t('xpack.AccountBackupPlan.Reason')
           },
           system_user_display: {
             label: this.$t('xpack.ChangeAuthPlan.SystemUser')

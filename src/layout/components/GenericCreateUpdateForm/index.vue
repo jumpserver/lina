@@ -283,8 +283,8 @@ export default {
       let object = this.object
       if (!object || Object.keys(object).length === 0) {
         if (cloneFrom) {
-          this.$log.debug('Clone from: ', cloneFrom)
-          const url = `${this.url}${cloneFrom}/`
+          const [curUrl, query] = this.url.split('?')
+          const url = `${curUrl}${cloneFrom}/${query ? ('?' + query) : ''}`
           object = await this.getObjectDetail(url)
           if (object['name']) {
             object.name = this.$t('common.cloneFrom') + ' ' + object.name

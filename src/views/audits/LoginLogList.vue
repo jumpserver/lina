@@ -18,7 +18,7 @@ export default {
       tableConfig: {
         url: '/api/v1/audits/login-logs/',
         columns: [
-          'username', 'type', 'backend', 'ip', 'city',
+          'username', 'type', 'backend_display', 'ip', 'city',
           'user_agent', 'mfa', 'reason_display', 'status', 'datetime'
         ],
         columnsMeta: {

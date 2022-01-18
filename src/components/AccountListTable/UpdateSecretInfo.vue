@@ -58,11 +58,12 @@ export default {
       }
       if (this.authInfo.private_key !== '') {
         data.private_key = this.authInfo.private_key
-        data.passphrase = this.authInfo.passphrase
+        if (this.authInfo.passphrase) data.passphrase = this.authInfo.passphrase
       }
       this.$axios.patch(
         `/api/v1/assets/accounts/${this.account.id}/`,
-        data
+        data,
+        { disableFlashErrorMsg: true }
       ).then(res => {
         this.authInfo = { password: '', private_key: '' }
         this.$message.success(this.$tc('common.updateSuccessMsg'))

@@ -70,6 +70,7 @@ export default {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
         },
+        showHasMore: false,
         hasObjectsId: this.object.users,
         showHasObjects: false,
         performAdd: (items) => {

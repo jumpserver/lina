@@ -17,7 +17,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/operate-logs/',
-        columns: ['user', 'action', 'resource_type', 'resource', 'remote_addr', 'datetime'],
+        columns: ['user', 'action_display', 'resource_type_display', 'resource', 'remote_addr', 'datetime'],
         columnsMeta: {
           user: {
             showOverflowTooltip: true
@@ -35,7 +35,7 @@ export default {
           remote_addr: {
             width: '140px'
           },
-          action: {
+          action_display: {
             width: '90px'
           }
         },
