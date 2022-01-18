@@ -22,7 +22,7 @@ export default {
       tableConfig: {
         url: `/api/v1/xpack/change-auth-plan/plan-execution-subtask/?plan_execution_id=${this.object.id}`,
         columns: [
-          'username', 'asset', 'is_success', 'reason', 'timedelta', 'date_start', 'actions'
+          'username', 'asset', 'is_success', 'timedelta', 'date_start', 'reason_display', 'actions'
         ],
         columnsMeta: {
           asset: {
@@ -41,6 +41,9 @@ export default {
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
+          },
+          reason_display: {
+            label: this.$t('xpack.AccountBackupPlan.Reason')
           },
           actions: {
             formatterArgs: {
