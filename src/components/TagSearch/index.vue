@@ -34,6 +34,7 @@
       @blur="focus = false"
       @focus="focus = true"
       @change="handleConfirm"
+      @keyup.enter.native="handleConfirm"
     />
   </div>
 
