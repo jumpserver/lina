@@ -135,7 +135,7 @@ export default {
           mfaVerifyRequired: true
         },
         searchConfig: {
-          exclude: ['systemuser', 'asset']
+          exclude: ['systemuser', 'app']
         },
         hasSearch: true
       }
