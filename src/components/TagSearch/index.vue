@@ -16,7 +16,7 @@
       size="small"
       class="filter-tag"
       type="info"
-      :disable-transitions="false"
+      :disable-transitions="true"
       @close="handleTagClose(k)"
       @click="handleTagClick(v,k)"
     >
@@ -206,6 +206,7 @@ export default {
       return true
     },
     handleConfirm() {
+      if (!this.filterValue) return
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search'
       }
