@@ -219,6 +219,7 @@
     "sshKeyFingerprint": "SSH fingerprint",
     "ip": "IP",
     "sshkey": "sshkey",
+    "SSHSecretKey": "SSh key",
     "GroupsHelpMessage": "Please fill in user groups, separated by commas if there are multiple user groups(Please fill in the existing user groups)",
     "HomeHelpMessage": "Default home directory: /home/system username",
     "Home": "Home",
