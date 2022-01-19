@@ -3,17 +3,39 @@
     <el-col :md="14" :sm="24">
       <DetailCard :items="detailItems" />
     </el-col>
+    <el-col :md="10" :sm="24">
+      <IBox :title="$t('common.Permissions')">
+        <div style="height: 10%">
+          <el-button
+            size="small"
+            type="primary"
+            style="width: 100%;"
+            :disabled="isDisabled"
+            @click="updatePermissions"
+          >
+            {{ $t('common.Update') }}
+          </el-button>
+        </div>
+        <div class="perm-tree">
+          <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
+        </div>
+      </IBox>
+    </el-col>
   </el-row>
 </template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
+import { IBox } from '@/components'
+import AutoDataZTree from '@/components/AutoDataZTree'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'RoleInfo',
   components: {
-    DetailCard
+    DetailCard,
+    AutoDataZTree,
+    IBox
   },
   props: {
     object: {
@@ -22,7 +44,33 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
+      loading: true,
+      isDisabled: true,
+      setting: {
+        showAssets: false,
+        showMenu: false,
+        showRefresh: true,
+        treeUrl: '',
+        check: {
+          enable: true
+        },
+        async: {
+          enable: false
+        },
+        callback: {
+          onCheck(event, treeId, treeNode) {
+            const checked = treeNode.checked
+            vm.$nextTick(() => {
+              vm.isDisabled = false
+            })
+            console.log('on check click: ', checked)
+          },
+          onSelected() {
+          }
+        }
+      }
     }
   },
   computed: {
@@ -47,11 +95,40 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.setting.treeUrl = `/api/v1/rbac/roles/${this.object.id}/permissions/tree/`
+    setTimeout(() => {
+      this.loading = false
+    })
+  },
   methods: {
+    updatePermissions() {
+      const ztree = this.$refs.tree.zTree
+      const checkedNodes = ztree.getCheckedNodes()
+      const permNodes = checkedNodes.filter(node => !node.isParent)
+      const permIds = permNodes.map(node => node.id)
+
+      const roleDetailUrl = `/api/v1/rbac/roles/${this.object.id}/`
+      const data = {
+        permissions: permIds
+      }
+      this.$axios.patch(roleDetailUrl, data).then(() => {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg') + error)
+        this.$log.error(error)
+      })
+    }
   }
 }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
+.perm-tree >>> .ztree * {
+  background: white;
+}
 
+.perm-tree >>> .ztree {
+  background: white !important;
+}
 </style>

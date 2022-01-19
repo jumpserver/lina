@@ -14,14 +14,12 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import RolePerms from './RolePerms'
 import RoleInfo from './RoleInfo'
 import RoleUsers from './RoleUsers'
 
 export default {
   components: {
     GenericDetailPage,
-    RolePerms,
     RoleInfo,
     RoleUsers
   },
@@ -43,10 +41,6 @@ export default {
           {
             title: this.$t('users.RoleInfo'),
             name: 'RoleInfo'
-          },
-          {
-            title: this.$t('users.RolePerms'),
-            name: 'RolePerms'
           },
           {
             title: this.$t('users.RoleUsers'),
