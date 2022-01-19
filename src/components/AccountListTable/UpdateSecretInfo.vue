@@ -8,7 +8,7 @@
     @cancel="handleCancel()"
     v-on="$listeners"
   >
-    <el-form label-position="right" label-width="80px">
+    <el-form label-position="right" label-width="90px">
       <el-form-item :label="this.$t('assets.Hostname')">
         <el-input v-model="account.hostname" readonly />
       </el-form-item>
@@ -18,8 +18,8 @@
       <el-form-item :label="this.$t('assets.Password')">
         <el-input v-model="authInfo.password" type="password" />
       </el-form-item>
-      <el-form-item :label="this.$t('assets.SSHKey')">
-        <input type="file" @change="onPrivateKeyLoaded">
+      <el-form-item :label="this.$t('assets.SSHSecretKey')">
+        <UploadKey @input="getFile" />
       </el-form-item>
       <el-form-item :label="this.$t('assets.Passphrase')">
         <el-input v-model="authInfo.passphrase" type="password" />
@@ -30,10 +30,12 @@
 
 <script>
 import Dialog from '@/components/Dialog'
+import { UploadKey } from '@/components'
 export default {
   name: 'UpdateSecretInfo',
   components: {
-    Dialog
+    Dialog,
+    UploadKey
   },
   props: {
     account: {
@@ -78,16 +80,8 @@ export default {
     handleCancel() {
       this.$emit('update:visible', false)
     },
-    onPrivateKeyLoaded(e) {
-      const vm = this
-      // TODO 校验文件类型
-      const reader = new FileReader()
-      reader.onload = function() {
-        vm.authInfo.private_key = this.result
-      }
-      reader.readAsText(
-        e.target.files[0]
-      )
+    getFile(file) {
+      this.authInfo.private_key = file
     }
   }
 }

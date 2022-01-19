@@ -232,10 +232,14 @@ export default {
   },
   methods: {
     performSubmit(validValues) {
-      const applyCategoryType = validValues.meta.apply_category_type
-      validValues.meta.apply_category = applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[0] : ''
-      validValues.meta.apply_type = applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[1] : ''
-      delete validValues.meta['apply_category_type']
+      const validMeta = validValues.meta
+      const applyCategoryType = validMeta.apply_category_type
+      const filter = (len, field) => {
+        return applyCategoryType && applyCategoryType.length > 0 ? applyCategoryType[len] : validMeta[field]
+      }
+      validMeta.apply_category = filter(0, 'apply_category')
+      validMeta.apply_type = filter(1, 'apply_type')
+      delete validMeta['apply_category_type']
       return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
     }
   }

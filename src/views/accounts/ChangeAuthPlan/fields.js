@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { AssetSelect, CronTab, UploadKey } from '@/components'
-import { Select2 } from '@/components/FormFields/Select2'
+import { Select2, UpdateToken } from '@/components/FormFields'
 import { Required } from '@/components/DataForm/rules'
 
 var validatorInterval = (rule, value, callback) => {
@@ -104,6 +104,8 @@ function getFields() {
   }
 
   const passphrase = {
+    label: i18n.t('assets.Passphrase'),
+    component: UpdateToken,
     hidden: (formValue) => {
       return formValue.is_ssh_key === false
     }
