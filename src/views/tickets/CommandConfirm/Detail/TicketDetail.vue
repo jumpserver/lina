@@ -75,7 +75,7 @@ export default {
           key: this.$t('tickets.ApplyFromSession'),
           value: this.object.meta.apply_from_session_id,
           formatter: function(item, value) {
-            const to = { name: 'SessionDetail', params: { id: value }}
+            const to = { name: 'SessionDetail', params: { id: value }, query: { oid: vm.object.org_id }}
             return <router-link to={to}>{vm.$t('sessions.session')}</router-link>
           }
         },
