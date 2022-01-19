@@ -10,6 +10,8 @@ var validatorInterval = (rule, value, callback) => {
 
 function getFields() {
   const recipients = {
+    label: i18n.t('xpack.ChangeAuthPlan.Addressee'),
+    helpText: i18n.t('xpack.ChangeAuthPlan.OnlyMailSend'),
     el: {
       value: [],
       ajax: {
