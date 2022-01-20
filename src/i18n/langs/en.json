@@ -652,7 +652,7 @@
     "Assets": "Assets",
     "Audits": "Audits",
     "BatchCommand": "Batch Command",
-    "BatchCommandLog": "Batch Command Log",
+    "BatchCommandLog": "Batch Command Logs",
     "CeleryTaskLog": "Celery task log",
     "CommandExecutions": "CommandExecutions ",
     "CommandFilterCreate": "Command filter create",
