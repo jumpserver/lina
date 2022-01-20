@@ -236,7 +236,10 @@
     "ReLogin": "重新登录"
   },
   "common": {
-    "Update": "更新",
+    "Scope": "类别",
+    "Builtin": "内置",
+    "DateCreated": "创建日期",
+    "UpdatedBy": "更新者",
     "ViewMore": "查看更多",
     "Announcement": "公告",
     "Logging": "日志记录",
@@ -724,6 +727,9 @@
     "WebTerminal": "Web终端",
     "Notifications": "通知",
     "SiteMessageList": "站内信"
+  },
+  "rbac": {
+    "Permissions": "权限"
   },
   "sessions": {
     "SetToDefaultStorage": "设置为默认存储",

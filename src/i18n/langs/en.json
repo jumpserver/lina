@@ -234,7 +234,10 @@
     "ReLogin": "Re-Login"
   },
   "common": {
-    "Update": "Update",
+    "Scope": "Type",
+    "Builtin": "Builtin",
+    "DateCreated": "Date created",
+    "UpdatedBy": "Update by",
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
@@ -701,6 +704,9 @@
     "WebTerminal": "Web Terminal",
     "Notifications": "Notifications",
     "SiteMessageList": "Site message"
+  },
+  "rbac": {
+    "Permissions": "Permissions"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",

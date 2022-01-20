@@ -4,7 +4,7 @@
       <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <IBox :title="$t('common.Permissions')">
+      <IBox :title="$t('rbac.Permissions')">
         <div style="height: 10%">
           <el-button
             size="small"
@@ -81,12 +81,24 @@ export default {
           value: this.object.display_name
         },
         {
-          key: this.$t('common.createdBy'),
+          key: this.$t('common.Scope'),
+          value: this.object['scope_display']
+        },
+        {
+          key: this.$t('common.Builtin'),
+          value: this.object['builtin']
+        },
+        {
+          key: this.$t('common.CreatedBy'),
           value: this.object.created_by
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
+        },
+        {
+          key: this.$t('common.DateUpdated'),
+          value: toSafeLocalDateStr(this.object.date_updated)
         },
         {
           key: this.$t('common.Comment'),
