@@ -206,7 +206,7 @@ export default {
       return true
     },
     handleConfirm() {
-      if (!this.filterValue) return
+      if (this.filterValue === '') return
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search'
       }
