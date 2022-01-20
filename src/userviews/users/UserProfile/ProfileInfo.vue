@@ -115,8 +115,7 @@ export default {
           title: this.$t('users.SetMFA'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Setting'),
-            disabled: this.object.mfa_force_enabled
+            label: this.$t('common.Setting')
           },
           callbacks: {
             click: function() {
