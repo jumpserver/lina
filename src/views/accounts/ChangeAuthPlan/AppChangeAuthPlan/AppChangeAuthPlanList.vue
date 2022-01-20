@@ -6,7 +6,7 @@
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
-import { DATABASE } from '@/views/perms/const'
+import { AppPlanDatabase } from '@/views/perms/const'
 
 export default {
   name: 'AppChangeAuthPlanList',
@@ -126,7 +126,7 @@ export default {
               type: option.name.toLowerCase()
             }})
           },
-          dropdown: DATABASE
+          dropdown: AppPlanDatabase
         }
       }
     }

@@ -97,6 +97,45 @@ export const DATABASE = [
   }
 ]
 
+export const AppPlanDatabase = [
+  {
+    name: MYSQL,
+    title: i18n.t(`applications.applicationsType.${MYSQL}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: true,
+    group: i18n.t('applications.RDBProtocol')
+  },
+  {
+    name: ORACLE,
+    title: i18n.t(`applications.applicationsType.${ORACLE}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
+  },
+  {
+    name: POSTGRESQL,
+    title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
+  },
+  {
+    name: MARIADB,
+    title: i18n.t(`applications.applicationsType.${MARIADB}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
+  },
+  {
+    name: SQLSERVER,
+    title: i18n.t(`applications.applicationsType.${SQLSERVER}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
+  }
+]
+
 export const KUBERNETES = 'k8s'
 export const CLOUD_CATEGORY = 'cloud'
 
