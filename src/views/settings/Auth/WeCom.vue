@@ -1,8 +1,6 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
-    :title="$t('setting.WeCom')"
     enable-field="AUTH_WECOM"
     v-on="$listeners"
   />
@@ -15,12 +13,6 @@ export default {
   name: 'WeCom',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     const vm = this

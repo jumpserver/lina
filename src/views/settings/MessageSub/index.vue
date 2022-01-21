@@ -1,50 +1,56 @@
 <template>
-  <div>
-    <el-table
-      :data="tableData"
-      row-key="id"
-      default-expand-all
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      :span-method="spanMethod"
-      :stripe="true"
-    >
-      <el-table-column :label="$t('notifications.MessageType')" width="230">
-        <template #default="scope">
-          <span>{{ scope.row.value }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-for="header in receiveBackends" :key="header.id" :label="header.name_display" width="120">
-        <template #default="scope">
-          <el-checkbox v-if="!scope.row.children" v-model="scope.row.receive_backends[header.name]" @change="onCheckReceiveBackend(scope.row)" />
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('notifications.Receivers')" show-overflow-tooltip>
-        <template #default="scope">
-          <span v-if="!scope.row.children">{{ scope.row.receivers.map(item => item.name).join(', ') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('common.Actions')" width="200">
-        <template #default="scope">
-          <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">{{ $t('notifications.ChangeReceiver') }}</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+  <Page v-bind="$attrs">
+    <div>
+      <el-table
+        :data="tableData"
+        row-key="id"
+        default-expand-all
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        :span-method="spanMethod"
+        :stripe="true"
+      >
+        <el-table-column :label="$t('notifications.MessageType')" width="230">
+          <template #default="scope">
+            <span>{{ scope.row.value }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-for="header in receiveBackends" :key="header.id" :label="header.name_display" width="120">
+          <template #default="scope">
+            <el-checkbox v-if="!scope.row.children" v-model="scope.row.receive_backends[header.name]" @change="onCheckReceiveBackend(scope.row)" />
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('notifications.Receivers')" show-overflow-tooltip>
+          <template #default="scope">
+            <span v-if="!scope.row.children">{{ scope.row.receivers.map(item => item.name).join(', ') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('common.Actions')" width="200">
+          <template #default="scope">
+            <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">{{ $t('notifications.ChangeReceiver') }}</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <SelectDialog
-      v-if="dialogVisible"
-      :visible.sync="dialogVisible"
-      :title="$t('notifications.ChangeReceiver')"
-      :selected-users="dialogSelectedUsers"
-      @submit="onDialogSelectSubmit"
-      @cancel="dialogVisible=false"
-    />
-  </div>
+      <SelectDialog
+        v-if="dialogVisible"
+        :visible.sync="dialogVisible"
+        :title="$t('notifications.ChangeReceiver')"
+        :selected-users="dialogSelectedUsers"
+        @submit="onDialogSelectSubmit"
+        @cancel="dialogVisible=false"
+      />
+    </div>
+  </Page>
 </template>
 
 <script>
+import Page from '@/layout/components/Page'
 import SelectDialog from './SelectDialog'
 export default {
-  components: { SelectDialog },
+  components: {
+    Page,
+    SelectDialog
+  },
   data() {
     return {
       currentEditSub: {},

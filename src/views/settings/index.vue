@@ -21,7 +21,7 @@ import Security from './Security/index'
 import License from './License'
 import Other from './Other.vue'
 import Clean from './Clean'
-import SysMessageSub from './MessageSub/Subscription'
+import SysMessageSub from './MessageSub'
 import SMS from './SMS'
 
 export default {

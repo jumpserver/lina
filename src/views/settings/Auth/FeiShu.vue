@@ -1,8 +1,6 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
-    :title="$t('setting.FeiShu')"
     enable-field="AUTH_FIESHU"
     v-on="$listeners"
   />
@@ -15,12 +13,6 @@ export default {
   name: 'Wecom',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     const vm = this

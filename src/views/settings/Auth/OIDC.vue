@@ -1,8 +1,6 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
-    title="OIDC"
     enable-field="AUTH_OPENID"
     v-on="$listeners"
   />
@@ -15,12 +13,6 @@ export default {
   name: 'OIDC',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     return {

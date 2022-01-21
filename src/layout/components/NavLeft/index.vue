@@ -4,7 +4,10 @@
       <Logo v-if="showLogo" :collapse="isCollapse" />
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <Organization v-if="showOrgs" class="organizations" />
+      <Organization v-if="showOrgs && currentViewRoute.meta.view !== 'settings'" class="organizations" />
+      <div class="nav-title" :class="{'collapsed': isCollapse}">
+        {{ currentViewRoute.meta.title }}
+      </div>
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
@@ -95,6 +98,20 @@ export default {
   .nav-header {
     background-image: url('~@/assets/img/header-profile.png');
     height: 55px;
+  }
+
+  .nav-title {
+    padding-top: 6px;
+    padding-left: 20px;
+    padding-bottom: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #293846;
+  }
+
+  .collapsed {
+    display: none;
   }
 
   .organizations {

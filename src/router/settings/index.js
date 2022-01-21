@@ -31,17 +31,7 @@ export default {
       component: () => import('@/views/settings/Email'),
       meta: {
         title: i18n.t('setting.Email'),
-        icon: 'gear',
-        permissions: ['settings.view_setting']
-      }
-    },
-    {
-      path: '/settings/ldap',
-      name: 'Ldap',
-      component: () => import('@/views/settings/Ldap'),
-      meta: {
-        title: i18n.t('setting.Ldap'),
-        icon: 'gear',
+        icon: 'envelope-o',
         permissions: ['settings.view_setting']
       }
     },
@@ -51,17 +41,17 @@ export default {
       component: () => import('@/views/settings/Auth'),
       meta: {
         title: i18n.t('setting.Auth'),
-        icon: 'gear',
+        icon: 'user-circle-o',
         permissions: ['settings.view_setting']
       }
     },
     {
       path: '/settings/message',
       name: 'SysMessageSub',
-      component: () => import('@/views/settings/MessageSub/Subscription'),
+      component: () => import('@/views/settings/MessageSub'),
       meta: {
         title: i18n.t('setting.MessageSub'),
-        icon: 'gear',
+        icon: 'bell-o',
         permissions: ['settings.view_setting']
       }
     },
@@ -84,7 +74,7 @@ export default {
       component: () => import('@/views/settings/Terminal'),
       meta: {
         title: i18n.t('setting.Terminal'),
-        icon: 'gear',
+        icon: 'terminal',
         permissions: ['settings.view_setting']
       }
     },
@@ -94,7 +84,7 @@ export default {
       component: () => import('@/views/settings/Security'),
       meta: {
         title: i18n.t('setting.Security'),
-        icon: 'gear',
+        icon: 'shield',
         permissions: ['settings.view_setting']
       }
     },
@@ -104,7 +94,7 @@ export default {
       component: () => import('@/views/settings/Clean'),
       meta: {
         title: i18n.t('setting.Cleaning'),
-        icon: 'gear',
+        icon: 'hourglass-2',
         permissions: ['settings.view_setting']
       }
     },
@@ -114,7 +104,7 @@ export default {
       component: () => import('@/views/settings/Other'),
       meta: {
         title: i18n.t('setting.Other'),
-        icon: 'gear',
+        icon: 'map-signs',
         permissions: ['settings.view_setting']
       }
     },
@@ -124,7 +114,7 @@ export default {
       component: () => import('@/views/settings/License'),
       meta: {
         title: i18n.t('setting.License'),
-        icon: 'gear',
+        icon: 'diamond',
         permissions: ['settings.view_setting']
       }
     }

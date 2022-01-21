@@ -1,8 +1,6 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
-    :title="$t('setting.Radius')"
     enable-field="AUTH_RADIUS"
     v-on="$listeners"
   />
@@ -14,12 +12,6 @@ export default {
   name: 'Cas',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     return {

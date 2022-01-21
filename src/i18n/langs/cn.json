@@ -831,6 +831,8 @@
     "Cleaning": "定期清理",
     "Other": "其它设置",
     "CASSetting": "CAS 配置",
+    "CAS": "CAS",
+    "OIDC": "OIDC",
     "Auth": "认证设置",
     "SyncSetting": "同步设置",
     "Advanced": "高级设置",
