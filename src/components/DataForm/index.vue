@@ -23,6 +23,7 @@
 
 <script>
 import ElFormRender from './components/el-form-renderer'
+import { scrollToError } from '@/utils'
 export default {
   components: {
     ElFormRender
@@ -76,6 +77,7 @@ export default {
           this.$emit('submit', form.getFormValue(), form, addContinue)
         } else {
           this.$emit('invalid', valid)
+          scrollToError(form.$el)
           return false
         }
       })

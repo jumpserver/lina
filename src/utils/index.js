@@ -110,3 +110,24 @@ export function param2Obj(url) {
 export function getDateTimeStamp(dateStr) {
   return Date.parse(dateStr.replace(/-/gi, '/'))
 }
+
+/**
+  * 自动滚动到错误位置
+  * @param {*} el 目标元素
+  * @param {Object} 滚动参数 scrollOption={
+  *   behavior: 'smooth',
+  *   block: 'center'
+  * }
+*/
+export const scrollToError = (
+  el,
+  scrollOption = {
+    behavior: 'smooth',
+    block: 'center'
+  }
+) => {
+  setTimeout(() => {
+    const isError = el.getElementsByClassName('is-error')
+    isError[0].scrollIntoView(scrollOption)
+  }, 0)
+}
