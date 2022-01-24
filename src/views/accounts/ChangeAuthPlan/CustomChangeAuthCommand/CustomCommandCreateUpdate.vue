@@ -53,7 +53,7 @@ export default {
           el: {
             multiple: false,
             ajax: {
-              url: '/api/v1/assets/platforms/?type=custom',
+              url: '/api/v1/assets/platforms/?internal=False',
               transformOption: (item) => {
                 return { label: `${item.name}`, value: item.id }
               }
