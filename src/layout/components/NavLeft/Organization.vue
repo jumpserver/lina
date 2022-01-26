@@ -7,7 +7,7 @@
     @change="changeOrg"
   >
     <template slot="prefix">
-      <i class="fa fa-bookmark" />
+      <i class="fa fa-sitemap icon" />
     </template>
 
     <el-option
@@ -70,5 +70,9 @@ export default {
         border: none;
       }
     }
+  }
+  .icon {
+    color: #606266;
+    cursor: pointer;
   }
 </style>

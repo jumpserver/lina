@@ -21,8 +21,11 @@
       </li>
     </ul>
     <ul class="navbar-left">
-      <li class="header-item">
+      <li class="left-item">
         <ViewSwitcher />
+      </li>
+      <li v-show="showOrganize()" class="left-item">
+        <Organization class="organization" />
       </li>
     </ul>
   </div>
@@ -39,10 +42,12 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import rolc from '@/utils/role'
+import Organization from '../NavLeft/Organization.vue'
 
 export default {
   components: {
     ViewSwitcher,
+    Organization,
     // Breadcrumb,
     // Hamburger,
     AccountDropdown,
@@ -54,6 +59,7 @@ export default {
   },
   data() {
     return {
+      routeViews: []
     }
   },
   computed: {
@@ -70,9 +76,19 @@ export default {
         !this.isOrgAuditor
     }
   },
+  created() {
+    this.$store.dispatch('permission/getFilterRoutes').then(res => {
+      this.routeViews = res.filter((i) => (i?.perms.length > 0 && i?.route !== 'UserView'))
+    })
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    showOrganize() {
+      const { routeViews, currentViewRoute } = this
+      const isShow = routeViews.some(i => (i.route === currentViewRoute.name))
+      return isShow
     }
   }
 }
@@ -82,7 +98,31 @@ export default {
     height: 55px;
     overflow: hidden;
     background: #f3f3f4;
-
+    .organization {
+      height: 53px;
+      background: #f3f3f4;
+      color: #606266;
+      &>>> .el-input__icon {
+        color: #606266;
+      }
+      &>>> .el-input__inner {
+        width: 120px;
+      }
+      &>>> .is-focus {
+        width: 200px;
+      }
+      &:after {
+        content:"";
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 94%;
+        height: 2px;
+        background-color: #00AC90;
+        margin:0 auto;
+        display:block;
+      }
+    }
     .header-item {
       line-height: 55px;
       display: inline-block;
@@ -99,6 +139,18 @@ export default {
 
     .navbar-left {
       float: left;
+      .left-item {
+        line-height: 55px;
+        display: inline-block;
+        vertical-align: middle;
+        &>>> .el-submenu__title {
+          font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+          padding: 0 14px;
+        }
+        &>>> .org-select {
+          padding: 0;
+        }
+      }
     }
 
     .navbar-right {
