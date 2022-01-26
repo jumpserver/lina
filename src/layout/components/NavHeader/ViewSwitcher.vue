@@ -9,7 +9,7 @@
       <template slot="title">
         <span class="title-label">
           <i class="fa fa-bars" />
-          {{ viewName }}
+          <span>{{ $t('common.nav.View') }}</span>
         </span>
       </template>
       <el-menu-item
@@ -31,6 +31,12 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ViewSwitcher',
+  props: {
+    showTitle: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       views: []
@@ -117,11 +123,9 @@ export default {
   background-color: transparent;
 }
 .title-label {
+  padding-left: 12px;
   font-size: 14px;
   vertical-align: unset;
-  .fa-bars {
-    vertical-align: revert;
-  }
 }
 .icons {
   display: block;

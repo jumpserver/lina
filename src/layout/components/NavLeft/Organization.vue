@@ -7,7 +7,7 @@
     @change="changeOrg"
   >
     <template slot="prefix">
-      <i class="fa fa-bookmark" />
+      <i class="fa fa-sitemap" style="color: #909399;" />
     </template>
 
     <el-option

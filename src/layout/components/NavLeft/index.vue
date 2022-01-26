@@ -4,7 +4,6 @@
       <Logo v-if="showLogo" :collapse="isCollapse" />
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <Organization v-if="showOrgs && currentViewRoute.meta.view !== 'settings'" class="organizations" />
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         {{ currentViewRoute.meta.title }}
       </div>
@@ -40,12 +39,11 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
-import Organization from './Organization'
 import variables from '@/styles/variables.scss'
 import Hamburger from '@/components/Hamburger'
 
 export default {
-  components: { Organization, SidebarItem, Logo, Hamburger },
+  components: { SidebarItem, Logo, Hamburger },
   computed: {
     ...mapGetters([
       'currentViewRoute',
@@ -101,11 +99,9 @@ export default {
   }
 
   .nav-title {
-    padding-top: 6px;
-    padding-left: 20px;
-    padding-bottom: 12px;
+    padding: 17px 0 17px 22px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 460;
     color: #fff;
     background-color: #293846;
   }
