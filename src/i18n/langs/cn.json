@@ -1067,6 +1067,8 @@
     "AuthSettings": "认证配置",
     "UserName": "姓名",
     "Account": "账户",
+    "AccountInformation": "账号信息",
+    "PersonalSetting": "个人设置",
     "Authentication": "认证",
     "Comment": "备注",
     "ConfirmPassword": "确认密码",

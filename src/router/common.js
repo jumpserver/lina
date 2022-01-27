@@ -7,19 +7,6 @@ import i18n from '@/i18n/i18n'
  */
 export default [
   {
-    path: '/users/profile',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '',
-        name: 'UserProfile',
-        component: () => import('@/views/userviews/users/UserProfile/index'),
-        meta: { title: i18n.t('route.UserProfile'), icon: 'user', activeMenu: '/users/profile' }
-      }
-    ]
-  },
-  {
     path: '/users/first-login',
     component: Layout,
     meta: { title: i18n.t('route.UserFirstLogin'), icon: 'user' },

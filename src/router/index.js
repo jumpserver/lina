@@ -50,6 +50,7 @@ import adminViewRoutes from './admin'
 import auditViewRoutes from './audit'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
+import profileRoutes from './profile'
 
 /**
  * admin
@@ -81,7 +82,8 @@ export const allRoutes = [
   adminViewRoutes,
   auditViewRoutes,
   ticketsRoutes,
-  settingsRoutes
+  settingsRoutes,
+  profileRoutes
 ]
 
 const createRouter = () => new Router({
