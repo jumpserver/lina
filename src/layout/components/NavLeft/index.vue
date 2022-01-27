@@ -3,10 +3,10 @@
     <div class="nav-header">
       <Logo v-if="showLogo" :collapse="isCollapse" />
     </div>
+    <div class="nav-title" :class="{'collapsed': isCollapse}">
+      {{ currentViewRoute.meta.title }}
+    </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
-      <div class="nav-title" :class="{'collapsed': isCollapse}">
-        {{ currentViewRoute.meta.title }}
-      </div>
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
@@ -99,6 +99,8 @@ export default {
   }
 
   .nav-title {
+    box-sizing: border-box;
+    height: 55px;
     padding: 17px 0 17px 22px;
     font-size: 15px;
     font-weight: 460;
@@ -107,7 +109,7 @@ export default {
   }
 
   .collapsed {
-    display: none;
+    padding: 6px 12px!important;
   }
 
   .organizations {
