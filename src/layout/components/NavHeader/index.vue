@@ -10,9 +10,6 @@
       <li class="header-item">
         <Help />
       </li>
-      <li class="header-item">
-        <Language />
-      </li>
       <li v-if="showTickets" class="header-item">
         <Tickets />
       </li>
@@ -37,7 +34,6 @@ import { mapGetters } from 'vuex'
 import AccountDropdown from './AccountDropdown'
 import SiteMessages from './SiteMessages'
 import Help from './Help'
-import Language from './Language'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
@@ -51,7 +47,6 @@ export default {
     // Breadcrumb,
     // Hamburger,
     AccountDropdown,
-    Language,
     Help,
     Tickets,
     WebTerminal,
