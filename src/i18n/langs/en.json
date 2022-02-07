@@ -1028,6 +1028,8 @@
     "UserName": "Name",
     "Account": "Account",
     "Existing":"Existing",
+    "AccountInformation": "Account information",
+    "PersonalSetting": "Personal setting",
     "Authentication": "Account",
     "Comment": "Comment",
     "ConfirmPassword": "Confirm password",

@@ -99,13 +99,18 @@ export default {
 .el-menu--popup-bottom-start {
   margin-top: 0px!important;
 }
-
 .menu-main.el-menu {
   background-color: transparent;
   ::v-deep .el-submenu .el-submenu__title {
     height: 55px;
     line-height: 55px;
     border-bottom: none;
+  }
+}
+.menu-main {
+  &>>> .el-icon-arrow-down {
+    font-size: 13px;
+    color: #606266;
   }
 }
 .el-menu--horizontal .el-menu .el-menu-item {
@@ -126,12 +131,12 @@ export default {
   padding-left: 12px;
   font-size: 14px;
   vertical-align: unset;
+  color: #606266!important;
 }
 .icons {
   display: block;
   font-size: 23px;
   text-align: center;
-  margin-bottom: -5px;
 }
 .icons-title {
   display: inline-block;

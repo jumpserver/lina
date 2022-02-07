@@ -4,7 +4,10 @@
       <li class="header-item header-icon">
         <SiteMessages />
       </li>
-      <li class="header-item" style="margin-left: 10px">
+      <li class="header-item header-icon">
+        <WebTerminal />
+      </li>
+      <li class="header-item">
         <Help />
       </li>
       <li class="header-item">
@@ -13,8 +16,8 @@
       <li v-if="showTickets" class="header-item">
         <Tickets />
       </li>
-      <li class="header-item">
-        <WebTerminal />
+      <li v-show="showOrganize()" class="header-item">
+        <Organization class="organization" />
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
@@ -23,9 +26,6 @@
     <ul class="navbar-left">
       <li class="left-item">
         <ViewSwitcher />
-      </li>
-      <li v-show="showOrganize()" class="left-item">
-        <Organization class="organization" />
       </li>
     </ul>
   </div>
@@ -42,7 +42,7 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import rolc from '@/utils/role'
-import Organization from '../NavLeft/Organization.vue'
+import Organization from '../NavLeft/Organization'
 
 export default {
   components: {
@@ -98,11 +98,15 @@ export default {
     height: 55px;
     overflow: hidden;
     background: #f3f3f4;
-
     .organization {
-      height: 55px;
+      height: 53px;
       background: #f3f3f4;
-      color: #909399!important;
+      color: #606266;
+      padding: 0!important;
+      margin-right: -15px;
+      &>>> .el-input__icon {
+        color: #606266;
+      }
     }
     .header-item {
       line-height: 55px;
@@ -115,6 +119,9 @@ export default {
     .header-icon {
       &:hover {
         background-color: #e6e6e6;
+      }
+      &>>> .el-badge {
+        vertical-align: sub;
       }
     }
 

@@ -1,57 +1,63 @@
 <template>
-  <div>
-    <el-row :gutter="20">
-      <el-col :span="14">
-        <DetailCard :items="detailCardItems" />
-      </el-col>
-      <el-col :span="10">
-        <QuickActions
-          type="primary"
-          :title="this.$t('users.AuthSettings')"
-          :actions="authQuickActions"
-        />
-        <QuickActions
-          type="info"
-          style="margin-top: 15px"
-          :title="this.$t('users.MessageSubscription')"
-          fa="fa-info-circle"
-          :actions="messageSubscriptionQuickActions"
-        />
-      </el-col>
-    </el-row>
-    <Dialog
-      width="50"
-      top="20vh"
-      :title="this.$t('common.PasswordConfirm')"
-      :visible.sync="showPasswordDialog"
-      :show-confirm="false"
-      :show-cancel="false"
-      :destroy-on-close="true"
-    >
+  <Page v-bind="$attrs">
+    <div>
       <el-row :gutter="20">
-        <el-col :span="4">
-          <div style="line-height: 34px;text-align: center">{{ $t('assets.Password') }}</div>
-        </el-col>
         <el-col :span="14">
-          <el-input v-model="passwordInput" type="password" />
-          <span class="help-tips help-block">{{ $t('common.PasswordRequireForSecurity') }}</span>
+          <DetailCard :items="detailCardItems" />
         </el-col>
-        <el-col :span="4">
-          <el-button size="mini" type="primary" style="line-height:20px " @click="passConfirm">{{ this.$t('common.Confirm') }}</el-button>
+        <el-col :span="10">
+          <QuickActions
+            type="primary"
+            :title="this.$t('users.AuthSettings')"
+            :actions="authQuickActions"
+          />
+          <QuickActions
+            type="info"
+            style="margin-top: 15px"
+            :title="this.$t('users.MessageSubscription')"
+            fa="fa-info-circle"
+            :actions="messageSubscriptionQuickActions"
+          />
         </el-col>
       </el-row>
-    </Dialog>
-  </div>
+      <Dialog
+        width="50"
+        top="20vh"
+        :title="this.$t('common.PasswordConfirm')"
+        :visible.sync="showPasswordDialog"
+        :show-confirm="false"
+        :show-cancel="false"
+        :destroy-on-close="true"
+      >
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <div style="line-height: 34px;text-align: center">{{ $t('assets.Password') }}</div>
+          </el-col>
+          <el-col :span="14">
+            <el-input v-model="passwordInput" type="password" />
+            <span class="help-tips help-block">{{ $t('common.PasswordRequireForSecurity') }}</span>
+          </el-col>
+          <el-col :span="4">
+            <el-button size="mini" type="primary" style="line-height:20px " @click="passConfirm">{{ this.$t('common.Confirm') }}</el-button>
+          </el-col>
+        </el-row>
+      </Dialog>
+    </div>
+  </Page>
 </template>
 
 <script type="text/jsx">
+import Page from '@/layout/components/Page'
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import Dialog from '@/components/Dialog'
 import { toSafeLocalDateStr } from '@/utils/common'
+import store from '@/store'
+
 export default {
   name: 'ProfileInfo',
   components: {
+    Page,
     DetailCard,
     QuickActions,
     Dialog
@@ -59,7 +65,7 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => store.state.users.profile
     }
   },
   data() {

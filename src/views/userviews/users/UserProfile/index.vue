@@ -26,7 +26,7 @@ export default {
       user: this.$store.state.users.profile,
       config: {
         title: this.$t('users.Profile'),
-        activeMenu: 'ProfileInfo',
+        activeMenu: 'ProfileUpdate',
         submenu: this.getSubmenu(),
         hasRightSide: false,
         actions: {
@@ -38,10 +38,6 @@ export default {
   methods: {
     getSubmenu() {
       return [
-        {
-          title: this.$t('common.BasicInfo'),
-          name: 'ProfileInfo'
-        },
         {
           title: this.$t('users.ProfileSetting'),
           name: 'ProfileUpdate'

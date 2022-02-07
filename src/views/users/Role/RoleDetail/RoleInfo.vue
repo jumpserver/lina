@@ -135,12 +135,19 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .perm-tree >>> .ztree * {
   background: white;
 }
-
 .perm-tree >>> .ztree {
   background: white !important;
+}
+.perm-tree >>> .checkbox_true_disable,
+.perm-tree >>> .checkbox_false_disable {
+  cursor: not-allowed!important;
+}
+.perm-tree >>> .checkbox_true_disable:before,
+.perm-tree >>> .checkbox_false_disable:before  {
+  color: #aaaaaa!important;
 }
 </style>

@@ -73,7 +73,9 @@ export default {
       const fromRoute = this.$route
       switch (val) {
         case 'profile':
-          this.$router.push({ name: 'UserProfile' })
+          this.$router.push('/users/profile', () => {
+            store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
+          })
           break
         case 'settings':
           this.$router.push('/settings', () => {
