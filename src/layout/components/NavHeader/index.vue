@@ -7,11 +7,11 @@
       <li class="header-item header-icon">
         <WebTerminal />
       </li>
-      <li class="header-item">
-        <Help />
-      </li>
       <li v-if="showTickets" class="header-item">
         <Tickets />
+      </li>
+      <li class="header-item">
+        <Help />
       </li>
       <li v-show="showOrganize()" class="header-item">
         <Organization class="organization" />

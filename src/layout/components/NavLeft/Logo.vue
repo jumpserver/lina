@@ -74,7 +74,7 @@ export default {
 
     & .sidebar-logo-text {
       width: 165px;
-      height: 55px;
+      height: 50px;
       vertical-align: middle;
       margin-right: 12px;
     }
