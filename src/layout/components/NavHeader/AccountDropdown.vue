@@ -1,6 +1,6 @@
 <template>
   <div class="header-tools header-profile">
-    <el-dropdown trigger="click" @command="handleClick">
+    <el-dropdown @command="handleClick">
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}

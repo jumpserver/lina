@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown trigger="click" @command="handleCommand">
+  <el-dropdown @command="handleCommand">
     <span class="el-dropdown-link">
       {{ $t('common.nav.Help') }}<i class="el-icon-arrow-down el-icon--right" />
     </span>

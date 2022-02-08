@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown trigger="click">
+  <el-dropdown>
     <span class="el-dropdown-link">
       {{ currentLang.title }}<i class="el-icon-arrow-down el-icon--right" />
     </span>
