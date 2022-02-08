@@ -108,7 +108,7 @@ export default {
             ajax: {
               url: '/api/v1/rbac/roles/?scope=system',
               transformOption: (item) => {
-                return { label: item.name_display, value: item.id }
+                return { label: item.display_name, value: item.id }
               }
             }
           },
@@ -124,7 +124,7 @@ export default {
             ajax: {
               url: '/api/v1/rbac/roles/?scope=org',
               transformOption: (item) => {
-                return { label: item.name_display, value: item.id }
+                return { label: item.display_name, value: item.id }
               }
             },
             disabled: this.$store.getters.currentOrgIsRoot,
