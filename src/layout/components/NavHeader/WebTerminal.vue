@@ -1,9 +1,10 @@
 <template>
   <el-link class="el-link" :href="webTerminalUrl" target="_blank">
-    <span class="fa-stack" style="font-size: .85em;">
+    <!-- <span class="fa-stack" style="font-size: .85em;">
       <i class="fa fa-square-o fa-stack-2x" />
       <i class="fa fa-terminal fa-stack-1x" />
-    </span>
+    </span> -->
+    <svg-icon icon-class="terminal" style="font-size: 18px" fill="red" />
   </el-link>
 </template>
 

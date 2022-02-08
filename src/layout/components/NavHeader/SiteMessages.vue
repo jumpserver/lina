@@ -2,7 +2,8 @@
   <div>
     <el-badge :value="unreadMsgCount" :hidden="unreadMsgCount === 0" :max="99" size="mini" type="primary">
       <a style="color: #606266 !important; width: 30px" @click="toggleDrawer">
-        <i class="el-icon-message" style="font-size: 18px" />
+        <!-- <i class="el-icon-message" style="font-size: 18px" /> -->
+        <svg-icon icon-class="email" style="font-size: 18px" />
       </a>
     </el-badge>
     <el-drawer
