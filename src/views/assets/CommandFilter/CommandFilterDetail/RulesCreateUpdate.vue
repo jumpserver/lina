@@ -28,7 +28,7 @@ export default {
         action: 0
       },
       fields: [
-        [this.$t('common.Basic'), ['filter', 'type', 'content', 'priority', 'action', 'reviewers', 'comment']]
+        [this.$t('common.Basic'), ['filter', 'type', 'content', 'ignore_case', 'priority', 'action', 'reviewers', 'comment']]
       ],
       fieldsMeta: {
         filter: {
