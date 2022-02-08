@@ -20,10 +20,16 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/cmd-filters/${this.object.id}/rules/`,
-        columns: ['type', 'content', 'action', 'priority', 'pattern', 'comment', 'actions'],
+        columns: ['type', 'content', 'ignore_case', 'action', 'priority', 'pattern', 'comment', 'actions'],
         columnsMeta: {
           type: {
             width: '100px'
+          },
+          ignore_case: {
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
+            }
           },
           priority: {
             width: '70px'
