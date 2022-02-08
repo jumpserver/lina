@@ -84,7 +84,7 @@ export default {
         // 这个页面不去提交auth这些
         const removeFields = [
           'AUTH_CAS', 'AUTH_OPENID', 'AUTH_WECOM', 'AUTH_DINGTALK',
-          'AUTH_FEISHU', 'AUTH_RADIUS', 'AUTH_SSO'
+          'AUTH_FEISHU', 'AUTH_RADIUS', 'AUTH_SSO', 'AUTH_SAML2'
         ]
         for (const i of removeFields) {
           delete data[i]
