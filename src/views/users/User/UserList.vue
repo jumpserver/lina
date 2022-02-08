@@ -45,7 +45,7 @@ export default {
         url: '/api/v1/users/users/',
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'system_roles_display', 'org_roles_display',
+          'groups_display', 'system_roles', 'org_roles',
           'source', 'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
@@ -68,13 +68,23 @@ export default {
           source: {
             width: '120px'
           },
-          system_roles_display: {
+          system_roles: {
             label: this.$t('users.SystemRoles'),
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            formatter: (row) => {
+              return row['system_roles_display']
+            },
+            filters: [],
+            columnKey: 'system_roles'
           },
-          org_roles_display: {
+          org_roles: {
             label: this.$t('users.OrgRoles'),
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            formatter: (row) => {
+              return row['org_roles_display']
+            },
+            filters: [],
+            columnKey: 'org_roles'
           },
           mfa_enabled: {
             label: 'MFA',
@@ -236,7 +246,21 @@ export default {
       'device', 'currentOrgIsDefault', 'currentUserIsSuperAdmin'
     ])
   },
+  mounted() {
+    this.setRolesFilter()
+  },
   methods: {
+    setRolesFilter() {
+      const roleTypes = ['system-roles', 'org-roles']
+      for (const roleType of roleTypes) {
+        this.$axios.get(`/api/v1/rbac/${roleType}/`).then((roles) => {
+          const fieldName = roleType.replace('-', '_')
+          this.tableConfig.columnsMeta[fieldName].filters = roles.map(r => {
+            return { text: r['display_name'], value: r.id }
+          })
+        })
+      }
+    },
     removeUserFromOrg({ row, col, reload }) {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
