@@ -10,7 +10,7 @@
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
         <el-dropdown-item v-show="showSettings" icon="el-icon-setting" command="settings">{{ $t('route.Settings') }}</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
-        <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
+        <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <ApiKey ref="api" />

@@ -2,19 +2,20 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <SiteMessages />
+        <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">
+          <SiteMessages />
+        </el-tooltip>
       </li>
       <li class="header-item header-icon">
-        <WebTerminal />
+        <el-tooltip effect="dark" :content="this.$t('route.WebTerminal')">
+          <WebTerminal />
+        </el-tooltip>
       </li>
       <li class="header-item">
         <Help />
       </li>
       <li v-if="showTickets" class="header-item">
         <Tickets />
-      </li>
-      <li v-show="showOrganize()" class="header-item">
-        <Organization class="organization" />
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
@@ -23,6 +24,9 @@
     <ul class="navbar-left">
       <li class="left-item">
         <ViewSwitcher />
+      </li>
+      <li v-show="showOrganize()" class="left-item" style="line-height: 14px;">
+        <Organization class="organization" />
       </li>
     </ul>
   </div>
@@ -94,11 +98,20 @@ export default {
     overflow: hidden;
     background: #f3f3f4;
     .organization {
-      height: 53px;
-      background: #f3f3f4;
+      height: 40px;
+      line-height: 40px;
+      background: #E0E0E0;
+      border-radius: 19px;
       color: #606266;
       padding: 0!important;
       margin-right: -15px;
+      &>>> .el-input--prefix .el-input__inner {
+        line-height: 40px!important;
+        height: 40px!important;
+      }
+      &>>> .fa-sitemap {
+        padding-left: 4px;
+      }
       &>>> .el-input__icon {
         color: #606266;
       }
