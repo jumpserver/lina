@@ -86,7 +86,11 @@ export default {
         if (key === '') {
           key = 'search'
         }
-        data[key] = value
+        if (key.startsWith('search')) {
+          data['search'] = (data.search ? data.search + ',' : '') + value
+        } else {
+          data[key] = value
+        }
       }
       return data
     },
@@ -109,6 +113,19 @@ export default {
       handler(val) {
         if (val && val.length > 0) {
           const routeFilter = this.checkInTableColumns()
+          const routerSearch = routeFilter.search || {}
+          const routerSearchArrs = routerSearch?.value?.split(',') || []
+          const routerSearchArrsLength = routerSearchArrs.length || 0
+          if (routerSearch && routerSearchArrsLength > 0) {
+            for (let i = 0; i < routerSearchArrsLength; i++) {
+              const cur = routerSearchArrs[i]
+              routeFilter[`search_${cur}`] = {
+                ...routerSearch,
+                value: cur
+              }
+            }
+            delete routeFilter.search
+          }
           const asFilterTags = _.cloneDeep(this.filterTags)
           this.filterTags = {
             ...asFilterTags,
@@ -130,8 +147,7 @@ export default {
       if (Object.keys(this.filterMaps).length > 0) {
         return this.$emit('tagSearch', this.filterMaps)
       }
-    }
-    , 400)
+    }, 400)
     // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
   },
   methods: {
@@ -200,23 +216,29 @@ export default {
       this.$nextTick(() => this.$refs.Cascade.handleClear())
     },
     handleTagClose(evt) {
-      this.checkUrlFilds(evt)
       this.$delete(this.filterTags, evt)
+      this.checkUrlFilds(evt)
       this.$emit('tagSearch', this.filterMaps)
       return true
     },
     handleConfirm() {
       if (this.filterValue === '') return
       if (this.filterValue && !this.filterKey) {
-        this.filterKey = 'search'
+        this.filterKey = Object.prototype.hasOwnProperty.call(this.filterTags, 'search')
+          ? 'search' + '_' + this.filterValue : 'search'
       }
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)
       this.$emit('tagSearch', this.filterMaps)
 
+      // 修改查询参数时改变url中保存的参数
       if (this.getUrlQuery) {
         let newQuery = _.cloneDeep(this.$route.query)
-        newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
+        if (this.filterKey.startsWith('search')) {
+          newQuery = { ...newQuery, search: encodeURI(this.filterMaps.search) }
+        } else {
+          newQuery = { ...newQuery, [this.filterKey]: encodeURI(this.filterValue) }
+        }
         this.$router.replace({ query: newQuery })
       }
 
@@ -249,7 +271,15 @@ export default {
     },
     // 删除查询条件时改变url
     checkUrlFilds(evt) {
-      const newQuery = _.omit(this.$route.query, evt)
+      let newQuery = _.omit(this.$route.query, evt)
+      if (this.getUrlQuery && evt.startsWith('search')) {
+        if (newQuery.search) delete newQuery.search
+        const filterMapsSearch = this.filterMaps.search || ''
+        newQuery = {
+          ...newQuery,
+          ...(filterMapsSearch && { search: encodeURI(filterMapsSearch) })
+        }
+      }
       this.$router.replace({ query: newQuery })
     }
   }
