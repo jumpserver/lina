@@ -41,6 +41,7 @@ export default {
           [
             'SECURITY_MFA_AUTH',
             'SECURITY_MFA_IN_LOGIN_PAGE',
+            'SECURITY_MFA_AUTH_ENABLED_FOR_THIRD_PARTY',
             'SECURITY_LOGIN_CHALLENGE_ENABLED',
             'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
