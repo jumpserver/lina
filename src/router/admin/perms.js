@@ -5,7 +5,10 @@ export default [
   {
     path: 'asset-permissions',
     component: empty,
-    meta: { title: i18n.t('route.AssetPermission') },
+    meta: {
+      title: i18n.t('route.AssetPermission'),
+      permissions: ['perms.view_assetpermission']
+    },
     children: [
       {
         path: '',

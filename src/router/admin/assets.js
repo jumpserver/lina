@@ -48,7 +48,9 @@ export default [
     path: 'domains',
     component: empty,
     redirect: '',
-    meta: {},
+    meta: {
+      permissions: ['assets.view_domain']
+    },
     children: [
       {
         path: '',
@@ -85,6 +87,7 @@ export default [
     redirect: 'create',
     hidden: true,
     meta: {
+      permissions: ['assets.view_gateway']
     },
     children: [
       {
@@ -111,7 +114,9 @@ export default [
     path: 'system-users',
     component: empty,
     redirect: '',
-    meta: {},
+    meta: {
+      permissions: ['assets.view_systemuser']
+    },
     children: [
       {
         path: '',
@@ -146,7 +151,9 @@ export default [
     path: 'command-filters',
     component: empty,
     redirect: '',
-    meta: {},
+    meta: {
+      permissions: ['assets.view_commandfilter']
+    },
     children: [
       {
         path: '',
@@ -181,7 +188,9 @@ export default [
     path: 'command-filter-rules',
     component: empty,
     hidden: true,
-    meta: { },
+    meta: {
+      permissions: ['assets.view_commandfilterrule']
+    },
     children: [
       {
         path: 'create',
@@ -206,7 +215,7 @@ export default [
   {
     path: 'platforms',
     component: empty,
-    meta: { permissions: [] },
+    meta: { permissions: ['assets.view_platform'] },
     redirect: '',
     children: [
       {
@@ -242,7 +251,9 @@ export default [
     path: 'labels',
     component: empty,
     redirect: '',
-    meta: {},
+    meta: {
+      permissions: ['assets.view_label']
+    },
     children: [
       {
         path: '',
@@ -266,5 +277,4 @@ export default [
       }
     ]
   }
-
 ]

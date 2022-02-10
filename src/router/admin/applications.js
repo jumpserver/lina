@@ -6,7 +6,10 @@ export default [
     path: 'remote-apps',
     redirect: '',
     component: empty,
-    meta: { title: i18n.t('route.RemoteApp'), licenseRequired: true },
+    meta: {
+      title: i18n.t('route.RemoteApp'), licenseRequired: true,
+      permissions: ['applications.view_application']
+    },
     children: [
       {
         path: '',
@@ -41,7 +44,10 @@ export default [
     path: 'databases',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.DatabaseApp') },
+    meta: {
+      title: i18n.t('route.DatabaseApp'),
+      permissions: ['applications.view_application']
+    },
     children: [
       {
         path: '',
@@ -75,7 +81,10 @@ export default [
   {
     path: 'kubernetes',
     component: empty,
-    meta: { title: i18n.t('route.KubernetesApp') },
+    meta: {
+      title: i18n.t('route.KubernetesApp'),
+      permissions: ['applications.view_application']
+    },
     children: [
       {
         path: '',

@@ -86,7 +86,9 @@ export default [
     path: 'user-groups',
     component: empty,
     redirect: '',
-    meta: {},
+    meta: {
+      permissions: ['users.view_usergroup']
+    },
     children: [
       {
         path: '',

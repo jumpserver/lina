@@ -43,6 +43,7 @@ export default {
         title: i18n.t('route.Users'),
         icon: 'users'
       },
+      alwaysShow: true,
       children: UsersRoute
     },
     {
@@ -59,7 +60,6 @@ export default {
       path: '/admin/applications',
       component: empty,
       name: 'applications',
-      alwaysShow: true,
       meta: {
         title: i18n.t('route.Applications'),
         icon: 'th'

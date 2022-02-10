@@ -3,16 +3,23 @@ import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'asset-accounts',
+    path: 'authbook',
     component: empty,
-    meta: { title: i18n.t('route.AssetAccount') },
+    meta: {
+      title: i18n.t('route.AssetAccount'),
+      app: 'assets'
+    },
     redirect: '',
     children: [
       {
         path: '',
         name: 'AssetAccountList',
         component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
-        meta: { title: i18n.t('route.AssetAccount') }
+        meta: {
+          title: i18n.t('route.AssetAccount'),
+          app: 'assets',
+          permissions: ['assets.view_authbook']
+        }
       }
     ]
   },
@@ -20,13 +27,22 @@ export default [
     path: 'application-accounts',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.AssetAccount') },
+    meta: {
+      title: i18n.t('route.AssetAccount'),
+      permissions: ['applications.view_account'],
+      app: 'applications',
+      resource: 'account'
+    },
     children: [
       {
         path: '',
         name: 'ApplicationAccountList',
         component: () => import('@/views/accounts/ApplicationAccount/ApplicationAccountList'),
-        meta: { title: i18n.t('route.ApplicationAccount') }
+        meta: {
+          title: i18n.t('route.ApplicationAccount'),
+          permissions: ['applications.view_account'],
+          resource: 'account'
+        }
       }
     ]
   },
@@ -34,7 +50,9 @@ export default [
     path: 'gathered-user',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('xpack.GatherUser.GatherUserList') },
+    meta: {
+      title: i18n.t('xpack.GatherUser.GatherUserList')
+    },
     children: [
       {
         path: '',
