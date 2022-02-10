@@ -16,17 +16,23 @@ export default {
       tableConfig: {
         url: '/api/v1/tickets/flows/',
         columns: [
-          'type_display', 'created_by',
+          'type_display', 'created_by', 'org_name',
           'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['actions'],
           default: [
-            'type_display', 'created_by',
+            'type_display', 'created_by', 'org_name',
             'date_created', 'date_updated', 'actions'
           ]
         },
         columnsMeta: {
+          org_name: {
+            formatter: function(row, col, cell) {
+              var currentOrg = vm.$store.getters.currentOrg
+              return currentOrg.is_root ? row.org_name : currentOrg.name
+            }
+          },
           type_display: {
             formatter: DetailFormatter,
             formatterArgs: {
