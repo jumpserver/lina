@@ -16,26 +16,27 @@
         <el-input v-model="account['username']" readonly />
       </el-form-item>
       <el-form-item :label="this.$t('assets.Password')">
-        <el-input v-model="authInfo.password" type="password" />
+        <UpdateToken v-model="authInfo.password" />
       </el-form-item>
       <el-form-item :label="this.$t('assets.SSHSecretKey')">
         <UploadKey @input="getFile" />
       </el-form-item>
       <el-form-item :label="this.$t('assets.Passphrase')">
-        <el-input v-model="authInfo.passphrase" type="password" />
+        <UpdateToken v-model="authInfo.passphrase" />
       </el-form-item>
     </el-form>
   </Dialog>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
-import { UploadKey } from '@/components'
+import { Dialog, UploadKey } from '@/components'
+import { UpdateToken } from '@/components/FormFields'
 export default {
   name: 'UpdateSecretInfo',
   components: {
     Dialog,
-    UploadKey
+    UploadKey,
+    UpdateToken
   },
   props: {
     account: {

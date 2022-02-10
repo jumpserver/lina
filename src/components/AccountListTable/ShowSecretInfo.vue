@@ -25,7 +25,7 @@
           <el-form-item :label="this.$t('assets.Password')">
             <el-input v-model="authInfo.password" type="password" show-password />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.SSHKey')">
+          <el-form-item :label="this.$t('users.SSHKey')">
             <el-input v-model="authInfo['private_key']" class="item-textarea" type="textarea" show-password />
           </el-form-item>
         </el-form>
