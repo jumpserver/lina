@@ -1,6 +1,10 @@
 <template>
-  <div v-if="!item.hidden && showItem(item)">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+  <div v-if="!item.hidden && (item.alwaysShow || !allChildrenHidden(item))">
+    <template
+      v-if="hasOneShowingChild(item.children, item) &&
+        (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+        !item.alwaysShow"
+    >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
@@ -57,11 +61,28 @@ export default {
     return {}
   },
   methods: {
-    showItem(item) {
-      if (item.children && item.children.length === 0) {
+    allChildrenHidden(item) {
+      if (!item.children) {
         return false
       }
+      for (const child of item.children) {
+        if (!this.allChildrenHidden(child)) {
+          return false
+        }
+      }
       return true
+    },
+    getRouteSiblings(item) {
+      let siblings = []
+      if (!item.children || item.children.length === 0) {
+        console.log('Return ........', item.name, item.children)
+        return []
+      }
+      for (const child of item.children) {
+        siblings = siblings.concat(this.getRouteSiblings(child))
+      }
+      console.log('Route children: ', item.name, siblings)
+      return siblings
     },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {

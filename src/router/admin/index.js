@@ -43,7 +43,6 @@ export default {
         title: i18n.t('route.Users'),
         icon: 'users'
       },
-      alwaysShow: true,
       children: UsersRoute
     },
     {
