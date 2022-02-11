@@ -95,14 +95,13 @@ export default {
     height: 55px;
     overflow: hidden;
     background: #f3f3f4;
+
     .organization {
-      position: relative;
-      height: 40px;
-      line-height: 40px;
+      height: 35px;
+      line-height: 35px;
       background: #E0E0E0;
       border-radius: 19px;
       color: #606266;
-      padding: 0!important;
       margin-right: -15px;
       &:after {
         position: absolute;
@@ -114,8 +113,8 @@ export default {
         border: 1px solid #676a6c;
       }
       &>>> .el-input--prefix .el-input__inner {
-        line-height: 40px!important;
-        height: 40px!important;
+        line-height: 35px !important;
+        height: 35px !important;
       }
       &>>> .fa-sitemap {
         padding-left: 4px;

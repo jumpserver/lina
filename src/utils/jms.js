@@ -33,7 +33,6 @@ export function getResourceNameByPath(path) {
 }
 
 export function getResourceFromRoute(route) {
-  console.log('Route: ', route)
   const meta = route.meta || {}
   if (meta.app && meta.resource) {
     return { path: route.path, view: meta.view, app: meta.app, resource: meta.resource }
