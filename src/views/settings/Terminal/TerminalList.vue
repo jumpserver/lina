@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
     <Dialog
       :visible.sync="dialogSettings.visible"
       :destroy-on-close="true"
@@ -14,12 +14,14 @@
 </template>
 
 <script>
-import { GenericListPage, GenericCreateUpdateForm } from '@/layout/components'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
+import GenericListTable from '@/layout/components/GenericListTable'
+
 export default {
   components: {
-    GenericListPage,
+    GenericListTable,
     Dialog,
     GenericCreateUpdateForm
   },
@@ -182,7 +184,7 @@ export default {
   },
   methods: {
     handleStorageConfiguration() {
-      this.$router.push('/terminal/storages')
+      this.$router.push('/settings/storages')
     }
   }
 }

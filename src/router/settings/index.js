@@ -1,5 +1,6 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty'
 
 export default {
   path: '/settings',
@@ -70,13 +71,44 @@ export default {
     },
     {
       path: '/settings/terminal',
-      name: 'Terminal',
-      component: () => import('@/views/settings/Terminal'),
+      component: empty,
+      redirect: '',
       meta: {
         title: i18n.t('setting.Terminal'),
-        icon: 'terminal',
         permissions: ['settings.view_setting']
-      }
+      },
+      children: [
+        {
+          path: '',
+          name: 'TerminalList',
+          component: () => import('@/views/settings/Terminal/index'),
+          meta: {
+            title: i18n.t('setting.Terminal'),
+            icon: 'terminal',
+            permissions: ['terminal.view_command'],
+            resource: 'terminal',
+            app: 'terminal'
+          }
+        },
+        {
+          path: ':id',
+          name: 'TerminalDetail',
+          component: () => import('@/views/settings/Terminal/TerminalDetail'),
+          meta: {
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        },
+        {
+          path: ':id/update',
+          name: 'TerminalUpdate',
+          component: () => import('@/views/settings/Terminal/TerminalUpdate'),
+          meta: {
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        }
+      ]
     },
     {
       path: '/settings/security',
