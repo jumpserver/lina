@@ -97,17 +97,18 @@ export default {
     height: 55px;
     overflow: hidden;
     background: #f3f3f4;
+
     .organization {
-      height: 40px;
-      line-height: 40px;
+      height: 35px;
+      line-height: 35px;
       background: #E0E0E0;
       border-radius: 19px;
       color: #606266;
-      padding: 0!important;
+      //padding: 0!important;
       margin-right: -15px;
       &>>> .el-input--prefix .el-input__inner {
-        line-height: 40px!important;
-        height: 40px!important;
+        line-height: 35px !important;
+        height: 35px !important;
       }
       &>>> .fa-sitemap {
         padding-left: 4px;
