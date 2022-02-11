@@ -1,10 +1,12 @@
 <template>
   <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
     <div class="nav-header">
-      <Logo v-if="showLogo" :collapse="isCollapse" />
-    </div>
-    <div class="nav-title" :class="{'collapsed': isCollapse}">
-      {{ currentViewRoute.meta.title }}
+      <div class="nav-logo">
+        <Logo v-if="showLogo" :collapse="isCollapse" />
+      </div>
+      <div class="nav-title" :class="{'collapsed': isCollapse}">
+        {{ currentViewRoute.meta.title }}
+      </div>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -95,6 +97,9 @@ export default {
 <style lang="scss" scoped>
   .nav-header {
     background-image: url('~@/assets/img/header-profile.png');
+  }
+
+  .nav-logo {
     height: 55px;
   }
 
@@ -105,7 +110,7 @@ export default {
     font-size: 15px;
     font-weight: 460;
     color: #fff;
-    background-color: #293846;
+    //background: #293846;
   }
 
   .collapsed {
