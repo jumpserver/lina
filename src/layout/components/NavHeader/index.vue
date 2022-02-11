@@ -102,7 +102,7 @@ export default {
       height: 35px;
       line-height: 35px;
       background: #E0E0E0;
-      border-radius: 5px;
+      border-radius: 19px;
       color: #606266;
       margin-right: -15px;
       &>>> .el-input--prefix .el-input__inner {
