@@ -11,11 +11,11 @@
           <WebTerminal />
         </el-tooltip>
       </li>
-      <li class="header-item">
-        <Help />
-      </li>
       <li v-if="showTickets" class="header-item">
         <Tickets />
+      </li>
+      <li class="header-item">
+        <Help />
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
@@ -42,14 +42,12 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import rolc from '@/utils/role'
-import Organization from '../NavLeft/Organization'
+import Organization from './Organization'
 
 export default {
   components: {
     ViewSwitcher,
     Organization,
-    // Breadcrumb,
-    // Hamburger,
     AccountDropdown,
     Help,
     Tickets,
@@ -105,17 +103,21 @@ export default {
       border-radius: 19px;
       color: #606266;
       margin-right: -15px;
-
-      &>>> .el-input__prefix {
-        left: 8px;
+      &:after {
+        position: absolute;
+        top: 12%;
+        left: -10px;
+        content: '';
+        width: 1px;
+        height: 30px;
+        border: 1px solid #676a6c;
       }
-      &>>> .el-input__suffix {
-        right: 5px;
+      &>>> .el-input__prefix {
+        left: 8px
       }
       &>>> .el-input--prefix .el-input__inner {
         line-height: 35px !important;
         height: 35px !important;
-        //margin-left: 3px;
       }
       &>>> .fa-sitemap {
         padding-left: 4px;
