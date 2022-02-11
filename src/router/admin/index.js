@@ -101,7 +101,6 @@ export default {
       path: '/admin/ops',
       component: empty,
       name: 'JobCenter',
-      alwaysShow: true,
       meta: {
         title: i18n.t('route.JobCenter'),
         icon: 'coffee'

@@ -5,13 +5,19 @@ export default [
     path: 'sessions',
     name: 'SessionList',
     component: () => import('@/views/sessions/SessionList'),
-    meta: { title: i18n.t('route.Sessions'), permissions: ['terminal.view_session'] },
+    meta: {
+      title: i18n.t('route.Sessions'),
+      permissions: ['terminal.view_session']
+    },
     children: [
       {
         path: '',
         name: 'SessionList',
         component: () => import('@/views/sessions/SessionList'),
-        meta: { title: i18n.t('route.SessionList') }
+        meta: {
+          title: i18n.t('route.SessionList'),
+          permissions: ['terminal.view_session']
+        }
       },
       {
         path: ':id',

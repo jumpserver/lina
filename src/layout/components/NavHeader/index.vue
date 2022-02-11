@@ -105,9 +105,17 @@ export default {
       border-radius: 19px;
       color: #606266;
       margin-right: -15px;
+
+      &>>> .el-input__prefix {
+        left: 8px;
+      }
+      &>>> .el-input__suffix {
+        right: 5px;
+      }
       &>>> .el-input--prefix .el-input__inner {
         line-height: 35px !important;
         height: 35px !important;
+        //margin-left: 3px;
       }
       &>>> .fa-sitemap {
         padding-left: 4px;
