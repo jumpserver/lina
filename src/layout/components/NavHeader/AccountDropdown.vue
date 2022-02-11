@@ -13,6 +13,7 @@
           <el-dropdown-item v-else icon="el-icon-guide" command="adminPage">{{ $t('common.nav.AdminPage') }}</el-dropdown-item>
         </template>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-magic-stick" command="tempPassword">{{ $t('common.nav.TempPassword') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -91,6 +92,9 @@ export default {
           break
         case 'apiKey':
           this.$refs.api.showApi()
+          break
+        case 'tempPassword':
+          window.location.href = `/core/auth/ssh-sso-token/`
           break
       }
     },

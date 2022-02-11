@@ -405,6 +405,7 @@
     },
     "isValid": "Is valid",
     "nav": {
+      "TempPassword": "SSH Temporary password",
       "APIKey": "API Key",
       "AdminPage": "Admin page",
       "Docs": "Docs",

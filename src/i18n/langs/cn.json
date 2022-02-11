@@ -417,6 +417,7 @@
     "fileType": "文件类型",
     "isValid": "有效",
     "nav": {
+      "TempPassword": "SSH 临时密码",
       "APIKey": "API Key",
       "AdminPage": "管理页面",
       "Docs": "文档",
