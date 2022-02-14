@@ -150,6 +150,11 @@ function cleanRoute(tmp, parent) {
     tmp.meta.permissions = getRouteDefaultPerms(tmp)
   }
 
+  // 设置是否显示 Organization, 该参数是继承的
+  if (!tmp.meta.showOrganization && parent.meta.showOrganization !== undefined) {
+    tmp.meta.showOrganization = parent.meta.showOrganization
+  }
+
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
   if (!tmp.meta.fullPath) {

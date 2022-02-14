@@ -13,6 +13,7 @@ export default {
     view: 'settings',
     type: 'view',
     showNavSwitcher: false,
+    showOrganization: false,
     permissions: []
   },
   children: [

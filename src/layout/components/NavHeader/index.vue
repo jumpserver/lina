@@ -11,7 +11,7 @@
           <WebTerminal />
         </el-tooltip>
       </li>
-      <li v-if="showTickets" class="header-item">
+      <li class="header-item">
         <Tickets />
       </li>
       <li class="header-item">
@@ -41,7 +41,6 @@ import Help from './Help'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
-import rolc from '@/utils/role'
 import Organization from './Organization'
 
 export default {
@@ -62,20 +61,13 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute'
-    ]),
-    isOrgAuditor() {
-      return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') ||
-        rolc.getRolesDisplay(this.currentOrgRoles).includes('Auditor')
-    },
-    showTickets() {
-      return this.publicSettings['TICKETS_ENABLED'] &&
-        this.publicSettings['XPACK_LICENSE_IS_VALID'] &&
-        !this.isOrgAuditor
-    }
+    ])
   },
   created() {
     this.$store.dispatch('permission/getFilterRoutes').then(res => {
-      this.routeViews = res.filter((i) => (i?.perms.length > 0 && i?.route !== 'UserView'))
+      this.routeViews = res.filter((i) => {
+        return i?.perms.length > 0 && i?.route !== 'UserView'
+      })
     })
   },
   methods: {
@@ -83,9 +75,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     showOrganize() {
-      const { routeViews, currentViewRoute } = this
-      const isShow = routeViews.some(i => (i.route === currentViewRoute.name))
-      return isShow
+      return this.$route.meta?.showOrganization !== false
     }
   }
 }
