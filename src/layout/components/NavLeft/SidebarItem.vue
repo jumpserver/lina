@@ -72,18 +72,6 @@ export default {
       }
       return true
     },
-    getRouteSiblings(item) {
-      let siblings = []
-      if (!item.children || item.children.length === 0) {
-        console.log('Return ........', item.name, item.children)
-        return []
-      }
-      for (const child of item.children) {
-        siblings = siblings.concat(this.getRouteSiblings(child))
-      }
-      console.log('Route children: ', item.name, siblings)
-      return siblings
-    },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {

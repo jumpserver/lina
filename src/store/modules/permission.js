@@ -10,10 +10,7 @@ import { getResourceNameByPath } from '@/utils/jms'
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
   const licenseRequired = route.meta?.licenseRequired
-  if (!licenseIsValid && licenseRequired) {
-    return false
-  }
-  return true
+  return !(!licenseIsValid && licenseRequired)
 }
 
 export function filterLicenseRequiredRoutes(routes, rootState) {
@@ -132,17 +129,14 @@ function cleanRoute(tmp, parent) {
   if (!tmp.meta.view) {
     tmp.meta.view = tmp.meta.level === 1 ? pathValue : parent.meta?.view
   }
-  // 标识路由是哪个 app(Django)
-  if (!tmp.meta.app) {
+  // 标识路由是哪个 Django app
+  if (!tmp.meta.app && tmp.meta.level >= 2) {
     tmp.meta.app = tmp.meta.level === 2 ? pathValue : parent.meta?.app
   }
   // 标识路由是哪个 resource(Model)
-  if (!tmp.meta.resource) {
-    let resource = parent.meta.resource
-    if (!resource) {
-      resource = getResourceNameByPath(pathValue)
-    }
-    tmp.meta.resource = resource
+  if (!tmp.meta.resource && tmp.meta.level >= 3) {
+    const resource = getResourceNameByPath(pathValue)
+    tmp.meta.resource = tmp.meta.level === 3 ? resource : parent.meta?.resource
   }
   // 标识路由的动作是哪个
   if (!tmp.meta.action) {
@@ -152,12 +146,10 @@ function cleanRoute(tmp, parent) {
   if (!tmp.meta.permissions) {
     tmp.meta.permissions = getRouteDefaultPerms(tmp)
   }
-
   // 设置是否显示 Organization, 该参数是继承的
   if (!tmp.meta.showOrganization && parent.meta.showOrganization !== undefined) {
     tmp.meta.showOrganization = parent.meta.showOrganization
   }
-
   // 设置 fullPath
   const parentFullPath = _.trimEnd(parent.meta.fullPath, '/')
   if (!tmp.meta.fullPath) {
@@ -166,15 +158,13 @@ function cleanRoute(tmp, parent) {
     } else {
       tmp.meta.fullPath = parentFullPath + '/' + tmp.path
     }
-    console.log('Full path: ', tmp.meta.fullPath)
+    // console.log('Full path: ', tmp.meta.fullPath)
   }
-
   // 设置默认active menu
   if (tmp.hidden && !tmp.meta.activeMenu) {
     tmp.meta.activeMenu = parentFullPath
     // Todo
   }
-  console.log('TMP is: ', tmp)
   return tmp
 }
 
