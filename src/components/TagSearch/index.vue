@@ -151,32 +151,39 @@ export default {
     // this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
   },
   methods: {
-    // 判断url中的查询条件
+    // 获取url中的查询条件，判断是不是包含在当前查询条件里
     checkInTableColumns() {
       const routeQuery = this.getUrlQuery ? this.$route?.query : {}
       const routeQueryKeys = Object.keys(routeQuery)
+      const routeQueryKeysLength = routeQueryKeys.length
       const keys = {}
-      if (routeQueryKeys.length < 1) return keys
-      if (routeQueryKeys.length > 0) {
-        for (let i = 0; i < routeQueryKeys.length; i++) {
+      if (routeQueryKeysLength < 1) return keys
+      if (routeQueryKeysLength > 0) {
+        for (let i = 0; i < routeQueryKeysLength; i++) {
           const key = routeQueryKeys[i]
-          const valueDecode = decodeURI(routeQuery[key])
+          let valueDecode = decodeURI(routeQuery[key])
           const isSearch = key !== 'search'
-          for (let k = 0, len = this.options.length; k < len; k++) {
-            const cur = this.options[k]
+          const curOptions = this.options || []
+          for (let k = 0, len = curOptions.length; k < len; k++) {
+            const cur = curOptions[k]
+            if (cur?.type === 'boolean') {
+              valueDecode = !!valueDecode
+            }
             if (key === cur.value || !isSearch) {
               const curChildren = cur.children || []
               keys[key] = {
+                ...cur,
                 key,
                 label: isSearch ? cur.label : '',
                 value: valueDecode
               }
               if (isSearch && curChildren.length > 0) {
-                curChildren.forEach(item => {
+                for (const item of curChildren) {
                   if (valueDecode === item.value) {
                     keys[key].valueLabel = item.label
+                    break
                   }
-                })
+                }
               }
             }
           }
@@ -224,8 +231,7 @@ export default {
     handleConfirm() {
       if (this.filterValue === '') return
       if (this.filterValue && !this.filterKey) {
-        this.filterKey = Object.prototype.hasOwnProperty.call(this.filterTags, 'search')
-          ? 'search' + '_' + this.filterValue : 'search'
+        this.filterKey = 'search' + '_' + this.filterValue
       }
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)

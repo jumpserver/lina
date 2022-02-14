@@ -132,6 +132,10 @@ export default {
                       {
                         label: 'SQLServer',
                         value: 'sqlserver'
+                      },
+                      {
+                        label: 'Redis',
+                        value: 'redis'
                       }
                     ]
                   },
