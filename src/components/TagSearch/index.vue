@@ -224,8 +224,7 @@ export default {
     handleConfirm() {
       if (this.filterValue === '') return
       if (this.filterValue && !this.filterKey) {
-        this.filterKey = Object.prototype.hasOwnProperty.call(this.filterTags, 'search')
-          ? 'search' + '_' + this.filterValue : 'search'
+        this.filterKey = 'search' + '_' + this.filterValue
       }
       const tag = { key: this.filterKey, label: this.keyLabel, value: this.filterValue, valueLabel: this.valueLabel }
       this.$set(this.filterTags, this.filterKey, tag)
