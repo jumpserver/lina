@@ -25,7 +25,7 @@
       <li class="left-item">
         <ViewSwitcher />
       </li>
-      <li v-show="showOrganize()" class="left-item" style="margin-left: 8px">
+      <li v-show="showOrganize()" class="left-item" style="margin-left: 12px">
         <Organization class="organization" />
       </li>
     </ul>
@@ -106,7 +106,7 @@ export default {
       &:after {
         position: absolute;
         top: 15%;
-        left: -12px;
+        left: -16px;
         content: '';
         width: 1px;
         height: 25px;
