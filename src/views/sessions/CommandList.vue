@@ -76,7 +76,6 @@ export default {
             }
           },
           user: {
-            width: '140px',
             showOverflowTooltip: true
           },
           asset: {
