@@ -25,7 +25,7 @@
       <li class="left-item">
         <ViewSwitcher />
       </li>
-      <li v-show="showOrganize()" class="left-item" style="line-height: 14px;">
+      <li v-show="showOrganize()" class="left-item" style="margin-left: 8px">
         <Organization class="organization" />
       </li>
     </ul>
@@ -102,15 +102,15 @@ export default {
       background: #E0E0E0;
       border-radius: 19px;
       color: #606266;
-      margin-right: -15px;
+      //margin-right: -15px;
       &:after {
         position: absolute;
-        top: 12%;
-        left: -10px;
+        top: 15%;
+        left: -12px;
         content: '';
         width: 1px;
-        height: 30px;
-        border: 1px solid #676a6c;
+        height: 25px;
+        background-color: rgba(144,147,152,.5);
       }
       &>>> .el-input__prefix {
         left: 8px

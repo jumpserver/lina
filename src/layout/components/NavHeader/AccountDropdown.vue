@@ -1,6 +1,6 @@
 <template>
   <div class="header-tools header-profile">
-    <el-dropdown @command="handleClick">
+    <el-dropdown :show-timeout="50" @command="handleClick">
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}
