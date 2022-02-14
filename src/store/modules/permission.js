@@ -138,8 +138,11 @@ function cleanRoute(tmp, parent) {
   }
   // 标识路由是哪个 resource(Model)
   if (!tmp.meta.resource) {
-    const resource = getResourceNameByPath(pathValue)
-    tmp.meta.resource = tmp.meta.level === 3 ? resource : parent.meta?.resource
+    let resource = parent.meta.resource
+    if (!resource) {
+      resource = getResourceNameByPath(pathValue)
+    }
+    tmp.meta.resource = resource
   }
   // 标识路由的动作是哪个
   if (!tmp.meta.action) {
