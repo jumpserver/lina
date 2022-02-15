@@ -134,6 +134,8 @@ export default {
     detailApiUrl() {
       if (this.url) {
         return `${this.url}/${this.$route.params.id}/`
+      } else if (this.validActions.detailApiUrl) {
+        return this.validActions.detailApiUrl
       } else {
         return getApiPath(this)
       }
