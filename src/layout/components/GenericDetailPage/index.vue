@@ -159,7 +159,7 @@ export default {
     defaultDelete() {
       const msg = this.$t('common.deleteWarningMsg') + ' ' + this.iTitle + ' ?'
       const title = this.$t('common.Info')
-      const performDelete = async function() {
+      const performDelete = () => {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
         return this.$axios.delete(url)

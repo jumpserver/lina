@@ -7,8 +7,10 @@ export default [
     redirect: '',
     component: empty,
     meta: {
-      title: i18n.t('route.RemoteApp'), licenseRequired: true,
-      permissions: ['applications.view_application']
+      title: i18n.t('route.RemoteApp'),
+      licenseRequired: true,
+      app: 'applications',
+      resource: 'application'
     },
     children: [
       {
@@ -22,14 +24,14 @@ export default [
         name: 'RemoteAppCreate',
         component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
         hidden: true,
-        meta: { title: i18n.t('route.RemoteApp'), action: 'create' }
+        meta: { title: i18n.t('route.RemoteApp') }
       },
       {
         path: ':id/update',
         name: 'RemoteAppUpdate',
         component: () => import('@/views/applications/RemoteApp/RemoteAppCreateUpdate'),
         hidden: true,
-        meta: { title: i18n.t('route.RemoteAppUpdate'), action: 'update' }
+        meta: { title: i18n.t('route.RemoteAppUpdate') }
       },
       {
         path: ':id',
@@ -46,7 +48,7 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('route.DatabaseApp'),
-      permissions: ['applications.view_application']
+      resource: 'application'
     },
     children: [
       {
@@ -60,14 +62,14 @@ export default [
         name: 'DatabaseAppCreate',
         component: () => import('@/views/applications/DatabaseApp/DatabaseAppCreateUpdate'),
         hidden: true,
-        meta: { title: i18n.t('route.DatabaseAppCreate'), action: 'create' }
+        meta: { title: i18n.t('route.DatabaseAppCreate') }
       },
       {
         path: ':id/update',
         name: 'DatabaseAppUpdate',
         component: () => import('@/views/applications/DatabaseApp/DatabaseAppCreateUpdate'),
         hidden: true,
-        meta: { title: i18n.t('route.DatabaseAppUpdate'), action: 'update' }
+        meta: { title: i18n.t('route.DatabaseAppUpdate') }
       },
       {
         path: ':id',
@@ -83,7 +85,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.KubernetesApp'),
-      permissions: ['applications.view_application']
+      resource: 'application'
     },
     children: [
       {
@@ -97,14 +99,14 @@ export default [
         name: 'KubernetesAppCreate',
         component: () => import('@/views/applications/KubernetesApp/KubernetesAppCreateUpdate'),
         hidden: true,
-        meta: { title: i18n.t('route.KubernetesAppCreate'), action: 'create' }
+        meta: { title: i18n.t('route.KubernetesAppCreate') }
       },
       {
         path: ':id/update',
         name: 'KubernetesAppUpdate',
         component: () => import('@/views/applications/KubernetesApp/KubernetesAppCreateUpdate'),
         hidden: true,
-        meta: { title: i18n.t('route.KubernetesAppUpdate'), action: 'update' }
+        meta: { title: i18n.t('route.KubernetesAppUpdate') }
       },
       {
         path: ':id',
