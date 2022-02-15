@@ -106,6 +106,9 @@ export default {
     line-height: 55px;
     border-bottom: none;
   }
+  &.el-menu--horizontal {
+    border-bottom: none;
+  }
 }
 .menu-main {
   &>>> .el-icon-arrow-down {
