@@ -161,6 +161,7 @@ export default {
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
+      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
     }
   },
   mounted() {

@@ -17,7 +17,6 @@ export default {
     GenericTreeListPage, AccountListTable
   },
   data() {
-    const vm = this
     return {
       isInit: true,
       clickedRow: null,
@@ -30,23 +29,24 @@ export default {
         url: '/api/v1/assets/accounts/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
         callback: {
-          onSelected: function(event, treeNode) {
-            let url = '/api/v1/assets/accounts/'
-            if (treeNode.meta.type === 'node') {
-              const nodeId = treeNode.meta.data.id
-              url = setUrlParam(url, 'asset', '')
-              url = setUrlParam(url, 'node', nodeId)
-            } else if (treeNode.meta.type === 'asset') {
-              const assetId = treeNode.meta.data.id
-              url = setUrlParam(url, 'node', '')
-              url = setUrlParam(url, 'asset', assetId)
-            }
-            setTimeout(() => {
-              vm.accountsUrl = url
-            }, 100)
-          }
+          onSelected: (event, treeNode) => this.getAccountsUrl(event, treeNode)
         }
       }
+    }
+  },
+  methods: {
+    getAccountsUrl(event, treeNode) {
+      let url = '/api/v1/assets/accounts/'
+      if (treeNode.meta.type === 'node') {
+        const nodeId = treeNode.meta.data.id
+        url = setUrlParam(url, 'asset', '')
+        url = setUrlParam(url, 'node', nodeId)
+      } else if (treeNode.meta.type === 'asset') {
+        const assetId = treeNode.meta.data.id
+        url = setUrlParam(url, 'node', '')
+        url = setUrlParam(url, 'asset', assetId)
+      }
+      this.accountsUrl = url
     }
   }
 }
