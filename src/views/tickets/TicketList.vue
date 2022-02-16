@@ -50,9 +50,7 @@ export default {
             icon: 'fa-gear',
             name: 'TicketFlow',
             hidden: () => {
-              const currentUser = vm.$store.getters.currentUser
-              const IsAdmin = currentUser.current_org_roles.filter(value => value === 'Admin').length !== 0
-              return !(vm.$store.getters.currentUserIsSuperAdmin || IsAdmin)
+              return !vm.$store.getters.currentUserIsSuperAdmin
             }
           }
         ]
