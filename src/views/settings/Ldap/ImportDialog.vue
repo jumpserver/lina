@@ -105,11 +105,17 @@ export default {
       settings: {
         visible: false,
         url: '/api/v1/settings/setting/?category=ldap',
-        fields: ['AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_INTERVAL', 'AUTH_LDAP_SYNC_CRONTAB'],
+        fields: ['AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL'],
         fieldsMeta: {
+          AUTH_LDAP_SYNC_IS_PERIODIC: {
+            type: 'switch'
+          },
           AUTH_LDAP_SYNC_CRONTAB: {
             component: CronTab,
             helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
+          },
+          AUTH_LDAP_SYNC_INTERVAL: {
+            helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
           }
         },
         submitMethod: () => 'patch'

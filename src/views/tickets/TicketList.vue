@@ -50,7 +50,7 @@ export default {
             icon: 'fa-gear',
             name: 'TicketFlow',
             hidden: () => {
-              return !(vm.$store.getters.currentUserIsSuperAdmin || vm.$store.getters.currentUserIsAdmin)
+              return !vm.$store.getters.currentUserIsSuperAdmin
             }
           }
         ]
