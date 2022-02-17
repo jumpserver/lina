@@ -78,9 +78,9 @@ export const allRoutes = [
       permissions: []
     }
   },
-  userViewRoutes,
   adminViewRoutes,
   auditViewRoutes,
+  userViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes

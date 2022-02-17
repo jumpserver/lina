@@ -55,20 +55,12 @@ export default {
   },
   data() {
     return {
-      routeViews: []
     }
   },
   computed: {
     ...mapGetters([
       'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute'
     ])
-  },
-  created() {
-    this.$store.dispatch('permission/getFilterRoutes').then(res => {
-      this.routeViews = res.filter((i) => {
-        return i?.perms.length > 0 && i?.route !== 'UserView'
-      })
-    })
   },
   methods: {
     toggleSideBar() {

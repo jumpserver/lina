@@ -18,8 +18,8 @@
         v-perms="view.perms"
         :index="view.name"
       >
-        <i class="icons" :class="view.icon" />
-        <span slot="title" class="icons-title">{{ view.label }}</span>
+        <i class="icons" :class="view.meta.icon" />
+        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-submenu>
   </el-menu>
@@ -80,9 +80,11 @@ export default {
   },
   methods: {
     async getRootPage() {
-      store.dispatch('permission/getFilterRoutes').then(res => {
-        this.views = res.filter((item) => item)
-      })
+      const routes = this.$store.state.permission.addRoutes.filter(
+        item => item.meta?.showNavSwitcher
+      )
+      console.log(routes)
+      this.views = routes
     },
     handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'

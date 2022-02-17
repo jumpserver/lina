@@ -242,30 +242,6 @@ const actions = {
       resolve(routes)
     })
   },
-  getFilterRoutes({ state }) {
-    const addRoutes = state.addRoutes
-    const routeArr = []
-    addRoutes.forEach(i => {
-      const meta = i.meta
-      const showNavSwitcher = meta?.showNavSwitcher
-      if (showNavSwitcher) {
-        const obj = {
-          name: meta.view || '',
-          label: meta.title || '',
-          route: i.name,
-          icon: meta?.icon || '',
-          perms: meta?.permissions
-        }
-        routeArr.push(obj)
-      }
-    })
-    if (routeArr.length >= 2) {
-      const item = routeArr?.[1]
-      routeArr[1] = routeArr[2]
-      routeArr[2] = item
-    }
-    return routeArr
-  },
   // 判断是否存在某种权限
   getRootPerms({ rootState }, rootType) {
     const perms = rootState.users.perms || []
