@@ -417,6 +417,7 @@
     "fileType": "文件类型",
     "isValid": "有效",
     "nav": {
+      "TempPassword": "临时密码",
       "APIKey": "API Key",
       "AdminPage": "管理页面",
       "Docs": "文档",
@@ -961,6 +962,7 @@
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
     "helpText": {
+      "TempPassword": "临时密码有效期为 300 秒，有效期内可重复使用",
       "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",

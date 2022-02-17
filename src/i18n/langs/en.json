@@ -405,6 +405,7 @@
     },
     "isValid": "Is valid",
     "nav": {
+      "TempPassword": "Temporary password",
       "APIKey": "API Key",
       "AdminPage": "Admin page",
       "Docs": "Docs",
@@ -937,6 +938,7 @@
     "LDAPUser": "LDAP User",
     "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
+      "ApiKeyList": "The temporary password is valid for 300 seconds and can be reused within the validity period",
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
       "authLdapSearchFilter": "Choice may be (cn|uid|sAMAccountName)=%(user)s)",
       "authLdapSearchOu": "Use | split User OUs",
