@@ -1,5 +1,11 @@
 <template>
-  <el-button ref="deleteButton" size="mini" type="danger" :disabled="iDisabled" @click="onDelete(col, row, cellValue, reload)">
+  <el-button
+    ref="deleteButton"
+    size="mini"
+    type="danger"
+    :disabled="iDisabled"
+    @click="onDelete(col, row, cellValue, reload)"
+  >
     <i class="fa fa-minus" />
   </el-button>
 </template>

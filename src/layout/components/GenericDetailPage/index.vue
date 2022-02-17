@@ -28,6 +28,11 @@ export default {
     ActionsGroup
   },
   props: {
+    url: {
+      type: String,
+      required: false,
+      default: ''
+    },
     object: {
       type: Object,
       required: true
@@ -83,16 +88,17 @@ export default {
   data() {
     const vm = this
     const defaultActions = {
-      canDelete: true,
+      // Delete button
+      canDelete: vm.$hasCurrentResAction('delete'),
       deleteCallback: function(item) { this.defaultDelete(item) },
-      deleteApiUrl: getApiPath(this),
+      deleteApiUrl: vm.detailApiUrl,
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
+      // Update button
       canUpdate: () => {
-        return !vm.currentOrgIsRoot
+        return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
       updateCallback: function(item) { this.defaultUpdate(item) },
-      updateRoute: this.$route.name.replace('Detail', 'Update'),
-      detailApiUrl: getApiPath(this)
+      updateRoute: this.$route.name.replace('Detail', 'Update')
     }
     return {
       defaultActions: defaultActions,
@@ -125,6 +131,15 @@ export default {
     iTitle() {
       return this.title || this.getTitle(this.object)
     },
+    detailApiUrl() {
+      if (this.url) {
+        return `${this.url}/${this.$route.params.id}/`
+      } else if (this.validActions.detailApiUrl) {
+        return this.validActions.detailApiUrl
+      } else {
+        return getApiPath(this)
+      }
+    },
     iActiveMenu: {
       get() {
         return this.activeMenu
@@ -146,7 +161,7 @@ export default {
     defaultDelete() {
       const msg = this.$t('common.deleteWarningMsg') + ' ' + this.iTitle + ' ?'
       const title = this.$t('common.Info')
-      const performDelete = async function() {
+      const performDelete = () => {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
         return this.$axios.delete(url)
@@ -183,8 +198,7 @@ export default {
       this.$router.push(route)
     },
     getObject() {
-      const url = this.validActions.detailApiUrl
-      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
+      return this.$axios.get(this.detailApiUrl, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
         this.$emit('getObjectDone', data)
       }).catch(error => {

@@ -1,12 +1,16 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <TabPage :submenu="submenu" :active-menu.sync="activeMenu">
+    <keep-alive>
+      <component :is="activeMenu" />
+    </keep-alive>
+  </TabPage>
 </template>
 
 <script>
-import { GenericCreateUpdateForm } from '@/layout/components'
-import IBox from '@/components/IBox'
+import TabPage from '@/layout/components/TabPage'
+import LDAP from '../Ldap'
+import Base from './Base'
+import Basic from './Basic'
 import CAS from './CAS'
 import OIDC from './OIDC'
 import Radius from './Radius'
@@ -17,83 +21,77 @@ import SSO from './SSO'
 import SAML2 from './SAML2'
 
 export default {
-  name: 'Auth',
   components: {
-    IBox,
-    GenericCreateUpdateForm
+    TabPage,
+    LDAP,
+    Base,
+    Basic,
+    CAS,
+    OIDC,
+    WeCom,
+    DingTalk,
+    FeiShu,
+    Radius,
+    SSO,
+    SAML2
   },
   data() {
     return {
-      url: '/api/v1/settings/setting/?category=auth',
-      fields: [
-        [
-          this.$t('setting.AuthMethod'), [
-            'AUTH_CAS', 'AUTH_OPENID',
-            'AUTH_WECOM', 'AUTH_DINGTALK', 'AUTH_FEISHU',
-            'AUTH_RADIUS', 'AUTH_SSO', 'AUTH_SAML2'
-          ]
-        ],
-        [
-          this.$t('common.Other'),
-          [
-            'FORGOT_PASSWORD_URL', // 'HEALTH_CHECK_TOKEN',
-            'LOGIN_REDIRECT_MSG_ENABLED'
-          ]
-        ]
-      ],
-      fieldsMeta: {
-        AUTH_CAS: {
-          component: CAS
+      loading: true,
+      activeMenu: 'Basic',
+      submenu: [
+        {
+          title: this.$t('common.Basic'),
+          name: 'Basic'
         },
-        AUTH_OPENID: {
-          component: OIDC
+        {
+          title: this.$t('setting.Ldap'),
+          name: 'LDAP'
         },
-        AUTH_RADIUS: {
-          component: Radius
+        {
+          title: this.$t('setting.CAS'),
+          name: 'CAS'
         },
-        AUTH_WECOM: {
-          component: WeCom
+        {
+          title: this.$t('setting.OIDC'),
+          name: 'OIDC'
         },
-        AUTH_DINGTALK: {
-          component: DingTalk
+        {
+          title: this.$t('setting.SAML2'),
+          name: 'SAML2'
         },
-        AUTH_FEISHU: {
-          component: FeiShu
+        {
+          title: this.$t('setting.WeCom'),
+          name: 'WeCom'
         },
-        AUTH_SSO: {
-          component: SSO
+        {
+          title: this.$t('setting.DingTalk'),
+          name: 'DingTalk'
         },
-        AUTH_SAML2: {
-          component: SAML2,
-          label: this.$t('setting.SAML2Auth')
+        {
+          title: this.$t('setting.FeiShu'),
+          name: 'FeiShu'
         },
-        FORGOT_PASSWORD_URL: {
-          on: {
-            change([value], updateForm) {
-              if (value && !value.startsWith('http')) {
-                updateForm({ FORGOT_PASSWORD_URL: 'http://' + value })
-              }
-            }
-          }
+        {
+          title: this.$t('setting.Radius'),
+          name: 'Radius'
+        },
+        {
+          title: this.$t('setting.SSO'),
+          name: 'SSO'
         }
-      },
-      submitMethod() {
-        return 'patch'
-      },
-      cleanFormValue(data) {
-        // 这个页面不去提交auth这些
-        const removeFields = [
-          'AUTH_CAS', 'AUTH_OPENID', 'AUTH_WECOM', 'AUTH_DINGTALK',
-          'AUTH_FEISHU', 'AUTH_RADIUS', 'AUTH_SSO', 'AUTH_SAML2'
-        ]
-        for (const i of removeFields) {
-          delete data[i]
-        }
-        return data
-      }
+      ]
     }
   },
-  methods: {}
+  computed: {
+    componentData() {
+      return {}
+    }
+  },
+  mounted() {
+  },
+  methods: {
+  }
 }
 </script>
 

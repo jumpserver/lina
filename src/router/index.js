@@ -1,14 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import i18n from '@/i18n/i18n'
-import rolec from '@/utils/role'
 
 Vue.use(Router)
 
-/* Layout */
-import Layout from '@/layout'
-
-const requireContext = require.context('@/views/xpack/', true, /router\.js$/)
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -27,17 +22,7 @@ const requireContext = require.context('@/views/xpack/', true, /router\.js$/)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
  */
-import UsersRoute from './users'
-import AssetsRoute from './assets'
-import ApplicationsRoute from './applications'
-import PermsRoute from './perms'
-import SessionsRoute from './sessions'
-import OpsRoutes from './ops'
-import TicketsRoutes from './tickets'
-import AuditsRoutes from './audits'
 import commonRoutes from './common'
-import aclRoutes from './acl'
-import AccountRoutes from './accounts'
 
 /**
  * constantRoutes
@@ -60,145 +45,45 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 // 权限路由
-import userPageRoutes from './userPage'
+import userViewRoutes from './user'
+import adminViewRoutes from './admin'
+import auditViewRoutes from './audit'
+import ticketsRoutes from './tickets'
+import settingsRoutes from './settings'
+import profileRoutes from './profile'
 
 /**
  * admin
  * the routes that need to be dynamically loaded based on admin roles
  */
-export const allRoleRoutes = [
+export const allRoutes = [
+  // {
+  //   path: '',
+  //   redirect: '/admin/',
+  //   meta: {
+  //     permissions: []
+  //   }
+  // },
   {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
+    path: '',
+    name: 'Home',
+    redirect: '',
+    component: () => import('@/views/home'),
     meta: {
-      permissions: [rolec.PERM_AUDIT]
-    },
-    children: [
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        meta: { title: i18n.t('route.Dashboard'), icon: 'dashboard', permissions: [rolec.PERM_AUDIT] }
-      }
-    ]
-  },
-  {
-    path: '/users',
-    component: Layout,
-    redirect: '/users/users/',
-    name: 'Users',
-    meta: {
-      title: i18n.t('route.Users'),
-      icon: 'users'
-    },
-    children: UsersRoute
-  },
-  {
-    path: '/assets',
-    component: Layout,
-    redirect: '/assets/assets/',
-    name: 'assets',
-    meta: { title: i18n.t('route.Assets'), icon: 'inbox' },
-    children: AssetsRoute
-  },
-  {
-    path: '/applications/',
-    component: Layout,
-    redirect: '/applications/remote-apps/',
-    name: 'applications',
-    alwaysShow: true,
-    meta: { title: i18n.t('route.Applications'), icon: 'th' },
-    children: ApplicationsRoute
-  },
-  {
-    path: '/accounts',
-    component: Layout,
-    redirect: '/accounts/asset-accounts/',
-    name: 'Accounts',
-    meta: {
-      licenseRequired: true,
-      title: i18n.t('route.Accounts'),
-      icon: 'address-book'
-    },
-    children: AccountRoutes
-  },
-  {
-    path: '/perms/',
-    component: Layout,
-    redirect: '/perms/asset-permissions/',
-    name: 'Perms',
-    meta: { title: i18n.t('route.Perms'), icon: 'edit' },
-    children: PermsRoute
-  },
-  {
-    path: '/acl/',
-    component: Layout,
-    redirect: '/perms/access-control-list/',
-    name: 'Acl',
-    meta: {
-      licenseRequired: true,
-      title: i18n.t('route.Acl'),
-      icon: 'fort-awesome' },
-    children: aclRoutes
-  },
-  {
-    path: '/terminal/',
-    component: Layout,
-    redirect: '/terminal/session-online/',
-    name: 'Sessions',
-    meta: { title: i18n.t('route.Sessions'), icon: 'rocket', permissions: [rolec.PERM_AUDIT] },
-    children: SessionsRoute
-  },
-  {
-    path: '/ops/',
-    component: Layout,
-    redirect: '/ops/tasks/',
-    name: 'JobCenter',
-    alwaysShow: true,
-    meta: { title: i18n.t('route.JobCenter'), icon: 'coffee' },
-    children: OpsRoutes
-  },
-  {
-    name: 'Tickets',
-    path: '/tickets/',
-    component: Layout,
-    redirect: '/tickets/tickets/',
-    children: TicketsRoutes,
-    hidden: true,
-    meta: {
-      licenseRequired: true,
-      permissions: [rolec.PERM_AUDIT]
-      // hidden: ({ settings }) => {
-      //   return !settings.TICKETS_ENABLED
-      // }
+      title: i18n.t('common.nav.HomePage'),
+      icon: 'el-icon-s-home',
+      view: 'home',
+      type: 'view',
+      showNavSwitcher: true,
+      permissions: []
     }
   },
-  {
-    path: '/audits/',
-    component: Layout,
-    redirect: '/audits/login-log/',
-    name: 'Audits',
-    meta: { title: i18n.t('route.Audits'), icon: 'history', permissions: [rolec.PERM_AUDIT] },
-    children: AuditsRoutes
-  },
-  ...requireContext.keys().map(key => requireContext(key).default),
-  {
-    path: '/settings',
-    component: Layout,
-    redirect: '/settings/',
-    permissions: [rolec.PERM_SUPER],
-    children: [
-      {
-        path: '',
-        name: 'Settings',
-        component: () => import('@/views/settings/index'),
-        meta: { title: i18n.t('route.Settings'), icon: 'gears', permissions: [rolec.PERM_SUPER] }
-      }
-    ]
-  },
-  ...userPageRoutes,
-  { path: '*', redirect: '/404', hidden: true, meta: { roles: ['SuperAdmin', 'Admin', 'Auditor', 'User'] }}
+  adminViewRoutes,
+  auditViewRoutes,
+  userViewRoutes,
+  ticketsRoutes,
+  settingsRoutes,
+  profileRoutes
 ]
 
 const createRouter = () => new Router({

@@ -1,31 +1,34 @@
 <template>
-  <div v-if="!loading">
-    <el-alert v-if="!hasValidLicense" type="success">
-      {{ this.$t('setting.ImportLicenseTip') }}
-    </el-alert>
-    <el-row :gutter="20">
-      <el-col :span="14">
-        <DetailCard :title="cardTitle" :items="detailItems" />
-      </el-col>
-      <el-col :span="10">
-        <QuickActions type="primary" :actions="quickActions" />
-      </el-col>
-    </el-row>
-    <Dialog
-      :visible.sync="dialogLicenseImport"
-      top="20vh"
-      :title="this.$t('setting.ImportLicense')"
-      @cancel="dialogLicenseImport = false"
-      @confirm="importLicense"
-    >
-      {{ this.$t('setting.LicenseFile') }}
-      <br>
-      <input type="file" @change="fileChange">
-    </Dialog>
-  </div>
+  <Page v-bind="$attrs">
+    <div v-if="!loading">
+      <el-alert v-if="!hasValidLicense" type="success">
+        {{ this.$t('setting.ImportLicenseTip') }}
+      </el-alert>
+      <el-row :gutter="20">
+        <el-col :span="14">
+          <DetailCard :title="cardTitle" :items="detailItems" />
+        </el-col>
+        <el-col :span="10">
+          <QuickActions type="primary" :actions="quickActions" />
+        </el-col>
+      </el-row>
+      <Dialog
+        :visible.sync="dialogLicenseImport"
+        top="20vh"
+        :title="this.$t('setting.ImportLicense')"
+        @cancel="dialogLicenseImport = false"
+        @confirm="importLicense"
+      >
+        {{ this.$t('setting.LicenseFile') }}
+        <br>
+        <input type="file" @change="fileChange">
+      </Dialog>
+    </div>
+  </Page>
 </template>
 
 <script>
+import Page from '@/layout/components/Page'
 import { QuickActions, Dialog } from '@/components'
 import DetailCard from '@/components/DetailCard/index'
 import { importLicense } from '@/api/settings'
@@ -34,6 +37,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'License',
   components: {
+    Page,
     DetailCard,
     QuickActions,
     Dialog

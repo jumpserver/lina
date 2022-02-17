@@ -6,12 +6,12 @@ export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 // const ROOT_ORG_ID = '00000000-0000-0000-0000-000000000000'
 
 function getPropOrg() {
-  const userAdminOrgList = store.getters.userAdminOrgList
-  const defaultOrg = userAdminOrgList.find((item) => item.is_default)
+  const orgs = store.getters.orgs
+  const defaultOrg = orgs.find((item) => item.is_default)
   if (defaultOrg) {
     return defaultOrg
   }
-  return userAdminOrgList[0]
+  return orgs[0]
 }
 
 function change2PropOrg() {
@@ -21,8 +21,8 @@ function change2PropOrg() {
 
 // function getOrgIdMapper() {
 //   const mapper = {}
-//   const userAdminOrgList = store.getters.userAdminOrgList
-//   userAdminOrgList.forEach((v) => {
+//   const orgs = store.getters.orgs
+//   orgs.forEach((v) => {
 //     mapper[v.id] = v
 //   })
 //   return mapper
@@ -31,8 +31,8 @@ function change2PropOrg() {
 function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
   const currentOrgId = currentOrg.id
-  const userAdminOrgList = store.getters.userAdminOrgList
-  const orgInList = userAdminOrgList.find((item) => item.id === currentOrgId)
+  const orgs = store.getters.orgs
+  const orgInList = orgs.find((item) => item.id === currentOrgId)
   return orgInList
 }
 

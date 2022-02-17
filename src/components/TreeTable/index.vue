@@ -76,6 +76,9 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    console.log(this.treeSetting)
+  },
   methods: {
     handleUrlChange(url) {
       this.$set(this.iTableConfig, 'url', url)

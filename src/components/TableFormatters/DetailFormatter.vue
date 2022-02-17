@@ -1,9 +1,10 @@
 <template>
-  <el-link class="detail" :type="col.type || 'success'" @click="goDetail">{{ iTitle }}</el-link>
+  <el-link class="detail" :disabled="disabled" :type="col.type || 'success'" @click="goDetail">{{ iTitle }}</el-link>
 </template>
 
 <script>
 import BaseFormatter from './base'
+
 export default {
   name: 'DetailFormatter',
   extends: BaseFormatter,
@@ -14,7 +15,11 @@ export default {
         return {
           route: this.$route.name.replace('List', 'Detail'),
           getRoute: null,
-          routeQuery: {},
+          routeQuery: null,
+          permissions: this.$getCurrentResActionPerms('view'),
+          can: (col) => {
+            return this.$hasPerm(this.formatterArgs.permissions)
+          },
           getTitle({ col, row, cellValue }) {
             return cellValue
           }
@@ -35,6 +40,9 @@ export default {
         row: this.row,
         cellValue: this.cellValue
       })
+    },
+    disabled() {
+      return !this.formatterArgs.can(this.col)
     }
   },
   methods: {
@@ -42,7 +50,11 @@ export default {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route
       if (this.formatterArgs.getRoute && typeof this.formatterArgs.getRoute === 'function') {
-        route = this.formatterArgs.getRoute({ row: this.row, col: this.col, cellValue: this.cellValue })
+        route = this.formatterArgs.getRoute({
+          row: this.row,
+          col: this.col,
+          cellValue: this.cellValue
+        })
       }
       if (!route) {
         console.error('No route found')
