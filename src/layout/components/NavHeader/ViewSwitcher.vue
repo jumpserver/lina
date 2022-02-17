@@ -9,7 +9,8 @@
       <template slot="title">
         <span class="title-label">
           <i class="fa fa-bars" />
-          <span>{{ $t('common.nav.View') }}</span>
+          <span v-if="currentView">{{ currentView.meta.title }}</span>
+          <span v-else>{{ $t('common.nav.View') }}</span>
         </span>
       </template>
       <el-menu-item
@@ -38,54 +39,31 @@ export default {
     }
   },
   data() {
-    return {
-      views: []
-    }
+    return {}
   },
   computed: {
     ...mapGetters([
       'currentViewRoute'
     ]),
+    views() {
+      return this.$store.state.permission.addRoutes.filter(
+        item => item.meta?.showNavSwitcher
+      )
+    },
     viewsMapper() {
       const mapper = {}
-      const addRoutes = this.$store.state.permission.addRoutes || []
-      for (const view of addRoutes) {
-        const child = view.children || []
-        if (child && child.length > 0) {
-          if (child[0].children && child[0].children.length > 0) {
-            mapper[view.meta.view] = child[0].children[0].meta.fullPath
-          } else {
-            mapper[view.meta.view] = view.children[0].meta.fullPath
-          }
-        } else {
-          mapper[view.meta.view] = view.meta.fullPath
-        }
+      for (const view of this.views) {
+        mapper[view.name] = view
       }
       return mapper
     },
-    viewName() {
-      let name = this.$t('common.nav.HomePage')
-      if (this.$route.fullPath === '/') return name
-      const viewName = this.currentViewRoute?.meta?.view
-      this.views.forEach(i => {
-        if (viewName && i.name === viewName) {
-          name = i.label
-        }
-      })
-      return name
+    currentView() {
+      return this.viewsMapper[this.currentViewRoute.name]
     }
   },
   created() {
-    this.getRootPage()
   },
   methods: {
-    async getRootPage() {
-      const routes = this.$store.state.permission.addRoutes.filter(
-        item => item.meta?.showNavSwitcher
-      )
-      console.log(routes)
-      this.views = routes
-    },
     handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
       const fromRoute = this.$route
@@ -99,7 +77,7 @@ export default {
 
 <style lang="scss" scoped>
 .el-menu--popup-bottom-start {
-  margin-top: 0px!important;
+  margin-top: 0 !important;
 }
 .menu-main.el-menu {
   background-color: transparent;
