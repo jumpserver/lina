@@ -139,6 +139,12 @@ export default {
               group: this.$t('assets.NoSQLProtocol')
             },
             {
+              name: 'MongoDB',
+              title: 'MongoDB',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
+            },
+            {
               name: 'K8S',
               title: 'K8S',
               type: 'primary',

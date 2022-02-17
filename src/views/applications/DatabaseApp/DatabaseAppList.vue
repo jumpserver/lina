@@ -44,6 +44,11 @@ export default {
         title: 'Redis',
         has: true,
         group: this.$t('assets.NoSQLProtocol')
+      },
+      {
+        name: 'mongodb',
+        title: 'MongoDB',
+        has: this.$store.getters.hasValidLicense
       }
     ]
     return {
