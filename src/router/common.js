@@ -13,13 +13,13 @@ export default [
     children: [
       {
         path: 'personal-information-improvement/',
-        component: () => import('@/views/userviews/users/UserFirstLogin/PersonalInformationImprovement/index'),
+        component: () => import('@/views/profile/UserFirstLogin/PersonalInformationImprovement/index'),
         name: 'PersonalInformationImprovement',
         meta: { title: i18n.t('route.PersonalInformationImprovement') }
       },
       {
         path: 'guide/',
-        component: () => import('@/views/userviews/users/UserFirstLogin/UserGuide/index'),
+        component: () => import('@/views/profile/UserFirstLogin/UserGuide/index'),
         name: 'UserGuide',
         meta: { title: i18n.t('route.UserGuide') }
       }

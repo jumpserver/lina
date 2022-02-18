@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { Announcement } from '@/components'
 import { SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {

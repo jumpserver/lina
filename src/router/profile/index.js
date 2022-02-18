@@ -17,7 +17,7 @@ export default {
     {
       path: '/users/profile-info',
       name: 'profileInfo',
-      component: () => import('@/views/userviews/users/UserProfile/ProfileInfo'),
+      component: () => import('@/views/profile/UserProfile/ProfileInfo'),
       meta: {
         title: i18n.t('users.AccountInformation'),
         icon: 'adjust',
@@ -27,7 +27,7 @@ export default {
     {
       path: '/users/profile-setting',
       name: 'profileSetting',
-      component: () => import('@/views/userviews/users/UserProfile/index'),
+      component: () => import('@/views/profile/UserProfile/index'),
       meta: {
         title: i18n.t('users.PersonalSetting'),
         icon: 'user-circle',

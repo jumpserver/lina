@@ -21,7 +21,7 @@ export default {
     {
       path: '/user/assets',
       name: 'MyAssets',
-      component: () => import('@/views/userviews/assets'),
+      component: () => import('@/views/myassets'),
       meta: {
         icon: 'files-o',
         title: i18n.t('route.MyAssets'),
@@ -43,7 +43,7 @@ export default {
         {
           path: 'remote-apps',
           name: 'MyRemoteApps',
-          component: () => import('@/views/userviews/apps/RemoteApp'),
+          component: () => import('@/views/myapps/RemoteApp'),
           meta: {
             title: i18n.t('route.RemoteApp'),
             permissions: [],
@@ -53,7 +53,7 @@ export default {
         {
           path: 'databases',
           name: 'MyDatabases',
-          component: () => import('@/views/userviews/apps/DatabaseApp'),
+          component: () => import('@/views/myapps/DatabaseApp'),
           meta: {
             title: i18n.t('route.DatabaseApp'),
             permissions: []
@@ -62,7 +62,7 @@ export default {
         {
           path: 'kubernetes',
           name: 'MyKubernetes',
-          component: () => import('@/views/userviews/apps/KubernetesApp'),
+          component: () => import('@/views/myapps/KubernetesApp'),
           meta: {
             title: i18n.t('route.KubernetesApp'),
             permissions: []
