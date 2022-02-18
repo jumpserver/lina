@@ -45,8 +45,8 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 // 权限路由
-import userViewRoutes from './user'
-import adminViewRoutes from './admin'
+import workspaceViewRoutes from './workspace'
+import consoleViewRoutes from './console'
 import auditViewRoutes from './audit'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
@@ -57,13 +57,6 @@ import profileRoutes from './profile'
  * the routes that need to be dynamically loaded based on admin roles
  */
 export const allRoutes = [
-  // {
-  //   path: '',
-  //   redirect: '/admin/',
-  //   meta: {
-  //     permissions: []
-  //   }
-  // },
   {
     path: '',
     name: 'Home',
@@ -78,9 +71,9 @@ export const allRoutes = [
       permissions: []
     }
   },
-  adminViewRoutes,
+  consoleViewRoutes,
   auditViewRoutes,
-  userViewRoutes,
+  workspaceViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes

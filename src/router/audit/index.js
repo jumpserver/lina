@@ -7,11 +7,11 @@ import empty from '@/layout/empty'
 
 export default {
   path: '/audit/',
-  name: 'AuditView',
+  name: 'Audit',
   component: Layout,
   redirect: '/audit/dashboard',
   meta: {
-    title: i18n.t('common.nav.AuditPage'),
+    title: i18n.t('common.nav.Audits'),
     icon: 'el-icon-s-claim',
     showNavSwitcher: true,
     permissions: ['rbac.view_auditview'],

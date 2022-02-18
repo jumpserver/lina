@@ -198,7 +198,7 @@ export default [
         name: 'CommandFilterRulesCreate',
         meta: {
           title: i18n.t('route.CommandFilterRulesCreate'),
-          activeMenu: '/admin/assets/cmd-filters'
+          activeMenu: '/console/assets/cmd-filters'
         }
       },
       {
@@ -207,7 +207,7 @@ export default [
         name: 'CommandFilterRulesUpdate',
         meta: {
           title: i18n.t('route.CommandFilterRulesUpdate'),
-          activeMenu: '/admin/assets/cmd-filters'
+          activeMenu: '/console/assets/cmd-filters'
         }
       }
     ]
