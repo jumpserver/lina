@@ -9,9 +9,7 @@ const getters = {
   },
   currentRole: state => state.users.currentRole,
   currentUser: state => state.users.profile,
-  permission_routes: state => state.permission.routes,
-  visitedViews: state => state.tagsView.visitedViews,
-  cachedViews: state => state.tagsView.cachedViews,
+  currentViewRoute: state => state.permission.currentViewRoute,
   publicSettings: state => state.settings.publicSettings,
   currentOrgRoles: state => state.users.roles,
   currentOrgPerms: state => state.users.perms,
@@ -21,12 +19,6 @@ const getters = {
   currentUserIsSuperAdmin: state => state.users.isSuperAdmin,
   currentUserIsAdmin: state => state.users.isAdmin,
   hasValidLicense: state => state.settings.hasValidLicense,
-  userAdminOrgList: (state, getters) => {
-    let orgs = state.users.orgs
-    if (!getters.hasValidLicense) {
-      orgs = orgs.filter(org => !org['is_root'])
-    }
-    return orgs
-  }
+  orgs: state => state.users.orgs
 }
 export default getters

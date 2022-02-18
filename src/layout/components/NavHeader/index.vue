@@ -1,26 +1,32 @@
 <template>
   <div class="navbar">
-    <div class="navbar-header">
-      <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    </div>
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <SiteMessages />
+        <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">
+          <SiteMessages />
+        </el-tooltip>
       </li>
-      <li class="header-item" style="margin-left: 10px">
-        <Help />
+      <li class="header-item header-icon">
+        <el-tooltip effect="dark" :content="this.$t('route.WebTerminal')">
+          <WebTerminal />
+        </el-tooltip>
       </li>
       <li class="header-item">
-        <Language />
-      </li>
-      <li v-if="showTickets" class="header-item">
         <Tickets />
       </li>
       <li class="header-item">
-        <WebTerminal />
+        <Help />
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
+      </li>
+    </ul>
+    <ul class="navbar-left">
+      <li class="left-item">
+        <ViewSwitcher />
+      </li>
+      <li v-show="showOrganize()" class="left-item" style="margin-left: 12px">
+        <Organization class="organization" />
       </li>
     </ul>
   </div>
@@ -28,21 +34,20 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Hamburger from '@/components/Hamburger'
+// import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
 import SiteMessages from './SiteMessages'
 import Help from './Help'
-import Language from './Language'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
-import rolc from '@/utils/role'
+import ViewSwitcher from './ViewSwitcher'
+import Organization from './Organization'
 
 export default {
   components: {
-    // Breadcrumb,
-    Hamburger,
+    ViewSwitcher,
+    Organization,
     AccountDropdown,
-    Language,
     Help,
     Tickets,
     WebTerminal,
@@ -54,71 +59,97 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar', 'publicSettings', 'currentOrgRoles'
-    ]),
-    isOrgAuditor() {
-      return rolc.getRolesDisplay(this.currentOrgRoles).includes('OrgAuditor') || rolc.getRolesDisplay(this.currentOrgRoles).includes('Auditor')
-    },
-    showTickets() {
-      return this.publicSettings.TICKETS_ENABLED &&
-        this.publicSettings['XPACK_LICENSE_IS_VALID']
-    }
+      'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute'
+    ])
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    showOrganize() {
+      return this.$route.meta?.showOrganization !== false
     }
   }
 }
 </script>
 <style lang="scss" scoped>
   .navbar {
-    height: 50px;
+    height: 55px;
     overflow: hidden;
-    position: relative;
     background: #f3f3f4;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
-    .hamburger-container {
-      line-height: 46px;
-      height: 100%;
+    .organization {
+      height: 35px;
+      line-height: 35px;
+      background: #E0E0E0;
+      border-radius: 19px;
+      color: #606266;
+      //margin-right: -15px;
+      &:after {
+        position: absolute;
+        top: 15%;
+        left: -16px;
+        content: '';
+        width: 1px;
+        height: 25px;
+        background-color: rgba(144,147,152,.5);
+      }
+      &>>> .el-input__prefix {
+        left: 8px
+      }
+      &>>> .el-input--prefix .el-input__inner {
+        line-height: 35px !important;
+        height: 35px !important;
+      }
+      &>>> .fa-sitemap {
+        padding-left: 4px;
+      }
+      &>>> .el-input__icon {
+        color: #606266;
+      }
+    }
+    .header-item {
+      line-height: 55px;
+      display: inline-block;
+      padding-right: 10px;
+      padding-left: 10px;
+      vertical-align: middle;
+    }
+
+    .header-icon {
+      &:hover {
+        background-color: #e6e6e6;
+      }
+      &>>> .el-badge {
+        vertical-align: sub;
+      }
+    }
+
+    .navbar-left {
       float: left;
-      cursor: pointer;
-      transition: background .3s;
-      -webkit-tap-highlight-color: transparent;
-      padding-left: 20px;
+      .left-item {
+        line-height: 55px;
+        display: inline-block;
+        vertical-align: middle;
+        &>>> .el-submenu__title {
+          font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+          padding: 0 14px;
+        }
+        &>>> .org-select {
+          padding: 0;
+        }
+      }
     }
 
     .navbar-right {
       float: right;
       margin-right: 10px;
-
-      .header-item {
-        line-height: 50px;
-        display: inline-block;
-        padding-right: 10px;
-        padding-left: 10px;
-      }
-
-      .header-icon {
-        &:hover {
-          background-color: #e6e6e6;
-        }
-      }
     }
-
-    .breadcrumb-container {
-      float: left;
-      padding-left: 20px;
-    }
-
-  }
-  .el-header {
-    background-color: #ffffff;
   }
 
   ul {
     margin: 0;
+    padding-inline-start: 0;
   }
 </style>
 

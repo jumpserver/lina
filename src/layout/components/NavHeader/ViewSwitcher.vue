@@ -1,0 +1,132 @@
+<template>
+  <el-menu
+    default-active="activeIndex"
+    class="menu-main"
+    mode="horizontal"
+    @select="handleSelectView"
+  >
+    <el-submenu index="2">
+      <template slot="title">
+        <span class="title-label">
+          <i class="fa fa-bars" />
+          <span v-if="currentView">{{ currentView.meta.title }}</span>
+          <span v-else>{{ $t('common.nav.View') }}</span>
+        </span>
+      </template>
+      <el-menu-item
+        v-for="view of views"
+        :key="view.name"
+        v-perms="view.perms"
+        :index="view.name"
+      >
+        <i class="icons" :class="view.meta.icon" />
+        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
+      </el-menu-item>
+    </el-submenu>
+  </el-menu>
+</template>
+
+<script>
+import store from '@/store'
+import { mapGetters } from 'vuex'
+
+export default {
+  name: 'ViewSwitcher',
+  props: {
+    showTitle: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapGetters([
+      'currentViewRoute'
+    ]),
+    views() {
+      return this.$store.state.permission.addRoutes.filter(
+        item => item.meta?.showNavSwitcher
+      )
+    },
+    viewsMapper() {
+      const mapper = {}
+      for (const view of this.views) {
+        mapper[view.name] = view
+      }
+      return mapper
+    },
+    currentView() {
+      return this.viewsMapper[this.currentViewRoute.name]
+    }
+  },
+  created() {
+  },
+  methods: {
+    handleSelectView(key, keyPath) {
+      const routeName = this.viewsMapper[key] || '/'
+      const fromRoute = this.$route
+      this.$router.push(routeName, () => {
+        store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.el-menu--popup-bottom-start {
+  margin-top: 0 !important;
+}
+.menu-main.el-menu {
+  background-color: transparent;
+  ::v-deep .el-submenu .el-submenu__title {
+    height: 55px;
+    line-height: 55px;
+    border-bottom: none;
+  }
+  &.el-menu--horizontal {
+    border-bottom: none;
+  }
+}
+.menu-main {
+  &>>> .el-icon-arrow-down {
+    font-size: 13px;
+    color: #606266;
+  }
+}
+.el-menu--horizontal .el-menu .el-menu-item {
+  display: inline-block!important;
+  text-align: center;
+  padding: 6px 0px 6px 18px;
+  &:hover {
+    color: #303133;
+  }
+  &:last-child {
+    padding: 6px 18px 6px 18px;
+  }
+}
+.el-submenu.is-opened {
+  background-color: transparent;
+}
+.title-label {
+  padding-left: 12px;
+  font-size: 14px;
+  vertical-align: unset;
+  color: #606266!important;
+}
+.icons {
+  display: block;
+  font-size: 23px;
+  text-align: center;
+}
+.icons-title {
+  display: inline-block;
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+.el-menu--popup-bottom-start {
+  margin-top: 0px!important;
+}
+</style>

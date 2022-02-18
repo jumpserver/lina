@@ -10,6 +10,7 @@
 <script>
 import { getTicketOpenCount } from '@/api/ticket'
 import { mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'WebTerminal',
@@ -33,7 +34,11 @@ export default {
       })
     },
     goToTickets() {
-      this.$router.push({ name: 'TicketList' })
+      // this.$router.push({ name: 'TicketList' })
+      const route = this.$route
+      this.$router.push('/tickets', () => {
+        store.dispatch('permission/generateViewRoutes', { to: this.$route, from: route })
+      })
     }
   }
 }

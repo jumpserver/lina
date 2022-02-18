@@ -58,7 +58,7 @@ function cleanDateStr(d) {
     if (!isNaN(Date.parse(d))) {
       return d
     }
-    if (!isNaN(Number(d))) {
+    if (!isNaN(Number(d)) || !d) {
       return d
     }
     switch (i) {
@@ -105,8 +105,8 @@ export function getApiPath(that) {
   } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
     pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
   }
-  pagePath = pagePathArray.join('/')
-  return `/api/v1${pagePath}/`
+  pagePath = pagePathArray.slice(2, pagePathArray.length).join('/')
+  return `/api/v1/${pagePath}/`
 }
 
 export function confirm({ msg, title, perform, success, failed, type = 'warning' }) {
@@ -148,6 +148,7 @@ export function formatDate(inputTime) {
 }
 
 const uuidPattern = /[0-9a-zA-Z\-]{36}/
+
 export function hasUUID(s) {
   return s.search(uuidPattern) !== -1
 }
@@ -254,6 +255,13 @@ export function truncateEnd(s, l) {
     return s
   }
   return s.slice(0, l - 3) + '...'
+}
+
+if (typeof String.prototype.replaceAll === 'undefined') {
+  // eslint-disable-next-line no-extend-native
+  String.prototype.replaceAll = function(match, replace) {
+    return this.replace(new RegExp(match, 'g'), () => replace)
+  }
 }
 
 export const assignIfNot = _.partialRight(_.assignInWith, customizer)

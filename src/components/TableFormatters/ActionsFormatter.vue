@@ -85,13 +85,17 @@ export default {
         return {
           hasUpdate: true, // can set function(row, value)
           canUpdate: () => {
-            return !this.$store.getters.currentOrgIsRoot
+            const notRootOrg = !this.$store.getters.currentOrgIsRoot
+            return notRootOrg && this.$hasCurrentResAction('change')
           }, // can set function(row, value)
           hasDelete: true, // can set function(row, value)
-          canDelete: true,
+          canDelete: () => {
+            return this.$hasCurrentResAction('delete')
+          },
           hasClone: true,
           canClone: () => {
-            return !this.$store.getters.currentOrgIsRoot
+            const notRootOrg = !this.$store.getters.currentOrgIsRoot
+            return notRootOrg && this.$hasCurrentResAction('add')
           },
           updateRoute: this.$route.name.replace('List', 'Update'),
           cloneRoute: this.$route.name.replace('List', 'Create'),

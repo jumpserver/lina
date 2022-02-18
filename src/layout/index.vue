@@ -1,11 +1,9 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <NavBar class="sidebar-container disabled-when-print" />
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}" class="disabled-when-print">
+    <NavLeft class="sidebar-container disabled-when-print" />
+    <div :class="{hasTagsView: needTagsView}" class="main-container">
+      <div :class="{'fixed-header': fixedHeader}" class="disabled-when-print">
         <NavHeader />
-        <tags-view v-if="needTagsView" />
       </div>
       <app-main />
       <Footer class="disabled-when-print" />
@@ -14,17 +12,16 @@
 </template>
 
 <script>
-import { NavHeader, NavBar, AppMain, Footer, TagsView } from './components'
+import { NavHeader, NavLeft, AppMain, Footer } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
   components: {
-    NavBar,
+    NavLeft,
     NavHeader,
     AppMain,
-    Footer,
-    TagsView
+    Footer
   },
   mixins: [ResizeMixin],
   computed: {
@@ -35,7 +32,8 @@ export default {
       return this.$store.state.app.device
     },
     fixedHeader() {
-      return this.$store.state.settings.fixedHeader
+      return true
+      // return this.$store.state.settings.fixedHeader
     },
     needTagsView() {
       return false
@@ -92,7 +90,7 @@ export default {
   }
 
   .hideSidebar .fixed-header {
-    width: calc(100% - 54px)
+    width: calc(100% - 55px)
   }
 
   .mobile .fixed-header {
@@ -113,7 +111,7 @@ export default {
       display: none;
     }
     .main-container{
-      margin-left: 0px !important;
+      margin-left: 0 !important;
     }
     //.fixed-header{
     //  width: 100% !important;

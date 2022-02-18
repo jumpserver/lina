@@ -41,7 +41,7 @@ export default {
 <style scoped>
   .page-heading {
     border-top: 0;
-    padding: 15px 30px 15px 25px;
+    padding: 12px 30px 13px 25px;
     background-color: #ffffff;
     min-height: 1px;
   }

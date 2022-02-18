@@ -1,5 +1,7 @@
 <template>
-  <el-link class="el-link" :href="webTerminalUrl" target="_blank">{{ $t('route.WebTerminal') }}</el-link>
+  <el-link class="el-link" :href="webTerminalUrl" target="_blank">
+    <svg-icon icon-class="terminal" style="font-size: 19px; vertical-align: sub;" />
+  </el-link>
 </template>
 
 <script>

@@ -13,16 +13,12 @@ const getDefaultState = () => {
   return {
     token: getTokenFromCookie(),
     currentOrg: '',
-    currentRole: '',
     profile: {},
     username: '',
-    roles: {},
-    sysRole: '',
     orgs: [],
-    perms: 0b00000000,
+    perms: [],
     MFAVerifyAt: null,
     isSuperAdmin: false,
-    isAdmin: false,
     hasAdminPerm: false,
     hasAuditPerm: false
   }
@@ -43,8 +39,8 @@ const mutations = {
     state.username = username
     state.currentOrg = getCurrentOrgLocal(username)
     state.currentRole = getCurrentRoleLocal(username)
-    state.isAdmin = profile['is_org_admin']
-    state.isSuperAdmin = profile['is_superuser']
+    state.perms = profile.perms
+    state.orgs = profile.orgs
   },
   SET_ORGS: (state, orgs) => {
     state.orgs = orgs
@@ -127,12 +123,13 @@ const actions = {
         return resolve(state.roles)
       }
       return dispatch('getProfile').then((profile) => {
-        const { current_org_roles: currentOrgRoles, role } = profile
-        const roles = rolec.parseUserRoles(currentOrgRoles, role)
-        commit('SET_SYS_ROLE', role)
-        commit('SET_ROLES', roles)
-        commit('SET_PERMS', rolec.sumPerms(roles))
-        resolve(roles)
+        // const { current_org_roles: currentOrgRoles, role } = profile
+        // const roles = rolec.parseUserRoles(currentOrgRoles, role)
+        // commit('SET_SYS_ROLE', role)
+        // commit('SET_ROLES', roles)
+        // commit('SET_PERMS', rolec.sumPerms(roles))
+        // resolve(roles)
+        resolve([])
       }).catch((e) => {
         reject(e)
       })
@@ -144,9 +141,9 @@ const actions = {
         return resolve(state.roles)
       }
       dispatch('getProfile').then(profile => {
-        const { admin_or_audit_orgs: inOrgs } = profile
-        commit('SET_ORGS', inOrgs)
-        resolve(inOrgs)
+        const { orgs } = profile
+        commit('SET_ORGS', orgs)
+        resolve(orgs)
       }).catch((e) => reject(e))
     })
   },

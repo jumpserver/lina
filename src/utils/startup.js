@@ -62,7 +62,7 @@ async function refreshCurrentOrg() {
 
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getInOrgs')
-  const adminOrgs = store.getters.userAdminOrgList
+  const adminOrgs = store.getters.orgs
   if (!adminOrgs || adminOrgs.length === 0) {
     return
   }
@@ -90,7 +90,7 @@ async function changeCurrentRoleIfNeed({ to, from, next }) {
     return
   }
 
-  const adminOrgs = store.getters.userAdminOrgList
+  const adminOrgs = store.getters.orgs
   if (!adminOrgs || adminOrgs.length === 0) {
     currentRole = rolec.USER_PAGE_REQUIRE_PERM_MIN
     await store.dispatch('users/setCurrentRole', currentRole)
@@ -111,11 +111,12 @@ export async function generatePageRoutes({ to, from, next }) {
     // try get user profile
     // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
     // 不能改名 current_org_roles, 里面返回的就是这个
-    const currentRole = store.getters.currentRole
+    // const currentRole = store.getters.currentRole
     // console.log('Current org role: ', currentRole, rolec.getRolesDisplay(currentRole))
 
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', currentRole)
+    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
+    console.log('Add routes: ', accessRoutes)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)

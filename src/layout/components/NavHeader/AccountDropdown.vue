@@ -1,6 +1,6 @@
 <template>
   <div class="header-tools header-profile">
-    <el-dropdown trigger="click" @command="handleClick">
+    <el-dropdown :show-timeout="50" @command="handleClick">
       <span class="el-dropdown-link">
         <el-avatar :src="avatarUrl" class="header-avatar" />
         {{ currentUser.name }}
@@ -8,12 +8,9 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <template v-if="currentOrgRoles.length > 1 || hasAdminOrg ">
-          <el-dropdown-item v-if="isInAdminRole " icon="el-icon-guide" command="userPage">{{ $t('common.nav.UserPage') }}</el-dropdown-item>
-          <el-dropdown-item v-else icon="el-icon-guide" command="adminPage">{{ $t('common.nav.AdminPage') }}</el-dropdown-item>
-        </template>
+        <el-dropdown-item v-show="showSettings" icon="el-icon-setting" command="settings">{{ $t('route.Settings') }}</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
-        <el-dropdown-item divided command="logout">{{ $t('common.nav.Logout') }}</el-dropdown-item>
+        <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <ApiKey ref="api" />
@@ -25,6 +22,7 @@ import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
 import rolec from '@/utils/role'
 import orgUtil from '@/utils/org'
+import store from '@/store'
 
 export default {
   name: 'AccountDropdown',
@@ -34,6 +32,7 @@ export default {
   data() {
     return {
       avatarUrl: require('@/assets/img/admin.png'),
+      showSettings: false,
       showApiKey: false
     }
   },
@@ -42,7 +41,7 @@ export default {
       'currentUser',
       'currentRole',
       'currentOrgRoles',
-      'userAdminOrgList',
+      'orgs',
       'currentOrgPerms'
     ]),
     isInAdminRole() {
@@ -50,7 +49,7 @@ export default {
       return inAdmin
     },
     hasAdminOrg() {
-      return this.userAdminOrgList.length > 0
+      return this.orgs.length > 0
     },
     adminPageRequirePerm() {
       return rolec.PERM_SUPER | rolec.PERM_ADMIN | rolec.PERM_AUDIT
@@ -64,11 +63,24 @@ export default {
       return userPageRequireRole & this.currentOrgPerms
     }
   },
+  created() {
+    store.dispatch('permission/getRootPerms', 'settings.change_setting').then(res => {
+      this.showSettings = res
+    })
+  },
   methods: {
     handleClick(val) {
+      const fromRoute = this.$route
       switch (val) {
         case 'profile':
-          this.$router.push({ name: 'UserProfile' })
+          this.$router.push('/users/profile', () => {
+            store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
+          })
+          break
+        case 'settings':
+          this.$router.push('/settings', () => {
+            store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
+          })
           break
         case 'adminPage':
           if (this.hasCurrentOrgAdminPagePerm) {
