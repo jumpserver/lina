@@ -7,7 +7,7 @@ export default {
   path: '/workspace/',
   component: Layout,
   name: 'UserView',
-  redirect: '/workspace/assets',
+  redirect: '/workspace/home',
   meta: {
     title: i18n.t('common.nav.UserPage'),
     type: 'view',
@@ -19,6 +19,16 @@ export default {
   },
   children: [
     // 404 page must be placed at the end !!!
+    {
+      path: '/workspace/home',
+      name: 'MyHome',
+      component: () => import('@/views/myhome'),
+      meta: {
+        icon: 'home',
+        title: i18n.t('route.WorkBench'),
+        permissions: []
+      }
+    },
     {
       path: '/workspace/assets',
       name: 'MyAssets',

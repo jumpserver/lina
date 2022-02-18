@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import i18n from '@/i18n/i18n'
 
 Vue.use(Router)
 
@@ -57,27 +56,27 @@ import profileRoutes from './profile'
  * the routes that need to be dynamically loaded based on admin roles
  */
 export const allRoutes = [
-  // {
-  //   path: '',
-  //   redirect: '/admin/',
-  //   meta: {
-  //     permissions: []
-  //   }
-  // },
   {
     path: '',
-    name: 'Home',
-    redirect: '',
-    component: () => import('@/views/home'),
+    redirect: '/workspace/home',
     meta: {
-      title: i18n.t('common.nav.HomePage'),
-      icon: 'el-icon-s-home',
-      view: 'home',
-      type: 'view',
-      showNavSwitcher: true,
       permissions: []
     }
   },
+  // {
+  //   path: '',
+  //   name: 'Home',
+  //   redirect: '',
+  //   component: () => import('@/views/home'),
+  //   meta: {
+  //     title: i18n.t('common.nav.HomePage'),
+  //     icon: 'el-icon-s-home',
+  //     view: 'home',
+  //     type: 'view',
+  //     showNavSwitcher: true,
+  //     permissions: []
+  //   }
+  // },
   adminViewRoutes,
   auditViewRoutes,
   userViewRoutes,

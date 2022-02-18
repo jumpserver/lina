@@ -11,7 +11,7 @@
           <WebTerminal />
         </el-tooltip>
       </li>
-      <li class="header-item">
+      <li class="header-item header-hover">
         <Tickets />
       </li>
       <li class="header-item">
@@ -114,6 +114,12 @@ export default {
       padding-right: 10px;
       padding-left: 10px;
       vertical-align: middle;
+    }
+
+    .header-hover {
+      &:hover {
+        background-color: #e6e6e6;
+      }
     }
 
     .header-icon {
