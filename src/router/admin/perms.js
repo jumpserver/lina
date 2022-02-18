@@ -7,7 +7,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.AssetPermission'),
-      permissions: ['perms.view_assetpermission']
+      resource: 'assetpermission'
     },
     children: [
       {
@@ -44,7 +44,8 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.ApplicationPermission'),
-      permissions: ['perms.view_applicationpermission']
+      permissions: ['perms.view_applicationpermission'],
+      resource: 'applicationpermission'
     },
     redirect: '',
     children: [
@@ -59,7 +60,7 @@ export default [
         component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionCreateUpdate'),
         name: 'ApplicationPermissionCreate',
         hidden: true,
-        meta: { title: i18n.t('route.ApplicationPermissionCreate'), action: 'create', permissions: ['perms.add_applicationpermission'] }
+        meta: { title: i18n.t('route.ApplicationPermissionCreate'), action: 'create' }
       },
       {
         path: ':id',
