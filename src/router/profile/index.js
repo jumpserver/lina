@@ -2,21 +2,21 @@ import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 
 export default {
-  path: '/users/profile',
-  redirect: '/users/profile-info',
+  path: '/profile',
+  redirect: '/profile/info',
   component: Layout,
   meta: {
     title: i18n.t('route.UserProfile'),
     icon: 'gear',
-    view: 'users',
+    view: 'profile',
     type: 'view',
     showNavSwitcher: false,
     permissions: []
   },
   children: [
     {
-      path: '/users/profile-info',
-      name: 'profileInfo',
+      path: '/profile/info',
+      name: 'ProfileInfo',
       component: () => import('@/views/profile/UserProfile/ProfileInfo'),
       meta: {
         title: i18n.t('users.AccountInformation'),
@@ -25,7 +25,7 @@ export default {
       }
     },
     {
-      path: '/users/profile-setting',
+      path: '/profile/setting',
       name: 'profileSetting',
       component: () => import('@/views/profile/UserProfile/index'),
       meta: {

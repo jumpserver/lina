@@ -4,22 +4,23 @@ import { BASE_URL } from '@/utils/common'
 import empty from '@/layout/empty'
 
 export default {
-  path: '/user/',
+  path: '/workspace/',
   component: Layout,
   name: 'UserView',
-  redirect: '/user/assets',
+  redirect: '/workspace/assets',
   meta: {
     title: i18n.t('common.nav.UserPage'),
     type: 'view',
-    view: 'user',
+    view: 'workspace',
     icon: 'el-icon-user-solid',
     showNavSwitcher: true,
+    showOrganization: false,
     permissions: ['rbac.view_userview']
   },
   children: [
     // 404 page must be placed at the end !!!
     {
-      path: '/user/assets',
+      path: '/workspace/assets',
       name: 'MyAssets',
       component: () => import('@/views/myassets'),
       meta: {
@@ -29,7 +30,7 @@ export default {
       }
     },
     {
-      path: '/user/apps',
+      path: '/workspace/apps',
       name: 'Apps',
       component: empty,
       redirect: 'remoteapp',
@@ -71,7 +72,7 @@ export default {
       ]
     },
     {
-      path: '/user/ops',
+      path: '/workspace/ops',
       component: empty,
       meta: {
         permissions: [],
