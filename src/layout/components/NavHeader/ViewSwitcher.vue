@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -66,10 +65,7 @@ export default {
   methods: {
     handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
-      const fromRoute = this.$route
-      this.$router.push(routeName, () => {
-        store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
-      })
+      this.$router.push(routeName)
     }
   }
 }

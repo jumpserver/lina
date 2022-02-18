@@ -70,17 +70,12 @@ export default {
   },
   methods: {
     handleClick(val) {
-      const fromRoute = this.$route
       switch (val) {
         case 'profile':
-          this.$router.push('/users/profile', () => {
-            store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
-          })
+          this.$router.push('/users/profile')
           break
         case 'settings':
-          this.$router.push('/settings', () => {
-            store.dispatch('permission/generateViewRoutes', { to: this.$route, from: fromRoute })
-          })
+          this.$router.push('/settings')
           break
         case 'adminPage':
           if (this.hasCurrentOrgAdminPagePerm) {
