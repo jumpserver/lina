@@ -59,7 +59,7 @@ export default [
         component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionCreateUpdate'),
         name: 'ApplicationPermissionCreate',
         hidden: true,
-        meta: { title: i18n.t('route.ApplicationPermissionCreate'), action: 'create' }
+        meta: { title: i18n.t('route.ApplicationPermissionCreate'), action: 'create', permissions: ['perms.add_applicationpermission'] }
       },
       {
         path: ':id',
