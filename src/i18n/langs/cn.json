@@ -425,8 +425,9 @@
     "isValid": "有效",
     "nav": {
       "APIKey": "API Key",
-      "AdminPage": "管理视图",
-      "AuditPage": "审计视图",
+      "Workspace": "工作台",
+      "Console": "控制台",
+      "Audits": "审计台",
       "HomePage": "首页",
       "QuickAccess": "快速访问",
       "SwitchPage": "切换视图",

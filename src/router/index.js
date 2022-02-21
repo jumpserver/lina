@@ -44,8 +44,8 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 // 权限路由
-import userViewRoutes from './user'
-import adminViewRoutes from './admin'
+import workspaceViewRoutes from './workspace'
+import consoleViewRoutes from './console'
 import auditViewRoutes from './audit'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
@@ -63,23 +63,9 @@ export const allRoutes = [
       permissions: []
     }
   },
-  // {
-  //   path: '',
-  //   name: 'Home',
-  //   redirect: '',
-  //   component: () => import('@/views/home'),
-  //   meta: {
-  //     title: i18n.t('common.nav.HomePage'),
-  //     icon: 'el-icon-s-home',
-  //     view: 'home',
-  //     type: 'view',
-  //     showNavSwitcher: true,
-  //     permissions: []
-  //   }
-  // },
-  adminViewRoutes,
+  consoleViewRoutes,
   auditViewRoutes,
-  userViewRoutes,
+  workspaceViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes

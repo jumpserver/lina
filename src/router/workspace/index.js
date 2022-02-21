@@ -6,10 +6,10 @@ import empty from '@/layout/empty'
 export default {
   path: '/workspace/',
   component: Layout,
-  name: 'UserView',
-  redirect: '/workspace/home',
+  name: 'Workspace',
+  redirect: '/workspace/assets',
   meta: {
-    title: i18n.t('common.nav.UserPage'),
+    title: i18n.t('common.nav.Workspace'),
     type: 'view',
     view: 'workspace',
     icon: 'el-icon-user-solid',

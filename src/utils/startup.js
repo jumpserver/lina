@@ -116,7 +116,6 @@ export async function generatePageRoutes({ to, from, next }) {
 
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
-    console.log('Add routes: ', accessRoutes)
 
     // dynamically add accessible routes
     router.addRoutes(accessRoutes)

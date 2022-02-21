@@ -26,6 +26,7 @@ export default {
 .app-main {
   background-color: #f3f3f4;
   min-height: calc(100vh - 50px);
+  height: 100vh;
   width: 100%;
   position: relative;
   overflow: hidden;
