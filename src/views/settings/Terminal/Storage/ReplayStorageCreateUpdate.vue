@@ -9,7 +9,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { STORAGE_TYPE_META_MAP } from './const'
+import { STORAGE_TYPE_META_MAP } from '../../../sessions/const'
 import { UpdateToken } from '@/components/FormFields'
 
 export default {

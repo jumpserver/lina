@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <NavHeader />
     <el-container class="container">
       <el-main class="main">
         <div class="content">
@@ -26,7 +25,6 @@
 
 <script>
 import store from '@/store'
-import { NavHeader } from '@/layout/components'
 import User from './components/User'
 import Announcement from './components/Announcement'
 import Ticket from './components/Ticket'
@@ -37,7 +35,6 @@ import Session from './components/Session'
 export default {
   name: 'Name',
   components: {
-    NavHeader,
     User,
     Announcement,
     Ticket,
@@ -70,11 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-  @import "~@/styles/variables.scss";
-
   .home {
-    @include clearfix;
     position: relative;
     height: 100%;
     width: 100%;
