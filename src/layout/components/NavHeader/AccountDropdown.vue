@@ -72,7 +72,7 @@ export default {
     handleClick(val) {
       switch (val) {
         case 'profile':
-          this.$router.push('/users/profile')
+          this.$router.push('/profile')
           break
         case 'settings':
           this.$router.push('/settings')
