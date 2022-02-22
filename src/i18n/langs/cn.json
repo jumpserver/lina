@@ -426,6 +426,7 @@
     "nav": {
       "APIKey": "API Key",
       "Workspace": "工作台",
+      "Navigation": "导航",
       "Console": "控制台",
       "Audits": "安全审计",
       "HomePage": "首页",
@@ -655,6 +656,7 @@
   },
   "route": {
     "": "",
+    "SystemSetting": "系统设置",
     "WorkBench": "工作台",
     "Role": "角色",
     "RoleDetail": "角色详情",
