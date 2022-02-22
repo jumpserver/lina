@@ -18,7 +18,7 @@ export default {
         icon: 'fa-inbox'
       },
       tableConfig: {
-        url: '/api/v1/terminal/sessions/asset/my/?limit=5',
+        url: '/api/v1/terminal/my-login-assets/?limit=5',
         columns: [
           'hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'
         ],
