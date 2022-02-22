@@ -24,7 +24,7 @@ export default {
       name: 'AuditDashboard',
       meta: {
         icon: 'dashboard',
-        title: i18n.t('route.Dashboard'),
+        title: i18n.t('route.Overview'),
         permissions: []
       }
     },
