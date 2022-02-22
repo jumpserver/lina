@@ -1,30 +1,25 @@
 <template>
   <el-card class="box-card" shadow="never">
     <div slot="header" class="title">
-      <span>{{ i18n.t('common.Announcement') }}</span>
+      <span>{{ $t('common.Announcement') }}</span>
     </div>
     <ul class="content">
       <li v-if="announcement.content" class="item">
         <span class="item-title">【{{ announcement.subject }}】</span>
         <span>{{ announcement.content }}</span>
       </li>
-      <li v-else class="other">{{ i18n.t('common.noAnnouncement') }}</li>
+      <li v-else class="other">{{ $t('common.noAnnouncement') }}</li>
     </ul>
   </el-card>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import i18n from '@/i18n/i18n'
 
 export default {
   name: 'Announcement',
   data() {
     return {
-      i18n,
-      cardConfig: {
-        title: i18n.t('common.Announcement')
-      },
       content: ''
     }
   },

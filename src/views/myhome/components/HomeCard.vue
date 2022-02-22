@@ -35,14 +35,6 @@ export default {
       type: String,
       default: () => ''
     },
-    dataArr: {
-      type: Array,
-      default: () => []
-    },
-    icon: {
-      type: String,
-      default: () => ''
-    },
     btnText: {
       type: String,
       default: () => ''

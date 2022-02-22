@@ -1,7 +1,7 @@
 <template>
   <el-card class="box-card" shadow="never">
     <div slot="header" class="title">
-      <span>{{ i18n.t('common.nav.Profile') }}</span>
+      <span>{{ $t('common.nav.Profile') }}</span>
     </div>
     <div class="content">
       <el-row :gutter="20">
@@ -10,9 +10,9 @@
         </el-col>
         <el-col :span="18">
           <ul>
-            <li><span class="title">{{ i18n.t('audits.Username') }}</span>：<span>{{ users.name }}</span></li>
-            <li><span class="title">{{ i18n.t('users.Email') }}</span>：<span>{{ users.email }}</span></li>
-            <li><span class="title">{{ i18n.t('audits.LoginDate') }}</span>：<span>{{ this.$moment(users.last_login).format('YYYY-MM-DD HH:mm:ss') }}</span></li>
+            <li><span class="title">{{ $t('audits.Username') }}</span>：<span>{{ users.name }}</span></li>
+            <li><span class="title">{{ $t('users.Email') }}</span>：<span>{{ users.email }}</span></li>
+            <li><span class="title">{{ $t('audits.LoginDate') }}</span>：<span>{{ this.$moment(users.last_login).format('YYYY-MM-DD HH:mm:ss') }}</span></li>
           </ul>
         </el-col>
       </el-row>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
 export default {
   name: 'Huser',
   props: {
@@ -32,7 +31,6 @@ export default {
   },
   data() {
     return {
-      i18n,
       users: {}
     }
   },

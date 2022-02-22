@@ -13,8 +13,7 @@ export default {
   data() {
     return {
       cardConfig: {
-        title: this.$t('route.SessionOffline'),
-        icon: 'fa-rocket'
+        title: this.$t('route.SessionOffline')
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
