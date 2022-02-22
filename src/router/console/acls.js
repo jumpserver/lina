@@ -8,7 +8,8 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('route.AssetAclList'),
-      licenseRequired: true
+      licenseRequired: true,
+      resource: 'loginassetacl'
     },
     children: [
       {

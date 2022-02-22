@@ -7,7 +7,7 @@ export default {
   path: '/workspace/',
   component: Layout,
   name: 'Workspace',
-  redirect: '/workspace/assets',
+  redirect: '/workspace/home',
   meta: {
     title: i18n.t('common.nav.Workspace'),
     type: 'view',
@@ -24,8 +24,8 @@ export default {
       name: 'MyHome',
       component: () => import('@/views/myhome'),
       meta: {
-        icon: 'home',
-        title: i18n.t('route.WorkBench'),
+        icon: 'dashboard',
+        title: i18n.t('route.Overview'),
         permissions: []
       }
     },

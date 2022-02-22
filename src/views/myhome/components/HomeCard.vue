@@ -18,7 +18,6 @@
         :table-config="tableConfig"
         :header-actions="headerActions"
       />
-      <i class="fa fa-5x" :class="icon" />
     </el-card>
   </div>
 </template>

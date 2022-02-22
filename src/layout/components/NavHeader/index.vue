@@ -11,6 +11,11 @@
           <WebTerminal />
         </el-tooltip>
       </li>
+      <li v-perms="settings.change_setting" class="header-item header-icon">
+        <el-tooltip effect="dark" :content="this.$t('route.SystemSetting')">
+          <SystemSetting />
+        </el-tooltip>
+      </li>
       <li class="header-item header-hover">
         <Tickets />
       </li>
@@ -42,6 +47,7 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
+import SystemSetting from './SystemSetting'
 
 export default {
   components: {
@@ -51,7 +57,8 @@ export default {
     Help,
     Tickets,
     WebTerminal,
-    SiteMessages
+    SiteMessages,
+    SystemSetting
   },
   data() {
     return {
@@ -78,61 +85,9 @@ export default {
     overflow: hidden;
     background: #f3f3f4;
 
-    .organization {
-      height: 35px;
-      line-height: 35px;
-      background: #E0E0E0;
-      border-radius: 19px;
-      color: #606266;
-      //margin-right: -15px;
-      &:after {
-        position: absolute;
-        top: 15%;
-        left: -16px;
-        content: '';
-        width: 1px;
-        height: 25px;
-        background-color: rgba(144,147,152,.5);
-      }
-      &>>> .el-input__prefix {
-        left: 8px
-      }
-      &>>> .el-input--prefix .el-input__inner {
-        line-height: 35px !important;
-        height: 35px !important;
-      }
-      &>>> .fa-sitemap {
-        padding-left: 4px;
-      }
-      &>>> .el-input__icon {
-        color: #606266;
-      }
-    }
-    .header-item {
-      line-height: 55px;
-      display: inline-block;
-      padding-right: 10px;
-      padding-left: 10px;
-      vertical-align: middle;
-    }
-
-    .header-hover {
-      &:hover {
-        background-color: #e6e6e6;
-      }
-    }
-
-    .header-icon {
-      &:hover {
-        background-color: #e6e6e6;
-      }
-      &>>> .el-badge {
-        vertical-align: sub;
-      }
-    }
-
     .navbar-left {
       float: left;
+
       .left-item {
         line-height: 55px;
         display: inline-block;
@@ -150,6 +105,36 @@ export default {
     .navbar-right {
       float: right;
       margin-right: 10px;
+
+      .header-hover {
+        &:hover {
+          background-color: #e6e6e6;
+        }
+      }
+
+      .header-item {
+        line-height: 55px;
+        display: inline-block;
+        padding-right: 10px;
+        padding-left: 10px;
+        vertical-align: middle;
+      }
+
+      .header-icon {
+        padding-left: 8px;
+        padding-right: 8px;
+        &:hover {
+          background-color: #e6e6e6;
+        }
+        &>>> i {
+          color: #909399;
+          font-size: 16px;
+        }
+        &>>> .svg-icon {
+          font-size: 16px;
+          color: #909399;
+        }
+      }
     }
   }
 
@@ -157,5 +142,6 @@ export default {
     margin: 0;
     padding-inline-start: 0;
   }
+
 </style>
 

@@ -10,12 +10,16 @@
 import TabPage from '@/layout/components/TabPage'
 import Basic from './Base'
 import TerminalList from './TerminalList'
+import ReplayStorage from './Storage/ReplayStorage'
+import CommandStorage from './Storage/CommandStorage'
 
 export default {
   components: {
     TabPage,
     Basic,
-    TerminalList
+    TerminalList,
+    ReplayStorage,
+    CommandStorage
   },
   data() {
     return {
@@ -29,6 +33,14 @@ export default {
         {
           title: this.$t('route.Terminal'),
           name: 'TerminalList'
+        },
+        {
+          title: this.$t('sessions.replayStorage'),
+          name: 'ReplayStorage'
+        },
+        {
+          title: this.$t('sessions.commandStorage'),
+          name: 'CommandStorage'
         }
       ]
     }

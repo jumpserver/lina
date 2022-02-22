@@ -148,10 +148,11 @@ export default [
     ]
   },
   {
-    path: 'command-filters',
+    path: 'cmd-filters',
     component: empty,
     redirect: '',
     meta: {
+      resource: 'commandfilter',
       permissions: ['assets.view_commandfilter']
     },
     children: [

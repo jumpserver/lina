@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--    <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>-->
     <el-badge :value="assignedTicketCount" :hidden="assignedTicketCount===0" size="mini" type="primary">
       <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>
     </el-badge>

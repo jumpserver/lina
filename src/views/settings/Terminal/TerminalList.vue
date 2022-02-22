@@ -168,16 +168,7 @@ export default {
         hasExport: false,
         hasImport: false,
         hasUpdate: false,
-        extraActions: [
-          {
-            name: 'StorageConfiguration',
-            title: this.$t('sessions.StorageConfiguration'),
-            type: 'primary',
-            has: true,
-            can: true,
-            callback: this.handleStorageConfiguration
-          }
-        ],
+        extraActions: [],
         extraMoreActions: [
           {
             name: 'updateSelected',
@@ -190,11 +181,6 @@ export default {
           }
         ]
       }
-    }
-  },
-  methods: {
-    handleStorageConfiguration() {
-      this.$router.push('/settings/storages')
     }
   }
 }
