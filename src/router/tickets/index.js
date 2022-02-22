@@ -1,4 +1,5 @@
 import Layout from '@/layout'
+import empty from '@/layout/empty'
 import i18n from '@/i18n/i18n'
 
 export default {
@@ -19,7 +20,7 @@ export default {
     {
       path: '/tickets/list',
       name: 'TicketList',
-      component: () => import('@/views/tickets/TicketList'),
+      component: () => import('@/views/tickets'),
       meta: {
         title: i18n.t('route.Tickets'),
         icon: 'file-text-o',
@@ -27,39 +28,63 @@ export default {
       }
     },
     {
-      path: '/tickets/create',
-      name: 'TicketNew',
-      component: () => import('@/views/tickets/TicketList'),
+      path: '/tickets/flow',
+      name: 'TicketFlow',
+      component: empty,
+      redirect: '',
       meta: {
-        title: i18n.t('route.TicketsNew'),
-        icon: 'external-link-square',
+        title: i18n.t('tickets.FlowSetUp'),
+        icon: 'sort-amount-asc',
         permissions: []
-      }
-    },
-    {
-      path: '/tickets/done',
-      name: 'TicketDone',
-      component: () => import('@/views/tickets/TicketList'),
-      meta: {
-        title: i18n.t('route.TicketsDone'),
-        icon: 'check-square-o',
-        permissions: []
-      }
-    },
-    {
-      path: '/tickets/:id',
-      name: 'TicketDetail',
-      component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
-      hidden: true,
-      meta: {
-      }
+      },
+      children: [
+        {
+          path: '',
+          name: 'TicketFlow',
+          component: () => import('@/views/tickets/TicketFlow/TicketFlow'),
+          meta: {
+            title: i18n.t('tickets.FlowSetUp'),
+            permissions: []
+          }
+        },
+        {
+          path: ':id',
+          name: 'FlowDetail',
+          component: () => import('@/views/tickets/TicketFlow/Detail'),
+          meta: {
+            title: i18n.t('route.TicketFlow'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: 'create',
+          name: 'TicketFlowCreate',
+          component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
+          meta: {
+            title: i18n.t('route.TicketFlowCreate'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: ':id/update',
+          name: 'TicketFlowUpdate',
+          component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
+          meta: {
+            title: i18n.t('route.TicketFlowUpdate'),
+            permissions: []
+          },
+          hidden: true
+        }
+      ]
     },
     {
       path: 'request-asset-perm/create',
       name: 'RequestAssetPermTicketCreateUpdate',
       component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
       meta: {
-        title: i18n.t('route.TicketDetail'),
+        title: i18n.t('tickets.OpenTicket'),
         permissions: []
       },
       hidden: true
@@ -68,44 +93,65 @@ export default {
       path: 'request-asset-perm/:id',
       name: 'AssetsTicketDetail',
       component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
-      meta: { title: i18n.t('route.TicketDetail'), permissions: [] },
+      meta: {
+        title: i18n.t('route.TicketDetail'),
+        activeMenu: '/tickets',
+        permissions: []
+      },
+      hidden: true
+    },
+    {
+      path: 'login-asset-confirm/:id',
+      name: 'loginAssetTicketDetail',
+      component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
+      meta: {
+        title: i18n.t('route.TicketDetail'),
+        permissions: []
+      },
+      hidden: true
+    },
+    {
+      path: 'request-application-perm/create',
+      name: 'RequestApplicationPermTicketCreateUpdate',
+      component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),
+      meta: {
+        title: i18n.t('route.TicketCreate'),
+        activeMenu: '/tickets',
+        permissions: []
+      },
+      hidden: true
+    },
+    {
+      path: 'request-application-perm/:id',
+      name: 'AppsTicketDetail',
+      component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
+      meta: {
+        title: i18n.t('route.TicketDetail'),
+        permissions: []
+      },
+      hidden: true
+    },
+    {
+      path: 'command-confirm/:id',
+      name: 'CommandConfirmDetail',
+      component: () => import('@/views/tickets/CommandConfirm/Detail'),
+      meta: {
+        title: i18n.t('route.CommandConfirm'),
+        permissions: []
+      },
+      hidden: true
+    },
+    {
+      path: ':id',
+      name: 'TicketDetail',
+      component: () => import('@/views/tickets/TicketDetail'),
+      meta: {
+        title: i18n.t('route.TicketDetail'),
+        activeMenu: '/tickets',
+        permissions: []
+      },
       hidden: true
     }
-    // {
-    //   path: 'login-asset-confirm/:id',
-    //   name: 'loginAssetTicketDetail',
-    //   component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
-    //   meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [] },
-    //   hidden: true
-    // },
-    // {
-    //   path: 'request-application-perm/create',
-    //   name: 'RequestApplicationPermTicketCreateUpdate',
-    //   component: () => import('@/views/tickets/RequestApplicationPerm/RequestApplicationPermTicketCreateUpdate'),
-    //   meta: { title: i18n.t('route.TicketCreate'), activeMenu: '/tickets/tickets', permissions: [] },
-    //   hidden: true
-    // },
-    // {
-    //   path: 'request-application-perm/:id',
-    //   name: 'AppsTicketDetail',
-    //   component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
-    //   meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets/tickets', permissions: [] },
-    //   hidden: true
-    // },
-    // {
-    //   path: 'command-confirm/:id',
-    //   name: 'CommandConfirmDetail',
-    //   component: () => import('@/views/tickets/CommandConfirm/Detail'),
-    //   meta: { title: i18n.t('route.CommandConfirm'), activeMenu: '/tickets/tickets', permissions: [] },
-    //   hidden: true
-    // },
-    // {
-    //   path: ':id',
-    //   name: 'TicketDetail',
-    //   component: () => import('@/views/tickets/TicketDetail'),
-    //   meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [] },
-    //   hidden: true
-    // }
   ]
 }
 

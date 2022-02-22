@@ -1,14 +1,14 @@
 <template>
-  <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage ref="GenericListPage" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 export default {
   name: 'TicketFlow',
   components: {
-    GenericListTable
+    GenericListPage
   },
   data() {
     const vm = this
