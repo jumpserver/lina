@@ -36,5 +36,14 @@ export default [
       title: i18n.t('route.Commands'),
       permissions: ['terminal.view_command']
     }
+  },
+  {
+    path: 'ftp',
+    name: 'FtpLog',
+    component: () => import('@/views/sessions/FTPLogList'),
+    meta: {
+      title: i18n.t('route.FileTransfer'),
+      permissions: ['audits.view_ftplog']
+    }
   }
 ]

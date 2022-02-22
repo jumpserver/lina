@@ -686,6 +686,7 @@
     "CommandFilterUpdate": "Command filter update",
     "CommandStorageUpdate": "Command storage update",
     "Commands": "Commands",
+    "FileTransfer": "File transfer",
     "CreateCommandStorage": "Create command storage",
     "CreateReplayStorage": "Create replay storage",
     "Dashboard": "Dashboard",

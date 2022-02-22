@@ -11,12 +11,6 @@ export default [
     }
   },
   {
-    path: 'ftp-log',
-    name: 'FtpLog',
-    component: () => import('@/views/audits/FTPLogList'),
-    meta: { title: i18n.t('route.FtpLog'), permissions: ['audits.view_ftplog'] }
-  },
-  {
     path: 'operate-log',
     name: 'OperateLog',
     component: () => import('@/views/audits/OperateLogList'),

@@ -710,6 +710,7 @@
     "CommandFilterUpdate": "更新命令过滤器",
     "CommandStorageUpdate": "更新命令存储",
     "Commands": "命令记录",
+    "FileTransfer": "文件传输",
     "CreateCommandStorage": "创建命令存储",
     "CreateReplayStorage": "创建录像存储",
     "Dashboard": "仪表盘",
