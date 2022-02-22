@@ -8,7 +8,7 @@
 
 <script>
 import TabPage from '@/layout/components/TabPage'
-import Basic from './Terminal'
+import Basic from './Base'
 import TerminalList from './TerminalList'
 
 export default {

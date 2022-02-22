@@ -200,7 +200,6 @@ const mutations = {
     state.routes = routes.concat(constantRoutes)
   },
   SET_VIEW_ROUTE: (state, viewRoute) => {
-    console.log('Current view route: ', viewRoute)
     state.currentViewRoute = viewRoute
   }
 }

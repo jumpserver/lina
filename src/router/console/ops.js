@@ -28,14 +28,14 @@ export default [
     component: () => import('@/views/ops/TaskDetail/AdhocDetail'),
     name: 'AdhocDetail',
     hidden: true,
-    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/admin/ops/tasks' }
+    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/console/ops/tasks' }
   },
   {
     path: 'executions/:id',
     component: () => import('@/views/ops/TaskDetail/HistoryExecutionDetail'),
     name: 'HistoryExecutionDetail',
     hidden: true,
-    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/admin/ops/tasks' }
+    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/console/ops/tasks' }
   },
   {
     path: 'command-executions/create',
