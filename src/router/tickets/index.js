@@ -12,6 +12,7 @@ export default {
     view: 'tickets',
     type: 'view',
     showNavSwitcher: false,
+    showOrganization: false,
     permissions: []
   },
   children: [
@@ -52,21 +53,24 @@ export default {
       hidden: true,
       meta: {
       }
+    },
+    {
+      path: 'request-asset-perm/create',
+      name: 'RequestAssetPermTicketCreateUpdate',
+      component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
+      meta: {
+        title: i18n.t('route.TicketDetail'),
+        permissions: []
+      },
+      hidden: true
+    },
+    {
+      path: 'request-asset-perm/:id',
+      name: 'AssetsTicketDetail',
+      component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
+      meta: { title: i18n.t('route.TicketDetail'), permissions: [] },
+      hidden: true
     }
-    // {
-    //   path: 'request-asset-perm/create',
-    //   name: 'RequestAssetPermTicketCreateUpdate',
-    //   component: () => import('@/views/tickets/RequestAssetPerm/RequestAssetPermTicketCreateUpdate'),
-    //   meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [] },
-    //   hidden: true
-    // },
-    // {
-    //   path: 'request-asset-perm/:id',
-    //   name: 'AssetsTicketDetail',
-    //   component: () => import('@/views/tickets/RequestAssetPerm/Detail'),
-    //   meta: { title: i18n.t('route.TicketDetail'), activeMenu: '/tickets', permissions: [] },
-    //   hidden: true
-    // },
     // {
     //   path: 'login-asset-confirm/:id',
     //   name: 'loginAssetTicketDetail',

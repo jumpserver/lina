@@ -24,8 +24,8 @@ export default {
       name: 'MyHome',
       component: () => import('@/views/myhome'),
       meta: {
-        icon: 'home',
-        title: i18n.t('route.Dashboard'),
+        icon: 'dashboard',
+        title: i18n.t('route.Overview'),
         permissions: []
       }
     },
