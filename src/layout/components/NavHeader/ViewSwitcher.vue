@@ -9,8 +9,7 @@
       <template slot="title">
         <span class="title-label">
           <i class="fa fa-bars" />
-          <span v-if="currentView">{{ currentView.meta.title }}</span>
-          <span v-else>{{ $t('common.nav.View') }}</span>
+          <span>{{ $t('common.nav.View') }}</span>
         </span>
       </template>
       <el-menu-item

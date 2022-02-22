@@ -11,6 +11,11 @@
           <WebTerminal />
         </el-tooltip>
       </li>
+      <li class="header-item header-icon">
+        <el-tooltip effect="dark" :content="this.$t('route.SystemSetting')">
+          <SystemSetting />
+        </el-tooltip>
+      </li>
       <li class="header-item header-hover">
         <Tickets />
       </li>
@@ -42,6 +47,7 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
+import SystemSetting from './SystemSetting'
 
 export default {
   components: {
@@ -51,7 +57,8 @@ export default {
     Help,
     Tickets,
     WebTerminal,
-    SiteMessages
+    SiteMessages,
+    SystemSetting
   },
   data() {
     return {
@@ -126,9 +133,17 @@ export default {
       &:hover {
         background-color: #e6e6e6;
       }
-      &>>> .el-badge {
-        vertical-align: sub;
+      &>>> i {
+        color: #909399;
+        font-size: 16px;
       }
+      &>>> .svg-icon {
+        font-size: 16px;
+        color: #909399;
+      }
+      //&>>> .el-badge {
+      //  vertical-align: sub;
+      //}
     }
 
     .navbar-left {
