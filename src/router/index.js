@@ -63,9 +63,9 @@ export const allRoutes = [
       permissions: []
     }
   },
+  workspaceViewRoutes,
   consoleViewRoutes,
   auditViewRoutes,
-  workspaceViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes
