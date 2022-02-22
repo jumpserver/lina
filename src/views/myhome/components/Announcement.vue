@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card" shadow="never">
     <div slot="header" class="title">
       <span>{{ i18n.t('common.Announcement') }}</span>
     </div>
@@ -52,11 +52,7 @@ ul,li {
   list-style: none
 }
 .box-card {
-  box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
   margin-bottom: 20px;
-  &:hover {
-    box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
-  }
 }
 .title {
   font-weight: 500;

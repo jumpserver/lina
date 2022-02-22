@@ -1,6 +1,6 @@
 <template>
   <div id="HomeCard">
-    <el-card class="box-card">
+    <el-card class="box-card" shadow="never">
       <div v-show="title || btnText" slot="header" class="clearfix">
         <span v-show="title" class="head-title">{{ title }}</span>
         <el-button
@@ -81,15 +81,12 @@ export default {
     position: relative;
     width: 100%;
     background-color: #fff;
-    box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
+    //box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
     transition: all 0.4s ease;
     overflow: hidden;
     &>>> .el-card__header {
       padding: 20px 20px 0;
       border-bottom: 0;
-    }
-    &:hover {
-      box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
     }
     &:nth-child(n) {
       margin-bottom: 20px;
