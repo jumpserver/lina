@@ -1,6 +1,6 @@
 <template>
-  <el-link class="el-link" :href="webTerminalUrl" target="_blank">
-    <svg-icon icon-class="terminal" style="font-size: 19px; vertical-align: sub;" />
+  <el-link :href="webTerminalUrl" target="_blank">
+    <svg-icon icon-class="terminal" />
   </el-link>
 </template>
 
@@ -18,9 +18,4 @@ export default {
 </script>
 
 <style scoped>
-.el-link {
-  color: #606266 !important;
-  font-size: 13px;
-  font-weight: 400
-}
 </style>
