@@ -8,7 +8,6 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user" command="profile">{{ $t('common.nav.Profile') }}</el-dropdown-item>
-        <el-dropdown-item v-show="showSettings" icon="el-icon-setting" command="settings">{{ $t('route.Settings') }}</el-dropdown-item>
         <el-dropdown-item icon="el-icon-key" command="apiKey">{{ $t('common.nav.APIKey') }}</el-dropdown-item>
         <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
@@ -20,9 +19,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import ApiKey from './ApiKey'
-import rolec from '@/utils/role'
-import orgUtil from '@/utils/org'
-import store from '@/store'
 
 export default {
   name: 'AccountDropdown',
@@ -32,7 +28,6 @@ export default {
   data() {
     return {
       avatarUrl: require('@/assets/img/admin.png'),
-      showSettings: false,
       showApiKey: false
     }
   },
@@ -43,54 +38,15 @@ export default {
       'currentOrgRoles',
       'orgs',
       'currentOrgPerms'
-    ]),
-    isInAdminRole() {
-      const inAdmin = rolec.hasPerm(rolec.ADMIN_PAGE_REQUIRE_PERM_MIN, this.currentRole)
-      return inAdmin
-    },
-    hasAdminOrg() {
-      return this.orgs.length > 0
-    },
-    adminPageRequirePerm() {
-      return rolec.PERM_SUPER | rolec.PERM_ADMIN | rolec.PERM_AUDIT
-    },
-    hasCurrentOrgAdminPagePerm() {
-      // 只有有一个权限就可以
-      return rolec.hasAdminPagePerm(this.currentOrgPerms)
-    },
-    currentOrgUsePagePerm() {
-      const userPageRequireRole = rolec.PERM_USE
-      return userPageRequireRole & this.currentOrgPerms
-    }
+    ])
   },
   created() {
-    store.dispatch('permission/getRootPerms', 'settings.change_setting').then(res => {
-      this.showSettings = res
-    })
   },
   methods: {
     handleClick(val) {
       switch (val) {
         case 'profile':
           this.$router.push('/profile')
-          break
-        case 'settings':
-          this.$router.push('/settings')
-          break
-        case 'adminPage':
-          if (this.hasCurrentOrgAdminPagePerm) {
-            const currentRole = rolec.getUserInAdminPagePerm(this.currentOrgPerms)
-            this.$store.dispatch('users/setCurrentRole', currentRole)
-            window.location.href = `/ui/`
-          } else {
-            orgUtil.change2PropOrg()
-          }
-          break
-        case 'userPage':
-          if (this.currentOrgUsePagePerm) {
-            this.$store.dispatch('users/setCurrentRole', rolec.USER)
-            window.location.href = `/ui/`
-          }
           break
         case 'logout':
           this.logout()

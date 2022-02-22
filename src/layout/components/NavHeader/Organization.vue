@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="currentOrg.id"
-    class="org-select"
+    class="org-select organization"
     filterable
     :placeholder="$t('common.Select')"
     @change="changeOrg"
@@ -74,5 +74,36 @@ export default {
   .icon {
     color: #606266;
     cursor: pointer;
+  }
+
+  .organization {
+    height: 35px;
+    line-height: 35px;
+    background: #E0E0E0;
+    border-radius: 19px;
+    color: #606266;
+    //margin-right: -15px;
+    &:after {
+      position: absolute;
+      top: 15%;
+      left: -16px;
+      content: '';
+      width: 1px;
+      height: 25px;
+      background-color: rgba(144,147,152,.5);
+    }
+    &>>> .el-input__prefix {
+      left: 8px
+    }
+    &>>> .el-input--prefix .el-input__inner {
+      line-height: 35px !important;
+      height: 35px !important;
+    }
+    &>>> .fa-sitemap {
+      padding-left: 4px;
+    }
+    &>>> .el-input__icon {
+      color: #606266;
+    }
   }
 </style>
