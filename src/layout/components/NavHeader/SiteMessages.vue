@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-badge :value="unreadMsgCount" :hidden="unreadMsgCount === 0" :max="99" size="mini" type="primary">
-      <a style="color: #606266 !important; width: 30px" @click="toggleDrawer">
+      <el-link style="height: 100%" @click="toggleDrawer">
         <svg-icon icon-class="email-fill" />
-      </a>
+      </el-link>
     </el-badge>
     <el-drawer
       :visible.sync="show"
