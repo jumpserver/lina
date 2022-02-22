@@ -12,21 +12,21 @@ import AccountRoutes from './accounts'
 import XPackRoutes from './xpack'
 
 export default {
-  path: '/admin',
+  path: '/console',
   component: Layout,
-  name: 'AdminView',
-  redirect: '/admin/dashboard',
+  name: 'Console',
+  redirect: '/console/dashboard',
   meta: {
-    title: i18n.t('common.nav.AdminPage'),
+    title: i18n.t('common.nav.Console'),
     icon: 'el-icon-s-tools',
-    view: 'admin',
+    view: 'console',
     type: 'view',
     showNavSwitcher: true,
     permissions: ['rbac.view_adminview']
   },
   children: [
     {
-      path: '/admin/dashboard',
+      path: '/console/dashboard',
       component: () => import('@/views/dashboard/index'),
       name: 'AdminDashboard',
       meta: {
@@ -36,7 +36,7 @@ export default {
       }
     },
     {
-      path: '/admin/users',
+      path: '/console/users',
       component: empty,
       name: 'Users',
       meta: {
@@ -46,7 +46,7 @@ export default {
       children: UsersRoute
     },
     {
-      path: '/admin/assets',
+      path: '/console/assets',
       component: empty,
       name: 'Assets',
       meta: {
@@ -56,7 +56,7 @@ export default {
       children: AssetsRoute
     },
     {
-      path: '/admin/applications',
+      path: '/console/applications',
       component: empty,
       name: 'applications',
       meta: {
@@ -66,7 +66,7 @@ export default {
       children: ApplicationsRoute
     },
     {
-      path: '/admin/accounts',
+      path: '/console/accounts',
       component: empty,
       name: 'Accounts',
       meta: {
@@ -77,7 +77,7 @@ export default {
       children: AccountRoutes
     },
     {
-      path: '/admin/perms',
+      path: '/console/perms',
       component: empty,
       name: 'Perms',
       meta: {
@@ -87,7 +87,7 @@ export default {
       children: PermsRoute
     },
     {
-      path: '/admin/acls',
+      path: '/console/acls',
       component: empty,
       name: 'Acl',
       meta: {
@@ -98,7 +98,7 @@ export default {
       children: AclRoutes
     },
     {
-      path: '/admin/ops',
+      path: '/console/ops',
       component: empty,
       name: 'JobCenter',
       meta: {
@@ -108,7 +108,7 @@ export default {
       children: OpsRoutes
     },
     {
-      path: '/admin/xpack',
+      path: '/console/xpack',
       component: empty,
       redirect: '/applications/remote-apps/',
       name: 'Xpack',

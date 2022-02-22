@@ -82,11 +82,10 @@ export default {
         {
           path: '',
           name: 'TerminalList',
-          component: () => import('@/views/settings/Terminal/index'),
+          component: () => import('@/views/settings/Terminal'),
           meta: {
             title: i18n.t('setting.Terminal'),
             icon: 'terminal',
-            permissions: ['terminal.view_command'],
             resource: 'terminal',
             app: 'terminal'
           }
@@ -96,6 +95,7 @@ export default {
           name: 'TerminalDetail',
           component: () => import('@/views/settings/Terminal/TerminalDetail'),
           meta: {
+            title: i18n.t('route.Terminal'),
             permissions: ['terminal.view_command']
           },
           hidden: true
@@ -105,6 +105,76 @@ export default {
           name: 'TerminalUpdate',
           component: () => import('@/views/settings/Terminal/TerminalUpdate'),
           meta: {
+            title: i18n.t('route.Terminal'),
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        }
+      ]
+    },
+    {
+      path: '/settings/storages',
+      component: empty,
+      redirect: '',
+      meta: {
+        title: i18n.t('setting.storage'),
+        permissions: ['terminal.view_command'],
+        resource: 'terminal',
+        app: 'terminal'
+      },
+      hidden: true,
+      children: [
+        {
+          path: '',
+          name: 'Storage',
+          component: () => import('@/views/settings/Terminal/Storage/index'),
+          meta: {
+            title: i18n.t('setting.storage'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        },
+        {
+          path: 'replay-storage/create',
+          name: 'CreateReplayStorage',
+          component: () => import('@/views/settings/Terminal/Storage/ReplayStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.CreateReplayStorage'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        },
+        {
+          path: 'replay-storage/:id/update',
+          name: 'ReplayStorageUpdate',
+          component: () => import('@/views/settings/Terminal/Storage/ReplayStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.ReplayStorageUpdate'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        },
+        {
+          path: 'command-storage/create',
+          name: 'CreateCommandStorage',
+          component: () => import('@/views/settings/Terminal/Storage/CommandStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.CreateCommandStorage'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.view_command']
+          },
+          hidden: true
+        },
+        {
+          path: 'command-storage/:id/update',
+          name: 'CommandStorageUpdate',
+          component: () => import('@/views/settings/Terminal/Storage/CommandStorageCreateUpdate'),
+          meta: {
+            title: i18n.t('route.CommandStorageUpdate'),
+            activeMenu: '/settings/terminal',
             permissions: ['terminal.view_command']
           },
           hidden: true

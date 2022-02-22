@@ -51,7 +51,8 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('xpack.GatherUser.GatherUserList')
+      title: i18n.t('xpack.GatherUser.GatherUserList'),
+      app: 'assets'
     },
     children: [
       {
@@ -116,7 +117,10 @@ export default [
     path: 'change-auth-plan',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan') },
+    meta: {
+      title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
+      app: 'xpack'
+    },
     children: [
       {
         path: '',
@@ -232,7 +236,11 @@ export default [
     path: 'backup',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') },
+    meta: {
+      title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
+      app: 'assets',
+      resource: 'accountbackupplan'
+    },
     children: [
       {
         path: '',

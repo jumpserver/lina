@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     <Dialog
       :visible.sync="dialogSettings.visible"
       :destroy-on-close="true"
@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { GenericListPage, GenericCreateUpdateForm } from '@/layout/components'
+import ListTable from '@/components/ListTable'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
 
@@ -27,7 +28,7 @@ const numTotFixed = (row, type) => {
 }
 export default {
   components: {
-    GenericListPage,
+    ListTable,
     Dialog,
     GenericCreateUpdateForm
   },
