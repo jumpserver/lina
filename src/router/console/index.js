@@ -18,7 +18,7 @@ export default {
   redirect: '/console/dashboard',
   meta: {
     title: i18n.t('common.nav.Console'),
-    icon: 'el-icon-s-tools',
+    icon: 'el-icon-s-operation',
     view: 'console',
     type: 'view',
     showNavSwitcher: true,

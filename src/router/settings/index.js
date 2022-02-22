@@ -6,13 +6,14 @@ export default {
   path: '/settings',
   component: Layout,
   redirect: '/settings/basic',
+  name: 'systemSettings',
   meta: {
     title: i18n.t('route.Settings'),
-    icon: 'gear',
+    icon: 'el-icon-s-tools',
     activeMenu: '/settings',
     view: 'settings',
     type: 'view',
-    showNavSwitcher: false,
+    showNavSwitcher: true,
     showOrganization: false,
     permissions: []
   },
