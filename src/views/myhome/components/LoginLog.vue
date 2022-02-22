@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card" shadow="never">
     <div slot="header" class="title">
       <span>{{ i18n.t('route.LoginLog') }}</span>
     </div>
@@ -42,12 +42,14 @@ export default {
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',
         columns: [
-          'ip', 'datetime'
+          'city', 'datetime'
         ],
         columnsMeta: {
-          ip: {
-            label: this.$t('audits.LoginIP'),
-            showOverflowTooltip: true
+          city: {
+            showOverflowTooltip: true,
+            formatter: (row) => {
+              return <span>{ row.city }({ row.ip })</span>
+            }
           },
           datetime: {
             showOverflowTooltip: true
@@ -63,11 +65,8 @@ export default {
 
 <style lang="scss" scoped>
 .box-card {
-  box-shadow: 0 2px 4px 0 rgb(54 58 80 / 32%);
   margin-bottom: 20px;
-  &:hover {
-    box-shadow: 0 4px 5px 0 rgb(54 58 80 / 42%);
-  }
+
   &>>> .el-card__header {
     margin-bottom: -10px;
   }

@@ -9,7 +9,7 @@ import { toSafeLocalDateStr } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
-  name: 'Hannouncement',
+  name: 'HomeAnnouncement',
   components: {
     HomeCard
   },

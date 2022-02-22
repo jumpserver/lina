@@ -8,8 +8,7 @@
               <el-row>
                 <el-col :md="16" :xs="24" style="padding-right: 20px;">
                   <Session />
-                  <Assect />
-                  <Ticket />
+                  <Ticket v-if="hasValidLicense" />
                 </el-col>
                 <el-col :md="8" :xs="24">
                   <User />
@@ -27,12 +26,10 @@
 
 <script>
 import { Page } from '@/layout/components'
-import store from '@/store'
 import User from './components/User'
 import Announcement from './components/Announcement'
 import Ticket from './components/Ticket'
-import Log from './components/Log'
-import Assect from './components/Assect'
+import Log from './components/LoginLog'
 import Session from './components/Session'
 
 export default {
@@ -43,16 +40,14 @@ export default {
     Announcement,
     Ticket,
     Log,
-    Assect,
     Session
   },
   data() {
     return {
-      rootShow: true
     }
   },
   computed: {
-    getasValidLicense() {
+    hasValidLicense() {
       return this.$store.getters.hasValidLicense
     }
   },
@@ -60,11 +55,6 @@ export default {
     this.init()
   },
   methods: {
-    init() {
-      store.dispatch('permission/getRootPerms', 'aaaa').then(res => {
-        this.rootShow = res
-      })
-    }
   }
 }
 
