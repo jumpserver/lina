@@ -27,7 +27,7 @@ export default {
     return {
       user: this.$store.state.users.profile,
       config: {
-        title: this.$t('users.Profile'),
+        title: this.$t('users.ProfileSetting'),
         activeMenu: 'ProfileUpdate',
         submenu: this.getSubmenu(),
         hasRightSide: false,

@@ -5,7 +5,11 @@
     mode="horizontal"
     @select="handleSelectView"
   >
-    <el-submenu index="2">
+    <el-submenu
+      index="2"
+      popper-class="view-switcher"
+      popper-append-to-body
+    >
       <template slot="title">
         <span class="title-label">
           <i class="fa fa-bars" />
@@ -71,65 +75,74 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-menu--popup-bottom-start {
-  margin-top: 0 !important;
-}
-.menu-main.el-menu {
-  background-color: transparent;
-  ::v-deep .el-submenu .el-submenu__title {
-    height: 55px;
-    line-height: 55px;
-    border-bottom: none;
+  /* 显示的 */
+  .menu-main.el-menu {
+    background-color: transparent;
+    &>>> .el-icon-arrow-down {
+      font-size: 13px;
+      color: #606266;
+    }
+    &>>> .el-menu--popup-bottom-start {
+      margin-top: 0!important;
+    }
+    ::v-deep .el-submenu .el-submenu__title {
+      height: 55px;
+      line-height: 55px;
+      border-bottom: none;
+    }
+    &.el-menu--horizontal {
+      border-bottom: none;
+    }
   }
-  &.el-menu--horizontal {
-    border-bottom: none;
+
+  .el-menu--horizontal.view-switcher .el-menu.el-menu--popup {
+    min-width: 70px!important;
+    margin-top: 0!important;
+    background: red;
+    &.el-menu--popup-bottom-start {
+      margin-top: 0!important;
+    }
+
+    .el-menu-item {
+      display: inline-block!important;
+      padding: 10px 10px;
+      text-align: center;
+      height: 70px;
+      width: 70px;
+
+      &.is-active {
+        font-weight: bold;
+      }
+      &:hover {
+        color: #303133;
+        background-color: #e6e6e6;
+      }
+      &:first-child {
+        margin-left: 20px;
+      }
+      &:last-child {
+        margin-right: 20px;
+      }
+
+      .title-label {
+        padding-left: 12px;
+        font-size: 14px;
+        vertical-align: unset;
+        color: #606266!important;
+      }
+
+      .icons {
+        display: block;
+        font-size: 23px;
+        text-align: center;
+      }
+      .icons-title {
+        display: inline-block;
+        font-size: 14px;
+      }
+    }
   }
-}
-.menu-main {
-  &>>> .el-icon-arrow-down {
-    font-size: 13px;
-    color: #606266;
-  }
-}
-.el-menu--horizontal .el-menu .el-menu-item {
-  display: inline-block!important;
-  padding: 10px 10px;
-  text-align: center;
-  height: 70px;
-  width: 70px;
-  &:hover {
-    color: #303133;
-    //background-color: #e6e6e6;
-  }
-  &:first-child {
-    margin-left: 20px;
-  }
-  &:last-child {
-    margin-right: 20px;
-  }
-}
-.el-submenu.is-opened {
-  background-color: transparent;
-}
-.title-label {
-  padding-left: 12px;
-  font-size: 14px;
-  vertical-align: unset;
-  color: #606266!important;
-}
-.icons {
-  display: block;
-  font-size: 23px;
-  text-align: center;
-}
-.icons-title {
-  display: inline-block;
-  font-size: 14px;
-}
-.el-menu--popup-bottom-start {
-  margin-top: 0!important;
-}
-.el-menu-item.is-active {
-  font-weight: bold;
-}
+  //.el-submenu.is-opened {
+  //  background-color: transparent;
+  //}
 </style>
