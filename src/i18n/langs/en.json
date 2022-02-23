@@ -1335,6 +1335,7 @@
       "Reason": "Reason"
     },
     "Cloud": {
+      "CloudImport": "Cloud import",
       "ServerAccountKey": "Server Account Key",
       "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
@@ -1411,7 +1412,7 @@
     "InterfaceSettings": "Interface Setting",
     "License": "License",
     "LicenseDetail": "License detail",
-    "SystemMonitor": "System Monitor",
+    "ComponentMonitor": "System Monitor",
     "ServiceRatio": "Service ratio",
     "LoadStatus":"Status",
     "NormalLoad":"Normal",

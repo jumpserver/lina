@@ -1,21 +1,17 @@
 <template>
-  <Page>
-    <el-row v-if="loaded" :gutter="40">
-      <el-col v-for="metric of metricsData" :key="metric.type" :lg="12" :md="24">
-        <MonitorCard :type="metric.type" :component-metric="metric" class="monitorCard" />
-      </el-col>
-    </el-row>
-  </Page>
+  <el-row v-if="loaded" :gutter="40">
+    <el-col v-for="metric of metricsData" :key="metric.type" :lg="12" :md="24">
+      <MonitorCard :type="metric.type" :component-metric="metric" class="monitorCard" />
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-import Page from '@/layout/components/Page/index'
-import MonitorCard from '@/views/xpack/SystemMonitor/component/MonitorCard'
+import MonitorCard from './component/MonitorCard'
 
 export default {
   name: 'SystemMonitor',
   components: {
-    Page,
     MonitorCard
   },
   data() {

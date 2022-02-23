@@ -203,6 +203,66 @@ export default {
       }
     },
     {
+      path: '/settings/interface',
+      name: 'Interface',
+      component: () => import('@/views/settings/Interface'),
+      meta: {
+        title: i18n.t('xpack.InterfaceSettings'),
+        icon: 'laptop',
+        permissions: ['xpack.view_interface']
+      }
+    },
+    {
+      path: '/settings/orgs',
+      component: empty,
+      redirect: '',
+      meta: { permissions: ['orgs.view_organization'] },
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/settings/Org/OrganizationList'),
+          name: 'OrganizationList',
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationList'),
+            icon: 'sitemap',
+            permissions: ['orgs.view_organization']
+          }
+        },
+        {
+          path: 'create',
+          component: () => import('@/views/settings/Org/OrganizationCreateUpdate'),
+          name: 'OrganizationCreate',
+          hidden: true,
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationCreate'),
+            action: 'create',
+            permissions: ['orgs.add_organization']
+          }
+        },
+        {
+          path: ':id/update',
+          component: () => import('@/views/settings/Org/OrganizationCreateUpdate'),
+          name: 'OrganizationUpdate',
+          hidden: true,
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationUpdate'),
+            action: 'update',
+            permissions: ['orgs.change_organization']
+          }
+        },
+        {
+          path: ':id',
+          component: () => import('@/views/settings/Org/OrganizationDetail/index'),
+          name: 'OrganizationDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('xpack.Organization.OrganizationDetail'),
+            permissions: ['orgs.view_organization']
+          }
+        }
+      ]
+    },
+    {
       path: '/settings/other',
       name: 'Other',
       component: () => import('@/views/settings/Other'),

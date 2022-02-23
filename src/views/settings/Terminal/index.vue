@@ -12,11 +12,13 @@ import Basic from './Base'
 import TerminalList from './TerminalList'
 import ReplayStorage from './Storage/ReplayStorage'
 import CommandStorage from './Storage/CommandStorage'
+import Monitor from './Monitor'
 
 export default {
   components: {
     TabPage,
     Basic,
+    Monitor,
     TerminalList,
     ReplayStorage,
     CommandStorage
@@ -41,6 +43,10 @@ export default {
         {
           title: this.$t('sessions.commandStorage'),
           name: 'CommandStorage'
+        },
+        {
+          title: this.$t('xpack.ComponentMonitor'),
+          name: 'Monitor'
         }
       ]
     }
