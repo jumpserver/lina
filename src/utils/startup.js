@@ -15,10 +15,6 @@ function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
 }
 
-// function setHeadTitle({ to, from, next }) {
-//   document.title = getPageTitle(to.meta.title)
-// }
-
 async function checkLogin({ to, from, next }) {
   if (whiteList.indexOf(to.path) !== -1) {
     next()
@@ -69,12 +65,11 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
   await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
-    // console.log('Not has current org')
     orgUtil.change2PropOrg()
     return reject('Change prop org')
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
-    console.debug('Not has current org permission')
+    console.error('Not has current org permission')
     orgUtil.change2PropOrg()
     return reject('Change prop org')
   }
@@ -109,11 +104,6 @@ export async function generatePageRoutes({ to, from, next }) {
 
   try {
     // try get user profile
-    // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-    // 不能改名 current_org_roles, 里面返回的就是这个
-    // const currentRole = store.getters.currentRole
-    // console.log('Current org role: ', currentRole, rolec.getRolesDisplay(currentRole))
-
     // generate accessible routes map based on roles
     const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
 
