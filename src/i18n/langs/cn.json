@@ -1477,6 +1477,7 @@
     "NoLicense": "暂无许可证",
     "Node": "节点",
     "Organization": {
+      "AllOrganization": "所有组织",
       "OrganizationCreate": "创建组织",
       "OrganizationDetail": "组织详情",
       "OrganizationList": "组织管理",

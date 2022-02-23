@@ -6,6 +6,7 @@ export default [
     path: 'cloud',
     component: empty,
     redirect: '',
+    hidden: true,
     meta: {
       title: i18n.t('xpack.Cloud.CloudImport'),
       permissions: ['xpack.view_account']

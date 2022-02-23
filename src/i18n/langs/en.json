@@ -1423,6 +1423,7 @@
     "NoLicense": "No License",
     "Node": "Node",
     "Organization": {
+      "AllOrganization": "All organization",
       "OrganizationCreate": "Create organization",
       "OrganizationDetail": "Org detail",
       "OrganizationList": "Organizations",
