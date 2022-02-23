@@ -77,8 +77,8 @@ export default {
 .menu-main.el-menu {
   background-color: transparent;
   ::v-deep .el-submenu .el-submenu__title {
-    height: 55px;
-    line-height: 55px;
+    height: 50px;
+    line-height: 50px;
     border-bottom: none;
   }
   &.el-menu--horizontal {
@@ -94,12 +94,15 @@ export default {
 .el-menu--horizontal .el-menu .el-menu-item {
   display: inline-block!important;
   text-align: center;
-  padding: 6px 0px 6px 18px;
+  padding: 8px 15px 20px 15px;
   &:hover {
     color: #303133;
   }
+  &:first-child {
+    margin-left: 15px;
+  }
   &:last-child {
-    padding: 6px 18px 6px 18px;
+    margin-right: 15px;
   }
 }
 .el-submenu.is-opened {
@@ -122,6 +125,6 @@ export default {
   font-size: 14px;
 }
 .el-menu--popup-bottom-start {
-  margin-top: 0px!important;
+  margin-top: 0!important;
 }
 </style>
