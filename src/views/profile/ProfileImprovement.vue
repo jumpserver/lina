@@ -1,19 +1,15 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <GenericCreateUpdatePage v-bind="$data" />
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { IBox } from '@/components'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'ProfileUpdate',
   components: {
-    GenericCreateUpdateForm,
-    IBox
+    GenericCreateUpdatePage
   },
   props: {
     object: {
@@ -82,7 +78,7 @@ export default {
       },
       onPerformSuccess() {
         this.$message.success(this.$t('common.updateSuccessMsg'))
-        setTimeout(() => this.$router.push({ name: 'UserGuide' }), 100)
+        setTimeout(() => this.$router.push({ name: 'ProfileInfo' }), 100)
       },
       submitMethod() {
         return 'put'

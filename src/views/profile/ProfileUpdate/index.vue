@@ -8,7 +8,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ProfileInfo from './ProfileInfo'
+import ProfileInfo from '../ProfileInfo'
 import ProfileUpdate from './ProfileUpdate'
 import PasswordUpdate from './PasswordUpdate'
 import SecretKeyUpdate from './SecretKeyUpdate'

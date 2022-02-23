@@ -93,10 +93,10 @@ export default {
 }
 .el-menu--horizontal .el-menu .el-menu-item {
   display: inline-block!important;
-  padding: 10px 15px;
+  padding: 10px 10px;
   text-align: center;
   height: 70px;
-  width: 85px;
+  width: 70px;
   &:hover {
     color: #303133;
     //background-color: #e6e6e6;
