@@ -12,19 +12,14 @@
         <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />{{ $t('common.nav.Logout') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <ApiKey ref="api" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import ApiKey from './ApiKey'
 
 export default {
   name: 'AccountDropdown',
-  components: {
-    ApiKey
-  },
   data() {
     return {
       avatarUrl: require('@/assets/img/admin.png'),
@@ -53,7 +48,7 @@ export default {
           window.location.href = `${process.env.VUE_APP_LOGOUT_PATH}?next=${this.$route.fullPath}`
           break
         case 'apiKey':
-          this.$refs.api.showApi()
+          this.$router.push('/profile/key')
           break
       }
     },
