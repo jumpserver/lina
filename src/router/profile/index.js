@@ -29,7 +29,7 @@ export default {
       name: 'ProfileSetting',
       component: () => import('@/views/profile/ProfileUpdate/index'),
       meta: {
-        title: i18n.t('users.PersonalSetting'),
+        title: i18n.t('users.Profile'),
         icon: 'user-circle',
         permissions: []
       }
@@ -40,6 +40,16 @@ export default {
       name: 'ProfileImprovement',
       hidden: true,
       meta: { title: i18n.t('route.PersonalInformationImprovement'), permissions: [] }
+    },
+    {
+      path: '/profile/key',
+      component: () => import('@/views/profile/ApiKey'),
+      name: 'ApiKey',
+      meta: {
+        title: i18n.t('common.nav.APIKey'),
+        icon: 'key',
+        permissions: []
+      }
     }
   ]
 }
