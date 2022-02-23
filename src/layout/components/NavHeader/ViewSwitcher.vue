@@ -93,13 +93,19 @@ export default {
 }
 .el-menu--horizontal .el-menu .el-menu-item {
   display: inline-block!important;
+  padding: 10px 10px;
   text-align: center;
-  padding: 6px 0px 6px 18px;
+  height: 70px;
+  width: 70px;
   &:hover {
     color: #303133;
+    //background-color: #e6e6e6;
+  }
+  &:first-child {
+    margin-left: 20px;
   }
   &:last-child {
-    padding: 6px 18px 6px 18px;
+    margin-right: 20px;
   }
 }
 .el-submenu.is-opened {
@@ -118,10 +124,12 @@ export default {
 }
 .icons-title {
   display: inline-block;
-  padding-bottom: 10px;
   font-size: 14px;
 }
 .el-menu--popup-bottom-start {
-  margin-top: 0px!important;
+  margin-top: 0!important;
+}
+.el-menu-item.is-active {
+  font-weight: bold;
 }
 </style>
