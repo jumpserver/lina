@@ -124,7 +124,7 @@ export async function generatePageRoutes({ to, from, next }) {
 
 export async function checkUserFirstLogin({ to, from, next }) {
   if (store.state.users.profile.is_first_login) {
-    next('/profile/information-improvement')
+    next('/profile/improvement')
   }
 }
 
