@@ -8,7 +8,8 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.Cloud.CloudImport'),
-      permissions: ['xpack.view_account']
+      app: 'xpack',
+      resource: 'account'
     },
     children: [
       {
@@ -18,8 +19,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.Cloud.CloudImport'),
-          activeMenu: '/console/assets/assets',
-          permissions: ['xpack.view_account']
+          activeMenu: '/console/assets/assets'
         }
       },
       {
