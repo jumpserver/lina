@@ -19,7 +19,7 @@
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { getInterfaceInfo, postInterface, restoreInterface } from '@/views/xpack/api'
+import { getInterfaceInfo, postInterface, restoreInterface } from '@/api/interface'
 
 export default {
   name: 'InterfaceSettings',

@@ -1,5 +1,6 @@
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import XPackRoutes from './xpack'
 
 export default [
   {
@@ -277,5 +278,6 @@ export default [
         meta: { title: i18n.t('route.LabelUpdate') }
       }
     ]
-  }
+  },
+  ...XPackRoutes
 ]
