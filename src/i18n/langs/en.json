@@ -1425,6 +1425,7 @@
     "Organization": {
       "AllOrganization": "All organization",
       "OrganizationCreate": "Create organization",
+      "OrganizationLists": "Organization lists",
       "OrganizationDetail": "Org detail",
       "OrganizationList": "Organizations",
       "OrganizationUpdate": "Update org",

@@ -1479,6 +1479,7 @@
     "Organization": {
       "AllOrganization": "所有组织",
       "OrganizationCreate": "创建组织",
+      "OrganizationLists": "组织列表",
       "OrganizationDetail": "组织详情",
       "OrganizationList": "组织管理",
       "OrganizationUpdate": "更新组织",

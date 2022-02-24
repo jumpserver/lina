@@ -74,12 +74,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-menu--popup-bottom-start{
-  margin-top: 130px;
-}
-
 .menu-main.el-menu {
   background-color: transparent;
+  // margin-top: -5px;
   ::v-deep .el-submenu .el-submenu__title {
     height: 55px;
     line-height: 55px;
@@ -128,9 +125,6 @@ export default {
 .icons-title {
   display: inline-block;
   font-size: 14px;
-}
-ul.el-menu--popup-bottom-start {
-  margin-top: 0!important;
 }
 .el-menu-item.is-active {
   font-weight: bold;

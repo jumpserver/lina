@@ -161,3 +161,12 @@ input[type=file] {
 .el-tooltip__popper.is-dark {
   max-width: 60% !important;
 }
+
+.view-switcher {
+  .el-menu--popup-bottom-start {
+    margin-top: 0!important;
+  }
+  .el-menu--popup {
+    min-width: 70px!important;
+  }
+}
