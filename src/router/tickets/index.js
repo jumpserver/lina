@@ -9,23 +9,108 @@ export default {
   meta: {
     title: i18n.t('route.Tickets'),
     icon: 'check-square-o',
-    activeMenu: '/tickets',
     view: 'tickets',
     type: 'view',
     showNavSwitcher: false,
-    showOrganization: false,
     permissions: []
   },
   children: [
     {
       path: '/tickets/list',
-      name: 'TicketList',
-      component: () => import('@/views/tickets'),
+      redirect: '',
+      component: empty,
       meta: {
         title: i18n.t('route.Tickets'),
         icon: 'file-text-o',
-        permissions: []
-      }
+        showOrganization: false,
+        permissions: [],
+        resource: 'terminal',
+        app: 'terminal'
+      },
+      children: [
+        {
+          path: '',
+          name: 'TicketList',
+          component: () => import('@/views/tickets'),
+          meta: {
+            title: i18n.t('route.Tickets'),
+            icon: 'file-text-o',
+            permissions: [],
+            resource: 'terminal',
+            app: 'terminal'
+          }
+        },
+        {
+          path: 'request-asset-perm/create',
+          name: 'RequestAssetPermTicketCreateUpdate',
+          component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
+          meta: {
+            title: i18n.t('tickets.OpenTicket'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: 'request-asset-perm/:id',
+          name: 'AssetsTicketDetail',
+          component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
+          meta: {
+            title: i18n.t('route.TicketDetail'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: 'login-asset-confirm/:id',
+          name: 'loginAssetTicketDetail',
+          component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
+          meta: {
+            title: i18n.t('route.TicketDetail'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: 'request-application-perm/create',
+          name: 'RequestApplicationPermTicketCreateUpdate',
+          component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),
+          meta: {
+            title: i18n.t('route.TicketCreate'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: 'request-application-perm/:id',
+          name: 'AppsTicketDetail',
+          component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
+          meta: {
+            title: i18n.t('route.TicketDetail'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: 'command-confirm/:id',
+          name: 'CommandConfirmDetail',
+          component: () => import('@/views/tickets/CommandConfirm/Detail'),
+          meta: {
+            title: i18n.t('route.CommandConfirm'),
+            permissions: []
+          },
+          hidden: true
+        },
+        {
+          path: ':id',
+          name: 'TicketDetail',
+          component: () => import('@/views/tickets/TicketDetail'),
+          meta: {
+            title: i18n.t('route.TicketDetail'),
+            permissions: []
+          },
+          hidden: true
+        }
+      ]
     },
     {
       path: '/tickets/flow',
@@ -80,79 +165,6 @@ export default {
           hidden: true
         }
       ]
-    },
-    {
-      path: 'request-asset-perm/create',
-      name: 'RequestAssetPermTicketCreateUpdate',
-      component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
-      meta: {
-        title: i18n.t('tickets.OpenTicket'),
-        permissions: []
-      },
-      hidden: true
-    },
-    {
-      path: 'request-asset-perm/:id',
-      name: 'AssetsTicketDetail',
-      component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
-      meta: {
-        title: i18n.t('route.TicketDetail'),
-        activeMenu: '/tickets',
-        permissions: []
-      },
-      hidden: true
-    },
-    {
-      path: 'login-asset-confirm/:id',
-      name: 'loginAssetTicketDetail',
-      component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
-      meta: {
-        title: i18n.t('route.TicketDetail'),
-        permissions: []
-      },
-      hidden: true
-    },
-    {
-      path: 'request-application-perm/create',
-      name: 'RequestApplicationPermTicketCreateUpdate',
-      component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),
-      meta: {
-        title: i18n.t('route.TicketCreate'),
-        activeMenu: '/tickets',
-        permissions: []
-      },
-      hidden: true
-    },
-    {
-      path: 'request-application-perm/:id',
-      name: 'AppsTicketDetail',
-      component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
-      meta: {
-        title: i18n.t('route.TicketDetail'),
-        permissions: []
-      },
-      hidden: true
-    },
-    {
-      path: 'command-confirm/:id',
-      name: 'CommandConfirmDetail',
-      component: () => import('@/views/tickets/CommandConfirm/Detail'),
-      meta: {
-        title: i18n.t('route.CommandConfirm'),
-        permissions: []
-      },
-      hidden: true
-    },
-    {
-      path: ':id',
-      name: 'TicketDetail',
-      component: () => import('@/views/tickets/TicketDetail'),
-      meta: {
-        title: i18n.t('route.TicketDetail'),
-        activeMenu: '/tickets',
-        permissions: []
-      },
-      hidden: true
     }
   ]
 }
