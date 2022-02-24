@@ -124,12 +124,12 @@ export default {
   .nav-footer {
     display: block;
     width: 100%;
-    height: 45px;
+    height: 40px;
     background-color: #293846;
 
     .toggle-bar {
       width: 55px;
-      height: 100%;
+      height: 40px;
       bottom: 0;
       left: 0;
       top: auto;
@@ -145,7 +145,7 @@ export default {
 
     .hamburger-container {
       left: 2px;
-      top: 13px;
+      top: 10px;
       position: absolute;
     }
   }

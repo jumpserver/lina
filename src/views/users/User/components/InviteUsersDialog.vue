@@ -48,7 +48,7 @@ export default {
             component: Select2,
             el: {
               ajax: {
-                url: '/api/v1/users/users/suggestion/'
+                url: '/api/v1/users/users/suggestions/'
               }
             }
           },
@@ -58,7 +58,7 @@ export default {
               ajax: {
                 url: '/api/v1/rbac/roles/?scope=org',
                 transformOption: (item) => {
-                  return { label: `${item.name}`, value: item.id }
+                  return { label: `${item.display_name}`, value: item.id }
                 }
               }
             }

@@ -21,7 +21,7 @@ import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
-import InviteUsersDialog from '@/views/users/User/components/InviteUsersDialog'
+import InviteUsersDialog from './components/InviteUsersDialog'
 
 export default {
   components: {
@@ -32,7 +32,7 @@ export default {
   data() {
     const vm = this
     const hasDelete = () => {
-      return vm.currentUserIsSuperAdmin
+      return vm.$hasPerm('users.delete_user')
     }
     const hasRemove = () => {
       if (!vm.publicSettings['XPACK_LICENSE_IS_VALID']) {

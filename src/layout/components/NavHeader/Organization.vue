@@ -22,7 +22,13 @@
         :selected="item.id === currentOrg.id"
         :label="item.name"
         :value="item.id"
-      />
+      >
+        <span v-if="item.icon" style="float: right; font-size: 12px">
+          <i class="fa" :class="item.icon" />
+        </span>
+        <span>{{ item.name }}</span>
+      </el-option>
+
     </el-option-group>
   </el-select>
 </template>
@@ -57,9 +63,11 @@ export default {
         label: this.$t('xpack.Organization.OrganizationList'),
         options: [{
           id: 'create',
+          icon: 'fa-plus',
           name: this.$t('xpack.Organization.OrganizationCreate')
         }, {
           id: 'list',
+          icon: 'fa-list-ul',
           name: this.$t('xpack.Organization.OrganizationLists')
         }]
       },
@@ -84,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/element-variables.scss";
+  @import '~@/styles/element-variables.scss';
   .org-select {
     padding: 0 10px 0 18px;
     line-height: 55px;
@@ -138,5 +146,8 @@ export default {
   }
   .option-group >>> .el-select-group__title {
     color: #909399 !important;
+    padding-left: 15px;
+    font-size: 12px;
+    line-height: 30px;
   }
 </style>
