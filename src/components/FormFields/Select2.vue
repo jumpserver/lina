@@ -155,6 +155,7 @@ export default {
           total = data.count
         }
         results = results.map(transformOption)
+        results = results.filter(Boolean)
         return { results: results, pagination: more, total: total }
       }
       const defaultAjax = {
