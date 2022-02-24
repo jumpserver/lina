@@ -108,7 +108,10 @@ export default {
             ajax: {
               url: '/api/v1/rbac/roles/?scope=system',
               transformOption: (item) => {
-                return { label: item.display_name, value: item.id }
+                if (item.name !== 'SystemComponent') {
+                  return { label: item.display_name, value: item.id }
+                }
+                return false
               }
             }
           },
