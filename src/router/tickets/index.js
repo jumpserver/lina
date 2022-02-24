@@ -44,7 +44,9 @@ export default {
           component: () => import('@/views/tickets/TicketFlow/TicketFlow'),
           meta: {
             title: i18n.t('tickets.FlowSetUp'),
-            permissions: []
+            permissions: [],
+            resource: 'terminal',
+            app: 'terminal'
           }
         },
         {
