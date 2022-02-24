@@ -14,6 +14,7 @@
       v-for="group in orgOption"
       :key="group.label"
       :label="group.label"
+      class="option-group"
     >
       <el-option
         v-for="item in group.options"
@@ -57,6 +58,9 @@ export default {
         options: [{
           id: 'create',
           name: this.$t('xpack.Organization.OrganizationCreate')
+        }, {
+          id: 'list',
+          name: this.$t('xpack.Organization.OrganizationLists')
         }]
       },
       {
@@ -68,6 +72,8 @@ export default {
   methods: {
     changeOrg(orgId) {
       if (orgId === 'create') {
+        this.$router.push('/settings/orgs/create')
+      } else if (orgId === 'list') {
         this.$router.push('/settings/orgs')
       } else {
         orgUtil.changeOrg(orgId)
@@ -87,7 +93,6 @@ export default {
     font-weight: 600;
     font-size: 15px;
     //border-top: solid 1px rgb(47, 64, 80);
-
     ::v-deep .el-input {
       input.el-input__inner {
         line-height: 55px;
@@ -108,7 +113,6 @@ export default {
     background: #E0E0E0;
     border-radius: 19px;
     color: #606266;
-    //margin-right: -15px;
     &:after {
       position: absolute;
       top: 15%;
@@ -131,5 +135,8 @@ export default {
     &>>> .el-input__icon {
       color: #606266;
     }
+  }
+  .option-group >>> .el-select-group__title {
+    color: #909399 !important;
   }
 </style>
