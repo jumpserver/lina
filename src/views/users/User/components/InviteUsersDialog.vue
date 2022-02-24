@@ -58,7 +58,7 @@ export default {
               ajax: {
                 url: '/api/v1/rbac/roles/?scope=org',
                 transformOption: (item) => {
-                  return { label: `${item.name_display}`, value: item.id }
+                  return { label: `${item.name}`, value: item.id }
                 }
               }
             }

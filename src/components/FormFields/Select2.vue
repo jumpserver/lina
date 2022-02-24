@@ -143,10 +143,18 @@ export default {
       }
       const transformOption = this.ajax.transformOption || defaultTransformOption
       const defaultProcessResults = (data) => {
-        let results = data.results
+        let results = []
+        let more = false
+        let total = 0
+        if (Array.isArray(data)) {
+          results = data
+          total = data.length
+        } else if (typeof data === 'object') {
+          results = data.results
+          more = !!data.next
+          total = data.count
+        }
         results = results.map(transformOption)
-        const more = !!data.next
-        const total = data.count
         return { results: results, pagination: more, total: total }
       }
       const defaultAjax = {
