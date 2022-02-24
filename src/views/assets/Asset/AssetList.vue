@@ -171,6 +171,13 @@ export default {
             { label: this.$t('assets.Label'), value: 'label' }
           ]
         },
+        extraActions: [
+          {
+            name: this.$t('xpack.Cloud.CloudImport'),
+            title: this.$t('xpack.Cloud.CloudImport'),
+            callback: () => this.$router.push({ name: 'CloudCenter' })
+          }
+        ],
         extraMoreActions: [
           {
             name: 'DeactiveSelected',

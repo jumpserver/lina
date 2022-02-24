@@ -1,30 +1,22 @@
 <template>
-  <div>
-    <Dialog :destroy-on-close="true" width="60%" :visible.sync="showDialog" :title="this.$t('setting.ApiKeyList')" :show-cancel="false" :show-confirm="false">
-      <div>
-        <el-alert type="success"> {{ helpMessage }} </el-alert>
-        <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-      </div>
-    </Dialog>
-  </div>
+  <GenericListPage
+    ref="ListTable"
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+    :help-message="helpMessage"
+  />
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
-import ListTable from '@/components/ListTable'
+import { GenericListPage } from '@/layout/components'
 import { DateFormatter, ShowKeyFormatter } from '@/components/TableFormatters'
-export default {
-  name: 'ApiKey',
-  components: {
-    Dialog,
-    ListTable
-  },
-  props: {
 
+export default {
+  components: {
+    GenericListPage
   },
   data() {
     return {
-      showDialog: false,
       helpMessage: this.$t('setting.helpText.ApiKeyList'),
       tableConfig: {
         hasSelection: true,
@@ -34,16 +26,13 @@ export default {
         ],
         columnsMeta: {
           id: {
-            label: 'AccessKeyID',
-            width: '315px'
+            label: 'AccessKeyID'
           },
           secret: {
             label: 'AccessKeySecret',
-            width: '315px',
             formatter: ShowKeyFormatter
           },
           is_active: {
-            width: '80px'
           },
           date_created: {
             label: this.$t('common.dateCreated'),
@@ -114,17 +103,9 @@ export default {
         ]
       }
     }
-  },
-  methods: {
-    showApi() {
-      this.showDialog = !this.showDialog
-    }
   }
 }
 </script>
 
-<style lang='scss' scoped>
-.api-key-dialog >>> .el-dialog__body {
-  padding-top: 0;
-}
+<style scoped>
 </style>

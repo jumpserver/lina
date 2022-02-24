@@ -8,12 +8,12 @@
               <el-row>
                 <el-col :md="16" :xs="24" style="padding-right: 20px;">
                   <Session />
+                  <Log />
                   <Ticket v-if="hasValidLicense" />
                 </el-col>
                 <el-col :md="8" :xs="24">
                   <User />
                   <Announcement />
-                  <Log />
                 </el-col>
               </el-row>
             </div>

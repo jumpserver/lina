@@ -1,17 +1,20 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <Page>
+    <IBox>
+      <GenericCreateUpdateForm v-bind="$data" />
+    </IBox>
+  </Page>
 </template>
 
 <script>
 import { IBox, CronTab } from '@/components'
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { Page, GenericCreateUpdateForm } from '@/layout/components'
 
 export default {
   name: 'Senior',
   components: {
     IBox,
+    Page,
     GenericCreateUpdateForm
   },
   data() {

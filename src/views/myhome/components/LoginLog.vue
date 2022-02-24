@@ -1,24 +1,14 @@
 <template>
-  <el-card class="box-card" shadow="never">
-    <div slot="header" class="title">
-      <span>{{ i18n.t('route.LoginLog') }}</span>
-    </div>
-    <ListTable
-      class="ListTable"
-      :table-config="tableConfig"
-      :header-actions="headerActions"
-    />
-  </el-card>
+  <HomeCard v-bind="cardConfig" :table-config="tableConfig" />
 </template>
 
 <script>
-import i18n from '@/i18n/i18n'
-import ListTable from '@/components/ListTable/index'
+import HomeCard from './HomeCard'
 
 export default {
   name: 'Log',
   components: {
-    ListTable
+    HomeCard
   },
   props: {
     headerActions: {
@@ -34,10 +24,8 @@ export default {
   },
   data() {
     return {
-      i18n,
       cardConfig: {
-        title: i18n.t('route.LoginLog'),
-        icon: 'fa-history'
+        title: this.$t('common.RecentLogin')
       },
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',
@@ -64,17 +52,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box-card {
-  margin-bottom: 20px;
-
-  &>>> .el-card__header {
-    margin-bottom: -10px;
-  }
-  .title {
-    font-weight: 500;
-  }
-}
-.ListTable >>> .el-data-table .el-pagination {
-  display: none;
-}
 </style>

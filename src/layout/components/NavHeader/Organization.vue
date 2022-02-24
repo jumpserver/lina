@@ -10,13 +10,19 @@
       <i class="fa fa-sitemap icon" />
     </template>
 
-    <el-option
-      v-for="item in orgs"
-      :key="item.id"
-      :selected="item.id === currentOrg.id"
-      :label="item.name"
-      :value="item.id"
-    />
+    <el-option-group
+      v-for="group in orgOption"
+      :key="group.label"
+      :label="group.label"
+    >
+      <el-option
+        v-for="item in group.options"
+        :key="item.id"
+        :selected="item.id === currentOrg.id"
+        :label="item.name"
+        :value="item.id"
+      />
+    </el-option-group>
   </el-select>
 </template>
 
@@ -32,6 +38,11 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      orgOption: []
+    }
+  },
   computed: {
     ...mapGetters([
       'currentOrg',
@@ -39,12 +50,28 @@ export default {
       'orgs'
     ])
   },
-  mounted() {
-    this.$log.debug('Organizations: ', this.orgs)
+  created() {
+    this.orgOption = [
+      {
+        label: this.$t('xpack.Organization.OrganizationList'),
+        options: [{
+          id: 'create',
+          name: this.$t('xpack.Organization.OrganizationCreate')
+        }]
+      },
+      {
+        label: this.$t('xpack.Organization.AllOrganization'),
+        options: this.orgs
+      }
+    ]
   },
   methods: {
     changeOrg(orgId) {
-      orgUtil.changeOrg(orgId)
+      if (orgId === 'create') {
+        this.$router.push('/settings/orgs')
+      } else {
+        orgUtil.changeOrg(orgId)
+      }
     }
   }
 }
@@ -62,7 +89,6 @@ export default {
     //border-top: solid 1px rgb(47, 64, 80);
 
     ::v-deep .el-input {
-
       input.el-input__inner {
         line-height: 55px;
         height: 55px;

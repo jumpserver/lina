@@ -263,6 +263,7 @@
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
+    "RecentLogin": "Recent login",
     "Database": "Database",
     "Params": "Params",
     "MFAVerify": "Verify MFA",
@@ -685,6 +686,7 @@
     "CommandFilterUpdate": "Command filter update",
     "CommandStorageUpdate": "Command storage update",
     "Commands": "Commands",
+    "FileTransfer": "File transfer",
     "CreateCommandStorage": "Create command storage",
     "CreateReplayStorage": "Create replay storage",
     "Dashboard": "Dashboard",
@@ -1333,6 +1335,7 @@
       "Reason": "Reason"
     },
     "Cloud": {
+      "CloudImport": "Cloud import",
       "ServerAccountKey": "Server Account Key",
       "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
@@ -1409,7 +1412,7 @@
     "InterfaceSettings": "Interface Setting",
     "License": "License",
     "LicenseDetail": "License detail",
-    "SystemMonitor": "System Monitor",
+    "ComponentMonitor": "System Monitor",
     "ServiceRatio": "Service ratio",
     "LoadStatus":"Status",
     "NormalLoad":"Normal",
@@ -1420,6 +1423,7 @@
     "NoLicense": "No License",
     "Node": "Node",
     "Organization": {
+      "AllOrganization": "All organization",
       "OrganizationCreate": "Create organization",
       "OrganizationDetail": "Org detail",
       "OrganizationList": "Organizations",

@@ -5,7 +5,10 @@
     mode="horizontal"
     @select="handleSelectView"
   >
-    <el-submenu index="2">
+    <el-submenu
+      index="2"
+      popper-class="view-switcher"
+    >
       <template slot="title">
         <span class="title-label">
           <i class="fa fa-bars" />
@@ -71,9 +74,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-menu--popup-bottom-start {
-  margin-top: 0 !important;
+.el-menu--popup-bottom-start{
+  margin-top: 130px;
 }
+
 .menu-main.el-menu {
   background-color: transparent;
   ::v-deep .el-submenu .el-submenu__title {
@@ -84,22 +88,27 @@ export default {
   &.el-menu--horizontal {
     border-bottom: none;
   }
-}
-.menu-main {
   &>>> .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
   }
 }
+
 .el-menu--horizontal .el-menu .el-menu-item {
   display: inline-block!important;
+  padding: 10px 10px;
   text-align: center;
-  padding: 6px 0px 6px 18px;
+  height: 70px;
+  width: 70px;
   &:hover {
     color: #303133;
+    background-color: #e6e6e6;
+  }
+  &:first-child {
+    margin-left: 20px;
   }
   &:last-child {
-    padding: 6px 18px 6px 18px;
+    margin-right: 20px;
   }
 }
 .el-submenu.is-opened {
@@ -118,10 +127,12 @@ export default {
 }
 .icons-title {
   display: inline-block;
-  padding-bottom: 10px;
   font-size: 14px;
 }
-.el-menu--popup-bottom-start {
-  margin-top: 0px!important;
+ul.el-menu--popup-bottom-start {
+  margin-top: 0!important;
+}
+.el-menu-item.is-active {
+  font-weight: bold;
 }
 </style>

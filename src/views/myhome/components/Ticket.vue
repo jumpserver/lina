@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import HomeCard from './HomeCard.vue'
+import HomeCard from './HomeCard'
 import { mapGetters } from 'vuex'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
@@ -55,46 +55,12 @@ export default {
           },
           {
             prop: 'type_display',
-            label: this.$t('tickets.type'),
-            width: '160px'
-          },
-          {
-            prop: 'status',
-            label: this.$t('tickets.status'),
-            align: 'center',
-            width: '90px',
-            formatter: row => {
-              if (row.status === 'open') {
-                return <el-tag type='primary' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.OpenStatus') }</el-tag>
-              } else {
-                return <el-tag type='danger' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.CloseStatus') }</el-tag>
-              }
-            }
-          },
-          {
-            prop: 'action',
-            label: this.$t('tickets.action'),
-            align: 'center',
-            width: '90px',
-            formatter: row => {
-              if (row.status === 'open') {
-                return <el-tag type='success' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Pending') }</el-tag>
-              }
-              switch (row.state) {
-                case 'approved':
-                  return <el-tag type='primary' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Approved') }</el-tag>
-                case 'rejected':
-                  return <el-tag type='danger' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Rejected') }</el-tag>
-                default :
-                  return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
-              }
-            }
+            label: this.$t('tickets.type')
           },
           {
             prop: 'date_created',
             label: this.$t('tickets.date'),
-            formatter: (row) => toSafeLocalDateStr(row.date_created),
-            width: '160px'
+            formatter: (row) => toSafeLocalDateStr(row.date_created)
           }
         ],
         hasSelection: false,

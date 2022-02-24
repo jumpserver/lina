@@ -6,18 +6,21 @@ export default [
     path: 'cloud',
     component: empty,
     redirect: '',
+    hidden: true,
     meta: {
-      title: i18n.t('xpack.Cloud.Cloud'),
-      permissions: ['xpack.view_account']
+      title: i18n.t('xpack.Cloud.CloudImport'),
+      app: 'xpack',
+      resource: 'account'
     },
     children: [
       {
         path: '',
-        component: () => import('@/views/xpack/Cloud/index.vue'),
+        component: () => import('@/views/assets/Cloud'),
         name: 'CloudCenter',
+        hidden: true,
         meta: {
-          title: i18n.t('xpack.Cloud.CloudCenter'),
-          permissions: ['xpack.view_account']
+          title: i18n.t('xpack.Cloud.CloudImport'),
+          activeMenu: '/console/assets/assets'
         }
       },
       {
@@ -32,7 +35,7 @@ export default [
         children: [
           {
             path: '',
-            component: () => import('@/views/xpack/Cloud/Account/AccountList'),
+            component: () => import('@/views/assets/Cloud/Account/AccountList'),
             name: 'AccountList',
             hidden: true,
             meta: {
@@ -42,7 +45,7 @@ export default [
           },
           {
             path: 'create',
-            component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
+            component: () => import('@/views/assets/Cloud/Account/AccountCreateUpdate'),
             name: 'AccountCreate',
             hidden: true,
             meta: {
@@ -53,7 +56,7 @@ export default [
           },
           {
             path: ':id/update',
-            component: () => import('@/views/xpack/Cloud/Account/AccountCreateUpdate'),
+            component: () => import('@/views/assets/Cloud/Account/AccountCreateUpdate'),
             name: 'AccountUpdate',
             hidden: true,
             meta: {
@@ -64,7 +67,7 @@ export default [
           },
           {
             path: ':id/',
-            component: () => import('@/views/xpack/Cloud/Account/AccountDetail/index'),
+            component: () => import('@/views/assets/Cloud/Account/AccountDetail/index'),
             name: 'AccountDetail',
             hidden: true,
             meta: {
@@ -85,7 +88,7 @@ export default [
         children: [
           {
             path: '',
-            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
+            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskList'),
             name: 'SyncInstanceTaskList',
             hidden: true,
             meta: {
@@ -95,7 +98,7 @@ export default [
           },
           {
             path: 'create',
-            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
+            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
             name: 'SyncInstanceTaskCreate',
             hidden: true,
             meta: {
@@ -105,7 +108,7 @@ export default [
           },
           {
             path: ':id/update',
-            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
+            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskCreateUpdate'),
             name: 'SyncInstanceTaskUpdate',
             hidden: true,
             meta: {
@@ -115,7 +118,7 @@ export default [
           },
           {
             path: ':id',
-            component: () => import('@/views/xpack/Cloud/SyncInstanceTask/SyncInstanceTaskDetail/index'),
+            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskDetail/index'),
             name: 'SyncInstanceTaskDetail',
             hidden: true,
             meta: {
@@ -125,69 +128,5 @@ export default [
         ]
       }
     ]
-  },
-  {
-    path: 'interface-setting',
-    component: () => import('@/views/xpack/InterfaceSettings.vue'),
-    name: 'InterfaceSetting',
-    meta: {
-      title: i18n.t('xpack.InterfaceSettings'),
-      permissions: ['xpack.view_interface']
-    }
-  },
-  {
-    path: 'orgs',
-    component: empty,
-    redirect: '',
-    meta: { permissions: ['orgs.view_organization'] },
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/xpack/Org/OrganizationList'),
-        name: 'OrganizationList',
-        meta: {
-          title: i18n.t('xpack.Organization.OrganizationList'),
-          permissions: ['orgs.view_organization']
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
-        name: 'OrganizationCreate',
-        hidden: true,
-        meta: {
-          title: i18n.t('xpack.Organization.OrganizationCreate'),
-          action: 'create',
-          permissions: ['orgs.add_organization']
-        }
-      },
-      {
-        path: ':id/update',
-        component: () => import('@/views/xpack/Org/OrganizationCreateUpdate'),
-        name: 'OrganizationUpdate',
-        hidden: true,
-        meta: {
-          title: i18n.t('xpack.Organization.OrganizationUpdate'),
-          action: 'update',
-          permissions: ['orgs.change_organization']
-        }
-      },
-      {
-        path: ':id',
-        component: () => import('@/views/xpack/Org/OrganizationDetail/index'),
-        name: 'OrganizationDetail',
-        hidden: true,
-        meta: {
-          title: i18n.t('xpack.Organization.OrganizationDetail'),
-          permissions: ['orgs.view_organization']
-        }
-      }
-    ]
-  },
-  {
-    path: 'system-monitor',
-    component: () => import('@/views/xpack/SystemMonitor/index.vue'),
-    name: 'SystemMonitor',
-    meta: { title: i18n.t('xpack.SystemMonitor'), permissions: ['terminal.view_terminal'] }
   }
 ]

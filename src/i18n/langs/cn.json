@@ -268,6 +268,7 @@
     "ViewMore": "查看更多",
     "Announcement": "公告",
     "Logging": "日志记录",
+    "RecentLogin": "最近登录",
     "Database": "数据库记录",
     "Params": "参数",
     "BasicInfo": "基本信息",
@@ -709,6 +710,7 @@
     "CommandFilterUpdate": "更新命令过滤器",
     "CommandStorageUpdate": "更新命令存储",
     "Commands": "命令记录",
+    "FileTransfer": "文件传输",
     "CreateCommandStorage": "创建命令存储",
     "CreateReplayStorage": "创建录像存储",
     "Dashboard": "仪表盘",
@@ -1384,6 +1386,7 @@
       "Reason": "原因"
     },
     "Cloud": {
+      "CloudImport": "云导入",
       "ServerAccountKey": "服务账号密钥",
       "IPNetworkSegment": "IP网段",
       "Aliyun": "阿里云",
@@ -1462,7 +1465,7 @@
     "ImportLicenseTip": "请导入许可证",
     "InterfaceSettings": "界面设置",
     "License": "许可证",
-    "SystemMonitor": "系统监控",
+    "ComponentMonitor": "组件监控",
     "ServiceRatio": "组件负载统计",
     "LoadStatus":"组件状态",
     "NormalLoad":"正常",
@@ -1474,6 +1477,7 @@
     "NoLicense": "暂无许可证",
     "Node": "节点",
     "Organization": {
+      "AllOrganization": "所有组织",
       "OrganizationCreate": "创建组织",
       "OrganizationDetail": "组织详情",
       "OrganizationList": "组织管理",

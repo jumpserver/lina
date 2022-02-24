@@ -17,7 +17,7 @@ export default {
     {
       path: '/profile/info',
       name: 'ProfileInfo',
-      component: () => import('@/views/profile/UserProfile/ProfileInfo'),
+      component: () => import('@/views/profile/ProfileInfo'),
       meta: {
         title: i18n.t('users.AccountInformation'),
         icon: 'adjust',
@@ -26,11 +26,28 @@ export default {
     },
     {
       path: '/profile/setting',
-      name: 'profileSetting',
-      component: () => import('@/views/profile/UserProfile/index'),
+      name: 'ProfileSetting',
+      component: () => import('@/views/profile/ProfileUpdate/index'),
       meta: {
-        title: i18n.t('users.PersonalSetting'),
+        title: i18n.t('users.Profile'),
         icon: 'user-circle',
+        permissions: []
+      }
+    },
+    {
+      path: '/profile/improvement',
+      component: () => import('@/views/profile/ProfileImprovement'),
+      name: 'ProfileImprovement',
+      hidden: true,
+      meta: { title: i18n.t('route.PersonalInformationImprovement'), permissions: [] }
+    },
+    {
+      path: '/profile/key',
+      component: () => import('@/views/profile/ApiKey'),
+      name: 'ApiKey',
+      meta: {
+        title: i18n.t('common.nav.APIKey'),
+        icon: 'key',
         permissions: []
       }
     }
