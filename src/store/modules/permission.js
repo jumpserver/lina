@@ -39,12 +39,25 @@ function isNeedHidden(route, rootState) {
   return hidden
 }
 
+function getPreferRole(routes) {
+  let prefer = JSON.parse(localStorage.getItem('PreferRole')) || ''
+  const hasRole = routes.some(i => (i.path === prefer && i.path !== ''))
+  if (!prefer) {
+    prefer = hasRole ? prefer : '/workspace'
+    localStorage.setItem('PreferRole', JSON.stringify(prefer))
+  }
+  return prefer
+}
+
 export function filterHiddenRoutes(routes, rootState) {
   const res = []
 
   routes.forEach(route => {
     const tmp = {
       ...route
+    }
+    if (tmp.name === 'default') {
+      tmp.redirect = getPreferRole(routes)
     }
     if (!isNeedHidden(route, rootState)) {
       if (tmp.children) {
@@ -222,6 +235,9 @@ const actions = {
         if (route.meta?.view === viewName) {
           viewRoute = route
         }
+      }
+      if (viewRoute.meta?.showNavSwitcher) {
+        localStorage.setItem('PreferRole', JSON.stringify(viewRoute.path))
       }
       commit('SET_VIEW_ROUTE', viewRoute)
     })

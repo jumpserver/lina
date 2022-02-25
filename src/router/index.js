@@ -58,7 +58,8 @@ import profileRoutes from './profile'
 export const allRoutes = [
   {
     path: '',
-    redirect: '/workspace/home',
+    redirect: '',
+    name: 'default',
     meta: {
       permissions: []
     }
