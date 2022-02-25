@@ -13,40 +13,12 @@ function hasLicense(route, rootState) {
   return !(!licenseIsValid && licenseRequired)
 }
 
-export function filterLicenseRequiredRoutes(routes, rootState) {
-  const res = []
-
-  routes.forEach(route => {
-    const tmp = {
-      ...route
-    }
-    if (hasLicense(route, rootState)) {
-      if (tmp.children) {
-        tmp.children = filterLicenseRequiredRoutes(tmp.children, rootState)
-      }
-      res.push(tmp)
-    }
-  })
-
-  return res
-}
-
 function isNeedHidden(route, rootState) {
   let hidden = route.meta ? route.meta.hidden : false
   if (typeof hidden === 'function') {
     hidden = hidden({ route: route, settings: rootState.settings.publicSettings })
   }
   return hidden
-}
-
-function getPreferRole(routes) {
-  let prefer = JSON.parse(localStorage.getItem('PreferRole')) || ''
-  const hasRole = routes.some(i => (i.path === prefer && i.path !== ''))
-  if (!prefer) {
-    prefer = hasRole ? prefer : '/workspace'
-    localStorage.setItem('PreferRole', JSON.stringify(prefer))
-  }
-  return prefer
 }
 
 export function filterHiddenRoutes(routes, rootState) {
@@ -56,10 +28,7 @@ export function filterHiddenRoutes(routes, rootState) {
     const tmp = {
       ...route
     }
-    if (tmp.name === 'default') {
-      tmp.redirect = getPreferRole(routes)
-    }
-    if (!isNeedHidden(route, rootState)) {
+    if (!isNeedHidden(route, rootState) || hasLicense(route, rootState)) {
       if (tmp.children) {
         tmp.children = filterHiddenRoutes(tmp.children, rootState)
       }
@@ -237,7 +206,7 @@ const actions = {
         }
       }
       if (viewRoute.meta?.showNavSwitcher) {
-        localStorage.setItem('PreferRole', JSON.stringify(viewRoute.path))
+        localStorage.setItem('BeforeRoute', JSON.stringify(viewRoute.path))
       }
       commit('SET_VIEW_ROUTE', viewRoute)
     })
@@ -246,7 +215,6 @@ const actions = {
     return new Promise(resolve => {
       let routes = filterPermedRoutes(allRoutes, rootState)
       routes = filterHiddenRoutes(routes, rootState)
-      routes = filterLicenseRequiredRoutes(routes, rootState)
       if (routes.length === 0) {
         console.log('No route find')
       } else {

@@ -58,3 +58,13 @@ export function hasActionPerm(route, action) {
   const permsRequired = getRouteRequiredPerms(route, action)
   return hasPermission(permsRequired)
 }
+
+export function getBeforeRoute(powerRoutes) {
+  let prefer = JSON.parse(localStorage.getItem('BeforeRoute')) || ''
+  const hasRole = powerRoutes.some(i => (i.path === prefer && i.path !== ''))
+  if (!prefer) {
+    prefer = hasRole ? prefer : '/workspace'
+    localStorage.setItem('BeforeRoute', JSON.stringify(prefer))
+  }
+  return prefer
+}
