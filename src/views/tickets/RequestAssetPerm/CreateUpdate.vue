@@ -101,7 +101,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile['user_all_orgs'].map((item) => {
+            options: this.$store.state.users.profile['user_all_orgs']?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },

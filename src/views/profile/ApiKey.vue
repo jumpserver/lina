@@ -1,6 +1,6 @@
 <template>
   <GenericListPage
-    ref="ListTable"
+    ref="GenericListTable"
     :table-config="tableConfig"
     :header-actions="headerActions"
     :help-message="helpMessage"
@@ -16,11 +16,12 @@ export default {
     GenericListPage
   },
   data() {
+    const ajaxUrl = '/api/v1/authentication/access-keys/'
     return {
       helpMessage: this.$t('setting.helpText.ApiKeyList'),
       tableConfig: {
         hasSelection: true,
-        url: `/api/v1/authentication/access-keys/`,
+        url: ajaxUrl,
         columns: [
           'id', 'secret', 'is_active', 'date_created', 'actions'
         ],
@@ -43,11 +44,9 @@ export default {
             prop: '',
             formatterArgs: {
               hasUpdate: false,
-              onDelete: function({ row, col, cellValue, reload }) {
-                this.$axios.delete(
-                  `/api/v1/authentication/access-keys/${row.id}/`
-                ).then(res => {
-                  this.$refs.ListTable.reloadTable()
+              onDelete: function({ row }) {
+                this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
+                  this.getRefsListTable.reloadTable()
                   this.$message.success(this.$t('common.deleteSuccessMsg'))
                 }).catch(error => {
                   this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
@@ -58,12 +57,11 @@ export default {
                   name: 'Enabled',
                   title: this.$t('common.On/Off'),
                   type: 'info',
-                  callback: function({ row, col, cellValue, reload }) {
-                    this.$axios.patch(
-                      `/api/v1/authentication/access-keys/${row.id}/`,
+                  callback: function({ row }) {
+                    this.$axios.patch(`${ajaxUrl}${row.id}/`,
                       { is_active: !row.is_active }
                     ).then(res => {
-                      this.$refs.ListTable.reloadTable()
+                      this.getRefsListTable.reloadTable()
                       this.$message.success(this.$t('common.updateSuccessMsg'))
                     }).catch(error => {
                       this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
@@ -90,10 +88,8 @@ export default {
             type: 'primary',
             can: true,
             callback: function() {
-              this.$axios.post(
-                `/api/v1/authentication/access-keys/`
-              ).then(res => {
-                this.$refs.ListTable.reloadTable()
+              this.$axios.post(ajaxUrl).then(res => {
+                this.getRefsListTable.reloadTable()
                 this.$message.success(this.$t('common.updateSuccessMsg'))
               }).catch(error => {
                 this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
@@ -102,6 +98,11 @@ export default {
           }
         ]
       }
+    }
+  },
+  computed: {
+    getRefsListTable() {
+      return this.$refs.GenericListTable.$refs.ListTable.$refs.ListTable || {}
     }
   }
 }

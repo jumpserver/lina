@@ -56,7 +56,7 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.users.profile.user_all_orgs.length > 0) {
+    if (this.$store.state.users.profile.user_all_orgs?.length > 0) {
       this.initial.org_id = this.$store.state.users.profile.user_all_orgs[0].id
     }
     this.loading = false
