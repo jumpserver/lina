@@ -87,11 +87,18 @@ export default {
   },
   data() {
     const vm = this
+    const detailApiUrl = (function() {
+      if (vm.url) {
+        return `${vm.url}/${vm.$route.params.id}/`
+      } else {
+        return getApiPath(vm)
+      }
+    }())
     const defaultActions = {
       // Delete button
       canDelete: vm.$hasCurrentResAction('delete'),
-      deleteCallback: function(item) { this.defaultDelete(item) },
-      deleteApiUrl: vm.detailApiUrl,
+      deleteCallback: function(item) { vm.defaultDelete(item) },
+      deleteApiUrl: detailApiUrl,
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
       // Update button
       canUpdate: () => {
@@ -101,7 +108,8 @@ export default {
       updateRoute: this.$route.name.replace('Detail', 'Update')
     }
     return {
-      defaultActions: defaultActions,
+      detailApiUrl,
+      defaultActions,
       loading: true,
       validActions: Object.assign(defaultActions, this.actions)
     }
@@ -130,15 +138,6 @@ export default {
     },
     iTitle() {
       return this.title || this.getTitle(this.object)
-    },
-    detailApiUrl() {
-      if (this.url) {
-        return `${this.url}/${this.$route.params.id}/`
-      } else if (this.validActions.detailApiUrl) {
-        return this.validActions.detailApiUrl
-      } else {
-        return getApiPath(this)
-      }
     },
     iActiveMenu: {
       get() {
@@ -198,7 +197,9 @@ export default {
       this.$router.push(route)
     },
     getObject() {
-      return this.$axios.get(this.detailApiUrl, { disableFlashErrorMsg: true }).then(data => {
+      // 兼容之前的 detailApiUrl
+      const url = this.validActions.detailApiUrl || this.detailApiUrl
+      return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
         this.$emit('getObjectDone', data)
       }).catch(error => {
