@@ -895,7 +895,9 @@
     "helpText": {
       "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com:3000,http://www.jumpserver.b.com:3000）",
       "esIndex": "es提供默认index：jumpserver",
-      "esDocType": "es默认文档类型：command"
+      "esDocType": "es默认文档类型：command",
+      "s3Endpoint": "S3 格式: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China) 格式: http://s3.{REGION_NAME}.amazonaws.com.cn<br>如: http://s3.cn-north-1.amazonaws.com.cn",
+      "ossEndpoint": "OSS 格式: http://{REGION_NAME}.aliyuncs.com<br>如: http://oss-cn-hangzhou.aliyuncs.com"
     }
   },
   "setting": {
