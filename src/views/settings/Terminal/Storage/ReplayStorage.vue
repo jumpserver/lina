@@ -4,7 +4,6 @@
 <script>
 import ListTable from '@/components/ListTable'
 import { TestReplayStorage, SetToDefaultReplayStorage } from '@/api/sessions'
-import { getReplayStorageOptions } from '@/views/sessions/const'
 export default {
   name: 'ReplayStorage',
   components: {
@@ -12,7 +11,6 @@ export default {
   },
   data() {
     const vm = this
-    const storageOptions = getReplayStorageOptions()
     return {
       replayActions: {
         hasExport: false,
@@ -23,7 +21,36 @@ export default {
           callback: (item) => {
             this.$router.push({ name: 'CreateReplayStorage', query: { type: item.name.toLowerCase() }})
           },
-          dropdown: storageOptions
+          dropdown: [
+            {
+              name: 'S3',
+              title: 'S3'
+            },
+            {
+              name: 'Ceph',
+              title: 'Ceph'
+            },
+            {
+              name: 'swift',
+              title: 'Swift'
+            },
+            {
+              name: 'OSS',
+              title: 'OSS'
+            },
+            {
+              name: 'Azure',
+              title: 'Azure'
+            },
+            {
+              name: 'obs',
+              title: 'OBS'
+            },
+            {
+              name: 'cos',
+              title: 'COS'
+            }
+          ]
         }
       },
       replayTableConfig: {

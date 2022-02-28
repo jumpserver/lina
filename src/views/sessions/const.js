@@ -48,16 +48,3 @@ export const STORAGE_TYPE_META_MAP = {
     endpointHelpText: i18n.t('sessions.helpText.s3Endpoint')
   }
 }
-
-export function getReplayStorageOptions() {
-  const options = []
-  const storages = Object.values(STORAGE_TYPE_META_MAP)
-  for (const s of storages) {
-    const option = {
-      name: s.name,
-      title: s.title
-    }
-    options.push(option)
-  }
-  return options
-}
