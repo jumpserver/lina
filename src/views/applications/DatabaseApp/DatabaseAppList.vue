@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { DATABASE } from '@/views/perms/const'
 
 export default {
   components: {
@@ -11,46 +12,7 @@ export default {
   },
   data() {
     const vm = this
-    const appType = [
-      {
-        name: 'mysql',
-        title: 'MySQL',
-        has: true,
-        group: this.$t('assets.RDBProtocol')
-      },
-      {
-        name: 'postgresql',
-        title: 'PostgreSQL',
-        has: this.$store.getters.hasValidLicense
-      },
-      {
-        name: 'mariadb',
-        title: 'MariaDB',
-        type: 'primary',
-        has: this.$store.getters.hasValidLicense
-      },
-      {
-        name: 'oracle',
-        title: 'Oracle',
-        has: this.$store.getters.hasValidLicense
-      },
-      {
-        name: 'sqlserver',
-        title: 'SQLServer',
-        has: this.$store.getters.hasValidLicense
-      },
-      {
-        name: 'redis',
-        title: 'Redis',
-        has: true,
-        group: this.$t('assets.NoSQLProtocol')
-      },
-      {
-        name: 'mongodb',
-        title: 'MongoDB',
-        has: this.$store.getters.hasValidLicense
-      }
-    ]
+    const appType = DATABASE
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
