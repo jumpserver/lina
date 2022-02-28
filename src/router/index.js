@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import { getBeforeViewRouter } from '@/utils/jms'
 
 Vue.use(Router)
 
@@ -51,6 +52,16 @@ import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
 
+const permissionRoutes = [
+  workspaceViewRoutes,
+  consoleViewRoutes,
+  auditViewRoutes,
+  ticketsRoutes,
+  settingsRoutes,
+  profileRoutes
+]
+const beforeViewRouter = getBeforeViewRouter(permissionRoutes) || ''
+
 /**
  * admin
  * the routes that need to be dynamically loaded based on admin roles
@@ -58,17 +69,12 @@ import profileRoutes from './profile'
 export const allRoutes = [
   {
     path: '',
-    redirect: '/workspace/home',
+    redirect: beforeViewRouter,
     meta: {
       permissions: []
     }
   },
-  workspaceViewRoutes,
-  consoleViewRoutes,
-  auditViewRoutes,
-  ticketsRoutes,
-  settingsRoutes,
-  profileRoutes
+  ...permissionRoutes
 ]
 
 const createRouter = () => new Router({
