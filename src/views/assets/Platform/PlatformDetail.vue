@@ -19,7 +19,6 @@ export default {
     return {
       TaskDetail: {},
       actions: {
-        detailApiUrl: `/api/v1/assets/platforms/${this.$route.params.id}/`
       },
       config: {
         title: this.$t('assets.PlatformDetail'),
