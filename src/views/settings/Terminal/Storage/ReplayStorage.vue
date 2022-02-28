@@ -45,6 +45,10 @@ export default {
             {
               name: 'obs',
               title: 'OBS'
+            },
+            {
+              name: 'cos',
+              title: 'COS'
             }
           ]
         }
