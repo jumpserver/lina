@@ -98,10 +98,8 @@ export default {
   height: 70px;
   width: 70px;
   &:hover {
-    color: inherit;
-    i {
-      color: inherit;
-    }
+    color: #303133;
+    background-color: #e6e6e6;
   }
   &:first-child {
     margin-left: 20px;
