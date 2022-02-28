@@ -39,6 +39,7 @@ export default {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
         activeMenu: 'UserInfo',
+        url: '/api/v1/users/groups/',
         actions: {
           canUpdate: () => vm.user.can_update,
           canDelete: () => vm.user.can_delete
