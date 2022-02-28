@@ -58,3 +58,13 @@ export function hasActionPerm(route, action) {
   const permsRequired = getRouteRequiredPerms(route, action)
   return hasPermission(permsRequired)
 }
+
+export function getBeforeViewRouter(permissionRoutes) {
+  let prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
+  const hasRole = permissionRoutes.some(i => (i.path === prefer && i.path !== ''))
+  if (!prefer) {
+    prefer = hasRole ? prefer : '/workspace'
+    localStorage.setItem('BeforeViewRouter', JSON.stringify(prefer))
+  }
+  return prefer
+}
