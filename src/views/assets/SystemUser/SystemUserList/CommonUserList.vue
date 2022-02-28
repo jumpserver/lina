@@ -108,14 +108,14 @@ export default {
               group: this.$t('assets.RDBProtocol')
             },
             {
-              name: 'PostgreSQL',
-              title: 'PostgreSQL',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
               name: 'MariaDB',
               title: 'MariaDB',
+              type: 'primary',
+              has: true
+            },
+            {
+              name: 'PostgreSQL',
+              title: 'PostgreSQL',
               type: 'primary',
               has: this.$store.getters.hasValidLicense
             },
