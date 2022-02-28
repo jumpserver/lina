@@ -6,6 +6,7 @@ export const SWIFT = 'swift'
 export const OSS = 'oss'
 export const AZURE = 'azure'
 export const OBS = 'obs'
+export const COS = 'cos'
 
 export const STORAGE_TYPE_META_MAP = {
   [S3]: {
@@ -26,7 +27,7 @@ export const STORAGE_TYPE_META_MAP = {
   },
   [OSS]: {
     name: OSS,
-    title: 'Oss',
+    title: 'OSS',
     meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'],
     endpointHelpText: i18n.t('sessions.helpText.ossEndpoint')
   },
@@ -39,5 +40,11 @@ export const STORAGE_TYPE_META_MAP = {
     name: OBS,
     title: 'OBS',
     meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
+  },
+  [COS]: {
+    name: COS,
+    title: 'COS',
+    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'],
+    endpointHelpText: i18n.t('sessions.helpText.s3Endpoint')
   }
 }
