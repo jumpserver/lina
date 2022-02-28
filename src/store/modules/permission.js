@@ -13,24 +13,6 @@ function hasLicense(route, rootState) {
   return !(!licenseIsValid && licenseRequired)
 }
 
-export function filterLicenseRequiredRoutes(routes, rootState) {
-  const res = []
-
-  routes.forEach(route => {
-    const tmp = {
-      ...route
-    }
-    if (hasLicense(route, rootState)) {
-      if (tmp.children) {
-        tmp.children = filterLicenseRequiredRoutes(tmp.children, rootState)
-      }
-      res.push(tmp)
-    }
-  })
-
-  return res
-}
-
 function isNeedHidden(route, rootState) {
   let hidden = route.meta ? route.meta.hidden : false
   if (typeof hidden === 'function') {
@@ -46,7 +28,7 @@ export function filterHiddenRoutes(routes, rootState) {
     const tmp = {
       ...route
     }
-    if (!isNeedHidden(route, rootState)) {
+    if (!isNeedHidden(route, rootState) || hasLicense(route, rootState)) {
       if (tmp.children) {
         tmp.children = filterHiddenRoutes(tmp.children, rootState)
       }
@@ -223,6 +205,9 @@ const actions = {
           viewRoute = route
         }
       }
+      if (viewRoute.meta?.showNavSwitcher) {
+        localStorage.setItem('BeforeViewRouter', JSON.stringify(viewRoute.path))
+      }
       commit('SET_VIEW_ROUTE', viewRoute)
     })
   },
@@ -230,7 +215,6 @@ const actions = {
     return new Promise(resolve => {
       let routes = filterPermedRoutes(allRoutes, rootState)
       routes = filterHiddenRoutes(routes, rootState)
-      routes = filterLicenseRequiredRoutes(routes, rootState)
       if (routes.length === 0) {
         console.log('No route find')
       } else {
