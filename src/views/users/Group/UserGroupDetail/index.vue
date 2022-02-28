@@ -14,9 +14,7 @@ import GroupInfo from './GroupInfo'
 export default {
   components: {
     GenericDetailPage,
-    // eslint-disable-next-line vue/no-unused-components
     GroupGrantedAssets,
-    // eslint-disable-next-line vue/no-unused-components
     GroupInfo
   },
   data() {
