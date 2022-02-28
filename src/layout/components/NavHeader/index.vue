@@ -127,12 +127,12 @@ export default {
           background-color: #e6e6e6;
         }
         &>>> i {
-          color: #909399;
+          color: #7c7e7f;
           font-size: 16px;
         }
         &>>> .svg-icon {
+          color: #7c7e7f;
           font-size: 16px;
-          color: #909399;
         }
       }
     }
