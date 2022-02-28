@@ -86,24 +86,10 @@ export default {
     }
   },
   data() {
-    const vm = this
-    const defaultActions = {
-      // Delete button
-      canDelete: vm.$hasCurrentResAction('delete'),
-      deleteCallback: function(item) { this.defaultDelete(item) },
-      deleteApiUrl: vm.detailApiUrl,
-      deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
-      // Update button
-      canUpdate: () => {
-        return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
-      },
-      updateCallback: function(item) { this.defaultUpdate(item) },
-      updateRoute: this.$route.name.replace('Detail', 'Update')
-    }
     return {
-      defaultActions: defaultActions,
+      defaultActions: {},
       loading: true,
-      validActions: Object.assign(defaultActions, this.actions)
+      validActions: {}
     }
   },
   computed: {
@@ -148,6 +134,24 @@ export default {
         this.$emit('update:activeMenu', item)
       }
     }
+  },
+  created() {
+    const vm = this
+    const defaultActions = {
+      // Delete button
+      canDelete: vm.$hasCurrentResAction('delete'),
+      deleteCallback: function(item) { vm.defaultDelete(item) },
+      deleteApiUrl: vm.detailApiUrl,
+      deleteSuccessRoute: vm.$route.name.replace('Detail', 'List'),
+      // Update button
+      canUpdate: () => {
+        return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
+      },
+      updateCallback: function(item) { vm.defaultUpdate(item) },
+      updateRoute: vm.$route.name.replace('Detail', 'Update')
+    }
+    this.defaultActions = defaultActions
+    this.validActions = Object.assign(defaultActions, this.actions)
   },
   async mounted() {
     try {
