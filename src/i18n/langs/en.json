@@ -867,9 +867,7 @@
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (, ) to split (eg: http://www.jumpserver.a.com, http://www.jumpserver.b.com)",
       "esIndex":"Es provides the default index: jumpserver",
-      "esDocType": "Es provides the default document type: command",
-      "s3Endpoint": "S3: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China): http://s3.{REGION_NAME}.amazonaws.com.cn<br>Example: http://s3.cn-north-1.amazonaws.com.cn",
-      "ossEndpoint": "OSS: http://{REGION_NAME}.aliyuncs.com<br>Example: http://oss-cn-hangzhou.aliyuncs.com"
+      "esDocType": "Es provides the default document type: command"
     }
   },
   "setting": {
