@@ -54,6 +54,9 @@ export default {
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope}-role-bindings/?role=${this.object.id}`,
         columns: ['user_display', 'actions'],
+        columnsShow: {
+          min: ['user_display', 'actions']
+        },
         columnsMeta: {
           actions: {
             formatterArgs: {
@@ -64,7 +67,10 @@ export default {
         }
       },
       headerActions: {
-        hasLeftActions: false
+        hasLeftActions: false,
+        searchConfig: {
+          exclude: ['scope', 'role', 'org']
+        }
       }
     }
   },
