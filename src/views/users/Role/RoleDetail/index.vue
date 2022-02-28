@@ -61,6 +61,8 @@ export default {
       this.$log.debug('Current nav is: ', this.config.activeMenu)
     },
     hasPermNotBuiltinNotRootOrg(row, perm) {
+      console.log('Row is: ', row)
+      console.log('Build: ', !row['builtin'])
       return !row['builtin'] &&
         this.$hasPerm(perm) &&
         !this.$isRootOrg()
