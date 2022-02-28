@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { getBeforeViewRoute } from '@/utils/jms'
+import { getBeforeViewRouter } from '@/utils/jms'
 
 Vue.use(Router)
 
@@ -60,7 +60,7 @@ const permissionRoutes = [
   settingsRoutes,
   profileRoutes
 ]
-const beforeViewRoute = getBeforeViewRoute(permissionRoutes) || ''
+const beforeViewRouter = getBeforeViewRouter(permissionRoutes) || ''
 
 /**
  * admin
@@ -69,7 +69,7 @@ const beforeViewRoute = getBeforeViewRoute(permissionRoutes) || ''
 export const allRoutes = [
   {
     path: '',
-    redirect: beforeViewRoute,
+    redirect: beforeViewRouter,
     meta: {
       permissions: []
     }

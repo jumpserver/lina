@@ -59,7 +59,7 @@ export function hasActionPerm(route, action) {
   return hasPermission(permsRequired)
 }
 
-export function getBeforeViewRoute(permissionRoutes) {
+export function getBeforeViewRouter(permissionRoutes) {
   let prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
   const hasRole = permissionRoutes.some(i => (i.path === prefer && i.path !== ''))
   if (!prefer) {
