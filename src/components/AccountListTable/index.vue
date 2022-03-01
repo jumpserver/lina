@@ -100,10 +100,10 @@ export default {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
-                  callback: function({ row }) {
+                  callback: ({ row }) => {
                     this.account = row
                     this.showViewSecretDialog = true
-                  }.bind(this)
+                  }
                 },
                 {
                   name: 'Delete',
@@ -132,10 +132,11 @@ export default {
                   name: 'Update',
                   title: this.$t('common.Update'),
                   can: !this.$store.getters.currentOrgIsRoot,
-                  callback: function({ row }) {
+                  callback: ({ row }) => {
+                    console.log('Update account')
                     this.account = row
                     this.showUpdateSecretDialog = true
-                  }.bind(this)
+                  }
                 }
               ]
             }

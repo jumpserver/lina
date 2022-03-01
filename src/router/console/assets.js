@@ -161,7 +161,7 @@ export default [
         path: '',
         name: 'CommandFilterList',
         component: () => import('@/views/assets/CommandFilter/CommandFilterList.vue'),
-        meta: { title: i18n.t('route.CommandFilterList'), activeMenu: 'CommandFilterList' }
+        meta: { title: i18n.t('route.CommandFilterList') }
       },
       {
         path: ':id/update',
@@ -191,7 +191,7 @@ export default [
     component: empty,
     hidden: true,
     meta: {
-      permissions: ['assets.view_commandfilterrule']
+      resource: 'commandfilterrule'
     },
     children: [
       {
@@ -217,7 +217,9 @@ export default [
   {
     path: 'platforms',
     component: empty,
-    meta: { permissions: ['assets.view_platform'] },
+    meta: {
+      resource: 'platform'
+    },
     redirect: '',
     children: [
       {
@@ -254,7 +256,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      permissions: ['assets.view_label']
+      resource: 'label'
     },
     children: [
       {
