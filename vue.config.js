@@ -1,6 +1,6 @@
 'use strict'
 const path = require('path')
-const defaultSettings = require('./src/settings.js')
+// const defaultSettings = require('./src/settings.js')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|ico|svg)(\?.*)?$/i
 
@@ -34,7 +34,7 @@ module.exports = {
   outputDir: 'lina',
   assetsDir: 'assets',
   lintOnSave: process.env.NODE_ENV === 'development',
-  productionSourceMap: false,
+  // productionSourceMap: false,
   devServer: {
     port: port,
     host: '0.0.0.0',
@@ -134,10 +134,7 @@ module.exports = {
       .end()
 
     config
-    // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
-      )
+      .devtool('cheap-source-map')
 
     config
       .when(process.env.NODE_ENV !== 'development',
