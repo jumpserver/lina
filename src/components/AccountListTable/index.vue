@@ -46,6 +46,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
@@ -101,8 +102,8 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.account = row
-                    this.showViewSecretDialog = true
+                    vm.account = row
+                    vm.showViewSecretDialog = true
                   }
                 },
                 {
@@ -133,9 +134,11 @@ export default {
                   title: this.$t('common.Update'),
                   can: !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    console.log('Update account')
-                    this.account = row
-                    this.showUpdateSecretDialog = true
+                    console.log('Update account: ', row)
+                    setTimeout(() => {
+                      vm.account = row
+                      vm.showUpdateSecretDialog = true
+                    })
                   }
                 }
               ]
