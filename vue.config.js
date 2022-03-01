@@ -34,7 +34,7 @@ module.exports = {
   outputDir: 'lina',
   assetsDir: 'assets',
   lintOnSave: process.env.NODE_ENV === 'development',
-  productionSourceMap: false,
+  productionSourceMap: true,
   devServer: {
     port: port,
     host: '0.0.0.0',
@@ -135,7 +135,7 @@ module.exports = {
 
     config
     // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development',
+      .when(process.env.NODE_ENV !== '',
         config => config.devtool('cheap-source-map')
       )
 
