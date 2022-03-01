@@ -3,7 +3,7 @@
     width="50"
     :title="this.$t('assets.UpdateAssetUserToken')"
     :destroy-on-close="true"
-    v-bind="$attrs"
+    :visible.sync="visible"
     @confirm="handleConfirm()"
     @cancel="handleCancel()"
     v-on="$listeners"
@@ -42,6 +42,10 @@ export default {
     account: {
       type: Object,
       default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
