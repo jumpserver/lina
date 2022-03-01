@@ -135,7 +135,11 @@ export default {
                   can: !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
-                    vm.showUpdateSecretDialog = true
+                    console.log('Row is: ', row)
+                    setTimeout(() => {
+                      vm.showUpdateSecretDialog = true
+                    })
+                    console.log('Show update: ', vm.showUpdateSecretDialog)
                   }
                 }
               ]
