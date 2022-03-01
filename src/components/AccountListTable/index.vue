@@ -2,7 +2,7 @@
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
+    <UpdateSecretInfo v-if="showUpdateSecretDialog" :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
 
@@ -134,11 +134,8 @@ export default {
                   title: this.$t('common.Update'),
                   can: !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
-                    console.log('Update account: ', row)
-                    setTimeout(() => {
-                      vm.account = row
-                      vm.showUpdateSecretDialog = true
-                    })
+                    vm.account = row
+                    vm.showUpdateSecretDialog = true
                   }
                 }
               ]
