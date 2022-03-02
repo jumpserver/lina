@@ -46,7 +46,7 @@ export default {
         }
       ],
       select2Option: {
-        url: '/api/v1/users/users/?all=true'
+        url: '/api/v1/users/users/?oid=root'
       },
       fields: [
       ]

@@ -3,7 +3,8 @@
     width="50"
     :title="this.$t('assets.UpdateAssetUserToken')"
     :destroy-on-close="true"
-    v-bind="$attrs"
+    :visible.sync="isVisible"
+    @update:visible="(event) => $emit('update:visible', event)"
     @confirm="handleConfirm()"
     @cancel="handleCancel()"
     v-on="$listeners"
@@ -42,6 +43,10 @@ export default {
     account: {
       type: Object,
       default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -51,6 +56,11 @@ export default {
         private_key: '',
         passphrase: ''
       }
+    }
+  },
+  computed: {
+    isVisible() {
+      return this.visible
     }
   },
   methods: {
