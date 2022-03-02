@@ -25,7 +25,9 @@ export default {
       meta: {
         icon: 'dashboard',
         title: i18n.t('route.Overview'),
-        permissions: []
+        permissions: ['common.view_resourcestatistics'],
+        resource: 'common',
+        app: 'common'
       }
     },
     {
