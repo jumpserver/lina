@@ -8,7 +8,7 @@ import VueCookie from 'vue-cookie'
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
-  locale: VueCookie.get('django_language') || 'zh-hans',
+  locale: (VueCookie.get('django_language') || 'zh-hans') === 'zh-hans' ? 'cn' : 'en',
   fallbackLocale: 'en',
   silentFallbackWarn: true,
   silentTranslationWarn: true,
