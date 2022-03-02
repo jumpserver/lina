@@ -33,7 +33,7 @@ export default {
         icon: 'fa-user',
         title: this.$t('common.Members'),
         objectsAjax: {
-          url: '/api/v1/users/users/?fields_size=mini&order=name',
+          url: `/api/v1/users/users/?fields_size=mini&order=name${this.object.scope === 'system' ? '&oid=root' : ''}`,
           transformOption: (item) => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
