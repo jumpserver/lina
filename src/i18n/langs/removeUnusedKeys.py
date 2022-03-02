@@ -3,7 +3,7 @@ import json
 
 i18n_report_path = '/tmp/abc.json'
 lang_paths = {
-    'cn': 'cn.json',
+    'cn': 'zh-hans.json',
     'en': 'en.json'
 }
 
