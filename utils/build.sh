@@ -28,7 +28,6 @@ function build() {
   if [[ -n ${VERSION-''} ]]; then
     change_version || exit 2
   fi
-  rm -rf lina dist
   yarn build:prod || exit 5
   # 打包
   rm -rf "${release_dir:?}"/*
