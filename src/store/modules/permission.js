@@ -189,7 +189,6 @@ const mutations = {
 
 const actions = {
   generateViewRoutes({ commit, rootState }, { to, from }) {
-    console.log('rootState: -----------------------------', rootState.users)
     Vue.$log.debug('>>>>>>>>>>>>>>>: generate view routes')
     return new Promise(resolve => {
       const path = to.path
