@@ -29,7 +29,8 @@ export default {
           },
           {
             title: this.$t('assets.Gateway'),
-            name: 'GatewayList'
+            name: 'GatewayList',
+            hidden: () => !this.$hasPerm('assets.view_gateway')
           }
         ],
         hasRightSide: true
