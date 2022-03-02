@@ -32,11 +32,13 @@ export default {
           },
           {
             title: this.$t('perms.usersAndUserGroups'),
-            name: 'ApplicationPermissionUser'
+            name: 'ApplicationPermissionUser',
+            hidden: () => !this.$hasPerm('perms.view_applicationpermission')
           },
           {
             title: this.$t('perms.appsList'),
-            name: 'ApplicationsPermission'
+            name: 'ApplicationsPermission',
+            hidden: () => !this.$hasPerm('perms.view_applicationpermission')
           }
         ],
         actions: {
