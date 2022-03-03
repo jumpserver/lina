@@ -24,11 +24,14 @@ export default {
         submenu: [
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-            name: 'AssetChangeAuthPlanList'
+            name: 'AssetChangeAuthPlanList',
+            hidden: () => !this.$hasPerm('xpack.view_changeauthplan')
+
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-            name: 'AppChangeAuthPlanList'
+            name: 'AppChangeAuthPlanList',
+            hidden: () => !this.$hasPerm('xpack.view_changeauthplan')
           }
         ]
       }

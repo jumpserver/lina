@@ -30,7 +30,8 @@ export default {
           },
           {
             title: this.$t('users.tabs.grantedAssets'),
-            name: 'GroupGrantedAssets'
+            name: 'GroupGrantedAssets',
+            hidden: () => !this.$hasPerm('perms.view_usergroupassets')
           }
         ]
       }
