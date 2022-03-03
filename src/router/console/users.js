@@ -126,9 +126,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      permissions: [],
-      activeMenu: '/console/users/roles',
-      app: 'rbac'
+      permissions: []
     },
     children: [
       {
@@ -138,7 +136,8 @@ export default [
         meta: {
           title: i18n.t('route.RoleList'),
           permissions: [],
-          app: 'rbac'
+          app: 'rbac',
+          resource: 'role'
         }
       },
       {
@@ -148,8 +147,9 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('route.RoleCreate'),
+          permissions: [],
           app: 'rbac',
-          permissions: []
+          resource: 'role'
         }
       },
       {
