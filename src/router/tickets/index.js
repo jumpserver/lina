@@ -120,7 +120,9 @@ export default {
       meta: {
         title: i18n.t('tickets.FlowSetUp'),
         icon: 'sort-amount-asc',
-        permissions: []
+        permissions: ['tickets.view_ticketflow'],
+        resource: 'ticketflow'
+
       },
       children: [
         {
@@ -129,9 +131,7 @@ export default {
           component: () => import('@/views/tickets/TicketFlow/TicketFlow'),
           meta: {
             title: i18n.t('tickets.FlowSetUp'),
-            permissions: [],
-            resource: 'terminal',
-            app: 'terminal'
+            permissions: ['tickets.view_ticketflow']
           }
         },
         {
@@ -140,7 +140,7 @@ export default {
           component: () => import('@/views/tickets/TicketFlow/Detail'),
           meta: {
             title: i18n.t('route.TicketFlow'),
-            permissions: []
+            permissions: ['tickets.view_ticketflow']
           },
           hidden: true
         },
@@ -150,7 +150,7 @@ export default {
           component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
           meta: {
             title: i18n.t('route.TicketFlowCreate'),
-            permissions: []
+            permissions: ['tickets.add_ticketflow']
           },
           hidden: true
         },
@@ -160,7 +160,7 @@ export default {
           component: () => import('@/views/tickets/TicketFlow/FlowCreateUpdate'),
           meta: {
             title: i18n.t('route.TicketFlowUpdate'),
-            permissions: []
+            permissions: ['tickets.change_ticketflow']
           },
           hidden: true
         }
