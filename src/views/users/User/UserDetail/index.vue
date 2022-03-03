@@ -34,6 +34,7 @@ export default {
     UserLoginACLList
   },
   data() {
+    const vm = this
     return {
       user: { name: '', username: '', email: '', comment: '' },
       config: {
