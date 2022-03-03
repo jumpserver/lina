@@ -415,8 +415,10 @@
     "isValid": "Is valid",
     "nav": {
       "APIKey": "API Key",
-      "AdminPage": "Admin page",
-      "AuditPage": "Audit page",
+      "Workspace": "Work",
+      "Navigation": "Navigation",
+      "Console": "Console",
+      "Audits": "Audit",
       "HomePage": "Home page",
       "QuickAccess": "Quick access",
       "SwitchPage": "Switch page",
