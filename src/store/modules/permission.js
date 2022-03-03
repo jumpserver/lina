@@ -28,7 +28,7 @@ export function filterHiddenRoutes(routes, rootState) {
     const tmp = {
       ...route
     }
-    if (!isNeedHidden(route, rootState) || hasLicense(route, rootState)) {
+    if (!isNeedHidden(route, rootState) && hasLicense(route, rootState)) {
       if (tmp.children) {
         tmp.children = filterHiddenRoutes(tmp.children, rootState)
       }
