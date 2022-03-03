@@ -2,9 +2,8 @@
   <Dialog
     width="50"
     :title="this.$t('assets.UpdateAssetUserToken')"
+    :visible.sync="visible"
     :destroy-on-close="true"
-    :visible.sync="isVisible"
-    @update:visible="(event) => $emit('update:visible', event)"
     @confirm="handleConfirm()"
     @cancel="handleCancel()"
     v-on="$listeners"
@@ -30,8 +29,8 @@
 </template>
 
 <script>
-import { Dialog, UploadKey } from '@/components'
-import { UpdateToken } from '@/components/FormFields'
+import Dialog from '@/components/Dialog'
+import { UpdateToken, UploadKey } from '@/components/FormFields'
 export default {
   name: 'UpdateSecretInfo',
   components: {
@@ -56,11 +55,6 @@ export default {
         private_key: '',
         passphrase: ''
       }
-    }
-  },
-  computed: {
-    isVisible() {
-      return this.visible
     }
   },
   methods: {
