@@ -77,7 +77,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.treeSetting)
+    // console.log(this.treeSetting)
   },
   methods: {
     handleUrlChange(url) {

@@ -32,6 +32,18 @@ export function getResourceNameByPath(path) {
   return resource
 }
 
+export function getResourceFromApiUrl(apiUrl) {
+  const re = new RegExp('/api/v1/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/.*')
+  const matched = apiUrl.match(re)
+  if (!matched) {
+    return { path: '', app: '', resource: '' }
+  }
+  const [path, app, resource] = matched
+  const resourceCleaned = getResourceNameByPath(resource)
+  const data = { path: path, app: app, resource: resourceCleaned }
+  return data
+}
+
 export function getResourceFromRoute(route) {
   const meta = route.meta || {}
   if (meta.app && meta.resource) {
@@ -67,4 +79,9 @@ export function getBeforeViewRoute(permissionRoutes) {
     localStorage.setItem('BeforeViewRouter', JSON.stringify(prefer))
   }
   return prefer
+}
+
+export function getApiUrlRequirePerms(url, action) {
+  const { app, resource } = getResourceFromApiUrl(url)
+  return [`${app}.${action}_${resource}`]
 }

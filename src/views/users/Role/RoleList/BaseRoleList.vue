@@ -1,5 +1,5 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable v-if="!loading" :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
@@ -17,7 +17,10 @@ export default {
     }
   },
   data() {
+    const scopeRole = this.scope + 'role'
     return {
+      loading: true,
+      scopeRole: scopeRole,
       tableConfig: {
         url: `/api/v1/rbac/roles/?scope=${this.scope}`,
         columns: [
@@ -33,9 +36,8 @@ export default {
             label: this.$t('common.Name'),
             formatter: DetailFormatter,
             formatterArgs: {
-              permissions: ['rbac.view_role'],
+              permissions: [`rbac.view_${scopeRole}`],
               getRoute({ row }) {
-                console.log('Base role is: ', row)
                 return {
                   name: 'RoleDetail',
                   query: {
@@ -56,13 +58,19 @@ export default {
           actions: {
             formatterArgs: {
               canUpdate: ({ row }) => {
-                return this.hasPermNotBuiltinNotRootOrg(row, 'rbac.change_role')
+                return this.hasPermNotBuiltinNotRootOrg(row, `rbac.change_${row.scope}role`)
               },
               canDelete: ({ row }) => {
-                return this.hasPermNotBuiltinNotRootOrg(row, 'rbac.delete_role')
+                return this.hasPermNotBuiltinNotRootOrg(row, `rbac.delete_${row.scope}role`)
+              },
+              updateRoute: {
+                name: 'RoleUpdate',
+                query: {
+                  'scope': this.scope
+                }
               },
               canClone: ({ row }) => {
-                return this.hasPermNotBuiltinNotRootOrg(row, 'rbac.add_role')
+                return this.$hasPerm(`rbac.add_${row.scope}role`)
               }
             }
           }
@@ -77,10 +85,15 @@ export default {
         },
         hasMoreActions: false,
         canCreate: () => {
-          return this.$hasPerm(`rbac.add_${this.scope}role`)
+          return this.$hasPerm(`rbac.add_${this.scopeRole}`)
         }
       }
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false
+    })
   },
   methods: {
     hasPermNotBuiltinNotRootOrg(row, perm) {

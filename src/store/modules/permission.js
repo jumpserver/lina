@@ -40,16 +40,16 @@ export function filterHiddenRoutes(routes, rootState) {
 }
 
 function hasPermission(perms, route) {
-  console.log('>>> Route: ', route)
+  // console.log('>>> Route: ', route)
   const permsRequired = route.meta?.permissions
-  Vue.$log.debug('Route permissions required: ', route.path, permsRequired)
+  // Vue.$log.debug('Route permissions required: ', route.path, permsRequired)
   let has
   if (!permsRequired || permsRequired.length === 0) {
     has = true
   } else {
     has = perms.some(perm => permsRequired.includes(perm))
   }
-  Vue.$log.debug('Has permission: ', route.path, ' => ', has)
+  // Vue.$log.debug('Has permission: ', route.path, ' => ', has)
   return has
 }
 

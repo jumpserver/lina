@@ -126,7 +126,9 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      permissions: ['rbac.view_role']
+      permissions: [],
+      activeMenu: '/console/users/roles',
+      app: 'rbac'
     },
     children: [
       {
@@ -135,9 +137,8 @@ export default [
         name: 'RoleList',
         meta: {
           title: i18n.t('route.RoleList'),
-          permissions: ['rbac.view_role'],
-          app: 'rbac',
-          resource: 'role'
+          permissions: [],
+          app: 'rbac'
         }
       },
       {
@@ -147,9 +148,8 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('route.RoleCreate'),
-          permissions: ['rbac.add_role'],
           app: 'rbac',
-          resource: 'role'
+          permissions: []
         }
       },
       {
@@ -160,8 +160,7 @@ export default [
         meta: {
           title: i18n.t('route.RoleUpdate'),
           app: 'rbac',
-          resource: 'role',
-          permissions: ['rbac.change_role']
+          permissions: []
         }
       },
       {
@@ -173,7 +172,7 @@ export default [
           title: i18n.t('route.RoleDetail'),
           app: 'rbac',
           resource: 'role',
-          permissions: ['rbac.change_role']
+          permissions: []
         }
       }
     ]
