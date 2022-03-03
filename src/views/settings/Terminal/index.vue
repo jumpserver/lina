@@ -34,19 +34,23 @@ export default {
         },
         {
           title: this.$t('route.Terminal'),
-          name: 'TerminalList'
+          name: 'TerminalList',
+          hidden: () => !this.$hasPerm('terminal.view_command')
         },
         {
           title: this.$t('sessions.replayStorage'),
-          name: 'ReplayStorage'
+          name: 'ReplayStorage',
+          hidden: () => !this.$hasPerm('terminal.view_replaystorage')
         },
         {
           title: this.$t('sessions.commandStorage'),
-          name: 'CommandStorage'
+          name: 'CommandStorage',
+          hidden: () => !this.$hasPerm('terminal.view_commandstorage')
         },
         {
           title: this.$t('xpack.ComponentMonitor'),
-          name: 'Monitor'
+          name: 'Monitor',
+          hidden: () => !this.$hasPerm('terminal.view_terminal')
         }
       ]
     }

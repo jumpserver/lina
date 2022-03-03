@@ -47,23 +47,28 @@ export default {
           },
           {
             title: this.$t('users.tabs.grantedAssets'),
-            name: 'UserGrantedAssets'
+            name: 'UserGrantedAssets',
+            hidden: () => !vm.$hasPerm('perms.view_myassets')
           },
           {
             title: this.$t('users.tabs.assetPermissionRules'),
-            name: 'UserAssetPermissionRules'
+            name: 'UserAssetPermissionRules',
+            hidden: () => !vm.$hasPerm('perms.view_assetpermission')
           },
           {
             title: this.$t('users.tabs.grantedApplications'),
-            name: 'UserGrantedApplications'
+            name: 'UserGrantedApplications',
+            hidden: () => !vm.$hasPerm('perms.view_usergroupapps')
           },
           {
             title: this.$t('users.tabs.ApplicationPermissionRules'),
-            name: 'UserApplicationPermissionRules'
+            name: 'UserApplicationPermissionRules',
+            hidden: () => !vm.$hasPerm('perms.view_applicationpermission')
           },
           {
             title: this.$t('route.UserAclLists'),
-            name: 'UserLoginACLList'
+            name: 'UserLoginACLList',
+            hidden: () => !vm.$hasPerm('acls.view_loginacl')
           }
         ]
       }

@@ -40,11 +40,13 @@ export default {
         submenu: [
           {
             title: this.$t('users.RoleInfo'),
-            name: 'RoleInfo'
+            name: 'RoleInfo',
+            hidden: () => !this.$hasPerm('rbac.view_role')
           },
           {
             title: this.$t('users.RoleUsers'),
-            name: 'RoleUsers'
+            name: 'RoleUsers',
+            hidden: () => !this.$hasPerm('rbac.view_role')
           }
         ]
       }
