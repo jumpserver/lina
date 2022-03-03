@@ -173,7 +173,7 @@ export default [
           title: i18n.t('route.RoleDetail'),
           app: 'rbac',
           resource: 'role',
-          permissions: ['rbac.change_role']
+          permissions: ['rbac.view_role']
         }
       }
     ]
