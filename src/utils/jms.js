@@ -71,14 +71,21 @@ export function hasActionPerm(route, action) {
   return hasPermission(permsRequired)
 }
 
-export function getBeforeViewRoute(permissionRoutes) {
-  let prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
-  const hasRole = permissionRoutes.some(i => (i.path === prefer && i.path !== ''))
+export function getBeforeViewRoute(routes) {
+  const prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
+  routes.forEach((i) => {
+    if (i.name === 'Home') {
+      if (i.path === prefer && i.path !== '') {
+        i.redirect = prefer
+      } else {
+        i.redirect = routes.length >= 1 ? routes[1].path : '/404'
+      }
+    }
+  })
   if (!prefer) {
-    prefer = hasRole ? prefer : '/workspace'
     localStorage.setItem('BeforeViewRouter', JSON.stringify(prefer))
   }
-  return prefer
+  return routes
 }
 
 export function getApiUrlRequirePerms(url, action) {
