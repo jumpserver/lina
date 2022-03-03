@@ -2,6 +2,7 @@
   <Dialog
     width="50"
     :title="this.$t('assets.UpdateAssetUserToken')"
+    :visible.sync="visible"
     :destroy-on-close="true"
     v-bind="$attrs"
     @confirm="handleConfirm()"
@@ -30,7 +31,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import { UploadKey } from '@/components'
+import { UploadKey } from '@/components/FormFields'
 export default {
   name: 'UpdateSecretInfo',
   components: {
@@ -41,6 +42,10 @@ export default {
     account: {
       type: Object,
       default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
