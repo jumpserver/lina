@@ -5,7 +5,7 @@ import {
 } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
-import { getResourceNameByPath, getBeforeViewRoute } from '@/utils/jms'
+import { getResourceNameByPath, setRedirectViewRoute } from '@/utils/jms'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -220,8 +220,7 @@ const actions = {
       } else {
         console.log('Routes: ', routes)
       }
-      // 根据权限重定向默认路由页面
-      routes = getBeforeViewRoute(routes)
+      routes = setRedirectViewRoute(routes)
       commit('SET_ROUTES', { routes })
       dispatch('generateViewRoutes', { from, to })
       resolve(routes)
