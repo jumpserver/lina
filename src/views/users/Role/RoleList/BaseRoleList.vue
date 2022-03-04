@@ -22,7 +22,7 @@ export default {
       loading: true,
       scopeRole: scopeRole,
       tableConfig: {
-        url: `/api/v1/rbac/roles/?scope=${this.scope}`,
+        url: `/api/v1/rbac/${this.scope}-roles/`,
         columns: [
           'display_name', 'users_amount', 'builtin', 'created_by',
           'date_create', 'date_updated', 'comment', 'actions'
