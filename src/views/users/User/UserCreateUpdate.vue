@@ -106,7 +106,7 @@ export default {
           el: {
             multiple: true,
             ajax: {
-              url: '/api/v1/rbac/roles/?scope=system',
+              url: '/api/v1/rbac/system-roles/',
               transformOption: (item) => {
                 if (item.name !== 'SystemComponent') {
                   return { label: item.display_name, value: item.id }
@@ -125,7 +125,7 @@ export default {
           el: {
             multiple: true,
             ajax: {
-              url: '/api/v1/rbac/roles/?scope=org',
+              url: '/api/v1/rbac/org-roles/',
               transformOption: (item) => {
                 return { label: item.display_name, value: item.id }
               }
