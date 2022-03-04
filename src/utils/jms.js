@@ -4,21 +4,28 @@ export function openTaskPage(taskId) {
   window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
 }
 
-export function hasPermission(permsRequired) {
-  const perms = store.getters?.currentOrgPerms || []
-
+export function checkPermission(permsRequired, permsAll) {
   if (!permsRequired || permsRequired.length === 0) {
     return true
   }
-
   if (typeof permsRequired === 'string') {
     permsRequired = [permsRequired]
   }
-
-  const has = perms.some(perm => {
-    return permsRequired.includes(perm)
+  return permsRequired.every(perm => {
+    // 包含 | 是或的关系, 单独处理
+    if (perm.indexOf('|') === -1) {
+      return permsAll.includes(perm)
+    }
+    const permOr = perm.split('|').map(item => item.trim())
+    return permOr.some(perm => {
+      return permsAll.includes(perm)
+    })
   })
-  return has
+}
+
+export function hasPermission(permsRequired) {
+  const permsAll = store.getters?.currentOrgPerms || []
+  return checkPermission(permsRequired, permsAll)
 }
 
 export function getResourceNameByPath(path) {

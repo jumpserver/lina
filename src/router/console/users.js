@@ -126,7 +126,8 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      permissions: []
+      permissions: ['rbac.view_orgrole | rbac.view_systemrole'],
+      app: 'rbac'
     },
     children: [
       {
@@ -135,9 +136,8 @@ export default [
         name: 'RoleList',
         meta: {
           title: i18n.t('route.RoleList'),
-          permissions: [],
           app: 'rbac',
-          resource: 'role'
+          permissions: ['rbac.view_orgrole | rbac.view_systemrole']
         }
       },
       {
