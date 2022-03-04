@@ -1,5 +1,5 @@
 <template>
-  <ListTable v-if="!loading" :table-config="tableConfig" :header-actions="headerActions" />
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
@@ -91,9 +91,6 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.loading = false
-    })
   },
   methods: {
     hasPermNotBuiltinNotRootOrg(row, perm) {
