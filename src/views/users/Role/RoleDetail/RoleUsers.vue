@@ -2,12 +2,13 @@
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
       <ListTable
+        ref="ListTable"
         :table-config="tableConfig"
         :header-actions="headerActions"
       />
     </el-col>
     <el-col :md="10" :sm="24">
-      <RelationCard v-bind="relationConfig" />
+      <RelationCard ref="userRelation" v-bind="relationConfig" />
     </el-col>
   </el-row>
 </template>
@@ -49,6 +50,11 @@ export default {
             }
           })
           return this.$axios.post(relationUrl, data)
+        },
+        onAddSuccess: () => {
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$refs.ListTable.reloadTable()
+          this.$refs.userRelation.$refs.select2.clearSelected()
         }
       },
       tableConfig: {
@@ -61,7 +67,10 @@ export default {
           actions: {
             formatterArgs: {
               hasUpdate: false,
-              hasClone: false
+              hasClone: false,
+              canDelete: ({ row }) => {
+                return this.$hasPerm(`rbac.delete_${row.scope}rolebinding`)
+              }
             }
           }
         }
@@ -73,8 +82,7 @@ export default {
         }
       }
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
