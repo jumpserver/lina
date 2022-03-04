@@ -5,7 +5,7 @@ import {
 } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
-import { getResourceNameByPath, getBeforeViewRoute } from '@/utils/jms'
+import { getResourceNameByPath, getBeforeViewRoute, hasPermission } from '@/utils/jms'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -37,20 +37,6 @@ export function filterHiddenRoutes(routes, rootState) {
   })
 
   return res
-}
-
-function hasPermission(perms, route) {
-  // console.log('>>> Route: ', route)
-  const permsRequired = route.meta?.permissions
-  // Vue.$log.debug('Route permissions required: ', route.path, permsRequired)
-  let has
-  if (!permsRequired || permsRequired.length === 0) {
-    has = true
-  } else {
-    has = perms.some(perm => permsRequired.includes(perm))
-  }
-  // Vue.$log.debug('Has permission: ', route.path, ' => ', has)
-  return has
 }
 
 const actionMapper = {
@@ -150,9 +136,8 @@ function cleanRoute(tmp, parent) {
   return tmp
 }
 
-export function filterPermedRoutes(routes, rootState, permsCache, parent) {
+export function filterPermedRoutes(routes, parent) {
   const res = []
-  const perms = permsCache || rootState.users.perms
 
   for (const route of routes) {
     let tmp = {
@@ -160,9 +145,9 @@ export function filterPermedRoutes(routes, rootState, permsCache, parent) {
     }
     tmp = cleanRoute(tmp, parent)
 
-    if (hasPermission(perms, tmp)) {
+    if (hasPermission(tmp.meta.permissions)) {
       if (tmp.children) {
-        tmp.children = filterPermedRoutes(tmp.children, rootState, perms, tmp)
+        tmp.children = filterPermedRoutes(tmp.children, tmp)
       }
       res.push(tmp)
     }
@@ -213,7 +198,7 @@ const actions = {
   },
   generateRoutes({ commit, dispatch, rootState }, { to, from }) {
     return new Promise(resolve => {
-      let routes = filterPermedRoutes(allRoutes, rootState)
+      let routes = filterPermedRoutes(allRoutes, null)
       routes = filterHiddenRoutes(routes, rootState)
       if (routes.length === 0) {
         console.log('No route find')
