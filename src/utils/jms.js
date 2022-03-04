@@ -78,19 +78,24 @@ export function hasActionPerm(route, action) {
   return hasPermission(permsRequired)
 }
 
-export function getBeforeViewRoute(routes) {
+/**
+ * set redirection for routes of different roles
+ */
+export function setRedirectViewRoute(routes) {
   const prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
+  let currentViewRouter = ''
+  const hasRole = routes.some(i => (i.path === prefer && i.path !== ''))
+
   routes.forEach((i) => {
     if (i.name === 'Home') {
-      if (i.path === prefer && i.path !== '') {
-        i.redirect = prefer
-      } else {
-        i.redirect = routes.length >= 1 ? routes[1].path : '/404'
-      }
+      currentViewRouter = hasRole ? prefer : routes[1]?.path
+      i.redirect = currentViewRouter
+    } else {
+      i.redirect = i.children.length > 0 ? i.children[0]?.path : '/404'
     }
   })
   if (!prefer) {
-    localStorage.setItem('BeforeViewRouter', JSON.stringify(prefer))
+    localStorage.setItem('BeforeViewRouter', JSON.stringify(currentViewRouter))
   }
   return routes
 }
