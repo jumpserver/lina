@@ -5,7 +5,7 @@ import {
 } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
-import { getResourceNameByPath } from '@/utils/jms'
+import { getResourceNameByPath, getBeforeViewRoute } from '@/utils/jms'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -28,7 +28,7 @@ export function filterHiddenRoutes(routes, rootState) {
     const tmp = {
       ...route
     }
-    if (!isNeedHidden(route, rootState) || hasLicense(route, rootState)) {
+    if (!isNeedHidden(route, rootState) && hasLicense(route, rootState)) {
       if (tmp.children) {
         tmp.children = filterHiddenRoutes(tmp.children, rootState)
       }
@@ -40,16 +40,16 @@ export function filterHiddenRoutes(routes, rootState) {
 }
 
 function hasPermission(perms, route) {
-  console.log('>>> Route: ', route)
+  // console.log('>>> Route: ', route)
   const permsRequired = route.meta?.permissions
-  Vue.$log.debug('Route permissions required: ', route.path, permsRequired)
+  // Vue.$log.debug('Route permissions required: ', route.path, permsRequired)
   let has
   if (!permsRequired || permsRequired.length === 0) {
     has = true
   } else {
     has = perms.some(perm => permsRequired.includes(perm))
   }
-  Vue.$log.debug('Has permission: ', route.path, ' => ', has)
+  // Vue.$log.debug('Has permission: ', route.path, ' => ', has)
   return has
 }
 
@@ -220,7 +220,8 @@ const actions = {
       } else {
         console.log('Routes: ', routes)
       }
-      // const routes = allRoutes
+      // 根据权限重定向默认路由页面
+      routes = getBeforeViewRoute(routes)
       commit('SET_ROUTES', { routes })
       dispatch('generateViewRoutes', { from, to })
       resolve(routes)

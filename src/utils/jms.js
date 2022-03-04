@@ -32,6 +32,18 @@ export function getResourceNameByPath(path) {
   return resource
 }
 
+export function getResourceFromApiUrl(apiUrl) {
+  const re = new RegExp('/api/v1/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/.*')
+  const matched = apiUrl.match(re)
+  if (!matched) {
+    return { path: '', app: '', resource: '' }
+  }
+  const [path, app, resource] = matched
+  const resourceCleaned = getResourceNameByPath(resource)
+  const data = { path: path, app: app, resource: resourceCleaned }
+  return data
+}
+
 export function getResourceFromRoute(route) {
   const meta = route.meta || {}
   if (meta.app && meta.resource) {
@@ -59,12 +71,24 @@ export function hasActionPerm(route, action) {
   return hasPermission(permsRequired)
 }
 
-export function getBeforeViewRoute(permissionRoutes) {
-  let prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
-  const hasRole = permissionRoutes.some(i => (i.path === prefer && i.path !== ''))
+export function getBeforeViewRoute(routes) {
+  const prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
+  routes.forEach((i) => {
+    if (i.name === 'Home') {
+      if (i.path === prefer && i.path !== '') {
+        i.redirect = prefer
+      } else {
+        i.redirect = routes.length >= 1 ? routes[1].path : '/404'
+      }
+    }
+  })
   if (!prefer) {
-    prefer = hasRole ? prefer : '/workspace'
     localStorage.setItem('BeforeViewRouter', JSON.stringify(prefer))
   }
-  return prefer
+  return routes
+}
+
+export function getApiUrlRequirePerms(url, action) {
+  const { app, resource } = getResourceFromApiUrl(url)
+  return [`${app}.${action}_${resource}`]
 }

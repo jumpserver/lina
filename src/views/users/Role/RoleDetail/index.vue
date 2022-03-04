@@ -2,7 +2,6 @@
   <GenericDetailPage
     :object.sync="role"
     :active-menu.sync="config.activeMenu"
-    :url="url"
     v-bind="config"
     v-on="$listeners"
   >
@@ -25,43 +24,38 @@ export default {
   },
   data() {
     const vm = this
+    const scope = this.$route.query['scope']
+    const scopeRole = `${scope}role`
     return {
+      scope: scope,
+      scopeRole: scope + 'role',
       role: { name: '', comment: '', users: [] },
       config: {
+        url: `/api/v1/rbac/${scope}-roles`,
         activeMenu: 'RoleInfo',
         actions: {
           canDelete: () => {
-            return vm.hasPermNotBuiltinNotRootOrg(this.role, 'rbac.delete_role')
+            return vm.hasPermNotBuiltinNotRootOrg(this.role, `rbac.delete_${scopeRole}`)
           },
           canUpdate: () => {
-            return vm.hasPermNotBuiltinNotRootOrg(this.role, 'rbac.change_role')
+            return vm.hasPermNotBuiltinNotRootOrg(this.role, `rbac.change_${scopeRole}`)
           }
         },
         submenu: [
           {
             title: this.$t('users.RoleInfo'),
-            name: 'RoleInfo',
-            hidden: () => !this.$hasPerm('rbac.view_role')
+            name: 'RoleInfo'
           },
           {
             title: this.$t('users.RoleUsers'),
             name: 'RoleUsers',
-            hidden: () => !this.$hasPerm('rbac.view_role')
+            hidden: () => !this.$hasPerm(`rbac.view_${scope}rolebinding`)
           }
         ]
       }
     }
   },
-  computed: {
-    url() {
-      const scope = this.$route.query['scope'] || 'org'
-      return `/api/v1/rbac/${scope}-roles`
-    }
-  },
   methods: {
-    handleTabClick(tab) {
-      this.$log.debug('Current nav is: ', this.config.activeMenu)
-    },
     hasPermNotBuiltinNotRootOrg(row, perm) {
       return !row['builtin'] &&
         this.$hasPerm(perm) &&

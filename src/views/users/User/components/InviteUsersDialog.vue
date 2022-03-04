@@ -48,7 +48,7 @@ export default {
             component: Select2,
             el: {
               ajax: {
-                url: '/api/v1/users/users/suggestions/'
+                url: '/api/v1/users/users/suggestions/?oid=root'
               }
             }
           },
