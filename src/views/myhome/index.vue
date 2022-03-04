@@ -51,9 +51,6 @@ export default {
       return this.$store.getters.hasValidLicense
     }
   },
-  created() {
-    this.init()
-  },
   methods: {
   }
 }
