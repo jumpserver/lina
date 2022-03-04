@@ -253,12 +253,14 @@ export default {
     setRolesFilter() {
       const roleTypes = ['system-roles', 'org-roles']
       for (const roleType of roleTypes) {
-        this.$axios.get(`/api/v1/rbac/${roleType}/`).then((roles) => {
-          const fieldName = roleType.replace('-', '_')
-          this.tableConfig.columnsMeta[fieldName].filters = roles.map(r => {
-            return { text: r['display_name'], value: r.id }
+        if (this.$hasPerm(`rbac.${roleType}`)) {
+          this.$axios.get(`/api/v1/rbac/${roleType}/`).then((roles) => {
+            const fieldName = roleType.replace('-', '_')
+            this.tableConfig.columnsMeta[fieldName].filters = roles.map(r => {
+              return { text: r['display_name'], value: r.id }
+            })
           })
-        })
+        }
       }
     },
     removeUserFromOrg({ row, col, reload }) {

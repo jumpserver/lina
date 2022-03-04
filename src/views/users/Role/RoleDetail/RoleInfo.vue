@@ -108,7 +108,7 @@ export default {
     }
   },
   mounted() {
-    this.setting.treeUrl = `/api/v1/rbac/roles/${this.object.id}/permissions/tree/`
+    this.setting.treeUrl = `/api/v1/rbac/org-roles/${this.object.id}/permissions/tree/`
     setTimeout(() => {
       this.loading = false
     })
