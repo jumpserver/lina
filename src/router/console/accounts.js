@@ -238,7 +238,7 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/AccountBackupPlan/index.vue'),
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanList'),
         name: 'AccountBackupPlanIndex',
         meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') }
       },
