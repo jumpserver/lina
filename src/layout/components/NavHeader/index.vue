@@ -6,7 +6,7 @@
           <SiteMessages />
         </el-tooltip>
       </li>
-      <li class="header-item header-icon">
+      <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
         <el-tooltip effect="dark" :content="this.$t('route.WebTerminal')">
           <WebTerminal />
         </el-tooltip>

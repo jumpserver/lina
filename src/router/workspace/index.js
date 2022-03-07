@@ -26,7 +26,7 @@ export default {
       meta: {
         icon: 'dashboard',
         title: i18n.t('route.Overview'),
-        permissions: ['common.view_resourcestatistics']
+        permissions: []
       }
     },
     {
@@ -85,7 +85,7 @@ export default {
       path: '/workspace/ops',
       component: empty,
       meta: {
-        permissions: [],
+        permissions: ['ops.add_commandexecution'],
         hidden: ({ settings }) => !settings['SECURITY_COMMAND_EXECUTION']
       },
       children: [
@@ -96,7 +96,7 @@ export default {
           meta: {
             title: i18n.t('route.BatchCommand'),
             icon: 'terminal',
-            permissions: []
+            permissions: ['ops.add_commandexecution']
           }
         }
       ]
@@ -105,7 +105,7 @@ export default {
       path: `external-luna`,
       component: empty,
       meta: {
-        permissions: []
+        permissions: ['rbac.view_webterminal']
       },
       children: [
         {
@@ -123,7 +123,7 @@ export default {
       path: 'external-elfinder',
       component: empty,
       meta: {
-        permissions: []
+        permissions: ['rbac.view_filemanager']
       },
       children: [
         {
@@ -132,7 +132,7 @@ export default {
             title: i18n.t('route.FileManager'),
             icon: 'file',
             activeMenu: '/assets',
-            permissions: []
+            permissions: ['rbac.view_filemanager']
           }
         }
       ]
