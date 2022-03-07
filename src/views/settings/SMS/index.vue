@@ -1,20 +1,16 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" class="form" />
-  </IBox>
+  <GenericCreateUpdatePage v-bind="$data" class="form" />
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import IBox from '@/components/IBox'
+import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import SMSAlibaba from './SMSAlibaba'
 import SMSTencent from './SMSTencent'
 
 export default {
   name: 'Auth',
   components: {
-    IBox,
-    GenericCreateUpdateForm
+    GenericCreateUpdatePage
   },
   data() {
     return {
