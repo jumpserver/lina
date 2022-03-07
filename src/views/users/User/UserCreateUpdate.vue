@@ -121,7 +121,7 @@ export default {
           value: []
         },
         org_roles: {
-          rules: !this.$store.getters.currentOrgIsRoot ? [rules.RequiredChange] : [],
+          rules: this.$store.getters.currentOrgIsRoot ? [] : [rules.RequiredChange],
           el: {
             multiple: true,
             ajax: {
