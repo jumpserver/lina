@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/assets/backup-execution/?plan_id=${this.object.id}`,
+        url: `/api/v1/assets/account-backup-plan-executions/?plan_id=${this.object.id}`,
         columns: [
           'timedelta', 'trigger_display', 'date_start', 'is_success', 'reason', 'actions'
         ],

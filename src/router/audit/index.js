@@ -25,7 +25,7 @@ export default {
       meta: {
         icon: 'dashboard',
         title: i18n.t('route.Overview'),
-        permissions: ['rbac.view_resourcestatistics'],
+        permissions: [],
         resource: 'common',
         app: 'common'
       }
