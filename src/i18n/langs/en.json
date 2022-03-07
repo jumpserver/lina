@@ -1336,7 +1336,7 @@
       "Reason": "Reason"
     },
     "Cloud": {
-      "CloudImport": "Cloud import",
+      "CloudSync": "Cloud sync",
       "ServerAccountKey": "Server Account Key",
       "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",

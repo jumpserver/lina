@@ -173,8 +173,9 @@ export default {
         },
         extraActions: [
           {
-            name: this.$t('xpack.Cloud.CloudImport'),
-            title: this.$t('xpack.Cloud.CloudImport'),
+            name: this.$t('xpack.Cloud.CloudSync'),
+            title: this.$t('xpack.Cloud.CloudSync'),
+            can: () => this.$hasPerm('xpack.view_account'),
             callback: () => this.$router.push({ name: 'CloudCenter' })
           }
         ],

@@ -8,7 +8,7 @@ export default [
     redirect: '',
     hidden: true,
     meta: {
-      title: i18n.t('xpack.Cloud.CloudImport'),
+      title: i18n.t('xpack.Cloud.CloudSync'),
       app: 'xpack',
       resource: 'account'
     },
@@ -19,7 +19,7 @@ export default [
         name: 'CloudCenter',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.Cloud.CloudImport'),
+          title: i18n.t('xpack.Cloud.CloudSync'),
           activeMenu: '/console/assets/assets'
         }
       },

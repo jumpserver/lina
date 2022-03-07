@@ -1385,7 +1385,7 @@
       "Reason": "原因"
     },
     "Cloud": {
-      "CloudImport": "云导入",
+      "CloudSync": "云同步",
       "ServerAccountKey": "服务账号密钥",
       "IPNetworkSegment": "IP网段",
       "Aliyun": "阿里云",
