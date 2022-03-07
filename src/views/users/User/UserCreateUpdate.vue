@@ -121,7 +121,7 @@ export default {
           value: []
         },
         org_roles: {
-          rules: [rules.RequiredChange],
+          rules: !this.$store.getters.currentOrgIsRoot ? [rules.RequiredChange] : [],
           el: {
             multiple: true,
             ajax: {
@@ -135,7 +135,8 @@ export default {
           },
           hidden: () => {
             return !this.$store.getters.hasValidLicense ||
-                !this.$hasPerm('rbac.change_orgrolebinding')
+              !this.$hasPerm('rbac.change_orgrolebinding') ||
+              this.$store.getters.currentOrgIsRoot
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
         },
