@@ -120,7 +120,7 @@ export default {
       const permNodes = checkedNodes.filter(node => !node.isParent)
       const permIds = permNodes.map(node => node.id)
 
-      const roleDetailUrl = `/api/v1/rbac/roles/${this.object.id}/`
+      const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
       const data = {
         permissions: permIds
       }
