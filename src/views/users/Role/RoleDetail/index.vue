@@ -26,11 +26,18 @@ export default {
     const vm = this
     const scope = this.$route.query['scope']
     const scopeRole = `${scope}role`
+    let titlePrefix = ''
+    if (scope === 'org') {
+      titlePrefix = vm.$t('route.OrgRole')
+    } else if (scope === 'system') {
+      titlePrefix = vm.$t('route.SystemRole')
+    }
     return {
       scope: scope,
       scopeRole: scope + 'role',
       role: { name: '', comment: '', users: [] },
       config: {
+        titlePrefix: titlePrefix,
         url: `/api/v1/rbac/${scope}-roles`,
         activeMenu: 'RoleInfo',
         actions: {

@@ -37,6 +37,11 @@ export default {
       type: Object,
       required: true
     },
+    titlePrefix: {
+      type: String,
+      required: false,
+      default: ''
+    },
     title: {
       type: String,
       default: ''
@@ -66,12 +71,11 @@ export default {
     getTitle: {
       type: Function,
       default: function(obj) {
-        const objectType = this.$route.meta.title
-          .replace('Detail', '')
-          .replace('详情', '')
+        const objectType = this.$route.meta.title.replace('Detail', '').replace('详情', '')
         this.$log.debug('Object is: ', obj)
+        const titlePrefix = this.titlePrefix || objectType
         const objectName = this.getObjectName(obj)
-        let title = `${objectType}: ${objectName}`
+        let title = `${titlePrefix}: ${objectName}`
         if (title.length > 80) {
           title = title.slice(0, 80) + '...'
         }
