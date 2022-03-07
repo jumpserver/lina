@@ -33,6 +33,7 @@ export default {
             label: this.$t('assets.Gateway'),
             formatter: DetailFormatter,
             formatterArgs: {
+              permissions: 'assets.view_gateway',
               routeQuery: {
                 activeTab: 'GatewayList'
               }
