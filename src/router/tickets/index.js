@@ -114,7 +114,6 @@ export default {
     },
     {
       path: '/tickets/flow',
-      name: 'TicketFlow',
       component: empty,
       redirect: '',
       meta: {
@@ -122,7 +121,6 @@ export default {
         icon: 'sort-amount-asc',
         permissions: ['tickets.view_ticketflow'],
         resource: 'ticketflow'
-
       },
       children: [
         {

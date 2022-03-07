@@ -26,7 +26,6 @@ export default [
       {
         path: 'account',
         component: empty,
-        name: 'AccountList',
         hidden: true,
         meta: {
           title: i18n.t('xpack.Cloud.AccountList'),

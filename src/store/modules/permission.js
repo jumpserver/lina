@@ -167,14 +167,14 @@ const mutations = {
     state.routes = routes.concat(constantRoutes)
   },
   SET_VIEW_ROUTE: (state, viewRoute) => {
-    console.log('Current view route: ', viewRoute)
+    Vue.$log.debug('Current view route: ', viewRoute)
     state.currentViewRoute = viewRoute
   }
 }
 
 const actions = {
   generateViewRoutes({ commit, rootState }, { to, from }) {
-    Vue.$log.debug('>>>>>>>>>>>>>>>: generate view routes')
+    Vue.$log.debug('Start generate view routes')
     return new Promise(resolve => {
       const path = to.path
       const re = new RegExp('/(\\w+)/?.*')
@@ -201,9 +201,9 @@ const actions = {
       let routes = filterPermedRoutes(allRoutes, null)
       routes = filterHiddenRoutes(routes, rootState)
       if (routes.length === 0) {
-        console.log('No route find')
+        console.error('No route find')
       } else {
-        console.log('Routes: ', routes)
+        Vue.$log.debug('All routes: ', routes)
       }
       // 根据权限重定向默认路由页面
       routes = getBeforeViewRoute(routes)
