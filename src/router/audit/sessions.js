@@ -1,10 +1,12 @@
 import i18n from '@/i18n/i18n'
+import empty from '@/layout/empty'
 
 export default [
   {
     path: 'sessions',
     name: 'SessionList',
-    component: () => import('@/views/sessions/SessionList'),
+    redirect: '',
+    component: empty,
     meta: {
       title: i18n.t('route.Sessions'),
       permissions: ['terminal.view_session']

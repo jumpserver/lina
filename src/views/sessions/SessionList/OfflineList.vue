@@ -10,6 +10,7 @@ export default {
     BaseList
   },
   data() {
+    const vm = this
     return {
       url: '/api/v1/terminal/sessions/?is_finished=1',
       extraActions: [
@@ -17,9 +18,7 @@ export default {
           name: 'replay',
           title: this.$t('sessions.replay'),
           type: 'warning',
-          can: ({ row, cellValue }) => {
-            return row['can_replay']
-          },
+          can: ({ row }) => vm.hasPerms(row, 'view'),
           callback: function({ row, tableData }) {
             // 跳转到luna页面
             const replayUrl = '/luna/replay/' + row.id
@@ -30,13 +29,10 @@ export default {
           name: 'download',
           title: this.$t('sessions.download'),
           type: 'primary',
-          can: ({ row, cellValue }) => {
-            return row['can_replay']
-          },
+          can: ({ row }) => vm.hasPerms(row, 'download'),
           callback: function({ row, tableData }) {
             // 跳转下载页面
             const downloadUrl = `/api/v1/terminal/sessions/${row.id}/replay/download/`
-
             const a = document.createElement('a')
             a.href = downloadUrl
             a.click()
@@ -44,6 +40,11 @@ export default {
           }
         }
       ]
+    }
+  },
+  methods: {
+    hasPerms(row, type) {
+      return row['can_replay'] && this.$hasPerm(`terminal.${type}_sessionreplay`)
     }
   }
 }

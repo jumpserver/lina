@@ -39,7 +39,8 @@ export default {
       meta: {
         title: i18n.t('route.SessionsAudit'),
         icon: 'rocket',
-        permissions: []
+        permissions: [],
+        app: 'terminal'
       },
       children: SessionRoutes
     },
