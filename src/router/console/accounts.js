@@ -127,8 +127,7 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/index.vue'),
         name: 'ChangeAuthPlanIndex',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan')
         }
       },
       {
@@ -136,8 +135,7 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanList.vue'),
         name: 'AssetChangeAuthPlanList',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan')
         },
         hidden: true
       },
@@ -167,8 +165,7 @@ export default [
         name: 'AssetChangeAuthPlanDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan')
         }
       },
       {
@@ -177,8 +174,7 @@ export default [
         name: 'ChangeAuthPlanExecutionDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail')
         }
       },
       {
@@ -186,8 +182,7 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue'),
         name: 'AppChangeAuthPlanList',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan')
         },
         hidden: true
       },
@@ -225,8 +220,7 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/AppChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
         name: 'AppChangeAuthPlanExecutionDetail',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          activeMenu: '/accounts/change-auth-plan'
+          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail')
         },
         hidden: true
       }
@@ -246,41 +240,47 @@ export default [
         path: '',
         component: () => import('@/views/accounts/AccountBackupPlan/index.vue'),
         name: 'AccountBackupPlanIndex',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'), activeMenu: '/accounts/backup' }
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') }
       },
       {
         path: '',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanList.vue'),
         name: 'AccountBackupPlanList',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'), activeMenu: '/accounts/backup' },
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') },
         hidden: true
       },
       {
         path: 'create',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
         name: 'AccountBackupPlanCreate',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanCreate'), activeMenu: '/accounts/backup', action: 'create' },
+        meta: {
+          title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanCreate'),
+          action: 'create'
+        },
         hidden: true
       },
       {
         path: ':id/update',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
         name: 'AccountBackupPlanUpdate',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanUpdate'), activeMenu: '/accounts/backup', action: 'update' },
+        meta: {
+          title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanUpdate'),
+          action: 'update'
+        },
         hidden: true
       },
       {
         path: ':id',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/index.vue'),
         name: 'AccountBackupPlanDetail',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'), activeMenu: '/accounts/backup' },
+        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') },
         hidden: true
       },
       {
         path: 'plan-execution/:id',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
         name: 'AccountBackupPlanExecutionDetail',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.ExecutionDetail'), activeMenu: '/accounts/backup' },
+        meta: { title: i18n.t('xpack.AccountBackupPlan.ExecutionDetail') },
         hidden: true
       }
     ]

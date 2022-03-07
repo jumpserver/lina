@@ -16,7 +16,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/backup/',
+        url: '/api/v1/assets/account-backup-plans/',
         columns: [
           'name', 'is_periodic', 'periodic_display', 'org_name', 'comment', 'actions'
         ],
@@ -62,7 +62,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/backup-execution/`,
+                      `/api/v1/assets/account-backup-plan-executions/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])
