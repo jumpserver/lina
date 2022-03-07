@@ -24,7 +24,8 @@ export default {
         submenu: [
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskList'),
-            name: 'SyncInstanceTaskList'
+            name: 'SyncInstanceTaskList',
+            hidden: () => !this.$hasPerm('xpack.view_syncinstancetask')
           },
           {
             title: this.$t('xpack.Cloud.AccountList'),
