@@ -61,11 +61,10 @@ export default {
         },
         callback: {
           onCheck(event, treeId, treeNode) {
-            const checked = treeNode.checked
+            // 选择后，更新按钮可用
             vm.$nextTick(() => {
               vm.isDisabled = false
             })
-            console.log('on check click: ', checked)
           },
           onSelected() {
           }
@@ -114,21 +113,42 @@ export default {
     })
   },
   methods: {
-    updatePermissions() {
+    checkViewNodeIfNeed() {
       const ztree = this.$refs.tree.zTree
-      const checkedNodes = ztree.getCheckedNodes()
-      const permNodes = checkedNodes.filter(node => !node.isParent)
-      const permIds = permNodes.map(node => node.id)
-
-      const roleDetailUrl = `/api/v1/rbac/roles/${this.object.id}/`
-      const data = {
-        permissions: permIds
+      const viewPermMapper = [
+        ['view_console', 'rbac.view_adminview'],
+        ['view_audit', 'rbac.view_auditview'],
+        ['view_workspace', 'rbac.view_userview']
+      ]
+      for (const [viewId, permId] of viewPermMapper) {
+        const viewNode = ztree.getNodeByParam('id', viewId)
+        const permNode = ztree.getNodeByParam('title', permId)
+        if (!viewNode || !permNode) {
+          continue
+        }
+        const nodeStatus = viewNode.getCheckStatus()
+        const viewStatus = nodeStatus.checked || nodeStatus.half
+        ztree.checkNode(permNode, viewStatus)
       }
-      this.$axios.patch(roleDetailUrl, data).then(() => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
-      }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg') + error)
-        this.$log.error(error)
+      return Promise.resolve(true)
+    },
+    updatePermissions() {
+      this.checkViewNodeIfNeed().then(() => {
+        const ztree = this.$refs.tree.zTree
+        const checkedNodes = ztree.getCheckedNodes()
+        const permNodes = checkedNodes.filter(node => !node.isParent)
+        const permIds = permNodes.map(node => node.id)
+
+        const roleDetailUrl = `/api/v1/rbac/roles/${this.object.id}/`
+        const data = {
+          permissions: permIds
+        }
+        this.$axios.patch(roleDetailUrl, data).then(() => {
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+        }).catch(error => {
+          this.$message.error(this.$t('common.updateErrorMsg') + error)
+          this.$log.error(error)
+        })
       })
     }
   }
