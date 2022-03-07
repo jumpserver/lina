@@ -20,7 +20,7 @@ export default {
           title: this.$t('sessions.terminate'),
           type: 'danger',
           can: ({ row, cellValue }) => {
-            return row['can_terminate']
+            return row['can_terminate'] && this.$hasPerm('terminal.terminate_session')
           },
           callback: function({ reload, row }) {
             // 终断 session reload
@@ -40,7 +40,7 @@ export default {
           title: this.$t('sessions.Monitor'),
           type: 'primary',
           can: ({ row, cellValue }) => {
-            return row['can_join']
+            return row['can_join'] && this.$hasPerm('terminal.monitor_session')
           },
           tip: ({ row }) => {
             if (row.login_from === 'RT') {
