@@ -129,7 +129,7 @@ website:    http://code.google.com/p/jquerytree/
   color: #676a6c;
 }
 .ztree li span.button.chk.checkbox_false_part::before {
-  content: "\f096";
+  content: "\f046";
   color: #aaaaaa;
 }
 .ztree li span.button.chk.checkbox_false_part_focus::before {
