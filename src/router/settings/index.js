@@ -62,13 +62,11 @@ export default {
       path: '/settings/sms',
       name: 'SMS',
       component: () => import('@/views/settings/SMS'),
-      hidden: () => {
-        return !this.$store.getters.hasValidLicense
-      },
       meta: {
         title: i18n.t('setting.SMS'),
-        icon: 'gear',
-        permissions: ['settings.view_setting']
+        icon: 'mobile-phone fa-lg',
+        permissions: ['settings.view_setting'],
+        licenseRequired: true
       }
     },
     {
@@ -225,7 +223,8 @@ export default {
           meta: {
             title: i18n.t('xpack.Organization.OrganizationList'),
             icon: 'sitemap',
-            permissions: ['orgs.view_organization']
+            permissions: ['orgs.view_organization'],
+            licenseRequired: true
           }
         },
         {
