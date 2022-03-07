@@ -4,7 +4,6 @@ import empty from '@/layout/empty'
 export default [
   {
     path: 'sessions',
-    name: 'SessionList',
     redirect: '',
     component: empty,
     meta: {
