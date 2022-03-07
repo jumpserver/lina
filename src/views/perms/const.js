@@ -65,7 +65,7 @@ export const DATABASE = [
     title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
-    has: true
+    has: hasLicence
   },
   {
     name: ORACLE,
