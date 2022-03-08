@@ -1,14 +1,11 @@
 <template>
-  <div class="error-404-container">
-    <div class="error-404-text">
-      <h1 class="error-404-title">{{ $t('route.AjaxError404') }}</h1>
-      <p class="error-404-subtitle">{{ $t('route.CannotAccess') }}</p>
-      <a href="/ui/" class="el-button el-button--success error-button">
-        {{ $t('route.GoHomePage') }}
-      </a>
+  <div class="error-403-container">
+    <div class="error-403-text">
+      <h1 class="error-403-title">{{ $t('route.NoPermission403') }}</h1>
+      <p class="error-403-subtitle">{{ $t('route.NoPermissionVew') }}</p>
     </div>
-    <div class="error-404-image-container">
-      <img class="error-404-error-image" src="@/assets/img/robot.png" alt="page error">
+    <div class="error-403-image-container">
+      <img class="error-403-error-image" src="@/assets/img/robot.png" alt="page error">
     </div>
   </div>
 </template>
@@ -16,12 +13,12 @@
 <script>
 
 export default {
-  name: 'Page404'
+  name: 'Page403'
 }
 </script>
 
 <style lang="scss" scoped>
-  .error-404-container {
+  .error-403-container {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -31,7 +28,7 @@ export default {
     margin-top: 180px;
   }
 
-  .error-404-text {
+  .error-403-text {
     -webkit-box-align: start;
     -ms-flex-align: start;
     align-items: flex-start;
@@ -48,13 +45,13 @@ export default {
     min-width: 384px;
   }
 
-  .error-404-title {
+  .error-403-title {
     font-size: 40px;
     font-weight: 600;
     font-synthesis: style;
   }
 
-  .error-404-subtitle {
+  .error-403-subtitle {
     font-size: 18px;
     margin-top: 10px;
     color: #646464;
@@ -63,9 +60,5 @@ export default {
 
   .error-button {
     margin-top: 20px;
-  }
-
-  a {
-    color: white !important;
   }
 </style>

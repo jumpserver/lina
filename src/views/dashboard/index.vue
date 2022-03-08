@@ -1,9 +1,12 @@
 <template>
   <Page>
-    <Announcement />
-    <ResourceSummary />
-    <DatesLoginSummary />
-    <TopAndLatestSummary />
+    <div v-if="$hasPerm('rbac.view_resourcestatistics')">
+      <Announcement />
+      <ResourceSummary />
+      <DatesLoginSummary />
+      <TopAndLatestSummary />
+    </div>
+    <Page403 v-else />
   </Page>
 </template>
 
@@ -13,6 +16,7 @@ import { Page } from '@/layout/components'
 import ResourceSummary from './ResourceSummary'
 import DatesLoginSummary from './DatesLoginSummary'
 import TopAndLatestSummary from './TopAndLatestSummary'
+import Page403 from '@/views/403'
 
 export default {
   name: 'Dashboard',
@@ -21,7 +25,8 @@ export default {
     DatesLoginSummary,
     ResourceSummary,
     TopAndLatestSummary,
-    Announcement
+    Announcement,
+    Page403
   },
   data() {
     return {
