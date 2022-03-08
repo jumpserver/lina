@@ -1,5 +1,6 @@
 <template>
   <GenericDetailPage
+    :url="url"
     :submenu="submenu"
     :object.sync="sessionData"
     :active-menu.sync="activeSubMenu"
@@ -29,6 +30,7 @@ export default {
   data() {
     return {
       sessionData: {},
+      url: `/api/v1/terminal/sessions`,
       activeSubMenu: 'SessionDetailInfo',
       submenu: [
         {
@@ -37,11 +39,13 @@ export default {
         },
         {
           title: this.$t('sessions.command'),
-          name: 'SessionCommands'
+          name: 'SessionCommands',
+          hidden: () => !this.$hasPerm('terminal.view_command')
         },
         {
           title: this.$t('sessions.Activity'),
-          name: 'SessionJoinRecords'
+          name: 'SessionJoinRecords',
+          hidden: () => !this.$hasPerm('terminal.view_sessionjoinrecord')
         }
       ]
     }
