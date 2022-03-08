@@ -7,7 +7,7 @@ import empty from '@/layout/empty'
 
 export default {
   path: '/audit/',
-  name: 'Audit',
+  name: 'audit',
   component: Layout,
   redirect: '/audit/dashboard',
   meta: {

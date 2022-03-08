@@ -78,24 +78,37 @@ export function hasActionPerm(route, action) {
   return hasPermission(permsRequired)
 }
 
-export function getBeforeViewRoute(routes) {
-  const prefer = JSON.parse(localStorage.getItem('BeforeViewRouter')) || ''
-  routes.forEach((i) => {
-    if (i.name === 'Home') {
-      if (i.path === prefer && i.path !== '') {
-        i.redirect = prefer
-      } else {
-        i.redirect = routes.length >= 1 ? routes[1].path : '/404'
-      }
-    }
-  })
-  if (!prefer) {
-    localStorage.setItem('BeforeViewRouter', JSON.stringify(prefer))
+const viewRequirePermsMapper = {
+  console: 'rbac.view_adminview',
+  audit: 'rbac.view_auditview',
+  workspace: 'rbac.view_userview'
+}
+
+export function getViewRequirePerms(view) {
+  return viewRequirePermsMapper[view] || 'super'
+}
+
+export function getPropView() {
+  const preView = localStorage.getItem('PreView')
+  const preViewRequirePerms = getViewRequirePerms(preView)
+  const hasPerm = hasPermission(preViewRequirePerms)
+  if (hasPerm) {
+    return preView
   }
-  return routes
+  for (const [view, perms] of Object.entries(viewRequirePermsMapper)) {
+    if (hasPermission(perms)) {
+      return view
+    }
+  }
+  return 'workspace'
 }
 
 export function getApiUrlRequirePerms(url, action) {
   const { app, resource } = getResourceFromApiUrl(url)
   return [`${app}.${action}_${resource}`]
+}
+
+export function getRouteViewRequirePerms(route) {
+  const viewName = route.path.split('/')[1]
+  return getViewRequirePerms(viewName)
 }

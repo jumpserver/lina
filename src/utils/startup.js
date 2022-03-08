@@ -1,12 +1,13 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
 import router from '@/router'
+import Vue from 'vue'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
-import rolec from '@/utils/role'
 import orgUtil from '@/utils/org'
 import { getCurrentOrg } from '@/api/orgs'
+import { getPropView, getRouteViewRequirePerms, hasPermission } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -31,7 +32,7 @@ async function checkLogin({ to, from, next }) {
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
-    console.log(e)
+    Vue.$log.error(e)
     const status = e.response.status
     if (status === 401 || status === 403) {
       setTimeout(() => {
@@ -75,28 +76,17 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
   }
 }
 
-async function changeCurrentRoleIfNeed({ to, from, next }) {
-  await store.dispatch('users/getRoles')
-  const userPerms = store.getters.currentOrgPerms
-
-  let currentRole = store.getters.currentRole
-  // 如果设置了当前角色，并且有这个权限的话
-  if (currentRole && rolec.hasPerm(userPerms, currentRole)) {
+async function changeCurrentViewIfNeed({ to, from, next }) {
+  const viewRequirePerms = getRouteViewRequirePerms(to)
+  const hasPerm = hasPermission(viewRequirePerms)
+  Vue.$log.debug('Change current view if need: ', viewRequirePerms, hasPerm)
+  if (hasPerm) {
+    Vue.$log.debug('Has current view perm')
     return
   }
-
-  const adminOrgs = store.getters.orgs
-  if (!adminOrgs || adminOrgs.length === 0) {
-    currentRole = rolec.USER_PAGE_REQUIRE_PERM_MIN
-    await store.dispatch('users/setCurrentRole', currentRole)
-    return
-  }
-  if (rolec.hasAdminPagePerm(userPerms)) {
-    currentRole = rolec.getUserInAdminPagePerm(userPerms)
-  } else {
-    currentRole = rolec.getUserInUserPagePerm(userPerms)
-  }
-  await store.dispatch('users/setCurrentRole', currentRole)
+  const view = getPropView()
+  next({ name: view })
+  return reject('Change prop view')
 }
 
 export async function generatePageRoutes({ to, from, next }) {
@@ -112,13 +102,13 @@ export async function generatePageRoutes({ to, from, next }) {
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
-    // console.log('Next to: ', to)
+    // Vue.$log.debug('Next to: ', to)
     next({ ...to, replace: true })
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
     Message.error(error || 'Has Error')
-    console.log('Error occur: ', error)
+    Vue.$log.error('Error occur: ', error)
   }
 }
 
@@ -139,8 +129,8 @@ export async function startup({ to, from, next }) {
   // await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
-  await changeCurrentRoleIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })
+  await changeCurrentViewIfNeed({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
 }
