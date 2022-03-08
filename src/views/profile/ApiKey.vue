@@ -57,6 +57,7 @@ export default {
                   name: 'Enabled',
                   title: this.$t('common.On/Off'),
                   type: 'info',
+                  can: () => this.$hasPerm('authentication.change_accesskey'),
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/`,
                       { is_active: !row.is_active }
@@ -86,7 +87,7 @@ export default {
             name: this.$t('setting.Create'),
             title: this.$t('setting.Create'),
             type: 'primary',
-            can: true,
+            can: () => this.$hasPerm('authentication.add_accesskey'),
             callback: function() {
               this.$axios.post(ajaxUrl).then(res => {
                 this.getRefsListTable.reloadTable()
