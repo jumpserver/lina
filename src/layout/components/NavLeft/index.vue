@@ -5,7 +5,7 @@
         <Logo v-if="showLogo" :collapse="isCollapse" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
-        {{ currentViewRoute.meta.title }}
+        {{ isTitle }}
       </div>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -85,6 +85,9 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
+    },
+    isTitle() {
+      return this.currentViewRoute.meta?.title || ''
     }
   },
   methods: {
