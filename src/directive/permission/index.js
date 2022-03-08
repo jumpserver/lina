@@ -1,4 +1,4 @@
-import { hasPermission, getRouteRequiredPerms } from '@/utils/jms'
+import { hasPermission, getRouteRequiredPerms, getApiUrlRequirePerms } from '@/utils/jms'
 import permission from './permission'
 import Vue from 'vue'
 
@@ -7,6 +7,11 @@ const install = function(Vue) {
 
   Vue.prototype.$hasPerm = function(perms) {
     return hasPermission(perms)
+  }
+
+  Vue.prototype.$hasApiActionPerm = function(url, action) {
+    const permsRequired = getApiUrlRequirePerms(url, action)
+    return hasPermission(permsRequired)
   }
 
   Vue.prototype.$getCurrentResActionPerms = function(action) {
