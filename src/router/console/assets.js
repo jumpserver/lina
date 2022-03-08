@@ -218,6 +218,7 @@ export default [
     path: 'platforms',
     component: empty,
     meta: {
+      permissions: ['assets.view_platform'],
       resource: 'platform'
     },
     redirect: '',
