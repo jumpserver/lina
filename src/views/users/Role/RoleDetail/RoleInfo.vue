@@ -66,15 +66,16 @@ export default {
               vm.isDisabled = false
             })
             vm.checkDeps(event, treeNode)
+            vm.checkViewNodeIfNeed()
           },
           onSelected() {
           }
         }
       },
       viewPermMapper: [
-        ['view_console', 'rbac.view_adminview'],
-        ['view_audit', 'rbac.view_auditview'],
-        ['view_workspace', 'rbac.view_userview']
+        ['view_console', ['rbac.view_adminview', 'rbac.view_resourcestatistics']],
+        ['view_audit', ['rbac.view_auditview', 'rbac.view_resourcestatistics']],
+        ['view_workspace', ['rbac.view_userview']]
       ]
     }
   },
@@ -188,15 +189,18 @@ export default {
     },
     checkViewNodeIfNeed() {
       const ztree = this.$refs.tree.zTree
-      for (const [viewId, permId] of this.viewPermMapper) {
+      for (const [viewId, permIds] of this.viewPermMapper) {
         const viewNode = ztree.getNodeByParam('id', viewId)
-        const permNode = ztree.getNodeByParam('title', permId)
-        if (!viewNode || !permNode) {
+        const permNodes = permIds.map(i => ztree.getNodeByParam('title', i))
+        if (!viewNode || permNodes.length === 0) {
+          this.$log.debug('Not view node or perms nodes length 0')
           continue
         }
         const nodeStatus = viewNode.getCheckStatus()
         const viewStatus = nodeStatus.checked || nodeStatus.half
-        ztree.checkNode(permNode, viewStatus)
+        for (const permNode of permNodes) {
+          ztree.checkNode(permNode, viewStatus)
+        }
       }
       return Promise.resolve(true)
     },
