@@ -65,11 +65,17 @@ export default {
             vm.$nextTick(() => {
               vm.isDisabled = false
             })
+            vm.checkDeps(event, treeNode)
           },
           onSelected() {
           }
         }
-      }
+      },
+      viewPermMapper: [
+        ['view_console', 'rbac.view_adminview'],
+        ['view_audit', 'rbac.view_auditview'],
+        ['view_workspace', 'rbac.view_userview']
+      ]
     }
   },
   computed: {
@@ -113,14 +119,53 @@ export default {
     })
   },
   methods: {
+    checkDeps(evt, node) {
+      if (node.isParent) {
+        this.$log.debug('Is parent')
+        return
+      }
+      const checked = node.checked
+      const appCode = node.title
+      if (!appCode) {
+        this.$log.debug('No app code: ', node)
+        return
+      }
+      const [app, code] = appCode.split('.')
+      if (!app || !code) {
+        this.$log.debug('App or code not found')
+        return
+      }
+      const ztree = this.$refs.tree.zTree
+      const [action, resource] = code.split('_')
+      const viewId = `${app}.view_${resource}`
+      const viewNode = ztree.getNodeByParam('title', viewId)
+      const cud = ['add', 'change', 'delete', 'remove']
+      if (!viewNode) {
+        return
+      }
+      if (action === 'view') {
+        if (checked) {
+          return
+        }
+        const cudIds = cud.map((i) => `${app}.${i}_${resource}`)
+        const curNodes = cudIds.map((i) => ztree.getNodeByParam('title', i)).filter(i => !!i)
+        for (const node of curNodes) {
+          ztree.checkNode(node, false)
+        }
+      } else if (cud.indexOf(action) > -1) {
+        if (!checked) {
+          return
+        }
+        this.$log.debug('Select view node: ', viewNode)
+        ztree.checkNode(viewNode, true)
+        this.$log.debug('status: ', viewNode.getCheckStatus())
+      } else {
+        this.$log.debug('Action do not known')
+      }
+    },
     checkViewNodeIfNeed() {
       const ztree = this.$refs.tree.zTree
-      const viewPermMapper = [
-        ['view_console', 'rbac.view_adminview'],
-        ['view_audit', 'rbac.view_auditview'],
-        ['view_workspace', 'rbac.view_userview']
-      ]
-      for (const [viewId, permId] of viewPermMapper) {
+      for (const [viewId, permId] of this.viewPermMapper) {
         const viewNode = ztree.getNodeByParam('id', viewId)
         const permNode = ztree.getNodeByParam('title', permId)
         if (!viewNode || !permNode) {
