@@ -14,7 +14,9 @@ export default [
         path: '',
         component: () => import('@/views/users/User/UserList.vue'), // Parent router-view
         name: 'UserList',
-        meta: { title: i18n.t('route.UserList') }
+        meta: {
+          title: i18n.t('route.UserList')
+        }
       },
       {
         path: 'create',
@@ -83,7 +85,7 @@ export default [
     ]
   },
   {
-    path: 'user-groups',
+    path: 'groups',
     component: empty,
     redirect: '',
     meta: {
@@ -94,7 +96,7 @@ export default [
         path: '',
         component: () => import('@/views/users/Group/UserGroupList.vue'), // Parent router-view
         name: 'UserGroupList',
-        meta: { title: i18n.t('route.UserGroupList') }
+        meta: { title: i18n.t('route.UserGroupList'), permissions: ['users.view_usergroup'] }
       },
       {
         path: 'create',

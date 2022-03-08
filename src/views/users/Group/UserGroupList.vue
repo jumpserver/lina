@@ -11,6 +11,8 @@ export default {
   },
   data() {
     return {
+      perms: {
+      },
       tableConfig: {
         url: '/api/v1/users/groups/',
         columns: ['name', 'users_amount', 'date_created', 'created_by', 'org_name', 'comment', 'actions'],
@@ -27,7 +29,8 @@ export default {
         detailRoute: 'UserGroupDetail'
       },
       headerActions: {
-        createRoute: 'UserGroupCreate'
+        createRoute: 'UserGroupCreate',
+        canCreate: this.$hasPerm('users.add_usergroup')
       }
     }
   }

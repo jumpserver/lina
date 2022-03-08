@@ -85,12 +85,13 @@ export default {
         return {
           hasUpdate: true, // can set function(row, value)
           canUpdate: () => {
+            console.log('Curren url: ', this.url)
             const notRootOrg = !this.$store.getters.currentOrgIsRoot
-            return notRootOrg && this.$hasCurrentResAction('change')
+            return notRootOrg && this.$hasApiActionPerm(this.url, 'update')
           }, // can set function(row, value)
           hasDelete: true, // can set function(row, value)
           canDelete: () => {
-            return this.$hasCurrentResAction('delete')
+            return this.$hasApiActionPerm(this.url, 'delete')
           },
           hasClone: true,
           canClone: () => {
