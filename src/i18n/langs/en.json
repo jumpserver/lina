@@ -1267,6 +1267,7 @@
     "officialWebsiteTip": "You can change the URL of the site navigation bar help -> Website",
     "Admin": "Admin",
     "Asset": "Asset",
+    "ip": "IP",
     "Database": "Database",
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
