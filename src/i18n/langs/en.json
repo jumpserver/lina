@@ -787,7 +787,12 @@
     "WebTerminal": "Web Terminal",
     "Notifications": "Notifications",
     "SiteMessageList": "Site message",
-    "UserLoginACL": "User Login ACL"
+    "UserLoginACL": "User Login ACL",
+    "NoPermission403": "403 No permission",
+    "NoPermissionVew": "No permission view current page",
+    "AjaxError404": "404 ajax error",
+    "CannotAccess": "Unable to access the current page",
+    "GoHomePage": "Go home page"
   },
   "rbac": {
     "Permissions": "Permissions"
