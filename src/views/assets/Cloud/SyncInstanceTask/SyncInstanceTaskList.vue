@@ -51,6 +51,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
+              permissions: 'xpack.view_syncinstancedetail',
               route: 'SyncInstanceTaskDetail',
               routeQuery: {
                 activeTab: 'detail'
@@ -61,6 +62,7 @@ export default {
             width: '110px',
             formatter: DetailFormatter,
             formatterArgs: {
+              permissions: 'xpack.view_syncinstancetaskexecution',
               route: 'SyncInstanceTaskDetail',
               routeQuery: {
                 activeTab: 'HistoryList'
@@ -70,6 +72,7 @@ export default {
           instance_count: {
             formatter: DetailFormatter,
             formatterArgs: {
+              permissions: 'xpack.view_syncinstancetask',
               route: 'SyncInstanceTaskDetail',
               routeQuery: {
                 activeTab: 'AssetList'

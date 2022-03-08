@@ -175,7 +175,7 @@ export default {
           {
             name: this.$t('xpack.Cloud.CloudSync'),
             title: this.$t('xpack.Cloud.CloudSync'),
-            can: () => this.$hasPerm('xpack.view_account'),
+            has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
             callback: () => this.$router.push({ name: 'CloudCenter' })
           }
         ],

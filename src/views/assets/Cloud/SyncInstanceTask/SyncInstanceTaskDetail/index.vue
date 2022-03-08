@@ -28,15 +28,19 @@ export default {
         submenu: [
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskDetail'),
-            name: 'detail'
+            name: 'detail',
+            hidden: () => !this.$hasPerm('xpack.view_syncinstancedetail')
           },
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskHistoryList'),
-            name: 'HistoryList'
+            name: 'HistoryList',
+            hidden: () => !this.$hasPerm('xpack.view_syncinstancetaskexecution')
           },
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskHistoryAssetList'),
-            name: 'AssetList'
+            name: 'AssetList',
+            hidden: () => !this.$hasPerm('xpack.view_syncinstancetask')
+
           }
         ],
         hasRightSide: true
