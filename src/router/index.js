@@ -44,9 +44,9 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 // 权限路由
-import workspaceViewRoutes from './workspace'
 import consoleViewRoutes from './console'
 import auditViewRoutes from './audit'
+import workspaceViewRoutes from './workspace'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
@@ -64,9 +64,9 @@ export const allRoutes = [
       permissions: []
     }
   },
-  workspaceViewRoutes,
   consoleViewRoutes,
   auditViewRoutes,
+  workspaceViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes

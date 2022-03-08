@@ -16,7 +16,7 @@
           <SystemSetting />
         </el-tooltip>
       </li>
-      <li v-if="$hasLicense" class="header-item header-hover">
+      <li v-if="$hasLicense()" class="header-item header-hover">
         <Tickets />
       </li>
       <li class="header-item">
@@ -74,7 +74,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     showOrganize() {
-      return (this.$route.meta?.showOrganization !== false) && this.$hasLicense
+      return (this.$route.meta?.showOrganization !== false) && this.$hasLicense()
     }
   }
 }

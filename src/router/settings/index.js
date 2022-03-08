@@ -215,6 +215,7 @@ export default {
       component: empty,
       redirect: '',
       meta: { permissions: ['orgs.view_organization'] },
+      licenseRequired: true,
       children: [
         {
           path: '',
@@ -223,8 +224,7 @@ export default {
           meta: {
             title: i18n.t('xpack.Organization.OrganizationList'),
             icon: 'sitemap',
-            permissions: ['orgs.view_organization'],
-            licenseRequired: true
+            permissions: ['orgs.view_organization']
           }
         },
         {
