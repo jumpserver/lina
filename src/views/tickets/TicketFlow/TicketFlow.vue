@@ -36,6 +36,7 @@ export default {
           type_display: {
             formatter: DetailFormatter,
             formatterArgs: {
+              permissions: 'tickets.view_ticketflow',
               route: 'FlowDetail'
             }
           },
@@ -46,6 +47,9 @@ export default {
               hasDelete: false,
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'TicketFlowUpdate', query: { type: row.type, clone_from: row.id }})
+              },
+              canUpdate: () => {
+                return vm.$hasPerm('tickets.change_ticketflow')
               },
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'TicketFlowUpdate', params: { id: row.id }})
