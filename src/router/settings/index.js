@@ -214,8 +214,10 @@ export default {
       path: '/settings/orgs',
       component: empty,
       redirect: '',
-      meta: { permissions: ['orgs.view_organization'] },
-      licenseRequired: true,
+      meta: {
+        permissions: ['orgs.view_organization'],
+        licenseRequired: true
+      },
       children: [
         {
           path: '',
