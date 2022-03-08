@@ -44,6 +44,10 @@ export default {
             prop: 'asset_display',
             label: this.$t('xpack.Asset')
           },
+          {
+            prop: 'asset_ip',
+            label: this.$t('xpack.ip')
+          },
           'region',
           {
             prop: 'status_display',
