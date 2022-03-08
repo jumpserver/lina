@@ -119,48 +119,71 @@ export default {
     })
   },
   methods: {
+    parsePerm(perm) {
+      if (!perm) {
+        this.$log.debug('No app code: ', perm)
+        return
+      }
+      const [app, code] = perm.split('.')
+      if (!app || !code) {
+        this.$log.debug('App or code not found')
+        return
+      }
+      const [action, resource] = code.split('_')
+      if (!action || !resource) {
+        return
+      }
+      return { action, resource, app }
+    },
     checkDeps(evt, node) {
       if (node.isParent) {
         this.$log.debug('Is parent')
         return
       }
-      const checked = node.checked
-      const appCode = node.title
-      if (!appCode) {
-        this.$log.debug('No app code: ', node)
+      const data = this.parsePerm(node.title)
+      if (!data) {
+        this.$log.error('Parse perm error: ', node.title)
         return
       }
-      const [app, code] = appCode.split('.')
-      if (!app || !code) {
-        this.$log.debug('App or code not found')
-        return
-      }
+
+      const { app, action, resource } = data
       const ztree = this.$refs.tree.zTree
-      const [action, resource] = code.split('_')
       const viewId = `${app}.view_${resource}`
       const viewNode = ztree.getNodeByParam('title', viewId)
-      const cud = ['add', 'change', 'delete', 'remove']
       if (!viewNode) {
         return
       }
+
+      const viewIgnoreAction = ['match']
+      const checked = node.checked
       if (action === 'view') {
+        // 选中 view node 不需要处理, 不选中的话去掉 兄弟节点选中
         if (checked) {
           return
         }
-        const cudIds = cud.map((i) => `${app}.${i}_${resource}`)
-        const curNodes = cudIds.map((i) => ztree.getNodeByParam('title', i)).filter(i => !!i)
-        for (const node of curNodes) {
+        const parent = viewNode.getParentNode()
+        const actionNodes = parent.children
+        for (const node of actionNodes) {
+          const d = this.parsePerm(node.title)
+          if (!d) {
+            continue
+          }
+          const { action: act, resource: res } = d
+          // 忽略的 action 不用处理, resource 不相同的不用处理
+          console.log('Action: ', act, d)
+          if (act === 'view' || viewIgnoreAction.indexOf(act) > -1 || res !== resource) {
+            continue
+          }
           ztree.checkNode(node, false)
         }
-      } else if (cud.indexOf(action) > -1) {
+      } else if (viewIgnoreAction.indexOf(action) > -1) {
+        this.$log.debug('Action is ignore: ', action)
+      } else {
         if (!checked) {
           return
         }
         this.$log.debug('Select view node: ', viewNode)
         ztree.checkNode(viewNode, true)
-        this.$log.debug('status: ', viewNode.getCheckStatus())
-      } else {
-        this.$log.debug('Action do not known')
       }
     },
     checkViewNodeIfNeed() {
