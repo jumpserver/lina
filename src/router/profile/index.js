@@ -48,7 +48,9 @@ export default {
       meta: {
         title: i18n.t('common.nav.APIKey'),
         icon: 'key',
-        permissions: []
+        permissions: ['authentication.view_accesskey'],
+        resource: 'accesskey',
+        app: 'authentication'
       }
     }
   ]
