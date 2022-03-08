@@ -6,7 +6,7 @@ import empty from '@/layout/empty'
 export default {
   path: '/workspace/',
   component: Layout,
-  name: 'Workspace',
+  name: 'workspace',
   redirect: '/workspace/home',
   meta: {
     title: i18n.t('common.nav.Workspace'),

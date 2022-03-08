@@ -80,9 +80,9 @@ export default {
   methods: {
     changeOrg(orgId) {
       if (orgId === 'create') {
-        this.$router.push('/settings/orgs/create')
+        this.$router.push({ name: 'OrganizationCreate' })
       } else if (orgId === 'list') {
-        this.$router.push('/settings/orgs')
+        this.$router.push({ name: 'OrganizationList' })
       } else {
         orgUtil.changeOrg(orgId)
       }

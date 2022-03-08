@@ -58,7 +58,6 @@ import profileRoutes from './profile'
 export const allRoutes = [
   {
     path: '',
-    redirect: '',
     name: 'Home',
     meta: {
       permissions: []

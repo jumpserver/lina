@@ -7,7 +7,6 @@ import {
   saveCurrentRoleLocal
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
-import rolec from '@/utils/role'
 
 const getDefaultState = () => {
   return {
@@ -57,18 +56,6 @@ const mutations = {
   ADD_ORG: (state, org) => {
     state.orgs.push(org)
   },
-  SET_ROLES(state, roles) {
-    state.roles = roles
-    // rolec.PERM_ADMIN &
-  },
-  SET_SYS_ROLE(state, role) {
-    state.sysRole = role
-  },
-  SET_PERMS(state, perms) {
-    state.perms = perms
-    state.hasAdmin = (perms & rolec.PERM_ADMIN) === rolec.PERM_ADMIN
-    state.hasAudit = (perms & rolec.PERM_AUDIT) === rolec.PERM_AUDIT
-  },
   SET_CURRENT_ORG(state, org) {
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
@@ -114,24 +101,6 @@ const actions = {
       }).catch(error => {
         // console.log(error)
         reject(error)
-      })
-    })
-  },
-  getRoles({ commit, dispatch, state }, refresh) {
-    return new Promise((resolve, reject) => {
-      if (!refresh && state.roles && state.roles.length > 0) {
-        return resolve(state.roles)
-      }
-      return dispatch('getProfile').then((profile) => {
-        // const { current_org_roles: currentOrgRoles, role } = profile
-        // const roles = rolec.parseUserRoles(currentOrgRoles, role)
-        // commit('SET_SYS_ROLE', role)
-        // commit('SET_ROLES', roles)
-        // commit('SET_PERMS', rolec.sumPerms(roles))
-        // resolve(roles)
-        resolve([])
-      }).catch((e) => {
-        reject(e)
       })
     })
   },

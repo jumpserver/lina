@@ -13,7 +13,7 @@ import AccountRoutes from './accounts'
 export default {
   path: '/console',
   component: Layout,
-  name: 'Console',
+  name: 'console',
   redirect: '/console/dashboard',
   meta: {
     title: i18n.t('common.nav.Console'),

@@ -5,7 +5,7 @@ import {
 } from '@/router'
 import empty from '@/layout/empty'
 import Layout from '@/layout/index'
-import { getResourceNameByPath, getBeforeViewRoute, hasPermission } from '@/utils/jms'
+import { getResourceNameByPath, hasPermission } from '@/utils/jms'
 
 function hasLicense(route, rootState) {
   const licenseIsValid = rootState.settings.hasValidLicense
@@ -191,7 +191,7 @@ const actions = {
         }
       }
       if (viewRoute.meta?.showNavSwitcher) {
-        localStorage.setItem('BeforeViewRouter', JSON.stringify(viewRoute.path))
+        localStorage.setItem('PreView', viewName)
       }
       commit('SET_VIEW_ROUTE', viewRoute)
     })
@@ -205,17 +205,10 @@ const actions = {
       } else {
         Vue.$log.debug('All routes: ', routes)
       }
-      // 根据权限重定向默认路由页面
-      routes = getBeforeViewRoute(routes)
       commit('SET_ROUTES', { routes })
       dispatch('generateViewRoutes', { from, to })
       resolve(routes)
     })
-  },
-  // 判断是否存在某种权限
-  getRootPerms({ rootState }, rootType) {
-    const perms = rootState.users.perms || []
-    return perms.includes(rootType)
   }
 }
 

@@ -19,21 +19,11 @@ function change2PropOrg() {
   setTimeout(() => changeOrg(org.id), 100)
 }
 
-// function getOrgIdMapper() {
-//   const mapper = {}
-//   const orgs = store.getters.orgs
-//   orgs.forEach((v) => {
-//     mapper[v.id] = v
-//   })
-//   return mapper
-// }
-
 function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
   const currentOrgId = currentOrg.id
   const orgs = store.getters.orgs
-  const orgInList = orgs.find((item) => item.id === currentOrgId)
-  return orgInList
+  return orgs.find((item) => item.id === currentOrgId)
 }
 
 async function changeOrg(orgId) {
@@ -43,8 +33,6 @@ async function changeOrg(orgId) {
   } else {
     console.debug('Change to org: ', org)
   }
-  // 重置Role为空
-  await store.dispatch('users/setCurrentRole', null)
 
   store.dispatch('users/setCurrentOrg', org).then(() => {
     // console.log('Set current org to: ', org)
