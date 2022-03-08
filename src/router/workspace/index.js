@@ -14,7 +14,7 @@ export default {
     view: 'workspace',
     icon: 'el-icon-user-solid',
     showNavSwitcher: true,
-    showOrganization: false,
+    showOrganization: true,
     permissions: ['rbac.view_userview']
   },
   children: [
