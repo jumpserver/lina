@@ -22,6 +22,7 @@
         :selected="item.id === currentOrg.id"
         :label="item.name"
         :value="item.id"
+        :disabled="item.disabled"
       >
         <span v-if="item.icon" style="float: right; font-size: 12px">
           <i class="fa" :class="item.icon" />
@@ -64,10 +65,12 @@ export default {
         options: [{
           id: 'create',
           icon: 'fa-plus',
+          disabled: !this.$hasPerm('orgs.add_organization'),
           name: this.$t('xpack.Organization.OrganizationCreate')
         }, {
           id: 'list',
           icon: 'fa-list-ul',
+          disabled: !this.$hasPerm('orgs.view_organization'),
           name: this.$t('xpack.Organization.OrganizationLists')
         }]
       },
