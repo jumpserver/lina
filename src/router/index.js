@@ -63,9 +63,7 @@ export const allRoutes = [
       permissions: []
     },
     beforeEnter(to, from, next) {
-      console.log('path is: ', to.path, from.path)
       if (from.path !== '/workspace/home') {
-        console.log('Next ')
         next('/workspace/')
         return true
       }
