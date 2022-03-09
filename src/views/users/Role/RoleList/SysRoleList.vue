@@ -6,6 +6,7 @@
 import BaseRoleList from './BaseRoleList'
 
 export default {
+  name: 'SysRoleList',
   components: {
     BaseRoleList
   },
