@@ -3,7 +3,7 @@
     <div slot="title">
       {{ Title }}
     </div>
-    <keep-alive>
+    <keep-alive exclude="SysRoleList,OrgRoleList">
       <component :is="config.activeMenu" />
     </keep-alive>
   </TabPage>
@@ -29,7 +29,7 @@ export default {
             title: this.$t('route.OrgRole'),
             name: 'OrgRoleList',
             hidden: () => {
-              return !this.$store.getters.hasValidLicense
+              return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole')
             }
           },
           {

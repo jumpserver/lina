@@ -7,6 +7,7 @@ import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
+  name: 'BaseRoleList',
   components: {
     ListTable
   },
@@ -89,8 +90,6 @@ export default {
         }
       }
     }
-  },
-  mounted() {
   },
   methods: {
     hasPermNotBuiltinNotRootOrg(row, perm) {
