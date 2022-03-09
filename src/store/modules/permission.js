@@ -182,7 +182,7 @@ const actions = {
       if (!matched) {
         Vue.$log.debug('Not match path, set default routes', path)
         commit('SET_VIEW_ROUTE', constantRoutes[0])
-        resolve([])
+        resolve(constantRoutes[0])
         return
       }
       const viewName = matched[1]
