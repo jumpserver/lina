@@ -116,7 +116,7 @@ export function getPropView() {
   if (preferView) {
     return preferView
   }
-  return 'home'
+  return ''
 }
 
 export function getApiUrlRequirePerms(url, action) {
@@ -127,4 +127,10 @@ export function getApiUrlRequirePerms(url, action) {
 export function getRouteViewRequirePerms(route) {
   const viewName = route.path.split('/')[1]
   return getViewRequirePerms(viewName)
+}
+
+export function hasRouteViewPerm(route) {
+  const viewName = route.path.split('/')[1]
+  const perms = getViewRequirePerms(viewName)
+  return hasPermission(perms)
 }

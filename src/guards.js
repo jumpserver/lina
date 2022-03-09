@@ -4,8 +4,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { startup } from '@/utils/startup'
 import store from '@/store'
-import { getPropView, getRouteViewRequirePerms, hasPermission, isSameView } from '@/utils/jms'
-import Vue from 'vue'
+import { isSameView } from '@/utils/jms'
 
 NProgress.configure({
   showSpinner: false
@@ -44,6 +43,5 @@ router.afterEach(async(to, from, next) => {
   await setPageTitle()
   await generateViewRoutesIfChange({ to, from })
   NProgress.done()
-  // await changeCurrentViewIfNeed({ to, from, next })
 })
 

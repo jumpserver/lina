@@ -58,7 +58,7 @@ export const constantRoutes = [
             next(`/${preferView}/`)
             return false
           }
-          return false
+          next()
         }
       }
     ]
