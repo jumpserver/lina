@@ -59,8 +59,11 @@ export default {
     ])
   },
   created() {
-    this.orgOption = [
-      {
+    this.init()
+  },
+  methods: {
+    init() {
+      const actionObject = {
         label: this.$t('xpack.Organization.OrganizationList'),
         options: [{
           id: 'create',
@@ -73,14 +76,16 @@ export default {
           disabled: !this.$hasPerm('orgs.view_organization'),
           name: this.$t('xpack.Organization.OrganizationLists')
         }]
-      },
-      {
-        label: this.$t('xpack.Organization.AllOrganization'),
-        options: this.orgs
       }
-    ]
-  },
-  methods: {
+      const hasPerms = this.$hasPerm('orgs.view_organization') || this.$hasPerm('xpack.Organization.OrganizationCreate')
+      this.orgOption = [
+        (hasPerms && actionObject),
+        {
+          label: this.$t('xpack.Organization.AllOrganization'),
+          options: this.orgs
+        }
+      ]
+    },
     changeOrg(orgId) {
       if (orgId === 'create') {
         this.$router.push({ name: 'OrganizationCreate' })
