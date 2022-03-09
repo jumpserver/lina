@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import {
-  allRoutes,
+  viewRoutes,
   constantRoutes
 } from '@/router'
 import empty from '@/layout/empty'
@@ -180,8 +180,9 @@ const actions = {
       const re = new RegExp('/(\\w+)/?.*')
       const matched = path.match(re)
       if (!matched) {
-        Vue.$log.error('Not match path', path)
-        return resolve([])
+        Vue.$log.debug('Not match path, set default routes', path)
+        commit('SET_VIEW_ROUTE', constantRoutes[0])
+        return
       }
       const viewName = matched[1]
       let viewRoute = {}
@@ -198,7 +199,7 @@ const actions = {
   },
   generateRoutes({ commit, dispatch, rootState }, { to, from }) {
     return new Promise(resolve => {
-      let routes = filterPermedRoutes(allRoutes, null)
+      let routes = filterPermedRoutes(viewRoutes, null)
       routes = filterHiddenRoutes(routes, rootState)
       if (routes.length === 0) {
         console.error('No route find')

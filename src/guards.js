@@ -4,6 +4,8 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { startup } from '@/utils/startup'
 import store from '@/store'
+import { getPropView, getRouteViewRequirePerms, hasPermission } from '@/utils/jms'
+import Vue from 'vue'
 
 NProgress.configure({
   showSpinner: false
@@ -14,6 +16,7 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   try {
     await startup({ to, from, next })
+    await changeCurrentViewIfNeed({ to, from, next })
     next()
   } catch (e) {
     const msg = 'Start service error: ' + e
@@ -32,7 +35,25 @@ function generateViewRoutesIfChange({ to, from }) {
 function setPageTitle() {
   const currentRoute = router.currentRoute
   const loginTitle = store.getters.publicSettings['LOGIN_TITLE']
-  document.title = currentRoute.meta.title + ' - ' + loginTitle
+  const routeTitle = currentRoute.meta.title
+  if (routeTitle) {
+    document.title = routeTitle + ' - ' + loginTitle
+  }
+}
+
+function changeCurrentViewIfNeed({ to, from, next }) {
+  if (to.path.slice(0, 5) === from.path.slice(0, 5)) {
+    return
+  }
+  const viewRequirePerms = getRouteViewRequirePerms(to)
+  const hasPerm = hasPermission(viewRequirePerms)
+  Vue.$log.debug('Change current view if need: ', viewRequirePerms, hasPerm)
+  if (hasPerm) {
+    Vue.$log.debug('Has current view perm')
+    return
+  }
+  const view = getPropView()
+  next({ name: view })
 }
 
 router.afterEach(async(to, from) => {

@@ -7,7 +7,6 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import { getCurrentOrg } from '@/api/orgs'
-import { getPropView, getRouteViewRequirePerms, hasPermission } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -76,19 +75,6 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
   }
 }
 
-async function changeCurrentViewIfNeed({ to, from, next }) {
-  const viewRequirePerms = getRouteViewRequirePerms(to)
-  const hasPerm = hasPermission(viewRequirePerms)
-  Vue.$log.debug('Change current view if need: ', viewRequirePerms, hasPerm)
-  if (hasPerm) {
-    Vue.$log.debug('Has current view perm')
-    return
-  }
-  const view = getPropView()
-  next({ name: view })
-  return reject('Change prop view')
-}
-
 export async function generatePageRoutes({ to, from, next }) {
   // determine whether the user has obtained his permission roles through getProfile
 
@@ -130,7 +116,6 @@ export async function startup({ to, from, next }) {
   await checkLogin({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })
-  await changeCurrentViewIfNeed({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
 }

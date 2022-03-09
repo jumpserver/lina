@@ -648,6 +648,7 @@
   },
   "route": {
     "": "",
+    "Index": "Index",
     "Role": "Role",
     "Overview": "Overview",
     "OrgRoles": "Organization roles",

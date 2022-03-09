@@ -68,7 +68,6 @@ export default {
       } else {
         detailRoute = route
       }
-      console.log('Route: ', detailRoute)
 
       const routeQuery = this.formatterArgs.routeQuery
       if (routeQuery && typeof routeQuery === 'object') {
