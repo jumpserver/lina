@@ -11,7 +11,7 @@
           <WebTerminal />
         </el-tooltip>
       </li>
-      <li v-perms="'settings.change_setting'" class="header-item header-icon">
+      <li v-perms="'settings.view_setting'" class="header-item header-icon">
         <el-tooltip effect="dark" :content="this.$t('route.SystemSetting')">
           <SystemSetting />
         </el-tooltip>
