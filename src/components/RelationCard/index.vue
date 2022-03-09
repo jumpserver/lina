@@ -217,9 +217,17 @@ export default {
     async loadHasObjects() {
       this.$log.debug('Start loadHasObject: ', this.params)
       const params = this.safeMakeParams(this.params)
-      let data = await this.$axios.get(this.iAjax.url, { params: params })
+      let data = await this.$axios.get(this.iAjax.url, {
+        params: params,
+        validateStatus: (status) => {
+          if (status === 403) {
+            return 200
+          }
+          return status
+        }
+      })
       data = this.iAjax.processResults.bind(this)(data)
-      data.results.forEach((v) => {
+      data.results && data.results.forEach((v) => {
         if (!this.hasObjects.find((item) => item.value === v.value)) {
           this.iHasObjects.push(v)
         }
