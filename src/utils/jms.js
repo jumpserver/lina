@@ -89,13 +89,7 @@ export function getViewRequirePerms(view) {
   return viewRequirePermsMapper[view] || 'super'
 }
 
-export function getPropView() {
-  const preView = localStorage.getItem('PreView')
-  const preViewRequirePerms = getViewRequirePerms(preView)
-  const hasPerm = hasPermission(preViewRequirePerms)
-  if (hasPerm) {
-    return preView
-  }
+export function getPermedPreferView() {
   for (const [view, perms] of Object.entries(viewRequirePermsMapper)) {
     const hasPerm = hasPermission(perms)
     Vue.$log.debug('Has view perm: ', view, hasPerm)
@@ -103,7 +97,26 @@ export function getPropView() {
       return view
     }
   }
-  return 'home'
+}
+
+export function isSameView(to, from) {
+  const fromView = from?.path.split('/')[1]
+  const toView = to?.path.split('/')[1]
+  return fromView === toView
+}
+
+export function getPropView() {
+  const preView = localStorage.getItem('PreView')
+  const preViewRequirePerms = getViewRequirePerms(preView)
+  const hasPerm = hasPermission(preViewRequirePerms)
+  if (hasPerm) {
+    return preView
+  }
+  const preferView = getPermedPreferView()
+  if (preferView) {
+    return preferView
+  }
+  return ''
 }
 
 export function getApiUrlRequirePerms(url, action) {
@@ -114,4 +127,10 @@ export function getApiUrlRequirePerms(url, action) {
 export function getRouteViewRequirePerms(route) {
   const viewName = route.path.split('/')[1]
   return getViewRequirePerms(viewName)
+}
+
+export function hasRouteViewPerm(route) {
+  const viewName = route.path.split('/')[1]
+  const perms = getViewRequirePerms(viewName)
+  return hasPermission(perms)
 }
