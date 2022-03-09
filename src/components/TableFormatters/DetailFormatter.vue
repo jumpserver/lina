@@ -16,9 +16,7 @@ export default {
           route: this.$route.name.replace('List', 'Detail'),
           getRoute: null,
           routeQuery: null,
-          can: (col) => {
-            return true
-          },
+          can: true,
           getTitle({ col, row, cellValue }) {
             return cellValue
           }
