@@ -71,7 +71,10 @@ export default {
       }
       const defaults = {}
       for (const [k, v] of Object.entries(actions)) {
-        defaults[k] = this.hasActionPerm(v.action) && v.checkRoot && this.currentOrgIsRoot
+        defaults[k] = this.hasActionPerm(v.action)
+        if (v.checkRoot) {
+          defaults[k] = defaults[k] && !this.currentOrgIsRoot
+        }
       }
       return Object.assign(defaults, this.headerActions)
     },
@@ -101,7 +104,7 @@ export default {
     permissions() {
       // 获取 permissions，获取不到通过 url 解析
       const permissions = this.tableConfig.permissions || {}
-      const { apiApp, apiResource } = getResourceFromApiUrl(this.tableUrl)
+      const { app: apiApp, resource: apiResource } = getResourceFromApiUrl(this.tableUrl)
       const app = permissions.app || apiApp
       const resource = permissions.resource || apiResource
       const actions = ['add', 'change', 'delete', 'view']
@@ -127,10 +130,6 @@ export default {
       },
       deep: true
     }
-  },
-  mounted() {
-    console.log('THis config: ', this.iTableConfig)
-    console.log('THis headr: ', this.iHeaderActions)
   },
   methods: {
     handleSelectionChange(val) {
