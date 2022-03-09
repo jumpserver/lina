@@ -65,9 +65,8 @@ export const allRoutes = [
     beforeEnter(to, from, next) {
       if (from.path !== '/workspace/home') {
         next('/workspace/')
-        return true
       }
-      return true
+      next(false)
     }
   },
   consoleViewRoutes,
