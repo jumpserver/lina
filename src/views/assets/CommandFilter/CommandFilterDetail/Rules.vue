@@ -20,6 +20,9 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/cmd-filters/${this.object.id}/rules/`,
+        permissions: {
+          resource: 'commandfilterrule'
+        },
         columns: ['type', 'content', 'ignore_case', 'action', 'priority', 'pattern', 'comment', 'actions'],
         columnsMeta: {
           type: {
