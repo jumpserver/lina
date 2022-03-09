@@ -50,7 +50,11 @@ export default [
         component: empty,
         redirect: '',
         hidden: true,
-        meta: { title: i18n.t('route.UserLoginACLList') },
+        meta: {
+          title: i18n.t('route.UserLoginACLList'),
+          app: 'acls',
+          resource: 'loginacl'
+        },
         children: [
           {
             path: '',
