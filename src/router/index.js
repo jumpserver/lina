@@ -61,6 +61,12 @@ export const allRoutes = [
     name: 'Home',
     meta: {
       permissions: []
+    },
+    beforeEnter(to, from, next) {
+      if (from.path !== '/workspace/home') {
+        next('/workspace/')
+      }
+      next(false)
     }
   },
   consoleViewRoutes,

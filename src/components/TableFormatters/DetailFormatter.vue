@@ -16,10 +16,7 @@ export default {
           route: this.$route.name.replace('List', 'Detail'),
           getRoute: null,
           routeQuery: null,
-          permissions: this.$getCurrentResActionPerms('view'),
-          can: (col) => {
-            return this.$hasPerm(this.formatterArgs.permissions)
-          },
+          can: true,
           getTitle({ col, row, cellValue }) {
             return cellValue
           }
@@ -42,7 +39,11 @@ export default {
       })
     },
     disabled() {
-      return !this.formatterArgs.can(this.col)
+      let can = this.formatterArgs.can
+      if (typeof can === 'function') {
+        can = can(this.col)
+      }
+      return !can
     }
   },
   methods: {
@@ -60,13 +61,14 @@ export default {
         console.error('No route found')
         return
       }
-      let detailRoute = {}
+      let detailRoute = { replace: true }
       if (typeof route === 'string') {
         detailRoute.name = route
         detailRoute.params = { id: this.row.id }
       } else {
         detailRoute = route
       }
+      console.log('Route: ', detailRoute)
 
       const routeQuery = this.formatterArgs.routeQuery
       if (routeQuery && typeof routeQuery === 'object') {
