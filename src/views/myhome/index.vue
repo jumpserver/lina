@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="$hasPerm('rbac.view_resourcestatistics')" class="home">
+    <div class="home">
       <el-container class="container">
         <el-main class="main">
           <div class="content">
@@ -21,7 +21,6 @@
         </el-main>
       </el-container>
     </div>
-    <Page403 v-else />
   </Page>
 </template>
 
@@ -32,7 +31,6 @@ import Announcement from './components/Announcement'
 import Ticket from './components/Ticket'
 import Log from './components/LoginLog'
 import Session from './components/Session'
-import Page403 from '@/views/403'
 
 export default {
   name: 'Name',
@@ -42,8 +40,7 @@ export default {
     Announcement,
     Ticket,
     Log,
-    Session,
-    Page403
+    Session
   },
   data() {
     return {

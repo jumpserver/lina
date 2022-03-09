@@ -7,6 +7,12 @@
       <li v-if="announcement.content" class="item">
         <span class="item-title">【{{ announcement.subject }}】</span>
         <span>{{ announcement.content }}</span>
+        <span v-if="announcement.link">
+          <el-link :href="announcement.link" target="_blank" class="item-url">
+            {{ $t('common.ViewMore') }}
+          </el-link>
+          <i class="fa fa-share-square-o icon-url" />
+        </span>
       </li>
       <li v-else class="other">{{ $t('common.noAnnouncement') }}</li>
     </ul>
@@ -66,8 +72,14 @@ ul,li {
       vertical-align: middle;
     }
   }
+  .item-url {
+    color: #8b9db6!important;
+  }
   .other {
     text-align: center;
+  }
+  .icon-url {
+    vertical-align: text-bottom;
   }
 }
 </style>
