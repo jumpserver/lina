@@ -62,8 +62,14 @@ export const allRoutes = [
     meta: {
       permissions: []
     },
-    beforeEnter() {
-      location.reload()
+    beforeEnter(to, from, next) {
+      console.log('path is: ', to.path, from.path)
+      if (from.path !== '/workspace/home') {
+        console.log('Next ')
+        next('/workspace/')
+        return true
+      }
+      return true
     }
   },
   consoleViewRoutes,
