@@ -49,6 +49,16 @@ export const constantRoutes = [
         meta: {
           icon: 'dashboard',
           title: i18n.t('route.Overview')
+        },
+        beforeEnter: (to, from, next) => {
+          console.log('Enter home view')
+          const preferView = getPermedPreferView()
+          if (preferView) {
+            console.log('Go to preferView: ', preferView)
+            next(`/${preferView}/`)
+            return false
+          }
+          return false
         }
       }
     ]
@@ -73,6 +83,7 @@ import workspaceViewRoutes from './workspace'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
+import { getPermedPreferView } from '@/utils/jms'
 
 /**
  * admin

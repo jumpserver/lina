@@ -182,6 +182,7 @@ const actions = {
       if (!matched) {
         Vue.$log.debug('Not match path, set default routes', path)
         commit('SET_VIEW_ROUTE', constantRoutes[0])
+        resolve([])
         return
       }
       const viewName = matched[1]
@@ -189,12 +190,14 @@ const actions = {
       for (const route of state.routes) {
         if (route.meta?.view === viewName) {
           viewRoute = route
+          break
         }
       }
       if (viewRoute.meta?.showNavSwitcher) {
         localStorage.setItem('PreView', viewName)
       }
       commit('SET_VIEW_ROUTE', viewRoute)
+      resolve(viewRoute)
     })
   },
   generateRoutes({ commit, dispatch, rootState }, { to, from }) {
@@ -207,7 +210,6 @@ const actions = {
         Vue.$log.debug('All routes: ', routes)
       }
       commit('SET_ROUTES', { routes })
-      dispatch('generateViewRoutes', { from, to })
       resolve(routes)
     })
   }

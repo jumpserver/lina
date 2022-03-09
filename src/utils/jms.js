@@ -89,6 +89,22 @@ export function getViewRequirePerms(view) {
   return viewRequirePermsMapper[view] || 'super'
 }
 
+export function getPermedPreferView() {
+  for (const [view, perms] of Object.entries(viewRequirePermsMapper)) {
+    const hasPerm = hasPermission(perms)
+    Vue.$log.debug('Has view perm: ', view, hasPerm)
+    if (hasPerm) {
+      return view
+    }
+  }
+}
+
+export function isSameView(to, from) {
+  const fromView = from?.path.split('/')[1]
+  const toView = to?.path.split('/')[1]
+  return fromView === toView
+}
+
 export function getPropView() {
   const preView = localStorage.getItem('PreView')
   const preViewRequirePerms = getViewRequirePerms(preView)
@@ -96,12 +112,9 @@ export function getPropView() {
   if (hasPerm) {
     return preView
   }
-  for (const [view, perms] of Object.entries(viewRequirePermsMapper)) {
-    const hasPerm = hasPermission(perms)
-    Vue.$log.debug('Has view perm: ', view, hasPerm)
-    if (hasPerm) {
-      return view
-    }
+  const preferView = getPermedPreferView()
+  if (preferView) {
+    return preferView
   }
   return 'home'
 }
