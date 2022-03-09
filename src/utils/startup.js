@@ -89,7 +89,6 @@ export async function generatePageRoutes({ to, from, next }) {
     router.addRoutes(accessRoutes)
 
     await store.dispatch('permission/generateViewRoutes', { to, from })
-    console.log('Genepage')
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
@@ -110,7 +109,6 @@ export async function checkUserFirstLogin({ to, from, next }) {
 }
 
 export async function changeCurrentViewIfNeed({ to, from, next }) {
-  console.log('Current to: ', to)
   const hasPerm = hasRouteViewPerm(to)
   Vue.$log.debug('Change current view if need: ', hasPerm)
   if (hasPerm) {
@@ -118,7 +116,7 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
     return
   }
   const view = getPropView()
-  console.log('Get prop view and goto: ', view)
+  Vue.$log.debug('Get prop view and goto: ', view)
   next(`/${view}`)
 }
 
