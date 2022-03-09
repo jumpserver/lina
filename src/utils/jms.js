@@ -1,4 +1,5 @@
 import store from '@/store'
+import Vue from 'vue'
 
 export function openTaskPage(taskId) {
   window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
@@ -96,11 +97,13 @@ export function getPropView() {
     return preView
   }
   for (const [view, perms] of Object.entries(viewRequirePermsMapper)) {
-    if (hasPermission(perms)) {
+    const hasPerm = hasPermission(perms)
+    Vue.$log.debug('Has view perm: ', view, hasPerm)
+    if (hasPerm) {
       return view
     }
   }
-  return 'workspace'
+  return 'home'
 }
 
 export function getApiUrlRequirePerms(url, action) {

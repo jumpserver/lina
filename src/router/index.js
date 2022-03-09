@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Layout from '@/layout'
+import i18n from '@/i18n/i18n'
 
 Vue.use(Router)
 
@@ -31,6 +33,27 @@ import commonRoutes from './common'
 // 全局路由
 export const constantRoutes = [
   {
+    path: '',
+    component: Layout,
+    redirect: '',
+    meta: {
+      type: 'view',
+      view: 'home',
+      title: i18n.t('route.Index')
+    },
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('@/views/myhome/index'),
+        meta: {
+          icon: 'dashboard',
+          title: i18n.t('route.Overview')
+        }
+      }
+    ]
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('@/views/404'),
@@ -55,20 +78,7 @@ import profileRoutes from './profile'
  * admin
  * the routes that need to be dynamically loaded based on admin roles
  */
-export const allRoutes = [
-  {
-    path: '',
-    name: 'Home',
-    meta: {
-      permissions: []
-    },
-    beforeEnter(to, from, next) {
-      if (from.path !== '/workspace/home') {
-        next('/workspace/')
-      }
-      next(false)
-    }
-  },
+export const viewRoutes = [
   consoleViewRoutes,
   auditViewRoutes,
   workspaceViewRoutes,

@@ -658,6 +658,7 @@
   },
   "route": {
     "": "",
+    "Index": "首页",
     "SystemSetting": "系统设置",
     "WorkBench": "工作台",
     "Role": "角色",
