@@ -81,7 +81,10 @@ export default {
         hasRefresh: true,
         hasSearch: true,
         hasMoreActions: false,
-        createRoute: 'CommandFilterCreate'
+        createRoute: 'CommandFilterCreate',
+        canCreate: () => {
+          return this.$hasPerm('assets.add_commandfilter')
+        }
       }
     }
   },
