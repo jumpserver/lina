@@ -6,7 +6,7 @@
       :date-pick="handleDateChange"
       :selected-rows="selectedRows"
       :reload-table="reloadTable"
-      v-bind="headerActions"
+      v-bind="iHeaderActions"
     />
     <IBox class="table-content">
       <AutoDataTable
@@ -25,7 +25,9 @@ import AutoDataTable from '../AutoDataTable'
 import IBox from '../IBox'
 import TableAction from './TableAction'
 import Emitter from '@/mixins/emitter'
+import { getResourceFromApiUrl } from '@/utils/jms'
 import deepmerge from 'deepmerge'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ListTable',
@@ -55,17 +57,61 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['currentOrgIsRoot']),
     dataTable() {
       return this.$refs.dataTable.$refs.dataTable
     },
+    iHeaderActions() {
+      const actions = {
+        canCreate: { action: 'add', checkRoot: true },
+        hasBulkDelete: { action: 'delete', checkRoot: false },
+        hasBulkUpdate: { action: 'change', checkRoot: true },
+        hasImport: { action: 'add', checkRoot: true },
+        hasExport: { action: 'view', checkRoot: false }
+      }
+      const defaults = {}
+      for (const [k, v] of Object.entries(actions)) {
+        defaults[k] = this.hasActionPerm(v.action) && v.checkRoot && this.currentOrgIsRoot
+      }
+      return Object.assign(defaults, this.headerActions)
+    },
     iTableConfig() {
-      const config = deepmerge(this.tableConfig, { extraQuery: this.extraQuery })
+      const config = deepmerge(this.tableConfig, {
+        extraQuery: this.extraQuery
+      })
+      const formatterArgs = {
+        'columnsMeta.actions.formatterArgs.canUpdate': 'change',
+        'columnsMeta.actions.formatterArgs.canDelete': 'delete',
+        'columnsMeta.actions.formatterArgs.canClone': 'add',
+        'columnsMeta.id.formatterArgs.can': 'view'
+      }
+      for (const [arg, action] of Object.entries(formatterArgs)) {
+        const notSet = _.get(config, arg) === undefined
+        if (notSet) {
+          _.set(config, arg, this.hasActionPerm(action))
+        }
+      }
       this.$log.debug('Header actions', this.headerActions)
       this.$log.debug('ListTable: iTableConfig change', config)
       return config
     },
     tableUrl() {
-      return this.iTableConfig.url
+      return this.tableConfig.url
+    },
+    permissions() {
+      // 获取 permissions，获取不到通过 url 解析
+      const permissions = this.tableConfig.permissions || {}
+      const { apiApp, apiResource } = getResourceFromApiUrl(this.tableUrl)
+      const app = permissions.app || apiApp
+      const resource = permissions.resource || apiResource
+      const actions = ['add', 'change', 'delete', 'view']
+      const defaultPermissions = actions.reduce((result, action) => {
+        result[action] = `${app}.${action}_${resource}`
+        return result
+      }, {})
+      const perms = Object.assign(defaultPermissions, permissions)
+      this.$log.debug('Permissions: ', perms)
+      return perms
     }
   },
   watch: {
@@ -82,6 +128,10 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    console.log('THis config: ', this.iTableConfig)
+    console.log('THis headr: ', this.iHeaderActions)
+  },
   methods: {
     handleSelectionChange(val) {
       this.selectedRows = val
@@ -96,6 +146,10 @@ export default {
     filter(attrs) {
       this.$emit('TagFilter', attrs)
       this.$refs.dataTable.$refs.dataTable.search(attrs, true)
+    },
+    hasActionPerm(action) {
+      const permRequired = this.permissions[action]
+      return this.$hasPerm(permRequired)
     },
     handleDateChange(attrs) {
       let dateFrom = ''

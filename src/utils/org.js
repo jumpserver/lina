@@ -33,6 +33,7 @@ async function changeOrg(orgId) {
   } else {
     console.debug('Change to org: ', org)
   }
+  localStorage.setItem('PreView', '')
 
   store.dispatch('users/setCurrentOrg', org).then(() => {
     // console.log('Set current org to: ', org)

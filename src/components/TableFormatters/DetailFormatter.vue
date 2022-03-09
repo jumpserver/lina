@@ -16,9 +16,8 @@ export default {
           route: this.$route.name.replace('List', 'Detail'),
           getRoute: null,
           routeQuery: null,
-          permissions: this.$getCurrentResActionPerms('view'),
           can: (col) => {
-            return this.$hasPerm(this.formatterArgs.permissions)
+            return true
           },
           getTitle({ col, row, cellValue }) {
             return cellValue

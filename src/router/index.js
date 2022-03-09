@@ -56,13 +56,6 @@ import profileRoutes from './profile'
  * the routes that need to be dynamically loaded based on admin roles
  */
 export const allRoutes = [
-  {
-    path: '',
-    name: 'Home',
-    meta: {
-      permissions: []
-    }
-  },
   consoleViewRoutes,
   auditViewRoutes,
   workspaceViewRoutes,
