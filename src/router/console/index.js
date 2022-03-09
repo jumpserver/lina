@@ -21,7 +21,7 @@ export default {
     view: 'console',
     type: 'view',
     showNavSwitcher: true,
-    permissions: ['rbac.view_adminview']
+    permissions: ['rbac.view_console']
   },
   children: [
     {
@@ -30,7 +30,7 @@ export default {
       name: 'AdminDashboard',
       meta: {
         icon: 'dashboard',
-        title: i18n.t('route.Overview'),
+        title: i18n.t('route.Dashboard'),
         permissions: []
       }
     },

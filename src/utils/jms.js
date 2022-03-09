@@ -80,9 +80,9 @@ export function hasActionPerm(route, action) {
 }
 
 const viewRequirePermsMapper = {
-  console: 'rbac.view_adminview',
-  audit: 'rbac.view_auditview',
-  workspace: 'rbac.view_userview'
+  console: 'rbac.view_console',
+  audit: 'rbac.view_audit',
+  workspace: 'rbac.view_workspace'
 }
 
 export function getViewRequirePerms(view) {
