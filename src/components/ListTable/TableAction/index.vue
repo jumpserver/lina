@@ -61,10 +61,6 @@ export default {
     selectedRows: {
       type: Array,
       default: () => []
-    },
-    permissions: {
-      type: Object,
-      default: () => ({})
     }
   },
   data() {
