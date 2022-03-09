@@ -257,7 +257,8 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      resource: 'label'
+      resource: 'label',
+      permissions: ['assets.view_label']
     },
     children: [
       {
