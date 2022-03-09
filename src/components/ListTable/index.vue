@@ -86,7 +86,7 @@ export default {
         'columnsMeta.actions.formatterArgs.canUpdate': 'change',
         'columnsMeta.actions.formatterArgs.canDelete': 'delete',
         'columnsMeta.actions.formatterArgs.canClone': 'add',
-        'columnsMeta.id.formatterArgs.can': 'view'
+        'columnsMeta.name.formatterArgs.can': 'view'
       }
       for (const [arg, action] of Object.entries(formatterArgs)) {
         const notSet = _.get(config, arg) === undefined
