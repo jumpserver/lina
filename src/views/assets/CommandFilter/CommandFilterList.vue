@@ -14,6 +14,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/cmd-filters/',
+        permissions: {
+          app: 'assets',
+          resource: 'commandfilter'
+        },
         columns: [
           'name', 'rules', 'users', 'user_groups', 'assets', 'applications', 'system_users', 'is_active',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
