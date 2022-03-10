@@ -34,7 +34,8 @@ export default {
           title: this.$t('common.Active'),
           type: 'switcher',
           attrs: {
-            model: this.object.is_active
+            model: this.object.is_active,
+            disabled: !this.$hasPerm('perms.change_assetpermission')
           },
           callbacks: {
             change: function(val) {
