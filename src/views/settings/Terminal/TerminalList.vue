@@ -98,6 +98,10 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/terminal/terminals/',
+        permissions: {
+          app: 'terminal',
+          resource: 'terminal'
+        },
         columns: [
           'name', 'remote_addr', 'session_online',
           'stat.cpu_load',
