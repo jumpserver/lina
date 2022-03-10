@@ -12,6 +12,7 @@
     filterable
     popper-append-to-body
     class="select2"
+    :disabled="selectDisabled"
     v-bind="$attrs"
     @change="onChange"
     @visible-change="onVisibleChange"
@@ -85,6 +86,10 @@ export default {
     disabledValues: {
       type: Array,
       default: () => []
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -101,13 +106,15 @@ export default {
       if (status === 403) {
         setTimeout(() => {
           vm.initialized = true
-        }, 300)
+          vm.selectDisabled = true
+        }, 200)
         return 200
       }
       return status
     }
     return {
       validateStatus,
+      selectDisabled: this.disabled,
       loading: false,
       initialized: false,
       defaultParams: _.cloneDeep(defaultParams),
