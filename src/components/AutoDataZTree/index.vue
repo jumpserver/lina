@@ -1,13 +1,13 @@
 <template>
   <DataZTree ref="dataztree" :setting="treeSetting" class="data-z-tree" v-on="$listeners">
     <slot v-if="treeSetting.hasRightMenu" slot="rMenu">
-      <li id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
+      <li v-if="treeSetting.showCreate" id="m_create" class="rmenu" tabindex="-1" @click="createTreeNode">
         <i class="fa fa-plus-square-o" />  {{ this.$t('tree.CreateNode') }}
       </li>
-      <li id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
+      <li v-if="treeSetting.showUpdate" id="m_edit" class="rmenu" tabindex="-1" @click="editTreeNode">
         <i class="fa fa-pencil-square-o" />  {{ this.$t('tree.RenameNode') }}
       </li>
-      <li id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
+      <li v-if="treeSetting.showDelete" id="m_del" class="rmenu" tabindex="-1" @click="removeTreeNode">
         <i class="fa fa-minus-square" />  {{ this.$t('tree.DeleteNode') }}
       </li>
       <slot name="rMenu" />
@@ -34,6 +34,9 @@ export default {
   data() {
     return {
       defaultSetting: {
+        showCreate: true,
+        showDelete: true,
+        showUpdate: true,
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
