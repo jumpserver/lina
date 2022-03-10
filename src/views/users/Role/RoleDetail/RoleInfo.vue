@@ -215,7 +215,7 @@ export default {
           if (id.indexOf('#') !== -1) {
             id = id.split('#')[1]
           }
-          permIds.push((id))
+          permIds.push(id)
         }
         // const permIds = permNodes.map(node => node.id)
 
