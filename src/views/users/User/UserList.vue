@@ -158,38 +158,14 @@ export default {
           {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
-            can({ selectedRows }) {
-              return selectedRows.length > 0
-            },
-            callback({ selectedRows, reloadTable }) {
-              const url = '/api/v1/users/users/'
-              const data = selectedRows.map(row => {
-                return { id: row.id, is_active: false }
-              })
-              if (data.length === 0) {
-                return
-              }
-              vm.$axios.patch(url, data).then(() => {
-                reloadTable()
-              })
-            }
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'activateSelected',
             title: this.$t('common.activateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0,
-            callback: ({ selectedRows, reloadTable }) => {
-              const url = '/api/v1/users/users/'
-              const data = selectedRows.map(row => {
-                return { id: row.id, is_active: true }
-              })
-              if (data.length === 0) {
-                return
-              }
-              vm.$axios.patch(url, data).then(() => {
-                reloadTable()
-              })
-            }
+            callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
           },
           {
             name: 'updateSelected',
@@ -279,6 +255,18 @@ export default {
       this.$axios.post(url).then(() => {
         reloadTable()
         this.$message.success(this.$t('common.removeSuccessMsg'))
+      })
+    },
+    bulkActionCallback(selectedRows, reloadTable, actionType) {
+      const vm = this
+      const url = '/api/v1/users/users/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: actionType === 'activate' }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        vm.$message.success(vm.$t(`common.${actionType}SuccessMsg`))
       })
     },
     handleInviteDialogClose() {
