@@ -1,5 +1,6 @@
 import store from '@/store'
 import Vue from 'vue'
+import { constantRoutes } from '@/router'
 
 export function openTaskPage(taskId) {
   window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
@@ -133,4 +134,19 @@ export function hasRouteViewPerm(route) {
   const viewName = route.path.split('/')[1]
   const perms = getViewRequirePerms(viewName)
   return hasPermission(perms)
+}
+
+export function getConstRouteName() {
+  const names = []
+  const constRoutes = constantRoutes
+  const addRoutes = (all, routes) => {
+    for (const route of routes) {
+      names.push(route.name)
+      if (route.children) {
+        addRoutes(all, route.children)
+      }
+    }
+  }
+  addRoutes(names, constRoutes)
+  return names
 }

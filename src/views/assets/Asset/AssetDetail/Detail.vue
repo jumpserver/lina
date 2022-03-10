@@ -5,7 +5,7 @@
     </el-col>
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
-      <RelationCard ref="NodeRelation" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
+      <RelationCard ref="NodeRelation" v-perms="'assets.change_asset'" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       <LabelCard type="warning" style="margin-top: 15px" v-bind="labelConfig" />
     </el-col>
   </el-row>
@@ -34,6 +34,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       quickActions: [
         {
@@ -41,7 +42,8 @@ export default {
           type: 'switcher',
           attrs: {
             label: this.$t('common.Test'),
-            model: this.object.is_active
+            model: this.object.is_active,
+            disabled: !vm.$hasPerm('assets.update_asset')
           },
           callbacks: {
             change: function(val) {
@@ -60,7 +62,8 @@ export default {
           title: this.$t('assets.RefreshHardware'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Refresh')
+            label: this.$t('assets.Refresh'),
+            disabled: !vm.$hasPerm('assets.refresh_assethardwareinfo')
           },
           callbacks: {
             click: function() {
@@ -78,7 +81,8 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('assets.Test')
+            label: this.$t('assets.Test'),
+            disabled: !vm.$hasPerm('assets.test_assetconnectivity')
           },
           callbacks: {
             click: function() {
@@ -215,13 +219,10 @@ export default {
         }
       ]
     }
-
   },
   mounted() {
-
   },
   methods: {
-
   }
 }
 </script>
