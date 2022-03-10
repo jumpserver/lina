@@ -3,17 +3,17 @@
     <GenericTreeListPage ref="TreeList" :table-config="tableConfig" :help-message="helpMessage" :header-actions="headerActions" :tree-setting="treeSetting">
       <div slot="rMenu">
         <li class="divider" />
-        <li id="m_add_asset_to_node" class="rmenu" tabindex="-1" @click="rMenuAddAssetToNode">
+        <li id="m_add_asset_to_node" v-perms="'assets.change_asset'" class="rmenu" tabindex="-1" @click="rMenuAddAssetToNode">
           <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
         </li>
-        <li id="m_move_asset_to_node" class="rmenu" tabindex="-1" @click="rMenuMoveAssetToNode">
+        <li id="m_move_asset_to_node" v-perms="'assets.change_asset'" class="rmenu" tabindex="-1" @click="rMenuMoveAssetToNode">
           <i class="fa fa-scissors" />  {{ this.$t('tree.MoveAssetToNode') }}
         </li>
         <li class="divider" />
-        <li id="m_update_node_asset_hardware_info" class="rmenu" tabindex="-1" @click="rMenuUpdateNodeAssetHardwareInfo">
+        <li id="m_update_node_asset_hardware_info" v-perms="'assets.refresh_assethardwareinfo'" class="rmenu" tabindex="-1" @click="rMenuUpdateNodeAssetHardwareInfo">
           <i class="fa fa-refresh" />  {{ this.$t('tree.UpdateNodeAssetHardwareInfo') }}
         </li>
-        <li id="m_test_node_asset_connectivity" class="rmenu" tabindex="-1" @click="rMenuTestNodeAssetConnectivity">
+        <li id="m_test_node_asset_connectivity" v-perms="'assets.test_assetconnectivity'" class="rmenu" tabindex="-1" @click="rMenuTestNodeAssetConnectivity">
           <i class="fa fa-link" />  {{ this.$t('tree.TestNodeAssetConnectivity') }}
         </li>
         <li class="divider" />
@@ -74,7 +74,10 @@ export default {
         showMenu: true,
         showRefresh: true,
         showAssets: false,
-        hasRightMenu: this.currentOrgIsRoot,
+        showCreate: true,
+        showUpdate: true,
+        showDelete: true,
+        hasRightMenu: true,
         url: '/api/v1/assets/assets/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
@@ -171,12 +174,22 @@ export default {
             { label: this.$t('assets.Label'), value: 'label' }
           ]
         },
+        extraActions: [
+          {
+            name: this.$t('xpack.Cloud.CloudSync'),
+            title: this.$t('xpack.Cloud.CloudSync'),
+            has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
+            callback: () => this.$router.push({ name: 'CloudCenter' })
+          }
+        ],
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
             title: this.$t('assets.DeactiveSelected'),
             type: 'primary',
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.hasPerm('assets.change_asset')
+            },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map((v) => {
                 return { pk: v.id, is_active: false }
@@ -192,7 +205,9 @@ export default {
             name: 'ActiveSelected',
             title: this.$t('assets.ActiveSelected'),
             type: 'primary',
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.hasPerm('assets.change_asset')
+            },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map((v) => {
                 return { pk: v.id, is_active: true }
@@ -207,7 +222,11 @@ export default {
           {
             name: 'updateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot,
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                  !vm.currentOrgIsRoot &&
+                  vm.hasPerm('assets.change_asset')
+            },
             callback: ({ selectedRows }) => {
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
               vm.updateSelectedDialogSetting.visible = true
@@ -220,7 +239,9 @@ export default {
               if (!this.$route.query.node) {
                 return false
               }
-              return selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot
+              return selectedRows.length > 0 &&
+                  !vm.currentOrgIsRoot &&
+                  vm.hasPerm('assets.change_asset')
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []
@@ -264,6 +285,9 @@ export default {
   mounted() {
     this.decorateRMenu()
     this.treeSetting.hasRightMenu = !this.currentOrgIsRoot
+    this.treeSetting.showCreate = this.$hasPerm('assets.add_node')
+    this.treeSetting.showUpdate = this.$hasPerm('assets.change_node')
+    this.treeSetting.showDelete = this.$hasPerm('assets.delete_node')
   },
   methods: {
     decorateRMenu() {

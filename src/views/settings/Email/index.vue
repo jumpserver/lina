@@ -1,13 +1,14 @@
 <template>
-  <IBox>
-    <GenericCreateUpdateForm v-bind="$data" />
-  </IBox>
+  <GenericCreateUpdatePage
+    v-bind="$data"
+    :update-success-next-route="successUrl"
+    :create-success-next-route="successUrl"
+  />
 </template>
 
 <script>
-import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
+import { GenericCreateUpdatePage } from '@/layout/components'
 import { testEmailSetting } from '@/api/settings'
-import { IBox } from '@/components'
 import EmailContent from './EmailContent'
 import SMTP from './SMTP'
 import rules from '@/components/DataForm/rules'
@@ -15,8 +16,7 @@ import rules from '@/components/DataForm/rules'
 export default {
   name: 'Email',
   components: {
-    GenericCreateUpdateForm,
-    IBox
+    GenericCreateUpdatePage
   },
   data() {
     const vm = this
@@ -74,6 +74,7 @@ export default {
         }
       },
       hasDetailInMsg: false,
+      successUrl: { name: 'Email' },
       url: '/api/v1/settings/setting/?category=email',
       moreButtons: [
         {

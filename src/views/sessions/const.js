@@ -1,18 +1,16 @@
-import i18n from '@/i18n/i18n'
-
 export const S3 = 's3'
 export const CEPH = 'ceph'
 export const SWIFT = 'swift'
 export const OSS = 'oss'
 export const AZURE = 'azure'
 export const OBS = 'obs'
+export const COS = 'cos'
 
 export const STORAGE_TYPE_META_MAP = {
   [S3]: {
     name: S3,
     title: 'S3',
-    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'],
-    endpointHelpText: i18n.t('sessions.helpText.s3Endpoint')
+    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
   },
   [CEPH]: {
     name: CEPH,
@@ -26,9 +24,8 @@ export const STORAGE_TYPE_META_MAP = {
   },
   [OSS]: {
     name: OSS,
-    title: 'Oss',
-    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT'],
-    endpointHelpText: i18n.t('sessions.helpText.ossEndpoint')
+    title: 'OSS',
+    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
   },
   [AZURE]: {
     name: AZURE,
@@ -39,5 +36,23 @@ export const STORAGE_TYPE_META_MAP = {
     name: OBS,
     title: 'OBS',
     meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
+  },
+  [COS]: {
+    name: COS,
+    title: 'COS',
+    meta: ['BUCKET', 'ACCESS_KEY', 'SECRET_KEY', 'ENDPOINT']
   }
+}
+
+export function getReplayStorageOptions() {
+  const options = []
+  const storages = Object.values(STORAGE_TYPE_META_MAP)
+  for (const s of storages) {
+    const option = {
+      name: s.name,
+      title: s.title
+    }
+    options.push(option)
+  }
+  return options
 }

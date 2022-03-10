@@ -1,9 +1,11 @@
 <template>
   <div class="error-404-container">
     <div class="error-404-text">
-      <h1 class="error-404-title">404 请求错误</h1>
-      <p class="error-404-subtitle">无法访问当前页面</p>
-      <a href="/ui/" class="el-button el-button--success error-button">去往首页</a>
+      <h1 class="error-404-title">{{ $t('route.AjaxError404') }}</h1>
+      <p class="error-404-subtitle">{{ $t('route.CannotAccess') }}</p>
+      <a href="/ui/" class="el-button el-button--success error-button">
+        {{ $t('route.GoHomePage') }}
+      </a>
     </div>
     <div class="error-404-image-container">
       <img class="error-404-error-image" src="@/assets/img/robot.png" alt="page error">
@@ -14,12 +16,7 @@
 <script>
 
 export default {
-  name: 'Page404',
-  computed: {
-    message() {
-      return 'The webmaster said that you can not enter this page...'
-    }
-  }
+  name: 'Page404'
 }
 </script>
 

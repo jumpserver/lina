@@ -1,8 +1,6 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
-    :title="$t('setting.DingTalk')"
     enable-field="AUTH_DINGTALK"
     v-on="$listeners"
   />
@@ -16,12 +14,6 @@ export default {
   name: 'DingTalk',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     const vm = this

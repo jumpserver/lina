@@ -29,7 +29,8 @@ export default {
           },
           {
             title: this.$t('assets.CommandFilterRules'),
-            name: 'rules'
+            name: 'rules',
+            hidden: () => !this.$hasPerm('assets.view_commandfilterrule')
           }
         ],
         hasRightSide: true

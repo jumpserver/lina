@@ -4,6 +4,7 @@
     :top="top"
     class="dialog"
     v-bind="$attrs"
+    append-to-body
     v-on="$listeners"
   >
     <slot />

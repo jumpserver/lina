@@ -24,11 +24,13 @@ export default {
         submenu: [
           {
             title: this.$t('assets.CommonUser'),
-            name: 'CommonUserList'
+            name: 'CommonUserList',
+            hidden: () => !this.$hasPerm('assets.view_systemuser')
           },
           {
             title: this.$t('assets.AdminUser'),
-            name: 'AdminUserList'
+            name: 'AdminUserList',
+            hidden: () => !this.$hasPerm('assets.view_systemuser')
           }
         ]
       }

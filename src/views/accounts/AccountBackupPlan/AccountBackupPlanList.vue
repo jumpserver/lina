@@ -1,22 +1,22 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanList',
   components: {
-    GenericListTable
+    GenericListPage
   },
   data() {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/backup/',
+        url: '/api/v1/assets/account-backup-plans/',
         columns: [
           'name', 'is_periodic', 'periodic_display', 'org_name', 'comment', 'actions'
         ],
@@ -62,7 +62,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/backup-execution/`,
+                      `/api/v1/assets/account-backup-plan-executions/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])

@@ -9,6 +9,7 @@ import UserPassword from './UserPassword'
 import WeekCronSelect from './WeekCronSelect'
 import UpdateToken from './UpdateToken'
 import JsonEditor from './JsonEditor'
+import Text from './Text'
 
 export default {
   DatetimeRangePicker,
@@ -21,7 +22,8 @@ export default {
   UserPassword,
   WeekCronSelect,
   UpdateToken,
-  JsonEditor
+  JsonEditor,
+  Text
 }
 
 export {
@@ -35,5 +37,6 @@ export {
   UserPassword,
   WeekCronSelect,
   UpdateToken,
-  JsonEditor
+  JsonEditor,
+  Text
 }

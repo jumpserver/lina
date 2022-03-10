@@ -4,23 +4,17 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { mapGetters } from 'vuex'
+
 export default {
   name: 'GenericListTable',
   components: {
     ListTable
   },
   computed: {
-    ...mapGetters(['currentOrgIsRoot'])
   },
   created() {
-    const headerActions = this.$attrs['header-actions'] || {}
-    if (headerActions.canCreate === undefined && this.currentOrgIsRoot) {
-      _.set(this.$attrs, 'header-actions.canCreate', false)
-    }
-    if (headerActions.hasImport === undefined && this.currentOrgIsRoot) {
-      _.set(this.$attrs, 'header-actions.hasImport', false)
-    }
+  },
+  methods: {
   }
 }
 </script>

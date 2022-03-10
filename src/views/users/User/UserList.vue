@@ -21,7 +21,7 @@ import { GenericListPage } from '@/layout/components'
 import { GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
-import InviteUsersDialog from '@/views/users/User/components/InviteUsersDialog'
+import InviteUsersDialog from './components/InviteUsersDialog'
 
 export default {
   components: {
@@ -32,10 +32,10 @@ export default {
   data() {
     const vm = this
     const hasDelete = () => {
-      return vm.currentUserIsSuperAdmin
+      return vm.$hasPerm('users.delete_user')
     }
     const hasRemove = () => {
-      if (!vm.publicSettings.XPACK_LICENSE_IS_VALID) {
+      if (!vm.publicSettings['XPACK_LICENSE_IS_VALID']) {
         return false
       }
       return !vm.currentOrgIsRoot
@@ -43,10 +43,13 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/users/',
+        permissions: {
+          resource: 'user'
+        },
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'total_role_display', 'source',
-          'is_valid', 'login_blocked', 'mfa_enabled',
+          'groups_display', 'system_roles', 'org_roles',
+          'source', 'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
           'comment', 'created_by', 'actions'
@@ -68,9 +71,23 @@ export default {
           source: {
             width: '120px'
           },
-          total_role_display: {
-            label: this.$t('users.Role'),
-            showOverflowTooltip: true
+          system_roles: {
+            label: this.$t('users.SystemRoles'),
+            showOverflowTooltip: true,
+            formatter: (row) => {
+              return row['system_roles_display']
+            },
+            filters: [],
+            columnKey: 'system_roles'
+          },
+          org_roles: {
+            label: this.$t('users.OrgRoles'),
+            showOverflowTooltip: true,
+            formatter: (row) => {
+              return row['org_roles_display']
+            },
+            filters: [],
+            columnKey: 'org_roles'
           },
           mfa_enabled: {
             label: 'MFA',
@@ -94,23 +111,13 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canClone: true,
               hasDelete: hasDelete,
-              canUpdate: function({ row }) {
-                return row['can_update']
-              },
-              canDelete: function({ row }) {
-                return row['can_delete']
-              },
               extraActions: [
                 {
                   title: this.$t('users.Remove'),
                   name: 'remove',
                   type: 'warning',
                   has: hasRemove,
-                  can: ({ row }) => {
-                    return row.can_delete
-                  },
                   callback: this.removeUserFromOrg
                 }
               ]
@@ -120,7 +127,6 @@ export default {
       },
       headerActions: {
         hasBulkDelete: hasDelete,
-        canCreate: true,
         extraActions: [
           {
             name: this.$t('users.InviteUser'),
@@ -128,6 +134,7 @@ export default {
             has: () => {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
+            can: () => vm.$hasPerm('users.invite_user'),
             callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
           }
         ],
@@ -137,45 +144,21 @@ export default {
             name: 'removeSelected',
             has: hasRemove,
             can({ selectedRows }) {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 || vm.$hasPerm('users.delete_user')
             },
             callback: this.bulkRemoveCallback.bind(this)
           },
           {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
-            can({ selectedRows }) {
-              return selectedRows.length > 0
-            },
-            callback({ selectedRows, reloadTable }) {
-              const url = '/api/v1/users/users/'
-              const data = selectedRows.map(row => {
-                return { id: row.id, is_active: false }
-              })
-              if (data.length === 0) {
-                return
-              }
-              vm.$axios.patch(url, data).then(() => {
-                reloadTable()
-              })
-            }
+            can: ({ selectedRows }) => selectedRows.length > 0,
+            callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'activateSelected',
             title: this.$t('common.activateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0,
-            callback: ({ selectedRows, reloadTable }) => {
-              const url = '/api/v1/users/users/'
-              const data = selectedRows.map(row => {
-                return { id: row.id, is_active: true }
-              })
-              if (data.length === 0) {
-                return
-              }
-              vm.$axios.patch(url, data).then(() => {
-                reloadTable()
-              })
-            }
+            callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
           },
           {
             name: 'updateSelected',
@@ -232,7 +215,23 @@ export default {
       'device', 'currentOrgIsDefault', 'currentUserIsSuperAdmin'
     ])
   },
+  mounted() {
+    this.setRolesFilter()
+  },
   methods: {
+    setRolesFilter() {
+      const roleTypes = [{ name: 'system-roles', perm: 'systemrole' }, { name: 'org-roles', perm: 'orgrole' }]
+      for (const roleType of roleTypes) {
+        if (this.$hasPerm(`rbac.${roleType.perm}`)) {
+          this.$axios.get(`/api/v1/rbac/${roleType}/`).then((roles) => {
+            const fieldName = roleType.name.replace('-', '_')
+            this.tableConfig.columnsMeta[fieldName].filters = roles.map(r => {
+              return { text: r['display_name'], value: r.id }
+            })
+          })
+        }
+      }
+    },
     removeUserFromOrg({ row, col, reload }) {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
@@ -251,6 +250,18 @@ export default {
         this.$message.success(this.$t('common.removeSuccessMsg'))
       })
     },
+    bulkActionCallback(selectedRows, reloadTable, actionType) {
+      const vm = this
+      const url = '/api/v1/users/users/'
+      const data = selectedRows.map(row => {
+        return { id: row.id, is_active: actionType === 'activate' }
+      })
+      if (data.length === 0) return
+      this.$axios.patch(url, data).then(() => {
+        reloadTable()
+        vm.$message.success(vm.$t(`common.${actionType}SuccessMsg`))
+      })
+    },
     handleInviteDialogClose() {
       this.InviteDialogSetting.InviteDialogVisible = false
       this.$refs.GenericListPage.$refs.ListTable.$refs.ListTable.reloadTable()
@@ -265,9 +276,6 @@ export default {
 <style lang="less" scoped>
 .asset-select-dialog ::v-deep .transition-box:first-child {
   background-color: #f3f3f3;
-}
-.dialog ::v-deep .el-input {
-  width: 25.5vw;
 }
 
 .dialog ::v-deep .el-dialog__footer {

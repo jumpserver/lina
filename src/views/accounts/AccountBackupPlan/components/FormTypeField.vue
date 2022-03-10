@@ -3,7 +3,7 @@
     :data="iData"
     show-checkbox
     node-key="id"
-    :default-expand-all="false"
+    :default-expand-all="true"
     :default-checked-keys="value"
     :props="defaultProps"
     v-bind="$attrs"

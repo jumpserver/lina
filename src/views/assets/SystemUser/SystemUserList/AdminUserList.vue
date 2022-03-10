@@ -19,6 +19,9 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/admin-users/',
+        permissions: {
+          resource: 'systemuser'
+        },
         columns: [
           'name', 'username', 'assets_amount',
           'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'

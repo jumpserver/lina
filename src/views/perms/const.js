@@ -43,12 +43,13 @@ export const REMOTE_APP = [
 ]
 
 export const MYSQL = 'mysql'
-export const REDIS = 'redis'
 export const ORACLE = 'oracle'
 export const POSTGRESQL = 'postgresql'
 export const MARIADB = 'mariadb'
 export const DATABASE_CATEGORY = 'db'
 export const SQLSERVER = 'sqlserver'
+export const REDIS = 'redis'
+export const MONGODB = 'mongodb'
 
 export const DATABASE = [
   {
@@ -60,6 +61,13 @@ export const DATABASE = [
     group: i18n.t('applications.RDBProtocol')
   },
   {
+    name: MARIADB,
+    title: i18n.t(`applications.applicationsType.${MARIADB}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: true
+  },
+  {
     name: ORACLE,
     title: i18n.t(`applications.applicationsType.${ORACLE}`),
     type: 'primary',
@@ -69,13 +77,6 @@ export const DATABASE = [
   {
     name: POSTGRESQL,
     title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
-  },
-  {
-    name: MARIADB,
-    title: i18n.t(`applications.applicationsType.${MARIADB}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
@@ -94,6 +95,13 @@ export const DATABASE = [
     category: DATABASE_CATEGORY,
     has: true,
     group: i18n.t('applications.NoSQLProtocol')
+  },
+  {
+    name: MONGODB,
+    title: i18n.t(`applications.applicationsType.${MONGODB}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
   }
 ]
 

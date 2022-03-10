@@ -29,12 +29,13 @@ export default {
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'AccountBackupPlanExecutionList'
+            name: 'AccountBackupPlanExecutionList',
+            hidden: () => !this.$hasPerm('assets.view_accountbackupplanexecution')
           }
         ],
         actions: {
-          detailApiUrl: `/api/v1/assets/backup/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/assets/backup/${this.$route.params.id}/`
+          detailApiUrl: `/api/v1/assets/account-backup-plans/${this.$route.params.id}/`,
+          deleteApiUrl: `/api/v1/assets/account-backup-plans/${this.$route.params.id}/`
         }
       }
     }

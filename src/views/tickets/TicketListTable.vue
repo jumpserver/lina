@@ -25,6 +25,9 @@ export default {
     return {
       ticketTableConfig: {
         url: this.url,
+        permissions: {
+          resource: 'superticket'
+        },
         columns: [
           {
             prop: 'serial_num',

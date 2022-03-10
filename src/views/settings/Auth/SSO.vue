@@ -1,8 +1,6 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
-    :title="$t('setting.SSO')"
     enable-field="AUTH_SSO"
     v-on="$listeners"
   />
@@ -14,12 +12,6 @@ export default {
   name: 'SSO',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     return {

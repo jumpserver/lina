@@ -2,7 +2,7 @@
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
+    <UpdateSecretInfo v-if="showUpdateSecretDialog" :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
 
@@ -46,6 +46,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
@@ -100,10 +101,10 @@ export default {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
-                  callback: function({ row }) {
-                    this.account = row
-                    this.showViewSecretDialog = true
-                  }.bind(this)
+                  callback: ({ row }) => {
+                    vm.account = row
+                    vm.showViewSecretDialog = true
+                  }
                 },
                 {
                   name: 'Delete',
@@ -132,10 +133,15 @@ export default {
                   name: 'Update',
                   title: this.$t('common.Update'),
                   can: !this.$store.getters.currentOrgIsRoot,
-                  callback: function({ row }) {
-                    this.account = row
-                    this.showUpdateSecretDialog = true
-                  }.bind(this)
+                  callback: ({ row }) => {
+                    vm.account = row
+                    vm.showUpdateSecretDialog = false
+                    setTimeout(() => {
+                      vm.showUpdateSecretDialog = true
+                      console.log('Show update1: ', vm.showUpdateSecretDialog)
+                    })
+                    console.log('Show update2: ', vm.showUpdateSecretDialog)
+                  }
                 }
               ]
             }

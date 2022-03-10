@@ -12,6 +12,7 @@
     filterable
     popper-append-to-body
     class="select2"
+    :disabled="selectDisabled"
     v-bind="$attrs"
     @change="onChange"
     @visible-change="onVisibleChange"
@@ -85,9 +86,14 @@ export default {
     disabledValues: {
       type: Array,
       default: () => []
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
+    const vm = this
     const defaultPageSize = 10
     const defaultParams = {
       search: '',
@@ -95,7 +101,20 @@ export default {
       hasMore: true,
       pageSize: defaultPageSize
     }
+    // 设置axios全局报错提示不显示
+    const validateStatus = (status) => {
+      if (status === 403) {
+        setTimeout(() => {
+          vm.initialized = true
+          vm.selectDisabled = true
+        }, 200)
+        return 200
+      }
+      return status
+    }
     return {
+      validateStatus,
+      selectDisabled: this.disabled,
       loading: false,
       initialized: false,
       defaultParams: _.cloneDeep(defaultParams),
@@ -143,10 +162,19 @@ export default {
       }
       const transformOption = this.ajax.transformOption || defaultTransformOption
       const defaultProcessResults = (data) => {
-        let results = data.results
+        let results = []
+        let more = false
+        let total = 0
+        if (Array.isArray(data)) {
+          results = data
+          total = data.length
+        } else if (typeof data === 'object') {
+          results = data?.results || []
+          more = !!data.next
+          total = data.count
+        }
         results = results.map(transformOption)
-        const more = !!data.next
-        const total = data.count
+        results = results.filter(Boolean)
         return { results: results, pagination: more, total: total }
       }
       const defaultAjax = {
@@ -154,7 +182,8 @@ export default {
         pageSize: defaultPageSize,
         makeParams: defaultMakeParams,
         transformOption: defaultTransformOption,
-        processResults: defaultProcessResults
+        processResults: defaultProcessResults,
+        validateStatus: this.validateStatus
       }
       return Object.assign(defaultAjax, this.ajax, this.url ? { url: this.url } : {})
     }
@@ -222,9 +251,13 @@ export default {
       this.getOptions()
     },
     async getInitialOptions() {
+      const { url, processResults, validateStatus } = this.iAjax
       const params = this.safeMakeParams(this.params)
-      let data = await this.$axios.get(this.iAjax.url, { params: params })
-      data = this.iAjax.processResults.bind(this)(data)
+      let data = await this.$axios.get(url, {
+        params,
+        validateStatus
+      })
+      data = processResults.bind(this)(data)
       data.results.forEach((v) => {
         this.initialOptions.push(v)
         if (this.optionsValues.indexOf(v.value) === -1) {
@@ -242,9 +275,13 @@ export default {
       }
     },
     async getOptions() {
+      const { url, processResults, validateStatus } = this.iAjax
       const params = this.safeMakeParams(this.params)
-      const resp = await this.$axios.get(this.iAjax.url, { params: params })
-      const data = this.iAjax.processResults.bind(this)(resp)
+      const resp = await this.$axios.get(url, {
+        params,
+        validateStatus
+      })
+      const data = processResults.bind(this)(resp)
       if (!data.pagination) {
         this.params.hasMore = false
       }

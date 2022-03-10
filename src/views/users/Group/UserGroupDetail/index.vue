@@ -14,15 +14,14 @@ import GroupInfo from './GroupInfo'
 export default {
   components: {
     GenericDetailPage,
-    // eslint-disable-next-line vue/no-unused-components
     GroupGrantedAssets,
-    // eslint-disable-next-line vue/no-unused-components
     GroupInfo
   },
   data() {
     return {
       group: { name: '', comment: '', users: [] },
       config: {
+        url: '/api/v1/users/groups/',
         activeMenu: 'GroupInfo',
         submenu: [
           {
@@ -31,7 +30,8 @@ export default {
           },
           {
             title: this.$t('users.tabs.grantedAssets'),
-            name: 'GroupGrantedAssets'
+            name: 'GroupGrantedAssets',
+            hidden: () => !this.$hasPerm('perms.view_usergroupassets')
           }
         ]
       }

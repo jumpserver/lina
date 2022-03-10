@@ -4,10 +4,11 @@ import locale from 'element-ui/lib/locale'
 import VueI18n from 'vue-i18n'
 import messages from './langs'
 import date from './date'
+import VueCookie from 'vue-cookie'
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
-  locale: localStorage.lang || 'cn',
+  locale: (VueCookie.get('django_language') || 'zh-hans') === 'zh-hans' ? 'cn' : 'en',
   fallbackLocale: 'en',
   silentFallbackWarn: true,
   silentTranslationWarn: true,

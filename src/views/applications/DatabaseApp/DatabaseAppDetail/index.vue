@@ -22,6 +22,7 @@ export default {
         name: '', get_type_display: '', host: '', port: '', database: '', date_created: '', created_by: '', comment: '', attrs: ''
       },
       config: {
+        url: '/api/v1/applications/applications/',
         activeMenu: 'DatabaseAppDetail',
         submenu: [
           {

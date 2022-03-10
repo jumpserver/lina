@@ -1,8 +1,6 @@
 <template>
-  <div style="">
-    <el-button type="primary" class="hamburger" size="mini" @click="toggleClick">
-      <i class="fa fa-bars" style="color: white; margin-right: 0" />
-    </el-button>
+  <div style="padding: 0 15px;" @click="toggleClick">
+    <svg-icon icon-class="hamburger" class="hamburger" :class="{'is-active':isActive}" />
   </div>
 </template>
 
@@ -25,11 +23,12 @@ export default {
 
 <style scoped>
 .hamburger {
- padding: 7px 12px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 20px;
+  color: rgb(167, 177, 194);
 }
-
 .hamburger.is-active {
   transform: rotate(180deg);
 }
-
 </style>

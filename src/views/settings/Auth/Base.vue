@@ -1,40 +1,19 @@
 <template>
-  <div>
-    <el-button v-if="!value" type="default" size="mini" @click="visible=true">{{ $t('setting.Enable') }}</el-button>
-    <el-button v-else type="primary" size="mini" @click="visible=true">{{ $t('setting.Setting') }}</el-button>
-    <Dialog
-      v-if="visible"
-      :visible.sync="visible"
-      :title="title"
-      :destroy-on-close="true"
-      :show-cancel="false"
-      :show-confirm="false"
-      width="70%"
-      v-on="$listeners"
-    >
-      <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
-    </Dialog>
-  </div>
+  <IBox>
+    <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
+  </IBox>
 </template>
 
 <script>
-import Dialog from '@/components/Dialog'
+import IBox from '@/components/IBox'
 import { GenericCreateUpdateForm } from '@/layout/components'
 export default {
   name: 'Base',
   components: {
-    Dialog,
+    IBox,
     GenericCreateUpdateForm
   },
   props: {
-    title: {
-      type: String,
-      default: ''
-    },
-    value: {
-      type: Boolean,
-      required: true
-    },
     config: {
       type: Object,
       default: () => ({})

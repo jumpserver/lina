@@ -1,5 +1,4 @@
 #app {
-
   .main-container {
     min-height: 100%;
     transition: margin-left .28s;
@@ -39,7 +38,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 120px);
+        height: calc(100% - 150px);
       }
     }
 

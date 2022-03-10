@@ -108,14 +108,14 @@ export default {
               group: this.$t('assets.RDBProtocol')
             },
             {
-              name: 'PostgreSQL',
-              title: 'PostgreSQL',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
               name: 'MariaDB',
               title: 'MariaDB',
+              type: 'primary',
+              has: true
+            },
+            {
+              name: 'PostgreSQL',
+              title: 'PostgreSQL',
               type: 'primary',
               has: this.$store.getters.hasValidLicense
             },
@@ -137,6 +137,12 @@ export default {
               type: 'primary',
               has: true,
               group: this.$t('assets.NoSQLProtocol')
+            },
+            {
+              name: 'MongoDB',
+              title: 'MongoDB',
+              type: 'primary',
+              has: this.$store.getters.hasValidLicense
             },
             {
               name: 'K8S',

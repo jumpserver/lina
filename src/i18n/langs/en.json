@@ -40,11 +40,12 @@
       "vmware_client":"Vmware Client",
       "custom":"Custom",
       "mysql": "MySQL",
-      "redis": "Redis",
       "oracle": "Oracle",
       "postgresql": "PostgreSQL",
       "mariadb": "MariaDB",
       "sqlserver": "SQLServer",
+      "redis": "Redis",
+      "mongodb": "MongoDB",
       "k8s": "kubernetes"
     },
     "applicationsCategory": {
@@ -238,7 +239,10 @@
     "User": "User",
     "Username": "Username",
     "SystemUserName": "System username",
-    "View": "View"
+    "View": "View",
+    "LoginIP": "Login IP",
+    "LoginCity": "Login city",
+    "LoginDate": "Login date"
   },
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
@@ -252,9 +256,14 @@
     "IPLoginLimit": "IP login limit",
     "Setting": "Setting",
     "Certificate": "Certificate",
+    "Scope": "Type",
+    "Builtin": "Builtin",
+    "DateCreated": "Date created",
+    "UpdatedBy": "Update by",
     "ViewMore": "View more",
     "Announcement": "Announcement",
     "Logging": "Logging",
+    "RecentLogin": "Recent login",
     "Database": "Database",
     "Params": "Params",
     "MFAVerify": "Verify MFA",
@@ -379,8 +388,10 @@
     "deleteFailedMsg": "Delete failed",
     "deleteSelected": "Delete selected",
     "deleteSuccessMsg": "Delete success",
+    "activateSuccessMsg": "Active success",
     "deleteWarningMsg": "Are you sure to delete ",
     "disableSelected": "Disable selected",
+    "disableSuccessMsg": "Disable success",
     "fieldRequiredError": "This field is required",
     "getErrorMsg": "Get failed",
     "fileType": "File type",
@@ -406,13 +417,20 @@
     "isValid": "Is valid",
     "nav": {
       "APIKey": "API Key",
-      "AdminPage": "Admin page",
+      "Workspace": "Work",
+      "Navigation": "Navigation",
+      "Console": "Console",
+      "Audits": "Audit",
+      "HomePage": "Home page",
+      "QuickAccess": "Quick access",
+      "SwitchPage": "Switch page",
       "Docs": "Docs",
       "Help": "Help",
       "Logout": "Logout",
       "Profile": "Profile",
       "Support": "Support",
       "UserPage": "User page",
+      "View": "View",
       "EnterpriseEdition": "Enterprise edition"
     },
     "passwordOrPassphrase": "Password or Passphrase",
@@ -438,6 +456,7 @@
       "SPECIAL_CHAR_REQUIRED": "Special char required",
       "MIN_LENGTH_ERROR": "Password minimum length {}"
     },
+    "noAnnouncement": "No announcement",
     "lastCannotBeDeleteMsg": "The last one can't be delete",
     "InvalidJson": "Not a valid json format",
     "time_period": "Time period",
@@ -566,11 +585,12 @@
     "version": "Version",
     "versionDetail": "Version detail",
     "versionRunExecution": "Version run execution",
-    "Unkown": "Unkown"
+    "Unkown": "Unkown",
+    "Unknown": "Unknown"
   },
   "perms": {
     "": "",
-    "Actions": "Permission",
+    "Actions": "Actions",
     "Permission": "Permissions",
     "Asset": "Asset",
     "Basic": "Basic",
@@ -630,6 +650,12 @@
   },
   "route": {
     "": "",
+    "Index": "Index",
+    "Role": "Role",
+    "Overview": "Overview",
+    "OrgRoles": "Organization roles",
+    "SystemRole": "System roles",
+    "RoleList": "Roles",
     "SessionDetail": "SessionDetail",
     "Accounts": "Accounts",
     "AssetAccount": "Asset account",
@@ -650,7 +676,9 @@
     "AssetPermissionUpdate": "Asset permissions update",
     "AssetUpdate": "Asset update",
     "Assets": "Assets",
-    "Audits": "Audits",
+    "LogsAudits": "Logs audit",
+    "SessionsAudit": "Sessions audit",
+    "SessionList": "Session list",
     "BatchCommand": "Batch Command",
     "BatchCommandLog": "Batch Command Logs",
     "CeleryTaskLog": "Celery task log",
@@ -663,6 +691,7 @@
     "CommandFilterUpdate": "Command filter update",
     "CommandStorageUpdate": "Command storage update",
     "Commands": "Commands",
+    "FileTransfer": "File transfer",
     "CreateCommandStorage": "Create command storage",
     "CreateReplayStorage": "Create replay storage",
     "Dashboard": "Dashboard",
@@ -761,7 +790,15 @@
     "WebTerminal": "Web Terminal",
     "Notifications": "Notifications",
     "SiteMessageList": "Site message",
-    "UserLoginACL": "User Login ACL"
+    "UserLoginACL": "User Login ACL",
+    "NoPermission403": "403 No permission",
+    "NoPermissionVew": "No permission view current page",
+    "AjaxError404": "404 ajax error",
+    "CannotAccess": "Unable to access the current page",
+    "GoHomePage": "Go home page"
+  },
+  "rbac": {
+    "Permissions": "Permissions"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",
@@ -840,9 +877,7 @@
     "helpText": {
       "esUrl": "Tip: If you have multiple hosts, use comma (, ) to split (eg: http://www.jumpserver.a.com, http://www.jumpserver.b.com)",
       "esIndex":"Es provides the default index: jumpserver",
-      "esDocType": "Es provides the default document type: command",
-      "s3Endpoint": "S3: http://s3.{REGION_NAME}.amazonaws.com<br>S3(China): http://s3.{REGION_NAME}.amazonaws.com.cn<br>Example: http://s3.cn-north-1.amazonaws.com.cn",
-      "ossEndpoint": "OSS: http://{REGION_NAME}.aliyuncs.com<br>Example: http://oss-cn-hangzhou.aliyuncs.com"
+      "esDocType": "Es provides the default document type: command"
     }
   },
   "setting": {
@@ -858,6 +893,7 @@
     "SMTP": "SMTP server",
     "Setting": "Setting",
     "AuthMethod": "Auth methods",
+    "SSO": "SSO",
     "AuthLimit": "Auth limit",
     "Ops": "Task",
     "OTP": "OTP(MFA)",
@@ -865,6 +901,8 @@
     "Cleaning": "Period clean",
     "Perms": "Perms",
     "CASSetting": "CAS setting",
+    "CAS": "CAS",
+    "OIDC": "OIDC",
     "Other": "More...",
     "Auth": "Auth",
     "SyncSetting": "Sync setting",
@@ -1091,11 +1129,16 @@
   },
   "users": {
     "FileEncryptionPassword": "File encryption password",
+    "RoleUsers": "Role users",
+    "RoleInfo": "Role info",
+    "RolePerms": "Role perms",
     "MessageSubscription": "Message Subscription",
     "AuthSettings": "Auth settings",
     "UserName": "Name",
     "Account": "Account",
     "Existing":"Existing",
+    "AccountInformation": "Account information",
+    "PersonalSetting": "Personal setting",
     "Authentication": "Account",
     "Comment": "Comment",
     "ConfirmPassword": "Confirm password",
@@ -1127,7 +1170,8 @@
       "MFAOfUserFirstLoginPersonalInformationImprovementPage": "Enable multi-factor authentication to make the account more secure <br/> After is enabled, you will enter the multi-factor authentication binding process on your next login <br/> You can also bind directly in (personal information -> fast modifier -> modifier multiple factor Settings)",
       "MFAOfUserFirstLoginUserGuidePage": "To protect the security of you and the company <br/> please properly keep your account, password, key and other important and sensitive information <br/> (e.g., set a complex password and enable multi-factor authentication)",
       "SSHKeyOfProfileSSHUpdatePage": "Copy your public key here",
-      "OrgRoleHelpText": "Organizational roles are the user's role in the current organization"
+      "OrgRoleHelpText": "Organizational roles are the user's role in the current organization",
+      "addRolePermissions": "After add or update success, set permissions in detail page"
     },
     "IAgree": "I agree",
     "ImprovePersonalInformation": "Improve personal information",
@@ -1146,8 +1190,8 @@
     "ResetAndDownloadSSHKey": "Reset and download SSH Key",
     "ResetPublicKeyAndDownload": "Reset public key and download",
     "Role": "Role",
-    "SuperRole": "Super role",
-    "OrgRole": "Org role",
+    "SystemRoles": "System roles",
+    "OrgRole": "Org roles",
     "SSHKey": "SSH Key",
     "SSHKeySetting": "SSH Key setting",
     "Secure": "Secure",
@@ -1225,6 +1269,7 @@
     "officialWebsiteTip": "You can change the URL of the site navigation bar help -> Website",
     "Admin": "Admin",
     "Asset": "Asset",
+    "ip": "IP",
     "Database": "Database",
     "AssetCount": "Asset count",
     "Auditor": "Auditor",
@@ -1300,6 +1345,7 @@
       "Reason": "Reason"
     },
     "Cloud": {
+      "CloudSync": "Cloud sync",
       "ServerAccountKey": "Server Account Key",
       "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
@@ -1376,7 +1422,7 @@
     "InterfaceSettings": "Interface Setting",
     "License": "License",
     "LicenseDetail": "License detail",
-    "SystemMonitor": "System Monitor",
+    "ComponentMonitor": "System Monitor",
     "ServiceRatio": "Service ratio",
     "LoadStatus":"Status",
     "NormalLoad":"Normal",
@@ -1387,7 +1433,9 @@
     "NoLicense": "No License",
     "Node": "Node",
     "Organization": {
+      "AllOrganization": "All organization",
       "OrganizationCreate": "Create organization",
+      "OrganizationLists": "Organization lists",
       "OrganizationDetail": "Org detail",
       "OrganizationList": "Organizations",
       "OrganizationUpdate": "Update org",

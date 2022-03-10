@@ -28,9 +28,19 @@ export default {
     ActionsGroup
   },
   props: {
+    url: {
+      type: String,
+      required: false,
+      default: ''
+    },
     object: {
       type: Object,
       required: true
+    },
+    titlePrefix: {
+      type: String,
+      required: false,
+      default: ''
     },
     title: {
       type: String,
@@ -61,12 +71,11 @@ export default {
     getTitle: {
       type: Function,
       default: function(obj) {
-        const objectType = this.$route.meta.title
-          .replace('Detail', '')
-          .replace('详情', '')
+        const objectType = this.$route.meta.title.replace('Detail', '').replace('详情', '')
         this.$log.debug('Object is: ', obj)
+        const titlePrefix = this.titlePrefix || objectType
         const objectName = this.getObjectName(obj)
-        let title = `${objectType}: ${objectName}`
+        let title = `${titlePrefix}: ${objectName}`
         if (title.length > 80) {
           title = title.slice(0, 80) + '...'
         }
@@ -82,20 +91,29 @@ export default {
   },
   data() {
     const vm = this
+    const detailApiUrl = (function() {
+      if (vm.url) {
+        return `${vm.url}/${vm.$route.params.id}/`
+      } else {
+        return getApiPath(vm)
+      }
+    }())
     const defaultActions = {
-      canDelete: true,
-      deleteCallback: function(item) { this.defaultDelete(item) },
-      deleteApiUrl: getApiPath(this),
+      // Delete button
+      canDelete: vm.$hasCurrentResAction('delete'),
+      deleteCallback: function(item) { vm.defaultDelete(item) },
+      deleteApiUrl: detailApiUrl,
       deleteSuccessRoute: this.$route.name.replace('Detail', 'List'),
+      // Update button
       canUpdate: () => {
-        return !vm.currentOrgIsRoot
+        return !vm.currentOrgIsRoot && vm.$hasCurrentResAction('change')
       },
       updateCallback: function(item) { this.defaultUpdate(item) },
-      updateRoute: this.$route.name.replace('Detail', 'Update'),
-      detailApiUrl: getApiPath(this)
+      updateRoute: this.$route.name.replace('Detail', 'Update')
     }
     return {
-      defaultActions: defaultActions,
+      detailApiUrl,
+      defaultActions,
       loading: true,
       validActions: Object.assign(defaultActions, this.actions)
     }
@@ -146,7 +164,7 @@ export default {
     defaultDelete() {
       const msg = this.$t('common.deleteWarningMsg') + ' ' + this.iTitle + ' ?'
       const title = this.$t('common.Info')
-      const performDelete = async function() {
+      const performDelete = () => {
         const url = this.validActions.deleteApiUrl
         this.$log.debug('Start perform delete: ', url)
         return this.$axios.delete(url)
@@ -183,7 +201,8 @@ export default {
       this.$router.push(route)
     },
     getObject() {
-      const url = this.validActions.detailApiUrl
+      // 兼容之前的 detailApiUrl
+      const url = this.validActions.detailApiUrl || this.detailApiUrl
       return this.$axios.get(url, { disableFlashErrorMsg: true }).then(data => {
         this.$emit('update:object', data)
         this.$emit('getObjectDone', data)

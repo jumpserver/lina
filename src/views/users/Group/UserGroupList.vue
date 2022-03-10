@@ -13,7 +13,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/groups/',
-        columns: ['name', 'users_amount', 'date_created', 'created_by', 'org_name', 'comment', 'actions'],
+        columns: [
+          'name', 'users_amount', 'date_created', 'created_by',
+          'org_name', 'comment', 'actions'
+        ],
         columnsShow: {
           default: ['name', 'users_amount', 'comment', 'actions'],
           min: ['name', 'action']
@@ -24,7 +27,10 @@ export default {
             width: '120px'
           }
         },
-        detailRoute: 'UserGroupDetail'
+        permissions: {
+          app: 'users',
+          resource: 'usergroup'
+        }
       },
       headerActions: {
         createRoute: 'UserGroupCreate'
