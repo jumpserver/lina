@@ -16,6 +16,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/xpack/cloud/sync-instance-tasks/',
+        permissions: {
+          app: 'xpack',
+          resource: 'syncinstancetask'
+        },
         columns: [
           'name', 'account_display', 'history_count', 'instance_count', 'periodic_display',
           'date_last_sync', 'comment', 'actions'
