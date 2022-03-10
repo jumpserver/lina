@@ -73,9 +73,9 @@ export default {
         }
       },
       viewPermMapper: [
-        ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
-        ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
-        ['view_workspace', ['rbac.view_workspace']]
+        // ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
+        // ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
+        // ['view_workspace', ['rbac.view_workspace']]
       ]
     }
   },
@@ -171,7 +171,7 @@ export default {
           }
           const { action: act, resource: res } = d
           // 忽略的 action 不用处理, resource 不相同的不用处理
-          console.log('Action: ', act, d)
+          this.$log.debug('Action: ', act, d)
           if (act === 'view' || viewIgnoreAction.indexOf(act) > -1 || res !== resource) {
             continue
           }
