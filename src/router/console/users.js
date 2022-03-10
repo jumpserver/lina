@@ -93,6 +93,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
+      resource: 'usergroup',
       permissions: ['users.view_usergroup']
     },
     children: [
