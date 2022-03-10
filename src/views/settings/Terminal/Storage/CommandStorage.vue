@@ -39,6 +39,9 @@ export default {
       commandTableConfig: {
         title: 'command',
         url: '/api/v1/terminal/command-storages/',
+        permissions: {
+          resource: 'commandstorage'
+        },
         columns: ['name', 'type', 'comment', 'is_default', 'actions'],
         columnsMeta: {
           comment: {

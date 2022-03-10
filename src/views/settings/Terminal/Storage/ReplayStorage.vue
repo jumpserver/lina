@@ -28,6 +28,9 @@ export default {
       },
       replayTableConfig: {
         url: '/api/v1/terminal/replay-storages/',
+        permissions: {
+          resource: 'replaystorage'
+        },
         columns: ['name', 'type', 'comment', 'is_default', 'actions'],
         columnsMeta: {
           name: {

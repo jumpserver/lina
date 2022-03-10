@@ -15,7 +15,7 @@ export default {
     type: 'view',
     showNavSwitcher: false,
     showOrganization: false,
-    permissions: []
+    permissions: ['settings.view_setting']
   },
   children: [
     {
@@ -25,7 +25,7 @@ export default {
       meta: {
         title: i18n.t('setting.Basic'),
         icon: 'gear',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_basic']
       }
     },
     {
@@ -35,7 +35,7 @@ export default {
       meta: {
         title: i18n.t('setting.Email'),
         icon: 'envelope-o',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_email']
       }
     },
     {
@@ -45,7 +45,7 @@ export default {
       meta: {
         title: i18n.t('setting.Auth'),
         icon: 'user-circle-o',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_auth']
       }
     },
     {
@@ -55,7 +55,7 @@ export default {
       meta: {
         title: i18n.t('setting.MessageSub'),
         icon: 'bell-o',
-        permissions: ['settings.view_setting']
+        permissions: ['notifications.change_systemmsgsubscription']
       }
     },
     {
@@ -65,7 +65,7 @@ export default {
       meta: {
         title: i18n.t('setting.SMS'),
         icon: 'mobile-phone fa-lg',
-        permissions: ['settings.view_setting'],
+        permissions: ['settings.change_sms'],
         licenseRequired: true
       }
     },
@@ -75,7 +75,8 @@ export default {
       redirect: '',
       meta: {
         title: i18n.t('setting.Terminal'),
-        permissions: ['settings.view_setting']
+        app: 'terminal',
+        permissions: ['settings.change_terminal']
       },
       children: [
         {
@@ -85,8 +86,7 @@ export default {
           meta: {
             title: i18n.t('setting.Terminal'),
             icon: 'terminal',
-            resource: 'terminal',
-            app: 'terminal'
+            permissions: ['settings.change_terminal']
           }
         },
         {
@@ -94,8 +94,7 @@ export default {
           name: 'TerminalDetail',
           component: () => import('@/views/settings/Terminal/TerminalDetail'),
           meta: {
-            title: i18n.t('route.Terminal'),
-            permissions: ['terminal.view_command']
+            title: i18n.t('route.Terminal')
           },
           hidden: true
         },
@@ -104,33 +103,7 @@ export default {
           name: 'TerminalUpdate',
           component: () => import('@/views/settings/Terminal/TerminalUpdate'),
           meta: {
-            title: i18n.t('route.Terminal'),
-            permissions: ['terminal.view_command']
-          },
-          hidden: true
-        }
-      ]
-    },
-    {
-      path: '/settings/storages',
-      component: empty,
-      redirect: '',
-      meta: {
-        title: i18n.t('setting.storage'),
-        permissions: ['terminal.view_command'],
-        resource: 'terminal',
-        app: 'terminal'
-      },
-      hidden: true,
-      children: [
-        {
-          path: '',
-          name: 'Storage',
-          component: () => import('@/views/settings/Terminal/Storage/index'),
-          meta: {
-            title: i18n.t('setting.storage'),
-            activeMenu: '/settings/terminal',
-            permissions: ['terminal.view_command']
+            title: i18n.t('route.Terminal')
           },
           hidden: true
         },
@@ -141,7 +114,7 @@ export default {
           meta: {
             title: i18n.t('route.CreateReplayStorage'),
             activeMenu: '/settings/terminal',
-            permissions: ['terminal.view_command']
+            permissions: ['terminal.add_replaystorage']
           },
           hidden: true
         },
@@ -152,7 +125,7 @@ export default {
           meta: {
             title: i18n.t('route.ReplayStorageUpdate'),
             activeMenu: '/settings/terminal',
-            permissions: ['terminal.view_command']
+            permissions: ['terminal.change_replaystorage']
           },
           hidden: true
         },
@@ -163,7 +136,7 @@ export default {
           meta: {
             title: i18n.t('route.CreateCommandStorage'),
             activeMenu: '/settings/terminal',
-            permissions: ['terminal.view_command']
+            permissions: ['terminal.add_commandstorage']
           },
           hidden: true
         },
@@ -174,7 +147,7 @@ export default {
           meta: {
             title: i18n.t('route.CommandStorageUpdate'),
             activeMenu: '/settings/terminal',
-            permissions: ['terminal.view_command']
+            permissions: ['terminal.change_commandstorage']
           },
           hidden: true
         }
@@ -187,7 +160,7 @@ export default {
       meta: {
         title: i18n.t('setting.Security'),
         icon: 'shield',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_security']
       }
     },
     {
@@ -197,7 +170,7 @@ export default {
       meta: {
         title: i18n.t('setting.Cleaning'),
         icon: 'hourglass-2',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_clean']
       }
     },
     {
@@ -207,7 +180,7 @@ export default {
       meta: {
         title: i18n.t('xpack.InterfaceSettings'),
         icon: 'laptop',
-        permissions: ['xpack.view_interface']
+        permissions: ['xpack.change_interface']
       }
     },
     {
@@ -215,6 +188,8 @@ export default {
       component: empty,
       redirect: '',
       meta: {
+        app: 'orgs',
+        resource: 'organization',
         permissions: ['orgs.view_organization'],
         licenseRequired: true
       },
@@ -270,7 +245,7 @@ export default {
       meta: {
         title: i18n.t('setting.Other'),
         icon: 'map-signs',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_other']
       }
     },
     {
@@ -280,7 +255,7 @@ export default {
       meta: {
         title: i18n.t('setting.License'),
         icon: 'diamond',
-        permissions: ['settings.view_setting']
+        permissions: ['settings.change_license']
       }
     }
   ]

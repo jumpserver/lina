@@ -35,7 +35,7 @@ export default {
         {
           title: this.$t('route.Terminal'),
           name: 'TerminalList',
-          hidden: () => !this.$hasPerm('terminal.view_command')
+          hidden: () => !this.$hasPerm('terminal.view_terminal')
         },
         {
           title: this.$t('sessions.replayStorage'),
