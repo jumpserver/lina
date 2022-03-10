@@ -43,6 +43,9 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/users/',
+        permissions: {
+          resource: 'user'
+        },
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
           'groups_display', 'system_roles', 'org_roles',
@@ -108,23 +111,13 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canClone: true,
               hasDelete: hasDelete,
-              canUpdate: function({ row }) {
-                return row['can_update']
-              },
-              canDelete: function({ row }) {
-                return row['can_delete']
-              },
               extraActions: [
                 {
                   title: this.$t('users.Remove'),
                   name: 'remove',
                   type: 'warning',
                   has: hasRemove,
-                  can: ({ row }) => {
-                    return row.can_delete
-                  },
                   callback: this.removeUserFromOrg
                 }
               ]
@@ -134,7 +127,6 @@ export default {
       },
       headerActions: {
         hasBulkDelete: hasDelete,
-        canCreate: true,
         extraActions: [
           {
             name: this.$t('users.InviteUser'),
@@ -142,6 +134,7 @@ export default {
             has: () => {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
+            can: () => vm.$hasPerm('users.invite_user'),
             callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
           }
         ],
@@ -151,7 +144,7 @@ export default {
             name: 'removeSelected',
             has: hasRemove,
             can({ selectedRows }) {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 || vm.$hasPerm('users.delete_user')
             },
             callback: this.bulkRemoveCallback.bind(this)
           },
