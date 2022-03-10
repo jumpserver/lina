@@ -14,7 +14,7 @@ export default {
     title: i18n.t('common.nav.Audits'),
     icon: 'el-icon-s-claim',
     showNavSwitcher: true,
-    permissions: ['rbac.view_audit'],
+    permissions: ['rbac.view_auditview'],
     view: 'audit'
   },
   children: [
@@ -25,9 +25,7 @@ export default {
       meta: {
         icon: 'dashboard',
         title: i18n.t('route.Dashboard'),
-        permissions: [],
-        resource: 'common',
-        app: 'common'
+        permissions: []
       }
     },
     {

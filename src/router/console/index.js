@@ -21,7 +21,7 @@ export default {
     view: 'console',
     type: 'view',
     showNavSwitcher: true,
-    permissions: ['rbac.view_console']
+    permissions: ['rbac.view_adminview']
   },
   children: [
     {
