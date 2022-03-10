@@ -113,7 +113,7 @@ export default {
         return result
       }, {})
       const perms = Object.assign(defaultPermissions, permissions)
-      this.$log.debug('Permissions: ', perms)
+      // this.$log.debug('Permissions: ', perms)
       return perms
     }
   },

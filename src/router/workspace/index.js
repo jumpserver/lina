@@ -24,7 +24,7 @@ export default {
       name: 'MyHome',
       component: () => import('@/views/myhome'),
       meta: {
-        icon: 'dashboard',
+        icon: 'area-chart',
         title: i18n.t('route.Overview'),
         permissions: []
       }

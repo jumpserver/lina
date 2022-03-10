@@ -7,7 +7,6 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import { getCurrentOrg } from '@/api/orgs'
-import { getPropView, hasRouteViewPerm, isSameView } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -108,21 +107,6 @@ export async function checkUserFirstLogin({ to, from, next }) {
   }
 }
 
-export async function changeCurrentViewIfNeed({ to, from, next }) {
-  if (!to.path || isSameView(to, from)) {
-    return
-  }
-  const hasPerm = hasRouteViewPerm(to)
-  Vue.$log.debug('Change current view if need: ', hasPerm)
-  if (hasPerm) {
-    Vue.$log.debug('Has current view perm')
-    return
-  }
-  const view = getPropView()
-  Vue.$log.debug('Get prop view and goto: ', view)
-  next(`/${view}`)
-}
-
 export async function startup({ to, from, next }) {
   if (initial) {
     return true
@@ -133,9 +117,8 @@ export async function startup({ to, from, next }) {
   await getPublicSetting({ to, from, next })
   // await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
-  await changeCurrentOrgIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })
-  await changeCurrentViewIfNeed({ to, from, next })
+  await changeCurrentOrgIfNeed({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
 }

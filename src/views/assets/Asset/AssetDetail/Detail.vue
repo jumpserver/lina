@@ -6,7 +6,7 @@
     <el-col :span="10">
       <QuickActions type="primary" :actions="quickActions" />
       <RelationCard ref="NodeRelation" v-perms="'assets.change_asset'" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
-      <LabelCard type="warning" style="margin-top: 15px" v-bind="labelConfig" />
+      <LabelCard v-perms="'assets.view_label'" type="warning" style="margin-top: 15px" v-bind="labelConfig" />
     </el-col>
   </el-row>
 </template>
