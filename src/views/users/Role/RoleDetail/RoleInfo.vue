@@ -73,9 +73,9 @@ export default {
         }
       },
       viewPermMapper: [
-        // ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
-        // ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
-        // ['view_workspace', ['rbac.view_workspace']]
+        ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
+        ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
+        ['view_workspace', ['rbac.view_workspace']]
       ]
     }
   },
