@@ -29,7 +29,9 @@ export default {
           },
           {
             title: this.$t('xpack.Cloud.AccountList'),
-            name: 'AccountList'
+            name: 'AccountList',
+            hidden: () => !this.$hasPerm('xpack.view_account')
+
           }
         ]
       }
