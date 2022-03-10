@@ -43,7 +43,7 @@ export default {
           attrs: {
             label: this.$t('common.Test'),
             model: this.object.is_active,
-            disabled: !vm.$hasPerm('assets.update_asset')
+            disabled: !vm.$hasPerm('assets.change_asset')
           },
           callbacks: {
             change: function(val) {
