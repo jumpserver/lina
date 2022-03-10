@@ -41,28 +41,28 @@ export default {
             title: this.$t('assets.AssetList'),
             name: 'AssetList',
             hidden: () => {
-              return !vm.systemUser['is_asset_protocol']
+              return !vm.systemUser['is_asset_protocol'] || !vm.$hasPerm('assets.view_systemuserasset')
             }
           },
           {
             title: this.$t('assets.AccountList'),
             name: 'AccountList',
             hidden: () => {
-              return !vm.systemUser['is_asset_protocol']
+              return !vm.systemUser['is_asset_protocol'] || !vm.$hasPerm('applications.view_account')
             }
           },
           {
             title: this.$t('assets.AppList'),
             name: 'AppList',
             hidden: () => {
-              return vm.systemUser['is_asset_protocol']
+              return !vm.systemUser['is_asset_protocol']
             }
           },
           {
             title: this.$t('assets.AccountList'),
             name: 'AppAccountList',
             hidden: () => {
-              return vm.systemUser['is_asset_protocol']
+              return vm.systemUser['is_asset_protocol'] || !vm.$hasPerm('assets.view_authbook')
             }
           },
           {
