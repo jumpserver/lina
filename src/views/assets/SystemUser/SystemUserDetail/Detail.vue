@@ -36,6 +36,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       quickActions: [
         {
@@ -44,7 +45,8 @@ export default {
           attrs: {
             label: this.$t('assets.AutoPush'),
             model: this.object.auto_push,
-            disabled: ['rdp', 'ssh'].indexOf(this.object.protocol) === -1 || this.object.type === 'admin'
+            disabled: (['rdp', 'ssh'].indexOf(this.object.protocol) === -1 || this.object.type === 'admin') ||
+              !vm.$hasPerm('assets.change_systemuser')
           },
           callbacks: {
             change: function(val) {
