@@ -73,9 +73,9 @@ export default {
         }
       },
       viewPermMapper: [
-        ['view_console', ['rbac.view_adminview', 'rbac.view_resourcestatistics']],
-        ['view_audit', ['rbac.view_auditview', 'rbac.view_resourcestatistics']],
-        ['view_workspace', ['rbac.view_userview']]
+        ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
+        ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
+        ['view_workspace', ['rbac.view_workspace']]
       ]
     }
   },
@@ -209,7 +209,15 @@ export default {
         const ztree = this.$refs.tree.zTree
         const checkedNodes = ztree.getCheckedNodes()
         const permNodes = checkedNodes.filter(node => !node.isParent)
-        const permIds = permNodes.map(node => node.id)
+        const permIds = []
+        for (const permNode of permNodes) {
+          let id = permNode.id
+          if (id.indexOf('#') !== -1) {
+            id = id.split('#')[1]
+          }
+          permIds.push((id))
+        }
+        // const permIds = permNodes.map(node => node.id)
 
         const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
         const data = {

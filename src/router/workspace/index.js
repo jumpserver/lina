@@ -15,7 +15,7 @@ export default {
     icon: 'el-icon-user-solid',
     showNavSwitcher: true,
     showOrganization: true,
-    permissions: ['rbac.view_userview']
+    permissions: ['rbac.view_workspace']
   },
   children: [
     // 404 page must be placed at the end !!!
