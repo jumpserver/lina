@@ -131,7 +131,6 @@ export function getRouteViewRequirePerms(route) {
 }
 
 export function hasRouteViewPerm(route) {
-  console.log('Route: ', route)
   if (route.name) {
     return hasPermission(route.meta.permissions)
   }
