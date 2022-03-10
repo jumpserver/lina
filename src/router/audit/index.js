@@ -14,7 +14,7 @@ export default {
     title: i18n.t('common.nav.Audits'),
     icon: 'el-icon-s-claim',
     showNavSwitcher: true,
-    permissions: ['rbac.view_auditview'],
+    permissions: ['rbac.view_audit'],
     view: 'audit'
   },
   children: [
