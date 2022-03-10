@@ -30,7 +30,7 @@ export default {
           {
             title: this.$t('assets.AdminUser'),
             name: 'AdminUserList',
-            hidden: () => !this.$hasPerm('assets.view_domain')
+            hidden: () => !this.$hasPerm('assets.view_systemuser')
           }
         ]
       }
