@@ -209,16 +209,7 @@ export default {
         const ztree = this.$refs.tree.zTree
         const checkedNodes = ztree.getCheckedNodes()
         const permNodes = checkedNodes.filter(node => !node.isParent)
-        const permIds = []
-        for (const permNode of permNodes) {
-          let id = permNode.id
-          if (id.indexOf('#') !== -1) {
-            id = id.split('#')[1]
-          }
-          permIds.push(id)
-        }
-        // const permIds = permNodes.map(node => node.id)
-
+        const permIds = permNodes.map(node => node.id)
         const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
         const data = {
           permissions: permIds
