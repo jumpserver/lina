@@ -187,7 +187,9 @@ export default {
             name: 'DeactiveSelected',
             title: this.$t('assets.DeactiveSelected'),
             type: 'primary',
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.hasPerm('assets.change_asset')
+            },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map((v) => {
                 return { pk: v.id, is_active: false }
@@ -203,7 +205,9 @@ export default {
             name: 'ActiveSelected',
             title: this.$t('assets.ActiveSelected'),
             type: 'primary',
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.hasPerm('assets.change_asset')
+            },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map((v) => {
                 return { pk: v.id, is_active: true }
@@ -218,7 +222,11 @@ export default {
           {
             name: 'updateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot,
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                  !vm.currentOrgIsRoot &&
+                  vm.hasPerm('assets.change_asset')
+            },
             callback: ({ selectedRows }) => {
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
               vm.updateSelectedDialogSetting.visible = true
@@ -231,7 +239,9 @@ export default {
               if (!this.$route.query.node) {
                 return false
               }
-              return selectedRows.length > 0 && !this.$store.getters.currentOrgIsRoot
+              return selectedRows.length > 0 &&
+                  !vm.currentOrgIsRoot &&
+                  vm.hasPerm('assets.change_asset')
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []
@@ -275,9 +285,9 @@ export default {
   mounted() {
     this.decorateRMenu()
     this.treeSetting.hasRightMenu = !this.currentOrgIsRoot
-    this.treeSetting.showCreate = this.hasPerm('assets.add_node')
-    this.treeSetting.showUpdate = this.hasPerm('assets.change_node')
-    this.treeSetting.showDelete = this.hasPerm('assets.delete_node')
+    this.treeSetting.showCreate = this.$hasPerm('assets.add_node')
+    this.treeSetting.showUpdate = this.$hasPerm('assets.change_node')
+    this.treeSetting.showDelete = this.$hasPerm('assets.delete_node')
   },
   methods: {
     decorateRMenu() {
