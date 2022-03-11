@@ -25,7 +25,7 @@ export default {
       meta: {
         title: i18n.t('setting.Basic'),
         icon: 'gear',
-        permissions: ['settings.change_basic']
+        permissions: ['settings.view_setting']
       }
     },
     {
