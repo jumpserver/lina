@@ -19,6 +19,7 @@ export default {
   },
   data() {
     const scopeRole = this.scope + 'role'
+    const vm = this
     return {
       loading: true,
       scopeRole: scopeRole,
@@ -72,6 +73,15 @@ export default {
               },
               canClone: ({ row }) => {
                 return this.$hasPerm(`rbac.add_${row.scope}role`)
+              },
+              onClone: ({ row }) => {
+                return vm.$router.push({
+                  name: 'RoleCreate',
+                  query: {
+                    scope: this.scope,
+                    clone_from: row.id
+                  }
+                })
               }
             }
           }
