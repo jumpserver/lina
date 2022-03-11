@@ -12,7 +12,8 @@ export default {
     view: 'tickets',
     type: 'view',
     showNavSwitcher: false,
-    permissions: []
+    resource: 'ticket',
+    permissions: ['tickets.view_ticket']
   },
   children: [
     {
@@ -22,10 +23,7 @@ export default {
       meta: {
         title: i18n.t('route.Tickets'),
         icon: 'file-text-o',
-        showOrganization: false,
-        permissions: [],
-        resource: 'terminal',
-        app: 'terminal'
+        showOrganization: false
       },
       children: [
         {
@@ -35,9 +33,7 @@ export default {
           meta: {
             title: i18n.t('route.Tickets'),
             icon: 'file-text-o',
-            permissions: [],
-            resource: 'terminal',
-            app: 'terminal'
+            permissions: []
           }
         },
         {
