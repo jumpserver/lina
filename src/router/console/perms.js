@@ -40,27 +40,31 @@ export default [
     ]
   },
   {
-    path: 'app-permissions',
+    path: 'application-permissions',
     component: empty,
+    redirect: '',
     meta: {
       title: i18n.t('route.ApplicationPermission'),
-      permissions: ['perms.view_applicationpermission'],
       resource: 'applicationpermission'
     },
-    redirect: '',
     children: [
       {
         path: '',
         name: 'ApplicationPermissionList',
         component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionList'),
-        meta: { title: i18n.t('route.ApplicationPermission'), permissions: ['perms.view_applicationpermission'] }
+        meta: {
+          title: i18n.t('route.ApplicationPermission')
+        }
       },
       {
         path: 'create',
         component: () => import('@/views/perms/ApplicationPermission/ApplicationPermissionCreateUpdate'),
         name: 'ApplicationPermissionCreate',
         hidden: true,
-        meta: { title: i18n.t('route.ApplicationPermissionCreate'), action: 'create' }
+        meta: {
+          title: i18n.t('route.ApplicationPermissionCreate'),
+          action: 'create'
+        }
       },
       {
         path: ':id',
