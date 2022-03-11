@@ -61,7 +61,7 @@ export default {
             component: Select2,
             el: {
               ajax: {
-                url: '/api/v1/rbac/roles/?scope=org',
+                url: '/api/v1/rbac/org-roles/',
                 transformOption: (item) => {
                   return { label: `${item.display_name}`, value: item.id }
                 }
