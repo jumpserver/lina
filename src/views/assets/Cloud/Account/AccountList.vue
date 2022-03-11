@@ -44,6 +44,7 @@ export default {
                 {
                   name: 'TestConnection',
                   title: this.$t('assets.TestConnection'),
+                  can: () => vm.$hasPerm('xpack.test_account'),
                   callback: function(val) {
                     this.$axios.get(`/api/v1/xpack/cloud/accounts/${val.row.id}/test-connective/`).then(res => {
                       this.$message.success(this.$t('common.TestSuccessMsg'))
