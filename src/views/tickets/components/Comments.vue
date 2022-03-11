@@ -14,7 +14,7 @@
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
             <pre style="padding-top: 10px; overflow: auto">
-{{ item.body }}
+              {{ item.body }}
             </pre>
           </div>
         </div>
