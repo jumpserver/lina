@@ -82,8 +82,7 @@ export default {
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
         ],
-        'assets.view_asset': ['assets.view_node'],
-        'assets': ['assets.domain']
+        'assets.view_asset': ['assets.view_node']
       }
     }
   },
