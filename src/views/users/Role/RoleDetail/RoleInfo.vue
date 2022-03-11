@@ -60,22 +60,19 @@ export default {
           enable: false
         },
         callback: {
-          onCheck(event, treeId, treeNode) {
+          onCheck: _.debounce((event, treeId, treeNode) => {
             // 选择后，更新按钮可用
             vm.$nextTick(() => {
               vm.isDisabled = false
             })
             vm.checkActionDeps(treeNode)
-            vm.checkSpecDeps(treeNode, treeNode)
-          },
-          beforeCheck(treeId, treeNode) {
-            // vm.checkSpecDeps(treeNode)
+            vm.checkSpecDeps()
+          }, 200),
+          beforeCheck: (treeId, treeNode) => {
             return true
           }
         }
       },
-      viewPermMapper: [
-      ],
       nodesDeps: {
         'view_console': ['rbac.view_console'],
         'view_audit': ['rbac.view_audit'],
@@ -84,7 +81,9 @@ export default {
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
-        ]
+        ],
+        'assets.view_asset': ['assets.view_node'],
+        'assets': ['assets.domain']
       }
     }
   },
@@ -199,27 +198,18 @@ export default {
         ztree.checkNode(viewNode, true)
       }
     },
-    checkSpecDeps(node, by) {
-      this.$log.debug('Check node deps: ', node.name, node.title)
-      const id = node.title
-      const deps = this.nodesDeps[id]
-      const parent = node.getParentNode()
+    checkSpecDeps() {
+      const ztree = this.$refs.tree.zTree
+      const depsId = ztree.getCheckedNodes().filter(i => {
+        return !!this.nodesDeps[i.title]
+      }).reduce((result, v) => {
+        return [...result, ...this.nodesDeps[v.title]]
+      }, [])
+      this.$log.debug('Select nodes should try: ', depsId)
 
-      if (parent) {
-        this.$log.debug('Not has parent, exit check')
-        this.checkSpecDeps(parent, by)
-      }
-
-      if (!deps) {
-        return
-      }
-      const nodeStatus = node.getCheckStatus()
-      const checked = nodeStatus.checked || nodeStatus.half
-      for (const i of deps) {
+      for (const i of depsId) {
         const depNode = this.ztree.getNodeByParam('title', i)
-        if (checked) {
-          this.ztree.checkNode(depNode, true)
-        }
+        this.ztree.checkNode(depNode, true)
       }
     },
 
