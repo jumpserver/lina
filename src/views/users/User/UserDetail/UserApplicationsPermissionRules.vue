@@ -16,6 +16,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: `/api/v1/perms/application-permissions/?user_id=${this.object.id}&draw=1`,
@@ -49,6 +50,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canUpdate: vm.$hasPerm('perms.change_applicationpermission'),
               onUpdate: ({ row, col, cellValue }) => {
                 const route = {
                   name: 'ApplicationPermissionUpdate',
@@ -57,11 +59,13 @@ export default {
                 }
                 this.$router.push(route)
               },
+              canDelete: vm.$hasPerm('perms.delete_applicationpermission'),
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/perms/application-permissions/${id}/?user_id=${this.object.id}&draw=1`
                 return this.$axios.delete(url)
               },
+              canClone: vm.$hasPerm('perms.add_applicationpermission'),
               onClone: ({ row }) => {
                 const route = {
                   name: 'ApplicationPermissionCreate',
