@@ -43,6 +43,7 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
+                  can: () => vm.$hasPerm('xpack.change_syncinstancetask'),
                   callback: function(data) {
                     this.$axios.get(`/api/v1/xpack/cloud/sync-instance-tasks/${data.row.id}/run/`).then(res => {
                       openTaskPage(res['task'])
