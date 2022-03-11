@@ -65,21 +65,33 @@ export default {
             vm.$nextTick(() => {
               vm.isDisabled = false
             })
-            vm.checkDeps(event, treeNode)
-            vm.checkViewNodeIfNeed()
+            vm.checkActionDeps(treeNode)
+            vm.checkSpecDeps(treeNode, treeNode)
           },
-          onSelected() {
+          beforeCheck(treeId, treeNode) {
+            // vm.checkSpecDeps(treeNode)
+            return true
           }
         }
       },
       viewPermMapper: [
-        ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
-        ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
-        ['view_workspace', ['rbac.view_workspace']]
-      ]
+      ],
+      nodesDeps: {
+        'view_console': ['rbac.view_console'],
+        'view_audit': ['rbac.view_audit'],
+        'view_workspace': ['rbac.view_workspace'],
+        'view_setting': ['settings.view_setting', 'settings.change_setting'],
+        'users.invite_user': [
+          'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
+          'rbac.view_orgrolebinding', 'rbac.view_orgrole'
+        ]
+      }
     }
   },
   computed: {
+    ztree() {
+      return this.$refs.tree.zTree
+    },
     detailItems() {
       return [
         {
@@ -136,7 +148,7 @@ export default {
       }
       return { action, resource, app }
     },
-    checkDeps(evt, node) {
+    checkActionDeps(node) {
       if (node.isParent) {
         this.$log.debug('Is parent')
         return
@@ -187,39 +199,44 @@ export default {
         ztree.checkNode(viewNode, true)
       }
     },
-    checkViewNodeIfNeed() {
-      const ztree = this.$refs.tree.zTree
-      for (const [viewId, permIds] of this.viewPermMapper) {
-        const viewNode = ztree.getNodeByParam('id', viewId)
-        const permNodes = permIds.map(i => ztree.getNodeByParam('title', i))
-        if (!viewNode || permNodes.length === 0) {
-          this.$log.debug('Not view node or perms nodes length 0')
-          continue
-        }
-        const nodeStatus = viewNode.getCheckStatus()
-        const viewStatus = nodeStatus.checked || nodeStatus.half
-        for (const permNode of permNodes) {
-          ztree.checkNode(permNode, viewStatus)
+    checkSpecDeps(node, by) {
+      this.$log.debug('Check node deps: ', node.name, node.title)
+      const id = node.title
+      const deps = this.nodesDeps[id]
+      const parent = node.getParentNode()
+
+      if (parent) {
+        this.$log.debug('Not has parent, exit check')
+        this.checkSpecDeps(parent, by)
+      }
+
+      if (!deps) {
+        return
+      }
+      const nodeStatus = node.getCheckStatus()
+      const checked = nodeStatus.checked || nodeStatus.half
+      for (const i of deps) {
+        const depNode = this.ztree.getNodeByParam('title', i)
+        if (checked) {
+          this.ztree.checkNode(depNode, true)
         }
       }
-      return Promise.resolve(true)
     },
+
     updatePermissions() {
-      this.checkViewNodeIfNeed().then(() => {
-        const ztree = this.$refs.tree.zTree
-        const checkedNodes = ztree.getCheckedNodes()
-        const permNodes = checkedNodes.filter(node => !node.isParent)
-        const permIds = permNodes.map(node => node.id)
-        const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
-        const data = {
-          permissions: permIds
-        }
-        this.$axios.patch(roleDetailUrl, data).then(() => {
-          this.$message.success(this.$t('common.updateSuccessMsg'))
-        }).catch(error => {
-          this.$message.error(this.$t('common.updateErrorMsg') + error)
-          this.$log.error(error)
-        })
+      const ztree = this.$refs.tree.zTree
+      const checkedNodes = ztree.getCheckedNodes()
+      const permNodes = checkedNodes.filter(node => !node.isParent)
+      const permIds = permNodes.map(node => node.id)
+      const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
+      const data = {
+        permissions: permIds
+      }
+      this.$axios.patch(roleDetailUrl, data).then(() => {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg') + error)
+        this.$log.error(error)
       })
     }
   }
