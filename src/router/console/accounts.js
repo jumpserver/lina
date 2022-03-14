@@ -60,7 +60,8 @@ export default [
         component: () => import('@/views/accounts/GatheredUser/index'),
         name: 'GatherUserListIndex',
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUser')
+          title: i18n.t('xpack.GatherUser.GatherUser'),
+          permissions: ['assets.view_gathereduser|xpack.view_gatherusertask']
         }
       },
       {

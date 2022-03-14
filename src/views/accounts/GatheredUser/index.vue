@@ -24,11 +24,13 @@ export default {
         submenu: [
           {
             title: this.$t('xpack.GatherUser.GatherUserList'),
-            name: 'GatheredUserList'
+            name: 'GatheredUserList',
+            hidden: !this.$hasPerm('assets.view_gathereduser')
           },
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskList'),
-            name: 'TaskList'
+            name: 'TaskList',
+            hidden: !this.$hasPerm('xpack.view_gatherusertask')
           }
         ]
       }
