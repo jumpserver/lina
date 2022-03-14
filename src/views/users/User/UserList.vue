@@ -143,27 +143,27 @@ export default {
             title: this.$t('common.removeSelected'),
             name: 'removeSelected',
             has: hasRemove,
-            can({ selectedRows }) {
-              return selectedRows.length > 0 || vm.$hasPerm('users.delete_user')
-            },
+            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: this.bulkRemoveCallback.bind(this)
           },
           {
             name: 'disableSelected',
             title: this.$t('common.disableSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'disable')
           },
           {
             name: 'activateSelected',
             title: this.$t('common.activateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
           },
           {
-            name: 'updateSelected',
+            name: 'actionUpdateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 && !vm.currentOrgIsRoot,
+            can: ({ selectedRows }) => selectedRows.length > 0 &&
+              !vm.currentOrgIsRoot &&
+              vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => {
               vm.updateSelectedDialogSetting.visible = true
               vm.updateSelectedDialogSetting.selectedRows = selectedRows

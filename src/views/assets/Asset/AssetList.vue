@@ -220,7 +220,7 @@ export default {
             }.bind(this)
           },
           {
-            name: 'updateSelected',
+            name: 'actionUpdateSelected',
             title: this.$t('common.updateSelected'),
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
