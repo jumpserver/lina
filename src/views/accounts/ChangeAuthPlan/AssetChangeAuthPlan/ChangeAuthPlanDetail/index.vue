@@ -27,15 +27,18 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'ChangeAuthPlanInfo'
+            name: 'ChangeAuthPlanInfo',
+            hidden: () => !this.$hasPerm('xpack.view_changeauthplan')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
-            name: 'ChangeAuthPlanAsset'
+            name: 'ChangeAuthPlanAsset',
+            hidden: () => !this.$hasPerm('xpack.change_changeauthplan')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'ChangeAuthPlanExecutionList'
+            name: 'ChangeAuthPlanExecutionList',
+            hidden: () => !this.$hasPerm('xpack.view_changeauthplanexecution')
           }
         ]
       }

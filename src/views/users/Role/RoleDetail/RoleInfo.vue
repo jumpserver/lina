@@ -110,7 +110,9 @@ export default {
         ],
         'xpack.view_syncinstancetask': ['xpack.view_account'],
         'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
-        'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask']
+        'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask'],
+        'xpack.view_changeauthplantask': ['xpack.view_changeauthplan'],
+        'xpack.view_changeauthplanexecution': ['xpack.view_changeauthplan']
       }
     }
   },
