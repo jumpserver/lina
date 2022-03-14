@@ -33,7 +33,7 @@ export default {
     return {
       tableConfig: {
         name: 'AppList',
-        url: `/api/v1/applications/accounts/?systemuser=${this.object.id}`,
+        url: `/api/v1/applications/system-users-apps-relations/?systemuser=${this.object.id}`,
         columns: ['app_display', 'actions'],
         columnsMeta: {
           app_display: {
@@ -68,7 +68,7 @@ export default {
                   type: 'danger',
                   can: !this.$store.getters.currentOrgIsRoot,
                   callback: (val) => {
-                    this.$axios.delete(`/api/v1/applications/accounts/${val.row.id}/`).then(() => {
+                    this.$axios.delete(`/api/v1/applications/system-users-apps-relations/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
                     })
@@ -98,7 +98,7 @@ export default {
         showHasObjects: false,
         performAdd: (items) => {
           const objectId = this.object.id
-          const relationUrl = `/api/v1/applications/accounts/`
+          const relationUrl = `/api/v1/applications/system-users-apps-relations/`
           const appsId = items.map(v => v.value)
           const data = []
           for (const appId of appsId) {
