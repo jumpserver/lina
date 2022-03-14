@@ -79,6 +79,7 @@ export default {
         'view_workspace': ['rbac.view_workspace'],
         'view_setting': ['settings.view_setting', 'settings.change_setting'],
         'cloud_import': ['assets.view_asset'],
+        'terminal_node': ['settings.change_terminal'],
         'rbac.orgrolebinding': ['rbac.view_orgrole'],
         'rbac.systemrolebinding': ['rbac.view_systemrole'],
         'users.invite_user': [
