@@ -130,7 +130,7 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: false,
         hasImport: false,
-        hasExport: true,
+        hasExport: this.$hasPerm('applications.view_applicationaccountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true

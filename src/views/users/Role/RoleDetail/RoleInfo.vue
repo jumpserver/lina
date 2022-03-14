@@ -79,6 +79,7 @@ export default {
         'view_workspace': ['rbac.view_workspace'],
         'view_setting': ['settings.view_setting', 'settings.change_setting'],
         'cloud_import': ['assets.view_asset'],
+        'terminal_node': ['settings.change_terminal'],
         'rbac.orgrolebinding': ['rbac.view_orgrole'],
         'rbac.systemrolebinding': ['rbac.view_systemrole'],
         'users.invite_user': [
@@ -107,7 +108,9 @@ export default {
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
         ],
-        'terminal_node': ['settings.change_terminal']
+        'xpack.view_syncinstancetask': ['xpack.view_account'],
+        'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
+        'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask']
       }
     }
   },
