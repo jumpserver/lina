@@ -41,7 +41,7 @@ export default {
           {
             title: this.$t('users.tabs.grantedAssets'),
             name: 'UserGrantedAssets',
-            hidden: () => !vm.$hasPerm('perms.view_myassets')
+            hidden: () => !vm.$hasPerm('perms.view_userassets')
           },
           {
             title: this.$t('users.tabs.assetPermissionRules'),

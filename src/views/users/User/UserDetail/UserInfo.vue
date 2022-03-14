@@ -229,9 +229,9 @@ export default {
         {
           key: this.$t('users.Role'),
           formatter: (item, val) => {
-            const org_roles_display = this.object.org_roles_display
-            const system_roles_display = this.object.system_roles_display
-            const roles_display = org_roles_display.split(', ').concat(system_roles_display.split(', '))
+            const org_roles_display = this.object.org_roles_display || ''
+            const system_roles_display = this.object.system_roles_display || ''
+            const roles_display = org_roles_display?.split(', ').concat(system_roles_display?.split(', '))
             return <span> { roles_display.join(' | ') } </span>
           }
         },
