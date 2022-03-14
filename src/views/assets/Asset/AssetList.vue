@@ -152,6 +152,7 @@ export default {
                   name: 'View',
                   title: this.$t(`common.UpdateAssetDetail`),
                   type: 'primary',
+                  can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
                   callback: function({ cellValue, tableData, row }) {
                     return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: row.id }})
                   }
