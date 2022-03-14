@@ -78,25 +78,22 @@ export default {
         'view_audit': ['rbac.view_audit'],
         'view_workspace': ['rbac.view_workspace'],
         'view_setting': ['settings.view_setting', 'settings.change_setting'],
+        'cloud_import': ['assets.view_asset'],
+        'rbac.orgrolebinding': ['rbac.view_orgrole'],
+        'rbac.systemrolebinding': ['rbac.view_systemrole'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
         ],
+        'acls.loginacl': ['users.view_user'],
         'assets.view_asset': ['assets.view_node'],
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
-        'cloud_import': ['assets.view_asset'],
-        'xpack.add_syncinstancetask': [
-          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
-          'xpack.view_account'
-        ],
+        'assets.view_authbook': ['assets.view_node'],
         'applications.add_application': ['assets.view_asset'],
+        'applications.view_account': ['applications.view_application'],
         'perms.view_assetpermission': ['assets.view_node'],
         'perms.view_applicationpermission': ['applications.view_application'],
-        'acls.loginacl': ['users.view_user'],
-        'rbac.orgrolebinding': ['rbac.view_orgrole'],
-        'rbac.systemrolebinding': ['rbac.view_systemrole'],
-        'settings.change_systemmsgsubscription': ['users.view_user'],
         'perms.assetpermission': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'users.view_user', 'users.view_usergroup'
@@ -105,7 +102,11 @@ export default {
           'applications.view_application', 'assets.view_systemuser',
           'users.view_user', 'users.view_usergroup'
         ],
-        'assets.view_authbook': ['assets.view_node']
+        'settings.change_systemmsgsubscription': ['users.view_user'],
+        'xpack.add_syncinstancetask': [
+          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
+          'xpack.view_account'
+        ]
       }
     }
   },

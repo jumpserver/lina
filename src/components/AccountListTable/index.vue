@@ -70,7 +70,7 @@ export default {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
+            formatter: this.$hasPerm('assets.view_asset') ? DetailFormatter : (row) => row.hostname,
             formatterArgs: {
               getRoute({ row }) {
                 return {
