@@ -28,14 +28,22 @@ export default [
     component: () => import('@/views/ops/TaskDetail/AdhocDetail'),
     name: 'AdhocDetail',
     hidden: true,
-    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/console/ops/tasks' }
+    meta: {
+      title: i18n.t('route.TaskDetail'),
+      permissions: ['ops.view_adhoc'],
+      activeMenu: '/ops/tasks'
+    }
   },
   {
     path: 'executions/:id',
     component: () => import('@/views/ops/TaskDetail/HistoryExecutionDetail'),
     name: 'HistoryExecutionDetail',
     hidden: true,
-    meta: { title: i18n.t('route.TaskDetail'), activeMenu: '/console/ops/tasks' }
+    meta: {
+      title: i18n.t('route.TaskDetail'),
+      permissions: ['ops.view_adhocexecution'],
+      activeMenu: '/console/ops/tasks'
+    }
   },
   {
     path: 'command-executions/create',
@@ -43,6 +51,7 @@ export default [
     component: () => import('@/views/ops/CommandExecution'),
     meta: {
       title: i18n.t('route.BatchCommand'),
+      permissions: ['ops.add_adhocexecution'],
       hidden: ({ settings }) => !settings['SECURITY_COMMAND_EXECUTION']
     }
   },
