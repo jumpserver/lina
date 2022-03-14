@@ -95,7 +95,16 @@ export default {
         'perms.view_applicationpermission': ['applications.view_application'],
         'acls.loginacl': ['users.view_user'],
         'rbac.orgrolebinding': ['rbac.view_orgrole'],
-        'rbac.systemrolebinding': ['rbac.view_systemrole']
+        'rbac.systemrolebinding': ['rbac.view_systemrole'],
+        'settings.change_systemmsgsubscription': ['users.view_user'],
+        'perms.assetpermission': [
+          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
+          'users.view_user', 'users.view_usergroup'
+        ],
+        'perms.applicationpermission': [
+          'applications.view_application', 'assets.view_systemuser',
+          'users.view_user', 'users.view_usergroup'
+        ]
       }
     }
   },
