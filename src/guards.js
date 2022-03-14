@@ -37,7 +37,6 @@ async function changeCurrentViewIfNeed({ to, from, next }) {
   const hasPerm = hasRouteViewPerm(to)
   Vue.$log.debug('Change has current view, has perm: ', hasPerm)
   if (hasPerm) {
-    Vue.$log.debug('Has current view perm')
     return
   }
   const view = getPropView()

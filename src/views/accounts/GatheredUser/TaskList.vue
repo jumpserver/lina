@@ -18,6 +18,10 @@ export default {
       tableConfig: {
         name: 'TaskListTable',
         url: '/api/v1/xpack/gathered-user/tasks/',
+        permissions: {
+          app: 'xpack',
+          resource: 'gatherusertask'
+        },
         columns: [
           'name', 'nodes', 'is_periodic', 'periodic_display', 'executed_times', 'actions'
         ],
@@ -69,6 +73,7 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
+                  can: vm.$hasPerm('xpack.change_gatherusertask'),
                   callback: function(data) {
                     this.$axios.post(
                       `/api/v1/xpack/gathered-user/task-executions/`,

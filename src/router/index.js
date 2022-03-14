@@ -69,11 +69,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-  },
   ...commonRoutes
 ]
 

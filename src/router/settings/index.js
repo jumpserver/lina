@@ -55,7 +55,7 @@ export default {
       meta: {
         title: i18n.t('setting.MessageSub'),
         icon: 'bell-o',
-        permissions: ['notifications.change_systemmsgsubscription']
+        permissions: ['settings.change_systemmsgsubscription']
       }
     },
     {
