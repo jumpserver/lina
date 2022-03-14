@@ -1172,6 +1172,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "InviteSuccess": "邀请成功",
     "FileEncryptionPassword": "文件加密密码",
     "RoleUsers": "授权用户",
     "RoleInfo": "角色信息",
