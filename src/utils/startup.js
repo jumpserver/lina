@@ -81,10 +81,16 @@ export async function generatePageRoutes({ to, from, next }) {
   try {
     // try get user profile
     // generate accessible routes map based on roles
-    const accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
+    let accessRoutes = await store.dispatch('permission/generateRoutes', { to, from })
 
+    // Incorrect route, jump to 404
+    accessRoutes = [...accessRoutes, {
+      path: '*',
+      redirect: '/404',
+      hidden: true
+    }]
     // dynamically add accessible routes
-    Vue.$log.debug('All routes: ', accessRoutes)
+    Vue.$log.debug('All routes:', accessRoutes)
     router.addRoutes(accessRoutes)
 
     await store.dispatch('permission/generateViewRoutes', { to, from })
