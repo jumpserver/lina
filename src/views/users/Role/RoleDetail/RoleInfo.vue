@@ -104,7 +104,8 @@ export default {
         'perms.applicationpermission': [
           'applications.view_application', 'assets.view_systemuser',
           'users.view_user', 'users.view_usergroup'
-        ]
+        ],
+        'assets.view_authbook': ['assets.view_node']
       }
     }
   },
