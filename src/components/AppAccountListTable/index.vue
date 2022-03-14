@@ -82,7 +82,7 @@ export default {
           },
           systemuser: {
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
+            formatter: this.$hasPerm('assets.view_systemuser') ? DetailFormatter : (row) => row.systemuser_display,
             formatterArgs: {
               getTitle({ row }) {
                 return row.systemuser_display
@@ -107,6 +107,7 @@ export default {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
+                  can: this.$hasPerm('applications.view_applicationaccountsecret'),
                   callback: function({ row }) {
                     this.account = row
                     this.showViewSecretDialog = true

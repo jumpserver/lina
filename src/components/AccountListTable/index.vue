@@ -53,6 +53,10 @@ export default {
       account: {},
       tableConfig: {
         url: this.url,
+        permissions: {
+          app: 'assets',
+          resource: 'authbook'
+        },
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
           'systemuser', 'date_created', 'date_updated', 'actions'
@@ -66,7 +70,7 @@ export default {
             prop: 'hostname',
             label: this.$t('assets.Hostname'),
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
+            formatter: this.$hasPerm('assets.view_asset') ? DetailFormatter : (row) => row.hostname,
             formatterArgs: {
               getRoute({ row }) {
                 return {
@@ -100,6 +104,7 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
+                  can: this.$hasPerm('assets.view_assetaccountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
@@ -109,6 +114,7 @@ export default {
                 {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
+                  can: this.$hasPerm('assets.delete_authbook'),
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
@@ -120,6 +126,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
+                  can: this.$hasPerm('assets.test_aauthbook'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/accounts/${row.id}/verify/`,
@@ -132,7 +139,7 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
-                  can: !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('assets.change_authbook') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
                     vm.showUpdateSecretDialog = false
