@@ -106,7 +106,10 @@ export default {
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
-        ]
+        ],
+        'xpack.view_syncinstancetask': ['xpack.view_account'],
+        'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
+        'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask']
       }
     }
   },

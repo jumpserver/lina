@@ -126,7 +126,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_aauthbook'),
+                  can: this.$hasPerm('assets.test_authbook'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/accounts/${row.id}/verify/`,
@@ -159,7 +159,7 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: false,
         hasImport: false,
-        hasExport: true,
+        hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
