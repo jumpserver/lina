@@ -82,7 +82,20 @@ export default {
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
         ],
-        'assets.view_asset': ['assets.view_node']
+        'assets.view_asset': ['assets.view_node'],
+        'assets.commandfilterrule': ['assets.view_commandfilter'],
+        'assets.gateway': ['assets.view_domain'],
+        'cloud_import': ['assets.view_asset'],
+        'xpack.add_syncinstancetask': [
+          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
+          'xpack.view_account'
+        ],
+        'applications.add_application': ['assets.view_asset'],
+        'perms.view_assetpermission': ['assets.view_node'],
+        'perms.view_applicationpermission': ['applications.view_application'],
+        'acls.loginacl': ['users.view_user'],
+        'rbac.orgrolebinding': ['rbac.view_orgrole'],
+        'rbac.systemrolebinding': ['rbac.view_systemrole']
       }
     }
   },
