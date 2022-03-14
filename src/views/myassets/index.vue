@@ -15,6 +15,7 @@ export default {
     Announcement
   },
   data() {
+    const vm = this
     return {
       allFavorites: [],
       treeSetting: {
@@ -112,7 +113,7 @@ export default {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
-                  can: ({ row }) => row.is_active,
+                  can: ({ row }) => row.is_active && vm.$hasPerm('perms.connect_myassets'),
                   callback: ({ row }) => {
                     window.open(`/luna/?login_to=${row.id}`, '_blank')
                   }

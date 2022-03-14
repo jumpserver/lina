@@ -58,6 +58,7 @@ export default {
                   name: 'connect',
                   fa: 'fa-terminal',
                   type: 'primary',
+                  can: this.$hasPerm('perms.connect_myapps'),
                   callback: function({ row }) {
                     window.open(`/luna/?type=remote_app&login_to=${row.id}`, '_blank')
                   }
