@@ -107,6 +107,7 @@ export default {
                   name: 'View',
                   title: this.$t('common.View'),
                   type: 'primary',
+                  can: this.$hasPerm('applications.view_applicationaccountsecret'),
                   callback: function({ row }) {
                     this.account = row
                     this.showViewSecretDialog = true
