@@ -26,7 +26,7 @@ export default {
       ticketTableConfig: {
         url: this.url,
         permissions: {
-          resource: 'superticket'
+          resource: 'ticket'
         },
         columns: [
           {

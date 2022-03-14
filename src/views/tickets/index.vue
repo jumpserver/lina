@@ -20,18 +20,15 @@ import { mapGetters } from 'vuex'
 import { getTicketOpenCount } from '@/api/ticket'
 import AssignedTicketList from './AssignedTicketList'
 import MyTicketList from './MyTicketList'
-import TicketFlow from './TicketFlow/TicketFlow'
 
 export default {
   name: 'Index',
   components: {
     TabPage,
     AssignedTicketList,
-    MyTicketList,
-    TicketFlow
+    MyTicketList
   },
   data() {
-    const vm = this
     return {
       assignedTicketCount: 0,
       config: {
@@ -44,14 +41,6 @@ export default {
           {
             title: this.$t('tickets.AssignedMe'),
             name: 'AssignedTicketList'
-          },
-          {
-            title: this.$t('tickets.FlowSetUp'),
-            icon: 'fa-gear',
-            name: 'TicketFlow',
-            hidden: () => {
-              return !vm.$store.getters.currentUserIsSuperAdmin
-            }
           }
         ]
       }

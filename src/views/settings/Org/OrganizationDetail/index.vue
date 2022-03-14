@@ -27,6 +27,7 @@ export default {
       Organization: {},
       config: {
         activeMenu: 'OrganizationDetail',
+        url: '/api/v1/orgs/orgs',
         submenu: [
           {
             title: this.$t('xpack.Organization.OrganizationDetail'),
@@ -51,7 +52,7 @@ export default {
                 try {
                   await performDelete.bind(this)()
                   this.$message.success(this.$t('common.deleteSuccessMsg'))
-                  this.$router.push('/xpack/orgs/') // 返回列表
+                  this.$router.push({ name: 'OrganizationList' })
                   return done()
                 } catch (error) {
                   this.$log.error(error)

@@ -17,6 +17,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
@@ -69,7 +70,13 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canClone: vm.$hasPerm('perms.add_assetpermission'),
+              cloneRoute: {
+                name: 'AssetPermissionCreate'
+              },
               updateRoute: 'AssetPermissionUpdate',
+              canUpdate: vm.$hasPerm('perms.change_assetpermission'),
+              canDelete: vm.$hasPerm('perms.delete_assetpermission'),
               performDelete: ({ row, col }) => {
                 const id = row.id
                 const url = `/api/v1/perms/asset-permissions/${id}/?user_id=${this.object.id}&draw=1`

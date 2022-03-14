@@ -60,26 +60,49 @@ export default {
           enable: false
         },
         callback: {
-          onCheck(event, treeId, treeNode) {
+          onCheck: _.debounce((event, treeId, treeNode) => {
             // 选择后，更新按钮可用
             vm.$nextTick(() => {
               vm.isDisabled = false
             })
-            vm.checkDeps(event, treeNode)
-            vm.checkViewNodeIfNeed()
-          },
-          onSelected() {
+            vm.checkActionDeps(treeNode)
+            vm.checkSpecDeps()
+          }, 200),
+          beforeCheck: (treeId, treeNode) => {
+            return true
           }
         }
       },
-      viewPermMapper: [
-        ['view_console', ['rbac.view_console', 'rbac.view_dashboard']],
-        ['view_audit', ['rbac.view_audit', 'rbac.view_dashboard']],
-        ['view_workspace', ['rbac.view_workspace']]
-      ]
+      nodesDeps: {
+        'view_console': ['rbac.view_console'],
+        'view_audit': ['rbac.view_audit'],
+        'view_workspace': ['rbac.view_workspace'],
+        'view_setting': ['settings.view_setting', 'settings.change_setting'],
+        'users.invite_user': [
+          'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
+          'rbac.view_orgrolebinding', 'rbac.view_orgrole'
+        ],
+        'assets.view_asset': ['assets.view_node'],
+        'assets.commandfilterrule': ['assets.view_commandfilter'],
+        'assets.gateway': ['assets.view_domain'],
+        'cloud_import': ['assets.view_asset'],
+        'xpack.add_syncinstancetask': [
+          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
+          'xpack.view_account'
+        ],
+        'applications.add_application': ['assets.view_asset'],
+        'perms.view_assetpermission': ['assets.view_node'],
+        'perms.view_applicationpermission': ['applications.view_application'],
+        'acls.loginacl': ['users.view_user'],
+        'rbac.orgrolebinding': ['rbac.view_orgrole'],
+        'rbac.systemrolebinding': ['rbac.view_systemrole']
+      }
     }
   },
   computed: {
+    ztree() {
+      return this.$refs.tree.zTree
+    },
     detailItems() {
       return [
         {
@@ -136,7 +159,7 @@ export default {
       }
       return { action, resource, app }
     },
-    checkDeps(evt, node) {
+    checkActionDeps(node) {
       if (node.isParent) {
         this.$log.debug('Is parent')
         return
@@ -187,39 +210,35 @@ export default {
         ztree.checkNode(viewNode, true)
       }
     },
-    checkViewNodeIfNeed() {
+    checkSpecDeps() {
       const ztree = this.$refs.tree.zTree
-      for (const [viewId, permIds] of this.viewPermMapper) {
-        const viewNode = ztree.getNodeByParam('id', viewId)
-        const permNodes = permIds.map(i => ztree.getNodeByParam('title', i))
-        if (!viewNode || permNodes.length === 0) {
-          this.$log.debug('Not view node or perms nodes length 0')
-          continue
-        }
-        const nodeStatus = viewNode.getCheckStatus()
-        const viewStatus = nodeStatus.checked || nodeStatus.half
-        for (const permNode of permNodes) {
-          ztree.checkNode(permNode, viewStatus)
-        }
+      const depsId = ztree.getCheckedNodes().filter(i => {
+        return !!this.nodesDeps[i.title]
+      }).reduce((result, v) => {
+        return [...result, ...this.nodesDeps[v.title]]
+      }, [])
+      this.$log.debug('Select nodes should try: ', depsId)
+
+      for (const i of depsId) {
+        const depNode = this.ztree.getNodeByParam('title', i)
+        this.ztree.checkNode(depNode, true)
       }
-      return Promise.resolve(true)
     },
+
     updatePermissions() {
-      this.checkViewNodeIfNeed().then(() => {
-        const ztree = this.$refs.tree.zTree
-        const checkedNodes = ztree.getCheckedNodes()
-        const permNodes = checkedNodes.filter(node => !node.isParent)
-        const permIds = permNodes.map(node => node.id)
-        const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
-        const data = {
-          permissions: permIds
-        }
-        this.$axios.patch(roleDetailUrl, data).then(() => {
-          this.$message.success(this.$t('common.updateSuccessMsg'))
-        }).catch(error => {
-          this.$message.error(this.$t('common.updateErrorMsg') + error)
-          this.$log.error(error)
-        })
+      const ztree = this.$refs.tree.zTree
+      const checkedNodes = ztree.getCheckedNodes()
+      const permNodes = checkedNodes.filter(node => !node.isParent)
+      const permIds = permNodes.map(node => node.id)
+      const roleDetailUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/`
+      const data = {
+        permissions: permIds
+      }
+      this.$axios.patch(roleDetailUrl, data).then(() => {
+        this.$message.success(this.$t('common.updateSuccessMsg'))
+      }).catch(error => {
+        this.$message.error(this.$t('common.updateErrorMsg') + error)
+        this.$log.error(error)
       })
     }
   }

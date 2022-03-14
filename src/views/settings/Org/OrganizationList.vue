@@ -14,9 +14,14 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/orgs/orgs/',
+        permissions: {
+          app: 'orgs',
+          resource: 'organization'
+        },
         columns: ['name',
           'resource_statistics.users_amount',
           'resource_statistics.groups_amount',
@@ -55,10 +60,8 @@ export default {
           actions: {
             prop: 'id',
             formatterArgs: {
-              canClone: true,
-              canUpdate: true,
               canDelete: function({ row }) {
-                return !row.is_default
+                return !row.is_default && vm.$hasPerm('orgs.delete_organization')
               },
               onDelete: function({ row, col, cellValue, reload }) {
                 const msg = this.$t('xpack.Organization.DeleteOrgMsg')
@@ -88,7 +91,6 @@ export default {
         }
       },
       headerActions: {
-        canCreate: true,
         hasExport: false,
         hasImport: false,
         hasMoreActions: false

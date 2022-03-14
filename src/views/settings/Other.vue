@@ -53,9 +53,6 @@ export default {
           label: this.$t('xpack.RegularlyPerform'),
           helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
         },
-        TICKETS_ENABLED: {
-          hidden: () => this.hasValidLicense()
-        },
         HELP_DOCUMENT_URL: {
           label: this.$t('xpack.helpDocument'),
           helpText: this.$t('xpack.helpDocumentTip'),

@@ -12,11 +12,7 @@ import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
 import UserGrantedApplications from './UserGrantedApplications'
 import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
-import UserGrantedDatabases from './UserGrantedDatabases'
-import UserGrantedK8Ss from './UserGrantedK8Ss'
-import UserK8SPermissionRules from './UserK8SPermissionRules'
 import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
-import UserDatabasePermissionRules from './UserDatabasePermissionRules'
 import UserInfo from './UserInfo'
 
 export default {
@@ -27,10 +23,6 @@ export default {
     UserAssetPermissionRules,
     UserGrantedApplications,
     UserApplicationPermissionRules,
-    UserGrantedDatabases,
-    UserDatabasePermissionRules,
-    UserK8SPermissionRules,
-    UserGrantedK8Ss,
     UserLoginACLList
   },
   data() {
