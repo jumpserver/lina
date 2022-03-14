@@ -139,7 +139,7 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
-                  can: this.$hasPerm('assets.change_authbook') && !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
                     vm.showUpdateSecretDialog = false
