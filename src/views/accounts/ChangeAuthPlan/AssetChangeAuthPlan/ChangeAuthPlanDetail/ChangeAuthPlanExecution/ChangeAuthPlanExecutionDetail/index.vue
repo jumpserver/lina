@@ -29,11 +29,13 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'ChangeAuthPlanExecutionInfo'
+            name: 'ChangeAuthPlanExecutionInfo',
+            hidden: () => !this.$hasPerm('xpack.view_changeauthplanexecution')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.TaskList'),
-            name: 'ChangeAuthPlanExecutionTaskList'
+            name: 'ChangeAuthPlanExecutionTaskList',
+            hidden: () => !this.$hasPerm('xpack.view_changeauthplantask')
           }
         ],
         getTitle: this.getExecutionTitle
