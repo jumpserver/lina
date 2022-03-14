@@ -136,7 +136,7 @@ export default {
       if (!this.hasMoreActions) {
         return
       }
-      let dropdown = [...this.defaultMoreActions, ...this.extraMoreActions]
+      let dropdown = _.uniqBy([...this.extraMoreActions, ...this.defaultMoreActions], 'name')
       dropdown = cleanActions(dropdown, true, {
         selectedRows: this.selectedRows,
         reloadTable: this.reloadTable

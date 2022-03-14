@@ -33,6 +33,7 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
+    const vm = this
     return {
       dialogSettings: {
         selectedRows: [],
@@ -175,9 +176,9 @@ export default {
         extraActions: [],
         extraMoreActions: [
           {
-            name: 'updateSelected',
+            name: 'actionUpdateSelected',
             title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0,
+            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('terminal.change_terminal'),
             callback: function({ selectedRows, reloadTable }) {
               this.dialogSettings.selectedRows = selectedRows
               this.dialogSettings.visible = true
