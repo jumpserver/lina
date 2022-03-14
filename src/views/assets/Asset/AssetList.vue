@@ -3,10 +3,10 @@
     <GenericTreeListPage ref="TreeList" :table-config="tableConfig" :help-message="helpMessage" :header-actions="headerActions" :tree-setting="treeSetting">
       <div slot="rMenu">
         <li class="divider" />
-        <li id="m_add_asset_to_node" v-perms="'assets.change_asset'" class="rmenu" tabindex="-1" @click="rMenuAddAssetToNode">
+        <li id="m_add_asset_to_node" v-perms="'assets.add_assettonode'" class="rmenu" tabindex="-1" @click="rMenuAddAssetToNode">
           <i class="fa fa-clone" />  {{ this.$t('tree.AddAssetToNode') }}
         </li>
-        <li id="m_move_asset_to_node" v-perms="'assets.change_asset'" class="rmenu" tabindex="-1" @click="rMenuMoveAssetToNode">
+        <li id="m_move_asset_to_node" v-perms="'assets.move_assettonode'" class="rmenu" tabindex="-1" @click="rMenuMoveAssetToNode">
           <i class="fa fa-scissors" />  {{ this.$t('tree.MoveAssetToNode') }}
         </li>
         <li class="divider" />
