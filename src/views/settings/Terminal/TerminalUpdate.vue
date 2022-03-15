@@ -1,5 +1,11 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :url="url" :fields-meta="fieldsMeta" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :url="url"
+    :update-success-next-route="successUrl"
+    :create-success-next-route="successUrl"
+    :fields-meta="fieldsMeta"
+  />
 </template>
 
 <script>
@@ -13,6 +19,7 @@ export default {
   },
   data() {
     return {
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'TerminalList' }},
       url: '/api/v1/terminal/terminals/',
       fields: [
         [this.$t('sessions.info'), ['name', 'remote_addr', 'command_storage', 'replay_storage']],
