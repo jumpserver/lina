@@ -87,7 +87,10 @@ export default {
               return row['org_roles_display']
             },
             filters: [],
-            columnKey: 'org_roles'
+            columnKey: 'org_roles',
+            has: () => {
+              return this.$store.getters.hasValidLicense
+            }
           },
           mfa_enabled: {
             label: 'MFA',
@@ -127,6 +130,7 @@ export default {
       },
       headerActions: {
         hasBulkDelete: hasDelete,
+        canCreate: this.$hasPerm('users.add_user'),
         extraActions: [
           {
             name: this.$t('users.InviteUser'),

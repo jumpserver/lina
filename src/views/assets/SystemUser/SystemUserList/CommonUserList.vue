@@ -9,6 +9,8 @@
 
 <script>
 import { GenericListTable } from '@/layout/components'
+import { ApplicationTypes } from '@/views/applications/const'
+import { AssetProtocols } from '@/views/assets/const'
 
 export default {
   components: {
@@ -75,81 +77,8 @@ export default {
             vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.title.toLowerCase() }})
           },
           dropdown: [
-            {
-              title: 'SSH',
-              name: 'SSH',
-              type: 'primary',
-              group: this.$t('assets.HostProtocol'),
-              has: true
-            },
-            {
-              title: 'RDP',
-              name: 'RDP',
-              type: 'primary',
-              has: true
-            },
-            {
-              title: 'VNC',
-              name: 'VNC',
-              type: 'primary',
-              has: true
-            },
-            {
-              title: 'Telnet',
-              name: 'Telnet',
-              type: 'primary',
-              has: true
-            },
-            {
-              name: 'MySQL',
-              title: 'MySQL',
-              type: 'primary',
-              has: true,
-              group: this.$t('assets.RDBProtocol')
-            },
-            {
-              name: 'MariaDB',
-              title: 'MariaDB',
-              type: 'primary',
-              has: true
-            },
-            {
-              name: 'PostgreSQL',
-              title: 'PostgreSQL',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'Oracle',
-              title: 'Oracle',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'SQLServer',
-              title: 'SQLServer',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'Redis',
-              title: 'Redis',
-              type: 'primary',
-              has: true,
-              group: this.$t('assets.NoSQLProtocol')
-            },
-            {
-              name: 'MongoDB',
-              title: 'MongoDB',
-              type: 'primary',
-              has: this.$store.getters.hasValidLicense
-            },
-            {
-              name: 'K8S',
-              title: 'K8S',
-              type: 'primary',
-              group: this.$t('assets.OtherProtocol')
-            }
+            ...AssetProtocols,
+            ...ApplicationTypes
           ]
         }
       },
