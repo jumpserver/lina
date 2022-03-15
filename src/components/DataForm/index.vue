@@ -130,4 +130,7 @@ export default {
   .el-form  ::v-deep  .help-block a {
     color: #1c84c6;
   }
+  .form-buttons {
+    padding-top: 10px;
+  }
 </style>
