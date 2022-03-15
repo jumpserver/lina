@@ -29,15 +29,18 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'AppChangeAuthPlanInfo'
+            name: 'AppChangeAuthPlanInfo',
+            hidden: !this.$hasPerm('xpack.view_applicationchangeauthplan')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.SystemUser'),
-            name: 'ChangeAuthPlanDatabase'
+            name: 'ChangeAuthPlanDatabase',
+            hidden: !this.$hasPerm('xpack.change_applicationchangeauthplan')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'AppChangeAuthPlanExecutionList'
+            name: 'AppChangeAuthPlanExecutionList',
+            hidden: !this.$hasPerm('xpack.view_applicationchangeauthplanexecution')
           }
         ],
         actions: {
