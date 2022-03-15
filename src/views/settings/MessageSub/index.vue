@@ -31,7 +31,9 @@
         </el-table-column>
         <el-table-column :label="$t('common.Actions')" width="200">
           <template #default="scope">
-            <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">{{ $t('notifications.ChangeReceiver') }}</el-button>
+            <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
+              {{ $t('notifications.ChangeReceiver') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
