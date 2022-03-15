@@ -40,6 +40,11 @@ export default {
           },
           canUpdate: () => {
             return vm.hasPermNotBuiltinNotRootOrg(this.role, `rbac.change_${scopeRole}`)
+          },
+          updateRoute: {
+            name: this.$route.name.replace('Detail', 'Update'),
+            params: {},
+            query: { scope: scope }
           }
         },
         submenu: [
