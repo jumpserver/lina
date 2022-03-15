@@ -78,7 +78,7 @@ export default {
         'view_console': ['rbac.view_console'],
         'view_audit': ['rbac.view_audit'],
         'view_workspace': ['rbac.view_workspace'],
-        'view_setting': ['settings.view_setting', 'settings.change_setting'],
+        'view_setting': ['settings.view_setting'],
         'cloud_import': ['assets.view_asset'],
         'terminal_node': ['settings.change_terminal'],
         'rbac.orgrolebinding': ['rbac.view_orgrole'],
