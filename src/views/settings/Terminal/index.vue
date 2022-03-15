@@ -50,7 +50,9 @@ export default {
         {
           title: this.$t('xpack.ComponentMonitor'),
           name: 'Monitor',
-          hidden: () => !this.$hasPerm('terminal.view_terminal')
+          hidden: () => {
+            return !this.$hasPerm('terminal.view_terminal') && this.$store.getters.hasValidLicense
+          }
         }
       ]
     }
