@@ -8,6 +8,8 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.Sessions'),
+      app: 'terminal',
+      resource: 'session',
       permissions: ['terminal.view_session']
     },
     children: [

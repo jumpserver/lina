@@ -19,9 +19,7 @@ export default {
           name: 'terminate',
           title: this.$t('sessions.terminate'),
           type: 'danger',
-          can: ({ row, cellValue }) => {
-            return row['can_terminate'] && this.$hasPerm('terminal.terminate_session')
-          },
+          can: ({ row }) => row['can_terminate'] && vm.$hasPerm('terminal.terminate_session'),
           callback: function({ reload, row }) {
             // 终断 session reload
             const data = [row.id]
