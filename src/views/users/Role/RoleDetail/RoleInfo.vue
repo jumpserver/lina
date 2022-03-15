@@ -68,7 +68,10 @@ export default {
           }, 200),
           beforeCheck: (treeId, treeNode) => {
             return true
-          }
+          },
+          onClick: _.debounce((event, treeId, treeNode) => {
+            vm.ztree.expandNode(treeNode)
+          }, 100)
         }
       },
       nodesDeps: {
