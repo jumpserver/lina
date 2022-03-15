@@ -64,7 +64,6 @@ export default {
     }
   },
   computed: {
-
   },
   watch: {
     config: {
@@ -211,7 +210,7 @@ export default {
     },
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
-      const columns = []
+      let columns = []
       for (let col of config.columns) {
         if (typeof col === 'object') {
           columns.push(col)
@@ -220,6 +219,15 @@ export default {
           columns.push(col)
         }
       }
+      columns = columns.filter(item => {
+        let has = item.has
+        if (has === undefined) {
+          has = true
+        } else if (typeof has === 'function') {
+          has = has()
+        }
+        return has
+      })
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns

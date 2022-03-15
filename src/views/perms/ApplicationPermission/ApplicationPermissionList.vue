@@ -1,12 +1,17 @@
 <template>
-  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting" :header-actions="headerActions" :table-config="tableConfig" />
+  <GenericTreeListPage
+    ref="TreeTablePage"
+    :tree-setting="treeSetting"
+    :header-actions="headerActions"
+    :table-config="tableConfig"
+  />
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { setUrlParam } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
-import { ApplicationTypes } from '@/views/perms/const'
+import { ApplicationTypes } from '@/views/applications/const'
 
 export default {
   name: 'AssetAccountList',
