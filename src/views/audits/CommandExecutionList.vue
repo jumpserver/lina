@@ -96,7 +96,7 @@ export default {
             options: [
               {
                 label: this.$t('audits.Hosts'),
-                value: 'asset_display'
+                value: 'asset__hostname'
               }
             ]
           },
