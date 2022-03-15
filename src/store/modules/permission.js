@@ -124,12 +124,12 @@ function cleanRoute(tmp, parent) {
     if (tmp.path[0] === '/') {
       tmp.meta['fullPath'] = tmp.path
     } else {
-      tmp.meta.fullPath = parentFullPath + '/' + tmp.path
+      tmp.meta.fullPath = parentFullPath ? parentFullPath + '/' + tmp.path : parentFullPath
     }
     // console.log('Full path: ', tmp.meta.fullPath)
   }
   // 设置默认active menu
-  if (tmp.hidden && !tmp.meta.activeMenu) {
+  if (tmp.meta.type === 'crud' && !tmp.meta.activeMenu) {
     tmp.meta.activeMenu = parentFullPath
     // Todo
   }
