@@ -74,6 +74,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
+                  can: 'xpack.view_changeauthplanexecution',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
