@@ -9,9 +9,8 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import OrganizationDetail from './OrganizationDetail'
-import { getApiPath } from '@/utils/common'
 const performDelete = function() {
-  const url = getApiPath(this)
+  const url = `${this.url}/${this.$route.params.id}/`
   return this.$axios.delete(url)
 }
 export default {
@@ -33,6 +32,9 @@ export default {
           }
         ],
         actions: {
+          deleteApiUrl: `${this.url}/${this.$route.params.id}/`,
+          canUpdate: this.$hasPerm('orgs.change_organization'),
+          canDelete: this.$hasPerm('orgs.delete_organization'),
           deleteCallback: function() {
             const msg = this.$t('xpack.Organization.DeleteOrgMsg')
             const title = this.$t('xpack.Organization.DeleteOrgTitle')
