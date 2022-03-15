@@ -16,7 +16,7 @@
           <SystemSetting />
         </el-tooltip>
       </li>
-      <li v-if="$hasLicense()" v-perms="'tickets.view_ticket'" class="header-item header-hover">
+      <li v-if="this.$hasLicense() && this.$hasPerm('tickets.view_ticket')" class="header-item header-hover">
         <Tickets />
       </li>
       <li class="header-item">
