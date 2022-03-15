@@ -94,7 +94,8 @@ export default {
           name: 'TerminalDetail',
           component: () => import('@/views/settings/Terminal/TerminalDetail'),
           meta: {
-            title: i18n.t('route.Terminal')
+            title: i18n.t('route.Terminal'),
+            permissions: ['terminal.view_terminal']
           },
           hidden: true
         },
@@ -103,7 +104,8 @@ export default {
           name: 'TerminalUpdate',
           component: () => import('@/views/settings/Terminal/TerminalUpdate'),
           meta: {
-            title: i18n.t('route.Terminal')
+            title: i18n.t('route.Terminal'),
+            permissions: ['terminal.change_terminal']
           },
           hidden: true
         },
