@@ -102,6 +102,7 @@ export default {
         }
       },
       headerActions: {
+        hasBulkUpdate: false,
         hasSearch: true,
         createRoute: {
           name: 'GatewayCreate',
