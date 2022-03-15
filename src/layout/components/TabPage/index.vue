@@ -9,15 +9,14 @@
 
     <div>
       <el-tabs
-        v-if="submenu.length > 0"
+        v-if="tabIndices.length > 0"
         slot="submenu"
         v-model="iActiveMenu"
         class="page-submenu"
         @tab-click="handleTabClick"
       >
-        <template v-for="item in submenu">
+        <template v-for="item in tabIndices">
           <el-tab-pane
-            v-if="checkShow(item)"
             :key="item.name"
             :label-content="item.labelContent"
             :name="item.name"
@@ -69,9 +68,12 @@ export default {
       }
     },
     tabIndices() {
-      const map = {}
-      this.submenu.forEach((v, i) => {
-        map[v.name] = i
+      const map = []
+      this.submenu.forEach((v) => {
+        const hidden = typeof v.hidden === 'function' ? v.hidden() : v.hidden
+        if (!hidden) {
+          map.push(v)
+        }
       })
       return map
     }
@@ -80,13 +82,6 @@ export default {
     this.iActiveMenu = this.getPropActiveTab()
   },
   methods: {
-    checkShow(item) {
-      let hidden = item.hidden
-      if (typeof hidden === 'function') {
-        hidden = hidden()
-      }
-      return !hidden
-    },
     handleTabClick(tab) {
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
@@ -108,14 +103,16 @@ export default {
       ]
 
       for (const preTab of preActiveTabs) {
-        for (const tabName in this.tabIndices) {
-          if (preTab && tabName && preTab.toLowerCase() === tabName.toLowerCase()) {
-            return tabName
+        const currentTab = typeof preTab === 'object' ? preTab.name : preTab
+        for (const tabName of this.tabIndices) {
+          const currentTabName = tabName?.name || ''
+          if (currentTab && currentTabName && currentTab.toLowerCase() === currentTabName.toLowerCase()) {
+            return currentTabName
           }
         }
       }
 
-      activeTab = this.submenu[0].name
+      activeTab = this.tabIndices[0].name
       return activeTab
     }
   }
