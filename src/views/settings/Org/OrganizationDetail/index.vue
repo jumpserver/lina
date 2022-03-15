@@ -9,7 +9,6 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import OrganizationDetail from './OrganizationDetail'
-import OrganizationMembershipList from './OrganizationMembershipList'
 import { getApiPath } from '@/utils/common'
 const performDelete = function() {
   const url = getApiPath(this)
@@ -19,7 +18,6 @@ export default {
   components: {
     GenericDetailPage,
     OrganizationDetail,
-    OrganizationMembershipList,
     TabPage
   },
   data() {
@@ -32,10 +30,6 @@ export default {
           {
             title: this.$t('xpack.Organization.OrganizationDetail'),
             name: 'OrganizationDetail'
-          },
-          {
-            title: this.$t('xpack.Organization.OrganizationMembership'),
-            name: 'OrganizationMembershipList'
           }
         ],
         actions: {
