@@ -46,8 +46,8 @@ export default {
       },
       onPerformError() {
       },
-      updateSuccessNextRoute: { name: 'TicketList' },
-      createSuccessNextRoute: { name: 'TicketList' }
+      updateSuccessNextRoute: { name: 'TicketFlow' },
+      createSuccessNextRoute: { name: 'TicketFlow' }
     }
   },
   computed: {
