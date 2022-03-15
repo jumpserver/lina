@@ -97,6 +97,9 @@ export default {
         hasMoreActions: false,
         canCreate: () => {
           return this.$hasPerm(`rbac.add_${this.scopeRole}`)
+        },
+        importOptions: {
+          canImportUpdate: false
         }
       }
     }

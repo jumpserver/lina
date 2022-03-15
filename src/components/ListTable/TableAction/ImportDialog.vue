@@ -13,8 +13,12 @@
   >
     <el-form v-if="!showTable" label-position="left" style="padding-left: 50px">
       <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
-        <el-radio v-model="importOption" class="export-item" label="create">{{ this.$t('common.Create') }}</el-radio>
-        <el-radio v-model="importOption" class="export-item" label="update">{{ this.$t('common.Update') }}</el-radio>
+        <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
+          {{ this.$t('common.Create') }}
+        </el-radio>
+        <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" label="update">
+          {{ this.$t('common.Update') }}
+        </el-radio>
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
             {{ downloadTemplateTitle }}
@@ -77,6 +81,14 @@ export default {
     url: {
       type: String,
       default: () => ''
+    },
+    canImportCreate: {
+      type: Boolean,
+      default: true
+    },
+    canImportUpdate: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
