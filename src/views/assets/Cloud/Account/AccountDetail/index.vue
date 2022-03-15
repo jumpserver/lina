@@ -23,6 +23,7 @@ export default {
         name: '', provider: '', provider_display: '', validity_display: '', comment: '', date_created: '', created_by: ''
       },
       config: {
+        url: `/api/v1/xpack/cloud/accounts`,
         activeMenu: 'AccountDetail',
         submenu: [
           {
