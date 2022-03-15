@@ -9,6 +9,7 @@ export default {
     GenericListPage
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: '/api/v1/assets/platforms/',
@@ -22,13 +23,9 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canClone: true,
-              canDelete: ({ row }) => {
-                return !row.internal
-              },
-              canUpdate: ({ row }) => {
-                return !row.internal
-              }
+              canClone: vm.$hasPerm('assets.add_platform'),
+              canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
+              canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform')
             }
           }
         }
@@ -37,7 +34,6 @@ export default {
         hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
-        canCreate: true,
         createRoute: 'PlatformCreate'
       }
     }
