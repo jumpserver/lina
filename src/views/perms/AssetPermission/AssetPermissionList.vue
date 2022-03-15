@@ -185,28 +185,11 @@ export default {
             }
           ]
         },
-        hasBulkUpdate: false,
-        extraMoreActions: [
-          {
-            name: 'RefreshPermissionCache',
-            title: this.$t('perms.refreshPermissionCache'),
-            type: 'primary',
-            has: true,
-            callback: this.HandleRefreshPermissionCache
-          }
-        ]
+        hasBulkUpdate: false
       }
     }
   },
   methods: {
-    HandleRefreshPermissionCache() {
-      const url = '/api/v1/perms/asset-permissions/cache/refresh/'
-      this.$axios.get(url).then(res => {
-        this.$message.success(this.$t('perms.refreshSuccess'))
-      }).catch(err => {
-        this.$message.error(this.$t('perms.refreshFail') + ':' + err)
-      })
-    }
   }
 }
 </script>
