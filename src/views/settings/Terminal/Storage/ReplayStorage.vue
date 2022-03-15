@@ -29,6 +29,7 @@ export default {
       replayTableConfig: {
         url: '/api/v1/terminal/replay-storages/',
         permissions: {
+          app: 'terminal',
           resource: 'replaystorage'
         },
         columns: ['name', 'type', 'comment', 'is_default', 'actions'],
@@ -60,16 +61,19 @@ export default {
                 this.$router.push({ name: 'ReplayStorageUpdate', params: { id: row.id }, query: { type: row.type }})
               },
               canUpdate: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null')
+                return (
+                  row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_replaystorage')
+                )
               },
               canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null')
+                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_replaystorage'))
               },
               hasClone: false,
               extraActions: [
                 {
                   name: 'test',
                   title: this.$t('sessions.test'),
+                  can: vm.$hasPerm('terminal.change_replaystorage'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     TestReplayStorage(row.id).then(data => {
@@ -84,6 +88,7 @@ export default {
                 {
                   name: 'set_to_default',
                   title: this.$t('sessions.SetToDefault'),
+                  can: this.$hasPerm('terminal.change_replaystorage'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultReplayStorage(row.id).then(data => {
