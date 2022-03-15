@@ -102,6 +102,8 @@ export default {
           'users.view_user', 'users.view_usergroup'
         ],
         'settings.change_systemmsgsubscription': ['users.view_user'],
+        'terminal.add_terminal': ['terminal.view_commandstorage', 'terminal.view_replaystorage'],
+        'terminal.change_terminal': ['terminal.view_commandstorage', 'terminal.view_replaystorage'],
         'xpack.add_syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
