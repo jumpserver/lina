@@ -16,7 +16,7 @@
           <SystemSetting />
         </el-tooltip>
       </li>
-      <li v-if="$hasLicense()" v-perms="['rbac.view_ticket']" class="header-item header-hover">
+      <li v-if="$hasLicense()" v-perms="'tickets.view_ticket'" class="header-item header-hover">
         <Tickets />
       </li>
       <li class="header-item">
