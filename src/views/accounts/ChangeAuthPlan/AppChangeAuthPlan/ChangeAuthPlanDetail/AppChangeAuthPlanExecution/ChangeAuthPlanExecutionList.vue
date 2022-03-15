@@ -82,6 +82,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
+                  can: 'xpack.view_applicationchangeauthplanexecution',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
@@ -91,6 +92,7 @@ export default {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
+                  can: 'xpack.view_applicationchangeauthplantask',
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AppChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
