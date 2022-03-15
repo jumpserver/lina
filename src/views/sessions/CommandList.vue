@@ -115,6 +115,7 @@ export default {
       headerActions: {
         hasLeftActions: false,
         hasImport: false,
+        hasExport: this.$hasPerm('terminal.view_command'),
         hasDatePicker: true,
         canExportSelected: true,
         exportOptions: {
