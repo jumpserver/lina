@@ -82,8 +82,9 @@ export default {
           },
           systemuser: {
             showOverflowTooltip: true,
-            formatter: this.$hasPerm('assets.view_systemuser') ? DetailFormatter : (row) => row.systemuser_display,
+            formatter: DetailFormatter,
             formatterArgs: {
+              can: this.$hasPerm('assets.view_systemuser'),
               getTitle({ row }) {
                 return row.systemuser_display
               },
