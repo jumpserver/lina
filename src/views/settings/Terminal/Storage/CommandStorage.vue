@@ -82,7 +82,7 @@ export default {
                   name: 'test',
                   title: this.$t('sessions.test'),
                   type: 'primary',
-                  can: vm.$hasPerm('terminal.change_commandstorage'),
+                  can: vm.$hasPerm('terminal.view_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
                     TestCommandStorage(row.id).then(data => {
                       if (!data['is_valid']) {
