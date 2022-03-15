@@ -23,6 +23,7 @@ export default {
         columnsMeta: {
           name: {
             formatterArgs: {
+              can: this.$hasPerm('applications.view_application'),
               route: 'RemoteAppDetail'
             }
           },
