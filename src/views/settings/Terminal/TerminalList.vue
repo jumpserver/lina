@@ -112,7 +112,10 @@ export default {
         ],
         columnsMeta: {
           name: {
-            sortable: 'custom'
+            sortable: 'custom',
+            formatterArgs: {
+              route: 'TerminalDetail'
+            }
           },
           'stat.cpu_load': {
             label: this.$t('sessions.systemCpuLoad'),
@@ -161,7 +164,7 @@ export default {
           actions: {
             formatterArgs: {
               hasClone: false,
-              canUpdate: true
+              updateRoute: { name: 'TerminalUpdate' }
             }
           }
         }
