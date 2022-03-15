@@ -68,13 +68,13 @@ export default {
             prop: 'id',
             formatterArgs: {
               canUpdate: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null')
+                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.change_commandstorage'))
               },
               onUpdate: function({ row }) {
                 this.$router.push({ name: 'CommandStorageUpdate', params: { id: row.id }})
               },
               canDelete: function({ row }) {
-                return (row.name !== 'default' && row.name !== 'null')
+                return (row.name !== 'default' && row.name !== 'null' && vm.$hasPerm('terminal.delete_commandstorage'))
               },
               hasClone: false,
               extraActions: [
@@ -82,6 +82,7 @@ export default {
                   name: 'test',
                   title: this.$t('sessions.test'),
                   type: 'primary',
+                  can: vm.$hasPerm('terminal.change_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
                     TestCommandStorage(row.id).then(data => {
                       if (!data['is_valid']) {
@@ -96,6 +97,7 @@ export default {
                   name: 'set_to_default',
                   title: this.$t('sessions.SetToDefault'),
                   type: 'primary',
+                  can: vm.$hasPerm('terminal.change_commandstorage'),
                   callback: function({ row, col, cellValue, reload }) {
                     SetToDefaultCommandStorage(row.id).then(data => {
                       vm.$refs.ListTable.reloadTable()
