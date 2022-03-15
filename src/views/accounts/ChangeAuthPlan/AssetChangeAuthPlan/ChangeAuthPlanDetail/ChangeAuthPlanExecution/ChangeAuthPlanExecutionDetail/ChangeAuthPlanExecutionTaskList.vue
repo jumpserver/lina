@@ -4,6 +4,7 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'ChangeAuthPlanExecutionTaskList',
@@ -18,6 +19,7 @@ export default {
     }
   },
   data() {
+    const vm = this
     return {
       tableConfig: {
         url: `/api/v1/xpack/change-auth-plan/plan-execution-subtask/?plan_execution_id=${this.object.id}`,
@@ -27,9 +29,18 @@ export default {
         columnsMeta: {
           asset: {
             label: this.$t('xpack.ChangeAuthPlan.Asset'),
-            formatter: function(row, column, cellValue, index) {
-              const url = `/assets/assets/${cellValue}`
-              return <router-link to={ url } >{ row.asset_info.hostname }</router-link>
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: this.$hasPerm('assets.view_asset'),
+              getTitle({ row }) {
+                return row.asset_info.hostname
+              },
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.asset }
+                }
+              }
             }
           },
           is_success: {
@@ -54,8 +65,8 @@ export default {
                 {
                   name: 'retry',
                   type: 'info',
-                  can: this.$hasPerm('xpack.change_changeauthplantask'),
                   title: this.$t('xpack.ChangeAuthPlan.Retry'),
+                  can: vm.$hasPerm('xpack.change_changeauthplantask'),
                   callback: function({ row, tableData }) {
                     this.$axios.put(
                       `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${row.id}/`,
