@@ -48,7 +48,7 @@ export default {
         hasLeftActions: false,
         hasImport: false,
         searchConfig: {
-          exclude: ['asset'],
+          exclude: ['asset', 'present'],
           options: [
             {
               label: this.$t('assets.Hostname'),
