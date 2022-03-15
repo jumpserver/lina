@@ -16,7 +16,12 @@
         </el-table-column>
         <el-table-column v-for="header in receiveBackends" :key="header.id" :label="header.name_display" width="120">
           <template #default="scope">
-            <el-checkbox v-if="!scope.row.children" v-model="scope.row.receive_backends[header.name]" @change="onCheckReceiveBackend(scope.row)" />
+            <el-checkbox
+              v-if="!scope.row.children"
+              v-model="scope.row.receiveBackends[header.name]"
+              :disabled="header.name === 'site_msg'"
+              @change="onCheckReceiveBackend(scope.row)"
+            />
           </template>
         </el-table-column>
         <el-table-column :label="$t('notifications.Receivers')" show-overflow-tooltip>
@@ -69,13 +74,13 @@ export default {
   methods: {
     onCheckReceiveBackend(sub) {
       const backends = []
-      for (const [name, checked] of Object.entries(sub.receive_backends)) {
+      for (const [name, checked] of Object.entries(sub.receiveBackends)) {
         if (checked) { backends.push(name) }
       }
 
       this.$axios.patch(
         `/api/v1/notifications/system-msg-subscription/${sub.id}/`,
-        { receive_backends: backends }
+        { receiveBackends: backends }
       ).catch(err => {
         this.$log.error(err)
       })
@@ -100,45 +105,43 @@ export default {
       this.dialogVisible = true
     },
     async initBackends() {
-      const backends = await this.$axios.get('/api/v1/notifications/backends/')
-      backends.forEach(backend => {
-        if (backend.name !== 'site_msg') {
-          this.receiveBackends.push(backend)
-        }
+      let backends = []
+      backends = await this.$axios.get('/api/v1/notifications/backends/')
+      this.receiveBackends = backends.filter(backend => {
+        return backend.name // !== 'site_msg'
       })
     },
     async initSubscriptions() {
       const subscriptions = await this.$axios.get('/api/v1/notifications/system-msg-subscription/')
-
-      const trans_subscriptions = []
+      const subCategory = []
 
       for (const category of subscriptions) {
-        const children = []
-        trans_subscriptions.push({
-          id: category.category,
-          value: category.category_label,
-          children: children
-        })
+        const subItems = []
+        const item = {
+          id: category['category'],
+          value: category['category_label'],
+          children: subItems
+        }
 
-        for (const sub of category.children) {
+        for (const item of category['children']) {
           const backendsChecked = {}
           this.receiveBackends.forEach(backend => {
-            backendsChecked[backend.name] = sub.receive_backends.indexOf(backend.name) > -1
+            backendsChecked[backend.name] = item['receive_backends'].indexOf(backend.name) > -1
           })
 
-          const trans_sub = {
-            id: sub.message_type,
-            value: sub.message_type_label,
-            receivers: sub.receivers,
-            receive_backends: backendsChecked
+          const subItem = {
+            id: item['message_type'],
+            value: item['message_type_label'],
+            receivers: item.receivers,
+            receiveBackends: backendsChecked
           }
-          children.push(trans_sub)
+          subItems.push(subItem)
 
-          this.idMessageTypeMapper[trans_sub.id] = trans_sub
+          this.idMessageTypeMapper[subItem.id] = subItems
         }
+        subCategory.push(item)
       }
-
-      this.tableData = trans_subscriptions
+      this.tableData = subCategory
     }
   }
 }
