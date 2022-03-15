@@ -73,7 +73,7 @@ export default {
                 {
                   name: 'test',
                   title: this.$t('sessions.test'),
-                  can: vm.$hasPerm('terminal.change_replaystorage'),
+                  can: vm.$hasPerm('terminal.view_replaystorage'),
                   type: 'primary',
                   callback: function({ row, col, cellValue, reload }) {
                     TestReplayStorage(row.id).then(data => {
