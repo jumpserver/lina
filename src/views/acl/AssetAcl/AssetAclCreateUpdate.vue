@@ -4,6 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+import rules from '@/components/DataForm/rules'
 export default {
   name: 'AclCreateUpdate',
   components: {
@@ -35,6 +36,9 @@ export default {
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
+        priority: {
+          rules: [rules.Required]
+        },
         assets: {
           fields: ['hostname_group', 'ip_group']
         },
