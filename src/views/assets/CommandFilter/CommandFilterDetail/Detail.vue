@@ -31,7 +31,7 @@ export default {
         icon: 'fa-info',
         title: this.$t('perms.addSystemUserToThisPermission'),
         objectsAjax: {
-          url: '/api/v1/assets/system-users/',
+          url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s`,
           transformOption: (item) => {
             const username = item.username || '*'
             return { label: item.name + '(' + username + ')', value: item.id }
