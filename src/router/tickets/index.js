@@ -13,6 +13,7 @@ export default {
     type: 'view',
     showNavSwitcher: false,
     resource: 'ticket',
+    licenseRequired: true,
     permissions: ['tickets.view_ticket']
   },
   children: [
