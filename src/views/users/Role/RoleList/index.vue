@@ -23,20 +23,20 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'OrgRoleList',
+        activeMenu: 'SysRoleList',
         submenu: [
-          {
-            title: this.$t('route.OrgRole'),
-            name: 'OrgRoleList',
-            hidden: () => {
-              return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole')
-            }
-          },
           {
             title: this.$t('route.SystemRole'),
             name: 'SysRoleList',
             hidden: () => {
               return !this.$hasPerm('rbac.view_systemrole')
+            }
+          },
+          {
+            title: this.$t('route.OrgRole'),
+            name: 'OrgRoleList',
+            hidden: () => {
+              return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole')
             }
           }
         ]

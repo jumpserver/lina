@@ -59,6 +59,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'GatherUserTaskDetail',
+              can: vm.$hasPerm('xpack.view_gatherusertaskexecution'),
               routeQuery: {
                 activeTab: 'TaskExecutionList'
               }

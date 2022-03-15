@@ -152,6 +152,7 @@ export default {
                   name: 'View',
                   title: this.$t(`common.UpdateAssetDetail`),
                   type: 'primary',
+                  can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
                   callback: function({ cellValue, tableData, row }) {
                     return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: row.id }})
                   }
@@ -188,7 +189,7 @@ export default {
             title: this.$t('assets.DeactiveSelected'),
             type: 'primary',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.hasPerm('assets.change_asset')
+              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map((v) => {
@@ -206,7 +207,7 @@ export default {
             title: this.$t('assets.ActiveSelected'),
             type: 'primary',
             can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.hasPerm('assets.change_asset')
+              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
             },
             callback: function({ selectedRows }) {
               const ids = selectedRows.map((v) => {
@@ -220,12 +221,12 @@ export default {
             }.bind(this)
           },
           {
-            name: 'updateSelected',
+            name: 'actionUpdateSelected',
             title: this.$t('common.updateSelected'),
             can: ({ selectedRows }) => {
               return selectedRows.length > 0 &&
                   !vm.currentOrgIsRoot &&
-                  vm.hasPerm('assets.change_asset')
+                  vm.$hasPerm('assets.change_asset')
             },
             callback: ({ selectedRows }) => {
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
@@ -241,7 +242,7 @@ export default {
               }
               return selectedRows.length > 0 &&
                   !vm.currentOrgIsRoot &&
-                  vm.hasPerm('assets.change_asset')
+                  vm.$hasPerm('assets.change_asset')
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []

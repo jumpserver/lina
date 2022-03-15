@@ -67,6 +67,9 @@ export default {
           value: this.object.latest_execution,
           formatter: function(row, data) {
             const route = { to: { name: 'AdhocDetail', params: { id: data.adhoc }}}
+            if (!this.$hasPerm('ops.ops.view_adhoc')) {
+              return <span>{ data.adhoc_short_id }</span>
+            }
             return <router-link {...{ attrs: route }}>{ data.adhoc_short_id }</router-link>
           }
         },

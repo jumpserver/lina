@@ -31,7 +31,7 @@ export default {
           {
             title: this.$t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
             name: 'AppChangeAuthPlanList',
-            hidden: () => !this.$hasPerm('xpack.view_changeauthplan')
+            hidden: () => !this.$hasPerm('xpack.view_applicationchangeauthplan')
           }
         ]
       }

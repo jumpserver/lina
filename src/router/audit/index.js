@@ -33,12 +33,10 @@ export default {
       component: empty,
       name: 'Sessions',
       redirect: '/audit/sessions/sessions',
-      alwaysShow: true,
       meta: {
         title: i18n.t('route.SessionsAudit'),
         icon: 'rocket',
-        permissions: [],
-        app: 'terminal'
+        permissions: []
       },
       children: SessionRoutes
     },
@@ -49,7 +47,8 @@ export default {
       name: 'Audits',
       meta: {
         title: i18n.t('route.LogsAudit'),
-        icon: 'history'
+        icon: 'history',
+        permissions: []
       },
       children: LogRoutes
     }

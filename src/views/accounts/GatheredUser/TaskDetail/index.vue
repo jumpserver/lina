@@ -23,6 +23,10 @@ export default {
       TaskDetail: {},
       config: {
         activeMenu: 'Detail',
+        actions: {
+          canUpdate: this.$hasPerm('xpack.change_gatherusertask'),
+          canDelete: this.$hasPerm('xpack.delete_gatherusertask')
+        },
         submenu: [
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskDetail'),
@@ -30,7 +34,8 @@ export default {
           },
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskExecutionList'),
-            name: 'TaskExecutionList'
+            name: 'TaskExecutionList',
+            hidden: !this.$hasPerm('xpack.view_gatherusertaskexecution')
           }
         ],
         hasRightSide: true

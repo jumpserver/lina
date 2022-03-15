@@ -53,6 +53,10 @@ export default {
       account: {},
       tableConfig: {
         url: this.url,
+        permissions: {
+          app: 'assets',
+          resource: 'authbook'
+        },
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
           'systemuser', 'date_created', 'date_updated', 'actions'
@@ -68,6 +72,7 @@ export default {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
+              can: this.$hasPerm('assets.view_asset'),
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
@@ -100,6 +105,7 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
+                  can: this.$hasPerm('assets.view_assetaccountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
@@ -109,6 +115,7 @@ export default {
                 {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
+                  can: this.$hasPerm('assets.delete_authbook'),
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
@@ -120,6 +127,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
+                  can: this.$hasPerm('assets.test_authbook'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/accounts/${row.id}/verify/`,
@@ -132,7 +140,7 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
-                  can: !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
                     vm.showUpdateSecretDialog = false
@@ -152,7 +160,7 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: false,
         hasImport: false,
-        hasExport: true,
+        hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true

@@ -21,15 +21,20 @@ export default {
     AssetList
   },
   data() {
+    const vm = this
     return {
       TaskDetail: {},
       config: {
         activeMenu: 'detail',
+        url: '/api/v1/xpack/cloud/sync-instance-tasks',
+        actions: {
+          canDelete: vm.$hasPerm('xpack.delete_syncinstancetask'),
+          canUpdate: vm.$hasPerm('xpack.change_syncinstancetask')
+        },
         submenu: [
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskDetail'),
-            name: 'detail',
-            hidden: () => !this.$hasPerm('xpack.view_syncinstancedetail')
+            name: 'detail'
           },
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskHistoryList'),
@@ -39,7 +44,7 @@ export default {
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskHistoryAssetList'),
             name: 'AssetList',
-            hidden: () => !this.$hasPerm('xpack.view_syncinstancetask')
+            hidden: () => !this.$hasPerm('xpack.view_syncinstancedetail')
 
           }
         ],

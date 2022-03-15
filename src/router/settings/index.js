@@ -180,6 +180,7 @@ export default {
       meta: {
         title: i18n.t('xpack.InterfaceSettings'),
         icon: 'laptop',
+        licenseRequired: true,
         permissions: ['settings.change_interface']
       }
     },

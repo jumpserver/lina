@@ -13,6 +13,7 @@ export default {
     type: 'view',
     showNavSwitcher: false,
     resource: 'ticket',
+    licenseRequired: true,
     permissions: ['tickets.view_ticket']
   },
   children: [
@@ -58,7 +59,7 @@ export default {
         },
         {
           path: 'login-asset-confirm/:id',
-          name: 'loginAssetTicketDetail',
+          name: 'LoginAssetTicketDetail',
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
           meta: {
             title: i18n.t('route.TicketDetail'),

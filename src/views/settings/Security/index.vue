@@ -9,7 +9,6 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import PasswordRule from './PasswordRule'
 import AuthLimit from './AuthLimit'
-import { Link } from '@/components/FormFields'
 
 export default {
   name: 'Security',
@@ -43,24 +42,9 @@ export default {
             'AuthLimit',
             'PasswordRule'
           ]
-        ],
-        [
-          this.$t('setting.InsecureCommandAlert'),
-          [
-            'SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER'
-          ]
         ]
       ],
       fieldsMeta: {
-        SECURITY_INSECURE_COMMAND_EMAIL_RECEIVER: {
-          component: Link,
-          helpText: this.$t('setting.InsecureCommandNotifyToSubscription'),
-          label: this.$t('common.Receivers'),
-          el: {
-            href: '/ui/#/settings?activeTab=SysMessageSub',
-            title: this.$t('setting.insecureCommandEmailUpdate')
-          }
-        },
         SECURITY_LOGIN_CHALLENGE_ENABLED: {
           on: {
             change: ([val], updateForm) => {

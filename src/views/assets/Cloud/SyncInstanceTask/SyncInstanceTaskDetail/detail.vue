@@ -75,11 +75,11 @@ export default {
         },
         {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols.join(', ')
+          value: this.object.protocols?.join(', ')
         },
         {
           key: this.$t('xpack.Cloud.IPNetworkSegment'),
-          value: this.object.ip_network_segment_group.join(', ')
+          value: this.object.ip_network_segment_group?.join(', ')
         },
         {
           key: this.$t('xpack.Cloud.IsAlwaysUpdate'),

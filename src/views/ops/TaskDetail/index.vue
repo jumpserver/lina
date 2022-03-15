@@ -34,12 +34,12 @@ export default {
           {
             title: this.$t('ops.taskVersions'),
             name: 'TaskAdhoc',
-            hidden: () => !this.$hasPerm('ops.view_task')
+            hidden: () => !this.$hasPerm('ops.view_adhoc')
           },
           {
             title: this.$t('ops.execution'),
             name: 'TaskHistory',
-            hidden: () => !this.$hasPerm('ops.view_taskmonitor')
+            hidden: () => !this.$hasPerm('ops.view_adhocexecution')
           }
         ],
         hasRightSide: false

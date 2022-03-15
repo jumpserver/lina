@@ -34,7 +34,7 @@ export default [
     component: () => import('@/views/audits/CommandExecutionList'),
     meta: {
       title: i18n.t('route.BatchCommandLog'),
-      permissions: ['audits.view_operatelog']
+      permissions: ['ops.view_commandexecution']
     }
   }
 ]
