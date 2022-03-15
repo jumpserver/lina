@@ -62,9 +62,7 @@ export default {
         callback: {
           onCheck: _.debounce((event, treeId, treeNode) => {
             // 选择后，更新按钮可用
-            vm.$nextTick(() => {
-              vm.isDisabled = false
-            })
+            vm.setUpdateBtn()
             vm.checkActionDeps(treeNode)
             vm.checkSpecDeps()
           }, 200),
@@ -120,6 +118,9 @@ export default {
     ztree() {
       return this.$refs.tree.zTree
     },
+    scope() {
+      return this.object.scope
+    },
     detailItems() {
       return [
         {
@@ -160,6 +161,12 @@ export default {
     })
   },
   methods: {
+    setUpdateBtn() {
+      const permRequired = `rbac.change_${this.object.scope}role`
+      if (this.$hasPerm(permRequired)) {
+        this.isDisabled = false
+      }
+    },
     parsePerm(perm) {
       if (!perm) {
         this.$log.debug('No app code: ', perm)
@@ -241,7 +248,6 @@ export default {
         this.ztree.checkNode(depNode, true)
       }
     },
-
     updatePermissions() {
       const ztree = this.$refs.tree.zTree
       const checkedNodes = ztree.getCheckedNodes()

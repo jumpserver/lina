@@ -11,6 +11,7 @@ export default {
     view: 'profile',
     type: 'view',
     showNavSwitcher: false,
+    showOrganization: false,
     permissions: []
   },
   children: [
