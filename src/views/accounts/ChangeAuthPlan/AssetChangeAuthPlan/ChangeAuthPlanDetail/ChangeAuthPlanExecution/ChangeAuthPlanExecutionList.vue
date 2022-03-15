@@ -83,6 +83,7 @@ export default {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
+                  can: this.$hasPerm('xpack.view_changeauthplantask'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
