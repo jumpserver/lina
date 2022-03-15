@@ -81,7 +81,7 @@ export default {
       children: [
         {
           path: '',
-          name: 'TerminalList',
+          name: 'TerminalSetting',
           component: () => import('@/views/settings/Terminal'),
           meta: {
             title: i18n.t('setting.Terminal'),

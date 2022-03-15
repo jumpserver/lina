@@ -21,7 +21,7 @@ export default {
     const storageType = this.$route.query.type || 's3'
     const storageTypeMeta = STORAGE_TYPE_META_MAP[storageType]
     return {
-      successUrl: { name: 'Storage', params: { activeMenu: 'RelayStorage' }},
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'RelayStorage' }},
       url: `/api/v1/terminal/replay-storages/`,
       initial: {
         type: storageType,

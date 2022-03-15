@@ -181,7 +181,7 @@ export default {
       default(res, method, vm, addContinue) {
         const route = this.getNextRoute(res, method)
         if (!(route.params && route.params.id)) {
-          route['params'] = { 'id': res.id }
+          route['params'] = Object.assign(route['params'] || {}, { 'id': res.id })
         }
         this.$emit('submitSuccess', res)
 

@@ -17,8 +17,7 @@ export default {
   data() {
     const commandType = this.$route.query.type || 'es'
     return {
-      successUrl: { name: 'Storage', params: { activeMenu: 'CommandStorage' }},
-
+      successUrl: { name: 'TerminalSetting', params: { activeMenu: 'CommandStorage' }},
       initial: { type: commandType, doc_type: 'command' },
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'meta', 'is_default', 'comment']]

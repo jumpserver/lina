@@ -49,7 +49,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/settings/setting/?category=terminal',
+      getUrl: () => '/api/v1/settings/setting/?category=terminal',
       hasDetailInMsg: false,
       submitMethod() {
         return 'put'
