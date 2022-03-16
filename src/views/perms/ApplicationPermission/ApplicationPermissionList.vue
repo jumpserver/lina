@@ -154,6 +154,7 @@ export default {
       },
       headerActions: {
         hasCreate: false,
+        createInNewPage: true,
         moreActionsType: 'primary',
         moreCreates: {
           callback: (option) => {

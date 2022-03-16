@@ -122,6 +122,7 @@ export default {
             query: this.$route.query
           }
         },
+        createInNewPage: true,
         searchConfig: {
           url: '',
           options: [
