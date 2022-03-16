@@ -82,6 +82,7 @@ export default {
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
         ],
         'acls.loginacl': ['users.view_user'],
+        'acls.loginassetacl': ['users.view_user'],
         'assets.view_asset': ['assets.view_node'],
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
