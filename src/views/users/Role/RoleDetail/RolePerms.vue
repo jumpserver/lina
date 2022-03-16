@@ -77,6 +77,7 @@ export default {
         'terminal_node': ['settings.change_terminal'],
         'rbac.orgrolebinding': ['rbac.view_orgrole'],
         'rbac.systemrolebinding': ['rbac.view_systemrole'],
+        'tickets.change_ticketflow': ['users.view_user'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
