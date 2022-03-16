@@ -25,9 +25,6 @@ export default {
     return {
       ticketTableConfig: {
         url: this.url,
-        permissions: {
-          resource: 'ticket'
-        },
         columns: [
           {
             prop: 'serial_num',
@@ -111,7 +108,7 @@ export default {
       ticketActions: {
         hasLeftActions: this.hasMoreActions,
         hasRightActions: false,
-        hasCreate: false,
+        canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {
           default: {

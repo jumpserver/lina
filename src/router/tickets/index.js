@@ -34,7 +34,7 @@ export default {
           meta: {
             title: i18n.t('route.Tickets'),
             icon: 'file-text-o',
-            permissions: []
+            permissions: ['tickets.view_ticket']
           }
         },
         {
@@ -43,7 +43,7 @@ export default {
           component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
           meta: {
             title: i18n.t('tickets.OpenTicket'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         },
@@ -53,7 +53,7 @@ export default {
           component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
           meta: {
             title: i18n.t('route.TicketDetail'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         },
@@ -63,7 +63,7 @@ export default {
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
           meta: {
             title: i18n.t('route.TicketDetail'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         },
@@ -73,7 +73,7 @@ export default {
           component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),
           meta: {
             title: i18n.t('route.TicketCreate'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         },
@@ -83,7 +83,7 @@ export default {
           component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
           meta: {
             title: i18n.t('route.TicketDetail'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         },
@@ -93,7 +93,7 @@ export default {
           component: () => import('@/views/tickets/CommandConfirm/Detail'),
           meta: {
             title: i18n.t('route.CommandConfirm'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         },
@@ -103,7 +103,7 @@ export default {
           component: () => import('@/views/tickets/TicketDetail'),
           meta: {
             title: i18n.t('route.TicketDetail'),
-            permissions: []
+            permissions: ['tickets.view_ticket']
           },
           hidden: true
         }
