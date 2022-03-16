@@ -1,21 +1,14 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <keep-alive>
-      <component :is="config.activeMenu" />
-    </keep-alive>
-  </TabPage>
+  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
-import AccountList from './Account/AccountList'
-import SyncInstanceTaskList from './SyncInstanceTask/SyncInstanceTaskList'
+
 export default {
-  name: 'Index',
+  name: 'CloudIndex',
   components: {
-    TabPage,
-    AccountList,
-    SyncInstanceTaskList
+    TabPage
   },
   data() {
     return {
@@ -25,13 +18,14 @@ export default {
           {
             title: this.$t('xpack.Cloud.SyncInstanceTaskList'),
             name: 'SyncInstanceTaskList',
-            hidden: () => !this.$hasPerm('xpack.view_syncinstancetask')
+            hidden: () => !this.$hasPerm('xpack.view_syncinstancetask'),
+            component: () => import('@/views/assets/Cloud/SyncInstanceTask/SyncInstanceTaskList.vue')
           },
           {
             title: this.$t('xpack.Cloud.AccountList'),
             name: 'AccountList',
-            hidden: () => !this.$hasPerm('xpack.view_account')
-
+            hidden: () => !this.$hasPerm('xpack.view_account'),
+            component: () => import('@/views/assets/Cloud/Account/AccountList.vue')
           }
         ]
       }
