@@ -51,7 +51,7 @@ export default {
     {
       path: '/settings/message',
       name: 'SysMessageSub',
-      component: () => import('@/views/settings/MessageSub'),
+      component: () => import('@/views/settings/Message'),
       meta: {
         title: i18n.t('setting.MessageSub'),
         icon: 'bell-o',
