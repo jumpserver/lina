@@ -32,6 +32,7 @@ export default {
       config: {
         activeMenu: 'UserInfo',
         actions: {
+          canUpdate: this.$hasPerm('users.change_user')
         },
         submenu: [
           {
