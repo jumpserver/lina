@@ -792,6 +792,7 @@
     "Notifications": "Notifications",
     "SiteMessageList": "Site message",
     "UserLoginACL": "User Login ACL",
+    "UserLoginACLDetail": "User Login ACL",
     "NoPermission403": "403 No permission",
     "NoPermissionVew": "No permission view current page",
     "AjaxError404": "404 ajax error",

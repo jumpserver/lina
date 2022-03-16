@@ -818,6 +818,7 @@
     "Notifications": "通知",
     "SiteMessageList": "站内信",
     "UserLoginACL": "用户登录",
+    "UserLoginACLDetail": "用户登录限制",
     "NoPermission403": "403 暂无权限",
     "NoPermissionVew": "没有权限查看当前页面",
     "AjaxError404": "404 请求错误",
