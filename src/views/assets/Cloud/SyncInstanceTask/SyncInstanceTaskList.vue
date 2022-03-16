@@ -8,6 +8,7 @@ import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
+  name: 'SyncInstanceTaskList',
   components: {
     GenericListTable
   },
