@@ -115,22 +115,20 @@ export default {
           const routeFilter = this.checkInTableColumns()
           const routerSearch = routeFilter.search || {}
           let routerSearchAttrs = []
-          if (typeof routerSearch?.value !== 'string') {
-            routerSearchAttrs = [routerSearch.value]
-          } else {
+          if (typeof routerSearch?.value === 'string') {
             routerSearchAttrs = routerSearch?.value?.split(',') || []
           }
-          const routerSearchAttrsLength = routerSearchAttrs.length || 0
-          if (routerSearch && routerSearchAttrsLength > 0) {
-            for (let i = 0; i < routerSearchAttrsLength; i++) {
-              const cur = routerSearchAttrs[i]
-              routeFilter[`search_${cur}`] = {
-                ...routerSearch,
-                value: cur
-              }
+
+          for (const attr of routerSearchAttrs) {
+            routeFilter[`search_${attr}`] = {
+              ...routerSearch,
+              value: attr
             }
+          }
+          if (routerSearchAttrs.length === 0) {
             delete routeFilter.search
           }
+
           const asFilterTags = _.cloneDeep(this.filterTags)
           this.filterTags = {
             ...asFilterTags,
