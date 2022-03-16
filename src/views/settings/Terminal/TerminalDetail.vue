@@ -34,6 +34,7 @@ export default {
         ],
         hasDelete: false,
         actions: {
+          canUpdate: this.$hasPerm('terminal.change_terminal'),
           hasDelete: false,
           canDelete: false,
           detailApiUrl: `/api/v1/terminal/terminals/${this.$route.params.id}/`
