@@ -74,7 +74,7 @@ export default {
         },
         moreCreates: {
           callback: (option) => {
-            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.title.toLowerCase() }})
+            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.name.toLowerCase() }})
           },
           dropdown: [
             ...AssetProtocols,
