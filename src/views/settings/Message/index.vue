@@ -10,27 +10,31 @@
         :stripe="true"
       >
         <el-table-column :label="$t('notifications.MessageType')" width="230">
-          <template #default="scope">
+          <template v-slot="scope">
             <span>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
         <el-table-column v-for="header in receiveBackends" :key="header.id" :label="header.name_display" width="120">
-          <template #default="scope">
-            <el-checkbox
-              v-if="!scope.row.children"
-              v-model="scope.row.receiveBackends[header.name]"
-              :disabled="header.name === 'site_msg'"
-              @change="onCheckReceiveBackend(scope.row)"
-            />
+          <template v-slot="scope">
+            <span v-if="!scope.row.children">
+              <el-checkbox
+                v-if="header.name !== 'site_msg'"
+                v-model="scope.row.receiveBackends[header.name]"
+                @change="onCheckReceiveBackend(scope.row)"
+              />
+              <el-checkbox v-else :value="true" :disabled="true" />
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('notifications.Receivers')" show-overflow-tooltip>
-          <template #default="scope">
-            <span v-if="!scope.row.children">{{ scope.row.receivers.map(item => item.name).join(', ') }}</span>
+          <template v-slot="scope">
+            <span v-if="!scope.row.children">
+              {{ scope.row.receivers.map(item => item.name).join(', ') }}
+            </span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('common.Actions')" width="200">
-          <template #default="scope">
+          <template v-slot="scope">
             <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
               {{ $t('notifications.ChangeReceiver') }}
             </el-button>

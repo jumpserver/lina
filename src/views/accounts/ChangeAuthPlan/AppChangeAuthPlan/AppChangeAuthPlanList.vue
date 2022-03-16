@@ -6,7 +6,7 @@
 import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
-import { AppPlanDatabase } from '@/views/perms/const'
+import { AppPlanDatabase } from '@/views/applications/const'
 
 export default {
   name: 'AppChangeAuthPlanList',

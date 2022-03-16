@@ -4,6 +4,7 @@
 
 <script>
 import TagSearch from '@/components/TagSearch'
+import i18n from '@/i18n/i18n'
 export default {
   name: 'AutoDataSearch',
   components: { TagSearch },
@@ -78,8 +79,8 @@ export default {
         }
         if (field.type === 'boolean') {
           option.children = [
-            { label: this.$t('common.Yes'), value: true },
-            { label: this.$t('common.No'), value: false }
+            { label: i18n.t('common.Yes'), value: true },
+            { label: i18n.t('common.No'), value: false }
           ]
         }
         vm.internalOptions.push(option)

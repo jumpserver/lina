@@ -154,7 +154,7 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasBulkDelete: true,
+        createInNewPage: true,
         moreActionsType: 'primary',
         moreCreates: {
           callback: (option) => {

@@ -31,7 +31,8 @@ export default {
           },
           {
             title: this.$t('ops.versionRunExecution'),
-            name: 'AdhocExecutionHistory'
+            name: 'AdhocExecutionHistory',
+            hidden: () => !this.$hasPerm('ops.view_adhocexecution')
           }
         ],
         hasRightSide: false

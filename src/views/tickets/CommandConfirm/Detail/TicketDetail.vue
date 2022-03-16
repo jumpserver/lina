@@ -76,6 +76,9 @@ export default {
           value: this.object.meta.apply_from_session_id,
           formatter: function(item, value) {
             const to = { name: 'SessionDetail', params: { id: value }, query: { oid: vm.object.org_id }}
+            if (!vm.$hasPerm('terminal.view_session')) {
+              return <span>{vm.$t('sessions.session')}</span>
+            }
             return <router-link to={to}>{vm.$t('sessions.session')}</router-link>
           }
         },
@@ -89,7 +92,10 @@ export default {
             const to = {
               name: 'CommandFilterRulesUpdate',
               params: { id: value.cmdFilterRuleId },
-              query: { filter: value.cmdFilterId }
+              query: { filter: value.cmdFilterId, oid: vm.object.org_id }
+            }
+            if (!vm.$hasPerm('assets.change_commandfilterrule')) {
+              return <span>{vm.$t('assets.CommandFilterRules')}</span>
             }
             return <router-link to={to}>{vm.$t('assets.CommandFilterRules')}</router-link>
           }

@@ -52,7 +52,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: `/api/v1/applications/applications/?category=db`,
+              url: `/api/v1/applications/applications/?category__in=db,cloud`,
               transformOption: (item) => {
                 return { label: item.name + ' (' + item.type_display + ')', value: item.id }
               }

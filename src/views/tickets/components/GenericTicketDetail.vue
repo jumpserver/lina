@@ -9,7 +9,7 @@
     </el-col>
     <el-col :span="6" :offset="1">
       <Steps :object="object" />
-      <Session v-perms="'tickets.view_ticketsession'" :object="object" />
+      <Session v-perms="'tickets.view_ticket'" :object="object" />
     </el-col>
   </el-row>
 </template>

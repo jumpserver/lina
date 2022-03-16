@@ -173,8 +173,8 @@ export default {
         }
         if (column.type === 'boolean') {
           col.filters = [
-            { text: this.$t('common.Yes'), value: true },
-            { text: this.$t('common.No'), value: false }
+            { text: i18n.t('common.Yes'), value: true },
+            { text: i18n.t('common.No'), value: false }
           ]
           col.sortable = false
           col['column-key'] = col.prop

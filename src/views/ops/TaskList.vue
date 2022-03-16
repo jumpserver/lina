@@ -82,9 +82,11 @@ export default {
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,
+              canDelete: this.$hasPerm('ops.delete_task'),
               extraActions: [
                 {
                   name: 'run',
+                  can: this.$hasPerm('ops.add_adhoc'),
                   title: this.$t('ops.run'),
                   type: 'primary',
                   callback: function({ row, tableData }) {
