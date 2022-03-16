@@ -6,7 +6,7 @@
           <el-button
             size="small"
             type="primary"
-            style="width: 100px;"
+            style="width: 100%;"
             :disabled="isDisabled"
             @click="updatePermissions"
           >
