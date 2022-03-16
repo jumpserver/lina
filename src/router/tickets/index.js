@@ -4,7 +4,7 @@ import i18n from '@/i18n/i18n'
 
 export default {
   path: '/tickets',
-  redirect: '/tickets/list',
+  redirect: '/tickets/tickets',
   component: Layout,
   meta: {
     title: i18n.t('route.Tickets'),
@@ -18,7 +18,7 @@ export default {
   },
   children: [
     {
-      path: '/tickets/list',
+      path: '/tickets/tickets',
       redirect: '',
       component: empty,
       meta: {
