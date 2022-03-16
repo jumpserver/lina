@@ -12,6 +12,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Select2 from '@/components/FormFields/Select2'
+import rules from '@/components/DataForm/rules'
 export default {
   name: 'RulesCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -69,6 +70,7 @@ export default {
         },
         reviewers: {
           hidden: (item) => item.action !== 2,
+          rules: [rules.RequiredChange],
           el: {
             value: [],
             ajax: {
