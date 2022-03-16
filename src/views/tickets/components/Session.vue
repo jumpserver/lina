@@ -37,7 +37,7 @@
       <el-button
         type="danger"
         size="small"
-        :disabled="asDisabled(!session.can_terminate)"
+        :disabled="asDisabled(!session.can_terminate || !$hasPerm('terminal.terminate_session'))"
         @click="onConnect"
       >
         {{ $t('sessions.terminate') }}
@@ -45,7 +45,7 @@
       <el-button
         type="primary"
         size="small"
-        :disabled="asDisabled(!session.can_join)"
+        :disabled="asDisabled(!session.can_join || !$hasPerm('terminal.monitor_session'))"
         @click="onMonitor"
       >
         {{ $t('sessions.Monitor') }}
@@ -117,7 +117,7 @@ export default {
       window.open(joinUrl, 'height=600, width=800, top=400, left=400, toolbar=no, menubar=no, scrollbars=no, location=no, status=no')
     },
     asDisabled(type) {
-      return (type || true) || !this.$hasPerm('tickets.change_ticketsession')
+      return (type || true) || !this.$hasPerm('tickets.view_ticket')
     }
   }
 
