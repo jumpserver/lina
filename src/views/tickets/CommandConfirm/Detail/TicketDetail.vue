@@ -89,7 +89,7 @@ export default {
             const to = {
               name: 'CommandFilterRulesUpdate',
               params: { id: value.cmdFilterRuleId },
-              query: { filter: value.cmdFilterId }
+              query: { filter: value.cmdFilterId, oid: vm.object.org_id }
             }
             return <router-link to={to}>{vm.$t('assets.CommandFilterRules')}</router-link>
           }
