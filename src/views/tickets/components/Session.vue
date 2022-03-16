@@ -80,6 +80,7 @@ export default {
   },
   beforeDestroy() {
     clearTimeout(this.curTimer)
+    this.curTimer = null
   },
   methods: {
     init() {
