@@ -138,7 +138,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$emit('update:activeMenu', 'PasswordUpdate')
+              this.$router.push({ name: 'ProfileSetting', query: { activeTab: 'PasswordUpdate' }})
             }.bind(this)
           }
         },
@@ -151,7 +151,7 @@ export default {
           },
           callbacks: {
             click: function() {
-              this.$emit('update:activeMenu', 'SSHUpdate')
+              this.$router.push({ name: 'ProfileSetting', query: { activeTab: 'SSHUpdate' }})
             }.bind(this)
           }
         },
