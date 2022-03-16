@@ -76,6 +76,7 @@ export default {
             formatterArgs: {
               hasEdit: false,
               hasDelete: false,
+              hasClone: false,
               hasUpdate: false,
               extraActions: [
                 {
