@@ -59,7 +59,7 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/rbac/${this.object.scope}-role-bindings/?role=${this.object.id}`,
-        columns: ['user_display', 'actions'],
+        columns: ['user_display', 'org_name', 'actions'],
         columnsShow: {
           min: ['user_display', 'actions']
         },

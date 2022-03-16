@@ -3,39 +3,17 @@
     <el-col :md="14" :sm="24">
       <DetailCard :items="detailItems" />
     </el-col>
-    <el-col :md="10" :sm="24">
-      <IBox :title="$t('rbac.Permissions')">
-        <div style="height: 10%">
-          <el-button
-            size="small"
-            type="primary"
-            style="width: 100%;"
-            :disabled="isDisabled"
-            @click="updatePermissions"
-          >
-            {{ $t('common.Update') }}
-          </el-button>
-        </div>
-        <div class="perm-tree">
-          <AutoDataZTree v-if="!loading" ref="tree" :setting="setting" />
-        </div>
-      </IBox>
-    </el-col>
   </el-row>
 </template>
 
 <script>
 import DetailCard from '@/components/DetailCard'
-import { IBox } from '@/components'
-import AutoDataZTree from '@/components/AutoDataZTree'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'RoleInfo',
   components: {
-    DetailCard,
-    AutoDataZTree,
-    IBox
+    DetailCard
   },
   props: {
     object: {
@@ -44,93 +22,11 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
-      loading: true,
-      isDisabled: true,
-      setting: {
-        showAssets: false,
-        showMenu: false,
-        showRefresh: true,
-        treeUrl: '',
-        check: {
-          enable: true
-        },
-        async: {
-          enable: false
-        },
-        callback: {
-          onCheck: _.debounce((event, treeId, treeNode) => {
-            // 选择后，更新按钮可用
-            vm.setUpdateBtn()
-            vm.checkActionDeps(treeNode)
-            vm.checkSpecDeps()
-          }, 200),
-          beforeCheck: (treeId, treeNode) => {
-            return true
-          },
-          onClick: _.debounce((event, treeId, treeNode) => {
-            vm.ztree.expandNode(treeNode)
-          }, 100)
-        }
-      },
-      nodesDeps: {
-        'view_console': ['rbac.view_console'],
-        'view_audit': ['rbac.view_audit'],
-        'view_workspace': ['rbac.view_workspace'],
-        'view_setting': ['settings.view_setting'],
-        'cloud_import': ['assets.view_asset'],
-        'terminal_node': ['settings.change_terminal'],
-        'rbac.orgrolebinding': ['rbac.view_orgrole'],
-        'rbac.systemrolebinding': ['rbac.view_systemrole'],
-        'users.invite_user': [
-          'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
-          'rbac.view_orgrolebinding', 'rbac.view_orgrole'
-        ],
-        'acls.loginacl': ['users.view_user'],
-        'assets.view_asset': ['assets.view_node'],
-        'assets.commandfilterrule': ['assets.view_commandfilter'],
-        'assets.gateway': ['assets.view_domain'],
-        'assets.view_authbook': ['assets.view_node'],
-        'applications.add_application': ['assets.view_asset'],
-        'applications.view_account': ['applications.view_application'],
-        'perms.view_assetpermission': ['assets.view_node'],
-        'perms.view_applicationpermission': ['applications.view_application'],
-        'perms.assetpermission': [
-          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
-          'users.view_user', 'users.view_usergroup'
-        ],
-        'perms.applicationpermission': [
-          'applications.view_application', 'assets.view_systemuser',
-          'users.view_user', 'users.view_usergroup'
-        ],
-        'settings.change_systemmsgsubscription': ['users.view_user'],
-        'terminal.add_terminal': ['terminal.view_commandstorage', 'terminal.view_replaystorage'],
-        'terminal.change_terminal': ['terminal.view_commandstorage', 'terminal.view_replaystorage'],
-        'terminal.view_commandstroage': ['settings.change_terminal'],
-        'terminal.view_replaystorage': ['settings.change_terminal'],
-        'terminal.view_status': ['settings.change_terminal'],
-        'terminal.view_task': ['settings.change_terminal'],
-        'terminal.view_terminal': ['settings.change_terminal'],
-        'xpack.add_syncinstancetask': [
-          'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
-          'xpack.view_account'
-        ],
-        'xpack.view_syncinstancetask': ['xpack.view_account'],
-        'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
-        'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask'],
-        'xpack.view_changeauthplantask': ['xpack.view_changeauthplan'],
-        'xpack.view_changeauthplanexecution': ['xpack.view_changeauthplan']
-      }
+      loading: true
     }
   },
   computed: {
-    ztree() {
-      return this.$refs.tree.zTree
-    },
-    scope() {
-      return this.object.scope
-    },
     detailItems() {
       return [
         {
@@ -165,10 +61,6 @@ export default {
     }
   },
   mounted() {
-    this.setting.treeUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/permissions/tree/`
-    setTimeout(() => {
-      this.loading = false
-    })
   },
   methods: {
     setUpdateBtn() {
@@ -279,18 +171,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree >>> .ztree * {
-  background: white;
-}
-.perm-tree >>> .ztree {
-  background: white !important;
-}
-.perm-tree >>> .checkbox_true_disable,
-.perm-tree >>> .checkbox_false_disable {
-  cursor: not-allowed!important;
-}
-.perm-tree >>> .checkbox_true_disable:before,
-.perm-tree >>> .checkbox_false_disable:before  {
-  color: #aaaaaa!important;
-}
 </style>

@@ -4,7 +4,20 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DATABASE } from '@/views/perms/const'
+import { DATABASE } from '@/views/applications/const'
+
+function getAppType(arr) {
+  const searchAppType = []
+  if (arr.length < 1) return searchAppType
+  arr.forEach((i) => {
+    const option = {
+      value: i.name,
+      label: i.title
+    }
+    searchAppType.push(option)
+  })
+  return searchAppType
+}
 
 export default {
   components: {
@@ -22,7 +35,10 @@ export default {
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'type_display', 'attrs.host', 'attrs.port', 'attrs.database', 'comment', 'actions']
+          default: [
+            'name', 'type_display', 'attrs.host', 'attrs.port',
+            'attrs.database', 'comment', 'actions'
+          ]
         },
         columnsMeta: {
           type_display: {
@@ -75,7 +91,7 @@ export default {
             {
               value: 'type',
               label: this.$t('applications.type'),
-              children: this.getAppType(appType)
+              children: getAppType(appType)
             }
           ]
         },
@@ -89,18 +105,6 @@ export default {
     }
   },
   methods: {
-    getAppType(arr) {
-      const searchAppType = []
-      if (arr.length < 1) return searchAppType
-      arr.forEach((i) => {
-        const option = {
-          value: i.name,
-          label: i.title
-        }
-        searchAppType.push(option)
-      })
-      return searchAppType
-    }
   }
 }
 </script>

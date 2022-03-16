@@ -13,7 +13,7 @@
       :title="this.$t('assets.Assets')"
       :visible.sync="dialogVisible"
       custom-class="asset-select-dialog"
-      width="70%"
+      width="80vw"
       top="1vh"
       @confirm="handleConfirm"
       @cancel="handleCancel"
@@ -192,7 +192,7 @@ export default {
   .el-dialog__wrapper  ::v-deep .el-dialog__body{
     padding: 5px 10px;
   }
-  .page  ::v-deep  .treebox{
+  .page  ::v-deep  .treebox {
     height: inherit !important;
   }
   .asset-select-dialog >>> .transition-box:first-child {

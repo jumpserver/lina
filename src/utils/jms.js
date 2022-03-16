@@ -43,6 +43,7 @@ export function getResourceNameByPath(path) {
 
 export function getResourceFromApiUrl(apiUrl) {
   const re = new RegExp('/api/v1/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/.*')
+  console.log('Api url: ', apiUrl)
   const matched = apiUrl.match(re)
   if (!matched) {
     return { path: '', app: '', resource: '' }
