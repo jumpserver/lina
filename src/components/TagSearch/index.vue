@@ -114,11 +114,16 @@ export default {
         if (val && val.length > 0) {
           const routeFilter = this.checkInTableColumns()
           const routerSearch = routeFilter.search || {}
-          const routerSearchArrs = routerSearch?.value?.split(',') || []
-          const routerSearchArrsLength = routerSearchArrs.length || 0
-          if (routerSearch && routerSearchArrsLength > 0) {
-            for (let i = 0; i < routerSearchArrsLength; i++) {
-              const cur = routerSearchArrs[i]
+          let routerSearchAttrs = []
+          if (typeof routerSearch?.value !== 'string') {
+            routerSearchAttrs = [routerSearch.value]
+          } else {
+            routerSearchAttrs = routerSearch?.value?.split(',') || []
+          }
+          const routerSearchAttrsLength = routerSearchAttrs.length || 0
+          if (routerSearch && routerSearchAttrsLength > 0) {
+            for (let i = 0; i < routerSearchAttrsLength; i++) {
+              const cur = routerSearchAttrs[i]
               routeFilter[`search_${cur}`] = {
                 ...routerSearch,
                 value: cur
@@ -157,32 +162,32 @@ export default {
       const routeQueryKeys = Object.keys(routeQuery)
       const routeQueryKeysLength = routeQueryKeys.length
       const keys = {}
-      if (routeQueryKeysLength < 1) return keys
-      if (routeQueryKeysLength > 0) {
-        for (let i = 0; i < routeQueryKeysLength; i++) {
-          const key = routeQueryKeys[i]
-          let valueDecode = decodeURI(routeQuery[key])
-          const isSearch = key !== 'search'
-          const curOptions = this.options || []
-          for (let k = 0, len = curOptions.length; k < len; k++) {
-            const cur = curOptions[k]
-            if (cur?.type === 'boolean') {
-              valueDecode = !!valueDecode
+      if (routeQueryKeysLength < 1) {
+        return keys
+      }
+      for (const [key, value] of Object.entries(routeQuery)) {
+        let valueDecode = decodeURI(value)
+        const isSearch = key !== 'search'
+        const curOptions = this.options || []
+
+        for (let k = 0, len = curOptions.length; k < len; k++) {
+          const cur = curOptions[k]
+          if (cur?.type === 'boolean') {
+            valueDecode = !!valueDecode
+          }
+          if (key === cur.value || !isSearch) {
+            const curChildren = cur.children || []
+            keys[key] = {
+              ...cur,
+              key,
+              label: isSearch ? cur.label : '',
+              value: valueDecode
             }
-            if (key === cur.value || !isSearch) {
-              const curChildren = cur.children || []
-              keys[key] = {
-                ...cur,
-                key,
-                label: isSearch ? cur.label : '',
-                value: valueDecode
-              }
-              if (isSearch && curChildren.length > 0) {
-                for (const item of curChildren) {
-                  if (valueDecode === item.value) {
-                    keys[key].valueLabel = item.label
-                    break
-                  }
+            if (isSearch && curChildren.length > 0) {
+              for (const item of curChildren) {
+                if (valueDecode === item.value) {
+                  keys[key].valueLabel = item.label
+                  break
                 }
               }
             }
