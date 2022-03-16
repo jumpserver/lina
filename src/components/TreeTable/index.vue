@@ -1,7 +1,7 @@
 <template>
   <el-collapse-transition>
     <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="transition-box">
+      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="transition-box left">
         <component
           :is="component"
           ref="AutoDataZTree"
@@ -131,5 +131,8 @@ export default {
   .auto-data-ztree {
     overflow: auto;
     /*border-right: solid 1px red;*/
+  }
+  .transition-box.left {
+    background: #f3f3f3;
   }
 </style>
