@@ -104,6 +104,7 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
+                  can: vm.$hasPerm('xpack.add_applicationchangeauthplanexecution'),
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/xpack/change-auth-plan/app-plan-execution/`,
