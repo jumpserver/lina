@@ -94,6 +94,9 @@ export default {
             scope: this.scope
           }
         },
+        searchConfig: {
+          exclude: ['scope']
+        },
         hasMoreActions: false,
         canCreate: () => {
           return this.$hasPerm(`rbac.add_${this.scopeRole}`)
