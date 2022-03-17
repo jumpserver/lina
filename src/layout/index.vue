@@ -1,5 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper">
+    <div v-if="device==='mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <NavLeft class="sidebar-container disabled-when-print" />
     <div :class="{hasTagsView: needTagsView}" class="main-container">
       <div :class="{'fixed-header': fixedHeader}" class="disabled-when-print">

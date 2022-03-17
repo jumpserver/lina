@@ -7,6 +7,10 @@
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         {{ isTitle }}
       </div>
+      <div class="active-mobile">
+        <ViewSwitcher />
+        <Organization class="organization" />
+      </div>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -43,9 +47,17 @@ import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 import Hamburger from '@/components/Hamburger'
+import ViewSwitcher from '../NavHeader/ViewSwitcher'
+import Organization from '../NavHeader/Organization'
 
 export default {
-  components: { SidebarItem, Logo, Hamburger },
+  components: {
+    SidebarItem,
+    Logo,
+    Hamburger,
+    ViewSwitcher,
+    Organization
+  },
   computed: {
     ...mapGetters([
       'currentViewRoute',
@@ -150,6 +162,22 @@ export default {
       left: 2px;
       top: 10px;
       position: absolute;
+    }
+  }
+  .active-mobile {
+    display: none;
+    &>>> .organization {
+      padding-left: 8px;
+      background: transparent;
+      color: #fff;
+    }
+    &>>> .menu-main {
+      margin-left: -10px;
+    }
+  }
+  @media screen and (max-width: 992px) {
+    .active-mobile {
+      display: block;
     }
   }
 </style>

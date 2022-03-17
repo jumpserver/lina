@@ -19,13 +19,14 @@
       <li v-if="this.$hasLicense() && this.$hasPerm('tickets.view_ticket')" class="header-item header-hover">
         <Tickets />
       </li>
-      <li class="header-item">
+      <li class="header-item active-menu">
         <Help />
       </li>
       <li class="header-item header-profile">
         <AccountDropdown />
       </li>
     </ul>
+    <hamburger :is-active="sidebar.opened" class="hamburger-container is-show-menu" @toggleClick="toggleSideBar" />
     <ul class="navbar-left">
       <li class="left-item">
         <ViewSwitcher />
@@ -39,7 +40,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import Hamburger from '@/components/Hamburger'
+import Hamburger from '@/components/Hamburger'
 import AccountDropdown from './AccountDropdown'
 import SiteMessages from './SiteMessages'
 import Help from './Help'
@@ -51,6 +52,7 @@ import SystemSetting from './SystemSetting'
 
 export default {
   components: {
+    Hamburger,
     ViewSwitcher,
     Organization,
     AccountDropdown,
@@ -81,13 +83,12 @@ export default {
 </script>
 <style lang="scss" scoped>
   .navbar {
+    position: relative;
     height: 55px;
     overflow: hidden;
     background: #f3f3f4;
-
     .navbar-left {
       float: left;
-
       .left-item {
         line-height: 55px;
         display: inline-block;
@@ -101,7 +102,6 @@ export default {
         }
       }
     }
-
     .navbar-right {
       float: right;
       margin-right: 10px;
@@ -137,11 +137,43 @@ export default {
       }
     }
   }
-
   ul {
     margin: 0;
     padding-inline-start: 0;
   }
-
+  .is-show-menu {
+    display: none;
+  }
+  .hamburger-container {
+    float: left;
+    height: 26px;
+    margin: 12px;
+    padding: 0 10px!important;
+    line-height: 30px;
+    border-radius: 4px;
+    border-color: #1ab394;
+    background-color: #1ab394;
+    color: #fff;
+    cursor: pointer;
+    transition: .2s;
+    -webkit-tap-highlight-color: transparent;
+    &>>> .svg-icon {
+      font-size: 16px;
+      color: #fff;
+    }
+  }
+  @media screen and (max-width: 1006px) {
+    .is-show-menu {
+      display: block;
+    }
+    .navbar-left {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 480px){
+    .active-menu {
+      display: none!important;;
+    }
+  }
 </style>
 

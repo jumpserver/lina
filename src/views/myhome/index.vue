@@ -6,7 +6,7 @@
           <div class="content">
             <div class="content-body">
               <el-row>
-                <el-col :md="16" :xs="24" style="padding-right: 20px;">
+                <el-col :md="16" :xs="24" class="content-left">
                   <Session />
                   <Log />
                   <Ticket v-if="hasValidLicense" />
@@ -66,6 +66,7 @@ export default {
       position: relative;
       overflow: hidden;
       .main {
+        padding: 0;
         .content {
           position: relative;
           width: 100%;
@@ -79,6 +80,14 @@ export default {
           }
         }
       }
+    }
+  }
+  .content-left {
+    padding-right: 20px;
+  }
+  @media screen and (max-width: 992px) {
+    .content-left {
+      padding-right: 0;
     }
   }
 </style>
