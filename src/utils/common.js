@@ -105,7 +105,13 @@ export function getApiPath(that) {
   } else if (pagePathArray.indexOf('gathered-user') !== -1 || pagePathArray.indexOf('change-auth-plan') !== -1) {
     pagePathArray[pagePathArray.indexOf('accounts')] = 'xpack'
   }
-  pagePath = pagePathArray.slice(2, pagePathArray.length).join('/')
+  if (pagePathArray.indexOf('view') !== -1) {
+    // view console
+    pagePath = pagePathArray.slice(2, pagePathArray.length).join('/')
+  } else {
+    // ticket ...
+    pagePath = pagePathArray.slice(1, pagePathArray.length).join('/')
+  }
   return `/api/v1/${pagePath}/`
 }
 
