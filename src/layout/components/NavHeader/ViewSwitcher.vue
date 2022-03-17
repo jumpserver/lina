@@ -2,7 +2,8 @@
   <el-menu
     default-active="activeIndex"
     class="menu-main"
-    mode="horizontal"
+    :class="mode"
+    :mode="mode"
     @select="handleSelectView"
   >
     <el-submenu
@@ -21,7 +22,7 @@
         v-perms="view.perms"
         :index="view.name"
       >
-        <i class="icons" :class="view.meta.icon" />
+        <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-submenu>
@@ -37,6 +38,10 @@ export default {
     showTitle: {
       type: Boolean,
       default: false
+    },
+    mode: {
+      type: String,
+      default: 'horizontal'
     }
   },
   data() {
@@ -131,4 +136,8 @@ export default {
 .el-menu-item.is-active {
   font-weight: bold;
 }
+.menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
+  right: 10px;
+}
+
 </style>

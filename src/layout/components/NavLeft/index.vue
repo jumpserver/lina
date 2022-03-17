@@ -5,7 +5,7 @@
         <Logo v-if="showLogo" :collapse="isCollapse" />
       </div>
       <div class="active-mobile">
-        <ViewSwitcher />
+        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
         <Organization class="organization" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
@@ -173,6 +173,9 @@ export default {
     }
     &>>> .menu-main {
       margin-left: -10px;
+    }
+    &>>> .title-label {
+      color: white !important;
     }
   }
   @media screen and (max-width: 992px) {
