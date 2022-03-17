@@ -4,12 +4,12 @@
       <div class="nav-logo">
         <Logo v-if="showLogo" :collapse="isCollapse" />
       </div>
-      <div class="nav-title" :class="{'collapsed': isCollapse}">
-        {{ isTitle }}
-      </div>
       <div class="active-mobile">
         <ViewSwitcher />
         <Organization class="organization" />
+      </div>
+      <div class="nav-title" :class="{'collapsed': isCollapse}">
+        {{ isTitle }}
       </div>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
