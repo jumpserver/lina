@@ -52,7 +52,7 @@ export default {
           {
             title: this.$t('users.tabs.grantedApplications'),
             name: 'UserGrantedApplications',
-            hidden: () => !vm.$hasPerm('perms.view_usergroupapps')
+            hidden: () => !vm.$hasPerm('perms.view_userapps')
           },
           {
             title: this.$t('users.tabs.ApplicationPermissionRules'),
