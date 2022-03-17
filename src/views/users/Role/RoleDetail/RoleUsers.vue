@@ -81,7 +81,17 @@ export default {
           canImportUpdate: false
         },
         searchConfig: {
-          exclude: ['scope', 'role', 'org']
+          exclude: ['user', 'scope', 'role', 'org'],
+          options: [
+            {
+              label: this.$t('users.Username'),
+              value: 'user__username'
+            },
+            {
+              label: this.$t('perms.User'),
+              value: 'user__name'
+            }
+          ]
         }
       }
     }
