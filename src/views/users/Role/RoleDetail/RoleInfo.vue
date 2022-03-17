@@ -88,6 +88,7 @@ export default {
           'assets.match_asset', 'assets.match_node', 'assets.match_systemuser',
           'applications.match_application'
         ],
+        'tickets.view_ticketflow': ['tickets.view_ticket'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
