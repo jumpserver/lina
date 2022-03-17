@@ -95,13 +95,13 @@ export const DATABASE = [
     category: DATABASE_CATEGORY,
     has: true,
     group: i18n.t('applications.NoSQLProtocol')
-  },
-  {
-    name: MONGODB,
-    title: i18n.t(`applications.applicationsType.${MONGODB}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY
   }
+  // {
+  //   name: MONGODB,
+  //   title: i18n.t(`applications.applicationsType.${MONGODB}`),
+  //   type: 'primary',
+  //   category: DATABASE_CATEGORY
+  // }
 ]
 
 export const AppPlanDatabase = [
