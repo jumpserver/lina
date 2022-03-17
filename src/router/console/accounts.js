@@ -7,7 +7,8 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.AssetAccount'),
-      app: 'assets'
+      app: 'assets',
+      licenseRequired: true
     },
     redirect: '',
     children: [
@@ -31,7 +32,8 @@ export default [
       title: i18n.t('route.AssetAccount'),
       permissions: ['applications.view_account'],
       app: 'applications',
-      resource: 'account'
+      resource: 'account',
+      licenseRequired: true
     },
     children: [
       {
@@ -52,7 +54,8 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.GatherUser.GatherUserList'),
-      app: 'assets'
+      app: 'assets',
+      licenseRequired: true
     },
     children: [
       {
@@ -114,7 +117,8 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
-      app: 'xpack'
+      app: 'xpack',
+      licenseRequired: true
     },
     children: [
       {
@@ -122,7 +126,8 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/index.vue'),
         name: 'ChangeAuthPlanIndex',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan')
+          title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
+          permissions: ['xpack.view_changeauthplan|xpack.view_applicationchangeauthplan']
         }
       },
       {
@@ -130,7 +135,8 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanList.vue'),
         name: 'AssetChangeAuthPlanList',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan')
+          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
+          permissions: ['xpack.view_changeauthplan']
         },
         hidden: true
       },
@@ -141,7 +147,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
-          action: 'create'
+          permissions: ['xpack.add_changeauthplan']
         }
       },
       {
@@ -151,7 +157,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
-          action: 'update'
+          permissions: ['xpack.change_changeauthplan']
         }
       },
       {
@@ -160,7 +166,8 @@ export default [
         name: 'AssetChangeAuthPlanDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan')
+          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
+          permissions: ['xpack.view_changeauthplan']
         }
       },
       {
@@ -169,7 +176,8 @@ export default [
         name: 'ChangeAuthPlanExecutionDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail')
+          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
+          permissions: ['xpack.view_changeauthplanexecution']
         }
       },
       {
@@ -177,7 +185,8 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue'),
         name: 'AppChangeAuthPlanList',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan')
+          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
+          permissions: ['xpack.view_applicationchangeauthplan']
         },
         hidden: true
       },
@@ -187,7 +196,7 @@ export default [
         name: 'AppChangeAuthPlanCreate',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanCreate'),
-          action: 'create'
+          permissions: ['xpack.add_applicationchangeauthplan']
         },
         hidden: true
       },
@@ -196,7 +205,8 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
         name: 'AppChangeAuthPlanDetail',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan')
+          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
+          permissions: ['xpack.view_applicationchangeauthplan']
         },
         hidden: true
       },
@@ -206,7 +216,7 @@ export default [
         name: 'AppChangeAuthPlanUpdate',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanUpdate'),
-          action: 'update'
+          permissions: ['xpack.change_applicationchangeauthplan']
         },
         hidden: true
       },
@@ -215,7 +225,8 @@ export default [
         component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/AppChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
         name: 'AppChangeAuthPlanExecutionDetail',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail')
+          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
+          permissions: ['xpack.view_applicationchangeauthplanexecution']
         },
         hidden: true
       }
@@ -228,7 +239,8 @@ export default [
     meta: {
       title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
       app: 'assets',
-      resource: 'accountbackupplan'
+      resource: 'accountbackupplan',
+      licenseRequired: true
     },
     children: [
       {
