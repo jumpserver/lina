@@ -1,7 +1,7 @@
 <template>
   <ElFormRender
     ref="form"
-    :class="mobile? 'mobile' : ''"
+    :class="mobile? 'mobile' : 'desktop'"
     :content="fields"
     :form="basicForm"
     :label-position="labelPosition"
@@ -74,7 +74,7 @@ export default {
       return this.$store.state.app.device === 'mobile'
     },
     labelPosition() {
-      return this.mobile ? 'top' : 'left'
+      return this.mobile ? 'top' : 'right'
     }
   },
   methods: {
