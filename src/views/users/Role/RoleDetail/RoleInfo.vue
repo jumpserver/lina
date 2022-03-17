@@ -98,6 +98,7 @@ export default {
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
         'assets.view_authbook': ['assets.view_node'],
+        'assets.gathereduser': ['assets.view_node'],
         'applications.add_application': ['assets.view_asset'],
         'applications.view_account': ['applications.view_application'],
         'perms.view_assetpermission': ['assets.view_node'],
