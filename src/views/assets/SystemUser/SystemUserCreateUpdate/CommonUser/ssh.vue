@@ -73,6 +73,7 @@ export default {
         },
         su_from: {
           hidden: (item) => !item.su_enabled,
+          rules: [Required],
           el: {
             multiple: false,
             clearable: true,
