@@ -11,7 +11,7 @@
       :modal="false"
       :title="$t('notifications.SiteMessage')"
       custom-class="site-msg"
-      size="25%"
+      :size="width"
       @open="getMessages"
     >
       <div slot="title">
@@ -91,6 +91,11 @@ export default {
       msgDetailVisible: false,
       currentMsg: null,
       unreadMsgCount: 0
+    }
+  },
+  computed: {
+    width() {
+      return this.$store.state.app.device === 'mobile' ? '70%' : '20%'
     }
   },
   mounted() {
