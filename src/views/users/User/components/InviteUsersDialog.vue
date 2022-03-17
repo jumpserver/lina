@@ -49,7 +49,7 @@ export default {
             component: Select2,
             el: {
               ajax: {
-                url: '/api/v1/users/users/suggestions/?oid=root',
+                url: '/api/v1/users/users/suggestions/',
                 transformOption: (item) => {
                   return { label: `${item.name}(${item.username})`, value: item.id }
                 }
