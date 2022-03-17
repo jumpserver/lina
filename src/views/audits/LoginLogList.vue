@@ -16,6 +16,10 @@ export default {
     const dateTo = getDayEnd(now).toISOString()
     return {
       tableConfig: {
+        permissions: {
+          app: 'audits',
+          resource: 'userloginlog'
+        },
         url: '/api/v1/audits/login-logs/',
         columns: [
           'username', 'type', 'backend_display', 'ip', 'city',

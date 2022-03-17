@@ -125,7 +125,7 @@ export default {
               value: attr
             }
           }
-          if (routerSearchAttrs.length === 0) {
+          if (routerSearchAttrs.length !== 0) {
             delete routeFilter.search
           }
 

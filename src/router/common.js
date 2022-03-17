@@ -24,5 +24,16 @@ export default [
       title: i18n.t('route.CeleryTaskLog'),
       permissions: []
     }
+  },
+  {
+    path: '/terminal/sessions/:id',
+    name: 'OldSessionDetail',
+    meta: {
+      permissions: ['terminal.view_session']
+    },
+    hidden: true,
+    beforeEnter: (to, from, next) => {
+      next({ name: 'SessionDetail', params: to.params, query: to.query })
+    }
   }
 ]

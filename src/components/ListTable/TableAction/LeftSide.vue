@@ -35,7 +35,9 @@ export default {
       default: false
     },
     hasBulkDelete: defaultTrue,
+    canBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
+    canBulkUpdate: defaultTrue,
     hasMoreActions: defaultTrue,
     tableUrl: {
       type: String,
@@ -98,6 +100,7 @@ export default {
       const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
       defaultActions.push(createCreateAction)
     }
+    const vm = this
     return {
       defaultActions: defaultActions,
       defaultMoreActions: [
@@ -107,7 +110,7 @@ export default {
           has: this.hasBulkDelete,
           can({ selectedRows }) {
             // vm.$log.debug('Delete select rows length: ', selectedRows.length)
-            return selectedRows.length > 0
+            return selectedRows.length > 0 && vm.canBulkDelete
           },
           callback: this.defaultBulkDeleteCallback
         },
@@ -115,7 +118,9 @@ export default {
           title: this.$t('common.updateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
-          can: ({ selectedRows }) => selectedRows.length > 0,
+          can: ({ selectedRows }) => {
+            return selectedRows.length > 0 && vm.canBulkUpdate
+          },
           callback: this.handleBulkUpdate
         }
       ]

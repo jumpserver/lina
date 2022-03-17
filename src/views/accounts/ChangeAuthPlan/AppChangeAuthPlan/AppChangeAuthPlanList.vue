@@ -17,14 +17,21 @@ export default {
     const vm = this
     return {
       tableConfig: {
+        permissions: {
+          'app': 'xpack',
+          'resource': 'applicationchangeauthplan'
+        },
         url: '/api/v1/xpack/change-auth-plan/app-plan/',
         columns: [
-          'name', 'password_strategy_display',
-          'is_periodic', 'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
+          'name', 'password_strategy_display', 'is_periodic', 'periodic_display',
+          'run_times', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'password_strategy_display', 'is_periodic', 'periodic_display', 'run_times', 'actions']
+          default: [
+            'name', 'password_strategy_display', 'is_periodic',
+            'periodic_display', 'run_times', 'actions'
+          ]
         },
         columnsMeta: {
           name: {

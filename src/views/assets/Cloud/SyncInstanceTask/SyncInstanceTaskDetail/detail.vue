@@ -34,7 +34,8 @@ export default {
           title: this.$t('xpack.Cloud.RunTaskManually'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.Execute')
+            label: this.$t('xpack.Execute'),
+            disabled: !this.$hasPerm('xpack.add_syncinstancetaskexecution')
           },
           callbacks: {
             click: function() {

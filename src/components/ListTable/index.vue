@@ -64,8 +64,8 @@ export default {
     iHeaderActions() {
       const actions = {
         canCreate: { action: 'add', checkRoot: true },
-        hasBulkDelete: { action: 'delete', checkRoot: false },
-        hasBulkUpdate: { action: 'change', checkRoot: true },
+        canBulkDelete: { action: 'delete', checkRoot: false },
+        canBulkUpdate: { action: 'change', checkRoot: true },
         hasImport: { action: 'add', checkRoot: true },
         hasExport: { action: 'view', checkRoot: false }
       }

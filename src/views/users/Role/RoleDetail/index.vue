@@ -15,14 +15,12 @@
 import { GenericDetailPage } from '@/layout/components'
 import RoleInfo from './RoleInfo'
 import RoleUsers from './RoleUsers'
-import RolePerms from './RolePerms'
 
 export default {
   components: {
     GenericDetailPage,
     RoleInfo,
-    RoleUsers,
-    RolePerms
+    RoleUsers
   },
   data() {
     const vm = this
@@ -53,10 +51,6 @@ export default {
           {
             title: this.$t('users.RoleInfo'),
             name: 'RoleInfo'
-          },
-          {
-            title: this.$t('users.RolePerms'),
-            name: 'RolePerms'
           },
           {
             title: this.$t('users.RoleUsers'),
