@@ -102,13 +102,6 @@ export default {
     }
   },
   watch: {
-    // filterTags: {
-    //   handler(val) {
-    //     this.$nextTick(() => this.$emit('tagSearch', this.filterMaps))
-    //     // this.$emit('tagSearch', this.filterMaps)
-    //   },
-    //   deep: true
-    // }
     options: {
       handler(val) {
         if (val && val.length > 0) {
