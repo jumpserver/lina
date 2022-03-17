@@ -84,26 +84,25 @@ export default {
         'rbac.orgrolebinding': ['rbac.view_orgrole', 'users.view_user'],
         'rbac.systemrolebinding': ['rbac.view_systemrole', 'users.view_user'],
         'tickets.change_ticketflow': ['users.view_user', 'tickets.view_ticket'],
-        'tickets.view_ticket': [
+        'tickets.ticket': [
           'assets.match_asset', 'assets.match_node', 'assets.match_systemuser',
           'applications.match_application'
         ],
-        'tickets.view_ticketflow': ['tickets.view_ticket'],
+        'tickets.ticketflow': ['tickets.view_ticket'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
         ],
         'acls.loginacl': ['users.view_user'],
         'acls.loginassetacl': ['users.view_user'],
-        'assets.view_asset': ['assets.view_node'],
+        'assets.asset': ['assets.view_node'],
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
-        'assets.view_authbook': ['assets.view_node'],
+        'assets.authbook': ['assets.view_node'],
         'assets.gathereduser': ['assets.view_node'],
-        'applications.add_application': ['assets.view_asset'],
-        'applications.view_account': ['applications.view_application'],
-        'perms.view_assetpermission': ['assets.view_node'],
-        'perms.view_applicationpermission': ['applications.view_application'],
+        'assets.gatherusertaskexecution': ['assets.view_gatherusertask'],
+        'applications.application': ['assets.view_asset'],
+        'applications.account': ['applications.view_application'],
         'perms.assetpermission': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'users.view_user', 'users.view_usergroup'
@@ -112,27 +111,26 @@ export default {
           'applications.view_application', 'assets.view_systemuser',
           'users.view_user', 'users.view_usergroup'
         ],
-        'settings.change_systemmsgsubscription': ['users.view_user'],
+        'settings.systemmsgsubscription': ['users.view_user'],
         'terminal.add_terminal': ['terminal.view_commandstorage', 'terminal.view_replaystorage'],
         'terminal.change_terminal': ['terminal.view_commandstorage', 'terminal.view_replaystorage'],
-        'terminal.view_commandstroage': ['settings.change_terminal'],
-        'terminal.view_replaystorage': ['settings.change_terminal'],
-        'terminal.view_status': ['settings.change_terminal'],
-        'terminal.view_task': ['settings.change_terminal'],
-        'terminal.view_terminal': ['settings.change_terminal'],
-        'xpack.add_syncinstancetask': [
+        'terminal.commandstroage': ['settings.change_terminal'],
+        'terminal.replaystorage': ['settings.change_terminal'],
+        'terminal.status': ['settings.change_terminal'],
+        'terminal.task': ['settings.change_terminal'],
+        'terminal.terminal': ['settings.change_terminal'],
+        'xpack.syncinstancetask': [
           'assets.view_asset', 'assets.view_node', 'assets.view_systemuser',
           'xpack.view_account'
         ],
-        'xpack.view_syncinstancetask': ['xpack.view_account'],
-        'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
-        'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask'],
-        'xpack.view_changeauthplan': ['assets.view_asset'],
-        'xpack.view_changeauthplantask': ['xpack.view_changeauthplan'],
-        'xpack.view_changeauthplanexecution': ['xpack.view_changeauthplan'],
-        'xpack.view_applicationchangeauthplan': ['applications.view_application', 'assets.view_systemuser'],
-        'xpack.view_applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
-        'xpack.view_applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
+        'xpack.syncinstancedetail': ['xpack.view_syncinstancetask'],
+        'xpack.syncinstancetaskexecution': ['xpack.view_syncinstancetask'],
+        'xpack.changeauthplan': ['assets.view_asset'],
+        'xpack.changeauthplantask': ['xpack.view_changeauthplan'],
+        'xpack.changeauthplanexecution': ['xpack.view_changeauthplan'],
+        'xpack.applicationchangeauthplan': ['applications.view_application', 'assets.view_systemuser'],
+        'xpack.applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
+        'xpack.applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
       }
     }
   },
