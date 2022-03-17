@@ -153,12 +153,14 @@ export default {
           msgLinkName = res.hostname
         }
         const h = this.$createElement
+        const detailRoute = this.objectDetailRoute
+        detailRoute.params = { id: res.id }
         if (this.hasDetailInMsg) {
           this.$message({
             message: h('p', null, [
               h('el-link', {
                 on: {
-                  click: () => this.$router.push(this.objectDetailRoute)
+                  click: () => this.$router.push(detailRoute)
                 },
                 style: { 'vertical-align': 'top' }
               }, msgLinkName),
@@ -194,6 +196,7 @@ export default {
     onPerformError: {
       type: Function,
       default(error, method, vm) {
+        this.$log.error('error: ', error)
         this.$emit('submitError', error)
         const response = error.response
         const data = response.data
