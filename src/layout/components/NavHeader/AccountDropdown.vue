@@ -65,4 +65,7 @@ export default {
     margin-right: 5px;
     vertical-align: middle;
   }
+  .mobile .header-avatar {
+    display: none;
+  }
 </style>

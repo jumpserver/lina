@@ -1,9 +1,10 @@
 <template>
   <ElFormRender
     ref="form"
+    :class="mobile? 'mobile' : ''"
     :content="fields"
     :form="basicForm"
-    label-position="right"
+    :label-position="labelPosition"
     label-width="20%"
     v-bind="$attrs"
     v-on="$listeners"
@@ -68,6 +69,14 @@ export default {
       basicForm: this.form
     }
   },
+  computed: {
+    mobile() {
+      return this.$store.state.app.device === 'mobile'
+    },
+    labelPosition() {
+      return this.mobile ? 'top' : 'left'
+    }
+  },
   methods: {
     // 获取表单数据
     submitForm(formName, addContinue) {
@@ -99,27 +108,35 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-form  ::v-deep  .el-form-item {
+  .el-form ::v-deep .el-form-item {
     margin-bottom: 12px;
   }
 
-  .el-form  ::v-deep  .el-form-item__content {
+  .el-form ::v-deep .el-form-item__content {
     width: 75%;
   }
 
-  .el-form  ::v-deep  .el-form-item__label {
+  .mobile.el-form ::v-deep .el-form-item__content {
+    width: 100%;
+  }
+
+  .el-form ::v-deep .el-form-item__label {
     padding: 0 30px 0 0;
   }
 
-  .el-form  ::v-deep  .el-form-item__error {
+  .el-form ::v-deep .el-form-item__error {
      position: inherit;
   }
 
-  .el-form  ::v-deep  .form-group-header {
+  .el-form ::v-deep .form-group-header {
     margin-left: 50px;
   }
 
-  .el-form  ::v-deep  .help-block {
+  .el-form.mobile ::v-deep .form-group-header {
+    margin-left: 0;
+  }
+
+  .el-form ::v-deep .help-block {
     display: block;
     margin-top: 5px;
     margin-bottom: 10px;
@@ -127,7 +144,7 @@ export default {
     font-size: 12px;
     line-height: 18px;
   }
-  .el-form  ::v-deep  .help-block a {
+  .el-form ::v-deep .help-block a {
     color: #1c84c6;
   }
   .form-buttons {
