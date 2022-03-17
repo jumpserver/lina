@@ -1,7 +1,7 @@
 <template>
   <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="TaskDetail" @update:activeMenu="handleUpdate" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -54,6 +54,11 @@ export default {
           return obj.hostname + '(' + obj.ip + ')'
         }
       }
+    }
+  },
+  methods: {
+    handleUpdate(data) {
+      this.config.activeMenu = data
     }
   }
 }
