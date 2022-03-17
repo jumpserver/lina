@@ -15,7 +15,7 @@
         <el-col :span="4">
           <div style="line-height: 34px;text-align: center">{{ $t('assets.SshPort') }}</div>
         </el-col>
-        <el-col :span="14">
+        <el-col :md="14" :sm="24">
           <el-input v-model="portInput" />
           <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
         </el-col>

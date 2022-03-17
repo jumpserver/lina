@@ -2,10 +2,10 @@
   <Page v-bind="$attrs">
     <div>
       <el-row :gutter="20">
-        <el-col :span="14">
+        <el-col :md="14" :sm="24">
           <DetailCard :items="detailCardItems" />
         </el-col>
-        <el-col :span="10">
+        <el-col :md="10" :sm="24">
           <QuickActions
             type="primary"
             :title="this.$t('users.AuthSettings')"
@@ -33,7 +33,7 @@
           <el-col :span="4">
             <div style="line-height: 34px;text-align: center">{{ $t('assets.Password') }}</div>
           </el-col>
-          <el-col :span="14">
+          <el-col :md="14" :sm="24">
             <el-input v-model="passwordInput" type="password" />
             <span class="help-tips help-block">{{ $t('common.PasswordRequireForSecurity') }}</span>
           </el-col>

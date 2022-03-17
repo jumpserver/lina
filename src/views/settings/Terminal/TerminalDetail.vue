@@ -2,7 +2,7 @@
   <GenericDetailPage :object.sync="terminalData" v-bind="config">
     <div>
       <el-row :gutter="20">
-        <el-col :span="14">
+        <el-col :md="14" :sm="24">
           <DetailCard :title="cardTitle" :items="detailItems" />
         </el-col>
       </el-row>
