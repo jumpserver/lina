@@ -33,7 +33,8 @@ export default {
           title: this.$t('xpack.ChangeAuthPlan.ManualExecutePlan'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.ChangeAuthPlan.Execute')
+            label: this.$t('xpack.ChangeAuthPlan.Execute'),
+            disabled: !this.$hasPerm('xpack.add_applicationchangeauthplanexecution')
           },
           callbacks: {
             click: function() {

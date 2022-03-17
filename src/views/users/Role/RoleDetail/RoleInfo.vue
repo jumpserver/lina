@@ -88,6 +88,7 @@ export default {
           'assets.match_asset', 'assets.match_node', 'assets.match_systemuser',
           'applications.match_application'
         ],
+        'tickets.view_ticketflow': ['tickets.view_ticket'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
@@ -98,6 +99,8 @@ export default {
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
         'assets.view_authbook': ['assets.view_node'],
+        'assets.gathereduser': ['assets.view_node'],
+        'xpack.gatherusertaskexecution': ['xpack.view_gatherusertask'],
         'applications.add_application': ['assets.view_asset'],
         'applications.view_account': ['applications.view_application'],
         'perms.view_assetpermission': ['assets.view_node'],

@@ -46,7 +46,7 @@ export default {
           {
             title: this.$t('assets.PermUserList'),
             name: 'PermUserList',
-            hidden: () => !this.$hasPerm('assets.view_asset')
+            hidden: () => !this.$hasPerm('perms.view_assetpermission')
           }
         ],
         hasRightSide: true,

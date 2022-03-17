@@ -40,7 +40,7 @@ export default {
           attrs: {
             type: 'danger',
             label: this.$t('sessions.terminate'),
-            disabled: !this.session['can_terminate'] || !vm.$hasPerm('terminal.terminate_session')
+            disabled: !this.session['can_terminate']
           },
           callbacks: {
             click: function() {
@@ -60,7 +60,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('sessions.Monitor'),
-            disabled: !this.session['can_join'] || !vm.$hasPerm('terminal.monitor_session')
+            disabled: !this.session['can_join']
           },
           callbacks: {
             click: function() {
