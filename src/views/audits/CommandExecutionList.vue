@@ -25,6 +25,10 @@ export default {
     const vm = this
     return {
       tableConfig: {
+        permissions: {
+          app: 'ops',
+          resource: 'commandexecution'
+        },
         url: '/api/v1/audits/command-execution-logs/',
         columns: [
           'hosts', 'user', 'command', 'run_as', 'result', 'is_finished',
