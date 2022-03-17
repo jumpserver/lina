@@ -121,6 +121,7 @@ export default {
                   name: 'remove',
                   type: 'warning',
                   has: hasRemove,
+                  can: vm.$hasPerm('users.remove_user'),
                   callback: this.removeUserFromOrg
                 }
               ]
