@@ -21,7 +21,7 @@ export default {
         hasBulkDelete: false,
         hasImport: false,
         hasExport: false,
-        hasSearch: true
+        hasSearch: false
       },
       tableConfig: {
         url: `/api/v1/xpack/gathered-user/task-executions/?task=${this.object.id}`,
