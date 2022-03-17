@@ -77,6 +77,9 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
+        importOptions: {
+          canImportUpdate: false
+        },
         searchConfig: {
           exclude: ['scope', 'role', 'org']
         }
