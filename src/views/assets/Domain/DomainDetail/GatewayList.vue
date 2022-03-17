@@ -74,6 +74,7 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
+                  can: this.$hasPerm('assets.test_gateway'),
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
                     this.dialogVisible = true
