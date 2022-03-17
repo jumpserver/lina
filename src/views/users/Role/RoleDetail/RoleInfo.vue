@@ -125,8 +125,12 @@ export default {
         'xpack.view_syncinstancetask': ['xpack.view_account'],
         'xpack.view_syncinstancedetail': ['xpack.view_syncinstancetask'],
         'xpack.view_syncinstancetaskexecution': ['xpack.view_syncinstancetask'],
+        'xpack.view_changeauthplan': ['assets.view_asset'],
         'xpack.view_changeauthplantask': ['xpack.view_changeauthplan'],
-        'xpack.view_changeauthplanexecution': ['xpack.view_changeauthplan']
+        'xpack.view_changeauthplanexecution': ['xpack.view_changeauthplan'],
+        'xpack.view_applicationchangeauthplan': ['applications.view_application', 'assets.view_systemuser'],
+        'xpack.view_applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
+        'xpack.view_applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
       }
     }
   },
