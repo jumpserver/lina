@@ -1,17 +1,11 @@
 <template>
-  <div class="table-header">
+  <div class="table-header clearfix">
     <slot name="header">
-      <div class="table-header-left-side">
-        <LeftSide v-if="hasLeftActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
-        <span v-else style="display: flex;flex-direction: row">
-          <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
-          <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
-        </span>
-      </div>
-      <div class="table-action-right-side">
-        <AutoDataSearch v-if="hasLeftActions && hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
-        <DatetimeRangePicker v-if="hasDatePicker && hasLeftActions" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
-        <RightSide v-if="hasRightActions" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
+      <LeftSide v-if="hasLeftActions" style="float: left" :class="'left-side ' + device" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
+      <RightSide v-if="hasRightActions" style="float: right" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
+      <div style="display: flex;flex-direction: row" class="search" :class="hasLeftActions ? 'right' : 'left'">
+        <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
+        <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
       </div>
     </slot>
   </div>
@@ -77,6 +71,12 @@ export default {
         url: this.tableUrl
       }
       return Object.assign(configDefault, this.searchConfig)
+    },
+    device() {
+      if (this.$store.state.app.device === 'mobile') {
+        return 'mobile'
+      }
+      return ''
     }
   },
   methods: {
@@ -92,9 +92,9 @@ export default {
 
 <style scoped>
   .table-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: space-between;*/
   }
 
   .right-side-item {
@@ -142,6 +142,12 @@ export default {
   }
   .datepicker{
     margin-left: 10px;
+  }
+  .search.left {
+    float: left;
+  }
+  .search.right {
+    float: right;
   }
 
 </style>

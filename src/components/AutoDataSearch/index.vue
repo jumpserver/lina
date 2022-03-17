@@ -7,7 +7,9 @@ import TagSearch from '@/components/TagSearch'
 import i18n from '@/i18n/i18n'
 export default {
   name: 'AutoDataSearch',
-  components: { TagSearch },
+  components: {
+    TagSearch
+  },
   props: {
     url: {
       type: String,
