@@ -65,6 +65,7 @@ export default {
                   name: 'Test',
                   title: this.$t('common.Test'),
                   type: 'primary',
+                  can: vm.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
                     const theUrl = `/api/v1/assets/system-users/${row.systemuser}/tasks/`
                     const data = { action: 'test', assets: [this.object.id] }
@@ -76,6 +77,7 @@ export default {
                 {
                   name: 'Push',
                   title: this.$t('common.Push'),
+                  can: vm.$hasPerm('assets.push_assetsystemuser'),
                   type: 'primary',
                   callback: ({ row }) => {
                     const theUrl = `/api/v1/assets/system-users/${row.systemuser}/tasks/`
@@ -89,7 +91,7 @@ export default {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   type: 'danger',
-                  can: !this.$store.getters.currentOrgIsRoot,
+                  can: !this.$store.getters.currentOrgIsRoot && vm.$hasPerm('assets.delete_authbook'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
@@ -111,7 +113,7 @@ export default {
             title: this.$t('common.TestSelectedSystemUsersConnective'),
             name: 'TestSelected',
             can({ selectedRows }) {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 && vm.$hasPerm('assets.test_assetconnectivity')
             },
             callback: this.bulkTestCallback.bind(this)
           },
@@ -119,7 +121,7 @@ export default {
             title: this.$t('common.PushSelectedSystemUsersToAsset'),
             name: 'PushSelected',
             can({ selectedRows }) {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 && vm.$hasPerm('assets.push_assetsystemuser')
             },
             callback: this.bulkPushCallback.bind(this)
           }
@@ -130,7 +132,8 @@ export default {
           title: this.$t('assets.TestAllSystemUsersConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Test')
+            label: this.$t('common.Test'),
+            disabled: !vm.$hasPerm('assets.test_assetconnectivity')
           },
           callbacks: {
             click: function() {
@@ -146,7 +149,8 @@ export default {
           title: this.$t('assets.PushAllSystemUsersToAsset'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Push')
+            label: this.$t('common.Push'),
+            disabled: !vm.$hasPerm('assets.push_assetsystemuser')
           },
           callbacks: {
             click: function({ row }) {
@@ -160,6 +164,7 @@ export default {
         }
       ],
       systemUserRelationConfig: {
+        disabled: !vm.$hasPerm('assets.add_authbook'),
         icon: 'fa-link',
         type: 'info',
         title: this.$t('assets.AssociateSystemUsers'),

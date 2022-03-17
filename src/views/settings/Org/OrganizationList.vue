@@ -91,6 +91,7 @@ export default {
         }
       },
       headerActions: {
+        canCreate: this.$hasPerm('orgs.add_organization'),
         hasExport: false,
         hasImport: false,
         hasMoreActions: false
