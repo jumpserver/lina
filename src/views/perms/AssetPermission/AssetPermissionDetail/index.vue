@@ -36,12 +36,12 @@ export default {
           {
             title: this.$t('perms.usersAndUserGroups'),
             name: 'AssetPermissionUser',
-            hidden: () => !this.$hasPerm('users.view_user')
+            hidden: () => !this.$hasPerm('users.view_user') || !this.$hasPerm('perms.change_assetpermission')
           },
           {
             title: this.$t('perms.assetAndNode'),
             name: 'AssetPermissionAsset',
-            hidden: () => !this.$hasPerm('assets.view_asset')
+            hidden: () => !this.$hasPerm('assets.view_asset') || !this.$hasPerm('perms.change_assetpermission')
           }
         ]
       }
