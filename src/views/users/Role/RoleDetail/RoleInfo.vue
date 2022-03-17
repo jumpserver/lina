@@ -81,8 +81,8 @@ export default {
         'view_setting': ['settings.view_setting'],
         'cloud_import': ['assets.view_asset'],
         'terminal_node': ['settings.change_terminal'],
-        'rbac.orgrolebinding': ['rbac.view_orgrole'],
-        'rbac.systemrolebinding': ['rbac.view_systemrole'],
+        'rbac.orgrolebinding': ['rbac.view_orgrole', 'users.view_user'],
+        'rbac.systemrolebinding': ['rbac.view_systemrole', 'users.view_user'],
         'tickets.change_ticketflow': ['users.view_user'],
         'users.invite_user': [
           'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
