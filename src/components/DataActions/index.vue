@@ -1,5 +1,5 @@
 <template>
-  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'">
+  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" style="display: flex">
     <template v-for="action in iActions">
       <el-dropdown
         v-if="action.dropdown"
