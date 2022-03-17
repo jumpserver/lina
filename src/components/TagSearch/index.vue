@@ -115,7 +115,9 @@ export default {
           const routeFilter = this.checkInTableColumns()
           const routerSearch = routeFilter.search || {}
           let routerSearchAttrs = []
-          routerSearchAttrs = routerSearch?.value?.split(',') || []
+          if (typeof routerSearch?.value === 'string') {
+            routerSearchAttrs = routerSearch?.value?.split(',') || []
+          }
 
           for (const attr of routerSearchAttrs) {
             routeFilter[`search_${attr}`] = {
