@@ -170,3 +170,11 @@ input[type=file] {
     min-width: 70px!important;
   }
 }
+
+.el-col.el-col-sm-24 .ibox {
+  margin-bottom: 10px;
+}
+
+.el-pagination {
+  overflow: auto;
+}

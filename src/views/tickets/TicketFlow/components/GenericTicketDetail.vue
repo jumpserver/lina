@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="17">
+    <el-col :md="17" :sm="24">
       <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
       <Details v-if="specialCardItems.length > 0" :detail-card-items="specialCardItems" :title="$t('common.ApprovaLevel')" />
       <slot id="MoreDetails" />

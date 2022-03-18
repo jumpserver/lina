@@ -34,8 +34,8 @@
     </GenericTreeListPage>
     <Dialog width="30%" :title="this.$t('assets.NodeInformation')" :visible.sync="nodeInfoDialogSetting.dialogVisible" :show-cancel="false" :show-confirm="false">
       <el-row v-for="item in nodeInfoDialogSetting.items" :key="'card-' + item.key" :gutter="10" class="item">
-        <el-col :span="6"><div class="item-label"><label>{{ item.label }}: </label></div></el-col>
-        <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
+        <el-col :md="6" :sm="24"><div class="item-label"><label>{{ item.label }}: </label></div></el-col>
+        <el-col :md="18" :sm="24"><div class="item-text">{{ item.value }}</div></el-col>
       </el-row>
     </Dialog>
     <AssetBulkUpdateDialog

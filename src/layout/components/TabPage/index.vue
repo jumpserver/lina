@@ -30,8 +30,12 @@
           </el-tab-pane>
         </template>
       </el-tabs>
-      <transition name="fade-transform" mode="out-in">
-        <slot />
+      <transition name="fade-transform" mode="out-in" appear>
+        <slot>
+          <keep-alive>
+            <component :is="computeActiveComponent" />
+          </keep-alive>
+        </slot>
       </transition>
     </div>
   </Page>
@@ -76,9 +80,19 @@ export default {
         }
       })
       return map
+    },
+    computeActiveComponent() {
+      let needActiveComponent = ''
+      for (const i of this.submenu) {
+        if (i.component && (i.name === this.iActiveMenu)) {
+          needActiveComponent = i.component
+          break
+        }
+      }
+      return needActiveComponent
     }
   },
-  mounted() {
+  created() {
     this.iActiveMenu = this.getPropActiveTab()
   },
   methods: {
@@ -106,7 +120,7 @@ export default {
         const currentTab = typeof preTab === 'object' ? preTab.name : preTab
         for (const tabName of this.tabIndices) {
           const currentTabName = tabName?.name || ''
-          if (currentTab && currentTabName && currentTab.toLowerCase() === currentTabName.toLowerCase()) {
+          if (currentTab?.toLowerCase() === currentTabName?.toLowerCase()) {
             return currentTabName
           }
         }
