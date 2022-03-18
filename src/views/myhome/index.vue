@@ -9,7 +9,7 @@
                 <el-col :md="16" :xs="24" class="content-left">
                   <Session />
                   <Log />
-                  <Ticket v-if="hasValidLicense" />
+                  <Ticket v-if="$hasLicense() && $hasPerm('tickets.view_ticket')" />
                 </el-col>
                 <el-col :md="8" :xs="24">
                   <User />
@@ -41,17 +41,6 @@ export default {
     Ticket,
     Log,
     Session
-  },
-  data() {
-    return {
-    }
-  },
-  computed: {
-    hasValidLicense() {
-      return this.$store.getters.hasValidLicense
-    }
-  },
-  methods: {
   }
 }
 
