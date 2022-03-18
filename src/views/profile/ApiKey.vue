@@ -33,8 +33,6 @@ export default {
             label: 'AccessKeySecret',
             formatter: ShowKeyFormatter
           },
-          is_active: {
-          },
           date_created: {
             label: this.$t('common.dateCreated'),
             showOverflowTooltip: true,
@@ -44,6 +42,7 @@ export default {
             prop: '',
             formatterArgs: {
               hasUpdate: false,
+              hasClone: false,
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
                   this.getRefsListTable.reloadTable()
