@@ -79,9 +79,7 @@ export default {
       return ''
     },
     searchClass() {
-      let cls = this.device + ' '
-      cls += this.hasLeftActions ? 'right' : 'left'
-      return cls
+      return this.hasLeftActions ? 'right' : 'left'
     }
   },
   methods: {
