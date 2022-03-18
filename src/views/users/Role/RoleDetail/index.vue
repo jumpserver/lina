@@ -36,10 +36,10 @@ export default {
         activeMenu: 'RoleInfo',
         actions: {
           canDelete: () => {
-            return vm.hasPermNotBuiltinNotRootOrg(this.role, `rbac.delete_${scopeRole}`)
+            return vm.hasPermNotBuiltin(this.role, `rbac.delete_${scopeRole}`)
           },
           canUpdate: () => {
-            return vm.hasPermNotBuiltinNotRootOrg(this.role, `rbac.change_${scopeRole}`)
+            return vm.hasPermNotBuiltin(this.role, `rbac.change_${scopeRole}`)
           },
           updateRoute: {
             name: this.$route.name.replace('Detail', 'Update'),
@@ -62,10 +62,8 @@ export default {
     }
   },
   methods: {
-    hasPermNotBuiltinNotRootOrg(row, perm) {
-      return !row['builtin'] &&
-        this.$hasPerm(perm) &&
-        !this.$isRootOrg()
+    hasPermNotBuiltin(row, perm) {
+      return !row['builtin'] && this.$hasPerm(perm)
     }
   }
 }

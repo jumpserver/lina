@@ -116,7 +116,7 @@ export default {
             }
           },
           hidden: () => {
-            return !this.$hasPerm('rbac.change_systemrolebinding')
+            return !this.$hasPerm('rbac.add_systemrolebinding')
           },
           value: []
         },

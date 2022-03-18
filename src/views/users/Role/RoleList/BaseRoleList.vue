@@ -60,10 +60,10 @@ export default {
           actions: {
             formatterArgs: {
               canUpdate: ({ row }) => {
-                return this.hasPermNotBuiltinNotRootOrg(row, `rbac.change_${row.scope}role`)
+                return this.hasPermNotBuiltin(row, `rbac.change_${row.scope}role`)
               },
               canDelete: ({ row }) => {
-                return this.hasPermNotBuiltinNotRootOrg(row, `rbac.delete_${row.scope}role`)
+                return this.hasPermNotBuiltin(row, `rbac.delete_${row.scope}role`)
               },
               updateRoute: {
                 name: 'RoleUpdate',
@@ -108,8 +108,8 @@ export default {
     }
   },
   methods: {
-    hasPermNotBuiltinNotRootOrg(row, perm) {
-      return !row['builtin'] && this.$hasPerm(perm) && !this.$isRootOrg()
+    hasPermNotBuiltin(row, perm) {
+      return !row['builtin'] && this.$hasPerm(perm)
     }
   }
 }
