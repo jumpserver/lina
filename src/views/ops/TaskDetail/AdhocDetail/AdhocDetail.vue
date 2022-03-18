@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <DetailCard :title="cardTitle" :items="detailCardItems" />
     </el-col>
-    <el-col :span="10">
+    <el-col :md="10" :sm="24">
       <RunInfoCard type="danger" style="margin-top: 15px" v-bind="RunFailedConfig" />
       <RunInfoCard type="info" v-bind="RunSuccessConfig" style="margin-top: 15px" />
     </el-col>

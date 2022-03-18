@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="16">
+      <el-col :md="16" :sm="24">
         <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
       </el-col>
-      <el-col :span="8">
+      <el-col :md="8" :sm="24">
         <QuickActions type="primary" :actions="quickActions" />
         <AssetRelationCard ref="assetSelect" type="primary" style="margin-top: 15px" v-bind="assetRelationConfig" />
         <RelationCard ref="nodeRelation" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />

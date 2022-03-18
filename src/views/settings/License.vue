@@ -5,10 +5,10 @@
         {{ this.$t('setting.ImportLicenseTip') }}
       </el-alert>
       <el-row :gutter="20">
-        <el-col :span="14">
+        <el-col :md="14" :sm="24">
           <DetailCard :title="cardTitle" :items="detailItems" />
         </el-col>
-        <el-col :span="10">
+        <el-col :md="10" :sm="24">
           <QuickActions type="primary" :actions="quickActions" />
         </el-col>
       </el-row>

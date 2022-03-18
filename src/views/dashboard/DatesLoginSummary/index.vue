@@ -1,11 +1,11 @@
 <template>
   <div class="white-bg dashboard-header print-margin">
     <el-row>
-      <el-col :span="12">
+      <el-col :md="12" :sm="24">
         <h2>{{ $t('dashboard.LoginOverview') }}</h2>
       </el-col>
-      <el-col :span="12">
-        <el-button-group style="float: right; padding: 0">
+      <el-col :md="12" :sm="24" class="clearfix">
+        <el-button-group style="float: right; padding: 0" class="clearfix">
           <el-button type="default" size="mini" :class="{ 'active': active === 'weekly'}" @click="changeDates('weekly')">{{ $t('dashboard.Weekly') }}</el-button>
           <el-button type="default" size="mini" :class="{ 'active': active === 'monthly'}" @click="changeDates('monthly')">{{ $t('dashboard.Monthly') }}</el-button>
         </el-button-group>
@@ -13,7 +13,7 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :lg="18" :sm="24">
-        <LoginMetric :range="active" class="card-item" style="margin-top: -30px" heigth="300px" />
+        <LoginMetric :range="active" class="card-item" heigth="300px" />
       </el-col>
       <el-col :lg="6" :sm="24">
         <LoginActivePin :range="active" class="card-item" />

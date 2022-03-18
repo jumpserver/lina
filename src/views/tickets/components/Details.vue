@@ -5,14 +5,14 @@
     </div>
     <div class="content">
       <el-row :gutter="10">
-        <el-col v-for="item in detailCardItems" :key="'card-' + item.key" :span="12">
+        <el-col v-for="item in detailCardItems" :key="'card-' + item.key" :md="12" :sm="24">
           <el-row class="item">
-            <el-col :span="6">
+            <el-col :md="6" :sm="12">
               <div :style="{ 'text-align': 'align' }" class="item-label">
                 <label>{{ item.key }}: </label>
               </div>
             </el-col>
-            <el-col :span="18">
+            <el-col :md="18" :sm="12">
               <div class="item-text">
                 <ItemValue v-bind="item" />
               </div>
@@ -22,14 +22,14 @@
       </el-row>
       <el-divider v-if="specialCardItems.length > 0" />
       <el-row :gutter="10">
-        <el-col v-for="item in specialCardItems" :key="'card-' + item.key" :span="12">
+        <el-col v-for="item in specialCardItems" :key="'card-' + item.key" :md="12" :sm="24">
           <el-row class="item">
-            <el-col :span="6">
+            <el-col :md="6" :sm="12">
               <div :style="{ 'text-align': 'align' }" class="item-label">
                 <label>{{ item.key }}: </label>
               </div>
             </el-col>
-            <el-col :span="18">
+            <el-col :md="18" :sm="12">
               <div class="item-text">
                 <ItemValue v-bind="item" />
               </div>
