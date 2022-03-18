@@ -242,7 +242,7 @@ export default {
               }
               return selectedRows.length > 0 &&
                   !vm.currentOrgIsRoot &&
-                  vm.$hasPerm('assets.change_asset')
+                  vm.$hasPerm('assets.update_node')
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []
