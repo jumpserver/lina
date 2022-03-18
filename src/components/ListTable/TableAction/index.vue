@@ -1,9 +1,9 @@
 <template>
-  <div class="table-header clearfix">
+  <div class="table-header clearfix" :class="device">
     <slot name="header">
-      <LeftSide v-if="hasLeftActions" style="float: left" :class="'left-side ' + device" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
-      <RightSide v-if="hasRightActions" style="float: right" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
-      <div style="display: flex;flex-direction: row" class="search" :class="hasLeftActions ? 'right' : 'left'">
+      <LeftSide v-if="hasLeftActions" class="left-side" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
+      <RightSide v-if="hasRightActions" class="right-side" :selected-rows="selectedRows" :table-url="tableUrl" v-bind="$attrs" v-on="$listeners" />
+      <div class="search" :class="searchClass">
         <AutoDataSearch v-if="hasSearch" class="right-side-item action-search" v-bind="iSearchTableConfig" @tagSearch="handleTagSearch" />
         <DatetimeRangePicker v-if="hasDatePicker" v-bind="datePicker" class="datepicker" @dateChange="handleDateChange" />
       </div>
@@ -77,6 +77,11 @@ export default {
         return 'mobile'
       }
       return ''
+    },
+    searchClass() {
+      let cls = this.device + ' '
+      cls += this.hasLeftActions ? 'right' : 'left'
+      return cls
     }
   },
   methods: {
@@ -143,11 +148,33 @@ export default {
   .datepicker{
     margin-left: 10px;
   }
+  .left-side {
+    float: left;
+  }
+  .right-side {
+    float: right;
+  }
+  .search {
+    display: flex;
+    flex-direction: row
+  }
+  .mobile .search {
+    display: inherit;
+  }
+  .mobile .search .datepicker {
+    margin-left: 0;
+  }
   .search.left {
     float: left;
   }
   .search.right {
     float: right;
   }
-
+  .mobile .search.right {
+    float: left;
+    padding-top: 5px;
+  }
+  .mobile .right-side {
+    padding-top: 6px;
+  }
 </style>
