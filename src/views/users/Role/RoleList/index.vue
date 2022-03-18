@@ -3,22 +3,16 @@
     <div slot="title">
       {{ Title }}
     </div>
-    <keep-alive exclude="SysRoleList,OrgRoleList">
-      <component :is="config.activeMenu" />
-    </keep-alive>
   </TabPage>
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
-import OrgRoleList from './OrgRoleList'
-import SysRoleList from './SysRoleList'
+
 export default {
   name: 'Index',
   components: {
-    TabPage,
-    SysRoleList,
-    OrgRoleList
+    TabPage
   },
   data() {
     return {
@@ -28,16 +22,14 @@ export default {
           {
             title: this.$t('route.SystemRole'),
             name: 'SysRoleList',
-            hidden: () => {
-              return !this.$hasPerm('rbac.view_systemrole')
-            }
+            hidden: () => !this.$hasPerm('rbac.view_systemrole'),
+            component: () => import('@/views/users/Role/RoleList/SysRoleList.vue')
           },
           {
             title: this.$t('route.OrgRole'),
             name: 'OrgRoleList',
-            hidden: () => {
-              return !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole')
-            }
+            hidden: () => !this.$store.getters.hasValidLicense || !this.$hasPerm('rbac.view_orgrole'),
+            component: () => import('@/views/users/Role/RoleList/OrgRoleList.vue')
           }
         ]
       }
