@@ -170,3 +170,7 @@ input[type=file] {
     min-width: 70px!important;
   }
 }
+
+.el-pagination {
+  overflow: auto;
+}
