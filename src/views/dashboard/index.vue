@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <div v-if="this.$hasPerm('rbac.view_console|rbac.view_workspace')">
+    <div v-if="this.$hasPerm('rbac.view_console|rbac.view_audit')">
       <Announcement />
       <ResourceSummary />
       <DatesLoginSummary />
