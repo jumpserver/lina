@@ -41,7 +41,10 @@ export default [
         name: 'AssetMoreInformationEdit',
         component: () => import('@/views/assets/Asset/AssetMoreInformationEdit.vue'),
         hidden: true,
-        meta: { title: i18n.t('common.UpdateAssetDetail'), action: 'update' }
+        meta: {
+          title: i18n.t('common.UpdateAssetDetail'),
+          permissions: ['assets.refresh_assethardwareinfo']
+        }
       }
     ]
   },
