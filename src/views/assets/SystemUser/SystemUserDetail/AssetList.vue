@@ -68,7 +68,7 @@ export default {
                   name: 'Push',
                   title: this.$t('common.Push'),
                   type: 'primary',
-                  can: this.object.auto_push,
+                  can: this.object.auto_push && vm.$hasPerm('assets.push_assetsystemuser'),
                   callback: ({ row }) => {
                     const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/`
                     const data = { action: 'push', assets: [row.asset] }
@@ -81,7 +81,7 @@ export default {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   type: 'danger',
-                  can: !this.$store.getters.currentOrgIsRoot,
+                  can: !this.$store.getters.currentOrgIsRoot && vm.$hasPerm('assets.delete_authbook'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
@@ -103,7 +103,7 @@ export default {
             title: this.$t('common.PushSelected'),
             name: 'PushSelected',
             can({ selectedRows }) {
-              return selectedRows.length > 0 && vm.object.auto_push
+              return selectedRows.length > 0 && vm.object.auto_push && vm.$hasPerm('assets.push_assetsystemuser')
             },
             callback: this.bulkPushCallback.bind(this)
           },
@@ -111,7 +111,7 @@ export default {
             title: this.$t('assets.TestAssetsConnective'),
             name: 'TestSelected',
             can({ selectedRows }) {
-              return selectedRows.length > 0
+              return selectedRows.length > 0 && vm.$hasPerm('assets.test_assetconnectivity')
             },
             callback: this.bulkTestCallback.bind(this)
           }
@@ -122,7 +122,8 @@ export default {
           title: this.$t('assets.TestAssetsConnective'),
           attrs: {
             type: 'primary',
-            label: this.$t('common.Test')
+            label: this.$t('common.Test'),
+            disabled: !vm.$hasPerm('assets.test_assetconnectivity')
           },
           callbacks: {
             click: function() {
