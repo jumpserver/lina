@@ -54,6 +54,7 @@ export default {
         },
         columnsMeta: {
           name: {
+            formatter: vm.$hasPerm('users.view_user') ? DetailFormatter : '',
             formatterArgs: {
               route: 'UserDetail'
             },
