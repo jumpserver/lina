@@ -17,11 +17,6 @@ export default {
       ],
       fieldsMeta: {
         type: {
-          type: 'select',
-          options: [{
-            label: 'MySQL',
-            value: 'mysql'
-          }],
           disabled: true
         },
         domain: {
