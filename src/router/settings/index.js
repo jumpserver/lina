@@ -1,6 +1,6 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
-import empty from '@/layout/empty'
+const empty = () => import('@/layout/empty.js')
 
 export default {
   path: '/settings',
