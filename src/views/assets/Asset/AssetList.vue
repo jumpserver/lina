@@ -237,12 +237,12 @@ export default {
             name: 'RemoveFromCurrentNode',
             title: this.$t('assets.RemoveFromCurrentNode'),
             can: ({ selectedRows }) => {
-              if (!this.$route.query.node) {
+              if (!vm.$route.query.node) {
                 return false
               }
               return selectedRows.length > 0 &&
                   !vm.currentOrgIsRoot &&
-                  vm.$hasPerm('assets.update_node')
+                  vm.$hasPerm('assets.change_node')
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []
