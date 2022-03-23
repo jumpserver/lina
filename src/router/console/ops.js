@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { BASE_URL } from '@/utils/common'
-import empty from '@/layout/empty'
+const empty = () => import('@/layout/empty.js')
 
 export default [
   {
