@@ -4,7 +4,8 @@ import json
 i18n_report_path = '/tmp/abc.json'
 lang_paths = {
     'cn': 'cn.json',
-    'en': 'en.json'
+    'en': 'en.json',
+    'ja': 'ja.json'
 }
 
 
@@ -51,5 +52,5 @@ def remove_keys(lang):
         f.write(data)
 
 
-for i in ['cn', 'en']:
+for i in ['cn', 'en', 'ja']:
     remove_keys(i)

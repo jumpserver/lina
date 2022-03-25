@@ -25,6 +25,11 @@ export default {
           title: '中文(简体)',
           code: 'cn',
           cookieCode: 'zh-hans' // cookie code是为了让后端知道当前语言
+        },
+        {
+          title: '日本語',
+          code: 'ja',
+          cookieCode: 'ja' // cookie code是为了让后端知道当前语言
         }
       ]
     }
@@ -58,6 +63,8 @@ export default {
     changeMomentLang() {
       if (this.currentLang.code.indexOf('en') > -1) {
         this.$moment.locale('en')
+      } else if (this.currentLang.code.indexOf('ja') > -1) {
+        this.$moment.locale('ja')
       } else {
         this.$moment.locale('zh-cn')
       }
