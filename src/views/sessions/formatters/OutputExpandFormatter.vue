@@ -1,5 +1,5 @@
 <template>
-  <pre style="border: none; background: none; white-space: pre-wrap;padding: 10px 20px">
+  <pre style="border: none; background: none; white-space: pre-wrap; word-wrap: break-word; padding: 10px 20px">
 {{ '$ '+ row.input }}
 <br>
 {{ row.output }}
