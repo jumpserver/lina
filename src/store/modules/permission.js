@@ -3,7 +3,7 @@ import {
   viewRoutes,
   constantRoutes
 } from '@/router'
-const empty = () => import('@/layout/empty.js')
+import empty from '@/layout/empty'
 import Layout from '@/layout/index'
 import { getResourceNameByPath, hasPermission } from '@/utils/jms'
 
