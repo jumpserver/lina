@@ -13,9 +13,14 @@
         <el-button :size="size" v-bind="cleanButtonAction(action)">
           {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
           <template v-for="option in action.dropdown">
-            <div v-if="option.group" :key="'group:'+option.name" class="dropdown-menu-title" style="width:130px">
+            <div
+              v-if="option.group"
+              :key="'group:'+option.name"
+              class="dropdown-menu-title"
+              style="width:130px"
+            >
               {{ option.group }}
             </div>
             <el-dropdown-item
