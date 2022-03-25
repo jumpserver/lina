@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-import empty from '@/layout/empty'
+const empty = () => import('@/layout/empty.js')
 import XPackRoutes from './xpack'
 
 export default [

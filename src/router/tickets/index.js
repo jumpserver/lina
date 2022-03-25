@@ -1,5 +1,5 @@
 import Layout from '@/layout'
-import empty from '@/layout/empty'
+const empty = () => import('@/layout/empty.js')
 import i18n from '@/i18n/i18n'
 
 export default {

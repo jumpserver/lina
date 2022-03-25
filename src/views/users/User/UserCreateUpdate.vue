@@ -135,7 +135,7 @@ export default {
           },
           hidden: () => {
             return !this.$store.getters.hasValidLicense ||
-              !this.$hasPerm('rbac.change_orgrolebinding') ||
+              !this.$hasPerm('rbac.add_orgrolebinding') ||
               this.$store.getters.currentOrgIsRoot
           },
           helpText: this.$t('users.HelpText.OrgRoleHelpText')
