@@ -14,10 +14,11 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
+    const comp = this.$t('common.Component')
     return {
       fields: [
         [
-          'KoKo',
+          `KoKo-SSH ${comp}`,
           [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
             'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_ASSET_LIST_PAGE_SIZE',
@@ -25,9 +26,16 @@ export default {
           ]
         ],
         [
-          'XRDP',
+          `XRDP-RDP ${comp}`,
           [
             'XRDP_ENABLED', 'TERMINAL_RDP_ADDR'
+          ]
+        ],
+        [
+          `Magnus-DB ${comp}`,
+          [
+            'TERMINAL_MAGNUS_ENABLED', 'TERMINAL_MAGNUS_HOST', 'TERMINAL_MAGNUS_MYSQL_PORT',
+            'TERMINAL_MAGNUS_POSTGRE_PORT'
           ]
         ]
       ],
