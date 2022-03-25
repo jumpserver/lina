@@ -1,7 +1,7 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 import { BASE_URL } from '@/utils/common'
-const empty = () => import('@/layout/empty.js')
+import empty from '@/layout/empty'
 
 export default {
   path: '/workspace/',

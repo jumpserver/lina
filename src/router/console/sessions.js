@@ -1,5 +1,5 @@
 import i18n from '@/i18n/i18n'
-const empty = () => import('@/layout/empty.js')
+import empty from '@/layout/empty'
 import { BASE_URL } from '@/utils/common'
 
 // Todo: 放到系统设置中

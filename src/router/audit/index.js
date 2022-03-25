@@ -1,8 +1,9 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
+
 import SessionRoutes from './sessions'
 import LogRoutes from './logs'
-const empty = () => import('@/layout/empty.js')
+import empty from '@/layout/empty'
 
 export default {
   path: '/audit/',
