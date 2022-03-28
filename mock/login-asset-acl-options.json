@@ -1,0 +1,2084 @@
+{
+    "name": "Login Asset Acl List",
+    "description": "",
+    "renders": [
+        "application/json",
+        "text/csv",
+        "application/xlsx"
+    ],
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded",
+        "multipart/form-data",
+        "text/csv",
+        "text/xlsx",
+        "*/*"
+    ],
+    "actions": {
+        "PUT": {
+            "id": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "Id",
+                "write_only": false
+            },
+            "name": {
+                "type": "string",
+                "required": true,
+                "read_only": false,
+                "label": "名称",
+                "max_length": 128,
+                "write_only": false
+            },
+            "users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "system_users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "System users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "name",
+                                                    "display_name": "名称"
+                                                },
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                },
+                                                {
+                                                    "value": "protocol",
+                                                    "display_name": "协议"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "assets": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Assets",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "hostname",
+                                                    "display_name": "主机名"
+                                                },
+                                                {
+                                                    "value": "ip",
+                                                    "display_name": "IP"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "is_active": {
+                "type": "boolean",
+                "required": false,
+                "default": true,
+                "read_only": false,
+                "label": "激活中",
+                "write_only": false
+            },
+            "date_created": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "创建日期",
+                "write_only": false
+            },
+            "date_updated": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "更新日期",
+                "write_only": false
+            },
+            "priority": {
+                "type": "integer",
+                "required": false,
+                "default": 50,
+                "read_only": false,
+                "label": "优先级",
+                "help_text": "优先级可选范围为 1-100 (数值越小越优先)",
+                "min_value": 1,
+                "max_value": 100,
+                "write_only": false
+            },
+            "action": {
+                "type": "choice",
+                "required": false,
+                "default": "login_confirm",
+                "read_only": false,
+                "label": "动作",
+                "write_only": false,
+                "choices": [
+                    {
+                        "value": "login_confirm",
+                        "display_name": "登录复核"
+                    }
+                ]
+            },
+            "action_display": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "动作",
+                "write_only": false
+            },
+            "comment": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "备注",
+                "write_only": false
+            },
+            "created_by": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "创建者",
+                "max_length": 32,
+                "write_only": false
+            },
+            "org_id": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织",
+                "write_only": false
+            },
+            "reviewers": {
+                "type": "field",
+                "required": true,
+                "read_only": false,
+                "label": "审批人",
+                "write_only": false
+            },
+            "reviewers_amount": {
+                "type": "integer",
+                "required": false,
+                "read_only": true,
+                "label": "Reviewers amount",
+                "write_only": false
+            },
+            "org_name": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织名称",
+                "write_only": false
+            }
+        },
+        "PATCH": {
+            "id": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "Id",
+                "write_only": false
+            },
+            "name": {
+                "type": "string",
+                "required": true,
+                "read_only": false,
+                "label": "名称",
+                "max_length": 128,
+                "write_only": false
+            },
+            "users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "system_users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "System users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "name",
+                                                    "display_name": "名称"
+                                                },
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                },
+                                                {
+                                                    "value": "protocol",
+                                                    "display_name": "协议"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "assets": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Assets",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "hostname",
+                                                    "display_name": "主机名"
+                                                },
+                                                {
+                                                    "value": "ip",
+                                                    "display_name": "IP"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "is_active": {
+                "type": "boolean",
+                "required": false,
+                "default": true,
+                "read_only": false,
+                "label": "激活中",
+                "write_only": false
+            },
+            "date_created": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "创建日期",
+                "write_only": false
+            },
+            "date_updated": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "更新日期",
+                "write_only": false
+            },
+            "priority": {
+                "type": "integer",
+                "required": false,
+                "default": 50,
+                "read_only": false,
+                "label": "优先级",
+                "help_text": "优先级可选范围为 1-100 (数值越小越优先)",
+                "min_value": 1,
+                "max_value": 100,
+                "write_only": false
+            },
+            "action": {
+                "type": "choice",
+                "required": false,
+                "default": "login_confirm",
+                "read_only": false,
+                "label": "动作",
+                "write_only": false,
+                "choices": [
+                    {
+                        "value": "login_confirm",
+                        "display_name": "登录复核"
+                    }
+                ]
+            },
+            "action_display": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "动作",
+                "write_only": false
+            },
+            "comment": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "备注",
+                "write_only": false
+            },
+            "created_by": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "创建者",
+                "max_length": 32,
+                "write_only": false
+            },
+            "org_id": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织",
+                "write_only": false
+            },
+            "reviewers": {
+                "type": "field",
+                "required": true,
+                "read_only": false,
+                "label": "审批人",
+                "write_only": false
+            },
+            "reviewers_amount": {
+                "type": "integer",
+                "required": false,
+                "read_only": true,
+                "label": "Reviewers amount",
+                "write_only": false
+            },
+            "org_name": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织名称",
+                "write_only": false
+            }
+        },
+        "GET": {
+            "id": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "Id",
+                "write_only": false
+            },
+            "name": {
+                "type": "string",
+                "required": true,
+                "read_only": false,
+                "label": "名称",
+                "max_length": 128,
+                "write_only": false,
+                "filter": true
+            },
+            "users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "system_users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "System users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "name",
+                                                    "display_name": "名称"
+                                                },
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                },
+                                                {
+                                                    "value": "protocol",
+                                                    "display_name": "协议"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "assets": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Assets",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "hostname",
+                                                    "display_name": "主机名"
+                                                },
+                                                {
+                                                    "value": "ip",
+                                                    "display_name": "IP"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "is_active": {
+                "type": "boolean",
+                "required": false,
+                "default": true,
+                "read_only": false,
+                "label": "激活中",
+                "write_only": false
+            },
+            "date_created": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "创建日期",
+                "write_only": false
+            },
+            "date_updated": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "更新日期",
+                "write_only": false
+            },
+            "priority": {
+                "type": "integer",
+                "required": false,
+                "default": 50,
+                "read_only": false,
+                "label": "优先级",
+                "help_text": "优先级可选范围为 1-100 (数值越小越优先)",
+                "min_value": 1,
+                "max_value": 100,
+                "write_only": false
+            },
+            "action": {
+                "type": "choice",
+                "required": false,
+                "default": "login_confirm",
+                "read_only": false,
+                "label": "动作",
+                "write_only": false,
+                "choices": [
+                    {
+                        "value": "login_confirm",
+                        "display_name": "登录复核"
+                    }
+                ]
+            },
+            "action_display": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "动作",
+                "write_only": false
+            },
+            "comment": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "备注",
+                "write_only": false
+            },
+            "created_by": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "创建者",
+                "max_length": 32,
+                "write_only": false
+            },
+            "org_id": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织",
+                "write_only": false
+            },
+            "reviewers": {
+                "type": "field",
+                "required": true,
+                "read_only": false,
+                "label": "审批人",
+                "write_only": false
+            },
+            "reviewers_amount": {
+                "type": "integer",
+                "required": false,
+                "read_only": true,
+                "label": "Reviewers amount",
+                "write_only": false
+            },
+            "org_name": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织名称",
+                "write_only": false
+            }
+        },
+        "POST": {
+            "id": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "Id",
+                "write_only": false
+            },
+            "name": {
+                "type": "string",
+                "required": true,
+                "read_only": false,
+                "label": "名称",
+                "max_length": 128,
+                "write_only": false
+            },
+            "users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "system_users": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "System users",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "name",
+                                                    "display_name": "名称"
+                                                },
+                                                {
+                                                    "value": "username",
+                                                    "display_name": "用户名"
+                                                },
+                                                {
+                                                    "value": "protocol",
+                                                    "display_name": "协议"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "assets": {
+                "type": "nested object",
+                "required": true,
+                "read_only": false,
+                "label": "Assets",
+                "write_only": false,
+                "children": {
+                    "strategy": {
+                        "type": "choice",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Strategy",
+                        "write_only": false,
+                        "choices": [
+                            {
+                                "value": "all",
+                                "display_name": "全部"
+                            },
+                            {
+                                "value": "objects",
+                                "display_name": "对象"
+                            },
+                            {
+                                "value": "attrs",
+                                "display_name": "Attribute"
+                            }
+                        ]
+                    },
+                    "objects": {
+                        "type": "list",
+                        "required": false,
+                        "default": [],
+                        "read_only": false,
+                        "label": "对象",
+                        "write_only": false,
+                        "child": {
+                            "type": "string",
+                            "required": true,
+                            "read_only": false,
+                            "write_only": false
+                        }
+                    },
+                    "attrs": {
+                        "type": "nested object",
+                        "required": true,
+                        "read_only": false,
+                        "label": "Attrs",
+                        "write_only": false,
+                        "children": {
+                            "logical_operator": {
+                                "type": "choice",
+                                "required": true,
+                                "read_only": false,
+                                "label": "Logical operator",
+                                "write_only": false,
+                                "choices": [
+                                    {
+                                        "value": "and",
+                                        "display_name": "AND"
+                                    },
+                                    {
+                                        "value": "or",
+                                        "display_name": "OR"
+                                    },
+                                    {
+                                        "value": "not",
+                                        "display_name": "NOT"
+                                    }
+                                ]
+                            },
+                            "rules": {
+                                "type": "list",
+                                "required": false,
+                                "default": [],
+                                "read_only": false,
+                                "label": "Rules",
+                                "write_only": false,
+                                "child": {
+                                    "type": "nested object",
+                                    "required": true,
+                                    "read_only": false,
+                                    "write_only": false,
+                                    "children": {
+                                        "attr": {
+                                            "type": "nested object",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "Attr",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "hostname",
+                                                    "display_name": "主机名"
+                                                },
+                                                {
+                                                    "value": "ip",
+                                                    "display_name": "IP"
+                                                }
+                                            ]
+                                        },
+                                        "operator": {
+                                            "type": "choice",
+                                            "required": true,
+                                            "read_only": false,
+                                            "label": "运营商",
+                                            "write_only": false,
+                                            "choices": [
+                                                {
+                                                    "value": "=",
+                                                    "display_name": "="
+                                                }
+                                            ]
+                                        },
+                                        "value": {
+                                            "type": "list",
+                                            "required": false,
+                                            "default": [],
+                                            "read_only": false,
+                                            "label": "内容",
+                                            "write_only": false,
+                                            "child": {
+                                                "type": "string",
+                                                "required": true,
+                                                "read_only": false,
+                                                "write_only": false
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "is_active": {
+                "type": "boolean",
+                "required": false,
+                "default": true,
+                "read_only": false,
+                "label": "激活中",
+                "write_only": false
+            },
+            "date_created": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "创建日期",
+                "write_only": false
+            },
+            "date_updated": {
+                "type": "datetime",
+                "required": false,
+                "read_only": true,
+                "label": "更新日期",
+                "write_only": false
+            },
+            "priority": {
+                "type": "integer",
+                "required": false,
+                "default": 50,
+                "read_only": false,
+                "label": "优先级",
+                "help_text": "优先级可选范围为 1-100 (数值越小越优先)",
+                "min_value": 1,
+                "max_value": 100,
+                "write_only": false
+            },
+            "action": {
+                "type": "choice",
+                "required": false,
+                "default": "login_confirm",
+                "read_only": false,
+                "label": "动作",
+                "write_only": false,
+                "choices": [
+                    {
+                        "value": "login_confirm",
+                        "display_name": "登录复核"
+                    }
+                ]
+            },
+            "action_display": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "动作",
+                "write_only": false
+            },
+            "comment": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "备注",
+                "write_only": false
+            },
+            "created_by": {
+                "type": "string",
+                "required": false,
+                "read_only": false,
+                "label": "创建者",
+                "max_length": 32,
+                "write_only": false
+            },
+            "org_id": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织",
+                "write_only": false
+            },
+            "reviewers": {
+                "type": "field",
+                "required": true,
+                "read_only": false,
+                "label": "审批人",
+                "write_only": false
+            },
+            "reviewers_amount": {
+                "type": "integer",
+                "required": false,
+                "read_only": true,
+                "label": "Reviewers amount",
+                "write_only": false
+            },
+            "org_name": {
+                "type": "field",
+                "required": false,
+                "read_only": true,
+                "label": "组织名称",
+                "write_only": false
+            }
+        }
+    }
+}

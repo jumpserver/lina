@@ -497,6 +497,7 @@
       "failedConditions": "cron expression error"
     },
     "Cycle": "Cycle",
+    "AttributeRule": "Attribute rule",
     "FormatError": "Format error",
     "WeekCronSelect": {
       "Monday": "Monday",
