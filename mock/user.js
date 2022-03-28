@@ -22,6 +22,7 @@ const users = {
     name: 'Normal Editor'
   }
 }
+const acl = require('./login-asset-acl-options.json')
 
 export default [
   // user login
@@ -80,5 +81,10 @@ export default [
         data: 'success'
       }
     }
+  },
+  {
+    url: '/api/v1/acls/login-asset-acls/*',
+    type: 'OPTIONS',
+    response: () => acl
   }
 ]
