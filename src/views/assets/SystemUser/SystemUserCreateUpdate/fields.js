@@ -184,6 +184,26 @@ function getFields() {
   const type = {
   }
 
+  const su_enabled = {
+    type: 'switch',
+    hidden: (item) => item.protocol !== 'ssh'
+  }
+
+  const su_from = {
+    hidden: (item) => !item.su_enabled,
+    rules: [Required],
+    el: {
+      multiple: false,
+      clearable: true,
+      ajax: {
+        url: '/api/v1/assets/system-users/su-from/',
+        transformOption: (item) => {
+          return { label: item.name + '(' + item.username + ')', value: item.id }
+        }
+      }
+    }
+  }
+
   return {
     login_mode: login_mode,
     username: username,
@@ -197,7 +217,9 @@ function getFields() {
     password: password,
     passphrase: passphrase,
     system_groups: system_groups,
-    type: type
+    type: type,
+    su_enabled: su_enabled,
+    su_from: su_from
   }
 }
 

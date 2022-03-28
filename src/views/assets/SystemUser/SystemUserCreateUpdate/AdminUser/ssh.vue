@@ -29,6 +29,7 @@ export default {
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'type']],
         [this.$t('common.Auth'), ['password', 'private_key', 'passphrase']],
         [this.$t('common.Command filter'), ['cmd_filters']],
+        [this.$t('assets.UserSwitch'), ['su_enabled', 'su_from']],
         [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
       fieldsMeta: {
@@ -73,7 +74,9 @@ export default {
           rules: [Required],
           helpText: this.$t('assets.SFTPHelpMessage')
         },
-        cmd_filters: fields.cmd_filters
+        cmd_filters: fields.cmd_filters,
+        su_enabled: fields.su_enabled,
+        su_from: fields.su_from
       },
       cleanFormValue: (values) => {
         values['type'] = 'admin'
