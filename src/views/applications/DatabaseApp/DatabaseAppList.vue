@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DATABASE } from '@/views/applications/const'
+import { DATABASE, KV_DATABASE } from '@/views/applications/const'
 
 function getAppType(arr) {
   const searchAppType = []
@@ -25,7 +25,7 @@ export default {
   },
   data() {
     const vm = this
-    const appType = DATABASE
+    const appType = [...DATABASE, ...KV_DATABASE]
     return {
       tableConfig: {
         url: '/api/v1/applications/applications/?category=db',
