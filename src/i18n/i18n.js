@@ -7,8 +7,11 @@ import date from './date'
 import VueCookie from 'vue-cookie'
 
 Vue.use(VueI18n)
+
+const cookieLang = VueCookie.get('django_language') || 'en'
+const defaultLang = cookieLang.slice(0, 2)
 const i18n = new VueI18n({
-  locale: (VueCookie.get('django_language') || 'zh-hans') === 'zh-hans' ? 'cn' : VueCookie.get('django_language'),
+  locale: defaultLang,
   fallbackLocale: 'en',
   silentFallbackWarn: true,
   silentTranslationWarn: true,

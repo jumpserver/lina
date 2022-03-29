@@ -18,7 +18,7 @@ export default {
     return {
       fields: [
         [
-          `KoKo-SSH ${comp}`,
+          `SSH ${comp}(KoKo)`,
           [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
             'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_ASSET_LIST_PAGE_SIZE',
@@ -26,16 +26,16 @@ export default {
           ]
         ],
         [
-          `XRDP-RDP ${comp}`,
+          `RDP ${comp}(XRDP)`,
           [
             'XRDP_ENABLED', 'TERMINAL_RDP_ADDR'
           ]
         ],
         [
-          `Magnus-DB ${comp}`,
+          `DB ${comp}(Magnus)`,
           [
             'TERMINAL_MAGNUS_ENABLED', 'TERMINAL_MAGNUS_HOST', 'TERMINAL_MAGNUS_MYSQL_PORT',
-            'TERMINAL_MAGNUS_POSTGRE_PORT'
+            'TERMINAL_MAGNUS_POSTGRE_PORT', 'TERMINAL_MAGNUS_MARIADB_PORT'
           ]
         ]
       ],
