@@ -21,8 +21,8 @@ export default {
           `SSH ${comp}(KoKo)`,
           [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
-            'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_ASSET_LIST_PAGE_SIZE',
-            'TERMINAL_TELNET_REGEX'
+            'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_KOKO_HOST', 'TERMINAL_KOKO_SSH_PORT',
+            'TERMINAL_ASSET_LIST_PAGE_SIZE', 'TERMINAL_TELNET_REGEX'
           ]
         ],
         [
