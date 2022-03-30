@@ -85,7 +85,7 @@ export default {
           component: () => import('@/views/settings/Terminal'),
           meta: {
             title: i18n.t('setting.Terminal'),
-            icon: 'terminal',
+            icon: 'tasks',
             permissions: ['settings.change_terminal']
           }
         },
