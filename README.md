@@ -19,7 +19,7 @@ VUE_APP_CORE_HOST = 'JUMPSERVER_APIHOST'
 $ yarn serve
 
 4. 构建
-$ yarn build
+$ yarn build:prod
 ```
 
 ## 生产中部署
