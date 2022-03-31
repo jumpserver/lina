@@ -60,6 +60,7 @@ export default {
 }
 .announcement-main {
   word-wrap:break-word;
+  white-space: pre-wrap;
 }
 .link-more {
   font-size: 10px;
