@@ -14,6 +14,7 @@ export const huaweicloud_private = 'huaweicloud_private'
 export const openstack = 'openstack'
 export const gcp = 'gcp'
 export const baiducloud = 'baiducloud'
+export const jdcloud = 'jdcloud'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
@@ -39,6 +40,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [baiducloud]: {
     name: baiducloud,
     title: i18n.t('xpack.Cloud.BaiduCloud'),
+    attrs: ['access_key_id', 'access_key_secret']
+  },
+  [jdcloud]: {
+    name: jdcloud,
+    title: i18n.t('xpack.Cloud.JDCloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [qcloud]: {
