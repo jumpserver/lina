@@ -7,7 +7,9 @@
       </template>
     </PageHeading>
     <PageContent>
-      <el-alert v-if="helpMessage" type="success"> <span v-html="helpMessage" /> </el-alert>
+      <el-alert v-if="helpMessage" type="success">
+        <span class="announcement-main">{{ helpMessage }}</span>
+      </el-alert>
       <slot />
     </PageContent>
   </div>
@@ -34,7 +36,6 @@ export default {
   },
   computed: {
     iTitle() {
-      // return ''
       return this.title || this.$route.meta.title
     }
   }
@@ -51,6 +52,10 @@ export default {
   }
   .print-margin{
     margin-top: 10px;
+  }
+  .announcement-main {
+    word-wrap:break-word;
+    white-space: pre-wrap;
   }
 }
 </style>
