@@ -53,6 +53,16 @@ export default {
         resource: 'accesskey',
         app: 'authentication'
       }
+    },
+    {
+      path: '/profile/tempPassword',
+      component: () => import('@/views/profile/TempPassword'),
+      name: 'TempPassword',
+      meta: {
+        title: i18n.t('common.nav.TempPassword'),
+        icon: 'magic',
+        permissions: []
+      }
     }
   ]
 }
