@@ -320,6 +320,7 @@
     "Export": "Export",
     "Import": "Import",
     "ContinueImport": "ContinueImport",
+    "ImportAll": "Import All",
     "Continue": "Continue",
     "Stop": "Stop",
     "Finished": "Finished",

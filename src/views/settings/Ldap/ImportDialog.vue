@@ -18,6 +18,7 @@
       <div slot="footer">
         <el-button @click="hiddenDialog">{{ $t('common.Cancel') }}</el-button>
         <el-button type="primary" :loading="dialogLdapUserImportLoginStatus" @click="importUserClick">{{ $t('common.Import') }}</el-button>
+        <el-button type="primary" :loading="dialogLdapUserImportAllLoginStatus" @click="importAllUserClick">{{ $t('common.ImportAll') }}</el-button>
       </div>
     </Dialog>
     <Dialog
@@ -41,8 +42,10 @@
 import ListTable from '@/components/ListTable'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
+import Select2 from '@/components/FormFields/Select2'
 import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
 import { CronTab } from '@/components'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'ImportDialog',
@@ -54,6 +57,7 @@ export default {
   data() {
     return {
       dialogLdapUserImportLoginStatus: false,
+      dialogLdapUserImportAllLoginStatus: false,
       refreshed: false,
       headerActions: {
         hasCreate: false,
@@ -105,8 +109,24 @@ export default {
       settings: {
         visible: false,
         url: '/api/v1/settings/setting/?category=ldap',
-        fields: ['AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL'],
+        fields: ['AUTH_LDAP_SYNC_ORG_ID', 'AUTH_LDAP_SYNC_IS_PERIODIC', 'AUTH_LDAP_SYNC_CRONTAB', 'AUTH_LDAP_SYNC_INTERVAL'],
         fieldsMeta: {
+          AUTH_LDAP_SYNC_ORG_ID: {
+            component: Select2,
+            rules: [Required],
+            el: {
+              multiple: false,
+              ajax: {
+                url: '/api/v1/orgs/orgs/',
+                transformOption: (item) => {
+                  return { label: item.name, value: item.id }
+                }
+              }
+            },
+            hidden: (formValue) => {
+              return !this.$hasLicense()
+            }
+          },
           AUTH_LDAP_SYNC_IS_PERIODIC: {
             type: 'switch'
           },
@@ -141,6 +161,16 @@ export default {
           // eslint-disable-next-line no-return-assign
         }).finally(() => this.dialogLdapUserImportLoginStatus = false)
       }
+    },
+    importAllUserClick() {
+      this.dialogLdapUserImportAllLoginStatus = true
+      const data = {
+        username_list: ['*']
+      }
+      importLdapUser(data).then(res => {
+        this.$message.success(res.msg)
+        // eslint-disable-next-line no-return-assign
+      }).finally(() => this.dialogLdapUserImportAllLoginStatus = false)
     },
     handlerListTableXHRError(errMsg) {
       if (this.dialogLdapUserImport) {
