@@ -314,6 +314,7 @@
     "Delete": "Delete",
     "Disable": "Disable",
     "Download": "Download",
+    "Copy": "Copy",
     "Enable": "Enable",
     "On/Off": "On/Off",
     "EnterForSearch": "Press enter to search",
@@ -417,6 +418,7 @@
     },
     "isValid": "Is valid",
     "nav": {
+      "TempPassword": "Temporary password",
       "APIKey": "API Key",
       "Workbench": "Workbench",
       "Navigation": "Navigation",
@@ -988,6 +990,7 @@
     "LDAPUser": "LDAP User",
     "InsecureCommandAlert": "Insecure command alert",
     "helpText": {
+      "TempPassword": "For a while, there is a period of 300 seconds, and there is a period of reuse.",
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
       "authLdapSearchFilter": "Choice may be (cn|uid|sAMAccountName)=%(user)s)",
       "authLdapSearchOu": "Use | split User OUs",
