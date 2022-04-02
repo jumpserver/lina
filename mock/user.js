@@ -22,7 +22,6 @@ const users = {
     name: 'Normal Editor'
   }
 }
-const acl = require('./login-asset-acl-options.json')
 
 export default [
   // user login

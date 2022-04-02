@@ -113,11 +113,12 @@ export class FormFieldGenerator {
     return field
   }
   generateField(name, fieldsMeta, remoteFieldsMeta) {
-    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [] }
+    let field = { id: name, prop: name, el: {}, attrs: {}, rules: [], children: {}}
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
     const fieldMeta = fieldsMeta[name] || {}
     field.label = remoteFieldMeta.label
     field.helpText = remoteFieldMeta.help_text
+    field.children = remoteFieldMeta.children || {}
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)

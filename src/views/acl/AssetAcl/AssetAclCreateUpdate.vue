@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { AttrsSelectRule } from '@/components'
+import { ResourceSelection } from '@/components'
 import rules from '@/components/DataForm/rules'
 export default {
   name: 'AclCreateUpdate',
@@ -16,14 +16,15 @@ export default {
       initial: {
         action: 'login_confirm',
         system_users: {
-          // name_group: '*',
-          // protocol_group: '*',
-          // username_group: '*'
+          name_group: '*',
+          protocol_group: '*',
+          username_group: '*'
         },
         users: {
           // username_group: '*'
         },
         assets: {
+          strategy: 'all'
           // hostname_group: '*',
           // ip_group: '*'
         }
@@ -42,7 +43,7 @@ export default {
         },
         assets: {
           fields: ['strategy', 'objects', 'attrs'],
-          component: AttrsSelectRule,
+          component: ResourceSelection,
           el: {
             objects: {
               value: [],
@@ -51,51 +52,12 @@ export default {
                 url: '/api/v1/users/groups/'
               }
             },
-            attrs: [
-              {
-                label: '属性',
-                prop: 'attr',
-                type: 'select',
-                isShowTable: true,
-                option: [{
-                  label: '资产名',
-                  value: 'zichanming'
-                }, {
-                  label: 'IP',
-                  value: 'IP'
-                }, {
-                  label: '简要说明',
-                  value: 'shuoming'
-                }, {
-                  label: '责任人',
-                  value: 'zerenren'
-                }]
-              },
-              {
-                label: '匹配',
-                prop: 'operator',
-                type: 'select',
-                isShowTable: true,
-                option: [{
-                  label: '=',
-                  value: '='
-                }, {
-                  label: '正则',
-                  value: 'zhengze'
-                }]
-              },
-              {
-                label: '内容',
-                prop: 'value',
-                type: 'input',
-                isShowTable: true
-              }
-            ]
+            attrsOption: {}
           }
         },
         users: {
           // fields: ['strategy', 'objects', 'attrs'],
-          // component: AttrsSelectRule,
+          // component: ResourceSelection,
           // fieldsMeta: {
 
           // }
@@ -103,7 +65,7 @@ export default {
         system_users: {
           // fields: ['name_group', 'username_group', 'protocol_group']
           // fields: ['strategy', 'objects', 'attrs'],
-          // component: AttrsSelectRule,
+          // component: ResourceSelection,
         },
         reviewers: {
           el: {
@@ -119,33 +81,38 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       afterGetFormValue(formValue) {
-        // formValue.assets.ip_group = formValue.assets.ip_group.toString()
-        // formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
-        // formValue.system_users.name_group = formValue.system_users.name_group.toString()
-        // formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
-        // formValue.system_users.username_group = formValue.system_users.username_group.toString()
-        // formValue.users.username_group = formValue.users.username_group.toString()
+        formValue.assets = {
+          strategy: 'attrs',
+          objects: [],
+          attrs: []
+        }
+        formValue.assets.ip_group = formValue.assets.ip_group.toString()
+        formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
+        formValue.system_users.name_group = formValue.system_users.name_group.toString()
+        formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
+        formValue.system_users.username_group = formValue.system_users.username_group.toString()
+        formValue.users.username_group = formValue.users.username_group.toString()
         return formValue
       },
       cleanFormValue(value) {
-        // if (!Array.isArray(value.assets.ip_group)) {
-        //   value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
-        // }
-        // if (!Array.isArray(value.assets.hostname_group)) {
-        //   value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
-        // }
-        // if (!Array.isArray(value.system_users.protocol_group)) {
-        //   value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
-        // }
-        // if (!Array.isArray(value.system_users.name_group)) {
-        //   value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
-        // }
-        // if (!Array.isArray(value.system_users.username_group)) {
-        //   value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
-        // }
-        // if (!Array.isArray(value.users.username_group)) {
-        //   value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
-        // }
+        if (!Array.isArray(value.assets.ip_group)) {
+          value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
+        }
+        if (!Array.isArray(value.assets.hostname_group)) {
+          value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.protocol_group)) {
+          value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.name_group)) {
+          value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
+        }
+        if (!Array.isArray(value.system_users.username_group)) {
+          value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
+        }
+        if (!Array.isArray(value.users.username_group)) {
+          value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
+        }
         return value
       }
     }
