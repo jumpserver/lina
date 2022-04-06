@@ -152,6 +152,28 @@ export default {
             permissions: ['terminal.change_commandstorage']
           },
           hidden: true
+        },
+        {
+          path: 'endpoint/create',
+          name: 'EndpointCreate',
+          component: () => import('@/views/settings/Terminal/Endpoint/EndpointCreateUpdate'),
+          meta: {
+            title: i18n.t('route.EndpointCreateUpdate'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.add_endpoint']
+          },
+          hidden: true
+        },
+        {
+          path: 'endpoint/:id/update',
+          name: 'EndpointUpdate',
+          component: () => import('@/views/settings/Terminal/Endpoint/EndpointCreateUpdate'),
+          meta: {
+            title: i18n.t('route.EndpointCreateUpdate'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.change_endpoint']
+          },
+          hidden: true
         }
       ]
     },

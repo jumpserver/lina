@@ -1433,6 +1433,8 @@
     "License": "License",
     "LicenseDetail": "License detail",
     "ComponentMonitor": "System Monitor",
+    "Endpoint": "Endpoint",
+    "EndpointRule": "Endpoint rule",
     "ServiceRatio": "Service ratio",
     "LoadStatus":"Status",
     "NormalLoad":"Normal",
