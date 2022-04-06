@@ -157,5 +157,9 @@ export const CLOUD = [
 ]
 
 export const ApplicationTypes = [
-  ...REMOTE_APP, ...DATABASE, ...CLOUD
+  ...DATABASE, ...REMOTE_APP, ...CLOUD
+]
+
+export const ApplicationSystemUserTypes = [
+  ...DATABASE, ...CLOUD
 ]
