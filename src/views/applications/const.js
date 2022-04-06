@@ -129,6 +129,10 @@ export const ApplicationTypes = [
   ...DATABASE, ...KV_DATABASE, ...REMOTE_APP, ...CLOUD
 ]
 
+export const ApplicationSystemUserTypes = [
+  ...DATABASE, ...KV_DATABASE, ...CLOUD
+]
+
 export const ApplicationCascader = [
   groupedDropdownToCascader(DATABASE),
   groupedDropdownToCascader(KV_DATABASE),
