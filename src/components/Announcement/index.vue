@@ -7,7 +7,7 @@
     :title="title"
     @close="onClose"
   >
-    <span class="announcement-main"> {{ announcement.content }}</span>
+    <span class="announcement-main">{{ announcement.content }}</span>
     <span v-if="announcement.link">
       <el-link :href="announcement.link" target="_blank" class="link-more">
         {{ $t('common.ViewMore') }}
