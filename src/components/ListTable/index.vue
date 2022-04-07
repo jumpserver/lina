@@ -192,6 +192,15 @@ export default {
   & >>> .el-table__header thead > tr > th {
     background-color: white;
   }
+  &>>> .el-table__row .cell {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  &>>> .el-table__expanded-cell pre {
+    max-height: 500px;
+    overflow-y: scroll;
+  }
 }
 
 //修改颜色
