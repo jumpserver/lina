@@ -174,6 +174,28 @@ export default {
             permissions: ['terminal.change_endpoint']
           },
           hidden: true
+        },
+        {
+          path: 'endpoint-rule/create',
+          name: 'EndpointRuleCreate',
+          component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
+          meta: {
+            title: i18n.t('route.EndpointRuleCreateUpdate'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.add_endpointrule']
+          },
+          hidden: true
+        },
+        {
+          path: 'endpoint-rule/:id/update',
+          name: 'EndpointRuleUpdate',
+          component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
+          meta: {
+            title: i18n.t('route.EndpointRuleCreateUpdate'),
+            activeMenu: '/settings/terminal',
+            permissions: ['terminal.change_endpointrule']
+          },
+          hidden: true
         }
       ]
     },

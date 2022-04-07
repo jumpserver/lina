@@ -1,10 +1,46 @@
 <template>
-  <div />
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
+import ListTable from '@/components/ListTable'
 export default {
-  name: 'EndpointRule'
+  name: 'EndpointRule',
+  components: {
+    ListTable
+  },
+  data() {
+    return {
+      tableConfig: {
+        url: '/api/v1/terminal/endpoint-rules/',
+        columns: [
+          'name', 'ip_group', 'priority', 'endpoint_display', 'date_updated', 'date_created',
+          'created_by', 'comment', 'actions'
+        ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'name', 'ip_group', 'priority', 'endpoint_display', 'actions'
+          ]
+        },
+        columnsMeta: {
+          name: {
+            formatter: null
+          },
+          actions: {
+            formatterArgs: {
+              updateRoute: 'EndpointRuleUpdate',
+              cloneRoute: 'EndpointRuleCreate'
+            }
+          }
+        }
+      },
+      headerActions: {
+        hasMoreActions: false,
+        createRoute: 'EndpointRuleCreate'
+      }
+    }
+  }
 }
 </script>
 

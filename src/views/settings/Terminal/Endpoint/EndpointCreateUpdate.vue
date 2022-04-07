@@ -15,6 +15,7 @@ export default {
   },
   data() {
     return {
+      url: '/api/v1/terminal/endpoints/',
       successUrl: { name: 'TerminalSetting', params: { activeMenu: 'EndpointList' }},
       fields: [
         [this.$t('common.Basic'), ['name', 'host']],
@@ -26,7 +27,6 @@ export default {
       ],
       fieldsMeta: {
       },
-      url: '/api/v1/terminal/endpoints/',
       hasDetailInMsg: false
     }
   },
