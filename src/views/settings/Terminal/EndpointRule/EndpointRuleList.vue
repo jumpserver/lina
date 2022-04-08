@@ -4,6 +4,7 @@
 
 <script>
 import ListTable from '@/components/ListTable'
+import { ArrayFormatter } from '@/components/TableFormatters'
 export default {
   name: 'EndpointRule',
   components: {
@@ -26,6 +27,10 @@ export default {
         columnsMeta: {
           name: {
             formatter: null
+          },
+          ip_group: {
+            formatter: ArrayFormatter,
+            showOverflowTooltip: true
           },
           actions: {
             formatterArgs: {

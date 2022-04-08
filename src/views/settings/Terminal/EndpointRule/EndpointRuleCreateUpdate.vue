@@ -3,6 +3,7 @@
     v-bind="$data"
     :create-success-next-route="successUrl"
     :update-success-next-route="successUrl"
+    :after-get-form-value="afterGetFormValue"
   />
 </template>
 
@@ -35,7 +36,17 @@ export default {
           }
         }
       },
-      hasDetailInMsg: false
+      hasDetailInMsg: false,
+      cleanFormValue(value) {
+        if (!Array.isArray(value.ip_group)) {
+          value.ip_group = value.ip_group ? value.ip_group.split(',') : []
+        }
+        return value
+      },
+      afterGetFormValue(formValue) {
+        formValue.ip_group = formValue.ip_group.toString()
+        return formValue
+      }
     }
   }
 }
