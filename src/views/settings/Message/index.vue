@@ -86,7 +86,7 @@ export default {
 
       this.$axios.patch(
         `/api/v1/notifications/system-msg-subscription/${sub.id}/`,
-        { receiveBackends: backends }
+        { receive_backends: backends }
       ).catch(err => {
         this.$log.error(err)
       })
