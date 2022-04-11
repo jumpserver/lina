@@ -651,6 +651,10 @@
   },
   "route": {
     "": "",
+    "CreateEndpoint": "Create endpoint",
+    "UpdateEndpoint": "Update endpoint",
+    "CreateEndpointRule": "Create endpoint rule",
+    "UpdateEndpointRule": "Update endpoint rule",
     "SystemSetting": "System setting",
     "Index": "Index",
     "Role": "Role",

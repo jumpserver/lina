@@ -662,6 +662,10 @@
   },
   "route": {
     "": "",
+    "CreateEndpoint": "创建端点",
+    "UpdateEndpoint": "更新端点",
+    "CreateEndpointRule": "创建端点规则",
+    "UpdateEndpointRule": "更新端点规则",
     "Index": "首页",
     "SystemSetting": "系统设置",
     "WorkBench": "工作台",

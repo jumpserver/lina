@@ -661,6 +661,10 @@
   },
   "route": {
     "": "",
+    "CreateEndpoint": "エンドポイントを作成する",
+    "UpdateEndpoint": "エンドポイントを更新",
+    "CreateEndpointRule": "エンドポイントルールを作成する",
+    "UpdateEndpointRule": "エンドポイントルールを更新する",
     "Index": "トップページ",
     "SystemSetting": "システム設定",
     "WorkBench": "作業台",

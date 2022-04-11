@@ -158,7 +158,7 @@ export default {
           name: 'EndpointCreate',
           component: () => import('@/views/settings/Terminal/Endpoint/EndpointCreateUpdate'),
           meta: {
-            title: i18n.t('route.EndpointCreateUpdate'),
+            title: i18n.t('route.CreateEndpoint'),
             activeMenu: '/settings/terminal',
             permissions: ['terminal.add_endpoint']
           },
@@ -169,7 +169,7 @@ export default {
           name: 'EndpointUpdate',
           component: () => import('@/views/settings/Terminal/Endpoint/EndpointCreateUpdate'),
           meta: {
-            title: i18n.t('route.EndpointCreateUpdate'),
+            title: i18n.t('route.UpdateEndpoint'),
             activeMenu: '/settings/terminal',
             permissions: ['terminal.change_endpoint']
           },
@@ -180,7 +180,7 @@ export default {
           name: 'EndpointRuleCreate',
           component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
           meta: {
-            title: i18n.t('route.EndpointRuleCreateUpdate'),
+            title: i18n.t('route.CreateEndpointRule'),
             activeMenu: '/settings/terminal',
             permissions: ['terminal.add_endpointrule']
           },
@@ -191,7 +191,7 @@ export default {
           name: 'EndpointRuleUpdate',
           component: () => import('@/views/settings/Terminal/EndpointRule/EndpointRuleCreateUpdate'),
           meta: {
-            title: i18n.t('route.EndpointRuleCreateUpdate'),
+            title: i18n.t('route.UpdateEndpointRule'),
             activeMenu: '/settings/terminal',
             permissions: ['terminal.change_endpointrule']
           },
