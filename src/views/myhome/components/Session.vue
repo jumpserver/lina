@@ -11,9 +11,10 @@ export default {
     HomeCard
   },
   data() {
+    const vm = this
     return {
       cardConfig: {
-        title: this.$t('route.SessionOffline')
+        title: this.$t('route.RecentSession')
       },
       tableConfig: {
         url: '/api/v1/terminal/my-sessions/?limit=5',
@@ -29,7 +30,11 @@ export default {
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }}>{ label }</router-link>
+              if (vm.$hasPerm('terminal.view_session')) {
+                return <router-link {...{ attrs: route }} >{ label }</router-link>
+              } else {
+                return label
+              }
             }
           },
           user: {
@@ -59,7 +64,7 @@ export default {
           }
         },
         hasSelection: false,
-        paginationSize: 5
+        paginationSize: 10
       }
     }
   }

@@ -768,6 +768,7 @@
     "Activity": "Activity",
     "SessionOffline": "Sessions offline",
     "SessionOnline": "Sessions online",
+    "RecentSession": "Recent session",
     "Sessions": "Sessions",
     "Settings": "Settings",
     "SystemUserCreate": "System user create",

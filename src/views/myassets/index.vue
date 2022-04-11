@@ -1,18 +1,15 @@
 <template>
   <div>
-    <Announcement />
     <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
   </div>
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { Announcement } from '@/components'
 import { SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {
-    GenericTreeListPage,
-    Announcement
+    GenericTreeListPage
   },
   data() {
     return {
