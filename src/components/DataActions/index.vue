@@ -1,5 +1,5 @@
 <template>
-  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" style="display: flex">
+  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
     <template v-for="action in iActions">
       <el-dropdown
         v-if="action.dropdown"
@@ -154,6 +154,11 @@ export default {
 </script>
 
 <style scoped>
+.layout {
+  display: flex;
+  justify-content: center;
+}
+
 .dropdown-menu-title {
   text-align: left;
   font-size: 12px;
@@ -170,7 +175,11 @@ export default {
 }
 
 .el-button-ungroup .action-item {
-  margin-left: 4px
+  margin-left: 4px;
+}
+
+.el-dropdown .el-dropdown-selfdefine {
+  padding: 2px 5px;
 }
 
 .el-button-ungroup .action-item:first-child {
