@@ -4,23 +4,23 @@ import { BASE_URL } from '@/utils/common'
 import empty from '@/layout/empty'
 
 export default {
-  path: '/workspace/',
+  path: '/workbench/',
   component: Layout,
-  name: 'workspace',
-  redirect: '/workspace/home',
+  name: 'workbench',
+  redirect: '/workbench/home',
   meta: {
-    title: i18n.t('common.nav.Workspace'),
+    title: i18n.t('common.nav.Workbench'),
     type: 'view',
-    view: 'workspace',
+    view: 'workbench',
     icon: 'el-icon-user-solid',
     showNavSwitcher: true,
     showOrganization: true,
-    permissions: ['rbac.view_workspace']
+    permissions: ['rbac.view_workbench']
   },
   children: [
     // 404 page must be placed at the end !!!
     {
-      path: '/workspace/home',
+      path: '/workbench/home',
       name: 'MyHome',
       component: () => import('@/views/myhome'),
       meta: {
@@ -30,7 +30,7 @@ export default {
       }
     },
     {
-      path: '/workspace/assets',
+      path: '/workbench/assets',
       name: 'MyAssets',
       component: () => import('@/views/myassets'),
       meta: {
@@ -40,7 +40,7 @@ export default {
       }
     },
     {
-      path: '/workspace/apps',
+      path: '/workbench/apps',
       name: 'Apps',
       component: empty,
       redirect: 'remoteapp',
@@ -82,7 +82,7 @@ export default {
       ]
     },
     {
-      path: '/workspace/ops',
+      path: '/workbench/ops',
       component: empty,
       meta: {
         permissions: ['ops.add_commandexecution'],
