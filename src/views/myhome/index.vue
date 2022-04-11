@@ -1,5 +1,6 @@
 <template>
   <Page>
+    <Announcement />
     <div class="home">
       <el-container class="container">
         <el-main class="main">
@@ -8,12 +9,11 @@
               <el-row>
                 <el-col :md="16" :xs="24" class="content-left">
                   <Session />
-                  <Log />
-                  <Ticket v-if="hasValidLicense" />
+                  <Ticket v-if="$hasLicense() && $hasPerm('tickets.view_ticket')" />
                 </el-col>
                 <el-col :md="8" :xs="24">
                   <User />
-                  <Announcement />
+                  <Log />
                 </el-col>
               </el-row>
             </div>
@@ -26,8 +26,8 @@
 
 <script>
 import { Page } from '@/layout/components'
+import { Announcement } from '@/components'
 import User from './components/User'
-import Announcement from './components/Announcement'
 import Ticket from './components/Ticket'
 import Log from './components/LoginLog'
 import Session from './components/Session'
@@ -36,22 +36,11 @@ export default {
   name: 'Name',
   components: {
     Page,
-    User,
     Announcement,
+    User,
     Ticket,
     Log,
     Session
-  },
-  data() {
-    return {
-    }
-  },
-  computed: {
-    hasValidLicense() {
-      return this.$store.getters.hasValidLicense
-    }
-  },
-  methods: {
   }
 }
 
