@@ -40,11 +40,13 @@ export default {
         visible: false,
         iFormSetting: {
           url: '/api/v1/terminal/terminals/',
+          getUrl: () => '/api/v1/terminal/terminals/',
           fields: [
             ['', ['command_storage', 'replay_storage']]
           ],
           fieldsMeta: {
             command_storage: {
+              label: this.$t('sessions.commandStorage'),
               component: Select2,
               el: {
                 ajax: {
@@ -54,6 +56,7 @@ export default {
               }
             },
             replay_storage: {
+              label: this.$t('sessions.replayStorage'),
               component: Select2,
               el: {
                 ajax: {
