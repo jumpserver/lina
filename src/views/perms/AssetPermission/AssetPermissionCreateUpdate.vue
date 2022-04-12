@@ -1,5 +1,10 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :url="url"
+  />
 </template>
 
 <script>
@@ -37,6 +42,7 @@ export default {
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: '/api/v1/perms/asset-permissions/',
+      createSuccessNextRoute: { name: 'AssetPermissionDetail' },
       fieldsMeta: {
         users: {
           el: {

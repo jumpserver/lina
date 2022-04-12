@@ -418,7 +418,7 @@
     "isValid": "Is valid",
     "nav": {
       "APIKey": "API Key",
-      "Workspace": "Workbench",
+      "Workbench": "Workbench",
       "Navigation": "Navigation",
       "Console": "Console",
       "Audits": "Audit",

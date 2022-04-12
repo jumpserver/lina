@@ -1,6 +1,11 @@
 <template>
   <div>
-    <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+    <Announcement />
+    <GenericTreeListPage
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+      :tree-setting="treeSetting"
+    />
   </div>
 </template>
 
@@ -36,6 +41,10 @@ export default {
         url: '/api/v1/perms/users/assets/',
         hasTree: true,
         columns: ['hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'],
+        columnsShow: {
+          default: ['hostname', 'ip', 'system_users', 'platform', 'actions'],
+          min: ['hostname', 'actions']
+        },
         columnsMeta: {
           hostname: {
             prop: 'hostname',
@@ -83,7 +92,7 @@ export default {
             showOverflowTooltip: true,
             align: 'center',
             label: this.$t('assets.SystemUsers'),
-            width: '150px',
+            width: '120px',
             formatter: SystemUserFormatter,
             formatterArgs: {
               getUrl: ({ row }) => {
@@ -99,6 +108,8 @@ export default {
             width: '100px'
           },
           actions: {
+            width: '150px',
+            align: 'center',
             formatterArgs: {
               hasDelete: false,
               loading: true,
