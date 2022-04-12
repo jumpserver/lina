@@ -35,7 +35,8 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'EndpointUpdate',
-              cloneRoute: 'EndpointCreate'
+              cloneRoute: 'EndpointCreate',
+              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001'
             }
           }
         }
