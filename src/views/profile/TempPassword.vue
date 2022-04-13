@@ -15,39 +15,44 @@ export default {
     GenericListPage
   },
   data() {
-    const ajaxUrl = '/api/v1/authentication/temp-password/'
+    const ajaxUrl = '/api/v1/authentication/temp-tokens/'
     return {
       helpMessage: this.$t('setting.helpText.TempPassword'),
       tableConfig: {
         hasSelection: true,
         url: ajaxUrl,
         columns: [
-          'temp_password', 'expire', 'actions'
+          'username', 'secret', 'date_expired', 'date_verified', 'is_valid', 'actions'
         ],
         columnsMeta: {
-          temp_password: {
+          secret: {
             label: this.$t('common.nav.TempPassword')
           },
           expire: {
-            label: this.$t('setting.Expired') + '( s )',
-            width: '100px'
+            label: this.$t('setting.Expired') + '( s )'
           },
           actions: {
             prop: '',
             formatterArgs: {
               hasUpdate: false,
               hasClone: false,
-              canDelete: true,
-              onDelete: function({ row }) {
-                this.$axios.delete(
-                  `/api/v1/authentication/temp-password/`
-                ).then(res => {
-                  this.getRefsListTable.reloadTable()
-                  this.$message.success(this.$t('common.deleteSuccessMsg'))
-                }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
-                })
-              }.bind(this)
+              hasDelete: false,
+              extraActions: [
+                {
+                  name: 'Expired',
+                  title: this.$t('setting.Expire'),
+                  type: 'info',
+                  callback: function({ row }) {
+                    this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
+                    ).then(res => {
+                      this.getRefsListTable.reloadTable()
+                      this.$message.success(this.$t('common.updateSuccessMsg'))
+                    }).catch(error => {
+                      this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                    })
+                  }.bind(this)
+                }
+              ]
             }
           }
         }
@@ -68,7 +73,7 @@ export default {
             can: true,
             callback: function() {
               this.$axios.post(
-                `/api/v1/authentication/temp-password/`
+                `/api/v1/authentication/temp-tokens/`
               ).then(res => {
                 this.getRefsListTable.reloadTable()
                 this.$message.success(this.$t('common.updateSuccessMsg'))
