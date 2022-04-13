@@ -1,16 +1,26 @@
 <template>
-  <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+  <div>
+    <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+    <PermBulkUpdateDialog
+      :visible.sync="updateSelectedDialogSetting.visible"
+      v-bind="updateSelectedDialogSetting"
+    />
+  </div>
 </template>
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { DetailFormatter } from '@/components/TableFormatters'
+import PermBulkUpdateDialog from '@/views/perms/components/PermBulkUpdateDialog'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    GenericTreeListPage
+    GenericTreeListPage,
+    PermBulkUpdateDialog
   },
   data() {
+    const vm = this
     return {
       treeSetting: {
         showMenu: false,
@@ -186,9 +196,31 @@ export default {
             }
           ]
         },
-        hasBulkUpdate: false
+        hasBulkUpdate: false,
+        extraMoreActions: [
+          {
+            name: 'actionUpdateSelected',
+            title: this.$t('common.updateSelected'),
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                !vm.currentOrgIsRoot &&
+                vm.$hasPerm('perms.change_assetpermission')
+            },
+            callback: ({ selectedRows }) => {
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.visible = true
+            }
+          }
+        ]
+      },
+      updateSelectedDialogSetting: {
+        visible: false,
+        selectedRows: []
       }
     }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
   }
