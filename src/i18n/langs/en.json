@@ -1060,7 +1060,7 @@
     "refreshLdapCache":"Refreshing Ldap cache ",
     "LicenseExpired": "License expired",
     "LicenseWillBe": "License will expire at ",
-    "Expire": "",
+    "Expire": "Expire",
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",
     "dingTalkTest": "Test",
