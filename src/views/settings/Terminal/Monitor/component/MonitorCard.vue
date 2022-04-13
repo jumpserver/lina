@@ -5,7 +5,7 @@
     </div>
     <el-card class="box-card" shadow="never">
       <el-row :gutter="10">
-        <el-col :span="18">
+        <el-col :md="18" :sm="24">
           <div style="padding-top: 6px;padding-bottom: 8px;">
             <h2 style="text-align: center;font-weight: 350">{{ $t('xpack.LoadStatus') }}</h2>
             <div class="progress">
@@ -50,7 +50,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :md="6" :sm="24">
           <div style="height: 100%;width: 100%;padding-top: 8px;">
             <h2 style="text-align: center;font-weight: 350">{{ $t('dashboard.OnlineSessions') }}</h2>
             <div style="text-align: center;font-size: 30px;">

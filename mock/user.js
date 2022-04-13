@@ -1,4 +1,3 @@
-
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -46,7 +45,6 @@ export default [
       }
     }
   },
-
   // get user info
   {
     url: '/vue-admin-template/user/info\.*',

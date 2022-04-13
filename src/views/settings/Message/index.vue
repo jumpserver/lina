@@ -14,7 +14,7 @@
             <span>{{ scope.row.value }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-for="header in receiveBackends" :key="header.id" :label="header.name_display" width="120">
+        <el-table-column v-for="header in receiveBackends" :key="header.id" :label="getNameDisplay(header)" width="80">
           <template v-slot="scope">
             <span v-if="!scope.row.children">
               <el-checkbox
@@ -86,7 +86,7 @@ export default {
 
       this.$axios.patch(
         `/api/v1/notifications/system-msg-subscription/${sub.id}/`,
-        { receiveBackends: backends }
+        { receive_backends: backends }
       ).catch(err => {
         this.$log.error(err)
       })
@@ -104,6 +104,13 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    getNameDisplay(header) {
+      const displayName = header['name_display']
+      if (displayName === 'Site message') {
+        return 'Inbox'
+      }
+      return displayName
     },
     onOpenDialog(sub) {
       this.currentEditSub = sub

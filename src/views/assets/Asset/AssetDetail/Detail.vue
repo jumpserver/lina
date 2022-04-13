@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <DetailCard :items="detailCardItems" />
     </el-col>
-    <el-col :span="10">
+    <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
       <RelationCard ref="NodeRelation" v-perms="'assets.change_asset'" type="info" style="margin-top: 15px" v-bind="nodeRelationConfig" />
       <LabelCard v-if="$hasPerm('assets.view_label')" type="warning" style="margin-top: 15px" v-bind="labelConfig" />

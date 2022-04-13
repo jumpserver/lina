@@ -1,21 +1,14 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <keep-alive>
-      <component :is="config.activeMenu" />
-    </keep-alive>
-  </TabPage>
+  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
 </template>
 
 <script>
 import { TabPage } from '@/layout/components'
-import GatheredUserList from './GatheredUserList'
-import TaskList from './TaskList'
+
 export default {
   name: 'Index',
   components: {
-    TabPage,
-    GatheredUserList,
-    TaskList
+    TabPage
   },
   data() {
     return {
@@ -25,12 +18,14 @@ export default {
           {
             title: this.$t('xpack.GatherUser.GatherUserList'),
             name: 'GatheredUserList',
-            hidden: !this.$hasPerm('assets.view_gathereduser')
+            hidden: !this.$hasPerm('assets.view_gathereduser'),
+            component: () => import('@/views/accounts/GatheredUser/GatheredUserList.vue')
           },
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskList'),
             name: 'TaskList',
-            hidden: !this.$hasPerm('xpack.view_gatherusertask')
+            hidden: !this.$hasPerm('xpack.view_gatherusertask'),
+            component: () => import('@/views/accounts/GatheredUser/TaskList.vue')
           }
         ]
       }

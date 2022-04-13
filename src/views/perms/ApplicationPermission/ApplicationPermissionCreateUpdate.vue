@@ -34,6 +34,7 @@ export default {
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
       url: `/api/v1/perms/application-permissions/?category=${this.$route.query.category}&type=${this.$route.query.type}`,
+      createSuccessNextRoute: { name: 'ApplicationPermissionDetail' },
       fieldsMeta: {
         users: {
           el: {

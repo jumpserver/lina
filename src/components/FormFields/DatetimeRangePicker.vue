@@ -91,18 +91,22 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
   .datepicker{
     width: 233px;
+    &>>> .el-range__icon {
+      margin-top: 2px;
+      margin-right: 3px;
+    }
+    &>>> .el-range-input {
+      width: 49%;
+    }
   }
   .el-input__inner{
     border: 1px solid #dcdee2;
     border-radius: 3px;
     height: 36px;
   }
-  /*.el-date-editor  ::v-deep  .el-input__icon{*/
-  /*  line-height: 28px;*/
-  /*}*/
   .el-date-editor  ::v-deep  .el-range-separator{
     line-height: 28px;
   }

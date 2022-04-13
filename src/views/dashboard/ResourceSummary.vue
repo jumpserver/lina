@@ -28,19 +28,19 @@ export default {
         {
           title: this.$t('dashboard.UsersTotal'),
           body: {
-            route: `/users/users`,
+            route: { name: 'UserList' },
             count: this.counter.total_count_users,
-            comment: 'All users',
-            disabled: !this.$store.state.users.hasAdmin
+            comment: this.$t('dashboard.UsersTotal'),
+            disabled: !this.$hasPerm('users.view_user')
           }
         },
         {
           title: this.$t('dashboard.AssetsTotal'),
           body: {
-            route: `/assets/assets`,
+            route: { name: 'AssetList' },
             count: this.counter.total_count_assets,
-            comment: 'All assets',
-            disabled: !this.$store.state.users.hasAdmin
+            comment: this.$t('dashboard.AssetsTotal'),
+            disabled: !this.$hasPerm('assets.view_asset')
           }
         },
         {
@@ -48,7 +48,8 @@ export default {
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_users,
-            comment: 'Online users'
+            comment: this.$t('dashboard.OnlineUsers'),
+            disabled: !this.$hasPerm('terminal.view_session')
           }
         },
         {
@@ -56,7 +57,8 @@ export default {
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_sessions,
-            comment: 'Online sessions'
+            comment: this.$t('dashboard.OnlineSessions'),
+            disabled: !this.$hasPerm('terminal.view_session')
           }
         }
       ]

@@ -1,4 +1,5 @@
 import i18n from '@/i18n/i18n'
+import { groupedDropdownToCascader } from '@/utils/common'
 
 export const AssetProtocols = [
   {
@@ -27,4 +28,6 @@ export const AssetProtocols = [
     has: true
   }
 ]
+
+export const AssetCascader = groupedDropdownToCascader(AssetProtocols)
 

@@ -1,5 +1,5 @@
 <template>
-  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'">
+  <div :class="grouped ? 'el-button-group' : 'el-button-ungroup'" class="layout">
     <template v-for="action in iActions">
       <el-dropdown
         v-if="action.dropdown"
@@ -13,9 +13,14 @@
         <el-button :size="size" v-bind="cleanButtonAction(action)">
           {{ action.title }}<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu slot="dropdown" style="overflow: auto;max-height: 60vh">
           <template v-for="option in action.dropdown">
-            <div v-if="option.group" :key="'group:'+option.name" class="dropdown-menu-title" style="width:130px">
+            <div
+              v-if="option.group"
+              :key="'group:'+option.name"
+              class="dropdown-menu-title"
+              style="width:130px"
+            >
               {{ option.group }}
             </div>
             <el-dropdown-item
@@ -149,6 +154,11 @@ export default {
 </script>
 
 <style scoped>
+.layout {
+  display: flex;
+  justify-content: center;
+}
+
 .dropdown-menu-title {
   text-align: left;
   font-size: 12px;
@@ -165,7 +175,7 @@ export default {
 }
 
 .el-button-ungroup .action-item {
-  margin-left: 4px
+  margin-left: 4px;
 }
 
 .el-button-ungroup .action-item:first-child {

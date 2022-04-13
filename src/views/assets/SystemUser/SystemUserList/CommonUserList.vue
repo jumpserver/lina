@@ -9,7 +9,7 @@
 
 <script>
 import { GenericListTable } from '@/layout/components'
-import { ApplicationTypes } from '@/views/applications/const'
+import { ApplicationSystemUserTypes } from '@/views/applications/const'
 import { AssetProtocols } from '@/views/assets/const'
 
 export default {
@@ -78,7 +78,7 @@ export default {
           },
           dropdown: [
             ...AssetProtocols,
-            ...ApplicationTypes
+            ...ApplicationSystemUserTypes
           ]
         }
       },

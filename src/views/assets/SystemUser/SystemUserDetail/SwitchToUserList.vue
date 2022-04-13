@@ -4,10 +4,10 @@
       <b>{{ Tips.title }}</b>: <span>{{ Tips.body }}</span>
     </el-alert>
     <el-row :gutter="20">
-      <el-col :span="20">
+      <el-col :md="20" :sm="24">
         <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
       </el-col>
-      <el-col :span="4" />
+      <el-col :md="4" :sm="24" />
     </el-row>
   </div>
 </template>

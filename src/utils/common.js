@@ -109,7 +109,7 @@ export function getApiPath(that) {
     // ticket ...
     pagePath = pagePathArray.slice(1, pagePathArray.length).join('/')
   } else {
-    // console,audit,workspace
+    // console,audit,workbench
     pagePath = pagePathArray.slice(2, pagePathArray.length).join('/')
   }
   return `/api/v1/${pagePath}/`
@@ -275,6 +275,20 @@ export const assignIfNot = _.partialRight(_.assignInWith, customizer)
 const scheme = document.location.protocol
 const port = document.location.port ? ':' + document.location.port : ''
 const BASE_URL = scheme + '//' + document.location.hostname + port
+
+export function groupedDropdownToCascader(group) {
+  const firstType = group[0]
+  return {
+    value: firstType.category,
+    label: firstType.group,
+    children: group.map(item => {
+      return {
+        value: item.name,
+        label: item.title
+      }
+    })
+  }
+}
 
 export { BASE_URL }
 

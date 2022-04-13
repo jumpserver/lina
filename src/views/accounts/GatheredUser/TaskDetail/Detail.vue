@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="14">
+    <el-col :md="14" :sm="24">
       <DetailCard :items="detailCardItems" />
     </el-col>
   </el-row>

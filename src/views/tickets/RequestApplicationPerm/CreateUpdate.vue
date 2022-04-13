@@ -12,6 +12,8 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
+import { ApplicationCascader } from '@/views/applications/const'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -108,69 +110,7 @@ export default {
               rules: [Required],
               el: {
                 multiple: false,
-                options: [
-                  {
-                    label: this.$t(`applications.applicationsCategory.db`),
-                    value: 'db',
-                    children: [
-                      {
-                        label: 'MySQL',
-                        value: 'mysql'
-                      },
-                      {
-                        label: 'Oracle',
-                        value: 'oracle'
-                      },
-                      {
-                        label: 'PostgreSQL',
-                        value: 'postgresql'
-                      },
-                      {
-                        label: 'MariaDB',
-                        value: 'mariadb'
-                      },
-                      {
-                        label: 'SQLServer',
-                        value: 'sqlserver'
-                      },
-                      {
-                        label: 'Redis',
-                        value: 'redis'
-                      }
-                    ]
-                  },
-                  {
-                    label: this.$t(`applications.applicationsCategory.cloud`),
-                    value: 'cloud',
-                    children: [
-                      {
-                        label: 'Kubernetes',
-                        value: 'k8s'
-                      }
-                    ]
-                  },
-                  {
-                    label: this.$t(`applications.applicationsCategory.remote_app`),
-                    value: 'remote_app',
-                    children: [
-                      {
-                        label: 'MySQL Workbench',
-                        value: 'mysql_workbench'
-                      },
-                      {
-                        label: 'vSphere Client',
-                        value: 'vmware_client'
-                      },
-                      {
-                        label: 'Custom',
-                        value: 'custom'
-                      }, {
-                        label: 'Chrome',
-                        value: 'chrome'
-                      }
-                    ]
-                  }
-                ]
+                options: ApplicationCascader
               },
               on: {
                 change: ([event], updateForm) => {
@@ -197,9 +137,10 @@ export default {
           hidden: (form) => {
             this.org_id = form['org_id']
             apply_category_type = this.apply_category_type
+            const fieldsMeta = this.fieldsMeta.meta.fieldsMeta
             if (apply_category_type) {
-              this.fieldsMeta.meta.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
-              this.fieldsMeta.meta.fieldsMeta.apply_system_users.el.ajax.url = apply_category_type[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=${apply_category_type[1]}`
+              fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
+              fieldsMeta.apply_system_users.el.ajax.url = apply_category_type[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=${apply_category_type[1]}`
             }
           }
         }

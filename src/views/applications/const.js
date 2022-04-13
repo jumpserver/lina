@@ -1,5 +1,7 @@
 import i18n from '@/i18n/i18n'
 import store from '@/store'
+import { groupedDropdownToCascader } from '@/utils/common'
+
 export const CHROME = 'chrome'
 export const MYSQL_WORKBENCH = 'mysql_workbench'
 export const VMWARE_CLIENT = 'vmware_client'
@@ -87,7 +89,10 @@ export const DATABASE = [
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
-  },
+  }
+]
+
+export const KV_DATABASE = [
   {
     name: REDIS,
     title: i18n.t(`applications.applicationsType.${REDIS}`),
@@ -95,52 +100,16 @@ export const DATABASE = [
     category: DATABASE_CATEGORY,
     has: true,
     group: i18n.t('applications.NoSQLProtocol')
-  }
-  // {
-  //   name: MONGODB,
-  //   title: i18n.t(`applications.applicationsType.${MONGODB}`),
-  //   type: 'primary',
-  //   category: DATABASE_CATEGORY
-  // }
-]
-
-export const AppPlanDatabase = [
-  {
-    name: MYSQL,
-    title: i18n.t(`applications.applicationsType.${MYSQL}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: true,
-    group: i18n.t('applications.RDBProtocol')
   },
   {
-    name: ORACLE,
-    title: i18n.t(`applications.applicationsType.${ORACLE}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
-  },
-  {
-    name: POSTGRESQL,
-    title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
-  },
-  {
-    name: MARIADB,
-    title: i18n.t(`applications.applicationsType.${MARIADB}`),
+    name: MONGODB,
+    title: i18n.t(`applications.applicationsType.${MONGODB}`),
     type: 'primary',
     category: DATABASE_CATEGORY
-  },
-  {
-    name: SQLSERVER,
-    title: i18n.t(`applications.applicationsType.${SQLSERVER}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
   }
 ]
+
+export const AppPlanDatabase = DATABASE
 
 export const KUBERNETES = 'k8s'
 export const CLOUD_CATEGORY = 'cloud'
@@ -157,5 +126,16 @@ export const CLOUD = [
 ]
 
 export const ApplicationTypes = [
-  ...REMOTE_APP, ...DATABASE, ...CLOUD
+  ...DATABASE, ...KV_DATABASE, ...REMOTE_APP, ...CLOUD
+]
+
+export const ApplicationSystemUserTypes = [
+  ...DATABASE, ...KV_DATABASE, ...CLOUD
+]
+
+export const ApplicationCascader = [
+  groupedDropdownToCascader(DATABASE),
+  groupedDropdownToCascader(KV_DATABASE),
+  groupedDropdownToCascader(REMOTE_APP),
+  groupedDropdownToCascader(CLOUD)
 ]

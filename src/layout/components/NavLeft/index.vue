@@ -4,12 +4,12 @@
       <div class="nav-logo">
         <Logo v-if="showLogo" :collapse="isCollapse" />
       </div>
+      <div class="active-mobile">
+        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
+        <Organization class="organization" />
+      </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         {{ isTitle }}
-      </div>
-      <div class="active-mobile">
-        <ViewSwitcher />
-        <Organization class="organization" />
       </div>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -173,6 +173,9 @@ export default {
     }
     &>>> .menu-main {
       margin-left: -10px;
+    }
+    &>>> .title-label {
+      color: white !important;
     }
   }
   @media screen and (max-width: 992px) {

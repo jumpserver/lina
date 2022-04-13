@@ -5,8 +5,8 @@
     </div>
     <ul class="content">
       <li v-if="announcement.content" class="item">
-        <span class="item-title">【{{ announcement.subject }}】</span>
-        <span>{{ announcement.content }}</span>
+        <p class="item-title">【{{ announcement.subject }}】</p>
+        <p class="item-content">{{ announcement.content }}</p>
         <span v-if="announcement.link">
           <el-link :href="announcement.link" target="_blank" class="item-url">
             {{ $t('common.ViewMore') }}
@@ -70,6 +70,11 @@ ul,li {
       text-align: center;
       font-size: 15px;
       vertical-align: middle;
+      margin-left: -10px;
+    }
+    .item-content {
+      white-space: pre-wrap;
+      margin: 0;
     }
   }
   .item-url {

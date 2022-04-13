@@ -34,8 +34,8 @@
     </GenericTreeListPage>
     <Dialog width="30%" :title="this.$t('assets.NodeInformation')" :visible.sync="nodeInfoDialogSetting.dialogVisible" :show-cancel="false" :show-confirm="false">
       <el-row v-for="item in nodeInfoDialogSetting.items" :key="'card-' + item.key" :gutter="10" class="item">
-        <el-col :span="6"><div class="item-label"><label>{{ item.label }}: </label></div></el-col>
-        <el-col :span="18"><div class="item-text">{{ item.value }}</div></el-col>
+        <el-col :md="6" :sm="24"><div class="item-label"><label>{{ item.label }}: </label></div></el-col>
+        <el-col :md="18" :sm="24"><div class="item-text">{{ item.value }}</div></el-col>
       </el-row>
     </Dialog>
     <AssetBulkUpdateDialog
@@ -51,7 +51,11 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, TagsFormatter } from '@/components/TableFormatters'
+import {
+  DetailFormatter,
+  ActionsFormatter,
+  TagsFormatter
+} from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import Dialog from '@/components/Dialog'
 import { mapGetters } from 'vuex'
@@ -88,17 +92,14 @@ export default {
         hasTree: true,
         columns: [
           'hostname', 'ip', 'public_ip', 'admin_user_display',
-          'protocols', 'platform', 'hardware_info', 'model',
-          'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
-          'disk_info', 'disk_total', 'memory', 'os', 'os_arch',
-          'os_version', 'number', 'vendor', 'sn', 'is_active',
+          'protocols', 'category', 'type', 'platform', 'sn', 'is_active',
           'connectivity', 'labels_display',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
           default: [
-            'hostname', 'ip', 'platform', 'protocols', 'hardware_info',
+            'hostname', 'ip', 'platform', 'category', 'type',
             'connectivity', 'actions'
           ]
         },
@@ -237,12 +238,12 @@ export default {
             name: 'RemoveFromCurrentNode',
             title: this.$t('assets.RemoveFromCurrentNode'),
             can: ({ selectedRows }) => {
-              if (!this.$route.query.node) {
+              if (!vm.$route.query.node) {
                 return false
               }
               return selectedRows.length > 0 &&
                   !vm.currentOrgIsRoot &&
-                  vm.$hasPerm('assets.change_asset')
+                  vm.$hasPerm('assets.change_node')
             },
             callback: function({ selectedRows, reloadTable }) {
               const assetsId = []

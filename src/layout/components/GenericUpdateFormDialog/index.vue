@@ -7,15 +7,22 @@
     :show-cancel="false"
     :show-confirm="false"
   >
-    <el-row>
-      <el-col :span="4">
+    <el-row :gutter="20">
+      <el-col :md="4" :sm="24">
         <div class="select-prop-label">
           <label>{{ selectPropertiesLabel }}</label>
         </div>
       </el-col>
-      <el-col :span="18">
+      <el-col :md="18" :sm="24">
         <el-checkbox-group v-model="checkedFields" @change="handleCheckedFieldsChange">
-          <el-checkbox v-for="(value, name) in iFormSetting.fieldsMeta" :key="name" :checked="true" :label="name">{{ value.label }}</el-checkbox>
+          <el-checkbox
+            v-for="(value, name) in iFormSetting.fieldsMeta"
+            :key="name"
+            :checked="true"
+            :label="name"
+          >
+            {{ value.label }}
+          </el-checkbox>
         </el-checkbox-group>
       </el-col>
     </el-row>

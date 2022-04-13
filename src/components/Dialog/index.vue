@@ -2,6 +2,7 @@
   <el-dialog
     :title="title"
     :top="top"
+    :width="iWidth"
     class="dialog"
     v-bind="$attrs"
     append-to-body
@@ -39,6 +40,10 @@ export default {
       type: String,
       default: '3vh'
     },
+    width: {
+      type: String,
+      default: '60%'
+    },
     showConfirm: {
       type: Boolean,
       default: true
@@ -56,6 +61,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  computed: {
+    iWidth() {
+      return this.$store.getters.isMobile ? '80%' : this.width
     }
   },
   methods: {

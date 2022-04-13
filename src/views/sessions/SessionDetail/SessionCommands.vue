@@ -1,6 +1,6 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="16">
+    <el-col :md="16" :sm="24">
       <ListTable :table-config="tableConfig" :header-actions="headerActions" />
     </el-col>
   </el-row>
@@ -66,5 +66,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

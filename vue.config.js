@@ -1,6 +1,5 @@
 'use strict'
 const path = require('path')
-const defaultSettings = require('./src/settings.js')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const productionGzipExtensions = /\.(js|css|json|txt|ico|svg)(\?.*)?$/i
 

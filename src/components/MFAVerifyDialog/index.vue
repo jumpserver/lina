@@ -10,14 +10,14 @@
     v-on="$listeners"
   >
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :md="4" :sm="24">
         <div style="line-height: 34px;text-align: center">MFA</div>
       </el-col>
-      <el-col :span="14">
+      <el-col :md="14" :sm="24">
         <el-input v-model="MFAToken" />
         <span class="help-tips help-block">{{ $t('common.MFARequireForSecurity') }}</span>
       </el-col>
-      <el-col :span="4">
+      <el-col :md="4" :sm="24">
         <el-button size="mini" type="primary" style="line-height:20px " @click="verifyMFA">
           {{ this.$t('common.Confirm') }}
         </el-button>

@@ -13,6 +13,8 @@ import TerminalList from './TerminalList'
 import ReplayStorage from './Storage/ReplayStorage'
 import CommandStorage from './Storage/CommandStorage'
 import Monitor from './Monitor'
+import EndpointList from './Endpoint/EndpointList'
+import EndpointRuleList from './EndpointRule/EndpointRuleList'
 
 export default {
   components: {
@@ -21,7 +23,9 @@ export default {
     Monitor,
     TerminalList,
     ReplayStorage,
-    CommandStorage
+    CommandStorage,
+    EndpointList,
+    EndpointRuleList
   },
   data() {
     return {
@@ -52,6 +56,20 @@ export default {
           name: 'Monitor',
           hidden: () => {
             return !(this.$hasPerm('terminal.view_status') && this.$store.getters.hasValidLicense)
+          }
+        },
+        {
+          title: this.$t('xpack.Endpoint'),
+          name: 'EndpointList',
+          hidden: () => {
+            return !this.$hasPerm('terminal.view_endpoint')
+          }
+        },
+        {
+          title: this.$t('xpack.EndpointRule'),
+          name: 'EndpointRuleList',
+          hidden: () => {
+            return !this.$hasPerm('terminal.view_endpointrule')
           }
         }
       ]

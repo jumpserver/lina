@@ -1,9 +1,9 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="20">
+    <el-col :md="20" :sm="24">
       <AppAccountListTable ref="ListTable" :url="accountUrl" :has-import="false" :has-clone="false" />
     </el-col>
-    <el-col :span="4" />
+    <el-col :md="4" :sm="24" />
   </el-row>
 </template>
 

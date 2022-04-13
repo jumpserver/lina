@@ -79,7 +79,7 @@ export const constantRoutes = [
 // 权限路由
 import consoleViewRoutes from './console'
 import auditViewRoutes from './audit'
-import workspaceViewRoutes from './workspace'
+import workbenchViewRoutes from './workbench'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
@@ -92,7 +92,7 @@ import { getPermedPreferView } from '@/utils/jms'
 export const viewRoutes = [
   consoleViewRoutes,
   auditViewRoutes,
-  workspaceViewRoutes,
+  workbenchViewRoutes,
   ticketsRoutes,
   settingsRoutes,
   profileRoutes

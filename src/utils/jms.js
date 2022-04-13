@@ -43,7 +43,6 @@ export function getResourceNameByPath(path) {
 
 export function getResourceFromApiUrl(apiUrl) {
   const re = new RegExp('/api/v1/([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/.*')
-  console.log('Api url: ', apiUrl)
   const matched = apiUrl.match(re)
   if (!matched) {
     return { path: '', app: '', resource: '' }
@@ -84,7 +83,7 @@ export function hasActionPerm(route, action) {
 const viewRequirePermsMapper = {
   console: 'rbac.view_console',
   audit: 'rbac.view_audit',
-  workspace: 'rbac.view_workspace'
+  workbench: 'rbac.view_workbench'
 }
 
 export function getViewRequirePerms(view) {

@@ -14,31 +14,33 @@ export default {
     GenericCreateUpdateForm
   },
   data() {
+    const comp = this.$t('common.Component')
     return {
       fields: [
         [
-          'KoKo',
+          `SSH ${comp}(KoKo)`,
           [
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
-            'TERMINAL_ASSET_LIST_SORT_BY', 'TERMINAL_ASSET_LIST_PAGE_SIZE',
-            'TERMINAL_TELNET_REGEX'
+            'TERMINAL_ASSET_LIST_SORT_BY',
+            'TERMINAL_ASSET_LIST_PAGE_SIZE', 'TERMINAL_TELNET_REGEX'
           ]
         ],
         [
-          'XRDP',
+          `RDP ${comp}(XRDP)`,
           [
-            'XRDP_ENABLED', 'TERMINAL_RDP_ADDR'
+            'XRDP_ENABLED'
+          ]
+        ],
+        [
+          `DB ${comp}(Magnus)`,
+          [
+            'TERMINAL_MAGNUS_ENABLED'
           ]
         ]
       ],
       fieldsMeta: {
         TERMINAL_TELNET_REGEX: {
           type: 'input'
-        },
-        TERMINAL_RDP_ADDR: {
-          hidden: () => {
-            return !this.$store.getters.hasValidLicense
-          }
         },
         XRDP_ENABLED: {
           hidden: () => {
