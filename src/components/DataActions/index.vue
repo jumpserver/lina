@@ -178,10 +178,6 @@ export default {
   margin-left: 4px;
 }
 
-.el-dropdown .el-dropdown-selfdefine {
-  padding: 2px 5px;
-}
-
 .el-button-ungroup .action-item:first-child {
   margin-left: 0;
 }
