@@ -1,10 +1,17 @@
 <template>
-  <GenericTreeListPage
-    ref="TreeTablePage"
-    :tree-setting="treeSetting"
-    :header-actions="headerActions"
-    :table-config="tableConfig"
-  />
+  <div>
+    <GenericTreeListPage
+      ref="TreeTablePage"
+      :tree-setting="treeSetting"
+      :header-actions="headerActions"
+      :table-config="tableConfig"
+    />
+    <PermBulkUpdateDialog
+      :visible.sync="updateSelectedDialogSetting.visible"
+      v-bind="updateSelectedDialogSetting"
+      :perm-type="permType"
+    />
+  </div>
 </template>
 
 <script>
@@ -12,15 +19,19 @@ import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { setUrlParam } from '@/utils/common'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { ApplicationTypes } from '@/views/applications/const'
+import PermBulkUpdateDialog from '@/views/perms/components/PermBulkUpdateDialog'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    GenericTreeListPage
+    GenericTreeListPage,
+    PermBulkUpdateDialog
   },
   data() {
     const vm = this
     return {
+      permType: 'applications',
       isInit: true,
       clickedRow: null,
       iShowTree: true,
@@ -164,9 +175,31 @@ export default {
             }})
           },
           dropdown: ApplicationTypes
-        }
+        },
+        extraMoreActions: [
+          {
+            name: 'actionUpdateSelected',
+            title: this.$t('common.updateSelected'),
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                !vm.currentOrgIsRoot &&
+                vm.$hasPerm('perms.change_applicationpermission')
+            },
+            callback: ({ selectedRows }) => {
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.visible = true
+            }
+          }
+        ]
+      },
+      updateSelectedDialogSetting: {
+        visible: false,
+        selectedRows: []
       }
     }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
   }
 }
 </script>
