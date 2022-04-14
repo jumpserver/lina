@@ -137,11 +137,20 @@ export default {
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
           if (action !== 'confirm') return done()
-          this.markAsRead(msgs)
+          this.markAsReadAll(msgs)
           done()
         }
       }).catch(() => {
         /* 取消*/
+      })
+    },
+    markAsReadAll(msgs) {
+      const url = `/api/v1/notifications/site-message/mark-as-read-all/`
+      this.$axios.patch(url, {}).then(res => {
+        this.msgDetailVisible = false
+        this.getMessages()
+      }).catch(err => {
+        this.$message(err.detail)
       })
     },
     markAsRead(msgs) {
