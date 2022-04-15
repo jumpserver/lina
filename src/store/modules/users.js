@@ -1,10 +1,8 @@
-import { logout, getProfile } from '@/api/users'
+import { logout, getProfile as apiGetProfile } from '@/api/users'
 import {
   getCurrentOrgLocal,
-  getCurrentRoleLocal,
   getTokenFromCookie,
-  saveCurrentOrgLocal,
-  saveCurrentRoleLocal
+  saveCurrentOrgLocal
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -14,10 +12,14 @@ const getDefaultState = () => {
     currentOrg: '',
     profile: {},
     username: '',
-    orgs: [],
+    auditOrgs: [],
+    consoleOrgs: [],
+    workbenchOrgs: [],
+    usingOrgs: [],
     perms: [],
     MFAVerifyAt: null,
     isSuperAdmin: false,
+    isAdmin: false,
     hasAdminPerm: false,
     hasAuditPerm: false
   }
@@ -34,35 +36,30 @@ const mutations = {
   },
   SET_PROFILE: (state, profile) => {
     state.profile = profile
-    const username = profile.username
-    state.username = username
-    state.currentOrg = getCurrentOrgLocal(username)
-    state.currentRole = getCurrentRoleLocal(username)
+    state.username = profile.username
     state.perms = profile.perms
-    state.orgs = profile.orgs
+    state.consoleOrgs = profile['console_orgs']
+    state.workbenchOrgs = profile['workbench_orgs']
+    state.auditOrgs = profile['audit_orgs']
+    state.currentOrg = getCurrentOrgLocal(profile.username)
   },
-  SET_ORGS: (state, orgs) => {
-    state.orgs = orgs
+  SET_USING_ORGS: (state, orgs) => {
+    state.usingOrgs = orgs
   },
   MODIFY_ORG: (state, org) => {
-    state.orgs = state.orgs.map(oldOrg => {
+    state.consoleOrgs = state.consoleOrgs.map(oldOrg => {
       if (oldOrg.id === org.id) {
         oldOrg.name = org.name
       }
       return oldOrg
-    }
-    )
+    })
   },
   ADD_ORG: (state, org) => {
-    state.orgs.push(org)
+    state.consoleOrgs.push(org)
   },
   SET_CURRENT_ORG(state, org) {
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
-  },
-  SET_CURRENT_ROLE(state, role) {
-    state.currentRole = role
-    saveCurrentRoleLocal(state.username, role)
   },
   SET_MFA_VERIFY(state) {
     state.MFAVerifyAt = (new Date()).valueOf()
@@ -70,21 +67,6 @@ const mutations = {
 }
 
 const actions = {
-  // user login
-  // login({ commit }, userInfo) {
-  //   const { username, password } = userInfo
-  //   return new Promise((resolve, reject) => {
-  //     login({ username: username.trim(), password: password }).then(response => {
-  //       const { data } = response
-  //       commit('SET_TOKEN', data.token)
-  //       setToken(data.token)
-  //       resolve()
-  //     }).catch(error => {
-  //       reject(error)
-  //     })
-  //   })
-  // },
-
   // get user Profile
   getProfile({ commit, state }, refresh = false) {
     return new Promise((resolve, reject) => {
@@ -92,7 +74,7 @@ const actions = {
         resolve(state.profile)
         return
       }
-      getProfile().then(response => {
+      apiGetProfile().then(response => {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
@@ -104,23 +86,16 @@ const actions = {
       })
     })
   },
-  getInOrgs({ commit, dispatch, state }, refresh) {
-    return new Promise((resolve, reject) => {
-      if (!refresh && state.role && state.role.length > 0) {
-        return resolve(state.roles)
-      }
-      dispatch('getProfile').then(profile => {
-        const { orgs } = profile
-        commit('SET_ORGS', orgs)
-        resolve(orgs)
-      }).catch((e) => reject(e))
-    })
-  },
   addAdminOrg({ commit, state }, org) {
     commit('ADD_ORG', org)
   },
   modifyOrg({ commit, state }, org) {
     commit('MODIFY_ORG', org)
+  },
+  setUsingOrgs({ commit, state, rootGetters }) {
+    const viewName = rootGetters.currentViewRoute.name
+    const usingOrgs = state[`${viewName}Orgs`] || []
+    commit('SET_USING_ORGS', usingOrgs)
   },
   // user logout
   logout({ commit, state }) {
@@ -135,20 +110,8 @@ const actions = {
       })
     })
   },
-
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      // removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
-    })
-  },
   setCurrentOrg({ commit }, data) {
     commit('SET_CURRENT_ORG', data)
-  },
-  setCurrentRole({ commit }, role) {
-    commit('SET_CURRENT_ROLE', role)
   },
   setMFAVerify({ commit }) {
     commit('SET_MFA_VERIFY')

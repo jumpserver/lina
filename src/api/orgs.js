@@ -13,3 +13,9 @@ export function getCurrentOrg() {
     method: 'get'
   })
 }
+
+export default {
+  getCurrentOrg,
+  getOrgDetail
+}
+

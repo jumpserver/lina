@@ -2,6 +2,7 @@ import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 import { BASE_URL } from '@/utils/common'
 import empty from '@/layout/empty'
+import store from '@/store'
 
 export default {
   path: '/workbench/',
@@ -13,9 +14,11 @@ export default {
     type: 'view',
     view: 'workbench',
     icon: 'el-icon-user-solid',
-    showNavSwitcher: true,
+    showNavSwitcher: () => {
+      return store.getters.auditOrgs.length > 0
+    },
     showOrganization: true,
-    permissions: ['rbac.view_workbench']
+    permissions: []
   },
   children: [
     // 404 page must be placed at the end !!!

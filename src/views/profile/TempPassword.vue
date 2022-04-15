@@ -9,6 +9,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { ShowKeyFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -26,7 +27,8 @@ export default {
         ],
         columnsMeta: {
           secret: {
-            label: this.$t('common.nav.TempPassword')
+            label: this.$t('common.nav.TempPassword'),
+            formatter: ShowKeyFormatter
           },
           expire: {
             label: this.$t('setting.Expired') + '( s )'

@@ -6,7 +6,7 @@ export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 // const ROOT_ORG_ID = '00000000-0000-0000-0000-000000000000'
 
 function getPropOrg() {
-  const orgs = store.getters.orgs
+  const orgs = store.getters.usingOrgs
   const defaultOrg = orgs.find((item) => item.is_default)
   if (defaultOrg) {
     return defaultOrg
@@ -22,7 +22,7 @@ function change2PropOrg() {
 function hasCurrentOrgPermission() {
   const currentOrg = store.getters.currentOrg
   const currentOrgId = currentOrg.id
-  const orgs = store.getters.orgs
+  const orgs = store.getters.usingOrgs
   return orgs.find((item) => item.id === currentOrgId)
 }
 

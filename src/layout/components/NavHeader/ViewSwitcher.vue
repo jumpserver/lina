@@ -19,7 +19,6 @@
       <el-menu-item
         v-for="view of views"
         :key="view.name"
-        v-perms="view.perms"
         :index="view.name"
       >
         <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
@@ -49,12 +48,18 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentViewRoute'
+      'currentViewRoute',
+      'viewRoutes'
     ]),
     views() {
-      return this.$store.state.permission.addRoutes.filter(
-        item => item.meta?.showNavSwitcher
-      )
+      return this.viewRoutes.filter((item) => {
+        let show = item.meta?.showNavSwitcher
+        if (typeof show === 'function') {
+          show = show()
+        }
+        console.log(item.name, '--', show)
+        return show
+      })
     },
     viewsMapper() {
       const mapper = {}

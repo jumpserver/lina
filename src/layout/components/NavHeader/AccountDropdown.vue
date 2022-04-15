@@ -29,11 +29,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentUser',
-      'currentRole',
-      'currentOrgRoles',
-      'orgs',
-      'currentOrgPerms'
+      'currentUser'
     ])
   },
   created() {
@@ -52,7 +48,7 @@ export default {
           this.$router.push('/profile/key')
           break
         case 'tempPassword':
-          this.$router.push('/profile/tempPassword')
+          this.$router.push('/profile/temp-password')
       }
     },
     logout() {

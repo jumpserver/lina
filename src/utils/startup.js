@@ -6,7 +6,7 @@ import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
-import { getCurrentOrg } from '@/api/orgs'
+import orgs from '@/api/orgs'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 let initial = false
@@ -51,15 +51,15 @@ async function getPublicSetting({ to, from, next }) {
 }
 
 async function refreshCurrentOrg() {
-  getCurrentOrg().then(org => {
+  orgs.getCurrentOrg().then(org => {
     store.dispatch('users/setCurrentOrg', org)
   })
 }
 
 async function changeCurrentOrgIfNeed({ to, from, next }) {
-  await store.dispatch('users/getInOrgs')
-  const adminOrgs = store.getters.orgs
-  if (!adminOrgs || adminOrgs.length === 0) {
+  await store.dispatch('users/getProfile')
+  const usingOrgs = store.getters.usingOrgs
+  if (!usingOrgs || usingOrgs.length === 0) {
     return
   }
   await refreshCurrentOrg()
@@ -94,6 +94,7 @@ export async function generatePageRoutes({ to, from, next }) {
     router.addRoutes(accessRoutes)
 
     await store.dispatch('permission/generateViewRoutes', { to, from })
+    await store.dispatch('users/setUsingOrgs')
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record

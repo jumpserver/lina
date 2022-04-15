@@ -55,7 +55,7 @@ export default {
       }
     },
     {
-      path: '/profile/tempPassword',
+      path: '/profile/temp-password',
       component: () => import('@/views/profile/TempPassword'),
       name: 'TempPassword',
       meta: {
