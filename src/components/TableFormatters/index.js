@@ -7,6 +7,7 @@ import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
 import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
 import ShowKeyFormatter from '@/components/TableFormatters/ShowKeyFormatter'
+import ShowKeyCopyFormatter from './ShowKeyCopyFormatter'
 import DialogDetailFormatter from './DialogDetailFormatter'
 import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
@@ -21,6 +22,7 @@ export default {
   DateFormatter,
   SystemUserFormatter,
   ShowKeyFormatter,
+  ShowKeyCopyFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
@@ -37,6 +39,7 @@ export {
   DateFormatter,
   SystemUserFormatter,
   ShowKeyFormatter,
+  ShowKeyCopyFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
