@@ -95,6 +95,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Algorithm": "密码算法",
+    "AlgorithmHelpText": "确保平台认证密码支持此算法",
     "AppList": "应用列表",
     "AssociateSystemUsers": "关联系统用户",
     "AssociateAssets": "关联资产",

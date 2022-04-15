@@ -90,6 +90,8 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "Algorithm": "Cryptographic Algorithm",
+    "AlgorithmHelpText": "Ensure that the platform authentication password supports this algorithm",
     "AppList": "Application list",
     "AssociateSystemUsers": "Associate system users",
     "AssociateAssets": "Associate assets",

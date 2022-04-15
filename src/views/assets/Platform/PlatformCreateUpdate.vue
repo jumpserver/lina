@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" />
+  <GenericCreateUpdatePage :fields="fields" :initial="initial" :fields-meta="fieldsMeta" :url="url" v-bind="$data" />
 </template>
 
 <script>
@@ -13,11 +13,12 @@ export default {
         base: 'Linux',
         console: 'true',
         security: 'RDP',
+        algorithm: 'SHA512',
         comment: '',
         charset: 'utf8'
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'base', 'charset', 'meta', 'comment']]
+        [this.$t('common.Basic'), ['name', 'base', 'charset', 'algorithm', 'meta', 'comment']]
       ],
       fieldsMeta: {
         meta: {
@@ -57,10 +58,37 @@ export default {
             }
           },
           hidden: form => form.base !== 'Windows'
+        },
+        algorithm: {
+          type: 'select',
+          label: this.$t('assets.Algorithm'),
+          helpText: this.$t('assets.AlgorithmHelpText'),
+          options: [{
+            label: 'SHA512',
+            value: 'SHA512'
+          },
+          {
+            label: 'DES',
+            value: 'DES'
+          }],
+          hidden: form => form.base === 'Windows'
         }
-
       },
-      url: '/api/v1/assets/platforms/'
+      url: '/api/v1/assets/platforms/',
+      afterGetFormValue(obj) {
+        if (obj['meta']) {
+          obj['algorithm'] = obj.meta['algorithm']
+        }
+        return obj
+      },
+      cleanFormValue(data) {
+        data['meta'] = data['meta'] ? data['meta'] : {}
+        if (data['algorithm']) {
+          Object.assign(data['meta'], { algorithm: data['algorithm'] })
+        }
+        delete data['algorithm']
+        return data
+      }
     }
   }
 }
