@@ -8,7 +8,7 @@
     </PageHeading>
     <PageContent>
       <el-alert v-if="helpMessage" type="success">
-        <span class="announcement-main">{{ helpMessage }}</span>
+        <span class="announcement-main" v-html="helpMessage" />
       </el-alert>
       <slot />
     </PageContent>
