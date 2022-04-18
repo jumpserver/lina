@@ -1274,6 +1274,7 @@
     "Sender": "Sender",
     "MarkAsRead": "Mark as read",
     "OneClickRead": "Currently read",
+    "AllClickRead": "All read",
     "OneClickReadMsg": "Are you sure you want to mark the current information as read?",
     "NoUnreadMsg": "No unread messages",
     "SiteMessage": "Site messages",
