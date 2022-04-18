@@ -90,7 +90,8 @@ export default {
         lion: 'Lion',
         xrdp: 'XRDP',
         core: 'Core',
-        celery: 'Celery'
+        celery: 'Celery',
+        magnus: 'Magnus'
       }
       return nameMapper[this.componentMetric.type]
     }

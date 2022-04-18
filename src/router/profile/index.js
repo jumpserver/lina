@@ -61,6 +61,7 @@ export default {
       meta: {
         title: i18n.t('common.nav.TempPassword'),
         icon: 'magic',
+        hidden: ({ settings }) => !settings['AUTH_TEMP_TOKEN'],
         permissions: []
       }
     }

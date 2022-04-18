@@ -9,7 +9,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DateFormatter, ShowKeyFormatter } from '@/components/TableFormatters'
+import { DateFormatter, ShowKeyCopyFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
           },
           secret: {
             label: 'AccessKeySecret',
-            formatter: ShowKeyFormatter
+            formatter: ShowKeyCopyFormatter
           },
           date_created: {
             label: this.$t('common.dateCreated'),
