@@ -5,7 +5,8 @@
     :width="iWidth"
     class="dialog"
     v-bind="$attrs"
-    append-to-body
+    :append-to-body="false"
+    :modal-append-to-body="false"
     v-on="$listeners"
   >
     <slot />

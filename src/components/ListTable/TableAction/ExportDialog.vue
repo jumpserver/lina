@@ -92,11 +92,11 @@ export default {
       return this.selectedRows.length > 0
     },
     tableQuery() {
-      const listTableRef = this.$parent.$parent.$parent.$parent
+      const listTableRef = this.$parent?.$parent?.$parent?.$parent
       if (!listTableRef) {
         return {}
       }
-      const query = listTableRef.dataTable.getQuery()
+      const query = listTableRef?.dataTable?.getQuery() || {}
       delete query['limit']
       delete query['offset']
       delete query['date_from']
@@ -199,8 +199,11 @@ export default {
       this.mfaDialogShow = false
     },
     handleExportCancel() {
-      this.exportDialogShow = false
-      this.mfaDialogShow = false
+      const vm = this
+      setTimeout(() => {
+        vm.exportDialogShow = false
+        vm.mfaDialogShow = false
+      }, 100)
     }
   }
 }
