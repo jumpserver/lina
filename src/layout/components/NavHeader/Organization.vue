@@ -75,13 +75,9 @@ export default {
           }
         ]
       }
-      const hasPerms = this.$hasPerm('orgs.view_organization | orgs.add_organization') &&
-            this.currentViewRoute.name === 'console'
-      if (hasPerms) {
-        return orgActions
-      } else {
-        return {}
-      }
+      const hasPerms = this.$hasPerm('orgs.view_organization | orgs.add_organization')
+      const isConsole = this.currentViewRoute.name === 'console'
+      return hasPerms && isConsole ? orgActions : {}
     },
     orgChoicesGroup() {
       return {

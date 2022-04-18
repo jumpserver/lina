@@ -119,7 +119,8 @@ export async function checkUserFirstLogin({ to, from, next }) {
 
 export async function changeCurrentViewIfNeed({ to, from, next }) {
   let view = to.path.split('/')[1]
-  if (['console', 'audit'].indexOf(view) < 0) {
+  if (['console', 'audit', 'workbench', ''].indexOf(view) < 0) {
+    Vue.$log.debug('Current view no need check', view)
     return
   }
 
@@ -138,6 +139,7 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
 
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
+  console.log('Start up')
   if (store.getters.inited) { return true }
   await store.dispatch('app/init')
 

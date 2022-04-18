@@ -121,9 +121,6 @@ export function getApiUrlRequirePerms(url, action) {
 }
 
 export function hasRouteViewPerm(route) {
-  if (route.name) {
-    return hasPermission(route.meta.permissions)
-  }
   const viewName = route.path.split('/')[1]
   return getPermedViews().indexOf(viewName) > -1
 }
