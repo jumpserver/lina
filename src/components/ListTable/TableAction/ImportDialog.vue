@@ -16,7 +16,7 @@
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
           {{ this.$t('common.Create') }}
         </el-radio>
-        <el-radio v-if="canImportUpdate" v-model="importOption" class="export-item" label="update">
+        <el-radio v-if="iCanImportUpdate" v-model="importOption" class="export-item" label="update">
           {{ this.$t('common.Update') }}
         </el-radio>
         <div style="line-height: 1.5">
@@ -87,8 +87,8 @@ export default {
       default: true
     },
     canImportUpdate: {
-      type: Boolean,
-      default: true
+      type: [Boolean, String],
+      default: ''
     }
   },
   data() {
@@ -128,6 +128,13 @@ export default {
         return this.$t('common.Import') + this.$t('common.Create')
       } else {
         return this.$t('common.Import') + this.$t('common.Update')
+      }
+    },
+    iCanImportUpdate() {
+      if (typeof this.canImportUpdate === 'boolean') {
+        return this.canImportUpdate
+      } else {
+        return this.$hasCurrentResAction('change')
       }
     }
   },
