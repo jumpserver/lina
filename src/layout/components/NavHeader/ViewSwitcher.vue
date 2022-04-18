@@ -57,7 +57,6 @@ export default {
         if (typeof show === 'function') {
           show = show()
         }
-        console.log(item.name, '--', show)
         return show
       })
     },
@@ -72,11 +71,10 @@ export default {
       return this.viewsMapper[this.currentViewRoute.name]
     }
   },
-  created() {
-  },
   methods: {
     handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
+      localStorage.setItem('PreView', key)
       this.$router.push(routeName)
     }
   }

@@ -15,7 +15,7 @@ export default {
     view: 'workbench',
     icon: 'el-icon-user-solid',
     showNavSwitcher: () => {
-      return store.getters.auditOrgs.length > 0
+      return store.getters.workbenchOrgs.length > 0
     },
     showOrganization: true,
     permissions: []

@@ -3,7 +3,6 @@ import { getOrgDetail } from '@/api/orgs'
 import store from '@/store'
 
 export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
-// const ROOT_ORG_ID = '00000000-0000-0000-0000-000000000000'
 
 function getPropOrg() {
   const orgs = store.getters.usingOrgs
@@ -33,7 +32,6 @@ async function changeOrg(orgId) {
   } else {
     console.debug('Change to org: ', org)
   }
-  localStorage.setItem('PreView', '')
 
   store.dispatch('users/setCurrentOrg', org).then(() => {
     // console.log('Set current org to: ', org)
