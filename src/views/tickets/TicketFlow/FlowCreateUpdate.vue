@@ -56,8 +56,8 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.users.profile['admin_orgs']?.length > 0) {
-      this.initial.org_id = this.$store.state.users.profile['admin_orgs'][0].id
+    if (this.$store.getters.consoleOrgs) {
+      this.initial.org_id = this.$store.getters.consoleOrgs[0].id
     }
     this.loading = false
   }
