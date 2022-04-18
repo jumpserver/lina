@@ -92,14 +92,14 @@ export default {
         hasTree: true,
         columns: [
           'hostname', 'ip', 'public_ip', 'admin_user_display',
-          'protocols', 'category', 'type', 'platform', 'sn', 'is_active',
+          'protocols', 'platform', 'sn', 'is_active',
           'connectivity', 'labels_display',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
           default: [
-            'hostname', 'ip', 'platform', 'category', 'type',
+            'hostname', 'ip', 'platform',
             'connectivity', 'actions'
           ]
         },

@@ -13,6 +13,9 @@
         <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" icon="el-icon-key" command="apiKey">
           {{ $t('common.nav.APIKey') }}
         </el-dropdown-item>
+        <el-dropdown-item v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN" icon="el-icon-magic-stick" command="tempPassword">
+          {{ $t('common.nav.TempPassword') }}
+        </el-dropdown-item>
         <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />
           {{ $t('common.nav.Logout') }}
         </el-dropdown-item>

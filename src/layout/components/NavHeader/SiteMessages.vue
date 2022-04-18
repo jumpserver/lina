@@ -6,6 +6,7 @@
       </el-link>
     </el-badge>
     <el-drawer
+      class="drawer"
       :visible.sync="show"
       :before-close="handleClose"
       :modal="false"
@@ -17,7 +18,7 @@
       <div slot="title">
         <span>{{ $t('notifications.SiteMessage') }}</span>
         <div v-if="unreadMsgCount !== 0" class="msg-list-all-read-btn" @click.stop="oneClickRead(messages)">
-          <a> {{ $t('notifications.OneClickRead') }}</a>
+          <a style="vertical-align: sub;"> {{ $t('notifications.AllClickRead') }}</a>
         </div>
       </div>
       <div v-if="unreadMsgCount !== 0" class="msg-list">
@@ -137,11 +138,20 @@ export default {
         confirmButtonClass: 'el-button--danger',
         beforeClose: async(action, instance, done) => {
           if (action !== 'confirm') return done()
-          this.markAsRead(msgs)
+          this.markAsReadAll(msgs)
           done()
         }
       }).catch(() => {
         /* 取消*/
+      })
+    },
+    markAsReadAll(msgs) {
+      const url = `/api/v1/notifications/site-message/mark-as-read-all/`
+      this.$axios.patch(url, {}).then(res => {
+        this.msgDetailVisible = false
+        this.getMessages()
+      }).catch(err => {
+        this.$message(err.detail)
       })
     },
     markAsRead(msgs) {
@@ -192,6 +202,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.drawer {
+  height: calc(100% - 40px);
+}
 .el-badge ::v-deep .el-badge__content.is-fixed{
   top:10px;
 }

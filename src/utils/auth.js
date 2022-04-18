@@ -5,7 +5,11 @@ const CURRENT_ORG_KEY = 'jms_current_org'
 const CURRENT_ROLE_KEY = 'jms_current_role'
 
 export function getTokenFromCookie() {
-  return VueCookie.get(TOKEN_KEY)
+  let cookieNamePrefix = VueCookie.get('SESSION_COOKIE_NAME_PREFIX', '')
+  if (cookieNamePrefix === '""') {
+    cookieNamePrefix = ''
+  }
+  return VueCookie.get(cookieNamePrefix + TOKEN_KEY)
 }
 
 export function getCurrentRoleLocal(username) {
