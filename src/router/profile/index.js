@@ -1,5 +1,6 @@
 import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
+import store from '@/store'
 
 export default {
   path: '/profile',
@@ -61,7 +62,10 @@ export default {
       meta: {
         title: i18n.t('common.nav.TempPassword'),
         icon: 'magic',
-        permissions: []
+        permissions: [],
+        hidden: () => {
+          return !store.getters.publicSettings['AUTH_TEMP_TOKEN']
+        }
       }
     }
   ]

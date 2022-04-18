@@ -118,9 +118,13 @@ export async function checkUserFirstLogin({ to, from, next }) {
 }
 
 export async function changeCurrentViewIfNeed({ to, from, next }) {
+  let view = to.path.split('/')[1]
+  if (['console', 'audit'].indexOf(view) < 0) {
+    return
+  }
+
   const hasPerm = hasRouteViewPerm(to)
   Vue.$log.debug('Change has current view, has perm: ', hasPerm)
-  let view = to.path.split('/')[1]
   if (hasPerm) {
     await store.dispatch('users/changeToView', view)
     return
