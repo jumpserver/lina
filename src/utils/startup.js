@@ -1,6 +1,6 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
-import router from '@/router'
+import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
@@ -10,7 +10,6 @@ import orgs from '@/api/orgs'
 import { getPropView, hasRouteViewPerm } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
-let initial = false
 
 function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
@@ -59,18 +58,21 @@ async function refreshCurrentOrg() {
 
 async function changeCurrentOrgIfNeed({ to, from, next }) {
   await store.dispatch('users/getProfile')
+
   const usingOrgs = store.getters.usingOrgs
   if (!usingOrgs || usingOrgs.length === 0) {
+    Vue.$log.error('No using orgs, return: ', usingOrgs)
     return
   }
   await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
+    Vue.$log.error('Current org is null or not a object')
     orgUtil.change2PropOrg()
     return reject('Change prop org')
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
-    console.error('Not has current org permission')
+    Vue.$log.error('Not has current org permission')
     orgUtil.change2PropOrg()
     return reject('Change prop org')
   }
@@ -78,6 +80,7 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
 
 export async function generatePageRoutes({ to, from, next }) {
   // determine whether the user has obtained his permission roles through getProfile
+  resetRouter()
 
   try {
     // try get user profile
@@ -95,7 +98,6 @@ export async function generatePageRoutes({ to, from, next }) {
     router.addRoutes(accessRoutes)
 
     await store.dispatch('permission/generateViewRoutes', { to, from })
-    await store.dispatch('users/setUsingOrgs')
 
     // hack method to ensure that addRoutes is complete
     // set the replace: true, so the navigation will not leave a history record
@@ -118,19 +120,22 @@ export async function checkUserFirstLogin({ to, from, next }) {
 export async function changeCurrentViewIfNeed({ to, from, next }) {
   const hasPerm = hasRouteViewPerm(to)
   Vue.$log.debug('Change has current view, has perm: ', hasPerm)
+  let view = to.path.split('/')[1]
   if (hasPerm) {
+    await store.dispatch('users/changeToView', view)
     return
   }
-  const view = getPropView()
-  // console.log('Next to: ', `/${view}/`)
-  initial = false
+  view = getPropView()
+  // Next 之前要重置 init 状态，否则这些路由守卫就不走了
+  await store.dispatch('app/reset')
   next(`/${view}/`)
   return new Promise((resolve, reject) => reject(''))
 }
 
 export async function startup({ to, from, next }) {
-  if (initial) { return true }
-  initial = true
+  // if (store.getters.inited) { return true }
+  if (store.getters.inited) { return true }
+  await store.dispatch('app/init')
 
   // set page title
   await getPublicSetting({ to, from, next })

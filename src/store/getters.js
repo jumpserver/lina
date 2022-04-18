@@ -1,6 +1,7 @@
 const getters = {
   sidebar: state => state.app.sidebar,
   device: state => state.app.device,
+  inited: state => state.app.inited,
   isMobile: state => state.app.device === 'mobile',
   token: state => state.users.token,
   consoleOrgs: state => state.users.consoleOrgs,

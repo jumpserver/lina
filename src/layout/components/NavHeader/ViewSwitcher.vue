@@ -30,6 +30,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'ViewSwitcher',
@@ -72,9 +73,11 @@ export default {
     }
   },
   methods: {
-    handleSelectView(key, keyPath) {
+    async handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
       localStorage.setItem('PreView', key)
+      // Next 之前要重置 init 状态，否则这些路由守卫就不走了
+      await store.dispatch('app/reset')
       this.$router.push(routeName)
     }
   }

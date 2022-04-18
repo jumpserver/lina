@@ -5,6 +5,7 @@ import {
   saveCurrentOrgLocal
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import Vue from 'vue'
 
 const getDefaultState = () => {
   return {
@@ -115,6 +116,11 @@ const actions = {
   },
   setMFAVerify({ commit }) {
     commit('SET_MFA_VERIFY')
+  },
+  changeToView({ commit }, viewName) {
+    const usingOrgs = state[`${viewName}Orgs`] || []
+    Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
+    commit('SET_USING_ORGS', usingOrgs)
   }
 }
 

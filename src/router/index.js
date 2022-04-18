@@ -51,10 +51,8 @@ export const constantRoutes = [
           title: i18n.t('route.Overview')
         },
         beforeEnter: (to, from, next) => {
-          console.log('Enter home view')
           const preferView = getFirstPermedView()
           if (preferView) {
-            console.log('Go to prefer view: ', preferView)
             next(`/${preferView}/`)
             return false
           }
