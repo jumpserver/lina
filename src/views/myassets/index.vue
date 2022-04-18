@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Announcement />
     <GenericTreeListPage
       :table-config="tableConfig"
       :header-actions="headerActions"

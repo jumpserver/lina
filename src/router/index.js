@@ -51,14 +51,13 @@ export const constantRoutes = [
           title: i18n.t('route.Overview')
         },
         beforeEnter: (to, from, next) => {
-          console.log('Enter home view')
-          const preferView = getPermedPreferView()
+          const preferView = getFirstPermedView()
           if (preferView) {
-            console.log('Go to preferView: ', preferView)
             next(`/${preferView}/`)
             return false
           }
           next()
+          return false
         }
       }
     ]
@@ -83,7 +82,7 @@ import workbenchViewRoutes from './workbench'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
-import { getPermedPreferView } from '@/utils/jms'
+import { getFirstPermedView } from '@/utils/jms'
 
 /**
  * admin

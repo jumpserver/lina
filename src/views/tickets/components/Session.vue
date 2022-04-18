@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     init() {
-      console.log('this.object.state', this.object)
       this.loading = true
       const url = `/api/v1/tickets/tickets/${this.object.id}/session/`
       this.$axios({

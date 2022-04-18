@@ -1,15 +1,15 @@
 // import getPageTitle from '@/utils/get-page-title'
 import store from '@/store'
-import router from '@/router'
+import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
-import { getCurrentOrg } from '@/api/orgs'
+import orgs from '@/api/orgs'
+import { getPropView, hasRouteViewPerm } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
-let initial = false
 
 function reject(msg) {
   return new Promise((resolve, reject) => reject(msg))
@@ -51,25 +51,28 @@ async function getPublicSetting({ to, from, next }) {
 }
 
 async function refreshCurrentOrg() {
-  getCurrentOrg().then(org => {
+  orgs.getCurrentOrg().then(org => {
     store.dispatch('users/setCurrentOrg', org)
   })
 }
 
 async function changeCurrentOrgIfNeed({ to, from, next }) {
-  await store.dispatch('users/getInOrgs')
-  const adminOrgs = store.getters.orgs
-  if (!adminOrgs || adminOrgs.length === 0) {
+  await store.dispatch('users/getProfile')
+
+  const usingOrgs = store.getters.usingOrgs
+  if (!usingOrgs || usingOrgs.length === 0) {
+    Vue.$log.error('No using orgs, return: ', usingOrgs)
     return
   }
   await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
+    Vue.$log.error('Current org is null or not a object')
     orgUtil.change2PropOrg()
     return reject('Change prop org')
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
-    console.error('Not has current org permission')
+    Vue.$log.error('Not has current org permission')
     orgUtil.change2PropOrg()
     return reject('Change prop org')
   }
@@ -77,6 +80,7 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
 
 export async function generatePageRoutes({ to, from, next }) {
   // determine whether the user has obtained his permission roles through getProfile
+  resetRouter()
 
   try {
     // try get user profile
@@ -113,18 +117,38 @@ export async function checkUserFirstLogin({ to, from, next }) {
   }
 }
 
-export async function startup({ to, from, next }) {
-  if (initial) {
-    return true
+export async function changeCurrentViewIfNeed({ to, from, next }) {
+  let view = to.path.split('/')[1]
+  if (['console', 'audit', 'workbench', ''].indexOf(view) < 0) {
+    Vue.$log.debug('Current view no need check', view)
+    return
   }
-  initial = true
+
+  const hasPerm = hasRouteViewPerm(to)
+  Vue.$log.debug('Change has current view, has perm: ', hasPerm)
+  if (hasPerm) {
+    await store.dispatch('users/changeToView', view)
+    return
+  }
+  view = getPropView()
+  // Next 之前要重置 init 状态，否则这些路由守卫就不走了
+  await store.dispatch('app/reset')
+  next(`/${view}/`)
+  return new Promise((resolve, reject) => reject(''))
+}
+
+export async function startup({ to, from, next }) {
+  // if (store.getters.inited) { return true }
+  console.log('Start up')
+  if (store.getters.inited) { return true }
+  await store.dispatch('app/init')
 
   // set page title
   await getPublicSetting({ to, from, next })
-  // await setHeadTitle({ to, from, next })
   await checkLogin({ to, from, next })
-  await generatePageRoutes({ to, from, next })
+  await changeCurrentViewIfNeed({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
+  await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
   return true
 }

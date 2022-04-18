@@ -69,3 +69,8 @@ export function logout() {
 export function refreshSessionIdAge() {
   return getProfile()
 }
+
+export default {
+  getProfile,
+  getUserList
+}

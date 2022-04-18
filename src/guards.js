@@ -4,8 +4,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { startup } from '@/utils/startup'
 import store from '@/store'
-import { getPropView, hasRouteViewPerm, isSameView } from '@/utils/jms'
-import Vue from 'vue'
+import { isSameView } from '@/utils/jms'
 
 NProgress.configure({
   showSpinner: false
@@ -30,20 +29,6 @@ function generateViewRoutesIfChange({ to, from }) {
   }
 }
 
-async function changeCurrentViewIfNeed({ to, from, next }) {
-  if (!to.path || isSameView(to, from)) {
-    return
-  }
-  const hasPerm = hasRouteViewPerm(to)
-  Vue.$log.debug('Change has current view, has perm: ', hasPerm)
-  if (hasPerm) {
-    return
-  }
-  const view = getPropView()
-  Vue.$log.debug('Get prop view and goto: ', view)
-  next(`/${view}`)
-}
-
 function setPageTitle() {
   const currentRoute = router.currentRoute
   const loginTitle = store.getters.publicSettings['LOGIN_TITLE']
@@ -52,12 +37,6 @@ function setPageTitle() {
     document.title = routeTitle + ' - ' + loginTitle
   }
 }
-
-router.beforeResolve(async(to, from, next) => {
-  /* must call `next` */
-  await changeCurrentViewIfNeed({ to, from, next })
-  next()
-})
 
 router.afterEach(async(to, from) => {
   // finish progress bar
