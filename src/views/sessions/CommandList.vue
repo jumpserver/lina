@@ -15,7 +15,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { getDayEnd, getDaysAgo, toSafeLocalDateStr } from '@/utils/common'
+import { getDaysAgo, getDaysFuture, toSafeLocalDateStr } from '@/utils/common'
 import { OutputExpandFormatter } from './formatters'
 import { DetailFormatter } from '@/components/TableFormatters'
 import isFalsey from '@/components/DataTable/compenents/el-data-table/utils/is-falsey'
@@ -30,12 +30,12 @@ export default {
   data() {
     const vm = this
     const now = new Date()
-    const dateFrom = getDaysAgo(2, now).toISOString()
-    const dateTo = getDayEnd(now).toISOString()
+    const dateFrom = getDaysAgo(7, now).toISOString()
+    const dateTo = getDaysFuture(1, now).toISOString()
     return {
       query: {
-        date_from: getDaysAgo(2, now).toISOString(),
-        date_to: getDayEnd(now).toISOString()
+        date_from: getDaysAgo(7, now).toISOString(),
+        date_to: getDaysFuture(1, now).toISOString()
       },
       loading: true,
       tableConfig: {
