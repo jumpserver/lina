@@ -20,6 +20,7 @@ export default {
         [
           `SSH ${comp}(KoKo)`,
           [
+            'TERMINAL_KOKO_SSH_ENABLED',
             'TERMINAL_PASSWORD_AUTH', 'TERMINAL_PUBLIC_KEY_AUTH',
             'TERMINAL_ASSET_LIST_SORT_BY',
             'TERMINAL_ASSET_LIST_PAGE_SIZE', 'TERMINAL_TELNET_REGEX'
@@ -39,16 +40,23 @@ export default {
         ]
       ],
       fieldsMeta: {
+        TERMINAL_KOKO_SSH_ENABLED: {
+          helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.EnableKoKoSSHHelpText')
+        },
         TERMINAL_TELNET_REGEX: {
           type: 'input'
         },
         XRDP_ENABLED: {
+          helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.SettingInEndpointHelpText'),
           hidden: () => {
             return !this.$store.getters.hasValidLicense
           },
           el: {
             hiddenGroup: true
           }
+        },
+        TERMINAL_MAGNUS_ENABLED: {
+          helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.SettingInEndpointHelpText')
         }
       },
       getUrl: () => '/api/v1/settings/setting/?category=terminal',
