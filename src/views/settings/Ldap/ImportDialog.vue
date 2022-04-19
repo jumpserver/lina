@@ -45,7 +45,7 @@ import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
 import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
 import { CronTab } from '@/components'
-import rules, { Required } from '@/components/DataForm/rules'
+import { Required } from '@/components/DataForm/rules'
 
 export default {
   name: 'ImportDialog',
@@ -135,7 +135,7 @@ export default {
             helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_INTERVAL: {
-            rules: [rules.Required],
+            rules: [Required],
             helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
           }
         },
