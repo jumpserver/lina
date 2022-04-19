@@ -93,11 +93,6 @@ const actions = {
   modifyOrg({ commit, state }, org) {
     commit('MODIFY_ORG', org)
   },
-  setUsingOrgs({ commit, state, rootGetters }) {
-    const viewName = rootGetters.currentViewRoute.name
-    const usingOrgs = state[`${viewName}Orgs`] || []
-    commit('SET_USING_ORGS', usingOrgs)
-  },
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -118,7 +113,7 @@ const actions = {
     commit('SET_MFA_VERIFY')
   },
   changeToView({ commit }, viewName) {
-    const usingOrgs = state[`${viewName}Orgs`] || []
+    const usingOrgs = state[`${viewName}Orgs`] || state.consoleOrgs
     Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
     commit('SET_USING_ORGS', usingOrgs)
   }

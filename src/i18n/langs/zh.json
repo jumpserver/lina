@@ -919,6 +919,8 @@
     }
   },
   "setting": {
+    "EnableKoKoSSHHelpText": "开启时连接资产会显示 SSH Client 拉起方式",
+    "SettingInEndpointHelpText": "在 系统设置 / 终端设置 / 服务端点 中配置服务地址和端口",
     "Feature": "功能",
     "AlibabaCloud": "阿里云",
     "TencentCloud": "腾讯云",
@@ -1491,8 +1493,8 @@
     "InterfaceSettings": "界面设置",
     "License": "许可证",
     "ComponentMonitor": "组件监控",
-    "Endpoint": "终端节点",
-    "EndpointRule": "终端节点规则",
+    "Endpoint": "服务端点",
+    "EndpointRule": "端点规则",
     "ServiceRatio": "组件负载统计",
     "LoadStatus":"组件状态",
     "NormalLoad":"正常",

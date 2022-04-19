@@ -897,6 +897,8 @@
     }
   },
   "setting": {
+    "EnableKoKoSSHHelpText": "Enabled, connect assets to display SSH Client pull-up method",
+    "SettingInEndpointHelpText": "Configure the service address and port in System Settings / Terminal Settings / Service Endpoints",
     "Feature": "Feature",
     "SMSProvider": "SMS provider",
     "SMS": "SMS",

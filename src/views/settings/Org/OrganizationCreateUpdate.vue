@@ -62,7 +62,7 @@ export default {
           switch (method) {
             case 'post':
               this.$store.dispatch('users/addAdminOrg', { id: res.id, name: res.name })
-              this.$message.success(this.$t('xpack.Organization.CreateOrgMsg'))
+              this.$message.success(this.$t('common.createSuccessMsg'))
               return this.$router.push({ name: 'OrganizationList' })
             case 'put':
               this.$store.dispatch('users/modifyOrg', { id: res.id, name: res.name })

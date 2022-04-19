@@ -61,6 +61,7 @@ export default {
                   name: 'retry',
                   type: 'info',
                   title: this.$t('xpack.ChangeAuthPlan.Retry'),
+                  can: this.$hasPerm('xpack.change_applicationchangeauthplantask'),
                   callback: function({ row, tableData }) {
                     this.$axios.put(
                       `/api/v1/xpack/change-auth-plan/app-plan-execution-subtask/${row.id}/`,

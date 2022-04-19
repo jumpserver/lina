@@ -135,6 +135,7 @@ export default {
             helpText: this.$t('xpack.HelpText.CrontabOfCreateUpdatePage')
           },
           AUTH_LDAP_SYNC_INTERVAL: {
+            rules: [Required],
             helpText: this.$t('xpack.HelpText.IntervalOfCreateUpdatePage')
           }
         },

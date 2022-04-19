@@ -4,7 +4,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDayEnd, getDaysAgo } from '@/utils/common'
+import { getDaysAgo, getDaysFuture } from '@/utils/common'
 
 export default {
   components: {
@@ -13,7 +13,7 @@ export default {
   data() {
     const now = new Date()
     const dateFrom = getDaysAgo(7, now).toISOString()
-    const dateTo = getDayEnd(now).toISOString()
+    const dateTo = getDaysFuture(1, now).toISOString()
     return {
       tableConfig: {
         url: '/api/v1/audits/password-change-logs/',
