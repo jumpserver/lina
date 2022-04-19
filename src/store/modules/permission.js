@@ -193,9 +193,6 @@ const actions = {
           break
         }
       }
-      if (viewRoute.meta?.showNavSwitcher) {
-        localStorage.setItem('PreView', viewName)
-      }
       commit('SET_VIEW_ROUTE', viewRoute)
       resolve(viewRoute)
     })

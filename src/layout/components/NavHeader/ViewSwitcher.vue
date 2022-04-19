@@ -19,7 +19,6 @@
       <el-menu-item
         v-for="view of views"
         :key="view.name"
-        v-perms="view.perms"
         :index="view.name"
       >
         <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
@@ -31,6 +30,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'ViewSwitcher',
@@ -49,12 +49,17 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentViewRoute'
+      'currentViewRoute',
+      'viewRoutes'
     ]),
     views() {
-      return this.$store.state.permission.addRoutes.filter(
-        item => item.meta?.showNavSwitcher
-      )
+      return this.viewRoutes.filter((item) => {
+        let show = item.meta?.showNavSwitcher
+        if (typeof show === 'function') {
+          show = show()
+        }
+        return show
+      })
     },
     viewsMapper() {
       const mapper = {}
@@ -67,11 +72,12 @@ export default {
       return this.viewsMapper[this.currentViewRoute.name]
     }
   },
-  created() {
-  },
   methods: {
-    handleSelectView(key, keyPath) {
+    async handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
+      localStorage.setItem('PreView', key)
+      // Next 之前要重置 init 状态，否则这些路由守卫就不走了
+      await store.dispatch('app/reset')
       this.$router.push(routeName)
     }
   }

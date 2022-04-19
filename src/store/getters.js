@@ -1,8 +1,13 @@
 const getters = {
   sidebar: state => state.app.sidebar,
   device: state => state.app.device,
+  inited: state => state.app.inited,
   isMobile: state => state.app.device === 'mobile',
   token: state => state.users.token,
+  consoleOrgs: state => state.users.consoleOrgs,
+  auditOrgs: state => state.users.auditOrgs,
+  workbenchOrgs: state => state.users.workbenchOrgs,
+  usingOrgs: state => state.users.usingOrgs,
   currentOrg: state => state.users.currentOrg,
   currentOrgIsDefault: state => state.users.currentOrg['is_default'],
   currentOrgIsRoot: state => {
@@ -11,6 +16,7 @@ const getters = {
   currentRole: state => state.users.currentRole,
   currentUser: state => state.users.profile,
   currentViewRoute: state => state.permission.currentViewRoute,
+  viewRoutes: state => state.permission.addRoutes,
   publicSettings: state => state.settings.publicSettings,
   currentOrgRoles: state => state.users.roles,
   currentOrgPerms: state => state.users.perms,
@@ -19,7 +25,6 @@ const getters = {
   tableConfig: state => state.table.tableConfig,
   currentUserIsSuperAdmin: state => state.users.isSuperAdmin,
   currentUserIsAdmin: state => state.users.isAdmin,
-  hasValidLicense: state => state.settings.hasValidLicense,
-  orgs: state => state.users.orgs
+  hasValidLicense: state => state.settings.hasValidLicense
 }
 export default getters

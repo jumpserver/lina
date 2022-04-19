@@ -1,6 +1,7 @@
 import Layout from '@/layout/index'
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
+import store from '@/store'
 
 import UsersRoute from './users'
 import AssetsRoute from './assets'
@@ -20,8 +21,10 @@ export default {
     icon: 'el-icon-s-operation',
     view: 'console',
     type: 'view',
-    showNavSwitcher: true,
-    permissions: ['rbac.view_console']
+    showNavSwitcher: () => {
+      return store.getters.consoleOrgs.length > 0
+    },
+    permissions: []
   },
   children: [
     {

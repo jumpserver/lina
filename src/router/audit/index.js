@@ -4,6 +4,7 @@ import i18n from '@/i18n/i18n'
 import SessionRoutes from './sessions'
 import LogRoutes from './logs'
 import empty from '@/layout/empty'
+import store from '@/store'
 
 export default {
   path: '/audit/',
@@ -13,8 +14,10 @@ export default {
   meta: {
     title: i18n.t('common.nav.Audits'),
     icon: 'el-icon-s-claim',
-    showNavSwitcher: true,
-    permissions: ['rbac.view_audit'],
+    showNavSwitcher: () => {
+      return store.getters.auditOrgs.length > 0
+    },
+    permissions: [],
     view: 'audit'
   },
   children: [

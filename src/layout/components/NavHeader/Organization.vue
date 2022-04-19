@@ -11,7 +11,7 @@
     </template>
 
     <el-option-group
-      v-for="group in orgOption"
+      v-for="group in orgGroups"
       :key="group.label"
       :label="group.label"
       class="option-group"
@@ -29,7 +29,6 @@
         </span>
         <span>{{ item.name }}</span>
       </el-option>
-
     </el-option-group>
   </el-select>
 </template>
@@ -55,15 +54,10 @@ export default {
   computed: {
     ...mapGetters([
       'currentOrg',
-      'currentRole',
-      'orgs'
-    ])
-  },
-  created() {
-    this.init()
-  },
-  methods: {
-    init() {
+      'usingOrgs',
+      'currentViewRoute'
+    ]),
+    orgActionsGroup() {
       const orgActions = {
         label: this.$t('xpack.Organization.OrganizationList'),
         options: [
@@ -82,14 +76,25 @@ export default {
         ]
       }
       const hasPerms = this.$hasPerm('orgs.view_organization | orgs.add_organization')
-      this.orgOption = [
-        (hasPerms && orgActions),
-        {
-          label: this.$t('xpack.Organization.AllOrganization'),
-          options: this.orgs
-        }
-      ]
+      const isConsole = this.currentViewRoute.name === 'console'
+      return hasPerms && isConsole ? orgActions : {}
     },
+    orgChoicesGroup() {
+      return {
+        label: this.$t('xpack.Organization.AllOrganization'),
+        options: this.usingOrgs
+      }
+    },
+    orgGroups() {
+      return [
+        this.orgActionsGroup,
+        this.orgChoicesGroup
+      ]
+    }
+  },
+  created() {
+  },
+  methods: {
     changeOrg(orgId) {
       if (orgId === 'create') {
         this.$router.push({ name: 'OrganizationCreate' })

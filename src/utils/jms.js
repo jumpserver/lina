@@ -1,5 +1,4 @@
 import store from '@/store'
-import Vue from 'vue'
 import { constantRoutes } from '@/router'
 
 export function openTaskPage(taskId) {
@@ -80,24 +79,13 @@ export function hasActionPerm(route, action) {
   return hasPermission(permsRequired)
 }
 
-const viewRequirePermsMapper = {
-  console: 'rbac.view_console',
-  audit: 'rbac.view_audit',
-  workbench: 'rbac.view_workbench'
-}
-
-export function getViewRequirePerms(view) {
-  return viewRequirePermsMapper[view] || 'super'
-}
-
-export function getPermedPreferView() {
-  for (const [view, perms] of Object.entries(viewRequirePermsMapper)) {
-    const hasPerm = hasPermission(perms)
-    Vue.$log.debug('Has view perm: ', view, hasPerm)
-    if (hasPerm) {
-      return view
-    }
-  }
+export function getPermedViews() {
+  const viewShowMapper = [
+    ['console', store.getters.consoleOrgs.length > 0],
+    ['audit', store.getters.auditOrgs.length > 0],
+    ['workbench', true]
+  ]
+  return viewShowMapper.filter(i => i[1]).map(i => i[0])
 }
 
 export function isSameView(to, from) {
@@ -107,13 +95,13 @@ export function isSameView(to, from) {
 }
 
 export function getPropView() {
+  const hasPermedViews = getPermedViews()
   const preView = localStorage.getItem('PreView')
-  const preViewRequirePerms = getViewRequirePerms(preView)
-  const hasPerm = hasPermission(preViewRequirePerms)
+  const hasPerm = hasPermedViews.indexOf(preView) > -1
   if (hasPerm) {
     return preView
   }
-  const preferView = getPermedPreferView()
+  const preferView = getPermedViews()[0]
   if (preferView) {
     return preferView
   }
@@ -125,18 +113,8 @@ export function getApiUrlRequirePerms(url, action) {
   return [`${app}.${action}_${resource}`]
 }
 
-export function getRouteViewRequirePerms(route) {
-  const viewName = route.path.split('/')[1]
-  return getViewRequirePerms(viewName)
-}
-
-export function hasRouteViewPerm(route) {
-  if (route.name) {
-    return hasPermission(route.meta.permissions)
-  }
-  const viewName = route.path.split('/')[1]
-  const perms = getViewRequirePerms(viewName)
-  return hasPermission(perms)
+export function isViewHasOrgs(viewName) {
+  return getPermedViews().indexOf(viewName) > -1
 }
 
 export function getConstRouteName() {
