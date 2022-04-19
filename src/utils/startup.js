@@ -7,7 +7,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
-import { getPropView, hasRouteViewPerm } from '@/utils/jms'
+import { getPropView, isViewHasOrgs } from '@/utils/jms'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 
@@ -118,28 +118,28 @@ export async function checkUserFirstLogin({ to, from, next }) {
 }
 
 export async function changeCurrentViewIfNeed({ to, from, next }) {
-  let view = to.path.split('/')[1]
-  if (['console', 'audit', 'workbench', ''].indexOf(view) < 0) {
-    Vue.$log.debug('Current view no need check', view)
+  let viewName = to.path.split('/')[1]
+  // 这几个是需要检测的, 切换视图组织时，避免 404
+  if (['console', 'audit', 'workbench', ''].indexOf(viewName) === -1) {
+    Vue.$log.debug('Current view no need check', viewName)
     return
   }
 
-  const hasPerm = hasRouteViewPerm(to)
-  Vue.$log.debug('Change has current view, has perm: ', hasPerm)
-  if (hasPerm) {
-    await store.dispatch('users/changeToView', view)
+  const has = isViewHasOrgs(viewName)
+  Vue.$log.debug('Change has current view, has perm: ', has)
+  if (has) {
+    await store.dispatch('users/changeToView', viewName)
     return
   }
-  view = getPropView()
+  viewName = getPropView()
   // Next 之前要重置 init 状态，否则这些路由守卫就不走了
   await store.dispatch('app/reset')
-  next(`/${view}/`)
+  next(`/${viewName}/`)
   return new Promise((resolve, reject) => reject(''))
 }
 
 export async function startup({ to, from, next }) {
   // if (store.getters.inited) { return true }
-  console.log('Start up')
   if (store.getters.inited) { return true }
   await store.dispatch('app/init')
 

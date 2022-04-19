@@ -85,14 +85,7 @@ export function getPermedViews() {
     ['audit', store.getters.auditOrgs.length > 0],
     ['workbench', true]
   ]
-  return viewShowMapper.filter(i => {
-    return i[1]
-  }).map(i => i[0])
-}
-
-export function getFirstPermedView() {
-  const hasPermedViews = getPermedViews()
-  return hasPermedViews[0]
+  return viewShowMapper.filter(i => i[1]).map(i => i[0])
 }
 
 export function isSameView(to, from) {
@@ -108,7 +101,7 @@ export function getPropView() {
   if (hasPerm) {
     return preView
   }
-  const preferView = getFirstPermedView()
+  const preferView = getPermedViews()[0]
   if (preferView) {
     return preferView
   }
@@ -120,8 +113,7 @@ export function getApiUrlRequirePerms(url, action) {
   return [`${app}.${action}_${resource}`]
 }
 
-export function hasRouteViewPerm(route) {
-  const viewName = route.path.split('/')[1]
+export function isViewHasOrgs(viewName) {
   return getPermedViews().indexOf(viewName) > -1
 }
 
