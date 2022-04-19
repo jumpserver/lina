@@ -61,7 +61,7 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
 
   const usingOrgs = store.getters.usingOrgs
   if (!usingOrgs || usingOrgs.length === 0) {
-    Vue.$log.error('No using orgs, return: ', usingOrgs)
+    Vue.$log.debug('No using orgs, return: ', usingOrgs)
     return
   }
   await refreshCurrentOrg()
