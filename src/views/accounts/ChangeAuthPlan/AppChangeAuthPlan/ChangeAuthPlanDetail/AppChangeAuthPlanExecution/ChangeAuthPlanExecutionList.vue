@@ -92,7 +92,7 @@ export default {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  can: 'xpack.view_applicationchangeauthplantask',
+                  can: this.$hasPerm('xpack.view_applicationchangeauthplantask'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AppChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
