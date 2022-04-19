@@ -62,7 +62,7 @@ export default {
         title: i18n.t('common.nav.TempPassword'),
         icon: 'magic',
         hidden: ({ settings }) => !settings['AUTH_TEMP_TOKEN'],
-        permissions: []
+        permissions: ['authentication.view_temptoken']
       }
     }
   ]
