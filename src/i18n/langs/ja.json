@@ -918,6 +918,8 @@
     }
   },
   "setting": {
+    "EnableKoKoSSHHelpText": "有効にすると、アセットを接続してSSHクライアントのプルアップ方式を表示します",
+    "SettingInEndpointHelpText": "[システム設定]/[端末設定]/[サービスエンドポイント]でサービスアドレスとポートを構成します",
     "Feature": "機能",
     "AlibabaCloud": "Alibaba cloud",
     "TencentCloud": "テンセント雲",
@@ -1490,8 +1492,8 @@
     "InterfaceSettings": "インターフェース設定",
     "License": "ライセンス",
     "ComponentMonitor": "コンポーネントモニタリング",
-    "Endpoint": "ターミナルエンドポイント",
-    "EndpointRule": "エンドポイントエンドポイントルール",
+    "Endpoint": "エンドポイント",
+    "EndpointRule": "エンドポイントルール",
     "ServiceRatio": "コンポーネント負荷統計",
     "LoadStatus": "コンポーネントステータス",
     "NormalLoad": "正常",
