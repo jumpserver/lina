@@ -50,9 +50,10 @@ export const constantRoutes = [
           icon: 'dashboard',
           title: i18n.t('route.Overview')
         },
-        beforeEnter: (to, from, next) => {
-          const preferView = getFirstPermedView()
+        beforeEnter: async(to, from, next) => {
+          const preferView = getPropView()
           if (preferView) {
+            await store.dispatch('app/reset')
             next(`/${preferView}/`)
             return false
           }
@@ -82,7 +83,8 @@ import workbenchViewRoutes from './workbench'
 import ticketsRoutes from './tickets'
 import settingsRoutes from './settings'
 import profileRoutes from './profile'
-import { getFirstPermedView } from '@/utils/jms'
+import { getPropView } from '@/utils/jms'
+import store from '@/store'
 
 /**
  * admin
