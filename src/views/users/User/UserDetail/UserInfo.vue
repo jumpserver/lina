@@ -37,7 +37,8 @@ export default {
           title: this.$t('common.Activate'),
           type: 'switcher',
           attrs: {
-            model: this.object.is_active
+            model: this.object.is_active,
+            disabled: !vm.$hasPerm('users.change_user')
           },
           callbacks: {
             change: function(v, item) {
@@ -57,7 +58,7 @@ export default {
           title: this.$t('users.quickUpdate.resetMFA'),
           attrs: {
             type: 'primary',
-            // disabled: !this.object.mfa_enabled || this.object.id === this.$store.state.users.profile.id,
+            disabled: !vm.$hasPerm('users.change_user'),
             label: this.$t('common.Reset')
           },
           callbacks: {
@@ -89,7 +90,7 @@ export default {
           title: this.$t('users.quickUpdate.resetPassword'),
           attrs: {
             type: 'primary',
-            disabled: this.object.source !== 'local',
+            disabled: this.object.source !== 'local' || !vm.$hasPerm('users.change_user'),
             label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
@@ -121,7 +122,7 @@ export default {
           title: this.$t('users.quickUpdate.resetSSHKey'),
           attrs: {
             type: 'primary',
-            disabled: !this.$store.state.users.profile.can_public_key_auth,
+            disabled: !this.$store.state.users.profile.can_public_key_auth || !vm.$hasPerm('users.change_user'),
             label: this.$t('users.quickUpdate.send')
           },
           callbacks: {
@@ -154,7 +155,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('users.quickUpdate.unblock'),
-            disabled: !this.object.login_blocked
+            disabled: !this.object.login_blocked || !vm.$hasPerm('users.change_user')
           },
           callbacks: {
             click: function(v, item) {
