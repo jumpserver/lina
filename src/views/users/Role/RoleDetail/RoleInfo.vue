@@ -270,7 +270,7 @@ export default {
       for (const i of depsId) {
         const depNode = this.ztree.getNodeByParam('title', i)
         if (!depNode) {
-          console.log(`Not found depNode for title: ${i}`)
+          this.$log.debug(`Not found depNode for title: ${i}`)
           continue
         }
         this.ztree.checkNode(depNode, true)
