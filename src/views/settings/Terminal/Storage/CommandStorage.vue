@@ -20,6 +20,7 @@ export default {
     const vm = this
     return {
       commandActions: {
+        canCreate: this.$hasPerm('terminal.add_commandstorage'),
         hasExport: false,
         hasImport: false,
         hasRefresh: true,
