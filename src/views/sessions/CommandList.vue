@@ -91,6 +91,7 @@ export default {
             formatter: DetailFormatter,
             width: '80px',
             formatterArgs: {
+              can: this.$hasPerm('terminal.view_session'),
               getTitle() {
                 return vm.$t('sessions.goto')
               },
