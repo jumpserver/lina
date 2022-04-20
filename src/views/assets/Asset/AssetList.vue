@@ -175,6 +175,7 @@ export default {
         },
         createInNewPage: true,
         searchConfig: {
+          exclude: ['is_active'],
           options: [
             { label: this.$t('assets.Label'), value: 'label' }
           ]
