@@ -148,7 +148,7 @@ export default {
             title: this.$t('common.removeSelected'),
             name: 'removeSelected',
             has: hasRemove,
-            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
+            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.remove_user'),
             callback: this.bulkRemoveCallback.bind(this)
           },
           {
