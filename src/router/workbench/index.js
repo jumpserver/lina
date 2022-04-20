@@ -17,7 +17,6 @@ export default {
     showNavSwitcher: () => {
       return store.getters.workbenchOrgs.length > 0
     },
-    showOrganization: true,
     permissions: []
   },
   children: [
@@ -29,6 +28,7 @@ export default {
       meta: {
         icon: 'area-chart',
         title: i18n.t('route.Overview'),
+        showOrganization: false,
         permissions: []
       }
     },
