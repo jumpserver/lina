@@ -148,6 +148,8 @@ export default {
   }
   .left-side {
     float: left;
+    display: block;
+    line-height: 36px;
   }
   .right-side {
     float: right;
@@ -170,9 +172,8 @@ export default {
   }
   .mobile .search.right {
     float: left;
-    padding-top: 5px;
   }
   .mobile .right-side {
-    padding-top: 6px;
+    padding-top: 5px;
   }
 </style>
