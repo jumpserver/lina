@@ -76,6 +76,14 @@ export default {
     extraRightSideActions: {
       type: Array,
       default: () => []
+    },
+    canCreate: {
+      type: Boolean,
+      default: false
+    },
+    canBulkUpdate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -102,7 +110,11 @@ export default {
       return this.selectedRows.length > 0
     },
     iImportOptions() {
-      return assignIfNot(this.importOptions, { url: this.tableUrl })
+      return assignIfNot(this.importOptions, {
+        url: this.tableUrl,
+        canImportCreate: this.canCreate,
+        canImportUpdate: this.canBulkUpdate
+      })
     },
     iExportOptions() {
       const options = assignIfNot(this.exportOptions, { url: this.tableUrl })
@@ -162,10 +174,6 @@ export default {
   .table-action-right-side {
     display: flex;
     justify-content:center;
-  }
-
-  .export-item {
-
   }
 
 </style>
