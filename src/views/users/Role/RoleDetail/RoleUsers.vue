@@ -31,7 +31,7 @@ export default {
     return {
       loading: true,
       relationConfig: {
-        disabled: !this.$hasPerm('rbac.add_systemrolebinding'),
+        disabled: !this.$hasPerm(`rbac.add_${this.object.scope}rolebinding`),
         icon: 'fa-user',
         title: this.$t('common.Members'),
         objectsAjax: {
