@@ -1,6 +1,6 @@
 <template>
   <el-select
-    :value="currentOrg.id"
+    :value="currentOrgId"
     class="org-select organization"
     filterable
     :placeholder="$t('common.Select')"
@@ -90,6 +90,15 @@ export default {
         this.orgActionsGroup,
         this.orgChoicesGroup
       ]
+    },
+    currentOrgId() {
+      const usingOrgIds = this.usingOrgs.map(o => o.id)
+      let currentOrgId = this.currentOrg.id
+      const find = usingOrgIds.indexOf(currentOrgId) > -1
+      if (!find) {
+        currentOrgId = null
+      }
+      return currentOrgId
     }
   },
   created() {
