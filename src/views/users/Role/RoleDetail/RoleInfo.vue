@@ -90,7 +90,7 @@ export default {
         ],
         'tickets.view_ticketflow': ['tickets.view_ticket'],
         'users.invite_user': [
-          'users.match_user', 'rbac.add_orgrolebinding', 'rbac.change_orgrolebinding',
+          'users.match_user', 'rbac.add_orgrolebinding',
           'rbac.view_orgrolebinding', 'rbac.view_orgrole'
         ],
         'acls.loginacl': ['users.view_user'],
@@ -269,6 +269,10 @@ export default {
 
       for (const i of depsId) {
         const depNode = this.ztree.getNodeByParam('title', i)
+        if (!depNode) {
+          console.log(`Not found depNode for title: ${i}`)
+          continue
+        }
         this.ztree.checkNode(depNode, true)
       }
     },
