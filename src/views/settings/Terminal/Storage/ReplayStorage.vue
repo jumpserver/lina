@@ -15,6 +15,7 @@ export default {
     const storageOptions = getReplayStorageOptions()
     return {
       replayActions: {
+        canCreate: this.$hasPerm('terminal.add_replaystorage'),
         hasExport: false,
         hasImport: false,
         hasRefresh: true,

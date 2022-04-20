@@ -84,17 +84,17 @@ export default {
     },
     canImportCreate: {
       type: Boolean,
-      default: true
+      default: false
     },
     canImportUpdate: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
     return {
       showImportDialog: false,
-      importOption: 'create',
+      importOption: this.canImportCreate && this.canImportUpdate ? 'create' : this.canImportCreate ? 'create' : 'update',
       errorMsg: '',
       loadStatus: false,
       importTypeOption: 'csv',

@@ -66,15 +66,16 @@ export default {
         canCreate: { action: 'add', checkRoot: true },
         canBulkDelete: { action: 'delete', checkRoot: false },
         canBulkUpdate: { action: 'change', checkRoot: true },
-        hasImport: { action: 'add', checkRoot: true },
+        hasImport: { action: 'add|change', checkRoot: true },
         hasExport: { action: 'view', checkRoot: false }
       }
       const defaults = {}
       for (const [k, v] of Object.entries(actions)) {
-        defaults[k] = this.hasActionPerm(v.action)
+        let hasPerm = v.action.split('|').some(i => this.hasActionPerm(i.trim()))
         if (v.checkRoot) {
-          defaults[k] = defaults[k] && !this.currentOrgIsRoot
+          hasPerm = hasPerm && !this.currentOrgIsRoot
         }
+        defaults[k] = hasPerm
       }
       return Object.assign(defaults, this.headerActions)
     },

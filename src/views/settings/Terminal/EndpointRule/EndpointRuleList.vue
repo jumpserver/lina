@@ -41,6 +41,7 @@ export default {
         }
       },
       headerActions: {
+        canCreate: this.$hasPerm('terminal.add_endpointrule'),
         hasMoreActions: false,
         createRoute: 'EndpointRuleCreate'
       }

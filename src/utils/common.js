@@ -33,7 +33,7 @@ function readableSecond(offset) {
     return hours.toFixed(1) + ' ' + getTimeUnits('h')
   } else if (minutes > 1) {
     return minutes.toFixed(1) + ' ' + getTimeUnits('m')
-  } else if (seconds > 1) {
+  } else if (seconds >= 0) {
     return seconds.toFixed(1) + ' ' + getTimeUnits('s')
   }
   return ''

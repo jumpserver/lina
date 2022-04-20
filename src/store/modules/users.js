@@ -113,7 +113,13 @@ const actions = {
     commit('SET_MFA_VERIFY')
   },
   changeToView({ commit }, viewName) {
-    const usingOrgs = state[`${viewName}Orgs`] || state.consoleOrgs
+    const mapper = {
+      console: state.consoleOrgs,
+      audit: state.auditOrgs,
+      workbench: state.workbenchOrgs,
+      tickets: state.consoleOrgs
+    }
+    const usingOrgs = mapper[viewName] || state.consoleOrgs
     Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
     commit('SET_USING_ORGS', usingOrgs)
   }

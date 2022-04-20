@@ -120,7 +120,7 @@ export async function checkUserFirstLogin({ to, from, next }) {
 export async function changeCurrentViewIfNeed({ to, from, next }) {
   let viewName = to.path.split('/')[1]
   // 这几个是需要检测的, 切换视图组织时，避免 404
-  if (['console', 'audit', 'workbench', ''].indexOf(viewName) === -1) {
+  if (['console', 'audit', 'workbench', 'tickets', ''].indexOf(viewName) === -1) {
     Vue.$log.debug('Current view no need check', viewName)
     return
   }

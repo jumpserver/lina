@@ -10,7 +10,7 @@ function getPropOrg() {
   if (defaultOrg) {
     return defaultOrg
   }
-  return orgs[0]
+  return orgs.filter(item => !item.is_root)[0]
 }
 
 function change2PropOrg() {
