@@ -27,7 +27,6 @@ async function changeOrg(org) {
     location.href = path
     // 如果不这么控制，从 控制台跳转过来会有问题，一段神奇的事情，总之这么搞就能解决
   } else {
-    location.reload()
     setTimeout(() => location.reload(), 400)
   }
 }
