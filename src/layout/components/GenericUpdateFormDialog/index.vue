@@ -97,10 +97,10 @@ export default {
     getDefaultFormSetting() {
       const vm = this
       return {
-        submitMethod: () => 'post',
+        submitMethod: () => 'patch',
         cleanFormValue: function(value) {
           const filterValue = {}
-          Object.keys(value).filter((key) => vm.checkedFields.includes(key)).forEach((key) => {
+          Object.keys(value).filter((key) => vm.checkedFields?.includes(key)).forEach((key) => {
             filterValue[key] = value[key]
           })
           const formValue = []
