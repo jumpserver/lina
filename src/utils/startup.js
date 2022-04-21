@@ -67,14 +67,12 @@ async function changeCurrentOrgIfNeed({ to, from, next }) {
   await refreshCurrentOrg()
   const currentOrg = store.getters.currentOrg
   if (!currentOrg || typeof currentOrg !== 'object') {
-    Vue.$log.error('Current org is null or not a object')
-    orgUtil.change2PropOrg()
-    return reject('Change prop org')
+    Vue.$log.error('Current org is null or not a object: ', currentOrg)
+    await orgUtil.change2PropOrg({ to, from, next })
   }
   if (!orgUtil.hasCurrentOrgPermission()) {
-    Vue.$log.error('Not has current org permission')
-    orgUtil.change2PropOrg()
-    return reject('Change prop org')
+    Vue.$log.error('Not has current org permission: ', currentOrg)
+    await orgUtil.change2PropOrg({ to, from, next })
   }
 }
 
@@ -126,7 +124,7 @@ export async function changeCurrentViewIfNeed({ to, from, next }) {
   }
 
   const has = isViewHasOrgs(viewName)
-  Vue.$log.debug('Change has current view, has perm: ', has)
+  Vue.$log.debug('Change has current view, has perm: ', viewName, '=>', has)
   if (has) {
     await store.dispatch('users/changeToView', viewName)
     return

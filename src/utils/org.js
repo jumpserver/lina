@@ -1,6 +1,5 @@
-import { hasUUID, BASE_URL } from '@/utils/common'
-import { getOrgDetail } from '@/api/orgs'
 import store from '@/store'
+import { hasUUID, replaceUUID } from '@/utils/common'
 
 export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
 
@@ -10,12 +9,25 @@ function getPropOrg() {
   if (defaultOrg) {
     return defaultOrg
   }
-  return orgs.filter(item => !item.is_root)[0]
+  return orgs.filter(item => !item['is_root'])[0]
 }
 
-function change2PropOrg() {
+async function change2PropOrg() {
   const org = getPropOrg()
-  setTimeout(() => changeOrg(org.id), 100)
+  await changeOrg(org)
+}
+
+async function changeOrg(org) {
+  await store.dispatch('users/setCurrentOrg', org)
+  await store.dispatch('app/reset')
+  let path = location.href
+  if (hasUUID(path)) {
+    path = replaceUUID(path, '')
+    path = _.trimEnd(path, '/')
+    location.href = path
+  } else {
+    location.reload()
+  }
 }
 
 function hasCurrentOrgPermission() {
@@ -25,27 +37,10 @@ function hasCurrentOrgPermission() {
   return orgs.find((item) => item.id === currentOrgId)
 }
 
-async function changeOrg(orgId) {
-  const org = await getOrgDetail(orgId)
-  if (!org) {
-    console.debug('Error: org not found')
-  } else {
-    console.debug('Change to org: ', org)
-  }
-
-  store.dispatch('users/setCurrentOrg', org).then(() => {
-    // console.log('Set current org to: ', org)
-    if (hasUUID(location.href)) {
-      location.href = BASE_URL
-    } else {
-      window.location.reload(true)
-    }
-  })
-}
-
 export default {
   hasCurrentOrgPermission,
-  changeOrg,
   DEFAULT_ORG_ID,
-  change2PropOrg
+  change2PropOrg,
+  changeOrg,
+  getPropOrg
 }

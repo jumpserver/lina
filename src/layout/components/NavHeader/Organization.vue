@@ -101,16 +101,15 @@ export default {
       return currentOrgId
     }
   },
-  created() {
-  },
   methods: {
     changeOrg(orgId) {
+      const org = this.usingOrgs.find(item => item.id === orgId)
       if (orgId === 'create') {
         this.$router.push({ name: 'OrganizationCreate' })
       } else if (orgId === 'list') {
         this.$router.push({ name: 'OrganizationList' })
       } else {
-        orgUtil.changeOrg(orgId)
+        orgUtil.changeOrg(org)
       }
     }
   }
