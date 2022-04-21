@@ -17,7 +17,7 @@ async function change2PropOrg() {
   await changeOrg(org)
 }
 
-async function changeOrg(org, reload) {
+async function changeOrg(org) {
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
   let path = location.href
@@ -26,10 +26,10 @@ async function changeOrg(org, reload) {
     path = _.trimEnd(path, '/')
     location.href = path
     // 如果不这么控制，从 控制台跳转过来会有问题，一段神奇的事情，总之这么搞就能解决
-  } else if (reload) {
+  } else {
     location.reload()
+    setTimeout(() => location.reload(), 400)
   }
-  console.log('Path is: ', path)
 }
 
 function hasCurrentOrgPermission() {
