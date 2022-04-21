@@ -691,6 +691,7 @@
     "AssetCreate": "创建资产",
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
+    "HostList": "主机列表",
     "Session": "会话",
     "AssetPermission": "资产授权",
     "AssetPermissionCreate": "创建资产授权规则",

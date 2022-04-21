@@ -46,6 +46,111 @@ export default [
     ]
   },
   {
+    path: 'hosts',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('route.AssetList'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'HostList',
+        component: () => import('@/views/assets/Asset/AssetList.vue'),
+        meta: { title: i18n.t('route.HostList') }
+      },
+      {
+        path: 'create',
+        name: 'AssetCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate') }
+      },
+      {
+        path: ':id',
+        name: 'AssetDetail',
+        component: () => import('@/views/assets/Asset/AssetDetail'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'AssetUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate') }
+      }
+    ]
+  },
+  {
+    path: 'devices',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('route.AssetList'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'HostList',
+        component: () => import('@/views/assets/Asset/AssetList.vue'),
+        meta: { title: i18n.t('route.NetworkDevices') }
+      },
+      {
+        path: 'create',
+        name: 'AssetCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate') }
+      },
+      {
+        path: ':id',
+        name: 'AssetDetail',
+        component: () => import('@/views/assets/Asset/AssetDetail'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'AssetUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate') }
+      }
+    ]
+  },
+  {
+    path: 'databases',
+    component: empty,
+    redirect: '',
+    meta: { title: i18n.t('route.Databases'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'HostList',
+        component: () => import('@/views/assets/Asset/AssetList.vue'),
+        meta: { title: i18n.t('route.Databases') }
+      },
+      {
+        path: 'create',
+        name: 'AssetCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate') }
+      },
+      {
+        path: ':id',
+        name: 'AssetDetail',
+        component: () => import('@/views/assets/Asset/AssetDetail'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'AssetUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate') }
+      }
+    ]
+  },
+  {
     path: 'domains',
     component: empty,
     redirect: '',
