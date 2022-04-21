@@ -104,12 +104,16 @@ export default {
   methods: {
     changeOrg(orgId) {
       const org = this.usingOrgs.find(item => item.id === orgId)
-      if (orgId === 'create') {
-        this.$router.push({ name: 'OrganizationCreate' })
-      } else if (orgId === 'list') {
-        this.$router.push({ name: 'OrganizationList' })
-      } else {
-        orgUtil.changeOrg(org)
+
+      switch (orgId) {
+        case 'create':
+          this.$router.push({ name: 'OrganizationCreate' })
+          break
+        case 'list':
+          this.$router.push({ name: 'OrganizationList' })
+          break
+        default:
+          orgUtil.changeOrg(org)
       }
     }
   }
