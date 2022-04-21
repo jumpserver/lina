@@ -25,7 +25,6 @@ async function changeOrg(org) {
     path = replaceUUID(path, '')
     path = _.trimEnd(path, '/')
     location.href = path
-    // 如果不这么控制，从 控制台跳转过来会有问题，一段神奇的事情，总之这么搞就能解决
   } else {
     setTimeout(() => location.reload(), 400)
   }
