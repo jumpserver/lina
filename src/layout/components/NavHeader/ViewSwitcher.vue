@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    default-active="activeIndex"
+    :default-active="currentViewRoute.name"
     class="menu-main"
     :class="mode"
     :mode="mode"
@@ -45,7 +45,9 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      showTip: true
+    }
   },
   computed: {
     ...mapGetters([
@@ -145,5 +147,4 @@ export default {
 .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
   right: 10px;
 }
-
 </style>
