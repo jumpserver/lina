@@ -147,8 +147,4 @@ export default {
 .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
   right: 10px;
 }
-.el-badge ::v-deep .el-badge__content.is-fixed{
-  top:10px;
-}
-
 </style>
