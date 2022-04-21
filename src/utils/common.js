@@ -159,6 +159,10 @@ export function hasUUID(s) {
   return s.search(uuidPattern) !== -1
 }
 
+export function replaceUUID(s, n) {
+  return s.replace(uuidPattern, n)
+}
+
 export function getDaysAgo(days, now) {
   if (!now) {
     now = new Date()
