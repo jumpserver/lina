@@ -113,7 +113,7 @@ export default {
           this.$router.push({ name: 'OrganizationList' })
           break
         default:
-          orgUtil.changeOrg(org)
+          orgUtil.changeOrg(org, true)
       }
     }
   }
