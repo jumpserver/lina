@@ -1,6 +1,4 @@
 FROM node:10 as stage-build
-ARG VERSION
-ENV VERSION=$VERSION
 ARG NPM_REGISTRY="https://registry.npm.taobao.org"
 ENV NPM_REGISTY=$NPM_REGISTRY
 ARG SASS_BINARY_SITE="https://npm.taobao.org/mirrors/node-sass"
@@ -15,6 +13,8 @@ COPY package.json yarn.lock /data/
 RUN yarn install
 RUN npm rebuild node-sass
 
+ARG VERSION
+ENV VERSION=$VERSION
 ADD . /data
 RUN cd utils && bash -xieu build.sh build
 
