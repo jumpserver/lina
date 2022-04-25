@@ -130,7 +130,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.myorgs?.map((item) => {
+            options: this.$store.state.users.profile.workbench_orgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -163,7 +163,7 @@ export default {
     }
   },
   mounted() {
-    let userAllOrgIds = this.$store.state.users.profile['myorgs']
+    let userAllOrgIds = this.$store.state.users.profile['workbench_orgs']
     const currentOrgId = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : null
     userAllOrgIds = userAllOrgIds ? userAllOrgIds.map(i => i.id) : []
     if (userAllOrgIds.length > 0) {
