@@ -431,7 +431,7 @@
     "fileType": "ファイルタイプ",
     "isValid": "有効",
     "nav": {
-      "TempPassword": "いちじパスワード",
+      "TempPassword": "一時パスワード使用後すぐに無効になります",
       "APIKey": "APIキー",
       "Workbench": "作業台",
       "Navigation": "ナビゲーション",
