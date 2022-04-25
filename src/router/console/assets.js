@@ -59,24 +59,24 @@ export default [
       },
       {
         path: 'create',
-        name: 'AssetCreate',
+        name: 'HostCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetCreate') }
+        meta: { title: i18n.t('route.HostCreate') }
       },
       {
         path: ':id',
-        name: 'AssetDetail',
+        name: 'HostDetail',
         component: () => import('@/views/assets/Asset/AssetDetail'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetDetail') }
+        meta: { title: i18n.t('route.HostDetail') }
       },
       {
         path: ':id/update',
-        name: 'AssetUpdate',
+        name: 'HostUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate') }
+        meta: { title: i18n.t('route.HostUpdate') }
       }
     ]
   },
@@ -84,34 +84,34 @@ export default [
     path: 'devices',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.AssetList'), permissions: ['assets.view_asset'] },
+    meta: { title: i18n.t('route.NetworkDevices'), permissions: ['assets.view_asset'] },
     children: [
       {
         path: '',
-        name: 'HostList',
+        name: 'DeviceList',
         component: () => import('@/views/assets/Asset/AssetList.vue'),
-        meta: { title: i18n.t('route.NetworkDevices') }
+        meta: { title: i18n.t('route.NetworkDevices'), permissions: [] }
       },
       {
         path: 'create',
-        name: 'AssetCreate',
+        name: 'DeviceCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetCreate') }
+        meta: { title: i18n.t('route.DeviceCreate') }
       },
       {
         path: ':id',
-        name: 'AssetDetail',
+        name: 'DeviceDetail',
         component: () => import('@/views/assets/Asset/AssetDetail'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetDetail') }
+        meta: { title: i18n.t('route.DeviceDetail') }
       },
       {
         path: ':id/update',
-        name: 'AssetUpdate',
+        name: 'DeviceUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate') }
+        meta: { title: i18n.t('route.DeviceUpdate') }
       }
     ]
   },
@@ -119,20 +119,20 @@ export default [
     path: 'databases',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.Databases'), permissions: ['assets.view_asset'] },
+    meta: { title: i18n.t('route.Databases'), permissions: [] },
     children: [
       {
         path: '',
-        name: 'HostList',
+        name: 'DatabaseList',
         component: () => import('@/views/assets/Asset/AssetList.vue'),
-        meta: { title: i18n.t('route.Databases') }
+        meta: { title: i18n.t('route.Databases'), permissions: [] }
       },
       {
         path: 'create',
-        name: 'AssetCreate',
+        name: 'DatabaseCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('route.AssetCreate') }
+        meta: { title: i18n.t('route.DatabaseCreate') }
       },
       {
         path: ':id',

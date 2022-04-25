@@ -692,6 +692,8 @@
     "AssetDetail": "资产详情",
     "AssetList": "资产列表",
     "HostList": "主机列表",
+    "NetworkDevices": "网络设备",
+    "Databases": "数据库",
     "Session": "会话",
     "AssetPermission": "资产授权",
     "AssetPermissionCreate": "创建资产授权规则",
