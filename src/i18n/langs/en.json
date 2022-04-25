@@ -419,7 +419,7 @@
     },
     "isValid": "Is valid",
     "nav": {
-      "TempPassword": "Temporary password",
+      "TempPassword": "Temporary password will expire immediately after use",
       "APIKey": "API Key",
       "Workbench": "Workbench",
       "Navigation": "Navigation",
