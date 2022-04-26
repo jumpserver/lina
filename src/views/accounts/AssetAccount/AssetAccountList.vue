@@ -1,7 +1,7 @@
 <template>
   <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting">
     <template #table>
-      <AccountListTable ref="table" :url="accountsUrl" />
+      <AccountListTable ref="table" :url="accountsUrl" :has-left-actions="true" />
     </template>
   </GenericTreeListPage>
 </template>
