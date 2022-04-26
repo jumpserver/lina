@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="24">
       <el-col :md="16" :sm="24">
-        <AccountListTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" />
+        <AccountListTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" :has-left-actions="true" />
       </el-col>
       <el-col :md="8" :sm="24">
         <QuickActions type="primary" :actions="quickActions" />
