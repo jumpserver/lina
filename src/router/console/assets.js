@@ -54,7 +54,7 @@ export default [
       {
         path: '',
         name: 'HostList',
-        component: () => import('@/views/assets/Asset/AssetList.vue'),
+        component: () => import('@/views/assets/Host/HostList.vue'),
         meta: { title: i18n.t('route.HostList') }
       },
       {

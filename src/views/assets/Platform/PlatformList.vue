@@ -14,9 +14,13 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/platforms/',
         columns: [
-          'name', 'base',
+          'name', 'category', 'type',
           'comment', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'category', 'type', 'actions']
+        },
         columnsMeta: {
           base: {
             width: '140px'
