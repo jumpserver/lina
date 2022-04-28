@@ -18,6 +18,7 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
+    <PlatformDialog :visible.sync="showPlatform" />
   </div>
 </template>
 
@@ -28,18 +29,21 @@ import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
+import PlatformDialog from './PlatformDialog'
 import TreeMenu from './TreeMenu'
 
 export default {
   components: {
     GenericTreeListPage,
     AssetBulkUpdateDialog,
-    TreeMenu
+    TreeMenu,
+    PlatformDialog
   },
   data() {
     const vm = this
     return {
       treeRef: null,
+      showPlatform: false,
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -138,6 +142,9 @@ export default {
             name: 'AssetCreate',
             query: this.$route.query
           }
+        },
+        onCreate: () => {
+          this.showPlatform = true
         },
         createInNewPage: true,
         searchConfig: {
