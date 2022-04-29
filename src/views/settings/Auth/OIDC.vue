@@ -22,7 +22,8 @@ export default {
         fields: [
           [this.$t('common.Basic'), [
             'AUTH_OPENID', 'BASE_SITE_URL', 'AUTH_OPENID_CLIENT_ID',
-            'AUTH_OPENID_CLIENT_SECRET'
+            'AUTH_OPENID_CLIENT_SECRET',
+            'AUTH_OPENID_CLIENT_AUTH_METHOD'
           ]],
           [this.$t('common.Params'), [
             'AUTH_OPENID_KEYCLOAK',
