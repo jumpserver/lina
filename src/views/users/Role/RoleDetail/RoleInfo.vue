@@ -98,6 +98,8 @@ export default {
         'assets.view_asset': ['assets.view_node'],
         'assets.commandfilterrule': ['assets.view_commandfilter'],
         'assets.gateway': ['assets.view_domain'],
+        'assets.add_asset': ['assets.view_platform'],
+        'assets.change_asset': ['assets.view_platform'],
         'assets.view_authbook': ['assets.view_node'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
