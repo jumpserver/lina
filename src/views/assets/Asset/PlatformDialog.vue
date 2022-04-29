@@ -23,9 +23,10 @@
               :span="6"
             >
               <el-card
-                :style="{ borderBottomColor: randomBottomColor(index) }"
+                :style="{ borderBottomColor: randomBorderColor(index) }"
                 class="platform-item"
                 shadow="hover"
+                @click.native="createAsset(platform)"
               >
                 {{ platform.name }}
               </el-card>
@@ -93,13 +94,21 @@ export default {
   },
   methods: {
     onConfirm() {
+      this.iVisible = false
     },
-    randomBottomColor(i) {
+    randomBorderColor(i) {
       const length = this.bottomColors.length
       const colorIndex = i % length
       const color = this.bottomColors[colorIndex]
-      console.log('Color: ', color)
       return color
+    },
+    createAsset(platform) {
+      const mapper = {
+        host: 'HostCreate'
+      }
+      const route = mapper[platform.category] || 'HostCreate'
+      this.$router.push({ name: route, query: { platform: platform.id }})
+      this.iVisible = false
     }
   }
 }
@@ -112,6 +121,10 @@ export default {
     padding: 10px
   }
   border-bottom: solid 4px;
+}
+
+.platform-item:hover {
+  cursor: pointer;
 }
 
 </style>

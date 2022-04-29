@@ -46,6 +46,66 @@ export default [
     ]
   },
   {
+    path: 'hosts',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: { title: i18n.t('route.HostList'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'HostList',
+        component: () => import('@/views/assets/Host/HostList.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'HostCreate',
+        component: () => import('@/views/assets/Host/HostCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'HostUpdate',
+        component: () => import('@/views/assets/Host/HostCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
+    path: 'databases',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: { title: i18n.t('route.Databases'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'DatabaseList',
+        component: () => import('@/views/assets/Database/HostList.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'DatabaseCreate',
+        component: () => import('@/views/assets/Database/DatabaseCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'DatabaseUpdate',
+        component: () => import('@/views/assets/Database/DatabaseCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
     path: 'domains',
     component: empty,
     redirect: '',

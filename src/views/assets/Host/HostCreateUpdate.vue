@@ -7,7 +7,7 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
-  name: 'AssetCreateUpdate',
+  name: 'HostCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -16,10 +16,11 @@ export default {
     if (this.$route.query['node']) {
       nodesInitial.push(this.$route.query.node)
     }
+    const platformId = this.$route.query['platform'] || 1
     return {
       initial: {
         is_active: true,
-        platform: 'Linux',
+        platform: parseInt(platformId),
         protocols: ['ssh/22'],
         nodes: nodesInitial
       },
