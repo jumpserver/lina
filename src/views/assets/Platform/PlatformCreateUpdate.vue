@@ -15,6 +15,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
+import { assetFieldsMeta } from '@/views/assets/const'
 export default {
   name: 'PlatformCreateUpdate',
   components: { GenericCreateUpdatePage },
@@ -29,7 +30,14 @@ export default {
         category_type: ['host', 'linux']
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'category_type', 'charset', 'meta']],
+        [this.$t('common.Basic'), [
+          'name', 'category_type', 'charset', 'meta'
+        ]],
+        [this.$t('assets.Defaults'), [
+          'domain_enabled', 'domain_default',
+          'protocols_enabled', 'protocols_default',
+          'admin_user_enabled', 'admin_user_default'
+        ]],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
@@ -81,7 +89,9 @@ export default {
             multiple: false,
             options: []
           }
-        }
+        },
+        domain_default: assetFieldsMeta.domain,
+        admin_user_default: assetFieldsMeta.admin_user
       },
       url: '/api/v1/assets/platforms/',
       cleanFormValue: (values) => {

@@ -18,6 +18,7 @@ export default {
     }
     const platformId = this.$route.query['platform'] || 1
     return {
+      title: this.$t('assets.CreateDatabase'),
       initial: {
         is_active: true,
         platform: parseInt(platformId),
@@ -28,15 +29,15 @@ export default {
       createSuccessNextRoute: { name: 'AssetDetail' },
       hasDetailInMsg: false,
       fields: [
-        [this.$t('common.Basic'), ['platform', 'hostname', 'ip', 'db_name']],
-        [this.$t('assets.Protocols'), ['protocols']],
+        [this.$t('common.Basic'), ['platform', 'hostname', 'ip', 'port', 'db_name']],
         [this.$t('assets.Domain'), ['domain']],
-        [this.$t('assets.Auth'), ['admin_user']],
         [this.$t('assets.Node'), ['nodes']],
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
-      fieldsMeta: assetFieldsMeta
+      fieldsMeta: {
+        ...assetFieldsMeta
+      }
     }
   }
 }

@@ -104,7 +104,10 @@ export default {
     },
     createAsset(platform) {
       const mapper = {
-        host: 'HostCreate'
+        host: 'HostCreate',
+        database: 'DatabaseCreate',
+        cloud: 'CloudCreate',
+        remote_app: 'RemoteAppCreate'
       }
       const route = mapper[platform.category] || 'HostCreate'
       this.$router.push({ name: route, query: { platform: platform.id }})

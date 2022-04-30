@@ -95,6 +95,12 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Defaults": "默认值",
+    "CreateDatabase": "创建资产-数据库",
+    "CreateHost": "创建资产-主机",
+    "CreateRemoteApp": "创建资产-远程应用",
+    "CreateNetworkDevice": "创建资产-网络设备",
+    "CreateCloud": "创建资产-云设施",
     "SelectPlatforms": "选择平台",
     "AppList": "应用列表",
     "AssociateSystemUsers": "关联系统用户",
