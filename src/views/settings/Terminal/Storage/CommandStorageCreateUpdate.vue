@@ -31,14 +31,18 @@ export default {
           helpText: this.$t('sessions.SetToDefaultStorage')
         },
         meta: {
-          fields: ['HOSTS', 'INDEX', 'IGNORE_VERIFY_CERTS'],
+          fields: ['HOSTS', 'IS_INDEX_BY_DAY', 'INDEX_PREFIX', 'INDEX', 'IGNORE_VERIFY_CERTS'],
           fieldsMeta: {
             HOSTS: {
               helpText: this.$t('sessions.helpText.esUrl')
             },
+            INDEX_PREFIX: {
+              hidden: (formValue) => !formValue.IS_INDEX_BY_DAY
+            },
             INDEX: {
               rules: [Required],
-              helpText: this.$t('sessions.helpText.esIndex')
+              helpText: this.$t('sessions.helpText.esIndex'),
+              hidden: (formValue) => formValue.IS_INDEX_BY_DAY
             }
           }
         }
