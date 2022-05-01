@@ -91,7 +91,8 @@ export default {
           }
         },
         domain_default: assetFieldsMeta.domain,
-        admin_user_default: assetFieldsMeta.admin_user
+        admin_user_default: assetFieldsMeta.admin_user,
+        protocols_default: assetFieldsMeta.protocols
       },
       url: '/api/v1/assets/platforms/',
       cleanFormValue: (values) => {

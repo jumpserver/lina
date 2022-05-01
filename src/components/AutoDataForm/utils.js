@@ -60,6 +60,7 @@ export class FormFieldGenerator {
         type = 'input'
         break
     }
+    // 上面重写了 type
     if (type === 'radio-group') {
       if (!fieldRemoteMeta.read_only) {
         const options = fieldRemoteMeta.choices.map(v => {
@@ -108,6 +109,10 @@ export class FormFieldGenerator {
       } else {
         filedRules.push(rules.RequiredChange)
       }
+    }
+    // 一些 field 有 choices 但不是 choiceField
+    if (fieldRemoteMeta.choices && field.type.indexOf('choice') === -1) {
+      field.el.choices = fieldRemoteMeta.choices
     }
     field.rules = filedRules
     return field

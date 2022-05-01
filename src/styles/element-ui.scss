@@ -492,3 +492,7 @@ a {
   color: $--color-link-highlight;
   background-color: rgba(0,0,0,.05)
 }
+
+.el-input-group__append, .el-input-group__prepend {
+  color: $--color-primary
+}

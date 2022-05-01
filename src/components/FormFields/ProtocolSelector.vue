@@ -1,14 +1,29 @@
 <template>
   <div>
-    <div v-for="(item,index) in items" :key="index" style="display: flex;margin-top: 8px;">
+    <div v-for="(item, index) in items" :key="index" style="display: flex;margin-top: 8px;">
       <el-input v-model="item.value" class="input-with-select" v-bind="$attrs">
         <el-select slot="prepend" v-model="item.select" @change="handleProtocolChange">
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
       </el-input>
       <div style="display: flex; margin-left: 20px" class="input-button">
-        <el-button type="danger" icon="el-icon-minus" style="flex-shrink: 0;" size="mini" :disabled="items.length===1" @click="handleDelete(index)" />
-        <el-button type="primary" icon="el-icon-plus" style="flex-shrink: 0;" size="mini" @click="handleAdd(index)" />
+        <el-button
+          type="danger"
+          icon="el-icon-minus"
+          style="flex-shrink: 0;"
+          size="mini"
+          :disabled="items.length === 1"
+          @click="handleDelete(index)"
+        />
+        <el-button
+          v-if="index === items.length - 1"
+          type="primary"
+          icon="el-icon-plus"
+          style="flex-shrink: 0;"
+          :disabled="remainProtocols.length === 0 || !item.value"
+          size="mini"
+          @click="handleAdd(index)"
+        />
       </div>
     </div>
   </div>
@@ -24,6 +39,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    choices: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -34,28 +53,16 @@ export default {
           value: '',
           select: ''
         }
-      ],
-      protocols: [
-        {
-          name: 'ssh',
-          port: 22
-        },
-        {
-          name: 'rdp',
-          port: 3389
-        },
-        {
-          name: 'telnet',
-          port: 23
-        },
-        {
-          name: 'vnc',
-          port: 5901
-        }
       ]
     }
   },
   computed: {
+    protocols() {
+      return this.choices.map(item => {
+        const proto = item.value.split('/')
+        return { name: proto[0], port: proto[1] }
+      })
+    },
     values() {
       const data = []
       this.items.map(i => {
@@ -143,7 +150,7 @@ export default {
 
   .input-with-select {
     flex-shrink: 1;
-    width: 80% !important;
+    width: calc(100% - 80px) !important;
   }
 
   .input-with-select .el-input-group__prepend {
