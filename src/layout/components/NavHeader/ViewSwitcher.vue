@@ -109,7 +109,6 @@ export default {
   padding: 10px 10px;
   text-align: center;
   height: 70px;
-  width: 70px;
   &:hover {
     color: inherit;
     i {
@@ -117,10 +116,10 @@ export default {
     }
   }
   &:first-child {
-    margin-left: 20px;
+    margin-left: 16px;
   }
   &:last-child {
-    margin-right: 20px;
+    margin-right: 16px;
   }
 }
 .el-submenu.is-opened {
