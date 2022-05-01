@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-for="(item, index) in items" :key="index" style="display: flex;margin-top: 8px;">
-      <el-input v-model="item.value" class="input-with-select" v-bind="$attrs">
-        <el-select slot="prepend" v-model="item.select" @change="handleProtocolChange">
+      <el-input v-model="item.port" class="input-with-select" v-bind="$attrs">
+        <el-select slot="prepend" v-model="item.name" @change="handleProtocolChange($event, item)">
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
       </el-input>
@@ -20,7 +20,7 @@
           type="primary"
           icon="el-icon-plus"
           style="flex-shrink: 0;"
-          :disabled="remainProtocols.length === 0 || !item.value"
+          :disabled="remainProtocols.length === 0 || !item.port"
           size="mini"
           @click="handleAdd(index)"
         />
@@ -47,13 +47,8 @@ export default {
   },
   data() {
     return {
-      select: '',
-      items: [
-        {
-          value: '',
-          select: ''
-        }
-      ]
+      name: '',
+      items: []
     }
   },
   computed: {
@@ -64,27 +59,21 @@ export default {
       })
     },
     values() {
-      const data = []
-      this.items.map(i => {
-        data.push(`${i.select}/${i.value}`)
+      return this.items.map(item => {
+        return `${item.name}/${item.port}`
       })
-      return data
     },
     itemsMap() {
       const mapper = {}
       for (const item of this.items) {
-        mapper[item.select] = item
+        mapper[item.name] = item
       }
       return mapper
     },
     remainProtocols() {
-      const remain = []
-      for (const item of this.protocols) {
-        if (!this.itemsMap[item.name]) {
-          remain.push(item)
-        }
-      }
-      return remain
+      return this.protocols.filter(proto => {
+        return !this.itemsMap[proto.name]
+      })
     }
   },
   watch: {
@@ -98,13 +87,9 @@ export default {
   },
   mounted() {
     if (this.value.length !== 0) {
-      this.items = []
-      this.value.forEach(v => {
-        const data = v.split('/')
-        this.items.push({
-          value: data[1],
-          select: data[0]
-        })
+      this.items = this.value.map(item => {
+        const proto = item.split('/')
+        return { name: proto[0], port: proto[1] }
       })
     }
   },
@@ -118,27 +103,12 @@ export default {
       })
     },
     handleAdd(index) {
-      this.items.push(
-        {
-          value: '',
-          select: ''
-        }
-      )
+      this.items.push({ ...this.remainProtocols[0] })
     },
-    handleProtocolChange(val) {
-      let port = 22
-      switch (val) {
-        case 'rdp':
-          port = 3389
-          break
-        case 'telnet':
-          port = 23
-          break
-        case 'vnc':
-          port = 5901
-          break
-      }
-      this.itemsMap[val].value = port
+    handleProtocolChange(evt, item) {
+      const selected = this.protocols.find(item => item.name === evt)
+      item.name = selected.name
+      item.port = selected.port
     }
   }
 }
