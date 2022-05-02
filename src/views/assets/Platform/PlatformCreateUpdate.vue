@@ -20,6 +20,8 @@ export default {
   name: 'PlatformCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
+    const category = this.$route.query.category
+    const type = this.$route.query.type
     return {
       loading: true,
       initial: {
@@ -94,7 +96,7 @@ export default {
         admin_user_default: assetFieldsMeta.admin_user,
         protocols_default: assetFieldsMeta.protocols
       },
-      url: '/api/v1/assets/platforms/',
+      url: `/api/v1/assets/platforms/?category=${category}&type=${type}`,
       cleanFormValue: (values) => {
         const category_type = values['category_type']
         values['category'] = category_type[0]

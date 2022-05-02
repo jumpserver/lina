@@ -21,6 +21,8 @@ const defaultUpdateCallback = function({ row, col }) {
 
   if (typeof updateRoute === 'object') {
     route = Object.assign(route, updateRoute)
+  } else if (typeof updateRoute === 'function') {
+    route = updateRoute({ row, col })
   } else {
     route.name = updateRoute
   }

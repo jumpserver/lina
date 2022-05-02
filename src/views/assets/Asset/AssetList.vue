@@ -94,12 +94,6 @@ export default {
             sortable: 'custom',
             width: '140px'
           },
-          hardware_info: {
-            showOverflowTooltip: true
-          },
-          cpu_model: {
-            showOverflowTooltip: true
-          },
           sn: {
             showOverflowTooltip: true
           },

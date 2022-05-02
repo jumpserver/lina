@@ -87,11 +87,18 @@ export default {
   },
   mounted() {
     if (this.value.length !== 0) {
-      this.items = this.value.map(item => {
+      const items = this.value.map(item => {
         const proto = item.split('/')
         return { name: proto[0], port: proto[1] }
       })
+      const protocolsNames = this.protocols.map(item => item.name)
+      this.items = items.filter(item => {
+        return protocolsNames[item.name]
+      })
+    } else {
+      this.items.push({ ...this.protocols[0] })
     }
+    console.log('Choices: ', this.choices)
   },
   methods: {
     onInput(val) {
@@ -114,28 +121,29 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  .el-select .el-input {
-    width: 130px;
-  }
+.el-select .el-input {
+  width: 130px;
+}
 
-  .input-with-select {
-    flex-shrink: 1;
-    width: calc(100% - 80px) !important;
-  }
+.input-with-select {
+  flex-shrink: 1;
+  width: calc(100% - 80px) !important;
+}
 
-  .input-with-select .el-input-group__prepend {
-    background-color: #fff;
-  }
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
 
-  .el-select  ::v-deep  .el-input__inner {
-    width: 100px;
-  }
+.el-select ::v-deep .el-input__inner {
+  width: 100px;
+}
 
-  .input-button {
-    margin-top: 4px;
-  }
-  .input-button  ::v-deep  .el-button.el-button--mini {
-    height: 25px;
-    padding: 5px;
-  }
+.input-button {
+  margin-top: 4px;
+}
+
+.input-button ::v-deep .el-button.el-button--mini {
+  height: 25px;
+  padding: 5px;
+}
 </style>

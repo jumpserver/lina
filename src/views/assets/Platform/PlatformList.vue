@@ -29,7 +29,17 @@ export default {
             formatterArgs: {
               canClone: vm.$hasPerm('assets.add_platform'),
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
-              canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform')
+              canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform'),
+              updateRoute: ({ row }) => {
+                return {
+                  name: 'PlatformUpdate',
+                  params: { id: row.id },
+                  query: {
+                    category: row.category,
+                    type: row.type
+                  }
+                }
+              }
             }
           }
         }
@@ -38,7 +48,16 @@ export default {
         hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
-        createRoute: 'PlatformCreate'
+        createRoute: 'PlatformCreate',
+        moreCreates: {
+          callback: (item) => {
+            this.$router.push({
+              name: 'PlatformCreate',
+              query: { type: item.name, category: item.category }
+            })
+          },
+          dropdown: this.$store.state.assets.assetCategoriesDropdown
+        }
       }
     }
   }

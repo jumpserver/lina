@@ -10,7 +10,7 @@
 
 <script>
 import { GenericUpdateFormDialog } from '@/layout/components'
-import Protocols from '@/views/assets/Asset/components/Protocols'
+import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 import rules from '@/components/DataForm/rules'
 export default {
   name: 'AssetBulkUpdateDialog',
@@ -55,7 +55,7 @@ export default {
           },
           protocols: {
             label: this.$t('assets.Protocols'),
-            component: Protocols
+            component: ProtocolSelector
           },
           domain: {
             label: this.$t('assets.Domain'),
