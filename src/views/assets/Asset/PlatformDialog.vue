@@ -23,7 +23,7 @@
               :span="6"
             >
               <el-card
-                :style="{ borderBottomColor: randomBorderColor(index) }"
+                :style="{ borderLeftColor: randomBorderColor(index) }"
                 class="platform-item"
                 shadow="hover"
                 @click.native="createAsset(platform)"
@@ -123,7 +123,7 @@ export default {
   & >>> .el-card__body {
     padding: 10px
   }
-  border-bottom: solid 4px;
+  border-left: solid 4px;
 }
 
 .platform-item:hover {

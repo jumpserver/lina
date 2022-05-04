@@ -1,15 +1,12 @@
 <template>
-  <div>
-    <GenericCreateUpdatePage
-      :url="url"
-      :fields="fields"
-      :initial="initial"
-      :fields-meta="fieldsMeta"
-      :clean-form-value="cleanFormValue"
-      :after-get-form-value="afterGetFormValue"
-    />
-  </div>
-
+  <GenericCreateUpdatePage
+    :url="url"
+    :fields="fields"
+    :initial="initial"
+    :fields-meta="fieldsMeta"
+    :clean-form-value="cleanFormValue"
+    :after-get-form-value="afterGetFormValue"
+  />
 </template>
 
 <script>
@@ -25,15 +22,13 @@ export default {
     return {
       loading: true,
       initial: {
-        console: 'true',
-        security: 'RDP',
         comment: 'Hello world',
-        charset: 'utf8',
-        category_type: ['host', 'linux']
+        charset: 'utf8'
+        // category_type: ['host', 'linux']
       },
       fields: [
         [this.$t('common.Basic'), [
-          'name', 'category_type', 'charset', 'meta'
+          'name', 'category_type', 'charset'
         ]],
         [this.$t('assets.Defaults'), [
           'domain_enabled', 'domain_default',
@@ -84,12 +79,13 @@ export default {
         category_type: {
           type: 'cascader',
           label: this.$t('assets.Type'),
+          // disabled: true,
           rules: [
             rules.Required
           ],
           el: {
             multiple: false,
-            options: []
+            options: this.$store.state.assets.assetCategoriesCascader
           }
         },
         domain_default: assetFieldsMeta.domain,
@@ -111,18 +107,16 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('/api/v1/assets/platforms/categories/').then(data => {
-      const options = data.map((item) => {
-        const children = item.children.map(this.toOption)
-        const option = this.toOption(item)
-        option.children = children
-        return option
-      })
-      this.fieldsMeta.category_type.el.options = options
-      this.loading = false
-    })
+    this.setCategoryOnCreate()
   },
   methods: {
+    setCategoryOnCreate() {
+      const category = this.$route.query.category
+      const type = this.$route.query.type
+      if (!category || !type) {
+        return
+      }
+    },
     toOption(choice) {
       return {
         label: choice['display_name'],

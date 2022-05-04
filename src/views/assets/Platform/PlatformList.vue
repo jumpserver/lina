@@ -39,6 +39,16 @@ export default {
                     type: row.type
                   }
                 }
+              },
+              cloneRoute: ({ row }) => {
+                return {
+                  name: 'PlatformCreate',
+                  query: {
+                    category: row.category,
+                    type: row.type,
+                    clone_from: row.id
+                  }
+                }
               }
             }
           }

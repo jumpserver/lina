@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" />
 </template>
 
 <script>
@@ -12,17 +12,10 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const nodesInitial = []
-    if (this.$route.query['node']) {
-      nodesInitial.push(this.$route.query.node)
-    }
-    const platformId = this.$route.query['platform'] || 1
     return {
+      loading: true,
+      platform: {},
       initial: {
-        is_active: true,
-        platform: parseInt(platformId),
-        protocols: ['ssh/22'],
-        nodes: nodesInitial
       },
       fields: [
         [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
@@ -36,6 +29,29 @@ export default {
       url: '/api/v1/assets/assets/',
       createSuccessNextRoute: { name: 'AssetDetail' },
       hasDetailInMsg: false
+    }
+  },
+  mounted() {
+    this.setPlatformInitial()
+  },
+  methods: {
+    async setPlatformInitial() {
+      const nodesInitial = []
+      if (this.$route.query['node']) {
+        nodesInitial.push(this.$route.query.node)
+      }
+      const platformId = this.$route.query['platform'] || 1
+      const url = `/api/v1/assets/platforms/${platformId}/`
+      this.platform = await this.$axios.get(url)
+      const initial = {
+        is_active: true,
+        platform: parseInt(platformId),
+        protocols: this.platform.protocols_default || ['ssh/22'],
+        nodes: nodesInitial,
+        admin_user: this.platform['admin_user_default']
+      }
+      this.initial = initial
+      this.loading = false
     }
   }
 }
