@@ -48,9 +48,11 @@ export default {
         platform: parseInt(platformId),
         protocols: this.platform.protocols_default || ['ssh/22'],
         nodes: nodesInitial,
+        domain: this.platform['domain_default'],
         admin_user: this.platform['admin_user_default']
       }
-      this.fieldsMeta.protocols.el.choices = this.platform
+      const limits = this.platform['type_limits']
+      this.fieldsMeta.protocols.el.choices = limits['protocols_limit']
       this.initial = initial
       this.loading = false
     }

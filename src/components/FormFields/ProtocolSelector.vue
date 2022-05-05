@@ -118,7 +118,7 @@ export default {
           return { name: proto[0], port: proto[1] }
         })
         const protocolsNames = this.protocols.map(item => item.name)
-        items = items.filter(item => protocolsNames[item.name])
+        items = items.filter(item => protocolsNames.indexOf(item.name) > -1)
       }
       if (items.length === 0) {
         items.push({ ...this.protocols[0] })

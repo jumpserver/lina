@@ -496,3 +496,8 @@ a {
 .el-input-group__append, .el-input-group__prepend {
   color: $--color-primary
 }
+
+.el-input.is-disabled .el-input__inner {
+  color: $--color-text-primary;
+  cursor: not-allowed;
+}
