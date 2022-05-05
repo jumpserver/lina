@@ -25,7 +25,7 @@ export default {
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
-      fieldsMeta: assetFieldsMeta,
+      fieldsMeta: assetFieldsMeta(),
       url: '/api/v1/assets/assets/',
       createSuccessNextRoute: { name: 'AssetDetail' },
       hasDetailInMsg: false

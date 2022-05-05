@@ -19,6 +19,7 @@ export default {
   data() {
     const category = this.$route.query.category
     const type = this.$route.query.type
+    const assetMeta = assetFieldsMeta()
     return {
       loading: true,
       initial: {
@@ -30,9 +31,13 @@ export default {
         [this.$t('common.Basic'), [
           'name', 'category_type', 'charset'
         ]],
-        [this.$t('assets.Defaults'), [
-          'domain_enabled', 'domain_default',
-          'protocols_enabled', 'protocols_default',
+        [this.$t('assets.Protocol'), [
+          'protocols_enabled', 'protocols_default'
+        ]],
+        [this.$t('assets.Domain'), [
+          'domain_enabled', 'domain_default'
+        ]],
+        [this.$t('assets.Auth'), [
           'admin_user_enabled', 'admin_user_default'
         ]],
         [this.$t('common.Other'), ['comment']]
@@ -99,14 +104,20 @@ export default {
             }
           }
         },
-        domain_default: assetFieldsMeta.domain,
-        admin_user_default: assetFieldsMeta.admin_user,
-        protocols_default: assetFieldsMeta.protocols,
-        domain_enabled: {
+        admin_user_default: assetMeta.admin_user,
+        protocols_enabled: {
           el: {
-            disabled: true
+            disabled: false
           }
-        }
+        },
+        protocols_default: assetMeta.protocols,
+        domain_enabled: {
+          value: true,
+          el: {
+            disabled: false
+          }
+        },
+        domain_default: assetMeta.domain
       },
       url: `/api/v1/assets/platforms/?category=${category}&type=${type}`,
       cleanFormValue: (values) => {
@@ -129,7 +140,6 @@ export default {
     setCategoryOnCreate() {
       const category = this.$route.query.category
       const type = this.$route.query.type
-      console.log('Category rdop down: ', this.$store.state.assets.assetCategoriesCascader)
       if (!category || !type) {
         return
       }
@@ -145,7 +155,9 @@ export default {
       const hasDomain = limits['has_domain']
       const protocolLimits = limits['protocols_limit']
       this.fieldsMeta.domain_enabled.el.disabled = !hasDomain
-      this.fieldsMeta.domain_default.el.disabled = !hasDomain
+      this.fieldsMeta.domain_enabled.value = !!hasDomain
+
+      this.fieldsMeta.protocols_enabled.el.disabled = protocolLimits.length === 0
       this.fieldsMeta.protocols_default.el.choices = protocolLimits
     }
   }

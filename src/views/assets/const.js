@@ -33,71 +33,73 @@ export const AssetProtocols = [
 
 export const AssetCascader = groupedDropdownToCascader(AssetProtocols)
 
-export const assetFieldsMeta = {
-  protocols: {
-    component: ProtocolSelector,
-    el: {
-      choices: []
-    }
-  },
-  platform: {
-    el: {
-      multiple: false,
-      disabled: true,
-      ajax: {
-        url: '/api/v1/assets/platforms/',
-        transformOption: (item) => {
-          return { label: `${item.name}`, value: item.id }
+export const assetFieldsMeta = () => {
+  return {
+    protocols: {
+      component: ProtocolSelector,
+      el: {
+        choices: []
+      }
+    },
+    platform: {
+      el: {
+        multiple: false,
+        disabled: true,
+        ajax: {
+          url: '/api/v1/assets/platforms/',
+          transformOption: (item) => {
+            return { label: `${item.name}`, value: item.id }
+          }
         }
       }
-    }
-  },
-  domain: {
-    disabled: false,
-    el: {
-      multiple: false,
-      clearable: true,
-      ajax: {
-        url: '/api/v1/assets/domains/'
-      }
-    }
-  },
-  admin_user: {
-    el: {
-      multiple: false,
-      ajax: {
-        url: '/api/v1/assets/system-users/?type=admin',
-        transformOption: (item) => {
-          const username = item.username || '*'
-          return { label: item.name + '(' + username + ')', value: item.id }
+    },
+    domain: {
+      disabled: false,
+      el: {
+        multiple: false,
+        clearable: true,
+        ajax: {
+          url: '/api/v1/assets/domains/'
         }
       }
-    }
-  },
-  nodes: {
-    rules: [rules.RequiredChange],
-    el: {
-      ajax: {
-        url: '/api/v1/assets/nodes/',
-        transformOption: (item) => {
-          return { label: `${item.full_value}`, value: item.id }
-        }
-      },
-      clearable: true
-    }
-  },
-  labels: {
-    el: {
-      ajax: {
-        url: '/api/v1/assets/labels/',
-        transformOption: (item) => {
-          return { label: `${item.name}:${item.value}`, value: item.id }
+    },
+    admin_user: {
+      el: {
+        multiple: false,
+        ajax: {
+          url: '/api/v1/assets/system-users/?type=admin',
+          transformOption: (item) => {
+            const username = item.username || '*'
+            return { label: item.name + '(' + username + ')', value: item.id }
+          }
         }
       }
+    },
+    nodes: {
+      rules: [rules.RequiredChange],
+      el: {
+        ajax: {
+          url: '/api/v1/assets/nodes/',
+          transformOption: (item) => {
+            return { label: `${item.full_value}`, value: item.id }
+          }
+        },
+        clearable: true
+      }
+    },
+    labels: {
+      el: {
+        ajax: {
+          url: '/api/v1/assets/labels/',
+          transformOption: (item) => {
+            return { label: `${item.name}:${item.value}`, value: item.id }
+          }
+        }
+      }
+    },
+    is_active: {
+      type: 'switch'
     }
-  },
-  is_active: {
-    type: 'switch'
   }
 }
 
