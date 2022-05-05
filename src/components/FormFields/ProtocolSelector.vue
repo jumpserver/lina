@@ -54,7 +54,7 @@ export default {
   computed: {
     protocols() {
       return this.choices.map(item => {
-        const proto = item.value.split('/')
+        const proto = item.split('/')
         return { name: proto[0], port: proto[1] }
       })
     },
@@ -83,22 +83,15 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    choices: {
+      handler(value) {
+        this.setDefaultItems()
+      }
     }
   },
   mounted() {
-    if (this.value.length !== 0) {
-      const items = this.value.map(item => {
-        const proto = item.split('/')
-        return { name: proto[0], port: proto[1] }
-      })
-      const protocolsNames = this.protocols.map(item => item.name)
-      this.items = items.filter(item => {
-        return protocolsNames[item.name]
-      })
-    } else {
-      this.items.push({ ...this.protocols[0] })
-    }
-    console.log('Choices: ', this.choices)
+    this.setDefaultItems()
   },
   methods: {
     onInput(val) {
@@ -116,6 +109,21 @@ export default {
       const selected = this.protocols.find(item => item.name === evt)
       item.name = selected.name
       item.port = selected.port
+    },
+    setDefaultItems() {
+      let items = []
+      if (this.value.length !== 0) {
+        items = this.value.map(item => {
+          const proto = item.split('/')
+          return { name: proto[0], port: proto[1] }
+        })
+        const protocolsNames = this.protocols.map(item => item.name)
+        items = items.filter(item => protocolsNames[item.name])
+      }
+      if (items.length === 0) {
+        items.push({ ...this.protocols[0] })
+      }
+      this.items = items
     }
   }
 }

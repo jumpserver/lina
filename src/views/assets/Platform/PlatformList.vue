@@ -58,16 +58,16 @@ export default {
         hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
-        createRoute: 'PlatformCreate',
-        moreCreates: {
-          callback: (item) => {
-            this.$router.push({
-              name: 'PlatformCreate',
-              query: { type: item.name, category: item.category }
-            })
-          },
-          dropdown: this.$store.state.assets.assetCategoriesDropdown
-        }
+        createRoute: 'PlatformCreate'
+        // moreCreates: {
+        //   callback: (item) => {
+        //     this.$router.push({
+        //       name: 'PlatformCreate',
+        //       query: { type: item.name, category: item.category }
+        //     })
+        //   },
+        //   dropdown: this.$store.state.assets.assetCategoriesDropdown
+        // }
       }
     }
   }

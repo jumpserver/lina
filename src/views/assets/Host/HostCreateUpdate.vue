@@ -50,6 +50,7 @@ export default {
         nodes: nodesInitial,
         admin_user: this.platform['admin_user_default']
       }
+      this.fieldsMeta.protocols.el.choices = this.platform
       this.initial = initial
       this.loading = false
     }

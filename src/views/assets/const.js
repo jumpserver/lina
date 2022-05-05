@@ -35,7 +35,10 @@ export const AssetCascader = groupedDropdownToCascader(AssetProtocols)
 
 export const assetFieldsMeta = {
   protocols: {
-    component: ProtocolSelector
+    component: ProtocolSelector,
+    el: {
+      choices: []
+    }
   },
   platform: {
     el: {
@@ -50,6 +53,7 @@ export const assetFieldsMeta = {
     }
   },
   domain: {
+    disabled: false,
     el: {
       multiple: false,
       clearable: true,

@@ -23,8 +23,8 @@ export default {
       loading: true,
       initial: {
         comment: 'Hello world',
-        charset: 'utf8'
-        // category_type: ['host', 'linux']
+        charset: 'utf8',
+        category_type: ['host', 'linux']
       },
       fields: [
         [this.$t('common.Basic'), [
@@ -86,11 +86,27 @@ export default {
           el: {
             multiple: false,
             options: this.$store.state.assets.assetCategoriesCascader
+          },
+          on: {
+            change: ([event], formValue) => {
+              const category = event[0]
+              const type = event[1]
+              const url = `/api/v1/assets/platforms/type-limits/?category=${category}&type=${type}`
+              this.$axios.get(url).then(limits => {
+                this.changeLimits(limits)
+              })
+              console.log('On change: ', event)
+            }
           }
         },
         domain_default: assetFieldsMeta.domain,
         admin_user_default: assetFieldsMeta.admin_user,
-        protocols_default: assetFieldsMeta.protocols
+        protocols_default: assetFieldsMeta.protocols,
+        domain_enabled: {
+          el: {
+            disabled: true
+          }
+        }
       },
       url: `/api/v1/assets/platforms/?category=${category}&type=${type}`,
       cleanFormValue: (values) => {
@@ -113,6 +129,7 @@ export default {
     setCategoryOnCreate() {
       const category = this.$route.query.category
       const type = this.$route.query.type
+      console.log('Category rdop down: ', this.$store.state.assets.assetCategoriesCascader)
       if (!category || !type) {
         return
       }
@@ -122,6 +139,14 @@ export default {
         label: choice['display_name'],
         value: choice['value']
       }
+    },
+    changeLimits(limits) {
+      console.log('Limits: ', limits)
+      const hasDomain = limits['has_domain']
+      const protocolLimits = limits['protocols_limit']
+      this.fieldsMeta.domain_enabled.el.disabled = !hasDomain
+      this.fieldsMeta.domain_default.el.disabled = !hasDomain
+      this.fieldsMeta.protocols_default.el.choices = protocolLimits
     }
   }
 }
