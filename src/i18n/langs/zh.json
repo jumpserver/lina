@@ -1099,6 +1099,7 @@
     "refreshLdapCache":"刷新Ldap缓存，请稍后",
     "LicenseExpired": "许可证已经过期",
     "LicenseWillBe": "许可证即将在 ",
+    "LicenseReachedAssetAmountLimit": "资产数量已经超过许可证数量限制",
     "Expire": " 过期",
     "WeCom": "企业微信",
     "DingTalk": "钉钉",
