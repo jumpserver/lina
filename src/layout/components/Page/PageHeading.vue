@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="globalNotification">
-      <LicenseExpireTip />
+      <LicenseRelatedTip />
       <PasswordExpireTip />
     </slot>
     <div class="page-heading">
@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import LicenseExpireTip from '@/layout/components/Page/LicenseExpireTip'
+import LicenseRelatedTip from '@/layout/components/Page/LicenseRelatedTip'
 import PasswordExpireTip from '@/layout/components/Page/PasswordExpireTip'
 export default {
   name: 'PageHeading',
   components: {
-    LicenseExpireTip,
+    LicenseRelatedTip,
     PasswordExpireTip
   },
   props: {

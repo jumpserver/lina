@@ -1070,6 +1070,7 @@
     "refreshLdapCache":"Refreshing Ldap cache ",
     "LicenseExpired": "License expired",
     "LicenseWillBe": "License will expire at ",
+    "LicenseReachedAssetAmountLimit": "The number of assets has exceeded the license limit",
     "Expire": "Expire",
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",

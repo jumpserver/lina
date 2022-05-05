@@ -1098,6 +1098,7 @@
     "refreshLdapCache": "Ldapキャッシュを更新します。後でお願いします。",
     "LicenseExpired": "ライセンスが期限切れです",
     "LicenseWillBe": "ライセンスはまもなく",
+    "LicenseReachedAssetAmountLimit": "アセットの数がライセンス制限を超えました",
     "Expire": "期限切れ",
     "WeCom": "企業wechat",
     "DingTalk": "ホッチキス",
