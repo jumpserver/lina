@@ -42,11 +42,11 @@ async function checkLogin({ to, from, next }) {
   }
 }
 
-async function getPublicSetting({ to, from, next }) {
+async function getPublicSetting({ to, from, next }, isOpen) {
   // 获取Public settings
   const publicSettings = store.getters.publicSettings
-  if (!publicSettings) {
-    await store.dispatch('settings/getPublicSettings')
+  if (!publicSettings || !isOpen) {
+    await store.dispatch('settings/getPublicSettings', isOpen)
   }
 }
 
@@ -142,8 +142,10 @@ export async function startup({ to, from, next }) {
   await store.dispatch('app/init')
 
   // set page title
-  await getPublicSetting({ to, from, next })
+  // await getOpenPublicSetting({ to, from, next })
+  await getPublicSetting({ to, from, next }, true)
   await checkLogin({ to, from, next })
+  await getPublicSetting({ to, from, next }, false)
   await changeCurrentViewIfNeed({ to, from, next })
   await changeCurrentOrgIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })

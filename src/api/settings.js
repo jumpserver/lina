@@ -68,9 +68,15 @@ export function importLdapUser(data) {
   })
 }
 
-export function getPublicSettings() {
+export function getPublicSettings(isOpen) {
+  let url
+  if (isOpen) {
+    url = '/api/v1/settings/public/open/'
+  } else {
+    url = '/api/v1/settings/public/'
+  }
   return request({
-    url: '/api/v1/settings/public/',
+    url: url,
     method: 'get'
   })
 }
