@@ -425,7 +425,7 @@
       "onlyCSVFilesTips": "Csvファイルのインポートのみサポート",
       "updateSuccessMsg": "更新のインポートに成功しました。合計:{count}",
       "uploadCsvLth10MHelpText": "Csv/xlsxのみアップロードでき、10m以下です",
-      "dragUploadFileInfo": "ファイルをここにドラッグするか、アップロードをクリックします",
+      "dragUploadFileInfo": "ここにファイルをドラッグするか、ここをクリックしてアップロードしてください",
       "hasImportErrorItemMsg": "インポート失敗項目があります。左側のxをクリックして失敗原因を確認し、表をクリックして編集した後、失敗項目のインポートを続けることができます"
     },
     "fileType": "ファイルタイプ",
