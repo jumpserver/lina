@@ -1,6 +1,7 @@
 import DatetimeRangePicker from './DatetimeRangePicker'
 import Link from './Link'
 import PasswordInput from './PasswordInput'
+import EncryptedPassword from './EncryptedPassword'
 import Select2 from './Select2'
 import Swicher from './Swicher'
 import UploadField from './UploadField'
@@ -23,7 +24,8 @@ export default {
   WeekCronSelect,
   UpdateToken,
   JsonEditor,
-  Text
+  Text,
+  EncryptedPassword
 }
 
 export {
@@ -38,5 +40,6 @@ export {
   WeekCronSelect,
   UpdateToken,
   JsonEditor,
-  Text
+  Text,
+  EncryptedPassword
 }

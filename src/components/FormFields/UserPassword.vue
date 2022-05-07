@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       attrs: {
+        showStrengthMeter: true
       }
     }
   },
