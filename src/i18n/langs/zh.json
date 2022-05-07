@@ -426,7 +426,7 @@
       "onlyCSVFilesTips": "仅支持csv文件导入",
       "updateSuccessMsg": "导入更新成功，总共：{count}",
       "uploadCsvLth10MHelpText": "只能上传 csv/xlsx, 且不超过 10M",
-      "dragUploadFileInfo": "将文件拖到此处，或点击上传",
+      "dragUploadFileInfo": "将文件拖到此处，或点击此处上传",
       "hasImportErrorItemMsg": "存在导入失败项，点击左侧 x 查看失败原因，点击表格编辑后，可以继续导入失败项"
     },
     "fileType": "文件类型",

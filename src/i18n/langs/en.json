@@ -413,7 +413,7 @@
       "downloadUpdateTemplateMsg": "Download update template",
       "onlyCSVFilesTips": "Only csv supported",
       "updateSuccessMsg": "Update success, total: {count}",
-      "dragUploadFileInfo": "Drag file here or click to upload",
+      "dragUploadFileInfo": "Drag file here or click here to upload",
       "uploadCsvLth10MHelpText": "csv/xlsx files with a size less than 10M",
       "hasImportErrorItemMsg": "There is an error item, click the x icon to view the details, and continue to import after editing"
     },
