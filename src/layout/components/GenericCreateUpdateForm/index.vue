@@ -16,6 +16,8 @@
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common'
+import { encryptPassword } from '@/utils/jms'
+
 export default {
   name: 'GenericCreateUpdateForm',
   components: {
@@ -218,6 +220,10 @@ export default {
     hasDetailInMsg: {
       type: Boolean,
       default: true
+    },
+    encryptedFields: {
+      type: Array,
+      default: () => ['password', 'token']
     }
   },
   data() {
@@ -265,10 +271,23 @@ export default {
     isUpdateMethod() {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
+    encryptFields(values) {
+      values = { ...values }
+      for (const field of this.encryptedFields) {
+        let value = values[field]
+        if (!value || typeof value !== 'string') {
+          continue
+        }
+        value = encryptPassword(value)
+        values[field] = value
+      }
+      return values
+    },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
       values = this.cleanFormValue(values)
+      values = this.encryptFields(values)
       return handler(values, formName, addContinue)
     },
     defaultOnSubmit(validValues, formName, addContinue) {

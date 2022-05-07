@@ -2,6 +2,7 @@
   <IBox>
     <GenericCreateUpdateForm
       :fields="fields"
+      :encrypted-fields="encryptedFields"
       :fields-meta="fieldsMeta"
       :initial="object"
       :url="url"
@@ -17,6 +18,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import UserPassword from '@/components/FormFields/UserPassword'
 import { IBox } from '@/components'
 import rules from '@/components/DataForm/rules'
+import { PasswordInput } from '@/components/FormFields'
 
 export default {
   name: 'PasswordUpdate',
@@ -34,12 +36,11 @@ export default {
     return {
       url: '/api/v1/users/profile/password/',
       fields: ['old_password', 'new_password', 'new_password_again'],
+      encryptedFields: ['old_password', 'new_password', 'new_password_again'],
       fieldsMeta: {
         old_password: {
           label: this.$t('users.OldPassword'),
-          el: {
-            type: 'password'
-          }
+          component: PasswordInput
         },
         new_password: {
           label: this.$t('users.NewPassword'),
@@ -48,9 +49,7 @@ export default {
         },
         new_password_again: {
           label: this.$t('users.ConfirmPassword'),
-          el: {
-            type: 'password'
-          }
+          component: PasswordInput
         }
       },
       updateSuccessNextRoute: {

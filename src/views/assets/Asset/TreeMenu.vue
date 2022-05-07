@@ -69,7 +69,8 @@ export default {
   props: {
     tree: {
       type: Object,
-      require: true
+      require: true,
+      default: () => ({})
     }
   },
   data() {

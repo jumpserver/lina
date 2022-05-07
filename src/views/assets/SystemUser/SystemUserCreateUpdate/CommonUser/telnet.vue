@@ -29,6 +29,7 @@ export default {
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('common.Other'), ['priority', 'comment']]
       ],
+      encryptedFields: ['password'],
       fieldsMeta: {
         login_mode: fields.login_mode,
         username: fields.username,
