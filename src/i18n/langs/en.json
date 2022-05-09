@@ -249,6 +249,7 @@
     "ReLogin": "Re-Login"
   },
   "common": {
+    "ChangeViewHelpText": "Click to change view",
     "PrivateCloud": "Private cloud",
     "PublicCloud": "Public cloud",
     "Correlation": "Correlation",

@@ -1,31 +1,40 @@
 <template>
-  <el-menu
-    :default-active="currentViewRoute.name"
-    class="menu-main"
-    :class="mode"
-    :mode="mode"
-    @select="handleSelectView"
+  <el-tooltip
+    v-model="iShowTip"
+    :manual="true"
+    :content="tipText"
+    class="item"
+    effect="dark"
+    placement="right"
   >
-    <el-submenu
-      index="2"
-      popper-class="view-switcher"
+    <el-menu
+      :default-active="currentViewRoute.name"
+      class="menu-main"
+      :class="mode"
+      :mode="mode"
+      @select="handleSelectView"
     >
-      <template slot="title">
-        <span class="title-label">
-          <i class="fa fa-bars" />
-          <span>{{ $t('common.nav.View') }}</span>
-        </span>
-      </template>
-      <el-menu-item
-        v-for="view of views"
-        :key="view.name"
-        :index="view.name"
+      <el-submenu
+        index="2"
+        popper-class="view-switcher"
       >
-        <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
-        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
-      </el-menu-item>
-    </el-submenu>
-  </el-menu>
+        <template slot="title">
+          <span class="title-label">
+            <i class="fa fa-bars" />
+            <span>{{ $t('common.nav.View') }}</span>
+          </span>
+        </template>
+        <el-menu-item
+          v-for="view of views"
+          :key="view.name"
+          :index="view.name"
+        >
+          <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
+          <span slot="title" class="icons-title">{{ view.meta.title }}</span>
+        </el-menu-item>
+      </el-submenu>
+    </el-menu>
+  </el-tooltip>
 </template>
 
 <script>
@@ -46,6 +55,7 @@ export default {
   },
   data() {
     return {
+      tipText: this.$t('common.ChangeViewHelpText'),
       showTip: true
     }
   },
@@ -72,6 +82,31 @@ export default {
     },
     currentView() {
       return this.viewsMapper[this.currentViewRoute.name]
+    },
+    tipHasRead: {
+      set(val) {
+        localStorage.setItem('viewSwitcherTip', val)
+      },
+      get() {
+        return localStorage.getItem('viewSwitcherTip')
+      }
+    },
+    iShowTip: {
+      get() {
+        if (this.mode !== 'horizontal') {
+          return false
+        }
+        if (this.views.length < 2) {
+          return false
+        }
+        if (this.tipHasRead) {
+          return false
+        }
+        return this.showTip
+      },
+      set(val) {
+        this.showTip = val
+      }
     }
   },
   methods: {
@@ -80,6 +115,10 @@ export default {
       localStorage.setItem('PreView', key)
       // Next 之前要重置 init 状态，否则这些路由守卫就不走了
       await store.dispatch('app/reset')
+      if (!this.tipHasRead) {
+        this.tipHasRead = '1'
+        this.iShowTip = false
+      }
       this.$router.push(routeName)
     }
   }
