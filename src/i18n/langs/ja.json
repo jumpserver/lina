@@ -254,6 +254,7 @@
     "ReLogin": "再ログイン"
   },
   "common": {
+    "ChangeViewHelpText": "クリックしてさまざまなビューにアクセス",
     "PrivateCloud": "プライベートクラウド",
     "PublicCloud": "パブリッククラウド",
     "Correlation": "関連",

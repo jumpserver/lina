@@ -254,6 +254,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ChangeViewHelpText": "点击切换不同视图",
     "Component": "组件",
     "PrivateCloud": "私有云",
     "PublicCloud": "公有云",
