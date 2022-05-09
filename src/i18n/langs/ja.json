@@ -915,7 +915,7 @@
     "TerminateTaskSendSuccessMsg": "最終タスクが発行されました。後で更新して確認してください。",
     "helpText": {
       "esUrl": "ヒント: 複数のホストがある場合は、カンマ ( , ) で分割します。 (Eg: http://www.jumpserver.a.com:3000、http://www.jumpserver.b.com:3000)",
-      "esIndex": "Esはデフォルトindexを提供します。",
+      "esIndex": "Esはデフォルトindexを提供します。日付による索引の作成を選択した場合、この空は索引接頭辞です。",
       "esDocType": "Esデフォルトのドキュメントタイプ: command"
     }
   },

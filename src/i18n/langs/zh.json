@@ -916,7 +916,7 @@
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {
       "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com:3000,http://www.jumpserver.b.com:3000）",
-      "esIndex": "es提供默认index：jumpserver",
+      "esIndex": "es提供默认index：jumpserver。若选择按日期建索引，此空为索引前缀",
       "esDocType": "es默认文档类型：command"
     }
   },
