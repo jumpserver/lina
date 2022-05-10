@@ -87,7 +87,7 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/settings/ldap/users/',
-        columns: ['username', 'name', 'email', 'existing'],
+        columns: ['username', 'name', 'email', 'groups', 'existing'],
         columnsMeta: {
           username: {
             label: this.$t('users.Username'),
@@ -96,6 +96,13 @@ export default {
           name: {
             label: this.$t('users.Name'),
             width: '180px'
+          },
+          groups: {
+            label: this.$t('users.UserGroups'),
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              return <span> {row.groups.join(' | ')} </span>
+            }
           },
           email: {
             label: this.$t('users.Email')
