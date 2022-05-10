@@ -1,7 +1,5 @@
 import store from '@/store'
 import { constantRoutes } from '@/router'
-import { JSEncrypt } from 'jsencrypt'
-import VueCookie from 'vue-cookie'
 
 export function openTaskPage(taskId) {
   window.open(`/#/ops/celery/task/${taskId}/log/`, '', 'width=900,height=600')
@@ -133,17 +131,4 @@ export function getConstRouteName() {
   }
   addRoutes(names, constRoutes)
   return names
-}
-
-export function encryptPassword(password) {
-  if (!password) {
-    return ''
-  }
-  var rsaPublicKeyText = VueCookie.get('jms_public_key')
-    .replaceAll('"', '')
-  var rsaPublicKey = atob(rsaPublicKeyText)
-  var jsencrypt = new JSEncrypt()
-  jsencrypt.setPublicKey(rsaPublicKey)
-  var value = jsencrypt.encrypt(password)
-  return value
 }
