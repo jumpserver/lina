@@ -16,7 +16,7 @@
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
 import { getUpdateObjURL } from '@/utils/common'
-import { encryptPassword } from '@/utils/jms'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'GenericCreateUpdateForm',
@@ -223,7 +223,7 @@ export default {
     },
     encryptedFields: {
       type: Array,
-      default: () => ['password', 'token']
+      default: () => ['password', 'token', 'private_key']
     }
   },
   data() {

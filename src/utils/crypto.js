@@ -1,5 +1,6 @@
 import { JSEncrypt } from 'jsencrypt'
 import CryptoJS from 'crypto-js'
+import VueCookie from 'vue-cookie'
 
 export function fillKey(key) {
   let keySize = 128
@@ -8,16 +9,16 @@ export function fillKey(key) {
     key = key.slice(0, 32)
     keySize = keySize * 2
   }
-  key = key.slice(0, keySize)
+  const filledKeyLength = keySize / 8
+  if (key.length >= filledKeyLength) {
+    return key.slice(0, filledKeyLength)
+  }
   const filledKey = Buffer.alloc(keySize / 8)
   const keys = Buffer.from(key)
-  if (keys.length < filledKey.length) {
-    for (let i = 0; i < filledKey.length; i++) {
-      filledKey[i] = keys[i]
-    }
-  } else {
-    return keys
+  for (let i = 0; i < keys.length; i++) {
+    filledKey[i] = keys[i]
   }
+  return filledKey
 }
 
 export function aesEncrypt(text, originKey) {
@@ -32,6 +33,24 @@ export function rsaEncrypt(text, pubKey) {
   const jsEncrypt = new JSEncrypt()
   jsEncrypt.setPublicKey(pubKey)
   return jsEncrypt.encrypt(text)
+}
+
+export function getCookie(name) {
+  return VueCookie.get(name)
+}
+
+export function encryptPassword(password) {
+  if (!password) {
+    return ''
+  }
+  const aesKey = (Math.random() + 1).toString(36).substring(2)
+  // public key 是 base64 存储的
+  const rsaPublicKeyText = getCookie('jms_public_key')
+    .replaceAll('"', '')
+  const rsaPublicKey = atob(rsaPublicKeyText)
+  const keyCipher = rsaEncrypt(aesKey, rsaPublicKey)
+  const passwordCipher = aesEncrypt(password, aesKey)
+  return `${keyCipher}:${passwordCipher}`
 }
 
 window.aesEncrypt = aesEncrypt
