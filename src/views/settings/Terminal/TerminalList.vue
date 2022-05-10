@@ -79,6 +79,7 @@ export default {
           onSubmit: function(validValues) {
             const url = '/api/v1/terminal/terminals/'
             const msg = this.$t('common.updateSuccessMsg')
+            validValues = Object.values(validValues)
             this.$axios.patch(url, validValues).then((res) => {
               this.$message.success(msg)
               this.dialogSettings.visible = false
