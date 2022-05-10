@@ -5,7 +5,7 @@
     :content="tipText"
     class="item"
     effect="dark"
-    placement="right"
+    placement="bottom-start"
   >
     <el-menu
       :default-active="currentViewRoute.name"
