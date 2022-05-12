@@ -22,7 +22,7 @@ async function checkLogin({ to, from, next }) {
   }
   // Determine whether the user has logged in
   const hasToken = getTokenFromCookie()
-  if (!hasToken) {
+  if (!hasToken || hasToken === 'null') {
     request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
       window.location = process.env.VUE_APP_LOGIN_PATH
     })
@@ -47,7 +47,7 @@ function afterGetSetting(setting) {
   if (setting['SESSION_EXPIRE_AT_BROWSER_CLOSE']) {
     setInterval(() => {
       const csrfToken = getTokenFromCookie()
-      setTokenToCookie(csrfToken, '30s')
+      if (csrfToken) { setTokenToCookie(csrfToken, '30s') }
     }, 10 * 1000)
   }
 }
