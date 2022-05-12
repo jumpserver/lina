@@ -18,7 +18,7 @@ export default {
           'name', 'host',
           'http_port', 'https_port', 'ssh_port',
           'rdp_port', 'mysql_port', 'mariadb_port',
-          'postgresql_port',
+          'postgresql_port', 'redis_port',
           'date_created', 'comment', 'actions'
         ],
         columnsShow: {
