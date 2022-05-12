@@ -158,7 +158,8 @@ export default {
       },
       headerActions: {
         hasLeftActions: this.hasLeftActions,
-        hasMoreActions: false,
+        hasMoreActions: true,
+        hasCreate: false,
         hasImport: false,
         hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
         exportOptions: {

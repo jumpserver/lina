@@ -57,9 +57,6 @@ export default {
       showAuthInfo: false
     }
   },
-  mounted() {
-    this.getAuthInfo()
-  },
   methods: {
     getAuthInfo() {
       const url = `/api/v1/applications/account-secrets/${this.account.id}/`

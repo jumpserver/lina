@@ -1,5 +1,5 @@
 <template>
-  <password
+  <Password
     :value="value"
     v-bind="iAttrs"
     class="el-input password-input"
@@ -32,7 +32,8 @@ export default {
       const defaultAttrs = {
         secureLength: 7,
         defaultClass: 'el-input__inner',
-        toggle: true
+        toggle: true,
+        showStrengthMeter: false
       }
       return Object.assign(defaultAttrs, this.attrs)
     }

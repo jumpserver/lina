@@ -254,6 +254,7 @@
     "ReLogin": "再ログイン"
   },
   "common": {
+    "ChangeViewHelpText": "クリックしてさまざまなビューにアクセス",
     "PrivateCloud": "プライベートクラウド",
     "PublicCloud": "パブリッククラウド",
     "Correlation": "関連",
@@ -425,13 +426,13 @@
       "onlyCSVFilesTips": "Csvファイルのインポートのみサポート",
       "updateSuccessMsg": "更新のインポートに成功しました。合計:{count}",
       "uploadCsvLth10MHelpText": "Csv/xlsxのみアップロードでき、10m以下です",
-      "dragUploadFileInfo": "ファイルをここにドラッグするか、アップロードをクリックします",
+      "dragUploadFileInfo": "ここにファイルをドラッグするか、ここをクリックしてアップロードしてください",
       "hasImportErrorItemMsg": "インポート失敗項目があります。左側のxをクリックして失敗原因を確認し、表をクリックして編集した後、失敗項目のインポートを続けることができます"
     },
     "fileType": "ファイルタイプ",
     "isValid": "有効",
     "nav": {
-      "TempPassword": "いちじパスワード",
+      "TempPassword": "一時パスワード",
       "APIKey": "APIキー",
       "Workbench": "作業台",
       "Navigation": "ナビゲーション",
@@ -914,7 +915,7 @@
     "TerminateTaskSendSuccessMsg": "最終タスクが発行されました。後で更新して確認してください。",
     "helpText": {
       "esUrl": "ヒント: 複数のホストがある場合は、カンマ ( , ) で分割します。 (Eg: http://www.jumpserver.a.com:3000、http://www.jumpserver.b.com:3000)",
-      "esIndex": "Esはデフォルトindexを提供します。",
+      "esIndex": "Esはデフォルトindexを提供します。日付による索引の作成を選択した場合、この空は索引接頭辞です。",
       "esDocType": "Esデフォルトのドキュメントタイプ: command"
     }
   },
@@ -1020,7 +1021,7 @@
     "LDAPServerInfo": "LDAPサーバー",
     "LDAPUser": "LDAPユーザー",
     "helpText": {
-      "TempPassword": "一時パスワードの有効期間は300秒で、有効期間内に再利用できます。",
+      "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",
       "authLdapSearchFilter": "可能なオプションは (cnまたはuidまたはsamaccount tname = %(user)s) です",
       "authLdapSearchOu": "| を使用して各OUを区切る",
@@ -1098,6 +1099,7 @@
     "refreshLdapCache": "Ldapキャッシュを更新します。後でお願いします。",
     "LicenseExpired": "ライセンスが期限切れです",
     "LicenseWillBe": "ライセンスはまもなく",
+    "LicenseReachedAssetAmountLimit": "アセットの数がライセンス制限を超えました",
     "Expire": "期限切れ",
     "WeCom": "企業wechat",
     "DingTalk": "ホッチキス",

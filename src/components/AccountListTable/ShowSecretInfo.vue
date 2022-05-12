@@ -60,9 +60,6 @@ export default {
       showAuthInfo: false
     }
   },
-  mounted() {
-    this.getAuthInfo()
-  },
   methods: {
     getAuthInfo() {
       const url = `/api/v1/assets/account-secrets/${this.account.id}/`

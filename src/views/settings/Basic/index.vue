@@ -23,7 +23,7 @@ export default {
       fields: [
         [
           this.$t('common.BasicInfo'), [
-            'SITE_URL', 'USER_GUIDE_URL',
+            'SITE_URL', // 'USER_GUIDE_URL',
             'GLOBAL_ORG_DISPLAY_NAME'
           ]
         ],

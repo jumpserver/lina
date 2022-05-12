@@ -31,7 +31,7 @@ export default {
           helpText: this.$t('sessions.SetToDefaultStorage')
         },
         meta: {
-          fields: ['HOSTS', 'INDEX', 'IGNORE_VERIFY_CERTS'],
+          fields: ['HOSTS', 'INDEX_BY_DATE', 'INDEX', 'IGNORE_VERIFY_CERTS'],
           fieldsMeta: {
             HOSTS: {
               helpText: this.$t('sessions.helpText.esUrl')

@@ -254,6 +254,7 @@
     "ReLogin": "重新登录"
   },
   "common": {
+    "ChangeViewHelpText": "点击切换不同视图",
     "Component": "组件",
     "PrivateCloud": "私有云",
     "PublicCloud": "公有云",
@@ -426,7 +427,7 @@
       "onlyCSVFilesTips": "仅支持csv文件导入",
       "updateSuccessMsg": "导入更新成功，总共：{count}",
       "uploadCsvLth10MHelpText": "只能上传 csv/xlsx, 且不超过 10M",
-      "dragUploadFileInfo": "将文件拖到此处，或点击上传",
+      "dragUploadFileInfo": "将文件拖到此处，或点击此处上传",
       "hasImportErrorItemMsg": "存在导入失败项，点击左侧 x 查看失败原因，点击表格编辑后，可以继续导入失败项"
     },
     "fileType": "文件类型",
@@ -915,7 +916,7 @@
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {
       "esUrl": "提示：如果有多台主机，请使用逗号 ( , ) 进行分割。（eg: http://www.jumpserver.a.com:3000,http://www.jumpserver.b.com:3000）",
-      "esIndex": "es提供默认index：jumpserver",
+      "esIndex": "es提供默认index：jumpserver。若选择按日期建索引，此空为索引前缀",
       "esDocType": "es默认文档类型：command"
     }
   },
@@ -1021,7 +1022,7 @@
     "LDAPServerInfo": "LDAP 服务器",
     "LDAPUser": "LDAP 用户",
     "helpText": {
-      "TempPassword": "临时密码有效期为 300 秒，有效期内可重复使用",
+      "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",
@@ -1099,6 +1100,7 @@
     "refreshLdapCache":"刷新Ldap缓存，请稍后",
     "LicenseExpired": "许可证已经过期",
     "LicenseWillBe": "许可证即将在 ",
+    "LicenseReachedAssetAmountLimit": "资产数量已经超过许可证数量限制",
     "Expire": " 过期",
     "WeCom": "企业微信",
     "DingTalk": "钉钉",

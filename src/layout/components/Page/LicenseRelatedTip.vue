@@ -3,6 +3,9 @@
     <el-alert v-if="isExpire" type="error">
       {{ isExpire }}
     </el-alert>
+    <el-alert v-if="reachedAssetAmountLimit" type="error">
+      {{ reachedAssetAmountLimit }}
+    </el-alert>
   </div>
 </template>
 
@@ -11,7 +14,7 @@ import { toSafeLocalDateStr } from '@/utils/common'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'LicenseExpireTip',
+  name: 'LicenseRelatedTip',
   data() {
     return {
       loading: true,
@@ -24,7 +27,7 @@ export default {
       'currentUser'
     ]),
     isExpire() {
-      if (!this.publicSettings.XPACK_ENABLED || this.currentUser.role !== 'Admin') {
+      if (!this.publicSettings.XPACK_ENABLED || !this.$hasPerm('settings.change_license')) {
         return false
       }
       const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
@@ -35,10 +38,19 @@ export default {
         return this.$t('setting.LicenseWillBe') + this.licenseData.date_expired + this.$t('setting.Expire')
       }
       return false
+    },
+    reachedAssetAmountLimit() {
+      if (!this.publicSettings.XPACK_ENABLED || !this.$hasPerm('settings.change_license')) {
+        return false
+      }
+      if (this.licenseData['current_asset_count'] > this.licenseData.asset_count) {
+        return this.$t('setting.LicenseReachedAssetAmountLimit')
+      }
+      return false
     }
   },
   mounted() {
-    if (this.publicSettings.XPACK_ENABLED && this.currentUser.role === 'Admin') {
+    if (this.publicSettings.XPACK_ENABLED && this.$hasPerm('settings.change_license')) {
       this.$axios.get('/api/v1/xpack/license/detail').then(res => {
         this.licenseData = res
       }).finally(() => {

@@ -38,6 +38,10 @@ export default {
     hasClone: {
       type: Boolean,
       default: false
+    },
+    systemUserDisabled: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -84,7 +88,7 @@ export default {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
-              can: this.$hasPerm('assets.view_systemuser'),
+              can: this.systemUserDisabled && this.$hasPerm('assets.view_systemuser'),
               getTitle({ row }) {
                 return row.systemuser_display
               },
