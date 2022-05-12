@@ -4,10 +4,11 @@ import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
-import { getTokenFromCookie } from '@/utils/auth'
+import { getTokenFromCookie, setTokenToCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
+import request from '@/utils/request'
 
 const whiteList = ['/login', process.env.VUE_APP_LOGIN_PATH] // no redirect whitelist
 
@@ -19,12 +20,12 @@ async function checkLogin({ to, from, next }) {
   if (whiteList.indexOf(to.path) !== -1) {
     next()
   }
-  // determine whether the user has logged in
+  // Determine whether the user has logged in
   const hasToken = getTokenFromCookie()
   if (!hasToken) {
-    setTimeout(() => {
+    request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
       window.location = process.env.VUE_APP_LOGIN_PATH
-    }, 100)
+    })
     return reject('No token found in cookie')
   }
 
@@ -42,12 +43,22 @@ async function checkLogin({ to, from, next }) {
   }
 }
 
+function afterGetSetting(setting) {
+  if (setting['SESSION_EXPIRE_AT_BROWSER_CLOSE']) {
+    setInterval(() => {
+      const csrfToken = getTokenFromCookie()
+      setTokenToCookie(csrfToken, '30s')
+    }, 10 * 1000)
+  }
+}
+
 async function getPublicSetting({ to, from, next }, isOpen) {
   // 获取Public settings
   const publicSettings = store.getters.publicSettings
   if (!publicSettings || !isOpen) {
     await store.dispatch('settings/getPublicSettings', isOpen)
   }
+  afterGetSetting(store.getters.publicSettings)
 }
 
 async function refreshCurrentOrg() {

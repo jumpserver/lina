@@ -1,15 +1,19 @@
 import VueCookie from 'vue-cookie'
 
-const TOKEN_KEY = 'csrftoken'
 const CURRENT_ORG_KEY = 'jms_current_org'
 const CURRENT_ROLE_KEY = 'jms_current_role'
+let cookieNamePrefix = VueCookie.get('SESSION_COOKIE_NAME_PREFIX')
+if (!cookieNamePrefix || ['""', "''"].indexOf(cookieNamePrefix) > -1) {
+  cookieNamePrefix = ''
+}
+const TOKEN_KEY = `${cookieNamePrefix}csrftoken`
 
 export function getTokenFromCookie() {
-  let cookieNamePrefix = VueCookie.get('SESSION_COOKIE_NAME_PREFIX')
-  if (!cookieNamePrefix || ['""', "''"].indexOf(cookieNamePrefix) > -1) {
-    cookieNamePrefix = ''
-  }
-  return VueCookie.get(cookieNamePrefix + TOKEN_KEY)
+  return VueCookie.get(TOKEN_KEY)
+}
+
+export function setTokenToCookie(value, expires) {
+  return VueCookie.set(TOKEN_KEY, value, { expires: expires })
 }
 
 export function getCurrentRoleLocal(username) {
