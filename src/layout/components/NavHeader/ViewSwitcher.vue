@@ -54,7 +54,7 @@ export default {
       tipText: this.$t('common.ChangeViewHelpText'),
       showTip: true,
       currentViewName: '',
-      isActive: JSON.parse(localStorage.getItem('showViewSwitcher')) || false
+      isActive: JSON.parse(localStorage.getItem('showViewSwitcher')) || true
     }
   },
   computed: {
@@ -122,7 +122,7 @@ export default {
       this.$router.push(routeName)
     },
     onSwitchChange: _.throttle(function() {
-      this.isActive = !this.isActive
+      // this.isActive = !this.isActive
       localStorage.setItem('showViewSwitcher', JSON.stringify(this.isActive))
     }, 300)
   }
@@ -200,6 +200,7 @@ export default {
     display: inline-block;
     .nav-item {
       display: inline-block;
+      height: 55px;
       color: #909399;
       font-size: 14px;
       cursor: pointer;
@@ -215,6 +216,7 @@ export default {
     }
     .nav-active {
       color: #333;
+      border-bottom: 2px solid #1ab394;
     }
     .nav-icon {
       display: inline-block;
