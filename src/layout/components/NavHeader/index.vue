@@ -89,6 +89,7 @@ export default {
     background: #f3f3f4;
     .navbar-left {
       float: left;
+      padding-left: 25px;
       .left-item {
         line-height: 55px;
         display: inline-block;

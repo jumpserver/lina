@@ -97,7 +97,7 @@ export function isSameView(to, from) {
 
 export function getPropView() {
   const hasPermedViews = getPermedViews()
-  const preView = localStorage.getItem('PreView')
+  const preView = JSON.parse(localStorage.getItem('PreView'))
   const hasPerm = hasPermedViews.indexOf(preView) > -1
   if (hasPerm) {
     return preView

@@ -7,33 +7,29 @@
     effect="dark"
     placement="bottom-start"
   >
-    <el-menu
-      :default-active="currentViewRoute.name"
-      class="menu-main"
-      :class="mode"
-      :mode="mode"
-      @select="handleSelectView"
-    >
-      <el-submenu
-        index="2"
-        popper-class="view-switcher"
-      >
-        <template slot="title">
-          <span class="title-label">
-            <i class="fa fa-bars" />
-            <span>{{ $t('common.nav.View') }}</span>
-          </span>
-        </template>
-        <el-menu-item
-          v-for="view of views"
-          :key="view.name"
-          :index="view.name"
+    <div class="content">
+      <span class="switch" @click="onSwitchChange">
+        <i class="fa fa-bars" :class="{'switch-active':isActive}" />
+      </span>
+      <transition name="slide-fade">
+        <ul
+          v-show="isActive"
+          class="nav"
         >
-          <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
-          <span slot="title" class="icons-title">{{ view.meta.title }}</span>
-        </el-menu-item>
-      </el-submenu>
-    </el-menu>
+          <li
+            v-for="(view, index) of views"
+            :key="view.name"
+            :index="index"
+            class="nav-item"
+            :class="{'nav-active': view.name == currentViewName}"
+            @click="handleSelectView(view)"
+          >
+            <i class="nav-icon" :class="view.meta.icon" />
+            <span class="nav-title">{{ view.meta.title }}</span>
+          </li>
+        </ul>
+      </transition>
+    </div>
   </el-tooltip>
 </template>
 
@@ -56,7 +52,9 @@ export default {
   data() {
     return {
       tipText: this.$t('common.ChangeViewHelpText'),
-      showTip: true
+      showTip: true,
+      currentViewName: '',
+      isActive: JSON.parse(localStorage.getItem('showViewSwitcher')) || false
     }
   },
   computed: {
@@ -79,9 +77,6 @@ export default {
         mapper[view.name] = view
       }
       return mapper
-    },
-    currentView() {
-      return this.viewsMapper[this.currentViewRoute.name]
     },
     tipHasRead: {
       set(val) {
@@ -109,10 +104,15 @@ export default {
       }
     }
   },
+  created() {
+    const getcurrentViewName = JSON.parse(localStorage.getItem('PreView'))?.name || this.currentViewRoute?.name || ''
+    this.currentViewName = getcurrentViewName
+  },
   methods: {
-    async handleSelectView(key, keyPath) {
-      const routeName = this.viewsMapper[key] || '/'
-      localStorage.setItem('PreView', key)
+    async handleSelectView(key) {
+      const routeName = key || '/'
+      this.currentViewName = key?.name
+      localStorage.setItem('PreView', JSON.stringify(key))
       // Next 之前要重置 init 状态，否则这些路由守卫就不走了
       await store.dispatch('app/reset')
       if (!this.tipHasRead) {
@@ -120,7 +120,11 @@ export default {
         this.iShowTip = false
       }
       this.$router.push(routeName)
-    }
+    },
+    onSwitchChange: _.throttle(function() {
+      this.isActive = !this.isActive
+      localStorage.setItem('showViewSwitcher', JSON.stringify(this.isActive))
+    }, 300)
   }
 }
 </script>
@@ -128,7 +132,6 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  // margin-top: -5px;
   ::v-deep .el-submenu .el-submenu__title {
     height: 55px;
     line-height: 55px;
@@ -170,19 +173,69 @@ export default {
   vertical-align: unset;
   color: #606266!important;
 }
-.icons {
-  display: block;
-  font-size: 23px;
-  text-align: center;
-}
-.icons-title {
-  display: inline-block;
-  font-size: 14px;
-}
 .el-menu-item.is-active {
   font-weight: bold;
 }
 .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
   right: 10px;
+}
+.content{
+  padding-right: 16px;
+  .switch {
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    vertical-align: top;
+    font-size: 18px;
+    transition: all .2s ease-in-out;
+    &:hover {
+      color: #333;
+    }
+    .switch-active {
+      transform: rotate(90deg);
+    }
+  }
+  .nav {
+    padding: 0;
+    display: inline-block;
+    .nav-item {
+      display: inline-block;
+      color: #909399;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: all .3s ease-in-out;
+      &:last-child {
+        padding-right: 0;
+      }
+      &:hover {
+        color: #676a6c;
+        background-color: #e6e6e6;
+      }
+    }
+    .nav-active {
+      color: #333;
+    }
+    .nav-icon {
+      display: inline-block;
+      font-size: 16px;
+      text-align: center;
+      .nav-title {
+        display: inline-block;
+        font-size: 14px;
+        color: #909399;
+      }
+    }
+  }
+  .slide-fade-enter-active {
+    transition: all .3s cubic-bezier(1, .5, .8, .8);;
+  }
+  .slide-fade-leave-active {
+    transition: all .3s cubic-bezier(1, 0.5, .8, 1);
+  }
+  .slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(1px);
+    opacity: 0;
+  }
 }
 </style>
