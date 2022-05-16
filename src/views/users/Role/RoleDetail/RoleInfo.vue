@@ -86,7 +86,7 @@ export default {
         'tickets.change_ticketflow': ['users.view_user', 'tickets.view_ticket'],
         'tickets.view_ticket': [
           'assets.match_asset', 'assets.match_node', 'assets.match_systemuser',
-          'applications.match_application'
+          'applications.match_application', 'rbac.view_workbench'
         ],
         'tickets.view_ticketflow': ['tickets.view_ticket'],
         'users.invite_user': [
