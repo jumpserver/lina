@@ -31,6 +31,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { UpdateToken, UploadKey } from '@/components/FormFields'
+import { encryptPassword } from '@/utils/crypto'
 export default {
   name: 'UpdateSecretInfo',
   components: {
@@ -61,10 +62,10 @@ export default {
     handleConfirm() {
       const data = {}
       if (this.authInfo.password !== '') {
-        data.password = this.authInfo.password
+        data.password = encryptPassword(this.authInfo.password)
       }
       if (this.authInfo.private_key !== '') {
-        data.private_key = this.authInfo.private_key
+        data.private_key = encryptPassword(this.authInfo.private_key)
         if (this.authInfo.passphrase) data.passphrase = this.authInfo.passphrase
       }
       this.$axios.patch(
