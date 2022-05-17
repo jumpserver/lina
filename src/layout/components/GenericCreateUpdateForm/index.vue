@@ -272,6 +272,10 @@ export default {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
     encryptFields(values) {
+      // 批量提交，clean 后可能是个数组
+      if (values instanceof Array) {
+        return values.map((item) => this.encryptFields(item))
+      }
       values = { ...values }
       for (const field of this.encryptedFields) {
         let value = values[field]
