@@ -53,7 +53,7 @@ export default {
         }
       } catch (error) {
         this.isShow = false
-        console.log(error, 'error')
+        // debug(error, 'error')
       }
     }
   }

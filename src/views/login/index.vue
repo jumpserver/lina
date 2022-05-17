@@ -116,7 +116,7 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          // debug('error submit!!')
           return false
         }
       })

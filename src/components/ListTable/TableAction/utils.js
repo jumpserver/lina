@@ -1,5 +1,5 @@
 export function cleanActions(actions, canDefaults, { selectedRows, reloadTable }) {
-  // console.log('Start clean actions: ', selectedRows.length, reloadTable)
+  // debug('Start clean actions: ', selectedRows.length, reloadTable)
   const cleanedActions = []
   const cloneActions = _.cloneDeep(actions)
   cloneActions.forEach((action) => {

@@ -172,7 +172,7 @@ export default {
       })
     },
     hideMenu() {
-      console.log('Tree: ', this.tree)
+      // debug('Tree: ', this.tree)
       this.tree.hideRMenu()
     },
     getSelectedNodes() {

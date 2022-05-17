@@ -36,7 +36,7 @@ function beforeRequestAddTimezone(config) {
   try {
     config.headers['X-TZ'] = Intl.DateTimeFormat().resolvedOptions().timeZone
   } catch (e) {
-    console.log('Current browser not support Intl tools')
+    // debug('Current browser not support Intl tools')
   }
 }
 
@@ -51,7 +51,7 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
+    // debug(error) // for debug
     return Promise.reject(error)
   }
 )
