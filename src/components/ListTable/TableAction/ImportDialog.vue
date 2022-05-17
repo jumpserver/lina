@@ -205,8 +205,9 @@ export default {
       }
       return this.url.indexOf('?') === -1 ? `${this.url}?${query}` : `${this.url}&${query}`
     },
+    // eslint-disable-next-line handle-callback-err
     catchError(error) {
-      console.log(error)
+      // debug(error)
     },
     onSuccess(msg) {
       this.errorMsg = ''

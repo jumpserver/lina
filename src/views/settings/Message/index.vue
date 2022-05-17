@@ -101,8 +101,8 @@ export default {
       ).then(newSub => {
         const msgType = this.idMessageTypeMapper[newSub.message_type]
         msgType.receivers = newSub.receivers
-      }).catch(err => {
-        console.log(err)
+      }).catch(() => {
+        // debug(err)
       })
     },
     getNameDisplay(header) {
