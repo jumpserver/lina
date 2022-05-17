@@ -4,7 +4,7 @@ import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
-import { getTokenFromCookie, setTokenToCookie } from '@/utils/auth'
+import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
@@ -44,12 +44,13 @@ async function checkLogin({ to, from, next }) {
 }
 
 function afterGetSetting(setting) {
-  if (setting['SESSION_EXPIRE_AT_BROWSER_CLOSE']) {
-    setInterval(() => {
-      const csrfToken = getTokenFromCookie()
-      if (csrfToken) { setTokenToCookie(csrfToken, '30s') }
-    }, 10 * 1000)
-  }
+  // if (setting['SESSION_EXPIRE_AT_BROWSER_CLOSE']) {
+  //   setInterval(() => {
+  //     const csrfToken = getTokenFromCookie()
+  //     Vue.$log.debug('Refresh csrf token expiration: ', csrfToken)
+  //     if (csrfToken) { setTokenToCookie(csrfToken, '30s') }
+  //   }, 10 * 1000)
+  // }
 }
 
 async function getPublicSetting({ to, from, next }, isOpen) {
