@@ -29,6 +29,7 @@ export default {
         ],
         [
           this.$t('setting.Feature'), [
+            'TICKETS_ENABLED',
             'ANNOUNCEMENT_ENABLED'
           ]
         ]
@@ -38,6 +39,11 @@ export default {
           rules: [rules.Required]
         },
         GLOBAL_ORG_DISPLAY_NAME: {
+          hidden: () => {
+            return !this.$store.getters.hasValidLicense
+          }
+        },
+        TICKETS_ENABLED: {
           hidden: () => {
             return !this.$store.getters.hasValidLicense
           }
