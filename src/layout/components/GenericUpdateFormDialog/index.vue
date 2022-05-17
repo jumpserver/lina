@@ -98,11 +98,11 @@ export default {
       const vm = this
       return {
         submitMethod: () => 'patch',
-        cleanFormValue: function(value) {
+        cleanFormValue: (value) => {
           const filterValue = {}
-          Object.keys(value).filter((key) => vm.checkedFields?.includes(key)).forEach((key) => {
-            filterValue[key] = value[key]
-          })
+          Object.keys(value)
+            .filter((key) => vm.checkedFields?.includes(key))
+            .forEach((key) => { filterValue[key] = value[key] })
           const formValue = []
           let object = {}
           for (const row of vm.selectedRows) {
