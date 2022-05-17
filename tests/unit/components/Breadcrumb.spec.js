@@ -79,7 +79,7 @@ describe('Breadcrumb.vue', () => {
   //   router.push('/menu/menu1/menu1-2/menu1-2-2')
   //   const breadcrumbArray = wrapper.findAll('.el-breadcrumb__inner')
   //   const second = breadcrumbArray.at(1)
-  //   console.log(breadcrumbArray)
+  //   // debug(breadcrumbArray)
   //   const href = second.find('a').attributes().href
   //   expect(href).toBe('#/menu/menu1')
   // })

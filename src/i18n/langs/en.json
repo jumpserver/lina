@@ -1379,6 +1379,7 @@
       "HuaweiPrivatecloud": "Huawei Private Cloud",
       "OpenStack": "OpenStack",
       "GCP": "Google Cloud Platform",
+      "FC": "Fusion Compute",
       "AWS_China": "AWS(China)",
       "AWS_Int": "AWS(International)",
       "HuaweiCloud": "Huawei Cloud",

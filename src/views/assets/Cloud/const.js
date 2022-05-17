@@ -13,6 +13,7 @@ export const qingcloud_private = 'qingcloud_private'
 export const huaweicloud_private = 'huaweicloud_private'
 export const openstack = 'openstack'
 export const gcp = 'gcp'
+export const fc = 'fc'
 export const baiducloud = 'baiducloud'
 export const jdcloud = 'jdcloud'
 
@@ -91,5 +92,10 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: gcp,
     title: i18n.t('xpack.Cloud.GCP'),
     attrs: ['service_account_key']
+  },
+  [fc]: {
+    name: fc,
+    title: i18n.t('xpack.Cloud.FC'),
+    attrs: ['api_endpoint', 'username', 'password']
   }
 }

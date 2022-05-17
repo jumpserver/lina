@@ -1422,6 +1422,7 @@
       "HuaweiPrivatecloud": "ファーウェイプライベートクラウド",
       "OpenStack": "OpenStack",
       "GCP": "Googleクラウド",
+      "FC": "Fusion Compute",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS (国際)",
       "HuaweiCloud": "ファーウェイ雲",

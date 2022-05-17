@@ -82,7 +82,7 @@ const actions = {
         commit('SET_PROFILE', response)
         resolve(response)
       }).catch(error => {
-        // console.log(error)
+        // debug(error)
         reject(error)
       })
     })
