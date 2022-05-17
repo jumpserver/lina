@@ -272,6 +272,7 @@ export default {
       return ['put', 'patch'].indexOf(this.method.toLowerCase()) > -1
     },
     encryptFields(values) {
+      const flag = values instanceof Array
       values = { ...values }
       for (const field of this.encryptedFields) {
         let value = values[field]
@@ -281,6 +282,7 @@ export default {
         value = encryptPassword(value)
         values[field] = value
       }
+      values = flag ? Object.values(values) : values
       return values
     },
     handleSubmit(values, formName, addContinue) {
