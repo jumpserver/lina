@@ -61,6 +61,7 @@ export default {
         return validValues
       },
       cleanFormValue(value) {
+        value.meta.INDEX = value.meta?.INDEX?.toLowerCase()
         value.meta.HOSTS = value.meta.HOSTS.split(',').map(item => (item.trim()))
         return value
       }
