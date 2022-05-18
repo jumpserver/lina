@@ -95,6 +95,7 @@ export default {
   computed: {
     iVisible: {
       set(val) {
+        this.$parent?.hideMenu()
         this.$emit('update:visible', val)
       },
       get() {
@@ -133,6 +134,7 @@ export default {
         $('#tree-refresh').trigger('click')
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
+        this.$parent?.hideMenu()
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
       })
     },

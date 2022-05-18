@@ -78,7 +78,7 @@ export default {
       default: () => []
     },
     canCreate: {
-      type: Boolean,
+      type: [Boolean, Function],
       default: false
     },
     canBulkUpdate: {

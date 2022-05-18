@@ -2,9 +2,9 @@
 import store from '@/store'
 import router, { resetRouter } from '@/router'
 import Vue from 'vue'
+import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
 import 'nprogress/nprogress.css' // progress bar style
-import { getTokenFromCookie } from '@/utils/auth'
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'
@@ -21,14 +21,24 @@ async function checkLogin({ to, from, next }) {
     next()
   }
   // Determine whether the user has logged in
-  const hasToken = getTokenFromCookie()
-  if (!hasToken || hasToken === 'null') {
+  const sessionExpire = VueCookie.get('jms_session_expire')
+  if (!sessionExpire) {
     request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
       window.location = process.env.VUE_APP_LOGIN_PATH
     })
-    return reject('No token found in cookie')
+    return reject('No session mark found in cookie')
+  } else if (sessionExpire === 'close') {
+    let startTime = new Date().getTime()
+    setInterval(() => {
+      const endTime = new Date().getTime()
+      const delta = (endTime - startTime)
+      startTime = endTime
+      Vue.$log.debug('Set session expire: ', delta)
+      VueCookie.set('jms_session_expire', 'close', { expires: '2m' })
+    }, 10 * 1000)
+  } else if (sessionExpire === 'age') {
+    Vue.$log.debug('Session expire on age')
   }
-
   try {
     return await store.dispatch('users/getProfile')
   } catch (e) {
@@ -43,23 +53,12 @@ async function checkLogin({ to, from, next }) {
   }
 }
 
-function afterGetSetting(setting) {
-  // if (setting['SESSION_EXPIRE_AT_BROWSER_CLOSE']) {
-  //   setInterval(() => {
-  //     const csrfToken = getTokenFromCookie()
-  //     Vue.$log.debug('Refresh csrf token expiration: ', csrfToken)
-  //     if (csrfToken) { setTokenToCookie(csrfToken, '30s') }
-  //   }, 10 * 1000)
-  // }
-}
-
 async function getPublicSetting({ to, from, next }, isOpen) {
   // 获取Public settings
   const publicSettings = store.getters.publicSettings
   if (!publicSettings || !isOpen) {
     await store.dispatch('settings/getPublicSettings', isOpen)
   }
-  afterGetSetting(store.getters.publicSettings)
 }
 
 async function refreshCurrentOrg() {
