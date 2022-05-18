@@ -31,6 +31,7 @@ export default {
       ],
       fieldsMeta: {
         attrs: {
+          encryptedFields: ['access_key_secret'],
           fields: accountProviderAttrs.attrs,
           fieldsMeta: {
             service_account_key: {
@@ -61,6 +62,13 @@ export default {
           url = `${url}${params.id}/`
         }
         return `${url}?provider=${accountProvider}`
+      },
+      cleanFormValue(values) {
+        // const encryptedFields = [
+        //   'access_key_secret', 'password', 'client_secret',
+        //   'oc_password', 'sc_password',
+        // ]
+        // const attrs = values.attrs
       }
     }
   },
