@@ -83,7 +83,7 @@ export default {
       default: () => ''
     },
     canImportCreate: {
-      type: Boolean,
+      type: [Boolean, Function],
       default: false
     },
     canImportUpdate: {
