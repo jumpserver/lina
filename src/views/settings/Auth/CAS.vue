@@ -21,7 +21,9 @@ export default {
       settings: {
         url: '/api/v1/settings/setting/?category=cas',
         fields: [
-          [this.$t('common.Basic'), ['AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION']],
+          [this.$t('common.Basic'), [
+            'AUTH_CAS', 'CAS_SERVER_URL', 'CAS_ROOT_PROXIED_AS', 'CAS_VERSION'
+          ]],
           [this.$t('common.Other'), [
             'CAS_LOGOUT_COMPLETELY', 'CAS_USERNAME_ATTRIBUTE',
             'CAS_APPLY_ATTRIBUTES_TO_USER', 'CAS_RENAME_ATTRIBUTES',
