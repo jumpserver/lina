@@ -8,20 +8,19 @@
     placement="bottom-start"
   >
     <div class="content">
-      <span class="switch" @click="onSwitchChange">
-        <i class="fa fa-bars" :class="{'switch-active':isActive}" />
-      </span>
+      <!--      <span class="switch" @click="onSwitchChange">-->
+      <!--        <i class="fa fa-bars" :class="{'switch-active':isActive}" />-->
+      <!--      </span>-->
       <transition name="slide-fade">
         <ul
           v-show="isActive"
           class="nav"
         >
           <li
-            v-for="(view, index) of views"
+            v-for="view of views"
             :key="view.name"
-            :index="index"
             class="nav-item"
-            :class="{'nav-active': view.name == currentViewName}"
+            :class="{'nav-active': view.name === currentViewName}"
             @click="handleSelectView(view)"
           >
             <i class="nav-icon" :class="view.meta.icon" />
@@ -133,8 +132,8 @@ export default {
 .menu-main.el-menu {
   background-color: transparent;
   ::v-deep .el-submenu .el-submenu__title {
-    height: 55px;
-    line-height: 55px;
+    height: 35px;
+    line-height: 35px;
     border-bottom: none;
   }
   &.el-menu--horizontal {
@@ -151,6 +150,7 @@ export default {
   padding: 10px 10px;
   text-align: center;
   height: 70px;
+  color: #1a1a1a;
   &:hover {
     color: inherit;
     i {
@@ -198,25 +198,32 @@ export default {
   .nav {
     padding: 0;
     display: inline-block;
+    align-items: center;
+
     .nav-item {
       display: inline-block;
-      height: 55px;
-      color: #909399;
+      height: 35px;
+      color: rgb(96, 98, 102);
       font-size: 14px;
       cursor: pointer;
-      padding: 0 4px;
+      padding: 0 12px;
+      margin-left: 10px;
       transition: all .3s ease-in-out;
-      &:last-child {
-        padding-right: 0;
-      }
+      vertical-align: middle;
+
       &:hover {
         color: #676a6c;
         background-color: #e6e6e6;
       }
+
+      &:first-child {
+        margin-left: 0;
+      }
     }
     .nav-active {
-      color: #333;
-      border-bottom: 2px solid #1ab394;
+      //color: #333;
+      background-color: #e6e6e6;
+      //border-bottom: 2px solid #1ab394;
     }
     .nav-icon {
       display: inline-block;

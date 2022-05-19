@@ -88,10 +88,12 @@ export default {
     overflow: hidden;
     background: #f3f3f4;
     .navbar-left {
+      margin-top: 8px;
       float: left;
-      padding-left: 25px;
+      //padding-left: 25px;
+      margin-left: 25px;
       .left-item {
-        line-height: 55px;
+        line-height: 35px;
         display: inline-block;
         vertical-align: middle;
         &>>> .el-submenu__title {
