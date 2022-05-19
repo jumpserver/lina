@@ -101,6 +101,14 @@ export default {
       ).then(newSub => {
         const msgType = this.idMessageTypeMapper[newSub.message_type]
         msgType.receivers = newSub.receivers
+        this.tableData.forEach(i => {
+          for (const item of i.children) {
+            if (item.id === newSub.message_type) {
+              item.receivers = newSub.receivers
+              break
+            }
+          }
+        })
       }).catch(() => {
         // debug(err)
       })
