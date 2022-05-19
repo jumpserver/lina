@@ -10,6 +10,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { Required } from '@/components/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
 import { UploadKey } from '@/components'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   components: {
@@ -64,11 +65,18 @@ export default {
         return `${url}?provider=${accountProvider}`
       },
       cleanFormValue(values) {
-        // const encryptedFields = [
-        //   'access_key_secret', 'password', 'client_secret',
-        //   'oc_password', 'sc_password',
-        // ]
-        // const attrs = values.attrs
+        const encryptedFields = [
+          'access_key_secret', 'password', 'client_secret',
+          'oc_password', 'sc_password'
+        ]
+        const attrs = values.attrs
+        for (const item of encryptedFields) {
+          const value = attrs[item]
+          if (value) {
+            attrs[item] = encryptPassword(value)
+          }
+        }
+        return values
       }
     }
   },
