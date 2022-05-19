@@ -19,6 +19,12 @@ export class FormFieldGenerator {
         }
         break
       case 'multiple choice':
+        if (fieldMeta.component) {
+          field.component = fieldMeta.component
+          field.el.options = fieldRemoteMeta.choices.map(v => {
+            return { label: v.display_name, value: v.value }
+          })
+        }
         field.el.choices = fieldRemoteMeta['choices']
         break
       case 'datetime':

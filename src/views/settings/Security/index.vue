@@ -7,6 +7,7 @@
 </template>
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { Select2 } from '@/components'
 import PasswordRule from './PasswordRule'
 import AuthLimit from './AuthLimit'
 
@@ -25,6 +26,8 @@ export default {
             'SECURITY_SERVICE_ACCOUNT_REGISTRATION',
             'SECURITY_MAX_IDLE_TIME',
             'SECURITY_WATERMARK_ENABLED',
+            'SECURITY_WATERMARK_DISPLAY_OPTION',
+            'SECURITY_WATERMARK_DISPLAY_CONTENT',
             'SECURITY_SESSION_SHARE'
           ]
         ],
@@ -45,6 +48,17 @@ export default {
         ]
       ],
       fieldsMeta: {
+        SECURITY_WATERMARK_DISPLAY_OPTION: {
+          component: Select2,
+          hidden: (form) => {
+            return !form['SECURITY_WATERMARK_ENABLED']
+          }
+        },
+        SECURITY_WATERMARK_DISPLAY_CONTENT: {
+          hidden: (form) => {
+            return !form['SECURITY_WATERMARK_ENABLED']
+          }
+        },
         SECURITY_LOGIN_CHALLENGE_ENABLED: {
           on: {
             change: ([val], updateForm) => {
