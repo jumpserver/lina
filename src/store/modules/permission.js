@@ -126,7 +126,7 @@ function cleanRoute(tmp, parent) {
     } else {
       tmp.meta.fullPath = parentFullPath ? parentFullPath + '/' + tmp.path : parentFullPath
     }
-    // console.log('Full path: ', tmp.meta.fullPath)
+    // debug('Full path: ', tmp.meta.fullPath)
   }
   // 设置默认active menu
   if (tmp.meta.type === 'crud' && !tmp.meta.activeMenu) {

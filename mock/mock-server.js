@@ -59,9 +59,9 @@ module.exports = app => {
         mockRoutesLength = mockRoutes.mockRoutesLength
         mockStartIndex = mockRoutes.mockStartIndex
 
-        console.log(chalk.magentaBright(`\n > Mock Server hot reload success! changed  ${path}`))
+        // debug(chalk.magentaBright(`\n > Mock Server hot reload success! changed  ${path}`))
       } catch (error) {
-        console.log(chalk.redBright(error))
+        // debug(chalk.redBright(error))
       }
     }
   })

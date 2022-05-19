@@ -146,9 +146,7 @@ export default {
                     vm.showUpdateSecretDialog = false
                     setTimeout(() => {
                       vm.showUpdateSecretDialog = true
-                      console.log('Show update1: ', vm.showUpdateSecretDialog)
                     })
-                    console.log('Show update2: ', vm.showUpdateSecretDialog)
                   }
                 }
               ]

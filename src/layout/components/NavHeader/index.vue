@@ -16,7 +16,7 @@
           <SystemSetting />
         </el-tooltip>
       </li>
-      <li v-if="this.$hasLicense() && this.$hasPerm('tickets.view_ticket')" class="header-item header-hover">
+      <li v-if="ticketsEnabled" class="header-item header-hover">
         <Tickets />
       </li>
       <li class="header-item active-menu">
@@ -69,7 +69,12 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar', 'publicSettings', 'currentOrgRoles', 'currentViewRoute'
-    ])
+    ]),
+    ticketsEnabled() {
+      return this.publicSettings['TICKETS_ENABLED'] &&
+        this.$hasLicense() &&
+        this.$hasPerm('tickets.view_ticket')
+    }
   },
   methods: {
     toggleSideBar() {

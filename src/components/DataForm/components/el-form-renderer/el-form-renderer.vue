@@ -146,7 +146,7 @@ export default {
        * - el-form 的 resetFields 不会触发 input & change 事件，无法监听
        * - bug1: https://github.com/FEMessage/el-data-table/issues/176#issuecomment-587280825
        * - bug2:
-       *   0. 建议先在监听器 watch.value 里 console.log(v.name, oldV.name)
+       *   0. 建议先在监听器 watch.value 里 // debug(v.name, oldV.name)
        *   1. 打开 basic 示例
        *   2. 在 label 为 name 的输入框里输入 1，此时 log：'1' ''
        *   3. 点击 reset 按钮，此时 log 两条数据： '1' '1', '' ''

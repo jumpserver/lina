@@ -17,7 +17,7 @@ export default {
     }
     // const locale = this.$i18n.locale
     // const value = dt.toLocaleString(locale, { hourCycle: 'h23' })
-    // console.log(this.$i18n.locale)
+    // debug(this.$i18n.locale)
     return {
       value: value
     }
