@@ -37,6 +37,7 @@ export default {
             }
           }
         ],
+        encryptedFields: ['FEISHU_APP_SECRET'],
         fields: [
           [
             this.$t('common.BasicInfo'),

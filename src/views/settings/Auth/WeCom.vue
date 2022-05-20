@@ -36,6 +36,7 @@ export default {
             }
           }
         ],
+        encryptedFields: ['WECOM_SECRET'],
         fields: [
           [
             this.$t('common.BasicInfo'),

@@ -31,6 +31,7 @@ export default {
   data() {
     return {
       visible: false,
+      encryptedFields: ['EMAIL_HOST_PASSWORD'],
       fields: [
         [
           this.$t('common.BasicInfo'),

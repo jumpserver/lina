@@ -7,6 +7,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { REMOTE_APP_TYPE_FIELDS_MAP, REMOTE_APP_TYPE_META_MAP, REMOTE_APP_PATH_DEFAULT_MAP } from './const'
 import rules from '@/components/DataForm/rules'
 import { UpdateToken } from '@/components/FormFields'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   components: {
@@ -69,9 +70,20 @@ export default {
         }
         return `${url}?type=${this.$route.query.type}`
       },
-      cleanFormValue(value) {
-        value.category = 'remote_app'
-        return value
+      cleanFormValue(values) {
+        values.category = 'remote_app'
+        const encryptedFields = [
+          'chrome_password', 'custom_password',
+          'mysql_workbench_password', 'vmware_password'
+        ]
+        const attrs = values.attrs
+        for (const item of encryptedFields) {
+          const value = attrs[item]
+          if (value) {
+            attrs[item] = encryptPassword(value)
+          }
+        }
+        return values
       }
     }
   },

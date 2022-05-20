@@ -27,6 +27,7 @@ export default {
     return {
       dialogTest: false,
       dialogLdapUserImport: false,
+      encryptedFields: ['AUTH_LDAP_BIND_PASSWORD'],
       fields: [
         [
           this.$t('setting.LDAPServerInfo'),
