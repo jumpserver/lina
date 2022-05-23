@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Select2 from '@/components/FormFields/Select2'
 import NestedField from '@/components/AutoDataForm/components/NestedField'
+import Swicher from '@/components/FormFields/Swicher'
 import rules from '@/components/DataForm/rules'
 import { assignIfNot } from '@/utils/common'
 
@@ -45,7 +46,8 @@ export class FormFieldGenerator {
         }
         break
       case 'boolean':
-        type = 'checkbox'
+        type = ''
+        field.component = Swicher
         break
       case 'nested object':
         type = 'nestedField'

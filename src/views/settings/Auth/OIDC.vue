@@ -19,15 +19,14 @@ export default {
     return {
       settings: {
         url: '/api/v1/settings/setting/?category=oidc',
+        encryptedFields: ['AUTH_OPENID_CLIENT_SECRET'],
         fields: [
           [this.$t('common.Basic'), [
             'AUTH_OPENID', 'BASE_SITE_URL', 'AUTH_OPENID_CLIENT_ID',
-            'AUTH_OPENID_CLIENT_SECRET',
-            'AUTH_OPENID_CLIENT_AUTH_METHOD'
+            'AUTH_OPENID_CLIENT_SECRET', 'AUTH_OPENID_CLIENT_AUTH_METHOD'
           ]],
           [this.$t('common.Params'), [
-            'AUTH_OPENID_KEYCLOAK',
-            'AUTH_OPENID_SERVER_URL', 'AUTH_OPENID_REALM_NAME',
+            'AUTH_OPENID_KEYCLOAK', 'AUTH_OPENID_SERVER_URL', 'AUTH_OPENID_REALM_NAME',
             'AUTH_OPENID_PROVIDER_ENDPOINT', 'AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT',
             'AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT', 'AUTH_OPENID_PROVIDER_JWKS_ENDPOINT',
             'AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT', 'AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT',
