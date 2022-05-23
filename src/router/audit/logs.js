@@ -36,5 +36,14 @@ export default [
       title: i18n.t('route.BatchCommandLog'),
       permissions: ['ops.view_commandexecution']
     }
+  },
+  {
+    path: 'task-log',
+    name: 'TaskLog',
+    component: () => import('@/views/audits/TaskLogList'),
+    meta: {
+      title: i18n.t('route.TaskLog'),
+      permissions: ['audits.view_tasklog']
+    }
   }
 ]
