@@ -3,7 +3,7 @@
 /* fade */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.1s;
+  transition: opacity 0.2s;
 }
 
 .fade-enter,
@@ -14,7 +14,7 @@
 /* fade-transform */
 .fade-transform-leave-active,
 .fade-transform-enter-active {
-  transition: all .1s;
+  transition: all .2s;
 }
 
 .fade-transform-enter {
@@ -30,7 +30,7 @@
 /* breadcrumb transition */
 .breadcrumb-enter-active,
 .breadcrumb-leave-active {
-  transition: all .1s;
+  transition: all .25s;
 }
 
 .breadcrumb-enter,
@@ -40,7 +40,7 @@
 }
 
 .breadcrumb-move {
-  transition: all .1s;
+  transition: all .25s;
 }
 
 .breadcrumb-leave-active {
