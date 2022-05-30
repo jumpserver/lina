@@ -3,6 +3,7 @@
     <GenericCreateUpdateForm v-bind="$data" />
     <ImportDialog :visible.sync="dialogLdapUserImport" />
     <TestLoginDialog :visible.sync="dialogTest" />
+    <SyncSettingDialog :visible.sync="dialogSyncSetting" />
   </IBox>
 </template>
 <script>
@@ -10,6 +11,7 @@ import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm
 import { testLdapSetting } from '@/api/settings'
 import ImportDialog from './ImportDialog'
 import TestLoginDialog from './TestLoginDialog'
+import SyncSettingDialog from './SyncSettingDialog'
 import { IBox } from '@/components'
 import rules from '@/components/DataForm/rules'
 import { JsonRequired } from '@/components/DataForm/rules'
@@ -21,12 +23,14 @@ export default {
     GenericCreateUpdateForm,
     IBox,
     ImportDialog,
-    TestLoginDialog
+    TestLoginDialog,
+    SyncSettingDialog
   },
   data() {
     return {
       dialogTest: false,
       dialogLdapUserImport: false,
+      dialogSyncSetting: false,
       encryptedFields: ['AUTH_LDAP_BIND_PASSWORD'],
       fields: [
         [
@@ -95,6 +99,12 @@ export default {
           title: this.$t('setting.ldapBulkImport'),
           callback: function(value, form) {
             this.dialogLdapUserImport = true
+          }.bind(this)
+        },
+        {
+          title: this.$t('setting.SyncSetting'),
+          callback: function(value, form) {
+            this.dialogSyncSetting = true
           }.bind(this)
         }
       ],
