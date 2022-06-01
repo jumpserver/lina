@@ -115,7 +115,7 @@ export default {
             state: {
               key: 'state',
               label: this.$t('tickets.action'),
-              value: 'open',
+              value: 'pending',
               valueLabel: this.$t('tickets.Pending')
             }
           },
@@ -128,7 +128,7 @@ export default {
               children: [
                 {
                   default: true,
-                  value: 'open',
+                  value: 'pending',
                   label: this.$t('tickets.Pending')
                 },
                 {

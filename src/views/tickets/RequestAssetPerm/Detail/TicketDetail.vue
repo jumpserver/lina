@@ -26,11 +26,13 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
       requestForm: {
-        node: this.object.meta.apply_nodes,
-        asset: this.object.meta.apply_assets,
-        systemuser: this.object.meta.apply_system_users
+        nodes: this.object.apply_nodes,
+        assets: this.object.apply_assets,
+        systemusers: this.object.apply_system_users,
+        apply_date_expired: this.object.apply_date_expired,
+        apply_date_start: this.object.apply_date_start
       },
       comments: '',
       assets: []
@@ -57,7 +59,7 @@ export default {
         },
         {
           key: this.$t('tickets.user'),
-          value: obj['applicant_display']
+          value: obj.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.OrgName'),
@@ -74,41 +76,42 @@ export default {
       ]
     },
     specialCardItems() {
-      const meta = this.object.meta || {}
+      const vm = this
+      const rel_snapshot = this.object.rel_snapshot
       return [
         {
           key: this.$t('perms.Node'),
-          value: meta?.apply_nodes_display?.join(', ') || ''
+          value: rel_snapshot.apply_nodes.join(', ')
         },
         {
           key: this.$t('tickets.Asset'),
-          value: meta?.apply_assets_display?.join(', ') || ''
+          value: rel_snapshot.apply_assets.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: meta?.apply_system_users_display?.join(', ') || ''
+          value: rel_snapshot.apply_system_users.join(', ')
         },
         {
           key: this.$t('assets.Action'),
-          value: forMatAction(this, meta['apply_actions_display'])
+          value: forMatAction(this, vm.object.apply_actions_display)
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(meta.apply_date_start)
+          value: toSafeLocalDateStr(vm.object.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(meta.apply_date_expired)
+          value: toSafeLocalDateStr(vm.object.apply_date_expired)
         }
       ]
     },
     assignedCardItems() {
       const vm = this
-      const meta = this.object.meta || {}
+      const rel_snapshot = this.object.rel_snapshot
       return [
         {
           key: this.$t('tickets.PermissionName'),
-          value: this.object.meta.apply_permission_name,
+          value: this.object.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'AssetPermissionDetail', params: { id: vm.object.id }, query: { oid: vm.object.org_id }}
             if (vm.$hasPerm('perms.view_assetpermission') && vm.object.status === 'closed' && vm.object.state === 'approved') {
@@ -120,32 +123,29 @@ export default {
         },
         {
           key: this.$t('perms.Node'),
-          value: meta?.apply_nodes_display?.join(', ') || ''
+          value: rel_snapshot.apply_nodes.join(', ')
         },
         {
           key: this.$t('assets.Asset'),
-          value: meta?.apply_assets_display?.join(', ') || ''
+          value: rel_snapshot.apply_assets.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: meta?.apply_system_users_display?.join(', ') || ''
+          value: rel_snapshot.apply_system_users.join(', ')
         },
         {
           key: this.$t('assets.Action'),
-          value: forMatAction(this, meta['apply_actions_display'])
+          value: forMatAction(this, vm.object.apply_actions_display)
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(meta?.apply_date_start)
+          value: toSafeLocalDateStr(vm.object.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(meta?.apply_date_expired)
+          value: toSafeLocalDateStr(vm.object.apply_date_expired)
         }
       ]
-    },
-    hasActionPerm() {
-      return this.object.assignees.indexOf(this.$store.state.users.profile.id) !== -1
     }
   },
   methods: {
@@ -159,11 +159,11 @@ export default {
       window.location.reload()
     },
     handleApprove() {
-      const assetLength = this.requestForm.asset.length
-      const nodeLength = this.requestForm.node.length
+      const assetLength = this.requestForm.assets.length
+      const nodeLength = this.requestForm.nodes.length
       if (assetLength === 0 && nodeLength === 0) {
         return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
-      } else if (this.requestForm.systemuser.length === 0) {
+      } else if (this.requestForm.systemusers.length === 0) {
         return this.$message.error(this.$tc('common.RequiredSystemUserErrMsg'))
       } else {
         this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {

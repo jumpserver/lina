@@ -26,13 +26,12 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
       requestForm: {
-        name: this.object.meta.approve_permission_name,
-        application: this.object.meta['apply_applications'],
-        systemuser: this.object.meta['apply_system_users'],
-        apply_date_expired: this.object.meta.apply_date_expired,
-        apply_date_start: this.object.meta.apply_date_start
+        application: this.object.apply_applications,
+        systemuser: this.object.apply_system_users,
+        apply_date_expired: this.object.apply_date_expired,
+        apply_date_start: this.object.apply_date_start
       },
       comments: '',
       assets: []
@@ -59,11 +58,11 @@ export default {
         },
         {
           key: this.$t('tickets.user'),
-          value: obj['applicant_display']
+          value: obj.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.OrgName'),
-          value: obj['org_name']
+          value: obj.org_name
         },
         {
           key: this.$t('common.dateCreated'),
@@ -76,37 +75,38 @@ export default {
       ]
     },
     specialCardItems() {
-      const meta = this.object.meta || {}
+      const vm = this
+      const rel_snapshot = this.object.rel_snapshot
       return [
         {
           key: this.$t('applications.appType'),
-          value: `${meta['apply_category_display']} / ${meta['apply_type_display']} `
+          value: `${vm.object.apply_category_display} / ${vm.object.apply_type_display} `
         },
         {
           key: this.$t('applications.appName'),
-          value: meta?.apply_applications_display?.join(', ') || ''
+          value: rel_snapshot.apply_applications.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: meta?.apply_system_users_display?.join(', ') || ''
+          value: rel_snapshot.apply_system_users.join(', ')
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(meta.apply_date_start)
+          value: toSafeLocalDateStr(vm.object.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(meta.apply_date_expired)
+          value: toSafeLocalDateStr(vm.object.apply_date_expired)
         }
       ]
     },
     assignedCardItems() {
       const vm = this
-      const meta = this.object.meta || {}
+      const rel_snapshot = this.object.rel_snapshot
       return [
         {
           key: this.$t('tickets.PermissionName'),
-          value: meta.apply_permission_name,
+          value: vm.object.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'ApplicationPermissionDetail', params: { id: vm.object.id }, query: { oid: vm.object.org_id }}
             if (vm.$hasPerm('perms.view_applicationpermission') && vm.object.status === 'closed' && vm.object.state === 'approved') {
@@ -118,19 +118,19 @@ export default {
         },
         {
           key: this.$t('applications.appName'),
-          value: meta?.apply_applications_display?.join(', ') || ''
+          value: rel_snapshot.apply_applications.join(', ')
         },
         {
           key: this.$t('tickets.SystemUser'),
-          value: meta?.apply_system_users_display?.join(', ') || ''
+          value: rel_snapshot.apply_system_users.join(', ')
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(meta.apply_date_start)
+          value: toSafeLocalDateStr(vm.object.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(meta.apply_date_expired)
+          value: toSafeLocalDateStr(vm.object.apply_date_expired)
         }
       ]
     },

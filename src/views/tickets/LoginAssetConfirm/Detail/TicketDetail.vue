@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -33,7 +33,7 @@ export default {
       return [
         {
           key: this.$t('tickets.Applicant'),
-          value: this.object['applicant_display']
+          value: this.object.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.type'),
@@ -59,15 +59,15 @@ export default {
         // apply_login_user: "Administrator(admin)"
         {
           key: this.$t('acl.apply_login_asset'),
-          value: this.object.meta['apply_login_asset']
+          value: this.object.rel_snapshot.apply_login_asset
         },
         {
           key: this.$t('acl.apply_login_system_user'),
-          value: this.object.meta['apply_login_system_user']
+          value: this.object.rel_snapshot.apply_login_system_user
         },
         {
           key: this.$t('acl.apply_login_user'),
-          value: this.object.meta['apply_login_user']
+          value: this.object.rel_snapshot.apply_login_user
         }
       ]
     }

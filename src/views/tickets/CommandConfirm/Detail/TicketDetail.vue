@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -33,7 +33,7 @@ export default {
       return [
         {
           key: this.$t('tickets.Applicant'),
-          value: this.object.applicant_display
+          value: this.object.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.type'),
@@ -57,23 +57,23 @@ export default {
       return [
         {
           key: this.$t('tickets.ApplyRunUser'),
-          value: this.object.meta.apply_run_user
+          value: this.object.rel_snapshot.apply_run_user
         },
         {
           key: this.$t('tickets.ApplyRunAsset'),
-          value: this.object.meta.apply_run_asset
+          value: this.object.rel_snapshot.apply_run_asset
         },
         {
           key: this.$t('tickets.ApplyRunSystemUser'),
-          value: this.object.meta.apply_run_system_user
+          value: this.object.rel_snapshot.apply_run_system_user
         },
         {
           key: this.$t('tickets.ApplyRunCommand'),
-          value: this.object.meta.apply_run_command
+          value: this.object.apply_run_command
         },
         {
           key: this.$t('tickets.ApplyFromSession'),
-          value: this.object.meta.apply_from_session_id,
+          value: this.object.apply_from_session,
           formatter: function(item, value) {
             const to = { name: 'SessionDetail', params: { id: value }, query: { oid: vm.object.org_id }}
             if (!vm.$hasPerm('terminal.view_session')) {
@@ -85,8 +85,8 @@ export default {
         {
           key: this.$t('tickets.ApplyFromCMDFilterRule'),
           value: {
-            cmdFilterRuleId: this.object.meta.apply_from_cmd_filter_rule_id,
-            cmdFilterId: this.object.meta.apply_from_cmd_filter_id
+            cmdFilterRuleId: this.object.apply_from_cmd_filter_rule,
+            cmdFilterId: this.object.apply_from_cmd_filter
           },
           formatter: function(item, value) {
             const to = {
