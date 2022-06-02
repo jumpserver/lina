@@ -1,18 +1,17 @@
 <template>
-  <TicketListTable :url="url" :has-more-actions="true" />
+  <BaseTicketList :url="url" :has-more-actions="true" />
 </template>
 
 <script>
-import TicketListTable from './TicketListTable'
+import BaseTicketList from './BaseTicketList'
 import { mapGetters } from 'vuex'
 export default {
   name: 'MyTicketList',
   components: {
-    TicketListTable
+    BaseTicketList
   },
   data() {
     return {
-
     }
   },
   computed: {
