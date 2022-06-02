@@ -116,9 +116,9 @@ export default {
         })
         return value
       },
-      url: '/api/v1/tickets/apply-asset-tickets/?action=open',
+      url: '/api/v1/tickets/apply-asset-tickets/?state=pending',
       createSuccessNextRoute: {
-        name: 'TicketList'
+        name: 'MyTicketList'
       }
     }
   },

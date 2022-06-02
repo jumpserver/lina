@@ -33,7 +33,7 @@ export default {
       return [
         {
           key: this.$t('tickets.Applicant'),
-          value: this.object.applicant_display
+          value: this.object.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.type'),

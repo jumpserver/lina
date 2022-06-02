@@ -144,9 +144,9 @@ export default {
           }
         }
       },
-      url: '/api/v1/tickets/tickets/?type=apply_application&action=open',
+      url: '/api/v1/tickets/apply-app-tickets/?state=pending',
       createSuccessNextRoute: {
-        name: 'TicketList'
+        name: 'MyTicketList'
       },
       cleanFormValue(value) {
         const applications = value.apply_applications
@@ -183,7 +183,7 @@ export default {
       validValues.apply_category = filter(0, 'apply_category')
       validValues.apply_type = filter(1, 'apply_type')
       delete validValues['apply_category_type']
-      return this.$axios['post'](`/api/v1/tickets/tickets/open/?type=apply_application`, validValues)
+      return this.$axios['post'](`/api/v1/tickets/apply-app-tickets/open/`, validValues)
     }
   }
 }
