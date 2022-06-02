@@ -1,15 +1,20 @@
 <template>
-  <ListTable :table-config="ticketTableConfig" :header-actions="ticketActions" />
+  <GenericListPage
+    v-loading="loading"
+    :table-config="ticketTableConfig"
+    :header-actions="ticketActions"
+  />
 </template>
+
 <script type="text/jsx">
-import ListTable from '@/components/ListTable'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { APPROVE, REJECT, CLOSED } from './const'
+import { APPROVE, REJECT } from './const'
 export default {
   name: 'TicketListTable',
   components: {
-    ListTable
+    GenericListPage
   },
   props: {
     url: {
@@ -23,6 +28,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       ticketTableConfig: {
         url: this.url,
         columns: [
@@ -70,9 +76,9 @@ export default {
             sortable: 'custom',
             formatter: row => {
               if (row.status === 'open') {
-                return <el-tag type='primary' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.OpenStatus') }</el-tag>
+                return <el-tag type='primary' size='mini'> { this.$t('tickets.OpenStatus') }</el-tag>
               } else {
-                return <el-tag type='danger' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.CloseStatus') }</el-tag>
+                return <el-tag type='danger' size='mini'>  { this.$t('tickets.CloseStatus') }</el-tag>
               }
             }
           },
@@ -84,15 +90,26 @@ export default {
             sortable: 'custom',
             formatter: row => {
               if (row.status === 'open') {
-                return <el-tag type='success' size='mini'style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Pending') }</el-tag>
+                return <el-tag
+                  type='success'
+                  size='mini'
+                >
+                  { this.$t('tickets.Pending') }
+                </el-tag>
               }
               switch (row.state) {
                 case 'approved':
-                  return <el-tag type='primary' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Approved') }</el-tag>
+                  return <el-tag type='primary' size='mini'>
+                    { this.$t('tickets.Approved') }
+                  </el-tag>
                 case 'rejected':
-                  return <el-tag type='danger' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Rejected') }</el-tag>
+                  return <el-tag type='danger' size='mini'>
+                    { this.$t('tickets.Rejected') }
+                  </el-tag>
                 default :
-                  return <el-tag type='info' size='mini' style='align-items:center; display: flex; justify-content:center;'> { this.$t('tickets.Closed') }</el-tag>
+                  return <el-tag type='info' size='mini'>
+                    { this.$t('tickets.Closed') }
+                  </el-tag>
               }
             }
           },
@@ -112,11 +129,11 @@ export default {
         hasBulkDelete: false,
         searchConfig: {
           default: {
-            state: {
-              key: 'state',
-              label: this.$t('tickets.action'),
+            status: {
+              key: 'status',
+              label: this.$t('tickets.Status'),
               value: 'open',
-              valueLabel: this.$t('tickets.Pending')
+              valueLabel: this.$t('tickets.Open')
             }
           },
           exclude: ['state'],
@@ -128,7 +145,7 @@ export default {
               children: [
                 {
                   default: true,
-                  value: 'open',
+                  value: 'pending',
                   label: this.$t('tickets.Pending')
                 },
                 {
@@ -138,10 +155,6 @@ export default {
                 {
                   value: REJECT,
                   label: this.$t('tickets.Rejected')
-                },
-                {
-                  value: CLOSED,
-                  label: this.$t('tickets.Closed')
                 }
               ]
             }
@@ -154,17 +167,26 @@ export default {
             {
               name: 'RequestAssetPerm',
               title: this.$t('tickets.RequestAssetPerm'),
-              callback: () => this.$router.push({ name: 'RequestAssetPermTicketCreateUpdate' })
+              callback: () => this.$router.push({
+                name: 'RequestAssetPermTicketCreateUpdate'
+              })
             },
             {
               name: 'RequestApplicationPerm',
               title: this.$t('tickets.RequestApplicationPerm'),
-              callback: () => this.$router.push({ name: 'RequestApplicationPermTicketCreateUpdate' })
+              callback: () => this.$router.push({
+                name: 'RequestApplicationPermTicketCreateUpdate'
+              })
             }
           ]
         }
       }
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false
+    }, 500)
   },
   methods: {
   }

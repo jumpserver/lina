@@ -1,14 +1,14 @@
 <template>
-  <TicketListTable :url="url" />
+  <BaseTicketList :url="url" />
 </template>
 
 <script>
-import TicketListTable from './TicketListTable'
+import BaseTicketList from './BaseTicketList'
 import { mapGetters } from 'vuex'
 export default {
   name: 'AssignedTicketList',
   components: {
-    TicketListTable
+    BaseTicketList
   },
   computed: {
     url() {
