@@ -138,6 +138,16 @@ export default {
         if (params.id) {
           url = getUpdateObjURL(url, params.id)
         }
+
+        const clone_from = this.$route.query['clone_from']
+        const query = clone_from ? `clone_from=${clone_from}` : ''
+        if (query) {
+          if (url.indexOf('?') === -1) {
+            url = `${url}?${query}`
+          } else {
+            url = `${url}&${query}`
+          }
+        }
         return url
       }
     },
