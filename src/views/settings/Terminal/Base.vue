@@ -27,9 +27,9 @@ export default {
           ]
         ],
         [
-          `RDP ${comp}(XRDP)`,
+          `RDP ${comp}(Razor)`,
           [
-            'XRDP_ENABLED'
+            'TERMINAL_RAZOR_ENABLED'
           ]
         ],
         [
@@ -46,7 +46,7 @@ export default {
         TERMINAL_TELNET_REGEX: {
           type: 'input'
         },
-        XRDP_ENABLED: {
+        TERMINAL_RAZOR_ENABLED: {
           helpText: this.$i18n.t('common.Info') + ': ' + this.$i18n.t('setting.SettingInEndpointHelpText'),
           hidden: () => {
             return !this.$store.getters.hasValidLicense

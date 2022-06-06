@@ -889,7 +889,7 @@
     "UseProtocol": "Use protocol",
     "SessionState": "Session state",
     "Monitor": "Monitor",
-    "XRDPNotSupport": "RDP Client session not support now",
+    "RazorNotSupport": "RDP Client session not support now",
     "sessionMonitor": "Session Monitor",
     "TerminateTaskSendSuccessMsg": "Terminate task has been send, Please check later",
     "helpText": {

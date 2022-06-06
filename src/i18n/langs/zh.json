@@ -911,7 +911,7 @@
     "UseProtocol": "使用协议",
     "SessionState": "会话状态",
     "Monitor": "监控",
-    "XRDPNotSupport": "RDP 客户端会话, 暂不支持监控",
+    "RazorNotSupport": "RDP 客户端会话, 暂不支持监控",
     "sessionMonitor": "监控",
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {
