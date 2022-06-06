@@ -1,8 +1,8 @@
 <template>
   <div>
-    <MFAVerifyDialog
-      @MFAVerifyDone="getAuthInfo"
-      @MFAVerifyCancel="exit"
+    <UserConfirmDialog
+      @UserConfirmDone="getAuthInfo"
+      @UserConfirmCancel="exit"
     />
     <Dialog
       :title="dialogTitle"
@@ -36,12 +36,12 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import MFAVerifyDialog from '@/components/MFAVerifyDialog'
+import UserConfirmDialog from '@/components/UserConfirmDialog'
 export default {
   name: 'ShowSecretInfo',
   components: {
     Dialog,
-    MFAVerifyDialog
+    UserConfirmDialog
   },
   props: {
     account: {

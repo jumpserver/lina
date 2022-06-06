@@ -1,9 +1,9 @@
 <template>
   <div>
-    <MFAVerifyDialog
+    <UserConfirmDialog
       v-if="mfaDialogShow"
-      @MFAVerifyDone="showExportDialog"
-      @MFAVerifyCancel="handleExportCancel"
+      @UserConfirmDone="showExportDialog"
+      @UserConfirmCancel="handleExportCancel"
     />
     <Dialog
       v-if="exportDialogShow"
@@ -31,7 +31,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import MFAVerifyDialog from '@/components/MFAVerifyDialog'
+import UserConfirmDialog from '@/components/UserConfirmDialog'
 import { createSourceIdCache } from '@/api/common'
 import * as queryUtil from '@/components/DataTable/compenents/el-data-table/utils/query'
 
@@ -39,7 +39,7 @@ export default {
   name: 'ExportDialog',
   components: {
     Dialog,
-    MFAVerifyDialog
+    UserConfirmDialog
   },
   props: {
     selectedRows: {
