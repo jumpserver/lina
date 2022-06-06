@@ -910,7 +910,7 @@
     "UseProtocol": "使用契約",
     "SessionState": "セッションステータス",
     "Monitor": "モニタリング",
-    "XRDPNotSupport": "RDPクライアントセッションは、監視をサポートしていません",
+    "RazorNotSupport": "RDPクライアントセッションは、監視をサポートしていません",
     "sessionMonitor": "モニタリング",
     "TerminateTaskSendSuccessMsg": "最終タスクが発行されました。後で更新して確認してください。",
     "helpText": {

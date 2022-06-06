@@ -89,6 +89,7 @@ export default {
         guacamole: 'Guacamole',
         lion: 'Lion',
         xrdp: 'XRDP',
+        razor: 'Razor',
         core: 'Core',
         celery: 'Celery',
         magnus: 'Magnus'
