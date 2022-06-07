@@ -277,6 +277,7 @@
     "DateUpdated": "更新日期",
     "ApprovaLevel": "审批信息",
     "MFAVerify": "验证 MFA",
+    "CurrentUserVerify": "验证当前用户",
     "ViewSecret": "查看密码",
     "ConnectWebSocketError": "连接 WebSocket 失败",
     "Action": "动作",
