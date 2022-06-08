@@ -58,6 +58,7 @@ export default {
       backends.sort((a, b) => b.level - a.level)
       this.ConfirmType = backends[0].name
       if (this.ConfirmType === 'relogin') {
+        this.visible = true
         return this.$message.error(this.$t('auth.ReLogin'))
       } else if (this.ConfirmType === 'mfa') {
         this.Label = 'MFA'
