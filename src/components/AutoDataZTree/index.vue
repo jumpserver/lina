@@ -82,8 +82,8 @@ export default {
   },
   methods: {
     refreshTree: function() {
-      const refreshIconRef = $('#tree-refresh')
-      refreshIconRef.click()
+      // const refreshIconRef = $('#tree-refresh')
+      // refreshIconRef.click()
     },
     editTreeNode: function() {
       this.hideRMenu()
@@ -112,16 +112,17 @@ export default {
       }
       let url = ''
       const query = Object.assign({}, this.$route.query)
+      const objectId = treeNode.meta.data.id
       if (treeNode.meta.type === 'node') {
         this.currentNode = treeNode
         this.currentNodeId = treeNode.meta.data.id
         query['node'] = this.currentNodeId
         query['asset'] = ''
-        url = `${this.setting.url}${combinator}node_id=${treeNode.meta.data.id}&show_current_asset=${show_current_asset}`
+        url = `${this.setting.url}${combinator}node_id=${objectId}&show_current_asset=${show_current_asset}`
       } else if (treeNode.meta.type === 'asset') {
         query['asset'] = treeNode.meta.data.id
         query['node'] = ''
-        url = `${this.setting.url}${combinator}asset_id=${treeNode.meta.data.id}&show_current_asset=${show_current_asset}`
+        url = `${this.setting.url}${combinator}asset_id=${objectId}&show_current_asset=${show_current_asset}`
       }
       this.$router.push({ query })
       this.$emit('urlChange', url)
@@ -151,11 +152,12 @@ export default {
         url,
         { 'value': treeNode.name }
       ).then(res => {
-        let assetsAmount = treeNode.meta.data.assetsAmount
+        let assetsAmount = treeNode.meta.data['assetsAmount']
         if (!assetsAmount) {
           assetsAmount = 0
         }
         treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
+        treeNode.meta.data = res
         this.zTree.updateNode(treeNode)
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).finally(() => { this.refreshTree() })
@@ -227,7 +229,7 @@ export default {
         this.$message.success(this.$t('common.updateSuccessMsg'))
       }).catch(error => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
-      }).finally(() => this.refreshTree())
+      }).finally()
     },
     createTreeNode: function() {
       this.hideRMenu()
@@ -243,13 +245,14 @@ export default {
           id: data['key'],
           name: data['value'],
           pId: parentNode.id,
+          isParent: true,
           meta: {
-            data: data
+            data: data,
+            type: 'node'
           }
         }
         newNode.checked = this.zTree.getSelectedNodes()[0].checked
         this.zTree.addNodes(parentNode, 0, newNode)
-        // vm.$refs.dataztree.refresh()
         const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
         this.currentNodeId = node.meta.data.id || newNode.id
         this.zTree.editName(node)
