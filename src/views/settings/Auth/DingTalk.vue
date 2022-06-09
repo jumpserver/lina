@@ -35,6 +35,7 @@ export default {
             }
           }
         ],
+        encryptedFields: ['DINGTALK_APPSECRET'],
         fields: [
           [
             this.$t('common.BasicInfo'),

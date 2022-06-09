@@ -8,7 +8,8 @@
 
 <script>
 import BaseAuth from './Base'
-import { UpdateToken } from '@/components/FormFields'
+import { JsonEditor, UpdateToken } from '@/components/FormFields'
+import { JsonRequired } from '@/components/DataForm/rules'
 
 export default {
   name: 'OIDC',
@@ -19,22 +20,21 @@ export default {
     return {
       settings: {
         url: '/api/v1/settings/setting/?category=oidc',
+        encryptedFields: ['AUTH_OPENID_CLIENT_SECRET'],
         fields: [
           [this.$t('common.Basic'), [
             'AUTH_OPENID', 'BASE_SITE_URL', 'AUTH_OPENID_CLIENT_ID',
-            'AUTH_OPENID_CLIENT_SECRET',
-            'AUTH_OPENID_CLIENT_AUTH_METHOD'
+            'AUTH_OPENID_CLIENT_SECRET', 'AUTH_OPENID_CLIENT_AUTH_METHOD'
           ]],
           [this.$t('common.Params'), [
-            'AUTH_OPENID_KEYCLOAK',
-            'AUTH_OPENID_SERVER_URL', 'AUTH_OPENID_REALM_NAME',
+            'AUTH_OPENID_KEYCLOAK', 'AUTH_OPENID_SERVER_URL', 'AUTH_OPENID_REALM_NAME',
             'AUTH_OPENID_PROVIDER_ENDPOINT', 'AUTH_OPENID_PROVIDER_AUTHORIZATION_ENDPOINT',
             'AUTH_OPENID_PROVIDER_TOKEN_ENDPOINT', 'AUTH_OPENID_PROVIDER_JWKS_ENDPOINT',
             'AUTH_OPENID_PROVIDER_USERINFO_ENDPOINT', 'AUTH_OPENID_PROVIDER_END_SESSION_ENDPOINT',
             'AUTH_OPENID_PROVIDER_SIGNATURE_ALG', 'AUTH_OPENID_PROVIDER_SIGNATURE_KEY',
             'AUTH_OPENID_SCOPES', 'AUTH_OPENID_ID_TOKEN_MAX_AGE', 'AUTH_OPENID_ID_TOKEN_INCLUDE_CLAIMS',
             'AUTH_OPENID_USE_STATE', 'AUTH_OPENID_USE_NONCE', 'AUTH_OPENID_ALWAYS_UPDATE_USER',
-            'AUTH_OPENID_IGNORE_SSL_VERIFICATION', 'AUTH_OPENID_SHARE_SESSION'
+            'AUTH_OPENID_IGNORE_SSL_VERIFICATION', 'AUTH_OPENID_SHARE_SESSION', 'AUTH_OPENID_USER_ATTR_MAP'
           ]]
         ],
         fieldsMeta: {
@@ -108,9 +108,24 @@ export default {
           'AUTH_OPENID_IGNORE_SSL_VERIFICATION': {
           },
           'AUTH_OPENID_SHARE_SESSION': {
+          },
+          'AUTH_OPENID_USER_ATTR_MAP': {
+            component: JsonEditor,
+            label: this.$t('setting.authLdapUserAttrMap'),
+            rules: [JsonRequired]
           }
         },
-        submitMethod: () => 'patch'
+        submitMethod: () => 'patch',
+        afterGetFormValue(obj) {
+          obj.AUTH_OPENID_USER_ATTR_MAP = JSON.stringify(obj.AUTH_OPENID_USER_ATTR_MAP)
+          return obj
+        },
+        cleanFormValue(data) {
+          if (data['AUTH_OPENID_USER_ATTR_MAP']) {
+            data['AUTH_OPENID_USER_ATTR_MAP'] = JSON.parse(data['AUTH_OPENID_USER_ATTR_MAP'])
+          }
+          return data
+        }
       }
     }
   }

@@ -276,6 +276,7 @@
     "DateUpdated": "更新日",
     "ApprovaLevel": "承認情報",
     "MFAVerify": "MFAの検証",
+    "CurrentUserVerify": "現在のユーザー検証",
     "ViewSecret": "パスワードの確認",
     "ConnectWebSocketError": "Webソケット接続に失敗しました",
     "Action": "アクション",
@@ -910,7 +911,7 @@
     "UseProtocol": "使用契約",
     "SessionState": "セッションステータス",
     "Monitor": "モニタリング",
-    "XRDPNotSupport": "RDPクライアントセッションは、監視をサポートしていません",
+    "RazorNotSupport": "RDPクライアントセッションは、監視をサポートしていません",
     "sessionMonitor": "モニタリング",
     "TerminateTaskSendSuccessMsg": "最終タスクが発行されました。後で更新して確認してください。",
     "helpText": {

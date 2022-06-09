@@ -42,7 +42,7 @@ export default {
           },
           tip: ({ row }) => {
             if (row.login_from === 'RT') {
-              return this.$t('sessions.XRDPNotSupport')
+              return this.$t('sessions.RazorNotSupport')
             }
             return ''
           },

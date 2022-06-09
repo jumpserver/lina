@@ -277,6 +277,7 @@
     "DateUpdated": "更新日期",
     "ApprovaLevel": "审批信息",
     "MFAVerify": "验证 MFA",
+    "CurrentUserVerify": "验证当前用户",
     "ViewSecret": "查看密码",
     "ConnectWebSocketError": "连接 WebSocket 失败",
     "Action": "动作",
@@ -911,7 +912,7 @@
     "UseProtocol": "使用协议",
     "SessionState": "会话状态",
     "Monitor": "监控",
-    "XRDPNotSupport": "RDP 客户端会话, 暂不支持监控",
+    "RazorNotSupport": "RDP 客户端会话, 暂不支持监控",
     "sessionMonitor": "监控",
     "TerminateTaskSendSuccessMsg": "终断任务已下发，请稍后刷新查看",
     "helpText": {

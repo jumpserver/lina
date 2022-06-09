@@ -11,6 +11,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { STORAGE_TYPE_META_MAP } from '../../../sessions/const'
 import { UpdateToken } from '@/components/FormFields'
+import { encryptPassword } from '@/utils/crypto'
 
 export default {
   name: 'ReplayStorageUpdate',
@@ -48,7 +49,7 @@ export default {
         meta: {
           fields: storageTypeMeta.meta,
           fieldsMeta: {
-            ACCESS_KEY: {
+            SECRET_KEY: {
               component: UpdateToken
             }
           }
@@ -56,16 +57,19 @@ export default {
         is_default: {
           helpText: this.$t('sessions.SetToDefaultStorage')
         }
+      },
+      cleanFormValue(values) {
+        const encryptedFields = ['SECRET_KEY', 'ACCOUNT_KEY']
+        const meta = values.meta
+        for (const item of encryptedFields) {
+          const val = meta[item]
+          if (val) {
+            meta[item] = encryptPassword(val)
+          }
+        }
+        return values
       }
     }
-  },
-  computed: {
-
-  },
-  mounted() {
-
-  },
-  methods: {
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert type="info">
+    <el-alert type="success">
       <b>{{ Tips.title }}</b>: <span>{{ Tips.body }}</span>
     </el-alert>
     <el-row :gutter="20">

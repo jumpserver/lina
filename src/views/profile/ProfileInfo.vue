@@ -1,5 +1,11 @@
 <template>
   <Page v-bind="$attrs">
+    <UserConfirmDialog
+      v-if="showPasswordDialog"
+      :visible.sync="showPasswordDialog"
+      @UserConfirmDone="verifyDone"
+      @UserConfirmCancel="exit"
+    />
     <div>
       <el-row :gutter="20">
         <el-col :md="14" :sm="24">
@@ -20,28 +26,6 @@
           />
         </el-col>
       </el-row>
-      <Dialog
-        width="50"
-        top="20vh"
-        :title="this.$t('common.PasswordConfirm')"
-        :visible.sync="showPasswordDialog"
-        :show-confirm="false"
-        :show-cancel="false"
-        :destroy-on-close="true"
-      >
-        <el-row :gutter="20">
-          <el-col :md="4" :sm="24">
-            <div style="line-height: 34px">{{ $t('assets.Password') }}</div>
-          </el-col>
-          <el-col :md="14" :sm="24">
-            <el-input v-model="passwordInput" type="password" />
-            <span class="help-tips help-block">{{ $t('common.PasswordRequireForSecurity') }}</span>
-          </el-col>
-          <el-col :md="4" :sm="24">
-            <el-button size="mini" type="primary" style="line-height:20px " @click="passConfirm">{{ this.$t('common.Confirm') }}</el-button>
-          </el-col>
-        </el-row>
-      </Dialog>
     </div>
   </Page>
 </template>
@@ -50,7 +34,7 @@
 import Page from '@/layout/components/Page'
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import Dialog from '@/components/Dialog'
+import UserConfirmDialog from '@/components/UserConfirmDialog'
 import { toSafeLocalDateStr } from '@/utils/common'
 import store from '@/store'
 
@@ -60,7 +44,7 @@ export default {
     Page,
     DetailCard,
     QuickActions,
-    Dialog
+    UserConfirmDialog
   },
   props: {
     object: {
@@ -72,7 +56,6 @@ export default {
     return {
       url: `/api/v1/users/profile/`,
       showPasswordDialog: false,
-      passwordInput: '',
       currentEdit: '',
       authQuickActions: [
         {
@@ -325,23 +308,19 @@ export default {
       }
       return backendList
     },
-    passConfirm() {
-      this.$axios.post(
-        `/api/v1/authentication/password/verify/`, {
-          password: this.passwordInput
-        }
-      ).then(res => {
-        if (!this.object[`is_${this.currentEdit}_bound`]) {
-          window.location.href = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
-        } else {
-          this.$axios.post(`/api/v1/authentication/${this.currentEdit}/qr/unbind/`).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
-            this.$store.dispatch('users/getProfile')
-          })
-        }
-      })
-      this.passwordInput = ''
+    verifyDone() {
+      if (!this.object[`is_${this.currentEdit}_bound`]) {
+        window.location.href = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
+      } else {
+        this.$axios.post(`/api/v1/authentication/${this.currentEdit}/qr/unbind/`).then(res => {
+          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$store.dispatch('users/getProfile')
+        })
+      }
       this.showPasswordDialog = false
+    },
+    exit() {
+      this.$emit('update:visible', false)
     }
   }
 }
