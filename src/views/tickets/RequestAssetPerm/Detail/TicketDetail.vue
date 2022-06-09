@@ -166,7 +166,7 @@ export default {
       } else if (this.requestForm.systemusers.length === 0) {
         return this.$message.error(this.$tc('common.RequiredSystemUserErrMsg'))
       } else {
-        this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
+        this.$axios.put(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
           meta: {}
         }).then(() => {
           this.$message.success(this.$tc('common.updateSuccessMsg'))

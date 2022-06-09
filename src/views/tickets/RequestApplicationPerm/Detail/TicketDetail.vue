@@ -152,7 +152,7 @@ export default {
       if (this.requestForm.application.length === 0 || this.requestForm.systemuser.length === 0) {
         return this.$message.error(this.$tc('common.NeedAssetsAndSystemUserErrMsg'))
       } else {
-        this.$axios.put(`/api/v1/tickets/tickets/${this.object.id}/approve/`, {
+        this.$axios.put(`/api/v1/tickets/apply-app-tickets/${this.object.id}/approve/`, {
           meta: {}
         }).then(
           () => {
