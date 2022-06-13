@@ -80,7 +80,7 @@ export default {
       return [
         {
           key: this.$t('applications.appType'),
-          value: `${vm.object.apply_category_display} / ${vm.object.apply_type_display} `
+          value: `${vm.object.apply_category} / ${vm.object.apply_type} `
         },
         {
           key: this.$t('applications.appName'),
