@@ -143,24 +143,21 @@ export default {
       }
       this.$emit('showAll', { node: currentNode, showCurrentAsset: 0 })
     },
-    rMenuShowNodeInfo() {
-      this.hideMenu()
+    async rMenuShowNodeInfo() {
       const currentNode = this.getSelectedNodes()[0]
-      if (!currentNode) {
-        return
-      }
-      this.$axios.get(
-        `/api/v1/assets/nodes/${currentNode.meta.data.id}/`
-      ).then(res => {
+      if (!currentNode) return
+
+      try {
+        const res = await this.$axios.get(`/api/v1/assets/nodes/${currentNode.meta.data.id}/`)
         this.nodeInfoDialogSetting.dialogVisible = true
         this.nodeInfoDialogSetting.items = [
           { key: 'id', label: 'ID', value: res.id },
           { key: 'name', label: this.$t('assets.Name'), value: res.name },
           { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value }
         ]
-      }).catch(error => {
+      } catch (error) {
         this.$message.error(this.$t('common.ErrorMsg' + ' ' + error))
-      })
+      }
     },
     rCheckAssetsAmount() {
       this.$axios.post(
