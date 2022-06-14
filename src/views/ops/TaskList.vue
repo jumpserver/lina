@@ -6,6 +6,11 @@
 import { timeOffset, toSafeLocalDateStr } from '@/utils/common'
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms'
+const performDelete = function({ row }) {
+  const id = row.id
+  const url = `${this.url}${id}/`
+  return this.$axios.delete(url)
+}
 
 export default {
   components: {
@@ -83,6 +88,27 @@ export default {
               hasUpdate: false,
               hasClone: false,
               canDelete: this.$hasPerm('ops.delete_task'),
+              onDelete: function({ row, col, cellValue, reload }) {
+                const msg = this.$t('common.deleteWarningMsg') + ` "${row.display_name || row.name}" ` + '?'
+                const title = this.$t('common.Info')
+                this.$alert(msg, title, {
+                  type: 'warning',
+                  confirmButtonClass: 'el-button--danger',
+                  showCancelButton: true,
+                  beforeClose: async(action, instance, done) => {
+                    if (action !== 'confirm') return done()
+                    instance.confirmButtonLoading = true
+                    try {
+                      await performDelete.bind(this)({ row: row, col: col })
+                      done()
+                      reload()
+                      this.$message.success(this.$t('common.deleteSuccessMsg'))
+                    } finally {
+                      instance.confirmButtonLoading = false
+                    }
+                  }
+                })
+              },
               extraActions: [
                 {
                   name: 'run',
