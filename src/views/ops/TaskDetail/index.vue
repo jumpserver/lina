@@ -25,6 +25,9 @@ export default {
     return {
       TaskDetail: {},
       config: {
+        getTitle(row) {
+          return row['display_name']
+        },
         activeMenu: 'TaskDetail',
         submenu: [
           {
