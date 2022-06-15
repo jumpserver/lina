@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading">
-    <el-alert v-if="isExpire" type="error">
-      {{ isExpire }}
-    </el-alert>
-    <el-alert v-if="reachedAssetAmountLimit" type="error">
-      {{ reachedAssetAmountLimit }}
+    <el-alert v-if="licenseMsg" type="error">
+      {{ licenseMsg }} !
+      <router-link :to="{ name: 'License' }" style="padding-left: 5px">
+        {{ $t('common.View') }} <i class="fa fa-external-link" />
+      </router-link>
     </el-alert>
   </div>
 </template>
@@ -26,6 +26,13 @@ export default {
       'publicSettings',
       'currentUser'
     ]),
+    licenseMsg() {
+      if (this.isExpire) {
+        return this.isExpire
+      } else {
+        return this.reachedAssetAmountLimit
+      }
+    },
     isExpire() {
       if (!this.publicSettings.XPACK_ENABLED || !this.$hasPerm('settings.change_license')) {
         return false

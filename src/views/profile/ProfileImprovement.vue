@@ -74,7 +74,7 @@ export default {
           this.$message.error(this.$t('common.PleaseAgreeToTheTerms'))
           return Promise.reject()
         }
-        return this.$axios['put'](this.url, validValues)
+        return this.$axios['patch'](this.url, validValues)
       },
       onPerformSuccess() {
         this.$message.success(this.$t('common.updateSuccessMsg'))

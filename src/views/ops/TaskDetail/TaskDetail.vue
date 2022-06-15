@@ -46,13 +46,13 @@ export default {
   },
   computed: {
     cardTitle() {
-      return this.object.name
+      return this.object.display_name
     },
     detailCardItems() {
       return [
         {
           key: this.$t('common.Name'),
-          value: this.object.name
+          value: this.object.display_name
         },
         {
           key: this.$t('common.dateCreated'),
