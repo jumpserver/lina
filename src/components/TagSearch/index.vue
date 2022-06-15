@@ -106,35 +106,9 @@ export default {
       handler(val) {
         if (val && val.length > 0) {
           const routeFilter = this.checkInTableColumns()
-          const routerSearch = routeFilter.search || {}
-          let routerSearchAttrs = []
-          if (typeof routerSearch?.value === 'string') {
-            routerSearchAttrs = routerSearch?.value?.split(',') || []
-          }
-
-          for (const attr of routerSearchAttrs) {
-            routeFilter[`search_${attr}`] = {
-              ...routerSearch,
-              value: attr
-            }
-          }
-          if (routerSearchAttrs.length !== 0) {
-            delete routeFilter.search
-          }
-
-          const asFilterTags = _.cloneDeep(this.filterTags)
-          this.filterTags = {
-            ...asFilterTags,
-            ...routeFilter
-          }
-          if (Object.keys(routeFilter).length > 0) {
-            setTimeout(() => {
-              return this.$emit('tagSearch', this.filterMaps)
-            }, 490)
-          }
+          this.filterTagSearch(routeFilter)
         }
       },
-      immediate: true,
       deep: true
     }
   },
@@ -149,43 +123,87 @@ export default {
   methods: {
     // 获取url中的查询条件，判断是不是包含在当前查询条件里
     checkInTableColumns() {
+      const searchFieldOptions = {}
       const routeQuery = this.getUrlQuery ? this.$route?.query : {}
-      const routeQueryKeys = Object.keys(routeQuery)
-      const routeQueryKeysLength = routeQueryKeys.length
-      const keys = {}
-      if (routeQueryKeysLength < 1) {
-        return keys
-      }
-      for (const [key, value] of Object.entries(routeQuery)) {
-        let valueDecode = decodeURI(value)
-        const isSearch = key !== 'search'
-        const curOptions = this.options || []
+      const routeQueryKeysLength = Object.keys(routeQuery).length
+      if (routeQueryKeysLength < 1) return searchFieldOptions
 
-        for (let k = 0, len = curOptions.length; k < len; k++) {
-          const cur = curOptions[k]
-          if (cur?.type === 'boolean') {
+      for (const [key, value] of Object.entries(routeQuery)) {
+        const valueDecode = decodeURI(value)
+        const isSearch = key === 'search'
+
+        if (isSearch) {
+          searchFieldOptions[key] = {
+            key,
+            label: '',
+            value: valueDecode
+          }
+          continue
+        }
+
+        searchFieldOptions[key] = this.getInQueryInfoFields(key, value)
+      }
+      return searchFieldOptions
+    },
+    getInQueryInfoFields(key, value) {
+      let searchFieldOption = {}
+      let valueDecode = decodeURI(value)
+      const currentOptions = this.options || []
+
+      for (let k = 0, len = currentOptions.length; k < len; k++) {
+        const current = currentOptions[k]
+        if (key === current.value) {
+          const curChildren = current.children || []
+          if (current?.type === 'boolean') {
             valueDecode = !!valueDecode
           }
-          if (key === cur.value || !isSearch) {
-            const curChildren = cur.children || []
-            keys[key] = {
-              ...cur,
-              key,
-              label: isSearch ? cur.label : '',
-              value: valueDecode
-            }
-            if (isSearch && curChildren.length > 0) {
-              for (const item of curChildren) {
-                if (valueDecode === item.value) {
-                  keys[key].valueLabel = item.label
-                  break
-                }
+          searchFieldOption = {
+            ...current,
+            key,
+            label: current.label,
+            value: valueDecode
+          }
+          if (curChildren.length > 0) {
+            for (const item of curChildren) {
+              if (valueDecode === item.value) {
+                searchFieldOption.valueLabel = item.label
+                break
               }
             }
           }
+          break
         }
       }
-      return keys
+
+      return searchFieldOption
+    },
+    filterTagSearch(routeFilter) {
+      const routerSearch = routeFilter.search || {}
+      let routerSearchAttrs = []
+      if (typeof routerSearch?.value === 'string') {
+        routerSearchAttrs = routerSearch?.value?.split(',') || []
+      }
+
+      for (const attr of routerSearchAttrs) {
+        routeFilter[`search_${attr}`] = {
+          ...routerSearch,
+          value: attr
+        }
+      }
+
+      if (routerSearchAttrs.length !== 0) {
+        delete routeFilter.search
+      }
+      const asFilterTags = _.cloneDeep(this.filterTags)
+      this.filterTags = {
+        ...asFilterTags,
+        ...routeFilter
+      }
+      if (Object.keys(routeFilter).length > 0) {
+        setTimeout(() => {
+          return this.$emit('tagSearch', this.filterMaps)
+        }, 490)
+      }
     },
     getValueLabel(key, value) {
       for (const field of this.options) {
