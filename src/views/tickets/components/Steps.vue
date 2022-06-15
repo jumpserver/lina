@@ -68,6 +68,8 @@ export default {
     ticketSteps() {
       // eslint-disable-next-line no-unused-vars
       var countApprove = 0
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.process.sort((a, b) => a.approval_level - b.approval_level)
       this.process.forEach(item => {
         // eslint-disable-next-line space-before-blocks
         if (item.state === 'approved'){

@@ -177,11 +177,11 @@ export default {
       }
     },
     handleClose() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/close/`
+      const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/close/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     handleReject() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/reject/`
+      const url = `/api/v1/tickets/apply-asset-tickets/${this.object.id}/reject/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     }
   }
