@@ -85,6 +85,9 @@ export default {
             { label: i18n.t('common.No'), value: false }
           ]
         }
+        if (option.value === 'id') {
+          option.label = 'ID'
+        }
         vm.internalOptions.push(option)
       }
     },
