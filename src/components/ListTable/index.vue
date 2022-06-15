@@ -86,13 +86,21 @@ export default {
       const formatterArgs = {
         'columnsMeta.actions.formatterArgs.canUpdate': 'change',
         'columnsMeta.actions.formatterArgs.canDelete': 'delete',
-        'columnsMeta.actions.formatterArgs.canClone': 'add',
+        'columnsMeta.actions.formatterArgs.canClone': () => {
+          return this.hasActionPerm('add') && !this.currentOrgIsRoot
+        },
         'columnsMeta.name.formatterArgs.can': 'view'
       }
+
       for (const [arg, action] of Object.entries(formatterArgs)) {
         const notSet = _.get(config, arg) === undefined
+        const isFunction = typeof action === 'function'
         if (notSet) {
-          _.set(config, arg, this.hasActionPerm(action))
+          if (isFunction) {
+            _.set(config, arg, action())
+          } else {
+            _.set(config, arg, this.hasActionPerm(action))
+          }
         }
       }
       this.$log.debug('Header actions', this.headerActions)
