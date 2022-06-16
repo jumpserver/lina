@@ -251,7 +251,8 @@
   },
   "auth": {
     "LoginRequiredMsg": "アカウントが終了しました。ログインし直してください",
-    "ReLogin": "再ログイン"
+    "ReLogin": "再ログイン",
+    "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
     "ChangeViewHelpText": "クリックしてさまざまなビューにアクセス",
