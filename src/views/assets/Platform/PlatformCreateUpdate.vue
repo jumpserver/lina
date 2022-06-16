@@ -84,7 +84,6 @@ export default {
         category_type: {
           type: 'cascader',
           label: this.$t('assets.Type'),
-          // disabled: true,
           rules: [
             rules.Required
           ],
@@ -96,39 +95,50 @@ export default {
             change: ([event], formValue) => {
               const category = event[0]
               const type = event[1]
-              const url = `/api/v1/assets/platforms/type-limits/?category=${category}&type=${type}`
-              this.$axios.get(url).then(limits => {
-                this.changeLimits(limits)
-              })
-              console.log('On change: ', event)
+              this.setLimits(category, type)
             }
           }
         },
-        admin_user_default: assetMeta.admin_user,
+        admin_user_default: {
+          ...assetMeta.admin_user,
+          hidden: (formValue) => {
+            return !formValue['admin_user_enabled']
+          }
+        },
         protocols_enabled: {
           el: {
             disabled: false
           }
         },
-        protocols_default: assetMeta.protocols,
+        protocols_default: {
+          ...assetMeta.protocols,
+          hidden: (formValue) => {
+            return !formValue['protocols_enabled']
+          }
+        },
         domain_enabled: {
           value: true,
           el: {
             disabled: false
           }
         },
-        domain_default: assetMeta.domain
+        domain_default: {
+          ...assetMeta,
+          hidden: (formValue) => {
+            return !formValue['domain_enabled']
+          }
+        }.domain
       },
       url: `/api/v1/assets/platforms/?category=${category}&type=${type}`,
       cleanFormValue: (values) => {
         const category_type = values['category_type']
         values['category'] = category_type[0]
         values['type'] = category_type[1]
-        // delete values['category_type']
         return values
       },
       afterGetFormValue: (obj) => {
         obj['category_type'] = [obj['category'], obj['type']]
+        this.setLimits(obj['category'], obj['type'])
         return obj
       }
     }
@@ -150,8 +160,9 @@ export default {
         value: choice['value']
       }
     },
-    changeLimits(limits) {
-      console.log('Limits: ', limits)
+    async setLimits(category, type) {
+      const url = `/api/v1/assets/platforms/type-limits/?category=${category}&type=${type}`
+      const limits = await this.$axios.get(url)
       const hasDomain = limits['has_domain']
       const protocolLimits = limits['protocols_limit']
       this.fieldsMeta.domain_enabled.el.disabled = !hasDomain
