@@ -250,6 +250,7 @@
   },
   "common": {
     "ChangeViewHelpText": "Click to change view",
+    "Component": "component",
     "PrivateCloud": "Private cloud",
     "PublicCloud": "Public cloud",
     "Correlation": "Correlation",
