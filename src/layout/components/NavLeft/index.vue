@@ -6,7 +6,7 @@
       </div>
       <div class="active-mobile">
         <ViewSwitcher mode="vertical" class="mobile-view-switch" />
-        <Organization class="organization" />
+        <Organization v-if="$hasLicense()" class="organization" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         {{ isTitle }}
