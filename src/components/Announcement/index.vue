@@ -12,7 +12,7 @@
       <el-link :href="announcement.link" target="_blank" class="link-more">
         {{ $t('common.ViewMore') }}
       </el-link>
-      <i class="fa fa-share-square-o" />
+      <i class="fa fa-external-link" />
     </span>
   </el-alert>
 </template>

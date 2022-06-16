@@ -250,6 +250,7 @@
   },
   "common": {
     "ChangeViewHelpText": "Click to change view",
+    "Component": "component",
     "PrivateCloud": "Private cloud",
     "PublicCloud": "Public cloud",
     "Correlation": "Correlation",
@@ -434,7 +435,8 @@
       "Help": "Help",
       "Logout": "Logout",
       "Profile": "Profile",
-      "Support": "Support",
+      "TechnicalSupport": "Technical support",
+      "ToolsDownload": "Tools download",
       "UserPage": "User page",
       "View": "View",
       "EnterpriseEdition": "Enterprise edition"

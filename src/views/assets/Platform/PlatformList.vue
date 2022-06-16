@@ -23,7 +23,7 @@ export default {
           },
           actions: {
             formatterArgs: {
-              canClone: vm.$hasPerm('assets.add_platform'),
+              canClone: () => vm.$hasPerm('assets.add_platform'),
               canUpdate: ({ row }) => !row.internal && vm.$hasPerm('assets.change_platform'),
               canDelete: ({ row }) => !row.internal && vm.$hasPerm('assets.delete_platform')
             }
@@ -34,7 +34,10 @@ export default {
         hasRightActions: true,
         hasMoreActions: false,
         hasBulkDelete: false,
-        createRoute: 'PlatformCreate'
+        createRoute: 'PlatformCreate',
+        canCreate: () => {
+          return this.$hasPerm('assets.add_platform')
+        }
       }
     }
   }

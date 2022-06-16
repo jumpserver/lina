@@ -84,7 +84,9 @@ export default {
         extraQuery: this.extraQuery
       })
       const formatterArgs = {
-        'columnsMeta.actions.formatterArgs.canUpdate': 'change',
+        'columnsMeta.actions.formatterArgs.canUpdate': () => {
+          return this.hasActionPerm('change') && !this.currentOrgIsRoot
+        },
         'columnsMeta.actions.formatterArgs.canDelete': 'delete',
         'columnsMeta.actions.formatterArgs.canClone': () => {
           return this.hasActionPerm('add') && !this.currentOrgIsRoot
@@ -96,11 +98,8 @@ export default {
         const notSet = _.get(config, arg) === undefined
         const isFunction = typeof action === 'function'
         if (notSet) {
-          if (isFunction) {
-            _.set(config, arg, action())
-          } else {
-            _.set(config, arg, this.hasActionPerm(action))
-          }
+          const hasActionPerm = isFunction ? action() : this.hasActionPerm(action)
+          _.set(config, arg, hasActionPerm)
         }
       }
       this.$log.debug('Header actions', this.headerActions)
