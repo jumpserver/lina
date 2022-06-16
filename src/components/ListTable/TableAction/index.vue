@@ -171,7 +171,10 @@ export default {
     float: right;
   }
   .mobile .search.right {
-    float: left;
+    float: none;
+  }
+  .mobile .search.right .action-search {
+    width: 100%;
   }
   .mobile .right-side {
     padding-top: 5px;

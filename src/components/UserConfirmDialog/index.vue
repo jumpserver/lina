@@ -67,16 +67,19 @@ export default {
       backends.sort((a, b) => b.level - a.level)
       this.ConfirmType = backends[0].name
       if (this.ConfirmType === 'relogin') {
-        this.visible = true
+        this.visible = false
         return this.$message.error(this.$t('auth.ReLogin'))
-      } else if (this.ConfirmType === 'mfa') {
+      }
+
+      if (this.ConfirmType === 'mfa') {
         this.Label = 'MFA'
         this.HelpText = this.$t('common.MFARequireForSecurity')
+        this.visible = true
       } else if (this.ConfirmType === 'password') {
         this.Label = this.$t('setting.password')
         this.HelpText = this.$t('common.PasswordRequireForSecurity')
+        this.visible = true
       }
-      this.visible = true
     })
   },
   methods: {
