@@ -31,6 +31,12 @@ export default {
           ]
         },
         columnsMeta: {
+          is_finished: {
+            width: '150px',
+            formatterArgs: {
+              showFalse: false
+            }
+          }
         }
       },
       headerActions: {
