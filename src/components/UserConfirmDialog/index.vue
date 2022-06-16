@@ -14,7 +14,7 @@
         <div style="line-height: 34px;text-align: center">{{ Label }}</div>
       </el-col>
       <el-col :md="14" :sm="24">
-        <el-input v-model="SecretKey" />
+        <el-input v-model="SecretKey" v-bind="showPassword" />
         <span class="help-tips help-block">{{ HelpText }}</span>
       </el-col>
       <el-col :md="4" :sm="24">
@@ -40,6 +40,16 @@ export default {
       ConfirmType: '',
       SecretKey: '',
       visible: false
+    }
+  },
+
+  computed: {
+    showPassword() {
+      if (this.ConfirmType === 'password') {
+        console.log('--------------')
+        return { 'show-password': true }
+      }
+      return {}
     }
   },
   watch: {
