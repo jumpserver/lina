@@ -251,7 +251,8 @@
   },
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
-    "ReLogin": "重新登录"
+    "ReLogin": "重新登录",
+    "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
     "ChangeViewHelpText": "点击切换不同视图",
