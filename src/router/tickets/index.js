@@ -82,6 +82,16 @@ export default {
           hidden: true
         },
         {
+          path: 'login-confirm/:id',
+          name: 'LoginTicketDetail',
+          component: () => import('@/views/tickets/LoginConfirm/Detail'),
+          meta: {
+            title: i18n.t('route.TicketDetail'),
+            permissions: ['tickets.view_ticket']
+          },
+          hidden: true
+        },
+        {
           path: 'request-application-perm/create',
           name: 'RequestApplicationPermTicketCreateUpdate',
           component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),

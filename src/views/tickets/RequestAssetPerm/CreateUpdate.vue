@@ -78,6 +78,9 @@ export default {
         apply_system_users: {
           type: 'systemUserSelect',
           component: Select2,
+          rules: [
+            { required: true }
+          ],
           label: this.$t('assets.SystemUser'),
           el: {
             value: [],

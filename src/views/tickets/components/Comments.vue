@@ -111,7 +111,6 @@ export default {
     }
   },
   mounted() {
-    console.log('this.object.type', this.object.type)
     switch (this.object.type) {
       case 'login_confirm':
         this.type_api = 'apply-login-tickets'
