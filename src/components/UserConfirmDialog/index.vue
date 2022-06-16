@@ -68,7 +68,7 @@ export default {
       this.ConfirmType = backends[0].name
       if (this.ConfirmType === 'relogin') {
         this.visible = false
-        return this.$message.error(this.$t('auth.ReLogin'))
+        return this.$message.error(this.$t('auth.ReLoginErr'))
       }
 
       if (this.ConfirmType === 'mfa') {

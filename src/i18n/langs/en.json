@@ -246,7 +246,8 @@
   },
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
-    "ReLogin": "Re-Login"
+    "ReLogin": "Re-Login",
+    "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
     "ChangeViewHelpText": "Click to change view",
