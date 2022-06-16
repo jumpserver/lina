@@ -99,6 +99,10 @@ export class FormFieldGenerator {
       case 'comment':
         field.el.type = 'textarea'
         break
+      case 'need_update_password':
+        field.el.type = 'checkbox'
+        field.component = null
+        break
     }
     return field
   }
