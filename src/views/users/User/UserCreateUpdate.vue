@@ -66,6 +66,7 @@ export default {
         need_update_password: {
           label: '',
           type: 'checkbox-group',
+          component: null, // 覆盖默认生成的 component
           el: {
             style: 'margin-top: -20px;margin-bottom: -10px'
           },
