@@ -109,6 +109,11 @@ export default {
       }
     }
   },
+  created() {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile/i.test(navigator.userAgent)) {
+      this.showTip = false
+    }
+  },
   methods: {
     async handleSelectView(key, keyPath) {
       const routeName = this.viewsMapper[key] || '/'
