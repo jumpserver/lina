@@ -255,6 +255,7 @@
   },
   "common": {
     "ChangeViewHelpText": "クリックしてさまざまなビューにアクセス",
+    "Component": "コンポーネント",
     "PrivateCloud": "プライベートクラウド",
     "PublicCloud": "パブリッククラウド",
     "Correlation": "関連",
