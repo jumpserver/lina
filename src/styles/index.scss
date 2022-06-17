@@ -2,7 +2,7 @@
 @import './mixin.scss';
 @import './transition.scss';
 @import './sidebar.scss';
-@import './element-variables.scss';
+// @import './element-variables.scss';
 @import './element-ui.scss';
 @import './theme/index.css';
 @import './menu.scss';
@@ -18,6 +18,21 @@ body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;
+}
+
+::-webkit-scrollbar {
+  width:14px;
+}
+::-webkit-scrollbar-track {
+  border-radius:10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  box-shadow: 8px 10px 20px #C6C6C6 inset;
+  border: 3px solid rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: 8px 10px 20px #878787 inset;
 }
 
 label {
