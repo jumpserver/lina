@@ -160,6 +160,8 @@ export function hasUUID(s) {
 }
 
 export function replaceUUID(s, n) {
+  const index = s.search(uuidPattern)
+  if (index > 0) return s.substr(0, index)
   return s.replace(uuidPattern, n)
 }
 
