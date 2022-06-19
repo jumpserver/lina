@@ -39,48 +39,48 @@ export default {
   },
   computed: {
     detailCardItems() {
-      const obj = this.object || {}
+      const { object } = this
       return [
         {
           key: this.$t('common.Number'),
-          value: obj.serial_num
+          value: object.serial_num
         },
         {
           key: this.$t('tickets.status'),
-          value: obj.status,
+          value: object.status,
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
         },
         {
           key: this.$t('tickets.type'),
-          value: obj.type_display
+          value: object.type_display
         },
         {
           key: this.$t('tickets.user'),
-          value: obj.rel_snapshot.applicant
+          value: object.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.OrgName'),
-          value: obj.org_name
+          value: object.org_name
         },
         {
           key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(obj.date_created)
+          value: toSafeLocalDateStr(object.date_created)
         },
         {
           key: this.$t('common.Comment'),
-          value: obj.comment
+          value: object.comment
         }
       ]
     },
     specialCardItems() {
-      const vm = this
-      const rel_snapshot = this.object.rel_snapshot
+      const { object } = this
+      const rel_snapshot = object.rel_snapshot
       return [
         {
           key: this.$t('applications.appType'),
-          value: `${vm.object.apply_category} / ${vm.object.apply_type} `
+          value: `${object.apply_category} / ${object.apply_type} `
         },
         {
           key: this.$t('applications.appName'),
@@ -92,24 +92,25 @@ export default {
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(vm.object.apply_date_start)
+          value: toSafeLocalDateStr(object.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(vm.object.apply_date_expired)
+          value: toSafeLocalDateStr(object.apply_date_expired)
         }
       ]
     },
     assignedCardItems() {
       const vm = this
-      const rel_snapshot = this.object.rel_snapshot
+      const { object } = this
+      const rel_snapshot = object.rel_snapshot
       return [
         {
           key: this.$t('tickets.PermissionName'),
           value: vm.object.apply_permission_name,
           formatter: function(item, value) {
-            const to = { name: 'ApplicationPermissionDetail', params: { id: vm.object.id }, query: { oid: vm.object.org_id }}
-            if (vm.$hasPerm('perms.view_applicationpermission') && vm.object.status === 'closed' && vm.object.state === 'approved') {
+            const to = { name: 'ApplicationPermissionDetail', params: { id: object.id }, query: { oid: object.org_id }}
+            if (vm.$hasPerm('perms.view_applicationpermission') && object.status === 'closed' && object.state === 'approved') {
               return <router-link to={to}>{ value }</router-link>
             } else {
               return <span>{ value }</span>
@@ -126,11 +127,11 @@ export default {
         },
         {
           key: this.$t('common.dateStart'),
-          value: toSafeLocalDateStr(vm.object.apply_date_start)
+          value: toSafeLocalDateStr(object.apply_date_start)
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(vm.object.apply_date_expired)
+          value: toSafeLocalDateStr(object.apply_date_expired)
         }
       ]
     },

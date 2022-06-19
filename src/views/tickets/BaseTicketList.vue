@@ -61,9 +61,12 @@ export default {
             }
           },
           {
-            prop: 'applicant_display',
+            prop: 'applicant',
             label: this.$t('tickets.user'),
-            sortable: 'custom'
+            sortable: 'custom',
+            formatter: row => {
+              return row.rel_snapshot.applicant
+            }
           },
           {
             prop: 'type_display',

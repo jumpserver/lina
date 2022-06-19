@@ -30,44 +30,43 @@ export default {
   },
   computed: {
     detailCardItems() {
+      const { object } = this
       return [
         {
           key: this.$t('tickets.Applicant'),
-          value: this.object.rel_snapshot.applicant
+          value: object.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.type'),
-          value: this.object.type_display
+          value: object.type_display
         },
         {
           key: this.$t('tickets.status'),
-          value: this.object.status,
+          value: object.status,
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
         },
         {
           key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          value: toSafeLocalDateStr(object.date_created)
         }
       ]
     },
     specialCardItems() {
-      return this.object.type === 'login_confirm' ? [] : [
-        // apply_login_asset: "114.118.2.76(114.118.2.76)"
-        // apply_login_system_user: "root()"
-        // apply_login_user: "Administrator(admin)"
+      const { object } = this
+      return object.type === 'login_confirm' ? [] : [
         {
           key: this.$t('acl.apply_login_asset'),
-          value: this.object.rel_snapshot.apply_login_asset
+          value: object.rel_snapshot.apply_login_asset
         },
         {
           key: this.$t('acl.apply_login_system_user'),
-          value: this.object.rel_snapshot.apply_login_system_user
+          value: object.rel_snapshot.apply_login_system_user
         },
         {
           key: this.$t('acl.apply_login_user'),
-          value: this.object.rel_snapshot.apply_login_user
+          value: object.rel_snapshot.apply_login_user
         }
       ]
     }

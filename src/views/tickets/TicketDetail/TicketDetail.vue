@@ -30,33 +30,34 @@ export default {
   },
   computed: {
     detailCardItems() {
+      const { object } = this
       return [
         {
           key: this.$t('tickets.Applicant'),
-          value: this.object.rel_snapshot.applicant
+          value: object.rel_snapshot.applicant
         },
         {
           key: this.$t('tickets.type'),
-          value: this.object.type_display
+          value: object.type_display
         },
         {
           key: this.$t('tickets.status'),
-          value: this.object.status,
+          value: object.status,
           formatter: (item, val) => {
             return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
           }
         },
         {
           key: this.$t('tickets.Assignees'),
-          value: this.object.process_map[this.object.approval_step - 1].assignees_display.join(',')
+          value: object.process_map[object.approval_step - 1].assignees_display.join(',')
         },
         {
           key: this.$t('tickets.Assignee'),
-          value: this.object.process_map[this.object.approval_step - 1].processor_display
+          value: object.process_map[object.approval_step - 1].processor_display
         },
         {
           key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          value: toSafeLocalDateStr(object.date_created)
         }
       ]
     }
