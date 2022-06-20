@@ -247,9 +247,13 @@
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
     "ReLogin": "Re-Login",
+    "ReLoginTitle": "The current three-party login user (cas/saml) is not bound to MFA and does not support password verification. Please login again",
+    "NeedReLogin": "Need Re-Login",
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "VerificationCodeSent": "The verification code has been sent",
+    "SendVerificationCode": "Send verification code",
     "ChangeViewHelpText": "Click to change view",
     "Component": "component",
     "PrivateCloud": "Private cloud",
