@@ -2,6 +2,7 @@
   <Page v-bind="$attrs">
     <UserConfirmDialog
       v-if="showPasswordDialog"
+      :url="confirmUrl"
       :visible.sync="showPasswordDialog"
       @UserConfirmDone="verifyDone"
       @UserConfirmCancel="exit"
@@ -284,6 +285,15 @@ export default {
           key: this.$t('users.Comment')
         }
       ]
+    },
+    confirmUrl() {
+      let url = ''
+      if (!this.object[`is_${this.currentEdit}_bound`]) {
+        url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
+      } else {
+        url = `/api/v1/authentication/${this.currentEdit}/qr/unbind/`
+      }
+      return url
     }
   },
   methods: {
@@ -309,10 +319,11 @@ export default {
       return backendList
     },
     verifyDone() {
+      const url = this.confirmUrl
       if (!this.object[`is_${this.currentEdit}_bound`]) {
-        window.location.href = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
+        window.location.href = url
       } else {
-        this.$axios.post(`/api/v1/authentication/${this.currentEdit}/qr/unbind/`).then(res => {
+        this.$axios.post(url).then(res => {
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$store.dispatch('users/getProfile')
         })

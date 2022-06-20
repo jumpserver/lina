@@ -252,9 +252,13 @@
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
     "ReLogin": "重新登录",
+    "ReLoginTitle": "当前三方登录用户（CAS/SAML），未绑定 MFA 且不支持密码校验，请重新登录。",
+    "NeedReLogin": "需要重新登录",
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "VerificationCodeSent": "验证码已发送",
+    "SendVerificationCode": "发送验证码",
     "ChangeViewHelpText": "点击切换不同视图",
     "Component": "组件",
     "PrivateCloud": "私有云",
