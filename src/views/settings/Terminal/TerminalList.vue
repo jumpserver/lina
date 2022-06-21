@@ -109,11 +109,16 @@ export default {
         },
         columns: [
           'name', 'remote_addr', 'session_online',
-          'stat.cpu_load',
-          'stat.disk_used', 'stat.memory_used',
-          'status',
-          'is_active', 'is_alive', 'actions'
+          'stat.cpu_load', 'stat.disk_used', 'stat.memory_used',
+          'status', 'is_active', 'is_alive', 'actions'
         ],
+        columnsShow: {
+          min: ['name'],
+          default: [
+            'name', 'session_online', 'stat.cpu_load', 'stat.disk_used',
+            'stat.memory_used', 'status'
+          ]
+        },
         columnsMeta: {
           name: {
             sortable: 'custom',
@@ -175,7 +180,6 @@ export default {
       },
       headerActions: {
         hasCreate: false,
-        hasBulkDelete: false,
         hasUpload: false,
         hasExport: false,
         hasImport: false,
