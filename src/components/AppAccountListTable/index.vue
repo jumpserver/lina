@@ -39,7 +39,7 @@ export default {
       type: Boolean,
       default: false
     },
-    systemUserDisabled: {
+    jumpRouterDisabled: {
       type: Boolean,
       default: true
     }
@@ -88,7 +88,7 @@ export default {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
-              can: this.systemUserDisabled && this.$hasPerm('assets.view_systemuser'),
+              can: this.jumpRouterDisabled && this.$hasPerm('assets.view_systemuser'),
               getTitle({ row }) {
                 return row.systemuser_display
               },

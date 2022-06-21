@@ -43,6 +43,10 @@ export default {
     hasClone: {
       type: Boolean,
       default: false
+    },
+    jumpRouterDisabled: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -72,7 +76,7 @@ export default {
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
-              can: this.$hasPerm('assets.view_asset'),
+              can: this.jumpRouterDisabled && this.$hasPerm('assets.view_asset'),
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
