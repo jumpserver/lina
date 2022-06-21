@@ -2,7 +2,14 @@
   <div>
     <el-row :gutter="24">
       <el-col :md="16" :sm="24">
-        <AccountListTable ref="ListTable" :url="assetUserUrl" :has-import="false" :has-clone="false" :has-left-actions="true" />
+        <AccountListTable
+          ref="ListTable"
+          :url="assetUserUrl"
+          :has-import="false"
+          :has-clone="false"
+          :has-left-actions="true"
+          :jump-router-disabled="jumpRouterDisabled"
+        />
       </el-col>
       <el-col :md="8" :sm="24">
         <QuickActions type="primary" :actions="quickActions" />
@@ -31,6 +38,7 @@ export default {
   data() {
     return {
       assetUserUrl: `/api/v1/assets/accounts/?asset=${this.object.id}`,
+      jumpRouterDisabled: false,
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
