@@ -6,6 +6,7 @@ import {
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
+const _ = require('lodash')
 
 const getDefaultState = () => {
   return {
@@ -64,6 +65,9 @@ const mutations = {
   },
   SET_MFA_VERIFY(state) {
     state.MFAVerifyAt = (new Date()).valueOf()
+  },
+  ADD_WORKBENCH_ORGS(state, org) {
+    state.workbenchOrgs.push(org)
   }
 }
 
@@ -108,6 +112,16 @@ const actions = {
   },
   setCurrentOrg({ commit }, data) {
     commit('SET_CURRENT_ORG', data)
+  },
+  currentUserJoinNewOrg({ state, commit }, users) {
+    const { profile, currentOrg, workbenchOrgs } = state
+    if (users.includes(profile.id)) {
+      const currentOrgInfo = { id: currentOrg.id, name: currentOrg.name }
+      const notExistInWorkbenchOrgs = _.find(workbenchOrgs, currentOrgInfo)
+      if (!notExistInWorkbenchOrgs) {
+        commit('ADD_WORKBENCH_ORGS', currentOrg)
+      }
+    }
   },
   setMFAVerify({ commit }) {
     commit('SET_MFA_VERIFY')
