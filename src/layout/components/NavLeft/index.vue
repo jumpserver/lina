@@ -9,7 +9,20 @@
         <Organization v-if="$hasLicense()" class="organization" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
-        {{ isTitle }}
+        <svg-icon
+          v-if="isRouteMeta.view === 'settings'"
+          icon-class="setting-fill"
+          style="margin-right: 0;"
+        />
+        <i
+          v-else
+          class="fa"
+          :class="isRouteMeta.icon"
+        />
+        <span
+          v-show="!isCollapse"
+          style="margin-left: 3px;"
+        >{{ isRouteMeta.title || '' }}</span>
       </div>
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
@@ -98,8 +111,8 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     },
-    isTitle() {
-      return this.currentViewRoute.meta?.title || ''
+    isRouteMeta() {
+      return this.currentViewRoute.meta || {}
     }
   },
   methods: {
@@ -111,6 +124,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .nav-header {
+    overflow: hidden;
     background-image: url('~@/assets/img/header-profile.png');
   }
 
@@ -120,16 +134,17 @@ export default {
 
   .nav-title {
     box-sizing: border-box;
-    height: 55px;
-    padding: 17px 0 17px 22px;
+    margin: 17px 0 17px 20px;
     font-size: 15px;
     font-weight: 460;
     color: #fff;
-    //background: #293846;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
   }
 
   .collapsed {
-    padding: 6px 12px!important;
+    text-align: left;
   }
 
   .organizations {
