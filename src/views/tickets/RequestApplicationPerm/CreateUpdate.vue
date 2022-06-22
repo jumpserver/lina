@@ -13,6 +13,7 @@ import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 import { ApplicationCascader } from '@/views/applications/const'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -24,10 +25,8 @@ export default {
     const now = new Date()
     const date_expired = getDaysFuture(7, now).toISOString()
     const date_start = now.toISOString()
-    // eslint-disable-next-line no-unused-vars
-    var org_id = ''
-    // eslint-disable-next-line no-unused-vars
-    var apply_category_type = []
+    let apply_category_type = []
+
     return {
       hasDetailInMsg: false,
       loading: true,
@@ -129,7 +128,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile.workbench_orgs?.map((item) => {
+            options: this.$store.state.users.workbenchOrgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -161,17 +160,21 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      workbenchOrgs: state => state.users.workbenchOrgs
+    }),
+    ...mapGetters(['currentOrg'])
+  },
   mounted() {
-    let userAllOrgIds = this.$store.state.users.profile['workbench_orgs']
-    const currentOrgId = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : null
-    userAllOrgIds = userAllOrgIds ? userAllOrgIds.map(i => i.id) : []
-    if (userAllOrgIds.length > 0) {
-      if (userAllOrgIds.includes(currentOrgId)) {
-        this.initial.org_id = currentOrgId
-      } else {
-        this.initial.org_id = userAllOrgIds[0]
-      }
+    const currentOrgId = this.currentOrg.id || ''
+    const userAllOrgIds = this.workbenchOrgs.map(i => i.id) || []
+    if (userAllOrgIds.includes(currentOrgId)) {
+      this.initial.org_id = currentOrgId
+    } else {
+      this.initial.org_id = userAllOrgIds[0]
     }
+
     this.loading = false
   },
   methods: {

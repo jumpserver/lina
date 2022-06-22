@@ -11,7 +11,10 @@
     after
     :destroy-on-close="true"
   >
-    <GenericCreateUpdateForm v-bind="formConfig" @submitSuccess="onSubmitSuccess()" />
+    <GenericCreateUpdateForm
+      v-bind="formConfig"
+      @submitSuccess="onSubmitSuccess"
+    />
   </Dialog>
 </template>
 <script>
@@ -76,8 +79,9 @@ export default {
     ...mapGetters(['currentOrg', 'currentUser', 'device'])
   },
   methods: {
-    onSubmitSuccess() {
+    onSubmitSuccess(res) {
       this.setting.InviteDialogVisible = false
+      this.$store.dispatch('users/currentUserJoinNewOrg', res.users)
     }
   }
 }
