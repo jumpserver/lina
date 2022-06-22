@@ -8,7 +8,7 @@ export default {
   component: Layout,
   meta: {
     title: i18n.t('route.Tickets'),
-    icon: 'check-square-o',
+    icon: 'fa-check-square-o',
     view: 'tickets',
     type: 'view',
     showNavSwitcher: false,
