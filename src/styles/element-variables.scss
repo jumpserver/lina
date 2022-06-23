@@ -992,3 +992,7 @@ $--breakpoints-spec: (
   'lg-and-down': (max-width: $--xl - 1),
   'xl-only' : (min-width: $--xl),
 );
+
+:export {
+  theme: $--color-primary;
+};
