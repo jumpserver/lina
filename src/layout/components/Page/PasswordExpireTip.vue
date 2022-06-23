@@ -22,7 +22,7 @@ export default {
       'publicSettings',
       'currentUser'
     ]),
-    isExpire() {
+    expireMsg() {
       // 用户来源不是Local时不显示密码过期提示
       if (this.currentUser.source !== 'local') {
         return false
@@ -33,7 +33,9 @@ export default {
         return this.$t('users.passwordExpired')
       }
       if (securityPasswordExpirationTime - intervalTime <= 5) {
-        return this.$t('users.passwordWillExpiredPrefixMsg') + (securityPasswordExpirationTime - intervalTime) + this.$t('users.passwordWillExpiredSuffixMsg')
+        return this.$t('users.passwordWillExpiredPrefixMsg') +
+          (securityPasswordExpirationTime - intervalTime) +
+          this.$t('users.passwordWillExpiredSuffixMsg')
       }
       return false
     }
