@@ -1104,6 +1104,7 @@
     "LicenseExpired": "ライセンスが期限切れです",
     "LicenseWillBe": "ライセンスはまもなく",
     "LicenseReachedAssetAmountLimit": "アセットの数がライセンス制限を超えました",
+    "LicenseForTest": "試験用ライセンス本ライセンスは試験用にのみ使用されます",
     "Expire": "期限切れ",
     "WeCom": "企業wechat",
     "DingTalk": "ホッチキス",
