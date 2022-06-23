@@ -89,7 +89,7 @@ export default {
     createSuccessNextRoute: {
       type: Object,
       default: function() {
-        const routeName = this.$route.name.replace('Create', 'List')
+        const routeName = this.$route.name?.replace('Create', 'List')
         return { name: routeName }
       }
     },
@@ -97,15 +97,14 @@ export default {
     updateSuccessNextRoute: {
       type: Object,
       default: function() {
-        const routeName = this.$route.name.replace('Update', 'List')
+        const routeName = this.$route.name?.replace('Update', 'List')
         return { name: routeName }
       }
     },
     objectDetailRoute: {
       type: Object,
       default: function() {
-        const routeName = this.$route.name
-          .replace('Update', 'Detail')
+        const routeName = this.$route.name?.replace('Update', 'Detail')
           .replace('Create', 'Detail')
         return { name: routeName }
       }

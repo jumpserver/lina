@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 
-export const OPEN = 'notified'
+export const OPEN = 'pending'
 export const APPROVE = 'approved'
 export const REJECT = 'rejected'
 export const CLOSED = 'closed'

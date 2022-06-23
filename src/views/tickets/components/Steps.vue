@@ -4,10 +4,10 @@
       <el-steps direction="vertical" :active="ticketSteps">
         <el-step
           :title="`${this.$t('tickets.OpenTicket')}：${object.type_display}`"
-          :description="`${this.$t('tickets.Applicant')}：${object.user_display}`"
+          :description="`${this.$t('tickets.Applicant')}：${object.rel_snapshot.applicant}`"
         >
           <div slot="description">
-            <div>{{ `${this.$t('tickets.Applicant')}：${object.applicant_display}` }}</div>
+            <div>{{ `${this.$t('tickets.Applicant')}：${object.rel_snapshot.applicant}` }}</div>
             <div>{{ `${this.$t('common.dateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
           </div>
         </el-step>
@@ -21,10 +21,10 @@
           </div>
           <div slot="description"><el-button type="text" style="color: blue" @click="lookOver(item.assignees_display)">点击查看 受理人</el-button></div>
           <div v-if="item.state==='closed'" slot="description">
-            <div>{{ `${thisCopy.$t('tickets.Assignee')}：${object.applicant_display}` }}</div>
+            <div>{{ `${thisCopy.$t('tickets.Assignee')}：${object.rel_snapshot.applicant}` }}</div>
             <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
           </div>
-          <div v-if="item.state!=='notified' && item.state!=='closed'" slot="description">
+          <div v-if="item.state!=='pending' && item.state!=='closed'" slot="description">
             <div>{{ `${thisCopy.$t('tickets.Assignee')}：${item.processor_display}` }}</div>
             <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
           </div>
@@ -68,6 +68,8 @@ export default {
     ticketSteps() {
       // eslint-disable-next-line no-unused-vars
       var countApprove = 0
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.process.sort((a, b) => a.approval_level - b.approval_level)
       this.process.forEach(item => {
         // eslint-disable-next-line space-before-blocks
         if (item.state === 'approved'){

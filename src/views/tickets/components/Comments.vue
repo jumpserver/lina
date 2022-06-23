@@ -94,6 +94,7 @@ export default {
   data() {
     return {
       comments: '',
+      type_api: '',
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -110,6 +111,25 @@ export default {
     }
   },
   mounted() {
+    switch (this.object.type) {
+      case 'login_confirm':
+        this.type_api = 'apply-login-tickets'
+        break
+      case 'apply_asset':
+        this.type_api = 'apply-asset-tickets'
+        break
+      case 'apply_application':
+        this.type_api = 'apply-app-tickets'
+        break
+      case 'login_asset_confirm':
+        this.type_api = 'apply-login-asset-tickets'
+        break
+      case 'command_confirm':
+        this.type_api = 'apply-command-tickets'
+        break
+      default:
+        this.type_api = 'tickets'
+    }
     this.getComment()
   },
   methods: {
@@ -134,16 +154,16 @@ export default {
     defaultApprove() {
       this.createComment(function() {
       })
-      const url = `/api/v1/tickets/tickets/${this.object.id}/approve/`
+      const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/approve/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     defaultReject() {
       this.createComment(function() {})
-      const url = `/api/v1/tickets/tickets/${this.object.id}/reject/`
+      const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     defaultClose() {
-      const url = `/api/v1/tickets/tickets/${this.object.id}/close/`
+      const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/close/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     createComment(successCallback) {

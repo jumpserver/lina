@@ -27,7 +27,7 @@ export default {
           }
         ],
         actions: {
-          detailApiUrl: `/api/v1/tickets/tickets/${this.$route.params.id}/`
+          detailApiUrl: `/api/v1/tickets/apply-app-tickets/${this.$route.params.id}/`
         },
         getObjectName: this.getObjectName,
         hasRightSide: false

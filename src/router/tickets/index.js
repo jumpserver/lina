@@ -4,7 +4,7 @@ import i18n from '@/i18n/i18n'
 
 export default {
   path: '/tickets',
-  redirect: '/tickets/tickets',
+  redirect: '/tickets/my-tickets',
   component: Layout,
   meta: {
     title: i18n.t('route.Tickets'),
@@ -18,25 +18,39 @@ export default {
   },
   children: [
     {
+      path: '/tickets/my-tickets',
+      name: 'MyTicketList',
+      component: () => import('@/views/tickets/MyTicketList'),
+      meta: {
+        title: i18n.t('route.MyTickets'),
+        icon: 'file-text-o',
+        showOrganization: false,
+        permissions: []
+      }
+    },
+    {
+
+      path: '/tickets/assigned-tickets',
+      name: 'AssignedTicketList',
+      component: () => import('@/views/tickets/AssignedTicketList'),
+      meta: {
+        title: i18n.t('route.AssignedTicketList'),
+        icon: 'check-square-o',
+        showOrganization: false,
+        permissions: []
+      }
+    },
+    {
       path: '/tickets/tickets',
       redirect: '',
       component: empty,
+      hidden: true,
       meta: {
         title: i18n.t('route.Tickets'),
         icon: 'file-text-o',
         showOrganization: false
       },
       children: [
-        {
-          path: '',
-          name: 'TicketList',
-          component: () => import('@/views/tickets'),
-          meta: {
-            title: i18n.t('route.Tickets'),
-            icon: 'file-text-o',
-            permissions: ['tickets.view_ticket']
-          }
-        },
         {
           path: 'request-asset-perm/create',
           name: 'RequestAssetPermTicketCreateUpdate',
@@ -61,6 +75,16 @@ export default {
           path: 'login-asset-confirm/:id',
           name: 'LoginAssetTicketDetail',
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
+          meta: {
+            title: i18n.t('route.TicketDetail'),
+            permissions: ['tickets.view_ticket']
+          },
+          hidden: true
+        },
+        {
+          path: 'login-confirm/:id',
+          name: 'LoginTicketDetail',
+          component: () => import('@/views/tickets/LoginConfirm/Detail'),
           meta: {
             title: i18n.t('route.TicketDetail'),
             permissions: ['tickets.view_ticket']
