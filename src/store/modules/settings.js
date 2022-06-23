@@ -4,6 +4,7 @@ import { getPublicSettings } from '@/api/settings'
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
 const state = {
+  theme: '#1ab394',
   showSettings: showSettings,
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
