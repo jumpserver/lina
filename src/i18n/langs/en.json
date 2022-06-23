@@ -1076,6 +1076,7 @@
     "LicenseExpired": "License expired",
     "LicenseWillBe": "License will expire at ",
     "LicenseReachedAssetAmountLimit": "The number of assets has exceeded the license limit",
+    "LicenseForTest": "Testing license, This license is only for testing",
     "Expire": "Expire",
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",
@@ -1085,7 +1086,6 @@
     "feiShuTest": "Test",
     "setting": "Setting"
   },
-
   "tickets": {
     "PermissionName": "Permission name",
     "Accept": "Accept",

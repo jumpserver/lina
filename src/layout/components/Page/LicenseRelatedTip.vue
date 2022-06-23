@@ -27,14 +27,14 @@ export default {
       'currentUser'
     ]),
     licenseMsg() {
-      if (this.isExpire) {
-        return this.isExpire
+      if (this.expireMsg) {
+        return this.expireMsg
       } else {
-        return this.reachedAssetAmountLimit
+        return this.reachLimitsMsg
       }
     },
-    isExpire() {
-      if (!this.publicSettings.XPACK_ENABLED || !this.$hasPerm('settings.change_license')) {
+    expireMsg() {
+      if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
         return false
       }
       const intervalDays = this.getIntervalDays(this.licenseData.date_expired)
@@ -46,9 +46,12 @@ export default {
       }
       return false
     },
-    reachedAssetAmountLimit() {
-      if (!this.publicSettings.XPACK_ENABLED || !this.$hasPerm('settings.change_license')) {
+    reachLimitsMsg() {
+      if (!this.publicSettings['XPACK_ENABLED'] || !this.$hasPerm('settings.change_license')) {
         return false
+      }
+      if (this.licenseData.corporation === 'FIT2CLOUD') {
+        return this.$t('setting.LicenseForTest')
       }
       if (this.licenseData['current_asset_count'] > this.licenseData.asset_count) {
         return this.$t('setting.LicenseReachedAssetAmountLimit')
@@ -57,7 +60,7 @@ export default {
     }
   },
   mounted() {
-    if (this.publicSettings.XPACK_ENABLED && this.$hasPerm('settings.change_license')) {
+    if (this.publicSettings['XPACK_ENABLED'] && this.$hasPerm('settings.change_license')) {
       this.$axios.get('/api/v1/xpack/license/detail').then(res => {
         this.licenseData = res
       }).finally(() => {
