@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert v-if="isExpire" type="error">
+    <el-alert v-if="expireMsg" type="error">
       {{ expireMsg }}
     </el-alert>
   </div>
