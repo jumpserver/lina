@@ -66,8 +66,8 @@ export default {
       display: none;
     }
     &>>> .jsoneditor-menu {
-      background: #1ab394;
-      border-bottom: 1px solid #1ab394;
+      background: var(--theme-color);
+      border-bottom: 1px solid var(--theme-color);
     }
   }
 </style>

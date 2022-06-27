@@ -2,7 +2,6 @@
 @import './mixin.scss';
 @import './transition.scss';
 @import './sidebar.scss';
-@import './element-variables.scss';
 @import './element-ui.scss';
 @import './theme/index.css';
 @import './menu.scss';
@@ -16,7 +15,7 @@ body {
   color: #676a6c;
   //font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 13px!important;
   line-height: 1.428;
 }
 
@@ -141,11 +140,11 @@ h4 {
   margin-top: 5px;
   margin-bottom: 10px;
   color: #737373;
-  font-size: 13px
+  font-size: 13px!important;
 }
 
 input[type=file] {
-  font-size: 12px;
+  font-size: 12px!important;;
   opacity: 80;
 }
 
@@ -177,4 +176,12 @@ input[type=file] {
 
 .el-pagination {
   overflow: auto;
+}
+
+.el-menu-item {
+  font-size: 13px!important;
+}
+
+.el-dropdown {
+  font-size: 13px!important;
 }

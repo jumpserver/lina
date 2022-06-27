@@ -254,8 +254,8 @@ export default {
     float: right;
     text-align: center;
     padding: 5px 0;
-    background-color: #1ab394;
-    border-color: #1ab394;
+    background-color: var(--theme-color);
+    border-color: var(--theme-color);
     color: #FFFFFF;
     border-radius: 3px;
   }

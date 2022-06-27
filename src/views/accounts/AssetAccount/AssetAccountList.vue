@@ -76,8 +76,8 @@ export default {
     margin-right: 10px;
     text-align: center;
     padding: 9px 0;
-    background-color: #1ab394;
-    border-color: #1ab394;
+    background-color: var(--theme-color);
+    border-color: var(--theme-color);
     color: #FFFFFF;
     border-radius: 5px;
     line-height: 1.428;

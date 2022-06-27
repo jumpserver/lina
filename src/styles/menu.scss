@@ -48,7 +48,7 @@
   }
 
   li.is-active {
-    border-left: 4px solid #19aa8d;
+    border-left: 4px solid var(--theme-color);
   }
 
   .el-submenu.is-opened {
@@ -63,5 +63,8 @@
 
   .nest-menu:last-child {
     padding-bottom: 10px;
+  }
+  .el-submenu__title {
+    font-size: 13px!important;
   }
 }

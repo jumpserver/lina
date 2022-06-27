@@ -2,7 +2,7 @@
   <el-color-picker
     v-model="theme"
     size="mini"
-    :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d']"
+    :predefine="themeList"
     class="theme-picker"
     popper-class="theme-picker-dropdown"
   />
@@ -17,12 +17,47 @@ export default {
   data() {
     return {
       chalk: '',
-      theme: ''
+      theme: '',
+      themeList1: [
+        {
+          label: '蓝色',
+          value: '#409EFF'
+        },
+        {
+          label: '深蓝',
+          value: '#1890ff'
+        },
+        {
+          label: '灰色',
+          value: '#60666F'
+        },
+        {
+          label: '黑色',
+          value: '#212121'
+        },
+        {
+          label: '绿色',
+          value: '#1ab394'
+        },
+        {
+          label: '靛青',
+          value: '#13c2c2'
+        },
+        {
+          label: '紫色',
+          value: '#6772E5'
+        },
+        {
+          label: '红色',
+          value: '#f5222d'
+        }
+      ],
+      themeList: ['#409EFF', '#1890ff', '#304156', '#212121', '#1ab394', '#13c2c2', '#6772E5', '#f5222d']
     }
   },
   computed: {
     defaultTheme() {
-      return this.$store.state.settings.theme
+      return this.$store.state.settings.themeColor
     }
   },
   watch: {
@@ -33,7 +68,7 @@ export default {
       immediate: true
     },
     async theme(val) {
-      const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
+      const oldVal = this.chalk ? this.theme : this.defaultTheme
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
@@ -58,6 +93,7 @@ export default {
             document.head.appendChild(styleTag)
           }
           styleTag.innerText = newStyle
+          document.documentElement.style.setProperty('--theme-color', this.theme)
         }
       }
 
@@ -81,12 +117,15 @@ export default {
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })
 
+      localStorage.setItem('themeColor', val)
       this.$emit('change', val)
 
       $message.close()
     }
   },
-
+  created() {
+    this.theme = this.defaultTheme
+  },
   methods: {
     updateStyle(style, oldCluster, newCluster) {
       let newStyle = style

@@ -1,12 +1,7 @@
 import Vue from 'vue'
-
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
 import ElementUI from 'element-ui'
-import 'elementCss'
-import './styles/element-variables.scss'
 import locale from 'elementLocale'
-
 import '@/styles/index.scss' // global css
 
 import App from './App'

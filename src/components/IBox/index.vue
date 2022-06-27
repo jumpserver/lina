@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .ibox {
     /*height: 100%;*/
     clear: both;
@@ -52,6 +52,12 @@ export default {
     min-height: 30px;
     line-height: 1.32;
     font-weight: normal;
+  }
+
+  .ibox.primary >>> .el-card__header {
+    background-color: var(--theme-color);
+    border-color: var(--theme-color);
+    color: white;
   }
 
   .ibox-title h5 {

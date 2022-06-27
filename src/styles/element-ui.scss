@@ -1,22 +1,16 @@
 // cover some element-ui styles
+@import './element-variables.scss';
+
+$--color-link: #1c84c6;
+$--color-link-highlight: #23527c;
+$--color-text-primary: #303133;
+/// color|1|Font Color|2
+$--color-text-regular: #606266;
 
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
   font-weight: 400 !important;
 }
-
-$--color-primary: #1ab394;
-$--color-success: #1c84c6;
-$--color-info: #23c6c8;
-$--color-warning: #f8ac59;
-$--color-danger: #ed5565;
-
-$--color-link: #1c84c6;
-$--color-link-highlight: #23527c;
-
-$--color-text-primary: #303133;
-/// color|1|Font Color|2
-$--color-text-regular: #606266;
 
 .el-upload {
   input[type="file"] {
@@ -27,7 +21,6 @@ $--color-text-regular: #606266;
 .el-upload__input {
   display: none;
 }
-
 
 // to fixed https://github.com/ElemeFE/element/issues/2461
 .el-dialog {
@@ -133,16 +126,10 @@ td .el-button.el-button--mini {
 
 .el-card__header {
   padding: 10px 15px;
-  font-size: 14px;
+  font-size: 14px!important;
   line-height: 18.5px;
   font-weight: normal;
   color: #333;
-}
-
-.el-card.primary > .el-card__header {
-  background-color: $--color-primary;
-  border-color: $--color-primary;
-  color: white;
 }
 
 .el-card.success > .el-card__header {
@@ -179,17 +166,17 @@ td .el-button.el-button--mini {
   padding: 6px 12px;
   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
   width: 100%;
-  font-size: 14px;
+  font-size: 14px!important;
   line-height: 1.5;
-  height: 34px;
+  height: 34px!important;
 }
 
 .el-input--small .el-input__inner {
-  height: 34px;
+  height: 34px!important;
 }
 
 .el-input--small .el-input__icon {
-  line-height: 34px;
+  line-height: 34px!important;
 }
 
 
@@ -212,9 +199,10 @@ td .el-button.el-button--mini {
 //  font-weight: 400;
 //}
 
-.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
-  background-color: $--color-primary;
-  color: white;
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover,
+.el-cascader-node:not(.is-disabled):hover {
+  color: var(--theme-color);
 }
 
 .el-select-dropdown__item.is-disabled:hover{
@@ -226,7 +214,7 @@ td .el-button.el-button--mini {
 }
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
-  color: white;
+  color: var(--theme-color);
   background-color: $--color-primary;
 }
 
@@ -325,7 +313,7 @@ td .el-button.el-button--mini {
   min-width: 28px;
   border-radius: 2px;
   border: 1px solid #DCDFE6;
-  font-size: 12px;
+  font-size: 12px!important;
   line-height: 26px;
   font-weight: 400;
 }
@@ -414,7 +402,7 @@ a {
 }
 
 .el-card {
-  color: #676a6c;
+  color: #676a6c!important;
 }
 
 
@@ -423,7 +411,7 @@ a {
 }
 
 .el-dialog__headerbtn .el-dialog__close {
-  font-size: 21px;
+  font-size: 21px!important;
   font-weight: 700;
   color: #000;
   text-shadow: 0 1px 0 #fff;
@@ -431,9 +419,9 @@ a {
 
 .el-dialog__headerbtn:focus .el-dialog__close, .el-dialog__headerbtn:hover .el-dialog__close {
   color: #000;
-  font-size: 22px;
+  font-size: 22px!important;
   font-weight: 800;
-  //color: red;
+
 }
 
 .el-button--danger.is-plain {
@@ -455,7 +443,7 @@ a {
 }
 
 .el-table {
-  font-size: 13px;
+  font-size: 13px!important;
 }
 
 .el-table-filter__list-item:hover {
@@ -491,4 +479,9 @@ a {
 .el-button--text:hover {
   color: $--color-link-highlight;
   background-color: rgba(0,0,0,.05)
+}
+
+.el-switch.is-checked .el-switch__core {
+  border-color: var(--theme-color)!important;
+  background-color: var(--theme-color)!important;
 }
