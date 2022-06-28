@@ -49,6 +49,7 @@ export default {
           helpText: this.$t('common.actionsTips')
         },
         apply_nodes: {
+          label: this.$t('perms.Node'),
           component: Select2,
           el: {
             value: [],
@@ -79,7 +80,7 @@ export default {
           type: 'systemUserSelect',
           component: Select2,
           rules: [
-            { required: true }
+            { required: true, message: this.$t('common.fieldRequiredError'), trigger: 'change' }
           ],
           label: this.$t('assets.SystemUser'),
           el: {
