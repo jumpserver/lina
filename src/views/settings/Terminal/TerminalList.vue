@@ -116,7 +116,7 @@ export default {
           min: ['name'],
           default: [
             'name', 'session_online', 'stat.cpu_load', 'stat.disk_used',
-            'stat.memory_used', 'status'
+            'stat.memory_used', 'status', 'actions'
           ]
         },
         columnsMeta: {
