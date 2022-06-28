@@ -52,7 +52,8 @@ import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
-import ThemePicker from '@/components/ThemePicker'
+// import ThemePicker from '@/components/ThemePicker'
+import ThemePicker from '@/components/ThemePicker2'
 
 export default {
   components: {

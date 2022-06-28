@@ -13,6 +13,13 @@ import '@/icons' // icon
 import '@/guards' // permission control
 import '@/directive'
 
+import { getIndexStyle } from '@/utils/theme/index'
+
+// 初始化主题样式
+getIndexStyle().then(() => {
+  store.dispatch('settings/changeThemeStyle')
+})
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

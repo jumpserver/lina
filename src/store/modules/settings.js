@@ -1,5 +1,6 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
+import { writeNewStyle } from '@/utils/theme/index'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -25,6 +26,10 @@ const mutations = {
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
     }
+  },
+  setTheme(state, data) {
+    state.themeColor = data
+    localStorage.setItem('themeColor', state.themeColor)
   }
 }
 
@@ -58,6 +63,10 @@ const actions = {
         reject(error)
       })
     })
+  },
+  changeThemeStyle({ state }) {
+    console.log('state: ---------------------------------------ss', state)
+    writeNewStyle(state.themeColor)
   }
 }
 
