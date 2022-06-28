@@ -57,7 +57,7 @@ export default {
           type: 'assetSelect',
           component: Select2,
           rules: [
-            { required: true, message: this.$t('common.fieldRequiredError'), trigger: 'change' }
+            { required: true, message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
           ],
           label: this.$t('applications.App'),
           el: {
@@ -74,7 +74,7 @@ export default {
           type: 'systemUserSelect',
           component: Select2,
           rules: [
-            { required: true, message: this.$t('common.fieldRequiredError'), trigger: 'change' }
+            { required: true, message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
           ],
           label: this.$t('assets.SystemUser'),
           el: {
