@@ -82,8 +82,9 @@ export function hasActionPerm(route, action) {
 export function getPermedViews() {
   const viewShowMapper = [
     ['console', store.getters.consoleOrgs.length > 0],
-    ['tickets', store.getters.consoleOrgs.length > 0],
+    ['tickets', true],
     ['audit', store.getters.auditOrgs.length > 0],
+    ['settings', true],
     ['workbench', true]
   ]
   return viewShowMapper.filter(i => i[1]).map(i => i[0])
