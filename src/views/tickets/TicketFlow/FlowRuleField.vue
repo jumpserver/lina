@@ -84,7 +84,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .text {
     font-size: 14px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
