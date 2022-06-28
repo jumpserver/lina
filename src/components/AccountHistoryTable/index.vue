@@ -1,24 +1,20 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="title" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo v-if="showUpdateSecretDialog" :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
-import UpdateSecretInfo from './UpdateSecretInfo'
 import { connectivityMeta } from './const'
-import { openTaskPage } from '@/utils/jms'
+import { GenericListPage } from '@/layout/components'
 
 export default {
-  name: 'AccountListTable',
+  name: 'AccountHistoryTable',
   components: {
-    ListTable,
-    UpdateSecretInfo,
+    GenericListPage,
     ShowSecretInfo
   },
   props: {
@@ -49,7 +45,6 @@ export default {
     const vm = this
     return {
       showViewSecretDialog: false,
-      showUpdateSecretDialog: false,
       account: {},
       tableConfig: {
         url: this.url,
@@ -111,54 +106,6 @@ export default {
                     vm.account = row
                     vm.showViewSecretDialog = true
                   }
-                },
-                {
-                  name: 'Delete',
-                  title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_authbook'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
-                      this.$refs.ListTable.reloadTable()
-                    })
-                  }
-                },
-                {
-                  name: 'Test',
-                  title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_authbook'),
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/accounts/${row.id}/verify/`,
-                      { action: 'test' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                },
-                {
-                  name: 'Update',
-                  title: this.$t('common.Update'),
-                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
-                    vm.account = row
-                    vm.showUpdateSecretDialog = false
-                    setTimeout(() => {
-                      vm.showUpdateSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'History',
-                  title: '历史',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({
-                      name: 'AssetAccountHistoryList',
-                      query: { id: row.id }
-                    })
-                  }
                 }
               ]
             }
@@ -167,7 +114,7 @@ export default {
       },
       headerActions: {
         hasLeftActions: this.hasLeftActions,
-        hasMoreActions: true,
+        hasMoreActions: false,
         hasCreate: false,
         hasImport: false,
         hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
@@ -180,6 +127,11 @@ export default {
         },
         hasSearch: true
       }
+    }
+  },
+  computed: {
+    title() {
+      return this.$t('assets.CommandFilterHelpMessage')
     }
   },
   watch: {
@@ -197,9 +149,6 @@ export default {
     }
   },
   methods: {
-    onUpdateAuthDone(account) {
-      Object.assign(this.account, account)
-    }
   }
 }
 </script>

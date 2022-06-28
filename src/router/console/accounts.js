@@ -21,6 +21,17 @@ export default [
           app: 'assets',
           permissions: ['assets.view_authbook']
         }
+      },
+      {
+        path: 'history',
+        name: 'AssetAccountHistoryList',
+        component: () => import('@/views/accounts/AssetAccount/AssetAccountHistoryList'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.AssetAccount'),
+          app: 'assets',
+          permissions: ['assets.view_authbook']
+        }
       }
     ]
   },
@@ -40,6 +51,17 @@ export default [
         path: '',
         name: 'ApplicationAccountList',
         component: () => import('@/views/accounts/ApplicationAccount/ApplicationAccountList'),
+        meta: {
+          title: i18n.t('route.ApplicationAccount'),
+          permissions: ['applications.view_account'],
+          resource: 'account'
+        }
+      },
+      {
+        path: 'history',
+        name: 'ApplicationAccountHistoryList',
+        component: () => import('@/views/accounts/ApplicationAccount/ApplicationAccountHistoryList'),
+        hidden: true,
         meta: {
           title: i18n.t('route.ApplicationAccount'),
           permissions: ['applications.view_account'],

@@ -1,19 +1,20 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="title" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
+import { GenericListPage } from '@/layout/components'
+
 import ShowSecretInfo from './ShowSecretInfo'
 
 export default {
   name: 'Detail',
   components: {
-    ListTable,
+    GenericListPage,
     ShowSecretInfo
   },
   props: {
@@ -53,7 +54,7 @@ export default {
         url: this.url,
         columns: [
           'app_display', 'username', 'category_display',
-          'type_display', 'systemuser', 'actions'
+          'type_display', 'systemuser', 'version', 'actions'
         ],
         columnsMeta: {
           app_display: {
@@ -100,6 +101,9 @@ export default {
               }
             }
           },
+          version: {
+            width: '70px'
+          },
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -117,25 +121,6 @@ export default {
                     this.account = row
                     this.showViewSecretDialog = true
                   }.bind(this)
-                },
-                {
-                  name: 'Update',
-                  title: this.$t('common.Update'),
-                  can: !this.$store.getters.currentOrgIsRoot,
-                  callback: function({ row }) {
-                    this.$message.success(this.$tc('applications.updateAccountMsg'))
-                  }.bind(this)
-                },
-                {
-                  name: 'History',
-                  title: '历史',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({
-                      name: 'ApplicationAccountHistoryList',
-                      query: { id: row.id }
-                    })
-                  }
                 }
               ]
             }
