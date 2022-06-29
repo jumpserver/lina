@@ -132,6 +132,12 @@ export default {
     padding: 6px 12px!important;
   }
 
+  .scrollbar-wrapper {
+    .el-submenu__title i {
+      color: red;
+    }
+  }
+
   .organizations {
     height: 55px;
   }
