@@ -1,15 +1,14 @@
 // sidebar
+$--color-white: #FFFFFF;
+$--color-black: #000000;
 $menuText: #a7b1c2;
 $menuActiveText: white;
+$subMenuActiveText: white; //https://github.com/ElemeFE/element/issues/12951
 $menuTextWeight: 600;
-$subMenuActiveText: #f4f4f5; //https://github.com/ElemeFE/element/issues/12951
-
-$menuBg: #2f4050;
-$menuHover: #293846;
-
-$subMenuBg: #1f2d3d;
-$subMenuHover: #001528;
-
+$menuBg: #323dbc;
+$menuHover: mix($--color-black, $menuBg, 10%) !default;
+$subMenuBg: mix($--color-black, $menuBg, 20%) !default;
+$subMenuHover: mix($--color-black, $menuBg, 30%);
 $sideBarWidth: 220px;
 
 // the :export directive is the magic sauce for webpack
