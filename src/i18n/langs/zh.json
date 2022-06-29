@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountHistableHelpMessage": "记录当前账号的历史版本",
     "PleaseClickLeftAssetToViewAssetAccount": "资产账号列表，点击左侧资产进行查看",
     "PleaseClickLeftApplicationToViewApplicationAccount": "应用账号列表，点击左侧应用进行查看",
     "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看"
@@ -259,6 +260,7 @@
   "common": {
     "VerificationCodeSent": "验证码已发送",
     "SendVerificationCode": "发送验证码",
+    "History": "历史",
     "ChangeViewHelpText": "点击切换不同视图",
     "Component": "组件",
     "PrivateCloud": "私有云",
@@ -695,6 +697,7 @@
     "TicketFlowUpdate": "更新审批流",
     "Accounts": "账号管理",
     "AssetAccount": "资产账号",
+    "AssetHistoryAccount": "资产历史账号",
     "ApplicationAccount": "应用账号",
     "Ticket":"工单",
     "MyTickets": "我的申请",

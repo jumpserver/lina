@@ -125,17 +125,6 @@ export default {
                   callback: function({ row }) {
                     this.$message.success(this.$tc('applications.updateAccountMsg'))
                   }.bind(this)
-                },
-                {
-                  name: 'History',
-                  title: '历史',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({
-                      name: 'ApplicationAccountHistoryList',
-                      query: { id: row.id }
-                    })
-                  }
                 }
               ]
             }

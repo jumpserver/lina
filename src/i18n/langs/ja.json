@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountHistableHelpMessage": "現在のアカウントの履歴バージョンを記録する",
     "PleaseClickLeftAssetToViewAssetAccount": "資産のアカウントのリスト、左側の資産をクリックして表示します",
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。"
@@ -259,6 +260,7 @@
   "common": {
     "VerificationCodeSent": "検証コードが送信されました",
     "SendVerificationCode": "認証コードの送信",
+    "History": "歴史",
     "ChangeViewHelpText": "クリックしてさまざまなビューにアクセス",
     "Component": "コンポーネント",
     "PrivateCloud": "プライベートクラウド",
@@ -695,6 +697,7 @@
     "TicketFlowUpdate": "承認フローの更新",
     "Accounts": "アカウント管理",
     "AssetAccount": "資産アカウント",
+    "AssetHistoryAccount": "資産履歴",
     "ApplicationAccount": "アプリアカウント",
     "Ticket": "ワークオーダー",
     "SessionDetail": "セッションの詳細",

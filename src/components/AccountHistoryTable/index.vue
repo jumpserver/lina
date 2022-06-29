@@ -7,8 +7,7 @@
 
 <script>
 import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
-import ShowSecretInfo from './ShowSecretInfo'
-import { connectivityMeta } from './const'
+import ShowSecretInfo from '../AccountListTable/ShowSecretInfo'
 import { GenericListPage } from '@/layout/components'
 
 export default {
@@ -25,7 +24,7 @@ export default {
     exportUrl: {
       type: String,
       default() {
-        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+        return this.url.replace('/assets/accounts-history/', '/assets/account-history-secrets/')
       }
     },
     hasLeftActions: {
@@ -53,7 +52,7 @@ export default {
           resource: 'authbook'
         },
         columns: [
-          'hostname', 'ip', 'username', 'version', 'connectivity',
+          'hostname', 'ip', 'username', 'version',
           'systemuser', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
@@ -88,7 +87,6 @@ export default {
           version: {
             width: '70px'
           },
-          connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -100,7 +98,7 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_assetaccountsecret'),
+                  can: this.$hasPerm('assets.view_assethistoryaccountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
@@ -117,7 +115,7 @@ export default {
         hasMoreActions: false,
         hasCreate: false,
         hasImport: false,
-        hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
+        hasExport: this.$hasPerm('assets.view_assethistoryaccountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
@@ -131,13 +129,13 @@ export default {
   },
   computed: {
     title() {
-      return this.$t('assets.CommandFilterHelpMessage')
+      return this.$t('accounts.AccountHistableHelpMessage')
     }
   },
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
-      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
+      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts-history/', '/account-history-secrets/'))
     }
   },
   mounted() {
