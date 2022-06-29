@@ -1,5 +1,8 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <el-alert type="success" v-html="helpMessage" />
+    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  </div>
 </template>
 
 <script>
@@ -12,6 +15,7 @@ export default {
   },
   data() {
     return {
+      helpMessage: this.$t('setting.EndpointListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoints/',
         columns: [
