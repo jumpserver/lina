@@ -1,11 +1,12 @@
 // sidebar
-$--color-white: #FFFFFF;
-$--color-black: #000000;
-$menuText: #a7b1c2;
+$menuText: white;
 $menuActiveText: white;
 $subMenuActiveText: white; //https://github.com/ElemeFE/element/issues/12951
+$menuBg: #ce3e2e;
+
+$--color-white: #FFFFFF;
+$--color-black: #000000;
 $menuTextWeight: 600;
-$menuBg: #323dbc;
 $menuHover: mix($--color-black, $menuBg, 10%) !default;
 $subMenuBg: mix($--color-black, $menuBg, 20%) !default;
 $subMenuHover: mix($--color-black, $menuBg, 30%);
