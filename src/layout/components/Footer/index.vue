@@ -33,7 +33,8 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="scss">
+@import "~@/styles/variables";
 .el-footer{
     padding: 0;
     height: 35px !important;
