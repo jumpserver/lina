@@ -25,7 +25,7 @@
         >{{ isRouteMeta.title || '' }}</span>
       </div>
     </div>
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
@@ -58,10 +58,10 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
-import variables from '@/styles/element-variables.scss'
 import Hamburger from '@/components/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
+import variables from '@/styles/themes/index.scss'
 
 export default {
   components: {
@@ -123,9 +123,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  @import "~@/styles/themes/index.scss";
   .nav-header {
     overflow: hidden;
-    background-image: url('~@/assets/img/header-profile.png');
+    background-color: $subMenuBg;
   }
 
   .nav-logo {
@@ -155,7 +156,7 @@ export default {
     display: block;
     width: 100%;
     height: 40px;
-    background-color: #293846;
+    background-color: $subMenuBg;
 
     .toggle-bar {
       width: 55px;
@@ -170,7 +171,7 @@ export default {
     }
 
     .toggle-bar:hover {
-      background-color: rgb(59, 76, 91);
+      background-color: $subMenuHover;
     }
 
     .hamburger-container {

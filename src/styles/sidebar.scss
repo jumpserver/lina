@@ -1,4 +1,4 @@
-@import "./element-variables";
+@import "./themes/index";
 #app {
   .main-container {
     min-height: 100%;
@@ -13,7 +13,7 @@
     background-color: $menuBg;
     height: 100%;
     position: fixed;
-    font-size: 0px;
+    font-size: 0;
     top: 0;
     bottom: 0;
     left: 0;
@@ -101,7 +101,6 @@
 
       .el-tooltip {
         // padding: 0 !important;
-
         .svg-icon {
           margin-left: 20px;
         }
@@ -146,7 +145,7 @@
   // mobile responsive
   .mobile {
     .main-container {
-      margin-left: 0px;
+      margin-left: 0;
     }
 
     .sidebar-container {
@@ -164,7 +163,6 @@
   }
 
   .withoutAnimation {
-
     .main-container,
     .sidebar-container {
       transition: none;
@@ -183,7 +181,6 @@
   .nest-menu .el-submenu-sidebar>.el-submenu__title,
   .el-menu-item {
     &:hover {
-      // you can use $subMenuHover
       background-color: $menuHover !important;
     }
   }

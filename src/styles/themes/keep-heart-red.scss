@@ -1,9 +1,10 @@
 // ElementUI
-$--color-primary: #1ab394;
+$--color-primary: #ed5565;
 $--color-success: #1c84c6;
 $--color-info: #23c6c8;
 $--color-warning: #f8ac59;
 $--color-danger: #ed5565;
+$--color-black: #000000;
 $--font-size-base: 13px;
 $--size-base: 13px;
 
@@ -18,19 +19,9 @@ $menuText: #a7b1c2;
 $menuActiveText: white;
 $menuTextWeight: 600;
 $subMenuActiveText: #f4f4f5;
-$menuBg: #2f4050;
-$menuHover: #293846;
-$subMenuBg: #1f2d3d;
-$subMenuHover: #001528;
+$menuBg: #ed5565;
+$menuHover: mix($--color-black, $menuBg, 10%);
+$subMenuBg: mix($--color-black, $menuBg, 20%);
+$subMenuHover: mix($--color-black, $menuBg, 30%);
 $sideBarWidth: 220px;
 
-:export {
-  menuText: $menuText;
-  menuActiveText: $menuActiveText;
-  subMenuActiveText: $subMenuActiveText;
-  menuBg: $menuBg;
-  menuHover: $menuHover;
-  subMenuBg: $subMenuBg;
-  subMenuHover: $subMenuHover;
-  sideBarWidth: $sideBarWidth;
-}

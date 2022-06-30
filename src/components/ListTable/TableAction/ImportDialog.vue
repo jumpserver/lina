@@ -233,7 +233,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  @import "~@/styles/element-variables.scss";
+  @import "~@/styles/themes/index.scss";
   .error-msg {
     color: $--color-danger;
   }

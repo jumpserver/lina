@@ -1,0 +1,27 @@
+// ElementUI
+$--color-primary: #1ab394;
+$--color-success: #1c84c6;
+$--color-info: #23c6c8;
+$--color-warning: #f8ac59;
+$--color-danger: #ed5565;
+$--color-black: #000000;
+$--font-size-base: 13px;
+$--size-base: 13px;
+
+$--color-link: #1c84c6;
+$--color-link-highlight: #23527c;
+
+$--color-text-primary: #303133;
+$--color-text-regular: #606266;
+
+// Menu
+$menuText: #a7b1c2;
+$menuActiveText: white;
+$menuTextWeight: 600;
+$subMenuActiveText: #f4f4f5;
+$menuBg: #2f4050;
+$menuHover: mix($--color-black, $menuBg, 10%);
+$subMenuBg: mix($--color-black, $menuBg, 20%);
+$subMenuHover: mix($--color-black, $menuBg, 30%);
+$sideBarWidth: 220px;
+
