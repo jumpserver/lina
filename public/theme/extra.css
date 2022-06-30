@@ -3,15 +3,11 @@
 /* Alert */
 .el-alert--info.is-light {
   background-color: light-9;
-  color: light-1;
+  color: light-2;
   border: 1px solid;
 }
 
 .el-alert--success.is-light {
-  border: #bce8f1 solid 1px;
-}
-
-.el-alert--info.is-light {
   border: #bce8f1 solid 1px;
 }
 
@@ -21,4 +17,8 @@
 
 .el-alert--error.is-light {
   border: #f1dfe2 solid 1px;
+}
+
+.el-alert--info .el-alert__description {
+  color: light-2;
 }

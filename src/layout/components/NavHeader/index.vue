@@ -139,11 +139,11 @@ export default {
           background-color: #e6e6e6;
         }
         &>>> i {
-          color: $headerIconColor;
+          color: var(--theme-color);
           font-size: 16px;
         }
         &>>> .svg-icon {
-          color: $headerIconColor;
+          color: var(--theme-color);
           font-size: 16px;
         }
       }

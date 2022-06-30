@@ -65,7 +65,6 @@ const actions = {
     })
   },
   changeThemeStyle({ state }) {
-    console.log('state: ---------------------------------------ss', state)
     writeNewStyle(state.themeColor)
   }
 }
