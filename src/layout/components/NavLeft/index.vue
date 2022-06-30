@@ -110,8 +110,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  @import "~@/styles/variables";
   .nav-header {
-    background-image: url('~@/assets/img/header-profile.png');
+    background-color: $subMenuBg;
   }
 
   .nav-logo {
@@ -125,11 +126,16 @@ export default {
     font-size: 15px;
     font-weight: 460;
     color: #fff;
-    //background: #293846;
   }
 
   .collapsed {
     padding: 6px 12px!important;
+  }
+
+  .scrollbar-wrapper {
+    .el-submenu__title i {
+      color: red;
+    }
   }
 
   .organizations {
@@ -140,7 +146,7 @@ export default {
     display: block;
     width: 100%;
     height: 40px;
-    background-color: #293846;
+    background-color: $subMenuBg;
 
     .toggle-bar {
       width: 55px;
@@ -155,7 +161,7 @@ export default {
     }
 
     .toggle-bar:hover {
-      background-color: rgb(59, 76, 91);
+      background-color: $subMenuHover;
     }
 
     .hamburger-container {
