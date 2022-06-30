@@ -24,7 +24,7 @@ export default {
           'password_strategy', 'update_password', 'password', 'need_update_password',
           'set_public_key', 'public_key', 'mfa_level', 'source'
         ]],
-        [this.$t('users.Secure'), ['system_roles', 'org_roles', 'date_expired']],
+        [this.$t('users.Secure'), ['system_roles', 'org_roles', 'is_active', 'date_expired']],
         [this.$t('common.Other'), ['phone', 'wechat', 'comment']]
       ],
       url: '/api/v1/users/users/',

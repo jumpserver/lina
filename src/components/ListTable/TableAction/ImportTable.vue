@@ -202,10 +202,13 @@ export default {
       }]
       for (const item of tableTitles) {
         const dataItemLens = tableData.map(d => {
-          const prop = item[1]
-          const itemColData = d[prop]
           if (!d) {
             return 0
+          }
+          const prop = item[1]
+          const itemColData = d[prop]
+          if (typeof itemColData === 'boolean') {
+            return 5 // boolean is 5 characters long 并且 boolean.length 是 undefined
           }
           if (typeof itemColData !== 'number' && (!itemColData || !itemColData.length)) {
             return 0

@@ -49,7 +49,7 @@ export default {
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
           'groups_display', 'system_roles', 'org_roles',
-          'source', 'is_valid', 'login_blocked', 'mfa_enabled',
+          'source', 'is_active', 'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
           'comment', 'created_by', 'actions'
