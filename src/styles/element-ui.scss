@@ -395,6 +395,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  color: $--color-primary;
+}
+
 .el-tag--default.el-tag--dark {
   background-color: #d1dade;
   color: #5e5e5e;

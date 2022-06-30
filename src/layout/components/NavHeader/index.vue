@@ -93,6 +93,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "~@/styles/variables.scss";
   .navbar {
     position: relative;
     height: 55px;
@@ -138,11 +139,11 @@ export default {
           background-color: #e6e6e6;
         }
         &>>> i {
-          color: #7c7e7f;
+          color: $headerIconColor;
           font-size: 16px;
         }
         &>>> .svg-icon {
-          color: #7c7e7f;
+          color: $headerIconColor;
           font-size: 16px;
         }
       }

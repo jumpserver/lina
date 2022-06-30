@@ -1,5 +1,5 @@
 <template>
-  <el-link :disabled="disabled" @click="onClick">
+  <el-link :underline="false" :disabled="disabled" @click="onClick">
     {{ title }}
   </el-link>
 </template>

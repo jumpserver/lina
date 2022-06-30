@@ -52,6 +52,10 @@
     border-left: 4px solid var(--theme-color);
   }
 
+  .el-menu-item i, .el-submenu__title i {
+    color: $menuText;
+  }
+
   .el-submenu.is-opened {
     background-color: $subMenuBg;
     .el-submenu__title {
