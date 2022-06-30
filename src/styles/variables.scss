@@ -5,11 +5,29 @@ $menuText: #a7b1c2;
 $menuActiveText: white;
 $subMenuActiveText: white; //https://github.com/ElemeFE/element/issues/12951
 $menuTextWeight: 600;
-$menuBg: #323dbc;
-$menuHover: mix($--color-black, $menuBg, 10%) !default;
-$subMenuBg: mix($--color-black, $menuBg, 20%) !default;
-$subMenuHover: mix($--color-black, $menuBg, 30%);
+$menuBg: var(--menu-bg);
+
+
+// 这是计算 tintColor 的方法
+@function tint($color, $percentage) {
+  @return mix(#000000, $color, $percentage);
+}
+
+// $menuHover: tint(#{$menuBg}, 10%) !default;
+// $subMenuBg: tint(#{$menuBg}, 20%) !default;
+// $subMenuHover:tint(#{$menuBg}, 30%) !default;
+
+$menuHover: calc(#{$menuBg} * 10%) !default;
+$subMenuBg: calc(#{$menuBg} * 20%) !default;
+$subMenuHover:calc(#{$menuBg} * 30%) !default;
+
+// $menuHover: mix($--color-black, $menuBg, 10%) !default;
+// $subMenuBg: mix($--color-black, $menuBg, 20%) !default;
+// $subMenuHover: mix($--color-black, $menuBg, 30%);
 $sideBarWidth: 220px;
+
+
+
 
 // the :export directive is the magic sauce for webpack
 // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
