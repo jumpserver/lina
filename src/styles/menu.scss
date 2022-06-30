@@ -11,6 +11,9 @@
       &:hover {
         color: $menuActiveText;
       }
+      i {
+        color: $menuText;
+      }
     }
   }
   .el-menu-item, .el-submenu-sidebar .el-menu-item {
@@ -22,6 +25,9 @@
     &:hover {
       background-color: $subMenuHover;
       color: $menuActiveText;
+    }
+    i {
+      color: $menuText;
     }
   }
 

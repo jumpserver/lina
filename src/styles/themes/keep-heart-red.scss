@@ -15,11 +15,11 @@ $--color-text-primary: #303133;
 $--color-text-regular: #606266;
 
 // Menu
-$menuText: #a7b1c2;
+$menuText: rgb(241, 212, 174);
 $menuActiveText: white;
 $menuTextWeight: 600;
 $subMenuActiveText: #f4f4f5;
-$menuBg: #ed5565;
+$menuBg: #b4312b;
 $menuHover: mix($--color-black, $menuBg, 10%);
 $subMenuBg: mix($--color-black, $menuBg, 20%);
 $subMenuHover: mix($--color-black, $menuBg, 30%);
