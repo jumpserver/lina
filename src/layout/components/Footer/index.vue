@@ -1,7 +1,7 @@
 <template>
   <div class="footer" :class="device" :style="style">
     <div class="pull-right version">
-      Version <strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv2. </span>
+      Version <strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span>
     </div>
     <div>{{ corporation }}</div>
   </div>
