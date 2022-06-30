@@ -125,7 +125,7 @@ export default {
     padding: 17px 0 17px 22px;
     font-size: 15px;
     font-weight: 460;
-    color: #fff;
+    color: $menuActiveText;
   }
 
   .collapsed {
