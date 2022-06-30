@@ -1,3 +1,4 @@
+@import "./element-variables";
 #app {
   .main-container {
     min-height: 100%;
@@ -29,7 +30,7 @@
     }
 
     .el-scrollbar__bar.is-vertical {
-      right: 0px;
+      right: 0;
     }
 
     .el-scrollbar {

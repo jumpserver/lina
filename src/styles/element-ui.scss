@@ -1,22 +1,11 @@
-// cover some element-ui styles
+@import "./element-variables";
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
 
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
   font-weight: 400 !important;
 }
-
-$--color-primary: #1ab394;
-$--color-success: #1c84c6;
-$--color-info: #23c6c8;
-$--color-warning: #f8ac59;
-$--color-danger: #ed5565;
-
-$--color-link: #1c84c6;
-$--color-link-highlight: #23527c;
-
-$--color-text-primary: #303133;
-/// color|1|Font Color|2
-$--color-text-regular: #606266;
 
 .el-upload {
   input[type="file"] {
@@ -492,3 +481,4 @@ a {
   color: $--color-link-highlight;
   background-color: rgba(0,0,0,.05)
 }
+
