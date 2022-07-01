@@ -88,20 +88,26 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+  $header-height: 50px;
   .navbar {
     position: relative;
-    height: 55px;
+    height: $header-height;
+    line-height: $header-height;
     overflow: hidden;
     background: #f3f3f4;
+
     .navbar-left {
       float: left;
       .left-item {
-        line-height: 55px;
+        line-height: $header-height;
         display: inline-block;
         vertical-align: middle;
+
         &>>> .el-submenu__title {
           font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
           padding: 0 14px;
+          line-height: $header-height;
+          height: $header-height;
         }
         &>>> .org-select {
           padding: 0;
@@ -119,7 +125,7 @@ export default {
       }
 
       .header-item {
-        line-height: 55px;
+        line-height: $header-height;
         display: inline-block;
         padding-right: 10px;
         padding-left: 10px;

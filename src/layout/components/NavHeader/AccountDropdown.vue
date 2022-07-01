@@ -67,8 +67,8 @@ export default {
 
 <style scoped>
   .header-avatar {
-    height: 30px;
-    width: 30px;
+    height: 24px;
+    width: 24px;
     margin-right: 5px;
     vertical-align: middle;
   }
