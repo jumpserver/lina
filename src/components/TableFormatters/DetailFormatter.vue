@@ -1,5 +1,12 @@
 <template>
-  <el-link class="detail" :disabled="disabled" :type="col.type || 'success'" @click="goDetail">{{ iTitle }}</el-link>
+  <el-link
+    class="detail"
+    :disabled="disabled"
+    :type="col.type"
+    @click="goDetail"
+  >
+    {{ iTitle }}
+  </el-link>
 </template>
 
 <script>

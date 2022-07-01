@@ -127,6 +127,10 @@ export default {
     color: #888;
   }
 
+  .action-search >>> .el-cascader {
+    line-height: 32px !important;
+  }
+
   .right-side-actions {
     display: flex;
     padding-left: 10px;
@@ -146,17 +150,19 @@ export default {
   .datepicker{
     margin-left: 10px;
   }
+  .table-header {
+    line-height: 32px;
+  }
   .left-side {
     float: left;
     display: block;
-    line-height: 36px;
   }
   .right-side {
     float: right;
   }
   .search {
     display: flex;
-    flex-direction: row
+    flex-direction: row;
   }
   .mobile .search {
     display: inherit;
@@ -178,5 +184,9 @@ export default {
   }
   .mobile .right-side {
     padding-top: 5px;
+  }
+
+  .filter-field.right-side-item.action-search {
+    height: 34px;
   }
 </style>

@@ -1,4 +1,4 @@
-@import "./element-variables";
+@import "./variables";
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";
 
@@ -101,19 +101,11 @@ td .el-button.el-button--mini {
 }
 
 .el-alert--success.is-light {
-  border: #bce8f1 solid 1px;
+  border: $--color-success-light 1px solid;
 }
 
 .el-alert--info.is-light {
-  border: #bce8f1 solid 1px;
-}
-
-.el-alert--warning.is-light {
-  border: #faebcc solid 1px;
-}
-
-.el-alert--error.is-light {
-  border: #f1dfe2 solid 1px;
+  border: $--color-info-light 1px solid;
 }
 
 .el-alert__content {
@@ -180,7 +172,6 @@ td .el-button.el-button--mini {
 .el-input--small .el-input__icon {
   line-height: 34px;
 }
-
 
 .el-select-dropdown__item.selected {
   font-weight: 400;
@@ -389,11 +380,6 @@ td .el-button.el-button--mini {
   background-color: #23c6c8;
   border-color: #23c6c8;
   color: #fff;
-}
-
-a {
-  color: $--color-link !important;
-  text-decoration: none;
 }
 
 .el-tag--default.el-tag--dark {

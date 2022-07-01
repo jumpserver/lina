@@ -52,6 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "~@/styles/variables.scss";
   .json-editor {
     &>>> .jsoneditor {
       border: 1px solid #e5e6e7;
@@ -66,8 +67,8 @@ export default {
       display: none;
     }
     &>>> .jsoneditor-menu {
-      background: #1ab394;
-      border-bottom: 1px solid #1ab394;
+      background: $--color-primary;
+      border-bottom: 1px solid $--color-primary;
     }
   }
 </style>

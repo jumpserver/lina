@@ -8,6 +8,7 @@
 <script>
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/legend'
+import vars from '@/styles/variables.scss'
 export default {
   name: 'LoginMetric',
   props: {
@@ -55,7 +56,7 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        color: ['#1ab394', '#1C84C6', '#9CC3DA'],
+        color: [vars['color-primary'], vars['color-info'], vars['color-success']],
         xAxis: [
           {
             type: 'category',
@@ -113,7 +114,6 @@ export default {
     },
     getDataUrl() {
       this.dataUrl = this.$refs.echarts.getDataURL({
-
       })
     }
   }

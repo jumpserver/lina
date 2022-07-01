@@ -59,7 +59,7 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
-  @import "~@/styles/element-variables.scss";
+  @import "~@/styles/variables.scss";
 
   .app-wrapper {
     @include clearfix;

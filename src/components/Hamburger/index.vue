@@ -21,12 +21,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "~@/styles/variables.scss";
 .hamburger {
   display: inline-block;
   vertical-align: middle;
   font-size: 20px;
-  color: rgb(167, 177, 194);
+  color: $menuText;
 }
 .hamburger.is-active {
   transform: rotate(180deg);
