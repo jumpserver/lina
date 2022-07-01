@@ -1,4 +1,4 @@
-import { generateColors } from './color'
+import { generateColors, changeSidebarColor } from './color'
 import axios from 'axios'
 import formula from './formula.json'
 import variables from '@/styles/var.scss'
@@ -25,7 +25,7 @@ export function writeNewStyle(themeColor) {
     document.head.appendChild(styleTag)
   }
   styleTag.innerText = cssText + colorsCssText
-  document.documentElement.style.setProperty('--theme-color', themeColor)
+  changeSidebarColor(themeColor)
 }
 
 export function getIndexStyle() {

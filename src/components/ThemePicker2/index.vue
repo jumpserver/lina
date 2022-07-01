@@ -43,7 +43,6 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import { changeSidebarColor } from '@/utils/theme/sidebar-variables'
 
 export default {
   name: 'ThemePicker2',
@@ -90,7 +89,6 @@ export default {
   },
   methods: {
     handleChangeColor(val) {
-      changeSidebarColor(val)
       this.$store.commit('settings/setTheme', val)
       this.$store.dispatch('settings/changeThemeStyle')
     },

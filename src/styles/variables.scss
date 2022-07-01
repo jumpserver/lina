@@ -1,15 +1,20 @@
 // sidebar
 $menuText: #f8e9b6;
 $menuActiveText: white;
-$subMenuActiveText: white; //https://github.com/ElemeFE/element/issues/12951
-$menuBg: #cc3829;
+$subMenuActiveText: white;
+// $menuBg: #cc3829;
+$menuBg: var(--menu-bg, #cc3829);
 
 $--color-white: #FFFFFF;
 $--color-black: #000000;
 $menuTextWeight: 600;
-$menuHover: mix($--color-black, $menuBg, 10%) !default;
-$subMenuBg: mix($--color-black, $menuBg, 20%) !default;
-$subMenuHover: mix($--color-black, $menuBg, 30%);
+
+$menuHover: var(--menu-hover, #cc3829) !default;
+$subMenuBg: var(--submenu-bg, #cc3829) !default;
+$subMenuHover:  var(--submenu-hover, #cc3829) !default;
+// $menuHover: mix($--color-black, $menuBg, 10%) !default;
+// $subMenuBg: mix($--color-black, $menuBg, 20%) !default;
+// $subMenuHover: mix($--color-black, $menuBg, 30%);
 $sideBarWidth: 220px;
 
 // header icon color
