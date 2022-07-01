@@ -105,7 +105,7 @@ export default {
 
         &>>> .el-submenu__title {
           font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-          padding: 0 14px;
+          padding: 0 8px;
           line-height: $header-height;
           height: $header-height;
         }
