@@ -113,7 +113,7 @@ export default {
           'status', 'is_active', 'is_alive', 'actions'
         ],
         columnsShow: {
-          min: ['name'],
+          min: ['name', 'actions'],
           default: [
             'name', 'session_online', 'stat.cpu_load', 'stat.disk_used',
             'stat.memory_used', 'status', 'actions'
