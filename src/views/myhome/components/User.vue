@@ -6,7 +6,7 @@
     <div class="content">
       <el-row :gutter="20">
         <el-col :span="5" class="left">
-          <el-avatar fit="fill" class="avatar" :size="60" :src="users.avatar_url" />
+          <el-avatar fit="fill" class="avatar" :size="60" :src="avatarUrl" />
         </el-col>
         <el-col :span="18">
           <ul>
@@ -34,7 +34,8 @@ export default {
   },
   data() {
     return {
-      users: {}
+      users: {},
+      avatarUrl: require('@/assets/img/admin.png')
     }
   },
   created() {
