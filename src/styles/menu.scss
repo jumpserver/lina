@@ -1,4 +1,4 @@
-@import "themes/index";
+@import "./variables";
 .left-menu.el-menu {
   .el-menu-item, .el-submenu {
     font-weight: 600;
@@ -75,7 +75,7 @@
   }
 
   li.is-active {
-    border-left: 4px solid $--color-primary;
+    border-left: 4px solid $menuActiveLeft;
   }
 
   .el-submenu-sidebar .el-menu-item {

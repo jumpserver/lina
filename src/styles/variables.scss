@@ -1,0 +1,25 @@
+@import "./themes/keep-heart-red";
+//@import "./classic";
+
+$--color-black: #000000;
+$--font-size-base: 13px;
+$--size-base: 13px;
+$--color-text-primary: #303133;
+$--color-text-regular: #606266;
+$--color-link: #1c84c6;
+$--color-link-highlight: #23527c;
+
+$menuTextWeight: 600;
+$menuHover: mix($--color-black, $menuBg, 10%);
+$subMenuBg: mix($--color-black, $menuBg, 20%);
+$subMenuHover: mix($--color-black, $menuBg, 30%);
+$sideBarWidth: 220px;
+
+:export {
+    color-primary: $--color-primary;
+    color-success: $--color-success;
+    color-info: $--color-info;
+    color-warning: $--color-warning;
+    color-danger: $--color-danger;
+    color-black: $--color-black;
+}

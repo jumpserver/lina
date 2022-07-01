@@ -53,6 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@/styles/variables';
   .asset-table ::v-deep .row-clicked, .asset-user-table ::v-deep .row-background-color {
     background-color: #f5f7fa;
   }
@@ -76,8 +77,8 @@ export default {
     margin-right: 10px;
     text-align: center;
     padding: 9px 0;
-    background-color: #1ab394;
-    border-color: #1ab394;
+    background-color: $--color-primary;
+    border-color: $--color-primary;
     color: #FFFFFF;
     border-radius: 5px;
     line-height: 1.428;

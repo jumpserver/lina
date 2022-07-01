@@ -408,7 +408,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/themes/index.scss";
+@import "~@/styles/variables.scss";
 .summary-item {
   padding: 0 10px
 }

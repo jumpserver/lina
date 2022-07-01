@@ -87,6 +87,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  @import "~@/styles/variables.scss";
   .navbar {
     position: relative;
     height: 55px;
@@ -156,8 +157,8 @@ export default {
     padding: 0 10px!important;
     line-height: 30px;
     border-radius: 4px;
-    border-color: #1ab394;
-    background-color: #1ab394;
+    border-color: $--color-primary;
+    background-color: $--color-primary;
     color: #fff;
     cursor: pointer;
     transition: .2s;

@@ -105,7 +105,7 @@ export default {
   .el-input__inner{
     border: 1px solid #dcdee2;
     border-radius: 3px;
-    height: 36px;
+    height: 32x;
   }
   .el-date-editor  ::v-deep  .el-range-separator{
     line-height: 28px;

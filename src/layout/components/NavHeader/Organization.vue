@@ -121,7 +121,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/styles/themes/index.scss';
+@import '~@/styles/variables.scss';
 
 .org-select {
   padding: 0 10px 0 18px;

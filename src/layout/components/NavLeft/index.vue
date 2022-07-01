@@ -61,7 +61,7 @@ import SidebarItem from './SidebarItem'
 import Hamburger from '@/components/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
-import variables from '@/styles/themes/index.scss'
+import variables from '@/styles/variables.scss'
 
 export default {
   components: {
@@ -123,10 +123,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  @import "~@/styles/themes/index.scss";
+  @import "~@/styles/variables.scss";
   .nav-header {
     overflow: hidden;
-    background-color: $subMenuBg;
+    background: $subMenuBg url('~@/assets/img/header-profile.png') no-repeat center center;
   }
 
   .nav-logo {
