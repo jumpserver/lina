@@ -1,3 +1,5 @@
+import color from 'css-color-function'
+
 const sideBarObject = {
   '#30BDF4': {
     '--menu-bg': '#2f4033'
@@ -5,7 +7,7 @@ const sideBarObject = {
   '#6772E5': {
     '--menu-bg': '#2f4022'
   },
-  '#FB6B01': {
+  '#E75A4A': {
     '--menu-bg': '#30bdf4'
   }
 }
@@ -49,9 +51,12 @@ export function changeSidebarColor(themeColor) {
   if (colors) {
     for (const key in colors) {
       const currentColor = colors[key]
-      document.documentElement.style.setProperty('--menu-hover', colorRgba(currentColor, 0.1))
-      document.documentElement.style.setProperty('--submenu-bg', colorRgba(currentColor, 0.2))
-      document.documentElement.style.setProperty('--submenu-hover', colorRgba(currentColor, 0.3))
+      // document.documentElement.style.setProperty('--menu-hover', colorRgba(currentColor, 0.1))
+      // document.documentElement.style.setProperty('--submenu-bg', colorRgba(currentColor, 0.2))
+      // document.documentElement.style.setProperty('--submenu-hover', colorRgba(currentColor, 0.3))
+      document.documentElement.style.setProperty('--menu-hover', color(currentColor, 0.1))
+      document.documentElement.style.setProperty('--submenu-bg', color(currentColor, 0.2))
+      document.documentElement.style.setProperty('--submenu-hover', color(currentColor, 0.3))
       document.documentElement.style.setProperty(key, currentColor)
     }
   }

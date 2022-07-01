@@ -7,18 +7,6 @@
   border: 1px solid;
 }
 
-.el-alert--success.is-light {
-  border: #bce8f1 solid 1px;
-}
-
-.el-alert--warning.is-light {
-  border: #faebcc solid 1px;
-}
-
-.el-alert--error.is-light {
-  border: #f1dfe2 solid 1px;
-}
-
 .el-alert--info .el-alert__description {
   color: light-2;
 }

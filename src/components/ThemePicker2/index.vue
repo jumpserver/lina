@@ -66,25 +66,25 @@ export default {
       ],
       options: [{
         value: '#409EFF',
-        label: '黄金糕'
+        label: '天蓝色'
       }, {
         value: '#3C6CFE',
-        label: '双皮奶'
+        label: '深蓝色'
       }, {
-        value: '#00AE8A',
-        label: '蚵仔煎'
+        value: '#1ab394',
+        label: '经典绿'
       }, {
         value: '#30BDF4',
-        label: '龙须面'
+        label: '蓝色梦'
       }, {
-        value: '#6772E5',
-        label: '北京烤鸭'
+        value: '#E75A4A',
+        label: '中国红'
       }, {
         value: '#FB6B01',
-        label: '北京烤鸭'
+        label: '橙色梦'
       }, {
         value: '#353D64',
-        label: '北京烤鸭'
+        label: '蓝黑色'
       }]
     }
   },
