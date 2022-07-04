@@ -10,6 +10,7 @@
         :on-submit="submitForm"
         :more-buttons="moreButtons"
         :has-save-continue="hasSaveContinue"
+        :submit-method="submitMethod"
       />
     </IBox>
   </Page>
@@ -36,11 +37,10 @@ export default {
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
       fields: [
-        ['', ['login_title']],
-        ['', ['login_image']],
-        ['', ['favicon']],
-        ['', ['logo_index']],
-        ['', ['logo_logout']]
+        ['Text', ['login_title']],
+        ['Logo', ['logo_index', 'logo_logout', 'favicon']],
+        ['Login pic', ['login_image']],
+        ['Theme', ['theme']]
       ],
       fieldsMeta: {
         login_title: {
@@ -105,6 +105,9 @@ export default {
         }
       },
       url: '/api/v1/xpack/interface/setting',
+      submitMethod() {
+        return 'put'
+      },
       moreButtons: [
         {
           title: this.$t('xpack.RestoreButton'),
@@ -134,8 +137,8 @@ export default {
   methods: {
     submitForm(values) {
       const form = new FormData()
-      const ImageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
-      ImageKeys.forEach((value, index) => {
+      const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
+      imageKeys.forEach((value, index) => {
         if (this.files[value] !== undefined) {
           form.append(value, this.files[value])
         }
@@ -147,11 +150,9 @@ export default {
         location.reload()
       })
     }
-
   }
 }
 </script>
 
 <style scoped>
-
 </style>
