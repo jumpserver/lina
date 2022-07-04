@@ -7,8 +7,8 @@ $--color-danger: #074bdc;
 
 // Men
 //$menuText: rgb(241, 212, 174);
-$menuBg: #b4312b;
-$menuActiveLeft: rgb(241, 212, 174);
-$menuText: #fff1d9;
+$menuBg: var(--menu-bg);
+$menuActiveLeft: var(--menu-activeleft);
+$menuText: var(--menu-text);
 $menuActiveText: white;
 $subMenuActiveText: #f4f4f5;

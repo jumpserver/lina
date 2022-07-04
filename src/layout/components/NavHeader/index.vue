@@ -2,6 +2,9 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
+        <ThemePicker2 />
+      </li>
+      <li class="header-item header-icon">
         <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">
           <SiteMessages />
         </el-tooltip>
@@ -49,6 +52,7 @@ import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
+import ThemePicker2 from '@/components/ThemePicker2'
 
 export default {
   components: {
@@ -60,7 +64,8 @@ export default {
     Tickets,
     WebTerminal,
     SiteMessages,
-    SystemSetting
+    SystemSetting,
+    ThemePicker2
   },
   data() {
     return {

@@ -1,0 +1,12 @@
+/* 这里只写element-variables里面改不动的、且和主题系列颜色相关的样式！！！ */
+/* 主题相关看该文件夹下的README.md */
+/* Alert */
+.el-alert--info.is-light {
+  background-color: light-9;
+  color: light-2;
+  border: 1px solid;
+}
+
+.el-alert--info .el-alert__description {
+  color: light-2;
+}
