@@ -1,25 +1,19 @@
 <template>
   <div>
-    <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" :help-message="title" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo v-if="showUpdateSecretDialog" :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
   </div>
 </template>
 
 <script>
-import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
-import ShowSecretInfo from './ShowSecretInfo'
-import UpdateSecretInfo from './UpdateSecretInfo'
-import { connectivityMeta } from './const'
-import { openTaskPage } from '@/utils/jms'
-import i18n from '@/i18n/i18n'
+import ShowSecretInfo from '../AccountListTable/ShowSecretInfo'
+import { GenericListPage } from '@/layout/components'
 
 export default {
-  name: 'AccountListTable',
+  name: 'AccountHistoryTable',
   components: {
-    ListTable,
-    UpdateSecretInfo,
+    GenericListPage,
     ShowSecretInfo
   },
   props: {
@@ -30,7 +24,7 @@ export default {
     exportUrl: {
       type: String,
       default() {
-        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+        return this.url.replace('/assets/accounts-history/', '/assets/account-history-secrets/')
       }
     },
     hasLeftActions: {
@@ -50,7 +44,6 @@ export default {
     const vm = this
     return {
       showViewSecretDialog: false,
-      showUpdateSecretDialog: false,
       account: {},
       tableConfig: {
         url: this.url,
@@ -59,7 +52,7 @@ export default {
           resource: 'authbook'
         },
         columns: [
-          'hostname', 'ip', 'username', 'version', 'connectivity',
+          'hostname', 'ip', 'username', 'version',
           'systemuser', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
@@ -94,7 +87,6 @@ export default {
           version: {
             width: '70px'
           },
-          connectivity: connectivityMeta,
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -106,59 +98,11 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_assetaccountsecret'),
+                  can: this.$hasPerm('assets.view_assethistoryaccountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
                     vm.showViewSecretDialog = true
-                  }
-                },
-                {
-                  name: 'Delete',
-                  title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_authbook'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
-                      this.$refs.ListTable.reloadTable()
-                    })
-                  }
-                },
-                {
-                  name: 'Test',
-                  title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_authbook'),
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/accounts/${row.id}/verify/`,
-                      { action: 'test' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
-                },
-                {
-                  name: 'Update',
-                  title: this.$t('common.Update'),
-                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
-                    vm.account = row
-                    vm.showUpdateSecretDialog = false
-                    setTimeout(() => {
-                      vm.showUpdateSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'History',
-                  title: i18n.t('common.History'),
-                  can: this.$hasPerm('assets.view_assethistoryaccount') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
-                    this.$router.push({
-                      name: 'AssetAccountHistoryList',
-                      query: { id: row.id }
-                    })
                   }
                 }
               ]
@@ -168,10 +112,10 @@ export default {
       },
       headerActions: {
         hasLeftActions: this.hasLeftActions,
-        hasMoreActions: true,
+        hasMoreActions: false,
         hasCreate: false,
         hasImport: false,
-        hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
+        hasExport: this.$hasPerm('assets.view_assethistoryaccountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
@@ -183,10 +127,15 @@ export default {
       }
     }
   },
+  computed: {
+    title() {
+      return this.$t('accounts.AccountHistableHelpMessage')
+    }
+  },
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
-      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
+      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts-history/', '/account-history-secrets/'))
     }
   },
   mounted() {
@@ -198,9 +147,6 @@ export default {
     }
   },
   methods: {
-    onUpdateAuthDone(account) {
-      Object.assign(this.account, account)
-    }
   }
 }
 </script>
