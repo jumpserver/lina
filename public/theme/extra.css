@@ -1,6 +1,6 @@
 /* 这里只写element-variables里面改不动的、且和主题系列颜色相关的样式！！！ */
 /* 主题相关看该文件夹下的README.md */
-/* Alert */
+
 .el-alert--info.is-light {
   background-color: light-9;
   color: light-2;
@@ -9,4 +9,26 @@
 
 .el-alert--info .el-alert__description {
   color: light-2;
+}
+
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+  background-color: primary;
+  color: white!important;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: white;
+  background-color: primary;
+}
+
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
+  margin: 0 5px;
+  background-color: white;
+  color: #606266;
+  min-width: 28px;
+  border-radius: 2px;
+  border: 1px solid #DCDFE6;
+  font-size: 12px;
+  line-height: 26px;
+  font-weight: 400;
 }

@@ -9,6 +9,9 @@ const sideBarObject = {
     '--color-danger': '#ed5565',
     '--menu-bg': '#2f4050',
     '--menu-text': '#a7b1c2',
+    '--menu-hover': '#293846',
+    '--submenu-bg': '#1f2d3d',
+    '--submenu-hover': '#3b4c5b',
     '--menu-activeleft': '#1ab394'
   },
   '#ca2e1f': {
@@ -18,6 +21,9 @@ const sideBarObject = {
     '--color-danger': '#074bdc',
     '--menu-bg': '#b4312b',
     '--menu-text': '#fff1d9',
+    '--menu-hover': '#a22c27',
+    '--submenu-bg': '#902722',
+    '--submenu-hover': '#7e221e',
     '--menu-activeleft': 'rgb(241, 212, 174)'
   }
 }
@@ -68,15 +74,9 @@ export function changeSidebarColor(themeColor) {
       const currentColor = colors[key]
       elementStyle.setProperty(key, currentColor)
       elementStyle.setProperty('--color-primary', themeColor)
-      elementStyle.setProperty('--menu-hover', color.convert(`color(${currentColor} shade(10%))`))
-      elementStyle.setProperty('--submenu-bg', color.convert(`color(${currentColor} shade(20%))`))
-      elementStyle.setProperty('--submenu-hover', color.convert(`color(${currentColor} shade(30%))`))
     }
   } else {
-    elementStyle.setProperty('--menu-bg', color.convert(`color(${themeColor} shade(30%))`))
+    elementStyle.setProperty('--menu-bg', color.convert(`color(${themeColor} tint(30%))`))
     elementStyle.setProperty('--color-primary', themeColor)
-    elementStyle.setProperty('--menu-hover', color.convert(`color(${themeColor} shade(10%))`))
-    elementStyle.setProperty('--submenu-bg', color.convert(`color(${themeColor} shade(20%))`))
-    elementStyle.setProperty('--submenu-hover', color.convert(`color(${themeColor} shade(30%))`))
   }
 }

@@ -1,5 +1,8 @@
 @import "./variables";
 .left-menu.el-menu {
+  .el-menu--inline {
+    background-color: $subMenuBg;
+  }
   .el-menu-item, .el-submenu {
     font-weight: 600;
   }

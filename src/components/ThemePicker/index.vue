@@ -1,26 +1,17 @@
 <template>
   <div>
-    <el-button type="primary" size="mini" @click="onChange">点击</el-button>
+    <el-button type="primary" size="mini" @click="onChange">切换主题</el-button>
     <Dialog
       :title="'主题配置'"
       :show-confirm="false"
       :show-cancel="false"
       :destroy-on-close="true"
-      :width="'40'"
+      :width="'20%'"
       :visible.sync="visible"
       v-bind="$attrs"
       v-on="$listeners"
     >
       <div>
-        <!-- <div>
-          <span>主题：</span>
-          <el-color-picker
-            v-model="themeColor"
-            class="u-theme-picker"
-            :predefine="themeList"
-            @change="handleChangeColor"
-          />
-        </div> -->
         <div>
           <span>主题：</span>
           <el-select
@@ -45,7 +36,7 @@
 import Dialog from '@/components/Dialog'
 
 export default {
-  name: 'ThemePicker2',
+  name: 'ThemePicker',
   components: {
     Dialog
   },
