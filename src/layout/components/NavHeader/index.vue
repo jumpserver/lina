@@ -2,7 +2,9 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <ThemePicker />
+        <el-tooltip effect="dark" :content="'仅测试使用'">
+          <ThemePicker />
+        </el-tooltip>
       </li>
       <li class="header-item header-icon">
         <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">

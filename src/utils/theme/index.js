@@ -24,8 +24,8 @@ export function writeNewStyle(themeColor) {
     styleTag.setAttribute('id', 'themeStyle')
     document.head.appendChild(styleTag)
   }
-  styleTag.innerText = cssText + colorsCssText
   changeSidebarColor(themeColor)
+  styleTag.innerText = cssText + colorsCssText
 }
 
 export function getIndexStyle() {

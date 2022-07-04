@@ -22,6 +22,6 @@ export default {
     --menu-hover: '#293846';
     --submenu-bg: '#1f2d3d';
     --submenu-hover: '#3b4c5b';
-    --menu-activeleft: #1ab394;
+    --menu-active-left: #1ab394;
   }
 </style>

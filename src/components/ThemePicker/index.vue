@@ -44,16 +44,6 @@ export default {
     return {
       visible: false,
       themeColor: this.$store.state.settings.themeColor,
-      themeList: [
-        '#409EFF',
-        '#3C6CFE',
-        '#00AE8A',
-        '#30BDF4',
-        '#6772E5',
-        '#FB6B01',
-        '#353D64',
-        '#7A40F2'
-      ],
       options: [
         {
           value: '#1ab394',
@@ -76,8 +66,5 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.u-theme-picker {
-  vertical-align: middle;
-}
+<style lang="scss" scoped>
 </style>
