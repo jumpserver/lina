@@ -1,7 +1,7 @@
 /* 参考根目录下的 element-variables */
 /* 切记此处不修改配置，以element-variables为准，可适当增加自定义配置 */
 /* 如果要修改element-variables，请执行npm run build_theme更新主题 */
-@import "./element-variables.all.scss";
+@import "./element-variables.scss";
 
 :export {
   name: "scss";

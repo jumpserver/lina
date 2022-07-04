@@ -1,6 +1,8 @@
-@import "src/styles/themes/revolution";
-//@import "./themes/classic";
-
+$--color-primary: #ca2e1f;
+$--color-success: #E98737;
+$--color-info: #f06f06;
+$--color-warning: #f82ed3;
+$--color-danger: #074bdc;
 $--color-black: #000000;
 $--font-size-base: 13px;
 $--size-base: 13px;
@@ -14,6 +16,11 @@ $menuHover: var(--menu-hover);
 $subMenuBg: var(--submenu-bg);
 $subMenuHover: var(--submenu-hover);
 $sideBarWidth: 220px;
+$menuBg: var(--menu-bg);
+$menuActiveLeft: var(--menu-active-left);
+$menuText: var(--menu-text);
+$menuActiveText: white;
+$subMenuActiveText: #f4f4f5;
 
 :export {
     color-primary: $--color-primary;
