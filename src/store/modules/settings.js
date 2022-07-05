@@ -1,18 +1,18 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
 import { writeNewStyle } from '@/utils/theme/index'
-import { defaultThemeColor } from '@/utils/theme/color'
+import { matchColor, defaultThemeColor } from '@/utils/theme/color'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
 const state = {
-  themeColor: localStorage.getItem('themeColor') || defaultThemeColor,
   showSettings: showSettings,
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
   publicSettings: null,
-  hasValidLicense: false
+  hasValidLicense: false,
+  themeColor: localStorage.getItem('themeColor') || defaultThemeColor
 }
 
 const mutations = {
@@ -22,7 +22,9 @@ const mutations = {
     }
   },
   SET_PUBLIC_SETTINGS: (state, settings) => {
+    const color = settings.INTERFACE?.theme
     state.publicSettings = settings
+    state.themeColor = matchColor[color] || defaultThemeColor
 
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']

@@ -1,5 +1,5 @@
 const config = {
-  '#ca2e1f': {
+  '#bd1a2d': {
     '--color-success': '#E98737',
     '--color-info': '#f06f06',
     '--color-warning': '#f82ed3',
