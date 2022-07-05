@@ -21,6 +21,16 @@ export default [
           app: 'assets',
           permissions: ['assets.view_authbook']
         }
+      },
+      {
+        path: 'history',
+        name: 'AssetAccountHistoryList',
+        component: () => import('@/views/accounts/AssetAccount/AssetAccountHistoryList'),
+        hidden: true,
+        meta: {
+          title: i18n.t('route.AssetHistoryAccount'),
+          permissions: ['assets.view_assethistoryaccount']
+        }
       }
     ]
   },

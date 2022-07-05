@@ -7,6 +7,8 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -98,7 +100,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.profile['workbench_orgs']?.map((item) => {
+            options: this.$store.state.users.workbenchOrgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -126,17 +128,21 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      workbenchOrgs: state => state.users.workbenchOrgs
+    }),
+    ...mapGetters(['currentOrg'])
+  },
   mounted() {
-    let userAllOrgIds = this.$store.state.users.profile['workbench_orgs']
-    const currentOrgId = this.$store.getters.currentOrg ? this.$store.getters.currentOrg.id : null
-    userAllOrgIds = userAllOrgIds ? userAllOrgIds.map(i => i.id) : []
-    if (userAllOrgIds.length > 0) {
-      if (userAllOrgIds.includes(currentOrgId)) {
-        this.initial.org_id = currentOrgId
-      } else {
-        this.initial.org_id = userAllOrgIds[0]
-      }
+    const currentOrgId = this.currentOrg.id || ''
+    const userAllOrgIds = this.workbenchOrgs.map(i => i.id) || []
+    if (userAllOrgIds.includes(currentOrgId)) {
+      this.initial.org_id = currentOrgId
+    } else {
+      this.initial.org_id = userAllOrgIds[0]
     }
+
     this.loading = false
   },
   methods: {

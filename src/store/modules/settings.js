@@ -37,7 +37,7 @@ const actions = {
       getPublicSettings(isOpen).then(response => {
         const data = response || {}
         if (isOpen) {
-          const faviconURL = data['LOGO_URLS']?.favicon
+          const faviconURL = data['INTERFACE']?.favicon
           let link = document.querySelector("link[rel*='icon']")
           if (!link) {
             link = document.createElement('link')
@@ -49,7 +49,7 @@ const actions = {
             link.href = faviconURL
           }
           // 动态修改Title
-          document.title = data['LOGIN_TITLE']
+          document.title = data['INTERFACE']['login_title']
         }
         commit('SET_PUBLIC_SETTINGS', data)
         resolve(response)
