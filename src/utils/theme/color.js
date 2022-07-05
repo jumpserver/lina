@@ -1,10 +1,14 @@
 import color from 'css-color-function'
 import formula from './formula.json'
-import { themeOptions } from './themeOptions.js'
+import themeOptions from './themeOptions.js'
+import defaultThemeConfig from './themeConfigs/default.js'
+
+const [defaultThemeConfigKey, defaultThemeConfigValue] = Object.entries(defaultThemeConfig)[0]
+export const defaultThemeColor = defaultThemeConfigKey
 
 export function generateColors(primary) {
   const colors = {}
-  const otherColor = themeOptions[primary]
+  const otherColor = themeOptions[primary] || defaultThemeConfigValue || {}
 
   Object.keys(formula).forEach((key) => {
     let value
@@ -40,17 +44,13 @@ export function colorRgbToHex(rgb) {
   return '#' + ((1 << 24) + (Number(r) << 16) + (Number(g) << 8) + Number(b)).toString(16).slice(1)
 }
 
-export function changeSidebarColor(themeColor) {
-  const colors = themeOptions[themeColor]
+export function changeSidebarColor(primary) {
+  const colors = themeOptions[primary] || defaultThemeConfigValue || {}
   const elementStyle = document.documentElement.style
-  if (colors) {
-    for (const key in colors) {
-      const currentColor = colors[key]
-      elementStyle.setProperty(key, currentColor)
-      elementStyle.setProperty('--color-primary', themeColor)
-    }
-  } else {
-    elementStyle.setProperty('--menu-bg', color.convert(`color(${themeColor} tint(30%))`))
-    elementStyle.setProperty('--color-primary', themeColor)
+
+  for (const key in colors) {
+    const currentColor = colors[key]
+    elementStyle.setProperty(key, currentColor)
+    elementStyle.setProperty('--color-primary', primary)
   }
 }

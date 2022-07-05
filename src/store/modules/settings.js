@@ -1,11 +1,12 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
 import { writeNewStyle } from '@/utils/theme/index'
+import { defaultThemeColor } from '@/utils/theme/color'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
 const state = {
-  themeColor: localStorage.getItem('themeColor') || '#ca2e1f',
+  themeColor: localStorage.getItem('themeColor') || defaultThemeColor,
   showSettings: showSettings,
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,

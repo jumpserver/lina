@@ -17,7 +17,7 @@
 
 <script>
 import { Page } from '@/layout/components'
-import { IBox, UploadField, ThemePicker } from '@/components'
+import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { getInterfaceInfo, postInterface, restoreInterface } from '@/api/interface'
 
@@ -40,8 +40,7 @@ export default {
         ['', ['login_image']],
         ['', ['favicon']],
         ['', ['logo_index']],
-        ['', ['logo_logout']],
-        ['', ['theme']]
+        ['', ['logo_logout']]
       ],
       fieldsMeta: {
         login_title: {
@@ -103,10 +102,6 @@ export default {
               this.files['logo_logout'] = value
             }
           }
-        },
-        theme: {
-          component: ThemePicker,
-          label: this.$t('xpack.ModifyTheme')
         }
       },
       url: '/api/v1/xpack/interface/setting',

@@ -2,11 +2,6 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip effect="dark" :content="'仅测试使用'">
-          <ThemePicker />
-        </el-tooltip>
-      </li>
-      <li class="header-item header-icon">
         <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">
           <SiteMessages />
         </el-tooltip>
@@ -54,7 +49,6 @@ import Tickets from './Tickets'
 import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
-import ThemePicker from '@/components/ThemePicker'
 
 export default {
   components: {
@@ -66,8 +60,7 @@ export default {
     Tickets,
     WebTerminal,
     SiteMessages,
-    SystemSetting,
-    ThemePicker
+    SystemSetting
   },
   data() {
     return {

@@ -1,26 +1,31 @@
 <template>
-  <div>
-    <el-button type="primary" size="mini" @click="onChange">切换主题</el-button>
+  <div class="theme">
+    <el-button
+      type="primary"
+      size="mini"
+      @click="onChange"
+    >
+      {{ $t('setting.Setting') }}
+    </el-button>
     <Dialog
-      :title="'主题配置'"
+      :title="$t('xpack.ModifyTheme')"
       :show-confirm="false"
       :show-cancel="false"
       :destroy-on-close="true"
-      :width="'20%'"
+      :width="'30%'"
       :visible.sync="visible"
       v-bind="$attrs"
       v-on="$listeners"
     >
       <div>
         <div>
-          <span>主题：</span>
+          <span>{{ $t('notifications.Subject') }}：</span>
           <el-select
             v-model="themeColor"
-            placeholder="请选择"
             @change="handleChangeColor"
           >
             <el-option
-              v-for="item in options"
+              v-for="item in getThemeOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -34,28 +39,56 @@
 
 <script>
 import Dialog from '@/components/Dialog'
+import { defaultThemeColor } from '@/utils/theme/color'
+import themeOptions from '@/utils/theme/themeOptions.js'
 
 export default {
   name: 'ThemePicker',
   components: {
     Dialog
   },
+  props: {
+    themes: {
+      type: Array,
+      default: () => ['#1ab394', '#ca2e1f', '#1c84c6', '#23c6c8', '#f8ac59', '#ed5565']
+    },
+    value: {
+      type: String,
+      default: defaultThemeColor
+    }
+  },
   data() {
     return {
       visible: false,
-      themeColor: this.$store.state.settings.themeColor,
-      options: [
-        {
-          value: '#1ab394',
-          label: '经典绿'
-        }, {
-          value: '#ca2e1f',
-          label: '中国红'
-        }]
+      themeColor: this.$store.state.settings.themeColor
+    }
+  },
+  computed: {
+    getThemeOptions() {
+      const options = []
+      for (const [key] of Object.entries(themeOptions)) {
+        if (this.themes.includes(key)) {
+          options.push({
+            value: key,
+            label: this.matchLabel(key)
+          })
+        }
+      }
+      return options
     }
   },
   methods: {
+    matchLabel(key) {
+      if (key === '#1ab394') {
+        return this.$t('xpack.ClassicGreen')
+      } else if (key === '#ca2e1f') {
+        return this.$t('xpack.ChinaRed')
+      } else {
+        return key
+      }
+    },
     handleChangeColor(val) {
+      this.$emit('change', val)
       this.$store.commit('settings/setTheme', val)
       this.$store.dispatch('settings/changeThemeStyle')
     },
@@ -67,4 +100,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .theme {
+    &>>> .el-input__suffix {
+      line-height: 34px;
+    }
+    &>>> .el-dialog__body {
+      padding: 0 20px;
+      overflow: hidden;
+    }
+  }
 </style>

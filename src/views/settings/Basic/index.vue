@@ -12,6 +12,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
 import Announcement from './announcement'
+import { ThemePicker } from '@/components'
 
 export default {
   name: 'Basic',
@@ -30,7 +31,8 @@ export default {
         [
           this.$t('setting.Feature'), [
             'TICKETS_ENABLED',
-            'ANNOUNCEMENT_ENABLED'
+            'ANNOUNCEMENT_ENABLED',
+            'theme'
           ]
         ]
       ],
@@ -51,6 +53,10 @@ export default {
         ANNOUNCEMENT_ENABLED: {
           // label: '公告',
           component: Announcement
+        },
+        theme: {
+          label: this.$t('xpack.ModifyTheme'),
+          component: ThemePicker
         }
       },
       successUrl: { name: 'Basic' },
