@@ -145,7 +145,7 @@ export default {
           value = values[key]
         }
         if (value) {
-          form.append(key, values[key])
+          form.append(key, value)
         }
       }
       updateInterface(form).then(res => {
