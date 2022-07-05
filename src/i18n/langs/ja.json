@@ -1333,6 +1333,7 @@
     "SMS": "Sms"
   },
   "xpack": {
+    "Images": "画像",
     "NavHelp": "ナビゲーションバーのリンク",
     "helpDocument": "ドキュメントリンク",
     "helpSupport": "サポートリンク",

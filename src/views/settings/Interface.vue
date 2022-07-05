@@ -20,7 +20,7 @@
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { getInterfaceInfo, postInterface, restoreInterface } from '@/api/interface'
+import { getInterfaceInfo, updateInterface, restoreInterface } from '@/api/interface'
 
 export default {
   name: 'InterfaceSettings',
@@ -37,10 +37,9 @@ export default {
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
       fields: [
-        ['Text', ['login_title']],
+        [this.$t('common.Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
-        ['Login pic', ['login_image']],
-        ['Theme', ['theme']]
+        [this.$t('xpack.Images'), ['login_image']]
       ],
       fieldsMeta: {
         login_title: {
@@ -138,15 +137,18 @@ export default {
     submitForm(values) {
       const form = new FormData()
       const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
-      imageKeys.forEach((value, index) => {
-        if (this.files[value] !== undefined) {
-          form.append(value, this.files[value])
+      for (const key in values) {
+        let value
+        if (imageKeys.includes(key)) {
+          value = this.files[key]
+        } else {
+          value = values[key]
         }
-      })
-      if (values['login_title'] !== undefined) {
-        form.append('login_title', values['login_title'])
+        if (value) {
+          form.append(key, values[key])
+        }
       }
-      postInterface(form).then(res => {
+      updateInterface(form).then(res => {
         location.reload()
       })
     }

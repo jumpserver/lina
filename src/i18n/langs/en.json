@@ -1292,6 +1292,7 @@
     "SMS": "SMS"
   },
   "xpack": {
+    "Images": "Images",
     "NavHelp": "Navigation Link",
     "helpDocument": "Docs link",
     "helpSupport": "Support link",
