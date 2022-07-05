@@ -7,7 +7,7 @@
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" class="header-avatar" />
+            <el-avatar :src="imageUrl" size="30" class="header-avatar" />
           </a>
           <div class="media-body ">
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>

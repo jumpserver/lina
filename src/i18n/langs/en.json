@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountHistableHelpMessage": "Record the historical version of the current account",
     "PleaseClickLeftAssetToViewAssetAccount": "Asset account list,  please click on the assets on the left to view",
     "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
     "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list, please click on the assets on the left to view"
@@ -254,6 +255,7 @@
   "common": {
     "VerificationCodeSent": "The verification code has been sent",
     "SendVerificationCode": "Send verification code",
+    "History": "History",
     "ChangeViewHelpText": "Click to change view",
     "Component": "component",
     "PrivateCloud": "Private cloud",
@@ -683,6 +685,7 @@
     "SessionDetail": "SessionDetail",
     "Accounts": "Accounts",
     "AssetAccount": "Asset Account",
+    "AssetHistoryAccount": "Asset History Account",
     "ApplicationAccount": "Application Account",
     "Ticket": "Tickets",
     "CommandConfirm": "Command confirm",
@@ -1296,6 +1299,7 @@
     "SMS": "SMS"
   },
   "xpack": {
+    "Images": "Images",
     "NavHelp": "Navigation Link",
     "helpDocument": "Docs link",
     "helpSupport": "Support link",
