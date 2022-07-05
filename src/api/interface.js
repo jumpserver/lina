@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function postInterface(formData) {
+export function updateInterface(formData) {
   return request({
     url: '/api/v1/xpack/interface/setting',
     method: 'put',

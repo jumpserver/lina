@@ -31,10 +31,10 @@ export default {
     ]),
     // eslint-disable-next-line vue/return-in-computed-property
     logoTextSrc() {
-      return this.publicSettings.LOGO_URLS.logo_index
+      return this.publicSettings['INTERFACE']['logo_index']
     },
     logoSrc() {
-      return this.publicSettings.LOGO_URLS.logo_logout
+      return this.publicSettings['INTERFACE']['logo_logout']
     }
   },
   created() {

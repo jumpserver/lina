@@ -1342,6 +1342,7 @@
     "SMS": "短信"
   },
   "xpack": {
+    "Images": "图片",
     "NavHelp": "导航栏链接",
     "helpDocument": "文档链接",
     "helpSupport": "支持链接",
