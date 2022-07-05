@@ -6,7 +6,7 @@
     <div class="content">
       <el-row :gutter="20">
         <el-col :span="5" class="left">
-          <el-avatar fit="fill" class="avatar" :size="60" :src="avatarUrl" />
+          <el-avatar fit="fill" class="avatar" :size="40" :src="avatarUrl" />
         </el-col>
         <el-col :span="18">
           <ul>
