@@ -1,6 +1,8 @@
-@import "src/styles/themes/chinese_red";
+@import "./themes/chinese_red";
 //@import "./themes/default";
 
+$--color-text-primary: #303133;
+$--color-text-regular: #606266;
 $--color-black: #000000;
 $--font-size-base: 13px;
 $--size-base: 13px;
