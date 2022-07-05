@@ -1569,6 +1569,9 @@
     "technologyConsult": "技術コンサルティング",
     "RegularlyPerform": "定期的に実行する",
     "CyclePerform": "サイクル実行",
+    "ModifyTheme": "テーマを変更",
+    "ClassicGreen": "クラシックグリーン",
+    "ChinaRed": "チャイナレッド",
     "HelpText": {
       "CrontabOfCreateUpdatePage": "例: 毎週日曜日03:05に <5 3 * * 0> <br/> 5桁のLinux crontab式を使用して、時分割日月曜日> (<a href = \"https://tool.lu/crontab/\" target = \"_ ツール </a>) <br/> 定期実行とサイクル実行を同時に設定している場合は、優先的に定期実行を使って",
       "IntervalOfCreateUpdatePage": "単位: 時",

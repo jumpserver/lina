@@ -249,14 +249,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/variables.scss";
   .mini-button{
     width: 12px;
     float: right;
     text-align: center;
     padding: 5px 0;
-    background-color: $--color-primary;
-    border-color: $--color-primary;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
     color: #FFFFFF;
     border-radius: 3px;
   }

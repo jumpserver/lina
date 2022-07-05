@@ -1,5 +1,5 @@
-@import "./themes/chinese_red";
-//@import "./themes/default";
+// @import "src/styles/themes/chinese_red";
+@import "./themes/default";
 
 $--color-text-primary: #303133;
 $--color-text-regular: #606266;
@@ -10,9 +10,9 @@ $--color-link: $--color-text-primary;
 $--color-link-highlight: #23527c;
 
 $menuTextWeight: 600;
-$menuHover: mix($--color-black, $menuBg, 10%);
-$subMenuBg: mix($--color-black, $menuBg, 20%);
-$subMenuHover: mix($--color-black, $menuBg, 30%);
+$menuHover: var(--menu-hover);
+$subMenuBg: var(--submenu-bg);
+$subMenuHover: var(--submenu-hover);
 $sideBarWidth: 220px;
 
 :export {
