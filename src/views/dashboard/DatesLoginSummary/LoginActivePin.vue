@@ -32,7 +32,6 @@
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
-import vars from '@/styles/variables.scss'
 
 export default {
   name: 'LoginActivePin',
@@ -57,7 +56,16 @@ export default {
     }
   },
   computed: {
+    themeColor() {
+      const documentStyle = document.documentElement.style
+      return {
+        primary: documentStyle.getPropertyValue('--color-primary'),
+        info: documentStyle.getPropertyValue('--color-info'),
+        success: documentStyle.getPropertyValue('--color-success')
+      }
+    },
     userOption() {
+      const { primary, info, success } = this.themeColor
       return {
         legend: {
           show: false
@@ -65,7 +73,7 @@ export default {
         title: {
           subtext: this.$t('dashboard.User')
         },
-        color: [vars['color-primary'], vars['color-info'], vars['color-success']],
+        color: [primary, info, success],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -100,6 +108,7 @@ export default {
       }
     },
     AssetOption() {
+      const { primary, info, success } = this.themeColor
       return {
         legend: {
           show: false
@@ -107,7 +116,7 @@ export default {
         title: {
           subtext: this.$t('dashboard.Asset')
         },
-        color: [vars['color-primary'], vars['color-info'], vars['color-success']],
+        color: [primary, info, success],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
