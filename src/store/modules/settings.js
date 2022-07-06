@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
-import { writeNewStyle } from '@/utils/theme/index'
+import { writeNewStyle, getIndexStyle } from '@/utils/theme/index'
 import { matchColor, defaultThemeColor } from '@/utils/theme/color'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
@@ -61,14 +61,18 @@ const actions = {
           document.title = data['INTERFACE']['login_title']
         }
         commit('SET_PUBLIC_SETTINGS', data)
+        getIndexStyle().then(() => {
+          writeNewStyle(state.themeColor)
+        })
         resolve(response)
       }).catch(error => {
         reject(error)
       })
     })
   },
-  changeThemeStyle({ state }) {
-    writeNewStyle(state.themeColor)
+  changeThemeStyle({ commit }, color) {
+    commit('setTheme', color)
+    writeNewStyle(color)
   }
 }
 

@@ -51,8 +51,7 @@ export default {
           on: {
             change: ([value]) => {
               const color = matchColor[value] || defaultThemeColor
-              this.$store.commit('settings/setTheme', color)
-              this.$store.dispatch('settings/changeThemeStyle')
+              this.$store.dispatch('settings/changeThemeStyle', color)
             }
           }
         },
