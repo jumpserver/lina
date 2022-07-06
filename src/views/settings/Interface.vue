@@ -122,7 +122,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/xpack/interface/setting',
+      url: '/api/v1/xpack/interface/setting/',
       submitMethod() {
         return 'put'
       },

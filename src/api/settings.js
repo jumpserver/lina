@@ -82,7 +82,7 @@ export function getPublicSettings(isOpen) {
 }
 export function getLogo() {
   return request({
-    url: '/api/v1/xpack/interface/setting',
+    url: '/api/v1/xpack/interface/setting/',
     method: 'get'
   })
 }
