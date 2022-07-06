@@ -1,5 +1,14 @@
 <template>
   <Page>
+    <div v-if="isDev" style="margin-bottom: 20px">
+      <el-button
+        v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+        :key="tp"
+        :type="tp"
+      >
+        {{ tp.toUpperCase() }}
+      </el-button>
+    </div>
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
         :fields="fields"
@@ -37,6 +46,7 @@ export default {
       interfaceInfo: {},
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
+      isDev: process.env.NODE_ENV === 'development',
       fields: [
         [this.$t('common.Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
@@ -112,7 +122,7 @@ export default {
           }
         }
       },
-      url: '/api/v1/xpack/interface/setting',
+      url: '/api/v1/xpack/interface/setting/',
       submitMethod() {
         return 'put'
       },
