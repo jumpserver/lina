@@ -14,12 +14,6 @@ import i18n from './i18n/i18n'
 import '@/icons' // icon
 import '@/guards' // permission control
 import '@/directive'
-import { getIndexStyle } from '@/utils/theme/index'
-
-// 初始化主题样式
-getIndexStyle().then(() => {
-  store.dispatch('settings/changeThemeStyle')
-})
 
 /**
  * If you don't want to use mock-server

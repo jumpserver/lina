@@ -402,7 +402,6 @@ td .el-button.el-button--mini {
   overflow: auto;
 }
 
-
 .el-cascader {
   line-height: 34px;
 }
@@ -410,3 +409,14 @@ td .el-button.el-button--mini {
 .el-input__icon {
   line-height: 34px;
 }
+
+.el-checkbox__input.is-checked+.el-checkbox__label {
+  color: #606266;
+}
+
+.el-select-dropdown__item.selected {
+  font-weight: 400;
+  color: #606266;
+  background-color: #ddd;
+}
+
