@@ -4,12 +4,7 @@ import defaultThemeConfig from './default.js'
 import store from '@/store/index.js'
 
 export const defaultThemeColor = '#1ab394'
-export const matchColor = {
-  classic: '#1ab394',
-  chinese_red: '#bd1a2d',
-  tech_blue: '#174779',
-  deep_black: '#0576b9'
-}
+export const matchColor = {}
 
 export function generateColors(primary) {
   const colors = {}
