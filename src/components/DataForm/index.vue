@@ -145,7 +145,7 @@ export default {
     line-height: 18px;
   }
   .el-form ::v-deep .help-block a {
-    color: #1c84c6;
+    color: var(--color-primary);
   }
   .form-buttons {
     padding-top: 10px;
