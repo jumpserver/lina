@@ -1,11 +1,9 @@
 import color from 'css-color-function'
 import formula from './formula.json'
-import themeOptions from './themeOptions.js'
-import defaultThemeConfig from './themeConfigs/default.js'
+import defaultThemeConfig from './default.js'
+import store from '@/store/index.js'
 
-const [defaultThemeConfigKey, defaultThemeConfigValue] = Object.entries(defaultThemeConfig)[0]
-
-export const defaultThemeColor = defaultThemeConfigKey
+export const defaultThemeColor = '#1ab394'
 export const matchColor = {
   classic: '#1ab394',
   chinese_red: '#bd1a2d',
@@ -15,32 +13,31 @@ export const matchColor = {
 
 export function generateColors(primary) {
   const colors = {}
-  const themeConfig = _.findKey(themeOptions, ['--color-primary', primary])
-  const otherColor = themeOptions[themeConfig] || defaultThemeConfigValue
+  const themeInfo = store?.getters?.publicSettings?.INTERFACE?.theme_info?.colors || {}
+  const otherColor = Object.keys(themeInfo).length > 0 ? themeInfo : defaultThemeConfig
 
-  Object.keys(formula).forEach((key) => {
-    let value
-    const valueKey = formula[key]
-    if (valueKey.includes('primary')) {
-      value = valueKey.replace(/primary/g, primary)
+  for (const [key, value] of Object.entries(formula)) {
+    let replaceColor
+    if (value.includes('primary')) {
+      replaceColor = value.replace(/primary/g, primary)
     }
-    if (valueKey.includes('success')) {
-      value = valueKey.replace(/success/g, otherColor['--color-success'])
+    if (value.includes('success')) {
+      replaceColor = value.replace(/success/g, otherColor['--color-success'])
     }
-    if (valueKey.includes('info')) {
-      value = valueKey.replace(/info/g, otherColor['--color-info'])
+    if (value.includes('info')) {
+      replaceColor = value.replace(/info/g, otherColor['--color-info'])
     }
-    if (valueKey.includes('warning')) {
-      value = valueKey.replace(/warning/g, otherColor['--color-warning'])
+    if (value.includes('warning')) {
+      replaceColor = value.replace(/warning/g, otherColor['--color-warning'])
     }
-    if (valueKey.includes('danger')) {
-      value = valueKey.replace(/danger/g, otherColor['--color-danger'])
+    if (value.includes('danger')) {
+      replaceColor = value.replace(/danger/g, otherColor['--color-danger'])
     }
-    if (value) {
-      const c = color.convert(value)
+    if (replaceColor) {
+      const c = color.convert(replaceColor)
       colors[key] = c.indexOf('rgba') > -1 ? c : colorRgbToHex(c)
     }
-  })
+  }
 
   return colors
 }
@@ -73,9 +70,8 @@ export function mix(color_1, color_2, weight) {
 }
 
 export function changeSidebarColor(primary) {
-  const themeConfig = _.findKey(themeOptions, ['--color-primary', primary])
-  const colors = themeOptions[themeConfig] || defaultThemeConfigValue || {}
   const elementStyle = document.documentElement.style
+  const colors = defaultThemeConfig
 
   for (const key in colors) {
     const currentColor = colors[key]
