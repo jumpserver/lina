@@ -6,9 +6,10 @@ import variables from '@/styles/var.scss'
 let originalStyle = ''
 
 export function writeNewStyle(themeColor) {
-  const colors = generateColors(themeColor)
-  let cssText = originalStyle
+  changeSidebarColor(themeColor)
   let colorsCssText = ''
+  let cssText = originalStyle
+  const colors = generateColors(themeColor)
   Object.keys(colors).forEach((key) => {
     cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${colors[key]}`)
     colorsCssText += `
@@ -24,7 +25,6 @@ export function writeNewStyle(themeColor) {
     styleTag.setAttribute('id', 'themeStyle')
     document.head.appendChild(styleTag)
   }
-  changeSidebarColor(themeColor)
   styleTag.innerText = cssText + colorsCssText
 }
 

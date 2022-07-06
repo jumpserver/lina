@@ -8,7 +8,7 @@
 <script>
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/legend'
-import vars from '@/styles/variables.scss'
+
 export default {
   name: 'LoginMetric',
   props: {
@@ -29,7 +29,16 @@ export default {
     }
   },
   computed: {
+    themeColor() {
+      const documentStyle = document.documentElement.style
+      return {
+        primary: documentStyle.getPropertyValue('--color-primary'),
+        info: documentStyle.getPropertyValue('--color-info'),
+        success: documentStyle.getPropertyValue('--color-success')
+      }
+    },
     options() {
+      const { primary, info, success } = this.themeColor
       return {
         title: {
           show: false
@@ -56,7 +65,7 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        color: [vars['color-primary'], vars['color-info'], vars['color-success']],
+        color: [primary, info, success],
         xAxis: [
           {
             type: 'category',
