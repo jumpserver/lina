@@ -15,7 +15,8 @@ export const matchColor = {
 
 export function generateColors(primary) {
   const colors = {}
-  const otherColor = themeOptions[primary] || defaultThemeConfigValue || {}
+  const themeConfig = _.findKey(themeOptions, ['--color-primary', primary])
+  const otherColor = themeOptions[themeConfig] || defaultThemeConfigValue
 
   Object.keys(formula).forEach((key) => {
     let value
@@ -72,7 +73,8 @@ export function mix(color_1, color_2, weight) {
 }
 
 export function changeSidebarColor(primary) {
-  const colors = themeOptions[primary] || defaultThemeConfigValue || {}
+  const themeConfig = _.findKey(themeOptions, ['--color-primary', primary])
+  const colors = themeOptions[themeConfig] || defaultThemeConfigValue || {}
   const elementStyle = document.documentElement.style
 
   for (const key in colors) {
@@ -84,6 +86,5 @@ export function changeSidebarColor(primary) {
       elementStyle.setProperty('--submenu-bg', mix('000000', changeColor, 20))
       elementStyle.setProperty('--submenu-hover', mix('000000', changeColor, 30))
     }
-    elementStyle.setProperty('--color-primary', primary)
   }
 }

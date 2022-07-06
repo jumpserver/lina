@@ -1,5 +1,6 @@
 const config = {
-  '#bd1a2d': {
+  chinese_red: {
+    '--color-primary': '#bd1a2d',
     '--color-success': '#E98737',
     '--color-info': '#f06f06',
     '--color-warning': '#f82ed3',

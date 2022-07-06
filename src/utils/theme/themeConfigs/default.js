@@ -1,5 +1,6 @@
 const config = {
-  '#1ab394': {
+  default: {
+    '--color-primary': '#1ab394',
     '--color-success': '#1c84c6',
     '--color-info': '#23c6c8',
     '--color-warning': '#f8ac59',

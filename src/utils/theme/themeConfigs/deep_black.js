@@ -1,5 +1,6 @@
 const config = {
-  '#0576b9': {
+  deep_black: {
+    '--color-primary': '#0576b9',
     '--color-success': '#2cb57e',
     '--color-info': '#47bce8',
     '--color-warning': '#f5bd58',
