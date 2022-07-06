@@ -31,7 +31,7 @@ export function writeNewStyle(themeColor) {
 export function getIndexStyle() {
   return new Promise((resolve) => {
     if (!originalStyle) {
-      axios.all([axios.get('/theme/index.css'), axios.get('/theme/element-ui.css')]).then(
+      axios.all([axios.get('/theme/element-ui.css'), axios.get('/theme/element-extra.css')]).then(
         axios.spread((file, extraFile) => {
           const fileData = file.data
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
