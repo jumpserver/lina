@@ -71,7 +71,8 @@ export function mix(color_1, color_2, weight) {
 
 export function changeSidebarColor(primary) {
   const elementStyle = document.documentElement.style
-  const colors = defaultThemeConfig
+  const themeInfo = store?.getters?.publicSettings?.INTERFACE?.theme_info?.colors || {}
+  const colors = Object.keys(themeInfo).length > 0 ? themeInfo : defaultThemeConfig
 
   for (const key in colors) {
     const currentColor = colors[key]
