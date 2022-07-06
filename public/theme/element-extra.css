@@ -11,17 +11,14 @@
   color: light-2;
 }
 
-.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
-  background-color: primary;
-  color: white!important;
-}
-
 .el-pagination.is-background .el-pager li:not(.disabled):hover {
   color: white;
   background-color: primary;
 }
 
-.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li {
   margin: 0 5px;
   background-color: white;
   color: #606266;
@@ -311,7 +308,9 @@ td .el-button.el-button--mini {
   border-bottom: 1px solid #e7e7e7 !important;
 }
 
-.el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
+.el-table .cell,
+.el-table--border td:first-child .cell,
+.el-table--border th:first-child .cell {
   padding-left: 10px;
   padding-right: 14px;
 }

@@ -1,5 +1,6 @@
 const config = {
-  '#174779': {
+  tech_blue: {
+    '--color-primary': '#174779',
     '--color-success': '#174779',
     '--color-info': '#17a2b8',
     '--color-warning': '#ffc107',
