@@ -57,12 +57,7 @@ export default {
           helpText: this.$t('xpack.loginTitleTip')
         },
         theme: {
-          on: {
-            // change: ([value]) => {
-            //   const color = matchColor[value] || defaultThemeColor
-            //   this.$store.dispatch('settings/changeThemeStyle', color)
-            // }
-          }
+          label: this.$t('notifications.Subject')
         },
         login_image: {
           component: UploadField,
