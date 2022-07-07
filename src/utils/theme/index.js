@@ -1,14 +1,14 @@
-import { generateColors, mix } from './color'
+import { changeMenuColor, generateColors, mix } from './color'
 import axios from 'axios'
 import formula from './formula.json'
 import variables from '@/styles/var.scss'
 
 let originalStyle = ''
 
-export function writeNewStyle(themeColor) {
+export function changeElementColor(themeColors) {
   let colorsCssText = ''
   let cssText = originalStyle
-  const colors = generateColors(themeColor)
+  const colors = generateColors(themeColors)
   for (const [key, value] of Object.entries(colors)) {
     const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
     cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${value}`)
@@ -35,24 +35,30 @@ export function writeNewStyle(themeColor) {
   styleTag.innerText = cssText + colorsCssText
 }
 
-export function initCustomStyle() {
+export function changeThemeColors(themeColors) {
   return new Promise((resolve) => {
     if (!originalStyle) {
-      axios.all([axios.get('/theme/element-ui.css'), axios.get('/theme/element-extra.css')]).then(
+      axios.all([
+        axios.get('/theme/element-ui.css'),
+        axios.get('/theme/element-extra.css')
+      ]).then(
         axios.spread((file, extraFile) => {
           const fileData = file.data
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = initCustomStyleTemplate(fileData + extraFileData)
+          originalStyle = replaceStyleColors(fileData + extraFileData)
           resolve()
         })
       )
     } else {
       resolve()
     }
+  }).then(() => {
+    changeMenuColor(themeColors)
+    changeElementColor(themeColors)
   })
 }
 
-export function initCustomStyleTemplate(data) {
+export function replaceStyleColors(data) {
   const colors = generateColors(variables.themeColor)
   const colorMap = new Map()
   Object.keys(formula).forEach((key) => {

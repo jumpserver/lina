@@ -3,16 +3,13 @@ import formula from './formula.json'
 import defaultThemeConfig from './default.js'
 import variables from '@/styles/var.scss'
 
-export const defaultThemeColor = '#1ab394'
-export const matchColor = {}
-
-export function generateColors(themeColor) {
+export function generateColors(themeColors) {
   const colors = {}
-  let primaryColor = themeColor
+  let primaryColor = themeColors
   let subColor = defaultThemeConfig
-  if (typeof themeColor === 'object') {
-    primaryColor = themeColor['--color-primary'] || variables.themeColor
-    subColor = Object.keys(themeColor).length > 0 ? themeColor : defaultThemeConfig
+  if (typeof themeColors === 'object') {
+    primaryColor = themeColors['--color-primary'] || variables.themeColor
+    subColor = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
   }
 
   for (const [key, value] of Object.entries(formula)) {
@@ -44,7 +41,6 @@ export function generateColors(themeColor) {
 /* 将rgb颜色转成hex */
 export function colorRgbToHex(rgb) {
   const [r, g, b] = rgb.replace(/(?:\(|\)|rgb|RGB)*/g, '').split(',')
-
   return '#' + ((1 << 24) + (Number(r) << 16) + (Number(g) << 8) + Number(b)).toString(16).slice(1)
 }
 
@@ -53,24 +49,22 @@ export function mix(color_1, color_2, weight) {
   function h2d(h) { return parseInt(h, 16) }
 
   weight = (typeof weight !== 'undefined') ? weight : 50
-
   let color = '#'
 
-  for (var i = 0; i <= 5; i += 2) {
+  for (let i = 0; i <= 5; i += 2) {
     const v1 = h2d(color_1.substr(i, 2))
     const v2 = h2d(color_2.substr(i, 2))
     let val = d2h(Math.floor(v2 + (v1 - v2) * (weight / 100.0)))
 
     while (val.length < 2) { val = '0' + val }
-
     color += val
   }
   return color
 }
 
-export function changeMenuColor(themeColor) {
+export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
-  const colors = Object.keys(themeColor).length > 0 ? themeColor : defaultThemeConfig
+  const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
 
   for (const key in colors) {
     const currentColor = colors[key]
