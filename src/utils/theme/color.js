@@ -1,36 +1,40 @@
 import color from 'css-color-function'
 import formula from './formula.json'
 import defaultThemeConfig from './default.js'
-import store from '@/store/index.js'
+import variables from '@/styles/var.scss'
 
 export const defaultThemeColor = '#1ab394'
 export const matchColor = {}
 
-export function generateColors(primary) {
+export function generateColors(themeColor) {
   const colors = {}
-  const themeInfo = store?.getters?.publicSettings?.INTERFACE?.theme_info?.colors || {}
-  const otherColor = Object.keys(themeInfo).length > 0 ? themeInfo : defaultThemeConfig
+  let primaryColor = themeColor
+  let subColor = defaultThemeConfig
+  if (typeof themeColor === 'object') {
+    primaryColor = themeColor['--color-primary'] || variables.themeColor
+    subColor = Object.keys(themeColor).length > 0 ? themeColor : defaultThemeConfig
+  }
 
   for (const [key, value] of Object.entries(formula)) {
     let replaceColor
     if (value.includes('primary')) {
-      replaceColor = value.replace(/primary/g, primary)
+      replaceColor = value.replace(/primary/g, primaryColor)
     }
     if (value.includes('success')) {
-      replaceColor = value.replace(/success/g, otherColor['--color-success'])
+      replaceColor = value.replace(/success/g, subColor['--color-success'])
     }
     if (value.includes('info')) {
-      replaceColor = value.replace(/info/g, otherColor['--color-info'])
+      replaceColor = value.replace(/info/g, subColor['--color-info'])
     }
     if (value.includes('warning')) {
-      replaceColor = value.replace(/warning/g, otherColor['--color-warning'])
+      replaceColor = value.replace(/warning/g, subColor['--color-warning'])
     }
     if (value.includes('danger')) {
-      replaceColor = value.replace(/danger/g, otherColor['--color-danger'])
+      replaceColor = value.replace(/danger/g, subColor['--color-danger'])
     }
     if (replaceColor) {
-      const c = color.convert(replaceColor)
-      colors[key] = c.indexOf('rgba') > -1 ? c : colorRgbToHex(c)
+      const convertColor = color.convert(replaceColor)
+      colors[key] = convertColor.indexOf('rgba') > -1 ? convertColor : colorRgbToHex(convertColor)
     }
   }
 
@@ -64,10 +68,9 @@ export function mix(color_1, color_2, weight) {
   return color
 }
 
-export function changeSidebarColor(primary) {
+export function changeMenuColor(themeColor) {
   const elementStyle = document.documentElement.style
-  const themeInfo = store?.getters?.publicSettings?.INTERFACE?.theme_info?.colors || {}
-  const colors = Object.keys(themeInfo).length > 0 ? themeInfo : defaultThemeConfig
+  const colors = Object.keys(themeColor).length > 0 ? themeColor : defaultThemeConfig
 
   for (const key in colors) {
     const currentColor = colors[key]
