@@ -1,7 +1,7 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
 import { writeNewStyle, getIndexStyle } from '@/utils/theme/index'
-import { matchColor, defaultThemeColor } from '@/utils/theme/color'
+import { defaultThemeColor } from '@/utils/theme/color'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -22,9 +22,9 @@ const mutations = {
     }
   },
   SET_PUBLIC_SETTINGS: (state, settings) => {
-    const color = settings.INTERFACE?.theme
+    const color = settings?.INTERFACE?.theme_info?.colors?.['--color-primary']
     state.publicSettings = settings
-    state.themeColor = matchColor[color] || defaultThemeColor
+    state.themeColor = color || defaultThemeColor
 
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
@@ -60,8 +60,8 @@ const actions = {
           // 动态修改Title
           document.title = data['INTERFACE']['login_title']
         }
-        commit('SET_PUBLIC_SETTINGS', data)
         getIndexStyle().then(() => {
+          commit('SET_PUBLIC_SETTINGS', data)
           writeNewStyle(state.themeColor)
         })
         resolve(response)

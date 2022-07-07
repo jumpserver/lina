@@ -30,7 +30,6 @@ import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
 import { getInterfaceInfo, updateInterface, restoreInterface } from '@/api/interface'
-import { matchColor, defaultThemeColor } from '@/utils/theme/color'
 
 export default {
   name: 'InterfaceSettings',
@@ -59,10 +58,10 @@ export default {
         },
         theme: {
           on: {
-            change: ([value]) => {
-              const color = matchColor[value] || defaultThemeColor
-              this.$store.dispatch('settings/changeThemeStyle', color)
-            }
+            // change: ([value]) => {
+            //   const color = matchColor[value] || defaultThemeColor
+            //   this.$store.dispatch('settings/changeThemeStyle', color)
+            // }
           }
         },
         login_image: {
