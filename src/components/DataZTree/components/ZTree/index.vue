@@ -11,6 +11,7 @@
         {{ this.$t('common.tree.Empty') }}<a id="tree-refresh"><i class="fa fa-refresh" /></a>
       </div>
     </div>
+    <input type="text" class="tree-search-input">
     <div :id="iRMenuID" class="rMenu">
       <ul class="dropdown-menu menu-actions">
         <slot name="rMenu" />
@@ -55,7 +56,6 @@ export default {
   },
   mounted() {
     this.initTree()
-    // $('.treebox').css('height', window.innerHeight - 60)
   },
   beforeDestroy() {
     $.fn.zTree.destroy(this.iZTreeID)
@@ -95,6 +95,7 @@ export default {
           vm.zTree.destroy()
         }
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
+        this.fuzzySearch(this.iZTreeID, '#tree-search-input')
         // 手动上报事件, Tree加载完成
         this.$emit('TreeInitFinish', this.zTree)
         if (this.treeSetting.showRefresh) {
@@ -117,15 +118,17 @@ export default {
     },
     rootNodeAddDom: function(ztree, callback) {
       const vm = this
-      const refreshIcon = "<a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
+      const searchIcon = "<a id='tree-search'><i class='fa fa-search'></i></a>"
+      const refreshIcon = " <a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
+      const icons = `${refreshIcon} ${searchIcon}`
       const rootNode = ztree.getNodes()[0]
       let $rootNodeRef
       if (rootNode) {
         $rootNodeRef = $('#' + rootNode.tId + '_a')
-        $rootNodeRef.after(refreshIcon)
+        $rootNodeRef.after(icons)
       } else {
         $rootNodeRef = $('#' + ztree.setting.treeId)
-        $rootNodeRef.html(refreshIcon)
+        $rootNodeRef.html(icons)
       }
       const refreshIconRef = $('#tree-refresh')
       refreshIconRef.bind('click', function() {
@@ -138,6 +141,16 @@ export default {
           vm.initTree()
         }
       })
+      const searchIconRef = $('#tree-search')
+      searchIconRef.bind('click', function(evt) {
+        const searchInput = $('.tree-search-input')
+        const searchIcon = $('#tree-search')
+        searchInput.css({
+          'top': searchIcon[0].offsetTop + 'px',
+          'left': searchIcon[0].offsetLeft + 15 + 'px',
+          'display': 'inline'
+        })
+      })
     },
     refresh: function() {
       const refreshIconRef = $('#tree-refresh')
@@ -147,7 +160,6 @@ export default {
       return this.zTree.getCheckedNodes(true)
     }
   }
-
 }
 </script>
 
@@ -191,7 +203,7 @@ export default {
     top: 100%;
     z-index: 1000;
   }
-  .ztree  ::v-deep  .fa-refresh {
+  .ztree ::v-deep .fa {
     font: normal normal normal 14px/1 FontAwesome !important;
   }
   .dropdown a:hover {
@@ -217,5 +229,10 @@ export default {
   .treebox {
     height: 80vh;
     overflow: auto;
+  }
+  .tree-search-input {
+    position: absolute;
+    display: none;
+    background: rgba(255, 255, 255, 0.6);
   }
 </style>
