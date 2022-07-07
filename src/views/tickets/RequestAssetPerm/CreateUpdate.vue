@@ -26,7 +26,10 @@ export default {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
-        apply_actions: ['all', 'connect', 'updownload', 'upload_file', 'download_file'],
+        apply_actions: [
+          'all', 'connect', 'updownload', 'upload_file', 'download_file',
+          'clipboard_copy_paste', 'clipboard_copy', 'clipboard_paste'
+        ],
         apply_assets: [],
         org_id: '',
         type: 'apply_asset'
@@ -81,9 +84,6 @@ export default {
         apply_system_users: {
           type: 'systemUserSelect',
           component: Select2,
-          rules: [
-            { required: true, message: this.$t('common.fieldRequiredError'), trigger: 'change' }
-          ],
           label: this.$t('assets.SystemUser'),
           el: {
             value: [],

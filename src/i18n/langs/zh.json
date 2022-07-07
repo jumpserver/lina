@@ -258,6 +258,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "NeedAddAppsOrSystemUserErrMsg": "需要添加应用或系统用户",
     "VerificationCodeSent": "验证码已发送",
     "SendVerificationCode": "发送验证码",
     "History": "历史",

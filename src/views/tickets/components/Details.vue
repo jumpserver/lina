@@ -1,7 +1,7 @@
 <template>
   <IBox class="box">
     <div slot="header" class="clearfix ibox-title">
-      <i class="fa fa-info-circle" /> {{ title }}
+      <i /> {{ title }}
     </div>
     <div class="content">
       <el-row :gutter="10">
