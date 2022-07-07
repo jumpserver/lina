@@ -1,14 +1,14 @@
-import { generateColors, mix } from './color'
+import { changeMenuColor, generateColors, mix } from './color'
 import axios from 'axios'
 import formula from './formula.json'
 import variables from '@/styles/var.scss'
 
 let originalStyle = ''
 
-export function changeElementColor(themeColor) {
+export function changeElementColor(themeColors) {
   let colorsCssText = ''
   let cssText = originalStyle
-  const colors = generateColors(themeColor)
+  const colors = generateColors(themeColors)
   for (const [key, value] of Object.entries(colors)) {
     const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
     cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${value}`)
@@ -35,7 +35,7 @@ export function changeElementColor(themeColor) {
   styleTag.innerText = cssText + colorsCssText
 }
 
-export function initThemeStyle() {
+export function changeThemeColors(themeColors) {
   return new Promise((resolve) => {
     if (!originalStyle) {
       axios.all([
@@ -52,6 +52,9 @@ export function initThemeStyle() {
     } else {
       resolve()
     }
+  }).then(() => {
+    changeMenuColor(themeColors)
+    changeElementColor(themeColors)
   })
 }
 

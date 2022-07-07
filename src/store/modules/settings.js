@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
-import { changeElementColor, initThemeStyle } from '@/utils/theme/index'
+import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
 import { changeMenuColor } from '@/utils/theme/color'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
@@ -60,10 +60,8 @@ const actions = {
           document.title = data['INTERFACE']['login_title']
         }
         const themeColors = data?.INTERFACE?.theme_info?.colors || {}
-        initThemeStyle(themeColors).then(() => {
+        changeThemeColors(themeColors).then(() => {
           commit('SET_PUBLIC_SETTINGS', data)
-          changeMenuColor(themeColors)
-          changeElementColor(themeColors)
         })
         resolve(response)
       }).catch(error => {
