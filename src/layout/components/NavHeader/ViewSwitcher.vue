@@ -96,7 +96,7 @@ export default {
         if (this.mode !== 'horizontal') {
           return false
         }
-        if (this.views.length < 2) {
+        if (this.views.length < 1) {
           return false
         }
         if (this.tipHasRead) {

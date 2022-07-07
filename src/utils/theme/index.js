@@ -5,7 +5,7 @@ import variables from '@/styles/var.scss'
 
 let originalStyle = ''
 
-export function writeNewStyle(themeColor) {
+export function changeElementColor(themeColor) {
   let colorsCssText = ''
   let cssText = originalStyle
   const colors = generateColors(themeColor)
@@ -35,14 +35,17 @@ export function writeNewStyle(themeColor) {
   styleTag.innerText = cssText + colorsCssText
 }
 
-export function initCustomStyle() {
+export function initThemeStyle() {
   return new Promise((resolve) => {
     if (!originalStyle) {
-      axios.all([axios.get('/theme/element-ui.css'), axios.get('/theme/element-extra.css')]).then(
+      axios.all([
+        axios.get('/theme/element-ui.css'),
+        axios.get('/theme/element-extra.css')
+      ]).then(
         axios.spread((file, extraFile) => {
           const fileData = file.data
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = initCustomStyleTemplate(fileData + extraFileData)
+          originalStyle = replaceStyleColors(fileData + extraFileData)
           resolve()
         })
       )
@@ -52,7 +55,7 @@ export function initCustomStyle() {
   })
 }
 
-export function initCustomStyleTemplate(data) {
+export function replaceStyleColors(data) {
   const colors = generateColors(variables.themeColor)
   const colorMap = new Map()
   Object.keys(formula).forEach((key) => {
