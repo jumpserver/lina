@@ -1,4 +1,4 @@
-import { generateColors, changeSidebarColor } from './color'
+import { generateColors, changeSidebarColor, mix } from './color'
 import axios from 'axios'
 import formula from './formula.json'
 import variables from '@/styles/var.scss'
@@ -10,14 +10,22 @@ export function writeNewStyle(themeColor) {
   let colorsCssText = ''
   let cssText = originalStyle
   const colors = generateColors(themeColor)
-  Object.keys(colors).forEach((key) => {
-    cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${colors[key]}`)
+  for (const [key, value] of Object.entries(colors)) {
+    const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
+    cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${value}`)
     colorsCssText += `
-      .color-${key}{color: ${colors[key]}!important;}
-      .bg-${key}{background-color: ${colors[key]}!important;}
-      .border-${key}{border-color: ${colors[key]}!important;}
+      .color-${key}{color: ${value}!important;}
+      .bg-${key}{background-color: ${value}!important;}
+      .border-${key}{border-color: ${value}!important;}
+      .el-button--${key}.is-disabled,
+      .el-button--${key}.is-disabled:active,
+      .el-button--${key}.is-disabled:focus,
+      .el-button--${key}:hover{
+        background-color: ${blendColor}!important;
+        border-color: ${blendColor}!important;
+      }
     `
-  })
+  }
 
   let styleTag = document.getElementById('themeStyle')
   if (!styleTag) {
