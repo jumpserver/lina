@@ -29,7 +29,7 @@
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { getInterfaceInfo, updateInterface, restoreInterface } from '@/api/interface'
+import { getInterfaceInfo, updateInterface, restoreInterface, previewThemes } from '@/api/interface'
 
 export default {
   name: 'InterfaceSettings',
@@ -46,6 +46,7 @@ export default {
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
       isDev: process.env.NODE_ENV === 'development',
+      themeConfigs: [],
       fields: [
         [this.$t('common.Basic'), ['login_title', 'theme']],
         ['Logo', ['logo_index', 'logo_logout', 'favicon']],
@@ -57,7 +58,13 @@ export default {
           helpText: this.$t('xpack.loginTitleTip')
         },
         theme: {
-          label: this.$t('notifications.Subject')
+          label: this.$t('notifications.Subject'),
+          on: {
+            change: ([value]) => {
+              const themeColors = this.getSelectThemeConfig(value)
+              this.$store.dispatch('settings/changeThemeStyle', themeColors)
+            }
+          }
         },
         login_image: {
           component: UploadField,
@@ -145,8 +152,24 @@ export default {
       this.interfaceInfo = data
       this.loading = false
     })
+    this.getPreviewThemes()
   },
   methods: {
+    getPreviewThemes() {
+      previewThemes().then(res => {
+        this.themeConfigs = res
+      })
+    },
+    getSelectThemeConfig(value) {
+      let themeConfig
+      for (const item of this.themeConfigs) {
+        if (item.name === value) {
+          themeConfig = item.colors
+          break
+        }
+      }
+      return themeConfig
+    },
     submitForm(values) {
       const form = new FormData()
       const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
