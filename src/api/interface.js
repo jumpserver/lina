@@ -34,3 +34,10 @@ export function importLicense(formData) {
     data: formData
   })
 }
+
+export function previewThemes() {
+  return request({
+    url: `/api/v1/xpack/interface/setting/themes/`,
+    method: 'get'
+  })
+}

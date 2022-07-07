@@ -69,10 +69,10 @@ const actions = {
       })
     })
   },
-  changeThemeStyle({ commit }, color) {
-    commit('setTheme', color)
-    changeMenuColor(color)
-    changeElementColor(color)
+  changeThemeStyle({ commit }, themeColors) {
+    changeMenuColor(themeColors)
+    changeElementColor(themeColors)
+    commit('setTheme', themeColors)
   }
 }
 
