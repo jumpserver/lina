@@ -139,8 +139,17 @@ export default {
         this.ConfirmType = data.confirm_type
         this.Content = data.content
         if (this.ConfirmType === 'relogin') {
-          this.title = this.$t('auth.NeedReLogin')
-          this.visible = true
+          this.$axios.post(
+            `/api/v1/authentication/confirm/`,
+            {
+              confirm_type: this.ConfirmType,
+              secret_key: ''
+            },
+            { disableFlashErrorMsg: true },
+          ).then(() => { this.$emit('UserConfirmDone', true) }).catch(() => {
+            this.title = this.$t('auth.NeedReLogin')
+            this.visible = true
+          })
           return
         }
         if (this.ConfirmType === 'mfa') {
