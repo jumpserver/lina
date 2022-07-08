@@ -19,7 +19,11 @@
           <div slot="description">
             <el-tag size="medium" :type="`${thisCopy.statusMap[item.state].type}`"> {{ `${thisCopy.statusMap[item.state].title}` }} </el-tag>
           </div>
-          <div slot="description"><el-button type="text" style="color: blue" @click="lookOver(item.assignees_display)">点击查看 受理人</el-button></div>
+          <div slot="description">
+            <el-button type="text" @click="lookOver(item.assignees_display)">
+              {{ $t('tickets.CheckViewAcceptor') }}
+            </el-button>
+          </div>
           <div v-if="item.state==='closed'" slot="description">
             <div>{{ `${thisCopy.$t('tickets.Assignee')}：${object.rel_snapshot.applicant}` }}</div>
             <div>{{ `${thisCopy.$t('common.dateFinished')}:  ${toSafeLocalDateStr(item.approval_date)}` }}</div>
