@@ -16,14 +16,22 @@ export function changeElementColor(themeColors) {
       .color-${key}{color: ${value}!important;}
       .bg-${key}{background-color: ${value}!important;}
       .border-${key}{border-color: ${value}!important;}
-      .el-button--${key}.is-disabled,
-      .el-button--${key}.is-disabled:active,
-      .el-button--${key}.is-disabled:focus,
-      .el-button--${key}:hover{
-        background-color: ${blendColor}!important;
-        border-color: ${blendColor}!important;
-      }
     `
+    if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
+      colorsCssText = colorsCssText + `
+        .el-button--${key}:focus {
+          background-color: ${value}!important;
+          border-color: ${value}!important;
+        }
+        .el-button--${key}.is-disabled,
+        .el-button--${key}.is-disabled:active,
+        .el-button--${key}.is-disabled:focus,
+        .el-button--${key}:hover{
+          background-color: ${blendColor}!important;
+          border-color: ${blendColor}!important;
+        }
+      `
+    }
   }
 
   let styleTag = document.getElementById('themeStyle')
