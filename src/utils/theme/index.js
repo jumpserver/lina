@@ -10,14 +10,14 @@ export function changeElementColor(themeColors) {
   let cssText = originalStyle
   const colors = generateColors(themeColors)
   for (const [key, value] of Object.entries(colors)) {
-    const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
     cssText = cssText.replace(new RegExp('(:|\\s+)' + key, 'g'), '$1' + `${value}`)
     colorsCssText += `
-      .color-${key}{color: ${value}!important;}
-      .bg-${key}{background-color: ${value}!important;}
-      .border-${key}{border-color: ${value}!important;}
+    .color-${key}{color: ${value}!important;}
+    .bg-${key}{background-color: ${value}!important;}
+    .border-${key}{border-color: ${value}!important;}
     `
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
+      const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       colorsCssText = colorsCssText + `
         .el-button--${key}:focus {
           background-color: ${value}!important;
@@ -29,6 +29,9 @@ export function changeElementColor(themeColors) {
         .el-button--${key}:hover{
           background-color: ${blendColor}!important;
           border-color: ${blendColor}!important;
+        }
+        .el-link.el-link--${key}:hover {
+          color: ${blendColor}!important;
         }
       `
     }
