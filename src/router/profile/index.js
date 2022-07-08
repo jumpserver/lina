@@ -64,6 +64,16 @@ export default {
         hidden: ({ settings }) => !settings['AUTH_TEMP_TOKEN'],
         permissions: ['authentication.view_temptoken']
       }
+    },
+    {
+      path: '/profile/connection-token',
+      component: () => import('@/views/profile/ConnectionToken'),
+      name: 'ConnectionToken',
+      meta: {
+        title: i18n.t('common.nav.ConnectionToken'),
+        icon: 'map-pin',
+        permissions: ['authentication.view_connectiontoken']
+      }
     }
   ]
 }

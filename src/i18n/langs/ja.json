@@ -442,6 +442,7 @@
     "isValid": "有効",
     "nav": {
       "TempPassword": "一時パスワード",
+      "ConnectionToken": "接続トークン",
       "APIKey": "APIキー",
       "Workbench": "作業台",
       "Navigation": "ナビゲーション",

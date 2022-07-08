@@ -442,6 +442,7 @@
     "isValid": "有效",
     "nav": {
       "TempPassword": "临时密码",
+      "ConnectionToken": "连接令牌",
       "APIKey": "API Key",
       "Workbench": "工作台",
       "Navigation": "导航",

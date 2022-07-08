@@ -430,6 +430,7 @@
     "isValid": "Is valid",
     "nav": {
       "TempPassword": "Temporary password",
+      "ConnectionToken": "Connection token",
       "APIKey": "API Key",
       "Workbench": "Workbench",
       "Navigation": "Navigation",
