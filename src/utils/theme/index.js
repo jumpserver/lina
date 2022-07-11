@@ -19,6 +19,7 @@ export function changeElementColor(themeColors) {
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       colorsCssText = colorsCssText + `
+        .el-button--${key},
         .el-button--${key}:focus {
           background-color: ${value}!important;
           border-color: ${value}!important;
@@ -30,6 +31,9 @@ export function changeElementColor(themeColors) {
           background-color: ${blendColor}!important;
           border-color: ${blendColor}!important;
         }
+        .el-link.el-link--${key}{
+          color: ${value}!important;
+        }
         .el-link.el-link--${key}:hover {
           color: ${blendColor}!important;
         }
@@ -37,6 +41,7 @@ export function changeElementColor(themeColors) {
     }
   }
 
+  colorsCssText = colorsCssText.replaceAll('\n', '')
   let styleTag = document.getElementById('themeStyle')
   if (!styleTag) {
     styleTag = document.createElement('style')
