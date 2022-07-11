@@ -430,6 +430,7 @@
     "isValid": "Is valid",
     "nav": {
       "TempPassword": "Temporary password",
+      "ConnectionToken": "Connection token",
       "APIKey": "API Key",
       "Workbench": "Workbench",
       "Navigation": "Navigation",
@@ -1010,6 +1011,7 @@
     "helpText": {
       "TempPassword": "For a while, there is a period of 300 seconds, failure immediately after use",
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
+      "ConnectionTokenList": "The connection token is a kind of authentication information that combines authentication and connection assets. It allows users to log in to assets with one click. Currently supported components include: KoKo, Lion, Magnus, Razor, etc.",
       "authLdapSearchFilter": "Choice may be (cn|uid|sAMAccountName)=%(user)s)",
       "authLdapSearchOu": "Use | split User OUs",
       "authLdapUserAttrMap": "User attr map present how to map LDAP user attr to jumpserver, username, name, email is jumpserver attr",

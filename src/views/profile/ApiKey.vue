@@ -27,10 +27,10 @@ export default {
         ],
         columnsMeta: {
           id: {
-            label: 'AccessKeyID'
+            label: 'Access Key'
           },
           secret: {
-            label: 'AccessKeySecret',
+            label: 'Secret Key',
             formatter: ShowKeyCopyFormatter
           },
           date_created: {
@@ -54,7 +54,9 @@ export default {
               extraActions: [
                 {
                   name: 'Enabled',
-                  title: this.$t('common.On/Off'),
+                  title: ({ row }) => {
+                    return row.is_active ? this.$t('common.Disable') : this.$t('common.Enable')
+                  },
                   type: 'info',
                   can: () => this.$hasPerm('authentication.change_accesskey'),
                   callback: function({ row }) {

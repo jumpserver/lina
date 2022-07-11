@@ -62,7 +62,18 @@ export default {
         title: i18n.t('common.nav.TempPassword'),
         icon: 'magic',
         hidden: ({ settings }) => !settings['AUTH_TEMP_TOKEN'],
-        permissions: ['authentication.view_temptoken']
+        permissions: ['authentication.view_temptoken'],
+        activeMenu: '/profile/temp-password'
+      }
+    },
+    {
+      path: '/profile/connection-token',
+      component: () => import('@/views/profile/ConnectionToken'),
+      name: 'ConnectionToken',
+      meta: {
+        title: i18n.t('common.nav.ConnectionToken'),
+        icon: 'map-pin',
+        permissions: ['authentication.view_connectiontoken']
       }
     }
   ]

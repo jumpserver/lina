@@ -145,6 +145,7 @@ export default {
         v.fa = this.cleanValue(v, 'fa')
         v.order = v.order || 100
         v.tip = this.cleanValue(v, 'tip')
+        v.title = this.cleanValue(v, 'title')
         return v
       })
       actions = actions.filter((v) => v.has)
