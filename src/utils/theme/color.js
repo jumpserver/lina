@@ -70,7 +70,7 @@ export function changeMenuColor(themeColors) {
     const currentColor = colors[key]
     const changeColor = currentColor.replace(/#/g, '')
     elementStyle.setProperty(key, currentColor)
-    if (key === '--menu-text') {
+    if (key === '--menu-bg') {
       elementStyle.setProperty('--menu-hover', mix('000000', changeColor, 10))
       elementStyle.setProperty('--submenu-bg', mix('000000', changeColor, 20))
       elementStyle.setProperty('--submenu-hover', mix('000000', changeColor, 30))
