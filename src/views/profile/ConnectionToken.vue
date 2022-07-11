@@ -9,7 +9,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { ShowKeyFormatter } from '@/components/TableFormatters'
+import { ShowKeyCopyFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'ConnectionToken',
@@ -36,13 +36,11 @@ export default {
           ]
         },
         columnsMeta: {
-          // is_expired: {
-          // },
           id: {
-            formatter: ShowKeyFormatter
+            formatter: ShowKeyCopyFormatter
           },
           secret: {
-            formatter: ShowKeyFormatter
+            formatter: ShowKeyCopyFormatter
           },
           actions: {
             prop: '',
