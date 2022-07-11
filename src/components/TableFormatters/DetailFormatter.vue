@@ -2,7 +2,7 @@
   <el-link
     class="detail"
     :disabled="disabled"
-    :type="col.type || 'success'"
+    :type="col.type || 'info'"
     @click="goDetail"
   >
     {{ iTitle }}
