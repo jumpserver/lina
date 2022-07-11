@@ -37,6 +37,10 @@ export function changeElementColor(themeColors) {
         .el-link.el-link--${key}:hover {
           color: ${blendColor}!important;
         }
+        .el-link.el-link--${key}.is-underline:hover:after,
+        .el-link.el-link--${key}:after {
+          border-color: ${value}!important;
+        }
       `
     }
   }
