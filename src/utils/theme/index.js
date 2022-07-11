@@ -1,7 +1,6 @@
 import { changeMenuColor, generateColors, mix } from './color'
 import axios from 'axios'
 import formula from './formula.json'
-import variables from '@/styles/var.scss'
 
 let originalStyle = ''
 
@@ -64,7 +63,7 @@ export function changeThemeColors(themeColors) {
         axios.spread((file, extraFile) => {
           const fileData = file.data
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = replaceStyleColors(fileData + extraFileData)
+          originalStyle = replaceStyleColors(fileData + extraFileData, themeColors)
           resolve()
         })
       )
@@ -77,8 +76,8 @@ export function changeThemeColors(themeColors) {
   })
 }
 
-export function replaceStyleColors(data) {
-  const colors = generateColors(variables.themeColor)
+export function replaceStyleColors(data, themeColors) {
+  const colors = generateColors(themeColors['--primary'])
   const colorMap = new Map()
   Object.keys(formula).forEach((key) => {
     colorMap.set(colors[key], key)

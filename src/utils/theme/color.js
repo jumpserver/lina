@@ -1,14 +1,16 @@
 import color from 'css-color-function'
 import formula from './formula.json'
 import defaultThemeConfig from './default.js'
-import variables from '@/styles/var.scss'
 
 export function generateColors(themeColors) {
   const colors = {}
+  if (!themeColors) {
+    themeColors = defaultThemeConfig
+  }
   let primaryColor = themeColors
   let subColor = defaultThemeConfig
   if (typeof themeColors === 'object') {
-    primaryColor = themeColors['--color-primary'] || variables.themeColor
+    primaryColor = themeColors['--color-primary']
     subColor = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
   }
 
