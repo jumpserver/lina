@@ -19,7 +19,6 @@ export function changeElementColor(themeColors) {
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       colorsCssText = colorsCssText + `
-        .el-button--${key},
         .el-button--${key}:focus {
           background-color: ${value}!important;
           border-color: ${value}!important;
