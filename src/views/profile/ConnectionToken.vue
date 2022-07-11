@@ -19,11 +19,11 @@ export default {
   data() {
     const ajaxUrl = '/api/v1/authentication/connection-token/'
     return {
-      helpMessage: '',
+      helpMessage: this.$t('setting.helpText.ConnectionTokenList'),
       tableConfig: {
         url: ajaxUrl,
         columns: [
-          'id', 'secret', 'type_display',
+          'id', 'type_display',
           'user_display', 'system_user_display', 'asset_display', 'application_display',
           'date_expired', 'validity',
           'date_created', 'created_by', 'org_name',
@@ -32,14 +32,12 @@ export default {
         columnsShow: {
           min: ['id', 'actions'],
           default: [
-            'id', 'secret', 'type_display', 'date_expired', 'validity', 'actions'
+            'id', 'type_display', 'date_expired', 'validity', 'actions'
           ]
         },
         columnsMeta: {
           id: {
-            formatter: ShowKeyCopyFormatter
-          },
-          secret: {
+            label: 'Token ID',
             formatter: ShowKeyCopyFormatter
           },
           actions: {
@@ -53,6 +51,7 @@ export default {
                   name: 'Expired',
                   title: this.$t('setting.Expire'),
                   type: 'info',
+                  can: ({ row }) => row.validity,
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
@@ -69,6 +68,7 @@ export default {
         }
       },
       headerActions: {
+        hasLeftActions: false,
         hasSearch: true,
         hasRightActions: true,
         hasRefresh: true,

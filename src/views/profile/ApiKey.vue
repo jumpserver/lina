@@ -27,10 +27,10 @@ export default {
         ],
         columnsMeta: {
           id: {
-            label: 'AccessKeyID'
+            label: 'Access Key'
           },
           secret: {
-            label: 'AccessKeySecret',
+            label: 'Secret Key',
             formatter: ShowKeyCopyFormatter
           },
           date_created: {
