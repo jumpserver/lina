@@ -16,6 +16,9 @@
         <el-dropdown-item v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')" icon="el-icon-magic-stick" command="tempPassword">
           {{ $t('common.nav.TempPassword') }}
         </el-dropdown-item>
+        <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" icon="el-icon-place" command="connectionToken">
+          {{ $t('common.nav.ConnectionToken') }}
+        </el-dropdown-item>
         <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />
           {{ $t('common.nav.Logout') }}
         </el-dropdown-item>
@@ -57,6 +60,9 @@ export default {
           break
         case 'tempPassword':
           this.$router.push('/profile/temp-password')
+          break
+        case 'connectionToken':
+          this.$router.push('/profile/connection-token')
       }
     },
     logout() {
