@@ -4,7 +4,7 @@ import defaultThemeConfig from './default.js'
 
 export function generateColors(themeColors) {
   const colors = {}
-  if (!themeColors) {
+  if (!themeColors || Object.keys(themeColors).length === 0) {
     themeColors = defaultThemeConfig
   }
   let primaryColor = themeColors
@@ -31,7 +31,7 @@ export function generateColors(themeColors) {
     if (value.includes('danger')) {
       replaceColor = value.replace(/danger/g, subColor['--color-danger'])
     }
-    if (replaceColor) {
+    if (replaceColor && !replaceColor.includes('undefined')) {
       const convertColor = color.convert(replaceColor)
       colors[key] = convertColor.indexOf('rgba') > -1 ? convertColor : colorRgbToHex(convertColor)
     }
