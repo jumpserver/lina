@@ -77,7 +77,7 @@ export function changeThemeColors(themeColors) {
 }
 
 export function replaceStyleColors(data, themeColors) {
-  const colors = generateColors(themeColors['--primary'])
+  const colors = generateColors(themeColors)
   const colorMap = new Map()
   Object.keys(formula).forEach((key) => {
     colorMap.set(colors[key], key)
