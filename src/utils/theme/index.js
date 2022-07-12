@@ -1,6 +1,7 @@
 import { changeMenuColor, generateColors, mix } from './color'
 import axios from 'axios'
 import formula from './formula.json'
+import defaultThemeConfig from './default.js'
 
 let originalStyle = ''
 
@@ -18,6 +19,7 @@ export function changeElementColor(themeColors) {
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       colorsCssText = colorsCssText + `
+        .el-button--${key},
         .el-button--${key}:focus {
           background-color: ${value}!important;
           border-color: ${value}!important;
@@ -54,6 +56,9 @@ export function changeElementColor(themeColors) {
 }
 
 export function changeThemeColors(themeColors) {
+  if (!themeColors) {
+    themeColors = defaultThemeConfig
+  }
   return new Promise((resolve) => {
     if (!originalStyle) {
       axios.all([
