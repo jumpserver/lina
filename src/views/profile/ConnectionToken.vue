@@ -25,14 +25,14 @@ export default {
         columns: [
           'id', 'type_display',
           'user_display', 'system_user_display', 'asset_display', 'application_display',
-          'date_expired', 'validity',
+          'date_expired', 'is_valid',
           'date_created', 'created_by', 'org_name',
           'actions'
         ],
         columnsShow: {
           min: ['id', 'actions'],
           default: [
-            'id', 'type_display', 'date_expired', 'validity', 'actions'
+            'id', 'type_display', 'date_expired', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
@@ -51,7 +51,7 @@ export default {
                   name: 'Expired',
                   title: this.$t('setting.Expire'),
                   type: 'info',
-                  can: ({ row }) => row.validity,
+                  can: ({ row }) => row['is_valid'],
                   callback: function({ row }) {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
