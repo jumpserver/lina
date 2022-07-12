@@ -7,6 +7,14 @@
   border-color: info;
 }
 
+.el-button--text {
+  padding: 5px
+}
+
+.el-button--text:hover {
+  background-color: rgba(0, 0, 0, .05);
+}
+
 .el-alert--info.is-light {
   background-color: light-9;
   color: light-2;

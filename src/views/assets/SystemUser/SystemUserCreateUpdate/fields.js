@@ -47,6 +47,9 @@ function getFields() {
 
   const private_key = {
     component: UploadKey,
+    el: {
+      fingerprint: ''
+    },
     hidden: (form) => {
       if (form.login_mode !== 'auto') {
         return true
