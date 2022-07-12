@@ -80,12 +80,18 @@ export function hasActionPerm(route, action) {
 }
 
 export function getPermedViews() {
+  // 看不懂，别特么瞎改
+  // 当用户访问某个 path 时，如果没有权限，应该 404，但是我们有个组织切换的功能，
+  // 当用户从 A 组织切换到 B 组织时，如果切换到 B 组织没有权限，404 显然不够优雅。
+  // 当用户访问某个 path 时，会从 path 提取 view，判断是否拥有权限，
+  // 如果没有权限，则 自上而下，寻找第一个有权限的 view。
+  // 这里应该拥有所有 view, 否则刷新页面时，有可能也会跳转
   const viewShowMapper = [
     ['console', store.getters.consoleOrgs.length > 0],
-    ['tickets', true],
     ['audit', store.getters.auditOrgs.length > 0],
-    ['settings', true],
-    ['workbench', true]
+    ['workbench', true],
+    ['tickets', hasPermission('tickets.view_ticket')],
+    ['settings', hasPermission('settings.view_setting')]
   ]
   return viewShowMapper.filter(i => i[1]).map(i => i[0])
 }
