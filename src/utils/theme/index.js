@@ -1,7 +1,6 @@
 import { changeMenuColor, generateColors, mix } from './color'
 import axios from 'axios'
 import formula from './formula.json'
-import defaultThemeConfig from './default.js'
 
 let originalStyle = ''
 
@@ -19,7 +18,6 @@ export function changeElementColor(themeColors) {
     if (['primary', 'success', 'info', 'warning', 'danger'].includes(key)) {
       const blendColor = mix('ffffff', value.replace(/#/g, ''), 35)
       colorsCssText = colorsCssText + `
-        .el-button--${key},
         .el-button--${key}:focus {
           background-color: ${value}!important;
           border-color: ${value}!important;
@@ -56,9 +54,6 @@ export function changeElementColor(themeColors) {
 }
 
 export function changeThemeColors(themeColors) {
-  if (!themeColors) {
-    themeColors = defaultThemeConfig
-  }
   return new Promise((resolve) => {
     if (!originalStyle) {
       axios.all([
@@ -68,7 +63,7 @@ export function changeThemeColors(themeColors) {
         axios.spread((file, extraFile) => {
           const fileData = file.data
           const extraFileData = extraFile.data.replace(/[\r\n]/g, '')
-          originalStyle = replaceStyleColors(fileData + extraFileData, themeColors)
+          originalStyle = replaceStyleColors(fileData + extraFileData)
           resolve()
         })
       )
@@ -81,8 +76,8 @@ export function changeThemeColors(themeColors) {
   })
 }
 
-export function replaceStyleColors(data, themeColors) {
-  const colors = generateColors(themeColors)
+export function replaceStyleColors(data) {
+  const colors = generateColors()
   const colorMap = new Map()
   Object.keys(formula).forEach((key) => {
     colorMap.set(colors[key], key)
