@@ -7,6 +7,11 @@
   border-color: info;
 }
 
+.el-button--success {
+  background-color: success;
+  border-color: success;
+}
+
 .el-alert--info.is-light {
   background-color: light-9;
   color: light-2;
