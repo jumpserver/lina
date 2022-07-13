@@ -1,7 +1,7 @@
 const config = {
   '--color-primary': '#1ab394',
-  '--color-success': '#1c84c6',
-  '--color-info': '#0d6efd',
+  '--color-success': '#2793d7',
+  '--color-info': '#1c84c6',
   '--color-warning': '#f8ac59',
   '--color-danger': '#ed5565',
   '--menu-bg': '#2f4050',

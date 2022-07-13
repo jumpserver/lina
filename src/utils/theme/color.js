@@ -80,7 +80,6 @@ export function changeMenuColor(themeColors) {
       elementStyle.setProperty('--menu-hover', menuHoverColor)
       elementStyle.setProperty('--submenu-bg', subMenuBgColor)
       elementStyle.setProperty('--submenu-hover', subMenuHoverColor)
-      console.log('Set subm： ', subMenuHoverColor)
     }
   }
 }
