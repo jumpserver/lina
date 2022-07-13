@@ -70,12 +70,17 @@ export function changeMenuColor(themeColors) {
 
   for (const key in colors) {
     const currentColor = colors[key]
-    const changeColor = currentColor.replace(/#/g, '')
+    const colorValue = currentColor.replace(/#/g, '')
     elementStyle.setProperty(key, currentColor)
+    const black = '000000'
     if (key === '--menu-bg') {
-      elementStyle.setProperty('--menu-hover', mix('000000', changeColor, 10))
-      elementStyle.setProperty('--submenu-bg', mix('000000', changeColor, 20))
-      elementStyle.setProperty('--submenu-hover', mix('000000', changeColor, 30))
+      const menuHoverColor = mix(black, colorValue, 10)
+      const subMenuBgColor = mix(black, colorValue, 20)
+      const subMenuHoverColor = mix(black, colorValue, 35)
+      elementStyle.setProperty('--menu-hover', menuHoverColor)
+      elementStyle.setProperty('--submenu-bg', subMenuBgColor)
+      elementStyle.setProperty('--submenu-hover', subMenuHoverColor)
+      console.log('Set subm： ', subMenuHoverColor)
     }
   }
 }
