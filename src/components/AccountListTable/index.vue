@@ -109,7 +109,10 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
-                    vm.showViewSecretDialog = true
+                    vm.showViewSecretDialog = false
+                    setTimeout(() => {
+                      vm.showViewSecretDialog = true
+                    })
                   }
                 },
                 {
