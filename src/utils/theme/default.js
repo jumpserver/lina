@@ -8,7 +8,7 @@ const config = {
   '--menu-text': '#a7b1c2',
   '--menu-hover': '#293846',
   '--submenu-bg': '#1f2d3d',
-  '--submenu-hover': '#3b4c5b',
+  '--submenu-hover': '#001528',
   '--menu-active-left': '#1ab394'
 }
 
