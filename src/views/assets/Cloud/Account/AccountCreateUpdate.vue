@@ -76,7 +76,25 @@ export default {
             attrs[item] = encryptPassword(value)
           }
         }
+        const toListFields = ['ip_group']
+        for (const item of toListFields) {
+          const value = attrs[item]
+          attrs[item] = value?.split(',') || []
+        }
         return values
+      },
+      afterGetFormValue(formValue) {
+        // 这里有点奇怪获取回来的表单数据是这样的: port 不知怎么来的
+        // port: 443
+        // provider: "lan"
+        // validity: false
+        if (!formValue.attrs) {
+          return formValue
+        }
+        if (Array.isArray(formValue.attrs.ip_group)) {
+          formValue.attrs.ip_group = formValue.attrs.ip_group.toString()
+        }
+        return formValue
       }
     }
   },

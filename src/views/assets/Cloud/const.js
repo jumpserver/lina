@@ -16,6 +16,7 @@ export const gcp = 'gcp'
 export const fc = 'fc'
 export const baiducloud = 'baiducloud'
 export const jdcloud = 'jdcloud'
+export const lan = 'lan'
 
 export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [aliyun]: {
@@ -97,5 +98,10 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
     name: fc,
     title: i18n.t('xpack.Cloud.FC'),
     attrs: ['api_endpoint', 'username', 'password']
+  },
+  [lan]: {
+    name: lan,
+    title: i18n.t('xpack.Cloud.LAN'),
+    attrs: ['ip_group', 'test_port', 'platform', 'hostname_prefix']
   }
 }

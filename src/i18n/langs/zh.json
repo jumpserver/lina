@@ -1446,6 +1446,7 @@
       "OpenStack": "OpenStack",
       "GCP": "谷歌云",
       "FC": "Fusion Compute",
+      "LAN": "局域网",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",
       "HuaweiCloud": "华为云",
