@@ -1,6 +1,6 @@
 import color from 'css-color-function'
 import formula from './formula.json'
-import defaultThemeConfig from './default.js'
+import defaultThemeConfig from '@/styles/default-theme.scss'
 
 export function generateColors(themeColors) {
   const colors = {}
@@ -8,10 +8,9 @@ export function generateColors(themeColors) {
     themeColors = defaultThemeConfig
   }
   let primaryColor = themeColors
-  let subColor = defaultThemeConfig
+  const subColor = themeColors || defaultThemeConfig
   if (typeof themeColors === 'object') {
     primaryColor = themeColors['--color-primary']
-    subColor = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
   }
 
   for (const [key, value] of Object.entries(formula)) {
