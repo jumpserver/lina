@@ -105,9 +105,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.workbenchOrgs.filter(item => {
-              return item.id !== '00000000-0000-0000-0000-000000000000'
-            })?.map((item) => {
+            options: this.$store.state.users.notRootWorkbenchOrgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -137,9 +135,7 @@ export default {
   },
   computed: {
     ...mapState({
-      workbenchOrgs: state => state.users.workbenchOrgs.filter(item => {
-        return item.id !== '00000000-0000-0000-0000-000000000000'
-      })
+      workbenchOrgs: state => state.users.notRootWorkbenchOrgs
     }),
     ...mapGetters(['currentOrg'])
   },

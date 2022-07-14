@@ -17,6 +17,7 @@ const getDefaultState = () => {
     auditOrgs: [],
     consoleOrgs: [],
     workbenchOrgs: [],
+    notRootWorkbenchOrgs: [],
     usingOrgs: [],
     perms: [],
     MFAVerifyAt: null,
@@ -42,6 +43,9 @@ const mutations = {
     state.perms = profile.perms
     state.consoleOrgs = profile['console_orgs']
     state.workbenchOrgs = profile['workbench_orgs']
+    state.notRootWorkbenchOrgs = profile['workbench_orgs'].filter(item => {
+      return item.id !== '00000000-0000-0000-0000-000000000000'
+    })
     state.auditOrgs = profile['audit_orgs']
     state.currentOrg = getCurrentOrgLocal(profile.username)
   },
