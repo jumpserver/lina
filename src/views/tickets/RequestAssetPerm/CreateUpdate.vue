@@ -42,6 +42,11 @@ export default {
         ]]
       ],
       fieldsMeta: {
+        title: {
+          el: {
+            type: 'input'
+          }
+        },
         type: {
           hidden: () => true,
           el: {
