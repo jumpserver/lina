@@ -7,6 +7,7 @@ const getters = {
   consoleOrgs: state => state.users.consoleOrgs,
   auditOrgs: state => state.users.auditOrgs,
   workbenchOrgs: state => state.users.workbenchOrgs,
+  notRootWorkbenchOrgs: state => state.users.notRootWorkbenchOrgs,
   usingOrgs: state => state.users.usingOrgs,
   currentOrg: state => state.users.currentOrg,
   currentOrgIsDefault: state => state.users.currentOrg['is_default'],
