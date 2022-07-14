@@ -29,7 +29,8 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'username', 'protocol', 'login_mode', 'assets_amount', 'applications_amount', 'comment', 'actions'
+            'name', 'username', 'protocol', 'login_mode', 'assets_amount',
+            'applications_amount', 'comment', 'actions'
           ]
         },
         columnsMeta: {
@@ -57,10 +58,14 @@ export default {
           actions: {
             formatterArgs: {
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }})
+                vm.$router.push({
+                  name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }
+                })
               },
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'SystemUserCreate', query: { protocol: row.protocol, clone_from: row.id }})
+                vm.$router.push({
+                  name: 'SystemUserCreate', query: { protocol: row.protocol, clone_from: row.id }
+                })
               }
             }
           }

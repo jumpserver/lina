@@ -5,6 +5,7 @@
     :fields-meta="fieldsMeta"
     :url="url"
     v-bind="$attrs"
+    @getObjectDone="onGetObjectDone($event)"
   />
 </template>
 
@@ -89,7 +90,11 @@ export default {
       url: '/api/v1/assets/system-users/'
     }
   },
-  method: {
+  methods: {
+    onGetObjectDone(obj) {
+      this.fieldsMeta.private_key.el.fingerprint = obj.ssh_key_fingerprint
+      console.log(obj.fingerprint)
+    }
   }
 }
 </script>
