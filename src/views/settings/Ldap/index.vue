@@ -77,16 +77,18 @@ export default {
       moreButtons: [
         {
           title: this.$t('setting.ldapConnectTest'),
-          callback: function(value, form) {
+          loading: false,
+          callback: function(value, form, btn) {
             if (value['AUTH_LDAP_BIND_PASSWORD'] === undefined) {
               value['AUTH_LDAP_BIND_PASSWORD'] = ''
             }
+            btn.loading = true
             testLdapSetting(value).then(resp => {
               this.$message.success(resp)
             }).catch(err => {
               const response = err.response
               this.$message.error(response.data)
-            })
+            }).finally(() => { btn.loading = false })
           }.bind(this)
         },
         {

@@ -25,15 +25,17 @@ export default {
         moreButtons: [
           {
             title: this.$t('setting.feiShuTest'),
-            callback: function(value, form) {
+            loading: false,
+            callback: function(value, form, btn) {
+              btn.loading = true
               vm.$axios.post(
                 '/api/v1/settings/feishu/testing/',
                 value
               ).then(res => {
                 vm.$message.success(res['msg'])
               }).catch(() => {
-                this.$log.error('err occur')
-              })
+                vm.$log.error('err occur')
+              }).finally(() => { btn.loading = false })
             }
           }
         ],
