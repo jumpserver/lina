@@ -14,6 +14,11 @@
 .el-button--text:hover {
   background-color: rgba(0, 0, 0, .05);
 }
+ 
+.el-button--success {
+  background-color: success;
+  border-color: success;
+}
 
 .el-alert--info.is-light {
   background-color: light-9;

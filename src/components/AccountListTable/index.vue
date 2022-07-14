@@ -13,7 +13,7 @@ import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-import i18n from '@/i18n/i18n'
+// import i18n from '@/i18n/i18n'
 
 export default {
   name: 'AccountListTable',
@@ -110,7 +110,10 @@ export default {
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
-                    vm.showViewSecretDialog = true
+                    vm.showViewSecretDialog = false
+                    setTimeout(() => {
+                      vm.showViewSecretDialog = true
+                    })
                   }
                 },
                 {
@@ -149,18 +152,18 @@ export default {
                       vm.showUpdateSecretDialog = true
                     })
                   }
-                },
-                {
-                  name: 'History',
-                  title: i18n.t('common.History'),
-                  can: this.$hasPerm('assets.view_assethistoryaccount') && !this.$store.getters.currentOrgIsRoot,
-                  callback: ({ row }) => {
-                    this.$router.push({
-                      name: 'AssetAccountHistoryList',
-                      query: { id: row.id }
-                    })
-                  }
                 }
+                // {
+                //   name: 'History',
+                //   title: i18n.t('common.History'),
+                //   can: this.$hasPerm('assets.view_assethistoryaccount') && !this.$store.getters.currentOrgIsRoot,
+                //   callback: ({ row }) => {
+                //     this.$router.push({
+                //       name: 'AssetAccountHistoryList',
+                //       query: { id: row.id }
+                //     })
+                //   }
+                // }
               ]
             }
           }
