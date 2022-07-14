@@ -60,9 +60,8 @@ const actions = {
           document.title = data['INTERFACE']['login_title']
         }
         const themeColors = data?.INTERFACE?.theme_info?.colors || {}
-        changeThemeColors(themeColors).then(() => {
-          commit('SET_PUBLIC_SETTINGS', data)
-        })
+        commit('SET_PUBLIC_SETTINGS', data)
+        changeThemeColors(themeColors)
         resolve(response)
       }).catch(error => {
         reject(error)
