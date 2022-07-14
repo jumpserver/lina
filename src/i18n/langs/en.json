@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountHistableHelpMessage": "Record the historical version of the current account",
     "PleaseClickLeftAssetToViewAssetAccount": "Asset account list,  please click on the assets on the left to view",
     "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",
     "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list, please click on the assets on the left to view"
@@ -247,9 +248,15 @@
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
     "ReLogin": "Re-Login",
+    "ReLoginTitle": "The current three-party login user (cas/saml) is not bound to MFA and does not support password verification. Please login again",
+    "NeedReLogin": "Need Re-Login",
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "NeedAddAppsOrSystemUserErrMsg": "Please add apps or system user",
+    "VerificationCodeSent": "The verification code has been sent",
+    "SendVerificationCode": "Send verification code",
+    "History": "History",
     "ChangeViewHelpText": "Click to change view",
     "Component": "component",
     "PrivateCloud": "Private cloud",
@@ -424,6 +431,7 @@
     "isValid": "Is valid",
     "nav": {
       "TempPassword": "Temporary password",
+      "ConnectionToken": "Connection token",
       "APIKey": "API Key",
       "Workbench": "Workbench",
       "Navigation": "Navigation",
@@ -436,8 +444,8 @@
       "Help": "Help",
       "Logout": "Logout",
       "Profile": "Profile",
-      "TechnicalSupport": "Technical support",
-      "ToolsDownload": "Tools download",
+      "Support": "Support",
+      "Download": "Download",
       "UserPage": "User page",
       "View": "View",
       "EnterpriseEdition": "Enterprise edition"
@@ -679,6 +687,7 @@
     "SessionDetail": "SessionDetail",
     "Accounts": "Accounts",
     "AssetAccount": "Asset Account",
+    "AssetHistoryAccount": "Asset History Account",
     "ApplicationAccount": "Application Account",
     "Ticket": "Tickets",
     "CommandConfirm": "Command confirm",
@@ -696,7 +705,7 @@
     "AssetPermissionUpdate": "Asset permissions update",
     "AssetUpdate": "Asset update",
     "Assets": "Assets",
-    "LogsAudits": "Logs audit",
+    "LogsAudit": "Logs audit",
     "SessionsAudit": "Sessions audit",
     "SessionList": "Session list",
     "BatchCommand": "Batch Command",
@@ -903,6 +912,8 @@
     }
   },
   "setting": {
+    "EndpointListHelpMessage": "The service endpoint is the address (port) for the user to access the service. When the user connects to the asset, the service endpoint will be selected according to the endpoint rules and asset tags, and the connection will be established as the access entry to realize the distributed connection of assets.",
+    "EndpointRuleListHelpMessage": "For the service endpoint selection strategy, two types are currently supported: <br>1. Specify the endpoint according to the endpoint rule (current page); <br>2. Select the endpoint through the asset tag. The tag name is fixed to endpoint, and the value is the name of the `endpoint`. <br>Two methods preferentially use label matching, because the IP segment may conflict, and the label method exists as a supplement to the rules.",
     "EnableKoKoSSHHelpText": "Enabled, connect assets to display SSH Client pull-up method",
     "SettingInEndpointHelpText": "Configure the service address and port in System Settings / Terminal Settings / Service Endpoints",
     "Feature": "Feature",
@@ -1001,6 +1012,7 @@
     "helpText": {
       "TempPassword": "For a while, there is a period of 300 seconds, failure immediately after use",
       "ApiKeyList": "The API key is used to sign the request header. The header of each request is different. Please refer to the usage documentation",
+      "ConnectionTokenList": "The connection token is a kind of authentication information that combines authentication and connection assets. It allows users to log in to assets with one click. Currently supported components include: KoKo, Lion, Magnus, Razor, etc.",
       "authLdapSearchFilter": "Choice may be (cn|uid|sAMAccountName)=%(user)s)",
       "authLdapSearchOu": "Use | split User OUs",
       "authLdapUserAttrMap": "User attr map present how to map LDAP user attr to jumpserver, username, name, email is jumpserver attr",
@@ -1076,6 +1088,7 @@
     "LicenseExpired": "License expired",
     "LicenseWillBe": "License will expire at ",
     "LicenseReachedAssetAmountLimit": "The number of assets has exceeded the license limit",
+    "LicenseForTest": "Testing license, This license is only for testing",
     "Expire": "Expire",
     "WeCom": "WeCom",
     "DingTalk": "DingTalk",
@@ -1085,7 +1098,6 @@
     "feiShuTest": "Test",
     "setting": "Setting"
   },
-
   "tickets": {
     "PermissionName": "Permission name",
     "Accept": "Accept",
@@ -1099,6 +1111,7 @@
     "OpenTicket": "Open Ticket",
     "HandleTicket": "Handle Ticket",
     "FinishedTicket": "Finished Ticket",
+    "CheckViewAcceptor": "Click to view the acceptor",
     "Assignees": "Assignees",
     "Close": "Close",
     "OpenStatus":"Open",
@@ -1290,6 +1303,7 @@
     "SMS": "SMS"
   },
   "xpack": {
+    "Images": "Images",
     "NavHelp": "Navigation Link",
     "helpDocument": "Docs link",
     "helpSupport": "Support link",
@@ -1512,6 +1526,9 @@
     "technologyConsult": "Technology Consult",
     "RegularlyPerform": "Regularly perform",
     "CyclePerform": "Cycle perform",
+    "ModifyTheme": "Modify theme",
+    "ClassicGreen": "Classic green",
+    "ChinaRed": "China red",
     "HelpText": {
       "CrontabOfCreateUpdatePage": "For example: every Sunday at 03:05 execute <5 3 * * 0> <br/> Using the 5-bit Linux crontab expression <minute hour day month week> (<a href=\"https://tool.lu/crontab/\" target=\"_blank\"> Online tool </a>) <br/> If both regularly perform and cycle perform execution are set, use regularly perform first",
       "IntervalOfCreateUpdatePage": "Unit: hour",

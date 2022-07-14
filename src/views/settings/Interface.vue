@@ -1,5 +1,49 @@
 <template>
   <Page>
+    <div v-if="isDev" style="margin-bottom: 20px">
+      <div class="dz">
+        <el-button
+          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          :key="tp"
+          :type="tp"
+        >
+          {{ tp.toUpperCase() }}
+        </el-button>
+      </div>
+      <div class="dz">
+        <el-button
+          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          :key="tp"
+          :type="tp"
+          disabled
+        >
+          {{ tp.toUpperCase() }}
+        </el-button>
+      </div>
+
+      <div class="dz">
+        <el-link
+          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          :key="tp"
+          :type="tp"
+        >
+          <span style="padding-right: 10px">{{ tp.toUpperCase() }}</span>
+        </el-link>
+      </div>
+      <div class="dz">
+        <el-radio-group v-model="dz.radio">
+          <el-radio :label="3">备选项1</el-radio>
+          <el-radio :label="6">备选项2</el-radio>
+          <el-radio :label="9">备选项3</el-radio>
+        </el-radio-group>
+      </div>
+      <el-steps class="dz" :space="200" :active="1" finish-status="error">
+        <el-step title="已完成" />
+        <el-step title="进行中" />
+        <el-step title="步骤 3" />
+      </el-steps>
+      <div class="dz" />
+    </div>
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
         :fields="fields"
@@ -10,6 +54,7 @@
         :on-submit="submitForm"
         :more-buttons="moreButtons"
         :has-save-continue="hasSaveContinue"
+        :submit-method="submitMethod"
       />
     </IBox>
   </Page>
@@ -19,7 +64,7 @@
 import { Page } from '@/layout/components'
 import { IBox, UploadField } from '@/components'
 import GenericCreateUpdateForm from '@/layout/components/GenericCreateUpdateForm'
-import { getInterfaceInfo, postInterface, restoreInterface } from '@/api/interface'
+import { getInterfaceInfo, updateInterface, restoreInterface, previewThemes } from '@/api/interface'
 
 export default {
   name: 'InterfaceSettings',
@@ -30,22 +75,32 @@ export default {
   },
   data() {
     return {
+      dz: {},
       loading: true,
       files: {},
       interfaceInfo: {},
       hasSaveContinue: false,
       successUrl: { name: 'Settings' },
+      isDev: process.env.NODE_ENV === 'development',
+      themeConfigs: [],
       fields: [
-        ['', ['login_title']],
-        ['', ['login_image']],
-        ['', ['favicon']],
-        ['', ['logo_index']],
-        ['', ['logo_logout']]
+        [this.$t('common.Basic'), ['login_title', 'theme']],
+        ['Logo', ['logo_index', 'logo_logout', 'favicon']],
+        [this.$t('xpack.Images'), ['login_image']]
       ],
       fieldsMeta: {
         login_title: {
           label: this.$t('xpack.loginTitle'),
           helpText: this.$t('xpack.loginTitleTip')
+        },
+        theme: {
+          label: this.$t('notifications.Subject'),
+          on: {
+            change: ([value]) => {
+              const themeColors = this.getSelectThemeConfig(value)
+              this.$store.dispatch('settings/changeThemeStyle', themeColors)
+            }
+          }
         },
         login_image: {
           component: UploadField,
@@ -104,7 +159,10 @@ export default {
           }
         }
       },
-      url: '/api/v1/xpack/interface/setting',
+      url: '/api/v1/xpack/interface/setting/',
+      submitMethod() {
+        return 'put'
+      },
       moreButtons: [
         {
           title: this.$t('xpack.RestoreButton'),
@@ -130,28 +188,48 @@ export default {
       this.interfaceInfo = data
       this.loading = false
     })
+    this.getPreviewThemes()
   },
   methods: {
+    getPreviewThemes() {
+      previewThemes().then(res => {
+        this.themeConfigs = res
+      })
+    },
+    getSelectThemeConfig(value) {
+      let themeConfig
+      for (const item of this.themeConfigs) {
+        if (item.name === value) {
+          themeConfig = item.colors
+          break
+        }
+      }
+      return themeConfig
+    },
     submitForm(values) {
       const form = new FormData()
-      const ImageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
-      ImageKeys.forEach((value, index) => {
-        if (this.files[value] !== undefined) {
-          form.append(value, this.files[value])
+      const imageKeys = ['favicon', 'login_image', 'logo_logout', 'logo_index']
+      for (const key in values) {
+        let value
+        if (imageKeys.includes(key)) {
+          value = this.files[key]
+        } else {
+          value = values[key]
         }
-      })
-      if (values['login_title'] !== undefined) {
-        form.append('login_title', values['login_title'])
+        if (value) {
+          form.append(key, value)
+        }
       }
-      postInterface(form).then(res => {
+      updateInterface(form).then(res => {
         location.reload()
       })
     }
-
   }
 }
 </script>
 
 <style scoped>
-
+.dz {
+  padding: 10px 0
+}
 </style>

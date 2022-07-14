@@ -1,5 +1,7 @@
 import defaultSettings from '@/settings'
 import { getPublicSettings } from '@/api/settings'
+import { changeElementColor, changeThemeColors } from '@/utils/theme/index'
+import { changeMenuColor } from '@/utils/theme/color'
 
 const { showSettings, fixedHeader, sidebarLogo, tagsView } = defaultSettings
 
@@ -9,7 +11,8 @@ const state = {
   sidebarLogo: sidebarLogo,
   tagsView: tagsView,
   publicSettings: null,
-  hasValidLicense: false
+  hasValidLicense: false,
+  themeColors: JSON.parse(localStorage.getItem('themeColors')) || {}
 }
 
 const mutations = {
@@ -20,10 +23,15 @@ const mutations = {
   },
   SET_PUBLIC_SETTINGS: (state, settings) => {
     state.publicSettings = settings
+    state.themeColors = settings?.INTERFACE?.theme_info?.colors || {}
 
     if (settings['XPACK_ENABLED']) {
       state.hasValidLicense = settings['XPACK_LICENSE_IS_VALID']
     }
+  },
+  setTheme(state, data) {
+    state.themeColors = data
+    localStorage.setItem('themeColors', JSON.stringify(data))
   }
 }
 
@@ -37,7 +45,7 @@ const actions = {
       getPublicSettings(isOpen).then(response => {
         const data = response || {}
         if (isOpen) {
-          const faviconURL = data['LOGO_URLS']?.favicon
+          const faviconURL = data['INTERFACE']?.favicon
           let link = document.querySelector("link[rel*='icon']")
           if (!link) {
             link = document.createElement('link')
@@ -49,14 +57,21 @@ const actions = {
             link.href = faviconURL
           }
           // 动态修改Title
-          document.title = data['LOGIN_TITLE']
+          document.title = data['INTERFACE']['login_title']
         }
+        const themeColors = data?.INTERFACE?.theme_info?.colors || {}
         commit('SET_PUBLIC_SETTINGS', data)
+        changeThemeColors(themeColors)
         resolve(response)
       }).catch(error => {
         reject(error)
       })
     })
+  },
+  changeThemeStyle({ commit }, themeColors) {
+    changeMenuColor(themeColors)
+    changeElementColor(themeColors)
+    commit('setTheme', themeColors)
   }
 }
 

@@ -31,13 +31,13 @@ export default {
         columns: [
           'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
           'command_amount', 'date_start', 'date_end', 'duration',
-          'org_name', 'actions'
+          'terminal_display', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['index', 'actions'],
           default: [
             'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
-            'command_amount', 'date_start', 'duration', 'actions'
+            'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
           ]
         },
         columnsMeta: {
@@ -82,9 +82,11 @@ export default {
             formatter: null
           },
           date_start: {
+            showOverflowTooltip: true,
             width: '100px'
           },
           date_end: {
+            showOverflowTooltip: true,
             width: '100px'
           },
           duration: {
@@ -93,6 +95,9 @@ export default {
               return timeOffset(row.date_start, row.date_end)
             },
             width: '80px'
+          },
+          terminal_display: {
+            showOverflowTooltip: true
           },
           actions: {
             prop: 'actions',

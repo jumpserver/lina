@@ -31,7 +31,7 @@ function generateViewRoutesIfChange({ to, from }) {
 
 function setPageTitle() {
   const currentRoute = router.currentRoute
-  const loginTitle = store.getters.publicSettings['LOGIN_TITLE']
+  const loginTitle = store.getters.publicSettings['INTERFACE']['login_title']
   const routeTitle = currentRoute.meta.title
   if (routeTitle) {
     document.title = routeTitle + ' - ' + loginTitle

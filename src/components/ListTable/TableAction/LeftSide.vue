@@ -27,7 +27,7 @@ export default {
     createRoute: {
       type: [String, Object, Function],
       default: function() {
-        return this.$route.name.replace('List', 'Create')
+        return this.$route.name?.replace('List', 'Create')
       }
     },
     createInNewPage: {

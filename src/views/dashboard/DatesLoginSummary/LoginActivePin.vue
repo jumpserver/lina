@@ -5,22 +5,22 @@
       <el-col :md="12" :sm="10">
         <echarts :options="userOption" :autoresize="true" />
         <div style="" class="print-display">
-          <div class="circle-icon" style="background: #1ab394;" />
+          <div class="circle-icon active-user" />
           <label>{{ $t('dashboard.ActiveUser') }}</label>
-          <div class="circle-icon" style="background: #1C84C6;" />
+          <div class="circle-icon disabled-user" />
           <label>{{ $t('dashboard.DisabledUser') }}</label>
-          <div class="circle-icon" style="background: #9CC3DA;" />
+          <div class="circle-icon inactive-user" />
           <label>{{ $t('dashboard.InActiveUser') }}</label>
         </div>
       </el-col>
       <el-col :md="12" :sm="10">
         <echarts :options="AssetOption" :autoresize="true" />
         <div style="" class="print-display">
-          <div class="circle-icon" style="background: #1ab394;" />
+          <div class="circle-icon active-asset" />
           <label>{{ $t('dashboard.ActiveAsset') }}</label>
-          <div class="circle-icon" style="background: #1C84C6;" />
+          <div class="circle-icon disabled-asset" />
           <label>{{ $t('dashboard.DisabledAsset') }}</label>
-          <div class="circle-icon" style="background: #9CC3DA;" />
+          <div class="circle-icon inactive-asset" />
           <label>{{ $t('dashboard.InActiveAsset') }}</label>
         </div>
       </el-col>
@@ -56,7 +56,16 @@ export default {
     }
   },
   computed: {
+    themeColor() {
+      const documentStyle = document.documentElement.style
+      return {
+        primary: documentStyle.getPropertyValue('--color-primary'),
+        info: documentStyle.getPropertyValue('--color-info'),
+        success: documentStyle.getPropertyValue('--color-success')
+      }
+    },
     userOption() {
+      const { primary, info, success } = this.themeColor
       return {
         legend: {
           show: false
@@ -64,7 +73,7 @@ export default {
         title: {
           subtext: this.$t('dashboard.User')
         },
-        color: ['#1ab394', '#1C84C6', '#9CC3DA'],
+        color: [primary, info, success],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -99,6 +108,7 @@ export default {
       }
     },
     AssetOption() {
+      const { primary, info, success } = this.themeColor
       return {
         legend: {
           show: false
@@ -106,7 +116,7 @@ export default {
         title: {
           subtext: this.$t('dashboard.Asset')
         },
-        color: ['#1ab394', '#1C84C6', '#9CC3DA'],
+        color: [primary, info, success],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -164,7 +174,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "~@/styles/variables.scss";
   .echarts {
     width: 100%;
     height: 250px;
@@ -179,6 +190,7 @@ export default {
     -webkit-border-radius: 7px;
     border-radius: 7px;
     display:inline-block;
+    background: $--color-primary;
   }
   @media print {
     .el-col-24{

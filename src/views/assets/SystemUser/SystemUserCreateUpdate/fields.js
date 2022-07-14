@@ -25,13 +25,11 @@ function getFields() {
     },
     rules: [Object.assign({}, Required)],
     hidden: (form) => {
-      if (['vnc'].includes(form.protocol)) {
+      if (['vnc', 'redis', 'telnet'].includes(form.protocol)) {
         this.fieldsMeta.username.rules[0].required = false
       } else if (form.login_mode === 'manual') {
         this.fieldsMeta.username.rules[0].required = false
       } else if (form.username_same_with_user) {
-        this.fieldsMeta.username.rules[0].required = false
-      } else if (form.protocol === 'redis') {
         this.fieldsMeta.username.rules[0].required = false
       } else {
         this.fieldsMeta.username.rules[0].required = true
@@ -47,6 +45,9 @@ function getFields() {
 
   const private_key = {
     component: UploadKey,
+    el: {
+      fingerprint: ''
+    },
     hidden: (form) => {
       if (form.login_mode !== 'auto') {
         return true

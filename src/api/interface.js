@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function postInterface(formData) {
+export function updateInterface(formData) {
   return request({
-    url: '/api/v1/xpack/interface/setting',
+    url: '/api/v1/xpack/interface/setting/',
     method: 'put',
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -12,15 +12,15 @@ export function postInterface(formData) {
 }
 export function getInterfaceInfo() {
   return request({
-    url: '/api/v1/xpack/interface/setting',
+    url: '/api/v1/xpack/interface/setting/',
     method: 'get'
   })
 }
 
 export function restoreInterface() {
   return request({
-    url: '/api/v1/xpack/interface/restore',
-    method: 'get'
+    url: '/api/v1/xpack/interface/setting/restore/',
+    method: 'put'
   })
 }
 
@@ -32,5 +32,12 @@ export function importLicense(formData) {
       'Content-Type': 'multipart/form-data'
     },
     data: formData
+  })
+}
+
+export function previewThemes() {
+  return request({
+    url: `/api/v1/xpack/interface/setting/themes/`,
+    method: 'get'
   })
 }

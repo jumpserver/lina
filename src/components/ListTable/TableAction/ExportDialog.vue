@@ -2,6 +2,7 @@
   <div>
     <UserConfirmDialog
       v-if="mfaDialogShow"
+      :url="url"
       @UserConfirmDone="showExportDialog"
       @UserConfirmCancel="handleExportCancel"
     />

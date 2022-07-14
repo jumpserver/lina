@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountHistableHelpMessage": "记录当前账号的历史版本",
     "PleaseClickLeftAssetToViewAssetAccount": "资产账号列表，点击左侧资产进行查看",
     "PleaseClickLeftApplicationToViewApplicationAccount": "应用账号列表，点击左侧应用进行查看",
     "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看"
@@ -252,9 +253,15 @@
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
     "ReLogin": "重新登录",
+    "ReLoginTitle": "当前三方登录用户（CAS/SAML），未绑定 MFA 且不支持密码校验，请重新登录。",
+    "NeedReLogin": "需要重新登录",
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "NeedAddAppsOrSystemUserErrMsg": "需要添加应用或系统用户",
+    "VerificationCodeSent": "验证码已发送",
+    "SendVerificationCode": "发送验证码",
+    "History": "历史",
     "ChangeViewHelpText": "点击切换不同视图",
     "Component": "组件",
     "PrivateCloud": "私有云",
@@ -436,6 +443,7 @@
     "isValid": "有效",
     "nav": {
       "TempPassword": "临时密码",
+      "ConnectionToken": "连接令牌",
       "APIKey": "API Key",
       "Workbench": "工作台",
       "Navigation": "导航",
@@ -448,8 +456,8 @@
       "Help": "帮助",
       "Logout": "退出登录",
       "Profile": "个人信息",
-      "TechnicalSupport": "技术支持",
-      "ToolsDownload": "工具下载",
+      "Support": "支持",
+      "Download": "下载",
       "UserPage": "用户视图",
       "View": "视图",
       "EnterpriseEdition": "企业版"
@@ -691,8 +699,11 @@
     "TicketFlowUpdate": "更新审批流",
     "Accounts": "账号管理",
     "AssetAccount": "资产账号",
+    "AssetHistoryAccount": "资产历史账号",
     "ApplicationAccount": "应用账号",
     "Ticket":"工单",
+    "MyTickets": "我的申请",
+    "AssignedTicketList": "待我审批",
     "SessionDetail": "会话详情",
     "CommandConfirm": "命令复核",
     "AdminUserCreate": "创建管理用户",
@@ -924,6 +935,8 @@
     }
   },
   "setting": {
+    "EndpointListHelpMessage": "服务端点是用户访问服务的地址(端口)，当用户在连接资产时，会根据端点规则和资产标签选择服务端点，作为访问入口建立连接，实现分布式连接资产",
+    "EndpointRuleListHelpMessage": "对于服务端点选择策略，目前支持两种：<br>1、根据端点规则指定端点(当前页面)；<br>2、通过资产标签选择端点，标签名固定是 endpoint，值是端点的名称。<br>两种方式优先使用标签匹配，因为 IP 段可能冲突，标签方式是作为规则的补充存在的。",
     "EnableKoKoSSHHelpText": "开启时连接资产会显示 SSH Client 拉起方式",
     "SettingInEndpointHelpText": "在 系统设置 / 终端设置 / 服务端点 中配置服务地址和端口",
     "Feature": "功能",
@@ -1027,6 +1040,7 @@
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
+      "ConnectionTokenList": "连接令牌是将身份验证和连接资产结合起来使用的一种认证信息，支持用户一键登录到资产，目前支持的组件包括：KoKo、Lion、Magnus、Razor 等",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",
       "authLdapUserAttrMap": "用户属性映射代表怎样将LDAP中用户属性映射到jumpserver用户上，username, name,email 是jumpserver的属性",
@@ -1104,6 +1118,7 @@
     "LicenseExpired": "许可证已经过期",
     "LicenseWillBe": "许可证即将在 ",
     "LicenseReachedAssetAmountLimit": "资产数量已经超过许可证数量限制",
+    "LicenseForTest": "测试用途许可证， 本许可证仅用于 开发、测试（PoC）和演示",
     "Expire": " 过期",
     "WeCom": "企业微信",
     "DingTalk": "钉钉",
@@ -1135,8 +1150,8 @@
     "Assignee": "处理人",
     "Assignees": "待处理人",
     "Close": "关闭",
-    "OpenStatus":"开启",
-    "CloseStatus":"关闭",
+    "OpenStatus":"审批中",
+    "CloseStatus":"已完成",
     "Comment": "备注",
     "MyTickets": "我发起的",
     "RequestPerm":"授权申请",
@@ -1155,6 +1170,7 @@
     "OpenTicket": "创建工单",
     "HandleTicket": "处理工单",
     "FinishedTicket": "完成工单",
+    "CheckViewAcceptor": "点击查看受理人",
     "IP": "IP",
     "Hostname": "主机名",
     "Asset": "资产",
@@ -1330,6 +1346,7 @@
     "SMS": "短信"
   },
   "xpack": {
+    "Images": "图片",
     "NavHelp": "导航栏链接",
     "helpDocument": "文档链接",
     "helpSupport": "支持链接",
@@ -1558,6 +1575,9 @@
     "technologyConsult": "技术咨询",
     "RegularlyPerform": "定期执行",
     "CyclePerform": "周期执行",
+    "ModifyTheme": "修改主题",
+    "ClassicGreen": "经典绿",
+    "ChinaRed": "中国红",
     "HelpText": {
       "CrontabOfCreateUpdatePage": "例如：每周日 03:05 执行 <5 3 * * 0> <br/> 使用5位 Linux crontab 表达式 <分 时 日 月 星期> （<a href=\"https://tool.lu/crontab/\" target=\"_blank\">在线工具</a>） <br/> 如果同时设置了定期执行和周期执行，优先使用定期执行",
       "IntervalOfCreateUpdatePage": "单位：时",

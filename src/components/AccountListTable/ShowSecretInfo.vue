@@ -1,6 +1,7 @@
 <template>
   <div>
     <UserConfirmDialog
+      :url="url"
       @UserConfirmDone="getAuthInfo"
       @UserConfirmCancel="exit"
     />
@@ -57,13 +58,13 @@ export default {
     return {
       dialogTitle: this.$t('common.ViewSecret'),
       authInfo: {},
-      showAuthInfo: false
+      showAuthInfo: false,
+      url: `/api/v1/assets/account-secrets/${this.account.id}/`
     }
   },
   methods: {
     getAuthInfo() {
-      const url = `/api/v1/assets/account-secrets/${this.account.id}/`
-      this.$axios.get(url, { disableFlashErrorMsg: true }).then(resp => {
+      this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.authInfo = resp
         this.showAuthInfo = true
       })

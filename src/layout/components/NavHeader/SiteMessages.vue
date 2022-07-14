@@ -31,18 +31,20 @@
           @mouseleave="hoverMsgId = ''"
           @click="showMsgDetail(msg)"
         >
-          <div class="msg-item-head">
-            <span class="msg-item-head-type">
+          <el-row :gutter="10" class="msg-item-head">
+            <el-col :span="15" class="msg-item-head-type">
               <i :class="msg['has_read'] ? 'fa-envelope-open-o' : 'fa-envelope'" class="fa msg-icon" />
               {{ msg.subject }}
-            </span>
-            <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
-              {{ formatDate(msg.date_created) }}
-            </span>
-            <div v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
-              <a>{{ $t('notifications.MarkAsRead') }}</a>
-            </div>
-          </div>
+            </el-col>
+            <el-col :span="9">
+              <span v-if="hoverMsgId !== msg.id || msg['has_read']" class="msg-item-head-time">
+                {{ formatDate(msg.date_created) }}
+              </span>
+              <span v-else class="msg-item-read-btn" @click.stop="markAsRead([msg])">
+                <a>{{ $t('notifications.MarkAsRead') }}</a>
+              </span>
+            </el-col>
+          </el-row>
           <div class="msg-item-txt">
             <span v-html="msg.message" />
           </div>
@@ -96,7 +98,7 @@ export default {
   },
   computed: {
     width() {
-      return this.$store.state.app.device === 'mobile' ? '70%' : '20%'
+      return this.$store.state.app.device === 'mobile' ? '70%' : '380px'
     }
   },
   mounted() {
@@ -270,7 +272,7 @@ export default {
 
   .msg-item-head-type {
     float: left;
-    width: 220px;
+    //width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: middle;

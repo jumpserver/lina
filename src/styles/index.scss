@@ -1,20 +1,29 @@
-@import './variables.scss';
 @import './mixin.scss';
 @import './transition.scss';
 @import './sidebar.scss';
-@import './element-variables.scss';
-@import './element-ui.scss';
-@import './theme/index.css';
 @import './menu.scss';
-@import './font-awesome/font-awesome.min.css';
+@import './fonts/font-awesome.min.css';
+
+::-webkit-scrollbar {
+  width:14px;
+}
+::-webkit-scrollbar-track {
+  border-radius:10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  box-shadow: 8px 10px 20px #C6C6C6 inset;
+  border: 3px solid rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: 8px 10px 20px #878787 inset;
+}
 
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: auto;
-  //text-rendering: optimizeLegibility;
   color: #676a6c;
-  //font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.428;

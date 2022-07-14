@@ -4,7 +4,6 @@ import router, { resetRouter } from '@/router'
 import Vue from 'vue'
 import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
-import 'nprogress/nprogress.css' // progress bar style
 import orgUtil from '@/utils/org'
 import orgs from '@/api/orgs'
 import { getPropView, isViewHasOrgs } from '@/utils/jms'

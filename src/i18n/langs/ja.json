@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "AccountHistableHelpMessage": "現在のアカウントの履歴バージョンを記録する",
     "PleaseClickLeftAssetToViewAssetAccount": "資産のアカウントのリスト、左側の資産をクリックして表示します",
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。"
@@ -252,9 +253,15 @@
   "auth": {
     "LoginRequiredMsg": "アカウントが終了しました。ログインし直してください",
     "ReLogin": "再ログイン",
+    "ReLoginTitle": "現在、サードパーティのログインユーザー（CAS/SAML）は、MFAをバインドしておらず、パスワードチェックをサポートしていません。再ログインしてください。",
+    "NeedReLogin": "再ログインが必要です",
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
+    "VerificationCodeSent": "検証コードが送信されました",
+    "SendVerificationCode": "認証コードの送信",
+    "History": "歴史",
     "ChangeViewHelpText": "クリックしてさまざまなビューにアクセス",
     "Component": "コンポーネント",
     "PrivateCloud": "プライベートクラウド",
@@ -436,6 +443,7 @@
     "isValid": "有効",
     "nav": {
       "TempPassword": "一時パスワード",
+      "ConnectionToken": "接続トークン",
       "APIKey": "APIキー",
       "Workbench": "作業台",
       "Navigation": "ナビゲーション",
@@ -448,8 +456,8 @@
       "Help": "ヘルプ",
       "Logout": "ログインを終了する",
       "Profile": "個人情報",
-      "TechnicalSupport": "テクニカルサポート",
-      "ToolsDownload": "ツールのダウンロード",
+      "Support": "サポート",
+      "Download": "ダウンロード",
       "UserPage": "ユーザービュー",
       "View": "ビュー",
       "EnterpriseEdition": "企業版"
@@ -691,6 +699,7 @@
     "TicketFlowUpdate": "承認フローの更新",
     "Accounts": "アカウント管理",
     "AssetAccount": "資産アカウント",
+    "AssetHistoryAccount": "資産履歴",
     "ApplicationAccount": "アプリアカウント",
     "Ticket": "ワークオーダー",
     "SessionDetail": "セッションの詳細",
@@ -924,6 +933,8 @@
     }
   },
   "setting": {
+    "EndpointListHelpMessage": "サービスエンドポイントは、ユーザーがサービスにアクセスするためのアドレス（ポート）です。ユーザーがアセットに接続すると、エンドポイントルールとアセットタグに従ってサービスエンドポイントが選択され、接続がアクセスエントリとして確立されます。資産の分散接続を実現します。",
+    "EndpointRuleListHelpMessage": "サービスエンドポイント選択戦略では、現在2つのタイプがサポートされています：<br> 1. エンドポイントルールに従ってエンドポイントを指定します（現在のページ）;<br>2. アセットタグを介してエンドポイントを選択します。タグ名はに固定されていますエンドポイントであり、値はエンドポイントの名前です。 <br> IPセグメントが競合する可能性があるため、2つの方法が優先的にラベル照合を使用し、ラベル方法はルールの補足として存在します。",
     "EnableKoKoSSHHelpText": "有効にすると、アセットを接続してSSHクライアントのプルアップ方式を表示します",
     "SettingInEndpointHelpText": "[システム設定]/[端末設定]/[サービスエンドポイント]でサービスアドレスとポートを構成します",
     "Feature": "機能",
@@ -1027,6 +1038,7 @@
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",
+      "ConnectionTokenList": "接続トークンは、認証アセットと接続アセットを組み合わせた一種の認証情報であり、ユーザーはワンクリックでアセットにログインできます。現在サポートされているコンポーネントには、KoKo、Lion、Magnus、Razorなどがあります。",
       "authLdapSearchFilter": "可能なオプションは (cnまたはuidまたはsamaccount tname = %(user)s) です",
       "authLdapSearchOu": "| を使用して各OUを区切る",
       "authLdapUserAttrMap": "ユーザー属性マッピングは、LDAPのユーザー属性をjumpserverユーザーにマッピングする方法を表します。username、name、emailはjumpserverの属性です",
@@ -1104,6 +1116,7 @@
     "LicenseExpired": "ライセンスが期限切れです",
     "LicenseWillBe": "ライセンスはまもなく",
     "LicenseReachedAssetAmountLimit": "アセットの数がライセンス制限を超えました",
+    "LicenseForTest": "試験用ライセンス本ライセンスは試験用にのみ使用されます",
     "Expire": "期限切れ",
     "WeCom": "企業wechat",
     "DingTalk": "ホッチキス",
@@ -1155,6 +1168,7 @@
     "OpenTicket": "ワークオーダーの作成",
     "HandleTicket": "作業指示の処理",
     "FinishedTicket": "ワークオーダーの完了",
+    "CheckViewAcceptor": "クリックして受付人を表示",
     "IP": "IP",
     "Hostname": "ホスト名",
     "Asset": "資産",
@@ -1330,6 +1344,7 @@
     "SMS": "Sms"
   },
   "xpack": {
+    "Images": "画像",
     "NavHelp": "ナビゲーションバーのリンク",
     "helpDocument": "ドキュメントリンク",
     "helpSupport": "サポートリンク",
@@ -1558,6 +1573,9 @@
     "technologyConsult": "技術コンサルティング",
     "RegularlyPerform": "定期的に実行する",
     "CyclePerform": "サイクル実行",
+    "ModifyTheme": "テーマを変更",
+    "ClassicGreen": "クラシックグリーン",
+    "ChinaRed": "チャイナレッド",
     "HelpText": {
       "CrontabOfCreateUpdatePage": "例: 毎週日曜日03:05に <5 3 * * 0> <br/> 5桁のLinux crontab式を使用して、時分割日月曜日> (<a href = \"https://tool.lu/crontab/\" target = \"_ ツール </a>) <br/> 定期実行とサイクル実行を同時に設定している場合は、優先的に定期実行を使って",
       "IntervalOfCreateUpdatePage": "単位: 時",

@@ -1,9 +1,15 @@
 <template>
   <div class="upload-key">
     <input ref="upLoadFile" type="file" style="display: none" @change="onChange">
-    <el-button size="mini" @click.native.stop="onUpLoad">
+    <el-button v-if="!fingerprint" size="mini" @click.native.stop="onUpLoad">
       {{ this.$t('common.SelectFile') }}
     </el-button>
+    <span v-else>
+      <el-button type="text" icon="el-icon-edit" @click.native.stop="onUpLoad">
+        {{ this.$t('common.Update') }}
+      </el-button>
+      <span v-if="!fileName" class="fingerprint">{{ fingerprint }}</span>
+    </span>
     <span>{{ fileName }}</span>
     <div v-if="tip !== ''">{{ tip }}</div>
   </div>
@@ -12,10 +18,6 @@
 <script>
 export default {
   props: {
-    // value: {
-    //   type: String,
-    //   default: () => ''
-    // },
     tip: {
       type: String,
       default: () => ''
@@ -23,6 +25,10 @@ export default {
     toFormat: {
       type: String,
       default: () => 'string'
+    },
+    fingerprint: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -58,4 +64,7 @@ export default {
 </script>
 
 <style scoped>
+.fingerprint {
+  font-size: 12px
+}
 </style>

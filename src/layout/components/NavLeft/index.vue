@@ -6,13 +6,26 @@
       </div>
       <div class="active-mobile">
         <ViewSwitcher mode="vertical" class="mobile-view-switch" />
-        <Organization class="organization" />
+        <Organization v-if="$hasLicense()" class="organization" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
-        {{ isTitle }}
+        <svg-icon
+          v-if="isRouteMeta.view === 'settings'"
+          icon-class="setting-fill"
+          style="margin-right: 0;"
+        />
+        <i
+          v-else
+          class="fa"
+          :class="isRouteMeta.icon"
+        />
+        <span
+          v-show="!isCollapse"
+          style="margin-left: 3px;"
+        >{{ isRouteMeta.title || '' }}</span>
       </div>
     </div>
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
@@ -45,10 +58,10 @@
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
-import variables from '@/styles/variables.scss'
 import Hamburger from '@/components/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
 import Organization from '../NavHeader/Organization'
+import variables from '@/styles/variables.scss'
 
 export default {
   components: {
@@ -98,8 +111,8 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     },
-    isTitle() {
-      return this.currentViewRoute.meta?.title || ''
+    isRouteMeta() {
+      return this.currentViewRoute.meta || {}
     }
   },
   methods: {
@@ -110,8 +123,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  @import "~@/styles/variables.scss";
   .nav-header {
-    background-image: url('~@/assets/img/header-profile.png');
+    overflow: hidden;
+    background: $subMenuBg url('~@/assets/img/header-profile.png') no-repeat center center;
   }
 
   .nav-logo {
@@ -120,16 +135,17 @@ export default {
 
   .nav-title {
     box-sizing: border-box;
-    height: 55px;
-    padding: 17px 0 17px 22px;
+    margin: 17px 0 17px 20px;
     font-size: 15px;
     font-weight: 460;
     color: #fff;
-    //background: #293846;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
   }
 
   .collapsed {
-    padding: 6px 12px!important;
+    text-align: left;
   }
 
   .organizations {
@@ -140,7 +156,7 @@ export default {
     display: block;
     width: 100%;
     height: 40px;
-    background-color: #293846;
+    background-color: $subMenuBg;
 
     .toggle-bar {
       width: 55px;
@@ -155,7 +171,7 @@ export default {
     }
 
     .toggle-bar:hover {
-      background-color: rgb(59, 76, 91);
+      background-color: $subMenuHover;
     }
 
     .hamburger-container {

@@ -248,14 +248,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .mini-button{
     width: 12px;
     float: right;
     text-align: center;
     padding: 5px 0;
-    background-color: #1ab394;
-    border-color: #1ab394;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
     color: #FFFFFF;
     border-radius: 3px;
   }

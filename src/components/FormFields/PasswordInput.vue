@@ -47,17 +47,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/element-variables.scss";
   .password-input >>> .Password__badge--error {
-    background-color: $--color-danger;
+    background-color: var(--color-danger);
   }
   .password-input >>> .Password__strength-meter--fill[data-score="4"] {
-    background: $--color-primary;
+    background: var(--color-success);
     width: 100%;
   }
 
   .password-input >>> .Password__badge--success {
-    background: $--color-primary;
+    background: var(--color-success);
   }
 
   .password-input >>> .Password__strength-meter {

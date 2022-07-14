@@ -1,5 +1,8 @@
 <template>
-  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <el-alert type="success" v-html="helpMessage" />
+    <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+  </div>
 </template>
 
 <script>
@@ -12,6 +15,7 @@ export default {
   },
   data() {
     return {
+      helpMessage: this.$t('setting.EndpointListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoints/',
         columns: [
@@ -19,6 +23,7 @@ export default {
           'http_port', 'https_port', 'ssh_port',
           'rdp_port', 'mysql_port', 'mariadb_port',
           'postgresql_port', 'redis_port',
+          'oracle_11g_port', 'oracle_12c_port',
           'date_created', 'comment', 'actions'
         ],
         columnsShow: {

@@ -1,11 +1,9 @@
 <template>
-  <div class="footer" :style="style">
-    <div class="pull-right">
-      Version <strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv2. </span>
+  <div class="footer" :class="device" :style="style">
+    <div class="pull-right version">
+      Version <strong> dev </strong> <span v-if="!publicSettings.XPACK_LICENSE_IS_VALID"> GPLv3. </span>
     </div>
-    <div style="padding-left:20px;">
-      {{ publicSettings.XPACK_LICENSE_INFO.corporation }}
-    </div>
+    <div>{{ corporation }}</div>
   </div>
 </template>
 <script>
@@ -27,7 +25,10 @@ export default {
       if (this.device === 'mobile') {
         return ''
       }
-      return this.sidebar.opened ? ('margin-left: 210px;') : ('margin-left: 54px')
+      return this.sidebar.opened ? ('margin-left: 220px;') : ('margin-left: 54px')
+    },
+    corporation() {
+      return this.publicSettings.XPACK_LICENSE_INFO.corporation
     }
   }
 }
@@ -38,9 +39,9 @@ export default {
     height: 35px !important;
 }
 .pull-right {
-    float: right!important;
+    float: right
 }
-.footer{
+.footer {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -54,5 +55,12 @@ export default {
     div{
         font-size: 13px;
     }
+}
+.mobile.footer {
+  text-align: center;
+}
+.mobile.footer .pull-right{
+  float: none;
+  display: block;
 }
 </style>
