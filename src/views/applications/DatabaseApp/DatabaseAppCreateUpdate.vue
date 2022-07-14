@@ -4,11 +4,14 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import { getDatabaseTypeFieldsMap } from '@/views/applications/DatabaseApp/const'
 export default {
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const appType = this.$route.query.type || 'mysql'
+    const fieldsMap = getDatabaseTypeFieldsMap(appType)
     return {
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'domain']],
@@ -29,7 +32,7 @@ export default {
           }
         },
         attrs: {
-          fields: ['host', 'port', 'database'],
+          fields: fieldsMap,
           fieldsMeta: {
             host: {
               type: 'input'

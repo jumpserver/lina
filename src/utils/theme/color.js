@@ -1,14 +1,16 @@
 import color from 'css-color-function'
 import formula from './formula.json'
 import defaultThemeConfig from './default.js'
-import variables from '@/styles/var.scss'
 
 export function generateColors(themeColors) {
   const colors = {}
+  if (!themeColors || Object.keys(themeColors).length === 0) {
+    themeColors = defaultThemeConfig
+  }
   let primaryColor = themeColors
   let subColor = defaultThemeConfig
   if (typeof themeColors === 'object') {
-    primaryColor = themeColors['--color-primary'] || variables.themeColor
+    primaryColor = themeColors['--color-primary']
     subColor = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
   }
 
@@ -29,7 +31,7 @@ export function generateColors(themeColors) {
     if (value.includes('danger')) {
       replaceColor = value.replace(/danger/g, subColor['--color-danger'])
     }
-    if (replaceColor) {
+    if (replaceColor && !replaceColor.includes('undefined')) {
       const convertColor = color.convert(replaceColor)
       colors[key] = convertColor.indexOf('rgba') > -1 ? convertColor : colorRgbToHex(convertColor)
     }
@@ -68,12 +70,16 @@ export function changeMenuColor(themeColors) {
 
   for (const key in colors) {
     const currentColor = colors[key]
-    const changeColor = currentColor.replace(/#/g, '')
+    const colorValue = currentColor.replace(/#/g, '')
     elementStyle.setProperty(key, currentColor)
-    if (key === '--menu-text') {
-      elementStyle.setProperty('--menu-hover', mix('000000', changeColor, 10))
-      elementStyle.setProperty('--submenu-bg', mix('000000', changeColor, 20))
-      elementStyle.setProperty('--submenu-hover', mix('000000', changeColor, 30))
+    const black = '000000'
+    if (key === '--menu-bg') {
+      const menuHoverColor = mix(black, colorValue, 10)
+      const subMenuBgColor = mix(black, colorValue, 20)
+      const subMenuHoverColor = mix(black, colorValue, 35)
+      elementStyle.setProperty('--menu-hover', menuHoverColor)
+      elementStyle.setProperty('--submenu-bg', subMenuBgColor)
+      elementStyle.setProperty('--submenu-hover', subMenuHoverColor)
     }
   }
 }

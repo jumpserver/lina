@@ -77,15 +77,6 @@ module.exports = {
     after: require('./mock/mock-server.js')
   },
   css: {
-    loaderOptions: {
-      sass: {
-        prependData: (content, loaderContext) => {
-          const { resourcePath } = loaderContext
-          if (resourcePath.endsWith('var.scss')) return content
-          return `@import "@/styles/var.scss"; ${content}`
-        }
-      }
-    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

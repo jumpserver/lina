@@ -37,6 +37,9 @@ export default {
         columns: [
           'asset_display', 'delete_action'
         ],
+        columnsShow: {
+          min: ['asset_display']
+        },
         columnsMeta: {
           asset_display: {
             label: this.$t('perms.Asset'),

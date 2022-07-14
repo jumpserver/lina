@@ -258,6 +258,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "NeedAddAppsOrSystemUserErrMsg": "需要添加应用或系统用户",
     "VerificationCodeSent": "验证码已发送",
     "SendVerificationCode": "发送验证码",
     "History": "历史",
@@ -442,6 +443,7 @@
     "isValid": "有效",
     "nav": {
       "TempPassword": "临时密码",
+      "ConnectionToken": "连接令牌",
       "APIKey": "API Key",
       "Workbench": "工作台",
       "Navigation": "导航",
@@ -1039,6 +1041,7 @@
     "helpText": {
       "TempPassword": "临时密码有效期为 300 秒，使用后立刻失效",
       "ApiKeyList": "使用api key签名请求头，每个请求的头部是不一样的, 请查阅使用文档",
+      "ConnectionTokenList": "连接令牌是将身份验证和连接资产结合起来使用的一种认证信息，支持用户一键登录到资产，目前支持的组件包括：KoKo、Lion、Magnus、Razor 等",
       "authLdapSearchFilter": "可能的选项是(cn或uid或sAMAccountName=%(user)s)",
       "authLdapSearchOu": "使用|分隔各OU",
       "authLdapUserAttrMap": "用户属性映射代表怎样将LDAP中用户属性映射到jumpserver用户上，username, name,email 是jumpserver的属性",
@@ -1168,6 +1171,7 @@
     "OpenTicket": "创建工单",
     "HandleTicket": "处理工单",
     "FinishedTicket": "完成工单",
+    "CheckViewAcceptor": "点击查看受理人",
     "IP": "IP",
     "Hostname": "主机名",
     "Asset": "资产",

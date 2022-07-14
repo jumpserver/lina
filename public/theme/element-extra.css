@@ -1,6 +1,17 @@
 /* 这里只写element-variables里面改不动的、且和主题系列颜色相关的样式！！！ */
 /* 主题相关看该文件夹下的README.md */
 
+/* info type special treatment */
+.el-button--info {
+  background-color: info;
+  border-color: info;
+}
+
+.el-button--success {
+  background-color: success;
+  border-color: success;
+}
+
 .el-alert--info.is-light {
   background-color: light-9;
   color: light-2;

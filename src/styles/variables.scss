@@ -1,6 +1,11 @@
-// @import "src/styles/themes/chinese_red";
-@import "./themes/default";
+// Color
+$--color-primary: var(--color-primary);
+$--color-success: var(--color-success);
+$--color-info: var(--color-info);
+$--color-warning: var(--color-warning);
+$--color-danger: var(--color-danger);
 
+// Text
 $--color-text-primary: #303133;
 $--color-text-regular: #606266;
 $--color-black: #000000;
@@ -9,6 +14,11 @@ $--size-base: 13px;
 $--color-link: $--color-text-primary;
 $--color-link-highlight: #23527c;
 
+// Menu
+$menuText: var(--menu-text);
+$menuActiveLeft: var(--menu-active-left);
+$menuActiveText: var(--menu-active-text);
+$menuBg: var(--menu-bg);
 $menuTextWeight: 600;
 $menuHover: var(--menu-hover);
 $subMenuBg: var(--submenu-bg);

@@ -114,6 +114,10 @@ export default {
         searchConfig: {
           options: [
             {
+              label: this.$t('audits.User'),
+              value: 'user__name'
+            },
+            {
               label: this.$t('audits.Username'),
               value: 'user__username'
             },

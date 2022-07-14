@@ -287,6 +287,9 @@ export default {
       ]
     },
     confirmUrl() {
+      return '/api/v1/authentication/confirm-oauth/'
+    },
+    bindOrUNBindUrl() {
       let url = ''
       if (!this.object[`is_${this.currentEdit}_bound`]) {
         url = `/core/auth/${this.currentEdit}/qr/bind/?redirect_url=${this.$route.fullPath}`
@@ -319,7 +322,7 @@ export default {
       return backendList
     },
     verifyDone() {
-      const url = this.confirmUrl
+      const url = this.bindOrUNBindUrl
       if (!this.object[`is_${this.currentEdit}_bound`]) {
         window.location.href = url
       } else {

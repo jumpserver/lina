@@ -258,6 +258,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
     "VerificationCodeSent": "検証コードが送信されました",
     "SendVerificationCode": "認証コードの送信",
     "History": "歴史",
@@ -442,6 +443,7 @@
     "isValid": "有効",
     "nav": {
       "TempPassword": "一時パスワード",
+      "ConnectionToken": "接続トークン",
       "APIKey": "APIキー",
       "Workbench": "作業台",
       "Navigation": "ナビゲーション",
@@ -1037,6 +1039,7 @@
     "helpText": {
       "TempPassword": "一時パスワードの有効期間は300秒で、使用後すぐに失効します",
       "ApiKeyList": "Api keyを使用してリクエストヘッダに署名します。リクエストのヘッダごとに異なります。使用ドキュメントを参照してください",
+      "ConnectionTokenList": "接続トークンは、認証アセットと接続アセットを組み合わせた一種の認証情報であり、ユーザーはワンクリックでアセットにログインできます。現在サポートされているコンポーネントには、KoKo、Lion、Magnus、Razorなどがあります。",
       "authLdapSearchFilter": "可能なオプションは (cnまたはuidまたはsamaccount tname = %(user)s) です",
       "authLdapSearchOu": "| を使用して各OUを区切る",
       "authLdapUserAttrMap": "ユーザー属性マッピングは、LDAPのユーザー属性をjumpserverユーザーにマッピングする方法を表します。username、name、emailはjumpserverの属性です",
@@ -1166,6 +1169,7 @@
     "OpenTicket": "ワークオーダーの作成",
     "HandleTicket": "作業指示の処理",
     "FinishedTicket": "ワークオーダーの完了",
+    "CheckViewAcceptor": "クリックして受付人を表示",
     "IP": "IP",
     "Hostname": "ホスト名",
     "Asset": "資産",

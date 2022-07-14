@@ -1,13 +1,48 @@
 <template>
   <Page>
     <div v-if="isDev" style="margin-bottom: 20px">
-      <el-button
-        v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
-        :key="tp"
-        :type="tp"
-      >
-        {{ tp.toUpperCase() }}
-      </el-button>
+      <div class="dz">
+        <el-button
+          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          :key="tp"
+          :type="tp"
+        >
+          {{ tp.toUpperCase() }}
+        </el-button>
+      </div>
+      <div class="dz">
+        <el-button
+          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          :key="tp"
+          :type="tp"
+          disabled
+        >
+          {{ tp.toUpperCase() }}
+        </el-button>
+      </div>
+
+      <div class="dz">
+        <el-link
+          v-for="tp of ['primary', 'success', 'info', 'warning', 'danger']"
+          :key="tp"
+          :type="tp"
+        >
+          <span style="padding-right: 10px">{{ tp.toUpperCase() }}</span>
+        </el-link>
+      </div>
+      <div class="dz">
+        <el-radio-group v-model="dz.radio">
+          <el-radio :label="3">备选项1</el-radio>
+          <el-radio :label="6">备选项2</el-radio>
+          <el-radio :label="9">备选项3</el-radio>
+        </el-radio-group>
+      </div>
+      <el-steps class="dz" :space="200" :active="1" finish-status="error">
+        <el-step title="已完成" />
+        <el-step title="进行中" />
+        <el-step title="步骤 3" />
+      </el-steps>
+      <div class="dz" />
     </div>
     <IBox v-if="!loading">
       <GenericCreateUpdateForm
@@ -40,6 +75,7 @@ export default {
   },
   data() {
     return {
+      dz: {},
       loading: true,
       files: {},
       interfaceInfo: {},
@@ -193,4 +229,7 @@ export default {
 </script>
 
 <style scoped>
+.dz {
+  padding: 10px 0
+}
 </style>
