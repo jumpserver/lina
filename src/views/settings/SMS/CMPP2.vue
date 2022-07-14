@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS :title="$t('setting.TencentCloud')" :config="$data" />
+  <BaseSMS :title="$t('setting.CMPP2')" :config="$data" />
 </template>
 
 <script>
@@ -7,30 +7,28 @@ import BaseSMS from './Base'
 import { UpdateToken } from '@/components/FormFields'
 
 export default {
-  name: 'SMSTencent',
+  name: 'CMPP2',
   components: {
     BaseSMS
   },
   data() {
     const vm = this
     return {
-      url: `/api/v1/settings/setting/?category=tencent`,
+      url: `/api/v1/settings/setting/?category=cmpp2`,
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
         {
           title: this.$t('common.Test'),
-          loading: false,
-          callback: function(value, form, btn) {
-            btn.loading = true
+          callback: function(value, form) {
             vm.$axios.post(
-              `/api/v1/settings/sms/tencent/testing/`,
+              `/api/v1/settings/sms/cmpp2/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
             }).catch(() => {
               vm.$log.error('err occur')
-            }).finally(() => { btn.loading = false })
+            })
           }
         }
       ],
@@ -38,13 +36,8 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'TENCENT_SECRET_ID', 'TENCENT_SECRET_KEY', 'TENCENT_SDKAPPID'
-          ]
-        ],
-        [
-          this.$t('setting.VerifySignTmpl'),
-          [
-            'TENCENT_VERIFY_SIGN_NAME', 'TENCENT_VERIFY_TEMPLATE_CODE'
+            'CMPP2_HOST', 'CMPP2_PORT', 'CMPP2_SP_ID', 'CMPP2_SP_SECRET', 'CMPP2_SRC_ID', 'CMPP2_SERVICE_ID',
+            'CMPP2_VERIFY_SIGN_NAME', 'CMPP2_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
@@ -55,17 +48,12 @@ export default {
         ]
       ],
       fieldsMeta: {
-        TENCENT_VERIFY_SIGN_TMPL: {
-          fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
-          fieldsMeta: {
-          }
-        },
-        TENCENT_SECRET_KEY: {
+        CMPP2_SP_SECRET: {
           component: UpdateToken
         }
       },
       submitMethod() {
-        return 'put'
+        return 'patch'
       }
     }
   },

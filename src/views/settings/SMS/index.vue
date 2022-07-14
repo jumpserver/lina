@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import SMSAlibaba from './SMSAlibaba'
 import SMSTencent from './SMSTencent'
+import CMPP2 from './CMPP2'
 
 export default {
   name: 'Auth',
@@ -23,7 +24,7 @@ export default {
         ],
         [
           this.$t('setting.SMSProvider'), [
-            'ALIYUN', 'QCLOUD'
+            'ALIYUN', 'QCLOUD', 'CMPP2'
           ]
         ]
       ],
@@ -40,6 +41,13 @@ export default {
           component: SMSTencent,
           hidden: (form) => {
             return form['SMS_BACKEND'] !== 'tencent'
+          }
+        },
+        CMPP2: {
+          label: this.$t('setting.CMPP2'),
+          component: CMPP2,
+          hidden: (form) => {
+            return form['SMS_BACKEND'] !== 'cmpp2'
           }
         }
       },
