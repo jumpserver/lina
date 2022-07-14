@@ -128,7 +128,7 @@
     "Charset": "文字セット",
     "CmdFilter": "コマンドフィルタ",
     "CommandFilterDetail": "コマンドフィルタの詳細",
-    "CommandFilterHelpMessage": "システムユーザーはいくつかのコマンドフィルタをバインドすることができ、一つのフィルタはいくつかのルールを定義することができます。ユーザーがこのシステムユーザーを使用して資産にログインし、一つのコマンドを実行するには、フィルタをバインドするすべてのルールが一致する必要があります優先度の高いものが先にマッチされ、ルールがマッチしたとき、ルールのアクションが許可されていれば、このコマンドは発行され、ルールのアクションが禁止されていれば、コマンドは実行されなくなりますそれ以外の場合は次のルールがマッチし、最後にルールがマッチしない場合は実行が許可されます",
+    "CommandFilterHelpMessage": "Xìtǒng yònghù zhīchí bǎng dìng duō gè mìnglìng guòlǜ qì shíxiàn jìnzhǐ shūrù mǒu xiē mìnglìng de xiàoguǒ; guòlǜ qì zhōng kě pèizhì duō gè guīzé, zài shǐyòng gāi xìtǒng yònghù liánjiē zīchǎn shí, shūrù de mìnglìng ànzhào guòlǜ qì zhōng pèizhì de guīzé yōuxiān jí shēngxiào; lì: Shǒuxiān pǐpèi dào de guīzé shì “yǔnxǔ”, zé gāi mìnglìng zhíxíng, shǒuxiān pǐpèi dào de guīzé wèi “jìnzhǐ”, zé jìnzhǐ gāi mìnglìng zhíxíng; rúguǒ zuìhòu wèi pǐpèi dào guīzé, zé yǔnxǔ zhíxíng.\n展开\n140 / 5,000\n翻译结果\nシステムユーザーは、複数のコマンドフィルターのバインドをサポートして、特定のコマンドの入力を禁止する効果を実現します。フィルターで複数のルールを構成できます。システムユーザーがアセットへの接続に使用される場合、入力コマンドは、フィルタで設定されたルール。<br>例：最初に一致したルールが「許可」の場合、コマンドが実行されます。最初に一致したルールが「禁止」の場合、コマンドの実行が禁止されます。最後のルールが一致しない場合、実行が許可されます。",
     "CommandFilterRuleContentHelpText": "各行のコマンド",
     "CommandFilterRulePriorityHelpText": "優先度の選択範囲は1-100、1最低優先度、100最高優先度です",
     "CommandFilterRules": "コマンドフィルタルール",
