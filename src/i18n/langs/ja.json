@@ -938,6 +938,7 @@
     "Feature": "機能",
     "AlibabaCloud": "Alibaba cloud",
     "TencentCloud": "テンセント雲",
+    "CMPP2": "CMPP v2.0",
     "Radius": "Radius",
     "VerifySignTmpl": "認証コードメールテンプレート",
     "Enable": "有効化",
@@ -1123,7 +1124,7 @@
     "SMS": "SMS設定",
     "feiShuTest": "テスト",
     "setting": "設定",
-    "SMSProvider": "メールサービス業者"
+    "SMSProvider": "メールサービス業者 / プロトコル"
   },
   "tickets": {
     "OneAssigneeType": "一次受付者タイプ",

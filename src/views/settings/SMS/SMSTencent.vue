@@ -22,7 +22,7 @@ export default {
           title: this.$t('common.Test'),
           callback: function(value, form) {
             vm.$axios.post(
-              `/api/v1/settings/tencent/testing/`,
+              `/api/v1/settings/sms/tencent/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
