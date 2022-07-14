@@ -126,7 +126,7 @@
     "Charset": "Charset",
     "CmdFilter": "CmdFilter",
     "CommandFilterDetail": "Command filter detail",
-    "CommandFilterHelpMessage": "System user bound some command filter, each command filter has some rules, When user login asset with this system user, then run a command, The command will be filter by rules, higher priority rule run first, When a rule matched, if rule action is allow, then allow command execute, else if action is deny, then command with be deny, else match next rule, if none matched, allowed",
+    "CommandFilterHelpMessage": "The system user supports binding multiple command filters to achieve the effect of prohibiting the input of certain commands; multiple rules can be configured in the filter. When the system user is used to connect to the asset, the input command takes effect according to the priority of the rules configured in the filter. <br>Example: The first matched rule is \"Allow\", the command is executed, the first matched rule is \"Forbidden\", the command execution is prohibited; if the last rule is not matched, it is allowed to be executed.",
     "CommandFilterRuleContentHelpText": "One line one command",
     "CommandFilterRulePriorityHelpText": "1-100, the higher will be match first",
     "CommandFilterRules": "Command filter rules",
