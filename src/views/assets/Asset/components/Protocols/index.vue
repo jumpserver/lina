@@ -6,7 +6,7 @@
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
       </el-input>
-      <div style="display: flex; margin-left: 20px" class="input-button">
+      <div class="input-button">
         <el-button type="danger" icon="el-icon-minus" style="flex-shrink: 0;" size="mini" :disabled="items.length===1" @click="handleDelete(index)" />
         <el-button type="primary" icon="el-icon-plus" style="flex-shrink: 0;" size="mini" @click="handleAdd(index)" />
       </div>
@@ -143,7 +143,7 @@ export default {
 
   .input-with-select {
     flex-shrink: 1;
-    width: 80% !important;
+    width: calc(100% - 80px);
   }
 
   .input-with-select .el-input-group__prepend {
@@ -155,7 +155,9 @@ export default {
   }
 
   .input-button {
+    display: flex;
     margin-top: 4px;
+    padding-left: 20px;
   }
   .input-button  ::v-deep  .el-button.el-button--mini {
     height: 25px;

@@ -5,6 +5,7 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import Protocols from './components/Protocols'
+import AssetAccounts from '@/components/FormFields/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 
 export default {
@@ -26,9 +27,9 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
-        [this.$t('assets.Protocols'), ['protocols']],
-        [this.$t('assets.Auth'), ['admin_user']],
+        [this.$t('assets.Protocol'), ['protocols']],
         [this.$t('assets.Node'), ['nodes']],
+        [this.$t('assets.Account'), ['accounts']],
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
@@ -37,7 +38,15 @@ export default {
           label: this.$t('assets.ipDomain')
         },
         protocols: {
-          component: Protocols
+          component: Protocols,
+          on: {
+            input: ([value], updateForm) => {
+              console.log('protocls: ', value)
+              this.fieldsMeta.accounts.el.protocols = value.map(item => {
+                return item.split('/')[0]
+              })
+            }
+          }
         },
         platform: {
           el: {
@@ -59,16 +68,12 @@ export default {
             }
           }
         },
-        admin_user: {
+        accounts: {
+          component: AssetAccounts,
+          label: '',
           el: {
-            multiple: false,
-            ajax: {
-              url: '/api/v1/assets/system-users/?type=admin',
-              transformOption: (item) => {
-                const username = item.username || '*'
-                return { label: item.name + '(' + username + ')', value: item.id }
-              }
-            }
+            protocols: [],
+            default: []
           }
         },
         nodes: {
@@ -98,7 +103,7 @@ export default {
         }
       },
       url: '/api/v1/assets/assets/',
-      createSuccessNextRoute: { name: 'AssetDetail' },
+      createSuccessNextRoute: { name: 'AssetDetail', query: { 'activeTab': 'Account' }},
       hasDetailInMsg: false
     }
   }

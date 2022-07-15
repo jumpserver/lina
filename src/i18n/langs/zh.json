@@ -96,6 +96,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "AddAccount": "添加账号",
+    "Account": "账号",
     "AppList": "应用列表",
     "AssociateSystemUsers": "关联系统用户",
     "AssociateAssets": "关联资产",
@@ -121,7 +123,7 @@
     "AccountList": "账号列表",
     "PermUserList": "授权用户",
     "ViewPerm": "查看授权",
-    "AutoGenerateKey": "自动生成",
+    "AutoGenerateKey": "随机生成密码密钥",
     "AutoPush": "自动推送",
     "BasePlatform": "基础平台",
     "Basic": "基本",
@@ -180,7 +182,7 @@
     "PlatformDetail": "平台详情",
     "PriorityHelpMessage": "1-100, 1最低优先级，100最高优先级。授权多个用户时，高优先级的系统用户将会作为默认登录用户",
     "Protocol": "协议",
-    "Protocols": "协议组",
+    "Protocols": "协议",
     "LoginOption": "登录选项",
     "PublicIp": "公网IP",
     "Push": "推送",

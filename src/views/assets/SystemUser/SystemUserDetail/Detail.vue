@@ -44,7 +44,7 @@ export default {
           type: 'switcher',
           attrs: {
             label: this.$t('assets.AutoPush'),
-            model: this.object.auto_push,
+            model: this.object.auto_push_account,
             disabled: (['rdp', 'ssh'].indexOf(this.object.protocol) === -1 || this.object.type === 'admin') ||
               !vm.$hasPerm('assets.change_systemuser')
           },
@@ -52,7 +52,7 @@ export default {
             change: function(val) {
               this.$axios.patch(
                 `/api/v1/assets/system-users/${this.object.id}/`,
-                { auto_push: val }
+                { auto_push_account: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
               }).catch(err => {

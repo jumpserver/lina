@@ -25,20 +25,24 @@ export default {
         protocol: this.$route.query.protocol,
         username_same_with_user: false,
         auto_generate_key: false,
-        auto_push: false,
+        auto_push_account: false,
         sftp_root: 'tmp',
         sudo: '/bin/whoami',
         shell: '/bin/bash'
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
-        [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'private_key', 'passphrase']],
-        [this.$t('assets.AutoPush'), ['auto_push', 'sudo', 'shell', 'home', 'system_groups']],
+        [this.$t('assets.Account'), [
+          'login_mode', 'auto_create_account',
+          'auto_generate_key', 'password', 'private_key', 'passphrase',
+          'auto_push_account', 'sudo', 'shell', 'home', 'system_groups'
+        ]],
         [this.$t('common.Command filter'), ['cmd_filters']],
         [this.$t('assets.UserSwitch'), ['su_enabled', 'su_from']],
         [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
       fieldsMeta: {
+        auto_create_account: fields.auto_create_account,
         login_mode: fields.login_mode,
         username: fields.username,
         private_key: fields.private_key,
@@ -47,7 +51,7 @@ export default {
         auto_generate_key: fields.auto_generate_key,
         protocol: fields.protocol,
         cmd_filters: fields.cmd_filters,
-        auto_push: fields.auto_push,
+        auto_push_account: fields.auto_push_account,
         sftp_root: {
           rules: [Required],
           helpText: this.$t('assets.SFTPHelpMessage')
@@ -55,16 +59,16 @@ export default {
         sudo: {
           rules: [Required],
           helpText: this.$t('assets.SudoHelpMessage'),
-          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push_account
         },
         password: fields.password,
         shell: {
-          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push,
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push_account,
           rules: [Required]
         },
         home: {
           label: this.$t('assets.Home'),
-          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push || item.username_same_with_user,
+          hidden: (item) => item.protocol !== 'ssh' || !item.auto_push_account || item.username_same_with_user,
           helpText: this.$t('assets.HomeHelpMessage')
         },
         system_groups: fields.system_groups,

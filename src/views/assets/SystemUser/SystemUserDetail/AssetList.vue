@@ -68,7 +68,7 @@ export default {
                   name: 'Push',
                   title: this.$t('common.Push'),
                   type: 'primary',
-                  can: this.object.auto_push && vm.$hasPerm('assets.push_assetsystemuser'),
+                  can: this.object.auto_push_account && vm.$hasPerm('assets.push_assetsystemuser'),
                   callback: ({ row }) => {
                     const theUrl = `/api/v1/assets/system-users/${vm.object.id}/tasks/`
                     const data = { action: 'push', assets: [row.asset] }
@@ -103,7 +103,7 @@ export default {
             title: this.$t('common.PushSelected'),
             name: 'PushSelected',
             can({ selectedRows }) {
-              return selectedRows.length > 0 && vm.object.auto_push && vm.$hasPerm('assets.push_assetsystemuser')
+              return selectedRows.length > 0 && vm.object.auto_push_account && vm.$hasPerm('assets.push_assetsystemuser')
             },
             callback: this.bulkPushCallback.bind(this)
           },
@@ -140,7 +140,7 @@ export default {
           title: this.$t('assets.PushSystemUserNow'),
           attrs: {
             type: 'primary',
-            disabled: !vm.object.auto_push,
+            disabled: !vm.object.auto_push_account,
             label: this.$t('common.Push')
           },
           callbacks: {

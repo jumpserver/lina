@@ -7,11 +7,12 @@ function getFields() {
     on: {
       input: ([value], updateForm) => {
         if (value === 'manual') {
-          updateForm({ auto_push: false })
+          updateForm({ auto_push_account: false })
           updateForm({ auto_generate_key: false })
         }
       }
-    }
+    },
+    helpText: '使用资产上已添加的账号登录，或者手动输入密码登录'
   }
 
   const username = {
@@ -52,6 +53,9 @@ function getFields() {
       if (form.login_mode !== 'auto') {
         return true
       }
+      if (!form.auto_create_account) {
+        return true
+      }
       return form.auto_generate_key === true
     }
   }
@@ -79,6 +83,9 @@ function getFields() {
       if (JSON.stringify(this.$route.params) !== '{}') {
         return true
       }
+      if (!form.auto_create_account) {
+        return true
+      }
       if (form.protocol === 'k8s') {
         return true
       }
@@ -95,7 +102,8 @@ function getFields() {
     },
     el: {
       disabled: false
-    }
+    },
+    helpText: '随机生成密码密钥，一般配合自动推送账号使用'
   }
 
   const protocol = {
@@ -118,16 +126,36 @@ function getFields() {
     }
   }
 
-  const auto_push = {
+  const auto_create_account = {
+    type: 'switch',
+    el: {
+      disabled: false
+    },
+    hidden: form => {
+      if (form.login_mode === 'manual') {
+        form['auto_create_account'] = false
+        this.fieldsMeta.auto_create_account.el.disabled = true
+      } else {
+        this.fieldsMeta.auto_create_account.el.disabled = false
+      }
+    },
+    helpText: '资产关联系统用户时自动添加账号，如果资产该用户名的账号，适用场景是账号密码相同比较多或自动推送账号'
+  }
+
+  const auto_push_account = {
     type: 'switch',
     el: {
       disabled: false
     },
     hidden: form => {
       if (form.login_mode === 'manual' || form.type === 'admin' || (form.ad_domain && form.ad_domain !== '')) {
-        this.fieldsMeta.auto_push.el.disabled = true
+        this.fieldsMeta.auto_push_account.el.disabled = true
       } else {
-        this.fieldsMeta.auto_push.el.disabled = false
+        this.fieldsMeta.auto_push_account.el.disabled = false
+      }
+      if (!form.auto_create_account) {
+        form['auto_push_account'] = false
+        return true
       }
     },
     on: {
@@ -143,11 +171,14 @@ function getFields() {
   const update_password = {
     label: this.$t('users.UpdatePassword'),
     type: 'checkbox',
-    hidden: (formValue) => {
-      if (formValue.update_password) {
+    hidden: (form) => {
+      if (form.update_password) {
         return true
       }
-      if (formValue.login_mode === 'manual') {
+      if (!form.auto_create_account) {
+        return true
+      }
+      if (form.login_mode === 'manual') {
         return true
       }
       return !this.$route.params.id
@@ -158,6 +189,9 @@ function getFields() {
     component: UpdateToken,
     hidden: form => {
       if (form.login_mode !== 'auto' || form.auto_generate_key) {
+        return true
+      }
+      if (!form.auto_create_account) {
         return true
       }
       if (!this.$route.params.id) {
@@ -172,13 +206,16 @@ function getFields() {
       if (form.login_mode !== 'auto') {
         return true
       }
+      if (!form.auto_create_account) {
+        return true
+      }
       return form.auto_generate_key === true
     }
   }
 
   const system_groups = {
     label: this.$t('assets.LinuxUserAffiliateGroup'),
-    hidden: (item) => !item.auto_push || item.username_same_with_user,
+    hidden: (item) => !item.auto_push_account || item.username_same_with_user,
     helpText: this.$t('assets.GroupsHelpMessage')
   }
 
@@ -213,14 +250,15 @@ function getFields() {
     auto_generate_key: auto_generate_key,
     protocol: protocol,
     cmd_filters: cmd_filters,
-    auto_push: auto_push,
+    auto_push_account: auto_push_account,
     update_password: update_password,
     password: password,
     passphrase: passphrase,
     system_groups: system_groups,
     type: type,
     su_enabled: su_enabled,
-    su_from: su_from
+    su_from: su_from,
+    auto_create_account
   }
 }
 

@@ -22,7 +22,7 @@ export default {
         login_mode: 'auto',
         protocol: this.$route.query.protocol,
         auto_generate_key: false,
-        auto_push: false
+        auto_push_account: false
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'priority', 'protocol']],

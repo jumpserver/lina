@@ -23,14 +23,14 @@ export default {
         protocol: this.$route.query.protocol,
         username_same_with_user: false,
         auto_generate_key: false,
-        auto_push: false,
+        auto_push_account: false,
         sudo: '/bin/whoami',
         shell: '/bin/bash'
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
         [this.$t('common.Auth'), ['login_mode', 'auto_generate_key', 'password', 'ad_domain']],
-        [this.$t('assets.AutoPush'), ['auto_push', 'system_groups']],
+        [this.$t('assets.AutoPush'), ['auto_push_account', 'system_groups']],
         [this.$t('common.Other'), ['priority', 'comment']]
       ],
       fieldsMeta: {
@@ -38,7 +38,7 @@ export default {
         auto_generate_key: fields.auto_generate_key,
         username: fields.username,
         username_same_with_user: fields.username_same_with_user,
-        auto_push: fields.auto_push,
+        auto_push_account: fields.auto_push_account,
         protocol: fields.protocol,
         ad_domain: {
           label: this.$t('assets.AdDomain'),
