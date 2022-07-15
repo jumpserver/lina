@@ -154,6 +154,9 @@ export default {
         }
         if (this.ConfirmType === 'mfa') {
           this.Select = this.Content.filter(item => !item.disabled)[0].name
+          if (this.Select === 'sms') {
+            this.smsWidth = 6
+          }
           this.HelpText = this.Content.filter(item => !item.disabled)[0].placeholder
         } else if (this.ConfirmType === 'password') {
           this.Select = this.$t('setting.password')
