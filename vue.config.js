@@ -106,6 +106,20 @@ module.exports = {
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
 
+    config.module
+      .rule('fonts')
+      .test(/.(ttf|otf|eot|woff|woff2)$/)
+      .use('url-loader')
+      .loader('url-loader')
+      .tap(options => {
+        options = {
+          limit: 50000,
+          name: '/public/fonts/[name].[ext]'
+        }
+        return options
+      })
+      .end()
+
     // set svg-sprite-loader
     config.module
       .rule('svg')
