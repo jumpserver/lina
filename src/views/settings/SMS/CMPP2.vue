@@ -20,7 +20,9 @@ export default {
       moreButtons: [
         {
           title: this.$t('common.Test'),
-          callback: function(value, form) {
+          loading: false,
+          callback: function(value, form, btn) {
+            btn.loading = true
             vm.$axios.post(
               `/api/v1/settings/sms/cmpp2/testing/`,
               value
@@ -28,7 +30,7 @@ export default {
               vm.$message.success(res['msg'])
             }).catch(() => {
               vm.$log.error('err occur')
-            })
+            }).finally(() => { btn.loading = false })
           }
         }
       ],
