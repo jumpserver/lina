@@ -68,7 +68,7 @@ export default {
         value: this.object.apply_applications,
         ajax: {
           url: function() {
-            const oid = this.object.org_id === '' ? 'DEFAULT' : this.object.org_id
+            const oid = this.object.org_id
             return `/api/v1/applications/applications/?oid=${oid}&type=${this.object.apply_type}`
           }.bind(this)(),
           transformOption: (item) => {
@@ -81,7 +81,7 @@ export default {
         value: this.object.apply_system_users,
         ajax: {
           url: function() {
-            const oid = this.object.org_id === '' ? 'DEFAULT' : this.object.org_id
+            const oid = this.object.org_id
             const protocol = this.object.apply_category === 'remote_app' ? 'rdp' : this.object.apply_type
             return `/api/v1/assets/system-users/?oid=${oid}&protocol=${protocol}`
           }.bind(this)(),
