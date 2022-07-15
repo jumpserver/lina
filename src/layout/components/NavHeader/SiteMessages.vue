@@ -309,6 +309,9 @@ export default {
   .msg-detail-txt {
     margin-bottom: 20px;
     line-height: 25px;
+    &>>> a {
+      color: var(--color-success)!important;
+    }
   }
 }
 
