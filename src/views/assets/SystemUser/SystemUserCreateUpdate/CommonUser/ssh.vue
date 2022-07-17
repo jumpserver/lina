@@ -33,7 +33,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'protocol', 'username', 'username_same_with_user']],
         [this.$t('assets.Account'), [
-          'login_mode', 'auto_create_account',
+          'login_mode', 'account_template_enabled',
           'auto_generate_key', 'password', 'private_key', 'passphrase',
           'auto_push_account', 'sudo', 'shell', 'home', 'system_groups'
         ]],
@@ -42,7 +42,7 @@ export default {
         [this.$t('common.Other'), ['priority', 'sftp_root', 'comment']]
       ],
       fieldsMeta: {
-        auto_create_account: fields.auto_create_account,
+        account_template_enabled: fields.account_template_enabled,
         login_mode: fields.login_mode,
         username: fields.username,
         private_key: fields.private_key,

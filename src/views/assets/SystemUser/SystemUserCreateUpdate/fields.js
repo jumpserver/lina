@@ -53,7 +53,7 @@ function getFields() {
       if (form.login_mode !== 'auto') {
         return true
       }
-      if (!form.auto_create_account) {
+      if (!form.account_template_enabled) {
         return true
       }
       return form.auto_generate_key === true
@@ -83,7 +83,7 @@ function getFields() {
       if (JSON.stringify(this.$route.params) !== '{}') {
         return true
       }
-      if (!form.auto_create_account) {
+      if (!form.account_template_enabled) {
         return true
       }
       if (form.protocol === 'k8s') {
@@ -126,20 +126,21 @@ function getFields() {
     }
   }
 
-  const auto_create_account = {
+  const account_template_enabled = {
     type: 'switch',
     el: {
       disabled: false
     },
     hidden: form => {
       if (form.login_mode === 'manual') {
-        form['auto_create_account'] = false
-        this.fieldsMeta.auto_create_account.el.disabled = true
+        form['account_template_enabled'] = false
+        this.fieldsMeta.account_template_enabled.el.disabled = true
       } else {
-        this.fieldsMeta.auto_create_account.el.disabled = false
+        this.fieldsMeta.account_template_enabled.el.disabled = false
       }
     },
-    helpText: '资产关联系统用户时自动添加账号，如果资产该用户名的账号，适用场景是账号密码相同比较多或自动推送账号'
+    helpText: '资产授权系统用户时, 如果资产不存在当前用户名的账号, 使用模版添加账号。' +
+      '适用场景是资产密码相同比较多或托管账号自动推送'
   }
 
   const auto_push_account = {
@@ -153,7 +154,7 @@ function getFields() {
       } else {
         this.fieldsMeta.auto_push_account.el.disabled = false
       }
-      if (!form.auto_create_account) {
+      if (!form.account_template_enabled) {
         form['auto_push_account'] = false
         return true
       }
@@ -175,7 +176,7 @@ function getFields() {
       if (form.update_password) {
         return true
       }
-      if (!form.auto_create_account) {
+      if (!form.account_template_enabled) {
         return true
       }
       if (form.login_mode === 'manual') {
@@ -191,7 +192,7 @@ function getFields() {
       if (form.login_mode !== 'auto' || form.auto_generate_key) {
         return true
       }
-      if (!form.auto_create_account) {
+      if (!form.account_template_enabled) {
         return true
       }
       if (!this.$route.params.id) {
@@ -206,7 +207,7 @@ function getFields() {
       if (form.login_mode !== 'auto') {
         return true
       }
-      if (!form.auto_create_account) {
+      if (!form.account_template_enabled) {
         return true
       }
       return form.auto_generate_key === true
@@ -258,7 +259,7 @@ function getFields() {
     type: type,
     su_enabled: su_enabled,
     su_from: su_from,
-    auto_create_account
+    account_template_enabled
   }
 }
 

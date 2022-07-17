@@ -2,7 +2,18 @@
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
     <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo v-if="showUpdateSecretDialog" :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
+    <UpdateSecretInfo
+      v-if="showUpdateSecretDialog"
+      :visible.sync="showUpdateSecretDialog"
+      :account="account"
+      @updateAuthDone="onUpdateAuthDone"
+    />
+    <AddAccount
+      v-if="showAddDialog"
+      :visible.sync="showAddDialog"
+      :asset="asset"
+      @add="addAccountSuccess"
+    />
   </div>
 </template>
 
@@ -11,16 +22,17 @@ import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
+import AddAccount from './AddAccount'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-// import i18n from '@/i18n/i18n'
 
 export default {
   name: 'AccountListTable',
   components: {
     ListTable,
     UpdateSecretInfo,
-    ShowSecretInfo
+    ShowSecretInfo,
+    AddAccount
   },
   props: {
     url: {
@@ -44,6 +56,10 @@ export default {
     hasClone: {
       type: Boolean,
       default: false
+    },
+    asset: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -51,6 +67,7 @@ export default {
     return {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
+      showAddDialog: false,
       account: {},
       tableConfig: {
         url: this.url,
@@ -60,7 +77,7 @@ export default {
         },
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
-          'systemuser', 'date_created', 'date_updated', 'actions'
+          'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['username', 'actions'],
@@ -153,17 +170,6 @@ export default {
                     })
                   }
                 }
-                // {
-                //   name: 'History',
-                //   title: i18n.t('common.History'),
-                //   can: this.$hasPerm('assets.view_assethistoryaccount') && !this.$store.getters.currentOrgIsRoot,
-                //   callback: ({ row }) => {
-                //     this.$router.push({
-                //       name: 'AssetAccountHistoryList',
-                //       query: { id: row.id }
-                //     })
-                //   }
-                // }
               ]
             }
           }
@@ -173,12 +179,23 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: true,
         hasCreate: false,
-        hasImport: false,
+        hasImport: true,
         hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
         },
+        extraActions: [
+          {
+            name: 'add',
+            title: this.$t('common.Add'),
+            type: 'primary',
+            can: vm.$hasPerm('assets.add_account'),
+            callback: () => {
+              this.showAddDialog = true
+            }
+          }
+        ],
         searchConfig: {
           exclude: ['systemuser', 'asset']
         },
@@ -203,6 +220,9 @@ export default {
   methods: {
     onUpdateAuthDone(account) {
       Object.assign(this.account, account)
+    },
+    addAccountSuccess() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
