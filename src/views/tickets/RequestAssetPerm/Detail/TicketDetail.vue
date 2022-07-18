@@ -36,7 +36,7 @@
             />
           </el-form-item>
           <el-form-item :label="$t('assets.Action')" required>
-            <PermissionFormActionField v-model="requestForm.actions" :value="requestForm.actions" style="width: 30% !important" />
+            <PermissionFormActionField v-model="requestForm.actions" :value="requestForm.actions" style="width: 30% !important" @selectChange="selectChange" />
           </el-form-item>
         </el-form>
       </template>
@@ -237,6 +237,9 @@ export default {
     }
   },
   methods: {
+    selectChange(checkedKeys){
+      this.requestForm.actions = checkedKeys
+    },
     formatTime(dateStr) {
       return formatTime(getDateTimeStamp(dateStr))
     },

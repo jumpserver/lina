@@ -6,7 +6,6 @@
     :default-expand-all="false"
     :default-checked-keys="value"
     :props="defaultProps"
-    v-bind="$attrs"
     @check="handleCheckChange"
   />
 </template>
@@ -83,8 +82,8 @@ export default {
       return this.choices.map((v) => v.value)
     },
     iData() {
-      console.log('this.choicesIDs', this.choicesIDs)
       console.log('this.choices', this.choices)
+      console.log('this.choicesIDs', this.choicesIDs)
       console.log('this.value', this.value)
       this.$log.debug('choices: ', this.choicesIDs)
       const fullTreeNodes = _.cloneDeep(this.fullChoicesTreeNodes)
@@ -110,11 +109,9 @@ export default {
       return newTreeNodes
     },
     handleCheckChange(data, obj) {
-      const checkedKeys = obj.checkedKeys
-      if (checkedKeys.length !== 0) {
-        checkedKeys.push('connect')
-      }
-      this.$emit('input', checkedKeys)
+      const checkedKeys = obj.checkedKeys.concat(obj.halfCheckedKeys)
+      console.log('checkedKeys', checkedKeys)
+      this.$emit('selectChange', checkedKeys)
     }
   }
 }
