@@ -26,6 +26,10 @@ async function changeOrg(org) {
     path = _.trimEnd(path, '/')
     location.href = path
   } else {
+    const index = path.indexOf('?')
+    if (index !== -1) {
+      location.href = path.substring(0, index)
+    }
     setTimeout(() => location.reload(), 400)
   }
 }
