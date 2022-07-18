@@ -127,7 +127,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.notRootWorkbenchOrgs?.map((item) => {
+            options: this.$store.state.users.noRootWorkbenchOrgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -161,7 +161,7 @@ export default {
   },
   computed: {
     ...mapState({
-      workbenchOrgs: state => state.users.notRootWorkbenchOrgs
+      workbenchOrgs: state => state.users.noRootWorkbenchOrgs
     }),
     ...mapGetters(['currentOrg'])
   },
