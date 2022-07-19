@@ -127,7 +127,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.notRootWorkbenchOrgs?.map((item) => {
+            options: this.$store.state.users.noRootWorkbenchOrgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -138,6 +138,14 @@ export default {
             if (apply_category_type) {
               fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestions/?oid=${vm.org_id}&category=${apply_category_type[0]}&type=${apply_category_type[1]}`
               fieldsMeta.apply_system_users.el.ajax.url = apply_category_type[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestions/?oid=${vm.org_id}&protocol=${apply_category_type[1]}`
+            }
+          },
+          on: {
+            change: ([event], updateForm) => {
+              updateForm({
+                apply_applications: [],
+                apply_system_users: []
+              })
             }
           }
         }
@@ -161,7 +169,7 @@ export default {
   },
   computed: {
     ...mapState({
-      workbenchOrgs: state => state.users.notRootWorkbenchOrgs
+      workbenchOrgs: state => state.users.noRootWorkbenchOrgs
     }),
     ...mapGetters(['currentOrg'])
   },
