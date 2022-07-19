@@ -14,7 +14,7 @@
 .el-button--text:hover {
   background-color: rgba(0, 0, 0, .05);
 }
- 
+
 .el-button--success {
   background-color: success;
   border-color: success;
@@ -412,6 +412,11 @@ td .el-button.el-button--mini {
 .el-dialog  .el-dialog__body {
   max-height: 90vh;
   overflow: auto;
+  padding: 30px;
+}
+
+.el-dialog .el-dialog__body form {
+  padding-right: 20px;
 }
 
 .el-cascader {
