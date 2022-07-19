@@ -419,6 +419,10 @@ td .el-button.el-button--mini {
   padding-right: 20px;
 }
 
+.el-dialog .el-dialog__footer {
+  padding: 10px 30px 30px;
+}
+
 .el-cascader {
   line-height: 34px;
 }
