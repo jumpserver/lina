@@ -114,6 +114,15 @@ export default {
             fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
+          },
+          on: {
+            change: ([event], updateForm) => {
+              updateForm({
+                apply_nodes: [],
+                apply_assets: [],
+                apply_system_users: []
+              })
+            }
           }
         }
       },
