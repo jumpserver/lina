@@ -10,7 +10,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import getFields from '../fields'
+import getFields from './fields'
 
 export default {
   name: 'CommonUserRDP',
@@ -24,7 +24,6 @@ export default {
         username_same_with_user: false,
         auto_generate_key: false,
         auto_push_account: false,
-        sudo: '/bin/whoami',
         shell: '/bin/bash'
       },
       fields: [

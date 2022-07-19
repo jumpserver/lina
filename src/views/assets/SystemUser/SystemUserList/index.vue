@@ -1,44 +1,97 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu">
-    <keep-alive>
-      <component :is="config.activeMenu" />
-    </keep-alive>
-  </TabPage>
+  <GenericListPage
+    :table-config="tableConfig"
+    :header-actions="headerActions"
+    :help-message="helpMessage"
+  />
 </template>
 
 <script>
-import { TabPage } from '@/layout/components'
-import CommonUserList from './CommonUserList'
-import AdminUserList from './AdminUserList'
+import { GenericListPage } from '@/layout/components'
+import { ApplicationSystemUserTypes } from '@/views/applications/const'
+import { AssetProtocols } from '@/views/assets/const'
+
 export default {
-  name: 'Index',
   components: {
-    TabPage,
-    CommonUserList,
-    AdminUserList
+    GenericListPage
   },
   data() {
+    const vm = this
     return {
-      config: {
-        activeMenu: 'CommonUserList',
-        submenu: [
-          {
-            title: this.$t('assets.CommonUser'),
-            name: 'CommonUserList',
-            hidden: () => !this.$hasPerm('assets.view_systemuser')
+      tableConfig: {
+        url: '/api/v1/assets/system-users/?type=common',
+        columns: [
+          'name', 'username', 'username_same_with_user', 'protocol', 'login_mode',
+          'assets_amount', 'applications_amount', 'priority',
+          'created_by', 'date_created', 'date_updated', 'comment', 'org_name', 'actions'
+        ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'name', 'username', 'protocol', 'login_mode', 'assets_amount',
+            'applications_amount', 'comment', 'actions'
+          ]
+        },
+        columnsMeta: {
+          username: {
+            showOverflowTooltip: true
           },
-          {
-            title: this.$t('assets.AdminUser'),
-            name: 'AdminUserList',
-            hidden: () => !this.$hasPerm('assets.view_systemuser')
+          protocol: {
+            width: '100px'
+          },
+          username_same_with_user: {
+            width: '150px',
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          login_mode: {
+            width: '120px'
+          },
+          assets_amount: {
+            width: '80px'
+          },
+          applications_amount: {
+            width: '80px'
+          },
+          actions: {
+            formatterArgs: {
+              onUpdate: ({ row }) => {
+                vm.$router.push({
+                  name: 'SystemUserUpdate', params: { id: row.id }, query: { protocol: row.protocol }
+                })
+              },
+              onClone: ({ row }) => {
+                vm.$router.push({
+                  name: 'SystemUserCreate', query: { protocol: row.protocol, clone_from: row.id }
+                })
+              }
+            }
           }
-        ]
-      }
+        }
+      },
+      headerActions: {
+        hasCreate: false,
+        createRoute: 'SystemUserCreate',
+        searchConfig: {
+          exclude: ['type', 'protocol']
+        },
+        moreCreates: {
+          callback: (option) => {
+            vm.$router.push({ name: 'SystemUserCreate', query: { protocol: option.name.toLowerCase() }})
+          },
+          dropdown: [
+            ...AssetProtocols,
+            ...ApplicationSystemUserTypes
+          ]
+        }
+      },
+      helpMessage: this.$t('assets.SystemUserListHelpMessage')
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>
