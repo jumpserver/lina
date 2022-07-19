@@ -24,6 +24,7 @@
 // eslint-disable-next-line no-unused-vars
 import $ from '@/utils/jquery-vendor.js'
 import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
+import '@ztree/ztree_v3/js/jquery.ztree.exhide.min.js'
 import '@/styles/ztree.css'
 import axiosRetry from 'axios-retry'
 
@@ -54,6 +55,7 @@ export default {
     }
   },
   mounted() {
+    window.treeSearch = this.treeSearch
     this.initTree()
     // $('.treebox').css('height', window.innerHeight - 60)
   },
@@ -117,15 +119,23 @@ export default {
     },
     rootNodeAddDom: function(ztree, callback) {
       const vm = this
-      const refreshIcon = "<a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
+      const searchIcon = `<a class="tree-search" id="searchIcon">
+                            <i class='fa fa-search tree-banner-icon' onclick="treeSearch()"></i>
+                             <input type="text" id="searchInput" class="tree-input" />
+                          </a>`
+      const refreshIcon = " <a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
+      const icons = `<span class="tree-banner-icon-zone">
+                      ${searchIcon}${refreshIcon}
+                    </span>`
       const rootNode = ztree.getNodes()[0]
+      $('#' + rootNode.tId).css('position', 'relative')
       let $rootNodeRef
       if (rootNode) {
         $rootNodeRef = $('#' + rootNode.tId + '_a')
-        $rootNodeRef.after(refreshIcon)
+        $rootNodeRef.after(icons)
       } else {
         $rootNodeRef = $('#' + ztree.setting.treeId)
-        $rootNodeRef.html(refreshIcon)
+        $rootNodeRef.html(icons)
       }
       const refreshIconRef = $('#tree-refresh')
       refreshIconRef.bind('click', function() {
@@ -145,6 +155,103 @@ export default {
     },
     getCheckedNodes: function() {
       return this.zTree.getCheckedNodes(true)
+    },
+    treeSearch() {
+      const searchIcon = document.getElementById(`searchIcon`)
+      const searchInput = document.getElementById(`searchInput`)
+      searchIcon.classList.toggle('active')
+      searchInput.focus()
+      searchInput.onclick = (e) => {
+        e.stopPropagation()
+      }
+      searchInput.onblur = (e) => {
+        e.stopPropagation()
+        if (!(e.target.value)) {
+          searchIcon.classList.toggle('active')
+        }
+      }
+      searchInput.oninput = _.debounce((e) => {
+        e.stopPropagation()
+        const value = e.target.value || ''
+        this.filterTree(value, this.zTree)
+      }, 450)
+    },
+    recurseParent(node) {
+      const parentNode = node.getParentNode()
+      if (parentNode && parentNode.pId) {
+        return [parentNode, ...this.recurseParent(parentNode)]
+      } else if (parentNode) {
+        return [parentNode]
+      } else {
+        return []
+      }
+    },
+    recurseChildren(node) {
+      if (!node.isParent) {
+        return []
+      }
+      const children = node.children
+      if (!children) {
+        return []
+      }
+      let allChildren = []
+      children.forEach((n) => {
+        allChildren = [...children, ...this.recurseChildren(n)]
+      })
+      return allChildren
+    },
+    filterTree(keyword, tree) {
+      // const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
+      // if (searchNode) {
+      //   tree.removeNode(searchNode[0])
+      // }
+
+      const nodes = tree.transformToArray(tree.getNodes())
+      if (!keyword) {
+        if (tree.hiddenNodes) {
+          tree.showNodes(tree.hiddenNodes)
+          tree.hiddenNodes = null
+        }
+        if (tree.expandNodes) {
+          tree.expandNodes.forEach((node) => {
+            if (node.id !== nodes[0].id) {
+              tree.expandNode(node, false)
+            }
+          })
+          tree.expandNodes = null
+        }
+        return null
+      }
+      let shouldShow = []
+      const matchedNodes = tree.getNodesByFilter((node) => {
+        return node.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1
+      })
+
+      if (matchedNodes.length < 1) {
+        let name = '搜索'
+        const assetsAmount = matchedNodes.length
+        name = `${name} (${assetsAmount})`
+        const newNode = { id: 'search', name: name, isParent: true, open: true }
+        tree.addNodes(null, newNode)
+      }
+
+      matchedNodes.forEach((node) => {
+        const parents = this.recurseParent(node)
+        const children = this.recurseChildren(node)
+        shouldShow = [...shouldShow, ...parents, ...children, node]
+      })
+      tree.hiddenNodes = nodes
+      tree.expandNodes = shouldShow
+      tree.hideNodes(nodes)
+      tree.showNodes(shouldShow)
+      shouldShow.forEach((node) => {
+        if (node.isParent) {
+          tree.expandNode(node, true)
+        }
+      })
+      const aaaa = tree.getNodes()
+      console.log('aaaa: -------------------------------------sdsds', aaaa)
+      console.log('tree: -----------========================tree', tree)
     }
   }
 
@@ -191,7 +298,7 @@ export default {
     top: 100%;
     z-index: 1000;
   }
-  .ztree  ::v-deep  .fa-refresh {
+  .ztree ::v-deep .fa {
     font: normal normal normal 14px/1 FontAwesome !important;
   }
   .dropdown a:hover {
@@ -217,5 +324,62 @@ export default {
   .treebox {
     height: 80vh;
     overflow: auto;
+  }
+
+  ::v-deep .tree-banner-icon-zone {
+    line-height: 24px;
+    position: absolute;
+    right: 0;
+  }
+
+  ::v-deep .tree-search {
+    position: relative;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 12px;
+    vertical-align: sub;
+    transition: .25s;
+    overflow: hidden;
+    .fa-search {
+      padding-top: 1px;
+    }
+  }
+
+  ::v-deep .tree-search .tree-banner-icon {
+    position: absolute;
+    top: 7px;
+    left: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  ::v-deep .tree-search.active, .tree-search.active  {
+    width: 160px;
+    background: #e0e0e0;
+  }
+
+  ::v-deep .tree-search.active:hover {
+    border-radius: 12px;
+  }
+
+  ::v-deep .tree-search input {
+    position: relative;
+    left: 19px;
+    width: 135px;
+    height: 100%;
+    background-color: transparent;
+    color: #606266;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
   }
 </style>
