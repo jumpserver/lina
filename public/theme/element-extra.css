@@ -389,6 +389,13 @@ td .el-button.el-button--mini {
   border-color: danger;
 }
 
+.el-button--danger.is-plain.is-disabled,
+.el-button--danger.is-plain.is-disabled:active,
+.el-button--danger.is-plain.is-disabled:focus,
+.el-button--danger.is-plain.is-disabled:hover {
+  color: white;
+}
+
 .el-alert .el-alert__description {
   margin: 1px 0 0;
 }
