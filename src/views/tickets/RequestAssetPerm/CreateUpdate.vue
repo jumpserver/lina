@@ -8,6 +8,7 @@ import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
 import { mapState, mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   components: {
@@ -16,7 +17,8 @@ export default {
 
   data() {
     const now = new Date()
-    const date_expired = getDaysFuture(7, now).toISOString()
+    const TicketAuthorizeDefaultTime = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
+    const date_expired = getDaysFuture(TicketAuthorizeDefaultTime, new Date()).toISOString()
     const date_start = now.toISOString()
     return {
       // 工单创建 隐藏提示信息中的跳转连接

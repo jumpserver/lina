@@ -14,6 +14,7 @@ import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 import { ApplicationCascader } from '@/views/applications/const'
 import { mapState, mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   components: {
@@ -23,7 +24,8 @@ export default {
   data() {
     const vm = this
     const now = new Date()
-    const date_expired = getDaysFuture(7, now).toISOString()
+    const TicketAuthorizeDefaultTime = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
+    const date_expired = getDaysFuture(TicketAuthorizeDefaultTime, new Date()).toISOString()
     const date_start = now.toISOString()
     let apply_category_type = []
 
