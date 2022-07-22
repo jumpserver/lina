@@ -47,11 +47,11 @@
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr, forMatAction } from '@/utils/common'
-import { STATUS_MAP } from '../../const'
-import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
-import Select2 from '@/components/FormFields/Select2'
 import IBox from '@/components/IBox'
+import Select2 from '@/components/FormFields/Select2'
+import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
+import { STATUS_MAP } from '../../const'
 export default {
   name: '',
   components: { GenericTicketDetail, IBox, Select2, PermissionFormActionField },

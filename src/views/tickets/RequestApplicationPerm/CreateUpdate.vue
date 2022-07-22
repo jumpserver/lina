@@ -13,6 +13,7 @@ import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 import { ApplicationCascader } from '@/views/applications/const'
+import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
 import { mapState, mapGetters } from 'vuex'
 import store from '@/store'
 
@@ -37,14 +38,17 @@ export default {
         apply_date_expired: date_expired,
         apply_date_start: date_start,
         org_id: '',
-        type: 'apply_application'
-
+        type: 'apply_application',
+        apply_actions: [
+          'all', 'connect', 'updownload', 'upload_file', 'download_file',
+          'clipboard_copy_paste', 'clipboard_copy', 'clipboard_paste'
+        ]
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
         [this.$t('tickets.RequestPerm'), [
           'apply_category_type', 'apply_applications', 'apply_system_users',
-          'apply_date_start', 'apply_date_expired'
+          'apply_actions', 'apply_date_start', 'apply_date_expired'
         ]]
       ],
       fieldsMeta: {
@@ -58,6 +62,11 @@ export default {
           el: {
             disabled: true
           }
+        },
+        apply_actions: {
+          label: this.$t('perms.Actions'),
+          component: PermissionFormActionField,
+          helpText: this.$t('common.actionsTips')
         },
         apply_applications: {
           type: 'assetSelect',
