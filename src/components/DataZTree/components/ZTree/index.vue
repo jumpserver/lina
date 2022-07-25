@@ -3,6 +3,23 @@
     <ul v-show="loading" class="ztree">
       {{ this.$t('common.tree.Loading') }}...
     </ul>
+    <div v-show="!loading" class="search-box">
+      <el-input
+        v-if="treeSetting.showRefresh"
+        v-model="treeSearchValue"
+        :placeholder="$t('common.Search')"
+        clearable
+        size="mini"
+        @input="treeSearchHandle"
+      />
+      <span
+        v-if="treeSetting.showRefresh"
+        class="refresh"
+        @click="refresh"
+      >
+        <i class="fa fa-refresh" />
+      </span>
+    </div>
     <div v-show="!loading" class="treebox">
       <ul :id="iZTreeID" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
@@ -46,7 +63,8 @@ export default {
       zTree: '',
       rMenu: '',
       init: false,
-      loading: false
+      loading: false,
+      treeSearchValue: ''
     }
   },
   computed: {
@@ -55,9 +73,7 @@ export default {
     }
   },
   mounted() {
-    window.treeSearch = this.treeSearch
     this.initTree()
-    // $('.treebox').css('height', window.innerHeight - 60)
   },
   beforeDestroy() {
     $.fn.zTree.destroy(this.iZTreeID)
@@ -99,12 +115,6 @@ export default {
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
         // 手动上报事件, Tree加载完成
         this.$emit('TreeInitFinish', this.zTree)
-        if (this.treeSetting.showRefresh) {
-          this.rootNodeAddDom(
-            this.zTree,
-            this.treeSetting.callback.refresh
-          )
-        }
 
         if (this.treeSetting.showMenu) {
           this.rMenu = $(`#${this.iRMenuID}`)
@@ -117,65 +127,24 @@ export default {
         vm.init = true
       })
     },
-    rootNodeAddDom: function(ztree, callback) {
-      const vm = this
-      const searchIcon = `<a class="tree-search" id="searchIcon">
-                            <i class='fa fa-search tree-banner-icon' onclick="treeSearch()"></i>
-                             <input type="text" id="searchInput" class="tree-input" />
-                          </a>`
-      const refreshIcon = " <a id='tree-refresh'><i class='fa fa-refresh'></i></a>"
-      const icons = `<span class="tree-banner-icon-zone">
-                      ${searchIcon}${refreshIcon}
-                    </span>`
-      const rootNode = ztree.getNodes()[0]
-      $('#' + rootNode.tId).css('position', 'relative')
-      let $rootNodeRef
-      if (rootNode) {
-        $rootNodeRef = $('#' + rootNode.tId + '_a')
-        $rootNodeRef.after(icons)
+    refresh() {
+      const result = this.treeSetting?.callback?.refresh()
+      this.treeSearchValue = ''
+      if (result && result.then) {
+        result.finally(() => {
+          this.initTree()
+        })
       } else {
-        $rootNodeRef = $('#' + ztree.setting.treeId)
-        $rootNodeRef.html(icons)
+        this.initTree()
       }
-      const refreshIconRef = $('#tree-refresh')
-      refreshIconRef.bind('click', function() {
-        const result = callback()
-        if (result && result.then) {
-          result.finally(() => {
-            vm.initTree()
-          })
-        } else {
-          vm.initTree()
-        }
-      })
-    },
-    refresh: function() {
-      const refreshIconRef = $('#tree-refresh')
-      refreshIconRef.click()
     },
     getCheckedNodes: function() {
       return this.zTree.getCheckedNodes(true)
     },
-    treeSearch() {
-      const searchIcon = document.getElementById(`searchIcon`)
-      const searchInput = document.getElementById(`searchInput`)
-      searchIcon.classList.toggle('active')
-      searchInput.focus()
-      searchInput.onclick = (e) => {
-        e.stopPropagation()
-      }
-      searchInput.onblur = (e) => {
-        e.stopPropagation()
-        if (!(e.target.value)) {
-          searchIcon.classList.toggle('active')
-        }
-      }
-      searchInput.oninput = _.debounce((e) => {
-        e.stopPropagation()
-        const value = e.target.value || ''
-        this.filterTree(value, this.zTree)
-      }, 450)
-    },
+    treeSearchHandle: _.debounce(function(value) {
+      const vm = this
+      vm.filterTree(value, vm.zTree)
+    }, 450),
     recurseParent(node) {
       const parentNode = node.getParentNode()
       if (parentNode && parentNode.pId) {
@@ -201,10 +170,10 @@ export default {
       return allChildren
     },
     filterTree(keyword, tree) {
-      // const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
-      // if (searchNode) {
-      //   tree.removeNode(searchNode[0])
-      // }
+      const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
+      if (searchNode) {
+        tree.removeNode(searchNode[0])
+      }
 
       const nodes = tree.transformToArray(tree.getNodes())
       if (!keyword) {
@@ -228,7 +197,7 @@ export default {
       })
 
       if (matchedNodes.length < 1) {
-        let name = '搜索'
+        let name = this.$t('common.Search')
         const assetsAmount = matchedNodes.length
         name = `${name} (${assetsAmount})`
         const newNode = { id: 'search', name: name, isParent: true, open: true }
@@ -249,16 +218,13 @@ export default {
           tree.expandNode(node, true)
         }
       })
-      const aaaa = tree.getNodes()
-      console.log('aaaa: -------------------------------------sdsds', aaaa)
-      console.log('tree: -----------========================tree', tree)
     }
   }
 
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
   div.rMenu {
     position: absolute;
     visibility: hidden;
@@ -326,60 +292,32 @@ export default {
     overflow: auto;
   }
 
-  ::v-deep .tree-banner-icon-zone {
-    line-height: 24px;
-    position: absolute;
-    right: 0;
-  }
-
-  ::v-deep .tree-search {
-    position: relative;
-    top: 1px;
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    border-radius: 12px;
-    vertical-align: sub;
-    transition: .25s;
-    overflow: hidden;
-    .fa-search {
-      padding-top: 1px;
+  .search-box {
+    display: flex;
+    height: 24px;
+    &>>> .el-input {
+      flex: 1;
+      margin-left: 4px;
     }
-  }
-
-  ::v-deep .tree-search .tree-banner-icon {
-    position: absolute;
-    top: 7px;
-    left: 6px;
-    width: 6px;
-    height: 6px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  ::v-deep .tree-search.active, .tree-search.active  {
-    width: 160px;
-    background: #e0e0e0;
-  }
-
-  ::v-deep .tree-search.active:hover {
-    border-radius: 12px;
-  }
-
-  ::v-deep .tree-search input {
-    position: relative;
-    left: 19px;
-    width: 135px;
-    height: 100%;
-    background-color: transparent;
-    color: #606266;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    outline: none;
+    &>>> .el-input__inner {
+      height: 24px;
+      line-height: 24px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    &>>> .el-input__suffix {
+      line-height: 24px;
+    }
+    .refresh {
+      cursor: pointer;
+      border-radius: 3px;
+      margin-left: 6px;
+      margin-right: 6px;
+      padding: 0 7px 0 6px;
+      line-height: 24px;
+      &:hover {
+        background: #e5e6e7;
+      }
+    }
   }
 </style>
