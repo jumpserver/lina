@@ -37,7 +37,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('perms.User'), ['users', 'user_groups']],
-        [this.$t('perms.Asset'), ['assets', 'nodes', 'system_users']],
+        [this.$t('perms.Asset'), ['assets', 'nodes', 'accounts']],
         [this.$t('common.action'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
@@ -79,18 +79,6 @@ export default {
               url: '/api/v1/assets/nodes/',
               transformOption: (item) => {
                 return { label: item.full_value, value: item.id }
-              }
-            }
-          }
-        },
-        system_users: {
-          el: {
-            value: [],
-            ajax: {
-              url: '/api/v1/assets/system-users/?protocol__in=rdp,ssh,vnc,telnet',
-              transformOption: (item) => {
-                const username = item.username || '*'
-                return { label: item.name + '(' + username + ')', value: item.id }
               }
             }
           }

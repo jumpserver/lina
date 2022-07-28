@@ -112,43 +112,6 @@ export default [
     ]
   },
   {
-    path: 'system-users',
-    component: empty,
-    redirect: '',
-    meta: {
-      permissions: ['assets.view_systemuser']
-    },
-    children: [
-      {
-        path: '',
-        name: 'SystemUserList',
-        component: () => import('@/views/assets/SystemUser/SystemUserList'),
-        meta: { title: i18n.t('route.SystemUserList') }
-      },
-      {
-        path: 'create',
-        name: 'SystemUserCreate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate'),
-        hidden: true,
-        meta: { title: i18n.t('route.SystemUserCreate') }
-      },
-      {
-        path: ':id/update',
-        name: 'SystemUserUpdate',
-        component: () => import('@/views/assets/SystemUser/SystemUserCreateUpdate'),
-        hidden: true,
-        meta: { title: i18n.t('route.SystemUserUpdate') }
-      },
-      {
-        path: ':id',
-        name: 'SystemUserDetail',
-        component: () => import('@/views/assets/SystemUser/SystemUserDetail'),
-        hidden: true,
-        meta: { title: i18n.t('route.SystemUserDetail') }
-      }
-    ]
-  },
-  {
     path: 'cmd-filters',
     component: empty,
     redirect: '',
