@@ -34,6 +34,7 @@ export default {
             'AUTH_OAUTH2_ACCESS_TOKEN_METHOD'
           ]],
           [this.$t('common.Params'), [
+            'AUTH_OAUTH2_SCOPE',
             'AUTH_OAUTH2_PROVIDER_AUTHORIZATION_ENDPOINT',
             'AUTH_OAUTH2_ACCESS_TOKEN_ENDPOINT',
             'AUTH_OAUTH2_PROVIDER_USERINFO_ENDPOINT'
