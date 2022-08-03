@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" />
 </template>
 
 <script>
@@ -7,24 +7,27 @@ import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage
 import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
-  name: 'AssetCreateUpdate',
+  name: 'HostCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
   data() {
     return {
-      initial: {},
+      loading: true,
+      platform: {},
+      initial: {
+      },
       fields: [
         [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
-        [this.$t('assets.Protocol'), ['protocols']],
+        [this.$t('assets.Protocols'), ['protocols']],
+        [this.$t('assets.Auth'), ['admin_user']],
         [this.$t('assets.Node'), ['nodes']],
-        this.$route.params.id ? null : [this.$t('assets.Account'), ['accounts']],
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: assetFieldsMeta(),
       url: '/api/v1/assets/assets/',
-      createSuccessNextRoute: { name: 'AssetDetail', query: { 'activeTab': 'Account' }},
+      createSuccessNextRoute: { name: 'AssetDetail' },
       hasDetailInMsg: false
     }
   },

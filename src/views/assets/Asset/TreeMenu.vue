@@ -169,7 +169,6 @@ export default {
       })
     },
     hideMenu() {
-      // debug('Tree: ', this.tree)
       this.tree.hideRMenu()
     },
     getSelectedNodes() {

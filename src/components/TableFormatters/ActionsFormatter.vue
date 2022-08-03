@@ -21,6 +21,8 @@ const defaultUpdateCallback = function({ row, col }) {
 
   if (typeof updateRoute === 'object') {
     route = Object.assign(route, updateRoute)
+  } else if (typeof updateRoute === 'function') {
+    route = updateRoute({ row, col })
   } else {
     route.name = updateRoute
   }
@@ -34,6 +36,8 @@ const defaultCloneCallback = function({ row, col }) {
 
   if (typeof cloneRoute === 'object') {
     route = Object.assign(route, cloneRoute)
+  } else if (typeof cloneRoute === 'function') {
+    route = cloneRoute({ row, col })
   } else {
     route.name = cloneRoute
   }

@@ -442,3 +442,12 @@ td .el-button.el-button--mini {
 .el-input-group__prepend div.el-select .el-input__inner:hover {
   color: #303133;
 }
+
+.el-input-group__append, .el-input-group__prepend {
+  color: $--color-primary
+}
+
+.el-input.is-disabled .el-input__inner {
+  color: $--color-text-primary;
+  cursor: not-allowed;
+}

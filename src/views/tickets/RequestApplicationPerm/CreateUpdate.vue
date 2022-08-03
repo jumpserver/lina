@@ -52,70 +52,85 @@ export default {
             disabled: true
           }
         },
-        apply_applications: {
-          type: 'assetSelect',
-          component: Select2,
-          label: this.$t('applications.App'),
-          el: {
-            value: [],
-            ajax: {
-              url: '',
-              transformOption: (item) => {
-                return { label: item.name, value: item.id }
+        meta: {
+          fields: [
+            'apply_category_type', 'apply_applications', 'apply_system_users',
+            'apply_date_start', 'apply_date_expired'],
+          fieldsMeta: {
+            apply_date_start: {
+              label: this.$t('common.DateStart'),
+              type: 'date-picker',
+              el: {
+                type: 'datetime'
               }
-            }
-          }
-        },
-        apply_system_users: {
-          type: 'systemUserSelect',
-          component: Select2,
-          label: this.$t('assets.SystemUser'),
-          el: {
-            value: [],
-            ajax: {
-              url: '',
-              transformOption: (item) => {
-                if (this.$route.query.type === 'k8s') {
-                  return { label: item.name, value: item.id }
+            },
+            apply_applications: {
+              type: 'assetSelect',
+              component: Select2,
+              label: this.$t('applications.App'),
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    return { label: item.name, value: item.id }
+                  }
                 }
-                const username = item.username || '*'
-                return { label: item.name + '(' + username + ')', value: item.id }
+              }
+            },
+            apply_system_users: {
+              type: 'systemUserSelect',
+              component: Select2,
+              label: this.$t('assets.SystemUser'),
+              el: {
+                value: [],
+                ajax: {
+                  url: '',
+                  transformOption: (item) => {
+                    if (this.$route.query.type === 'k8s') {
+                      return { label: item.name, value: item.id }
+                    }
+                    const username = item.username || '*'
+                    return { label: item.name + '(' + username + ')', value: item.id }
+                  }
+                }
+              }
+            },
+            apply_date_expired: {
+              label: this.$t('common.DateEnd'),
+              type: 'date-picker',
+              el: {
+                type: 'datetime'
+              }
+            },
+            apply_category_type: {
+              type: 'cascader',
+              label: this.$t('applications.appType'),
+              rules: [Required],
+              el: {
+                multiple: false,
+                options: ApplicationCascader
+              },
+              on: {
+                change: ([event], updateForm) => {
+                  this.apply_category_type = event
+                  updateForm({
+                    apply_applications: [],
+                    apply_system_users: []
+                  })
+                  const fieldsMeta = this.fieldsMeta.meta.fieldsMeta
+                  const appUrl = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
+                  fieldsMeta.apply_applications.el.ajax.url = appUrl
+
+                  let protocol = event[1]
+                  if (event[0] === 'remote_app') {
+                    protocol = 'rdp'
+                  }
+                  const sysUserUrl = `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${protocol}`
+                  fieldsMeta.apply_system_users.el.ajax.url = sysUserUrl
+                }
               }
             }
-          }
-        },
-        apply_category_type: {
-          type: 'cascader',
-          label: this.$t('applications.appType'),
-          rules: [Required],
-          el: {
-            multiple: false,
-            options: ApplicationCascader
-          },
-          on: {
-            change: ([event], updateForm) => {
-              this.apply_category_type = event
-              updateForm({
-                apply_applications: [],
-                apply_system_users: []
-              })
-              this.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
-              this.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`
-            }
-          }
-        },
-        apply_date_start: {
-          label: this.$t('common.DateStart'),
-          type: 'date-picker',
-          el: {
-            type: 'datetime'
-          }
-        },
-        apply_date_expired: {
-          label: this.$t('common.DateEnd'),
-          type: 'date-picker',
-          el: {
-            type: 'datetime'
           }
         },
         org_id: {

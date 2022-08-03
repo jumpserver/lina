@@ -30,6 +30,10 @@ export default {
         return this.$route.name?.replace('List', 'Create')
       }
     },
+    onCreate: {
+      type: Function,
+      default: null
+    },
     createInNewPage: {
       type: Boolean,
       default: false
@@ -84,7 +88,7 @@ export default {
         type: 'primary',
         has: this.hasCreate && !this.moreCreates,
         can: this.canCreate,
-        callback: this.handleCreate
+        callback: this.onCreate || this.handleCreate
       }
     ]
     if (this.moreCreates) {
@@ -95,7 +99,7 @@ export default {
         has: true,
         can: this.canCreate,
         dropdown: [],
-        callback: this.handleCreate
+        callback: this.onCreate || this.handleCreate
       }
       const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
       defaultActions.push(createCreateAction)

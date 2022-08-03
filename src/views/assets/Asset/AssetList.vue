@@ -18,6 +18,7 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
+    <PlatformDialog :visible.sync="showPlatform" />
   </div>
 </template>
 
@@ -28,18 +29,21 @@ import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
+import PlatformDialog from './PlatformDialog'
 import TreeMenu from './TreeMenu'
 
 export default {
   components: {
     GenericTreeListPage,
     AssetBulkUpdateDialog,
-    TreeMenu
+    TreeMenu,
+    PlatformDialog
   },
   data() {
     const vm = this
     return {
       treeRef: null,
+      showPlatform: false,
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -58,17 +62,14 @@ export default {
         hasTree: true,
         columns: [
           'hostname', 'ip', 'public_ip', 'admin_user_display',
-          'protocols', 'platform', 'hardware_info', 'model',
-          'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
-          'disk_info', 'disk_total', 'memory', 'os', 'os_arch',
-          'os_version', 'number', 'vendor', 'sn', 'is_active',
-          'connectivity', 'labels_display',
+          'protocols', 'category', 'type', 'platform', 'sn',
+          'is_active', 'connectivity', 'labels_display',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
           default: [
-            'hostname', 'ip', 'platform', 'protocols', 'hardware_info',
+            'hostname', 'ip', 'platform', 'category', 'type',
             'connectivity', 'actions'
           ]
         },
@@ -92,12 +93,6 @@ export default {
           ip: {
             sortable: 'custom',
             width: '140px'
-          },
-          hardware_info: {
-            showOverflowTooltip: true
-          },
-          cpu_model: {
-            showOverflowTooltip: true
           },
           sn: {
             showOverflowTooltip: true
@@ -141,6 +136,9 @@ export default {
             name: 'AssetCreate',
             query: this.$route.query
           }
+        },
+        onCreate: () => {
+          this.showPlatform = true
         },
         createInNewPage: true,
         searchConfig: {
