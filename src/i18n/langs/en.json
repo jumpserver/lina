@@ -912,6 +912,7 @@
     }
   },
   "setting": {
+    "OAuth2LogoTip": "Tip: Authentication service application icon (recommended image size: 64px*64px)",
     "EndpointListHelpMessage": "The service endpoint is the address (port) for the user to access the service. When the user connects to the asset, the service endpoint will be selected according to the endpoint rules and asset tags, and the connection will be established as the access entry to realize the distributed connection of assets.",
     "EndpointRuleListHelpMessage": "For the service endpoint selection strategy, two types are currently supported: <br>1. Specify the endpoint according to the endpoint rule (current page); <br>2. Select the endpoint through the asset tag. The tag name is fixed to endpoint, and the value is the name of the `endpoint`. <br>Two methods preferentially use label matching, because the IP segment may conflict, and the label method exists as a supplement to the rules.",
     "EnableKoKoSSHHelpText": "Enabled, connect assets to display SSH Client pull-up method",

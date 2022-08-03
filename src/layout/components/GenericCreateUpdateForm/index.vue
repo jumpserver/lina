@@ -53,6 +53,10 @@ export default {
       type: Function,
       default: null
     },
+    afterOnSubmit: {
+      type: Function,
+      default(validValues) {}
+    },
     hasReset: {
       type: Boolean,
       default: null
@@ -301,7 +305,9 @@ export default {
       handler = handler.bind(this)
       values = this.cleanFormValue(values)
       values = this.encryptFields(values)
-      return handler(values, formName, addContinue)
+      const result = handler(values, formName, addContinue)
+      this.afterOnSubmit(values)
+      return result
     },
     defaultOnSubmit(validValues, formName, addContinue) {
       this.isSubmitting = true

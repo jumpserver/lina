@@ -86,3 +86,14 @@ export function getLogo() {
     method: 'get'
   })
 }
+
+export function updateOAuth2Settings(formData) {
+  return request({
+    url: '/api/v1/settings/setting/?category=oauth2',
+    method: 'patch',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: formData
+  })
+}
