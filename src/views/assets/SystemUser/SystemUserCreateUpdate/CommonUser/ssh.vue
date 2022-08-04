@@ -93,7 +93,6 @@ export default {
   methods: {
     onGetObjectDone(obj) {
       this.fieldsMeta.private_key.el.fingerprint = obj.ssh_key_fingerprint
-      console.log(obj.fingerprint)
     }
   }
 }
