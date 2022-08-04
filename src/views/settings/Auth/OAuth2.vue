@@ -12,7 +12,7 @@ import BaseAuth from './Base'
 import { JsonEditor } from '@/components/FormFields'
 import { JsonRequired } from '@/components/DataForm/rules'
 import { UploadField } from '@/components'
-import { updateOAuth2Settings } from '@/api/settings'
+import request from '@/utils/request'
 
 export default {
   name: 'OAuth2',
@@ -22,14 +22,13 @@ export default {
   data() {
     const vm = this
     return {
-      files: {},
       settings: {
         url: '/api/v1/settings/setting/?category=oauth2',
         fields: [
           [this.$t('common.Basic'), [
             'AUTH_OAUTH2',
+            'AUTH_OAUTH2_PROVIDER',
             'AUTH_OAUTH2_LOGO_PATH',
-            'AUTH_OAUTH2_LOGO_TITLE',
             'AUTH_OAUTH2_CLIENT_ID', 'AUTH_OAUTH2_CLIENT_SECRET',
             'AUTH_OAUTH2_ACCESS_TOKEN_METHOD'
           ]],
@@ -54,7 +53,7 @@ export default {
             },
             on: {
               fileChange: ([value], updateForm) => {
-                this.files['AUTH_OAUTH2_LOGO_PATH'] = value
+                vm.updateOAuth2Logo(value)
               }
             }
           },
@@ -69,29 +68,32 @@ export default {
           }
         },
         submitMethod: () => 'patch',
-        afterOnSubmit(values) {
-          const form = new FormData()
-          if (vm.files['AUTH_OAUTH2_LOGO_PATH']) {
-            form.append('AUTH_OAUTH2_LOGO_PATH', vm.files['AUTH_OAUTH2_LOGO_PATH'])
-            updateOAuth2Settings(form).then(res => { })
-          }
-        },
         afterGetFormValue(obj) {
           obj.AUTH_OAUTH2_USER_ATTR_MAP = JSON.stringify(obj.AUTH_OAUTH2_USER_ATTR_MAP)
           return obj
         },
         cleanFormValue(data) {
+          delete data['AUTH_OAUTH2_LOGO_PATH']
           if (data['AUTH_OAUTH2_USER_ATTR_MAP']) {
             data['AUTH_OAUTH2_USER_ATTR_MAP'] = JSON.parse(data['AUTH_OAUTH2_USER_ATTR_MAP'])
           }
-          delete data['AUTH_OAUTH2_LOGO_PATH']
           return data
         }
       }
     }
   },
   methods: {
-    onConfirm() {
+    updateOAuth2Logo(file) {
+      const formData = new FormData()
+      formData.append('AUTH_OAUTH2_LOGO_PATH', file)
+      return request({
+        url: '/api/v1/settings/setting/?category=oauth2',
+        method: 'patch',
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        data: formData
+      })
     }
   }
 }
