@@ -12,6 +12,7 @@ import DialogDetailFormatter from './DialogDetailFormatter'
 import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
+import NestedObjectFormatter from './NestedObjectFormatter'
 
 export default {
   DetailFormatter,
@@ -27,7 +28,8 @@ export default {
   ArrayFormatter,
   EditableInputFormatter,
   StatusFormatter,
-  TagsFormatter
+  TagsFormatter,
+  NestedObjectFormatter
 }
 
 export {
@@ -44,5 +46,6 @@ export {
   ArrayFormatter,
   EditableInputFormatter,
   StatusFormatter,
-  TagsFormatter
+  TagsFormatter,
+  NestedObjectFormatter
 }

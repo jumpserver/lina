@@ -24,7 +24,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, TagsFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, ActionsFormatter, TagsFormatter, NestedObjectFormatter } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -61,10 +61,12 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'public_ip', 'admin_user_display',
-          'protocols', 'category', 'type', 'platform', 'sn',
-          'is_active', 'connectivity', 'labels_display',
-          'created_by', 'date_created', 'comment', 'org_name', 'actions'
+          'hostname', 'ip', 'protocols',
+          'category', 'type', 'platform',
+          'labels', 'nodes',
+          'is_active', 'connectivity',
+          'created_by', 'date_created', 'comment', 'org_name',
+          'actions'
         ],
         columnsShow: {
           min: ['hostname', 'ip', 'actions'],
@@ -82,14 +84,6 @@ export default {
             showOverflowTooltip: true,
             sortable: true
           },
-          platform: {
-            sortable: true
-          },
-          protocols: {
-            formatter: function(row) {
-              return <span> {row.protocols.toString()} </span>
-            }
-          },
           ip: {
             sortable: 'custom',
             width: '140px'
@@ -103,6 +97,9 @@ export default {
           connectivity: connectivityMeta,
           labels_display: {
             formatter: TagsFormatter
+          },
+          nodes: {
+            formatter: NestedObjectFormatter
           },
           actions: {
             formatter: ActionsFormatter,

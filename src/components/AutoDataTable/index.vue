@@ -26,7 +26,8 @@ import {
   DetailFormatter,
   DisplayFormatter,
   ActionsFormatter,
-  ChoicesFormatter
+  ChoicesFormatter,
+  NestedObjectFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
@@ -129,7 +130,7 @@ export default {
       }
       return col
     },
-    generateColumnByType(type, col) {
+    generateColumnByType(type, col, meta) {
       switch (type) {
         case 'choice':
           col.sortable = 'custom'
@@ -143,6 +144,15 @@ export default {
         case 'datetime':
           col.formatter = DateFormatter
           col.width = '160px'
+          break
+        case 'nested object':
+          col.formatter = NestedObjectFormatter
+          break
+        case 'field':
+          if (meta.child && meta.child.type === 'nested object') {
+            col.formatter = NestedObjectFormatter
+          }
+          break
       }
       return col
     },
@@ -202,7 +212,7 @@ export default {
       let col = { prop: name, label: colMeta.label }
 
       col = this.generateColumnByName(name, col)
-      col = this.generateColumnByType(colMeta.type, col)
+      col = this.generateColumnByType(colMeta.type, col, colMeta)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
