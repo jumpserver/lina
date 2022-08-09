@@ -38,11 +38,7 @@ export default {
         apply_date_expired: date_expired,
         apply_date_start: date_start,
         org_id: '',
-        type: 'apply_application',
-        apply_actions: [
-          'all', 'connect', 'updownload', 'upload_file', 'download_file',
-          'clipboard_copy_paste', 'clipboard_copy', 'clipboard_paste'
-        ]
+        type: 'apply_application'
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
@@ -66,7 +62,10 @@ export default {
         apply_actions: {
           label: this.$t('perms.Actions'),
           component: PermissionFormActionField,
-          helpText: this.$t('common.actionsTips')
+          helpText: this.$t('common.actionsTips'),
+          el: {
+            actions: []
+          }
         },
         apply_applications: {
           type: 'assetSelect',
@@ -114,6 +113,11 @@ export default {
               updateForm({
                 apply_applications: [],
                 apply_system_users: []
+              })
+              this.$axios.get(
+                `/api/v1/perms/application-permissions/applications/actions/?category=${event[0]}`,
+              ).then(res => {
+                this.fieldsMeta.apply_actions.el.actions = res
               })
               this.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
               this.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`
