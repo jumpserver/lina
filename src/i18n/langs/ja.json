@@ -933,6 +933,7 @@
     }
   },
   "setting": {
+    "OAuth2LogoTip": "ヒント: 認証サービス プロバイダー (推奨画像サイズ: 64px*64px)",
     "EndpointListHelpMessage": "サービスエンドポイントは、ユーザーがサービスにアクセスするためのアドレス（ポート）です。ユーザーがアセットに接続すると、エンドポイントルールとアセットタグに従ってサービスエンドポイントが選択され、接続がアクセスエントリとして確立されます。資産の分散接続を実現します。",
     "EndpointRuleListHelpMessage": "サービスエンドポイント選択戦略では、現在2つのタイプがサポートされています：<br> 1. エンドポイントルールに従ってエンドポイントを指定します（現在のページ）;<br>2. アセットタグを介してエンドポイントを選択します。タグ名はに固定されていますエンドポイントであり、値はエンドポイントの名前です。 <br> IPセグメントが競合する可能性があるため、2つの方法が優先的にラベル照合を使用し、ラベル方法はルールの補足として存在します。",
     "EnableKoKoSSHHelpText": "有効にすると、アセットを接続してSSHクライアントのプルアップ方式を表示します",
@@ -940,6 +941,7 @@
     "Feature": "機能",
     "AlibabaCloud": "Alibaba cloud",
     "TencentCloud": "テンセント雲",
+    "CMPP2": "CMPP v2.0",
     "Radius": "Radius",
     "VerifySignTmpl": "認証コードメールテンプレート",
     "Enable": "有効化",
@@ -997,9 +999,11 @@
     "authLdapServerUri": "LDAPアドレス",
     "authLdapUserAttrMap": "ユーザー属性マッピング",
     "authUserAttrMap": "ユーザー属性マッピング",
-    "authUserAttrMapHelpText": "マッピング関係 {idp:sp}",
-    "SAML2": "SAML2",
+    "authUserAttrMapHelpText": "左側のキーがJumpServerユーザ属性、右側の値が認証プラットフォームユーザ属性",
+    "OAuth2": "OAuth2",
     "enableSAML2Auth": "SAML2認証をオンにする",
+    "enableOAuth2Auth": "OAuth2認証をオンにする",
+    "tokenHTTPMethod": "Token 取得方法",
     "SAML2Auth": "SAML2認定",
     "authSAML2Xml": "IDPメタデータXML",
     "authSAML2MetadataUrl": "IDPメタデータURL",
@@ -1126,13 +1130,13 @@
     "SMS": "SMS設定",
     "feiShuTest": "テスト",
     "setting": "設定",
-    "SMSProvider": "メールサービス業者",
     "SystemTools": "システムツール",
     "basicTools": "基本的なツール",
     "destinationIP": "宛先アドレス",
     "testPort": "テストポート",
     "testTools": "テスト",
     "testHelpText": "テストの宛先アドレスを入力してください"
+    "SMSProvider": "メールサービス業者 / プロトコル"
   },
   "tickets": {
     "OneAssigneeType": "一次受付者タイプ",
@@ -1448,6 +1452,7 @@
       "OpenStack": "OpenStack",
       "GCP": "Googleクラウド",
       "FC": "Fusion Compute",
+      "LAN": "ローカルエリアネットワーク",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS (国際)",
       "HuaweiCloud": "ファーウェイ雲",

@@ -935,6 +935,7 @@
     }
   },
   "setting": {
+    "OAuth2LogoTip": "提示：认证服务提供商（建议图片大小为: 64px*64px）",
     "EndpointListHelpMessage": "服务端点是用户访问服务的地址(端口)，当用户在连接资产时，会根据端点规则和资产标签选择服务端点，作为访问入口建立连接，实现分布式连接资产",
     "EndpointRuleListHelpMessage": "对于服务端点选择策略，目前支持两种：<br>1、根据端点规则指定端点(当前页面)；<br>2、通过资产标签选择端点，标签名固定是 endpoint，值是端点的名称。<br>两种方式优先使用标签匹配，因为 IP 段可能冲突，标签方式是作为规则的补充存在的。",
     "EnableKoKoSSHHelpText": "开启时连接资产会显示 SSH Client 拉起方式",
@@ -942,6 +943,7 @@
     "Feature": "功能",
     "AlibabaCloud": "阿里云",
     "TencentCloud": "腾讯云",
+    "CMPP2": "CMPP v2.0",
     "Radius": "Radius",
     "VerifySignTmpl": "验证码短信模板",
     "Enable": "启用",
@@ -999,9 +1001,10 @@
     "authLdapServerUri": "LDAP地址",
     "authLdapUserAttrMap": "用户属性映射",
     "authUserAttrMap": "用户属性映射",
-    "authUserAttrMapHelpText": "映射关系 {idp：sp}",
-    "SAML2": "SAML2",
-    "enableSAML2Auth": "开启 SAML2 认证",
+    "authUserAttrMapHelpText": "左侧的键为 JumpServer 用户属性，右侧的值为认证平台用户属性",
+    "OAuth2": "OAuth2",
+    "enableOAuth2Auth": "开启 OAuth2 认证",
+    "tokenHTTPMethod": "Token 获取方法",
     "SAML2Auth": "SAML2 认证",
     "authSAML2Xml": "IDP metadata XML",
     "authSAML2MetadataUrl": "IDP metadata URL",
@@ -1135,6 +1138,7 @@
     "testPort": "端口",
     "testTools": "测试",
     "testHelpText": "请输入目的地址进行测试"
+    "SMSProvider": "短信服务商 / 协议"
   },
   "tickets": {
     "OneAssigneeType": "一级受理人类型",
@@ -1450,6 +1454,7 @@
       "OpenStack": "OpenStack",
       "GCP": "谷歌云",
       "FC": "Fusion Compute",
+      "LAN": "局域网",
       "AWS_China": "AWS(中国)",
       "AWS_Int": "AWS(国际)",
       "HuaweiCloud": "华为云",

@@ -24,7 +24,7 @@ export default {
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
-              `/api/v1/settings/alibaba/testing/`,
+              `/api/v1/settings/sms/alibaba/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
