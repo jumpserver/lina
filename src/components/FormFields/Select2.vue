@@ -2,8 +2,8 @@
   <el-select
     ref="select"
     v-model="iValue"
-    v-loading="!initialized"
     v-loadmore="loadMore"
+    v-loading="!initialized"
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
@@ -78,7 +78,7 @@ export default {
     },
     // 初始化值，也就是选中的值
     value: {
-      type: [Array, String, Number, Boolean],
+      type: [Array, String, Number, Boolean, Object],
       default() {
         return this.multiple ? [] : ''
       }
@@ -88,6 +88,10 @@ export default {
       default: () => []
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    valueIsObj: {
       type: Boolean,
       default: false
     }
@@ -137,7 +141,16 @@ export default {
         if (noValue && !this.initialized) {
           return
         }
-        this.$emit('input', val)
+        let value = val
+        if (this.valueIsObj) {
+          if (Array.isArray(val)) {
+            value = val.map((v) => ({ pk: v }))
+          } else {
+            value = { pk: val }
+          }
+        }
+        this.$log.debug('set iValue', value)
+        this.$emit('input', value)
       },
       get() {
         return this.value
@@ -197,9 +210,6 @@ export default {
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
-    },
-    value(iNew) {
-      this.iValue = iNew
     }
   },
   async mounted() {
@@ -325,7 +335,13 @@ export default {
       })
     },
     getSelectedOptions() {
-      const values = this.iValue
+      let values = this.iValue
+      if (!values) {
+        return this.multiple ? [] : ''
+      }
+      if (!this.multiple) {
+        values = [values]
+      }
       return this.iOptions.filter((v) => {
         return values.indexOf(v.value) !== -1
       })

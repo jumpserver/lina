@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { assetFieldsMeta } from '@/views/assets/const'
+import { assetFieldsMeta } from '../const'
 
 export default {
   name: 'HostCreateUpdate',
@@ -15,17 +15,16 @@ export default {
     return {
       loading: true,
       platform: {},
-      initial: {
-      },
+      initial: {},
       fields: [
-        [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'public_ip', 'domain']],
+        [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'domain']],
         [this.$t('assets.Protocols'), ['protocols']],
-        [this.$t('assets.Auth'), ['admin_user']],
         [this.$t('assets.Node'), ['nodes']],
+        this.$route.params.id ? null : [this.$t('assets.Account'), ['accounts']],
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
-      fieldsMeta: assetFieldsMeta(),
+      fieldsMeta: assetFieldsMeta(this),
       url: '/api/v1/assets/assets/',
       createSuccessNextRoute: { name: 'AssetDetail' },
       hasDetailInMsg: false
@@ -52,6 +51,7 @@ export default {
         admin_user: this.platform['admin_user_default']
       }
       const limits = this.platform['type_limits']
+      console.log('Fields meta: ', this.fieldsMeta)
       this.fieldsMeta.protocols.el.choices = limits['protocols_limit']
       this.initial = initial
       this.loading = false

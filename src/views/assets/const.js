@@ -1,45 +1,25 @@
 import i18n from '@/i18n/i18n'
-import { groupedDropdownToCascader } from '@/utils/common'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
+import AssetAccounts from '@/components/FormFields/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 
-export const AssetProtocols = [
-  {
-    title: 'SSH',
-    name: 'SSH',
-    type: 'primary',
-    group: i18n.t('assets.HostProtocol'),
-    has: true
-  },
-  {
-    title: 'RDP',
-    name: 'RDP',
-    type: 'primary',
-    has: true
-  },
-  {
-    title: 'VNC',
-    name: 'VNC',
-    type: 'primary',
-    has: true
-  },
-  {
-    title: 'Telnet',
-    name: 'Telnet',
-    type: 'primary',
-    has: true
-  }
-]
-
-export const AssetCascader = groupedDropdownToCascader(AssetProtocols)
-
-export const assetFieldsMeta = () => {
+export const assetFieldsMeta = (vm) => {
   return {
+    ip: {
+      label: i18n.t('assets.ipDomain')
+    },
     protocols: {
       component: ProtocolSelector,
-      el: {
-        choices: []
-      }
+      on: {
+        input: ([value], updateForm) => {
+          console.log('protocls: ', value)
+          console.log('this is: ', this)
+          vm.fieldsMeta.accounts.el.protocols = value.map(item => {
+            return item.split('/')[0]
+          })
+        }
+      },
+      el: {}
     },
     platform: {
       el: {
@@ -63,16 +43,12 @@ export const assetFieldsMeta = () => {
         }
       }
     },
-    admin_user: {
+    accounts: {
+      component: AssetAccounts,
+      label: '',
       el: {
-        multiple: false,
-        ajax: {
-          url: '/api/v1/assets/system-users/?type=admin',
-          transformOption: (item) => {
-            const username = item.username || '*'
-            return { label: item.name + '(' + username + ')', value: item.id }
-          }
-        }
+        protocols: [],
+        default: []
       }
     },
     nodes: {
