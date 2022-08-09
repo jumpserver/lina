@@ -33,7 +33,12 @@
             />
           </el-form-item>
           <el-form-item :label="$t('assets.Action')" required>
-            <PermissionFormActionField v-model="requestForm.actions" :value="requestForm.actions" :actions="actions" style="width: 30% !important" />
+            <PermissionFormActionField
+              v-model="requestForm.actions"
+              :value="requestForm.actions"
+              :actions="actions"
+              style="width: 30% !important"
+            />
           </el-form-item>
         </el-form>
       </template>

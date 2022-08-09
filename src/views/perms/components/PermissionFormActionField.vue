@@ -78,7 +78,6 @@ export default {
   },
   computed: {
     choicesIDs() {
-      console.log('dynamicActions----', this.actions)
       if (this.actions) {
         return this.actions
       }
