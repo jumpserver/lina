@@ -1130,6 +1130,12 @@
     "SMS": "SMS設定",
     "feiShuTest": "テスト",
     "setting": "設定",
+    "SystemTools": "システムツール",
+    "basicTools": "基本的なツール",
+    "destinationIP": "宛先アドレス",
+    "testPort": "テストポート",
+    "testTools": "テスト",
+    "testHelpText": "テストの宛先アドレスを入力してください"
     "SMSProvider": "メールサービス業者 / プロトコル"
   },
   "tickets": {

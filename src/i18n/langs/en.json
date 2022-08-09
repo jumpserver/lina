@@ -1101,7 +1101,13 @@
     "weComTest": "Test",
     "FeiShu": "FeiShu",
     "feiShuTest": "Test",
-    "setting": "Setting"
+    "setting": "Setting",
+    "SystemTools": "System Tools",
+    "basicTools": "Basic Tools",
+    "destinationIP": "Destination IP",
+    "testPort": "Test Port",
+    "testTools": "Test",
+    "testHelpText": "Please enter the destination address for testing"
   },
   "tickets": {
     "PermissionName": "Permission name",

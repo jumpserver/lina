@@ -1131,6 +1131,13 @@
     "SMS": "短信设置",
     "feiShuTest": "测试",
     "setting": "设置",
+    "SMSProvider": "短信服务商",
+    "SystemTools": "系统工具",
+    "basicTools": "基本工具",
+    "destinationIP": "目的地址",
+    "testPort": "端口",
+    "testTools": "测试",
+    "testHelpText": "请输入目的地址进行测试"
     "SMSProvider": "短信服务商 / 协议"
   },
   "tickets": {

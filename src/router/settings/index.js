@@ -296,6 +296,16 @@ export default {
       }
     },
     {
+      path: '/settings/tools',
+      name: 'Tools',
+      component: () => import('@/views/settings/Tools'),
+      meta: {
+        title: i18n.t('setting.SystemTools'),
+        icon: 'wrench',
+        permissions: ['settings.view_setting']
+      }
+    },
+    {
       path: '/settings/license',
       name: 'License',
       component: () => import('@/views/settings/License'),
