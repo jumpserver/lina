@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Select2 from '@/components/FormFields/Select2'
+import NestedObjectSelect2 from '@/components/FormFields/NestedObjectSelect2'
 import Swicher from '@/components/FormFields/Swicher'
 import rules from '@/components/DataForm/rules'
 import { assignIfNot } from '@/utils/common'
@@ -34,7 +35,7 @@ export class FormFieldGenerator {
           field.el.clearable = false
         }
         if (fieldRemoteMeta.child && fieldRemoteMeta.child.type === 'nested object') {
-          field.el.valueIsObj = true
+          field.component = NestedObjectSelect2
         }
         break
       case 'string':
@@ -52,9 +53,7 @@ export class FormFieldGenerator {
         field.component = Swicher
         break
       case 'nested object':
-        field.component = Select2
-        field.el.valueIsObj = true
-        Vue.$log.debug('All fields in generate: ', field.el.allFields)
+        field.component = NestedObjectSelect2
         break
       default:
         type = 'input'

@@ -2,8 +2,8 @@
   <el-select
     ref="select"
     v-model="iValue"
-    v-loadmore="loadMore"
     v-loading="!initialized"
+    v-loadmore="loadMore"
     :options="iOptions"
     :remote="remote"
     :remote-method="filterOptions"
@@ -78,7 +78,7 @@ export default {
     },
     // 初始化值，也就是选中的值
     value: {
-      type: [Array, String, Number, Boolean, Object],
+      type: [Array, String, Number, Boolean],
       default() {
         return this.multiple ? [] : ''
       }
@@ -88,10 +88,6 @@ export default {
       default: () => []
     },
     disabled: {
-      type: Boolean,
-      default: false
-    },
-    valueIsObj: {
       type: Boolean,
       default: false
     }
@@ -141,14 +137,8 @@ export default {
         if (noValue && !this.initialized) {
           return
         }
-        let value = val
-        if (this.valueIsObj) {
-          if (!this.multiple) { value = [value] }
-          value = value.map((v) => (typeof v === 'object' ? v : { pk: v }))
-          if (!this.multiple) { value = value[0] }
-        }
-        this.$log.debug('set iValue', value)
-        this.$emit('input', value)
+        console.log('select2 set value: ', val)
+        this.$emit('input', val)
       },
       get() {
         return this.value
@@ -203,6 +193,10 @@ export default {
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
+    },
+    value(iNew) {
+      console.log('watch Set val: ', iNew)
+      // this.iValue = iNew
     }
   },
   async mounted() {
@@ -322,17 +316,9 @@ export default {
     addOption(option) {
       this.iOptions.push(option)
     },
-    getOptionsByValues(values) {
-      return this.iOptions.filter((v) => {
-        return values.indexOf(v.value) !== -1
-      })
-    },
     getSelectedOptions() {
       let values = this.iValue
-      if (!values) {
-        return this.multiple ? [] : ''
-      }
-      if (!this.multiple) {
+      if (!Array.isArray(values)) {
         values = [values]
       }
       return this.iOptions.filter((v) => {
@@ -347,7 +333,7 @@ export default {
     },
     onChange(values) {
       const options = this.getSelectedOptions()
-      this.$log.debug('Current select options: ', options)
+      this.$log.debug('Current select options: ', options, 'Val: ', this.value)
       this.$emit('changeOptions', options)
       this.$emit('change', options)
     },
@@ -363,11 +349,11 @@ export default {
 </script>
 
 <style scoped>
-  .select2 {
-    width: 100%;
-  }
-  .select2 >>> .el-tag.el-tag--info {
-    height: auto;
-    white-space: normal;
-  }
+.select2 {
+  width: 100%;
+}
+.select2 >>> .el-tag.el-tag--info {
+  height: auto;
+  white-space: normal;
+}
 </style>

@@ -10,9 +10,11 @@ import WeekCronSelect from './WeekCronSelect'
 import UpdateToken from './UpdateToken'
 import JsonEditor from './JsonEditor'
 import Text from './Text'
+import NestedObjectSelect2 from './NestedObjectSelect2'
 
 export default {
   DatetimeRangePicker,
+  NestedObjectSelect2,
   Link,
   PasswordInput,
   Select2,
@@ -28,6 +30,7 @@ export default {
 
 export {
   DatetimeRangePicker,
+  NestedObjectSelect2,
   Link,
   PasswordInput,
   Select2,

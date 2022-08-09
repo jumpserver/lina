@@ -15,7 +15,7 @@ export default {
     return {
       loading: true,
       platform: {},
-      initial: {},
+      initial: { labels: [] },
       fields: [
         [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'domain']],
         [this.$t('assets.Protocols'), ['protocols']],
