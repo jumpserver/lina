@@ -52,6 +52,8 @@ export default {
         showAssets: false,
         showMenu: false,
         showRefresh: true,
+        showSearch: false,
+        customRootNode: false,
         treeUrl: '',
         check: {
           enable: true
