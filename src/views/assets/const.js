@@ -12,8 +12,6 @@ export const assetFieldsMeta = (vm) => {
       component: ProtocolSelector,
       on: {
         input: ([value], updateForm) => {
-          console.log('protocls: ', value)
-          console.log('this is: ', this)
           vm.fieldsMeta.accounts.el.protocols = value.map(item => {
             return item.split('/')[0]
           })

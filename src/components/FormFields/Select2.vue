@@ -143,11 +143,9 @@ export default {
         }
         let value = val
         if (this.valueIsObj) {
-          if (Array.isArray(val)) {
-            value = val.map((v) => ({ pk: v }))
-          } else {
-            value = { pk: val }
-          }
+          if (!this.multiple) { value = [value] }
+          value = value.map((v) => (typeof v === 'object' ? v : { pk: v }))
+          if (!this.multiple) { value = value[0] }
         }
         this.$log.debug('set iValue', value)
         this.$emit('input', value)
@@ -202,11 +200,6 @@ export default {
     }
   },
   watch: {
-    // url(newValue, oldValue) {
-    //   this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
-    //   this.iAjax.url = newValue
-    //   this.refresh()
-    // },
     iAjax(newValue, oldValue) {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()

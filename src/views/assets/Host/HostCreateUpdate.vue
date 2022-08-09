@@ -51,7 +51,6 @@ export default {
         admin_user: this.platform['admin_user_default']
       }
       const limits = this.platform['type_limits']
-      console.log('Fields meta: ', this.fieldsMeta)
       this.fieldsMeta.protocols.el.choices = limits['protocols_limit']
       this.initial = initial
       this.loading = false
