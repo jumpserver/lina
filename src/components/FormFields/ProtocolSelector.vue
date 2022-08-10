@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, index) in items" :key="index" style="display: flex;margin-top: 8px;">
+    <div v-for="(item, index) in items" :key="item.name" style="display: flex;margin-top: 8px;">
       <el-input v-model="item.port" class="input-with-select" v-bind="$attrs">
         <el-select slot="prepend" v-model="item.name" @change="handleProtocolChange($event, item)">
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
@@ -42,7 +42,7 @@ export default {
     },
     choices: {
       type: Array,
-      default: () => []
+      default: () => ([])
     }
   },
   data() {
@@ -52,51 +52,33 @@ export default {
     }
   },
   computed: {
-    protocols() {
-      return this.choices.map(item => {
-        const proto = item.split('/')
-        return { name: proto[0], port: proto[1] }
-      })
-    },
-    values() {
-      return this.items.map(item => {
-        return `${item.name}/${item.port}`
-      })
-    },
-    itemsMap() {
-      const mapper = {}
-      for (const item of this.items) {
-        mapper[item.name] = item
-      }
-      return mapper
+    selectedProtocolNames() {
+      return this.items.map(item => item.name)
     },
     remainProtocols() {
-      return this.protocols.filter(proto => {
-        return !this.itemsMap[proto.name]
+      return this.choices.filter(proto => {
+        return this.selectedProtocolNames.indexOf(proto.name) === -1
       })
     }
   },
   watch: {
-    values: {
+    choices: {
+      handler(value) {
+        this.setDefaultItems(value)
+      }
+    },
+    items: {
       handler(value) {
         this.$emit('input', value)
       },
       immediate: true,
       deep: true
-    },
-    choices: {
-      handler(value) {
-        this.setDefaultItems()
-      }
     }
   },
   mounted() {
-    this.setDefaultItems()
+    this.setDefaultItems(this.choices)
   },
   methods: {
-    onInput(val) {
-      this.$emit('input', 'my-input: ' + val)
-    },
     handleDelete(index) {
       this.items = this.items.filter((value, i) => {
         return i !== index
@@ -110,20 +92,14 @@ export default {
       item.name = selected.name
       item.port = selected.port
     },
-    setDefaultItems() {
-      let items = []
-      if (this.value.length !== 0) {
-        items = this.value.map(item => {
-          const proto = item.split('/')
-          return { name: proto[0], port: proto[1] }
-        })
-        const protocolsNames = this.protocols.map(item => item.name)
-        items = items.filter(item => protocolsNames.indexOf(item.name) > -1)
+    setDefaultItems(choices) {
+      if (!this.value) {
+        if (choices.length !== 0) {
+          this.items = [choices[0]]
+        }
+      } else {
+        this.items = [...this.value]
       }
-      if (items.length === 0) {
-        items.push({ ...this.protocols[0] })
-      }
-      this.items = items
     }
   }
 }

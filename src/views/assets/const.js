@@ -10,14 +10,10 @@ export const assetFieldsMeta = (vm) => {
     },
     protocols: {
       component: ProtocolSelector,
-      on: {
-        input: ([value], updateForm) => {
-          vm.fieldsMeta.accounts.el.protocols = value.map(item => {
-            return item.split('/')[0]
-          })
-        }
-      },
-      el: {}
+      on: {},
+      el: {
+        choices: []
+      }
     },
     platform: {
       el: {

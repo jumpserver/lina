@@ -25,7 +25,9 @@ export default {
       initial: {
         comment: 'Hello world',
         charset: 'utf8',
-        category_type: ['host', 'linux']
+        category_type: ['host', 'linux'],
+        domain_enabled: false,
+        protocols_enabled: false
       },
       fields: [
         [this.$t('common.Basic'), [
@@ -37,8 +39,11 @@ export default {
         [this.$t('assets.Domain'), [
           'domain_enabled', 'domain_default'
         ]],
-        [this.$t('assets.Auth'), [
-          'admin_user_enabled', 'admin_user_default'
+        [this.$t('assets.Account'), [
+          'su_enabled', 'su_method',
+          'verify_account_enabled', 'verify_account_method',
+          'create_account_enabled', 'create_account_method',
+          'change_password_enabled', 'change_password_method'
         ]],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -89,30 +94,27 @@ export default {
           ],
           el: {
             multiple: false,
-            options: this.$store.state.assets.assetCategoriesCascader
+            options: []
           },
           on: {
-            change: ([event], formValue) => {
+            change: ([event], updateForm) => {
               const category = event[0]
               const type = event[1]
-              this.setLimits(category, type)
+              this.setLimits(category, type, updateForm)
             }
-          }
-        },
-        admin_user_default: {
-          ...assetMeta.admin_user,
-          hidden: (formValue) => {
-            return !formValue['admin_user_enabled']
           }
         },
         protocols_enabled: {
           el: {
-            disabled: false
-          }
+            disabled: false,
+            value: false
+          },
+          value: false
         },
         protocols_default: {
           ...assetMeta.protocols,
           hidden: (formValue) => {
+            console.log('formValue', formValue)
             return !formValue['protocols_enabled']
           }
         },
@@ -144,7 +146,10 @@ export default {
     }
   },
   mounted() {
-    this.setCategoryOnCreate()
+    this.$store.dispatch('assets/getAssetCategories').then((state) => {
+      this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
+      this.setCategoryOnCreate()
+    })
   },
   methods: {
     setCategoryOnCreate() {
@@ -154,22 +159,22 @@ export default {
         return
       }
     },
-    toOption(choice) {
-      return {
-        label: choice['display_name'],
-        value: choice['value']
-      }
-    },
-    async setLimits(category, type) {
-      const url = `/api/v1/assets/platforms/type-limits/?category=${category}&type=${type}`
-      const limits = await this.$axios.get(url)
-      const hasDomain = limits['has_domain']
-      const protocolLimits = limits['protocols_limit']
+    async setLimits(category, type, updateForm) {
+      const url = `/api/v1/assets/platforms/type-constraints/?category=${category}&type=${type}`
+      const constraints = await this.$axios.get(url)
+      const hasDomain = constraints['has_domain']
       this.fieldsMeta.domain_enabled.el.disabled = !hasDomain
-      this.fieldsMeta.domain_enabled.value = !!hasDomain
 
-      this.fieldsMeta.protocols_enabled.el.disabled = protocolLimits.length === 0
-      this.fieldsMeta.protocols_default.el.choices = protocolLimits
+      const protocols = constraints['protocols'] || []
+      this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
+      this.fieldsMeta.protocols_default.el.choices = protocols
+
+      if (updateForm) {
+        updateForm({
+          protocols_enabled: !!protocols.length,
+          domain_enabled: hasDomain
+        })
+      }
     }
   }
 }

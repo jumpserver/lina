@@ -46,11 +46,14 @@ const mutations = {
 const actions = {
   getAssetCategories({ commit, dispatch, state }) {
     return new Promise(resolve => {
+      if (state.assetCategories.length > 0) {
+        resolve(state)
+      }
       apiGetCategoryTypes().then(data => {
         commit('SET_CATEGORIES', data)
         commit('SET_CATEGORIES_DROPDOWN', data)
-        console.log('Set done')
-        resolve(true)
+        console.log('Get category done: ', state.assetCategories)
+        resolve(state)
       })
     })
   }
