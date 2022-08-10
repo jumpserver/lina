@@ -39,10 +39,9 @@ export default {
         showDelete: true,
         showUpdate: true,
         showSearch: true,
-        // 自定义根节点
-        customRootNode: false,
-        // 自定义根节点名称
-        customRootNodeName: this.$t('assets.Asset'),
+        // 自定义header
+        customTreeHeader: true,
+        customTreeHeaderName: this.$t('assets.Asset'),
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
@@ -85,9 +84,6 @@ export default {
     rMenu() {
       return this.$refs.dataztree.rMenu
     }
-  },
-  created() {
-    this.defaultSetting.customRootNode = this.currentOrg.is_root
   },
   beforeDestroy() {
     $('body').unbind('mousedown')

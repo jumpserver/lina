@@ -53,7 +53,7 @@ export default {
         showMenu: false,
         showRefresh: true,
         showSearch: false,
-        customRootNode: false,
+        customTreeHeader: false,
         treeUrl: '',
         check: {
           enable: true
