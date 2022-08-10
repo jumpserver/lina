@@ -1135,7 +1135,7 @@
     "destinationIP": "宛先アドレス",
     "testPort": "テストポート",
     "testTools": "テスト",
-    "testHelpText": "テストの宛先アドレスを入力してください"
+    "testHelpText": "テストの宛先アドレスを入力してください",
     "SMSProvider": "メールサービス業者 / プロトコル"
   },
   "tickets": {
