@@ -1,24 +1,45 @@
 <template>
   <div>
-    <ul v-show="loading" class="ztree">
-      {{ this.$t('common.tree.Loading') }}...
-    </ul>
-    <div v-show="!loading">
-      <ul
-        v-if="treeSetting.customRootNode"
-        id="myAssets"
-        class="ztree"
-      >
-        <ul :id="iZTreeID" class="ztree">
-          {{ this.$t('common.tree.Loading') }}...
-        </ul>
-      </ul>
-      <ul v-else :id="iZTreeID" class="ztree">
+    <div
+      v-if="treeSetting.customRootNode"
+      class="tree-header"
+    >
+      <div class="header">
+        <span class="title">{{ treeSetting.customRootNodeName }}</span>
+        <span class="tree-banner-icon-zone">
+          <a id="searchIcon" class="tree-search special">
+            <i
+              class="fa fa-search tree-banner-icon"
+              @click.stop="treeSearch"
+            />
+            <input
+              id="searchInput"
+              v-model="treeSearchValue"
+              type="text"
+              class="tree-input"
+            >
+          </a>
+          <i
+            class="fa fa-refresh tree-banner-icon"
+            style="margin-right: 2px;"
+            @click.stop="refresh"
+          />
+        </span>
+      </div>
+      <ul v-show="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
-      <div v-if="treeSetting.treeUrl===''">
-        {{ this.$t('common.tree.Empty') }}<a id="tree-refresh"><i class="fa fa-refresh" /></a>
-      </div>
+      <ul v-show="!loading" :id="iZTreeID" class="ztree" />
+    </div>
+    <div v-else>
+      <ul v-show="loading" class="ztree">
+        {{ this.$t('common.tree.Loading') }}...
+      </ul>
+      <ul v-show="!loading" :id="iZTreeID" class="ztree" />
+    </div>
+    <div v-if="treeSetting.treeUrl===''">
+      {{ this.$t('common.tree.Empty') }}
+      <a id="tree-refresh"><i class="fa fa-refresh" /></a>
     </div>
     <div :id="iRMenuID" class="rMenu">
       <ul class="dropdown-menu menu-actions">
@@ -55,7 +76,8 @@ export default {
       zTree: '',
       rMenu: '',
       init: false,
-      loading: false
+      loading: false,
+      treeSearchValue: ''
     }
   },
   computed: {
@@ -104,8 +126,10 @@ export default {
           vm.zTree.destroy()
         }
 
-        this.zTree = this.initHasRootNode(res)
-        this.rootNodeAddDom(this.zTree)
+        this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
+        if (!this.treeSetting.customRootNode) {
+          this.rootNodeAddDom(this.zTree)
+        }
         // 手动上报事件, Tree加载完成
         this.$emit('TreeInitFinish', this.zTree)
 
@@ -128,36 +152,15 @@ export default {
                           </a>`
       const refreshIcon = "<a id='tree-refresh' onclick='refresh()'><i class='fa fa-refresh'></i></a>"
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
-      const icons = `<span class="tree-banner-icon-zone">${treeActions}</span>`
+      const icons = `<span class="">${treeActions}</span>`
       const rootNode = ztree.getNodes()[0]
-      $('#' + rootNode.tId).css('position', 'relative')
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
         $rootNodeRef.after(icons)
       }
     },
-    initHasRootNode(res) {
-      let myAssetsTree = null
-      const myAssetsNodes = [
-        {
-          name: this.setting.customRootNodeName,
-          id: 'myAssets',
-          isParent: true,
-          title: 'My assets',
-          children: [],
-          open: true
-        }
-      ]
-      const _assetTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
-      if (this.treeSetting.customRootNode) {
-        myAssetsNodes[0].children = _assetTree.getNodes()
-        myAssetsTree = $.fn.zTree.init($('#myAssets'), this.treeSetting, myAssetsNodes)
-      } else {
-        myAssetsTree = _assetTree
-      }
-      return myAssetsTree
-    },
     refresh() {
+      this.treeSearchValue = ''
       const result = this.treeSetting?.callback?.refresh()
       if (result && result.then) {
         result.finally(() => {
@@ -184,8 +187,8 @@ export default {
       searchInput.oninput = _.debounce((e) => {
         e.stopPropagation()
         const value = e.target.value || ''
-        this.filterTree(value, this.zTree)
-      }, 450)
+        this.filterAssetsServer(value)
+      }, 700)
     },
     getCheckedNodes: function() {
       return this.zTree.getCheckedNodes(true)
@@ -214,11 +217,21 @@ export default {
       })
       return allChildren
     },
+    groupBy(array, f) {
+      const groups = {}
+      array.forEach(function(o) {
+        const group = JSON.stringify(f(o))
+        groups[group] = groups[group] || []
+        groups[group].push(o)
+      })
+      return Object.keys(groups).map(function(group) {
+        return groups[group]
+      })
+    },
     filterTree(keyword, tree) {
       const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
       if (searchNode) tree.removeNode(searchNode[0])
       const nodes = tree.transformToArray(tree.getNodes())
-      nodes.shift()
       if (!keyword) {
         tree.showNodes(nodes)
         return
@@ -267,6 +280,43 @@ export default {
           tree.expandNode(node, true)
         }
       }
+    },
+    filterAssetsServer(keyword) {
+      if (!this.zTree) return
+      let searchNode = this.zTree.getNodesByFilter((node) => node.id === 'search')
+      if (searchNode) {
+        this.zTree.removeChildNodes(searchNode[0])
+        this.zTree.removeNode(searchNode[0])
+      }
+      const treeNodes = this.zTree.getNodes()
+      if (!keyword) {
+        if (treeNodes.length !== 0) {
+          this.zTree.showNodes(treeNodes)
+        }
+        return
+      }
+      if (treeNodes.length !== 0) {
+        this.zTree.hideNodes(treeNodes)
+      }
+
+      const searchUrl = `/api/v1/assets/nodes/children/tree/?search=${keyword}&all=all`
+      this.$axios.get(searchUrl).then(nodes => {
+        let name = this.$t('common.Search')
+        const assetsAmount = nodes.length
+        name = `${name} (${assetsAmount})`
+        const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
+        searchNode = this.zTree.addNodes(null, newNode)[0]
+        searchNode.zAsync = true
+        const nodesGroupByOrg = this.groupBy(nodes, (node) => {
+          return node.meta.data.org_name
+        })
+
+        for (const item of nodesGroupByOrg) {
+          this.zTree.addNodes(searchNode, item)
+        }
+        searchNode.open = true
+      })
+      return
     }
   }
 
@@ -344,9 +394,10 @@ export default {
     margin-left: 3px;
   }
   ::v-deep .tree-banner-icon-zone {
-    line-height: 24px;
     position: absolute;
-    right: 0;
+    right: 7px;
+    height: 30px;
+    overflow: hidden;
     .fa {
       color: #838385!important;;
       &:hover {
@@ -357,7 +408,7 @@ export default {
 
   ::v-deep .tree-search {
     position: relative;
-    top: 1px;
+    top: -2px;
     width: 20px;
     height: 20px;
     display: inline-block;
@@ -365,6 +416,9 @@ export default {
     vertical-align: sub;
     transition: .25s;
     overflow: hidden;
+    .fa {
+      width: 13px!important;
+    }
     .fa-search {
       padding-top: 1px;
     }
@@ -372,6 +426,7 @@ export default {
 
   ::v-deep .tree-search .tree-banner-icon {
     position: absolute;
+    top: 1px;
     left: 6px;
     width: 6px;
     height: 6px;
@@ -385,9 +440,9 @@ export default {
     cursor: pointer;
   }
 
-  ::v-deep .tree-search.active, .tree-search.active  {
+  ::v-deep .tree-search.active  {
     width: 160px;
-    background-color: #e0e0e0!important;
+    background-color: #ffffff!important;
   }
 
   ::v-deep .tree-search.active:hover {
@@ -399,12 +454,36 @@ export default {
     left: 20px;
     width: 133px;
     height: 100%;
-    background-color: #e0e0e0!important;
+    background-color: #ffffff!important;
     color: #606266;
     display: flex;
     justify-content: center;
     align-items: center;
     border: none;
     outline: none;
+  }
+  .tree-header {
+    position: relative;
+    .header {
+      height: 30px;
+      line-height: 30px;
+      border-bottom: 1px solid #e0e0e0;
+      border-radius: 3px;
+      padding: 0 5px;
+      box-sizing: border-box;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: #D7D8DC;
+      .rotate {
+        transition: all .1.8s;
+        transform: rotate(-90deg);
+      }
+      .fa-caret-down {
+        font-size: 16px;
+      }
+      .special {
+        top: 1px!important;
+      }
+    }
   }
 </style>

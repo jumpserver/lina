@@ -40,7 +40,7 @@ export default {
         showUpdate: true,
         showSearch: true,
         // 自定义根节点
-        customRootNode: false,
+        customRootNode: true,
         // 自定义根节点名称
         customRootNodeName: this.$t('assets.Asset'),
         async: {
@@ -85,9 +85,6 @@ export default {
     rMenu() {
       return this.$refs.dataztree.rMenu
     }
-  },
-  created() {
-    this.defaultSetting.customRootNode = this.currentOrg.is_root
   },
   beforeDestroy() {
     $('body').unbind('mousedown')
