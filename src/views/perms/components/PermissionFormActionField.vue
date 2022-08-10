@@ -22,6 +22,10 @@ export default {
     choices: {
       type: Array,
       default: () => []
+    },
+    actions: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -74,6 +78,9 @@ export default {
   },
   computed: {
     choicesIDs() {
+      if (this.actions) {
+        return this.actions
+      }
       if (this.choices.length === 0) {
         return [
           'all', 'connect', 'upload_file', 'download_file', 'updownload',

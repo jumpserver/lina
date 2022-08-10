@@ -33,7 +33,12 @@
             />
           </el-form-item>
           <el-form-item :label="$t('assets.Action')" required>
-            <PermissionFormActionField v-model="requestForm.actions" :value="requestForm.actions" style="width: 30% !important" />
+            <PermissionFormActionField
+              v-model="requestForm.actions"
+              :value="requestForm.actions"
+              :actions="actions"
+              style="width: 30% !important"
+            />
           </el-form-item>
         </el-form>
       </template>
@@ -61,6 +66,7 @@ export default {
   data() {
     return {
       statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
+      actions: this.dynamicActions(),
       requestForm: {
         applications: this.object.apply_applications,
         systemusers: this.object.apply_system_users,
@@ -213,6 +219,16 @@ export default {
     }
   },
   methods: {
+    dynamicActions() {
+      const category = this.object.apply_category
+      const actions = []
+      this.$axios.get(
+        `/api/v1/perms/application-permissions/applications/actions/?category=${category}`,
+      ).then(res => {
+        actions.push(...res)
+      })
+      return actions
+    },
     formatTime(dateStr) {
       return formatTime(getDateTimeStamp(dateStr))
     },
