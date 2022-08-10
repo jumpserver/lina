@@ -1137,7 +1137,7 @@
     "destinationIP": "目的地址",
     "testPort": "端口",
     "testTools": "测试",
-    "testHelpText": "请输入目的地址进行测试"
+    "testHelpText": "请输入目的地址进行测试",
     "SMSProvider": "短信服务商 / 协议"
   },
   "tickets": {
