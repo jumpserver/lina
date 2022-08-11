@@ -88,17 +88,17 @@ export default {
       this.items.push({ ...this.remainProtocols[0] })
     },
     handleProtocolChange(evt, item) {
-      const selected = this.protocols.find(item => item.name === evt)
+      const selected = this.choices.find(item => item.name === evt)
       item.name = selected.name
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      if (!this.value) {
-        if (choices.length !== 0) {
-          this.items = [choices[0]]
-        }
-      } else {
+      if (this.value && this.value.length > 0) {
         this.items = [...this.value]
+        return
+      }
+      if (choices.length !== 0) {
+        this.items = [choices[0]]
       }
     }
   }

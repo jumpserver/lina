@@ -15,7 +15,7 @@ export default {
     return {
       initial: {},
       fields: [
-        [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'domain']]
+        [this.$t('common.Basic'), ['name', 'ip', 'platform', 'domain']]
         // [this.$t('assets.Protocol'), ['protocols']],
         // [this.$t('assets.Node'), ['nodes']],
         // this.$route.params.id ? null : [this.$t('assets.Account'), ['accounts']],

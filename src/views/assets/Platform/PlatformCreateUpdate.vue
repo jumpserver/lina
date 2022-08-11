@@ -23,7 +23,7 @@ export default {
     return {
       loading: true,
       initial: {
-        comment: 'Hello world',
+        comment: '',
         charset: 'utf8',
         category_type: ['host', 'linux'],
         domain_enabled: false,
@@ -106,20 +106,16 @@ export default {
         },
         protocols_enabled: {
           el: {
-            disabled: false,
-            value: false
-          },
-          value: false
+            disabled: false
+          }
         },
         protocols_default: {
           ...assetMeta.protocols,
           hidden: (formValue) => {
-            console.log('formValue', formValue)
             return !formValue['protocols_enabled']
           }
         },
         domain_enabled: {
-          value: true,
           el: {
             disabled: false
           }

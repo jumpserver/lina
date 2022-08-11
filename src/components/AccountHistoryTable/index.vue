@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from '../AccountListTable/ShowSecretInfo'
 import { GenericListPage } from '@/layout/components'
 
@@ -52,7 +52,7 @@ export default {
           resource: 'authbook'
         },
         columns: [
-          'hostname', 'ip', 'username', 'version',
+          'asset_name', 'ip', 'username', 'version',
           'systemuser', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
@@ -60,9 +60,9 @@ export default {
           default: ['hostname', 'ip', 'username', 'version', 'actions']
         },
         columnsMeta: {
-          hostname: {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+          asset_name: {
+            prop: 'asset_name',
+            label: this.$t('assets.Name'),
             showOverflowTooltip: true,
             formatter: DetailFormatter,
             formatterArgs: {
@@ -80,9 +80,6 @@ export default {
           },
           username: {
             showOverflowTooltip: true
-          },
-          systemuser: {
-            formatter: DisplayFormatter
           },
           version: {
             width: '70px'

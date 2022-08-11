@@ -4,8 +4,7 @@
 
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import { UpdateToken } from '@/components/FormFields'
-import { UploadKey } from '@/components'
+import { UpdateToken, UploadKey } from '@/components/FormFields'
 export default {
   name: 'AccountCreateForm',
   components: {
@@ -14,7 +13,7 @@ export default {
   props: {
     protocols: {
       type: Array,
-      default: () => ['ssh', 'rdp']
+      default: () => ([])
     },
     accounts: {
       type: Array,
@@ -30,16 +29,16 @@ export default {
       url: '/api/v1/assets/accounts/',
       form: this.account || { protocol: this.protocols[0] },
       fields: [
-        'protocol', 'type', 'username', 'password',
+        'type', 'username', 'password',
         'private_key', 'passphrase', 'comment'
       ],
       fieldsMeta: {
         protocol: {
           type: 'radio-group',
           label: this.$t('assets.Protocol'),
-          default: this.protocols[0],
+          default: this.protocols[0].name,
           options: this.protocols.map((item) => {
-            return { label: item.toUpperCase(), value: item }
+            return { label: item.name.toUpperCase(), value: item.name }
           })
         },
         password: {
@@ -54,6 +53,9 @@ export default {
       },
       hasSaveContinue: false
     }
+  },
+  mounted() {
+    console.log('protocols: ', this.protocols)
   },
   methods: {
     confirm(form) {

@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       account: {
-        hostname: '',
+        name: '',
         username: '',
         password: '',
         private_key: ''
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     protocols() {
-      return this.asset ? this.asset.protocols.map((item) => item.split('/')[0]) : []
+      return this.asset ? this.asset.protocol : []
     }
   },
   methods: {

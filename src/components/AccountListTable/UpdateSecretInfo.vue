@@ -9,8 +9,8 @@
     v-on="$listeners"
   >
     <el-form label-position="right" label-width="90px">
-      <el-form-item :label="this.$t('assets.Hostname')">
-        <el-input v-model="account.hostname" readonly />
+      <el-form-item :label="this.$t('assets.Name')">
+        <el-input v-model="account['asset_name']" readonly />
       </el-form-item>
       <el-form-item :label="this.$t('assets.Username')">
         <el-input v-model="account['username']" readonly />

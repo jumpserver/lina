@@ -15,9 +15,11 @@ export default {
     return {
       loading: true,
       platform: {},
-      initial: { labels: [] },
+      initial: {
+        labels: []
+      },
       fields: [
-        [this.$t('common.Basic'), ['hostname', 'ip', 'platform', 'domain']],
+        [this.$t('common.Basic'), ['name', 'ip', 'platform', 'domain']],
         [this.$t('assets.Protocols'), ['protocols']],
         [this.$t('assets.Node'), ['nodes']],
         this.$route.params.id ? null : [this.$t('assets.Account'), ['accounts']],
@@ -45,13 +47,12 @@ export default {
       const initial = {
         is_active: true,
         platform: parseInt(platformId),
-        protocols: this.platform.protocols_default || ['ssh/22'],
+        protocols: this.platform.protocols_default,
         nodes: nodesInitial,
-        domain: this.platform['domain_default'],
-        admin_user: this.platform['admin_user_default']
+        domain: this.platform.domain_default
       }
-      const limits = this.platform['type_limits']
-      this.fieldsMeta.protocols.el.choices = limits['protocols_limit']
+      const constraints = this.platform['type_constraints']
+      this.fieldsMeta.protocols.el.choices = constraints['protocols']
       this.initial = initial
       this.loading = false
     }

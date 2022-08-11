@@ -24,7 +24,12 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
-import { DetailFormatter, ActionsFormatter, TagsFormatter, NestedObjectFormatter } from '@/components/TableFormatters'
+import {
+  DetailFormatter,
+  ActionsFormatter,
+  TagsFormatter,
+  NestedObjectFormatter
+} from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -61,7 +66,7 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'protocols',
+          'name', 'ip', 'protocols',
           'category', 'type', 'platform',
           'labels', 'nodes',
           'is_active', 'connectivity',
