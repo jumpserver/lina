@@ -32,6 +32,14 @@
               type="datetime"
             />
           </el-form-item>
+          <el-form-item :label="$t('assets.Action')" required>
+            <PermissionFormActionField
+              v-model="requestForm.actions"
+              :value="requestForm.actions"
+              :actions="actions"
+              style="width: 30% !important"
+            />
+          </el-form-item>
         </el-form>
       </template>
     </IBox>
@@ -40,14 +48,15 @@
 
 <script>
 import IBox from '@/components/IBox'
-import { formatTime, getDateTimeStamp } from '@/utils/index'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { toSafeLocalDateStr, forMatAction } from '@/utils/common'
 import Select2 from '@/components/FormFields/Select2'
+import { formatTime, getDateTimeStamp } from '@/utils/index'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
 import { STATUS_MAP } from '../../const'
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2 },
+  components: { GenericTicketDetail, IBox, Select2, PermissionFormActionField },
   props: {
     object: {
       type: Object,
@@ -57,9 +66,11 @@ export default {
   data() {
     return {
       statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
+      actions: this.dynamicActions(),
       requestForm: {
         applications: this.object.apply_applications,
         systemusers: this.object.apply_system_users,
+        actions: this.object.apply_actions,
         apply_date_expired: this.object.apply_date_expired,
         apply_date_start: this.object.apply_date_start
       },
@@ -153,6 +164,10 @@ export default {
           value: rel_snapshot.apply_system_users.join(', ')
         },
         {
+          key: this.$t('assets.Action'),
+          value: forMatAction(this, object.apply_actions_display)
+        },
+        {
           key: this.$t('common.dateStart'),
           value: toSafeLocalDateStr(object.apply_date_start)
         },
@@ -204,6 +219,16 @@ export default {
     }
   },
   methods: {
+    dynamicActions() {
+      const category = this.object.apply_category
+      const actions = []
+      this.$axios.get(
+        `/api/v1/perms/application-permissions/applications/actions/?category=${category}`,
+      ).then(res => {
+        actions.push(...res)
+      })
+      return actions
+    },
     formatTime(dateStr) {
       return formatTime(getDateTimeStamp(dateStr))
     },
@@ -224,6 +249,7 @@ export default {
         apply_type: this.object.apply_type,
         apply_system_users: this.requestForm.systemusers ? this.requestForm.systemusers : [],
         apply_applications: this.requestForm.applications ? this.requestForm.applications : [],
+        apply_actions: this.requestForm.actions,
         apply_date_start: this.requestForm.apply_date_start,
         apply_date_expired: this.requestForm.apply_date_expired,
         org_id: this.object.org_id

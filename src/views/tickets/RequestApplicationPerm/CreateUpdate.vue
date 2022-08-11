@@ -13,7 +13,9 @@ import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { Required } from '@/components/DataForm/rules'
 import { ApplicationCascader } from '@/views/applications/const'
+import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
 import { mapState, mapGetters } from 'vuex'
+import store from '@/store'
 
 export default {
   components: {
@@ -23,7 +25,8 @@ export default {
   data() {
     const vm = this
     const now = new Date()
-    const date_expired = getDaysFuture(7, now).toISOString()
+    const TicketAuthorizeDefaultTime = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
+    const date_expired = getDaysFuture(TicketAuthorizeDefaultTime, new Date()).toISOString()
     const date_start = now.toISOString()
     let apply_category_type = []
 
@@ -36,13 +39,12 @@ export default {
         apply_date_start: date_start,
         org_id: '',
         type: 'apply_application'
-
       },
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
         [this.$t('tickets.RequestPerm'), [
           'apply_category_type', 'apply_applications', 'apply_system_users',
-          'apply_date_start', 'apply_date_expired'
+          'apply_actions', 'apply_date_start', 'apply_date_expired'
         ]]
       ],
       fieldsMeta: {
@@ -55,6 +57,14 @@ export default {
           hidden: () => true,
           el: {
             disabled: true
+          }
+        },
+        apply_actions: {
+          label: this.$t('perms.Actions'),
+          component: PermissionFormActionField,
+          helpText: this.$t('common.actionsTips'),
+          el: {
+            actions: []
           }
         },
         apply_applications: {
@@ -103,6 +113,11 @@ export default {
               updateForm({
                 apply_applications: [],
                 apply_system_users: []
+              })
+              this.$axios.get(
+                `/api/v1/perms/application-permissions/applications/actions/?category=${event[0]}`,
+              ).then(res => {
+                this.fieldsMeta.apply_actions.el.actions = res
               })
               this.fieldsMeta.apply_applications.el.ajax.url = `/api/v1/applications/applications/suggestion/?oid=${vm.org_id}&category=${event[0]}&type=${event[1]}`
               this.fieldsMeta.apply_system_users.el.ajax.url = event[0] === 'remote_app' ? `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=rdp` : `/api/v1/assets/system-users/suggestion/?oid=${vm.org_id}&protocol=${event[1]}`

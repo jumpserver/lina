@@ -22,6 +22,10 @@ export default {
     choices: {
       type: Array,
       default: () => []
+    },
+    actions: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -74,6 +78,9 @@ export default {
   },
   computed: {
     choicesIDs() {
+      if (this.actions) {
+        return this.actions
+      }
       if (this.choices.length === 0) {
         return [
           'all', 'connect', 'upload_file', 'download_file', 'updownload',
@@ -83,9 +90,6 @@ export default {
       return this.choices.map((v) => v.value)
     },
     iData() {
-      console.log('this.choicesIDs', this.choicesIDs)
-      console.log('this.choices', this.choices)
-      console.log('this.value', this.value)
       this.$log.debug('choices: ', this.choicesIDs)
       const fullTreeNodes = _.cloneDeep(this.fullChoicesTreeNodes)
       const treeNodes = this.trimChoicesTreeNodes(fullTreeNodes)
