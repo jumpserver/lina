@@ -190,7 +190,7 @@ export default {
         e.stopPropagation()
         const value = e.target.value || ''
         this.filterAssetsServer(value)
-      }, 700)
+      }, 600)
     },
     getCheckedNodes: function() {
       return this.zTree.getCheckedNodes(true)
