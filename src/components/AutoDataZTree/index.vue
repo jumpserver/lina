@@ -18,6 +18,7 @@
 <script>
 import DataZTree from '../DataZTree'
 import $ from '@/utils/jquery-vendor'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AutoDataZTree',
@@ -37,6 +38,10 @@ export default {
         showCreate: true,
         showDelete: true,
         showUpdate: true,
+        showSearch: true,
+        // 自定义header
+        customTreeHeader: true,
+        customTreeHeaderName: this.$t('assets.Asset'),
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
@@ -66,6 +71,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'currentOrg'
+    ]),
     treeSetting() {
       this.$log.debug('Settings: ', this.setting)
       return _.merge(this.defaultSetting, this.setting)
@@ -192,7 +200,7 @@ export default {
         return
       }
       // 屏蔽收藏资产
-      if (treeNode.id === '-12') {
+      if (treeNode?.id === '-12') {
         return
       }
       if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {
