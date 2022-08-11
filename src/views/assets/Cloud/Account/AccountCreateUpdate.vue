@@ -7,7 +7,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Required } from '@/components/DataForm/rules'
+import { Required, specialEmojiCheck } from '@/components/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
 import { UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'
@@ -31,6 +31,9 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        name: {
+          rules: [Required, specialEmojiCheck]
+        },
         attrs: {
           encryptedFields: ['access_key_secret'],
           fields: accountProviderAttrs.attrs,
