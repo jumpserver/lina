@@ -4,7 +4,7 @@
       <div>
         <el-form ref="testForm" label-width="20%" :model="testData" :rules="testRules">
           <el-form-item :label="$t('setting.basicTools')">
-            <el-radio-group v-model="testData.tool_type">
+            <el-radio-group v-model="testData.tool_type" @change="changeToolType">
               <el-radio v-for="t in tools" :key="t" :label="t" />
             </el-radio-group>
           </el-form-item>
@@ -55,6 +55,9 @@ export default {
     }
   },
   methods: {
+    changeToolType() {
+      this.testResp = ''
+    },
     enableWS() {
       this.testResp = ''
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
