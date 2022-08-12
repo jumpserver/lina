@@ -38,9 +38,9 @@ export default {
         showCreate: true,
         showDelete: true,
         showUpdate: true,
-        showSearch: true,
+        showSearch: false,
         // 自定义header
-        customTreeHeader: true,
+        customTreeHeader: false,
         customTreeHeaderName: this.$t('assets.Asset'),
         async: {
           enable: true,

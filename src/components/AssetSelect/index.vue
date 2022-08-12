@@ -75,6 +75,8 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
+        showSearch: true,
+        customTreeHeader: true,
         url: '/api/v1/assets/assets/?fields_size=mini',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
