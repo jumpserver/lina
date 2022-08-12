@@ -23,6 +23,7 @@ async function checkLogin({ to, from, next }) {
   const sessionExpire = VueCookie.get('jms_session_expire')
   if (!sessionExpire) {
     request.get(process.env['VUE_APP_LOGOUT_PATH']).finally(() => {
+      localStorage.setItem('next', window.location.href)
       window.location = process.env.VUE_APP_LOGIN_PATH
     })
     return reject('No session mark found in cookie')
@@ -45,6 +46,7 @@ async function checkLogin({ to, from, next }) {
     const status = e.response.status
     if (status === 401 || status === 403) {
       setTimeout(() => {
+        localStorage.setItem('next', window.location.href)
         window.location = process.env.VUE_APP_LOGIN_PATH
       }, 100)
     }
@@ -111,6 +113,12 @@ export async function generatePageRoutes({ to, from, next }) {
     // set the replace: true, so the navigation will not leave a history record
     // Vue.$log.debug('Next to: ', to)
     next({ ...to, replace: true })
+    const LoginCallBack = localStorage.getItem('next')
+    const jms_session_expire = VueCookie.get('jms_session_expire')
+    if (jms_session_expire === 'close' && LoginCallBack) {
+      window.location = LoginCallBack
+      localStorage.removeItem('next')
+    }
   } catch (error) {
     // remove token and go to login page to re-login
     // await store.dispatch('user/resetToken')
