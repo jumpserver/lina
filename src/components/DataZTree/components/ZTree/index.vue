@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="treeSetting.customTreeHeader"
-      class="tree-header"
+      class="tree-header treebox"
     >
       <div class="content">
         <span class="title">
@@ -33,7 +33,7 @@
       </ul>
       <ul v-show="!loading" :id="iZTreeID" class="ztree" />
     </div>
-    <div v-else>
+    <div v-else class="treebox">
       <ul v-show="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
