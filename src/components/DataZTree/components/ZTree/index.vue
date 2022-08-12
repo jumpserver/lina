@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="treeSetting.customTreeHeader"
-      class="tree-header"
+      class="tree-header treebox"
     >
       <div class="content">
         <span class="title">
@@ -32,16 +32,19 @@
         {{ this.$t('common.tree.Loading') }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" class="ztree" />
+      <div v-if="treeSetting.treeUrl===''" class="tree-empty">
+        {{ this.$t('common.tree.Empty') }}
+      </div>
     </div>
-    <div v-else>
+    <div v-else class="treebox">
       <ul v-show="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
       <ul v-show="!loading" :id="iZTreeID" class="ztree" />
-    </div>
-    <div v-if="treeSetting.treeUrl===''">
-      {{ this.$t('common.tree.Empty') }}
-      <a id="tree-refresh"><i class="fa fa-refresh" /></a>
+      <div v-if="treeSetting.treeUrl===''" class="tree-empty">
+        {{ this.$t('common.tree.Empty') }}
+        <a id="tree-refresh"><i class="fa fa-refresh" /></a>
+      </div>
     </div>
     <div :id="iRMenuID" class="rMenu">
       <ul class="dropdown-menu menu-actions">
@@ -189,7 +192,11 @@ export default {
       searchInput.oninput = _.debounce((e) => {
         e.stopPropagation()
         const value = e.target.value || ''
-        this.filterAssetsServer(value)
+        if (this.treeSetting.async.enable) {
+          this.filterAssetsServer(value)
+        } else {
+          this.filterTree(value)
+        }
       }, 600)
     },
     getCheckedNodes: function() {
@@ -230,7 +237,8 @@ export default {
         return groups[group]
       })
     },
-    filterTree(keyword, tree) {
+    filterTree(keyword, tree = this.zTree) {
+      if (!this.zTree) return
       const searchNode = tree.getNodesByFilter((node) => node.id === 'search')
       if (searchNode) tree.removeNode(searchNode[0])
       const nodes = tree.transformToArray(tree.getNodes())
@@ -301,7 +309,12 @@ export default {
         this.zTree.hideNodes(treeNodes)
       }
 
-      const searchUrl = `/api/v1/assets/nodes/children/tree/?search=${keyword}&all=all`
+      let treeUrl = this.treeSetting.treeUrl
+      const filterField = treeUrl.includes('?') ? `&search=${keyword}` : `?search=${keyword}`
+      if (treeUrl.indexOf('assets/nodes/children/tree') > -1) {
+        treeUrl = treeUrl + '&all=all'
+      }
+      const searchUrl = `${treeUrl}${filterField}`
       this.$axios.get(searchUrl).then(nodes => {
         let name = this.$t('common.Search')
         const assetsAmount = nodes.length
@@ -490,5 +503,8 @@ export default {
         top: 1px!important;
       }
     }
+  }
+  .tree-empty {
+    margin-left: 4px;
   }
 </style>

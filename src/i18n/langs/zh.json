@@ -491,6 +491,7 @@
     "InvalidJson": "不是合法 JSON",
     "time_period": "时段",
     "FormatError": "格式错误",
+    "NotSpecialEmoji": "不允许输入特殊表情符号",
     "WeekCronSelect": {
       "Monday": "星期一",
       "Tuesday": "星期二",

@@ -515,6 +515,7 @@
     },
     "Cycle": "Cycle",
     "FormatError": "Format error",
+    "NotSpecialEmoji": "Special emoticons are not allowed",
     "WeekCronSelect": {
       "Monday": "Monday",
       "Tuesday": "Tuesday",

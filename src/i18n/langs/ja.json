@@ -491,6 +491,7 @@
     "InvalidJson": "JSONの合法的ではありません",
     "time_period": "時間帯",
     "FormatError": "フォーマットエラー",
+    "NotSpecialEmoji": "特殊な表情記号の入力は許可されていません",
     "WeekCronSelect": {
       "Monday": "月曜日",
       "Tuesday": "火曜日",

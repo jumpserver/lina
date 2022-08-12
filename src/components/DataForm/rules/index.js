@@ -14,10 +14,23 @@ export const EmailCheck = {
   trigger: ['blur', 'change']
 }
 
+export const specialEmojiCheck = {
+  validator: (rule, value, callback) => {
+    value = value.trim()
+    if (/[\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/.test(value)) {
+      callback(new Error(i18n.t('common.NotSpecialEmoji')))
+    } else {
+      callback()
+    }
+  },
+  trigger: ['blur', 'change']
+}
+
 export default {
   Required,
   RequiredChange,
-  EmailCheck
+  EmailCheck,
+  specialEmojiCheck
 }
 
 export const JsonRequired = {
