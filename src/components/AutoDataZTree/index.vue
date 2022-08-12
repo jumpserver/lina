@@ -180,7 +180,7 @@ export default {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
       const zTreeID = this.$refs.dataztree.$refs.ztree.iZTreeID
       const offset = $(`#${zTreeID}`).offset()
-      const scrollTop = document.querySelector('.treebox').scrollTop
+      const scrollTop = document.querySelector('.treebox')?.scrollTop
       x -= offset.left
       // Tmp
       y -= (offset.top + scrollTop) / 3 - 10
