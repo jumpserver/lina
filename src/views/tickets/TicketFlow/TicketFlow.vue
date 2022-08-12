@@ -48,8 +48,8 @@ export default {
               onClone: ({ row }) => {
                 vm.$router.push({ name: 'TicketFlowUpdate', query: { type: row.type, clone_from: row.id }})
               },
-              canUpdate: () => {
-                return vm.$hasPerm('tickets.change_ticketflow')
+              canUpdate: ({ row }) => {
+                return vm.$hasPerm('tickets.change_ticketflow') && row.org_id !== '00000000-0000-0000-0000-000000000000'
               },
               onUpdate: ({ row }) => {
                 vm.$router.push({ name: 'TicketFlowUpdate', params: { id: row.id }})
