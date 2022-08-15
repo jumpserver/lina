@@ -81,8 +81,10 @@ export default {
         }
         const toListFields = ['ip_group']
         for (const item of toListFields) {
-          const value = attrs[item]
-          attrs[item] = value?.split(',') || []
+          let value = attrs[item]
+          value = value?.split(',') || []
+          value = value.filter((value, index) => { if (value) return true })
+          attrs[item] = value
         }
         return values
       },
