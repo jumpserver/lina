@@ -17,8 +17,19 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     const accountProvider = this.$route.query.provider || aliyun
     const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
+    function setFieldAttrs() {
+      const fieldsObject = {}
+      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password']
+      for (const item of accountProviderAttrs?.attrs) {
+        fieldsObject[item] = {
+          rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [Required]
+        }
+      }
+      return fieldsObject
+    }
     return {
       initial: {
         provider: this.$route.query.provider,
@@ -47,7 +58,8 @@ export default {
             },
             password: {
               rules: this.$route.params.id ? [] : [Required]
-            }
+            },
+            ...setFieldAttrs()
           }
         },
         provider: {
@@ -102,8 +114,6 @@ export default {
         return formValue
       }
     }
-  },
-  computed: {
   },
   methods: {
   }
