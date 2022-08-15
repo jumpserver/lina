@@ -2,7 +2,6 @@
   <div class="accounts">
     <el-table :data="accounts" style="width: 100%">
       <el-table-column prop="username" label="用户名" width="180" />
-      <el-table-column prop="protocol" label="协议" />
       <el-table-column prop="type" label="类型" />
       <el-table-column fixed="right" align="right" label="操作" width="135" class-name="buttons">
         <template slot-scope="scope">
@@ -43,7 +42,7 @@ export default {
   props: {
     protocols: {
       type: Array,
-      default: () => ['ssh']
+      default: () => []
     },
     value: {
       type: [Array],

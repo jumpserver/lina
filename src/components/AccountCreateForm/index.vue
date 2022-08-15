@@ -1,5 +1,7 @@
 <template>
-  <AutoDataForm v-bind="$data" @submit="confirm" />
+  <div>
+    <AutoDataForm v-bind="$data" @submit="confirm" />
+  </div>
 </template>
 
 <script>
@@ -27,20 +29,12 @@ export default {
   data() {
     return {
       url: '/api/v1/assets/accounts/',
-      form: this.account || { protocol: this.protocols[0] },
+      form: this.account || { },
       fields: [
-        'type', 'username', 'password',
-        'private_key', 'passphrase', 'comment'
+        'username', 'password', 'private_key', 'passphrase',
+        'privileged', 'comment'
       ],
       fieldsMeta: {
-        protocol: {
-          type: 'radio-group',
-          label: this.$t('assets.Protocol'),
-          default: this.protocols[0].name,
-          options: this.protocols.map((item) => {
-            return { label: item.name.toUpperCase(), value: item.name }
-          })
-        },
         password: {
           component: UpdateToken
         },
