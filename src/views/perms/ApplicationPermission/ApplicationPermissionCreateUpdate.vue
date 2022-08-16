@@ -12,19 +12,23 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getDayFuture } from '@/utils/common'
 import PermissionFormActionField from '../components/PermissionFormActionField'
+import { remoteApplication } from '../const.js'
 
 export default {
   components: {
     GenericCreateUpdatePage
   },
   data() {
+    const queryCategory = this.$route.query.category
+    const queryType = this.$route.query.type
+    const urlSearchFields = `category=${queryCategory}&type=${queryType}`
     return {
       initial: {
         is_active: true,
         date_start: new Date().toISOString(),
         date_expired: getDayFuture(36500, new Date()).toISOString(),
-        type: this.$route.query.type,
-        category: this.$route.query.category
+        type: queryType,
+        category: queryCategory
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -33,7 +37,7 @@ export default {
         [this.$t('common.action'), ['actions']],
         [this.$t('common.Other'), ['is_active', 'date_start', 'date_expired', 'comment']]
       ],
-      url: `/api/v1/perms/application-permissions/?category=${this.$route.query.category}&type=${this.$route.query.type}`,
+      url: `/api/v1/perms/application-permissions/?${urlSearchFields}`,
       createSuccessNextRoute: { name: 'ApplicationPermissionDetail' },
       fieldsMeta: {
         users: {
@@ -66,7 +70,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: `/api/v1/applications/applications/?category=${this.$route.query.category}&type=${this.$route.query.type}`,
+              url: `/api/v1/applications/applications/?${urlSearchFields}`,
               transformOption: (item) => {
                 return { label: item.name + ' (' + item.type_display + ')', value: item.id }
               }
@@ -79,7 +83,6 @@ export default {
             ajax: {
               url: (function() {
                 let url = '/api/v1/assets/system-users/'
-                const queryType = this.$route.query.type
                 if (this.$route.query.category === 'remote_app') {
                   url += `?protocol=rdp`
                 } else if (queryType) {
@@ -88,7 +91,7 @@ export default {
                 return url
               }.bind(this)()),
               transformOption: (item) => {
-                if (this.$route.query.type === 'k8s') {
+                if (queryType === 'k8s') {
                   return { label: item.name, value: item.id }
                 }
                 const username = item.username || '*'
@@ -106,7 +109,7 @@ export default {
         actions: {
           label: this.$t('perms.Actions'),
           component: PermissionFormActionField,
-          helpText: this.$t('common.actionsTips')
+          helpText: remoteApplication.includes(queryType) ? this.$t('common.actionsTips') : ''
         },
         is_active: {
           type: 'checkbox'
