@@ -87,7 +87,9 @@ export default {
             valueSet = {}
           }
           form[k] = valueSet
-          this._cleanFormValue(form[k], v.children)
+          if (v.children) {
+            this._cleanFormValue(form[k], v.children)
+          }
         }
         if (v.default === undefined) {
           continue
