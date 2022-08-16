@@ -98,6 +98,7 @@
     "Action": "Action",
     "ActiveSelected": "Active selected",
     "AdminUser": "Admin user",
+    "AssetTree": "Asset tree",
     "ReplaceNodeAssetsAdminUser":"Replace node assets admin user with this",
     "AdminUserDetail": "Admin user detail",
     "DynamicUsername": "Dynamic username",

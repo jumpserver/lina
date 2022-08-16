@@ -41,7 +41,7 @@ export default {
         showSearch: false,
         // 自定义header
         customTreeHeader: false,
-        customTreeHeaderName: this.$t('assets.Asset'),
+        customTreeHeaderName: this.$t('assets.AssetTree'),
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
