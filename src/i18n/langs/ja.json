@@ -109,6 +109,7 @@
     "HardwareInfo": "ハードウェア情報",
     "AssetDetail": "アセットの詳細",
     "AssetList": "アセットリスト",
+    "AssetTree": "アセットツリー",
     "ReplaceNodeAssetsAdminUser": "ノード資産を置換する管理者",
     "AssetListHelpMessage": "左側は資産ツリーで、右クリックはツリーノードを新規作成、削除、変更することができ、授権資産もノード方式で組織され、右側はそのノードの下に属する資産である\n",
     "TestGatewayTestConnection": "テスト接続ゲートウェイ",
