@@ -18,6 +18,7 @@
               id="searchInput"
               v-model="treeSearchValue"
               type="text"
+              autocomplete="off"
               class="tree-input"
             >
           </a>
@@ -153,7 +154,7 @@ export default {
       const { showSearch, showRefresh } = this.treeSetting
       const searchIcon = `<a class="tree-search" id="searchIcon">
                             <i class='fa fa-search tree-banner-icon' onclick="treeSearch()" /></i>
-                             <input type="text" id="searchInput" class="tree-input" />
+                             <input type="text" autocomplete="off" id="searchInput" class="tree-input" />
                           </a>`
       const refreshIcon = "<a id='tree-refresh' onclick='refresh()'><i class='fa fa-refresh'></i></a>"
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
