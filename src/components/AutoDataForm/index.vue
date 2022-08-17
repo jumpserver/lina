@@ -79,9 +79,6 @@ export default {
     _cleanFormValue(form, remoteMeta) {
       for (const [k, v] of Object.entries(remoteMeta)) {
         let valueSet = form[k]
-        if (valueSet !== undefined) {
-          continue
-        }
         if (v.type === 'nested object') {
           if (typeof valueSet !== 'object') {
             valueSet = {}
@@ -90,6 +87,9 @@ export default {
           if (v.children) {
             this._cleanFormValue(form[k], v.children)
           }
+        }
+        if (valueSet !== undefined) {
+          continue
         }
         if (v.default === undefined) {
           continue

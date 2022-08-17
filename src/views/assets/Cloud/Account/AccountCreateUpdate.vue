@@ -32,6 +32,9 @@ export default {
     }
     return {
       initial: {
+        attrs: {
+          ip_group: []
+        },
         provider: this.$route.query.provider,
         port: 443
       },
@@ -49,6 +52,8 @@ export default {
           encryptedFields: ['access_key_secret'],
           fields: accountProviderAttrs.attrs,
           fieldsMeta: {
+            // 必须放在最上面，下面特殊制定的字段才会覆盖默认
+            ...setFieldAttrs(),
             service_account_key: {
               label: this.$t('xpack.Cloud.ServerAccountKey'),
               component: UploadKey,
@@ -58,8 +63,7 @@ export default {
             },
             password: {
               rules: this.$route.params.id ? [] : [Required]
-            },
-            ...setFieldAttrs()
+            }
           }
         },
         provider: {
@@ -101,10 +105,6 @@ export default {
         return values
       },
       afterGetFormValue(formValue) {
-        // 这里有点奇怪获取回来的表单数据是这样的: port 不知怎么来的
-        // port: 443
-        // provider: "lan"
-        // validity: false
         if (!formValue.attrs) {
           return formValue
         }
