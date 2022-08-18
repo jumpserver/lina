@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     choicesIDs() {
-      if (this.actions) {
+      if (this.actions.length !== 0) {
         return this.actions
       }
       if (this.choices.length === 0) {

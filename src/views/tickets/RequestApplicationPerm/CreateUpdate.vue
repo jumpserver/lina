@@ -64,7 +64,7 @@ export default {
           component: PermissionFormActionField,
           helpText: this.$t('common.actionsTips'),
           el: {
-            actions: []
+            actions: ['all', 'connect']
           }
         },
         apply_applications: {

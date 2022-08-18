@@ -2,7 +2,11 @@
   <Page>
     <el-collapse-transition>
       <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-        <div v-show="iShowTree" :style="iShowTree?('width:250px;'):('width:0;')" class="transition-box">
+        <div
+          v-show="iShowTree"
+          :style="{width: iShowTree?'20%': 0}"
+          class="transition-box tree-box"
+        >
           <AutoDataZTree
             ref="AutoDataZTree"
             :key="DataZTree"
@@ -10,7 +14,7 @@
             class="auto-data-ztree"
           />
         </div>
-        <div :style="iShowTree?('display: flex;width: calc(100% - 250px);'):('display: flex;width:100%;')">
+        <div :style="iShowTree?('display: flex;width: 80%;'):('display: flex;width:100%;')">
           <div class="mini">
             <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
               <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
@@ -70,6 +74,8 @@ export default {
         treeUrl: '',
         showRefresh: true,
         showMenu: false,
+        showSearch: true,
+        customTreeHeader: true,
         check: {
           enable: true
         },
@@ -275,5 +281,9 @@ export default {
     width: 600px;
     height: 100px;
     border: 1px solid #eee;
+  }
+  .tree-box {
+    margin-right: 2px;
+    border: 1px solid #e0e0e0;
   }
 </style>

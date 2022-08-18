@@ -1,7 +1,10 @@
 <template>
   <Page>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$data" />
+      <GenericCreateUpdateForm
+        v-bind="$data"
+        @submitSuccess="onSubmitSuccess"
+      />
     </IBox>
   </Page>
 </template>
@@ -82,6 +85,9 @@ export default {
   methods: {
     hasValidLicense() {
       return this.$store.getters.hasValidLicense
+    },
+    onSubmitSuccess(res) {
+      this.$store.state.settings.publicSettings.TICKET_AUTHORIZE_DEFAULT_TIME = res.TICKET_AUTHORIZE_DEFAULT_TIME
     }
   }
 }

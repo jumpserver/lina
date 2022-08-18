@@ -7,7 +7,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Required } from '@/components/DataForm/rules'
+import { Required, specialEmojiCheck } from '@/components/DataForm/rules'
 import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun } from '../const'
 import { UploadKey } from '@/components'
 import { encryptPassword } from '@/utils/crypto'
@@ -17,10 +17,24 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     const accountProvider = this.$route.query.provider || aliyun
     const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
+    function setFieldAttrs() {
+      const fieldsObject = {}
+      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password']
+      for (const item of accountProviderAttrs?.attrs) {
+        fieldsObject[item] = {
+          rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [Required]
+        }
+      }
+      return fieldsObject
+    }
     return {
       initial: {
+        attrs: {
+          ip_group: []
+        },
         provider: this.$route.query.provider,
         port: 443
       },
@@ -31,10 +45,15 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        name: {
+          rules: [Required, specialEmojiCheck]
+        },
         attrs: {
           encryptedFields: ['access_key_secret'],
           fields: accountProviderAttrs.attrs,
           fieldsMeta: {
+            // 必须放在最上面，下面特殊制定的字段才会覆盖默认
+            ...setFieldAttrs(),
             service_account_key: {
               label: this.$t('xpack.Cloud.ServerAccountKey'),
               component: UploadKey,
@@ -78,16 +97,14 @@ export default {
         }
         const toListFields = ['ip_group']
         for (const item of toListFields) {
-          const value = attrs[item]
-          attrs[item] = value?.split(',') || []
+          let value = attrs[item]
+          value = value?.split(',') || []
+          value = value.filter((value, index) => { if (value) return true })
+          attrs[item] = value
         }
         return values
       },
       afterGetFormValue(formValue) {
-        // 这里有点奇怪获取回来的表单数据是这样的: port 不知怎么来的
-        // port: 443
-        // provider: "lan"
-        // validity: false
         if (!formValue.attrs) {
           return formValue
         }
@@ -97,8 +114,6 @@ export default {
         return formValue
       }
     }
-  },
-  computed: {
   },
   methods: {
   }
