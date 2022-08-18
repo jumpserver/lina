@@ -435,6 +435,7 @@
       "downloadImportTemplateMsg": "下载创建模板",
       "downloadUpdateTemplateMsg": "下载更新模板",
       "onlyCSVFilesTips": "仅支持csv文件导入",
+      "ImportFail": "导入失败",
       "updateSuccessMsg": "导入更新成功，总共：{count}",
       "uploadCsvLth10MHelpText": "只能上传 csv/xlsx, 且不超过 10M",
       "dragUploadFileInfo": "将文件拖到此处，或点击此处上传",
