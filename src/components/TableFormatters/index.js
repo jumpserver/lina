@@ -13,6 +13,7 @@ import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
 import NestedObjectFormatter from './NestedObjectFormatter'
+import ChoicesDisplayFormatter from './ChoicesDisplayFormatter'
 
 export default {
   DetailFormatter,
@@ -29,7 +30,8 @@ export default {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  NestedObjectFormatter
+  NestedObjectFormatter,
+  ChoicesDisplayFormatter
 }
 
 export {
@@ -47,5 +49,6 @@ export {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  NestedObjectFormatter
+  NestedObjectFormatter,
+  ChoicesDisplayFormatter
 }

@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { ChoicesDisplayFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericListPage
@@ -22,6 +23,12 @@ export default {
           default: ['name', 'category', 'type', 'actions']
         },
         columnsMeta: {
+          type: {
+            formatter: ChoicesDisplayFormatter
+          },
+          category: {
+            formatter: ChoicesDisplayFormatter
+          },
           base: {
             width: '140px'
           },

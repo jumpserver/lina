@@ -2,9 +2,10 @@
   <div>
     <div v-for="(item, index) in items" :key="item.name" style="display: flex;margin-top: 8px;">
       <el-input v-model="item.port" class="input-with-select" v-bind="$attrs">
-        <el-select slot="prepend" v-model="item.name" @change="handleProtocolChange($event, item)">
+        <el-select slot="prepend" v-model="item.name" class="prepend" @change="handleProtocolChange($event, item)">
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
+        <el-button v-if="showSetting" slot="append" icon="el-icon-setting" @click="onSettingClick(item)" />
       </el-input>
       <div style="display: flex; margin-left: 20px" class="input-button">
         <el-button
@@ -43,6 +44,16 @@ export default {
     choices: {
       type: Array,
       default: () => ([])
+    },
+    showSetting: {
+      type: Boolean,
+      default: false
+    },
+    onSettingClick: {
+      type: Function,
+      default: (item) => {
+        alert('Click setting: ' + item.name + ', port: ' + item.port)
+      }
     }
   },
   data() {
@@ -129,5 +140,9 @@ export default {
 .input-button ::v-deep .el-button.el-button--mini {
   height: 25px;
   padding: 5px;
+}
+.el-input-group__append .el-button {
+  font-size: 14px;
+  color: #1a1a1a;
 }
 </style>

@@ -28,7 +28,8 @@ import {
   DetailFormatter,
   ActionsFormatter,
   TagsFormatter,
-  NestedObjectFormatter
+  NestedObjectFormatter,
+  ChoicesDisplayFormatter
 } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
@@ -66,7 +67,7 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'name', 'ip', 'protocols',
+          'name', 'ip',
           'category', 'type', 'platform',
           'labels', 'nodes',
           'is_active', 'connectivity',
@@ -81,6 +82,12 @@ export default {
           ]
         },
         columnsMeta: {
+          type: {
+            formatter: ChoicesDisplayFormatter
+          },
+          category: {
+            formatter: ChoicesDisplayFormatter
+          },
           hostname: {
             formatter: DetailFormatter,
             formatterArgs: {

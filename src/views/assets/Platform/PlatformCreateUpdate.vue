@@ -34,7 +34,7 @@ export default {
           'name', 'category_type', 'charset'
         ]],
         [this.$t('assets.Protocol'), [
-          'protocols_enabled', 'protocols_default'
+          'protocols_enabled', 'protocols'
         ]],
         [this.$t('assets.Domain'), [
           'domain_enabled', 'domain_default'
@@ -109,8 +109,12 @@ export default {
             disabled: false
           }
         },
-        protocols_default: {
+        protocols: {
           ...assetMeta.protocols,
+          el: {
+            choices: [],
+            showSetting: true
+          },
           hidden: (formValue) => {
             return !formValue['protocols_enabled']
           }
@@ -163,7 +167,7 @@ export default {
 
       const protocols = constraints['protocols'] || []
       this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
-      this.fieldsMeta.protocols_default.el.choices = protocols
+      this.fieldsMeta.protocols.el.choices = protocols
 
       if (updateForm) {
         updateForm({
