@@ -28,6 +28,7 @@
 import ListTable from '@/components/ListTable'
 import Dialog from '@/components/Dialog'
 import { importLdapUser, refreshLdapUserCache, startLdapUserCache } from '@/api/settings'
+import { getErrorResponseMsg } from '@/utils/common'
 
 export default {
   name: 'ImportDialog',
@@ -103,7 +104,12 @@ export default {
         importLdapUser(data).then(res => {
           this.$message.success(res.msg)
           // eslint-disable-next-line no-return-assign
-        }).finally(() => this.dialogLdapUserImportLoginStatus = false)
+        }).catch(error => {
+          const errorMessage = getErrorResponseMsg(error) || this.$t('common.imExport.ImportFail')
+          this.$message.error(errorMessage)
+        }).finally(() => {
+          this.dialogLdapUserImportLoginStatus = false
+        })
       }
     },
     importAllUserClick() {
