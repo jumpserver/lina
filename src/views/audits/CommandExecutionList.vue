@@ -100,7 +100,7 @@ export default {
             options: [
               {
                 label: this.$t('audits.Hosts'),
-                value: 'asset__hostname'
+                value: 'hostname_ip'
               }
             ]
           },
