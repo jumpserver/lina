@@ -22,7 +22,7 @@ export default {
       name: 'MyTicketList',
       component: () => import('@/views/tickets/MyTicketList'),
       meta: {
-        title: i18n.t('route.MyTickets'),
+        title: i18n.t('tickets.MyTickets'),
         icon: 'file-text-o',
         showOrganization: false,
         permissions: []

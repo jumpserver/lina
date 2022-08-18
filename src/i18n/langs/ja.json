@@ -681,6 +681,7 @@
   },
   "route": {
     "": "",
+    "AssignedTicketList": "割り当て済みワークオーダー",
     "CreateEndpoint": "エンドポイントを作成する",
     "UpdateEndpoint": "エンドポイントを更新",
     "CreateEndpointRule": "エンドポイントルールを作成する",
