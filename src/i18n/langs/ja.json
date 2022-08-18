@@ -435,6 +435,7 @@
       "downloadImportTemplateMsg": "作成テンプレートのダウンロード",
       "downloadUpdateTemplateMsg": "更新テンプレートのダウンロード",
       "onlyCSVFilesTips": "Csvファイルのインポートのみサポート",
+      "ImportFail": "インポートに失敗しました",
       "updateSuccessMsg": "更新のインポートに成功しました。合計:{count}",
       "uploadCsvLth10MHelpText": "Csv/xlsxのみアップロードでき、10m以下です",
       "dragUploadFileInfo": "ここにファイルをドラッグするか、ここをクリックしてアップロードしてください",

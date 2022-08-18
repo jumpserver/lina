@@ -424,6 +424,7 @@
       "downloadImportTemplateMsg": "Download import template",
       "downloadUpdateTemplateMsg": "Download update template",
       "onlyCSVFilesTips": "Only csv supported",
+      "ImportFail": "Import fail",
       "updateSuccessMsg": "Update success, total: {count}",
       "dragUploadFileInfo": "Drag file here or click here to upload",
       "uploadCsvLth10MHelpText": "csv/xlsx files with a size less than 10M",
