@@ -671,6 +671,7 @@
   },
   "route": {
     "": "",
+    "AssignedTicketList": "Assigned tickets",
     "CreateEndpoint": "Create endpoint",
     "UpdateEndpoint": "Update endpoint",
     "CreateEndpointRule": "Create endpoint rule",
