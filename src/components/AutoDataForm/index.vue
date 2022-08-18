@@ -79,14 +79,15 @@ export default {
     _cleanFormValue(form, remoteMeta) {
       for (const [k, v] of Object.entries(remoteMeta)) {
         let valueSet = form[k]
-        if (v.type === 'nested object') {
+        if (v.type === 'nested object' && v.children) {
+          // 有一些字段属性时 nested object 类型，但是没有 children，没有children的不需要走递归逻辑，
+          // 比如：认证配置中的属性映射字段
           if (typeof valueSet !== 'object') {
+            // 处理一些前端没有设置初始值的情况
             valueSet = {}
           }
           form[k] = valueSet
-          if (v.children) {
-            this._cleanFormValue(form[k], v.children)
-          }
+          this._cleanFormValue(valueSet, v.children)
         }
         if (valueSet !== undefined) {
           continue
