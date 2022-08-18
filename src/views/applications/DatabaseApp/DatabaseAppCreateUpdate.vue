@@ -5,6 +5,7 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getDatabaseTypeFieldsMap } from '@/views/applications/DatabaseApp/const'
+import { UploadKey } from '@/components'
 export default {
   components: {
     GenericCreateUpdatePage
@@ -36,6 +37,14 @@ export default {
           fieldsMeta: {
             host: {
               type: 'input'
+            },
+            use_ssl: {
+              component: 'el-switch'
+            },
+            ca_cert: {
+              label: this.$t('common.Certificate'),
+              hidden: (form) => { return !form.use_ssl },
+              component: UploadKey
             }
           }
         }
