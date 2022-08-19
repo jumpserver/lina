@@ -2,10 +2,21 @@
   <div>
     <div v-for="(item, index) in items" :key="item.name" style="display: flex;margin-top: 8px;">
       <el-input v-model="item.port" class="input-with-select" v-bind="$attrs">
-        <el-select slot="prepend" v-model="item.name" class="prepend" @change="handleProtocolChange($event, item)">
+        <el-select
+          slot="prepend"
+          v-model="item.name"
+          class="prepend"
+          @change="handleProtocolChange($event, item)"
+        >
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
         </el-select>
-        <el-button v-if="showSetting" slot="append" icon="el-icon-setting" @click="onSettingClick(item)" />
+        <el-button
+          v-if="showSetting(item)"
+          slot="append"
+          icon="el-icon-setting"
+          :disabled="disableSetting(item)"
+          @click="onSettingClick(item)"
+        />
       </el-input>
       <div style="display: flex; margin-left: 20px" class="input-button">
         <el-button
@@ -46,8 +57,16 @@ export default {
       default: () => ([])
     },
     showSetting: {
-      type: Boolean,
-      default: false
+      type: Function,
+      default: (item) => {
+        return false
+      }
+    },
+    disableSetting: {
+      type: Function,
+      default: (item) => {
+        return false
+      }
     },
     onSettingClick: {
       type: Function,
@@ -59,7 +78,8 @@ export default {
   data() {
     return {
       name: '',
-      items: []
+      items: [],
+      settingItem: {}
     }
   },
   computed: {
@@ -144,5 +164,6 @@ export default {
 .el-input-group__append .el-button {
   font-size: 14px;
   color: #1a1a1a;
+  padding: 9px 20px;
 }
 </style>

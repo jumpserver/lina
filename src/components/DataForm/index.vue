@@ -148,6 +148,6 @@ export default {
     color: var(--color-primary);
   }
   .form-buttons {
-    padding-top: 10px;
+    margin-top: 20px;
   }
 </style>

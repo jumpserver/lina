@@ -1,17 +1,29 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <TabPage :active-menu.sync="tab.activeMenu" :submenu="tab.submenu" @tab-click="changeMoreCreates">
+    <keep-alive>
+      <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+    </keep-alive>
+  </TabPage>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable, TabPage } from '@/layout/components'
 import { ChoicesDisplayFormatter } from '@/components/TableFormatters'
+import { Categories } from '@/views/assets/const'
+
 export default {
   components: {
-    GenericListPage
+    TabPage,
+    GenericListTable
   },
   data() {
     const vm = this
     return {
+      show: true,
+      tab: {
+        submenu: Categories,
+        activeMenu: 'host'
+      },
       tableConfig: {
         url: '/api/v1/assets/platforms/',
         columns: [
@@ -42,8 +54,8 @@ export default {
                   name: 'PlatformUpdate',
                   params: { id: row.id },
                   query: {
-                    category: row.category,
-                    type: row.type
+                    category: row.category.value,
+                    type: row.type.value
                   }
                 }
               },
@@ -51,8 +63,8 @@ export default {
                 return {
                   name: 'PlatformCreate',
                   query: {
-                    category: row.category,
-                    type: row.type,
+                    category: row.category.value,
+                    type: row.type.value,
                     clone_from: row.id
                   }
                 }
@@ -68,17 +80,34 @@ export default {
         createRoute: 'PlatformCreate',
         canCreate: () => {
           return this.$hasPerm('assets.add_platform')
+        },
+        moreCreates: {
+          callback: (item) => {
+            this.$router.push({
+              name: 'PlatformCreate',
+              query: { type: item.name, category: item.category }
+            })
+          },
+          dropdown: []
         }
-        // moreCreates: {
-        //   callback: (item) => {
-        //     this.$router.push({
-        //       name: 'PlatformCreate',
-        //       query: { type: item.name, category: item.category }
-        //     })
-        //   },
-        //   dropdown: this.$store.state.assets.assetCategoriesDropdown
-        // }
-      }
+      },
+      categoriesDropdown: this.$store.state.assets.assetCategoriesDropdown
+    }
+  },
+  computed: {
+    url() {
+      return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
+    }
+  },
+  mounted() {
+    this.changeMoreCreates()
+  },
+  methods: {
+    changeMoreCreates() {
+      this.tableConfig.url = this.url
+      this.headerActions.moreCreates.dropdown = this.categoriesDropdown.filter(item => {
+        return item.category === this.tab.activeMenu
+      })
     }
   }
 }

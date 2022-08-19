@@ -1,19 +1,21 @@
 <template>
   <div>
-    <GenericTreeListPage
-      ref="TreeList"
-      :table-config="tableConfig"
-      :help-message="helpMessage"
-      :header-actions="headerActions"
-      :tree-setting="treeSetting"
-    >
-      <TreeMenu
-        slot="rMenu"
-        :tree="treeRef"
-        @showAll="showAll"
-      />
-    </GenericTreeListPage>
-
+    <TabPage :active-menu.sync="tab.activeMenu" :submenu="tab.submenu" @tab-click="handleTabChange">
+      <TreeTable
+        ref="TreeList"
+        :table-config="tableConfig"
+        :help-message="helpMessage"
+        :header-actions="headerActions"
+        :tree-setting="treeSetting"
+        :show-tree="showTree"
+      >
+        <TreeMenu
+          slot="rMenu"
+          :tree="treeRef"
+          @showAll="showAll"
+        />
+      </TreeTable>
+    </TabPage>
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
@@ -23,7 +25,15 @@
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage/index'
+import { TabPage } from '@/layout/components'
+import { TreeTable } from '@/components'
+import $ from '@/utils/jquery-vendor'
+import { mapGetters } from 'vuex'
+import { connectivityMeta } from '@/components/AccountListTable/const'
+import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
+import PlatformDialog from './PlatformDialog'
+import TreeMenu from './TreeMenu'
+import { Categories } from '@/views/assets/const'
 import {
   DetailFormatter,
   ActionsFormatter,
@@ -31,25 +41,28 @@ import {
   NestedObjectFormatter,
   ChoicesDisplayFormatter
 } from '@/components/TableFormatters'
-import $ from '@/utils/jquery-vendor'
-import { mapGetters } from 'vuex'
-import { connectivityMeta } from '@/components/AccountListTable/const'
-import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
-import PlatformDialog from './PlatformDialog'
-import TreeMenu from './TreeMenu'
 
 export default {
   components: {
-    GenericTreeListPage,
     AssetBulkUpdateDialog,
     TreeMenu,
-    PlatformDialog
+    PlatformDialog,
+    TreeTable,
+    TabPage
   },
   data() {
     const vm = this
     return {
       treeRef: null,
       showPlatform: false,
+      showTree: true,
+      tab: {
+        submenu: [
+          { name: 'all', title: '所有' },
+          ...Categories
+        ],
+        activeMenu: 'host'
+      },
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -67,10 +80,8 @@ export default {
         url: '/api/v1/assets/assets/',
         hasTree: true,
         columns: [
-          'name', 'ip',
-          'category', 'type', 'platform',
-          'labels', 'nodes',
-          'is_active', 'connectivity',
+          'name', 'ip', 'category', 'type', 'platform',
+          'labels', 'nodes', 'is_active', 'connectivity',
           'created_by', 'date_created', 'comment', 'org_name',
           'actions'
         ],
@@ -99,9 +110,6 @@ export default {
           ip: {
             sortable: 'custom',
             width: '140px'
-          },
-          sn: {
-            showOverflowTooltip: true
           },
           comment: {
             showOverflowTooltip: true
@@ -278,6 +286,16 @@ export default {
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
+    },
+    handleTabChange(item) {
+      let url = '/api/v1/assets/assets/'
+      const showTree = item.name === 'all'
+      if (item.name !== 'all') {
+        url = `${url}?category=${item.name}`
+      }
+      this.treeSetting.url = url
+      this.showTree = showTree
+      this.tableConfig.url = url
     }
   }
 }

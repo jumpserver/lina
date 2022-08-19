@@ -81,32 +81,8 @@ export default {
     }
   },
   data() {
-    const defaultActions = [
-      {
-        name: 'actionCreate',
-        title: this.createTitle,
-        type: 'primary',
-        has: this.hasCreate && !this.moreCreates,
-        can: this.canCreate,
-        callback: this.onCreate || this.handleCreate
-      }
-    ]
-    if (this.moreCreates) {
-      const defaultMoreCreate = {
-        name: 'actionMoreCreate',
-        title: this.createTitle,
-        type: 'primary',
-        has: true,
-        can: this.canCreate,
-        dropdown: [],
-        callback: this.onCreate || this.handleCreate
-      }
-      const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
-      defaultActions.push(createCreateAction)
-    }
     const vm = this
     return {
-      defaultActions: defaultActions,
       defaultMoreActions: [
         {
           title: this.$t('common.deleteSelected'),
@@ -131,6 +107,32 @@ export default {
     }
   },
   computed: {
+    defaultActions() {
+      const defaultActions = [
+        {
+          name: 'actionCreate',
+          title: this.createTitle,
+          type: 'primary',
+          has: this.hasCreate && !this.moreCreates,
+          can: this.canCreate,
+          callback: this.onCreate || this.handleCreate
+        }
+      ]
+      if (this.moreCreates) {
+        const defaultMoreCreate = {
+          name: 'actionMoreCreate',
+          title: this.createTitle,
+          type: 'primary',
+          has: true,
+          can: this.canCreate,
+          dropdown: [],
+          callback: this.onCreate || this.handleCreate
+        }
+        const createCreateAction = Object.assign(defaultMoreCreate, this.moreCreates)
+        defaultActions.push(createCreateAction)
+      }
+      return defaultActions
+    },
     iActions() {
       return [...this.actions, this.moreAction]
     },

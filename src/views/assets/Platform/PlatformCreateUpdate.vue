@@ -1,27 +1,44 @@
 <template>
-  <GenericCreateUpdatePage
-    :url="url"
-    :fields="fields"
-    :initial="initial"
-    :fields-meta="fieldsMeta"
-    :clean-form-value="cleanFormValue"
-    :after-get-form-value="afterGetFormValue"
-  />
+  <div>
+    <GenericCreateUpdatePage
+      :url="url"
+      :fields="fields"
+      :initial="initial"
+      :fields-meta="fieldsMeta"
+      :clean-form-value="cleanFormValue"
+      :after-get-form-value="afterGetFormValue"
+    />
+    <ProtocolSettingDialog
+      :visible.sync="showDialog"
+      :item="settingItem"
+    />
+  </div>
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
 import { assetFieldsMeta } from '@/views/assets/const'
+import ProtocolSettingDialog from './ProtocolSettingDialog'
+
 export default {
   name: 'PlatformCreateUpdate',
-  components: { GenericCreateUpdatePage },
+  components: {
+    GenericCreateUpdatePage,
+    ProtocolSettingDialog
+  },
   data() {
     const category = this.$route.query.category
     const type = this.$route.query.type
     const assetMeta = assetFieldsMeta()
     return {
       loading: true,
+      showDialog: false,
+      settingItem: {
+        setting: {},
+        name: '',
+        port: 0
+      },
       initial: {
         comment: '',
         charset: 'utf8',
@@ -48,44 +65,6 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
-        meta: {
-          fields: ['security', 'console'],
-          fieldsMeta: {
-            security: {
-              prop: 'meta.security',
-              type: 'select',
-              label: 'RDP security',
-              options: [{
-                label: 'RDP',
-                value: 'rdp'
-              },
-              {
-                label: 'NLA',
-                value: 'nla'
-              },
-              {
-                label: 'TLS',
-                value: 'tls'
-              },
-              {
-                label: 'Any',
-                value: 'any'
-              }]
-            },
-            console: {
-              type: 'select',
-              label: 'RDP console',
-              options: [{
-                label: this.$t('common.Yes'),
-                value: 'true'
-              }, {
-                label: this.$t('common.No'),
-                value: 'false'
-              }]
-            }
-          },
-          hidden: form => form.base !== 'Windows'
-        },
         category_type: {
           type: 'cascader',
           label: this.$t('assets.Type'),
@@ -113,7 +92,12 @@ export default {
           ...assetMeta.protocols,
           el: {
             choices: [],
-            showSetting: true
+            showSetting: (item) => true,
+            onSettingClick: (item) => {
+              this.settingItem = item
+              this.showDialog = true
+            },
+            disableSetting: (item) => item.name !== 'rdp'
           },
           hidden: (formValue) => {
             return !formValue['protocols_enabled']

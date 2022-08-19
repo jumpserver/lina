@@ -17,14 +17,21 @@
         </component>
       </div>
       <div :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')">
-        <div class="mini">
-          <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
-            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+        <div v-if="showTree" class="mini">
+          <div style="display:block" class="mini-button" @click="iShowTree = !iShowTree">
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" />
+            <i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
           <slot name="table">
-            <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" v-on="$listeners" />
+            <ListTable
+              ref="ListTable"
+              :key="componentKey"
+              :table-config="iTableConfig"
+              :header-actions="headerActions"
+              v-on="$listeners"
+            />
           </slot>
         </div>
       </div>
@@ -74,6 +81,9 @@ export default {
       handler(val) {
       },
       deep: true
+    },
+    showTree(val) {
+      this.iShowTree = val
     }
   },
   mounted() {
