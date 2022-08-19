@@ -2,6 +2,7 @@
   <div>
     <TabPage :active-menu.sync="tab.activeMenu" :submenu="tab.submenu" @tab-click="handleTabChange">
       <TreeTable
+        v-if="show"
         ref="TreeList"
         :table-config="tableConfig"
         :help-message="helpMessage"
@@ -56,6 +57,7 @@ export default {
       treeRef: null,
       showPlatform: false,
       showTree: true,
+      show: true,
       tab: {
         submenu: [
           { name: 'all', title: '所有' },
@@ -93,12 +95,8 @@ export default {
           ]
         },
         columnsMeta: {
-          type: {
-            formatter: ChoicesDisplayFormatter
-          },
-          category: {
-            formatter: ChoicesDisplayFormatter
-          },
+          type: { formatter: ChoicesDisplayFormatter },
+          category: { formatter: ChoicesDisplayFormatter },
           hostname: {
             formatter: DetailFormatter,
             formatterArgs: {
@@ -107,20 +105,11 @@ export default {
             showOverflowTooltip: true,
             sortable: true
           },
-          ip: {
-            sortable: 'custom',
-            width: '140px'
-          },
-          comment: {
-            showOverflowTooltip: true
-          },
+          ip: { sortable: 'custom', width: '140px' },
+          comment: { showOverflowTooltip: true },
           connectivity: connectivityMeta,
-          labels_display: {
-            formatter: TagsFormatter
-          },
-          nodes: {
-            formatter: NestedObjectFormatter
-          },
+          labels_display: { formatter: TagsFormatter },
+          nodes: { formatter: NestedObjectFormatter },
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
@@ -288,14 +277,18 @@ export default {
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
     },
     handleTabChange(item) {
-      let url = '/api/v1/assets/assets/'
-      const showTree = item.name === 'all'
-      if (item.name !== 'all') {
-        url = `${url}?category=${item.name}`
-      }
-      this.treeSetting.url = url
-      this.showTree = showTree
-      this.tableConfig.url = url
+      this.show = false
+      setTimeout(() => {
+        let url = '/api/v1/assets/assets/'
+        const showTree = item.name === 'all'
+        if (item.name !== 'all') {
+          url = `${url}?category=${item.name}`
+        }
+        this.treeSetting.url = url
+        this.showTree = showTree
+        this.tableConfig.url = url
+        this.show = true
+      }, 100)
     }
   }
 }
