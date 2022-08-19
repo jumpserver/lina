@@ -50,7 +50,7 @@ export default {
       const reader = new FileReader()
       reader.onload = function() {
         let result = this.result
-        if (vm.toFormat === 'object') {
+        if (vm.toFormat === 'object' && vm.fileName.endsWith('.json')) {
           result = JSON.parse(result)
         }
         vm.$emit('input', result)
