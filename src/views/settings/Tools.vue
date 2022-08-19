@@ -1,27 +1,38 @@
 <template>
   <Page v-bind="$attrs">
     <IBox>
-      <div>
-        <el-form ref="testForm" label-width="20%" :model="testData" :rules="testRules">
-          <el-form-item :label="$t('setting.basicTools')">
-            <el-radio-group v-model="testData.tool_type" @change="changeToolType">
-              <el-radio v-for="t in tools" :key="t" :label="t" />
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item :label="$t('setting.destinationIP')" prop="dest_addr">
-            <el-input v-model="testData.dest_addr" :placeholder="$t('setting.destinationIP')" />
-          </el-form-item>
-          <el-form-item v-if="testData.tool_type=='Telnet'" :label="$t('setting.testPort')" prop="port_num">
-            <el-input v-model="testData.port_num" :placeholder="$t('setting.testPort')" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" :loading="isTesting" @click="submitTest">{{ $t('setting.testTools') }}</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="testResp" type="textarea" :readonly="true" :rows="8" :placeholder="$t('setting.testHelpText')" />
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-form ref="testForm" label-width="20%" :model="testData" :rules="testRules">
+        <el-form-item :label="$t('setting.basicTools')">
+          <el-radio-group v-model="testData.tool_type" @change="changeToolType">
+            <el-radio v-for="t in tools" :key="t" :label="t" />
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="$t('setting.destinationIP')" prop="dest_addr">
+          <el-input v-model="testData.dest_addr" :placeholder="$t('setting.destinationIP')" />
+        </el-form-item>
+        <el-form-item v-if="testData.tool_type=='Telnet'" :label="$t('setting.testPort')" prop="port_num">
+          <el-input v-model="testData.port_num" :placeholder="$t('setting.testPort')" />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            size="small"
+            :loading="isTesting"
+            @click="submitTest"
+          >
+            {{ $t('setting.testTools') }}
+          </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="testResp"
+            type="textarea"
+            :readonly="true"
+            :rows="8"
+            :placeholder="$t('setting.testHelpText')"
+          />
+        </el-form-item>
+      </el-form>
     </IBox>
   </Page>
 </template>
@@ -95,20 +106,19 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-form ::v-deep .el-form-item {
-  margin-bottom: 12px;
-}
-
-.el-form ::v-deep .el-form-item__content {
-  width: 75%;
-}
-
-.el-form ::v-deep .el-form-item__label {
-  padding: 0 30px 0 0;
-}
-
-.el-form ::v-deep .el-form-item__error {
+<style lang="scss" scoped>
+.el-form {
+  &>>> .el-form-item {
+    margin-bottom: 12px;
+  }
+  &>>> .el-form-item__content {
+    width: 75%;
+  }
+  &>>> .el-form-item__label {
+    padding: 0 30px 0 0;
+  }
+  &>>> .el-form-item__error {
     position: inherit;
+  }
 }
 </style>
