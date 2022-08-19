@@ -91,13 +91,17 @@ export default {
         const attrs = values.attrs
         for (const item of encryptedFields) {
           const value = attrs[item]
-          if (value) {
-            attrs[item] = encryptPassword(value)
+          if (!value) {
+            continue
           }
+          attrs[item] = encryptPassword(value)
         }
         const toListFields = ['ip_group']
         for (const item of toListFields) {
           let value = attrs[item]
+          if (!value) {
+            continue
+          }
           value = value?.split(',') || []
           value = value.filter((value, index) => { if (value) return true })
           attrs[item] = value
