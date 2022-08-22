@@ -89,6 +89,14 @@ export const DATABASE = [
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
+  },
+  {
+    name: MONGODB,
+    title: i18n.t(`applications.applicationsType.${MONGODB}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence,
+    group: i18n.t('applications.NoSQLProtocol')
   }
 ]
 
