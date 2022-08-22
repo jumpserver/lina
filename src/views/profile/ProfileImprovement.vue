@@ -78,6 +78,7 @@ export default {
       },
       onPerformSuccess() {
         this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$store.dispatch('users/ifFirstLogin', false)
         setTimeout(() => this.$router.push({ name: 'ProfileInfo' }), 100)
       },
       submitMethod() {
