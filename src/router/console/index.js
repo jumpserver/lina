@@ -5,7 +5,6 @@ import store from '@/store'
 
 import UsersRoute from './users'
 import AssetsRoute from './assets'
-import ApplicationsRoute from './applications'
 import PermsRoute from './perms'
 import OpsRoutes from './ops'
 import AclRoutes from './acls'
@@ -56,16 +55,6 @@ export default {
         icon: 'inbox'
       },
       children: AssetsRoute
-    },
-    {
-      path: '/console/applications',
-      component: empty,
-      name: 'applications',
-      meta: {
-        title: i18n.t('route.Applications'),
-        icon: 'th'
-      },
-      children: ApplicationsRoute
     },
     {
       path: '/console/accounts',
