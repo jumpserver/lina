@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="this.$t('assets.SelectPlatforms')"
+    :title="$tc('assets.SelectPlatforms')"
     :visible.sync="iVisible"
     width="70%"
     top="1vh"
@@ -77,12 +77,12 @@ export default {
       }
     },
     sortedPlatforms() {
-      return _.groupBy(this.platforms, (item) => item.category)
+      return _.groupBy(this.platforms, (item) => item.category.value)
     },
     categoryMapper() {
       const mapper = {}
       for (const p of this.platforms) {
-        mapper[p.category] = p.category_display
+        mapper[p.category.value] = p.category.label
       }
       return mapper
     }

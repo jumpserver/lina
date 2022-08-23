@@ -12,7 +12,7 @@ export default [
       {
         path: '',
         name: 'AssetList',
-        component: () => import('@/views/assets/Asset/AssetList.vue'),
+        component: () => import('@/views/assets/Asset/AssetList/index.vue'),
         meta: { title: i18n.t('route.AssetList') }
       },
       {

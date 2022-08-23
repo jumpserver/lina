@@ -63,7 +63,7 @@ export default {
           { name: 'all', title: '所有' },
           ...Categories
         ],
-        activeMenu: 'host'
+        activeMenu: 'all'
       },
       treeSetting: {
         showMenu: true,
@@ -258,6 +258,7 @@ export default {
     this.treeSetting.showUpdate = this.$hasPerm('assets.change_node')
     this.treeSetting.showDelete = this.$hasPerm('assets.delete_node')
     this.treeRef = this.$refs.TreeList
+    this.handleTabChange()
   },
   methods: {
     decorateRMenu() {
@@ -277,12 +278,13 @@ export default {
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
     },
     handleTabChange(item) {
+      const category = item ? item.name : this.tab.activeMenu
       this.show = false
       setTimeout(() => {
         let url = '/api/v1/assets/assets/'
-        const showTree = item.name === 'all'
-        if (item.name !== 'all') {
-          url = `${url}?category=${item.name}`
+        const showTree = category === 'all'
+        if (category !== 'all') {
+          url = `${url}?category=${category}`
         }
         this.treeSetting.url = url
         this.showTree = showTree

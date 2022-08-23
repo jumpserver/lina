@@ -2,7 +2,7 @@
   <div class="asset-select-dialog">
     <Dialog
       v-if="iVisible"
-      :title="this.$t('assets.Assets')"
+      :title="$tc('assets.Assets')"
       :visible.sync="iVisible"
       width="70%"
       top="1vh"

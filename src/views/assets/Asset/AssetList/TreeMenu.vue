@@ -33,7 +33,7 @@
     />
     <Dialog
       width="50%"
-      :title="this.$t('assets.NodeInformation')"
+      :title="$tc('assets.NodeInformation')"
       :visible.sync="nodeInfoDialogSetting.dialogVisible"
       :show-cancel="false"
       :show-confirm="false"
