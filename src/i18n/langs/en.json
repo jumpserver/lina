@@ -1408,6 +1408,7 @@
       "IPNetworkSegment": "Ip Network Segment",
       "Aliyun": "Ali Cloud",
       "Qcloud": "Tencent Cloud",
+      "QcloudLighthouse": "Tencent Cloud(Lighthouse)",
       "QingyunPrivatecloud": "Qingyun Private Cloud",
       "HuaweiPrivatecloud": "Huawei Private Cloud",
       "OpenStack": "OpenStack",
