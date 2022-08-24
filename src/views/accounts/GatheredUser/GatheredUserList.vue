@@ -23,10 +23,11 @@ export default {
         url: '/api/v1/assets/gathered-users/',
         hasTree: true,
         columns: [
-          'hostname', 'ip', 'username', 'date_last_login', 'present', 'ip_last_login', 'date_updated'
+          'name', 'ip', 'username', 'date_last_login', 'present',
+          'ip_last_login', 'date_updated'
         ],
         columnsMeta: {
-          hostname: {
+          name: {
             showOverflowTooltip: true
           },
           ip: {
@@ -51,8 +52,8 @@ export default {
           exclude: ['asset', 'present'],
           options: [
             {
-              label: this.$t('assets.Hostname'),
-              value: 'asset__hostname'
+              label: this.$t('assets.Name'),
+              value: 'asset__name'
             },
             {
               label: 'IP',

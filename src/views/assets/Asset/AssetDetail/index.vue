@@ -51,7 +51,7 @@ export default {
         ],
         hasRightSide: true,
         getObjectName: function(obj) {
-          return obj.hostname + '(' + obj.ip + ')'
+          return obj.name + '(' + obj.ip + ')'
         }
       }
     }

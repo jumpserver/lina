@@ -33,7 +33,7 @@ export default {
             showOverflowTooltip: true,
             formatter: function(row, column, cellValue, index) {
               const route = { to: { name: 'AssetDetail', params: { id: cellValue }}}
-              const hostname = row.attrs['asset_info'].hostname
+              const hostname = row.attrs['asset_info'].name
               if (vm.$hasPerm('assets.view_asset')) {
                 return <router-link{...{ attrs: route }} >{ hostname }</router-link>
               } else {

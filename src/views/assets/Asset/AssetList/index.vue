@@ -88,16 +88,16 @@ export default {
           'actions'
         ],
         columnsShow: {
-          min: ['hostname', 'ip', 'actions'],
+          min: ['name', 'ip', 'actions'],
           default: [
-            'hostname', 'ip', 'platform', 'category', 'type',
+            'name', 'ip', 'platform', 'category', 'type',
             'connectivity', 'actions'
           ]
         },
         columnsMeta: {
           type: { formatter: ChoicesDisplayFormatter },
           category: { formatter: ChoicesDisplayFormatter },
-          hostname: {
+          name: {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'

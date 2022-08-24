@@ -61,7 +61,7 @@ export default {
       ajax: {
         url: '/api/v1/assets/assets/?fields_size=mini',
         transformOption: (item) => {
-          return { label: item.hostname + '(' + item.ip + ')', value: item.id }
+          return { label: item.name + '(' + item.ip + ')', value: item.id }
         }
       }
     }
@@ -88,8 +88,8 @@ export default {
         canSelect: this.canSelect,
         columns: [
           {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+            prop: 'name',
+            label: this.$t('assets.Name'),
             sortable: true,
             showOverflowTooltip: true,
             formatter: DetailFormatter,

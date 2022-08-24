@@ -80,7 +80,7 @@ export const Categories = [
   },
   {
     title: '网络设备',
-    name: 'network'
+    name: 'networking'
   },
   {
     title: '数据库',

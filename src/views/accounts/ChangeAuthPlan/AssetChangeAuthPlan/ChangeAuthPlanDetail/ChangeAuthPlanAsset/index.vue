@@ -33,10 +33,10 @@ export default {
       tableConfig: {
         url: `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/assets/`,
         columns: [
-          'hostname', 'ip', 'delete_action'
+          'name', 'ip', 'delete_action'
         ],
         columnsMeta: {
-          hostname: {
+          name: {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'

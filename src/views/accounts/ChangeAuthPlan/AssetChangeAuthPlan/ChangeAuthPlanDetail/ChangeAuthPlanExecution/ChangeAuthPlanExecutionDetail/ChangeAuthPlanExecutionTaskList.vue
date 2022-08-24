@@ -33,7 +33,7 @@ export default {
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
               getTitle({ row }) {
-                return row.asset_info.hostname
+                return row.asset_info.name
               },
               getRoute({ row }) {
                 return {

@@ -142,8 +142,8 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('assets.Hostname'),
-          value: this.object.hostname
+          key: this.$t('assets.Name'),
+          value: this.object.name
         },
         {
           key: this.$t('assets.ip'),

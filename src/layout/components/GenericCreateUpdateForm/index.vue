@@ -160,8 +160,6 @@ export default {
         let msgLinkName = ''
         if (res.name) {
           msgLinkName = res.name
-        } else if (res.hostname) {
-          msgLinkName = res.hostname
         }
         const h = this.$createElement
         const detailRoute = this.objectDetailRoute
@@ -323,8 +321,6 @@ export default {
           object = await this.getObjectDetail(url)
           if (object['name']) {
             object.name = this.$t('common.cloneFrom') + '' + object.name
-          } else if (object['hostname']) {
-            object.hostname = this.$t('common.cloneFrom') + '' + object.hostname
           }
         } else {
           object = await this.getObjectDetail(this.iUrl)

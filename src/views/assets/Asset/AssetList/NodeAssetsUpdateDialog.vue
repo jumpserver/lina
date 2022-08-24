@@ -62,8 +62,8 @@ export default {
         hasTree: true,
         columns: [
           {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+            prop: 'name',
+            label: this.$t('assets.Name'),
             sortable: true,
             formatter: DetailFormatter,
             formatterArgs: {
