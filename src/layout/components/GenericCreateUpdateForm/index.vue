@@ -268,10 +268,12 @@ export default {
     this.$log.debug('Object init is: ', this.object)
     this.loading = true
     try {
-      const values = await this.getFormValue()
-      this.$log.debug('Final object is: ', values)
-      const formValue = Object.assign(this.form, values)
-      this.form = this.afterGetFormValue(formValue)
+      if (this.object) {
+        const values = await this.getFormValue()
+        this.$log.debug('Final object is: ', values)
+        const formValue = Object.assign(this.form, values)
+        this.form = this.afterGetFormValue(formValue)
+      }
     } finally {
       this.loading = false
     }
