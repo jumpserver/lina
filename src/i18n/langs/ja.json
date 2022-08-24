@@ -1451,6 +1451,7 @@
       "IPNetworkSegment": "IPネットワークセグメント",
       "Aliyun": "Alibaba cloud",
       "Qcloud": "テンセント雲",
+      "QcloudLighthouse": "テンセント雲(軽量アプリケーションサーバー)",
       "QingyunPrivatecloud": "青雲プライベートクラウド",
       "HuaweiPrivatecloud": "ファーウェイプライベートクラウド",
       "OpenStack": "OpenStack",
