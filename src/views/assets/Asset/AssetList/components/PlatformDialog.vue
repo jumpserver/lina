@@ -128,6 +128,7 @@ export default {
         host: 'HostCreate',
         database: 'DatabaseCreate',
         cloud: 'CloudCreate',
+        web: 'WebCreate',
         remote_app: 'RemoteAppCreate'
       }
       const route = mapper[platform.category.value] || 'HostCreate'

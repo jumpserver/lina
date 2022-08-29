@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { assetFieldsMeta } from '../const'
+import { assetFieldsMeta } from '../../const'
 
 export default {
   name: 'HostCreateUpdate',

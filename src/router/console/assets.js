@@ -55,21 +55,21 @@ export default [
       {
         path: '',
         name: 'HostList',
-        component: () => import('@/views/assets/Host/HostList.vue'),
+        component: () => import('@/views/assets/Asset/AssetList/HostList.vue'),
         hidden: true,
         meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
       },
       {
         path: 'create',
         name: 'HostCreate',
-        component: () => import('@/views/assets/Host/HostCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'HostUpdate',
-        component: () => import('@/views/assets/Host/HostCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/HostCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
       }
@@ -85,21 +85,111 @@ export default [
       {
         path: '',
         name: 'DatabaseList',
-        component: () => import('@/views/assets/Database/HostList.vue'),
+        component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue'),
         hidden: true,
         meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
       },
       {
         path: 'create',
         name: 'DatabaseCreate',
-        component: () => import('@/views/assets/Database/DatabaseCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
         name: 'DatabaseUpdate',
-        component: () => import('@/views/assets/Database/DatabaseCreateUpdate.vue'),
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/DatabaseCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
+    path: 'networking',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: { title: i18n.t('route.networking'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'DatabaseList',
+        component: () => import('@/views/assets/Asset/AssetList/NetworkList.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'DatabaseCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/NetworkingCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'DatabaseUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/NetworkingCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
+    path: 'CloudCreate',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: { title: i18n.t('route.networking'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'CloudsPlatformList',
+        component: () => import('@/views/assets/Asset/AssetList/CloudsPlatformList.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'CloudCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'CloudCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/CloudsPlatformCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
+      }
+    ]
+  },
+  {
+    path: 'web',
+    component: empty,
+    redirect: '',
+    hidden: true,
+    meta: { title: i18n.t('route.networking'), permissions: ['assets.view_asset'] },
+    children: [
+      {
+        path: '',
+        name: 'WebList',
+        component: () => import('@/views/assets/Asset/AssetList/WebList.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: 'create',
+        name: 'WebCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetCreate'), activeMenu: '/console/assets/assets' }
+      },
+      {
+        path: ':id/update',
+        name: 'WebUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/WebCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
       }
