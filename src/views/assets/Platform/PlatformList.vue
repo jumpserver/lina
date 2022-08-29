@@ -1,5 +1,10 @@
 <template>
-  <TabPage :active-menu.sync="tab.activeMenu" :submenu="tab.submenu" @tab-click="changeMoreCreates">
+  <TabPage
+    v-if="!loading"
+    :active-menu.sync="tab.activeMenu"
+    :submenu="tab.submenu"
+    @tab-click="changeMoreCreates"
+  >
     <keep-alive>
       <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
     </keep-alive>
@@ -19,7 +24,7 @@ export default {
   data() {
     const vm = this
     return {
-      show: true,
+      loading: true,
       tab: {
         submenu: Categories,
         activeMenu: 'host'
@@ -90,8 +95,7 @@ export default {
           },
           dropdown: []
         }
-      },
-      categoriesDropdown: this.$store.state.assets.assetCategoriesDropdown
+      }
     }
   },
   computed: {
@@ -99,13 +103,18 @@ export default {
       return `/api/v1/assets/platforms/?category=${this.tab.activeMenu}`
     }
   },
-  mounted() {
-    this.changeMoreCreates()
+  async mounted() {
+    try {
+      await this.$store.dispatch('assets/getAssetCategories')
+      await this.changeMoreCreates()
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
-    changeMoreCreates() {
+    async changeMoreCreates() {
       this.tableConfig.url = this.url
-      this.headerActions.moreCreates.dropdown = this.categoriesDropdown.filter(item => {
+      this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
       })
     }
