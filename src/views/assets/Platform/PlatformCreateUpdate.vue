@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading" class="platform-form">
     <GenericCreateUpdatePage
       :url="url"
       :fields="fields"
@@ -44,7 +44,11 @@ export default {
         charset: 'utf8',
         category_type: ['host', 'linux'],
         domain_enabled: false,
-        protocols_enabled: false
+        protocols_enabled: false,
+        verify_account_enabled: false,
+        create_account_enabled: false,
+        change_password_enabled: false,
+        su_enabled: false
       },
       fields: [
         [this.$t('common.Basic'), [
@@ -73,13 +77,12 @@ export default {
           ],
           el: {
             multiple: false,
-            options: []
+            options: [],
+            disabled: true
           },
-          on: {
-            change: ([event], updateForm) => {
-              const category = event[0]
-              const type = event[1]
-              this.setLimits(category, type, updateForm)
+          hidden: (formValue) => {
+            if (formValue.category_type[0] === undefined) {
+              formValue.category_type = this.initial.category_type
             }
           }
         },
@@ -99,9 +102,7 @@ export default {
             },
             disableSetting: (item) => item.name !== 'rdp'
           },
-          hidden: (formValue) => {
-            return !formValue['protocols_enabled']
-          }
+          hidden: (formValue) => !formValue['protocols_enabled']
         },
         domain_enabled: {
           el: {
@@ -109,11 +110,31 @@ export default {
           }
         },
         domain_default: {
-          ...assetMeta,
+          ...assetMeta.domain,
+          hidden: (formValue) => !formValue['domain_enabled']
+        },
+        verify_account_method: {
           hidden: (formValue) => {
-            return !formValue['domain_enabled']
-          }
-        }.domain
+            return !formValue['verify_account_enabled']
+          },
+          type: 'select',
+          options: []
+        },
+        create_account_method: {
+          hidden: (formValue) => !formValue['create_account_enabled'],
+          type: 'select',
+          options: [],
+          el: {}
+        },
+        change_password_method: {
+          hidden: (formValue) => !formValue['change_password_enabled'],
+          type: 'select',
+          options: []
+        },
+        su_method: {
+          hidden: (formValue) => !formValue['su_enabled'],
+          type: 'select'
+        }
       },
       url: `/api/v1/assets/platforms/?category=${category}&type=${type}`,
       cleanFormValue: (values) => {
@@ -124,26 +145,34 @@ export default {
       },
       afterGetFormValue: (obj) => {
         obj['category_type'] = [obj['category'], obj['type']]
-        this.setLimits(obj['category'], obj['type'])
+        this.setConstraints(obj['category'], obj['type'])
         return obj
       }
     }
   },
-  mounted() {
-    this.$store.dispatch('assets/getAssetCategories').then((state) => {
-      this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
-      this.setCategoryOnCreate()
-    })
+  async mounted() {
+    try {
+      await this.setCategories()
+      await this.setConstraints()
+      await this.setOpsMethods()
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
-    setCategoryOnCreate() {
+    async setCategories() {
       const category = this.$route.query.category
       const type = this.$route.query.type
-      if (!category || !type) {
-        return
+      const state = await this.$store.dispatch('assets/getAssetCategories')
+      this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
+      if (category && type) {
+        this.initial.category_type = [category, type]
       }
+      return new Promise((resolve, reject) => resolve(true))
     },
-    async setLimits(category, type, updateForm) {
+    async setConstraints() {
+      const category = this.$route.query.category
+      const type = this.$route.query.type
       const url = `/api/v1/assets/platforms/type-constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
       const hasDomain = constraints['has_domain']
@@ -153,17 +182,35 @@ export default {
       this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
       this.fieldsMeta.protocols.el.choices = protocols
 
-      if (updateForm) {
-        updateForm({
-          protocols_enabled: !!protocols.length,
-          domain_enabled: hasDomain
+      this.initial.protocols_enabled = !!protocols.length
+      this.initial.domain_enabled = hasDomain
+    },
+    async setOpsMethods() {
+      const category = this.$route.query.category
+      const type = this.$route.query.type
+      const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/')
+      const items = ['verify_account', 'change_password', 'create_account']
+      for (const item of items) {
+        const methods = allMethods.filter(method => {
+          return method['category'] === category &&
+            method['type'] === type &&
+            method['method'] === item
+        }).map(method => {
+          return { value: method['id'], label: method['name'] }
         })
+        this.fieldsMeta[item + '_method'].options = methods
       }
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
+.platform-form >>> .el-form-item {
+  .el-select {
+    width: 100%;
+  }
+}
 
 </style>
+
