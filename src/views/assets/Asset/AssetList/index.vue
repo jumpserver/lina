@@ -21,7 +21,7 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
-    <PlatformDialog :visible.sync="showPlatform" />
+    <PlatformDialog :visible.sync="showPlatform" :category="category" />
   </div>
 </template>
 
@@ -65,6 +65,7 @@ export default {
         ],
         activeMenu: 'all'
       },
+      category: '',
       treeSetting: {
         showMenu: true,
         showRefresh: true,
@@ -279,6 +280,8 @@ export default {
     },
     handleTabChange(item) {
       const category = item ? item.name : this.tab.activeMenu
+      this.category = category
+      console.log('category: ', category)
       this.show = false
       setTimeout(() => {
         let url = '/api/v1/assets/assets/'
