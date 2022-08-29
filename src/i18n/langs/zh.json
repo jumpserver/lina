@@ -96,6 +96,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "All": "所有",
+    "CloudPlatform": "云平台",
     "AddAccount": "添加账号",
     "Account": "账号",
     "Defaults": "默认值",

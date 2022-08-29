@@ -1,40 +1,61 @@
 <template>
-  <GenericListPage
-    :table-config="tableConfig"
-    :header-actions="headerActions"
-    :help-message="notice"
-  />
+  <div>
+    <ListTable
+      :table-config="iTableConfig"
+      :header-actions="iHeaderActions"
+    />
+    <PlatformDialog :visible.sync="showPlatform" :category="category" />
+  </div>
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
-import { ActionsFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
+import { ListTable } from '@/components'
+import { ActionsFormatter, DetailFormatter, TagsFormatter, ChoicesDisplayFormatter } from '@/components/TableFormatters'
 import { connectivityMeta } from '@/components/AccountListTable/const'
+import PlatformDialog from '../components/PlatformDialog'
 
 export default {
   components: {
-    GenericListPage
+    ListTable,
+    PlatformDialog
+  },
+  props: {
+    tableConfig: {
+      type: Object,
+      default: () => ({})
+    },
+    headerActions: {
+      type: Object,
+      default: () => ({})
+    },
+    category: {
+      type: String,
+      default: 'all'
+    }
   },
   data() {
     const vm = this
     return {
-      tableConfig: {
+      showPlatform: false,
+      defaultConfig: {
         url: '/api/v1/assets/hosts/',
         columns: [
-          'hostname', 'ip', 'public_ip', 'admin_user_display',
+          'name', 'ip', 'public_ip', 'admin_user_display',
           'protocols', 'category', 'type', 'platform', 'sn',
           'is_active', 'connectivity', 'labels_display',
           'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['hostname', 'ip', 'actions'],
+          min: ['name', 'ip', 'actions'],
           default: [
-            'hostname', 'ip', 'platform', 'category', 'type',
+            'name', 'ip', 'platform', 'category', 'type',
             'connectivity', 'actions'
           ]
         },
         columnsMeta: {
-          hostname: {
+          type: { formatter: ChoicesDisplayFormatter },
+          category: { formatter: ChoicesDisplayFormatter },
+          name: {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AssetDetail'
@@ -93,10 +114,21 @@ export default {
           }
         }
       },
-      headerActions: {
+      defaultHeaderActions: {
         hasMoreActions: false,
-        createRoute: 'HostCreate'
+        createRoute: 'HostCreate',
+        onCreate: () => {
+          this.showPlatform = true
+        }
       }
+    }
+  },
+  computed: {
+    iTableConfig() {
+      return _.merge(this.defaultConfig, this.tableConfig)
+    },
+    iHeaderActions() {
+      return _.merge(this.defaultHeaderActions, this.headerActions)
     }
   }
 }
