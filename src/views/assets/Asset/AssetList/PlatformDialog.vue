@@ -12,10 +12,10 @@
       <el-row :gutter="20">
         <el-collapse v-model="activePlatform" accordion>
           <el-collapse-item
-            v-for="(ps, category) in sortedPlatforms"
-            :key="category"
-            :title="categoryMapper[category]"
-            :name="category"
+            v-for="(ps, categoryName) in sortedPlatforms"
+            :key="categoryName"
+            :title="categoryMapper[categoryName]"
+            :name="categoryName"
           >
             <el-col
               v-for="(platform, index) of ps"
@@ -49,6 +49,13 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    category: {
+      type: String,
+      Validator: (value) => {
+        return ['all', 'host', 'networking', 'database', 'cloud', 'web'].includes(value)
+      },
+      default: 'all'
     }
   },
   data() {
@@ -77,7 +84,9 @@ export default {
       }
     },
     sortedPlatforms() {
-      return _.groupBy(this.platforms, (item) => item.category.value)
+      const { category, platforms } = this
+      const filterPlatforms = _.groupBy(platforms, (item) => item.category.value)
+      return category === 'all' ? filterPlatforms : { [category]: filterPlatforms[category] }
     },
     categoryMapper() {
       const mapper = {}
@@ -87,7 +96,19 @@ export default {
       return mapper
     }
   },
-  mounted() {
+  watch: {
+    category: {
+      handler(val) {
+        if (val === 'all') {
+          this.activePlatform = 'host'
+        } else {
+          this.activePlatform = val
+        }
+      },
+      immediate: true
+    }
+  },
+  created() {
     this.$axios.get('/api/v1/assets/platforms/').then(data => {
       this.platforms = data
     })
@@ -109,7 +130,7 @@ export default {
         cloud: 'CloudCreate',
         remote_app: 'RemoteAppCreate'
       }
-      const route = mapper[platform.category] || 'HostCreate'
+      const route = mapper[platform.category.value] || 'HostCreate'
       this.$router.push({ name: route, query: { platform: platform.id }})
       this.iVisible = false
     }
