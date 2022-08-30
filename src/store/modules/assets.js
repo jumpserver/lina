@@ -52,7 +52,6 @@ const actions = {
       apiGetCategoryTypes().then(data => {
         commit('SET_CATEGORIES', data)
         commit('SET_CATEGORIES_DROPDOWN', data)
-        console.log('Get category done: ', state.assetCategories)
         resolve(state)
       })
     })

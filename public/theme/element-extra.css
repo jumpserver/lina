@@ -14,7 +14,7 @@
 .el-button--text:hover {
   background-color: rgba(0, 0, 0, .05);
 }
- 
+
 .el-button--success {
   background-color: success;
   border-color: success;
@@ -196,18 +196,12 @@ td .el-button.el-button--mini {
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: #606266;
-  background-color: #ddd;
+  background-color: primary;
   font-weight: 400;
 }
 
-.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
- color: #606266;
- background-color: #ddd;
- font-weight: 400;
-}
-
 .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
-  background-color: primary;
+  background-color: light-2;
   color: white!important;
 }
 
@@ -221,7 +215,7 @@ td .el-button.el-button--mini {
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
   color: white;
-  background-color: primary;
+  background-color: light-2;
 }
 
 .el-tag.el-tag--info {
@@ -435,7 +429,7 @@ td .el-button.el-button--mini {
 .el-select-dropdown__item.selected {
   font-weight: 400;
   color: #606266;
-  background-color: #ddd;
+  background-color: primary;
 }
 
 .el-input-group__prepend div.el-select .el-input__inner,
@@ -444,7 +438,7 @@ td .el-button.el-button--mini {
 }
 
 .el-input-group__append, .el-input-group__prepend {
-  color: $--color-primary
+  color: primary
 }
 
 .el-input.is-disabled .el-input__inner {

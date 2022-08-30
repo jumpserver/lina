@@ -140,6 +140,10 @@ export default {
   width: 130px;
 }
 
+.el-select {
+  width: 100px;
+}
+
 .input-with-select {
   flex-shrink: 1;
   width: calc(100% - 80px) !important;

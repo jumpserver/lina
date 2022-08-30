@@ -63,7 +63,6 @@ export default {
         [this.$t('assets.Account'), [
           'su_enabled', 'su_method',
           'verify_account_enabled', 'verify_account_method',
-          'create_account_enabled', 'create_account_method',
           'change_password_enabled', 'change_password_method'
         ]],
         [this.$t('common.Other'), ['comment']]
@@ -144,8 +143,9 @@ export default {
         return values
       },
       afterGetFormValue: (obj) => {
-        obj['category_type'] = [obj['category'], obj['type']]
-        this.setConstraints(obj['category'], obj['type'])
+        if (obj['category'] && obj['type']) {
+          obj['category_type'] = [obj['category'].value, obj['type'].value]
+        }
         return obj
       }
     }
@@ -168,6 +168,7 @@ export default {
       if (category && type) {
         this.initial.category_type = [category, type]
       }
+      console.log('Iitial : ', this.initial)
       return new Promise((resolve, reject) => resolve(true))
     },
     async setConstraints() {
@@ -192,9 +193,15 @@ export default {
       const items = ['verify_account', 'change_password', 'create_account']
       for (const item of items) {
         const methods = allMethods.filter(method => {
-          return method['category'] === category &&
-            method['type'] === type &&
-            method['method'] === item
+          const ok = method['method'] === item && method['category'] === category
+          const tpOk = method['type'].indexOf(type) > -1 ||
+            method['type'].indexOf('all') > -1
+
+          console.log(
+            'method[\'type\'].indexOf(type) > -1', method['type'].indexOf(type) > -1
+          )
+
+          return ok & tpOk
         }).map(method => {
           return { value: method['id'], label: method['name'] }
         })
@@ -207,10 +214,9 @@ export default {
 
 <style lang='scss' scoped>
 .platform-form >>> .el-form-item {
-  .el-select {
+  .el-select:not(.prepend) {
     width: 100%;
   }
 }
-
 </style>
 
