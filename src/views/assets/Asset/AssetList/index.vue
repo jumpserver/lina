@@ -1,5 +1,9 @@
 <template>
-  <TabPage :active-menu.sync="config.activeMenu" :submenu="config.submenu" />
+  <TabPage
+    :active-menu.sync="config.activeMenu"
+    :submenu="config.submenu"
+    @tab-click="handleTabClick"
+  />
 </template>
 
 <script>
@@ -22,30 +26,30 @@ export default {
           },
           {
             title: this.$t('applications.host'),
-            name: 'host',
+            name: 'hosts',
             hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/HostList.vue')
           },
           {
             title: this.$t('route.NetworkDevices'),
-            name: 'networking',
+            name: 'networks',
             hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/NetworkList.vue')
           },
           {
             title: this.$t('route.Databases'),
-            name: 'database',
+            name: 'databases',
             hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
           {
             title: this.$t('assets.CloudPlatform'),
-            name: 'cloud',
+            name: 'clouds',
             hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/CloudsPlatformList.vue')
           },
           {
-            title: 'Web',
+            title: 'Webs',
             name: 'web',
             hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
@@ -54,9 +58,15 @@ export default {
       }
     }
   },
-  computed: {
-  },
   mounted() {
+  },
+  methods: {
+    handleTabClick(tab) {
+      const params = new URLSearchParams(window.location.search)
+      params.set('activeTab', tab.name)
+      const query = Object.fromEntries(params)
+      this.$router.replace({ query })
+    }
   }
 }
 </script>
