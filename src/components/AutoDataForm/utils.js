@@ -11,13 +11,24 @@ export class FormFieldGenerator {
   }
   generateFieldByType(type, field, fieldMeta, fieldRemoteMeta) {
     switch (type) {
+      case 'display_choice':
       case 'choice':
-        type = 'radio-group'
         if (!fieldRemoteMeta.read_only) {
           field.options = fieldRemoteMeta.choices.map(v => {
             return { label: v.display_name, value: v.value }
           })
+          // 因为现在的 detail 返回的 choice 是一个对象了 {label: '', value: ''}
+          if (type === 'display_choice') {
+            field.options = field.options.map(v => {
+              v.value = { value: v.value }
+              return v
+            })
+            field.el = {
+              valueKey: 'value'
+            }
+          }
         }
+        type = 'radio-group'
         break
       case 'multiple choice':
         field.el.choices = fieldRemoteMeta['choices']
@@ -61,14 +72,9 @@ export class FormFieldGenerator {
     }
     // 上面重写了 type
     if (type === 'radio-group') {
-      if (!fieldRemoteMeta.read_only) {
-        const options = fieldRemoteMeta.choices.map(v => {
-          return { label: v.display_name, value: v.value }
-        })
-        if (options.length > 4) {
-          type = 'select'
-          field.el.filterable = true
-        }
+      if (field.options.length > 4) {
+        type = 'select'
+        field.el.filterable = true
       }
     }
     field.type = type

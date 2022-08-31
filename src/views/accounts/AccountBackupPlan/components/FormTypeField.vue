@@ -71,7 +71,7 @@ export default {
             },
             {
               id: 'networking',
-              label: 'NetworkDevice',
+              label: 'Networking',
               children: [
                 {
                   id: 'switch',

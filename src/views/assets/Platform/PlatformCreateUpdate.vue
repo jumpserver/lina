@@ -168,7 +168,6 @@ export default {
       if (category && type) {
         this.initial.category_type = [category, type]
       }
-      console.log('Iitial : ', this.initial)
       return new Promise((resolve, reject) => resolve(true))
     },
     async setConstraints() {
@@ -196,11 +195,6 @@ export default {
           const ok = method['method'] === item && method['category'] === category
           const tpOk = method['type'].indexOf(type) > -1 ||
             method['type'].indexOf('all') > -1
-
-          console.log(
-            'method[\'type\'].indexOf(type) > -1', method['type'].indexOf(type) > -1
-          )
-
           return ok & tpOk
         }).map(method => {
           return { value: method['id'], label: method['name'] }

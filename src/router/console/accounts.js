@@ -35,30 +35,6 @@ export default [
     ]
   },
   {
-    path: 'application-accounts',
-    component: empty,
-    redirect: '',
-    meta: {
-      title: i18n.t('route.AssetAccount'),
-      permissions: ['applications.view_account'],
-      app: 'applications',
-      resource: 'account',
-      licenseRequired: true
-    },
-    children: [
-      {
-        path: '',
-        name: 'ApplicationAccountList',
-        component: () => import('@/views/accounts/ApplicationAccount/ApplicationAccountList'),
-        meta: {
-          title: i18n.t('route.ApplicationAccount'),
-          permissions: ['applications.view_account'],
-          resource: 'account'
-        }
-      }
-    ]
-  },
-  {
     path: 'gathered-user',
     component: empty,
     redirect: '',

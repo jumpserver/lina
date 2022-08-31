@@ -2,6 +2,7 @@ import i18n from '@/i18n/i18n'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 import AssetAccounts from '@/components/FormFields/AssetAccounts'
 import rules from '@/components/DataForm/rules'
+import { Select2 } from '@/components/FormFields'
 
 export const assetFieldsMeta = (vm) => {
   return {
@@ -28,6 +29,7 @@ export const assetFieldsMeta = (vm) => {
       }
     },
     domain: {
+      component: Select2,
       disabled: false,
       el: {
         multiple: false,

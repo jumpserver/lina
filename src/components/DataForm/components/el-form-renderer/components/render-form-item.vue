@@ -43,7 +43,7 @@
       <template v-for="opt in options">
         <el-option
           v-if="data.type === 'select'"
-          :key="opt.value"
+          :key="opt.label"
           v-bind="opt"
         />
         <!-- TODO: 支持 el-checkbox-button 变体 -->

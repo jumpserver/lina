@@ -78,7 +78,7 @@ export default {
     },
     // 初始化值，也就是选中的值
     value: {
-      type: [Array, String, Number, Boolean],
+      type: [Array, String, Number, Boolean, Object],
       default() {
         return this.multiple ? [] : ''
       }
@@ -137,8 +137,12 @@ export default {
         if (noValue && !this.initialized) {
           return
         }
-        console.log('select2 set value: ', val)
-        this.$emit('input', val)
+        if (val && val.constructor === Object && val.value) {
+          this.$emit('input', val.value)
+        } else {
+          this.$emit('input', val)
+        }
+        console.log('Set value: ', val)
       },
       get() {
         return this.value
@@ -194,16 +198,19 @@ export default {
       this.$log.debug('Select url changed: ', oldValue, ' => ', newValue)
       this.refresh()
     },
-    value(iNew) {
-      console.log('watch Set val: ', iNew)
+    value: {
+      handler(newValue, oldValue) {
+        console.log('watch Set val: ', newValue)
+      },
+      deep: true
       // this.iValue = iNew
     }
   },
   async mounted() {
-    // this.$log.debug('Select2 url is: ', this.iAjax.url)
     if (!this.initialized) {
       await this.initialSelect()
       setTimeout(() => {
+        this.$log.debug('Value is : ', this.value)
         this.iValue = this.value
         this.initialized = true
       })
