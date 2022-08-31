@@ -94,32 +94,71 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              performDelete: ({ row, col }) => {
+              performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
                 return this.$axios.delete(url)
-              },
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t(`common.UpdateAssetDetail`),
-                  type: 'primary',
-                  can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
-                  callback: function({ cellValue, tableData, row }) {
-                    return this.$router.push({ name: 'AssetMoreInformationEdit', params: { id: row.id }})
-                  }
-                }
-              ]
+              }
             }
           }
         }
       },
       defaultHeaderActions: {
-        hasMoreActions: false,
         createRoute: 'HostCreate',
         onCreate: () => {
           this.showPlatform = true
-        }
+        },
+        extraMoreActions: [
+          {
+            name: 'DeactiveSelected',
+            title: this.$t('assets.DeactiveSelected'),
+            type: 'primary',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
+                return { pk: v.id, is_active: false }
+              })
+              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          },
+          {
+            name: 'ActiveSelected',
+            title: this.$t('assets.ActiveSelected'),
+            type: 'primary',
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
+            },
+            callback: function({ selectedRows }) {
+              const ids = selectedRows.map((v) => {
+                return { pk: v.id, is_active: true }
+              })
+              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
+                this.$message.success(this.$t('common.updateSuccessMsg'))
+              }).catch(err => {
+                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+              })
+            }.bind(this)
+          },
+          {
+            name: 'actionUpdateSelected',
+            title: this.$t('common.updateSelected'),
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                !vm.currentOrgIsRoot &&
+                vm.$hasPerm('assets.change_asset')
+            },
+            callback: ({ selectedRows }) => {
+              vm.updateSelectedDialogSetting.selectedRows = selectedRows
+              vm.updateSelectedDialogSetting.visible = true
+            }
+          }
+        ]
       }
     }
   },

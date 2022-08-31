@@ -91,6 +91,9 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "All": "All",
+    "CloudPlatform": "Cloud platform",
+    "RecentlyUsed": "Recently used",
     "AppList": "Application list",
     "AssociateSystemUsers": "Associate system users",
     "AssociateAssets": "Associate assets",
