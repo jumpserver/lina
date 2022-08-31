@@ -96,6 +96,9 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "All": "すべて",
+    "CloudPlatform": "クラウドプラットフォーム",
+    "RecentlyUsed": "最近使われる",
     "AppList": "アプリケーションリスト",
     "AssociateSystemUsers": "関連システムユーザー",
     "AssociateAssets": "関連資産",

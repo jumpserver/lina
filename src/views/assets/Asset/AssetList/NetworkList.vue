@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/assets/networking/'
+        url: '/api/v1/assets/networks/'
       },
       headerActions: {
         createRoute: 'NetworkingCreate'

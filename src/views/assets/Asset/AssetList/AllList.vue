@@ -160,14 +160,6 @@ export default {
             { label: this.$t('assets.Label'), value: 'label' }
           ]
         },
-        extraActions: [
-          {
-            name: this.$t('xpack.Cloud.CloudSync'),
-            title: this.$t('xpack.Cloud.CloudSync'),
-            has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
-            callback: () => this.$router.push({ name: 'CloudCenter' })
-          }
-        ],
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
