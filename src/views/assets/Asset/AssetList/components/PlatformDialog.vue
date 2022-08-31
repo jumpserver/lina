@@ -20,7 +20,7 @@
             :style="{ borderLeftColor: randomBorderColor(index) }"
             class="platform-item"
             shadow="hover"
-            @click.native="createAsset(p)"
+            @click.native="createAsset(item)"
           >
             {{ item.name }}
           </el-card>
@@ -70,7 +70,7 @@ export default {
     category: {
       type: String,
       Validator: (value) => {
-        return ['all', 'host', 'networking', 'database', 'cloud', 'web'].includes(value)
+        return ['all', 'host', 'networks', 'database', 'cloud', 'web'].includes(value)
       },
       default: 'all'
     }
@@ -118,7 +118,7 @@ export default {
       return mapper
     },
     showRecentPlatforms() {
-      return this.category === 'all' ? this.allRecentPlatforms() : this.recentPlatforms[this.category]
+      return this.category === 'all' ? this.recentPlatforms : this.typeRecentPlatforms()
     }
   },
   created() {
@@ -129,43 +129,33 @@ export default {
   },
   methods: {
     getRecentPlatforms() {
-      const recentPlatforms = JSON.parse(localStorage.getItem('RecentPlatforms')) || {
-        host: [],
-        networking: [],
-        database: [],
-        cloud: [],
-        web: []
-      }
-      this.recentPlatforms = recentPlatforms
+      this.recentPlatforms = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
     },
     setRecentPlatforms(platform) {
-      const platforms = { ...this.recentPlatforms }
-      const categoryValue = platform.category.value
-      const platformCategory = platforms[categoryValue]
+      const recentPlatforms = this.recentPlatforms || []
       const item = {
         id: platform.id,
         name: platform.name,
         category: platform.category
       }
 
-      if (!_.some(platformCategory, item)) {
-        if (platformCategory.length >= 4) {
-          platformCategory.pop()
+      if (!_.some(recentPlatforms, item)) {
+        if (recentPlatforms.length >= 8) {
+          recentPlatforms.pop()
         }
-        platformCategory.unshift(item)
-        localStorage.setItem('RecentPlatforms', JSON.stringify(platforms))
+        recentPlatforms.unshift(item)
+        localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatforms))
       }
     },
-    allRecentPlatforms() {
-      const { recentPlatforms } = this
-      const platforms = []
-      for (const category in recentPlatforms) {
-        const platformCategory = recentPlatforms[category]
-        if (platformCategory.length > 0) {
-          platforms.push(platformCategory[0])
+    typeRecentPlatforms() {
+      const typePlatforms = []
+      const { category, recentPlatforms } = this
+      for (const item of recentPlatforms) {
+        if (item.category.value === category) {
+          typePlatforms.push(item)
         }
       }
-      return platforms
+      return typePlatforms
     },
     onConfirm() {
       this.iVisible = false
@@ -177,6 +167,7 @@ export default {
       return color
     },
     createAsset(platform) {
+      // debugger
       const mapper = {
         host: 'HostCreate',
         database: 'DatabaseCreate',
