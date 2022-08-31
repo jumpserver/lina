@@ -49,7 +49,7 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/CloudsPlatformList.vue')
           },
           {
-            title: 'Webs',
+            title: 'Web',
             name: 'web',
             hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
@@ -62,10 +62,14 @@ export default {
   },
   methods: {
     handleTabClick(tab) {
-      const params = new URLSearchParams(window.location.search)
-      params.set('activeTab', tab.name)
-      const query = Object.fromEntries(params)
-      this.$router.replace({ query })
+      const query = _.cloneDeep(this.$route.query)
+      const newQuery = {
+        ...query,
+        activeTab: tab.name
+      }
+      this.$nextTick(() => {
+        this.$router.replace({ query: newQuery })
+      })
     }
   }
 }

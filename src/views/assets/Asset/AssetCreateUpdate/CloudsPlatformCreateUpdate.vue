@@ -18,7 +18,6 @@ export default {
     }
     const platformId = this.$route.query['platform'] || 1
     return {
-      title: this.$t('assets.CreateDatabase'),
       initial: {
         is_active: true,
         platform: parseInt(platformId),
