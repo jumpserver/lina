@@ -108,6 +108,9 @@ export default {
         onCreate: () => {
           this.showPlatform = true
         },
+        searchConfig: {
+          getUrlQuery: false
+        },
         extraMoreActions: [
           {
             name: 'DeactiveSelected',
