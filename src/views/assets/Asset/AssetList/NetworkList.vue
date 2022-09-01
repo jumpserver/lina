@@ -1,9 +1,5 @@
 <template>
-  <BaseList
-    :category="'networking'"
-    :table-config="tableConfig"
-    :header-actions="headerActions"
-  />
+  <BaseList v-bind="config" />
 </template>
 
 <script>
@@ -15,11 +11,12 @@ export default {
   },
   data() {
     return {
-      tableConfig: {
-        url: '/api/v1/assets/networks/'
-      },
-      headerActions: {
-        createRoute: 'NetworkingCreate'
+      config: {
+        url: '/api/v1/assets/networks/',
+        category: 'networking',
+        headerActions: {
+          createRoute: 'NetworkingCreate'
+        }
       }
     }
   }

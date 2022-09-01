@@ -1,16 +1,18 @@
 <template>
   <div>
-    <ListTable
-      :table-config="iTableConfig"
-      :header-actions="iHeaderActions"
-    />
+    <ListTable :table-config="iTableConfig" :header-actions="iHeaderActions" />
     <PlatformDialog :visible.sync="showPlatform" :category="category" />
   </div>
 </template>
 
 <script>
 import { ListTable } from '@/components'
-import { ActionsFormatter, DetailFormatter, TagsFormatter, ChoicesDisplayFormatter } from '@/components/TableFormatters'
+import {
+  ActionsFormatter,
+  DetailFormatter,
+  TagsFormatter,
+  ChoicesDisplayFormatter
+} from '@/components/TableFormatters'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
 
@@ -20,6 +22,14 @@ export default {
     PlatformDialog
   },
   props: {
+    url: {
+      type: String,
+      required: true
+    },
+    category: {
+      type: String,
+      default: 'all'
+    },
     tableConfig: {
       type: Object,
       default: () => ({})
@@ -28,9 +38,17 @@ export default {
       type: Object,
       default: () => ({})
     },
-    category: {
-      type: String,
-      default: 'all'
+    addColumns: {
+      type: Array,
+      default: () => []
+    },
+    addColumnsMeta: {
+      type: Object,
+      default: () => ({})
+    },
+    addExtraMoreActions: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -40,10 +58,10 @@ export default {
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
         columns: [
-          'name', 'ip', 'public_ip', 'admin_user_display',
-          'protocols', 'category', 'type', 'platform', 'sn',
-          'is_active', 'connectivity', 'labels_display',
-          'created_by', 'date_created', 'comment', 'org_name', 'actions'
+          'name', 'ip', 'category', 'type', 'platform',
+          'protocols', 'is_active', 'connectivity',
+          'created_by', 'date_created', 'comment',
+          'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'ip', 'actions'],
@@ -67,8 +85,10 @@ export default {
             sortable: true
           },
           protocols: {
-            formatter: function(row) {
-              return <span> {row.protocols.toString()} </span>
+            formatter: (row) => {
+              let data = row.protocols.map(item => item.name + '/' + item.port)
+              data = data.join(', ')
+              return <span> {data} </span>
             }
           },
           ip: {
@@ -167,10 +187,25 @@ export default {
   },
   computed: {
     iTableConfig() {
-      return _.merge(this.defaultConfig, this.tableConfig)
+      const config = _.merge({}, this.defaultConfig, this.tableConfig)
+      if (this.addColumns) {
+        config.columns = [
+          ...config.columns.slice(0, 2),
+          ...this.addColumns,
+          ...config.columns.slice(2)
+        ]
+      }
+      if (this.addColumnsMeta) {
+        config.columnsMeta = _.merge(config.columnsMeta, this.addColumnsMeta)
+      }
+      return config
     },
     iHeaderActions() {
-      return _.merge(this.defaultHeaderActions, this.headerActions)
+      const actions = _.merge({}, this.defaultHeaderActions, this.headerActions)
+      if (this.addExtraMoreActions) {
+        actions.extraMoreActions = [...actions.extraMoreActions, ...this.addExtraMoreActions]
+      }
+      return actions
     }
   }
 }

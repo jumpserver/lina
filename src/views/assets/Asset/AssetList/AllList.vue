@@ -12,35 +12,38 @@
         :tree="treeRef"
         @showAll="showAll"
       />
+      <BaseList
+        slot="table"
+        v-bind="tableConfig"
+      />
     </TreeTable>
 
     <AssetBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
-    <PlatformDialog :visible.sync="showPlatform" :category="category" />
+    <PlatformDialog #platform-dialog :visible.sync="showPlatform" :category="category" />
   </div>
 </template>
 
 <script>
 import { TreeTable } from '@/components'
-import { DetailFormatter, ActionsFormatter, TagsFormatter, ChoicesDisplayFormatter } from '@/components/TableFormatters'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
-import { connectivityMeta } from '@/components/AccountListTable/const'
 import AssetBulkUpdateDialog from './components/AssetBulkUpdateDialog'
 import TreeMenu from './components/TreeMenu'
 import PlatformDialog from './components/PlatformDialog'
+import BaseList from './components/BaseList'
 
 export default {
   components: {
     TreeTable,
     AssetBulkUpdateDialog,
     TreeMenu,
-    PlatformDialog
+    PlatformDialog,
+    BaseList
   },
   data() {
-    const vm = this
     return {
       treeRef: null,
       showPlatform: false,
@@ -61,185 +64,12 @@ export default {
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
       },
       tableConfig: {
-        url: '/api/v1/assets/assets/',
-        hasTree: true,
-        columns: [
-          'name', 'ip', 'public_ip', 'admin_user_display',
-          'protocols', 'platform', 'hardware_info', 'model',
-          'cpu_model', 'cpu_cores', 'cpu_count', 'cpu_vcpus',
-          'disk_info', 'disk_total', 'memory', 'os', 'os_arch',
-          'os_version', 'number', 'vendor', 'sn', 'is_active',
-          'connectivity', 'labels_display',
-          'created_by', 'date_created', 'comment', 'org_name', 'actions'
-        ],
-        columnsShow: {
-          min: ['hostname', 'ip', 'actions'],
-          default: [
-            'hostname', 'ip', 'platform', 'protocols', 'hardware_info',
-            'connectivity', 'actions'
-          ]
-        },
-        columnsMeta: {
-          type: { formatter: ChoicesDisplayFormatter },
-          category: { formatter: ChoicesDisplayFormatter },
-          name: {
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'AssetDetail'
-            },
-            showOverflowTooltip: true,
-            sortable: true
-          },
-          platform: {
-            sortable: true
-          },
-          protocols: {
-            formatter: function(row) {
-              return <span> {row.protocols.toString()} </span>
-            }
-          },
-          ip: {
-            sortable: 'custom',
-            width: '140px'
-          },
-          hardware_info: {
-            showOverflowTooltip: true
-          },
-          cpu_model: {
-            showOverflowTooltip: true
-          },
-          sn: {
-            showOverflowTooltip: true
-          },
-          comment: {
-            showOverflowTooltip: true
-          },
-          connectivity: connectivityMeta,
-          labels_display: {
-            formatter: TagsFormatter
-          },
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              performDelete: ({ row, col }) => {
-                const id = row.id
-                const url = `/api/v1/assets/assets/${id}/`
-                return this.$axios.delete(url)
-              },
-              extraActions: [
-                {
-                  name: 'View',
-                  title: this.$t(`common.UpdateAssetDetail`),
-                  type: 'primary',
-                  can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
-                  callback: function({ cellValue, tableData, row }) {
-                    return this.$router.push({
-                      name: 'AssetMoreInformationEdit',
-                      params: { id: row.id }
-                    })
-                  }
-                }
-              ]
-            }
-          }
-        }
+        url: '/api/v1/assets/assets/'
       },
       headerActions: {
-        createRoute: () => {
-          return {
-            name: 'AssetCreate',
-            query: this.$route.query
-          }
-        },
         onCreate: () => {
           this.showPlatform = true
-        },
-        createInNewPage: true,
-        searchConfig: {
-          options: [
-            { label: this.$t('assets.Label'), value: 'label' }
-          ]
-        },
-        extraMoreActions: [
-          {
-            name: 'DeactiveSelected',
-            title: this.$t('assets.DeactiveSelected'),
-            type: 'primary',
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
-            },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map((v) => {
-                return { pk: v.id, is_active: false }
-              })
-              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          },
-          {
-            name: 'ActiveSelected',
-            title: this.$t('assets.ActiveSelected'),
-            type: 'primary',
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 && vm.$hasPerm('assets.change_asset')
-            },
-            callback: function({ selectedRows }) {
-              const ids = selectedRows.map((v) => {
-                return { pk: v.id, is_active: true }
-              })
-              this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
-              }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          },
-          {
-            name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 &&
-                !vm.currentOrgIsRoot &&
-                vm.$hasPerm('assets.change_asset')
-            },
-            callback: ({ selectedRows }) => {
-              vm.updateSelectedDialogSetting.selectedRows = selectedRows
-              vm.updateSelectedDialogSetting.visible = true
-            }
-          },
-          {
-            name: 'RemoveFromCurrentNode',
-            title: this.$t('assets.RemoveFromCurrentNode'),
-            can: ({ selectedRows }) => {
-              if (!vm.$route.query.node) {
-                return false
-              }
-              return selectedRows.length > 0 &&
-                !vm.currentOrgIsRoot &&
-                vm.$hasPerm('assets.change_node')
-            },
-            callback: function({ selectedRows, reloadTable }) {
-              const assetsId = []
-              for (const item of selectedRows) {
-                assetsId.push(item.id)
-              }
-              const nodeId = this.$route.query.node
-              if (!nodeId) {
-                return
-              }
-              const url = `/api/v1/assets/nodes/${nodeId}/assets/remove/`
-              this.$axios.put(url, { assets: assetsId }).then(res => {
-                this.$message.success(this.$t('common.removeSuccessMsg'))
-                reloadTable()
-              }).catch(err => {
-                this.$message.error(this.$t('common.removeErrorMsg' + ' ' + err))
-              })
-            }.bind(this)
-          }
-        ]
+        }
       },
       helpMessage: this.$t('assets.AssetListHelpMessage'),
       updateSelectedDialogSetting: {

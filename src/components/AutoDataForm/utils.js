@@ -11,7 +11,7 @@ export class FormFieldGenerator {
   }
   generateFieldByType(type, field, fieldMeta, fieldRemoteMeta) {
     switch (type) {
-      case 'display_choice':
+      case 'labeled_choice':
       case 'choice':
         if (!fieldRemoteMeta.read_only) {
           field.options = fieldRemoteMeta.choices.map(v => {

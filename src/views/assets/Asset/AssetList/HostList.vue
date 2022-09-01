@@ -1,9 +1,5 @@
 <template>
-  <BaseList
-    :category="'host'"
-    :table-config="tableConfig"
-    :header-actions="headerActions"
-  />
+  <BaseList v-bind="config" />
 </template>
 
 <script>
@@ -17,8 +13,20 @@ export default {
   data() {
     const vm = this
     return {
-      tableConfig: {
+      config: {
         url: '/api/v1/assets/hosts/',
+        category: 'host',
+        headerActions: {
+          createRoute: 'HostCreate',
+          extraActions: [
+            {
+              name: this.$t('xpack.Cloud.CloudSync'),
+              title: this.$t('xpack.Cloud.CloudSync'),
+              has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
+              callback: () => this.$router.push({ name: 'CloudCenter' })
+            }
+          ]
+        },
         columnsMeta: {
           actions: {
             formatter: ActionsFormatter,
@@ -45,18 +53,8 @@ export default {
             }
           }
         }
-      },
-      headerActions: {
-        createRoute: 'HostCreate',
-        extraActions: [
-          {
-            name: this.$t('xpack.Cloud.CloudSync'),
-            title: this.$t('xpack.Cloud.CloudSync'),
-            has: () => vm.$hasPerm('xpack.view_account') && vm.$hasLicense(),
-            callback: () => this.$router.push({ name: 'CloudCenter' })
-          }
-        ]
       }
+
     }
   }
 }

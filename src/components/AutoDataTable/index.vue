@@ -27,7 +27,7 @@ import {
   DisplayFormatter,
   ActionsFormatter,
   ChoicesFormatter,
-  NestedObjectFormatter
+  ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
@@ -145,15 +145,19 @@ export default {
           col.formatter = DateFormatter
           col.width = '160px'
           break
-        case 'nested object':
-          col.formatter = NestedObjectFormatter
+        case 'object_related_field':
+          col.formatter = ObjectRelatedFormatter
+          break
+        case 'm2m_related_field':
+          col.formatter = ObjectRelatedFormatter
           break
         case 'field':
           if (meta.child && meta.child.type === 'nested object') {
-            col.formatter = NestedObjectFormatter
+            col.formatter = ObjectRelatedFormatter
           }
           break
       }
+      this.$log.debug('Field: ', type, col.prop, col)
       return col
     },
     addHelpTipsIfNeed(col) {
