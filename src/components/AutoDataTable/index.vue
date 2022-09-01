@@ -193,12 +193,12 @@ export default {
           col.filters = column.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { text: item['display_name'], value: 'True' }
+                return { text: item['label'], value: 'True' }
               } else {
-                return { text: item['display_name'], value: 'False' }
+                return { text: item['label'], value: 'False' }
               }
             }
-            return { text: item['display_name'], value: item.value }
+            return { text: item['label'], value: item.value }
           })
           col.sortable = false
           col['column-key'] = col.prop

@@ -2,15 +2,20 @@
   <div class="accounts">
     <el-table :data="accounts" style="width: 100%">
       <el-table-column prop="username" label="用户名" width="180" />
-      <el-table-column prop="type" label="类型" />
+      <el-table-column prop="privileged" label="特权账号">
+        <template slot-scope="scope">
+          <i class="fa text-primary" :class="scope.row['privileged'] ? 'fa-check' : ''" />
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" align="right" label="操作" width="135" class-name="buttons">
         <template slot-scope="scope">
           <el-button type="danger" icon="el-icon-minus" size="mini" @click="removeAccount(scope.row)" />
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)" />
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="onEditClick(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
-    <el-button size="mini" type="primary" @click="showAddDialog">添加</el-button>
+    <el-button size="mini" type="primary" @click="onAddClick">添加</el-button>
+    <el-button size="mini" type="success" @click="onAddClick">模版添加</el-button>
     <Dialog
       v-if="visible"
       :title="this.$tc('assets.AddAccount')"
@@ -53,7 +58,7 @@ export default {
     return {
       visible: false,
       accounts: [],
-      account: null,
+      account: {},
       initial: false
     }
   },
@@ -73,7 +78,10 @@ export default {
   },
   methods: {
     addAccount(account) {
-      account._id = this.accounts.length + 1
+      const i = this.accounts.findIndex(item => item.username === account.username)
+      if (i !== -1) {
+        this.accounts.splice(i, 1)
+      }
       this.accounts.push(account)
       this.visible = false
     },
@@ -82,17 +90,22 @@ export default {
         return item._id !== account._id
       })
     },
-    editAccount(account) {
-      this.accounts.splice(account._id, 1, account)
+    editAccount(form) {
+      const i = this.accounts.findIndex(item => item.username === this.account.username)
+      this.accounts.splice(i, 1, form)
       this.visible = false
     },
-    showEditDialog(account) {
+    onEditClick(account) {
       this.account = account
-      this.visible = true
+      setTimeout(() => {
+        this.visible = true
+      })
     },
-    showAddDialog() {
+    onAddClick() {
       this.account = null
-      this.visible = true
+      setTimeout(() => {
+        this.visible = true
+      })
     }
   }
 }

@@ -16,25 +16,11 @@ export default [
         meta: { title: i18n.t('route.AssetList') }
       },
       {
-        path: 'create',
-        name: 'AssetCreate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.AssetCreate') }
-      },
-      {
         path: ':id',
         name: 'AssetDetail',
         component: () => import('@/views/assets/Asset/AssetDetail'),
         hidden: true,
         meta: { title: i18n.t('route.AssetDetail') }
-      },
-      {
-        path: ':id/update',
-        name: 'AssetUpdate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate.vue'),
-        hidden: true,
-        meta: { title: i18n.t('route.AssetUpdate') }
       },
       {
         path: 'detail/:id/update',

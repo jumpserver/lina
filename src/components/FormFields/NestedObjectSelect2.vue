@@ -44,7 +44,6 @@ export default {
       get() {
         const value = this.objectsToValues(this.value)
         console.log('Nest get ivalue: ', value, 'Value: ', this.value)
-        console.log('Attrs: ', this.$attrs)
         return value
       }
     }

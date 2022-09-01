@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <AutoDataForm v-bind="$data" @submit="confirm" />
-  </div>
+  <AutoDataForm v-bind="$data" @submit="confirm" />
 </template>
 
 <script>
@@ -53,7 +51,8 @@ export default {
   },
   methods: {
     confirm(form) {
-      if (this.account && this.account._id) {
+      console.log('Account form: accout is: ', this.account)
+      if (this.account) {
         this.$emit('edit', form)
       } else {
         this.$emit('add', form)

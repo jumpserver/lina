@@ -15,10 +15,10 @@ export class FormFieldGenerator {
       case 'choice':
         if (!fieldRemoteMeta.read_only) {
           field.options = fieldRemoteMeta.choices.map(v => {
-            return { label: v.display_name, value: v.value }
+            return { label: v.label, value: v.value }
           })
           // 因为现在的 detail 返回的 choice 是一个对象了 {label: '', value: ''}
-          if (type === 'display_choice') {
+          if (type === 'well_choice') {
             field.options = field.options.map(v => {
               v.value = { value: v.value }
               return v

@@ -16,7 +16,9 @@ export default {
       loading: true,
       platform: {},
       initial: {
-        labels: []
+        labels: [],
+        is_active: true,
+        nodes: []
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'ip', 'platform', 'domain']],
@@ -45,15 +47,15 @@ export default {
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
-        is_active: true,
         platform: parseInt(platformId),
-        protocols: this.platform.protocols_default,
+        protocols: this.platform.protocols,
         nodes: nodesInitial,
         domain: this.platform.domain_default
       }
+      Object.assign(this.initial, initial)
+
       const constraints = this.platform['type_constraints']
       this.fieldsMeta.protocols.el.choices = constraints['protocols']
-      this.initial = initial
       this.loading = false
     }
   }

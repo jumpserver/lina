@@ -57,9 +57,6 @@ export default {
         [this.$t('assets.Protocol'), [
           'protocols_enabled', 'protocols'
         ]],
-        [this.$t('assets.Domain'), [
-          'domain_enabled', 'domain_default'
-        ]],
         [this.$t('assets.Account'), [
           'su_enabled', 'su_method',
           'verify_account_enabled', 'verify_account_method',
@@ -103,27 +100,12 @@ export default {
           },
           hidden: (formValue) => !formValue['protocols_enabled']
         },
-        domain_enabled: {
-          el: {
-            disabled: false
-          }
-        },
-        domain_default: {
-          ...assetMeta.domain,
-          hidden: (formValue) => !formValue['domain_enabled']
-        },
         verify_account_method: {
           hidden: (formValue) => {
             return !formValue['verify_account_enabled']
           },
           type: 'select',
           options: []
-        },
-        create_account_method: {
-          hidden: (formValue) => !formValue['create_account_enabled'],
-          type: 'select',
-          options: [],
-          el: {}
         },
         change_password_method: {
           hidden: (formValue) => !formValue['change_password_enabled'],
@@ -175,21 +157,18 @@ export default {
       const type = this.$route.query.type
       const url = `/api/v1/assets/platforms/type-constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
-      const hasDomain = constraints['has_domain']
-      this.fieldsMeta.domain_enabled.el.disabled = !hasDomain
 
       const protocols = constraints['protocols'] || []
       this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
       this.fieldsMeta.protocols.el.choices = protocols
 
       this.initial.protocols_enabled = !!protocols.length
-      this.initial.domain_enabled = hasDomain
     },
     async setOpsMethods() {
       const category = this.$route.query.category
       const type = this.$route.query.type
       const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/')
-      const items = ['verify_account', 'change_password', 'create_account']
+      const items = ['verify_account', 'change_password']
       for (const item of items) {
         const methods = allMethods.filter(method => {
           const ok = method['method'] === item && method['category'] === category

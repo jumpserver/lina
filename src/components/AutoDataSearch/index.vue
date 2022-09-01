@@ -71,12 +71,12 @@ export default {
           option.children = field.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { label: item.display_name, value: 'True' }
+                return { label: item.label, value: 'True' }
               } else {
-                return { label: item.display_name, value: 'False' }
+                return { label: item.label, value: 'False' }
               }
             }
-            return { label: item.display_name, value: item.value }
+            return { label: item.label, value: item.value }
           })
         }
         if (field.type === 'boolean') {

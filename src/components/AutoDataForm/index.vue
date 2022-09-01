@@ -1,5 +1,12 @@
 <template>
-  <DataForm ref="dataForm" v-loading="loading" :fields="totalFields" :form="iForm" v-bind="$attrs" v-on="$listeners">
+  <DataForm
+    ref="dataForm"
+    v-loading="loading"
+    :fields="totalFields"
+    :form="iForm"
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
     <FormGroupHeader
       v-for="(group, i) in groups"
       :slot="'id:'+group.name"
