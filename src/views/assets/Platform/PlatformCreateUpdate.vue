@@ -39,28 +39,31 @@ export default {
         name: '',
         port: 0
       },
+      opsItems: [
+        'gather_facts_enabled', 'create_account_enabled',
+        'change_password_enabled', 'verify_account_enabled',
+        'gather_accounts_enabled', 'su_enabled'
+      ],
       initial: {
         comment: '',
         charset: 'utf8',
-        category_type: ['host', 'linux'],
-        domain_enabled: false,
-        protocols_enabled: false,
-        verify_account_enabled: false,
-        create_account_enabled: false,
-        change_password_enabled: false,
-        su_enabled: false
+        category_type: ['host', 'linux']
       },
       fields: [
         [this.$t('common.Basic'), [
-          'name', 'category_type', 'charset'
+          'name', 'category_type'
         ]],
-        [this.$t('assets.Protocol'), [
-          'protocols_enabled', 'protocols'
+        [this.$t('assets.Asset'), [
+          'charset',
+          'protocols_enabled', 'protocols',
+          'gather_facts_enabled', 'gather_facts_method'
         ]],
         [this.$t('assets.Account'), [
           'su_enabled', 'su_method',
+          'create_account_enabled', 'create_account_method',
           'verify_account_enabled', 'verify_account_method',
-          'change_password_enabled', 'change_password_method'
+          'change_password_enabled', 'change_password_method',
+          'gather_accounts_enabled', 'gather_accounts_method'
         ]],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -101,19 +104,14 @@ export default {
           hidden: (formValue) => !formValue['protocols_enabled']
         },
         verify_account_method: {
-          hidden: (formValue) => {
-            return !formValue['verify_account_enabled']
-          },
           type: 'select',
           options: []
         },
         change_password_method: {
-          hidden: (formValue) => !formValue['change_password_enabled'],
           type: 'select',
           options: []
         },
         su_method: {
-          hidden: (formValue) => !formValue['su_enabled'],
           type: 'select'
         }
       },
@@ -161,15 +159,32 @@ export default {
       const protocols = constraints['protocols'] || []
       this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
       this.fieldsMeta.protocols.el.choices = protocols
-
       this.initial.protocols_enabled = !!protocols.length
+
+      for (const itemOk of this.opsItems) {
+        const itemConstraint = constraints[itemOk]
+        const itemMethod = itemOk.replace('_enabled', '_method')
+        if (itemConstraint === false) {
+          _.set(this.fieldsMeta, `${itemOk}.el.disabled`, true)
+        }
+        if (!this.fieldsMeta[itemMethod]?.hidden) {
+          _.set(this.fieldsMeta, `${itemMethod}.hidden`, (formValue) => !formValue[itemOk])
+        }
+        // set default value
+        if (this.initial[itemOk] === undefined) {
+          this.initial[itemOk] = false
+        }
+        if (_.get(this.fieldsMeta, `${itemMethod}.type`) === undefined) {
+          _.set(this.fieldsMeta, `${itemMethod}.type`, 'select')
+        }
+      }
     },
     async setOpsMethods() {
       const category = this.$route.query.category
       const type = this.$route.query.type
       const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/')
-      const items = ['verify_account', 'change_password']
-      for (const item of items) {
+      for (const itemOk of this.opsItems) {
+        const item = itemOk.replace('_enabled', '')
         const methods = allMethods.filter(method => {
           const ok = method['method'] === item && method['category'] === category
           const tpOk = method['type'].indexOf(type) > -1 ||
@@ -178,7 +193,9 @@ export default {
         }).map(method => {
           return { value: method['id'], label: method['name'] }
         })
-        this.fieldsMeta[item + '_method'].options = methods
+        if (methods.length > 0) {
+          this.fieldsMeta[`${itemOk.replace('_enabled', '_method')}`].options = methods
+        }
       }
     }
   }
