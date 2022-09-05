@@ -187,15 +187,18 @@ export default {
   },
   computed: {
     iTableConfig() {
-      const config = _.merge({}, this.defaultConfig, this.tableConfig)
-      if (this.addColumns) {
+      const config = _.merge(this.defaultConfig, this.tableConfig, {
+        url: this.url,
+        category: this.category
+      })
+      if (this.addColumns.length > 0) {
         config.columns = [
           ...config.columns.slice(0, 2),
           ...this.addColumns,
           ...config.columns.slice(2)
         ]
       }
-      if (this.addColumnsMeta) {
+      if (Object.keys(this.addColumnsMeta).length > 0) {
         config.columnsMeta = _.merge(config.columnsMeta, this.addColumnsMeta)
       }
       return config

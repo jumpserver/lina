@@ -4,7 +4,6 @@
       ref="TreeList"
       :table-config="tableConfig"
       :help-message="helpMessage"
-      :header-actions="headerActions"
       :tree-setting="treeSetting"
     >
       <TreeMenu
@@ -14,7 +13,7 @@
       />
       <BaseList
         slot="table"
-        v-bind="tableConfig"
+        :table-config="tableConfig"
       />
     </TreeTable>
 
@@ -22,7 +21,6 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
-    <PlatformDialog #platform-dialog :visible.sync="showPlatform" :category="category" />
   </div>
 </template>
 
@@ -32,15 +30,14 @@ import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import AssetBulkUpdateDialog from './components/AssetBulkUpdateDialog'
 import TreeMenu from './components/TreeMenu'
-import PlatformDialog from './components/PlatformDialog'
 import BaseList from './components/BaseList'
+import { setUrlParam } from '@/utils/common'
 
 export default {
   components: {
     TreeTable,
     AssetBulkUpdateDialog,
     TreeMenu,
-    PlatformDialog,
     BaseList
   },
   data() {
@@ -61,15 +58,13 @@ export default {
         url: '/api/v1/assets/assets/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
+        callback: {
+          onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
+        }
       },
       tableConfig: {
         url: '/api/v1/assets/assets/'
-      },
-      headerActions: {
-        onCreate: () => {
-          this.showPlatform = true
-        }
       },
       helpMessage: this.$t('assets.AssetListHelpMessage'),
       updateSelectedDialogSetting: {
@@ -105,6 +100,19 @@ export default {
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
       this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
+    },
+    getAssetsUrl(treeNode) {
+      let url = '/api/v1/assets/assets/'
+      if (treeNode.meta.type === 'node') {
+        const nodeId = treeNode.meta.data.id
+        url = setUrlParam(url, 'asset', '')
+        url = setUrlParam(url, 'node', nodeId)
+      } else if (treeNode.meta.type === 'asset') {
+        const assetId = treeNode.meta.data.id
+        url = setUrlParam(url, 'node', '')
+        url = setUrlParam(url, 'asset', assetId)
+      }
+      this.$set(this.tableConfig, 'url', url)
     }
   }
 }
