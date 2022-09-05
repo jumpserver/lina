@@ -29,7 +29,7 @@ export default {
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: assetFieldsMeta(this),
-      url: '/api/v1/assets/assets/',
+      url: '/api/v1/assets/hosts/',
       createSuccessNextRoute: { name: 'AssetDetail' },
       hasDetailInMsg: false
     }
