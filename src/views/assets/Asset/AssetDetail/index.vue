@@ -52,6 +52,16 @@ export default {
         hasRightSide: true,
         getObjectName: function(obj) {
           return obj.name + '(' + obj.ip + ')'
+        },
+        actions: {
+          updateCallback: () => {
+            const category = this.TaskDetail.category.value || 'host'
+            const routerName = _.capitalize(category) + 'Update'
+            this.$router.push({
+              name: routerName,
+              params: { id: this.$route.params.id }
+            })
+          }
         }
       }
     }
