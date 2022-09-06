@@ -1453,6 +1453,7 @@
       "IPNetworkSegment": "IP网段",
       "Aliyun": "阿里云",
       "Qcloud": "腾讯云",
+      "QcloudLighthouse": "腾讯云(轻量应用服务器)",
       "QingyunPrivatecloud": "青云私有云",
       "HuaweiPrivatecloud": "华为私有云",
       "CTYunPrivate": "天翼私有云",

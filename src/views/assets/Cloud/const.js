@@ -8,6 +8,7 @@ export const aws_international = 'aws_international'
 export const aws_china = 'aws_china'
 export const huaweicloud = 'huaweicloud'
 export const qcloud = 'qcloud'
+export const qcloud_lighthouse = 'qcloud_lighthouse'
 export const azure = 'azure'
 export const azure_international = 'azure_international'
 
@@ -54,6 +55,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [qcloud]: {
     name: qcloud,
     title: i18n.t('xpack.Cloud.Qcloud'),
+    attrs: ['access_key_id', 'access_key_secret']
+  },
+  [qcloud_lighthouse]: {
+    name: qcloud_lighthouse,
+    title: i18n.t('xpack.Cloud.QcloudLighthouse'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [azure]: {
