@@ -28,7 +28,7 @@ export default {
     },
     category: {
       type: String,
-      default: 'all'
+      default: ''
     },
     tableConfig: {
       type: Object,
@@ -114,6 +114,10 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
+              onUpdate: ({ row }) => {
+                const routeName = _.capitalize(row.category.value) + 'Update'
+                vm.$router.push({ name: routeName, params: { id: row.id }})
+              },
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
@@ -124,7 +128,6 @@ export default {
         }
       },
       defaultHeaderActions: {
-        createRoute: 'HostCreate',
         onCreate: () => {
           this.showPlatform = true
         },
@@ -189,7 +192,7 @@ export default {
     iTableConfig() {
       const config = _.merge(this.defaultConfig, this.tableConfig, {
         url: this.url,
-        category: this.category
+        ...(this.category && { category: this.category })
       })
       if (this.addColumns.length > 0) {
         config.columns = [
