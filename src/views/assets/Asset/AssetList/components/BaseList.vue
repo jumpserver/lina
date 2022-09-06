@@ -2,6 +2,10 @@
   <div>
     <ListTable :table-config="iTableConfig" :header-actions="iHeaderActions" />
     <PlatformDialog :visible.sync="showPlatform" :category="category" />
+    <AssetBulkUpdateDialog
+      :visible.sync="updateSelectedDialogSetting.visible"
+      v-bind="updateSelectedDialogSetting"
+    />
   </div>
 </template>
 
@@ -13,13 +17,15 @@ import {
   TagsFormatter,
   ChoicesDisplayFormatter
 } from '@/components/TableFormatters'
+import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
 
 export default {
   components: {
     ListTable,
-    PlatformDialog
+    PlatformDialog,
+    AssetBulkUpdateDialog
   },
   props: {
     url: {
@@ -53,6 +59,14 @@ export default {
   },
   data() {
     const vm = this
+    const onAction = (row, action) => {
+      const routeName = _.capitalize(row.category.value) + action
+      vm.$router.push({
+        name: routeName,
+        params: { id: row.id },
+        ...(action === 'Create' && { query: { clone_from: row.id }})
+      })
+    }
     return {
       showPlatform: false,
       defaultConfig: {
@@ -114,10 +128,8 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              onUpdate: ({ row }) => {
-                const routeName = _.capitalize(row.category.value) + 'Update'
-                vm.$router.push({ name: routeName, params: { id: row.id }})
-              },
+              onUpdate: ({ row }) => onAction(row, 'Update'),
+              onClone: ({ row }) => onAction(row, 'Create'),
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
@@ -180,11 +192,16 @@ export default {
                 vm.$hasPerm('assets.change_asset')
             },
             callback: ({ selectedRows }) => {
+              console.log('selectedRows: ----------------------ss', selectedRows)
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
               vm.updateSelectedDialogSetting.visible = true
             }
           }
         ]
+      },
+      updateSelectedDialogSetting: {
+        visible: false,
+        selectedRows: []
       }
     }
   },
