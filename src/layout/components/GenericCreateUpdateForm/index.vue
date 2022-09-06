@@ -233,6 +233,11 @@ export default {
     encryptedFields: {
       type: Array,
       default: () => ['password', 'token', 'private_key']
+    },
+    // 是否回显表单数据
+    echoForm: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -268,10 +273,12 @@ export default {
     this.$log.debug('Object init is: ', this.object)
     this.loading = true
     try {
-      const values = await this.getFormValue()
-      this.$log.debug('Final object is: ', values)
-      const formValue = Object.assign(this.form, values)
-      this.form = this.afterGetFormValue(formValue)
+      if (this.echoForm) {
+        const values = await this.getFormValue()
+        this.$log.debug('Final object is: ', values)
+        const formValue = Object.assign(this.form, values)
+        this.form = this.afterGetFormValue(formValue)
+      }
     } finally {
       this.loading = false
     }

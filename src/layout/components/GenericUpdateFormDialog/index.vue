@@ -97,6 +97,7 @@ export default {
     getDefaultFormSetting() {
       const vm = this
       return {
+        echoForm: false,
         submitMethod: () => 'patch',
         cleanFormValue: (value) => {
           const filterValue = {}
