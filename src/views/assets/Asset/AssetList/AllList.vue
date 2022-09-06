@@ -13,7 +13,7 @@
       />
       <BaseList
         slot="table"
-        :table-config="tableConfig"
+        v-bind="tableConfig"
       />
     </TreeTable>
 

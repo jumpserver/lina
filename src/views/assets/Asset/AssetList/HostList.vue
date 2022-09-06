@@ -27,7 +27,7 @@ export default {
             }
           ]
         },
-        columnsMeta: {
+        addColumnsMeta: {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
