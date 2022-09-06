@@ -233,6 +233,10 @@ export default {
     encryptedFields: {
       type: Array,
       default: () => ['password', 'token', 'private_key']
+    },
+    needGetObjectDetail: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -312,7 +316,7 @@ export default {
     },
     async getFormValue() {
       const cloneFrom = this.$route.query['clone_from']
-      if (!this.isUpdateMethod() && !cloneFrom) {
+      if ((!this.isUpdateMethod() && !cloneFrom) || !this.needGetObjectDetail) {
         return Object.assign(this.form, this.initial)
       }
       let object = this.object
