@@ -22,7 +22,7 @@ export default {
     const accountProviderAttrs = ACCOUNT_PROVIDER_ATTRS_MAP[accountProvider]
     function setFieldAttrs() {
       const fieldsObject = {}
-      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password']
+      const updateNotRequiredFields = ['access_key_secret', 'client_secret', 'password', 'sc_password', 'oc_password', 'cert_file', 'key_file']
       for (const item of accountProviderAttrs?.attrs) {
         fieldsObject[item] = {
           rules: updateNotRequiredFields.includes(item) && vm.$route.params.id ? [] : [Required]
@@ -56,6 +56,20 @@ export default {
             ...setFieldAttrs(),
             service_account_key: {
               label: this.$t('xpack.Cloud.ServerAccountKey'),
+              component: UploadKey,
+              el: {
+                toFormat: 'object'
+              }
+            },
+            cert_file: {
+              label: this.$t('common.Certificate'),
+              component: UploadKey,
+              el: {
+                toFormat: 'object'
+              }
+            },
+            key_file: {
+              label: this.$t('common.SecretKey'),
               component: UploadKey,
               el: {
                 toFormat: 'object'
