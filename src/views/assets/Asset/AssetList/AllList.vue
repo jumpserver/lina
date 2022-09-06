@@ -16,11 +16,6 @@
         v-bind="tableConfig"
       />
     </TreeTable>
-
-    <AssetBulkUpdateDialog
-      :visible.sync="updateSelectedDialogSetting.visible"
-      v-bind="updateSelectedDialogSetting"
-    />
   </div>
 </template>
 
@@ -28,7 +23,6 @@
 import { TreeTable } from '@/components'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
-import AssetBulkUpdateDialog from './components/AssetBulkUpdateDialog'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
 import { setUrlParam } from '@/utils/common'
@@ -36,7 +30,6 @@ import { setUrlParam } from '@/utils/common'
 export default {
   components: {
     TreeTable,
-    AssetBulkUpdateDialog,
     TreeMenu,
     BaseList
   },
@@ -66,11 +59,7 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/'
       },
-      helpMessage: this.$t('assets.AssetListHelpMessage'),
-      updateSelectedDialogSetting: {
-        visible: false,
-        selectedRows: []
-      }
+      helpMessage: this.$t('assets.AssetListHelpMessage')
     }
   },
   computed: {
