@@ -41,8 +41,22 @@ export default {
             use_ssl: {
               component: 'el-switch'
             },
+            allow_invalid_cert: {
+              label: this.$t('common.AllowInvalidCert'),
+              hidden: (form) => { return !form.use_ssl }
+            },
             ca_cert: {
-              label: this.$t('common.Certificate'),
+              label: this.$t('common.CACertificate'),
+              hidden: (form) => { return !form.use_ssl },
+              component: UploadKey
+            },
+            client_cert: {
+              label: this.$t('common.ClientCertificate'),
+              hidden: (form) => { return !form.use_ssl },
+              component: UploadKey
+            },
+            key_file: {
+              label: this.$t('common.CertificateKey'),
               hidden: (form) => { return !form.use_ssl },
               component: UploadKey
             }
