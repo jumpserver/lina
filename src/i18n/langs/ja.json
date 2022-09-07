@@ -276,6 +276,7 @@
     "ClientCertificate": "クライアント証明書",
     "CertificateKey": "証明書秘密鍵ファイル",
     "AllowInvalidCert": "証明書チェックを無視する",
+    "UseSSL": "使う SSL/TLS",
     "SecretKey": "鍵",
     "Scope": "カテゴリ",
     "Builtin": "内蔵",

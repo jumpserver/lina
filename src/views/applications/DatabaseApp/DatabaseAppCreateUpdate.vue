@@ -39,6 +39,7 @@ export default {
               type: 'input'
             },
             use_ssl: {
+              label: this.$t('common.UseSSL'),
               component: 'el-switch'
             },
             allow_invalid_cert: {
