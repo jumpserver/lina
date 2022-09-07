@@ -100,21 +100,21 @@ export default [
     children: [
       {
         path: '',
-        name: 'NetworksList',
+        name: 'NetworkingList',
         component: () => import('@/views/assets/Asset/AssetList/NetworkList.vue'),
         hidden: true,
         meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
       },
       {
         path: 'create',
-        name: 'NetworksCreate',
+        name: 'NetworkingCreate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/NetworkCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('assets.CreateNetworkDevice'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
-        name: 'NetworksUpdate',
+        name: 'NetworkingUpdate',
         component: () => import('@/views/assets/Asset/AssetCreateUpdate/NetworkCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }

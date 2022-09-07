@@ -70,7 +70,7 @@ export default {
     category: {
       type: String,
       Validator: (value) => {
-        return ['all', 'host', 'networks', 'database', 'cloud', 'web'].includes(value)
+        return ['all', 'host', 'networking', 'database', 'cloud', 'web'].includes(value)
       },
       default: 'all'
     }
