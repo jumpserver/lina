@@ -8,10 +8,6 @@
       :clean-form-value="cleanFormValue"
       :after-get-form-value="afterGetFormValue"
     />
-    <ProtocolSettingDialog
-      :visible.sync="showDialog"
-      :item="settingItem"
-    />
   </div>
 </template>
 
@@ -19,13 +15,11 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
 import { assetFieldsMeta } from '@/views/assets/const'
-import ProtocolSettingDialog from './ProtocolSettingDialog'
 
 export default {
   name: 'PlatformCreateUpdate',
   components: {
-    GenericCreateUpdatePage,
-    ProtocolSettingDialog
+    GenericCreateUpdatePage
   },
   data() {
     const category = this.$route.query.category
@@ -93,12 +87,7 @@ export default {
         protocols: {
           ...assetMeta.protocols,
           el: {
-            choices: [],
-            showSetting: (item) => true,
-            onSettingClick: (item) => {
-              this.settingItem = item
-              this.showDialog = true
-            }
+            choices: []
           },
           hidden: (formValue) => !formValue['protocols_enabled']
         },

@@ -13,6 +13,7 @@ export const assetFieldsMeta = (vm) => {
       component: ProtocolSelector,
       on: {},
       el: {
+        settingReadonly: true,
         choices: []
       }
     },

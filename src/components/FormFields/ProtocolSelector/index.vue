@@ -40,6 +40,7 @@
     <ProtocolSettingDialog
       :visible.sync="showDialog"
       :item="settingItem"
+      :disabled="settingReadonly"
     />
   </div>
 </template>
@@ -63,11 +64,13 @@ export default {
       type: Array,
       default: () => ([])
     },
+    settingReadonly: {
+      type: Boolean,
+      default: false
+    },
     showSetting: {
       type: Function,
-      default: (item) => {
-        return true
-      }
+      default: (item) => true
     }
   },
   data() {
