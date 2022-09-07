@@ -92,6 +92,7 @@ export default {
           component: Select2,
           el: {
             multiple: true,
+            allowCreate: true,
             value: [],
             ajax: {
               url: '/api/v1/xpack/cloud/regions/',

@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import SMSAlibaba from './SMSAlibaba'
 import SMSTencent from './SMSTencent'
+import SMSHuawei from './SMSHuawei'
 import CMPP2 from './CMPP2'
 
 export default {
@@ -24,7 +25,7 @@ export default {
         ],
         [
           this.$t('setting.SMSProvider'), [
-            'ALIYUN', 'QCLOUD', 'CMPP2'
+            'ALIYUN', 'QCLOUD', 'HUAWEICLOUD', 'CMPP2'
           ]
         ]
       ],
@@ -41,6 +42,13 @@ export default {
           component: SMSTencent,
           hidden: (form) => {
             return form['SMS_BACKEND'] !== 'tencent'
+          }
+        },
+        HUAWEICLOUD: {
+          label: this.$t('setting.HuaweiCloud'),
+          component: SMSHuawei,
+          hidden: (form) => {
+            return form['SMS_BACKEND'] !== 'huawei'
           }
         },
         CMPP2: {
