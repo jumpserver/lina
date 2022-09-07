@@ -56,7 +56,7 @@ export default {
               hidden: (form) => { return !form.use_ssl },
               component: UploadKey
             },
-            key_file: {
+            client_key: {
               label: this.$t('common.CertificateKey'),
               hidden: (form) => { return !form.use_ssl },
               component: UploadKey

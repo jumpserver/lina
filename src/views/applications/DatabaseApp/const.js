@@ -7,9 +7,9 @@ export function getDatabaseTypeFieldsMap(type) {
     case ORACLE:
       return baseParams.concat(['version'])
     case REDIS:
-      return baseParams.concat(tlsParams.concat(['client_cert', 'key_file']))
+      return baseParams.concat(tlsParams.concat(['client_cert', 'client_key']))
     case MONGODB:
-      return baseParams.concat(tlsParams.concat(['key_file']))
+      return baseParams.concat(tlsParams.concat(['client_key']))
     default:
       return baseParams
   }
