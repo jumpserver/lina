@@ -14,7 +14,6 @@
           v-if="showSetting(item)"
           slot="append"
           icon="el-icon-setting"
-          :disabled="disableSetting(item)"
           @click="onSettingClick(item)"
         />
       </el-input>
@@ -38,11 +37,19 @@
         />
       </div>
     </div>
+    <ProtocolSettingDialog
+      :visible.sync="showDialog"
+      :item="settingItem"
+    />
   </div>
 </template>
 
 <script>
+import ProtocolSettingDialog from './ProtocolSettingDialog'
 export default {
+  components: {
+    ProtocolSettingDialog
+  },
   props: {
     value: {
       type: [Array],
@@ -59,19 +66,7 @@ export default {
     showSetting: {
       type: Function,
       default: (item) => {
-        return false
-      }
-    },
-    disableSetting: {
-      type: Function,
-      default: (item) => {
-        return false
-      }
-    },
-    onSettingClick: {
-      type: Function,
-      default: (item) => {
-        alert('Click setting: ' + item.name + ', port: ' + item.port)
+        return true
       }
     }
   },
@@ -79,7 +74,8 @@ export default {
     return {
       name: '',
       items: [],
-      settingItem: {}
+      settingItem: {},
+      showDialog: false
     }
   },
   computed: {
@@ -131,6 +127,10 @@ export default {
       if (choices.length !== 0) {
         this.items = [choices[0]]
       }
+    },
+    onSettingClick(item) {
+      this.settingItem = item
+      this.showDialog = true
     }
   }
 }

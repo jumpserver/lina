@@ -98,8 +98,7 @@ export default {
             onSettingClick: (item) => {
               this.settingItem = item
               this.showDialog = true
-            },
-            disableSetting: (item) => item.name !== 'rdp'
+            }
           },
           hidden: (formValue) => !formValue['protocols_enabled']
         },

@@ -1,4 +1,3 @@
-import DatetimeRangePicker from './DatetimeRangePicker'
 import Link from './Link'
 import PasswordInput from './PasswordInput'
 import Select2 from './Select2'
@@ -11,6 +10,7 @@ import UpdateToken from './UpdateToken'
 import JsonEditor from './JsonEditor'
 import Text from './Text'
 import NestedObjectSelect2 from './NestedObjectSelect2'
+import DatetimeRangePicker from './DatetimeRangePicker'
 
 export default {
   DatetimeRangePicker,

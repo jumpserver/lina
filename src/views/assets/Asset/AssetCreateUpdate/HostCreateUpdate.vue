@@ -34,8 +34,12 @@ export default {
       hasDetailInMsg: false
     }
   },
-  mounted() {
-    this.setPlatformInitial()
+  async mounted() {
+    try {
+      await this.setPlatformInitial()
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
     async setPlatformInitial() {
@@ -56,7 +60,6 @@ export default {
 
       const constraints = this.platform['type_constraints']
       this.fieldsMeta.protocols.el.choices = constraints['protocols']
-      this.loading = false
     }
   }
 }

@@ -21,7 +21,6 @@ export default {
       initial: {
         is_active: true,
         platform: parseInt(platformId),
-        protocols: ['mysql/22'],
         nodes: nodesInitial
       },
       url: '/api/v1/assets/databases/',
