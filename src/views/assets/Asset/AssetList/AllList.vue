@@ -57,7 +57,8 @@ export default {
         }
       },
       tableConfig: {
-        url: '/api/v1/assets/assets/'
+        url: '/api/v1/assets/assets/',
+        category: 'all'
       },
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }
