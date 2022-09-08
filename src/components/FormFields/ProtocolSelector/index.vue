@@ -23,7 +23,7 @@
           icon="el-icon-minus"
           style="flex-shrink: 0;"
           size="mini"
-          :disabled="items.length === 1"
+          :disabled="items.length === 1 || (item.setting && item.setting.required)"
           @click="handleDelete(index)"
         />
         <el-button

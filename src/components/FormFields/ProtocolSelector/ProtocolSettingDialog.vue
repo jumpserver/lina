@@ -61,7 +61,7 @@ export default {
         url: '',
         fields: [
           [
-            'Hello', [
+            this.$t('common.Basic'), [
               {
                 id: 'required',
                 label: '必须配置',
@@ -69,15 +69,15 @@ export default {
                 type: 'switch'
               },
               {
-                id: 'as_default',
+                id: 'default',
                 label: '默认配置',
-                helpText: '新建资产时，默认配置',
+                helpText: '新建资产时，默认显示',
                 type: 'switch'
               }
             ]
           ],
           [
-            'Protocol', [
+            this.$t('assets.Protocol'), [
               {
                 id: 'console',
                 label: 'Console',
