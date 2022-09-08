@@ -60,12 +60,22 @@ export default {
   data() {
     const vm = this
     const onAction = (row, action) => {
-      const routeName = _.capitalize(row.category.value) + action
-      vm.$router.push({
+      let routeAction = action
+      if (action === 'Clone') {
+        routeAction = 'Create'
+      }
+      const routeName = _.capitalize(row.category.value) + routeAction
+      const route = {
         name: routeName,
         params: { id: row.id },
-        ...(action === 'Create' && { query: { clone_from: row.id }})
-      })
+        query: {}
+      }
+      if (action === 'Clone') {
+        route.query.clone_from = row.id
+      } else if (action === 'Update') {
+        route.query.platform = row.platform.id
+      }
+      vm.$router.push(route)
     }
     return {
       showPlatform: false,
@@ -109,15 +119,6 @@ export default {
             sortable: 'custom',
             width: '140px'
           },
-          hardware_info: {
-            showOverflowTooltip: true
-          },
-          cpu_model: {
-            showOverflowTooltip: true
-          },
-          sn: {
-            showOverflowTooltip: true
-          },
           comment: {
             showOverflowTooltip: true
           },
@@ -129,7 +130,7 @@ export default {
             formatter: ActionsFormatter,
             formatterArgs: {
               onUpdate: ({ row }) => onAction(row, 'Update'),
-              onClone: ({ row }) => onAction(row, 'Create'),
+              onClone: ({ row }) => onAction(row, 'Clone'),
               performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`

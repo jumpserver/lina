@@ -11,7 +11,7 @@
     @open="onOpen"
     v-on="$listeners"
   >
-    <el-alert type="success">
+    <el-alert v-if="disabled" type="success">
       继承自平台配置，如需更改，请更改平台中的配置
       <el-link :href="platformDetail" class="link-more" target="_blank">查看</el-link>
       <i class="fa fa-external-link" />
@@ -19,7 +19,7 @@
     <AutoDataForm
       class="data-form"
       :form="form"
-      :disabled="iDisabled"
+      :disabled="disabled"
       v-bind="config"
       @submit="onSubmit"
     />
@@ -41,7 +41,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
@@ -52,8 +52,7 @@ export default {
       },
       loading: true,
       form: {},
-      iDisabled: this.disabled,
-      platformDetail: '#/console/assets/platforms/' + this.$route.query['platform'],
+      platformDetail: '#/console/assets/platforms/' + this.$route.query.platform,
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,

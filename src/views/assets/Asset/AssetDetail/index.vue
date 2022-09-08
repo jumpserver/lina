@@ -1,7 +1,12 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    :object.sync="asset"
+    :active-menu.sync="config.activeMenu"
+    v-bind="config"
+    v-on="$listeners"
+  >
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="asset" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -25,7 +30,7 @@ export default {
   },
   data() {
     return {
-      TaskDetail: {},
+      asset: {},
       config: {
         activeMenu: 'Detail',
         submenu: [
@@ -55,11 +60,12 @@ export default {
         },
         actions: {
           updateCallback: () => {
-            const category = this.TaskDetail.category.value || 'host'
+            const category = this.asset.category.value || 'host'
             const routerName = _.capitalize(category) + 'Update'
             this.$router.push({
               name: routerName,
-              params: { id: this.$route.params.id }
+              params: { id: this.$route.params.id },
+              query: { platform: this.asset.platform.id }
             })
           }
         }

@@ -56,10 +56,13 @@ export default {
         nodes: nodesInitial
       }
       Object.assign(this.initial, initial)
-      this.fieldsMeta.protocols.el.choices = this.platform['protocols']
-      if (this.platform.domain_enabled === false) {
-        this.fieldsMeta.domain.hidden = () => true
+      const hiddenCheckFields = ['protocols', 'domain']
+      for (const field of hiddenCheckFields) {
+        if (this.platform[field + '_enabled'] === false) {
+          this.fieldsMeta[field].hidden = () => true
+        }
       }
+      this.fieldsMeta.protocols.el.choices = this.platform['protocols']
     }
   }
 }
