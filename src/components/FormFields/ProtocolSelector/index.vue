@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(item, index) in items" :key="item.name" style="display: flex;margin-top: 8px;">
-      <el-input v-model="item.port" class="input-with-select" v-bind="$attrs">
+      <el-input v-model="item.port" :placeholder="portPlaceholder" class="input-with-select" v-bind="$attrs">
         <el-select
           slot="prepend"
           v-model="item.name"
@@ -89,6 +89,13 @@ export default {
       return this.choices.filter(proto => {
         return this.selectedProtocolNames.indexOf(proto.name) === -1
       })
+    },
+    portPlaceholder() {
+      if (this.settingReadonly) {
+        return '端口'
+      } else {
+        return '默认端口'
+      }
     }
   },
   watch: {

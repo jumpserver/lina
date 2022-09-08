@@ -3,19 +3,21 @@
     <el-table :data="accounts" style="width: 100%">
       <el-table-column prop="username" label="用户名" width="180" />
       <el-table-column prop="privileged" label="特权账号">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <i class="fa text-primary" :class="scope.row['privileged'] ? 'fa-check' : ''" />
         </template>
       </el-table-column>
       <el-table-column fixed="right" align="right" label="操作" width="135" class-name="buttons">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button type="danger" icon="el-icon-minus" size="mini" @click="removeAccount(scope.row)" />
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="onEditClick(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
-    <el-button size="mini" type="primary" @click="onAddClick">添加</el-button>
-    <el-button size="mini" type="success" @click="onAddClick">模版添加</el-button>
+    <div class="actions">
+      <el-button size="mini" type="primary" @click="onAddClick">添加</el-button>
+      <el-button size="mini" type="success" @click="onAddClick">模版添加</el-button>
+    </div>
     <Dialog
       v-if="visible"
       :title="this.$tc('assets.AddAccount')"

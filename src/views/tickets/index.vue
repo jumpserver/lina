@@ -3,7 +3,7 @@
     <el-badge
       v-if="props.tab === 'AssignedTicketList'"
       slot="badge"
-      slot-scope="props"
+      v-slot="props"
       :value="getBadgeValue(props)"
       size="mini"
       type="primary"

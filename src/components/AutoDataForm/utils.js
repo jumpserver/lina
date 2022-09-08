@@ -148,13 +148,15 @@ export class FormFieldGenerator {
   }
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {
     const [groupTitle, fields] = field
-    this.groups.push({
+    const _fields = this.generateFields(fields, fieldsMeta, remoteFieldsMeta)
+    const group = {
       id: groupTitle,
       title: groupTitle,
-      name: fields[0],
-      fields: fields
-    })
-    return this.generateFields(fields, fieldsMeta, remoteFieldsMeta)
+      fields: _fields,
+      name: _fields[0].id
+    }
+    this.groups.push(group)
+    return _fields
   }
   generateFields(_fields, fieldsMeta, remoteFieldsMeta) {
     let fields = []

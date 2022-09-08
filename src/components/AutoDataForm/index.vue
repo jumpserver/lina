@@ -1,20 +1,24 @@
 <template>
   <DataForm
+    v-if="!loading"
     ref="dataForm"
-    v-loading="loading"
     :fields="totalFields"
     :form="iForm"
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <FormGroupHeader
+    <span
       v-for="(group, i) in groups"
       :slot="'id:'+group.name"
       :key="'group-'+group.name"
-      :group="group"
-      :index="i"
-      :line="i !== 0"
-    />
+    >
+      <FormGroupHeader
+        v-if="!groupHidden(group, i)"
+        :group="group"
+        :index="i"
+        :line="i !== 0"
+      />
+    </span>
   </DataForm>
 </template>
 
@@ -66,16 +70,16 @@ export default {
     this.optionUrlMetaAndGenerateColumns()
   },
   methods: {
-    optionUrlMetaAndGenerateColumns() {
-      this.$store.dispatch('common/getUrlMeta', { url: this.url }).then(data => {
-        this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
-        this.generateColumns()
-        this.cleanFormValue()
-      }).catch(err => {
-        this.$log.error(err)
-      }).finally(() => {
-        this.loading = false
-      })
+    async optionUrlMetaAndGenerateColumns() {
+      let data = { actions: {}}
+      if (this.url) {
+        data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
+      }
+      this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
+      this.generateColumns()
+      this.cleanFormValue()
+      this.loading = false
+      console.log('Loading: ', this.groups)
     },
     generateColumns() {
       const generator = new FormFieldGenerator()
@@ -114,6 +118,18 @@ export default {
       } else {
         field.attrs.error = error
       }
+    },
+    groupHidden(group, i) {
+      for (const field of group.fields) {
+        let hidden = field.hidden
+        if (typeof hidden === 'function') {
+          hidden = hidden(this.iForm)
+        }
+        if (!hidden) {
+          return false
+        }
+      }
+      return true
     }
   }
 }

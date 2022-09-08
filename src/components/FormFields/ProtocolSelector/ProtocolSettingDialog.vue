@@ -16,7 +16,7 @@
       <el-link :href="platformDetail" class="link-more" target="_blank">查看</el-link>
       <i class="fa fa-external-link" />
     </el-alert>
-    <DataForm
+    <AutoDataForm
       class="data-form"
       :form="form"
       :disabled="iDisabled"
@@ -27,12 +27,12 @@
 </template>
 
 <script>
-import { Dialog, DataForm } from '@/components'
+import { Dialog, AutoDataForm } from '@/components'
 export default {
   name: 'ProtocolSetting',
   components: {
     Dialog,
-    DataForm
+    AutoDataForm
   },
   props: {
     item: {
@@ -46,44 +46,65 @@ export default {
   },
   data() {
     return {
-      form: this.item.setting || {},
+      defaultSetting: {
+        required: false,
+        default: true,
+        is_active: true
+      },
+      loading: true,
+      form: {},
       iDisabled: this.disabled,
       platformDetail: '#/console/assets/platforms/' + this.$route.query['platform'],
       config: {
         hasSaveContinue: false,
         hasButtons: !this.disabled,
+        url: '',
         fields: [
-          {
-            id: 'required',
-            label: '必须配置',
-            helpText: '资产上必须开启该协议',
-            type: 'switch'
-          },
-          {
-            id: 'console',
-            label: 'Console',
-            type: 'switch',
-            hidden: () => this.item.name !== 'rdp'
-          },
-          {
-            id: 'security',
-            label: 'Security',
-            hidden: () => this.item.name !== 'rdp',
-            type: 'radio-group',
-            options: [
-              { label: 'Any', value: 'any' },
-              { label: 'RDP', value: 'rdp' },
-              { label: 'NLA', value: 'nla' },
-              { label: 'TLS', value: 'tls' }
+          [
+            'Hello', [
+              {
+                id: 'required',
+                label: '必须配置',
+                helpText: '新建资产时，必须开启该协议',
+                type: 'switch'
+              },
+              {
+                id: 'as_default',
+                label: '默认配置',
+                helpText: '新建资产时，默认配置',
+                type: 'switch'
+              }
             ]
-          },
-          {
-            id: 'sftp_home',
-            label: 'SFTP home',
-            type: 'input',
-            helpText: this.$t('assets.SFTPHelpMessage'),
-            hidden: () => this.item.name !== 'sftp'
-          }
+          ],
+          [
+            'Protocol', [
+              {
+                id: 'console',
+                label: 'Console',
+                type: 'switch',
+                hidden: () => this.item.name !== 'rdp'
+              },
+              {
+                id: 'security',
+                label: 'Security',
+                hidden: () => this.item.name !== 'rdp',
+                type: 'radio-group',
+                options: [
+                  { label: 'Any', value: 'any' },
+                  { label: 'RDP', value: 'rdp' },
+                  { label: 'NLA', value: 'nla' },
+                  { label: 'TLS', value: 'tls' }
+                ]
+              },
+              {
+                id: 'sftp_home',
+                label: 'SFTP home',
+                type: 'input',
+                helpText: this.$t('assets.SFTPHelpMessage'),
+                hidden: () => this.item.name !== 'sftp'
+              }
+            ]
+          ]
         ]
       }
     }
@@ -94,7 +115,8 @@ export default {
       this.$emit('update:visible', false)
     },
     onOpen() {
-      this.form = this.item.setting
+      this.form = this.item.setting || this.defaultSetting
+      console.log('Item: ', this.item, this.form)
     }
   }
 }

@@ -85,6 +85,7 @@ export default {
           }
         },
         protocols: {
+          label: '支持的协议',
           ...assetMeta.protocols,
           el: {
             choices: []
