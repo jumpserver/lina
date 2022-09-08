@@ -50,20 +50,16 @@ export default {
       const platformId = this.$route.query['platform'] || 1
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
-      let protocols = this.platform.protocols.filter(p => {
-        return p.setting.default || p.setting.required
-      })
-      if (protocols.length === 0) {
-        protocols = this.platform.protocols[0]
-      }
       const initial = {
         platform: parseInt(platformId),
-        protocols: protocols,
-        nodes: nodesInitial,
-        domain: this.platform['domain_default']
+        protocols: [],
+        nodes: nodesInitial
       }
       Object.assign(this.initial, initial)
       this.fieldsMeta.protocols.el.choices = this.platform['protocols']
+      if (this.platform.domain_enabled === false) {
+        this.fieldsMeta.domain.hidden = () => true
+      }
     }
   }
 }

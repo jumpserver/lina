@@ -47,9 +47,8 @@ export default {
   data() {
     return {
       defaultSetting: {
-        required: false,
-        default: true,
-        is_active: true
+        sftp_enabled: true,
+        sftp_home: '/tmp'
       },
       loading: true,
       form: {},
@@ -60,51 +59,37 @@ export default {
         hasButtons: !this.disabled,
         url: '',
         fields: [
-          [
-            this.$t('common.Basic'), [
-              {
-                id: 'required',
-                label: '必须配置',
-                helpText: '新建资产时，必须开启该协议',
-                type: 'switch'
-              },
-              {
-                id: 'default',
-                label: '默认配置',
-                helpText: '新建资产时，默认显示',
-                type: 'switch'
-              }
+          {
+            id: 'console',
+            label: 'Console',
+            type: 'switch',
+            hidden: () => this.item.name !== 'rdp'
+          },
+          {
+            id: 'security',
+            label: 'Security',
+            hidden: () => this.item.name !== 'rdp',
+            type: 'radio-group',
+            options: [
+              { label: 'Any', value: 'any' },
+              { label: 'RDP', value: 'rdp' },
+              { label: 'NLA', value: 'nla' },
+              { label: 'TLS', value: 'tls' }
             ]
-          ],
-          [
-            this.$t('assets.Protocol'), [
-              {
-                id: 'console',
-                label: 'Console',
-                type: 'switch',
-                hidden: () => this.item.name !== 'rdp'
-              },
-              {
-                id: 'security',
-                label: 'Security',
-                hidden: () => this.item.name !== 'rdp',
-                type: 'radio-group',
-                options: [
-                  { label: 'Any', value: 'any' },
-                  { label: 'RDP', value: 'rdp' },
-                  { label: 'NLA', value: 'nla' },
-                  { label: 'TLS', value: 'tls' }
-                ]
-              },
-              {
-                id: 'sftp_home',
-                label: 'SFTP home',
-                type: 'input',
-                helpText: this.$t('assets.SFTPHelpMessage'),
-                hidden: () => this.item.name !== 'sftp'
-              }
-            ]
-          ]
+          },
+          {
+            id: 'sftp_enabled',
+            label: '启用 SFTP',
+            type: 'switch',
+            hidden: () => this.item.name !== 'ssh'
+          },
+          {
+            id: 'sftp_home',
+            label: 'SFTP home',
+            type: 'input',
+            helpText: this.$t('assets.SFTPHelpMessage'),
+            hidden: (form) => this.item.name !== 'ssh' || !form['sftp_enabled']
+          }
         ]
       }
     }
@@ -116,7 +101,6 @@ export default {
     },
     onOpen() {
       this.form = this.item.setting || this.defaultSetting
-      console.log('Item: ', this.item, this.form)
     }
   }
 }

@@ -22,8 +22,6 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const category = this.$route.query.category
-    const type = this.$route.query.type
     const assetMeta = assetFieldsMeta()
     return {
       loading: true,
@@ -48,7 +46,7 @@ export default {
           'name', 'category_type'
         ]],
         [this.$t('assets.Asset'), [
-          'charset',
+          'charset', 'domain_enabled',
           'protocols_enabled', 'protocols',
           'gather_facts_enabled', 'gather_facts_method'
         ]],
@@ -84,6 +82,11 @@ export default {
             disabled: false
           }
         },
+        domain_enabled: {
+          el: {
+            disabled: false
+          }
+        },
         protocols: {
           label: '支持的协议',
           ...assetMeta.protocols,
@@ -104,7 +107,7 @@ export default {
           type: 'select'
         }
       },
-      url: `/api/v1/assets/platforms/?category=${category}&type=${type}`,
+      url: `/api/v1/assets/platforms/`,
       cleanFormValue: (values) => {
         const category_type = values['category_type']
         values['category'] = category_type[0]
@@ -149,6 +152,10 @@ export default {
       this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
       this.fieldsMeta.protocols.el.choices = protocols
       this.initial.protocols_enabled = !!protocols.length
+
+      const domainDisabled = constraints['domain_enabled'] === false
+      this.fieldsMeta.domain_enabled.el.disabled = domainDisabled
+      this.initial.domain_enabled = !domainDisabled
 
       for (const itemOk of this.opsItems) {
         const itemConstraint = constraints[itemOk]

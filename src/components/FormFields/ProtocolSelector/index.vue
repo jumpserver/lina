@@ -130,13 +130,11 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      if (this.value && this.value.length > 0) {
-        this.items = [...this.value]
-        return
+      let defaults = this.value
+      if (defaults.length === 0 && choices.length !== 0) {
+        defaults = choices
       }
-      if (choices.length !== 0) {
-        this.items = [choices[0]]
-      }
+      this.items = defaults
     },
     onSettingClick(item) {
       this.settingItem = item
