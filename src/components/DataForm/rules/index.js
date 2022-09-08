@@ -45,3 +45,20 @@ export const JsonRequired = {
     }
   }
 }
+
+export const JsonRequiredUserNameMapped = {
+  required: true,
+  trigger: 'change',
+  validator: (rule, value, callback) => {
+    try {
+      JSON.parse(value)
+      const hasUserName = _.map(JSON.parse(value), (value) => value)
+      if (!hasUserName.includes('username')) {
+        callback(new Error(i18n.t('common.requiredHasUserNameMapped')))
+      }
+      callback()
+    } catch (e) {
+      callback(new Error(i18n.t('common.InvalidJson')))
+    }
+  }
+}

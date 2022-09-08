@@ -423,6 +423,7 @@
     "disableSelected": "選択した無効",
     "disableSuccessMsg": "成功を無効にする",
     "fieldRequiredError": "このフィールドは必須項目です",
+    "requiredHasUserNameMapped": "usernameフィールドのマッピングを含める必要があります, {'uid':'username'}など",
     "getErrorMsg": "の取得に失敗しました",
     "MFAErrorMsg": "MFAエラーです。チェックしてください",
     "Total": "合計",

@@ -414,6 +414,7 @@
     "disableSelected": "Disable selected",
     "disableSuccessMsg": "Disable success",
     "fieldRequiredError": "This field is required",
+    "requiredHasUserNameMapped": "The mapping of the username field must be included, such as {'uid': 'username'}",
     "getErrorMsg": "Get failed",
     "fileType": "File type",
     "Status": "Status",

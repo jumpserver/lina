@@ -423,6 +423,7 @@
     "disableSelected": "禁用所选",
     "disableSuccessMsg": "禁用成功",
     "fieldRequiredError": "这个字段是必填项",
+    "requiredHasUserNameMapped": "必须包含 username 字段的映射，如 { 'uid': 'username' }",
     "getErrorMsg": "获取失败",
     "MFAErrorMsg": "MFA错误，请检查",
     "Total": "总共",
