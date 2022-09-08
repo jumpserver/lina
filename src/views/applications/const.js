@@ -92,24 +92,27 @@ export const DATABASE = [
   }
 ]
 
+const MONGODB_ITEM = {
+  name: MONGODB,
+  title: i18n.t(`applications.applicationsType.${MONGODB}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  group: i18n.t('applications.NoSQLProtocol')
+}
+
+const REDIS_ITEM = {
+  name: REDIS,
+  title: i18n.t(`applications.applicationsType.${REDIS}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: true
+}
+
 export const KV_DATABASE = [
-  {
-    name: REDIS,
-    title: i18n.t(`applications.applicationsType.${REDIS}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: true,
-    group: i18n.t('applications.NoSQLProtocol')
-  },
-  {
-    name: MONGODB,
-    title: i18n.t(`applications.applicationsType.${MONGODB}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY
-  }
+  MONGODB_ITEM, REDIS_ITEM
 ]
 
-export const AppPlanDatabase = DATABASE
+export const AppPlanDatabase = [...DATABASE, MONGODB_ITEM]
 
 export const KUBERNETES = 'k8s'
 export const CLOUD_CATEGORY = 'cloud'

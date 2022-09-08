@@ -72,6 +72,9 @@ const mutations = {
   },
   ADD_WORKBENCH_ORGS(state, org) {
     state.workbenchOrgs.push(org)
+  },
+  SET_IS_FIRST_LOGIN(state, flag) {
+    state.profile.is_first_login = flag
   }
 }
 
@@ -140,6 +143,9 @@ const actions = {
     const usingOrgs = mapper[viewName] || state.consoleOrgs
     Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
     commit('SET_USING_ORGS', usingOrgs)
+  },
+  ifFirstLogin({ commit }, flag) {
+    commit('SET_IS_FIRST_LOGIN', flag)
   }
 }
 
