@@ -1345,6 +1345,10 @@
     "Receivers": "接收人",
     "Subscription": "消息订阅",
     "ChangeReceiver": "修改消息接收人",
+    "Constituency": "待选区",
+    "Selected": "已选中",
+    "PrePage": "上一页",
+    "NextPage": "下一页",
     "Subject": "主题",
     "Message": "消息",
     "DeliveryTime": "发送时间",
@@ -1510,8 +1514,8 @@
       "DeleteReleasedAssets": "删除已释放资产"
     },
     "Template": {
-        "Template": "模版管理"
-     },
+      "Template": "模版管理"
+    },
     "Corporation": "公司",
     "Edition": "版本",
     "Execute": "执行",

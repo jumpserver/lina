@@ -67,6 +67,8 @@ export default {
           return results
         },
         selectedData: [],
+        boxTitle: [this.$t('notifications.Constituency'), this.$t('notifications.Selected')],
+        pageTexts: [this.$t('notifications.PrePage'), this.$t('notifications.NextPage')],
         showClearBtn: true
       }
     }
