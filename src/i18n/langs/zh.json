@@ -245,6 +245,7 @@
     "Home": "家目录",
     "LinuxUserAffiliateGroup": "用户附属组",
     "ipDomain": "IP(域名)",
+    "Cluster": "集群",
     "HostProtocol": "主机协议",
     "DatabaseProtocol": "数据库协议",
     "RDBProtocol": "关系型数据库",

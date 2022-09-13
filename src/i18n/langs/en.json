@@ -240,6 +240,7 @@
     "Home": "Home",
     "LinuxUserAffiliateGroup": "Linux user affiliate group",
     "ipDomain": "IP(Host)",
+    "Cluster": "Cluster",
     "HostProtocol": "Host Protocol",
     "DatabaseProtocol": "Database Protocol",
     "RDBProtocol": "RDS Protocol",

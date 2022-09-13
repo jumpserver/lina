@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { assetFieldsMeta } from '../../const'
+import { assetFieldsMeta, setPlatformInitial } from '../../const'
 
 export default {
   name: 'HostCreateUpdate',
@@ -14,10 +14,11 @@ export default {
   data() {
     return {
       loading: true,
+      initial: {},
       platform: {},
-      initial: {
-        labels: []
-      },
+      url: '/api/v1/assets/assets/',
+      createSuccessNextRoute: { name: 'AssetList' },
+      hasDetailInMsg: false,
       fields: [
         [this.$t('common.Basic'), ['name', 'ip', 'platform', 'domain']],
         [this.$t('assets.Protocols'), ['protocols']],
@@ -26,36 +27,17 @@ export default {
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
-      fieldsMeta: assetFieldsMeta(this),
-      url: '/api/v1/assets/assets/',
-      createSuccessNextRoute: { name: 'AssetDetail' },
-      hasDetailInMsg: false
+      fieldsMeta: assetFieldsMeta(this)
     }
   },
-  mounted() {
-    this.setPlatformInitial()
-  },
-  methods: {
-    async setPlatformInitial() {
-      const nodesInitial = []
-      if (this.$route.query['node']) {
-        nodesInitial.push(this.$route.query.node)
-      }
-      const platformId = this.$route.query['platform'] || 1
-      const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
-      const initial = {
-        is_active: true,
-        platform: parseInt(platformId),
-        protocols: this.platform.protocols_default,
-        nodes: nodesInitial,
-        domain: this.platform.domain_default
-      }
-      const constraints = this.platform['type_constraints']
-      this.fieldsMeta.protocols.el.choices = constraints['protocols']
-      this.initial = initial
+  async created() {
+    try {
+      await setPlatformInitial(this)
+    } finally {
       this.loading = false
     }
+  },
+  methods: {
   }
 }
 </script>
