@@ -1,10 +1,10 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { assetFieldsMeta } from '@/views/assets/const'
+import { assetFieldsMeta, setPlatformInitial } from '@/views/assets/const'
 
 export default {
   name: 'DatabaseCreateUpdate',
@@ -12,23 +12,14 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const nodesInitial = []
-    if (this.$route.query['node']) {
-      nodesInitial.push(this.$route.query.node)
-    }
-    const platformId = this.$route.query['platform'] || 1
     return {
-      initial: {
-        is_active: true,
-        platform: parseInt(platformId),
-        protocols: ['mysql/22'],
-        nodes: nodesInitial
-      },
+      loading: true,
+      initial: {},
       url: '/api/v1/assets/databases/',
-      createSuccessNextRoute: { name: 'AssetDetail' },
+      createSuccessNextRoute: { name: 'AssetList' },
       hasDetailInMsg: false,
       fields: [
-        [this.$t('common.Basic'), ['name', 'ip', 'platform', 'db_name']],
+        [this.$t('common.Basic'), ['name', 'ip', 'platform', 'cluster']],
         [this.$t('assets.Protocols'), ['protocols']],
         [this.$t('assets.Domain'), ['domain']],
         [this.$t('assets.Node'), ['nodes']],
@@ -38,30 +29,14 @@ export default {
       fieldsMeta: assetFieldsMeta(this)
     }
   },
-  mounted() {
-    this.setPlatformInitial()
-  },
-  methods: {
-    async setPlatformInitial() {
-      const nodesInitial = []
-      if (this.$route.query['node']) {
-        nodesInitial.push(this.$route.query.node)
-      }
-      const platformId = this.$route.query['platform'] || 1
-      const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
-      const initial = {
-        is_active: true,
-        platform: parseInt(platformId),
-        protocols: this.platform.protocols_default,
-        nodes: nodesInitial,
-        domain: this.platform.domain_default
-      }
-      const constraints = this.platform['type_constraints']
-      this.fieldsMeta.protocols.el.choices = constraints['protocols']
-      this.initial = initial
+  async created() {
+    try {
+      await setPlatformInitial(this)
+    } finally {
       this.loading = false
     }
+  },
+  methods: {
   }
 }
 </script>
