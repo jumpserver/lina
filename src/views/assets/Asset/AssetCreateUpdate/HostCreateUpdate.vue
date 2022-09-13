@@ -63,6 +63,7 @@ export default {
         }
       }
       this.fieldsMeta.protocols.el.choices = this.platform['protocols']
+      this.fieldsMeta.accounts.el.protocols = this.platform['protocols']
     }
   }
 }
