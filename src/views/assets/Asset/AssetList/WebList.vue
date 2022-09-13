@@ -13,7 +13,7 @@ export default {
     return {
       config: {
         category: 'web',
-        url: '/api/v1/assets/webs/',
+        url: '/api/v1/assets/web/',
         headerActions: {
           createRoute: 'WebCreate'
         }

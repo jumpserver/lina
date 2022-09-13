@@ -4,7 +4,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { assetFieldsMeta } from '../../const'
+import { assetFieldsMeta, setPlatformInitial } from '../../const'
 
 export default {
   name: 'HostCreateUpdate',
@@ -14,12 +14,11 @@ export default {
   data() {
     return {
       loading: true,
+      initial: {},
       platform: {},
-      initial: {
-        labels: [],
-        is_active: true,
-        nodes: []
-      },
+      url: '/api/v1/assets/hosts/',
+      createSuccessNextRoute: { name: 'AssetList' },
+      hasDetailInMsg: false,
       fields: [
         [this.$t('common.Basic'), ['name', 'ip', 'platform', 'domain']],
         [this.$t('assets.Protocols'), ['protocols']],
@@ -28,42 +27,17 @@ export default {
         [this.$t('assets.Label'), ['labels']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
-      fieldsMeta: assetFieldsMeta(this),
-      url: '/api/v1/assets/hosts/',
-      createSuccessNextRoute: { name: 'AssetDetail' },
-      hasDetailInMsg: false
+      fieldsMeta: assetFieldsMeta(this)
     }
   },
   async mounted() {
     try {
-      await this.setPlatformInitial()
+      await setPlatformInitial(this)
     } finally {
       this.loading = false
     }
   },
   methods: {
-    async setPlatformInitial() {
-      const nodesInitial = []
-      if (this.$route.query['node']) {
-        nodesInitial.push(this.$route.query.node)
-      }
-      const platformId = this.$route.query['platform'] || 1
-      const url = `/api/v1/assets/platforms/${platformId}/`
-      this.platform = await this.$axios.get(url)
-      const initial = {
-        platform: parseInt(platformId),
-        protocols: [],
-        nodes: nodesInitial
-      }
-      Object.assign(this.initial, initial)
-      const hiddenCheckFields = ['protocols', 'domain']
-      for (const field of hiddenCheckFields) {
-        if (this.platform[field + '_enabled'] === false) {
-          this.fieldsMeta[field].hidden = () => true
-        }
-      }
-      this.fieldsMeta.protocols.el.choices = this.platform['protocols']
-    }
   }
 }
 </script>

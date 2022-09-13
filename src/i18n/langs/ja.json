@@ -245,6 +245,7 @@
     "Home": "ホームディレクトリ",
     "LinuxUserAffiliateGroup": "ユーザー付属グループ",
     "ipDomain": "IP (ドメイン名)",
+    "Cluster": "クラスター",
     "HostProtocol": "ホストプロトコル",
     "DatabaseProtocol": "データベースプロトコル",
     "RDBProtocol": "リレーショナルデータベース",
