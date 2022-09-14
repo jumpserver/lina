@@ -4,7 +4,7 @@ import AssetAccounts from '@/components/FormFields/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 import { Select2 } from '@/components/FormFields'
 
-export const assetFieldsMeta = (vm) => {
+export const assetFieldsMeta = () => {
   return {
     ip: {
       label: i18n.t('assets.ipDomain')
@@ -78,33 +78,6 @@ export const assetFieldsMeta = (vm) => {
     },
     url: {
       label: 'url'
-    }
-  }
-}
-
-export const setPlatformInitial = async(vm) => {
-  const nodesInitial = []
-  if (!vm.initial) vm.$set(vm, 'initial', {})
-  if (vm.$route.query['node']) {
-    nodesInitial.push(vm.$route.query.node)
-  }
-  const platformId = vm.$route.query['platform'] || 1
-  const url = `/api/v1/assets/platforms/${platformId}/`
-  vm.platform = await vm.$axios.get(url)
-  const initial = {
-    labels: [],
-    is_active: true,
-    nodes: nodesInitial,
-    platform: parseInt(platformId),
-    protocols: vm.platform.protocols || []
-  }
-  vm.initial = Object.assign({}, initial, vm.initial)
-  vm.$set(vm.fieldsMeta.protocols.el, 'choices', (vm.platform['protocols'] || []))
-  const hiddenCheckFields = ['protocols', 'domain']
-
-  for (const field of hiddenCheckFields) {
-    if (vm.platform[field + '_enabled'] === false) {
-      vm.fieldsMeta[field].hidden = () => true
     }
   }
 }
