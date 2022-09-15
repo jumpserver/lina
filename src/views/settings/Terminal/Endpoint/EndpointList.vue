@@ -39,9 +39,10 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canUpdate: this.$hasPerm('terminal.change_endpoint'),
               updateRoute: 'EndpointUpdate',
               cloneRoute: 'EndpointCreate',
-              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001'
+              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001' && this.$hasPerm('terminal.delete_endpoint')
             }
           }
         }
