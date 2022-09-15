@@ -84,6 +84,7 @@ export default {
       }
       this.defaultConfig.initial = Object.assign({}, initial, this.defaultConfig.initial)
       this.$set(this.defaultConfig.fieldsMeta.protocols.el, 'choices', (this.platform['protocols'] || []))
+      this.$set(this.defaultConfig.fieldsMeta.accounts.el, 'protocols', (this.platform['protocols'] || []))
       const hiddenCheckFields = ['protocols', 'domain']
 
       for (const field of hiddenCheckFields) {
