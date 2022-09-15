@@ -42,7 +42,7 @@ export default {
                 vm.relationDialog.tableConfig.url = setUrlParam(vm.relationDialog.tableConfig.url, 'commandexecution', row.id)
                 vm.relationDialog.show = true
               }
-              return <el-link class='link' onClick={onClick}>{ cellValue.length }</el-link>
+              return <el-link class='text-link' onClick={onClick}>{ cellValue.length }</el-link>
             }
           },
           command: {
@@ -67,7 +67,7 @@ export default {
             formatter: (row) => {
               const label = this.$t('audits.View')
               const route = { to: { name: 'CeleryTaskLog', params: { id: row.id }}}
-              return <router-link class='link' {...{ attrs: route }} target='_blank'>{ label }</router-link>
+              return <router-link class='text-link' {...{ attrs: route }} target='_blank'>{ label }</router-link>
             }
           },
           date_start: {
@@ -137,12 +137,5 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .link {
-    color: var(--color-info);
-    &:hover {
-      color: var(--color-info);
-      filter: opacity(65%);
-    }
-  }
+<style>
 </style>
