@@ -247,6 +247,15 @@ td .el-button.el-button--mini {
   border-top-color: #676a6c;
 }
 
+.text-link {
+  color: info!important;
+}
+
+.text-link:hover {
+  color: info!important;
+  filter: opacity(65%)!important;
+}
+
 .text-danger {
   color: danger;
 }
