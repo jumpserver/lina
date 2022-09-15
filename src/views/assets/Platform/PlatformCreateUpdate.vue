@@ -31,35 +31,45 @@ export default {
         name: '',
         port: 0
       },
-      opsItems: [
-        'gather_facts_enabled', 'create_account_enabled',
-        'change_password_enabled', 'verify_account_enabled',
-        'gather_accounts_enabled', 'su_enabled'
-      ],
       initial: {
         comment: '',
         charset: 'utf8',
-        category_type: ['host', 'linux']
+        category_type: ['host', 'linux'],
+        automation: {
+        }
       },
       fields: [
         [this.$t('common.Basic'), [
           'name', 'category_type'
         ]],
-        [this.$t('assets.Asset'), [
-          'charset', 'domain_enabled',
+        ['配置', [
           'protocols_enabled', 'protocols',
-          'gather_facts_enabled', 'gather_facts_method'
+          'charset', 'domain_enabled', 'brand',
+          'su_enabled', 'su_method'
         ]],
-        [this.$t('assets.Account'), [
-          'su_enabled', 'su_method',
-          'create_account_enabled', 'create_account_method',
-          'verify_account_enabled', 'verify_account_method',
-          'change_password_enabled', 'change_password_method',
-          'gather_accounts_enabled', 'gather_accounts_method'
+        ['自动化', [
+          'automation'
         ]],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        automation: {
+          initial: {},
+          fields: [
+            'ping_enabled', 'ping_method',
+            'gather_facts_enabled', 'gather_facts_method',
+            'create_account_enabled', 'create_account_method',
+            'change_password_enabled', 'change_password_method',
+            'verify_account_enabled', 'verify_account_method'
+          ],
+          fieldsMeta: {
+            ping_method: {},
+            gather_facts_method: {},
+            create_account_method: {},
+            change_password_method: {},
+            verify_account_method: {}
+          }
+        },
         category_type: {
           type: 'cascader',
           label: this.$t('assets.Type'),
@@ -95,14 +105,6 @@ export default {
           },
           hidden: (formValue) => !formValue['protocols_enabled']
         },
-        verify_account_method: {
-          type: 'select',
-          options: []
-        },
-        change_password_method: {
-          type: 'select',
-          options: []
-        },
         su_method: {
           type: 'select'
         }
@@ -126,7 +128,6 @@ export default {
     try {
       await this.setCategories()
       await this.setConstraints()
-      await this.setOpsMethods()
     } finally {
       this.loading = false
     }
@@ -140,6 +141,7 @@ export default {
       if (category && type) {
         this.initial.category_type = [category, type]
       }
+      this.url += `?category=${category}&type=${type}`
       return new Promise((resolve, reject) => resolve(true))
     },
     async setConstraints() {
@@ -148,39 +150,48 @@ export default {
       const url = `/api/v1/assets/platforms/type-constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
 
-      const protocols = constraints['protocols'] || []
-      this.fieldsMeta.protocols_enabled.el.disabled = protocols.length === 0
-      this.fieldsMeta.protocols.el.choices = protocols
-      this.initial.protocols_enabled = !!protocols.length
-
-      const domainDisabled = constraints['domain_enabled'] === false
-      this.fieldsMeta.domain_enabled.el.disabled = domainDisabled
-      this.initial.domain_enabled = !domainDisabled
-
-      for (const itemOk of this.opsItems) {
-        const itemConstraint = constraints[itemOk]
-        const itemMethod = itemOk.replace('_enabled', '_method')
-        if (itemConstraint === false) {
-          _.set(this.fieldsMeta, `${itemOk}.el.disabled`, true)
+      const fieldsCheck = ['protocols_enabled', 'domain_enabled', 'su_enabled']
+      for (const field of fieldsCheck) {
+        let disabled = constraints[field] === false
+        if (field === 'protocols_enabled') {
+          disabled = disabled && constraints['protocols'].length === 0
+          this.initial[field] = !disabled
         }
-        if (!this.fieldsMeta[itemMethod]?.hidden) {
-          _.set(this.fieldsMeta, `${itemMethod}.hidden`, (formValue) => !formValue[itemOk])
-        }
-        // set default value
-        if (this.initial[itemOk] === undefined) {
-          this.initial[itemOk] = false
-        }
-        if (_.get(this.fieldsMeta, `${itemMethod}.type`) === undefined) {
-          _.set(this.fieldsMeta, `${itemMethod}.type`, 'select')
-        }
+        _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
+
+      this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
+      await this.setOpsMethods(constraints)
     },
-    async setOpsMethods() {
+    async setOpsMethods(constraints) {
       const category = this.$route.query.category
       const type = this.$route.query.type
-      const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/')
-      for (const itemOk of this.opsItems) {
-        const item = itemOk.replace('_enabled', '')
+      const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/') || []
+      const autoFieldsMeta = this.fieldsMeta.automation.fieldsMeta
+      const autoFields = this.fieldsMeta.automation.fields
+        .filter(item => item.endsWith('_method'))
+        .map(item => item.replace('_method', ''))
+
+      const initial = this.initial.automation || {}
+      for (const item of autoFields) {
+        const itemEnabled = item + '_enabled'
+        const itemMethod = item + '_method'
+        const itemConstraint = constraints[itemEnabled]
+        // 设置隐藏和disabled
+        if (itemConstraint === false) {
+          _.set(autoFieldsMeta, `${itemEnabled}.el.disabled`, true)
+        }
+        if (!autoFieldsMeta[itemMethod]?.hidden) {
+          _.set(autoFieldsMeta, `${itemMethod}.hidden`, (formValue) => !formValue[itemEnabled])
+        }
+        // 设置默认值
+        if (initial[itemEnabled] === undefined) {
+          initial[itemEnabled] = false
+        }
+        // 设置 method 类型和 options
+        if (_.get(autoFieldsMeta, `${itemMethod}.type`) === undefined) {
+          _.set(autoFieldsMeta, `${itemMethod}.type`, 'select')
+        }
         const methods = allMethods.filter(method => {
           const ok = method['method'] === item && method['category'] === category
           const tpOk = method['type'].indexOf(type) > -1 ||
@@ -190,17 +201,24 @@ export default {
           return { value: method['id'], label: method['name'] }
         })
         if (methods.length > 0) {
-          this.fieldsMeta[`${itemOk.replace('_enabled', '_method')}`].options = methods
+          const itemMethod = itemEnabled.replace('_enabled', '_method')
+          autoFieldsMeta[itemMethod].options = methods
         }
       }
+      console.log('Automation fields meta: ', this.fieldsMeta.automation)
     }
   }
 }
 </script>
 
 <style lang='scss' scoped>
-.platform-form >>> .el-form-item {
-  .el-select:not(.prepend) {
+.platform-form >>> {
+  .el-form-item {
+    .el-select:not(.prepend) {
+      width: 100%;
+    }
+  }
+  .el-cascader {
     width: 100%;
   }
 }

@@ -101,6 +101,7 @@ export const setPlatformInitial = async(vm) => {
   vm.initial = Object.assign({}, initial, vm.initial)
   vm.$set(vm.fieldsMeta.protocols.el, 'choices', (vm.platform['protocols'] || []))
   vm.$set(vm.fieldsMeta.accounts.el, 'protocols', (vm.platform['protocols'] || []))
+  console.log('fieldsMeta: ', vm.fieldsMeta)
 
   const hiddenCheckFields = ['protocols', 'domain']
   for (const field of hiddenCheckFields) {

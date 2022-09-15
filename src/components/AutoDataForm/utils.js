@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Select2 from '@/components/FormFields/Select2'
 import ObjectSelect2 from '@/components/FormFields/NestedObjectSelect2'
+import NestedField from '@/components/AutoDataForm/components/NestedField'
 import Swicher from '@/components/FormFields/Swicher'
 import rules from '@/components/DataForm/rules'
 import { assignIfNot } from '@/utils/common'
@@ -70,7 +71,12 @@ export class FormFieldGenerator {
         field.component = ObjectSelect2
         break
       case 'nested object':
-        field.component = ObjectSelect2
+        type = 'nestedField'
+        field.component = NestedField
+        field.label = ''
+        field.labelWidth = 0
+        field.el.fields = this.generateNestFields(field, fieldMeta, fieldRemoteMeta)
+        field.el.errors = {}
         break
       default:
         type = 'input'
@@ -133,7 +139,7 @@ export class FormFieldGenerator {
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
     const fieldMeta = fieldsMeta[name] || {}
     field.label = remoteFieldMeta.label
-    field.helpText = remoteFieldMeta.help_text
+    field.helpText = remoteFieldMeta['help_text']
     field = this.generateFieldByType(remoteFieldMeta.type, field, fieldMeta, remoteFieldMeta)
     field = this.generateFieldByName(name, field)
     field = this.generateFieldByOther(field, fieldMeta, remoteFieldMeta)
