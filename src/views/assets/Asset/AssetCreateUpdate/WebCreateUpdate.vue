@@ -1,13 +1,13 @@
 <template>
-  <BaseCreateUpdate v-bind="$data" />
+  <BaseAssetCreateUpdate v-bind="$data" />
 </template>
 
 <script>
-import BaseCreateUpdate from './components/BaseCreateUpdate'
+import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
 
 export default {
   name: 'WebCreateUpdate',
-  components: { BaseCreateUpdate },
+  components: { BaseAssetCreateUpdate },
   data() {
     return {
       url: '/api/v1/assets/web/',

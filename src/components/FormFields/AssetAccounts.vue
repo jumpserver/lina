@@ -39,11 +39,10 @@
       :title="'选择模版'"
       :visible.sync="templateTable.visible"
       :destroy-on-close="true"
-      :show-cancel="false"
-      :show-confirm="false"
       width="70%"
+      @submit="onSelectTemplate"
     >
-      <ListTable v-bind="templateTable" />
+      <AutoDataTable :config="templateTable.tableConfig" />
     </Dialog>
   </div>
 </template>
@@ -51,12 +50,12 @@
 <script>
 import Dialog from '@/components/Dialog'
 import AccountCreateForm from '@/components/AccountCreateForm'
-import ListTable from '@/components/ListTable'
+import AutoDataTable from '@/components/AutoDataTable'
 export default {
   name: 'AssetAccounts',
   components: {
     Dialog,
-    ListTable,
+    AutoDataTable,
     AccountCreateForm
   },
   props: {
@@ -79,9 +78,12 @@ export default {
         visible: false,
         tableConfig: {
           url: '/api/v1/assets/account-templates/',
-          columns: ['name', 'username', 'privileged', 'actions']
-        },
-        headerActions: {
+          columns: ['name', 'username', 'privileged', 'actions'],
+          columnsMeta: {
+            privileged: {
+              width: '100px'
+            }
+          }
         }
       }
     }
@@ -133,6 +135,9 @@ export default {
     },
     onAddFromTemplateClick() {
       this.templateTable.visible = true
+    },
+    onSelectTemplate() {
+
     }
   }
 }

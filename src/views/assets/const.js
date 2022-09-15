@@ -81,26 +81,3 @@ export const assetFieldsMeta = () => {
     }
   }
 }
-
-export const Categories = [
-  {
-    title: '主机',
-    name: 'host'
-  },
-  {
-    title: '网络设备',
-    name: 'networking'
-  },
-  {
-    title: '数据库',
-    name: 'database'
-  },
-  {
-    title: '云平台',
-    name: 'cloud'
-  },
-  {
-    title: 'Web',
-    name: 'web'
-  }
-]

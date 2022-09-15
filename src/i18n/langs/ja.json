@@ -105,7 +105,7 @@
     "CreateDatabase": "資産の作成 - データベース",
     "CreateHost": "資産の作成 - ホスト",
     "CreateRemoteApp": "資産の作成 - リモートアプリケーション",
-    "CreateNetworkDevice": "資産の作成 - ネットワークデバイス",
+    "CreateDevice": "資産の作成 - ネットワークデバイス",
     "CreateCloud": "資産の作成 - クラウドプラットフォーム",
     "CreateWeb": "資産の作成 - ウェブ",
     "SelectPlatforms": "プラットフォームを選択",

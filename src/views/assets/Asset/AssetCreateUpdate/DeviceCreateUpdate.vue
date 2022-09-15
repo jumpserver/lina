@@ -6,14 +6,11 @@
 import BaseAssetCreateUpdate from './BaseAssetCreateUpdate'
 
 export default {
-  name: 'CloudCreateUpdate',
+  name: 'DeviceCreateUpdate',
   components: { BaseAssetCreateUpdate },
   data() {
     return {
-      url: '/api/v1/assets/clouds/',
-      addFields: [
-        [this.$t('common.Basic'), ['cluster']]
-      ]
+      url: '/api/v1/assets/assets/devices/'
     }
   }
 }

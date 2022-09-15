@@ -100,7 +100,7 @@
     "CreateDatabase": "Create asset - Database",
     "CreateHost": "Create asset - Host",
     "CreateRemoteApp": "Create asset - Remote app",
-    "CreateNetworkDevice": "Create asset - Network device",
+    "CreateDevice": "Create asset - Network device",
     "CreateCloud": "Create asset - Cloud platform",
     "CreateWeb": "Create asset - web",
     "SelectPlatforms": "Select platforms",

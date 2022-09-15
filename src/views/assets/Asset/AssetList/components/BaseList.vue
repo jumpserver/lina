@@ -193,7 +193,6 @@ export default {
                 vm.$hasPerm('assets.change_asset')
             },
             callback: ({ selectedRows }) => {
-              console.log('selectedRows: ----------------------ss', selectedRows)
               vm.updateSelectedDialogSetting.selectedRows = selectedRows
               vm.updateSelectedDialogSetting.visible = true
             }

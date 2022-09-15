@@ -92,30 +92,30 @@ export default [
     ]
   },
   {
-    path: 'networks',
+    path: 'devices',
     component: empty,
     redirect: '',
     hidden: true,
-    meta: { title: i18n.t('route.networking'), permissions: ['assets.view_asset'] },
+    meta: { title: i18n.t('route.devices'), permissions: ['assets.view_asset'] },
     children: [
       {
         path: '',
-        name: 'NetworkingList',
-        component: () => import('@/views/assets/Asset/AssetList/NetworkList.vue'),
+        name: 'DeviceList',
+        component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue'),
         hidden: true,
         meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
       },
       {
         path: 'create',
-        name: 'NetworkingCreate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate/NetworkCreateUpdate.vue'),
+        name: 'DeviceCreate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
         hidden: true,
-        meta: { title: i18n.t('assets.CreateNetworkDevice'), activeMenu: '/console/assets/assets' }
+        meta: { title: i18n.t('assets.CreateDevice'), activeMenu: '/console/assets/assets' }
       },
       {
         path: ':id/update',
-        name: 'NetworkingUpdate',
-        component: () => import('@/views/assets/Asset/AssetCreateUpdate/NetworkCreateUpdate.vue'),
+        name: 'DeviceUpdate',
+        component: () => import('@/views/assets/Asset/AssetCreateUpdate/DeviceCreateUpdate.vue'),
         hidden: true,
         meta: { title: i18n.t('route.AssetUpdate'), activeMenu: '/console/assets/assets' }
       }
@@ -131,7 +131,7 @@ export default [
       {
         path: '',
         name: 'CloudsPlatformList',
-        component: () => import('@/views/assets/Asset/AssetList/CloudsPlatformList.vue'),
+        component: () => import('@/views/assets/Asset/AssetList/CloudList.vue'),
         hidden: true,
         meta: { title: i18n.t('route.HostList'), activeMenu: '/console/assets/assets' }
       },

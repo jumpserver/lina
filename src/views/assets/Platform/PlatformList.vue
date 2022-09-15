@@ -14,7 +14,6 @@
 <script>
 import { GenericListTable, TabPage } from '@/layout/components'
 import { ChoicesDisplayFormatter } from '@/components/TableFormatters'
-import { Categories } from '@/views/assets/const'
 
 export default {
   components: {
@@ -26,7 +25,7 @@ export default {
     return {
       loading: true,
       tab: {
-        submenu: Categories,
+        submenu: [],
         activeMenu: 'host'
       },
       tableConfig: {
@@ -105,7 +104,7 @@ export default {
   },
   async mounted() {
     try {
-      await this.$store.dispatch('assets/getAssetCategories')
+      await this.setCategories()
       await this.changeMoreCreates()
     } finally {
       this.loading = false
@@ -116,6 +115,15 @@ export default {
       this.tableConfig.url = this.url
       this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
+      })
+    },
+    async setCategories() {
+      const state = await this.$store.dispatch('assets/getAssetCategories')
+      this.tab.submenu = state.assetCategories.map(item => {
+        return {
+          title: item.display_name,
+          name: item.value
+        }
       })
     }
   }

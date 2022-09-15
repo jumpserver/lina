@@ -31,10 +31,10 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/HostList.vue')
           },
           {
-            title: this.$t('route.NetworkDevices'),
-            name: 'networks',
+            title: this.$t('route.Devices'),
+            name: 'devices',
             hidden: () => false,
-            component: () => import('@/views/assets/Asset/AssetList/NetworkList.vue')
+            component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
           {
             title: this.$t('route.Databases'),
@@ -43,10 +43,10 @@ export default {
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
           {
-            title: this.$t('assets.CloudPlatform'),
+            title: this.$t('assets.Clouds'),
             name: 'clouds',
             hidden: () => false,
-            component: () => import('@/views/assets/Asset/AssetList/CloudsPlatformList.vue')
+            component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
           },
           {
             title: 'Web',

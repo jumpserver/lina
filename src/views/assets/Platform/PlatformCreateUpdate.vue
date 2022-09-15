@@ -35,21 +35,18 @@ export default {
         comment: '',
         charset: 'utf8',
         category_type: ['host', 'linux'],
-        automation: {
-        }
+        automation: {}
       },
       fields: [
         [this.$t('common.Basic'), [
-          'name', 'category_type'
+          'name', 'category_type', 'charset', 'domain_enabled'
         ]],
+        ['网络设备', ['brand']],
         ['配置', [
           'protocols_enabled', 'protocols',
-          'charset', 'domain_enabled', 'brand',
           'su_enabled', 'su_method'
         ]],
-        ['自动化', [
-          'automation'
-        ]],
+        ['自动化', ['automation']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
@@ -87,6 +84,7 @@ export default {
             }
           }
         },
+        brand: {},
         protocols_enabled: {
           el: {
             disabled: false
@@ -161,9 +159,10 @@ export default {
       }
 
       this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
-      await this.setOpsMethods(constraints)
+      this.fieldsMeta.brand.hidden = () => constraints['brand_enabled'] !== true
+      await this.setAutomationMethods(constraints)
     },
-    async setOpsMethods(constraints) {
+    async setAutomationMethods(constraints) {
       const category = this.$route.query.category
       const type = this.$route.query.type
       const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/') || []

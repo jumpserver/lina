@@ -1,5 +1,5 @@
 <template>
-  <GenericCreateUpdatePage v-if="!iConfig.loading" v-bind="iConfig" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" />
 </template>
 
 <script>
@@ -21,8 +21,8 @@ export default {
   },
   data() {
     return {
+      loading: true,
       defaultConfig: {
-        loading: true,
         initial: {},
         platform: {},
         url: '/api/v1/assets/hosts/',
@@ -60,18 +60,15 @@ export default {
   },
   async created() {
     try {
-      await this.setPlatformInitial()
+      await this.setInitial()
+      await this.setPlatformConstrains()
     } finally {
-      this.defaultConfig.loading = false
+      this.loading = false
     }
   },
   methods: {
-    async setPlatformInitial() {
-      const nodesInitial = []
-      if (!this.defaultConfig.initial) this.$set(this.defaultConfig, 'initial', {})
-      if (this.$route.query['node']) {
-        nodesInitial.push(this.$route.query.node)
-      }
+    async setInitial() {
+      const nodesInitial = this.$route.query['node'] ? [this.$route.query['node']] : []
       const platformId = this.$route.query['platform'] || 1
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
@@ -83,6 +80,8 @@ export default {
         protocols: this.platform.protocols || []
       }
       this.defaultConfig.initial = Object.assign({}, initial, this.defaultConfig.initial)
+    },
+    async setPlatformConstrains() {
       this.$set(this.defaultConfig.fieldsMeta.protocols.el, 'choices', (this.platform['protocols'] || []))
       this.$set(this.defaultConfig.fieldsMeta.accounts.el, 'protocols', (this.platform['protocols'] || []))
       const hiddenCheckFields = ['protocols', 'domain']
