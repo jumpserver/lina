@@ -16,7 +16,7 @@
     </el-table>
     <div class="actions">
       <el-button size="mini" type="primary" @click="onAddClick">添加</el-button>
-      <el-button size="mini" type="success" @click="onAddClick">模版添加</el-button>
+      <el-button size="mini" type="success" @click="onAddFromTemplateClick">模版添加</el-button>
     </div>
     <Dialog
       v-if="visible"
@@ -34,16 +34,29 @@
         @edit="editAccount"
       />
     </Dialog>
+    <Dialog
+      v-if="templateTable.visible"
+      :title="'选择模版'"
+      :visible.sync="templateTable.visible"
+      :destroy-on-close="true"
+      :show-cancel="false"
+      :show-confirm="false"
+      width="70%"
+    >
+      <ListTable v-bind="templateTable" />
+    </Dialog>
   </div>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
 import AccountCreateForm from '@/components/AccountCreateForm'
+import ListTable from '@/components/ListTable'
 export default {
   name: 'AssetAccounts',
   components: {
     Dialog,
+    ListTable,
     AccountCreateForm
   },
   props: {
@@ -61,7 +74,16 @@ export default {
       visible: false,
       accounts: [],
       account: {},
-      initial: false
+      initial: false,
+      templateTable: {
+        visible: false,
+        tableConfig: {
+          url: '/api/v1/assets/account-templates/',
+          columns: ['name', 'username', 'privileged', 'actions']
+        },
+        headerActions: {
+        }
+      }
     }
   },
   watch: {
@@ -108,6 +130,9 @@ export default {
       setTimeout(() => {
         this.visible = true
       })
+    },
+    onAddFromTemplateClick() {
+      this.templateTable.visible = true
     }
   }
 }

@@ -29,18 +29,35 @@ export default {
       url: '/api/v1/assets/accounts/',
       form: this.account || { },
       fields: [
-        'username', 'password', 'private_key', 'passphrase',
-        'privileged', 'comment'
+        ['Basic', ['username', 'privileged']],
+        ['Auth', ['password', 'private_key', 'passphrase']],
+        ['Other', ['push_now', 'comment']]
       ],
+      defaultPrivilegedAccounts: ['root', 'administrator'],
       fieldsMeta: {
         password: {
           component: UpdateToken
         },
         private_key: {
-          component: UploadKey
+          component: UploadKey,
+          hidden: () => {
+            return !this.hasProtocol('ssh')
+          }
+        },
+        username: {
+          on: {
+            change: ([value], updateForm) => {
+              if (this.defaultPrivilegedAccounts.indexOf(value.toLowerCase()) > -1) {
+                updateForm({ privileged: true })
+              }
+            }
+          }
         },
         passphrase: {
-          component: UpdateToken
+          component: UpdateToken,
+          hidden: () => {
+            return !this.hasProtocol('ssh')
+          }
         }
       },
       hasSaveContinue: false
@@ -57,6 +74,9 @@ export default {
       } else {
         this.$emit('add', form)
       }
+    },
+    hasProtocol(name) {
+      return this.protocols.find(item => item.name === name)
     }
   }
 }
