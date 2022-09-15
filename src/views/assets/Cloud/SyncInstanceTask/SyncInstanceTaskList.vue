@@ -58,10 +58,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               permissions: 'xpack.view_syncinstancedetail',
-              route: 'SyncInstanceTaskDetail',
-              routeQuery: {
-                activeTab: 'detail'
-              }
+              route: 'SyncInstanceTaskDetail'
             }
           },
           history_count: {

@@ -38,6 +38,7 @@ export default {
       },
       tableConfig: {
         url: `/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/instances/`,
+        hasSelection: false,
         columns: [
           'instance_id',
           {
