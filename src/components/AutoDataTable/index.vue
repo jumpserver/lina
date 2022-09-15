@@ -157,7 +157,7 @@ export default {
           }
           break
       }
-      this.$log.debug('Field: ', type, col.prop, col)
+      // this.$log.debug('Field: ', type, col.prop, col)
       return col
     },
     addHelpTipsIfNeed(col) {
