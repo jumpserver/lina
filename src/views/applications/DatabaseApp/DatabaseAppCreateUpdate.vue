@@ -6,6 +6,8 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { getDatabaseTypeFieldsMap } from '@/views/applications/DatabaseApp/const'
 import { UploadKey } from '@/components'
+import { Required } from '@/components/DataForm/rules'
+
 export default {
   components: {
     GenericCreateUpdatePage
@@ -37,6 +39,9 @@ export default {
           fieldsMeta: {
             host: {
               type: 'input'
+            },
+            port: {
+              rules: [Required]
             },
             use_ssl: {
               label: this.$t('common.UseSSL'),
