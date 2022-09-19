@@ -91,7 +91,7 @@ export default {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
                   type: 'danger',
-                  can: !this.$store.getters.currentOrgIsRoot && vm.$hasPerm('assets.delete_authbook'),
+                  can: !this.$store.getters.currentOrgIsRoot && vm.$hasPerm('assets.delete_account'),
                   callback: (val) => {
                     this.$axios.delete(`/api/v1/assets/system-users-assets-relations/${val.row.id}/`).then(() => {
                       this.$message.success(this.$t('common.deleteSuccessMsg'))
@@ -164,7 +164,7 @@ export default {
         }
       ],
       systemUserRelationConfig: {
-        disabled: !vm.$hasPerm('assets.add_authbook'),
+        disabled: !vm.$hasPerm('assets.add_account'),
         icon: 'fa-link',
         type: 'info',
         title: this.$t('assets.AssociateSystemUsers'),

@@ -49,7 +49,7 @@ export default {
         url: this.url,
         permissions: {
           app: 'assets',
-          resource: 'authbook'
+          resource: 'account'
         },
         columns: [
           'asset_name', 'ip', 'username', 'version',

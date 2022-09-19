@@ -41,12 +41,12 @@ export default {
           {
             title: this.$t('assets.SystemUser'),
             name: 'SystemUserList',
-            hidden: () => !this.$hasPerm('assets.view_authbook')
+            hidden: () => !this.$hasPerm('assets.view_account')
           },
           {
             title: this.$t('assets.AccountList'),
             name: 'Account',
-            hidden: () => !this.$hasPerm('assets.view_authbook')
+            hidden: () => !this.$hasPerm('assets.view_account')
           },
           {
             title: this.$t('assets.PermUserList'),

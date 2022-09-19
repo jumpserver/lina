@@ -73,7 +73,7 @@ export default {
         url: this.url,
         permissions: {
           app: 'assets',
-          resource: 'authbook'
+          resource: 'account'
         },
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
@@ -136,7 +136,7 @@ export default {
                 {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_authbook'),
+                  can: this.$hasPerm('assets.delete_account'),
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
@@ -148,7 +148,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_authbook'),
+                  can: this.$hasPerm('assets.test_account'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/accounts/${row.id}/verify/`,
