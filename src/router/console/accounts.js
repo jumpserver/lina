@@ -3,7 +3,7 @@ import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'authbook',
+    path: 'accounts',
     component: empty,
     meta: {
       title: i18n.t('route.AssetAccount'),
@@ -19,7 +19,7 @@ export default [
         meta: {
           title: i18n.t('route.AssetAccount'),
           app: 'assets',
-          permissions: ['assets.view_authbook']
+          permissions: ['assets.view_account']
         }
       },
       {

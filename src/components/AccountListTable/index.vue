@@ -19,7 +19,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DisplayFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import AddAccount from './AddAccount'
@@ -73,7 +73,7 @@ export default {
         url: this.url,
         permissions: {
           app: 'assets',
-          resource: 'authbook'
+          resource: 'account'
         },
         columns: [
           'hostname', 'ip', 'username', 'version', 'connectivity',
@@ -85,22 +85,26 @@ export default {
         },
         columnsMeta: {
           hostname: {
-            prop: 'hostname',
             label: this.$t('assets.Hostname'),
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
-            formatterArgs: {
-              can: this.$hasPerm('assets.view_asset'),
-              getRoute({ row }) {
-                return {
-                  name: 'AssetDetail',
-                  params: { id: row.asset }
-                }
+            formatter: function(row, column, cellValue, index) {
+              const to = {
+                name: 'AssetDetail',
+                params: { id: row.asset.id }
+              }
+              if (vm.$hasPerm('assets.view_asset')) {
+                return <router-link to={ to } >{ row.asset.name }</router-link>
+              } else {
+                return <span>{ row.asset.name }</span>
               }
             }
           },
           ip: {
-            width: '120px'
+            width: '120px',
+            label: this.$t('assets.ip'),
+            formatter: function(row, column, cellValue, index) {
+              return <span>{ row.asset.ip }</span>
+            }
           },
           username: {
             showOverflowTooltip: true
@@ -136,7 +140,7 @@ export default {
                 {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_authbook'),
+                  can: this.$hasPerm('assets.delete_account'),
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
@@ -148,7 +152,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_authbook'),
+                  can: this.$hasPerm('assets.test_account'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/accounts/${row.id}/verify/`,
