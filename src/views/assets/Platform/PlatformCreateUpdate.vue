@@ -41,7 +41,6 @@ export default {
         [this.$t('common.Basic'), [
           'name', 'category_type', 'charset', 'domain_enabled'
         ]],
-        ['网络设备', ['brand']],
         ['配置', [
           'protocols_enabled', 'protocols',
           'su_enabled', 'su_method'
@@ -145,7 +144,7 @@ export default {
     async setConstraints() {
       const category = this.$route.query.category
       const type = this.$route.query.type
-      const url = `/api/v1/assets/platforms/type-constraints/?category=${category}&type=${type}`
+      const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
 
       const fieldsCheck = ['protocols_enabled', 'domain_enabled', 'su_enabled']
@@ -157,15 +156,10 @@ export default {
         }
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
-
       this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
-      this.fieldsMeta.brand.hidden = () => constraints['brand_enabled'] !== true
-      await this.setAutomationMethods(constraints)
+      await this.setAutomations(constraints['automation'])
     },
-    async setAutomationMethods(constraints) {
-      const category = this.$route.query.category
-      const type = this.$route.query.type
-      const allMethods = await this.$axios.get('/api/v1/assets/platforms/ops-methods/') || []
+    async setAutomations(automation) {
       const autoFieldsMeta = this.fieldsMeta.automation.fieldsMeta
       const autoFields = this.fieldsMeta.automation.fields
         .filter(item => item.endsWith('_method'))
@@ -175,36 +169,24 @@ export default {
       for (const item of autoFields) {
         const itemEnabled = item + '_enabled'
         const itemMethod = item + '_method'
-        const itemConstraint = constraints[itemEnabled]
+        const itemConstraint = automation[itemEnabled]
         // 设置隐藏和disabled
         if (itemConstraint === false) {
           _.set(autoFieldsMeta, `${itemEnabled}.el.disabled`, true)
         }
         if (!autoFieldsMeta[itemMethod]?.hidden) {
-          _.set(autoFieldsMeta, `${itemMethod}.hidden`, (formValue) => !formValue[itemEnabled])
-        }
-        // 设置默认值
-        if (initial[itemEnabled] === undefined) {
           initial[itemEnabled] = false
+          _.set(autoFieldsMeta, `${itemMethod}.hidden`, (formValue) => !formValue[itemEnabled])
         }
         // 设置 method 类型和 options
         if (_.get(autoFieldsMeta, `${itemMethod}.type`) === undefined) {
           _.set(autoFieldsMeta, `${itemMethod}.type`, 'select')
         }
-        const methods = allMethods.filter(method => {
-          const ok = method['method'] === item && method['category'] === category
-          const tpOk = method['type'].indexOf(type) > -1 ||
-            method['type'].indexOf('all') > -1
-          return ok & tpOk
-        }).map(method => {
+        const methods = automation[itemMethod + 's'] || []
+        autoFieldsMeta[itemMethod].options = methods.map(method => {
           return { value: method['id'], label: method['name'] }
         })
-        if (methods.length > 0) {
-          const itemMethod = itemEnabled.replace('_enabled', '_method')
-          autoFieldsMeta[itemMethod].options = methods
-        }
       }
-      console.log('Automation fields meta: ', this.fieldsMeta.automation)
     }
   }
 }

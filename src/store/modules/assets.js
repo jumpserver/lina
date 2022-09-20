@@ -11,8 +11,8 @@ const mutations = {
     state.assetCategories = categories
     const toOption = (choice) => {
       return {
-        label: choice['display_name'],
-        value: choice['value']
+        label: choice['name'],
+        value: choice['id']
       }
     }
     state.assetCategoriesCascader = categories.map((item) => {
@@ -27,14 +27,14 @@ const mutations = {
     for (const category of categories) {
       category.children.forEach((type, index) => {
         const option = {
-          name: type.value,
-          title: type.display_name,
+          name: type.id,
+          title: type.name,
           type: 'primary',
-          category: category.value,
+          category: category.id,
           has: true
         }
         if (index === 0) {
-          option.group = category.display_name
+          option.group = category.name
         }
         dropdown.push(option)
       })

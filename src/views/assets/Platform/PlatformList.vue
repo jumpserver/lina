@@ -121,8 +121,8 @@ export default {
       const state = await this.$store.dispatch('assets/getAssetCategories')
       this.tab.submenu = state.assetCategories.map(item => {
         return {
-          title: item.display_name,
-          name: item.value
+          title: item.name,
+          name: item.id
         }
       })
     }
