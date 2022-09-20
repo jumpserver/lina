@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="showSetting ? 'show-setting' : 'hide-setting'">
     <div v-for="(item, index) in items" :key="item.name" style="display: flex;margin-top: 8px;">
       <el-input v-model="item.port" :placeholder="portPlaceholder" class="input-with-select" v-bind="$attrs">
         <el-select

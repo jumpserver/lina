@@ -61,7 +61,6 @@ export default {
       component: empty,
       name: 'Accounts',
       meta: {
-        licenseRequired: true,
         title: i18n.t('route.Accounts'),
         icon: 'address-book'
       },

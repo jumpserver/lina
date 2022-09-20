@@ -8,7 +8,7 @@ export default [
     meta: {
       title: i18n.t('route.AssetAccount'),
       app: 'assets',
-      licenseRequired: true
+      permissions: ['assets.view_account']
     },
     redirect: '',
     children: [

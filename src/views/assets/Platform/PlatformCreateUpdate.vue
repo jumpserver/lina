@@ -152,8 +152,8 @@ export default {
         let disabled = constraints[field] === false
         if (field === 'protocols_enabled') {
           disabled = disabled && constraints['protocols'].length === 0
-          this.initial[field] = !disabled
         }
+        this.initial[field] = !disabled
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
       this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
@@ -172,21 +172,20 @@ export default {
         const itemConstraint = automation[itemEnabled]
         // 设置隐藏和disabled
         if (itemConstraint === false) {
+          initial[itemEnabled] = false
           _.set(autoFieldsMeta, `${itemEnabled}.el.disabled`, true)
         }
         if (!autoFieldsMeta[itemMethod]?.hidden) {
-          initial[itemEnabled] = false
           _.set(autoFieldsMeta, `${itemMethod}.hidden`, (formValue) => !formValue[itemEnabled])
         }
         // 设置 method 类型和 options
-        if (_.get(autoFieldsMeta, `${itemMethod}.type`) === undefined) {
-          _.set(autoFieldsMeta, `${itemMethod}.type`, 'select')
-        }
+        _.set(autoFieldsMeta, `${itemMethod}.type`, 'select')
         const methods = automation[itemMethod + 's'] || []
         autoFieldsMeta[itemMethod].options = methods.map(method => {
           return { value: method['id'], label: method['name'] }
         })
       }
+      console.log('Initial: ', initial)
     }
   }
 }
