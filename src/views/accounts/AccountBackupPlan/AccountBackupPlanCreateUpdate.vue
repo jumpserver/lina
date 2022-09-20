@@ -5,7 +5,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import getFields from '@/views/accounts/AccountBackupPlan/fields'
-import FormTypeField from './components/FormTypeField'
 
 export default {
   name: 'AccountBackupPlanUpdate',
@@ -13,12 +12,13 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     const fields = getFields.bind(this)()
     return {
       url: '/api/v1/assets/account-backup-plans/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.AccountBackupPlan.Types'), ['types']],
+        [this.$t('xpack.AccountBackupPlan.Types'), ['categories']],
         [this.$t('xpack.AccountBackupPlan.Backup'), ['recipients']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
@@ -26,16 +26,30 @@ export default {
       initial: {
         is_periodic: true,
         interval: 24,
-        types: ['all', 'asset', 'application']
+        categories: []
       },
       fieldsMeta: {
         is_periodic: fields.is_periodic,
         crontab: fields.crontab,
         interval: fields.interval,
         recipients: fields.recipients,
-        types: {
+        categories: {
+          component: 'el-cascader',
           label: this.$t('xpack.AccountBackupPlan.Types'),
-          component: FormTypeField
+          remote: {
+            request: () => vm.$axios.get('/api/v1/assets/platforms/categories/')
+          },
+          el: {
+            options: [],
+            showAllLevels: false,
+            props: {
+              multiple: true,
+              emitPath: false
+            },
+            style: {
+              width: '100%'
+            }
+          }
         }
       },
       createSuccessNextRoute: { name: 'AccountBackupPlanIndex' },
