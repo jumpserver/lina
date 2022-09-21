@@ -103,7 +103,8 @@ export default {
           hidden: (formValue) => !formValue['protocols_enabled']
         },
         su_method: {
-          type: 'select'
+          type: 'select',
+          hidden: (form) => !form['su_enabled']
         }
       },
       url: `/api/v1/assets/platforms/`,

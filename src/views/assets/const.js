@@ -6,9 +6,7 @@ import { Select2 } from '@/components/FormFields'
 
 export const assetFieldsMeta = () => {
   return {
-    ip: {
-      label: i18n.t('assets.ipDomain')
-    },
+    ip: {},
     protocols: {
       component: ProtocolSelector,
       on: {},

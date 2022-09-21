@@ -14,6 +14,7 @@
           v-if="showSetting(item)"
           slot="append"
           icon="el-icon-setting"
+          :disabled="!item.setting || Object.keys(item.setting).length === 0"
           @click="onSettingClick(item)"
         />
       </el-input>
@@ -23,7 +24,7 @@
           icon="el-icon-minus"
           style="flex-shrink: 0;"
           size="mini"
-          :disabled="items.length === 1 || (item.setting && item.setting.required)"
+          :disabled="items.length === 1"
           @click="handleDelete(index)"
         />
         <el-button

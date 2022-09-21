@@ -24,7 +24,7 @@ export default {
           disabled: true
         },
         attrs: {
-          fields: ['cluster'],
+          fields: ['url'],
           fieldsMeta: {
             cluster: {
               helpText: this.$t('applications.clusterHelpTextMessage')

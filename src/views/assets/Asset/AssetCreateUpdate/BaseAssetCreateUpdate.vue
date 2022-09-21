@@ -29,7 +29,7 @@ export default {
         createSuccessNextRoute: { name: 'AssetList' },
         hasDetailInMsg: false,
         fields: [
-          [this.$t('common.Basic'), ['name', 'ip', 'platform', 'domain']],
+          [this.$t('common.Basic'), ['name', 'address', 'platform', 'domain']],
           [this.$t('assets.Protocols'), ['protocols']],
           [this.$t('assets.Node'), ['nodes']],
           this.$route.params.id ? null : [this.$t('assets.Account'), ['accounts']],

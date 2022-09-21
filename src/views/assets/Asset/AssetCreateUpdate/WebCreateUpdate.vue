@@ -10,10 +10,7 @@ export default {
   components: { BaseAssetCreateUpdate },
   data() {
     return {
-      url: '/api/v1/assets/web/',
-      addFields: [
-        [this.$t('common.Basic'), ['url']]
-      ]
+      url: '/api/v1/assets/webs/'
     }
   }
 }
