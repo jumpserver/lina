@@ -22,6 +22,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     const assetMeta = assetFieldsMeta()
     return {
       loading: true,
@@ -75,7 +76,14 @@ export default {
           el: {
             multiple: false,
             options: [],
+            props: {
+              label: 'name',
+              value: 'id'
+            },
             disabled: true
+          },
+          remote: {
+            request: () => vm.$axios.get('/api/v1/assets/categories/')
           },
           hidden: (formValue) => {
             if (formValue.category_type[0] === undefined) {
@@ -133,8 +141,6 @@ export default {
     async setCategories() {
       const category = this.$route.query.category
       const type = this.$route.query.type
-      const state = await this.$store.dispatch('assets/getAssetCategories')
-      this.fieldsMeta.category_type.el.options = state.assetCategoriesCascader
       if (category && type) {
         this.initial.category_type = [category, type]
       }

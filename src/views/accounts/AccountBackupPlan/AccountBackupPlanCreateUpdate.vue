@@ -37,14 +37,16 @@ export default {
           component: 'el-cascader',
           label: this.$t('xpack.AccountBackupPlan.Types'),
           remote: {
-            request: () => vm.$axios.get('/api/v1/assets/platforms/categories/')
+            request: () => vm.$axios.get('/api/v1/assets/categories/')
           },
           el: {
             options: [],
             showAllLevels: false,
             props: {
               multiple: true,
-              emitPath: false
+              emitPath: false,
+              label: 'name',
+              value: 'id'
             },
             style: {
               width: '100%'
