@@ -48,7 +48,10 @@ export default {
     return {
       defaultSetting: {
         sftp_enabled: true,
-        sftp_home: '/tmp'
+        sftp_home: '/tmp',
+        username_selector: '#username',
+        password_selector: '#password',
+        submit_selector: '.btn-submit'
       },
       loading: true,
       form: {},
@@ -88,6 +91,24 @@ export default {
             type: 'input',
             helpText: this.$t('assets.SFTPHelpMessage'),
             hidden: (form) => this.item.name !== 'ssh' || !form['sftp_enabled']
+          },
+          {
+            id: 'username_selector',
+            label: '用户名输入框选择器',
+            type: 'input',
+            hidden: (form) => this.item.name !== 'http'
+          },
+          {
+            id: 'password_selector',
+            label: '密码输入框选择器',
+            type: 'input',
+            hidden: (form) => this.item.name !== 'http'
+          },
+          {
+            id: 'submit_selector',
+            label: '提交按钮选择器',
+            type: 'input',
+            hidden: (form) => this.item.name !== 'http'
           }
         ]
       }

@@ -6,7 +6,7 @@ import { Select2 } from '@/components/FormFields'
 
 export const assetFieldsMeta = () => {
   return {
-    ip: {},
+    address: {},
     protocols: {
       component: ProtocolSelector,
       on: {},

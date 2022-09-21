@@ -82,15 +82,15 @@ export default {
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
         columns: [
-          'name', 'ip', 'category', 'type', 'platform',
+          'name', 'address', 'category', 'type', 'platform',
           'protocols', 'is_active', 'connectivity',
           'created_by', 'date_created', 'comment',
           'org_name', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'ip', 'actions'],
+          min: ['name', 'address', 'actions'],
           default: [
-            'name', 'ip', 'platform', 'category', 'type',
+            'name', 'address', 'platform', 'category', 'type',
             'connectivity', 'actions'
           ]
         },

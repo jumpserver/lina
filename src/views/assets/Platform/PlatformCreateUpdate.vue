@@ -83,7 +83,7 @@ export default {
             }
           }
         },
-        brand: {},
+        charset: {},
         protocols_enabled: {
           el: {
             disabled: false
@@ -158,6 +158,11 @@ export default {
         _.set(this.fieldsMeta, `${field}.el.disabled`, disabled)
       }
       this.fieldsMeta.protocols.el.choices = constraints['protocols'] || []
+
+      if (constraints['charset_enabled'] === false) {
+        this.fieldsMeta.charset.hidden = () => true
+      }
+
       await this.setAutomations(constraints['automation'])
     },
     async setAutomations(automation) {
@@ -186,7 +191,6 @@ export default {
           return { value: method['id'], label: method['name'] }
         })
       }
-      console.log('Initial: ', initial)
     }
   }
 }

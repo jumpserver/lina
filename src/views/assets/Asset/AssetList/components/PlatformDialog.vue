@@ -5,33 +5,16 @@
     :visible.sync="iVisible"
     width="60%"
     top="1vh"
-    @confirm="onConfirm"
-    @cancel="onConfirm"
+    :show-cancel="false"
+    :show-confirm="false"
   >
     <div style="margin: 0 10px">
-      <el-row v-if="showRecentPlatforms.length > 0" :gutter="20">
-        <p class="recent">{{ this.$t('assets.RecentlyUsed') }}</p>
-        <el-col
-          v-for="(item, index) of showRecentPlatforms"
-          :key="item.id"
-          :span="6"
-        >
-          <el-card
-            :style="{ borderLeftColor: randomBorderColor(index) }"
-            class="platform-item"
-            shadow="hover"
-            @click.native="createAsset(item)"
-          >
-            {{ item.name }}
-          </el-card>
-        </el-col>
-      </el-row>
       <el-row :gutter="20">
-        <el-collapse v-model="activePlatform" accordion>
+        <el-collapse v-model="activeType" accordion>
           <el-collapse-item
             v-for="(ps, categoryName) in sortedPlatforms"
             :key="categoryName"
-            :title="categoryMapper[categoryName]"
+            :title="categoryName"
             :name="categoryName"
           >
             <el-col
@@ -69,17 +52,14 @@ export default {
     },
     category: {
       type: String,
-      Validator: (value) => {
-        return ['all', 'host', 'networking', 'database', 'cloud', 'web'].includes(value)
-      },
       default: 'all'
     }
   },
   data() {
     return {
       platforms: [],
-      recentPlatforms: {},
-      activePlatform: 'host',
+      recentPlatformIds: [],
+      activeType: 'host',
       typeIconMapper: {
         linux: 'fa-linux',
         windows: 'fa-windows',
@@ -97,65 +77,52 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       },
-      get() {
-        return this.visible
-      }
+      get() { return this.visible }
     },
     sortedPlatforms() {
-      const { category, platforms } = this
-      const filterPlatforms = _.groupBy(platforms, (item) => item.category.value)
-      return category === 'all' ? filterPlatforms : this.arrangePlatforms(filterPlatforms[category])
-    },
-    categoryMapper() {
-      const mapper = {}
-      for (const p of this.platforms) {
-        if (this.category === 'all') {
-          mapper[p.category.value] = p.category.label
-        } else {
-          mapper[p.type.value] = p.type.label
-        }
+      const recentPlatforms = {}
+      if (this.category === 'all') {
+        recentPlatforms[this.$t('assets.RecentlyUsed')] = this.allRecentPlatforms
+        return { ...recentPlatforms, ...this.allSortedPlatforms }
+      } else {
+        recentPlatforms[this.$t('assets.RecentlyUsed')] = this.recentPlatforms
+        return { ...recentPlatforms, ...this.typeSortedPlatforms }
       }
-      return mapper
     },
-    showRecentPlatforms() {
-      return this.category === 'all' ? this.recentPlatforms : this.typeRecentPlatforms()
+    allSortedPlatforms() {
+      return _.groupBy(this.platforms, (item) => item.category.label)
+    },
+    typeSortedPlatforms() {
+      const typedPlatforms = this.platforms.filter(item => item.category.value === this.category)
+      return _.groupBy(typedPlatforms, (item) => item.type.label)
+    },
+    recentPlatforms() {
+      return this.category === 'all' ? this.allRecentPlatforms : this.typeRecentPlatforms
+    },
+    allRecentPlatforms() {
+      return this.recentPlatformIds
+        .map(i => this.platforms.find(p => p.id === i))
+        .filter(p => p)
+    },
+    typeRecentPlatforms() {
+      return this.allRecentPlatforms.filter(item => item.category.value === this.category)
     }
   },
   created() {
     this.$axios.get('/api/v1/assets/platforms/').then(data => {
       this.platforms = data
+      this.loadRecentPlatformIds()
+      this.activeType = Object.keys(this.sortedPlatforms)[0]
     })
-    this.getRecentPlatforms()
   },
   methods: {
-    getRecentPlatforms() {
-      this.recentPlatforms = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
-    },
-    setRecentPlatforms(platform) {
-      const recentPlatforms = this.recentPlatforms || []
-      const item = {
-        id: platform.id,
-        name: platform.name,
-        category: platform.category
-      }
-
-      if (!_.some(recentPlatforms, item)) {
-        if (recentPlatforms.length >= 8) {
-          recentPlatforms.pop()
-        }
-        recentPlatforms.unshift(item)
-        localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatforms))
-      }
-    },
-    typeRecentPlatforms() {
-      const typePlatforms = []
-      const { category, recentPlatforms } = this
-      for (const item of recentPlatforms) {
-        if (item.category.value === category) {
-          typePlatforms.push(item)
-        }
-      }
-      return typePlatforms
+    loadRecentPlatformIds() {
+      const recentPlatformIds = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
+      this.recentPlatformIds = recentPlatformIds
+        .map(i => this.platforms.find(p => p.id === i))
+        .filter(p => p)
+        .map(p => p.id)
+      console.log('This. platform id: ', this.recentPlatformIds)
     },
     onConfirm() {
       this.iVisible = false
@@ -166,34 +133,20 @@ export default {
       const color = this.bottomColors[colorIndex]
       return color
     },
-    createAsset(platform) {
-      // debugger
-      const mapper = {
-        host: 'HostCreate',
-        database: 'DatabaseCreate',
-        cloud: 'CloudCreate',
-        web: 'WebCreate',
-        remote_app: 'RemoteAppCreate'
+    addToRecentPlatforms(platform) {
+      const recentPlatformIds = this.recentPlatformIds.filter(i => i !== platform.id)
+      recentPlatformIds.unshift(platform.id)
+      if (recentPlatformIds.length > 8) {
+        recentPlatformIds.pop()
       }
-      const route = mapper[platform.category.value] || 'HostCreate'
-      this.$router.push({ name: route, query: { platform: platform.id }})
-      this.iVisible = false
-      this.setRecentPlatforms(platform)
+      this.recentPlatformIds = recentPlatformIds
+      localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatformIds))
     },
-    arrangePlatforms(data = []) {
-      const filterField = {}
-      data.length > 0 && data.forEach(el => {
-        if (el.internal) {
-          filterField[el.type.value] = [el]
-        } else {
-          filterField[el.type.value]?.push(el)
-        }
-      })
-
-      const filterFieldKey = Object.keys(filterField)
-      this.activePlatform = filterFieldKey.length > 0 ? filterFieldKey[0] : ''
-
-      return filterField
+    createAsset(platform) {
+      const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
+      this.addToRecentPlatforms(platform)
+      this.iVisible = false
+      this.$router.push({ name: route, query: { platform: platform.id }})
     }
   }
 }

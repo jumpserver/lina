@@ -27,31 +27,26 @@ export default {
           {
             title: this.$t('applications.host'),
             name: 'hosts',
-            hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/HostList.vue')
           },
           {
             title: this.$t('route.Device'),
             name: 'devices',
-            hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
           {
             title: this.$t('route.Database'),
             name: 'databases',
-            hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
           },
           {
             title: this.$t('assets.Cloud'),
             name: 'clouds',
-            hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
           },
           {
             title: 'Web',
             name: 'web',
-            hidden: () => false,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           }
         ]
