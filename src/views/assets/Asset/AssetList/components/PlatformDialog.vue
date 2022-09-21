@@ -12,7 +12,7 @@
       <el-row :gutter="20">
         <el-collapse v-model="activeType" accordion>
           <el-collapse-item
-            v-for="(ps, categoryName) in sortedPlatforms"
+            v-for="(ps, categoryName) in iPlatforms"
             :key="categoryName"
             :title="categoryName"
             :name="categoryName"
@@ -60,6 +60,7 @@ export default {
       platforms: [],
       recentPlatformIds: [],
       activeType: 'host',
+      recentUsedLabel: this.$t('assets.RecentlyUsed'),
       typeIconMapper: {
         linux: 'fa-linux',
         windows: 'fa-windows',
@@ -79,15 +80,21 @@ export default {
       },
       get() { return this.visible }
     },
-    sortedPlatforms() {
-      const recentPlatforms = {}
+    iPlatforms() {
+      let recentPlatforms = {}
+      let platforms = {}
       if (this.category === 'all') {
-        recentPlatforms[this.$t('assets.RecentlyUsed')] = this.allRecentPlatforms
-        return { ...recentPlatforms, ...this.allSortedPlatforms }
+        recentPlatforms[this.recentUsedLabel] = this.allRecentPlatforms
+        platforms = this.allSortedPlatforms
       } else {
-        recentPlatforms[this.$t('assets.RecentlyUsed')] = this.recentPlatforms
-        return { ...recentPlatforms, ...this.typeSortedPlatforms }
+        recentPlatforms[this.recentUsedLabel] = this.typeRecentPlatforms
+        platforms = this.typeSortedPlatforms
       }
+      // 最近使用为空就不用了
+      if (recentPlatforms[this.recentUsedLabel].length === 0) {
+        recentPlatforms = {}
+      }
+      return { ...recentPlatforms, ...platforms }
     },
     allSortedPlatforms() {
       return _.groupBy(this.platforms, (item) => item.category.label)
@@ -95,9 +102,6 @@ export default {
     typeSortedPlatforms() {
       const typedPlatforms = this.platforms.filter(item => item.category.value === this.category)
       return _.groupBy(typedPlatforms, (item) => item.type.label)
-    },
-    recentPlatforms() {
-      return this.category === 'all' ? this.allRecentPlatforms : this.typeRecentPlatforms
     },
     allRecentPlatforms() {
       return this.recentPlatformIds
@@ -112,7 +116,7 @@ export default {
     this.$axios.get('/api/v1/assets/platforms/').then(data => {
       this.platforms = data
       this.loadRecentPlatformIds()
-      this.activeType = Object.keys(this.sortedPlatforms)[0]
+      this.activeType = Object.keys(this.iPlatforms)[0]
     })
   },
   methods: {
