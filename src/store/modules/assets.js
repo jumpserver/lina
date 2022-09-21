@@ -9,17 +9,9 @@ const state = {
 const mutations = {
   SET_CATEGORIES: (state, categories) => {
     state.assetCategories = categories
-    const toOption = (choice) => {
-      return {
-        label: choice['name'],
-        value: choice['id']
-      }
-    }
-    state.assetCategoriesCascader = categories.map((item) => {
-      const children = item.children.map(toOption)
-      const option = toOption(item)
-      option.children = children
-      return option
+    state.assetCategoriesCascader = categories.map(category => {
+      category['children'] = category['types']
+      return category
     })
   },
   SET_CATEGORIES_DROPDOWN: (state, categories) => {
@@ -27,14 +19,14 @@ const mutations = {
     for (const category of categories) {
       category.children.forEach((type, index) => {
         const option = {
-          name: type.id,
-          title: type.name,
+          name: type.value,
+          title: type.label,
           type: 'primary',
-          category: category.id,
+          category: category.value,
           has: true
         }
         if (index === 0) {
-          option.group = category.name
+          option.group = category.label
         }
         dropdown.push(option)
       })
