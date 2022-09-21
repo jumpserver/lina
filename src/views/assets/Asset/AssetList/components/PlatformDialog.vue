@@ -9,29 +9,12 @@
     @cancel="onConfirm"
   >
     <div style="margin: 0 10px">
-      <el-row v-if="showRecentPlatforms.length > 0" :gutter="20">
-        <p class="recent">{{ this.$t('assets.RecentlyUsed') }}</p>
-        <el-col
-          v-for="(item, index) of showRecentPlatforms"
-          :key="item.id"
-          :span="6"
-        >
-          <el-card
-            :style="{ borderLeftColor: randomBorderColor(index) }"
-            class="platform-item"
-            shadow="hover"
-            @click.native="createAsset(item)"
-          >
-            {{ item.name }}
-          </el-card>
-        </el-col>
-      </el-row>
       <el-row :gutter="20">
         <el-collapse v-model="activePlatform" accordion>
           <el-collapse-item
             v-for="(ps, categoryName) in sortedPlatforms"
             :key="categoryName"
-            :title="categoryMapper[categoryName]"
+            :title="categoryMapper[categoryName] || $t('assets.RecentlyUsed')"
             :name="categoryName"
           >
             <el-col
@@ -78,7 +61,7 @@ export default {
   data() {
     return {
       platforms: [],
-      recentPlatforms: {},
+      recentPlatforms: [],
       activePlatform: 'host',
       typeIconMapper: {
         linux: 'fa-linux',
@@ -103,8 +86,28 @@ export default {
     },
     sortedPlatforms() {
       const { category, platforms } = this
+      let object = {}
+      let subRecentPlatforms = []
       const filterPlatforms = _.groupBy(platforms, (item) => item.category.value)
-      return category === 'all' ? filterPlatforms : this.arrangePlatforms(filterPlatforms[category])
+      const recentPlatforms = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
+
+      if (category === 'all') {
+        subRecentPlatforms = platforms?.filter(i => (recentPlatforms.includes(i.id)))
+        object = {
+          ...(subRecentPlatforms?.length > 0 && { recent: subRecentPlatforms }),
+          ...filterPlatforms
+        }
+      } else {
+        const subFilterPlatforms = _.groupBy(filterPlatforms[category], (item) => item.type.value)
+        subRecentPlatforms = filterPlatforms[category]?.filter(i => (recentPlatforms.includes(i.id)))
+        object = {
+          ...(subRecentPlatforms?.length > 0 && { recent: subRecentPlatforms }),
+          ...subFilterPlatforms
+        }
+      }
+
+      this.setActivePlatform(object)
+      return object
     },
     categoryMapper() {
       const mapper = {}
@@ -116,46 +119,29 @@ export default {
         }
       }
       return mapper
-    },
-    showRecentPlatforms() {
-      return this.category === 'all' ? this.recentPlatforms : this.typeRecentPlatforms()
     }
   },
   created() {
     this.$axios.get('/api/v1/assets/platforms/').then(data => {
       this.platforms = data
     })
-    this.getRecentPlatforms()
   },
   methods: {
-    getRecentPlatforms() {
-      this.recentPlatforms = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
-    },
     setRecentPlatforms(platform) {
-      const recentPlatforms = this.recentPlatforms || []
-      const item = {
-        id: platform.id,
-        name: platform.name,
-        category: platform.category
-      }
-
-      if (!_.some(recentPlatforms, item)) {
-        if (recentPlatforms.length >= 8) {
+      const recentPlatforms = JSON.parse(localStorage.getItem('RecentPlatforms')) || []
+      if (!recentPlatforms.includes(platform.id)) {
+        if (recentPlatforms.length >= 12) {
           recentPlatforms.pop()
         }
-        recentPlatforms.unshift(item)
+        recentPlatforms.unshift(platform.id)
         localStorage.setItem('RecentPlatforms', JSON.stringify(recentPlatforms))
       }
     },
-    typeRecentPlatforms() {
-      const typePlatforms = []
-      const { category, recentPlatforms } = this
-      for (const item of recentPlatforms) {
-        if (item.category.value === category) {
-          typePlatforms.push(item)
-        }
+    setActivePlatform(object) {
+      const objectKeys = Object.keys(object) || []
+      if (objectKeys.length > 0) {
+        this.activePlatform = objectKeys[0]
       }
-      return typePlatforms
     },
     onConfirm() {
       this.iVisible = false
@@ -167,7 +153,6 @@ export default {
       return color
     },
     createAsset(platform) {
-      // debugger
       const mapper = {
         host: 'HostCreate',
         database: 'DatabaseCreate',
@@ -179,21 +164,6 @@ export default {
       this.$router.push({ name: route, query: { platform: platform.id }})
       this.iVisible = false
       this.setRecentPlatforms(platform)
-    },
-    arrangePlatforms(data = []) {
-      const filterField = {}
-      data.length > 0 && data.forEach(el => {
-        if (el.internal) {
-          filterField[el.type.value] = [el]
-        } else {
-          filterField[el.type.value]?.push(el)
-        }
-      })
-
-      const filterFieldKey = Object.keys(filterField)
-      this.activePlatform = filterFieldKey.length > 0 ? filterFieldKey[0] : ''
-
-      return filterField
     }
   }
 }
