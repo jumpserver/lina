@@ -46,8 +46,6 @@ export default {
               getRoute: function({ row }) {
                 if (row.type === 'apply_asset') {
                   return 'AssetsTicketDetail'
-                } else if (row.type === 'apply_application') {
-                  return 'AppsTicketDetail'
                 } else if (row.type === 'login_asset_confirm') {
                   return 'LoginAssetTicketDetail'
                 } else if (row.type === 'login_confirm') {
@@ -174,13 +172,6 @@ export default {
               title: this.$t('tickets.RequestAssetPerm'),
               callback: () => this.$router.push({
                 name: 'RequestAssetPermTicketCreateUpdate'
-              })
-            },
-            {
-              name: 'RequestApplicationPerm',
-              title: this.$t('tickets.RequestApplicationPerm'),
-              callback: () => this.$router.push({
-                name: 'RequestApplicationPermTicketCreateUpdate'
               })
             }
           ]

@@ -21,7 +21,7 @@
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('tickets.SystemUser')" :rules="isRequired">
-            <Select2 v-model="requestForm.systemusers" v-bind="systemuserSelect2" style="width: 50% !important" />
+            <Select2 v-model="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$t('common.dateStart')" required>
             <el-date-picker
@@ -67,7 +67,7 @@ export default {
       requestForm: {
         nodes: this.object.apply_nodes,
         assets: this.object.apply_assets,
-        systemusers: this.object.apply_system_users,
+        accounts: this.object.apply_accounts,
         actions: this.object.apply_actions,
         apply_date_expired: this.object.apply_date_expired,
         apply_date_start: this.object.apply_date_start
@@ -95,20 +95,6 @@ export default {
           }(this.object)),
           transformOption: (item) => {
             return { label: item.hostname, value: item.id }
-          }
-        }
-      },
-      systemuserSelect2: {
-        multiple: true,
-        value: this.object.apply_system_users,
-        ajax: {
-          url: (function(object) {
-            const oid = object.org_id === '' ? 'DEFAULT' : object.org_id
-            return `/api/v1/assets/system-users/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
-          }(this.object)),
-          transformOption: (item) => {
-            const username = item.username || '*'
-            return { label: item.name + '(' + username + ')', value: item.id }
           }
         }
       }
@@ -170,8 +156,8 @@ export default {
           value: rel_snapshot.apply_assets.join(', ')
         },
         {
-          key: this.$t('tickets.SystemUser'),
-          value: rel_snapshot.apply_system_users.join(', ')
+          key: this.$t('tickets.Account'),
+          value: rel_snapshot.apply_accounts.join(', ')
         },
         {
           key: this.$t('assets.Action'),
@@ -213,8 +199,8 @@ export default {
           value: rel_snapshot.apply_assets.join(', ')
         },
         {
-          key: this.$t('tickets.SystemUser'),
-          value: rel_snapshot.apply_system_users.join(', ')
+          key: this.$t('tickets.Account'),
+          value: rel_snapshot.apply_accounts.join(', ')
         },
         {
           key: this.$t('assets.Action'),

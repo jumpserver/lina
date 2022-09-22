@@ -50,7 +50,6 @@ export default {
     afterGetTicket(ticket) {
       const ticketRouteMapper = {
         'apply_asset': 'AssetsTicketDetail',
-        'apply_application': 'AppsTicketDetail',
         'login_confirm': 'LoginTicketDetail',
         'login_asset_confirm': 'LoginAssetTicketDetail',
         'command_confirm': 'CommandConfirmDetail'

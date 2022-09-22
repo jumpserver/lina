@@ -37,7 +37,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
         [this.$t('tickets.RequestPerm'), [
-          'apply_nodes', 'apply_assets', 'apply_system_users',
+          'apply_nodes', 'apply_assets', 'apply_accounts',
           'apply_actions', 'apply_date_start', 'apply_date_expired'
         ]]
       ],
@@ -81,21 +81,6 @@ export default {
             }
           }
         },
-        apply_system_users: {
-          type: 'systemUserSelect',
-          component: Select2,
-          label: this.$t('assets.SystemUser'),
-          el: {
-            value: [],
-            ajax: {
-              url: '',
-              transformOption: (item) => {
-                const username = item.username || '*'
-                return { label: item.name + '(' + username + ')', value: item.id }
-              }
-            }
-          }
-        },
         org_id: {
           component: Select2,
           el: {
@@ -108,7 +93,6 @@ export default {
           },
           hidden: (form) => {
             const fieldsMeta = this.fieldsMeta
-            fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
           }
@@ -116,7 +100,7 @@ export default {
       },
       cleanFormValue(value) {
         Object.keys(value).forEach((item, index, arr) => {
-          if (['apply_system_users', 'apply_assets', 'apply_nodes'].includes(item)) {
+          if (['apply_accounts', 'apply_assets', 'apply_nodes'].includes(item)) {
             if (value[item].length < 1) {
               delete value[item]
             }
