@@ -23,13 +23,15 @@ export default {
           this.$t('applications.port'),
           [
             'http_port', 'https_port', 'ssh_port', 'rdp_port',
-            'mysql_port', 'mariadb_port', 'postgresql_port', 'redis_port',
-            'oracle_11g_port', 'oracle_12c_port'
+            'magnus_listen_port_range'
           ]
         ],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        magnus_listen_port_range: {
+          disabled: true
+        }
       },
       hasDetailInMsg: false
     }
