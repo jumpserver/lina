@@ -92,26 +92,6 @@ export default {
           hidden: true
         },
         {
-          path: 'request-application-perm/create',
-          name: 'RequestApplicationPermTicketCreateUpdate',
-          component: () => import('@/views/tickets/RequestApplicationPerm/CreateUpdate'),
-          meta: {
-            title: i18n.t('route.TicketCreate'),
-            permissions: ['tickets.view_ticket']
-          },
-          hidden: true
-        },
-        {
-          path: 'request-application-perm/:id',
-          name: 'AppsTicketDetail',
-          component: () => import('@/views/tickets/RequestApplicationPerm/Detail'),
-          meta: {
-            title: i18n.t('route.TicketDetail'),
-            permissions: ['tickets.view_ticket']
-          },
-          hidden: true
-        },
-        {
           path: 'command-confirm/:id',
           name: 'CommandConfirmDetail',
           component: () => import('@/views/tickets/CommandConfirm/Detail'),

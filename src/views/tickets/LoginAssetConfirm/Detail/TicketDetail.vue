@@ -61,8 +61,8 @@ export default {
           value: object.rel_snapshot.apply_login_asset
         },
         {
-          key: this.$t('acl.apply_login_system_user'),
-          value: object.rel_snapshot.apply_login_system_user
+          key: this.$t('acl.apply_login_account'),
+          value: object.rel_snapshot.apply_login_account
         },
         {
           key: this.$t('acl.apply_login_user'),

@@ -65,8 +65,8 @@ export default {
           value: object.apply_run_asset
         },
         {
-          key: this.$t('tickets.ApplyRunSystemUser'),
-          value: object.rel_snapshot.apply_run_system_user
+          key: this.$t('tickets.ApplyRunAccount'),
+          value: object.rel_snapshot.apply_run_account
         },
         {
           key: this.$t('tickets.ApplyRunCommand'),
