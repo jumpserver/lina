@@ -12,10 +12,10 @@
       <el-row :gutter="20">
         <el-collapse v-model="activeType" accordion>
           <el-collapse-item
-            v-for="(ps, categoryName) in iPlatforms"
-            :key="categoryName"
-            :title="categoryName"
-            :name="categoryName"
+            v-for="(ps, cName) in iPlatforms"
+            :key="cName"
+            :title="cName"
+            :name="cName"
           >
             <el-col
               v-for="(platform, index) of ps"

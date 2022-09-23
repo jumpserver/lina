@@ -4,7 +4,7 @@
 
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
-import { UpdateToken, UploadKey } from '@/components/FormFields'
+import { UpdateToken } from '@/components/FormFields'
 export default {
   name: 'AccountCreateForm',
   components: {
@@ -30,20 +30,11 @@ export default {
       form: this.account || { },
       fields: [
         ['Basic', ['username', 'privileged']],
-        ['Auth', ['password', 'private_key', 'passphrase']],
-        ['Other', ['push_now', 'comment']]
+        ['Auth', ['secret_type', 'password', 'ssh_key', 'token', 'api_key', 'passphrase']],
+        ['Other', ['push_now', 'name', 'comment']]
       ],
       defaultPrivilegedAccounts: ['root', 'administrator'],
       fieldsMeta: {
-        password: {
-          component: UpdateToken
-        },
-        private_key: {
-          component: UploadKey,
-          hidden: () => {
-            return !this.hasProtocol('ssh')
-          }
-        },
         username: {
           on: {
             change: ([value], updateForm) => {
@@ -53,11 +44,50 @@ export default {
             }
           }
         },
-        passphrase: {
+        password: {
+          label: 'Password',
           component: UpdateToken,
-          hidden: () => {
-            return !this.hasProtocol('ssh')
-          }
+          hidden: (formValue) => formValue['secret_type'] !== 'password'
+        },
+        ssh_key: {
+          label: 'SSH private key',
+          el: {
+            type: 'textarea',
+            rows: 4
+          },
+          hidden: (formValue) => formValue['secret_type'] !== 'ssh_key'
+        },
+        passphrase: {
+          label: 'Passphrase',
+          component: UpdateToken,
+          hidden: (formValue) => formValue['secret_type'] !== 'ssh_key'
+        },
+        token: {
+          label: 'Token',
+          el: {
+            type: 'textarea',
+            rows: 4
+          },
+          hidden: (formValue) => formValue['secret_type'] !== 'token'
+        },
+        api_key: {
+          id: 'api_key',
+          label: 'Secret key',
+          el: {
+            type: 'textarea',
+            rows: 4
+          },
+          hidden: (formValue) => formValue['secret_type'] !== 'api_key'
+        },
+        secret_type: {
+          label: 'Secret Type',
+          type: 'radio-group',
+          options: [
+            { label: 'Password', value: 'password' },
+            { label: 'SSH key', value: 'ssh_key' },
+            { label: 'Token', value: 'token' },
+            { label: 'Api key', value: 'api_key' }
+          ]
         }
       },
       hasSaveContinue: false
