@@ -13,8 +13,8 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { JsonEditor } from '@/components/FormFields'
 import rules from '@/components/DataForm/rules'
+import { JsonEditor } from '@/components/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
