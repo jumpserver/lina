@@ -55,9 +55,6 @@ export default {
           }
         ],
         hasRightSide: true,
-        getObjectName: function(obj) {
-          return obj.name + '(' + obj.ip + ')'
-        },
         actions: {
           updateCallback: () => {
             const category = this.asset.category.value || 'host'

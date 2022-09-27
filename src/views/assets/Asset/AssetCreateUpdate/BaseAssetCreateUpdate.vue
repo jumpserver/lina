@@ -27,6 +27,7 @@ export default {
         platform: {},
         url: '/api/v1/assets/hosts/',
         createSuccessNextRoute: { name: 'AssetList' },
+        updateSuccessNextRoute: { name: 'AssetList' },
         hasDetailInMsg: false,
         fields: [
           [this.$t('common.Basic'), ['name', 'address', 'platform', 'domain']],
@@ -44,11 +45,13 @@ export default {
   computed: {
     iConfig() {
       const { url, addFields, defaultConfig } = this
+      // 过滤类型为：null, undefined 的元素
+      defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
       if (addFields.length > 0) {
-        const defaultFields = Object.fromEntries(defaultConfig.fields)
+        const defaultFields = Object.fromEntries(config.fields)
         for (const [key, value] of addFields) {
-          if (Object.prototype.hasOwnProperty.call(defaultFields, key)) {
+          if (defaultFields.hasOwnProperty(key)) {
             defaultFields[key] = new Set([...defaultFields[key], ...(value || [])])
           }
         }
@@ -68,8 +71,10 @@ export default {
   },
   methods: {
     async setInitial() {
-      const nodesInitial = this.$route.query['node'] ? [this.$route.query['node']] : []
-      const platformId = this.$route.query['platform'] || 1
+      const { defaultConfig } = this
+      const { node, platform } = this.$router?.query || {}
+      const nodesInitial = node || []
+      const platformId = platform || 1
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
       const initial = {
@@ -79,15 +84,16 @@ export default {
         platform: parseInt(platformId),
         protocols: this.platform.protocols || []
       }
-      this.defaultConfig.initial = Object.assign({}, initial, this.defaultConfig.initial)
+      this.defaultConfig.initial = Object.assign({}, initial, defaultConfig.initial)
     },
     async setPlatformConstrains() {
-      this.$set(this.defaultConfig.fieldsMeta.protocols.el, 'choices', (this.platform['protocols'] || []))
-      this.$set(this.defaultConfig.fieldsMeta.accounts.el, 'protocols', (this.platform['protocols'] || []))
+      const { platform } = this
+      this.$set(this.defaultConfig.fieldsMeta.protocols.el, 'choices', (platform['protocols'] || []))
+      this.$set(this.defaultConfig.fieldsMeta.accounts.el, 'protocols', (platform['protocols'] || []))
       const hiddenCheckFields = ['protocols', 'domain']
 
       for (const field of hiddenCheckFields) {
-        if (this.platform[field + '_enabled'] === false) {
+        if (platform[field + '_enabled'] === false) {
           this.defaultConfig.fieldsMeta[field].hidden = () => true
         }
       }
