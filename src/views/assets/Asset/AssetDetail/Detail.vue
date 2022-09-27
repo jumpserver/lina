@@ -106,7 +106,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes,
+        hasObjectsId: this.object.nodes?.map(i => i.id) || [],
         performAdd: (items) => {
           const newData = []
           const value = this.$refs.NodeRelation.iHasObjects
@@ -151,7 +151,7 @@ export default {
         },
         {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols.toString()
+          value: this.object.protocols.map(i => i.name).join(',')
         },
         {
           key: this.$t('assets.PublicIp'),
@@ -163,7 +163,7 @@ export default {
         },
         {
           key: this.$t('assets.Domain'),
-          value: this.object.domain_display
+          value: this.object.domain.name || ''
         },
         {
           key: this.$t('assets.Vendor'),
@@ -187,7 +187,7 @@ export default {
         },
         {
           key: this.$t('assets.Platform'),
-          value: this.object.platform
+          value: this.object.platform?.name || ''
         },
         {
           key: this.$t('assets.Os'),
