@@ -140,6 +140,7 @@ export default {
   },
   computed: {
     detailCardItems() {
+      console.log('this.object', this.object)
       return [
         {
           key: this.$t('assets.Name'),
@@ -163,7 +164,7 @@ export default {
         },
         {
           key: this.$t('assets.Domain'),
-          value: this.object.domain.name || ''
+          value: this.object.domain?.name || ''
         },
         {
           key: this.$t('assets.Vendor'),
