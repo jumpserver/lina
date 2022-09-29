@@ -4,6 +4,7 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    v-bind="$data"
   />
 </template>
 
@@ -83,6 +84,10 @@ export default {
             }
           }
         },
+        accounts: {
+          type: 'input',
+          component: null
+        },
         actions: {
           label: this.$t('perms.Actions'),
           component: PermissionFormActionField,
@@ -100,6 +105,17 @@ export default {
         is_active: {
           type: 'checkbox'
         }
+      },
+      afterGetFormValue(validValues) {
+        console.log('>>>', validValues, validValues.accounts)
+        validValues.accounts = validValues.accounts ? validValues.accounts.toString() : ''
+        return validValues
+      },
+      cleanFormValue(value) {
+        if (!Array.isArray(value.accounts)) {
+          value.accounts = value.accounts ? value.accounts.split(',') : []
+        }
+        return value
       }
     }
   }

@@ -61,7 +61,7 @@ export default {
       ajax: {
         url: '/api/v1/assets/assets/?fields_size=mini',
         transformOption: (item) => {
-          return { label: item.name + '(' + item.ip + ')', value: item.id }
+          return { label: item.name + '(' + item.address + ')', value: item.id }
         }
       }
     }
