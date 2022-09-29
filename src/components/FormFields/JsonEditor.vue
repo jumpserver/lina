@@ -18,7 +18,7 @@ export default {
   components: { JsonEditor },
   props: {
     value: {
-      type: String,
+      type: [String, Object],
       default: () => ''
     }
   },
@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.resultInfo = JSON.parse(this.value)
+    this.resultInfo = typeof this.value === 'string' ? JSON.parse(this.value) : this.value
   },
   methods: {
     // 数据改变
