@@ -14,7 +14,8 @@ RUN set -ex \
 
 ADD . /data
 RUN RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn install \
+    sed -i "s@Version <strong>.*</strong>@Version <strong>${VERSION}</strong>@g" src/layout/components/Footer/index.vue \
+    && yarn install \
     && yarn build
 
 FROM nginx:alpine
