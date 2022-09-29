@@ -1,22 +1,20 @@
-FROM node:10 as stage-build
+FROM node:14.16 as stage-build
+ARG TARGETARCH
+ARG VERSION
+ENV VERSION=$VERSION
 ARG NPM_REGISTRY="https://registry.npmmirror.com"
 ENV NPM_REGISTY=$NPM_REGISTRY
-ARG SASS_BINARY_SITE="https://npmmirror.com/mirrors/node-sass"
-ENV SASS_BINARY_SITE=$SASS_BINARY_SITE
 
 WORKDIR /data
 
-RUN npm config set sass_binary_site=${SASS_BINARY_SITE}
-RUN npm config set registry ${NPM_REGISTRY}
-RUN yarn config set registry ${NPM_REGISTRY}
-COPY package.json yarn.lock /data/
-RUN yarn install
-RUN npm rebuild node-sass
+RUN set -ex \
+    && npm config set registry ${NPM_REGISTRY} \
+    && yarn config set registry ${NPM_REGISTRY} \
+    && yarn config set cache-folder /root/.cache/yarn/lina
 
-ARG VERSION
-ENV VERSION=$VERSION
 ADD . /data
-RUN cd utils && bash -xieu build.sh build
+RUN RUN --mount=type=cache,target=/root/.cache/yarn \
+    yarn install && cd utils && bash -xieu build.sh build
 
 FROM nginx:alpine
 COPY --from=stage-build /data/release/lina /opt/lina
