@@ -95,11 +95,12 @@ export default {
   },
   mounted() {
     console.log('protocols: ', this.protocols)
+    console.log('this.account: ', this.account)
   },
   methods: {
     confirm(form) {
       console.log('Account form: accout is: ', this.account)
-      if (this.account) {
+      if (this.account?.name) {
         this.$emit('edit', form)
       } else {
         this.$emit('add', form)

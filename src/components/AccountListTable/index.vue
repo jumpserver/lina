@@ -12,6 +12,7 @@
       v-if="showAddDialog"
       :visible.sync="showAddDialog"
       :asset="asset"
+      :account="account"
       @add="addAccountSuccess"
     />
   </div>
@@ -168,9 +169,9 @@ export default {
                   can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
-                    vm.showUpdateSecretDialog = false
+                    vm.showAddDialog = false
                     setTimeout(() => {
-                      vm.showUpdateSecretDialog = true
+                      vm.showAddDialog = true
                     })
                   }
                 }
@@ -196,6 +197,7 @@ export default {
             type: 'primary',
             can: vm.$hasPerm('assets.add_account'),
             callback: () => {
+              this.account = null
               this.showAddDialog = true
             }
           }
