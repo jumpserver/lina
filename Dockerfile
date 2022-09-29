@@ -14,8 +14,9 @@ RUN set -ex \
 
 ADD . /data
 RUN RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn install && cd utils && bash -xieu build.sh build
+    yarn install \
+    && yarn build
 
 FROM nginx:alpine
-COPY --from=stage-build /data/release/lina /opt/lina
+COPY --from=stage-build /data/lina /opt/lina
 COPY nginx.conf /etc/nginx/conf.d/default.conf
