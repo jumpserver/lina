@@ -1,7 +1,7 @@
 <template>
   <Dialog
     :title="this.$tc('assets.AddAccount')"
-    :visible.sync="visible"
+    :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
@@ -14,6 +14,7 @@
       :protocols="protocols"
       :account="account"
       @add="addAccount"
+      @edit="editAccount"
     />
   </Dialog>
 </template>
@@ -35,19 +36,30 @@ export default {
     asset: {
       type: Object,
       default: null
-    }
-  },
-  data() {
-    return {
-      account: {
+    },
+    account: {
+      type: Object,
+      default: () => ({
         name: '',
         username: '',
         password: '',
         private_key: ''
-      }
+      })
+    }
+  },
+  data() {
+    return {
     }
   },
   computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      }
+    },
     protocols() {
       return this.asset ? this.asset.protocol : []
     }
@@ -57,12 +69,19 @@ export default {
       const data = { asset: this.asset.id, ...form }
       this.$axios.post(`/api/v1/assets/accounts/`, data)
         .then(() => {
-          this.visible = false
+          this.iVisible = false
           this.$emit('add', true)
         })
         .catch(() => {
           this.$message.error(this.$tc('common.createErrorMsg'))
         })
+    },
+    editAccount(form) {
+      const data = { asset: this.asset.id, ...form }
+      this.$axios.patch(`/api/v1/assets/accounts/${this.asset.id}`, data).then(() => {
+        this.iVisible = false
+        this.$emit('add', true)
+      })
     }
   }
 }
