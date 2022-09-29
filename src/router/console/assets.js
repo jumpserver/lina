@@ -278,7 +278,7 @@ export default [
       },
       {
         path: ':id',
-        component: () => import('@/views/assets/Platform/PlatformDetail.vue'), // Parent router-view
+        component: () => import('@/views/assets/Platform/PlatformDetail'), // Parent router-view
         name: 'PlatformDetail',
         hidden: true,
         meta: { title: i18n.t('route.PlatformDetail') }

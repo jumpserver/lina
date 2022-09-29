@@ -13,9 +13,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import rules from '@/components/DataForm/rules'
-import { JsonEditor } from '@/components/FormFields'
-import { assetFieldsMeta } from '@/views/assets/const'
+import { fieldsMeta } from './const'
 
 export default {
   name: 'PlatformCreateUpdate',
@@ -23,7 +21,6 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const assetMeta = assetFieldsMeta()
     return {
       loading: true,
       showDialog: false,
@@ -51,70 +48,7 @@ export default {
         ['自动化', ['automation']],
         [this.$t('common.Other'), ['comment']]
       ],
-      fieldsMeta: {
-        automation: {
-          initial: {},
-          fields: [
-            'ansible_enabled', 'ansible_config',
-            'ping_enabled', 'ping_method',
-            'gather_facts_enabled', 'gather_facts_method',
-            'create_account_enabled', 'create_account_method',
-            'change_password_enabled', 'change_password_method',
-            'verify_account_enabled', 'verify_account_method'
-          ],
-          fieldsMeta: {
-            ansible_config: {
-              component: JsonEditor,
-              hidden: (formValue) => !formValue['ansible_enabled']
-            },
-            ping_method: {},
-            gather_facts_method: {},
-            create_account_method: {},
-            change_password_method: {},
-            verify_account_method: {}
-          }
-        },
-        category_type: {
-          type: 'cascader',
-          label: this.$t('assets.Type'),
-          rules: [
-            rules.Required
-          ],
-          el: {
-            multiple: false,
-            options: [],
-            disabled: true
-          },
-          hidden: (formValue) => {
-            if (formValue.category_type[0] === undefined) {
-              formValue.category_type = this.initial.category_type
-            }
-          }
-        },
-        charset: {},
-        protocols_enabled: {
-          el: {
-            disabled: false
-          }
-        },
-        domain_enabled: {
-          el: {
-            disabled: false
-          }
-        },
-        protocols: {
-          label: '支持的协议',
-          ...assetMeta.protocols,
-          el: {
-            choices: []
-          },
-          hidden: (formValue) => !formValue['protocols_enabled']
-        },
-        su_method: {
-          type: 'select',
-          hidden: (form) => !form['su_enabled']
-        }
-      },
+      fieldsMeta,
       url: `/api/v1/assets/platforms/`,
       cleanFormValue: (values) => {
         const category_type = values['category_type']
