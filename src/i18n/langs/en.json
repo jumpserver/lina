@@ -244,7 +244,9 @@
     "View": "View",
     "LoginIP": "Login IP",
     "LoginCity": "Login city",
-    "LoginDate": "Login date"
+    "LoginDate": "Login date",
+    "BeforeChange": "Before change",
+    "AfterChange": "After change"
   },
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
@@ -254,6 +256,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "NoContent": "No content",
     "NeedAddAppsOrSystemUserErrMsg": "Please add apps or system user",
     "VerificationCodeSent": "The verification code has been sent",
     "SendVerificationCode": "Send verification code",
