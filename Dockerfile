@@ -13,7 +13,7 @@ RUN set -ex \
     && yarn config set cache-folder /root/.cache/yarn/lina
 
 ADD . /data
-RUN RUN --mount=type=cache,target=/root/.cache/yarn \
+RUN --mount=type=cache,target=/root/.cache/yarn \
     sed -i "s@Version <strong>.*</strong>@Version <strong>${VERSION}</strong>@g" src/layout/components/Footer/index.vue \
     && yarn install \
     && yarn build
