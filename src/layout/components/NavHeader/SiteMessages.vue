@@ -46,7 +46,7 @@
             </el-col>
           </el-row>
           <div class="msg-item-txt">
-            <span v-html="msg.message" />
+            <span v-html="$escape(msg.message)" />
           </div>
         </div>
       </div>
