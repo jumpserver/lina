@@ -4,7 +4,7 @@
       {{ this.$t('common.NoContent') }}
     </div>
     <div v-else>
-      <el-card v-if="row.before" class="box-card" style="width: 46%; display: inline-block">
+      <el-card class="box-card" style="width: 46%; display: inline-block">
         <div slot="header">
           <span>{{ this.$t('audits.BeforeChange') }}</span>
         </div>
@@ -12,7 +12,7 @@
           {{ key }}: {{ value }}
         </div>
       </el-card>
-      <el-card v-if="row.after" class="box-card" style="width: 46%; display: inline-block">
+      <el-card class="box-card" style="width: 46%; display: inline-block">
         <div slot="header">
           <span>{{ this.$t('audits.AfterChange') }}</span>
         </div>
