@@ -6,7 +6,12 @@
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
     </el-col>
-    <PlatformDetailUpdateDialog v-if="visible" :visible.sync="visible" :fields="fields" />
+    <PlatformDetailUpdateDialog
+      v-if="visible"
+      :visible.sync="visible"
+      :show-fields="fields"
+      :object="object"
+    />
   </el-row>
 </template>
 

@@ -13,7 +13,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { fieldsMeta } from './const'
+import { platformFieldsMeta, setAutomations } from './const'
 
 export default {
   name: 'PlatformCreateUpdate',
@@ -48,7 +48,7 @@ export default {
         ['自动化', ['automation']],
         [this.$t('common.Other'), ['comment']]
       ],
-      fieldsMeta,
+      fieldsMeta: platformFieldsMeta(this),
       url: `/api/v1/assets/platforms/`,
       cleanFormValue: (values) => {
         const category_type = values['category_type']
@@ -61,7 +61,8 @@ export default {
           obj['category_type'] = [obj['category'].value, obj['type'].value]
         }
         return obj
-      }
+      },
+      object: {}
     }
   },
   async mounted() {
@@ -89,6 +90,7 @@ export default {
       const type = this.$route.query.type
       const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
+      this.object = constraints
 
       const fieldsCheck = ['protocols_enabled', 'domain_enabled', 'su_enabled']
       for (const field of fieldsCheck) {
@@ -105,45 +107,7 @@ export default {
         this.fieldsMeta.charset.hidden = () => true
       }
 
-      await this.setAutomations(constraints['automation'])
-    },
-    async setAutomations(automation) {
-      const autoFieldsMeta = this.fieldsMeta.automation.fieldsMeta
-      const autoFields = this.fieldsMeta.automation.fields
-        .filter(item => item.endsWith('_method'))
-        .map(item => item.replace('_method', ''))
-
-      const initial = this.initial.automation || {}
-      initial['ansible_enabled'] = automation['ansible_enabled']
-      initial['ansible_config'] = JSON.stringify(automation['ansible_config'])
-
-      for (const item of autoFields) {
-        const itemEnabledKey = item + '_enabled'
-        const itemMethodKey = item + '_method'
-        const itemEnabled = automation[itemEnabledKey]
-        // 设置 enableKey disabled 和 默认值
-        if (itemEnabled === false) {
-          initial[itemEnabledKey] = false
-          _.set(autoFieldsMeta, `${itemEnabledKey}.el.disabled`, true)
-        } else {
-          initial[itemEnabledKey] = true
-        }
-
-        // 设置 enableKey Hidden
-        _.set(autoFieldsMeta, `${itemEnabledKey}.hidden`, (formValue) => {
-          return !formValue['ansible_enabled']
-        })
-        // 设置 enableMethod Hidden
-        _.set(autoFieldsMeta, `${itemMethodKey}.hidden`, (formValue) => {
-          return !formValue[itemEnabledKey] || !formValue['ansible_enabled']
-        })
-        // 设置 method 类型和 options
-        _.set(autoFieldsMeta, `${itemMethodKey}.type`, 'select')
-        const methods = automation[itemMethodKey + 's'] || []
-        autoFieldsMeta[itemMethodKey].options = methods.map(method => {
-          return { value: method['id'], label: method['name'] }
-        })
-      }
+      await setAutomations(this)
     }
   }
 }

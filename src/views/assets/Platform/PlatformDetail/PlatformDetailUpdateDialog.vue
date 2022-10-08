@@ -1,6 +1,5 @@
 <template>
   <Dialog
-    v-if="iVisible"
     :title="$tc('common.Update')"
     :visible.sync="iVisible"
     width="60%"
@@ -8,14 +7,14 @@
     :show-cancel="false"
     :show-confirm="false"
   >
-    <GenericCreateUpdateForm v-bind="config" @submitSuccess="submitSuccess" />
+    <GenericCreateUpdateForm v-bind="$data" @submitSuccess="submitSuccess" />
   </Dialog>
 </template>
 
 <script>
 import Dialog from '@/components/Dialog'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { fieldsMeta } from '../const'
+import { platformFieldsMeta, setAutomations } from '../const'
 
 export default {
   components: {
@@ -27,24 +26,25 @@ export default {
       type: Boolean,
       default: false
     },
-    fields: {
+    showFields: {
       type: Array,
       default: () => []
+    },
+    object: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      config: {
-        successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
-        url: `/api/v1/assets/platforms/`,
-        hasReset: false,
-        hasDetailInMsg: false,
-        submitMethod: () => 'patch',
-        fields: [
-          ['', this.fields]
-        ],
-        fieldsMeta
-      }
+      initial: {},
+      successUrl: { name: 'Settings', params: { activeMenu: 'Basic' }},
+      url: `/api/v1/assets/platforms/`,
+      hasReset: false,
+      hasDetailInMsg: false,
+      submitMethod: () => 'patch',
+      fields: [['', this.showFields]],
+      fieldsMeta: platformFieldsMeta(this)
     }
   },
   computed: {
@@ -56,6 +56,7 @@ export default {
     }
   },
   created() {
+    setAutomations(this)
   },
   methods: {
     submitSuccess() {
@@ -69,5 +70,4 @@ export default {
   ::v-deep .el-dialog .el-dialog__body {
     padding: 0 20px;
   }
-
 </style>
