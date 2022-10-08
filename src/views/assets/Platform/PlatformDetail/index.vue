@@ -1,5 +1,5 @@
 <template>
-  <GenericDetailPage :actions="actions" :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
     <keep-alive>
       <component :is="config.activeMenu" :object="TaskDetail" />
     </keep-alive>
@@ -18,8 +18,7 @@ export default {
   data() {
     return {
       TaskDetail: {},
-      actions: {
-      },
+      actions: {},
       config: {
         title: this.$t('assets.PlatformDetail'),
         activeMenu: 'Detail',
@@ -29,6 +28,21 @@ export default {
             name: 'Detail'
           }
         ],
+        actions: {
+          updateCallback: () => {
+            const { type, category } = this.TaskDetail
+            this.$router.push({
+              name: 'PlatformCreate',
+              params: {
+                id: this.$route.params.id
+              },
+              query: {
+                type: type.value,
+                category: category.value
+              }
+            })
+          }
+        },
         hasRightSide: this.$route.params.id > 7
       }
     }
