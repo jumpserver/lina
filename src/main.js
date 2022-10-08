@@ -57,9 +57,9 @@ Vue.component('echarts', ECharts)
 import service from '@/utils/request'
 
 // lodash
-// import _ from 'lodash'
-window._ = require('lodash')
-// Vue.set(Vue.prototype, '_', _)
+import _ from 'lodash'
+window._ = _
+Vue.prototype.$escape = _.escape
 
 // if the table component cannot access `this.$axios`, it cannot send request
 Vue.prototype.$axios = service

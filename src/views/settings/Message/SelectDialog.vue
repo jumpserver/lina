@@ -47,7 +47,7 @@ export default {
           }
           const data = await getUserList(params)
           const results = data['results'].map(item => {
-            return { id: item.id, label: `${item.name}(${item.username})` }
+            return { id: item.id, label: _.escape(`${item.name}(${item.username})`) }
           })
           return results
         },
