@@ -4,9 +4,9 @@
     :top="top"
     :width="iWidth"
     class="dialog"
+    :append-to-body="true"
+    :modal-append-to-body="true"
     v-bind="$attrs"
-    :append-to-body="false"
-    :modal-append-to-body="false"
     v-on="$listeners"
   >
     <slot />
