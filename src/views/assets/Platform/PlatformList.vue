@@ -105,13 +105,15 @@ export default {
   async mounted() {
     try {
       await this.setCategories()
-      await this.changeMoreCreates()
     } finally {
       this.loading = false
     }
   },
+  updated() {
+    this.changeMoreCreates()
+  },
   methods: {
-    async changeMoreCreates() {
+    changeMoreCreates() {
       this.tableConfig.url = this.url
       this.headerActions.moreCreates.dropdown = this.$store.state.assets.assetCategoriesDropdown.filter(item => {
         return item.category === this.tab.activeMenu
