@@ -14,7 +14,9 @@ export default {
   },
   data() {
     return {
-      initial: {},
+      initial: {
+        need_update_password: true
+      },
       user: {
         'can_public_key_auth': false
       },
