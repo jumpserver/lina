@@ -29,6 +29,12 @@ export default {
           }
         ],
         actions: {
+          canUpdate: () => {
+            return !this.TaskDetail.internal && this.$hasPerm('assets.change_platform')
+          },
+          canDelete: () => {
+            return !this.TaskDetail.internal && this.$hasPerm('assets.delete_platform')
+          },
           updateCallback: () => {
             const { type, category } = this.TaskDetail
             this.$router.push({
