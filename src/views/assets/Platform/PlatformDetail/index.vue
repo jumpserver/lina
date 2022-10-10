@@ -36,12 +36,10 @@ export default {
             return !this.TaskDetail.internal && this.$hasPerm('assets.delete_platform')
           },
           updateCallback: () => {
-            const { type, category } = this.TaskDetail
+            const { id, type, category } = this.TaskDetail
             this.$router.push({
-              name: 'PlatformCreate',
-              params: {
-                id: this.$route.params.id
-              },
+              name: 'PlatformUpdate',
+              params: { id },
               query: {
                 type: type.value,
                 category: category.value
