@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS :title="$t('setting.TencentCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$t('setting.TencentCloud')" :config="$data" />
 </template>
 
 <script>
@@ -28,8 +28,9 @@ export default {
               value
             ).then(res => {
               vm.$message.success(res['msg'])
-            }).catch(() => {
+            }).catch((error) => {
               vm.$log.error('err occur')
+              vm.$refs.baseSms.testPerformError(error)
             }).finally(() => { btn.loading = false })
           }
         }

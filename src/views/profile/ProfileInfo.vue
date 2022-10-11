@@ -37,7 +37,8 @@ import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import UserConfirmDialog from '@/components/UserConfirmDialog'
 import { toSafeLocalDateStr } from '@/utils/common'
-import store from '@/store'
+import { getProfile } from '@/api/users'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ProfileInfo',
@@ -47,14 +48,9 @@ export default {
     QuickActions,
     UserConfirmDialog
   },
-  props: {
-    object: {
-      type: Object,
-      default: () => store.state.users.profile
-    }
-  },
   data() {
     return {
+      object: this.userProfile || {},
       url: `/api/v1/users/profile/`,
       showPasswordDialog: false,
       currentEdit: '',
@@ -160,7 +156,7 @@ export default {
           attrs: {
             disabled: true,
             name: 'site_msg',
-            model: this.object.receive_backends.indexOf('site_msg') !== -1
+            model: this.object?.receive_backends.indexOf('site_msg') !== -1
           },
           callbacks: {
             change: this.updateUserReceiveBackends
@@ -171,7 +167,7 @@ export default {
           type: 'switcher',
           attrs: {
             name: 'email',
-            model: this.object.receive_backends.indexOf('email') !== -1
+            model: this.object?.receive_backends.indexOf('email') !== -1
           },
           callbacks: {
             change: this.updateUserReceiveBackends
@@ -182,7 +178,7 @@ export default {
           type: 'switcher',
           attrs: {
             name: 'wecom',
-            model: this.object.receive_backends.indexOf('wecom') !== -1
+            model: this.object?.receive_backends.indexOf('wecom') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -194,7 +190,7 @@ export default {
           type: 'switcher',
           attrs: {
             name: 'dingtalk',
-            model: this.object.receive_backends.indexOf('dingtalk') !== -1
+            model: this.object?.receive_backends.indexOf('dingtalk') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -206,7 +202,7 @@ export default {
           type: 'switcher',
           attrs: {
             name: 'feishu',
-            model: this.object.receive_backends.indexOf('feishu') !== -1
+            model: this.object?.receive_backends.indexOf('feishu') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -217,6 +213,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      userProfile: state => state.users.profile
+    }),
     detailCardItems() {
       return [
         {
@@ -298,6 +297,12 @@ export default {
       }
       return url
     }
+  },
+  created() {
+    getProfile().then(res => {
+      this.object = res
+      this.$store.commit('users/SET_PROFILE', res)
+    })
   },
   methods: {
     updateUserReceiveBackends(val) {

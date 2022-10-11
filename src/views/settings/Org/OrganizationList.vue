@@ -60,6 +60,7 @@ export default {
           actions: {
             prop: 'id',
             formatterArgs: {
+              canUpdate: this.$hasPerm('orgs.change_organization'),
               canDelete: function({ row }) {
                 return !row.is_default && vm.$hasPerm('orgs.delete_organization')
               },
