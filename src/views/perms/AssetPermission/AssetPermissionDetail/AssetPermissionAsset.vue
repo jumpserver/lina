@@ -19,6 +19,7 @@ import AssetRelationCard from '@/components/AssetRelationCard'
 
 export default {
   name: 'AssetPermissionAsset',
+  inject: ['reload'],
   components: {
     ListTable,
     RelationCard,
@@ -93,7 +94,7 @@ export default {
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           that.$refs.assetSelect.$refs.select2.clearSelected()
-          window.location.reload()
+          this.reload()
         }
       },
       nodeRelationConfig: {

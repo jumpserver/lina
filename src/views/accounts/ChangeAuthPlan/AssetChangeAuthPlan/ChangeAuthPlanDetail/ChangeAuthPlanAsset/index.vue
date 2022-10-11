@@ -18,6 +18,7 @@ import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormat
 
 export default {
   name: 'ChangeAuthPlanAsset',
+  inject: ['reload'],
   components: {
     GenericListTable, RelationCard, AssetRelationCard
   },
@@ -93,7 +94,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          window.location.reload()
+          this.reload()
         }
       },
       nodeRelationConfig: {
@@ -120,7 +121,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          window.location.reload()
+          this.reload()
         },
         performDelete: (item) => {
           const data = {

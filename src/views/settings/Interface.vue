@@ -68,6 +68,7 @@ import { getInterfaceInfo, updateInterface, restoreInterface, previewThemes } fr
 
 export default {
   name: 'InterfaceSettings',
+  inject: ['reload'],
   components: {
     IBox,
     Page,
@@ -175,7 +176,7 @@ export default {
               }).then(() => {
               restoreInterface().then(res => {
                 this.$message.success(res.success)
-                location.reload()
+                this.reload()
               })
             })
           }.bind(this)
@@ -221,7 +222,7 @@ export default {
         }
       }
       updateInterface(form).then(res => {
-        location.reload()
+        this.reload()
       })
     }
   }

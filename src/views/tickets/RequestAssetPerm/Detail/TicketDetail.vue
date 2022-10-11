@@ -54,6 +54,7 @@ import PermissionFormActionField from '@/views/perms/components/PermissionFormAc
 import { STATUS_MAP } from '../../const'
 export default {
   name: '',
+  inject: ['reload'],
   components: { GenericTicketDetail, IBox, Select2, PermissionFormActionField },
   props: {
     object: {
@@ -244,7 +245,7 @@ export default {
       return toSafeLocalDateStr(dataStr)
     },
     reloadPage() {
-      window.location.reload()
+      this.reload()
     },
     handleApprove() {
       if (this.object.approval_step === this.object.process_map.length) {

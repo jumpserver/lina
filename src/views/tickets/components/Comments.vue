@@ -70,6 +70,7 @@ import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'Comments',
+  inject: ['reload'],
   components: { IBox },
   props: {
     object: {
@@ -199,7 +200,7 @@ export default {
       )
     },
     reloadPage() {
-      window.location.reload()
+      this.reload()
     }
   }
 

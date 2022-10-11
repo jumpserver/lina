@@ -16,6 +16,7 @@ import { terminateSession } from '@/api/sessions'
 import { toSafeLocalDateStr } from '@/utils/common'
 export default {
   name: 'SessionDetailInfo',
+  inject: ['reload'],
   components: {
     DetailCard,
     QuickActions
@@ -49,7 +50,7 @@ export default {
                 const msg = vm.$t('sessions.TerminateTaskSendSuccessMsg')
                 vm.$message.success(msg)
                 window.setTimeout(function() {
-                  window.location.reload()
+                  this.reload()
                 }, 50000)
               })
             }

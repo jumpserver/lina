@@ -88,7 +88,7 @@ export default {
       return toSafeLocalDateStr(dataStr)
     },
     reloadPage() {
-      window.location.reload()
+      this.reload()
     }
   }
 }

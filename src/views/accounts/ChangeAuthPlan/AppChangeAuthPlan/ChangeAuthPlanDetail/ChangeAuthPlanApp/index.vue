@@ -16,6 +16,7 @@ import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormat
 
 export default {
   name: 'ChangeAuthPlanDatabase',
+  inject: ['reload'],
   components: {
     GenericListTable, RelationCard
   },
@@ -98,7 +99,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          window.location.reload()
+          this.reload()
           this.$refs.listTable.$refs.ListTable.reloadTable()
         }
       }
