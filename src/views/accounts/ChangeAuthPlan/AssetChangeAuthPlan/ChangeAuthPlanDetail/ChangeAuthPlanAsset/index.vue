@@ -93,7 +93,7 @@ export default {
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          window.location.reload()
+          this.$store.commit('common/reload')
         }
       },
       nodeRelationConfig: {
@@ -120,7 +120,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          window.location.reload()
+          this.$store.commit('common/reload')
         },
         performDelete: (item) => {
           const data = {

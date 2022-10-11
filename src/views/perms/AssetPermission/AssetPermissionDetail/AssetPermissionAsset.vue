@@ -93,7 +93,7 @@ export default {
           this.$message.success(this.$t('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           that.$refs.assetSelect.$refs.select2.clearSelected()
-          window.location.reload()
+          this.$store.commit('common/reload')
         }
       },
       nodeRelationConfig: {
