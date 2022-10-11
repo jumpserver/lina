@@ -2,7 +2,8 @@ import { optionUrlMeta } from '@/api/common'
 
 const getDefaultState = () => {
   return {
-    metaMap: {}
+    metaMap: {},
+    isRouterAlive: true
   }
 }
 
@@ -11,6 +12,12 @@ const state = getDefaultState()
 const mutations = {
   SET_URL_META: (state, { url, meta }) => {
     state.metaMap[url] = meta
+  },
+  reload: (state) => {
+    state.isRouterAlive = false
+    setTimeout(() => {
+      state.isRouterAlive = true
+    }, 0)
   }
 }
 
