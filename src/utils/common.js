@@ -302,3 +302,8 @@ export function groupedDropdownToCascader(group) {
 
 export { BASE_URL }
 
+export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
+  var iTop = (window.screen.height - 30 - iHeight) / 2
+  var iLeft = (window.screen.width - 10 - iWidth) / 2
+  window.open(url, name, 'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft)
+}
