@@ -72,7 +72,7 @@ export default {
   methods: {
     async setInitial() {
       const { defaultConfig } = this
-      const { node, platform } = this.$router?.query || {}
+      const { node, platform } = this.$route?.query || {}
       const nodesInitial = node || []
       const platformId = platform || 1
       const url = `/api/v1/assets/platforms/${platformId}/`

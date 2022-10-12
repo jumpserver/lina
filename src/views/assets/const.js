@@ -22,7 +22,7 @@ export const assetFieldsMeta = () => {
         ajax: {
           url: '/api/v1/assets/platforms/',
           transformOption: (item) => {
-            return { label: `${item.name}`, value: item.id }
+            return { label: item.name, value: item.id }
           }
         }
       }
