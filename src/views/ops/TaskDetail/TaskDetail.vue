@@ -108,7 +108,7 @@ export default {
               openTaskPage(value, 'ansible')
             }
             const title = this.$t('common.View')
-            return <a onClick={onClick} >{ title }</a>
+            return <a class='text-link' onClick={onClick} >{ title }</a>
           }
         }
       ]
