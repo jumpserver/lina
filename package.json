@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --mode staging",
     "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
@@ -32,7 +33,7 @@
     "element-ui": "2.13.2",
     "eslint-plugin-html": "^6.0.0",
     "install": "^0.13.0",
-    "jquery": "^3.5.0",
+    "jquery": "^3.6.1",
     "js-cookie": "2.2.0",
     "jsencrypt": "^3.2.1",
     "krry-transfer": "^1.7.3",

@@ -1,4 +1,2 @@
-import $ from 'jquery'
-window.$ = $
-window.jQuery = $
+import $ from 'jquery/dist/jquery.min.js'
 export default $

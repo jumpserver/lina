@@ -6,6 +6,7 @@
 import ListTable from '@/components/ListTable'
 import { ActionsFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AdhocExecutionHistory',
@@ -85,6 +86,14 @@ export default {
                   type: 'primary',
                   callback: function({ row, tableData }) {
                     return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: row.id }})
+                  }
+                },
+                {
+                  name: 'log',
+                  title: this.$t('ops.output'),
+                  type: 'info',
+                  callback: function({ row }) {
+                    openTaskPage(row.id, 'ansible')
                   }
                 }
               ]

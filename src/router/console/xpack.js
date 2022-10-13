@@ -1,6 +1,8 @@
 import empty from '@/layout/empty'
 import i18n from '@/i18n/i18n'
 
+const activateMenu = '/console/assets/assets'
+
 export default [
   {
     path: 'cloud',
@@ -20,7 +22,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.Cloud.CloudSync'),
-          activeMenu: '/console/assets/assets'
+          activeMenu: activateMenu
         }
       },
       {
@@ -71,6 +73,7 @@ export default [
             hidden: true,
             meta: {
               title: i18n.t('xpack.Cloud.AccountDetail'),
+              activeMenu: activateMenu,
               permissions: ['xpack.view_account']
             }
           }
@@ -121,7 +124,8 @@ export default [
             name: 'SyncInstanceTaskDetail',
             hidden: true,
             meta: {
-              title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail')
+              title: i18n.t('xpack.Cloud.SyncInstanceTaskDetail'),
+              activeMenu: activateMenu
             }
           }
         ]

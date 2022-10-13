@@ -30,7 +30,7 @@ async function changeOrg(org) {
     if (index !== -1) {
       location.href = path.substring(0, index)
     }
-    setTimeout(() => location.reload(), 400)
+    setTimeout(() => store.commit('common/reload'), 400)
   }
 }
 

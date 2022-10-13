@@ -88,7 +88,7 @@ export default {
       return toSafeLocalDateStr(dataStr)
     },
     reloadPage() {
-      window.location.reload()
+      this.$store.commit('common/reload')
     }
   }
 }

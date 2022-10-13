@@ -49,7 +49,7 @@ export default {
                 const msg = vm.$t('sessions.TerminateTaskSendSuccessMsg')
                 vm.$message.success(msg)
                 window.setTimeout(function() {
-                  window.location.reload()
+                  this.$store.commit('common/reload')
                 }, 50000)
               })
             }
