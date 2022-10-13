@@ -103,6 +103,7 @@
     "CreateDevice": "Create asset - Network device",
     "CreateCloud": "Create asset - Cloud platform",
     "CreateWeb": "Create asset - web",
+    "Privileged": "Privileged",
     "SelectPlatforms": "Select platforms",
     "AppList": "Application list",
     "AssociateSystemUsers": "Associate system users",

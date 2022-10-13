@@ -109,6 +109,7 @@
     "CreateDevice": "创建资产-网络设备",
     "CreateCloud": "创建资产-云平台",
     "CreateWeb": "创建资产-web",
+    "Privileged": "有特权",
     "SelectPlatforms": "选择平台",
     "AppList": "应用列表",
     "AssociateSystemUsers": "关联系统用户",
