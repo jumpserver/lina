@@ -108,6 +108,7 @@
     "CreateDevice": "資産の作成 - ネットワークデバイス",
     "CreateCloud": "資産の作成 - クラウドプラットフォーム",
     "CreateWeb": "資産の作成 - ウェブ",
+    "Privileged": "特権のある",
     "SelectPlatforms": "プラットフォームを選択",
     "AppList": "アプリケーションリスト",
     "AssociateSystemUsers": "関連システムユーザー",

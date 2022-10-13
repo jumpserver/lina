@@ -77,12 +77,12 @@ export default {
           resource: 'account'
         },
         columns: [
-          'hostname', 'ip', 'username', 'version', 'connectivity',
+          'hostname', 'ip', 'username', 'version', 'privlieged', 'connectivity',
           'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['username', 'actions'],
-          default: ['hostname', 'ip', 'username', 'version', 'actions']
+          default: ['hostname', 'ip', 'username', 'version', 'privlieged', 'actions']
         },
         columnsMeta: {
           hostname: {
@@ -115,6 +115,9 @@ export default {
           },
           version: {
             width: '70px'
+          },
+          privlieged: {
+            label: this.$t('assets.Privileged')
           },
           connectivity: connectivityMeta,
           actions: {
