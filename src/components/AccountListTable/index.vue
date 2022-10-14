@@ -61,6 +61,10 @@ export default {
     asset: {
       type: Object,
       default: null
+    },
+    columns: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -219,6 +223,9 @@ export default {
     }
   },
   mounted() {
+    if (this.columns.length > 0) {
+      this.tableConfig.columns = this.columns
+    }
     if (this.otherActions) {
       const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
       for (const item of this.otherActions) {
