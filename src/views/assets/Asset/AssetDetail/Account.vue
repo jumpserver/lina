@@ -9,6 +9,7 @@
           :has-import="false"
           :has-clone="false"
           :has-left-actions="true"
+          :columns="assetAccountColumns"
         />
       </el-col>
       <el-col :md="8" :sm="24">
@@ -38,6 +39,10 @@ export default {
   data() {
     return {
       assetUserUrl: `/api/v1/assets/accounts/?asset=${this.object.id}`,
+      assetAccountColumns: [
+        'username', 'version', 'privlieged', 'connectivity',
+        'date_created', 'date_updated', 'actions'
+      ],
       quickActions: [
         {
           title: this.$t('assets.TestAssetsConnective'),
