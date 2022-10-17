@@ -15,7 +15,7 @@ export const platformFieldsMeta = (vm) => {
         'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
         'create_account_enabled', 'create_account_method',
-        'change_password_enabled', 'change_password_method',
+        'change_secret_enabled', 'change_secret_method',
         'verify_account_enabled', 'verify_account_method'
       ],
       fieldsMeta: {
@@ -26,7 +26,7 @@ export const platformFieldsMeta = (vm) => {
         ping_method: {},
         gather_facts_method: {},
         create_account_method: {},
-        change_password_method: {},
+        change_secret_method: {},
         verify_account_method: {}
       }
     },
@@ -110,5 +110,6 @@ export const setAutomations = (vm) => {
     autoFieldsMeta[itemMethodKey].options = methods.map(method => {
       return { value: method['id'], label: method['name'] }
     })
+    _.set(initial, `${itemMethodKey}`, autoFieldsMeta[itemMethodKey].options[0]?.value)
   }
 }

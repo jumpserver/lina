@@ -102,6 +102,11 @@ export default {
   watch: {
     choices: {
       handler(value) {
+        if (!this.settingReadonly) {
+          this.value[0].primary = true
+          this.value[0].default = true
+          this.value[0].required = true
+        }
         this.setDefaultItems(value)
       }
     },
@@ -115,12 +120,16 @@ export default {
   },
   mounted() {
     this.setDefaultItems(this.choices)
+    console.log('CHoices: ', this.choices)
   },
   methods: {
     handleDelete(index) {
       this.items = this.items.filter((value, i) => {
         return i !== index
       })
+    },
+    canDelete(item) {
+      return this.item.primary || this.item.required
     },
     handleAdd(index) {
       this.items.push({ ...this.remainProtocols[0] })
