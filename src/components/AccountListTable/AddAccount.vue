@@ -35,7 +35,7 @@ export default {
     },
     asset: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     account: {
       type: Object,
@@ -77,10 +77,11 @@ export default {
         })
     },
     editAccount(form) {
-      const data = { asset: this.asset.id, ...form }
-      this.$axios.patch(`/api/v1/assets/accounts/${this.asset.id}`, data).then(() => {
+      const data = { ...form }
+      this.$axios.patch(`/api/v1/assets/accounts/${this.account.id}/`, data).then(() => {
         this.iVisible = false
         this.$emit('add', true)
+        this.$message.success(this.$t('common.updateSuccessMsg'))
       })
     }
   }
