@@ -52,6 +52,7 @@ export const DATABASE_CATEGORY = 'db'
 export const SQLSERVER = 'sqlserver'
 export const REDIS = 'redis'
 export const MONGODB = 'mongodb'
+export const CLICKHOUSE = 'clickhouse'
 
 export const DATABASE = [
   {
@@ -86,6 +87,13 @@ export const DATABASE = [
   {
     name: SQLSERVER,
     title: i18n.t(`applications.applicationsType.${SQLSERVER}`),
+    type: 'primary',
+    category: DATABASE_CATEGORY,
+    has: hasLicence
+  },
+  {
+    name: CLICKHOUSE,
+    title: i18n.t(`applications.applicationsType.${CLICKHOUSE}`),
     type: 'primary',
     category: DATABASE_CATEGORY,
     has: hasLicence
