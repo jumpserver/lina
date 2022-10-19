@@ -10,7 +10,10 @@ export default {
   components: { BaseAssetCreateUpdate },
   data() {
     return {
-      url: '/api/v1/assets/webs/'
+      url: '/api/v1/assets/webs/',
+      addFields: [
+        [this.$t('common.Selector'), ['username_selector', 'password_selector', 'submit_selector']]
+      ]
     }
   }
 }

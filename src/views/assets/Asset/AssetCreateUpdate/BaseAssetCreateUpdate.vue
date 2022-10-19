@@ -31,14 +31,14 @@ export default {
         updateSuccessNextRoute: { name: 'AssetList' },
         hasDetailInMsg: false,
         fields: [
-          [this.$t('common.Basic'), ['name', 'address', 'platform', 'domain']],
-          [this.$t('assets.Protocols'), ['protocols']],
-          [this.$t('assets.Node'), ['nodes']],
+          [this.$t('common.Basic'), ['name', 'address', 'platform']],
+          [this.$t('assets.Network'), ['domain', 'protocols']],
           [this.$t('assets.Account'), ['accounts']],
+          [this.$t('assets.Node'), ['nodes']],
           [this.$t('assets.Label'), ['labels']],
           [this.$t('common.Other'), ['is_active', 'comment']]
         ],
-        fieldsMeta: assetFieldsMeta()
+        fieldsMeta: assetFieldsMeta(this)
       }
     }
   },
@@ -48,14 +48,13 @@ export default {
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
-      if (addFields.length > 0) {
-        const defaultFields = Object.fromEntries(config.fields)
-        for (const [key, value] of addFields) {
-          if (defaultFields.hasOwnProperty(key)) {
-            defaultFields[key] = new Set([...defaultFields[key], ...(value || [])])
-          }
+      for (const [groupName, adds] of addFields) {
+        const group = config.fields.find(([name]) => name === groupName)
+        if (group) {
+          group[1] = group[1].concat(adds)
+        } else {
+          config.fields.splice(1, 0, [groupName, adds])
         }
-        config.fields = Object.entries(defaultFields)
       }
       return config
     }
@@ -87,8 +86,8 @@ export default {
     },
     async setPlatformConstrains() {
       const { platform } = this
-      this.$set(this.defaultConfig.fieldsMeta.protocols.el, 'choices', (platform['protocols'] || []))
-      this.$set(this.defaultConfig.fieldsMeta.accounts.el, 'protocols', (platform['protocols'] || []))
+      this.defaultConfig.fieldsMeta.protocols.el.choices.splice(0, 0, ...platform.protocols)
+      this.defaultConfig.fieldsMeta.accounts.el.platform = platform
       const hiddenCheckFields = ['protocols', 'domain']
 
       for (const field of hiddenCheckFields) {

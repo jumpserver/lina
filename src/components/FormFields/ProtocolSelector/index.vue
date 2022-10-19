@@ -158,7 +158,7 @@ export default {
 }
 
 .el-select {
-  width: 100px;
+  max-width: 120px;
 }
 
 .input-with-select {
@@ -171,7 +171,7 @@ export default {
 }
 
 .el-select ::v-deep .el-input__inner {
-  width: 100px;
+  width: 110px;
 }
 
 .input-button {

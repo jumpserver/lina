@@ -4,15 +4,31 @@ import AssetAccounts from '@/components/FormFields/AssetAccounts'
 import rules from '@/components/DataForm/rules'
 import { Select2 } from '@/components/FormFields'
 
-export const assetFieldsMeta = () => {
+export const assetFieldsMeta = (vm) => {
+  const platformProtocols = []
+  const secretTypes = []
   return {
     address: {},
     protocols: {
       component: ProtocolSelector,
-      on: {},
       el: {
         settingReadonly: true,
-        choices: []
+        choices: platformProtocols
+      },
+      on: {
+        input: ([value]) => {
+          const protocolSecretTypes = platformProtocols.reduce((pre, cur) => {
+            pre[cur.name] = cur['secret_types']
+            return pre
+          }, {})
+          const _secretTypes = value.map(v => v.name).reduce((pre, name) => {
+            if (protocolSecretTypes[name]) {
+              return pre.concat(protocolSecretTypes[name])
+            }
+            return pre
+          }, [])
+          secretTypes.splice(0, secretTypes.length, ..._secretTypes)
+        }
       }
     },
     platform: {
@@ -42,7 +58,7 @@ export const assetFieldsMeta = () => {
       component: AssetAccounts,
       label: '',
       el: {
-        protocols: [],
+        platform: {},
         default: []
       }
     },

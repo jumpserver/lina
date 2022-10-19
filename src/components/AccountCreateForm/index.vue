@@ -1,5 +1,5 @@
 <template>
-  <AutoDataForm v-bind="$data" @submit="confirm" />
+  <AutoDataForm v-loading="loading" v-bind="$data" @submit="confirm" />
 </template>
 
 <script>
@@ -11,13 +11,9 @@ export default {
     AutoDataForm
   },
   props: {
-    protocols: {
-      type: Array,
-      default: () => ([])
-    },
-    accounts: {
-      type: Array,
-      default: () => ([])
+    platform: {
+      type: Object,
+      default: () => ({})
     },
     account: {
       type: Object,
@@ -26,6 +22,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       url: '/api/v1/assets/accounts/',
       form: this.account || { },
       fields: [
@@ -45,12 +42,12 @@ export default {
           }
         },
         password: {
-          label: 'Password',
+          label: this.$t('assets.Password'),
           component: UpdateToken,
           hidden: (formValue) => formValue['secret_type'] !== 'password'
         },
         ssh_key: {
-          label: 'SSH private key',
+          label: this.$t('assets.SSHPrivateKey'),
           el: {
             type: 'textarea',
             rows: 4
@@ -72,7 +69,7 @@ export default {
         },
         api_key: {
           id: 'api_key',
-          label: 'Secret key',
+          label: this.$t('assets.SecretKey'),
           el: {
             type: 'textarea',
             rows: 4
@@ -80,26 +77,48 @@ export default {
           hidden: (formValue) => formValue['secret_type'] !== 'api_key'
         },
         secret_type: {
-          label: 'Secret Type',
           type: 'radio-group',
           options: [
-            { label: 'Password', value: 'password' },
-            { label: 'SSH key', value: 'ssh_key' },
-            { label: 'Token', value: 'token' },
-            { label: 'Api key', value: 'api_key' }
+            { label: 'Password', value: 'password' }
           ]
+        },
+        push_now: {
+          hidden: () => {
+            return !this.platform.automation['push_account_enabled']
+          }
         }
       },
       hasSaveContinue: false
     }
   },
   mounted() {
-    console.log('protocols: ', this.protocols)
-    console.log('this.account: ', this.account)
+    this.setSecretTypes().then(() => {
+      this.loading = false
+    })
   },
   methods: {
+    async setSecretTypes() {
+      const options = [
+        { label: 'Password', value: 'password' },
+        { label: 'SSH key', value: 'ssh_key' },
+        { label: 'Token', value: 'token' },
+        { label: 'Api key', value: 'api_key' }
+      ]
+      const secretTypes = []
+      this.platform.protocols.forEach(p => {
+        secretTypes.push(...p['secret_types'])
+      })
+      if (!this.form.secret_type) {
+        this.form.secret_type = secretTypes[0]
+      }
+      const supportOptions = options.filter(item => {
+        return secretTypes.indexOf(item.value) > -1
+      })
+      if (supportOptions.length > 0) {
+        this.fieldsMeta.secret_type.options = supportOptions
+      }
+    },
     confirm(form) {
-      console.log('Account form: accout is: ', this.account)
       if (this.account?.name) {
         this.$emit('edit', form)
       } else {

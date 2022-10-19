@@ -31,7 +31,7 @@
       width="70%"
     >
       <AccountCreateForm
-        :protocols="protocols"
+        :platform="platform"
         :account="account"
         @add="addAccount"
         @edit="editAccount"
@@ -62,9 +62,9 @@ export default {
     AccountCreateForm
   },
   props: {
-    protocols: {
-      type: Array,
-      default: () => []
+    platform: {
+      type: Object,
+      default: () => ({})
     },
     value: {
       type: [Array],
@@ -146,7 +146,6 @@ export default {
       this.templateTable.visible = true
     },
     onSelectTemplate() {
-
     }
   }
 }

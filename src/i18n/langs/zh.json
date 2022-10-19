@@ -96,6 +96,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Network": "网络",
     "All": "所有",
     "Cloud": "云服务",
     "CloudPlatform": "云平台",
@@ -278,6 +279,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Selector": "选择器",
     "NeedAddAppsOrSystemUserErrMsg": "需要添加应用或系统用户",
     "VerificationCodeSent": "验证码已发送",
     "SendVerificationCode": "发送验证码",
