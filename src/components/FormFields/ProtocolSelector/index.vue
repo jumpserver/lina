@@ -24,7 +24,7 @@
           icon="el-icon-minus"
           style="flex-shrink: 0;"
           size="mini"
-          :disabled="items.length === 1"
+          :disabled="cannotDisable(item)"
           @click="handleDelete(index)"
         />
         <el-button
@@ -32,8 +32,8 @@
           type="primary"
           icon="el-icon-plus"
           style="flex-shrink: 0;"
-          :disabled="remainProtocols.length === 0 || !item.port"
           size="mini"
+          :disabled="remainProtocols.length === 0 || !item.port"
           @click="handleAdd(index)"
         />
       </div>
@@ -102,11 +102,6 @@ export default {
   watch: {
     choices: {
       handler(value) {
-        if (!this.settingReadonly) {
-          this.value[0].primary = true
-          this.value[0].default = true
-          this.value[0].required = true
-        }
         this.setDefaultItems(value)
       }
     },
@@ -120,7 +115,8 @@ export default {
   },
   mounted() {
     this.setDefaultItems(this.choices)
-    console.log('CHoices: ', this.choices)
+    console.log('Choices: ', this.choices)
+    console.log('Value: ', this.value)
   },
   methods: {
     handleDelete(index) {
@@ -128,8 +124,8 @@ export default {
         return i !== index
       })
     },
-    canDelete(item) {
-      return this.item.primary || this.item.required
+    cannotDisable(item) {
+      return item.primary || item.required
     },
     handleAdd(index) {
       this.items.push({ ...this.remainProtocols[0] })
@@ -140,11 +136,14 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      let defaults = this.value
-      if (defaults.length === 0 && choices.length !== 0) {
-        defaults = choices
-      }
-      this.items = defaults
+      const defaults = choices.filter(item => item.required || item.primary || item.default)
+      console.log('defaults1: ', defaults)
+      console.log('this value: ', this.value)
+      const notInDefaults = this.value.filter(item => {
+        return !defaults.find(d => d.name === item.name)
+      })
+      console.log('Not defaults: ', notInDefaults)
+      this.items = [...defaults, ...notInDefaults]
     },
     onSettingClick(item) {
       this.settingItem = item

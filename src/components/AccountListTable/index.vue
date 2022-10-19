@@ -20,7 +20,7 @@
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, DisplayFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter } from '@/components/TableFormatters'
 import ShowSecretInfo from './ShowSecretInfo'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import AddAccount from './AddAccount'
@@ -81,18 +81,18 @@ export default {
           resource: 'account'
         },
         columns: [
-          'hostname', 'ip', 'username', 'version', 'privlieged', 'connectivity',
-          'date_created', 'date_updated', 'actions'
+          'asset', 'username', 'version', 'privileged',
+          'secret_type', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['username', 'actions'],
-          default: ['hostname', 'ip', 'username', 'version', 'privlieged', 'actions']
+          default: ['hostname', 'ip', 'username', 'version', 'privileged', 'actions']
         },
         columnsMeta: {
-          hostname: {
-            label: this.$t('assets.Hostname'),
+          asset: {
+            label: this.$t('assets.Asset'),
             showOverflowTooltip: true,
-            formatter: function(row, column, cellValue, index) {
+            formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
                 params: { id: row.asset.id }
@@ -104,24 +104,17 @@ export default {
               }
             }
           },
-          ip: {
-            width: '120px',
-            label: this.$t('assets.ip'),
-            formatter: function(row, column, cellValue, index) {
-              return <span>{ row.asset.ip }</span>
-            }
-          },
           username: {
             showOverflowTooltip: true
-          },
-          systemuser: {
-            formatter: DisplayFormatter
           },
           version: {
             width: '70px'
           },
-          privlieged: {
-            label: this.$t('assets.Privileged')
+          privileged: {
+            label: this.$t('assets.Privileged'),
+            formatterArgs: {
+              showFalse: false
+            }
           },
           connectivity: connectivityMeta,
           actions: {
@@ -244,6 +237,8 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-
+<style lang='scss' scoped>
+.cell a {
+  color: var(--color-info);
+}
 </style>

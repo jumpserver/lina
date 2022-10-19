@@ -14,6 +14,7 @@ import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter'
 import ChoicesDisplayFormatter from './ChoicesDisplayFormatter'
+import BooleanFormatter from './BooleanFormatter'
 
 export default {
   DetailFormatter,
@@ -31,7 +32,8 @@ export default {
   StatusFormatter,
   TagsFormatter,
   ObjectRelatedFormatter,
-  ChoicesDisplayFormatter
+  ChoicesDisplayFormatter,
+  BooleanFormatter
 }
 
 export {

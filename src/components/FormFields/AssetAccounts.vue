@@ -1,5 +1,8 @@
 <template>
-  <div class="accounts">
+  <div v-if="isUpdate(this)">
+    在资产详情中更新账号信息
+  </div>
+  <div v-else class="accounts">
     <el-table :data="accounts" style="width: 100%">
       <el-table-column prop="username" label="用户名" width="180" />
       <el-table-column prop="privileged" label="特权账号">
@@ -66,6 +69,12 @@ export default {
     value: {
       type: [Array],
       default: () => []
+    },
+    isUpdate: {
+      type: Function,
+      default: (vm) => {
+        return vm.$route.params.id
+      }
     }
   },
   data() {
