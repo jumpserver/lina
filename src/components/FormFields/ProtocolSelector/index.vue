@@ -137,12 +137,9 @@ export default {
     },
     setDefaultItems(choices) {
       const defaults = choices.filter(item => item.required || item.primary || item.default)
-      console.log('defaults1: ', defaults)
-      console.log('this value: ', this.value)
       const notInDefaults = this.value.filter(item => {
         return !defaults.find(d => d.name === item.name)
       })
-      console.log('Not defaults: ', notInDefaults)
       this.items = [...defaults, ...notInDefaults]
     },
     onSettingClick(item) {
