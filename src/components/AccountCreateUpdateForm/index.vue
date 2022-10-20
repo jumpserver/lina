@@ -1,5 +1,9 @@
 <template>
-  <AutoDataForm v-loading="loading" v-bind="$data" @submit="confirm" />
+  <AutoDataForm
+    v-bind="$data"
+    @submit="confirm"
+    @afterRemoteMeta="afterGetRemoteMeta"
+  />
 </template>
 
 <script>
@@ -13,7 +17,7 @@ export default {
   props: {
     platform: {
       type: Object,
-      default: () => ({})
+      required: true
     },
     account: {
       type: Object,
@@ -23,17 +27,30 @@ export default {
   data() {
     return {
       loading: true,
+      usernameChanged: false,
       url: '/api/v1/assets/accounts/',
       form: this.account || { },
       fields: [
-        ['Basic', ['username', 'privileged']],
-        ['Auth', ['secret_type', 'password', 'ssh_key', 'token', 'api_key', 'passphrase']],
-        ['Other', ['push_now', 'name', 'comment']]
+        [this.$t('common.Basic'), ['name', 'username', 'privileged']],
+        [this.$t('assets.Secret'), ['secret_type', 'password', 'ssh_key', 'token', 'api_key', 'passphrase']],
+        [this.$t('common.Other'), ['push_now', 'comment']]
       ],
       defaultPrivilegedAccounts: ['root', 'administrator'],
       fieldsMeta: {
+        name: {
+          on: {
+            input: ([value], updateForm) => {
+              if (!this.usernameChanged) {
+                updateForm({ username: value })
+              }
+            }
+          }
+        },
         username: {
           on: {
+            input: ([value], updateForm) => {
+              this.usernameChanged = true
+            },
             change: ([value], updateForm) => {
               if (this.defaultPrivilegedAccounts.indexOf(value.toLowerCase()) > -1) {
                 updateForm({ privileged: true })
@@ -44,20 +61,20 @@ export default {
         password: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
-          hidden: (formValue) => formValue['secret_type'] !== 'password'
+          hidden: (formValue) => formValue.secret_type !== 'password'
         },
         ssh_key: {
-          label: this.$t('assets.SSHPrivateKey'),
+          label: this.$t('assets.PrivateKey'),
           el: {
             type: 'textarea',
             rows: 4
           },
-          hidden: (formValue) => formValue['secret_type'] !== 'ssh_key'
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         passphrase: {
           label: 'Passphrase',
           component: UpdateToken,
-          hidden: (formValue) => formValue['secret_type'] !== 'ssh_key'
+          hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         token: {
           label: 'Token',
@@ -65,7 +82,7 @@ export default {
             type: 'textarea',
             rows: 4
           },
-          hidden: (formValue) => formValue['secret_type'] !== 'token'
+          hidden: (formValue) => formValue.secret_type !== 'token'
         },
         api_key: {
           id: 'api_key',
@@ -74,13 +91,11 @@ export default {
             type: 'textarea',
             rows: 4
           },
-          hidden: (formValue) => formValue['secret_type'] !== 'api_key'
+          hidden: (formValue) => formValue.secret_type !== 'api_key'
         },
         secret_type: {
           type: 'radio-group',
-          options: [
-            { label: 'Password', value: 'password' }
-          ]
+          options: []
         },
         push_now: {
           hidden: () => {
@@ -92,18 +107,10 @@ export default {
     }
   },
   mounted() {
-    this.setSecretTypes().then(() => {
-      this.loading = false
-    })
   },
   methods: {
-    async setSecretTypes() {
-      const options = [
-        { label: 'Password', value: 'password' },
-        { label: 'SSH key', value: 'ssh_key' },
-        { label: 'Token', value: 'token' },
-        { label: 'Api key', value: 'api_key' }
-      ]
+    afterGetRemoteMeta(meta) {
+      const choices = meta.secret_type.choices
       const secretTypes = []
       this.platform.protocols.forEach(p => {
         secretTypes.push(...p['secret_types'])
@@ -111,12 +118,9 @@ export default {
       if (!this.form.secret_type) {
         this.form.secret_type = secretTypes[0]
       }
-      const supportOptions = options.filter(item => {
+      this.fieldsMeta.secret_type.options = choices.filter(item => {
         return secretTypes.indexOf(item.value) > -1
       })
-      if (supportOptions.length > 0) {
-        this.fieldsMeta.secret_type.options = supportOptions
-      }
     },
     confirm(form) {
       if (this.account?.name) {
@@ -124,9 +128,6 @@ export default {
       } else {
         this.$emit('add', form)
       }
-    },
-    hasProtocol(name) {
-      return this.protocols.find(item => item.name === name)
     }
   }
 }

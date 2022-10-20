@@ -1,7 +1,7 @@
 import Link from './Link'
 import PasswordInput from './PasswordInput'
 import Select2 from './Select2'
-import Swicher from './Swicher'
+import Switcher from './Switcher'
 import UploadField from './UploadField'
 import UploadKey from './UploadKey'
 import UserPassword from './UserPassword'
@@ -13,33 +13,33 @@ import NestedObjectSelect2 from './NestedObjectSelect2'
 import DatetimeRangePicker from './DatetimeRangePicker'
 
 export default {
-  DatetimeRangePicker,
-  NestedObjectSelect2,
+  Text,
   Link,
-  PasswordInput,
+  Switcher,
   Select2,
-  Swicher,
   UploadKey,
+  JsonEditor,
+  UpdateToken,
   UploadField,
   UserPassword,
+  PasswordInput,
   WeekCronSelect,
-  UpdateToken,
-  JsonEditor,
-  Text
+  NestedObjectSelect2,
+  DatetimeRangePicker
 }
 
 export {
-  DatetimeRangePicker,
-  NestedObjectSelect2,
+  Text,
   Link,
-  PasswordInput,
+  Switcher,
   Select2,
-  Swicher,
   UploadKey,
+  JsonEditor,
+  UpdateToken,
   UploadField,
   UserPassword,
+  PasswordInput,
   WeekCronSelect,
-  UpdateToken,
-  JsonEditor,
-  Text
+  NestedObjectSelect2,
+  DatetimeRangePicker
 }

@@ -96,6 +96,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "PrivateKey": "密钥",
+    "Secret": "密码",
     "Network": "网络",
     "All": "所有",
     "Cloud": "云服务",

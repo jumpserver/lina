@@ -17,6 +17,10 @@ export default {
     addFields: {
       type: Array,
       default: () => []
+    },
+    addFieldsMeta: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -44,7 +48,7 @@ export default {
   },
   computed: {
     iConfig() {
-      const { url, addFields, defaultConfig } = this
+      const { url, addFields, addFieldsMeta, defaultConfig } = this
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
@@ -54,6 +58,14 @@ export default {
           group[1] = group[1].concat(adds)
         } else {
           config.fields.splice(1, 0, [groupName, adds])
+        }
+      }
+
+      for (const [name, meta] of Object.entries(addFieldsMeta)) {
+        if (config.fieldsMeta[name]) {
+          config.fieldsMeta[name] = Object.assign(config.fieldsMeta[name], meta)
+        } else {
+          config.fieldsMeta[name] = meta
         }
       }
       return config

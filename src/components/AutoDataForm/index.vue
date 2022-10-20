@@ -76,13 +76,15 @@ export default {
         data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       }
       this.remoteMeta = data.actions[this.method.toUpperCase()] || {}
+      this.$emit('afterRemoteMeta', this.remoteMeta)
       this.generateColumns()
+      this.$emit('afterGenerateColumns', this.totalFields)
       this.cleanFormValue()
       this.loading = false
       console.log('Loading: ', this.groups)
     },
     generateColumns() {
-      const generator = new FormFieldGenerator()
+      const generator = new FormFieldGenerator(this.$emit)
       this.totalFields = generator.generateFields(this.fields, this.fieldsMeta, this.remoteMeta)
       this.groups = generator.groups
       this.$log.debug('Total fields: ', this.totalFields)

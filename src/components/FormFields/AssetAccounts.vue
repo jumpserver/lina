@@ -52,7 +52,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import AccountCreateForm from '@/components/AccountCreateForm'
+import AccountCreateForm from '@/components/AccountCreateUpdateForm'
 import AutoDataTable from '@/components/AutoDataTable'
 export default {
   name: 'AssetAccounts',
