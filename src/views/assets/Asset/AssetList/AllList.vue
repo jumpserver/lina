@@ -25,7 +25,7 @@ import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam, setRouterQuery } from '@/utils/common'
 
 export default {
   components: {
@@ -103,6 +103,7 @@ export default {
         url = setUrlParam(url, 'asset', assetId)
       }
       this.$set(this.tableConfig, 'url', url)
+      setRouterQuery(this)
     }
   }
 }

@@ -11,7 +11,7 @@
     <AddAccount
       v-if="showAddDialog"
       :visible.sync="showAddDialog"
-      :asset="asset"
+      :asset="iAsset"
       :account="account"
       @add="addAccountSuccess"
     />
@@ -26,6 +26,7 @@ import UpdateSecretInfo from './UpdateSecretInfo'
 import AddAccount from './AddAccount'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
+import { hasUUID } from '@/utils/common'
 
 export default {
   name: 'AccountListTable',
@@ -73,6 +74,7 @@ export default {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showAddDialog: false,
+      iAsset: this.asset,
       account: {},
       tableConfig: {
         url: this.url,
@@ -213,6 +215,12 @@ export default {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
       this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
+    },
+    '$route.query.assets': {
+      immediate: true,
+      handler() {
+        this.hasAccountPermission()
+      }
     }
   },
   mounted() {
@@ -232,6 +240,14 @@ export default {
     },
     addAccountSuccess() {
       this.$refs.ListTable.reloadTable()
+    },
+    hasAccountPermission() {
+      const { path, query } = this.$route
+      if (!hasUUID(path)) {
+        const hasPerm = this.$hasPerm('assets.add_account') && !!query.assets
+        this.iAsset = { id: query.assets }
+        this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
+      }
     }
   }
 }

@@ -209,6 +209,19 @@ export function setUrlParam(url, name, value) {
   return url
 }
 
+export function setRouterQuery(vm, url = '') {
+  url = url || vm.tableConfig.url
+  const params = url.split('?')[1]
+  const query = Object.fromEntries(new URLSearchParams(params))
+  const newQuery = {
+    ...vm.$route.query,
+    ...query
+  }
+  vm.$nextTick(() => {
+    vm.$router.replace({ query: newQuery })
+  })
+}
+
 export function getDayFuture(days, now) {
   if (!now) {
     now = new Date()
