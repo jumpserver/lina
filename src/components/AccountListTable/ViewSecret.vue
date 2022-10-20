@@ -17,17 +17,17 @@
     >
       <div>
         <el-form label-position="right" label-width="80px" :model="authInfo">
-          <el-form-item :label="this.$t('assets.Name')">
-            <el-input v-model="account['asset_name']" readonly />
+          <el-form-item :label="this.$tc('assets.Name')">
+            <el-input v-model="account['name']" readonly />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.Username')">
+          <el-form-item :label="this.$tc('assets.Username')">
             <el-input v-model="account['username']" readonly />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.Password')">
-            <el-input v-model="authInfo.password" type="password" show-password />
+          <el-form-item v-if="account['secret_type'] === 'password'" :label="this.$tc('assets.Password')">
+            <el-input v-model="authInfo.secret" type="password" show-password />
           </el-form-item>
-          <el-form-item :label="this.$t('users.SSHKey')">
-            <el-input v-model="authInfo['private_key']" class="item-textarea" type="textarea" show-password />
+          <el-form-item v-else :label="this.$tc('assets.Key')">
+            <el-input v-model="authInfo.secret" type="textarea" :rows="10" />
           </el-form-item>
         </el-form>
       </div>
@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      dialogTitle: this.$t('common.ViewSecret'),
+      dialogTitle: this.$tc('common.ViewSecret'),
       authInfo: {},
       showAuthInfo: false,
       url: `/api/v1/assets/account-secrets/${this.account.id}/`

@@ -1,7 +1,7 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
+    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
       :visible.sync="showUpdateSecretDialog"
@@ -21,7 +21,7 @@
 <script>
 import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter } from '@/components/TableFormatters'
-import ShowSecretInfo from './ShowSecretInfo'
+import ViewSecret from './ViewSecret'
 import UpdateSecretInfo from './UpdateSecretInfo'
 import AddAccount from './AddAccount'
 import { connectivityMeta } from './const'
@@ -33,7 +33,7 @@ export default {
   components: {
     ListTable,
     UpdateSecretInfo,
-    ShowSecretInfo,
+    ViewSecret,
     AddAccount
   },
   props: {
@@ -130,7 +130,7 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_assetaccountsecret'),
+                  can: this.$hasPerm('assets.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.account = row
@@ -168,7 +168,7 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
-                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('assets.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
                     vm.showAddDialog = false
@@ -233,6 +233,8 @@ export default {
         actionColumn.formatterArgs.extraActions.push(item)
       }
     }
+
+    console.log('Has perm: ', this.$hasPerm('assets.change_account'))
   },
   methods: {
     onUpdateAuthDone(account) {

@@ -13,7 +13,6 @@
     <AccountCreateUpdateForm
       v-if="!loading"
       :platform="platform"
-      :protocols="protocols"
       :account="account"
       @add="addAccount"
       @edit="editAccount"
@@ -41,11 +40,7 @@ export default {
     },
     account: {
       type: Object,
-      default: () => ({
-        name: '',
-        username: '',
-        secret: ''
-      })
+      default: () => ({})
     }
   },
   data() {
