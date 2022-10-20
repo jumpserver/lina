@@ -150,7 +150,12 @@ export default {
       const route = _.capitalize(platform.category.value) + 'Create' || 'HostCreate'
       this.addToRecentPlatforms(platform)
       this.iVisible = false
-      this.$router.push({ name: route, query: { platform: platform.id }})
+      const query = {
+        node: this.$route.query?.node || '',
+        platform: platform.id
+      }
+
+      this.$router.push({ name: route, query })
     }
   }
 }
