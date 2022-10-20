@@ -83,7 +83,7 @@ export default {
     async setInitial() {
       const { defaultConfig } = this
       const { node, platform } = this.$route?.query || {}
-      const nodesInitial = node || []
+      const nodesInitial = node ? [node] : []
       const platformId = platform || 1
       const url = `/api/v1/assets/platforms/${platformId}/`
       this.platform = await this.$axios.get(url)
