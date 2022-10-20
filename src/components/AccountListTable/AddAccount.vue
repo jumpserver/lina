@@ -67,14 +67,13 @@ export default {
   methods: {
     addAccount(form) {
       const data = { asset: this.asset.id, ...form }
-      this.$axios.post(`/api/v1/assets/accounts/`, data)
-        .then(() => {
-          this.iVisible = false
-          this.$emit('add', true)
-        })
-        .catch(() => {
-          this.$message.error(this.$tc('common.createErrorMsg'))
-        })
+      this.$axios.post(`/api/v1/assets/accounts/`, data).then(() => {
+        this.iVisible = false
+        this.$emit('add', true)
+        this.$message.success(this.$t('common.createSuccessMsg'))
+      }).catch(() => {
+        this.$message.error(this.$tc('common.createErrorMsg'))
+      })
     },
     editAccount(form) {
       const data = { ...form }
