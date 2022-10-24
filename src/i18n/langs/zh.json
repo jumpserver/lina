@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "HistoryPassword": "历史密码",
+    "PasswordRecord": "密码记录",
     "AccountHistableHelpMessage": "记录当前账号的历史版本",
     "PleaseClickLeftAssetToViewAssetAccount": "资产账号列表，点击左侧资产进行查看",
     "PleaseClickLeftApplicationToViewApplicationAccount": "应用账号列表，点击左侧应用进行查看",

@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "HistoryPassword": "履歴パスワード",
+    "PasswordRecord": "パスワードレコード",
     "AccountHistableHelpMessage": "現在のアカウントの履歴バージョンを記録する",
     "PleaseClickLeftAssetToViewAssetAccount": "資産のアカウントのリスト、左側の資産をクリックして表示します",
     "PleaseClickLeftApplicationToViewApplicationAccount": "アカウントのリストを適用して、左側のアプリケーションをクリックして表示します",

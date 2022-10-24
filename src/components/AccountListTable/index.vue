@@ -15,6 +15,11 @@
       :account="account"
       @add="addAccountSuccess"
     />
+    <PasswordHistoryDialog
+      v-if="showPasswordHistoryDialog"
+      :account="account"
+      :visible.sync="showPasswordHistoryDialog"
+    />
   </div>
 </template>
 
@@ -27,6 +32,7 @@ import AddAccount from './AddAccount'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import { hasUUID } from '@/utils/common'
+import PasswordHistoryDialog from './PasswordHistoryDialog'
 
 export default {
   name: 'AccountListTable',
@@ -34,7 +40,8 @@ export default {
     ListTable,
     UpdateSecretInfo,
     ShowSecretInfo,
-    AddAccount
+    AddAccount,
+    PasswordHistoryDialog
   },
   props: {
     url: {
@@ -71,6 +78,7 @@ export default {
   data() {
     const vm = this
     return {
+      showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showAddDialog: false,
@@ -174,6 +182,17 @@ export default {
                     vm.showAddDialog = false
                     setTimeout(() => {
                       vm.showAddDialog = true
+                    })
+                  }
+                },
+                {
+                  title: this.$t('accounts.HistoryPassword'),
+                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
+                  callback: ({ row }) => {
+                    vm.account = row
+                    vm.showPasswordHistoryDialog = false
+                    setTimeout(() => {
+                      vm.showPasswordHistoryDialog = true
                     })
                   }
                 }
