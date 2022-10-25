@@ -72,10 +72,11 @@ export default {
   },
   methods: {
     async getPlatform() {
-      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${this.asset?.platform?.id}/`)
+      const platformId = this.asset?.platform?.id || this.asset?.platform_id
+      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
     },
     addAccount(form) {
-      const data = { asset: this.asset.id, ...form }
+      const data = { asset: this.asset?.id || '', ...form }
       this.$axios.post(`/api/v1/assets/accounts/`, data).then(() => {
         this.iVisible = false
         this.$emit('add', true)

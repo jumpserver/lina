@@ -68,7 +68,7 @@ export default {
     },
     asset: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     columns: {
       type: Array,
@@ -179,6 +179,7 @@ export default {
                   can: this.$hasPerm('assets.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
+                    vm.$set(this.iAsset, 'platform_id', row.asset.platform_id)
                     vm.showAddDialog = false
                     setTimeout(() => {
                       vm.showAddDialog = true
@@ -252,8 +253,6 @@ export default {
         actionColumn.formatterArgs.extraActions.push(item)
       }
     }
-
-    console.log('Has perm: ', this.$hasPerm('assets.change_account'))
   },
   methods: {
     onUpdateAuthDone(account) {
@@ -262,11 +261,15 @@ export default {
     addAccountSuccess() {
       this.$refs.ListTable.reloadTable()
     },
+    async getAssetDetail() {
+      const { query: { assets }} = this.$route
+      this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${assets}/`)
+    },
     hasAccountPermission() {
-      const { path, query } = this.$route
+      const { path, query: { assets }} = this.$route
       if (!hasUUID(path)) {
-        const hasPerm = this.$hasPerm('assets.add_account') && !!query.assets
-        this.iAsset = { id: query.assets }
+        if (assets) this.getAssetDetail()
+        const hasPerm = this.$hasPerm('assets.add_account') && !!assets
         this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
       }
     }
