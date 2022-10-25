@@ -72,8 +72,7 @@ export default {
   },
   methods: {
     async getPlatform() {
-      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${this.asset.platform.id}/`)
-      console.log('Platform: ', this.platform)
+      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${this.asset?.platform?.id}/`)
     },
     addAccount(form) {
       const data = { asset: this.asset.id, ...form }
