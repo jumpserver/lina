@@ -5,11 +5,11 @@
         <AccountListTable
           ref="ListTable"
           :asset="object"
-          :url="assetUserUrl"
+          :url="url"
           :has-import="false"
           :has-clone="false"
           :has-left-actions="true"
-          :columns="assetAccountColumns"
+          :columns="columns"
         />
       </el-col>
       <el-col :md="8" :sm="24">
@@ -38,9 +38,9 @@ export default {
   },
   data() {
     return {
-      assetUserUrl: `/api/v1/assets/accounts/?asset=${this.object.id}`,
-      assetAccountColumns: [
-        'username', 'version', 'privlieged', 'connectivity',
+      url: `/api/v1/assets/accounts/?asset=${this.object.id}`,
+      columns: [
+        'username', 'version', 'privileged', 'connectivity',
         'date_created', 'date_updated', 'actions'
       ],
       quickActions: [

@@ -20,7 +20,7 @@
           <el-form-item :label="this.$t('assets.Name')">
             <el-input v-model="account.asset.name" readonly />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.Username')">
+          <el-form-item :label="this.$tc('assets.Username')">
             <el-input v-model="account['username']" readonly />
           </el-form-item>
           <el-form-item v-if="secretTypePassword" :label="this.$t('assets.Password')">
@@ -68,7 +68,7 @@ export default {
   },
   data() {
     return {
-      dialogTitle: this.$t('common.ViewSecret'),
+      dialogTitle: this.$tc('common.ViewSecret'),
       authInfo: {},
       showAuthInfo: false,
       url: `/api/v1/assets/account-secrets/${this.account.id}/`

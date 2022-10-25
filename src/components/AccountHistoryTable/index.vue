@@ -7,7 +7,7 @@
 
 <script>
 import { ActionsFormatter, DetailFormatter } from '@/components/TableFormatters'
-import ShowSecretInfo from '../AccountListTable/ShowSecretInfo'
+import ShowSecretInfo from '../AccountListTable/ViewSecret'
 import { GenericListPage } from '@/layout/components'
 
 export default {

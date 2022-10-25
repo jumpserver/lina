@@ -10,7 +10,7 @@ export default {
   components: { BaseAssetCreateUpdate },
   data() {
     return {
-      url: '/api/v1/assets/assets/devices/'
+      url: '/api/v1/assets/devices/'
     }
   }
 }

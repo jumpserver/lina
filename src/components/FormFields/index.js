@@ -1,45 +1,45 @@
 import Link from './Link'
-import PasswordInput from './PasswordInput'
-import Select2 from './Select2'
-import Swicher from './Swicher'
-import UploadField from './UploadField'
-import UploadKey from './UploadKey'
-import UserPassword from './UserPassword'
-import WeekCronSelect from './WeekCronSelect'
-import UpdateToken from './UpdateToken'
-import JsonEditor from './JsonEditor'
 import Text from './Text'
+import Select2 from './Select2'
+import Switcher from './Switcher'
+import UploadKey from './UploadKey'
+import JsonEditor from './JsonEditor'
+import UploadField from './UploadField'
+import UpdateToken from './UpdateToken'
+import UserPassword from './UserPassword'
+import PasswordInput from './PasswordInput'
+import WeekCronSelect from './WeekCronSelect'
 import NestedObjectSelect2 from './NestedObjectSelect2'
 import DatetimeRangePicker from './DatetimeRangePicker'
 
 export default {
-  DatetimeRangePicker,
-  NestedObjectSelect2,
+  Text,
   Link,
-  PasswordInput,
+  Switcher,
   Select2,
-  Swicher,
   UploadKey,
+  JsonEditor,
+  UpdateToken,
   UploadField,
   UserPassword,
+  PasswordInput,
   WeekCronSelect,
-  UpdateToken,
-  JsonEditor,
-  Text
+  NestedObjectSelect2,
+  DatetimeRangePicker
 }
 
 export {
-  DatetimeRangePicker,
-  NestedObjectSelect2,
+  Text,
   Link,
-  PasswordInput,
+  Switcher,
   Select2,
-  Swicher,
   UploadKey,
+  JsonEditor,
+  UpdateToken,
   UploadField,
   UserPassword,
+  PasswordInput,
   WeekCronSelect,
-  UpdateToken,
-  JsonEditor,
-  Text
+  NestedObjectSelect2,
+  DatetimeRangePicker
 }

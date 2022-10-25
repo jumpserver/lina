@@ -15,13 +15,13 @@
         <el-col :md="10" :sm="24">
           <QuickActions
             type="primary"
-            :title="this.$t('users.AuthSettings')"
+            :title="this.$tc('users.AuthSettings')"
             :actions="authQuickActions"
           />
           <QuickActions
             type="info"
             style="margin-top: 15px"
-            :title="this.$t('users.MessageSubscription')"
+            :title="this.$tc('users.MessageSubscription')"
             fa="fa-info-circle"
             :actions="messageSubscriptionQuickActions"
           />
@@ -156,7 +156,7 @@ export default {
       messageSubscriptionQuickActions: [
         {
           title: this.$t('notifications.SiteMessage'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             disabled: true,
             name: 'site_msg',
@@ -168,7 +168,7 @@ export default {
         },
         {
           title: this.$t('setting.Email'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'email',
             model: this.object.receive_backends.indexOf('email') !== -1

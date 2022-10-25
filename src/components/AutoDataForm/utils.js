@@ -2,12 +2,13 @@ import Vue from 'vue'
 import Select2 from '@/components/FormFields/Select2'
 import ObjectSelect2 from '@/components/FormFields/NestedObjectSelect2'
 import NestedField from '@/components/AutoDataForm/components/NestedField'
-import Swicher from '@/components/FormFields/Swicher'
+import Switcher from '@/components/FormFields/Switcher'
 import rules from '@/components/DataForm/rules'
 import { assignIfNot } from '@/utils/common'
 
 export class FormFieldGenerator {
-  constructor() {
+  constructor(emit) {
+    this.$emite = emit
     this.groups = []
   }
   generateFieldByType(type, field, fieldMeta, fieldRemoteMeta) {
@@ -62,7 +63,7 @@ export class FormFieldGenerator {
         break
       case 'boolean':
         type = ''
-        field.component = Swicher
+        field.component = Switcher
         break
       case 'object_related_field':
         field.component = ObjectSelect2

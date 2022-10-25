@@ -10,8 +10,9 @@
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <AccountCreateForm
-      :protocols="protocols"
+    <AccountCreateUpdateForm
+      v-if="!loading"
+      :platform="platform"
       :account="account"
       @add="addAccount"
       @edit="editAccount"
@@ -21,12 +22,12 @@
 
 <script>
 import Dialog from '@/components/Dialog'
-import AccountCreateForm from '@/components/AccountCreateForm'
+import AccountCreateUpdateForm from '@/components/AccountCreateUpdateForm'
 export default {
   name: 'CreateAccountDialog',
   components: {
     Dialog,
-    AccountCreateForm
+    AccountCreateUpdateForm
   },
   props: {
     visible: {
@@ -39,18 +40,16 @@ export default {
     },
     account: {
       type: Object,
-      default: () => ({
-        name: '',
-        username: '',
-        password: '',
-        private_key: ''
-      })
+      default: () => ({})
     }
   },
   data() {
     return {
+      loading: true,
+      platform: {}
     }
   },
+
   computed: {
     iVisible: {
       get() {
@@ -64,7 +63,17 @@ export default {
       return this.asset ? this.asset.protocol : []
     }
   },
+  async mounted() {
+    try {
+      await this.getPlatform()
+    } finally {
+      this.loading = false
+    }
+  },
   methods: {
+    async getPlatform() {
+      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${this.asset?.platform?.id}/`)
+    },
     addAccount(form) {
       const data = { asset: this.asset.id, ...form }
       this.$axios.post(`/api/v1/assets/accounts/`, data).then(() => {

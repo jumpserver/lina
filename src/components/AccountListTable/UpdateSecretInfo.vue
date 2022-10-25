@@ -1,7 +1,7 @@
 <template>
   <Dialog
     width="50"
-    :title="this.$t('assets.UpdateAssetUserToken')"
+    :title="this.$tc('assets.UpdateAssetUserToken')"
     :visible.sync="visible"
     :destroy-on-close="true"
     @confirm="handleConfirm()"
