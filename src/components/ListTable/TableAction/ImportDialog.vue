@@ -5,14 +5,14 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
     :loading-status="loadStatus"
-    width="80%"
+    width="60%"
     class="importDialog"
     :show-cancel="false"
     :show-confirm="false"
     @close="handleImportCancel"
   >
-    <el-form v-if="!showTable" label-position="left" style="padding-left: 50px">
-      <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
+    <el-form v-if="!showTable" label-position="left">
+      <el-form-item :label="$tc('common.Import' )" :label-width="'100px'">
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
           {{ this.$t('common.Create') }}
         </el-radio>
@@ -27,7 +27,7 @@
           </span>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('common.Upload' )" :label-width="'100px'" class="file-uploader">
+      <el-form-item :label="$tc('common.Upload' )" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           drag
@@ -42,7 +42,9 @@
           <i class="el-icon-upload" />
           <div class="el-upload__text">{{ $t('common.imExport.dragUploadFileInfo') }}</div>
           <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }">{{ $t('common.imExport.uploadCsvLth10MHelpText') }}</span>
+            <span :class="{'hasError': hasFileFormatOrSizeError }">
+              {{ $t('common.imExport.uploadCsvLth10MHelpText') }}
+            </span>
             <div v-if="renderError" class="hasError">{{ renderError }}</div>
           </div>
         </el-upload>
@@ -241,10 +243,6 @@ export default {
     background-color: #f3f3f4;
     max-height: 200px;
     overflow: auto
-  }
-
-  .importDialog >>> .el-form-item.file-uploader {
-    padding-right: 150px;
   }
 
   .file-uploader >>> .el-upload {

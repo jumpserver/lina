@@ -14,7 +14,7 @@ export const platformFieldsMeta = (vm) => {
         'ansible_enabled', 'ansible_config',
         'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
-        'create_account_enabled', 'create_account_method',
+        'push_account_enabled', 'push_account_method',
         'change_secret_enabled', 'change_secret_method',
         'verify_account_enabled', 'verify_account_method'
       ],
@@ -25,7 +25,7 @@ export const platformFieldsMeta = (vm) => {
         },
         ping_method: {},
         gather_facts_method: {},
-        create_account_method: {},
+        push_account_method: {},
         change_secret_method: {},
         verify_account_method: {}
       }

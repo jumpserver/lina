@@ -200,6 +200,38 @@ export default {
       ]
     },
     {
+      path: '/settings/applets',
+      component: empty,
+      redirect: '',
+      meta: {
+        title: i18n.t('setting.Applets'),
+        app: 'terminal',
+        permissions: ['settings.change_terminal']
+      },
+      children: [
+        {
+          path: '',
+          name: 'Applets',
+          component: () => import('@/views/settings/Applet'),
+          meta: {
+            title: i18n.t('setting.Applets'),
+            icon: 'tasks',
+            permissions: ['settings.change_terminal']
+          }
+        },
+        {
+          path: 'create',
+          name: 'AppletCreate',
+          component: () => import('@/views/settings/Applet/Applets/AppletCreateUpdate'),
+          meta: {
+            title: i18n.t('route.AppletCreate'),
+            permissions: ['settings.change_terminal']
+          },
+          hidden: true
+        }
+      ]
+    },
+    {
       path: '/settings/security',
       name: 'Security',
       component: () => import('@/views/settings/Security'),
