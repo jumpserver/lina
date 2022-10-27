@@ -140,7 +140,7 @@ export default {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
             can: () => vm.$hasPerm('users.invite_user'),
-            callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
+            callback: () => { this.InviteDialogSetting.InviteDialogVisible = true }
           }
         ],
         extraMoreActions: [

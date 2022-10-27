@@ -2,6 +2,7 @@
   <Dialog
     title="离线上传"
     v-bind="$attrs"
+    @confirm="onSubmit"
     v-on="$listeners"
   >
     <el-form label-position="top">
@@ -22,7 +23,9 @@
           accept=".zip"
         >
           <i class="el-icon-upload" />
-          <div class="el-upload__text">{{ $t('common.imExport.dragUploadFileInfo') }}</div>
+          <div class="el-upload__text">
+            {{ $t('common.imExport.dragUploadFileInfo') }}
+          </div>
           <div slot="tip" class="el-upload__tip">
             <span :class="{'hasError': hasFileFormatOrSizeError }">
               {{ $t('terminal.uploadZipTips') }}
@@ -45,13 +48,38 @@ export default {
   data() {
     return {
       hasFileFormatOrSizeError: false,
-      renderError: ''
+      renderError: '',
+      file: null
     }
   },
   methods: {
     onFileChange(file, fileList) {
+      if (file.status !== 'ready') {
+        return
+      }
+      this.file = file
     },
     beforeUpload(file) {
+    },
+    onSubmit() {
+      if (!this.file) {
+        return
+      }
+      const form = new FormData()
+      form.append('file', this.file.raw)
+      this.$axios.post(
+        '/api/v1/terminal/applets/upload/',
+        form,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          disableFlashErrorMsg: true
+        }
+      ).then(res => {
+        this.$message.success('上传成功')
+        this.$emit('update:visible', false)
+      }).catch(err => {
+        this.$message.error(err)
+      })
     }
   }
 }

@@ -20,12 +20,38 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/applets/',
         columns: [
-          'name', 'display_name', 'icon', 'type', 'actions'
+          'icon', 'name', 'version', 'author', 'protocols',
+          'type', 'comment', 'date_created', 'date_updated', 'actions'
         ],
+        columnsShow: {
+          min: ['icon', 'name', 'version', 'author', 'protocols', 'actions'],
+          default: [
+            'icon', 'name', 'version', 'author', 'protocols',
+            'type', 'comment', 'actions'
+          ]
+        },
         columnsMeta: {
           icon: {
+            align: 'center',
+            width: '60px',
             formatter: (row) => {
-              return <img src={row.icon} width='32' height='32' alt='icon'></img>
+              return <img src={row.icon} width='30' height='30' alt='icon'></img>
+            }
+          },
+          name: {
+            formatterArgs: {
+              getTitle: ({ row }) => row['display_name']
+            }
+          },
+          version: {
+            width: '80px'
+          },
+          type: {
+            width: '80px'
+          },
+          protocols: {
+            formatter: (row) => {
+              return row.protocols.map(tag => <el-tag size='mini'>{tag}</el-tag>)
             }
           }
         }

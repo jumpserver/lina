@@ -22,8 +22,8 @@
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
             {{ downloadTemplateTitle }}
-            <el-link type="success" :underline="false" style="padding-left: 10px" @click="downloadTemplateFile('csv')"> CSV </el-link>
-            <el-link type="success" :underline="false" style="padding-left: 10px" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
+            <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
+            <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
           </span>
         </div>
       </el-form-item>
@@ -40,7 +40,9 @@
           accept=".csv,.xlsx"
         >
           <i class="el-icon-upload" />
-          <div class="el-upload__text">{{ $t('common.imExport.dragUploadFileInfo') }}</div>
+          <div class="el-upload__text">
+            {{ $t('common.imExport.dragUploadFileInfo') }}
+          </div>
           <div slot="tip" class="el-upload__tip">
             <span :class="{'hasError': hasFileFormatOrSizeError }">
               {{ $t('common.imExport.uploadCsvLth10MHelpText') }}
@@ -170,7 +172,10 @@ export default {
       this.$axios.post(
         renderToJsonUrl,
         file.raw,
-        { headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
+        {
+          headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
+          disableFlashErrorMsg: true
+        }
       ).then(data => {
         this.jsonData = data
         this.showTable = true
@@ -207,9 +212,8 @@ export default {
       }
       return this.url.indexOf('?') === -1 ? `${this.url}?${query}` : `${this.url}&${query}`
     },
-    // eslint-disable-next-line handle-callback-err
-    catchError(error) {
-      // debug(error)
+    catchError(err) {
+      console.log(err)
     },
     onSuccess(msg) {
       this.errorMsg = ''
@@ -222,7 +226,7 @@ export default {
       window.URL.revokeObjectURL(url)
     },
     async handleImportConfirm() {
-      this.$refs['importTable'].performUpload()
+      await this.$refs['importTable'].performUpload()
     },
     handleImportCancel() {
       this.showImportDialog = false
@@ -285,5 +289,9 @@ export default {
   .el-upload__tip {
     line-height: 1.5;
     padding-top: 0;
+
+    .el-link {
+      margin-left: 10px;
+    }
   }
 </style>

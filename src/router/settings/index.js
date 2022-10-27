@@ -220,14 +220,24 @@ export default {
           }
         },
         {
-          path: 'create',
-          name: 'AppletCreate',
-          component: () => import('@/views/settings/Applet/Applets/AppletCreateUpdate'),
+          path: 'hosts/create',
+          name: 'AppletHostCreate',
+          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),
+          hidden: true,
           meta: {
-            title: i18n.t('route.AppletCreate'),
+            title: i18n.t('route.AppletHostCreate'),
             permissions: ['settings.change_terminal']
-          },
-          hidden: true
+          }
+        },
+        {
+          path: 'hosts/:id/update',
+          name: 'AppletHostUpdate',
+          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostUpdate'),
+            permissions: ['settings.change_terminal']
+          }
         }
       ]
     },

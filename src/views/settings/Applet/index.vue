@@ -9,7 +9,7 @@
 <script>
 import { TabPage } from '@/layout/components'
 import Applets from './Applets/AppletList'
-import AppletHosts from './AppletHosts'
+import AppletHosts from './AppletHosts/AppletHostList'
 export default {
   name: 'Applet',
   components: {

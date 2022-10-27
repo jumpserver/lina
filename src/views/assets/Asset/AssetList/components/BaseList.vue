@@ -110,8 +110,7 @@ export default {
           },
           protocols: {
             formatter: (row) => {
-              let data = row.protocols.map(item => item.name + '/' + item.port)
-              data = data.join(', ')
+              const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
               return <span> {data} </span>
             }
           },

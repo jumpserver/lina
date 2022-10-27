@@ -98,6 +98,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Address": "地址",
     "PrivateKey": "密钥",
     "Secret": "密码",
     "Network": "网络",
@@ -706,6 +707,8 @@
   },
   "route": {
     "": "",
+    "AppletHostCreate": "添加远程应用发布机",
+    "AppletHostUpdate": "更新远程应用发布机",
     "AppletCreate": "创建远程应用",
     "CreateEndpoint": "创建端点",
     "UpdateEndpoint": "更新端点",
