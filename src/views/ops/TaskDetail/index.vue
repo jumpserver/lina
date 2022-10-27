@@ -10,7 +10,6 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import TaskDetail from './TaskDetail'
 import TaskHistory from './TaskHistory'
-import TaskAdhoc from './TaskAdhoc'
 import CeleryTaskLog from '../CeleryTaskLog'
 export default {
   components: {
@@ -18,7 +17,6 @@ export default {
     CeleryTaskLog,
     TaskHistory,
     TaskDetail,
-    TaskAdhoc,
     TabPage
   },
   data() {
@@ -33,11 +31,6 @@ export default {
           {
             title: this.$t('ops.taskDetail'),
             name: 'TaskDetail'
-          },
-          {
-            title: this.$t('ops.taskVersions'),
-            name: 'TaskAdhoc',
-            hidden: () => !this.$hasPerm('ops.view_adhoc')
           },
           {
             title: this.$t('ops.execution'),

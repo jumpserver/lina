@@ -4,8 +4,6 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
-import { DetailFormatter } from '@/components/TableFormatters'
-import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
   name: 'TaskHistory',
@@ -21,63 +19,25 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/ops/adhoc-executions/?task=${this.object.id}`,
+        url: `/api/v1/ops/tasks/${this.object.id}/executions/`,
         columns: [
-          'date_start', 'stat', 'ratio', 'is_finished', 'is_success', 'timedelta', 'adhoc_short_id', 'actions'
+          'id', 'state', 'is_finished', 'date_published', 'date_start', 'date_finished', 'actions'
         ],
         columnsMeta: {
-          date_start: {
-            formatter: (row) => toSafeLocalDateStr(row.date_start),
-            width: '160px'
-          },
-          stat: {
-            label: this.$t('ops.stat'),
-            align: 'center',
-            width: '100px',
-            formatter: function(row) {
-              return (
-                <div>
-                  <span class='text-primary'>{row.stat.success}</span>/
-                  <span class='text-danger'>{row.stat.failed}</span>/
-                  <span>{row.stat.total}</span>
-                </div>
-              )
-            }
-          },
-          ratio: {
-            label: this.$t('ops.ratio'),
-            align: 'center',
-            width: '80px',
-            formatter: function(row) {
-              const ratio = (row.stat.success / row.stat.total) * 100
-              if (ratio === 100) {
-                return <span class='text-navy'>{ratio + '%'}</span>
+          state: {
+            label: this.$t('ops.state'),
+            width: '120px',
+            formatter: (row) => {
+              switch (row.state) {
+                case 'PENDING':
+                  return <span><i Class='fa fa-spinner fa-spin' />{this.$t(`ops.${row.state}`)}</span>
+                case 'RUNNING':
+                  return <span><i Class='fa fa-spinner fa-spin' />{this.$t(`ops.${row.state}`)}</span>
+                case 'SUCCESS':
+                  return <span Class='text-success'><i Class='fa fa-check' />{this.$t(`ops.${row.state}`)}</span>
+                case 'FAILURE':
+                  return <span Class='text-danger'><i Class='fa fa-times' />{this.$t(`ops.${row.state}`)}</span>
               }
-              return <span class='text-danger'>{ratio + '%'}</span>
-            }
-          },
-          is_finished: {
-            align: 'center',
-            width: '100px',
-            label: this.$t('ops.isFinished')
-          },
-          is_success: {
-            align: 'center',
-            width: '100px',
-            label: this.$t('ops.isSuccess')
-          },
-          timedelta: {
-            label: this.$t('ops.time'),
-            width: '100px',
-            formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
-            }
-          },
-          adhoc_short_id: {
-            label: this.$t('ops.version'),
-            formatter: DetailFormatter,
-            formatterArgs: {
-              route: 'HistoryExecutionDetail'
             }
           },
           actions: {
