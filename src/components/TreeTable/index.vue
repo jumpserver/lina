@@ -44,6 +44,8 @@ import AutoDataZTree from '../AutoDataZTree'
 import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
+import { setUrlParam } from '@/utils/common'
+
 export default {
   name: 'TreeTable',
   components: {
@@ -88,8 +90,16 @@ export default {
   },
   mounted() {
     // debug(this.treeSetting)
+    this.initSetTableUrl()
   },
   methods: {
+    initSetTableUrl() {
+      const { asset = '', node = '' } = this.$route.query || {}
+      let url = this.iTableConfig.url
+      url = setUrlParam(url, 'asset', asset)
+      url = setUrlParam(url, 'node', node)
+      this.$set(this.iTableConfig, 'url', url)
+    },
     handleUrlChange(url) {
       this.$set(this.iTableConfig, 'url', url)
       this.$emit('urlChange', url)

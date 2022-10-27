@@ -236,7 +236,7 @@ export default {
       this.$set(this.tableConfig, 'url', iNew)
       this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
     },
-    '$route.query.assets': {
+    '$route.query.asset': {
       immediate: true,
       handler() {
         this.hasAccountPermission()
@@ -262,14 +262,14 @@ export default {
       this.$refs.ListTable.reloadTable()
     },
     async getAssetDetail() {
-      const { query: { assets }} = this.$route
-      this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${assets}/`)
+      const { query: { asset }} = this.$route
+      this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
     },
     hasAccountPermission() {
-      const { path, query: { assets }} = this.$route
+      const { path, query: { asset }} = this.$route
       if (!hasUUID(path)) {
-        if (assets) this.getAssetDetail()
-        const hasPerm = this.$hasPerm('assets.add_account') && !!assets
+        if (asset) this.getAssetDetail()
+        const hasPerm = this.$hasPerm('assets.add_account') && !!asset
         this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
       }
     }
