@@ -12,14 +12,14 @@ export default [
         path: '',
         name: 'TaskList',
         component: () => import('@/views/ops/TaskList'),
-        meta: { title: i18n.t('route.TaskList') }
+        meta: { title: i18n.t('route.TaskList'), permissions: [] }
       },
       {
         path: ':id',
         component: () => import('@/views/ops/TaskDetail'),
         name: 'TaskDetail',
         hidden: true,
-        meta: { title: i18n.t('route.TaskDetail') }
+        meta: { title: i18n.t('route.TaskDetail'), permissions: [] }
       }
     ]
   },
