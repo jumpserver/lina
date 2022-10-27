@@ -5,14 +5,14 @@
     :destroy-on-close="true"
     :close-on-click-modal="false"
     :loading-status="loadStatus"
-    width="80%"
+    width="60%"
     class="importDialog"
     :show-cancel="false"
     :show-confirm="false"
     @close="handleImportCancel"
   >
-    <el-form v-if="!showTable" label-position="left" style="padding-left: 50px">
-      <el-form-item :label="$t('common.Import' )" :label-width="'100px'">
+    <el-form v-if="!showTable" label-position="left">
+      <el-form-item :label="$tc('common.Import' )" :label-width="'100px'">
         <el-radio v-if="canImportCreate" v-model="importOption" class="export-item" label="create">
           {{ this.$t('common.Create') }}
         </el-radio>
@@ -22,12 +22,12 @@
         <div style="line-height: 1.5">
           <span class="el-upload__tip">
             {{ downloadTemplateTitle }}
-            <el-link type="success" :underline="false" style="padding-left: 10px" @click="downloadTemplateFile('csv')"> CSV </el-link>
-            <el-link type="success" :underline="false" style="padding-left: 10px" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
+            <el-link type="success" @click="downloadTemplateFile('csv')"> CSV </el-link>
+            <el-link type="success" @click="downloadTemplateFile('xlsx')"> XLSX </el-link>
           </span>
         </div>
       </el-form-item>
-      <el-form-item :label="$t('common.Upload' )" :label-width="'100px'" class="file-uploader">
+      <el-form-item :label="$tc('common.Upload' )" :label-width="'100px'" class="file-uploader">
         <el-upload
           ref="upload"
           drag
@@ -40,9 +40,13 @@
           accept=".csv,.xlsx"
         >
           <i class="el-icon-upload" />
-          <div class="el-upload__text">{{ $t('common.imExport.dragUploadFileInfo') }}</div>
+          <div class="el-upload__text">
+            {{ $t('common.imExport.dragUploadFileInfo') }}
+          </div>
           <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }">{{ $t('common.imExport.uploadCsvLth10MHelpText') }}</span>
+            <span :class="{'hasError': hasFileFormatOrSizeError }">
+              {{ $t('common.imExport.uploadCsvLth10MHelpText') }}
+            </span>
             <div v-if="renderError" class="hasError">{{ renderError }}</div>
           </div>
         </el-upload>
@@ -168,7 +172,10 @@ export default {
       this.$axios.post(
         renderToJsonUrl,
         file.raw,
-        { headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' }, disableFlashErrorMsg: true }
+        {
+          headers: { 'Content-Type': isCsv ? 'text/csv' : 'text/xlsx' },
+          disableFlashErrorMsg: true
+        }
       ).then(data => {
         this.jsonData = data
         this.showTable = true
@@ -205,9 +212,8 @@ export default {
       }
       return this.url.indexOf('?') === -1 ? `${this.url}?${query}` : `${this.url}&${query}`
     },
-    // eslint-disable-next-line handle-callback-err
-    catchError(error) {
-      // debug(error)
+    catchError(err) {
+      console.log(err)
     },
     onSuccess(msg) {
       this.errorMsg = ''
@@ -220,7 +226,7 @@ export default {
       window.URL.revokeObjectURL(url)
     },
     async handleImportConfirm() {
-      this.$refs['importTable'].performUpload()
+      await this.$refs['importTable'].performUpload()
     },
     handleImportCancel() {
       this.showImportDialog = false
@@ -241,10 +247,6 @@ export default {
     background-color: #f3f3f4;
     max-height: 200px;
     overflow: auto
-  }
-
-  .importDialog >>> .el-form-item.file-uploader {
-    padding-right: 150px;
   }
 
   .file-uploader >>> .el-upload {
@@ -287,5 +289,9 @@ export default {
   .el-upload__tip {
     line-height: 1.5;
     padding-top: 0;
+
+    .el-link {
+      margin-left: 10px;
+    }
   }
 </style>

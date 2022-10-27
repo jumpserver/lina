@@ -27,7 +27,8 @@ import {
   DisplayFormatter,
   ActionsFormatter,
   ChoicesFormatter,
-  ObjectRelatedFormatter
+  ObjectRelatedFormatter,
+  ChoicesDisplayFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
@@ -135,6 +136,10 @@ export default {
         case 'choice':
           col.sortable = 'custom'
           col.formatter = DisplayFormatter
+          break
+        case 'labeled_choice':
+          col.sortable = 'custom'
+          col.formatter = ChoicesDisplayFormatter
           break
         case 'boolean':
           col.formatter = ChoicesFormatter

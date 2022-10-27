@@ -42,12 +42,12 @@ export default {
       let url = '/api/v1/assets/accounts/'
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'assets', '')
-        url = setUrlParam(url, 'nodes', nodeId)
+        url = setUrlParam(url, 'asset', '')
+        url = setUrlParam(url, 'node', nodeId)
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data.id
-        url = setUrlParam(url, 'nodes', '')
-        url = setUrlParam(url, 'assets', assetId)
+        url = setUrlParam(url, 'node', '')
+        url = setUrlParam(url, 'asset', assetId)
       }
 
       this.$set(this.tableConfig, 'url', url)

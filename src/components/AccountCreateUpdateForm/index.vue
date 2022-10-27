@@ -99,7 +99,7 @@ export default {
         },
         push_now: {
           hidden: () => {
-            return !this.platform.automation['push_account_enabled']
+            return !this.platform.automation?.['push_account_enabled']
           }
         }
       },
@@ -112,7 +112,7 @@ export default {
     afterGetRemoteMeta(meta) {
       const choices = meta.secret_type.choices
       const secretTypes = []
-      this.platform.protocols.forEach(p => {
+      this.platform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])
       })
       if (!this.form.secret_type) {

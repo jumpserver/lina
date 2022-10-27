@@ -21,6 +21,14 @@ export default {
     addFieldsMeta: {
       type: Object,
       default: () => ({})
+    },
+    createSuccessNextRoute: {
+      type: Object,
+      default: () => ({ name: 'AssetList' })
+    },
+    updateSuccessNextRoute: {
+      type: Object,
+      default: () => ({ name: 'AssetList' })
     }
   },
   data() {
@@ -31,8 +39,8 @@ export default {
         initial: {},
         platform: {},
         url: '/api/v1/assets/hosts/',
-        createSuccessNextRoute: { name: 'AssetList' },
-        updateSuccessNextRoute: { name: 'AssetList' },
+        createSuccessNextRoute: this.createSuccessNextRoute,
+        updateSuccessNextRoute: this.updateSuccessNextRoute,
         hasDetailInMsg: false,
         fields: [
           [this.$t('common.Basic'), ['name', 'address', 'platform']],

@@ -1,6 +1,8 @@
 {
   "": "",
   "accounts": {
+    "HistoryPassword": "History password",
+    "PasswordRecord": "Password record",
     "AccountHistableHelpMessage": "Record the historical version of the current account",
     "PleaseClickLeftAssetToViewAssetAccount": "Asset account list,  please click on the assets on the left to view",
     "PleaseClickLeftApplicationToViewApplicationAccount": "Application account list, please click on the application on the left to view",

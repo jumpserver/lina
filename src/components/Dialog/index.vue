@@ -83,12 +83,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog >>> .el-dialog__header {
-    /*padding-top: 10px;*/
+  .dialog >>> .el-dialog {
+    padding: 30px 40px 35px;
+
+    &__header {
+      padding: 0 10px 0 0;
+    }
+
+    &__body {
+      padding: 15px 0 0;
+    }
+
+    &__footer {
+      padding: 0 0 10px 0;
+    }
   }
 
-  .dialog-footer {
-    padding-right: 20px;
+  .dialog-footer >>> button.el-button--small {
+    padding: 10px 21px;
+    font-size: 13px;
   }
-
 </style>

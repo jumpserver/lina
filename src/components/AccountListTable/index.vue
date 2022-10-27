@@ -15,6 +15,11 @@
       :account="account"
       @add="addAccountSuccess"
     />
+    <PasswordHistoryDialog
+      v-if="showPasswordHistoryDialog"
+      :account="account"
+      :visible.sync="showPasswordHistoryDialog"
+    />
   </div>
 </template>
 
@@ -27,12 +32,14 @@ import AddAccount from './AddAccount'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import { hasUUID } from '@/utils/common'
+import PasswordHistoryDialog from './PasswordHistoryDialog'
 
 export default {
   name: 'AccountListTable',
   components: {
     ListTable,
     UpdateSecretInfo,
+    PasswordHistoryDialog,
     ViewSecret,
     AddAccount
   },
@@ -61,7 +68,7 @@ export default {
     },
     asset: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     columns: {
       type: Array,
@@ -71,6 +78,7 @@ export default {
   data() {
     const vm = this
     return {
+      showPasswordHistoryDialog: false,
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
       showAddDialog: false,
@@ -171,9 +179,21 @@ export default {
                   can: this.$hasPerm('assets.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
+                    vm.$set(this.iAsset, 'platform_id', row.asset.platform_id)
                     vm.showAddDialog = false
                     setTimeout(() => {
                       vm.showAddDialog = true
+                    })
+                  }
+                },
+                {
+                  title: this.$t('accounts.HistoryPassword'),
+                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
+                  callback: ({ row }) => {
+                    vm.account = row
+                    vm.showPasswordHistoryDialog = false
+                    setTimeout(() => {
+                      vm.showPasswordHistoryDialog = true
                     })
                   }
                 }
@@ -216,7 +236,7 @@ export default {
       this.$set(this.tableConfig, 'url', iNew)
       this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
     },
-    '$route.query.assets': {
+    '$route.query.asset': {
       immediate: true,
       handler() {
         this.hasAccountPermission()
@@ -233,8 +253,6 @@ export default {
         actionColumn.formatterArgs.extraActions.push(item)
       }
     }
-
-    console.log('Has perm: ', this.$hasPerm('assets.change_account'))
   },
   methods: {
     onUpdateAuthDone(account) {
@@ -243,11 +261,15 @@ export default {
     addAccountSuccess() {
       this.$refs.ListTable.reloadTable()
     },
+    async getAssetDetail() {
+      const { query: { asset }} = this.$route
+      this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
+    },
     hasAccountPermission() {
-      const { path, query } = this.$route
+      const { path, query: { asset }} = this.$route
       if (!hasUUID(path)) {
-        const hasPerm = this.$hasPerm('assets.add_account') && !!query.assets
-        this.iAsset = { id: query.assets }
+        if (asset) this.getAssetDetail()
+        const hasPerm = this.$hasPerm('assets.add_account') && !!asset
         this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
       }
     }

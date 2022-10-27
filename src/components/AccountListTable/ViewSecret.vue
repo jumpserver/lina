@@ -17,17 +17,26 @@
     >
       <div>
         <el-form label-position="right" label-width="80px" :model="authInfo">
-          <el-form-item :label="this.$tc('assets.Name')">
-            <el-input v-model="account['name']" readonly />
+          <el-form-item :label="this.$t('assets.Name')">
+            <el-input v-model="account.asset.name" readonly />
           </el-form-item>
           <el-form-item :label="this.$tc('assets.Username')">
             <el-input v-model="account['username']" readonly />
           </el-form-item>
-          <el-form-item v-if="account['secret_type'] === 'password'" :label="this.$tc('assets.Password')">
-            <el-input v-model="authInfo.secret" type="password" show-password />
+          <el-form-item v-if="secretTypePassword" :label="this.$t('assets.Password')">
+            <ShowKeyCopyFormatter v-model="authInfo.secret" />
           </el-form-item>
-          <el-form-item v-else :label="this.$tc('assets.Key')">
-            <el-input v-model="authInfo.secret" type="textarea" :rows="10" />
+          <el-form-item v-else :label="this.$t('users.SSHKey')">
+            <el-input v-model="authInfo['private_key']" class="item-textarea" type="textarea" show-password readonly />
+          </el-form-item>
+          <el-form-item :label="this.$t('common.DateCreated')">
+            <span>{{ $moment(authInfo.date_created, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') }}</span>
+          </el-form-item>
+          <el-form-item :label="this.$t('common.DateUpdated')">
+            <span>{{ $moment(authInfo.date_updated, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') }}</span>
+          </el-form-item>
+          <el-form-item :label="this.$t('accounts.PasswordRecord')">
+            <span>{{ authInfo.version }}</span>
           </el-form-item>
         </el-form>
       </div>
@@ -38,11 +47,14 @@
 <script>
 import Dialog from '@/components/Dialog'
 import UserConfirmDialog from '@/components/UserConfirmDialog'
+import { ShowKeyCopyFormatter } from '@/components/TableFormatters'
+
 export default {
   name: 'ShowSecretInfo',
   components: {
     Dialog,
-    UserConfirmDialog
+    UserConfirmDialog,
+    ShowKeyCopyFormatter
   },
   props: {
     account: {
@@ -62,6 +74,11 @@ export default {
       url: `/api/v1/assets/account-secrets/${this.account.id}/`
     }
   },
+  computed: {
+    secretTypePassword() {
+      return this.authInfo.secret_type === 'password'
+    }
+  },
   methods: {
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
@@ -76,8 +93,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .item-textarea >>> .el-textarea__inner {
     height: 110px;
+  }
+  ul {
+    margin: 0;
+  }
+  li {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    .title {
+      color: #303133;
+      font-weight: 500;
+    }
   }
 </style>

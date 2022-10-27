@@ -43,48 +43,6 @@ export default {
       }
     },
     {
-      path: '/workbench/apps',
-      name: 'Apps',
-      component: empty,
-      redirect: 'remoteapp',
-      alwaysShow: true,
-      meta: {
-        title: i18n.t('route.MyApps'),
-        icon: 'th',
-        permissions: ['perms.view_myapps']
-      },
-      children: [
-        {
-          path: 'remote-apps',
-          name: 'MyRemoteApps',
-          component: () => import('@/views/myapps/RemoteApp'),
-          meta: {
-            title: i18n.t('route.RemoteApp'),
-            permissions: [],
-            licenseRequired: true
-          }
-        },
-        {
-          path: 'databases',
-          name: 'MyDatabases',
-          component: () => import('@/views/myapps/DatabaseApp'),
-          meta: {
-            title: i18n.t('route.DatabaseApp'),
-            permissions: []
-          }
-        },
-        {
-          path: 'kubernetes',
-          name: 'MyKubernetes',
-          component: () => import('@/views/myapps/KubernetesApp'),
-          meta: {
-            title: i18n.t('route.KubernetesApp'),
-            permissions: []
-          }
-        }
-      ]
-    },
-    {
       path: '/workbench/ops',
       component: empty,
       meta: {

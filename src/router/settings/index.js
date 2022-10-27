@@ -200,6 +200,48 @@ export default {
       ]
     },
     {
+      path: '/settings/applets',
+      component: empty,
+      redirect: '',
+      meta: {
+        title: i18n.t('setting.Applets'),
+        app: 'terminal',
+        permissions: ['settings.change_terminal']
+      },
+      children: [
+        {
+          path: '',
+          name: 'Applets',
+          component: () => import('@/views/settings/Applet'),
+          meta: {
+            title: i18n.t('setting.Applets'),
+            icon: 'tasks',
+            permissions: ['settings.change_terminal']
+          }
+        },
+        {
+          path: 'hosts/create',
+          name: 'AppletHostCreate',
+          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostCreate'),
+            permissions: ['settings.change_terminal']
+          }
+        },
+        {
+          path: 'hosts/:id/update',
+          name: 'AppletHostUpdate',
+          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostUpdate'),
+            permissions: ['settings.change_terminal']
+          }
+        }
+      ]
+    },
+    {
       path: '/settings/security',
       name: 'Security',
       component: () => import('@/views/settings/Security'),
