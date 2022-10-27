@@ -230,6 +230,16 @@ export default {
           }
         },
         {
+          path: 'hosts/:id',
+          name: 'AppletHostDetail',
+          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostDetail/index'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AppletHostDetail'),
+            permissions: ['settings.change_terminal']
+          }
+        },
+        {
           path: 'hosts/:id/update',
           name: 'AppletHostUpdate',
           component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),

@@ -25,6 +25,17 @@ export default {
           ]
         },
         columnsMeta: {
+          name: {
+            formatterArgs: {
+              getRoute: ({ row }) => {
+                console.log('Row: ', row)
+                return {
+                  name: 'AppletHostDetail',
+                  params: { id: row.id }
+                }
+              }
+            }
+          },
           protocols: {
             label: this.$t('assets.Protocols'),
             formatter: (row) => {
