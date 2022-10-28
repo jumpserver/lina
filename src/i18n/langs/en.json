@@ -95,6 +95,8 @@
   "assets": {
     "SelectTemplate": "Select template",
     "InAssetDetail": "Update account information in asset details",
+    "SecretType": "Secret type",
+    "PrivilegedTemplate": "Privileged",
     "All": "All",
     "CloudPlatform": "Cloud platform",
     "RecentlyUsed": "Recently used",
@@ -716,6 +718,9 @@
     "SessionDetail": "SessionDetail",
     "Accounts": "Accounts",
     "AssetAccount": "Asset Account",
+    "AccountTemplate": "Account template",
+    "CreateAccountTemplate": "Create account template",
+    "UpdateAccountTemplate": "Update account template",
     "AssetHistoryAccount": "Asset History Account",
     "ApplicationAccount": "Application Account",
     "Ticket": "Tickets",

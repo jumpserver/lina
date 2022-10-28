@@ -35,6 +35,54 @@ export default [
     ]
   },
   {
+    path: 'account-template',
+    component: empty,
+    meta: {
+      title: i18n.t('route.AccountTemplate'),
+      app: 'assets',
+      permissions: ['assets.view_accounttemplate']
+    },
+    redirect: '',
+    children: [
+      {
+        path: '',
+        name: 'AccountTemplateList',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
+        meta: {
+          title: i18n.t('route.AccountTemplate'),
+          permissions: ['assets.view_accounttemplate']
+        }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+        name: 'AccountTemplateCreate',
+        meta: {
+          title: i18n.t('route.CreateAccountTemplate'),
+          action: 'create'
+        },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+        name: 'AccountTemplateUpdate',
+        meta: {
+          title: i18n.t('route.UpdateAccountTemplate'),
+          action: 'update'
+        },
+        hidden: true
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
+        name: 'AccountTemplateDetail',
+        meta: { title: i18n.t('route.AccountTemplate') },
+        hidden: true
+      }
+    ]
+  },
+  {
     path: 'gathered-user',
     component: empty,
     redirect: '',
