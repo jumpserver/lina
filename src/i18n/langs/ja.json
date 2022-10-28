@@ -1478,6 +1478,7 @@
       "HuaweiCloud": "ファーウェイ雲",
       "BaiduCloud": "百度雲",
       "JDCloud": "京東雲",
+      "KingSoftCloud": "金山雲",
       "Azure": "Azure(中国)",
       "Azure_Int": "Azure (国際)",
       "HostnameStrategy": "資産を生成するためにホスト名。例: 1. インスタンス名 (instanceDemo) 2.インスタンス名と一部IP (下位2桁) (instanceDemo-250.1)",
