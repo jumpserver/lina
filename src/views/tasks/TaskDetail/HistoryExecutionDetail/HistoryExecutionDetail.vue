@@ -13,7 +13,7 @@
 <script type="text/jsx">
 import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
-import RunInfoCard from '../../RunInfoCard'
+import RunInfoCard from '../../../tasks/RunInfoCard'
 import { toLastFailureDisplay, toLastSucessDisplay } from '../business'
 import { openTaskPage } from '@/utils/jms'
 

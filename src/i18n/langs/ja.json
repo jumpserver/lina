@@ -751,7 +751,7 @@
     "TicketsTodo": "To-doオーダー",
     "TicketsDone": "すでに勤務単",
     "TicketsNew": "ワークオーダーを提出する",
-    "BatchCommandLog": "一括コマンド",
+    "tasksLog": "一括コマンド",
     "CeleryTaskLog": "Celeryタスクログ",
     "CommandExecutions": "コマンド実行",
     "CommandFilterCreate": "コマンドフィルタの作成",
