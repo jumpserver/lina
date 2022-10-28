@@ -98,6 +98,8 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "SelectTemplate": "テンプレートの選択",
+    "InAssetDetail": "資産詳細でのアカウント情報の更新",
     "All": "すべて",
     "CloudPlatform": "クラウドプラットフォーム",
     "RecentlyUsed": "最近使われる",
@@ -321,6 +323,7 @@
     "actionsTips": "クリップボード権限制御は現在RDP/VNCプロトコルの接続のみをサポートしています",
     "TableColSettingInfo": "表示したいリストの詳細を選択してください。",
     "Add": "追加",
+    "TemplateAdd": "テンプレートの追加",
     "UpdateAssetDetail": "詳細情報の設定",
     "AddSuccessMsg": "追加に成功しました",
     "Auth": "認証",

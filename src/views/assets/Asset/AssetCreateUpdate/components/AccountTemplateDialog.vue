@@ -1,6 +1,8 @@
 <template>
   <Dialog
-    :title="'选择模版'"
+    v-if="iVisible"
+    :title="$t('assets.SelectTemplate')"
+    :visible.sync="iVisible"
     :destroy-on-close="true"
     width="70%"
     v-bind="$attrs"
@@ -20,6 +22,10 @@ export default {
     AutoDataTable
   },
   props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -31,6 +37,16 @@ export default {
             width: '100px'
           }
         }
+      }
+    }
+  },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
       }
     }
   }
