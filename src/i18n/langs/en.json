@@ -93,6 +93,8 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "SelectTemplate": "Select template",
+    "InAssetDetail": "Update account information in asset details",
     "All": "All",
     "CloudPlatform": "Cloud platform",
     "RecentlyUsed": "Recently used",
@@ -314,6 +316,7 @@
     "Active": "Active",
     "TableColSettingInfo": "Please select the list details you want to display",
     "Add": "Add",
+    "TemplateAdd": "Template add",
     "PleaseAgreeToTheTerms": "Please agree to the terms",
     "PushSelected": "Push selected",
     "PushSelectedSystemUsersToAsset": "Push selected system users to asset",

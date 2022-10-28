@@ -1,8 +1,8 @@
 <template>
   <Dialog
-    v-if="visible"
-    :title="this.$tc('assets.AddAccount')"
-    :visible.sync="visible"
+    v-if="iVisible"
+    :title="this.$t('assets.AddAccount')"
+    :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
@@ -47,6 +47,16 @@ export default {
   data() {
     return {}
   },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      }
+    }
+  },
   methods: {
     addAccount(account) {
       const i = this.accounts.findIndex(item => item.username === account.username)
@@ -54,12 +64,12 @@ export default {
         this.accounts.splice(i, 1)
       }
       this.accounts.push(account)
-      this.$emit('update:visible', false)
+      this.iVisible = false
     },
     editAccount(form) {
       const i = this.accounts.findIndex(item => item.username === this.account.username)
       this.accounts.splice(i, 1, form)
-      this.$emit('update:visible', false)
+      this.iVisible = false
     }
   }
 }
