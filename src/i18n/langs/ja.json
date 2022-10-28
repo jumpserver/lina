@@ -100,6 +100,8 @@
   "assets": {
     "SelectTemplate": "テンプレートの選択",
     "InAssetDetail": "資産詳細でのアカウント情報の更新",
+    "SecretType": "機密タイプ",
+    "PrivilegedTemplate": "特権的",
     "All": "すべて",
     "CloudPlatform": "クラウドプラットフォーム",
     "RecentlyUsed": "最近使われる",
@@ -724,6 +726,9 @@
     "TicketFlowUpdate": "承認フローの更新",
     "Accounts": "アカウント管理",
     "AssetAccount": "資産アカウント",
+    "AccountTemplate": "アカウントテンプレート",
+    "CreateAccountTemplate": "アカウントテンプレートの作成",
+    "UpdateAccountTemplate": "アカウントテンプレートの更新",
     "AssetHistoryAccount": "資産履歴",
     "ApplicationAccount": "アプリアカウント",
     "Ticket": "ワークオーダー",
