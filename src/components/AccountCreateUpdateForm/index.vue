@@ -58,7 +58,7 @@ export default {
             }
           }
         },
-        password: {
+        secret: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
           hidden: (formValue) => formValue.secret_type !== 'password'
