@@ -26,7 +26,7 @@ export default {
         visible: false,
         width: '60%',
         tableConfig: {
-          url: `/api/v1/assets/accounts-historys?id=${this.account.id}`,
+          url: `/api/v1/assets/${this.account.id}/histories/`,
           columns: [
             'name', 'version', 'password', 'date_created'
           ],
