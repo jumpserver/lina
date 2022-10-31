@@ -32,7 +32,7 @@ export default {
     },
     cellValue: {
       type: [String, Number],
-      default: null
+      default: ''
     },
     hasShow: {
       type: Boolean,
@@ -56,7 +56,7 @@ export default {
   methods: {
     switchShowValue() {
       const value = this.value || this.cellValue
-      return '******' + value.replace(/[\s\S]/g, '')
+      return value ? '******' + value.replace(/[\s\S]/g, '') : ''
     },
     onShow() {
       const { currentValue, switchShowValue } = this

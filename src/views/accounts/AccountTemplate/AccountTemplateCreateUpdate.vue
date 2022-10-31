@@ -21,9 +21,29 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        secret_type: {
+          on: {
+            change: this.secretTypeChange
+          }
+        },
+        secret: {
+          el: {
+            type: 'input',
+            rows: 4
+          }
+        }
       },
       createSuccessNextRoute: { name: 'AccountTemplateList' },
       updateSuccessNextRoute: { name: 'AccountTemplateList' }
+    }
+  },
+  methods: {
+    secretTypeChange([value]) {
+      if (value !== 'password') {
+        this.$set(this.fieldsMeta.secret.el, 'type', 'textarea')
+      } else {
+        this.$set(this.fieldsMeta.secret.el, 'type', 'input')
+      }
     }
   }
 }

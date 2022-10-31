@@ -31,7 +31,7 @@ export default {
       quickActions: [
         {
           title: this.$t('assets.PrivilegedTemplate'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             model: this.object?.privileged,
             disabled: !this.$hasPerm('assets.change_accounttemplate')
@@ -39,7 +39,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                '/api/v1/assets/account-templates/',
+                `/api/v1/assets/account-templates/${this.object.id}/`,
                 { privileged: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
