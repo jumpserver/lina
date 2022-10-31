@@ -39,7 +39,7 @@ export default {
       quickActions: [
         {
           title: this.$t('assets.IsActive'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             label: this.$t('common.Test'),
             model: this.object.is_active,

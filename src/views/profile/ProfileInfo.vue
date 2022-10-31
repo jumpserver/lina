@@ -179,7 +179,7 @@ export default {
         },
         {
           title: this.$t('setting.WeCom'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'wecom',
             model: this.object.receive_backends.indexOf('wecom') !== -1
@@ -191,7 +191,7 @@ export default {
         },
         {
           title: this.$t('setting.DingTalk'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'dingtalk',
             model: this.object.receive_backends.indexOf('dingtalk') !== -1
@@ -203,7 +203,7 @@ export default {
         },
         {
           title: this.$t('setting.FeiShu'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'feishu',
             model: this.object.receive_backends.indexOf('feishu') !== -1
