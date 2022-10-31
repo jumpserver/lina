@@ -50,7 +50,13 @@ export default {
           [this.$t('assets.Label'), ['labels']],
           [this.$t('common.Other'), ['is_active', 'comment']]
         ],
-        fieldsMeta: assetFieldsMeta(this)
+        fieldsMeta: assetFieldsMeta(this),
+        cleanFormValue(values) {
+          const { id = '' } = this.$route.params
+          if (id) delete values['accounts']
+
+          return values
+        }
       }
     }
   },
