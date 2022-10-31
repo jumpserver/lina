@@ -32,6 +32,10 @@ export default {
         return this.$t('common.Update')
       }
     },
+    showInput: {
+      type: Boolean,
+      default: true
+    },
     placeholder: {
       type: String,
       default: () => ''
@@ -39,13 +43,13 @@ export default {
   },
   data() {
     return {
-      isShow: false,
+      isShow: this.showInput,
       curValue: this.value
     }
   },
   created() {
-    if (this.$route.path.indexOf('/create') !== -1) {
-      this.isShow = true
+    if (this.$route.path.indexOf('/update') !== -1) {
+      this.isShow = false
     }
   },
   methods: {
