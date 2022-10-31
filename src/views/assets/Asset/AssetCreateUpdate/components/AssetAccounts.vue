@@ -31,7 +31,9 @@
         :accounts="accounts"
       />
       <AccountTemplateDialog
+        v-if="templateDialogVisible"
         :visible.sync="templateDialogVisible"
+        :accounts="accounts"
       />
     </div>
   </div>
@@ -88,7 +90,7 @@ export default {
   methods: {
     removeAccount(account) {
       this.accounts = this.accounts.filter((item) => {
-        return item._id !== account._id
+        return item.id !== account.id
       })
     },
     onEditClick(account) {

@@ -32,7 +32,7 @@ export default {
       form: this.account || { },
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'privileged']],
-        [this.$t('assets.Secret'), ['secret_type', 'password', 'ssh_key', 'token', 'api_key', 'passphrase']],
+        [this.$t('assets.Secret'), ['secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase']],
         [this.$t('common.Other'), ['push_now', 'comment']]
       ],
       defaultPrivilegedAccounts: ['root', 'administrator'],

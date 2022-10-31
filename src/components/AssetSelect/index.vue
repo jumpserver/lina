@@ -110,7 +110,7 @@ export default {
           {
             prop: 'protocols',
             formatter: function(row) {
-              return <span> {row.protocols.toString()} </span>
+              return <span> {row.protocols?.toString()} </span>
             },
             label: this.$t('assets.Protocols')
           }
