@@ -657,6 +657,7 @@
   },
   "perms": {
     "": "",
+    "permAccount": "授权账号",
     "Actions": "动作",
     "Asset": "资产",
     "Basic": "基本",
