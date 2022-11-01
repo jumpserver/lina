@@ -30,7 +30,8 @@ export default {
             } catch (e) {
               // pass
             }
-            formValue['protocols'][0].port = port
+            const protocols = formValue['protocols']?.[0] || {}
+            protocols.port = port
           }
         },
         username_selector: {

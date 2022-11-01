@@ -8,7 +8,7 @@
       :account="account"
       @updateAuthDone="onUpdateAuthDone"
     />
-    <AddAccount
+    <AccountCreateUpdate
       v-if="showAddDialog"
       :visible.sync="showAddDialog"
       :asset="iAsset"
@@ -28,7 +28,7 @@ import ListTable from '@/components/ListTable/index'
 import { ActionsFormatter } from '@/components/TableFormatters'
 import ViewSecret from './ViewSecret'
 import UpdateSecretInfo from './UpdateSecretInfo'
-import AddAccount from './AddAccount'
+import AccountCreateUpdate from './AccountCreateUpdate'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
 import { hasUUID } from '@/utils/common'
@@ -41,7 +41,7 @@ export default {
     UpdateSecretInfo,
     PasswordHistoryDialog,
     ViewSecret,
-    AddAccount
+    AccountCreateUpdate
   },
   props: {
     url: {

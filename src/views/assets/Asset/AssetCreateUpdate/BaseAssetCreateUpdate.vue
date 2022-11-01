@@ -15,7 +15,7 @@ export default {
       required: true
     },
     addFields: {
-      type: Array,
+      type: [Array, Function],
       default: () => []
     },
     addFieldsMeta: {
@@ -29,6 +29,10 @@ export default {
     updateSuccessNextRoute: {
       type: Object,
       default: () => ({ name: 'AssetList' })
+    },
+    updateInitial: {
+      type: Function,
+      default: () => {}
     }
   },
   data() {
@@ -54,7 +58,6 @@ export default {
         cleanFormValue(values) {
           const { id = '' } = this.$route.params
           if (id) delete values['accounts']
-
           return values
         }
       }
@@ -66,12 +69,12 @@ export default {
       // 过滤类型为：null, undefined 的元素
       defaultConfig.fields = defaultConfig.fields.filter(Boolean)
       const config = _.merge(defaultConfig, { url })
-      for (const [groupName, adds] of addFields) {
+      for (const [groupName, adds, pos] of addFields) {
         const group = config.fields.find(([name]) => name === groupName)
         if (group) {
           group[1] = group[1].concat(adds)
         } else {
-          config.fields.splice(1, 0, [groupName, adds])
+          config.fields.splice(pos, 0, [groupName, adds])
         }
       }
 
@@ -107,6 +110,9 @@ export default {
         nodes: nodesInitial,
         platform: parseInt(platformId),
         protocols: []
+      }
+      if (this.updateInitial) {
+        this.updateInitial(initial)
       }
       this.defaultConfig.initial = Object.assign({}, initial, defaultConfig.initial)
     },

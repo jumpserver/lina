@@ -13,14 +13,18 @@
 
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
+import Account from '@/views/assets/Asset/AssetDetail/Account'
 import Detail from './Detail'
+import Applets from './Applets'
 
 export default {
   name: 'AssetListDetail',
   components: {
     GenericDetailPage,
+    Applets,
     TabPage,
-    Detail
+    Detail,
+    Account
   },
   data() {
     return {
@@ -30,8 +34,16 @@ export default {
         activeMenu: 'Detail',
         submenu: [
           {
-            'title': 'AppletHostDetail',
+            'title': this.$t('common.Detail'),
             'name': 'Detail'
+          },
+          {
+            title: this.$t('assets.Account'),
+            name: 'Account'
+          },
+          {
+            'title': this.$t('terminal.Applets'),
+            'name': 'Applets'
           }
         ],
         hasRightSide: true,
@@ -48,6 +60,9 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    this.$route.query.oid = 'SYSTEM'
   }
 }
 </script>

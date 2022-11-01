@@ -102,6 +102,7 @@
     "InAssetDetail": "在资产详情中更新账号信息",
     "SecretType": "密文类型",
     "PrivilegedTemplate": "特权的",
+    "InitialDeploy": "初始化部署",
     "Address": "地址",
     "PrivateKey": "密钥",
     "Secret": "密码",
@@ -288,6 +289,10 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Automations": "自动化",
+    "Sync": "同步",
+    "Deploy": "部署",
+    "Detail": "详情",
     "Selector": "选择器",
     "NeedAddAppsOrSystemUserErrMsg": "需要添加应用或系统用户",
     "VerificationCodeSent": "验证码已发送",
@@ -717,6 +722,7 @@
   },
   "route": {
     "": "",
+    "AppletHostDetail": "远程应用发布机详情",
     "AppletHostCreate": "添加远程应用发布机",
     "AppletHostUpdate": "更新远程应用发布机",
     "AppletCreate": "创建远程应用",
@@ -908,7 +914,8 @@
   "terminal": {
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
-    "uploadZipTips": "请上传zip格式的文件"
+    "uploadZipTips": "请上传zip格式的文件",
+    "HostDeployment": "发布机部署"
   },
   "sessions": {
     "SetToDefaultStorage": "设置为默认存储",

@@ -47,7 +47,7 @@ export default {
   computed: {
     iType() {
       switch (this.action.type) {
-        case 'switch':
+        case 'switcher':
           return 'Switcher'
         default:
           return 'el-button'

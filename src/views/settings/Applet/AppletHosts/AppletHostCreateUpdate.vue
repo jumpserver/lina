@@ -14,9 +14,16 @@ export default {
       config: {
         url: '/api/v1/terminal/applet-hosts/?oid=RemoteAppHost',
         addFields: [
-          [this.$t('assets.Account'), ['account_automation']]
+          [this.$t('common.Automations'), ['account_automation', 'deploy_options'], 3]
         ],
         addFieldsMeta: {
+          deploy_options: {
+            fields: [
+              'RDS_Licensing', 'RDS_LicenseServer', 'RDS_LicensingMode',
+              'RDS_fSingleSessionPerUser', 'RDS_MaxDisconnectionTime',
+              'RDS_RemoteAppLogoffTimeLimit'
+            ]
+          },
           platform: {
             hidden: () => true
           },

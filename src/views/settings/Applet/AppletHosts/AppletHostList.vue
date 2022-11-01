@@ -28,7 +28,6 @@ export default {
           name: {
             formatterArgs: {
               getRoute: ({ row }) => {
-                console.log('Row: ', row)
                 return {
                   name: 'AppletHostDetail',
                   params: { id: row.id }
@@ -54,7 +53,6 @@ export default {
       }
     }
   }
-
 }
 </script>
 
