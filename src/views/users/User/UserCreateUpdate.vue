@@ -171,6 +171,9 @@ export default {
         if (value.update_password !== undefined) {
           delete value.update_password
         }
+        if (value.source !== 'local') {
+          delete value.need_update_password
+        }
         return value
       }
     }
