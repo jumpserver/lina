@@ -29,7 +29,7 @@ export default {
       loading: true,
       usernameChanged: false,
       url: '/api/v1/assets/accounts/',
-      form: this.account || { },
+      form: this.account || {},
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'privileged']],
         [this.$t('assets.Secret'), ['secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase']],
@@ -121,6 +121,11 @@ export default {
       })
     },
     confirm(form) {
+      const secretType = form.secret_type || ''
+      if (secretType !== 'password') {
+        form.secret = form[secretType]
+        delete form[secretType]
+      }
       if (this.account?.name) {
         this.$emit('edit', form)
       } else {

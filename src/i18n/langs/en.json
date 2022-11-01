@@ -640,6 +640,7 @@
   },
   "perms": {
     "": "",
+    "permAccount": "Accounts",
     "Actions": "Actions",
     "Permission": "Permissions",
     "Asset": "Asset",

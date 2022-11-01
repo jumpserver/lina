@@ -647,6 +647,7 @@
   },
   "perms": {
     "": "",
+    "permAccount": "認定アカウント",
     "Actions": "アクション",
     "Asset": "資産",
     "Basic": "基本",
