@@ -27,26 +27,17 @@ export default {
         width: '60%',
         tableConfig: {
           url: `/api/v1/assets/account-secrets/${this.account.id}/histories/`,
-          columns: [
-            'name', 'version', 'password', 'date_created'
-          ],
-          columnsShow: {
-            min: ['name'],
-            default: [
-              'name', 'version', 'password', 'date_created'
-            ]
-          },
-          columnsMeta: {
-            name: {
-              showOverflowTooltip: true
-            }
-          }
+          columns: ['secret', 'secret_type', 'version']
         },
         headerActions: {
           hasImport: false,
           hasExport: false,
           hasLeftActions: false,
-          hasColumnSetting: false
+          hasColumnSetting: false,
+          hasSearch: false,
+          searchConfig: {
+            getUrlQuery: false
+          }
         }
       }
     }
