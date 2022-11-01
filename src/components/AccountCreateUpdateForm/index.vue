@@ -106,8 +106,6 @@ export default {
       hasSaveContinue: false
     }
   },
-  mounted() {
-  },
   methods: {
     afterGetRemoteMeta(meta) {
       const choices = meta.secret_type.choices
