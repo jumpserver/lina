@@ -81,7 +81,6 @@ export default {
       this.$emit('afterGenerateColumns', this.totalFields)
       this.cleanFormValue()
       this.loading = false
-      console.log('Loading: ', this.groups)
     },
     generateColumns() {
       const generator = new FormFieldGenerator(this.$emit)
@@ -91,21 +90,29 @@ export default {
     },
     _cleanFormValue(form, remoteMeta) {
       for (const [k, v] of Object.entries(remoteMeta)) {
-        if (v.default === undefined) {
-          continue
+        let valueSet = form[k]
+        if (v.type === 'nested object' && v.children) {
+          // 有一些字段属性时 nested object 类型，但是没有 children，没有children的不需要走递归逻辑，
+          // 比如：认证配置中的属性映射字段
+          if (typeof valueSet !== 'object') {
+            // 处理一些前端没有设置初始值的情况
+            valueSet = {}
+          }
+          form[k] = valueSet
+          this._cleanFormValue(valueSet, v.children)
         }
-        const valueSet = form[k]
         if (valueSet !== undefined) {
           continue
         }
-        if (v.type === 'nested object' && typeof valueSet === 'object') {
-          this._cleanFormValue(valueSet, v.children)
+        if (v.default === undefined) {
+          continue
         }
         form[k] = v.default
       }
     },
     cleanFormValue() {
       this._cleanFormValue(this.iForm, this.remoteMeta)
+      console.log('Form: ', this.iForm)
     },
     setFieldError(name, error) {
       const field = this.totalFields.find((v) => v.prop === name)
