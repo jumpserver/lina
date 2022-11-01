@@ -179,6 +179,10 @@ export default {
   &>>> .el-input__icon {
     color: #606266;
   }
+
+  &>>> .el-input .el-select__caret {
+    color: #8d8f93;
+  }
 }
 
 .option-group >>> .el-select-group__title {
