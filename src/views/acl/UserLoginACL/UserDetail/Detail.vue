@@ -55,7 +55,7 @@ export default {
       quickActions: [
         {
           title: this.$t('common.Active'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             model: this.object.is_active
           },

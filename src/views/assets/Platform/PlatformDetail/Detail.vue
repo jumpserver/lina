@@ -79,7 +79,7 @@ export default {
       const quickActions = [
         {
           title: this.$t('assets.DomainEnabled'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             label: this.$t('common.Update'),
             model: object['domain_enabled'],

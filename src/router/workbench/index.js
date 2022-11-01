@@ -42,26 +42,7 @@ export default {
         permissions: ['perms.view_myassets']
       }
     },
-    {
-      path: '/workbench/ops',
-      component: empty,
-      meta: {
-        permissions: ['ops.add_commandexecution'],
-        hidden: ({ settings }) => !settings['SECURITY_COMMAND_EXECUTION']
-      },
-      children: [
-        {
-          path: '',
-          name: 'CommandExecutions',
-          component: () => import('@/views/ops/CommandExecution'),
-          meta: {
-            title: i18n.t('route.BatchCommand'),
-            icon: 'terminal',
-            permissions: ['ops.add_commandexecution']
-          }
-        }
-      ]
-    },
+
     {
       path: `external-luna`,
       component: empty,
@@ -94,6 +75,38 @@ export default {
             icon: 'file',
             activeMenu: '/assets',
             permissions: ['rbac.view_filemanager']
+          }
+        }
+      ]
+    },
+    {
+      path: '/workbench/ops',
+      component: empty,
+      name: 'JobCenter',
+      meta: {
+        title: i18n.t('route.JobCenter'),
+        icon: 'coffee',
+        permissions: []
+      },
+      children: [
+        {
+          path: 'a',
+          name: 'CommandExecutions2',
+          component: () => import('@/views/ops/Command'),
+          meta: {
+            title: i18n.t('route.BatchCommand'),
+            icon: 'terminal',
+            permissions: []
+          }
+        },
+        {
+          path: '',
+          name: 'CommandExecutions',
+          component: () => import('@/views/ops/Command'),
+          meta: {
+            title: i18n.t('route.BatchScript'),
+            icon: 'book',
+            permissions: []
           }
         }
       ]

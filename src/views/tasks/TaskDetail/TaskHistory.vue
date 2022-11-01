@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/ops/tasks/${this.object.id}/executions/`,
+        url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
         columns: [
           'id', 'state', 'is_finished', 'date_published', 'date_start', 'date_finished', 'actions'
         ],

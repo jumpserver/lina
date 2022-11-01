@@ -6,7 +6,7 @@ import store from '@/store'
 import UsersRoute from './users'
 import AssetsRoute from './assets'
 import PermsRoute from './perms'
-import OpsRoutes from './ops'
+import TaskRoutes from './tasks'
 import AclRoutes from './acls'
 import AccountRoutes from './accounts'
 
@@ -88,14 +88,14 @@ export default {
       children: AclRoutes
     },
     {
-      path: '/console/ops',
+      path: '/console/tasks',
       component: empty,
-      name: 'JobCenter',
+      name: 'TaskCenter',
       meta: {
-        title: i18n.t('route.JobCenter'),
-        icon: 'coffee'
+        title: i18n.t('route.TaskCenter'),
+        icon: 'tasks'
       },
-      children: OpsRoutes
+      children: TaskRoutes
     }
   ]
 }

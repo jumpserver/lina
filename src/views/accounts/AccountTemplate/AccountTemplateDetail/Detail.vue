@@ -15,7 +15,7 @@ import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'RemoteAppPermissionDetail',
+  name: 'Detail',
   components: {
     DetailCard,
     QuickActions
@@ -23,24 +23,24 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => ({})
+      default: () => {}
     }
   },
   data() {
     return {
       quickActions: [
         {
-          title: this.$t('common.Active'),
+          title: this.$t('assets.PrivilegedTemplate'),
           type: 'switch',
           attrs: {
-            model: this.object.is_active,
-            disabled: !this.$hasPerm('perms.change_applicationpermission')
+            model: this.object?.privileged,
+            disabled: !this.$hasPerm('assets.change_accounttemplate')
           },
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `/api/v1/perms/application-permissions/${this.object.id}/`,
-                { is_active: val }
+                `/api/v1/assets/account-templates/${this.object.id}/`,
+                { privileged: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
               }).catch(err => {
@@ -56,47 +56,27 @@ export default {
     detailCardItems() {
       return [
         {
-          key: this.$t('common.Name'),
+          key: this.$t('assets.Name'),
           value: this.object.name
         },
         {
-          key: this.$t('assets.Applications'),
-          value: this.object.category_display
+          key: this.$t('users.Username'),
+          value: this.object.username
         },
         {
-          key: this.$t('perms.userCount'),
-          value: this.object.users_amount
+          key: this.$t('assets.SecretType'),
+          value: this.object.secret_type
         },
         {
-          key: this.$t('perms.userGroupCount'),
-          value: this.object.user_groups_amount
-        },
-        {
-          key: this.$t('perms.appsCount'),
-          value: this.object.applications_amount
-        },
-        {
-          key: this.$t('perms.systemUserCount'),
-          value: this.object.system_users_amount
-        },
-        {
-          key: this.$t('perms.dateStart'),
-          value: toSafeLocalDateStr(this.object.date_start)
-        },
-        {
-          key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(this.object.date_expired)
-        },
-        {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {
-          key: this.$t('common.createdBy'),
-          value: this.object.created_by
+          key: this.$t('xpack.ChangeAuthPlan.DateUpdated'),
+          value: toSafeLocalDateStr(this.object.date_updated)
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$t('assets.Comment'),
           value: this.object.comment
         }
       ]
@@ -105,6 +85,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 
 </style>

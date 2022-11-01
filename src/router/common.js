@@ -7,7 +7,7 @@ import i18n from '@/i18n/i18n'
 export default [
   {
     path: '/ops/celery/task/:id/log/',
-    component: () => import('@/views/ops/CeleryTaskLog'),
+    component: () => import('@/views/tasks/CeleryTaskLog'),
     name: 'CeleryTaskLog',
     hidden: true,
     meta: {
@@ -17,7 +17,7 @@ export default [
   },
   {
     path: '/ops/task/task/:id/log/',
-    component: () => import('@/views/ops/CeleryTaskLog'),
+    component: () => import('@/views/tasks/CeleryTaskLog'),
     name: 'TaskLog',
     hidden: true,
     meta: {

@@ -188,7 +188,7 @@ export default {
                 },
                 {
                   title: this.$t('accounts.HistoryPassword'),
-                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('assets.view_accountsecret') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
                     vm.showPasswordHistoryDialog = false
@@ -207,7 +207,7 @@ export default {
         hasMoreActions: true,
         hasCreate: false,
         hasImport: true,
-        hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
+        hasExport: this.$hasPerm('assets.view_account'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
