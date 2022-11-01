@@ -1,18 +1,15 @@
 <template>
-  <AutoDataForm
-    v-bind="$data"
-    @submit="confirm"
-    @afterRemoteMeta="afterGetRemoteMeta"
-  />
+  <GenericCreateUpdateForm v-if="!loading" v-bind="$data" @afterRemoteMeta="afterGetRemoteMeta" />
 </template>
 
 <script>
-import AutoDataForm from '@/components/AutoDataForm'
+import { GenericCreateUpdateForm } from '@/layout/components'
 import { UpdateToken } from '@/components/FormFields'
+
 export default {
   name: 'AccountCreateForm',
   components: {
-    AutoDataForm
+    GenericCreateUpdateForm
   },
   props: {
     platform: {
@@ -25,17 +22,17 @@ export default {
     }
   },
   data() {
+    const url = '/api/v1/assets/accounts/'
     return {
+      url,
       loading: true,
-      usernameChanged: false,
-      url: '/api/v1/assets/accounts/',
-      form: this.account || { },
+      initial: {},
+      getUrl: () => url,
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'privileged']],
         [this.$t('assets.Secret'), ['secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase']],
         [this.$t('common.Other'), ['push_now', 'comment']]
       ],
-      defaultPrivilegedAccounts: ['root', 'administrator'],
       fieldsMeta: {
         name: {
           on: {
@@ -103,10 +100,26 @@ export default {
           }
         }
       },
-      hasSaveContinue: false
+      hasReset: true,
+      hasSaveContinue: false,
+      cleanFormValue(values) {
+        const secretType = values.secret_type || ''
+        if (secretType !== 'password') {
+          values.secret = values[secretType]
+          delete values[secretType]
+        }
+
+        return values
+      },
+      onSubmit: this.confirm
     }
   },
-  mounted() {
+  async created() {
+    try {
+      this.initial = await this.account
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
     afterGetRemoteMeta(meta) {
@@ -115,8 +128,8 @@ export default {
       this.platform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])
       })
-      if (!this.form.secret_type) {
-        this.form.secret_type = secretTypes[0]
+      if (!this.initial.secret_type) {
+        this.initial.secret_type = secretTypes[0]
       }
       this.fieldsMeta.secret_type.options = choices.filter(item => {
         return secretTypes.indexOf(item.value) > -1
