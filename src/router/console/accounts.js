@@ -23,6 +23,13 @@ export default [
         }
       },
       {
+        path: ':id',
+        component: () => import('@/views/accounts/AssetAccount/AssetAccountDetail/index.vue'),
+        name: 'AssetAccountDetail',
+        meta: { title: i18n.t('route.AssetAccount') },
+        hidden: true
+      },
+      {
         path: 'history',
         name: 'AssetAccountHistoryList',
         component: () => import('@/views/accounts/AssetAccount/AssetAccountHistoryList'),
