@@ -69,10 +69,10 @@ export default {
           }
         },
         {
-          title: '同步所有应用',
+          title: '发布所有应用',
           attrs: {
             type: 'primary',
-            label: this.$t('common.Sync')
+            label: this.$t('common.Publish')
           },
           callbacks: {
             click: function() {

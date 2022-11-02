@@ -169,6 +169,10 @@ export default {
     line-height: 1.5;
     padding: 6px 0;
     font-size: 13px;
+
+    * {
+      vertical-align: middle;
+    }
   }
   .el-table  ::v-deep  .el-table__row > td> div > span {
     text-overflow: ellipsis;

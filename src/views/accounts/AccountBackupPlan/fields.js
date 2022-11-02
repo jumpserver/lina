@@ -1,7 +1,7 @@
 import i18n from '@/i18n/i18n'
 import { CronTab } from '@/components'
 
-var validatorInterval = (rule, value, callback) => {
+const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
     return callback(new Error(i18n.t('xpack.ChangeAuthPlan.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
   }

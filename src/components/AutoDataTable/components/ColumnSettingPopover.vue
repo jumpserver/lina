@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="showColumnSettingPopover"
-    :title="$t('common.CustomCol')"
+    :title="$tc('common.CustomCol')"
     :visible.sync="showColumnSettingPopover"
     :destroy-on-close="true"
     :show-cancel="false"

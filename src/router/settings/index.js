@@ -215,7 +215,7 @@ export default {
           component: () => import('@/views/settings/Applet'),
           meta: {
             title: i18n.t('setting.Applets'),
-            icon: 'tasks',
+            icon: 'windows',
             permissions: ['settings.change_terminal']
           }
         },
@@ -226,7 +226,8 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostCreate'),
-            permissions: ['settings.change_terminal']
+            permissions: ['settings.change_terminal'],
+            activeMenu: '/settings/applets'
           }
         },
         {
@@ -236,7 +237,8 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostDetail'),
-            permissions: ['settings.change_terminal']
+            permissions: ['settings.change_terminal'],
+            activeMenu: '/settings/applets'
           }
         },
         {
@@ -246,7 +248,8 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostUpdate'),
-            permissions: ['settings.change_terminal']
+            permissions: ['settings.change_terminal'],
+            activeMenu: '/settings/applets'
           }
         }
       ]

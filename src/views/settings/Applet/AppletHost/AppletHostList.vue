@@ -38,7 +38,9 @@ export default {
           protocols: {
             label: this.$t('assets.Protocols'),
             formatter: (row) => {
-              return row.protocols.map(p => <el-tag size='mini' class='protocol'>{p.name}/{p.port} </el-tag>)
+              return row.protocols.map((p, i) => {
+                return <el-tag size='mini' class='protocol'>{p.name}/{p.port}</el-tag>
+              })
             }
           },
           actions: {

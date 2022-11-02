@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="16" :sm="24">
-      <ListTable :table-config="config" />
+      <ListTable :table-config="config" :header-actions="headerConfig" />
     </el-col>
     <el-col :md="8" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -9,9 +9,10 @@
   </el-row>
 </template>
 
-<script>
+<script type="text/jsx">
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
+import { DetailFormatter } from '@/components/TableFormatters'
 export default {
   name: 'Publications',
   components: {
@@ -26,35 +27,40 @@ export default {
   },
   data() {
     return {
+      headerConfig: {
+        hasImport: false
+      },
       config: {
         url: `/api/v1/terminal/applet-publications/?host=${this.object.id}`,
         columns: [
-          'applet.icon', 'applet.display_name', 'date_updated', 'status',
+          'applet.display_name', 'date_updated', 'status',
           'actions'
         ],
         columnsMeta: {
-          'applet.icon': {
-            label: this.$t('common.Icon'),
-            align: 'center',
-            width: '60px',
-            formatter: (row) => {
-              return <img src={row.applet.icon} width='30' height='30' alt='icon'></img>
+          'applet.display_name': {
+            label: this.$t('common.DisplayName'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getIcon: ({ row }) => row.applet?.icon,
+              getTitle: ({ row }) => row.applet.display_name
             }
           },
-          'applet.display_name': {
-            label: this.$t('common.DisplayName')
-          },
           status: {
-            label: this.$t('common.Status'),
+            label: this.$t('applets.PublishStatus'),
             formatter: (row) => {
-              if (!row.status) {
-                return <el-tag size='mini' type='danger'>{ this.$t('applets.NoPublished') }</el-tag>
+              const typeMapper = {
+                'ready': 'info',
+                'pending': 'info',
+                'running': 'success',
+                'success': 'success',
+                'failed': 'danger'
               }
-              return row.status.label
+              const tp = typeMapper[row.status.value] || 'info'
+              return <el-tag size='mini' type={tp}>{ row.status.label }</el-tag>
             }
           },
           date_updated: {
-            label: '发布日期'
+            label: '日期'
           },
           actions: {
             formatterArgs: {
@@ -82,10 +88,10 @@ export default {
           }
         },
         {
-          title: '同步所有应用',
+          title: '发布所有应用',
           attrs: {
             type: 'primary',
-            label: this.$t('common.Sync')
+            label: this.$t('common.Publish')
           },
           callbacks: {
             click: function() {

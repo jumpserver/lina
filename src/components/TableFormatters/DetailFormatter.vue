@@ -120,6 +120,5 @@ export default {
 .icon {
   width: 28px;
   height: 28px;
-  vertical-align: middle;
 }
 </style>

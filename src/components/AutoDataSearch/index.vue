@@ -67,7 +67,7 @@ export default {
           type: field.type,
           value: name
         }
-        if (field.type === 'choice' && field.choices) {
+        if (['choice', 'labeled_choice'].indexOf(field.type) > -1 && field.choices) {
           option.children = field.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
