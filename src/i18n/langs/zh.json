@@ -289,6 +289,8 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Icon": "图标",
+    "DisplayName": "名称",
     "Automations": "自动化",
     "Sync": "同步",
     "Deploy": "部署",
@@ -996,6 +998,9 @@
       "esIndex": "es 提供默认 index：jumpserver。如果开启按日期建立索引，那么输入的值会作为索引前缀",
       "esDocType": "es 默认文档类型：command"
     }
+  },
+  "applets": {
+    "NoPublished": "未发布"
   },
   "setting": {
     "Applets": "远程应用",

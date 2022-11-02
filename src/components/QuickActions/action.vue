@@ -47,6 +47,8 @@ export default {
   computed: {
     iType() {
       switch (this.action.type) {
+        case 'switch':
+          return 'Switcher'
         case 'switcher':
           return 'Switcher'
         default:

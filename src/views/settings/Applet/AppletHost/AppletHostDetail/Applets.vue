@@ -29,13 +29,32 @@ export default {
       config: {
         url: `/api/v1/terminal/applet-publications/?host=${this.object.id}`,
         columns: [
-          'name', 'applet', 'comment', 'date_created', 'date_updated', 'actions'
+          'applet.icon', 'applet.display_name', 'date_updated', 'status',
+          'actions'
         ],
         columnsMeta: {
-          applet: {
+          'applet.icon': {
+            label: this.$t('common.Icon'),
+            align: 'center',
+            width: '60px',
             formatter: (row) => {
-              return row.applet.name
+              return <img src={row.applet.icon} width='30' height='30' alt='icon'></img>
             }
+          },
+          'applet.display_name': {
+            label: this.$t('common.DisplayName')
+          },
+          status: {
+            label: this.$t('common.Status'),
+            formatter: (row) => {
+              if (!row.status) {
+                return <el-tag size='mini' type='danger'>{ this.$t('applets.NoPublished') }</el-tag>
+              }
+              return row.status.label
+            }
+          },
+          date_updated: {
+            label: '发布日期'
           },
           actions: {
             formatterArgs: {

@@ -1,12 +1,15 @@
 <template>
-  <el-link
-    class="detail"
-    :disabled="disabled"
-    :type="col.type || 'info'"
-    @click="goDetail"
-  >
-    {{ iTitle }}
-  </el-link>
+  <div>
+    <img v-if="icon" :src="icon" alt="icon" class="icon">
+    <el-link
+      class="detail"
+      :disabled="disabled"
+      :type="col.type || 'info'"
+      @click="goDetail"
+    >
+      {{ iTitle }}
+    </el-link>
+  </div>
 </template>
 
 <script>
@@ -26,6 +29,9 @@ export default {
           can: true,
           getTitle({ col, row, cellValue }) {
             return cellValue
+          },
+          getIcon({ col, row, cellValue }) {
+            return null
           }
         }
       }
@@ -51,6 +57,13 @@ export default {
         can = can(this.col)
       }
       return !can
+    },
+    icon() {
+      return this.formatterArgs.getIcon({
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue
+      })
     }
   },
   methods: {
@@ -97,5 +110,16 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 400;
+}
+
+.detail {
+  line-height: 25px;
+  font-size: 13px;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
 }
 </style>
