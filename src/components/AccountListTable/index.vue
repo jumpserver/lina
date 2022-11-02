@@ -91,12 +91,12 @@ export default {
           resource: 'account'
         },
         columns: [
-          'asset', 'username', 'version', 'privileged',
+          'name', 'asset', 'username', 'version', 'privileged',
           'secret_type', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
-          min: ['username', 'actions'],
-          default: ['hostname', 'ip', 'username', 'version', 'privileged', 'actions']
+          min: ['name', 'username', 'actions'],
+          default: ['name', 'hostname', 'ip', 'username', 'version', 'privileged', 'actions']
         },
         columnsMeta: {
           asset: {

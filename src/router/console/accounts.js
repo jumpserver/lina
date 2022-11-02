@@ -21,6 +21,13 @@ export default [
           app: 'assets',
           permissions: ['assets.view_account']
         }
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/AssetAccount/AssetAccountDetail/index.vue'),
+        name: 'AssetAccountDetail',
+        meta: { title: i18n.t('route.AssetAccount') },
+        hidden: true
       }
     ]
   },
