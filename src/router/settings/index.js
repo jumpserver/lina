@@ -222,7 +222,7 @@ export default {
         {
           path: 'hosts/create',
           name: 'AppletHostCreate',
-          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),
+          component: () => import('@/views/settings/Applet/AppletHost/AppletHostCreateUpdate'),
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostCreate'),
@@ -232,7 +232,7 @@ export default {
         {
           path: 'hosts/:id',
           name: 'AppletHostDetail',
-          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostDetail/index'),
+          component: () => import('@/views/settings/Applet/AppletHost/AppletHostDetail/index'),
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostDetail'),
@@ -242,7 +242,7 @@ export default {
         {
           path: 'hosts/:id/update',
           name: 'AppletHostUpdate',
-          component: () => import('@/views/settings/Applet/AppletHosts/AppletHostCreateUpdate'),
+          component: () => import('@/views/settings/Applet/AppletHost/AppletHostCreateUpdate'),
           hidden: true,
           meta: {
             title: i18n.t('route.AppletHostUpdate'),

@@ -20,7 +20,7 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/applets/',
         columns: [
-          'icon', 'name', 'version', 'author', 'protocols',
+          'name', 'version', 'author', 'protocols',
           'type', 'comment', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
@@ -40,7 +40,8 @@ export default {
           },
           name: {
             formatterArgs: {
-              getTitle: ({ row }) => row['display_name']
+              getTitle: ({ row }) => row['display_name'],
+              getIcon: ({ row }) => row['icon']
             }
           },
           version: {

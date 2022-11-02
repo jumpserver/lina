@@ -28,16 +28,6 @@ export default [
         name: 'AssetAccountDetail',
         meta: { title: i18n.t('route.AssetAccount') },
         hidden: true
-      },
-      {
-        path: 'history',
-        name: 'AssetAccountHistoryList',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountHistoryList'),
-        hidden: true,
-        meta: {
-          title: i18n.t('route.AssetHistoryAccount'),
-          permissions: ['assets.view_assethistoryaccount']
-        }
       }
     ]
   },
