@@ -5,7 +5,8 @@
     :type="col.type || 'info'"
     @click="goDetail"
   >
-    {{ iTitle }}
+    <img v-if="icon" :src="icon" alt="icon" class="icon">
+    <span class="title">{{ iTitle }}</span>
   </el-link>
 </template>
 
@@ -26,6 +27,9 @@ export default {
           can: true,
           getTitle({ col, row, cellValue }) {
             return cellValue
+          },
+          getIcon({ col, row, cellValue }) {
+            return null
           }
         }
       }
@@ -51,6 +55,13 @@ export default {
         can = can(this.col)
       }
       return !can
+    },
+    icon() {
+      return this.formatterArgs.getIcon({
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue
+      })
     }
   },
   methods: {
@@ -97,5 +108,14 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 400;
+}
+
+.detail {
+  line-height: 25px;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
 }
 </style>
