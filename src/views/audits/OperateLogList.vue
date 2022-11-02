@@ -5,7 +5,6 @@
       :title="this.$t('route.OperateLog')"
       :visible.sync="logDetailVisible"
       width="70%"
-      :show-close="false"
     >
       <TwoTabFormatter :row="rowObj" />
     </el-dialog>
@@ -29,7 +28,12 @@ export default {
     const dateFrom = getDaysAgo(7, now).toISOString()
     const dateTo = getDaysFuture(1, now).toISOString()
     return {
-      rowObj: '',
+      rowObj: {
+        left: '',
+        rigth: '',
+        leftTitle: vm.$t('audits.BeforeChange'),
+        rightTitle: vm.$t('audits.AfterChange')
+      },
       logDetailVisible: false,
       tableConfig: {
         url: '/api/v1/audits/operate-logs/',
@@ -73,9 +77,8 @@ export default {
                     vm.$axios.get(
                       `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`,
                     ).then(res => {
-                      row.before = res.before
-                      row.after = res.after
-                      vm.rowObj = row
+                      vm.rowObj.left = res.before
+                      vm.rowObj.right = res.after
                       vm.logDetailVisible = true
                     })
                   }
