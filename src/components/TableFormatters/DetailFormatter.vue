@@ -1,13 +1,15 @@
 <template>
-  <el-link
-    class="detail"
-    :disabled="disabled"
-    :type="col.type || 'info'"
-    @click="goDetail"
-  >
+  <div>
     <img v-if="icon" :src="icon" alt="icon" class="icon">
-    <span class="title">{{ iTitle }}</span>
-  </el-link>
+    <el-link
+      class="detail"
+      :disabled="disabled"
+      :type="col.type || 'info'"
+      @click="goDetail"
+    >
+      {{ iTitle }}
+    </el-link>
+  </div>
 </template>
 
 <script>
@@ -115,7 +117,8 @@ export default {
 }
 
 .icon {
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
 }
 </style>
