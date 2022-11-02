@@ -165,18 +165,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
   .el-table  ::v-deep  .el-table__row > td {
     line-height: 1.5;
-    padding: 8px 0;
+    padding: 6px 0;
+    font-size: 13px;
   }
   .el-table  ::v-deep  .el-table__row > td> div > span {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }
-  .el-table  ::v-deep  .el-table__header > thead > tr >th {
-    padding: 8px 0;
+  .el-table  ::v-deep  .el-table__header > thead > tr > th {
+    padding: 6px 0;
     background-color: #F5F5F6;
     font-size: 13px;
     line-height: 1.5;

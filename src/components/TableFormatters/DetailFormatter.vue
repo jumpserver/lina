@@ -114,6 +114,7 @@ export default {
 
 .detail {
   line-height: 25px;
+  font-size: 13px;
 }
 
 .icon {
