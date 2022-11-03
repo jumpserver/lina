@@ -1305,6 +1305,7 @@
       "databasePermissionRules": "Database Permission rules",
       "k8sPermissionRules": "Kubernetes Permission rules",
       "grantedAssets": "Granted assets",
+      "grantedAccounts": "Granted accounts",
       "grantedK8Ss": "Granted K8Ss",
       "grantedDatabases": "Granted databases",
       "grantedRemoteApps": "Granted remote apps",

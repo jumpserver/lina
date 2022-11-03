@@ -1341,6 +1341,7 @@
       "databasePermissionRules": "データベース認可ルール",
       "k8sPermissionRules": "Kubernetesライセンスルール",
       "grantedAssets": "認可された資産",
+      "grantedAccounts": "公認アカウント",
       "grantedK8Ss": "認可されたKubernetes",
       "grantedDatabases": "認可されたデータベース",
       "grantedRemoteApps": "許可されたリモートアプリケーション",

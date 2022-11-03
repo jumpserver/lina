@@ -10,6 +10,7 @@
 import { GenericDetailPage } from '@/layout/components'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
+import UserGrantedAccounts from './UserGrantedAccounts'
 import UserGrantedApplications from './UserGrantedApplications'
 import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
 import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
@@ -20,6 +21,7 @@ export default {
     GenericDetailPage,
     UserInfo,
     UserGrantedAssets,
+    UserGrantedAccounts,
     UserAssetPermissionRules,
     UserGrantedApplications,
     UserApplicationPermissionRules,
@@ -42,6 +44,12 @@ export default {
           {
             title: this.$t('users.tabs.grantedAssets'),
             name: 'UserGrantedAssets',
+            hidden: () => !vm.$hasPerm('perms.view_userassets')
+          },
+          {
+            title: this.$t('users.tabs.grantedAccounts'),
+            name: 'UserGrantedAccounts',
+            // Todo: perms.view_useraccounts
             hidden: () => !vm.$hasPerm('perms.view_userassets')
           },
           {
