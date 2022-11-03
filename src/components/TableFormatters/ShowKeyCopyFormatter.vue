@@ -1,7 +1,7 @@
 <template>
   <div class="content">
-    <span>{{ currentValue }}</span>
-    <span class="right">
+    <span class="text">{{ currentValue }}</span>
+    <span v-if="iValue" class="action">
       <el-tooltip
         v-if="hasShow"
         effect="dark"
@@ -81,11 +81,18 @@ export default {
 </script>
 <style lang="scss" scoped>
   .content {
+    display: flex;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    .right {
+    .text {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .action {
       float: right;
       font-size: 15px;
       cursor: pointer;

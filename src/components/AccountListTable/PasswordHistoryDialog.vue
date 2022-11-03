@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListTableDialog } from '@/layout/components'
+import { ShowKeyCopyFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -27,7 +28,12 @@ export default {
         width: '60%',
         tableConfig: {
           url: `/api/v1/assets/account-secrets/${this.account.id}/histories/`,
-          columns: ['secret', 'secret_type', 'version']
+          columns: ['secret', 'secret_type', 'version'],
+          columnsMeta: {
+            secret: {
+              formatter: ShowKeyCopyFormatter
+            }
+          }
         },
         headerActions: {
           hasImport: false,
@@ -51,12 +57,6 @@ export default {
         this.$emit('update:visible', val)
       }
     }
-  },
-  created() {
-
-  },
-  methods: {
-
   }
 }
 </script>
