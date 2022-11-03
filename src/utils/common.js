@@ -311,3 +311,17 @@ export function groupedDropdownToCascader(group) {
 
 export { BASE_URL }
 
+/**
+ * Download file
+ * @param  {String} content
+ * @param  {String} fileName
+ */
+export function downloadFile(content, filename) {
+  const a = document.createElement('a')
+  const blob = new Blob([content])
+  const url = window.URL.createObjectURL(blob)
+  a.href = url
+  a.download = filename
+  a.click()
+  window.URL.revokeObjectURL(url)
+}
