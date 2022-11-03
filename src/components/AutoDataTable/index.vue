@@ -230,23 +230,28 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      for (let col of config.columns) {
-        if (typeof col === 'object') {
-          columns.push(col)
-        } else if (typeof col === 'string') {
-          col = this.generateColumn(col)
-          columns.push(col)
+      const configColumns = config?.columns || []
+      if (configColumns.length > 0) {
+        for (let col of configColumns) {
+          if (typeof col === 'object') {
+            columns.push(col)
+          } else if (typeof col === 'string') {
+            col = this.generateColumn(col)
+            columns.push(col)
+          }
         }
+        columns = columns.filter(item => {
+          let has = item.has
+          if (has === undefined) {
+            has = true
+          } else if (typeof has === 'function') {
+            has = has()
+          }
+          return has
+        })
+      } else {
+        columns = Object.keys(this.meta).map(key => this.generateColumn(key))
       }
-      columns = columns.filter(item => {
-        let has = item.has
-        if (has === undefined) {
-          has = true
-        } else if (typeof has === 'function') {
-          has = has()
-        }
-        return has
-      })
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns
