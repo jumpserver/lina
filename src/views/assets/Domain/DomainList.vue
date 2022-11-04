@@ -42,7 +42,6 @@ export default {
         }
       },
       headerActions: {
-        hasMoreActions: false,
         createRoute: 'DomainCreate'
       },
       notice: this.$t('assets.DomainHelpMessage')
