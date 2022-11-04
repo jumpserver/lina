@@ -123,7 +123,6 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
         searchConfig: {
           getUrlQuery: false
         },
