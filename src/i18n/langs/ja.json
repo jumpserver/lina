@@ -250,7 +250,9 @@
     "SystemUserName": "システムユーザー名",
     "LoginIP": "ログインIP",
     "LoginCity": "ログイン都市",
-    "LoginDate": "ログイン日"
+    "LoginDate": "ログイン日",
+    "BeforeChange": "変更前",
+    "AfterChange": "変更後"
   },
   "auth": {
     "LoginRequiredMsg": "アカウントが終了しました。ログインし直してください",
@@ -260,6 +262,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "NoContent": "まだ内容がない",
     "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
     "VerificationCodeSent": "検証コードが送信されました",
     "SendVerificationCode": "認証コードの送信",

@@ -250,7 +250,9 @@
     "SystemUserName": "系统用户名",
     "LoginIP": "登录IP",
     "LoginCity": "登录城市",
-    "LoginDate": "登录日期"
+    "LoginDate": "登录日期",
+    "BeforeChange": "变更前",
+    "AfterChange": "变更后"
   },
   "auth": {
     "LoginRequiredMsg": "账号已退出，请重新登录",
@@ -260,6 +262,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "NoContent": "暂无内容",
     "NeedAddAppsOrSystemUserErrMsg": "需要添加应用或系统用户",
     "VerificationCodeSent": "验证码已发送",
     "SendVerificationCode": "发送验证码",
