@@ -9,6 +9,13 @@ export const assetFieldsMeta = (vm) => {
   const secretTypes = []
   return {
     address: {},
+    automation: {
+      fieldsMeta: {
+        gather_facts_enabled: {
+          label: i18n.t('assets.CollectHardwareInfo')
+        }
+      }
+    },
     protocols: {
       component: ProtocolSelector,
       el: {
