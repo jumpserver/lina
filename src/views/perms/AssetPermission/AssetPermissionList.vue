@@ -1,6 +1,10 @@
 <template>
   <div>
-    <GenericTreeListPage :table-config="tableConfig" :header-actions="headerActions" :tree-setting="treeSetting" />
+    <GenericTreeListPage
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+      :tree-setting="treeSetting"
+    />
     <PermBulkUpdateDialog
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
@@ -10,8 +14,8 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { DetailFormatter } from '@/components/TableFormatters'
 import PermBulkUpdateDialog from '@/views/perms/components/PermBulkUpdateDialog'
+import { DetailFormatter } from '@/components/TableFormatters'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -20,7 +24,6 @@ export default {
     PermBulkUpdateDialog
   },
   data() {
-    const vm = this
     return {
       treeSetting: {
         showMenu: false,
@@ -34,16 +37,15 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
         columns: [
-          'name',
-          'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount',
-          'date_expired', 'is_valid', 'is_expired', 'is_active', 'from_ticket',
-          'created_by', 'date_created', 'comment', 'org_name', 'actions'
+          'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount',
+          'system_users_amount', 'date_expired', 'is_valid', 'is_expired', 'is_active',
+          'from_ticket', 'created_by', 'date_created', 'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'users_amount', 'user_groups_amount', 'assets_amount', 'nodes_amount', 'system_users_amount',
-            'is_valid', 'actions'
+            'name', 'users_amount', 'user_groups_amount', 'assets_amount',
+            'nodes_amount', 'system_users_amount', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
@@ -196,22 +198,11 @@ export default {
             }
           ]
         },
-        hasBulkUpdate: false,
-        extraMoreActions: [
-          {
-            name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => {
-              return selectedRows.length > 0 &&
-                !vm.currentOrgIsRoot &&
-                vm.$hasPerm('perms.change_assetpermission')
-            },
-            callback: ({ selectedRows }) => {
-              vm.updateSelectedDialogSetting.selectedRows = selectedRows
-              vm.updateSelectedDialogSetting.visible = true
-            }
-          }
-        ]
+        hasBulkUpdate: true,
+        handleBulkUpdate: ({ selectedRows }) => {
+          this.updateSelectedDialogSetting.selectedRows = selectedRows
+          this.updateSelectedDialogSetting.visible = true
+        }
       },
       updateSelectedDialogSetting: {
         visible: false,

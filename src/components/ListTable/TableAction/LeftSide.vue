@@ -26,7 +26,7 @@ export default {
     canCreate: defaultTrue,
     createRoute: {
       type: [String, Object, Function],
-      default: function() {
+      default() {
         return this.$route.name?.replace('List', 'Create')
       }
     },
@@ -42,6 +42,10 @@ export default {
     canBulkDelete: defaultTrue,
     hasBulkUpdate: defaultFalse,
     canBulkUpdate: defaultTrue,
+    handleBulkUpdate: {
+      type: Function,
+      default: () => {}
+    },
     hasMoreActions: defaultTrue,
     tableUrl: {
       type: String,
@@ -89,7 +93,6 @@ export default {
           name: 'actionDeleteSelected',
           has: this.hasBulkDelete,
           can({ selectedRows }) {
-            // vm.$log.debug('Delete select rows length: ', selectedRows.length)
             return selectedRows.length > 0 && vm.canBulkDelete
           },
           callback: this.defaultBulkDeleteCallback
@@ -98,8 +101,12 @@ export default {
           title: this.$t('common.updateSelected'),
           name: 'actionUpdateSelected',
           has: this.hasBulkUpdate,
-          can: ({ selectedRows }) => {
-            return selectedRows.length > 0 && vm.canBulkUpdate
+          can: function({ selectedRows }) {
+            let canBulkUpdate = vm.canBulkUpdate
+            if (typeof canBulkUpdate === 'function') {
+              canBulkUpdate = canBulkUpdate({ selectedRows })
+            }
+            return selectedRows.length > 0 && canBulkUpdate
           },
           callback: this.handleBulkUpdate
         }
@@ -183,7 +190,7 @@ export default {
     },
     defaultBulkDeleteCallback({ selectedRows, reloadTable }) {
       const msg = this.$t('common.deleteWarningMsg') + ' ' + selectedRows.length + ' ' + this.$t('common.rows') + ' ?'
-      const title = this.$t('common.Info')
+      const title = this.$tc('common.Info')
       const performDelete = this.performBulkDelete || this.defaultPerformBulkDelete
       this.$alert(msg, title, {
         type: 'warning',
@@ -196,9 +203,9 @@ export default {
             await performDelete(selectedRows)
             done()
             reloadTable()
-            this.$message.success(this.$t('common.bulkDeleteSuccessMsg'))
+            this.$message.success(this.$tc('common.bulkDeleteSuccessMsg'))
           } catch (error) {
-            this.$message.error(this.$t('common.bulkDeleteErrorMsg') + error)
+            this.$message.error(this.$tc('common.bulkDeleteErrorMsg') + error)
           } finally {
             instance.confirmButtonLoading = false
           }
@@ -214,8 +221,6 @@ export default {
       const data = await createSourceIdCache(ids)
       const url = (this.tableUrl.indexOf('?') === -1) ? `${this.tableUrl}?spm=` + data.spm : `${this.tableUrl}&spm=` + data.spm
       return this.$axios.delete(url)
-    },
-    handleBulkUpdate({ selectedRows }) {
     }
   }
 }

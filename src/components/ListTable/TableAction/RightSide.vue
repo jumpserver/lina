@@ -82,7 +82,7 @@ export default {
       default: false
     },
     canBulkUpdate: {
-      type: Boolean,
+      type: [Boolean, Function],
       default: false
     }
   },

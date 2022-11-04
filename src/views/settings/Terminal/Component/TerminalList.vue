@@ -170,17 +170,14 @@ export default {
         hasImport: false,
         hasUpdate: false,
         extraActions: [],
-        extraMoreActions: [
-          {
-            name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('terminal.change_terminal'),
-            callback: ({ selectedRows, reloadTable }) => {
-              this.dialogSettings.selectedRows = selectedRows
-              this.dialogSettings.visible = true
-            }
-          }
-        ]
+        hasBulkUpdate: true,
+        canBulkUpdate: ({ selectedRows }) => {
+          return selectedRows.length > 0 && vm.$hasPerm('terminal.change_terminal')
+        },
+        handleBulkUpdate: ({ selectedRows }) => {
+          this.dialogSettings.selectedRows = selectedRows
+          this.dialogSettings.visible = true
+        }
       }
     }
   }

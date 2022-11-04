@@ -91,7 +91,7 @@ export default {
       default: false
     },
     canImportUpdate: {
-      type: Boolean,
+      type: [Boolean, Function],
       default: false
     }
   },

@@ -143,6 +143,16 @@ export default {
             callback: () => { this.InviteDialogSetting.InviteDialogVisible = true }
           }
         ],
+        hasBulkUpdate: true,
+        canBulkUpdate: ({ selectedRows }) => {
+          return selectedRows.length > 0 &&
+            !vm.currentOrgIsRoot &&
+            vm.$hasPerm('users.change_user')
+        },
+        handleBulkUpdate: ({ selectedRows }) => {
+          vm.updateSelectedDialogSetting.visible = true
+          vm.updateSelectedDialogSetting.selectedRows = selectedRows
+        },
         extraMoreActions: [
           {
             title: this.$t('common.removeSelected'),
@@ -162,17 +172,6 @@ export default {
             title: this.$t('common.activateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
-          },
-          {
-            name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 &&
-              !vm.currentOrgIsRoot &&
-              vm.$hasPerm('users.change_user'),
-            callback: ({ selectedRows, reloadTable }) => {
-              vm.updateSelectedDialogSetting.visible = true
-              vm.updateSelectedDialogSetting.selectedRows = selectedRows
-            }
           }
         ]
       },

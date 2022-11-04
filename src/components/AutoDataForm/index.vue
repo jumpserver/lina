@@ -115,7 +115,6 @@ export default {
     },
     cleanFormValue() {
       this._cleanFormValue(this.iForm, this.remoteMeta)
-      console.log('Form: ', this.iForm)
     },
     setFieldError(name, error) {
       const field = this.totalFields.find((v) => v.prop === name)
