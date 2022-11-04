@@ -18,10 +18,8 @@ export default {
       type: Object,
       default() {
         return {
-          iconChoices: {
-          },
-          classChoices: {
-          },
+          iconChoices: {},
+          classChoices: {},
           hasTips: false,
           useIcon: false,
           useText: true,
@@ -39,7 +37,7 @@ export default {
   },
   computed: {
     key() {
-      return this.cellValue['value']
+      return this.cellValue ? this.cellValue['value'] : ''
     },
     icon() {
       return this.formatterArgs.iconChoices[this.key] || ''

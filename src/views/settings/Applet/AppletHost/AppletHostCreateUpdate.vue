@@ -14,7 +14,7 @@ export default {
       config: {
         url: '/api/v1/terminal/applet-hosts/?oid=RemoteAppHost',
         addFields: [
-          [this.$t('common.Automations'), ['account_automation', 'deploy_options'], 3]
+          [this.$t('common.Automations'), ['deploy_options'], 3]
         ],
         addFieldsMeta: {
           deploy_options: {

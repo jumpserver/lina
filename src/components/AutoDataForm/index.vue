@@ -89,6 +89,9 @@ export default {
       this.$log.debug('Total fields: ', this.totalFields)
     },
     _cleanFormValue(form, remoteMeta) {
+      if (!form) {
+        form = {}
+      }
       for (const [k, v] of Object.entries(remoteMeta)) {
         let valueSet = form[k]
         if (v.type === 'nested object' && v.children) {

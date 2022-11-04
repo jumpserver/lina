@@ -14,13 +14,13 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
         columns: [
-          'name', 'address', 'protocols',
+          'name', 'address', 'protocols', 'status',
           'comment', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'address', 'protocols',
+            'name', 'address', 'protocols', 'status',
             'comment', 'actions'
           ]
         },

@@ -33,8 +33,8 @@ export default {
       config: {
         url: `/api/v1/terminal/applet-publications/?host=${this.object.id}`,
         columns: [
-          'applet.display_name', 'date_updated', 'status',
-          'actions'
+          'applet.display_name', 'applet.version',
+          'date_updated', 'status', 'actions'
         ],
         columnsMeta: {
           'applet.display_name': {
@@ -45,15 +45,16 @@ export default {
               getTitle: ({ row }) => row.applet.display_name
             }
           },
+          'applet.version': {
+            label: this.$t('common.Version')
+          },
           status: {
             label: this.$t('applets.PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
-                'ready': 'info',
-                'pending': 'info',
-                'running': 'success',
-                'success': 'success',
-                'failed': 'danger'
+                'not_match': 'warning',
+                'published': 'success',
+                'unpublished': 'danger'
               }
               const tp = typeMapper[row.status.value] || 'info'
               return <el-tag size='mini' type={tp}>{ row.status.label }</el-tag>

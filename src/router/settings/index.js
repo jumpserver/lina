@@ -92,7 +92,7 @@ export default {
         {
           path: ':id',
           name: 'TerminalDetail',
-          component: () => import('@/views/settings/Terminal/TerminalDetail'),
+          component: () => import('@/views/settings/Terminal/Component/TerminalDetail'),
           meta: {
             title: i18n.t('route.Terminal'),
             permissions: ['terminal.view_terminal']
@@ -102,7 +102,7 @@ export default {
         {
           path: ':id/update',
           name: 'TerminalUpdate',
-          component: () => import('@/views/settings/Terminal/TerminalUpdate'),
+          component: () => import('@/views/settings/Terminal/Component/TerminalUpdate'),
           meta: {
             title: i18n.t('route.Terminal'),
             permissions: ['terminal.change_terminal']

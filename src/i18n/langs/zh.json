@@ -289,6 +289,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Version": "版本",
     "Publish": "发布",
     "Icon": "图标",
     "DisplayName": "名称",
@@ -918,7 +919,8 @@
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
     "uploadZipTips": "请上传zip格式的文件",
-    "HostDeployment": "发布机部署"
+    "HostDeployment": "发布机部署",
+    "TerminalStat": "CPU/内存/磁盘"
   },
   "sessions": {
     "SetToDefaultStorage": "设置为默认存储",

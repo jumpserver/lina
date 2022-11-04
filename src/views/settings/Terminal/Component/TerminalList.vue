@@ -5,7 +5,7 @@
       :visible.sync="dialogSettings.visible"
       :destroy-on-close="true"
       :show-cancel="false"
-      :title="$t('sessions.terminalUpdateStorage')"
+      :title="$tc('sessions.terminalUpdateStorage')"
       :show-confirm="false"
     >
       <GenericCreateUpdateForm v-bind="dialogSettings.iFormSetting" />
@@ -19,13 +19,6 @@ import { GenericCreateUpdateForm } from '@/layout/components'
 import Dialog from '@/components/Dialog'
 import Select2 from '@/components/FormFields/Select2'
 
-const numTotFixed = (row, type) => {
-  const cur = row.stat?.[type] || ''
-  if (cur instanceof Number && !Number.isInteger(cur)) {
-    return cur.toFixed(1)
-  }
-  return cur
-}
 export default {
   components: {
     ListTable,
@@ -67,7 +60,7 @@ export default {
             }
           },
           submitMethod: () => 'post',
-          cleanFormValue: function(value) {
+          cleanFormValue: (value) => {
             const formValue = []
             let object = {}
             for (const row of this.dialogSettings.selectedRows) {
@@ -75,8 +68,8 @@ export default {
               formValue.push(object)
             }
             return formValue
-          }.bind(this),
-          onSubmit: function(validValues) {
+          },
+          onSubmit: (validValues) => {
             const url = '/api/v1/terminal/terminals/'
             const msg = this.$t('common.updateSuccessMsg')
             validValues = Object.values(validValues)
@@ -97,7 +90,7 @@ export default {
                 }
               }
             })
-          }.bind(this),
+          },
           hasSaveContinue: false
         }
       },
@@ -108,15 +101,14 @@ export default {
           resource: 'terminal'
         },
         columns: [
-          'name', 'remote_addr', 'session_online',
-          'stat.cpu_load', 'stat.disk_used', 'stat.memory_used',
-          'status', 'is_active', 'is_alive', 'actions'
+          'name', 'remote_addr', 'session_online', 'stat',
+          'load', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'session_online', 'stat.cpu_load', 'stat.disk_used',
-            'stat.memory_used', 'status', 'actions'
+            'name', 'session_online', 'stat',
+            'load', 'actions'
           ]
         },
         columnsMeta: {
@@ -126,25 +118,18 @@ export default {
               route: 'TerminalDetail'
             }
           },
-          'stat.cpu_load': {
-            label: this.$t('sessions.systemCpuLoad'),
-            width: '120px',
-            formatter: (row) => (numTotFixed(row, 'cpu_load'))
+          stat: {
+            label: this.$t('terminal.TerminalStat'),
+            formatter: (row) => {
+              if (!row?.stat) {
+                return ''
+              }
+              const stat = row.stat
+              return `${stat['cpu_load']} ${stat['memory_used']}% ${stat['disk_used']}%`
+            }
           },
-          'stat.disk_used': {
-            label: this.$t('sessions.systemDiskUsedPercent'),
-            width: '120px',
-            formatter: (row) => (numTotFixed(row, 'disk_used'))
-          },
-          'stat.memory_used': {
-            label: this.$t('sessions.systemMemoryUsedPercent'),
-            width: '120px',
-            formatter: (row) => (numTotFixed(row, 'memory_used'))
-          },
-          status: {
+          load: {
             label: this.$t('xpack.LoadStatus'),
-            width: '120px',
-            // formatter: DisplayFormatter,
             filterable: 'custom',
             formatterArgs: {
               classChoices: {
@@ -190,10 +175,10 @@ export default {
             name: 'actionUpdateSelected',
             title: this.$t('common.updateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('terminal.change_terminal'),
-            callback: function({ selectedRows, reloadTable }) {
+            callback: ({ selectedRows, reloadTable }) => {
               this.dialogSettings.selectedRows = selectedRows
               this.dialogSettings.visible = true
-            }.bind(this)
+            }
           }
         ]
       }
