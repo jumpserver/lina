@@ -16,12 +16,16 @@ export const platformFieldsMeta = (vm) => {
         'gather_facts_enabled', 'gather_facts_method',
         'push_account_enabled', 'push_account_method',
         'change_secret_enabled', 'change_secret_method',
-        'verify_account_enabled', 'verify_account_method'
+        'verify_account_enabled', 'verify_account_method',
+        'gather_accounts_enabled', 'gather_accounts_method'
       ],
       fieldsMeta: {
         ansible_config: {
           component: JsonEditor,
           hidden: (formValue) => !formValue['ansible_enabled']
+        },
+        gather_facts_enabled: {
+          label: i18n.t('assets.CollectHardwareInfo')
         },
         ping_method: {},
         gather_facts_method: {},

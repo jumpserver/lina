@@ -113,7 +113,7 @@ export default {
             },
             {
               id: 'sftp_enabled',
-              label: '启用 SFTP',
+              label: this.$t('common.Enable') + ' SFTP',
               type: 'switch',
               hidden: () => this.item.name !== 'ssh'
             },

@@ -137,13 +137,10 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      const defaults = choices.filter(item => (item.required || item.primary || item.default))
       if (this.value.length > 0) {
-        const notInDefaults = this.value.filter(item => {
-          return defaults.find(d => d.name === item.name)
-        })
-        this.items = notInDefaults
+        this.items = this.value
       } else {
+        const defaults = choices.filter(item => (item.required || item.primary || item.default))
         this.items = defaults
       }
     },
