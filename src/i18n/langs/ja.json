@@ -52,6 +52,7 @@
       "sqlserver": "SQLServer",
       "redis": "Redis",
       "mongodb": "MongoDB",
+      "clickhouse": "ClickHouse",
       "k8s": "Kubernetes"
     },
     "applicationsCategory": {

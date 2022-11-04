@@ -49,6 +49,7 @@ export default {
         case 'sqlserver':
         case 'redis':
         case 'mongodb':
+        case 'clickhouse':
           return Database
         case 'k8s':
           return K8S
