@@ -204,6 +204,21 @@
     "Pending": "等待",
     "Platform": "系统平台",
     "PlatformDetail": "平台详情",
+    "ProtocolsGroup": "协议组",
+    "DefaultPort": "默认端口",
+    "primary": "主要的",
+    "primaryOnly": "主要的协议, 只能有一个",
+    "Required": "必需的",
+    "RequiredProtocols": "必需的协议, 添加资产时必须选择",
+    "Default": "默认的",
+    "DefaultProtocol": "默认的协议, 添加资产时默认会选择",
+    "LoginConfig": "登录配置",
+    "UserNameSelector": "用户名输入框选择器",
+    "PasswordSelector": "密码输入框选择器",
+    "SubmitSelector": "提交按钮选择器",
+    "PlatformProtocolConfig": "平台协议配置",
+    "InheritPlatformConfig": "继承自平台配置，如需更改，请更改平台中的配置",
+    "CollectHardwareInfo": "启用收集硬件信息",
     "DomainEnabled": "启用网域",
     "ProtocolsEnabled": "启用协议",
     "AccountEnabled": "启用切换账号",
@@ -913,7 +928,8 @@
     "GoHomePage": "去往首页"
   },
   "rbac": {
-    "Permissions": "权限"
+    "Permissions": "权限",
+    "NoPermission": "暂无权限"
   },
   "terminal": {
     "Applets": "远程应用",

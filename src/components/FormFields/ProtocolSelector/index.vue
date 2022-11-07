@@ -6,6 +6,7 @@
           slot="prepend"
           v-model="item.name"
           class="prepend"
+          :disabled="cannotDisable(item)"
           @change="handleProtocolChange($event, item)"
         >
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
@@ -14,7 +15,6 @@
           v-if="showSetting(item)"
           slot="append"
           icon="el-icon-setting"
-          :disabled="!item.setting || Object.keys(item.setting).length === 0"
           @click="onSettingClick(item)"
         />
       </el-input>
@@ -39,6 +39,7 @@
       </div>
     </div>
     <ProtocolSettingDialog
+      v-if="showDialog"
       :visible.sync="showDialog"
       :item="settingItem"
       :disabled="settingReadonly"
@@ -93,9 +94,9 @@ export default {
     },
     portPlaceholder() {
       if (this.settingReadonly) {
-        return '端口'
+        return this.$t('applications.port')
       } else {
-        return '默认端口'
+        return this.$t('assets.DefaultPort')
       }
     }
   },
@@ -115,8 +116,8 @@ export default {
   },
   mounted() {
     this.setDefaultItems(this.choices)
-    console.log('Choices: ', this.choices)
-    console.log('Value: ', this.value)
+    console.log('Choices: -------------------------------------------', this.choices)
+    console.log('Value: ---------------------------------------------', this.value)
   },
   methods: {
     handleDelete(index) {
@@ -136,11 +137,12 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      const defaults = choices.filter(item => item.required || item.primary || item.default)
-      const notInDefaults = this.value.filter(item => {
-        return !defaults.find(d => d.name === item.name)
-      })
-      this.items = [...defaults, ...notInDefaults]
+      if (this.value.length > 0) {
+        this.items = this.value
+      } else {
+        const defaults = choices.filter(item => (item.required || item.primary || item.default))
+        this.items = defaults
+      }
     },
     onSettingClick(item) {
       this.settingItem = item

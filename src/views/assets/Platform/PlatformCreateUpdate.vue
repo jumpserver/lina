@@ -41,11 +41,11 @@ export default {
         [this.$t('common.Basic'), [
           'name', 'category_type', 'charset', 'domain_enabled'
         ]],
-        ['配置', [
+        [this.$t('setting.Config'), [
           'protocols_enabled', 'protocols',
           'su_enabled', 'su_method'
         ]],
-        ['自动化', ['automation']],
+        [this.$t('common.Automations'), ['automation']],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: platformFieldsMeta(this),

@@ -195,6 +195,21 @@
     "Pending": "Pending",
     "Platform": "Platform",
     "PlatformDetail": "Platform detail",
+    "ProtocolsGroup": "Protocols group",
+    "DefaultPort": "Default port",
+    "primary": "primary",
+    "primaryOnly": "There can only be one main agreement",
+    "Required": "Required",
+    "RequiredProtocols": "Required agreement, which must be selected when adding assets",
+    "Default": "Default",
+    "DefaultProtocol": "Default agreement, which will be selected by default when adding assets",
+    "LoginConfig": "Login config",
+    "UserNameSelector": "User name input box selector",
+    "PasswordSelector": "Password Input Box Selector",
+    "SubmitSelector": "Submit Button Selector",
+    "PlatformProtocolConfig": "Platform protocol config",
+    "InheritPlatformConfig": "Inherited from the platform configuration. If you need to change, please change the configuration in the platform",
+    "CollectHardwareInfo": "Enable collection of hardware information",
     "DomainEnabled": "Enable domain",
     "ProtocolsEnabled": "Enable protocol",
     "AccountEnabled": "Enable account switching",
@@ -866,7 +881,8 @@
     "GoHomePage": "Go home page"
   },
   "rbac": {
-    "Permissions": "Permissions"
+    "Permissions": "Permissions",
+    "NoPermission": "No permission"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",

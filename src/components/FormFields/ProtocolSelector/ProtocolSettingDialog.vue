@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :title="'平台协议配置：' + item.name"
+    :title="$t('assets.PlatformProtocolConfig') + '：' + item.name"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
@@ -8,12 +8,13 @@
     class="setting-dialog"
     width="70%"
     v-bind="$attrs"
-    @open="onOpen"
     v-on="$listeners"
   >
     <el-alert v-if="disabled" type="success">
-      继承自平台配置，如需更改，请更改平台中的配置
-      <el-link :href="platformDetail" class="link-more" target="_blank">查看</el-link>
+      {{ $t('assets.InheritPlatformConfig') }}
+      <el-link :href="platformDetail" class="link-more" target="_blank">
+        {{ $t('common.View') }}
+      </el-link>
       <i class="fa fa-external-link" />
     </el-alert>
     <AutoDataForm
@@ -46,6 +47,7 @@ export default {
   },
   data() {
     return {
+      bases: ['required', 'default'],
       defaultSetting: {
         sftp_enabled: true,
         sftp_home: '/tmp',
@@ -62,35 +64,35 @@ export default {
         url: '',
         fields: [
           [this.$t('common.Basic'), [
-            {
-              id: 'primary',
-              label: '主要的',
-              type: 'switch',
-              helpText: '主要的协议, 只能有一个',
-              on: {
-                change: ([event], updateForm) => {
-                  if (event) {
-                    updateForm({ required: true })
-                  } else {
-                    updateForm({ required: false })
-                  }
-                }
-              }
-            },
+            // {
+            //   id: 'primary',
+            //   label: this.$t('assets.Primary'),
+            //   type: 'switch',
+            //   helpText:  this.$t('assets.PrimaryOnly'),
+            //   on: {
+            //     change: ([event], updateForm) => {
+            //       if (event) {
+            //         updateForm({ required: true })
+            //       } else {
+            //         updateForm({ required: false })
+            //       }
+            //     }
+            //   }
+            // },
             {
               id: 'required',
-              label: '必需的',
+              label: this.$t('assets.Required'),
               type: 'switch',
-              helpText: '必需的协议, 添加资产时必须选择'
+              helpText: this.$t('assets.RequiredProtocols')
             },
             {
               id: 'default',
-              label: '默认的',
+              label: this.$t('assets.Default'),
               type: 'switch',
-              helpText: '默认的协议, 添加资产时默认会选择'
+              helpText: this.$t('assets.DefaultProtocol')
             }
           ]],
-          ['登录配置', [
+          [this.$t('assets.LoginConfig'), [
             {
               id: 'console',
               label: 'Console',
@@ -111,7 +113,7 @@ export default {
             },
             {
               id: 'sftp_enabled',
-              label: '启用 SFTP',
+              label: this.$t('common.Enable') + ' SFTP',
               type: 'switch',
               hidden: () => this.item.name !== 'ssh'
             },
@@ -124,19 +126,19 @@ export default {
             },
             {
               id: 'username_selector',
-              label: '用户名输入框选择器',
+              label: this.$t('assets.UserNameSelector'),
               type: 'input',
               hidden: (form) => this.item.name !== 'http'
             },
             {
               id: 'password_selector',
-              label: '密码输入框选择器',
+              label: this.$t('assets.PasswordSelector'),
               type: 'input',
               hidden: (form) => this.item.name !== 'http'
             },
             {
               id: 'submit_selector',
-              label: '提交按钮选择器',
+              label: this.$t('assets.SubmitSelector'),
               type: 'input',
               hidden: (form) => this.item.name !== 'http'
             }
@@ -145,13 +147,24 @@ export default {
       }
     }
   },
+  created() {
+    const itemSetting = this.item.setting || this.defaultSetting
+    for (const i of this.bases) {
+      if (this.item.hasOwnProperty(i)) {
+        itemSetting[i] = this.item[i]
+      }
+    }
+    this.form = itemSetting
+  },
   methods: {
     onSubmit(form) {
+      for (const i of this.bases) {
+        if (form.hasOwnProperty(i)) {
+          this.item[i] = form[i]
+        }
+      }
       this.item.setting = form
       this.$emit('update:visible', false)
-    },
-    onOpen() {
-      this.form = this.item.setting || this.defaultSetting
     }
   }
 }
