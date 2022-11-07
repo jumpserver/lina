@@ -88,7 +88,10 @@ export default {
         ],
         columnsShow: {
           min: ['name', 'username', 'actions'],
-          default: ['name', 'hostname', 'ip', 'username', 'version', 'privileged', 'actions']
+          default: [
+            'name', 'hostname', 'ip', 'username',
+            'version', 'privileged', 'actions'
+          ]
         },
         columnsMeta: {
           asset: {
@@ -115,7 +118,10 @@ export default {
           privileged: {
             label: this.$t('assets.Privileged'),
             formatterArgs: {
-              showFalse: false
+              iconChoices: {
+                true: 'fa-check text-primary',
+                false: 'fa-ban text-warning'
+              }
             }
           },
           connectivity: connectivityMeta,

@@ -322,12 +322,11 @@ td .el-button.el-button--mini {
 }
 
 .el-table .cell,
-.el-table--border td:first-child .cell,
-.el-table--border th:first-child .cell {
+.el-table td:first-child .cell,
+.el-table th:first-child .cell {
   padding-left: 10px;
   padding-right: 14px;
 }
-
 
 .el-tag--default.el-tag--dark {
   background-color: #d1dade;

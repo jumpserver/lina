@@ -1,5 +1,11 @@
 <template>
-  <ActionsGroup v-loading="loadingStatus" :size="'mini'" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" />
+  <ActionsGroup
+    v-loading="loadingStatus"
+    :size="'mini'"
+    :actions="actions"
+    :more-actions="moreActions"
+    :more-actions-title="moreActionsTitle"
+  />
 </template>
 
 <script>

@@ -47,7 +47,7 @@ export default {
         buttonSize: 'mini',
         tableAttrs: {
           stripe: false, // 斑马纹表格
-          border: true, // 表格边框
+          border: false, // 表格边框
           fit: true, // 宽度自适应,
           tooltipEffect: 'dark'
         },

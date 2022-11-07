@@ -215,6 +215,14 @@ export default {
       }
       return col
     },
+    setDefaultFormatterIfNeed(col) {
+      if (!col.formatter) {
+        col.formatter = (row, column, cellValue) => {
+          return [undefined, null, ''].indexOf(cellValue) > -1 ? '-' : cellValue
+        }
+      }
+      return col
+    },
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
@@ -222,6 +230,7 @@ export default {
 
       col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col, colMeta)
+      col = this.setDefaultFormatterIfNeed(col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)

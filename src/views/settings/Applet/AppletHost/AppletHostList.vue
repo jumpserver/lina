@@ -14,13 +14,13 @@ export default {
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
         columns: [
-          'name', 'address', 'protocols', 'status', 'comment',
+          'name', 'address', 'protocols', 'load', 'comment',
           'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'address', 'protocols', 'status',
+            'name', 'address', 'protocols', 'load',
             'comment', 'actions'
           ]
         },
@@ -32,6 +32,17 @@ export default {
                   name: 'AppletHostDetail',
                   params: { id: row.id }
                 }
+              }
+            }
+          },
+          load: {
+            formatterArgs: {
+              classChoices: {
+                '': 'success',
+                offline: 'fa fa-chain-broken text-danger',
+                critical: 'fa fa-bolt text-warning',
+                high: 'fa fa-exclamation-triangle text-info',
+                normal: 'fa fa-check text-primary'
               }
             }
           },
