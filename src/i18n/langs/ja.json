@@ -198,6 +198,7 @@
     "Pending": "待つ",
     "Platform": "システムプラットフォーム",
     "PlatformDetail": "プラットフォームの詳細",
+    "ProtocolsGroup": "プロトコル・グループ",
     "DefaultPort": "デフォルトポート",
     "primary": "メジャー",
     "primaryOnly": "主な合意は、1つだけあります",
@@ -895,7 +896,8 @@
     "GoHomePage": "トップページへ"
   },
   "rbac": {
-    "Permissions": "権限"
+    "Permissions": "権限",
+    "NoPermission": "権限なし"
   },
   "sessions": {
     "SetToDefaultStorage": "デフォルトストレージに設定",
