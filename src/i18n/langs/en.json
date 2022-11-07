@@ -195,6 +195,7 @@
     "Pending": "Pending",
     "Platform": "Platform",
     "PlatformDetail": "Platform detail",
+    "ProtocolsGroup": "Protocols group",
     "DefaultPort": "Default port",
     "primary": "primary",
     "primaryOnly": "There can only be one main agreement",
@@ -880,7 +881,8 @@
     "GoHomePage": "Go home page"
   },
   "rbac": {
-    "Permissions": "Permissions"
+    "Permissions": "Permissions",
+    "NoPermission": "No permission"
   },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",

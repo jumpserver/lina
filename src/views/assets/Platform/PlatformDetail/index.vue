@@ -9,11 +9,14 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
+import Automation from './Automation.vue'
+
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    Automation
   },
   data() {
     return {
@@ -26,6 +29,10 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('common.Automations'),
+            name: 'Automation'
           }
         ],
         actions: {

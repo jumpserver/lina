@@ -36,8 +36,7 @@ export default {
   data() {
     const myFields = {
       AccountEnabled: ['su_enabled', 'su_method'],
-      ProtocolsEnabled: ['protocols_enabled', 'protocols'],
-      AutoEnabled: ['automation']
+      ProtocolsEnabled: ['protocols_enabled', 'protocols']
     }
 
     return {
@@ -48,18 +47,19 @@ export default {
   },
   computed: {
     detailCardItems() {
+      const { object } = this
       return [
         {
           key: this.$t('assets.Name'),
-          value: this.object.name
+          value: object.name
         },
         {
           key: this.$t('assets.BasePlatform'),
-          value: this.object.base
+          value: object.base
         },
         {
           key: this.$t('assets.Charset'),
-          value: this.object.charset
+          value: object.charset
         },
         {
           key: this.$t('assets.Meta'),
@@ -67,7 +67,7 @@ export default {
         },
         {
           key: this.$t('assets.Comment'),
-          value: this.object.comment
+          value: object.comment
         }
       ]
     }
