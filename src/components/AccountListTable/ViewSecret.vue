@@ -15,7 +15,7 @@
       v-bind="$attrs"
       v-on="$listeners"
     >
-      <el-form class="password-form" label-position="right" label-width="80px" :model="authInfo">
+      <el-form class="password-form" label-position="right" label-width="100px" :model="authInfo">
         <el-form-item :label="this.$tc('assets.Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
@@ -115,10 +115,15 @@ export default {
   }
   .el-form-item {
     border-bottom: 1px solid #EBEEF5;
-    padding: 3px 0;
+    padding: 5px 0;
     margin-bottom: 0;
+
     &:hover {
       background-color: #F5F7FA;
+    }
+
+    >>> .el-form-item__label {
+      padding-right: 20px;
     }
   }
 
