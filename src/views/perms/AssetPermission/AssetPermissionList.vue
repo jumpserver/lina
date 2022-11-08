@@ -14,7 +14,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import PermBulkUpdateDialog from '@/views/perms/components/PermBulkUpdateDialog'
+import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { mapGetters } from 'vuex'
 
@@ -30,7 +30,7 @@ export default {
         showRefresh: true,
         showAssets: true,
         url: '/api/v1/perms/asset-permissions/',
-        nodeUrl: '/api/v1/perms/host-permissions/',
+        nodeUrl: '/api/v1/perms/asset-permissions/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
       },
       tableConfig: {

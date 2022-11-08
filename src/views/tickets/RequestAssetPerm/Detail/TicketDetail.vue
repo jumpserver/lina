@@ -51,7 +51,7 @@ import { STATUS_MAP } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import Select2 from '@/components/FormFields/Select2'
 import IBox from '@/components/IBox'
-import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
+import PermissionFormActionField from '@/views/perms/AssetPermission/components/PermissionFormActionField'
 export default {
   name: '',
   components: { GenericTicketDetail, IBox, Select2, PermissionFormActionField },

@@ -10,7 +10,7 @@
 
 <script>
 import { GenericUpdateFormDialog } from '@/layout/components'
-import getFields from '@/views/perms/fields'
+import getFields from '../fields'
 
 export default {
   name: 'PermBulkUpdateDialog',
@@ -67,7 +67,7 @@ export default {
         fields.splice(2, 0, 'applications')
         Object.assign(fieldsMeta, { applications: fieldsManager.applications })
       } else {
-        url = '/api/v1/perms/host-permissions/'
+        url = '/api/v1/perms/asset-permissions/'
         fields.splice(2, 0, ...['assets', 'nodes'])
         Object.assign(fieldsMeta, {
           assets: fieldsManager.assets,

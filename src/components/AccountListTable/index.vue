@@ -123,6 +123,9 @@ export default {
               },
               getIcon: ({ row }) => {
                 return row.privileged ? 'fa-check-circle text-primary' : ''
+              },
+              classChoices: {
+                false: ''
               }
             }
           },

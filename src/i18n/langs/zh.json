@@ -676,7 +676,6 @@
     "version": "版本",
     "versionDetail": "版本详情",
     "versionRunExecution": "执行历史",
-    "Unkown": "未知",
     "Unknown": "未知",
     "PENDING": "等待中",
     "RUNNING": "运行中",
@@ -685,6 +684,7 @@
   },
   "perms": {
     "": "",
+    "Account": "账号",
     "permAccount": "授权账号",
     "Actions": "动作",
     "Asset": "资产",

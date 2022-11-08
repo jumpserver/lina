@@ -10,9 +10,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import PermissionFormActionField from '../components/PermissionFormActionField'
+import PermissionFormActionField from './components/PermissionFormActionField'
 import AssetSelect from '@/components/AssetSelect'
 import { getDayFuture } from '@/utils/common'
+import AccountFormatter from './components/AccountFormatter'
 
 export default {
   components: {
@@ -86,7 +87,8 @@ export default {
         },
         accounts: {
           type: 'input',
-          component: null
+          label: this.$t('perms.Account'),
+          component: AccountFormatter
         },
         actions: {
           label: this.$t('perms.Actions'),

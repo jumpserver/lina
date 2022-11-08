@@ -1,5 +1,5 @@
 import AssetSelect from '@/components/AssetSelect'
-import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
+import PermissionFormActionField from './components/PermissionFormActionField'
 
 function getFields() {
   const users = {

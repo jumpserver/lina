@@ -3,7 +3,7 @@ import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'host-permissions',
+    path: 'asset-permissions',
     component: empty,
     meta: {
       title: i18n.t('route.AssetPermission'),

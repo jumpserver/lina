@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
-import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
+import PermissionFormActionField from '@/views/perms/AssetPermission/components/PermissionFormActionField'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
