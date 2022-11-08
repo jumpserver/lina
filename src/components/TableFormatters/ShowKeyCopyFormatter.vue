@@ -1,7 +1,7 @@
 <template>
   <div class="content">
-    <span class="text">{{ currentValue }}</span>
-    <span v-if="iValue" class="action">
+    <pre class="text">{{ currentValue }}</pre>
+    <span v-if="cellValue" class="action">
       <el-tooltip
         v-if="hasShow"
         effect="dark"
@@ -32,51 +32,46 @@
 
 <script>
 import { downloadText } from '@/utils/common'
+import BaseFormatter from '@/components/TableFormatters/base'
 
 export default {
   name: 'ShowKeyCopyFormatter',
+  extends: BaseFormatter,
   props: {
-    name: {
-      type: String,
-      required: true
-    },
-    value: {
-      type: String,
-      default: () => ''
-    },
-    cellValue: {
-      type: [String, Number],
-      default: ''
-    },
-    hasShow: {
-      type: Boolean,
-      default: true
-    },
-    hasCopy: {
-      type: Boolean,
-      default: true
-    },
-    hasDownload: {
-      type: Boolean,
-      default: true
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          name: 'key',
+          hasShow: true,
+          hasDownload: true,
+          hasCopy: true,
+          defaultShow: false
+        }
+      }
     }
   },
   data() {
     return {
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
       isShow: false
     }
   },
   computed: {
-    iValue() {
-      return this.value || this.cellValue
-    },
+    hasShow: function() { return this.formatterArgs.hasShow },
+    hasDownload: function() { return this.formatterArgs.hasDownload },
+    hasCopy: function() { return this.formatterArgs.hasCopy },
+    name: function() { return this.formatterArgs.name },
     currentValue() {
       if (this.isShow) {
-        return this.iValue
+        return this.cellValue
       } else {
         return '******'
       }
     }
+  },
+  mounted() {
+    this.isShow = this.formatterArgs.defaultShow
   },
   methods: {
     onShow() {
@@ -85,7 +80,7 @@ export default {
     onCopy: _.throttle(function() {
       const inputDom = document.createElement('input')
       inputDom.id = 'createInputDom'
-      inputDom.value = this.iValue
+      inputDom.value = this.cellValue
       document.body.appendChild(inputDom)
       inputDom.select()
       document?.execCommand('copy')
@@ -97,7 +92,7 @@ export default {
       document.body.removeChild(inputDom)
     }, 1800),
     onDownload() {
-      downloadText(this.iValue, this.name + '.txt')
+      downloadText(this.cellValue, this.name + '.txt')
     }
   }
 }
@@ -107,14 +102,15 @@ export default {
     display: flex;
     width: 100%;
     overflow: hidden;
-    white-space: nowrap;
+    //white-space: nowrap;
     text-overflow: ellipsis;
     font-size: 13px;
 
     .text {
       flex: 1;
+      line-height: 1.3;
       overflow: hidden;
-      white-space: nowrap;
+      //white-space: nowrap;
       text-overflow: ellipsis;
     }
 
@@ -122,6 +118,7 @@ export default {
       float: right;
       font-size: 15px;
       cursor: pointer;
+      margin-left: 5px;
 
       .fa {
         margin-right: 10px;

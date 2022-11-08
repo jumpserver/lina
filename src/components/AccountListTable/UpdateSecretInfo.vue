@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      authInfo: {
+      secretInfo: {
         password: '',
         private_key: '',
         passphrase: ''
@@ -61,12 +61,12 @@ export default {
   methods: {
     handleConfirm() {
       const data = {}
-      if (this.authInfo.password !== '') {
-        data.password = encryptPassword(this.authInfo.password)
+      if (this.secretInfo.password !== '') {
+        data.password = encryptPassword(this.secretInfo.password)
       }
-      if (this.authInfo.private_key !== '') {
-        data.private_key = encryptPassword(this.authInfo.private_key)
-        if (this.authInfo.passphrase) data.passphrase = this.authInfo.passphrase
+      if (this.secretInfo.private_key !== '') {
+        data.private_key = encryptPassword(this.secretInfo.private_key)
+        if (this.secretInfo.passphrase) data.passphrase = this.secretInfo.passphrase
       }
       this.$axios.patch(
         `/api/v1/assets/accounts/${this.account.id}/`,
@@ -87,7 +87,7 @@ export default {
       this.$emit('update:visible', false)
     },
     getFile(file) {
-      this.authInfo.private_key = file
+      this.secretInfo.private_key = file
     }
   }
 }

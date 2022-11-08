@@ -31,8 +31,19 @@ export default {
           columns: ['secret', 'secret_type', 'version'],
           columnsMeta: {
             secret: {
-              formatter: ShowKeyCopyFormatter
+              formatter: ShowKeyCopyFormatter,
+              formatterArgs: {
+                hasDownload: false,
+                name: this.account.name
+              }
+            },
+            secret_type: {
+              width: '200px'
+            },
+            version: {
+              width: '100px'
             }
+
           }
         },
         headerActions: {
