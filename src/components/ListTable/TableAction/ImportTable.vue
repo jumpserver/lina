@@ -176,7 +176,7 @@ export default {
         align: 'center',
         formatter: StatusFormatter,
         formatterArgs: {
-          iconChoices: {
+          faChoices: {
             ok: 'fa-check text-primary',
             error: 'fa-times text-danger',
             pending: 'fa-clock-o'

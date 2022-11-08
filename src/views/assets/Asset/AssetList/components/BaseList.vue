@@ -15,7 +15,7 @@ import {
   ActionsFormatter,
   DetailFormatter,
   TagsFormatter,
-  ChoicesDisplayFormatter
+  ChoicesFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -90,13 +90,13 @@ export default {
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
-            'name', 'address', 'platform', 'category', 'type',
+            'name', 'address', 'platform',
             'connectivity', 'actions'
           ]
         },
         columnsMeta: {
-          type: { formatter: ChoicesDisplayFormatter },
-          category: { formatter: ChoicesDisplayFormatter },
+          type: { formatter: ChoicesFormatter },
+          category: { formatter: ChoicesFormatter },
           name: {
             formatter: DetailFormatter,
             formatterArgs: {

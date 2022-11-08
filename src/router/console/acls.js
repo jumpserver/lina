@@ -3,7 +3,7 @@ import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'asset-acl',
+    path: 'host-acl',
     component: empty,
     redirect: '',
     meta: {

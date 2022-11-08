@@ -13,8 +13,6 @@ import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter'
-import ChoicesDisplayFormatter from './ChoicesDisplayFormatter'
-import BooleanFormatter from './BooleanFormatter'
 
 export default {
   DetailFormatter,
@@ -31,9 +29,7 @@ export default {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  ObjectRelatedFormatter,
-  ChoicesDisplayFormatter,
-  BooleanFormatter
+  ObjectRelatedFormatter
 }
 
 export {
@@ -51,6 +47,5 @@ export {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  ObjectRelatedFormatter,
-  ChoicesDisplayFormatter
+  ObjectRelatedFormatter
 }

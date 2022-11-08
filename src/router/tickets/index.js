@@ -52,7 +52,7 @@ export default {
       },
       children: [
         {
-          path: 'request-asset-perm/create',
+          path: 'request-host-perm/create',
           name: 'RequestAssetPermTicketCreateUpdate',
           component: () => import('@/views/tickets/RequestAssetPerm/CreateUpdate'),
           meta: {
@@ -62,7 +62,7 @@ export default {
           hidden: true
         },
         {
-          path: 'request-asset-perm/:id',
+          path: 'request-host-perm/:id',
           name: 'AssetsTicketDetail',
           component: () => import('@/views/tickets/RequestAssetPerm/Detail/index'),
           meta: {
@@ -72,7 +72,7 @@ export default {
           hidden: true
         },
         {
-          path: 'login-asset-confirm/:id',
+          path: 'login-host-confirm/:id',
           name: 'LoginAssetTicketDetail',
           component: () => import('@/views/tickets/LoginAssetConfirm/Detail'),
           meta: {

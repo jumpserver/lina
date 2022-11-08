@@ -30,7 +30,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['users']],
-        [this.$t('acl.asset'), ['assets']],
+        [this.$t('acl.host'), ['assets']],
         [this.$t('acl.system_user'), ['system_users']],
         [this.$t('acl.action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]

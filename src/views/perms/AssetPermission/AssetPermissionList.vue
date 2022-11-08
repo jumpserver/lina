@@ -30,7 +30,7 @@ export default {
         showRefresh: true,
         showAssets: true,
         url: '/api/v1/perms/asset-permissions/',
-        nodeUrl: '/api/v1/perms/asset-permissions/',
+        nodeUrl: '/api/v1/perms/host-permissions/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
       },
       tableConfig: {

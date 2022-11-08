@@ -27,8 +27,7 @@ import {
   DisplayFormatter,
   ActionsFormatter,
   ChoicesFormatter,
-  ObjectRelatedFormatter,
-  ChoicesDisplayFormatter
+  ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
@@ -119,6 +118,23 @@ export default {
         case 'is_valid':
           col.label = i18n.t('common.Validity')
           col.formatter = ChoicesFormatter
+          col.formatterArgs = {
+            textChoices: {
+              true: i18n.t('common.Valid'),
+              false: i18n.t('common.Invalid')
+            }
+          }
+          col.align = 'center'
+          col.width = '80px'
+          break
+        case 'is_active':
+          col.formatter = ChoicesFormatter
+          col.formatterArgs = {
+            textChoices: {
+              true: i18n.t('common.Active'),
+              false: i18n.t('common.Inactive')
+            }
+          }
           col.align = 'center'
           col.width = '80px'
           break
@@ -139,7 +155,7 @@ export default {
           break
         case 'labeled_choice':
           col.sortable = 'custom'
-          col.formatter = ChoicesDisplayFormatter
+          col.formatter = ChoicesFormatter
           break
         case 'boolean':
           col.formatter = ChoicesFormatter

@@ -112,7 +112,7 @@ export default {
           value: this.session.user
         },
         {
-          key: this.$t('sessions.asset'),
+          key: this.$t('sessions.host'),
           value: this.session.asset
         },
         {

@@ -6,7 +6,7 @@ export const connectivityMeta = {
   label: i18n.t('assets.Reachable'),
   formatter: ChoicesFormatter,
   formatterArgs: {
-    iconChoices: {
+    faChoices: {
       ok: 'fa-check',
       failed: 'fa-times',
       unknown: 'fa-circle-o'

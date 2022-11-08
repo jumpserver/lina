@@ -2,8 +2,8 @@
   <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
     <div slot="content" v-html="tips" />
     <span :class="classes">
-      <i v-if="formatterArgs.useIcon" :class="'fa ' + icon" />
-      <span v-if="formatterArgs.useText">{{ text }}</span>
+      <i v-if="formatterArgs.showIcon" :class="'fa ' + icon" />
+      <span v-if="formatterArgs.showText">{{ text }}</span>
     </span>
   </el-tooltip>
 </template>
@@ -18,9 +18,9 @@ export default {
       type: Object,
       default() {
         return {
-          iconChoices: {
-            true: 'fa-check',
-            false: 'fa-times'
+          faChoices: {
+            true: 'fa-check-circle',
+            false: 'fa-times-circle'
           },
           classChoices: {
             true: 'text-primary',
@@ -31,11 +31,18 @@ export default {
             false: this.$t('common.No')
           },
           getKey({ row, cellValue }) {
-            return cellValue
+            return typeof cellValue === 'object' ? cellValue.value : cellValue
+          },
+          getText({ row, cellValue }) {
+            const key = this.getKey({ row, cellValue })
+            return typeof cellValue === 'object' ? cellValue.label : this.textChoices[key] || cellValue
+          },
+          getIcon({ row, cellValue }) {
+            return this.faChoices[cellValue]
           },
           hasTips: false,
-          useIcon: true,
-          useText: false,
+          showIcon: true,
+          showText: true,
           showFalse: true,
           getTips: ({ row, cellValue }) => {
             return cellValue
@@ -56,13 +63,17 @@ export default {
       )
     },
     icon() {
-      return this.formatterArgs.iconChoices[this.key]
+      return this.formatterArgs.getIcon(
+        { row: this.row, cellValue: this.cellValue }
+      )
     },
     classes() {
       return this.formatterArgs.classChoices[this.key]
     },
     text() {
-      return this.formatterArgs.textChoices[this.key]
+      return this.formatterArgs.getText(
+        { row: this.row, cellValue: this.cellValue }
+      )
     },
     tips() {
       return this.formatterArgs.getTips({ cellValue: this.cellValue, row: this.row })
@@ -73,6 +84,8 @@ export default {
       }
       return true
     }
+  },
+  methods: {
   }
 }
 </script>

@@ -13,7 +13,7 @@
 
 <script>
 import { GenericListTable, TabPage } from '@/layout/components'
-import { ChoicesDisplayFormatter } from '@/components/TableFormatters'
+import { ChoicesFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -40,10 +40,10 @@ export default {
         },
         columnsMeta: {
           type: {
-            formatter: ChoicesDisplayFormatter
+            formatter: ChoicesFormatter
           },
           category: {
-            formatter: ChoicesDisplayFormatter
+            formatter: ChoicesFormatter
           },
           base: {
             width: '140px'

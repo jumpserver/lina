@@ -67,7 +67,7 @@ export default {
         fields.splice(2, 0, 'applications')
         Object.assign(fieldsMeta, { applications: fieldsManager.applications })
       } else {
-        url = '/api/v1/perms/asset-permissions/'
+        url = '/api/v1/perms/host-permissions/'
         fields.splice(2, 0, ...['assets', 'nodes'])
         Object.assign(fieldsMeta, {
           assets: fieldsManager.assets,

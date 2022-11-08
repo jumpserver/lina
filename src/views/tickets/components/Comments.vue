@@ -114,13 +114,13 @@ export default {
         this.type_api = 'apply-login-tickets'
         break
       case 'apply_asset':
-        this.type_api = 'apply-asset-tickets'
+        this.type_api = 'apply-host-tickets'
         break
       case 'apply_application':
         this.type_api = 'apply-app-tickets'
         break
       case 'login_asset_confirm':
-        this.type_api = 'apply-login-asset-tickets'
+        this.type_api = 'apply-login-host-tickets'
         break
       case 'command_confirm':
         this.type_api = 'apply-command-tickets'

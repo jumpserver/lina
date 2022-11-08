@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     refreshObjectAssetPermission() {
-      const url = this.tableUrl.replace('/assets/', '/asset-permissions/cache/')
+      const url = this.tableUrl.replace('/assets/', '/host-permissions/cache/')
       if (url.indexOf('user-groups')) {
         return false
       }

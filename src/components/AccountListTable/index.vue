@@ -118,9 +118,11 @@ export default {
           privileged: {
             label: this.$t('assets.Privileged'),
             formatterArgs: {
-              iconChoices: {
-                true: 'fa-check text-primary',
-                false: 'fa-ban text-warning'
+              getText: ({ row }) => {
+                return row.privileged ? ' ' : '-'
+              },
+              getIcon: ({ row }) => {
+                return row.privileged ? 'fa-check-circle text-primary' : ''
               }
             }
           },
