@@ -14,7 +14,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import { GenericCreateUpdateForm } from '@/layout/components'
-import { platformFieldsMeta, setAutomations } from '../const'
+import { platformFieldsMeta } from '../const'
 
 export default {
   components: {
@@ -56,9 +56,19 @@ export default {
     }
   },
   created() {
-    setAutomations(this)
+    try {
+      this.setOptions()
+    } finally {
+      this.iVisible = true
+    }
   },
   methods: {
+    async setOptions() {
+      const { category, type } = this.object
+      const url = `/api/v1/assets/categories/constraints/?category=${category.value}&type=${type.value}`
+      const res = await this.$axios.get(url)
+      this.fieldsMeta.protocols.el.choices = res['protocols'] || []
+    },
     submitSuccess() {
       this.iVisible = false
     }
