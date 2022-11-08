@@ -62,7 +62,7 @@ export default {
         }
         return obj
       },
-      object: {}
+      defaultOptions: {}
     }
   },
   async mounted() {
@@ -90,7 +90,7 @@ export default {
       const type = this.$route.query.type
       const url = `/api/v1/assets/categories/constraints/?category=${category}&type=${type}`
       const constraints = await this.$axios.get(url)
-      this.object = constraints
+      this.defaultOptions = constraints
 
       const fieldsCheck = ['protocols_enabled', 'domain_enabled', 'su_enabled']
       for (const field of fieldsCheck) {

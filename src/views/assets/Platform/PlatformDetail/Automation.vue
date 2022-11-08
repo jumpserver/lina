@@ -36,15 +36,19 @@ export default {
       submitMethod: () => 'patch',
       fields: [['', ['automation']]],
       fieldsMeta: platformFieldsMeta(this),
-      onSubmit: this.submit
+      onSubmit: this.submit,
+      defaultOptions: {}
     }
   },
   computed: {
     ...mapGetters(['isSystemAdmin'])
   },
-  mounted() {
+  async mounted() {
     try {
-      setAutomations(this)
+      const { category, type } = this.object
+      const url = `/api/v1/assets/categories/constraints/?category=${category.value}&type=${type.value}`
+      this.defaultOptions = await this.$axios.get(url)
+      await setAutomations(this)
     } finally {
       this.loading = false
     }
