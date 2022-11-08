@@ -205,17 +205,25 @@ export default {
     onPerformError: {
       type: Function,
       default(error, method, vm) {
-        this.$log.error('error: ', error)
-        this.$emit('submitError', error)
         const response = error.response
         const data = response.data
         if (response.status === 400) {
           for (const key of Object.keys(data)) {
-            let value = data[key]
-            if (value instanceof Array) {
-              value = value.join(';')
+            let err = ''
+            let errorTips = data[key]
+            if (errorTips instanceof Array) {
+              errorTips = _.filter(errorTips, (item) => Object.keys(item).length > 0)
+              for (const i of errorTips) {
+                if (i instanceof Object) {
+                  err += i?.port?.join(',')
+                } else {
+                  err += errorTips
+                }
+              }
+            } else {
+              err = errorTips
             }
-            this.$refs.form.setFieldError(key, value)
+            this.$refs.form.setFieldError(key, err)
           }
         }
       }
