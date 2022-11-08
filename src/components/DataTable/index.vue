@@ -189,14 +189,6 @@ export default {
     margin-top: 15px;
   }
 
-  //分页
-  .el-pagination  ::v-deep  .el-pagination__total{
-    float: left;
-  }
-
-  .el-pagination  ::v-deep  .el-pagination__sizes{
-    float: left;
-  }
   //修改颜色
   // .el-button--text{
   //   color: #409EFF;

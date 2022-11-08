@@ -126,7 +126,6 @@ export default {
         .map(i => this.platforms.find(p => p.id === i))
         .filter(p => p)
         .map(p => p.id)
-      console.log('This. platform id: ', this.recentPlatformIds)
     },
     onConfirm() {
       this.iVisible = false
