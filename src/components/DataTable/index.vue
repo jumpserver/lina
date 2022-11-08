@@ -49,7 +49,11 @@ export default {
           stripe: false, // 斑马纹表格
           border: false, // 表格边框
           fit: true, // 宽度自适应,
-          tooltipEffect: 'dark'
+          tooltipEffect: 'dark',
+          rowClassName: ({ row }) => {
+            const selected = this.dataTable.selected.find(item => item.id === row.id)
+            return selected ? 'selected-row' : ''
+          }
         },
         extraButtons: userTableActions.extraButtons,
         onEdit: (row) => {
@@ -103,7 +107,9 @@ export default {
       return config
     },
     iListeners() {
-      return Object.assign({}, this.$listeners, this.tableConfig.listeners)
+      const defaultListeners = {
+      }
+      return Object.assign(defaultListeners, this.$listeners, this.tableConfig.listeners)
     },
     dataTable() {
       return this.$refs.table
@@ -165,28 +171,38 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .el-table  ::v-deep  .el-table__row > td {
-    line-height: 1.5;
-    padding: 6px 0;
-    font-size: 13px;
-
-    * {
-      vertical-align: middle;
+  .el-table  ::v-deep  .el-table__row {
+    &.selected-row {
+      background-color: #f5f7fa;
     }
-  }
-  .el-table  ::v-deep  .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table  ::v-deep  .el-table__header > thead > tr > th {
-    padding: 6px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
+    &> td {
+      line-height: 1.5;
+      padding: 6px 0;
+      font-size: 13px;
+
+      * {
+        vertical-align: middle;
+      }
+
+      .el-checkbox {
+        vertical-align: super;
+      }
+    }
+    .el-table  ::v-deep  .el-table__row > td> div > span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .el-table  ::v-deep  .el-table__header > thead > tr > th {
+      padding: 6px 0;
+      background-color: #F5F5F6;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .table{
+      margin-top: 15px;
+    }
   }
 
   //修改颜色

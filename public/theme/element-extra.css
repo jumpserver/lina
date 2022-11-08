@@ -195,7 +195,7 @@ td .el-button.el-button--mini {
 }
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
-  color: #606266;
+  color: white;
   background-color: primary;
   font-weight: 400;
 }
@@ -431,7 +431,7 @@ td .el-button.el-button--mini {
 
 .el-select-dropdown__item.selected {
   font-weight: 400;
-  color: #606266;
+  color: white;
   background-color: primary;
 }
 
