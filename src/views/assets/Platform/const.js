@@ -78,7 +78,7 @@ export const platformFieldsMeta = (vm) => {
 }
 
 export const setAutomations = (vm) => {
-  const automation = vm.object.automation || {}
+  const automation = vm.defaultOptions.automation || {}
   const autoFieldsMeta = vm.fieldsMeta.automation.fieldsMeta
   const autoFields = vm.fieldsMeta.automation.fields
     .filter(item => item.endsWith('_method'))
