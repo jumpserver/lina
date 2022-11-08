@@ -13,6 +13,7 @@
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
@@ -44,6 +45,24 @@ export default {
                 { name: this.object?.name, privileged: val }
               ).then(res => {
                 this.$message.success(this.$t('common.updateSuccessMsg'))
+              })
+            }
+          })
+        },
+        {
+          title: this.$t('assets.TestAccountConnective'),
+          attrs: {
+            type: 'primary',
+            label: this.$t('assets.Test'),
+            disabled: !vm.$hasPerm('assets.test_account')
+          },
+          callbacks: Object.freeze({
+            click: () => {
+              this.$axios.post(
+                `/api/v1/assets/accounts/${this.object.id}/verify/`,
+                { action: 'test' }
+              ).then(res => {
+                openTaskPage(res['task'])
               })
             }
           })
