@@ -5,6 +5,7 @@
 <script>
 import BaseList from './components/BaseList'
 import { ActionsFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -37,6 +38,19 @@ export default {
                 return this.$axios.delete(url)
               },
               extraActions: [
+                {
+                  name: 'Test',
+                  title: this.$t('common.Test'),
+                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  callback: ({ row }) => {
+                    this.$axios.post(
+                      `/api/v1/assets/assets/${row.id}/tasks/`,
+                      { action: 'refresh' }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
+                },
                 {
                   name: 'View',
                   title: this.$t(`common.UpdateAssetDetail`),

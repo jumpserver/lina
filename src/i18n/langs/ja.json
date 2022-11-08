@@ -250,6 +250,7 @@
     "SystemUsers": "システムユーザー",
     "Test": "テスト",
     "TestAssetsConnective": "アセットの接続性をテストします",
+    "TestAccountConnective": "アカウント接続のテスト",
     "TestAllSystemUsersConnective": "すべてのシステムユーザーの接続性をテストします",
     "TestConnection": "テスト接続",
     "Type": "タイプ",

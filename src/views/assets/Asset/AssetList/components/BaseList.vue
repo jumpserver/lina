@@ -20,6 +20,7 @@ import {
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -134,7 +135,22 @@ export default {
                 const id = row.id
                 const url = `/api/v1/assets/assets/${id}/`
                 return this.$axios.delete(url)
-              }
+              },
+              extraActions: [
+                {
+                  name: 'Test',
+                  title: this.$t('common.Test'),
+                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  callback: ({ row }) => {
+                    this.$axios.post(
+                      `/api/v1/assets/assets/${row.id}/tasks/`,
+                      { action: 'refresh' }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
+                }
+              ]
             }
           }
         }
