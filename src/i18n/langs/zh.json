@@ -257,6 +257,7 @@
     "SystemUsers": "系统用户",
     "Test": "测试",
     "TestAssetsConnective": "测试资产可连接性",
+    "TestAccountConnective": "测试账号可连接性",
     "TestAllSystemUsersConnective": "测试所有系统用户可连接性",
     "TestConnection": "测试连接",
     "Type": "类型",
