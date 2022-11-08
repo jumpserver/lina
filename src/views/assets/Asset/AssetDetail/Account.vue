@@ -38,7 +38,7 @@ export default {
     return {
       columns: [
         'username', 'version', 'privileged', 'connectivity',
-        'date_created', 'date_updated', 'actions'
+        'is_active', 'date_created', 'date_updated', 'actions'
       ]
     }
   },

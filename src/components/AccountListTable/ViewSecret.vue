@@ -16,31 +16,31 @@
       v-on="$listeners"
     >
       <el-form class="password-form" label-position="right" label-width="80px" :model="authInfo">
-        <el-form-item :label="this.$t('assets.Name')">
-          <ShowKeyCopyFormatter v-model="account.asset.name" />
+        <el-form-item :label="this.$tc('assets.Name')">
+          <span>{{ account['name'] }}</span>
         </el-form-item>
         <el-form-item :label="this.$tc('assets.Username')">
-          <ShowKeyCopyFormatter v-model="account.username" />
+          <span>{{ account['username'] }}</span>
         </el-form-item>
-        <el-form-item v-if="secretTypePassword" :label="this.$t('assets.Password')">
+        <el-form-item v-if="secretTypePassword" :label="this.$tc('assets.Password')">
           <ShowKeyCopyFormatter v-model="authInfo.secret" />
         </el-form-item>
         <div v-else>
-          <el-form-item :label="this.$t('assets.SSHSecretKey')">
+          <el-form-item :label="this.$tc('assets.SSHSecretKey')">
             <ShowKeyCopyFormatter v-model="authInfo.secret" :has-show="false" />
           </el-form-item>
-          <el-form-item :label="this.$t('assets.sshKeyFingerprint')">
+          <el-form-item :label="this.$tc('assets.sshKeyFingerprint')">
             <span>{{ sshKeyFingerprint }}</span>
             <el-button type="text" @click="onDownload">{{ $t('common.Download') }}</el-button>
           </el-form-item>
         </div>
-        <el-form-item :label="this.$t('common.DateCreated')">
-          <span>{{ $moment(authInfo.date_created, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') }}</span>
+        <el-form-item :label="this.$tc('common.DateCreated')">
+          <span>{{ account['date_created'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="this.$t('common.DateUpdated')">
-          <span>{{ $moment(authInfo.date_updated, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') }}</span>
+        <el-form-item :label="this.$tc('common.DateUpdated')">
+          <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="this.$t('accounts.PasswordRecord')">
+        <el-form-item :label="this.$tc('accounts.PasswordRecord')">
           <el-button type="text" @click="onShowPasswordHistory">{{ authInfo.version }}</el-button>
         </el-form-item>
       </el-form>
@@ -80,7 +80,7 @@ export default {
   },
   data() {
     return {
-      dialogTitle: this.$tc('common.ViewSecret'),
+      dialogTitle: this.$tc('assets.AccountDetail'),
       authInfo: {},
       showAuthInfo: false,
       sshKeyFingerprint: '',
@@ -119,9 +119,19 @@ export default {
   .item-textarea >>> .el-textarea__inner {
     height: 110px;
   }
+  .el-form-item {
+    border-bottom: 1px solid #EBEEF5;
+    padding: 3px 0;
+    margin-bottom: 0;
+    &:hover {
+      background-color: #F5F7FA;
+    }
+  }
+
   ul {
     margin: 0;
   }
+
   li {
     display: block;
     font-size: 13px;
@@ -133,8 +143,5 @@ export default {
       color: #303133;
       font-weight: 500;
     }
-  }
-  .password-form >>> .el-form-item {
-    margin-bottom: 4px;
   }
 </style>

@@ -97,6 +97,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "AccountDetail": "账号详情",
     "Accounts": "账号列表",
     "SelectTemplate": "选择模版",
     "InAssetDetail": "在资产详情中更新账号信息",
