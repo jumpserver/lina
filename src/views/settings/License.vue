@@ -15,7 +15,7 @@
       <Dialog
         :visible.sync="dialogLicenseImport"
         top="20vh"
-        :title="this.$t('setting.ImportLicense')"
+        :title="this.$tc('setting.ImportLicense')"
         @cancel="dialogLicenseImport = false"
         @confirm="importLicense"
       >

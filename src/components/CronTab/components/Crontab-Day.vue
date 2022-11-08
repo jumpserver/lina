@@ -25,7 +25,7 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="7">
         {{ this.$t('common.CronTab.appoint') }}
-        <el-select v-model="checkboxList" clearable :placeholder="this.$t('common.CronTab.manyChoose')" multiple style="width:100%">
+        <el-select v-model="checkboxList" clearable :placeholder="this.$tc('common.CronTab.manyChoose')" multiple style="width:100%">
           <el-option v-for="item in 31" :key="item" :value="item">{{ item }}</el-option>
         </el-select>
       </el-radio>

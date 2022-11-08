@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :title="this.$t('common.updateSelected')"
+    :title="this.$tc('common.updateSelected')"
     :visible.sync="iVisible"
     width="70%"
     top="1vh"

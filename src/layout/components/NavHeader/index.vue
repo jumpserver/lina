@@ -2,17 +2,17 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">
+        <el-tooltip effect="dark" :content="this.$tc('route.SiteMessageList')">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$t('route.WebTerminal')">
+        <el-tooltip effect="dark" :content="this.$tc('route.WebTerminal')">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$t('route.SystemSetting')">
+        <el-tooltip effect="dark" :content="this.$tc('route.SystemSetting')">
           <SystemSetting />
         </el-tooltip>
       </li>

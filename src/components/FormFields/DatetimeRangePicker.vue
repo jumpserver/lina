@@ -2,9 +2,9 @@
   <el-date-picker
     v-model="value"
     type="datetimerange"
-    :range-separator="this.$t('common.To')"
-    :start-placeholder="this.$t('common.DateStart')"
-    :end-placeholder="this.$t('common.DateEnd')"
+    :range-separator="this.$tc('common.To')"
+    :start-placeholder="this.$tc('common.DateStart')"
+    :end-placeholder="this.$tc('common.DateEnd')"
     size="small"
     :clearable="false"
     class="datepicker"

@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-tabs type="border-card">
-      <el-tab-pane v-if="shouldHide('min')" :label="this.$t('common.CronTab.min')">
+      <el-tab-pane v-if="shouldHide('min')" :label="this.$tc('common.CronTab.min')">
         <CrontabMin
           ref="cronmin"
           :check="checkNumber"
@@ -11,7 +11,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('hour')" :label="this.$t('common.CronTab.hour')">
+      <el-tab-pane v-if="shouldHide('hour')" :label="this.$tc('common.CronTab.hour')">
         <CrontabHour
           ref="cronhour"
           :check="checkNumber"
@@ -20,7 +20,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('day')" :label="this.$t('common.CronTab.day')">
+      <el-tab-pane v-if="shouldHide('day')" :label="this.$tc('common.CronTab.day')">
         <CrontabDay
           ref="cronday"
           :check="checkNumber"
@@ -29,7 +29,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('month')" :label="this.$t('common.CronTab.month')">
+      <el-tab-pane v-if="shouldHide('month')" :label="this.$tc('common.CronTab.month')">
         <CrontabMonth
           ref="cronmonth"
           :check="checkNumber"
@@ -38,7 +38,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('week')" :label="this.$t('common.CronTab.week')">
+      <el-tab-pane v-if="shouldHide('week')" :label="this.$tc('common.CronTab.week')">
         <CrontabWeek
           ref="cronweek"
           :check="checkNumber"

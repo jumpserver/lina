@@ -31,11 +31,11 @@ export default {
             false: this.$t('common.No')
           },
           getKey({ row, cellValue }) {
-            return typeof cellValue === 'object' ? cellValue.value : cellValue
+            return (cellValue && typeof cellValue === 'object') ? cellValue.value : cellValue
           },
           getText({ row, cellValue }) {
             const key = this.getKey({ row, cellValue })
-            return typeof cellValue === 'object' ? cellValue.label : this.textChoices[key] || cellValue
+            return (cellValue && typeof cellValue === 'object') ? cellValue.label : this.textChoices[key] || cellValue
           },
           getIcon({ row, cellValue }) {
             return this.faChoices[cellValue]

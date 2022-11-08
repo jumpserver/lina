@@ -3,7 +3,7 @@
     <div class="box">
       <el-input v-model="input" clearable @focus="showDialog" @clear="onClear" />
     </div>
-    <el-dialog :title="this.$t('common.CronTab.newCron')" :visible.sync="showCron" top="8vh" width="580px" append-to-body>
+    <el-dialog :title="this.$tc('common.CronTab.newCron')" :visible.sync="showCron" top="8vh" width="580px" append-to-body>
       <Crontab
         :expression="expression"
         @hide="showCron = false"

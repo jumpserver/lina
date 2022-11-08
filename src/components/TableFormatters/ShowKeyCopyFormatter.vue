@@ -1,71 +1,86 @@
 <template>
   <div class="content">
-    <span class="text">{{ currentValue }}</span>
-    <span v-if="iValue" class="action">
+    <pre class="text">{{ currentValue }}</pre>
+    <span v-if="cellValue" class="action">
       <el-tooltip
         v-if="hasShow"
         effect="dark"
         placement="top"
-        :content="this.$t('common.View')"
+        :content="this.$tc('common.View')"
       >
-        <i class="el-icon-view" @click="onShow()" />
+        <i class="fa" :class="isShow ? 'fa-eye-slash' : 'fa-eye'" @click="onShow()" />
+      </el-tooltip>
+      <el-tooltip
+        v-if="hasDownload"
+        effect="dark"
+        placement="top"
+        :content="this.$tc('common.Download')"
+      >
+        <i class="fa fa-download" @click="onDownload()" />
       </el-tooltip>
       <el-tooltip
         v-if="hasCopy"
         effect="dark"
         placement="top"
-        :content="this.$t('common.Copy')"
+        :content="this.$tc('common.Copy')"
       >
-        <i class="el-icon-copy-document" @click="onCopy()" />
+        <i class="fa fa-clone" @click="onCopy()" />
       </el-tooltip>
     </span>
   </div>
 </template>
 
 <script>
+import { downloadText } from '@/utils/common'
+import BaseFormatter from '@/components/TableFormatters/base'
+
 export default {
   name: 'ShowKeyCopyFormatter',
+  extends: BaseFormatter,
   props: {
-    value: {
-      type: String,
-      default: () => ''
-    },
-    cellValue: {
-      type: [String, Number],
-      default: ''
-    },
-    hasShow: {
-      type: Boolean,
-      default: true
-    },
-    hasCopy: {
-      type: Boolean,
-      default: true
+    formatterArgsDefault: {
+      type: Object,
+      default() {
+        return {
+          name: 'key',
+          hasShow: true,
+          hasDownload: true,
+          hasCopy: true,
+          defaultShow: false
+        }
+      }
     }
   },
   data() {
     return {
-      currentValue: this.switchShowValue()
+      formatterArgs: Object.assign(this.formatterArgsDefault, this.col.formatterArgs || {}),
+      isShow: false
     }
   },
   computed: {
-    iValue() {
-      return this.value || this.cellValue
+    hasShow: function() { return this.formatterArgs.hasShow },
+    hasDownload: function() { return this.formatterArgs.hasDownload },
+    hasCopy: function() { return this.formatterArgs.hasCopy },
+    name: function() { return this.formatterArgs.name },
+    currentValue() {
+      if (this.isShow) {
+        return this.cellValue
+      } else {
+        return '******'
+      }
     }
   },
+  mounted() {
+    this.isShow = this.formatterArgs.defaultShow
+  },
   methods: {
-    switchShowValue() {
-      const value = this.value || this.cellValue
-      return value ? '******' + value.replace(/[\s\S]/g, '') : ''
-    },
     onShow() {
-      const { currentValue, switchShowValue } = this
-      this.currentValue = currentValue === this.iValue ? switchShowValue() : this.iValue
+      this.isShow = !this.isShow
     },
     onCopy: _.throttle(function() {
       const inputDom = document.createElement('input')
       inputDom.id = 'createInputDom'
-      inputDom.value = this.iValue
+      inputDom.value = this.cellValue
       document.body.appendChild(inputDom)
       inputDom.select()
       document?.execCommand('copy')
@@ -75,7 +90,10 @@ export default {
         duration: 1400
       })
       document.body.removeChild(inputDom)
-    }, 1800)
+    }, 1800),
+    onDownload() {
+      downloadText(this.cellValue, this.name + '.txt')
+    }
   }
 }
 </script>
@@ -84,19 +102,26 @@ export default {
     display: flex;
     width: 100%;
     overflow: hidden;
-    white-space: nowrap;
+    //white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 13px;
+
     .text {
       flex: 1;
+      line-height: 1.3;
       overflow: hidden;
-      white-space: nowrap;
+      //white-space: nowrap;
       text-overflow: ellipsis;
     }
+
     .action {
       float: right;
       font-size: 15px;
       cursor: pointer;
-      .el-icon-view, .el-icon-copy-document {
+      margin-left: 5px;
+
+      .fa {
+        margin-right: 10px;
         &:hover {
           color: var(--color-primary);
         }

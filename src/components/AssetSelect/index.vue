@@ -10,7 +10,7 @@
     />
     <Dialog
       v-if="dialogVisible"
-      :title="this.$t('assets.Assets')"
+      :title="this.$tc('assets.Assets')"
       :visible.sync="dialogVisible"
       custom-class="asset-select-dialog"
       width="80vw"

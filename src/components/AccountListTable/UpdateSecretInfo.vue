@@ -1,7 +1,7 @@
 <template>
   <Dialog
     width="50"
-    :title="this.$tc('assets.UpdateAssetUserToken')"
+    :title="this.$tcc('assets.UpdateAssetUserToken')"
     :visible.sync="visible"
     :destroy-on-close="true"
     @confirm="handleConfirm()"
@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      authInfo: {
+      secretInfo: {
         password: '',
         private_key: '',
         passphrase: ''
@@ -61,12 +61,12 @@ export default {
   methods: {
     handleConfirm() {
       const data = {}
-      if (this.authInfo.password !== '') {
-        data.password = encryptPassword(this.authInfo.password)
+      if (this.secretInfo.password !== '') {
+        data.password = encryptPassword(this.secretInfo.password)
       }
-      if (this.authInfo.private_key !== '') {
-        data.private_key = encryptPassword(this.authInfo.private_key)
-        if (this.authInfo.passphrase) data.passphrase = this.authInfo.passphrase
+      if (this.secretInfo.private_key !== '') {
+        data.private_key = encryptPassword(this.secretInfo.private_key)
+        if (this.secretInfo.passphrase) data.passphrase = this.secretInfo.passphrase
       }
       this.$axios.patch(
         `/api/v1/assets/accounts/${this.account.id}/`,
@@ -74,12 +74,12 @@ export default {
         { disableFlashErrorMsg: true }
       ).then(res => {
         this.authInfo = { password: '', private_key: '' }
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tcc('common.updateSuccessMsg'))
         this.$emit('updateAuthDone', res)
         this.$emit('update:visible', false)
       }).catch(err => {
         const errMsg = Object.values(err.response.data).join(', ')
-        this.$message.error(this.$tc('common.updateErrorMsg') + ' ' + errMsg)
+        this.$message.error(this.$tcc('common.updateErrorMsg') + ' ' + errMsg)
         this.$emit('update:visible', true)
       })
     },
@@ -87,7 +87,7 @@ export default {
       this.$emit('update:visible', false)
     },
     getFile(file) {
-      this.authInfo.private_key = file
+      this.secretInfo.private_key = file
     }
   }
 }
