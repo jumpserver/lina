@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      select: '',
+      select: [],
       input3: ''
     }
   }
