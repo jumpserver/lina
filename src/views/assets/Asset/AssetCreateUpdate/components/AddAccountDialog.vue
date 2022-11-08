@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="this.$t('assets.AddAccount')"
+    :title="this.$tc('assets.AddAccount')"
     :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"

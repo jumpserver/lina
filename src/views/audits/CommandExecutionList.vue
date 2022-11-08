@@ -1,7 +1,7 @@
 <template>
   <div>
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog v-if="relationDialog.show" :visible.sync="relationDialog.show" :title="this.$t('audits.Hosts')" :show-cancel="false" :show-confirm="false">
+    <Dialog v-if="relationDialog.show" :visible.sync="relationDialog.show" :title="this.$tc('audits.Hosts')" :show-cancel="false" :show-confirm="false">
       <ListTable :table-config="relationDialog.tableConfig" :header-actions="relationDialog.headerActions" />
     </Dialog>
   </div>

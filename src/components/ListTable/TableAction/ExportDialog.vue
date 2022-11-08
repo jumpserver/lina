@@ -20,7 +20,7 @@
             <el-radio v-for="option of exportTypeOptions" :key="option.value" style="padding: 10px 20px;" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item class="export-form" :label="this.$t('common.imExport.ExportRange')" :label-width="'100px'">
+        <el-form-item class="export-form" :label="this.$tc('common.imExport.ExportRange')" :label-width="'100px'">
           <el-radio-group v-model="exportOption">
             <el-radio v-for="option of exportOptions" :key="option.value" class="export-item" :label="option.value" :disabled="!option.can">{{ option.label }}</el-radio>
           </el-radio-group>

@@ -1,7 +1,7 @@
 <template>
   <Dialog
     width="50"
-    :title="this.$tc('assets.UpdateAssetUserToken')"
+    :title="this.$tcc('assets.UpdateAssetUserToken')"
     :visible.sync="visible"
     :destroy-on-close="true"
     @confirm="handleConfirm()"
@@ -9,19 +9,19 @@
     v-on="$listeners"
   >
     <el-form label-position="right" label-width="90px">
-      <el-form-item :label="this.$t('assets.Name')">
+      <el-form-item :label="this.$tc('assets.Name')">
         <el-input v-model="account['asset_name']" readonly />
       </el-form-item>
-      <el-form-item :label="this.$t('assets.Username')">
+      <el-form-item :label="this.$tc('assets.Username')">
         <el-input v-model="account['username']" readonly />
       </el-form-item>
-      <el-form-item :label="this.$t('assets.Password')">
+      <el-form-item :label="this.$tc('assets.Password')">
         <UpdateToken v-model="authInfo.password" />
       </el-form-item>
-      <el-form-item :label="this.$t('assets.SSHSecretKey')">
+      <el-form-item :label="this.$tc('assets.SSHSecretKey')">
         <UploadKey @input="getFile" />
       </el-form-item>
-      <el-form-item :label="this.$t('assets.Passphrase')">
+      <el-form-item :label="this.$tc('assets.Passphrase')">
         <UpdateToken v-model="authInfo.passphrase" />
       </el-form-item>
     </el-form>
@@ -74,12 +74,12 @@ export default {
         { disableFlashErrorMsg: true }
       ).then(res => {
         this.authInfo = { password: '', private_key: '' }
-        this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$message.success(this.$tcc('common.updateSuccessMsg'))
         this.$emit('updateAuthDone', res)
         this.$emit('update:visible', false)
       }).catch(err => {
         const errMsg = Object.values(err.response.data).join(', ')
-        this.$message.error(this.$tc('common.updateErrorMsg') + ' ' + errMsg)
+        this.$message.error(this.$tcc('common.updateErrorMsg') + ' ' + errMsg)
         this.$emit('update:visible', true)
       })
     },

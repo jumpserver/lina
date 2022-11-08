@@ -3,7 +3,7 @@
     <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
     <Dialog
       v-if="dialogVisible"
-      :title="this.$t('assets.TestGatewayTestConnection')"
+      :title="this.$tc('assets.TestGatewayTestConnection')"
       :visible.sync="dialogVisible"
       width="40%"
       top="35vh"

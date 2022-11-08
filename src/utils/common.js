@@ -316,7 +316,7 @@ export { BASE_URL }
  * @param  {String} content
  * @param  {String} fileName
  */
-export function downloadFile(content, filename) {
+export function downloadText(content, filename) {
   const a = document.createElement('a')
   const blob = new Blob([content])
   const url = window.URL.createObjectURL(blob)

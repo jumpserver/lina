@@ -23,15 +23,14 @@
           <span>{{ account['username'] }}</span>
         </el-form-item>
         <el-form-item v-if="secretTypePassword" :label="this.$tc('assets.Password')">
-          <ShowKeyCopyFormatter v-model="authInfo.secret" />
+          <ShowKeyCopyFormatter v-model="authInfo.secret" :name="account['name']" />
         </el-form-item>
         <div v-else>
           <el-form-item :label="this.$tc('assets.SSHSecretKey')">
-            <ShowKeyCopyFormatter v-model="authInfo.secret" :has-show="false" />
+            <ShowKeyCopyFormatter v-model="authInfo.secret" :has-show="false" :name="account['name']" />
           </el-form-item>
           <el-form-item :label="this.$tc('assets.sshKeyFingerprint')">
             <span>{{ sshKeyFingerprint }}</span>
-            <el-button type="text" @click="onDownload">{{ $t('common.Download') }}</el-button>
           </el-form-item>
         </div>
         <el-form-item :label="this.$tc('common.DateCreated')">
@@ -58,7 +57,6 @@ import Dialog from '@/components/Dialog'
 import PasswordHistoryDialog from './PasswordHistoryDialog'
 import UserConfirmDialog from '@/components/UserConfirmDialog'
 import { ShowKeyCopyFormatter } from '@/components/TableFormatters'
-import { downloadFile } from '@/utils/common.js'
 
 export default {
   name: 'ShowSecretInfo',
@@ -106,10 +104,6 @@ export default {
     },
     onShowPasswordHistory() {
       this.showPasswordHistoryDialog = true
-    },
-    onDownload() {
-      const { secret, secret_type } = this.authInfo || {}
-      downloadFile(secret, secret_type + '.key')
     }
   }
 }

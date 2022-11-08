@@ -18,7 +18,7 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="6">
         {{ this.$t('common.CronTab.appoint') }}
-        <el-select v-model="checkboxList" clearable :placeholder="this.$t('common.CronTab.manyChoose')" multiple style="width:100%">
+        <el-select v-model="checkboxList" clearable :placeholder="this.$tc('common.CronTab.manyChoose')" multiple style="width:100%">
           <el-option v-for="(item,index) of weekList" :key="index" :value="index+1">{{ item }}</el-option>
         </el-select>
       </el-radio>

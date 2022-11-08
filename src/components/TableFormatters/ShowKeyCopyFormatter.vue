@@ -6,26 +6,40 @@
         v-if="hasShow"
         effect="dark"
         placement="top"
-        :content="this.$t('common.View')"
+        :content="this.$tc('common.View')"
       >
-        <i class="el-icon-view" @click="onShow()" />
+        <i class="fa" :class="isShow ? 'fa-eye-slash' : 'fa-eye'" @click="onShow()" />
+      </el-tooltip>
+      <el-tooltip
+        v-if="hasDownload"
+        effect="dark"
+        placement="top"
+        :content="this.$tc('common.Download')"
+      >
+        <i class="fa fa-download" @click="onDownload()" />
       </el-tooltip>
       <el-tooltip
         v-if="hasCopy"
         effect="dark"
         placement="top"
-        :content="this.$t('common.Copy')"
+        :content="this.$tc('common.Copy')"
       >
-        <i class="el-icon-copy-document" @click="onCopy()" />
+        <i class="fa fa-clone" @click="onCopy()" />
       </el-tooltip>
     </span>
   </div>
 </template>
 
 <script>
+import { downloadText } from '@/utils/common'
+
 export default {
   name: 'ShowKeyCopyFormatter',
   props: {
+    name: {
+      type: String,
+      required: true
+    },
     value: {
       type: String,
       default: () => ''
@@ -41,26 +55,32 @@ export default {
     hasCopy: {
       type: Boolean,
       default: true
+    },
+    hasDownload: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
-      currentValue: this.switchShowValue()
+      isShow: false
     }
   },
   computed: {
     iValue() {
       return this.value || this.cellValue
+    },
+    currentValue() {
+      if (this.isShow) {
+        return this.iValue
+      } else {
+        return '******'
+      }
     }
   },
   methods: {
-    switchShowValue() {
-      const value = this.value || this.cellValue
-      return value ? '******' + value.replace(/[\s\S]/g, '') : ''
-    },
     onShow() {
-      const { currentValue, switchShowValue } = this
-      this.currentValue = currentValue === this.iValue ? switchShowValue() : this.iValue
+      this.isShow = !this.isShow
     },
     onCopy: _.throttle(function() {
       const inputDom = document.createElement('input')
@@ -75,7 +95,10 @@ export default {
         duration: 1400
       })
       document.body.removeChild(inputDom)
-    }, 1800)
+    }, 1800),
+    onDownload() {
+      downloadText(this.iValue, this.name + '.txt')
+    }
   }
 }
 </script>
@@ -86,17 +109,22 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 13px;
+
     .text {
       flex: 1;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+
     .action {
       float: right;
       font-size: 15px;
       cursor: pointer;
-      .el-icon-view, .el-icon-copy-document {
+
+      .fa {
+        margin-right: 10px;
         &:hover {
           color: var(--color-primary);
         }

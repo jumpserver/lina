@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="setting.InviteDialogVisible"
-    :title="this.$t('users.InviteUserInOrg')"
+    :title="this.$tc('users.InviteUserInOrg')"
     :visible.sync="setting.InviteDialogVisible"
     :show-cancel="false"
     :show-confirm="false"

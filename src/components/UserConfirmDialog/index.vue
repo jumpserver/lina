@@ -14,7 +14,7 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
           <el-alert
-            :title="this.$t('auth.ReLoginTitle')"
+            :title="this.$tc('auth.ReLoginTitle')"
             type="info"
             center
             :closable="false"
