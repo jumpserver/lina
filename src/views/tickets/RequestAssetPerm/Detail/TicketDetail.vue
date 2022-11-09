@@ -23,7 +23,7 @@
           <el-form-item :label="$t('tickets.SystemUser')" :rules="isRequired">
             <Select2 v-model="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
-          <el-form-item :label="$t('common.dateStart')" required>
+          <el-form-item :label="$t('common.DateStart')" required>
             <el-date-picker
               v-model="requestForm.apply_date_start"
               type="datetime"
@@ -134,7 +134,7 @@ export default {
           value: object.org_name
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(object.date_created)
         },
         {
@@ -164,7 +164,7 @@ export default {
           value: forMatAction(this, object.apply_actions_display)
         },
         {
-          key: this.$t('common.dateStart'),
+          key: this.$t('common.DateStart'),
           value: toSafeLocalDateStr(object.apply_date_start)
         },
         {
@@ -207,7 +207,7 @@ export default {
           value: forMatAction(this, object.apply_actions_display)
         },
         {
-          key: this.$t('common.dateStart'),
+          key: this.$t('common.DateStart'),
           value: toSafeLocalDateStr(object.apply_date_start)
         },
         {

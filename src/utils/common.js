@@ -76,21 +76,20 @@ function cleanDateStr(d) {
 }
 
 export function toSafeLocalDateStr(d) {
-  if (d === '' || d === null) {
-    return ''
+  if ([null, undefined, ''].includes(d)) {
+    return '-'
   }
   const date = safeDate(d)
-  // const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
-  const date_s =
-    date.toLocaleDateString(getUserLang(), { hourCycle: 'h23' }) +
-    ' ' +
-    date.toLocaleTimeString(getUserLang(), { hourCycle: 'h23' })
-  return date_s
+  return moment(date).format('L LTS')
 }
 
 export function forMatAction(vm, d) {
   d.forEach(function(item, index, arr) {
-    if ([vm.$t('perms.clipboardCopyPaste'), vm.$t('perms.upDownload'), vm.$t('perms.all')].includes(item)) {
+    if ([
+      vm.$t('perms.clipboardCopyPaste'),
+      vm.$t('perms.upDownload'),
+      vm.$t('perms.all')
+    ].includes(item)) {
       arr.splice(index, 1)
     }
   })

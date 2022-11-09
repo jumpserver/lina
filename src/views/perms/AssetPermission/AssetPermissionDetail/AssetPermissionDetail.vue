@@ -12,7 +12,6 @@
 <script>
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
 import { ACTIONS_FIELDS_MAP } from './const'
 
 export default {
@@ -62,23 +61,19 @@ export default {
         },
         {
           key: this.$t('perms.userCount'),
-          value: this.object.users_amount
+          value: this.object.users.length
         },
         {
           key: this.$t('perms.userGroupCount'),
-          value: this.object.user_groups_amount
+          value: this.object.user_groups.length
         },
         {
           key: this.$t('perms.assetCount'),
-          value: this.object.assets_amount
+          value: this.object.assets.length
         },
         {
           key: this.$t('perms.nodeCount'),
-          value: this.object.nodes_amount
-        },
-        {
-          key: this.$t('perms.systemUserCount'),
-          value: this.object.system_users_amount
+          value: this.object.nodes.length
         },
         {
           key: this.$t('perms.Actions'),
@@ -89,16 +84,16 @@ export default {
           }
         },
         {
-          key: this.$t('perms.dateStart'),
-          value: toSafeLocalDateStr(this.object.date_start)
+          key: this.$t('common.DateStart'),
+          value: this.object.date_start
         },
         {
           key: this.$t('common.dateExpired'),
-          value: toSafeLocalDateStr(this.object.date_expired)
+          value: this.object.date_expired
         },
         {
-          key: this.$t('common.dateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
+          key: this.$t('common.DateCreated'),
+          value: this.object.date_created
         },
         {
           key: this.$t('common.createdBy'),

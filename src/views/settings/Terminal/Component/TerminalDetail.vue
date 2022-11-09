@@ -65,7 +65,7 @@ export default {
         //   value: this.terminalData.http_port
         // },
         {
-          key: this.$t('sessions.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: this.terminalData.date_created
         },
         {

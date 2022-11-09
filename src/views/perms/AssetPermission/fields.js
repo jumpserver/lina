@@ -75,7 +75,7 @@ function getFields() {
   }
 
   const date_start = {
-    label: this.$t('common.dateStart'),
+    label: this.$t('common.DateStart'),
     hidden: () => false
   }
 

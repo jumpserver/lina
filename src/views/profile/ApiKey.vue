@@ -34,7 +34,7 @@ export default {
             formatter: ShowKeyCopyFormatter
           },
           date_created: {
-            label: this.$t('common.dateCreated'),
+            label: this.$t('common.DateCreated'),
             showOverflowTooltip: true,
             formatter: DateFormatter
           },

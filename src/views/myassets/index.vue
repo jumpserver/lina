@@ -39,9 +39,9 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/users/assets/',
         hasTree: true,
-        columns: ['name', 'address', 'platform', 'category', 'type', 'comment', 'actions'],
+        columns: ['name', 'address', 'platform', 'category', 'accounts', 'type', 'comment', 'actions'],
         columnsShow: {
-          default: ['name', 'address', 'platform', 'actions'],
+          default: ['name', 'address', 'platform', 'accounts', 'actions'],
           min: ['name', 'address', 'actions']
         },
         columnsMeta: {

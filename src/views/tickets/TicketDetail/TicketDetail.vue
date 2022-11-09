@@ -56,7 +56,7 @@ export default {
           value: object.process_map[object.approval_step - 1].processor_display
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(object.date_created)
         }
       ]

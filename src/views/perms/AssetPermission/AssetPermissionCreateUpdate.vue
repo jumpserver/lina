@@ -96,7 +96,7 @@ export default {
           helpText: this.$t('common.actionsTips')
         },
         date_start: {
-          label: this.$t('common.dateStart')
+          label: this.$t('common.DateStart')
         },
         date_expired: {
           label: this.$t('common.dateExpired')

@@ -8,7 +8,7 @@
         >
           <div slot="description">
             <div>{{ `${this.$t('tickets.Applicant')}：${object.rel_snapshot.applicant}` }}</div>
-            <div>{{ `${this.$t('common.dateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
+            <div>{{ `${this.$t('common.DateCreated')}:  ${toSafeLocalDateStr(object.date_created)}` }}</div>
           </div>
         </el-step>
         <el-step

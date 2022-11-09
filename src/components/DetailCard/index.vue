@@ -2,7 +2,7 @@
   <IBox :title="title" fa="fa-info-circle">
     <el-form class="content" label-position="left" label-width="25%">
       <el-form-item v-for="item in items" :key="item.key" :label="item.key">
-        <ItemValue :value="item.value" v-bind="item" />
+        <ItemValue class="item-value" :value="item.value" v-bind="item" />
       </el-form-item>
     </el-form>
     <slot />
@@ -59,6 +59,10 @@ export default {
     >>> .el-form-item__content {
       font-size: 13px;
     }
+  }
+
+  .item-value span {
+    word-break: break-word;
   }
   .content {
     font-size: 13px;
