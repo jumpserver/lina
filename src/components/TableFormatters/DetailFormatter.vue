@@ -7,7 +7,9 @@
       :type="col.type || 'info'"
       @click="goDetail"
     >
-      {{ iTitle }}
+      <slot>
+        {{ iTitle }}
+      </slot>
     </el-link>
   </div>
 </template>
