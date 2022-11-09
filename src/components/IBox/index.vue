@@ -41,7 +41,6 @@ export default {
     /*height: 100%;*/
     clear: both;
     padding: 0;
-    background-color: #ffffff;
   }
 
   .ibox >>> .el-card__header {
@@ -83,8 +82,7 @@ export default {
   }
 
   .ibox >>> .el-card__body {
-    background-color: #ffffff;
-    padding: 15px 20px 20px 20px;
+    padding: 15px 30px 20px 30px;
     color: inherit;
   }
 </style>

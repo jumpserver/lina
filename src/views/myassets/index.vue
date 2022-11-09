@@ -39,15 +39,15 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/users/assets/',
         hasTree: true,
-        columns: ['hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'],
+        columns: ['name', 'address', 'platform', 'category', 'type', 'comment', 'actions'],
         columnsShow: {
-          default: ['hostname', 'ip', 'system_users', 'platform', 'actions'],
-          min: ['hostname', 'actions']
+          default: ['name', 'address', 'platform', 'actions'],
+          min: ['name', 'address', 'actions']
         },
         columnsMeta: {
-          hostname: {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+          name: {
+            prop: 'name',
+            label: this.$t('assets.Name'),
             formatter: DialogDetailFormatter,
             showOverflowTooltip: true,
             formatterArgs: {
@@ -55,23 +55,31 @@ export default {
               getDetailItems: function({ col, row, cellValue }) {
                 return [
                   {
-                    key: this.$t('assets.Hostname'),
-                    value: row.hostname
+                    key: this.$t('assets.Name'),
+                    value: row.name
                   },
                   {
-                    key: this.$t('assets.ip'),
-                    value: row.ip
+                    key: this.$t('assets.Address'),
+                    value: row.address
                   },
                   {
                     key: this.$t('assets.Protocols'),
-                    value: row.protocols.join(', ')
+                    value: row.protocols.map(item => item.name).join(', ')
+                  },
+                  {
+                    key: this.$t('assets.Category'),
+                    value: row.category.label
+                  },
+                  {
+                    key: this.$t('assets.Type'),
+                    value: row.type.label
                   },
                   {
                     key: this.$t('assets.Platform'),
                     value: row.platform
                   },
                   {
-                    key: this.$t('common.Activate'),
+                    key: this.$t('common.Active'),
                     value: row.is_active
                   },
                   {

@@ -1,12 +1,12 @@
 <template>
-  <DetailFormatter>
+  <DetailFormatter :row="row" :col="col">
     <template>
       <el-popover
         placement="top-start"
         :title="title"
         width="400"
         trigger="hover"
-        :disabled="cellValue.length === 0"
+        :disabled="!showItems"
       >
         <div class="detail-content">
           <div v-for="item of items" :key="item" class="detail-item">
@@ -21,14 +21,21 @@
 
 <script>
 import DetailFormatter from './DetailFormatter'
+import BaseFormatter from './base'
 export default {
   name: 'AmountFormatter',
   components: {
     DetailFormatter
   },
-  extends: DetailFormatter,
+  extends: BaseFormatter,
   data() {
     return {
+      formatterArgsNew: {
+        showItems: true,
+        getItem(item) {
+          return item.name
+        }
+      }
     }
   },
   computed: {
@@ -38,6 +45,9 @@ export default {
     items() {
       const getItem = this.formatterArgs.getItem || function(item) { return item.name }
       return this.cellValue.map(item => getItem(item))
+    },
+    showItems() {
+      return this.formatterArgs.showItems !== false && this.cellValue.length > 0
     }
   },
   mounted() {

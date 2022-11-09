@@ -12,8 +12,8 @@
     <slot />
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
-        <el-button v-if="showCancel" size="small" @click="onCancel">{{ cancelTitle }}</el-button>
-        <el-button v-if="showConfirm" type="primary" size="small" :loading="loadingStatus" @click="onConfirm">
+        <el-button v-if="showCancel" @click="onCancel">{{ cancelTitle }}</el-button>
+        <el-button v-if="showConfirm" type="primary" :loading="loadingStatus" @click="onConfirm">
           {{ confirmTitle }}
         </el-button>
       </slot>
@@ -84,23 +84,28 @@ export default {
 
 <style lang="scss" scoped>
   .dialog >>> .el-dialog {
-    padding: 30px 40px 35px;
+    border-radius: 0.3em;
 
     &__header {
-      padding: 0 10px 0 0;
+      box-sizing: border-box;
+      padding: 15px 22px;
+      border-bottom: 1px solid #dee2e6;
+      font-weight: 400;
     }
 
     &__body {
-      padding: 15px 0 0;
+      padding: 30px 40px;
     }
 
     &__footer {
-      padding: 0 0 10px 0;
+      border-top: 1px solid #dee2e6;
+      padding: 16px;
+      justify-content: flex-end;
     }
   }
 
-  .dialog-footer >>> button.el-button--small {
-    padding: 10px 21px;
+  .dialog-footer >>> button.el-button {
     font-size: 13px;
+    padding: 10px 20px;
   }
 </style>

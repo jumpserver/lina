@@ -37,7 +37,7 @@ export default {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
         columns: [
-          'name', 'users', 'user_groups', 'assets', 'nodes',
+          'name', 'users', 'user_groups', 'assets', 'nodes', 'accounts',
           'date_expired', 'is_valid', 'is_expired', 'is_active',
           'from_ticket', 'created_by', 'date_created', 'comment',
           'org_name', 'actions'
@@ -46,13 +46,14 @@ export default {
           min: ['name', 'actions'],
           default: [
             'name', 'users', 'user_groups', 'assets',
-            'nodes', 'system_users', 'is_valid', 'actions'
+            'nodes', 'accounts', 'is_valid', 'actions'
           ]
         },
         columnsMeta: {
           name: {
             formatterArgs: {
               routeQuery: {
+                name: 'AssetPermissionDetail',
                 activeTab: 'AssetPermissionDetail'
               }
             },
@@ -70,7 +71,6 @@ export default {
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
-              counting: true,
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -81,7 +81,6 @@ export default {
             width: '100px',
             formatter: AmountFormatter,
             formatterArgs: {
-              counting: true,
               routeQuery: {
                 activeTab: 'AssetPermissionUser'
               }
@@ -102,7 +101,19 @@ export default {
             width: '60px',
             formatter: AmountFormatter,
             formatterArgs: {
-              counting: true,
+              routeQuery: {
+                activeTab: 'AssetPermissionAsset'
+              }
+            }
+          },
+          accounts: {
+            label: this.$t('perms.Account'),
+            width: '60px',
+            formatter: AmountFormatter,
+            formatterArgs: {
+              getItem(item) {
+                return item
+              },
               routeQuery: {
                 activeTab: 'AssetPermissionAsset'
               }

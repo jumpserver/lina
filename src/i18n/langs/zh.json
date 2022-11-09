@@ -97,6 +97,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Category": "类别",
     "AccountDetail": "账号详情",
     "Accounts": "账号列表",
     "SelectTemplate": "选择模版",
@@ -700,10 +701,6 @@
     "UserGroups": "用户组",
     "PermName": "授权名称",
     "Permissions": "授权列表",
-    "DatabaseAppPermission": "数据库授权",
-    "RemoteAppPermission": "远程应用授权",
-    "addApplicationToThisPermission": "添加应用",
-    "KubernetesAppPermission": "Kubernetes授权",
     "addAssetToThisPermission": "添加资产",
     "addDatabaseAppToThisPermission": "添加数据库应用",
     "addNodeToThisPermission": "添加节点",
@@ -793,6 +790,7 @@
     "Database": "数据库",
     "Session": "会话",
     "AssetPermission": "资产授权",
+    "AssetPermissionList": "资产授权列表",
     "AssetPermissionCreate": "创建资产授权规则",
     "AssetPermissionDetail": "资产授权详情",
     "AssetPermissionUpdate": "更新资产授权规则",
