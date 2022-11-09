@@ -53,7 +53,6 @@ export default {
           name: {
             formatterArgs: {
               routeQuery: {
-                name: 'AssetPermissionDetail',
                 activeTab: 'AssetPermissionDetail'
               }
             },

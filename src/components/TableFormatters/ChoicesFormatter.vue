@@ -1,11 +1,14 @@
 <template>
-  <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
-    <div slot="content" v-html="tips" />
-    <span :class="classes">
-      <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
-      <span v-if="formatterArgs.showText">{{ text }}</span>
-    </span>
-  </el-tooltip>
+  <span>
+    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
+      <div slot="content" v-html="tips" />
+      <span :class="classes">
+        <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
+        <span v-if="formatterArgs.showText">{{ text }}</span>
+      </span>
+    </el-tooltip>
+    <span v-else>-</span>
+  </span>
 </template>
 
 <script>

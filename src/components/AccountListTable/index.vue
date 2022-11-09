@@ -66,6 +66,14 @@ export default {
     columns: {
       type: Array,
       default: () => []
+    },
+    hasExport: {
+      type: Boolean,
+      default: true
+    },
+    hasImport: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -117,16 +125,10 @@ export default {
           },
           privileged: {
             label: this.$t('assets.Privileged'),
+            width: '120px',
             formatterArgs: {
-              getText: ({ row }) => {
-                return row.privileged ? ' ' : '-'
-              },
-              getIcon: ({ row }) => {
-                return row.privileged ? 'fa-check-circle text-primary' : ''
-              },
-              classChoices: {
-                false: ''
-              }
+              showText: false,
+              showFalse: false
             }
           },
           connectivity: connectivityMeta,
@@ -199,7 +201,7 @@ export default {
         hasMoreActions: true,
         hasCreate: false,
         hasImport: true,
-        hasExport: this.$hasPerm('assets.view_account'),
+        hasExport: this.hasExport && this.$hasPerm('assets.view_accountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
@@ -217,7 +219,7 @@ export default {
           }
         ],
         searchConfig: {
-          exclude: ['systemuser', 'asset']
+          exclude: ['asset']
         },
         hasSearch: true
       }

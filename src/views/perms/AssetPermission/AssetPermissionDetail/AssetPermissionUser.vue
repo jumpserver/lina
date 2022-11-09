@@ -120,7 +120,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
         onDeleteSuccess: (obj, that) => {

@@ -79,8 +79,14 @@ export default {
           key: this.$t('perms.Actions'),
           value: this.object.actions,
           formatter(row, value) {
-            const actionMap = value.map(item => ACTIONS_FIELDS_MAP[item].action).join(',')
-            return <span>{actionMap}</span>
+            const actionMap = value.map(item => ACTIONS_FIELDS_MAP[item].action)
+            return (
+              <div>
+                {actionMap.map(item => (
+                  <el-tag size='mini' style={{ marginRight: '3px' }} key={item}>{item}</el-tag>
+                )) }
+              </div>
+            )
           }
         },
         {
@@ -109,6 +115,5 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
+<style lang="scss" scoped>
 </style>
