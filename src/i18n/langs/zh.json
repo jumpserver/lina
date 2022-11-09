@@ -685,6 +685,11 @@
   },
   "perms": {
     "": "",
+    "AllAccounts": "所有账号",
+    "ManualInput": "手动输入",
+    "SameAccount": "同名账号",
+    "SpecifyInput": "指定输入",
+    "Input": "输入",
     "Account": "账号",
     "permAccount": "授权账号",
     "Actions": "动作",
