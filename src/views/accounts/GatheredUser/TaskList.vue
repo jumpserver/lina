@@ -17,17 +17,17 @@ export default {
     return {
       tableConfig: {
         name: 'TaskListTable',
-        url: '/api/v1/xpack/gathered-user/tasks/',
+        url: '/api/v1/assets/gather-account-automations/',
         permissions: {
-          app: 'xpack',
-          resource: 'gatherusertask'
+          app: 'assets',
+          resource: 'gatheraccountsautomation'
         },
         columns: [
           'name', 'nodes', 'is_periodic', 'periodic_display',
-          'executed_times', 'actions'
+          'executed_amount', 'actions'
         ],
         columnsShow: {
-          min: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_times', 'actions']
+          min: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']
         },
         columnsMeta: {
           name: {
@@ -41,7 +41,7 @@ export default {
           },
           nodes: {
             formatter: function(row, column, cellValue, index) {
-              return cellValue.length
+              return cellValue.map(v => v['name']).join(', ')
             }
           },
           is_periodic: {
@@ -56,11 +56,11 @@ export default {
             showOverflowTooltip: true,
             width: 150
           },
-          executed_times: {
+          executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'GatherUserTaskDetail',
-              can: vm.$hasPerm('xpack.view_gatherusertaskexecution'),
+              can: vm.$hasPerm('assets.view_automationexecution'),
               routeQuery: {
                 activeTab: 'TaskExecutionList'
               }
@@ -75,11 +75,14 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
-                  can: vm.$hasPerm('xpack.add_gatherusertaskexecution'),
+                  can: vm.$hasPerm('assets.add_automationexecution'),
                   callback: function(data) {
                     this.$axios.post(
-                      `/api/v1/xpack/gathered-user/task-executions/`,
-                      { task: data.row.id }
+                      `/api/v1/assets/automation-executions/`,
+                      {
+                        automation: data.row.id,
+                        type: data.row.type
+                      }
                     ).then(res => {
                       openTaskPage(res['task'])
                     }).catch(res => {

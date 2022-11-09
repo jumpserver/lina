@@ -17,7 +17,7 @@ export default {
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
-      url: '/api/v1/xpack/gathered-user/tasks/',
+      url: '/api/v1/assets/gather-account-automations/',
       hasDetailInMsg: false,
       fieldsMeta: {
         crontab: {
