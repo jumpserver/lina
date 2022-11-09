@@ -108,11 +108,6 @@ export default {
           type: 'checkbox'
         }
       },
-      afterGetFormValue(validValues) {
-        console.log('>>>', validValues, validValues.accounts)
-        validValues.accounts = validValues.accounts ? validValues.accounts.toString() : ''
-        return validValues
-      },
       cleanFormValue(value) {
         if (!Array.isArray(value.accounts)) {
           value.accounts = value.accounts ? value.accounts.split(',') : []
