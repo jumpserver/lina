@@ -24,8 +24,8 @@ export default {
         hasSearch: false
       },
       tableConfig: {
-        url: `/api/v1/xpack/gathered-user/task-executions/?task=${this.object.id}`,
-        columns: ['timedelta', 'date_start', 'success'],
+        url: `/api/v1/assets/automation-executions/?automation_id=${this.object.id}`,
+        columns: ['trigger_display', 'date_start', 'date_finished', 'status'],
         columnsMeta: {
           timedelta: {
             label: this.$t('ops.timeDelta'),
@@ -36,10 +36,6 @@ export default {
           },
           date_start: {
             width: null
-          },
-          success: {
-            width: null,
-            label: this.$t('common.Success')
           }
         }
 
