@@ -37,6 +37,12 @@ export default {
           [
             'TERMINAL_MAGNUS_ENABLED'
           ]
+        ],
+        [
+          `Web ${comp}(Luna)`,
+          [
+            'TERMINAL_GRAPHICAL_RESOLUTION'
+          ]
         ]
       ],
       fieldsMeta: {

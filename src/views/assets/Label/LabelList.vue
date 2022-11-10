@@ -27,7 +27,6 @@ export default {
         }
       },
       headerActions: {
-        hasMoreActions: false,
         createRoute: 'LabelCreate'
       }
     }

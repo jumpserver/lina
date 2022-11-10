@@ -47,6 +47,7 @@
       "sqlserver": "SQLServer",
       "redis": "Redis",
       "mongodb": "MongoDB",
+      "clickhouse": "ClickHouse",
       "k8s": "kubernetes"
     },
     "applicationsCategory": {
@@ -244,7 +245,9 @@
     "View": "View",
     "LoginIP": "Login IP",
     "LoginCity": "Login city",
-    "LoginDate": "Login date"
+    "LoginDate": "Login date",
+    "BeforeChange": "Before change",
+    "AfterChange": "After change"
   },
   "auth": {
     "LoginRequiredMsg": "You account has logout, Please login again",
@@ -254,6 +257,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "NoContent": "No content",
     "NeedAddAppsOrSystemUserErrMsg": "Please add apps or system user",
     "VerificationCodeSent": "The verification code has been sent",
     "SendVerificationCode": "Send verification code",
@@ -1435,6 +1439,7 @@
       "HuaweiCloud": "Huawei Cloud",
       "BaiduCloud": "Baidu Cloud",
       "JDCloud": "JD Cloud",
+      "KingSoftCloud": "KingSoft Cloud",
       "Azure":"Azure(China)",
       "Azure_Int": "Azure(International)",
       "HostnameStrategy": "Used to produce the asset hostname. For example, 1. Instance name (instanceDemo)；2. Instance name and Partial IP (instanceDemo-250.1)",

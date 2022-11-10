@@ -52,6 +52,7 @@
       "sqlserver": "SQLServer",
       "redis": "Redis",
       "mongodb": "MongoDB",
+      "clickhouse": "ClickHouse",
       "k8s": "Kubernetes"
     },
     "applicationsCategory": {
@@ -249,7 +250,9 @@
     "SystemUserName": "システムユーザー名",
     "LoginIP": "ログインIP",
     "LoginCity": "ログイン都市",
-    "LoginDate": "ログイン日"
+    "LoginDate": "ログイン日",
+    "BeforeChange": "変更前",
+    "AfterChange": "変更後"
   },
   "auth": {
     "LoginRequiredMsg": "アカウントが終了しました。ログインし直してください",
@@ -259,6 +262,7 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "NoContent": "まだ内容がない",
     "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
     "VerificationCodeSent": "検証コードが送信されました",
     "SendVerificationCode": "認証コードの送信",
@@ -1478,6 +1482,7 @@
       "HuaweiCloud": "ファーウェイ雲",
       "BaiduCloud": "百度雲",
       "JDCloud": "京東雲",
+      "KingSoftCloud": "金山雲",
       "Azure": "Azure(中国)",
       "Azure_Int": "Azure (国際)",
       "HostnameStrategy": "資産を生成するためにホスト名。例: 1. インスタンス名 (instanceDemo) 2.インスタンス名と一部IP (下位2桁) (instanceDemo-250.1)",

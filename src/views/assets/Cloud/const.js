@@ -4,6 +4,7 @@ export const gcp = 'gcp'
 export const aliyun = 'aliyun'
 export const baiducloud = 'baiducloud'
 export const jdcloud = 'jdcloud'
+export const kingsoftcloud = 'kingsoftcloud'
 export const aws_international = 'aws_international'
 export const aws_china = 'aws_china'
 export const huaweicloud = 'huaweicloud'
@@ -50,6 +51,11 @@ export const ACCOUNT_PROVIDER_ATTRS_MAP = {
   [jdcloud]: {
     name: jdcloud,
     title: i18n.t('xpack.Cloud.JDCloud'),
+    attrs: ['access_key_id', 'access_key_secret']
+  },
+  [kingsoftcloud]: {
+    name: kingsoftcloud,
+    title: i18n.t('xpack.Cloud.KingSoftCloud'),
     attrs: ['access_key_id', 'access_key_secret']
   },
   [qcloud]: {
