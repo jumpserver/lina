@@ -8,7 +8,7 @@
         <div v-if="!leftEmpty()">
           <el-alert type="info" effect="dark" :closable="false" style="width: 100%;">{{ row.leftTitle }}</el-alert>
           <div v-for="(value, key, index) in row.left" :key="index" class="text item">
-            <el-tag type="info" :hit="true"><strong>{{ key }}: </strong>>{{ value }}</el-tag>
+            <el-tag type="info" :hit="true"><strong>{{ key }}: </strong>{{ value }}</el-tag>
           </div>
         </div>
       </el-col>
