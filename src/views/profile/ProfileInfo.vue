@@ -37,8 +37,7 @@ import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
 import UserConfirmDialog from '@/components/UserConfirmDialog'
 import { toSafeLocalDateStr } from '@/utils/common'
-import { getProfile } from '@/api/users'
-import { mapState } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'ProfileInfo',
@@ -48,9 +47,14 @@ export default {
     QuickActions,
     UserConfirmDialog
   },
+  props: {
+    object: {
+      type: Object,
+      default: () => store.state.users.profile
+    }
+  },
   data() {
     return {
-      object: this.userProfile || {},
       url: `/api/v1/users/profile/`,
       showPasswordDialog: false,
       currentEdit: '',
@@ -213,9 +217,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      userProfile: state => state.users.profile
-    }),
     detailCardItems() {
       return [
         {
@@ -298,12 +299,6 @@ export default {
       return url
     }
   },
-  created() {
-    getProfile().then(res => {
-      this.object = res
-      this.$store.commit('users/SET_PROFILE', res)
-    })
-  },
   methods: {
     updateUserReceiveBackends(val) {
       this.$axios.patch(
@@ -311,6 +306,7 @@ export default {
         { 'receive_backends': this.getReceiveBackendList() }
       ).then(res => {
         this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$store.dispatch('users/getProfile', true)
       }).catch(err => {
         this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
       })
