@@ -98,7 +98,7 @@ export default {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
           this.$message.success(this.$t('common.updateSuccessMsg'))
-          this.$store.commit('common/reload')
+          window.location.reload()
           this.$refs.listTable.$refs.ListTable.reloadTable()
         }
       }

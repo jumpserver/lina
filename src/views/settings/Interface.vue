@@ -175,7 +175,7 @@ export default {
               }).then(() => {
               restoreInterface().then(res => {
                 this.$message.success(res.success)
-                this.$store.commit('common/reload')
+                location.reload()
               })
             })
           }.bind(this)
@@ -221,7 +221,7 @@ export default {
         }
       }
       updateInterface(form).then(res => {
-        this.$store.commit('common/reload')
+        location.reload()
       })
     }
   }
