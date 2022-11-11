@@ -29,24 +29,16 @@ export default {
     detailItems() {
       return [
         {
-          key: this.$t('xpack.ChangeAuthPlan.Username'),
-          value: this.object.username
-        },
-        {
           key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
-          value: this.object.assets_amount
+          value: this.object.snapshot.asset_amount
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
-          value: this.object.nodes_amount
+          value: this.object.snapshot.node_amount
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
-          value: this.object.password_strategy_display
-        },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
-          value: this.object.timedelta.toFixed(2) + 's'
+          value: this.object.trigger_display
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.DateStart'),

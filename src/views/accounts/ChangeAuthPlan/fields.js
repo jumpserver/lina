@@ -126,8 +126,7 @@ export const getFields = () => {
     },
     accounts: {
       label: i18n.t('common.Username'),
-      component: TagInput,
-      helpText: i18n.t('xpack.ChangeAuthPlan.HelpText.UsernameOfCreateUpdatePage')
+      component: TagInput
     },
     secret: {
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'password')

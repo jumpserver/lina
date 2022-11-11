@@ -21,6 +21,7 @@ export default {
     return {
       execution: { id: '' },
       config: {
+        url: '/api/v1/assets/automation-executions/',
         activeMenu: 'ChangeAuthPlanExecutionInfo',
         actions: {
           hasUpdate: false,
@@ -30,12 +31,12 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'ChangeAuthPlanExecutionInfo',
-            hidden: () => !this.$hasPerm('xpack.view_changeauthplanexecution')
+            hidden: () => !this.$hasPerm('assets.view_automationexecution')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.TaskList'),
             name: 'ChangeAuthPlanExecutionTaskList',
-            hidden: () => !this.$hasPerm('xpack.view_changeauthplantask')
+            hidden: () => !this.$hasPerm('assets.view_changesecretrecord')
           }
         ],
         getTitle: this.getExecutionTitle

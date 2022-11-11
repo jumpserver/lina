@@ -24,21 +24,22 @@ export default {
       plan: { name: '', username: '', comment: '' },
       config: {
         activeMenu: 'ChangeAuthPlanInfo',
+        url: '/api/v1/assets/change-secret-automations/',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
             name: 'ChangeAuthPlanInfo',
-            hidden: () => !this.$hasPerm('xpack.view_changeauthplan')
+            hidden: () => !this.$hasPerm('assets.view_changesecretautomation')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
             name: 'ChangeAuthPlanAsset',
-            hidden: () => !this.$hasPerm('xpack.change_changeauthplan')
+            hidden: () => !this.$hasPerm('assets.change_changesecretautomation')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
             name: 'ChangeAuthPlanExecutionList',
-            hidden: () => !this.$hasPerm('xpack.view_changeauthplanexecution')
+            hidden: () => !this.$hasPerm('assets.view_automationexecution')
           }
         ]
       }

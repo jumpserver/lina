@@ -34,12 +34,12 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('xpack.ChangeAuthPlan.Execute'),
-            disabled: !this.$hasPerm('xpack.add_changeauthplanexecution')
+            disabled: !this.$hasPerm('assets.add_automationexecution')
           },
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/xpack/change-auth-plan/plan-execution/`,
+                `/api/v1/assets/automation-executions/`,
                 { plan: this.object.id }
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
@@ -59,19 +59,19 @@ export default {
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.Username'),
-          value: this.object.username
+          value: this.object.accounts.join(', ')
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
-          value: this.object.assets_amount
+          value: this.object.assets.length
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
-          value: this.object.nodes_amount
+          value: this.object.nodes.length
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
-          value: this.object.password_strategy_display
+          value: this.object.secret_strategy.label
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.RegularlyPerform'),
