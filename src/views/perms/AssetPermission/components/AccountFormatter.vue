@@ -13,14 +13,14 @@
     </el-checkbox-group>
     <TagInput
       v-if="showInput"
-      :custom-tag="customTags"
-      @tagSearch="handleTagChange"
+      :value="customTags"
+      @change="handleTagChange"
     />
   </div>
 </template>
 
 <script>
-import TagInput from './TagInput.vue'
+import { TagInput } from '@/components/FormFields'
 
 export default {
   components: {

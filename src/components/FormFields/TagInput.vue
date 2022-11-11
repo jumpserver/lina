@@ -5,7 +5,7 @@
       :key="k"
       closable
       size="small"
-      type="info"
+      :type="tagType"
       :disable-transitions="true"
       @close="handleTagClose(v)"
       @click="handleTagClick(v,k)"
@@ -15,7 +15,7 @@
     <el-input
       ref="SearchInput"
       v-model.trim="filterValue"
-      :placeholder="$tc('perms.Input')"
+      :placeholder="placeholder"
       class="search-input"
       @blur="focus = false"
       @focus="focus = true"
@@ -26,16 +26,26 @@
 </template>
 
 <script>
+import i18n from '@/i18n/i18n'
+
 export default {
   props: {
-    customTag: {
+    value: {
       type: Array,
       default: () => []
+    },
+    tagType: {
+      type: String,
+      default: 'info'
+    },
+    placeholder: {
+      type: String,
+      default: () => i18n.t('perms.Input')
     }
   },
   data() {
     return {
-      filterTags: this.customTag,
+      filterTags: this.value,
       focus: false,
       filterValue: ''
     }
@@ -43,14 +53,14 @@ export default {
   methods: {
     handleTagClose(tag) {
       this.filterTags.splice(this.filterTags.indexOf(tag), 1)
-      this.$emit('tagSearch', this.filterTags)
+      this.$emit('change', this.filterTags)
     },
     handleConfirm() {
       if (this.filterValue === '') return
       if (!this.filterTags.includes(this.filterValue)) {
         this.filterTags.push(this.filterValue)
         this.filterValue = ''
-        this.$emit('tagSearch', this.filterTags)
+        this.$emit('change', this.filterTags)
       }
     },
     handleTagClick(v, k) {
@@ -67,7 +77,7 @@ export default {
 
 <style lang="scss" scoped>
   .el-tag + .el-tag {
-    margin-left: 10px;
+    margin-left: 4px;
   }
   .filter-field {
     display: flex;

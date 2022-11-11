@@ -25,7 +25,7 @@ export default {
       url: '/api/v1/assets/change-secret-automations/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['assets', 'nodes']],
+        [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
         [
           this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
           [
