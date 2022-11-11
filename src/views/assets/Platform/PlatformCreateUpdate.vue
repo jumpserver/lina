@@ -7,6 +7,7 @@
       :fields-meta="fieldsMeta"
       :clean-form-value="cleanFormValue"
       :after-get-form-value="afterGetFormValue"
+      :after-get-remote-meta="handleAfterGetRemoteMeta"
     />
   </div>
 </template>
@@ -74,6 +75,9 @@ export default {
     }
   },
   methods: {
+    handleAfterGetRemoteMeta(meta) {
+      this.fieldsMeta.su_method.options = meta?.su_method?.choices || []
+    },
     async setCategories() {
       const category = this.$route.query.category
       const type = this.$route.query.type
