@@ -19,12 +19,11 @@ export default {
     }
   },
   data() {
-    const vm = this
     return {
       tableConfig: {
         url: `/api/v1/assets/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
-          'username', 'asset', 'is_success', 'timedelta', 'date_start', 'reason_display', 'actions'
+          'asset', 'account', 'date_started', 'date_finished', 'status', 'error'
         ],
         columnsMeta: {
           asset: {
@@ -33,12 +32,28 @@ export default {
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
               getTitle({ row }) {
-                return row.asset_info.name
+                return row.asset.name
               },
               getRoute({ row }) {
                 return {
                   name: 'AssetDetail',
-                  params: { id: row.asset }
+                  params: { id: row.asset.id }
+                }
+              }
+            }
+          },
+          account: {
+            label: this.$t('users.Username'),
+            formatter: DetailFormatter,
+            formatterArgs: {
+              can: this.$hasPerm('assets.view_account'),
+              getTitle({ row }) {
+                return row.account.name
+              },
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.account.id }
                 }
               }
             }
@@ -55,28 +70,6 @@ export default {
           },
           reason_display: {
             label: this.$t('xpack.AccountBackupPlan.Reason')
-          },
-          actions: {
-            formatterArgs: {
-              hasDelete: false,
-              hasUpdate: false,
-              hasClone: false,
-              extraActions: [
-                {
-                  name: 'retry',
-                  type: 'info',
-                  title: this.$t('xpack.ChangeAuthPlan.Retry'),
-                  can: vm.$hasPerm('xpack.change_changeauthplantask'),
-                  callback: function({ row, tableData }) {
-                    this.$axios.put(
-                      `/api/v1/assets/change-secret-records/${row.id}/`,
-                    ).then(res => {
-                      window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
-                    })
-                  }.bind(this)
-                }
-              ]
-            }
           }
         }
       },
