@@ -22,7 +22,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: `/api/v1/xpack/change-auth-plan/plan-execution-subtask/?plan_execution_id=${this.object.id}`,
+        url: `/api/v1/assets/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
           'username', 'asset', 'is_success', 'timedelta', 'date_start', 'reason_display', 'actions'
         ],
@@ -69,7 +69,7 @@ export default {
                   can: vm.$hasPerm('xpack.change_changeauthplantask'),
                   callback: function({ row, tableData }) {
                     this.$axios.put(
-                      `/api/v1/xpack/change-auth-plan/plan-execution-subtask/${row.id}/`,
+                      `/api/v1/assets/change-secret-records/${row.id}/`,
                     ).then(res => {
                       window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                     })

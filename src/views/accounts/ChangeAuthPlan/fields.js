@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { AssetSelect, CronTab } from '@/components'
-import { UpdateToken } from '@/components/FormFields'
+import { UpdateToken, TagInput } from '@/components/FormFields'
 import { Required } from '@/components/DataForm/rules'
 
 var validatorInterval = (rule, value, callback) => {
@@ -17,9 +17,7 @@ function getAssetPasswordRulesItems() {
       prop: 'length',
       label: i18n.t('xpack.ChangeAuthPlan.PasswordLength'),
       rules: [Required],
-      hidden: (formValue) => {
-        return !['random_one', 'random_all'].includes(formValue.secret_strategy)
-      }
+      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'password')
     }
   ]
 }
@@ -32,8 +30,16 @@ function generatePasswordRulesItemsFields(obType) {
   }
   items.forEach((item, index, array) => {
     itemsFields.push({
-      id: item.id, prop: item.prop, el: {}, attrs: {}, type: 'input', label: item.label, rules: item.rules, helpText: item.helpText,
-      hidden: item.hidden })
+      id: item.id,
+      prop: item.prop,
+      el: {},
+      attrs: {},
+      type: 'input',
+      label: item.label,
+      rules: item.rules,
+      helpText: item.helpText,
+      hidden: item.hidden
+    })
   })
   return itemsFields
 }
@@ -116,8 +122,12 @@ export const getFields = () => {
     },
     secret_type: {
       type: 'radio-group',
-      options: [],
-      hidden: (formValue) => formValue.secret_strategy !== 'specific'
+      options: []
+    },
+    accounts: {
+      label: i18n.t('common.Username'),
+      component: TagInput,
+      helpText: i18n.t('xpack.ChangeAuthPlan.HelpText.UsernameOfCreateUpdatePage')
     },
     secret: {
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'password')
@@ -128,12 +138,13 @@ export const getFields = () => {
         type: 'textarea',
         rows: 4
       },
-      hidden: (formValue) => formValue.secret_type !== 'ssh_key'
+      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+
     },
     ssh_key_change_strategy: {
       type: 'radio-group',
       options: [],
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+      hidden: ({ secret_strategy, secret_type }) => (secret_type !== 'ssh_key')
     }
   }
 }
