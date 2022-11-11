@@ -244,7 +244,7 @@ export default {
       return toSafeLocalDateStr(dataStr)
     },
     reloadPage() {
-      this.$store.commit('common/reload')
+      window.location.reload()
     },
     handleApprove() {
       if (this.object.approval_step === this.object.process_map.length) {
