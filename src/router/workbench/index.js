@@ -90,24 +90,120 @@ export default {
       },
       children: [
         {
-          path: 'a',
-          name: 'CommandExecutions2',
-          component: () => import('@/views/ops/Command'),
+          path: 'adhoc',
+          name: 'Adhoc',
+          component: () => import('@/views/ops/Adhoc'),
           meta: {
             title: i18n.t('route.BatchCommand'),
-            icon: 'terminal',
             permissions: []
           }
         },
         {
-          path: '',
-          name: 'CommandExecutions',
-          component: () => import('@/views/ops/Command'),
+          path: 'command/:id',
+          component: () => import('@/views/ops/Adhoc/my/AdhocDetail'),
+          name: 'AdhocDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('route.AdhocDetail'),
+            permissions: [],
+            activeMenu: '/workbench/ops/adhoc'
+          }
+        },
+        {
+          path: 'command/:id/update',
+          name: 'AdhocUpdate',
+          component: () => import('@/views/ops/Adhoc/my/AdhocUpdateCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.updateAdhoc'),
+            permissions: [],
+            activeMenu: '/workbench/ops/adhoc'
+          }
+        },
+        {
+          path: 'command/create',
+          name: 'AdhocCreate',
+          hidden: true,
+          component: () => import('@/views/ops/Adhoc/my/AdhocUpdateCreate'),
+          meta: {
+            title: i18n.t('ops.createAdhoc'),
+            permissions: [],
+            activeMenu: '/workbench/ops/adhoc'
+          }
+        },
+        {
+          path: 'playbook',
+          name: 'Playbook',
+          component: () => import('@/views/ops/Playbook'),
           meta: {
             title: i18n.t('route.BatchScript'),
-            icon: 'book',
             permissions: []
           }
+        },
+        {
+          path: 'flow/create',
+          name: 'PlaybookCreate',
+          hidden: true,
+          component: () => import('@/views/ops/Playbook/PlaybookUpdateCreate'),
+          meta: {
+            title: i18n.t('route.PlaybookCreate'),
+            permissions: [],
+            activeMenu: '/workbench/ops/playbook'
+          }
+        },
+        {
+          path: 'job',
+          name: 'Job',
+          component: empty,
+          redirect: '',
+          meta: {
+            title: i18n.t('route.JobList'),
+            permissions: []
+          },
+          children: [
+            {
+              path: '',
+              name: 'JobList',
+              component: () => import('@/views/ops/Job'),
+              meta: {
+                title: i18n.t('route.JobList'),
+                permissions: []
+              }
+            },
+            {
+              path: 'create',
+              component: () => import('@/views/ops/Job/JobUpdateCreate'),
+              name: 'JobCreate',
+              hidden: true,
+              meta: {
+                title: i18n.t('route.JobCreate'),
+                permissions: [],
+                activeMenu: '/workbench/ops/job'
+              }
+            },
+            {
+              path: 'update',
+              component: () => import('@/views/ops/Job/JobUpdateCreate'),
+              name: 'JobUpdate',
+              hidden: true,
+              meta: {
+                title: i18n.t('route.JobUpdate'),
+                permissions: [],
+                activeMenu: '/workbench/ops/job'
+              }
+            },
+            {
+              path: ':id',
+              component: () => import('@/views/ops/Job/JobDetail'),
+              name: 'JobDetail',
+              hidden: true,
+              meta: {
+                title: i18n.t('route.JobDetail'),
+                permissions: [],
+                activeMenu: '/workbench/ops/job'
+              }
+            }
+          ]
         }
       ]
     }

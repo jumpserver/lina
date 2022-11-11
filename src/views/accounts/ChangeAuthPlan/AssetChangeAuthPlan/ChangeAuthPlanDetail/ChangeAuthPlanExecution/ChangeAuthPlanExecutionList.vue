@@ -18,41 +18,32 @@ export default {
     }
   },
   data() {
+    console.log('this', this)
     return {
       tableConfig: {
-        url: `/api/v1/xpack/change-auth-plan/plan-execution/?plan_id=${this.object.id}`,
+        url: `/api/v1/assets/automation-executions/?automation_id=${this.object.id}`,
         columns: [
-          'username', 'assets_amount', 'nodes_amount', 'result_summary', 'password_strategy_display',
-          'timedelta', 'trigger_display', 'date_start', 'actions'
+          'asset_amount', 'node_amount', 'status',
+          'trigger_display', 'date_start', 'actions'
         ],
         columnsMeta: {
-          username: {
-            label: this.$t('xpack.ChangeAuthPlan.Username')
-          },
-          assets_amount: {
+          asset_amount: {
             label: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
-            width: '80px'
-          },
-          nodes_amount: {
-            label: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
-            width: '80px'
-          },
-          result_summary: {
-            label: this.$t('xpack.ChangeAuthPlan.Result'),
             width: '80px',
-            showOverflowTooltip: true,
             formatter: function(row) {
-              const summary = <div>
-                <span class='text-primary'>{row.result_summary.succeed}</span>/
-                <span class='text-danger'>{row.result_summary.failed}</span>/
-                <span>{row.result_summary.total}</span>
-              </div>
-              return summary
+              return <span>{ row.snapshot.asset_amount }</span>
             }
           },
-          password_strategy_display: {
-            label: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
-            width: '220px',
+          node_amount: {
+            label: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            width: '80px',
+            formatter: function(row) {
+              return <span>{ row.snapshot.node_amount }</span>
+            }
+          },
+          status: {
+            label: this.$t('xpack.ChangeAuthPlan.Result'),
+            width: '80px',
             showOverflowTooltip: true
           },
           timedelta: {

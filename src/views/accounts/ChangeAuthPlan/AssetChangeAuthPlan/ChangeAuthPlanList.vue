@@ -92,7 +92,10 @@ export default {
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/assets/automation-executions/`,
-                      { plan: row.id }
+                      {
+                        automation: row.id,
+                        type: row.type
+                      }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
