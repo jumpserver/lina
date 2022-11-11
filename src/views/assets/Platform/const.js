@@ -72,6 +72,7 @@ export const platformFieldsMeta = (vm) => {
     },
     su_method: {
       type: 'select',
+      options: [],
       hidden: (form) => !form['su_enabled']
     }
   }
