@@ -17,7 +17,7 @@ function getAssetPasswordRulesItems() {
       prop: 'length',
       label: i18n.t('xpack.ChangeAuthPlan.PasswordLength'),
       rules: [Required],
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'password')
+      hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     }
   ]
 }
