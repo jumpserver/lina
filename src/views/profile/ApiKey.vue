@@ -46,9 +46,9 @@ export default {
               onDelete: function({ row }) {
                 this.$axios.delete(`${ajaxUrl}${row.id}/`).then(res => {
                   this.getRefsListTable.reloadTable()
-                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
                 }).catch(error => {
-                  this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+                  this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
                 })
               }.bind(this),
               extraActions: [
@@ -64,9 +64,9 @@ export default {
                       { is_active: !row.is_active }
                     ).then(res => {
                       this.getRefsListTable.reloadTable()
-                      this.$message.success(this.$t('common.updateSuccessMsg'))
+                      this.$message.success(this.$tc('common.updateSuccessMsg'))
                     }).catch(error => {
-                      this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                      this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
                     })
                   }.bind(this)
                 }
@@ -92,9 +92,9 @@ export default {
             callback: function() {
               this.$axios.post(ajaxUrl).then(res => {
                 this.getRefsListTable.reloadTable()
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(error => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
               })
             }.bind(this)
           }

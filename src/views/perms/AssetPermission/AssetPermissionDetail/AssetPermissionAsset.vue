@@ -89,10 +89,9 @@ export default {
         },
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           that.$refs.assetSelect.$refs.select2.clearSelected()
-          window.location.reload()
         }
       },
       nodeRelationConfig: {
@@ -120,7 +119,7 @@ export default {
           this.$log.debug('Select value', that.select2.value)
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         },
         performDelete: (item) => {
@@ -137,7 +136,7 @@ export default {
             this.$log.debug('disabled values remove index: ', i)
             that.select2.disabledValues.splice(i, 1)
           }
-          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('common.deleteSuccessMsg'))
           this.$refs.ListTable.reloadTable()
         }
       }

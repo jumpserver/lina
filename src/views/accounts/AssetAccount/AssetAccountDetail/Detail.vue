@@ -44,7 +44,7 @@ export default {
                 `/api/v1/assets/accounts/${this.object.id}/`,
                 { name: this.object?.name, privileged: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               })
             }
           })

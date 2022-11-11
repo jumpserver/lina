@@ -45,7 +45,7 @@ export default {
       }, 500)
     },
     onError: _.debounce(function(value) {
-      this.$message.error(this.$t('common.FormatError'))
+      this.$message.error(this.$tc('common.FormatError'))
     }, 1100)
   }
 }

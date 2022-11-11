@@ -42,9 +42,9 @@ export default {
                 `/api/v1/assets/account-templates/${this.object.id}/`,
                 { privileged: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }

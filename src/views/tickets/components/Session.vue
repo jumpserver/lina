@@ -105,7 +105,7 @@ export default {
       const url = '/api/v1/terminal/tasks/kill-session-for-ticket/'
       const data = [this.session.id] || []
       this.$axios.post(url, data).then(res => {
-        this.$message.success(this.$t('sessions.TerminateTaskSendSuccessMsg'))
+        this.$message.success(this.$tc('sessions.TerminateTaskSendSuccessMsg'))
         this.curTimer = setTimeout(() => {
           this.init()
         }, 50000)

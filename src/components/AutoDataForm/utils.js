@@ -11,29 +11,20 @@ export class FormFieldGenerator {
     this.$emite = emit
     this.groups = []
   }
+
   generateFieldByType(type, field, fieldMeta, fieldRemoteMeta) {
     switch (type) {
       case 'labeled_choice':
       case 'choice':
-        if (!fieldRemoteMeta.read_only) {
-          field.options = fieldRemoteMeta.choices.map(v => {
-            return { label: v.label, value: v.value }
-          })
-          // 因为现在的 detail 返回的 choice 是一个对象了 {label: '', value: ''}
-          if (type === 'labeled_choice') {
-            field.options = field.options.map(v => {
-              v.value = { value: v.value }
-              return v
-            })
-            field.el = {
-              valueKey: 'value'
-            }
-          }
+        if (!fieldRemoteMeta['read_only']) {
+          field.options = fieldRemoteMeta.choices
         }
         type = 'radio-group'
         break
       case 'multiple choice':
-        field.el.choices = fieldRemoteMeta['choices']
+        field.options = fieldRemoteMeta.choices
+        console.log('multiple choice: ', field.options)
+        type = 'checkbox-group'
         break
       case 'datetime':
         type = 'date-picker'
@@ -93,6 +84,7 @@ export class FormFieldGenerator {
     field.type = type
     return field
   }
+
   generateNestFields(field, fieldMeta, fieldRemoteMeta) {
     const fields = []
     const nestedFields = fieldMeta.fields || []
@@ -105,6 +97,7 @@ export class FormFieldGenerator {
     Vue.$log.debug('NestFields: ', fields)
     return fields
   }
+
   generateFieldByName(name, field) {
     switch (name) {
       case 'email':
@@ -119,6 +112,7 @@ export class FormFieldGenerator {
     }
     return field
   }
+
   generateFieldByOther(field, fieldMeta, fieldRemoteMeta) {
     const filedRules = field.rules || []
     if (fieldRemoteMeta.required) {
@@ -135,6 +129,7 @@ export class FormFieldGenerator {
     field.rules = filedRules
     return field
   }
+
   generateField(name, fieldsMeta, remoteFieldsMeta) {
     let field = { id: name, prop: name, el: {}, attrs: {}, rules: [] }
     const remoteFieldMeta = remoteFieldsMeta[name] || {}
@@ -153,6 +148,7 @@ export class FormFieldGenerator {
     // Vue.$log.debug('Generate field: ', name, field)
     return field
   }
+
   generateFieldGroup(field, fieldsMeta, remoteFieldsMeta) {
     const [groupTitle, fields] = field
     const _fields = this.generateFields(fields, fieldsMeta, remoteFieldsMeta)
@@ -165,6 +161,7 @@ export class FormFieldGenerator {
     this.groups.push(group)
     return _fields
   }
+
   generateFields(_fields, fieldsMeta, remoteFieldsMeta) {
     let fields = []
     for (let field of _fields) {

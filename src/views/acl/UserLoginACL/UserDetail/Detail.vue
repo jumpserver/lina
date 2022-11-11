@@ -43,9 +43,9 @@ export default {
             data.push(v.value)
           })
           return this.$axios.patch(relationUrl, { nodes: data }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
+            this.$message.success(this.$tc('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+            this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
           })
         },
         onAddSuccess: () => {
@@ -65,9 +65,9 @@ export default {
                 `/api/v1/acls/login-acls/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }

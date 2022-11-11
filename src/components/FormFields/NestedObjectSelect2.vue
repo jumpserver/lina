@@ -10,6 +10,7 @@
 
 <script>
 import Select2 from './Select2'
+
 export default {
   name: 'NestedObjectSelect2',
   components: {
@@ -26,8 +27,7 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     attrsWithoutValue() {
@@ -43,7 +43,6 @@ export default {
       },
       get() {
         const value = this.objectsToValues(this.value)
-        console.log('Nest get ivalue: ', value, 'Value: ', this.value)
         return value
       }
     }
@@ -67,7 +66,9 @@ export default {
       value = value.map(v => {
         return typeof v === 'object' ? v : { pk: v }
       })
-      if (!this.multiple) { value = value[0] }
+      if (!this.multiple) {
+        value = value[0]
+      }
       return value
     },
     objectsToValues(objects) {

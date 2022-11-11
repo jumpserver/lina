@@ -266,6 +266,9 @@ export default {
         const hasPerm = this.$hasPerm('assets.add_account') && !!asset
         this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
       }
+    },
+    refresh() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }

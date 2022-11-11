@@ -240,7 +240,7 @@ export default {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
         reload()
-        this.$message.success(this.$t('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('common.removeSuccessMsg'))
       })
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
@@ -251,7 +251,7 @@ export default {
       const url = `${this.tableConfig.url}remove/?spm=` + data.spm
       this.$axios.post(url).then(() => {
         reloadTable()
-        this.$message.success(this.$t('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('common.removeSuccessMsg'))
       })
     },
     bulkActionCallback(selectedRows, reloadTable, actionType) {

@@ -79,7 +79,7 @@ export default {
                   callback: function(val) {
                     this.dialogVisible = true
                     if (!val.row.port) {
-                      return this.$message.error(this.$t('common.BadRequestErrorMsg'))
+                      return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
                     } else {
                       this.portInput = val.row.port
                       this.cellValue = val.row.id
@@ -126,11 +126,11 @@ export default {
 
       if (isNaN(port)) {
         this.buttonLoading = false
-        return this.$message.error(this.$t('common.TestPortErrorMsg'))
+        return this.$message.error(this.$tc('common.TestPortErrorMsg'))
       }
       this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port }).then(
         res => {
-          return this.$message.success(this.$t('common.TestSuccessMsg'))
+          return this.$message.success(this.$tc('common.TestSuccessMsg'))
         }
       ).finally(() => {
         this.portInput = ''

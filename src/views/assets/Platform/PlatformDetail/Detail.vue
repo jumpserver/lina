@@ -90,7 +90,7 @@ export default {
               const data = { domain_enabled: val }
               this.$axios.patch(
                 `/api/v1/assets/platforms/${this.object.id}/`, data).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               })
             }
           })

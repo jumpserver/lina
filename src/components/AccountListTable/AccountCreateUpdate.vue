@@ -80,7 +80,7 @@ export default {
       this.$axios.post(`/api/v1/assets/accounts/`, data).then(() => {
         this.iVisible = false
         this.$emit('add', true)
-        this.$message.success(this.$t('common.createSuccessMsg'))
+        this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch(() => {
         this.$message.error(this.$tc('common.createErrorMsg'))
       })
@@ -90,7 +90,7 @@ export default {
       this.$axios.patch(`/api/v1/assets/accounts/${this.account.id}/`, data).then(() => {
         this.iVisible = false
         this.$emit('add', true)
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     }
   }

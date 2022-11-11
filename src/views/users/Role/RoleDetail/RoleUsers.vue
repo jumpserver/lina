@@ -53,7 +53,7 @@ export default {
           return this.$axios.post(relationUrl, data)
         },
         onAddSuccess: () => {
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$refs.ListTable.reloadTable()
           this.$refs.userRelation.$refs.select2.clearSelected()
         }

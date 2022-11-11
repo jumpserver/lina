@@ -25,15 +25,17 @@
           </tr>
           <tr>
             <td colspan="2">
-              <el-button size="small" type="primary" @click="addAccount">{{ $t('common.Add') }}</el-button>
+              <el-button size="small" type="primary" @click="addAccount">
+                {{ $t('common.Add') }}
+              </el-button>
             </td>
           </tr>
         </table>
-        <tr v-for="username of object['accounts']" :key="username" class="item">
-          <td style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+        <tr v-for="(username, i) of object['accounts']" :key="i" class="item">
+          <td class="item-name" style="">
             <b>{{ username }}</b>
           </td>
-          <td>
+          <td class="item-btn">
             <el-button
               size="mini"
               type="danger"
@@ -82,8 +84,7 @@ export default {
   methods: {
     async removeAccount(username) {
       const url = `/api/v1/perms/asset-permissions/${this.object.id}/`
-      const assetPermission = await this.$axios.get(url)
-      const accounts = assetPermission['accounts'].filter(item => item !== username)
+      const accounts = (this.object['accounts'] || []).filter(item => item !== username)
       this.$axios.patch(url, { accounts: accounts }).then(() => {
         this.object.accounts = accounts
         this.$refs.ListTable.refresh()
@@ -91,11 +92,11 @@ export default {
     },
     async addAccount() {
       const url = `/api/v1/perms/asset-permissions/${this.object.id}/`
-      const assetPermission = await this.$axios.get(url)
       if (!this.relation.username) {
         return
       }
-      const accounts = assetPermission['accounts'] + [this.relation.username]
+      const accounts = this.object['accounts'].concat([this.relation.username])
+      console.log('Accounts: ', accounts)
       this.$axios.patch(url, { accounts: accounts }).then(() => {
         this.object.accounts.push(this.relation.username)
         this.$refs.ListTable.refresh()
@@ -106,5 +107,10 @@ export default {
 </script>
 
 <style scoped>
-
+.item-name {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>

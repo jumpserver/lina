@@ -56,10 +56,10 @@ export default {
   methods: {
     submit(validValues) {
       if (!this.$hasPerm('assets.change_platform') || !this.isSystemAdmin) {
-        return this.$message.error(this.$t('rbac.NoPermission'))
+        return this.$message.error(this.$tc('rbac.NoPermission'))
       }
       this.$axios.patch(`${this.url}${this.object.id}/`, validValues).then(() => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       })
     }
   }

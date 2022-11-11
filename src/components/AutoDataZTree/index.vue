@@ -136,11 +136,11 @@ export default {
       this.$axios.delete(
         `${this.treeSetting.nodeUrl}${currentNode.meta.data.id}/`
       ).then(() => {
-        this.$message.success(this.$t('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('common.deleteSuccessMsg'))
         this.zTree.removeNode(currentNode)
         this.refreshTree()
       }).catch(() => {
-        // this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+        // this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
@@ -159,7 +159,7 @@ export default {
         treeNode.name = treeNode.name + ' (' + assetsAmount + ')'
         treeNode.meta.data = res
         this.zTree.updateNode(treeNode)
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).finally(() => { this.refreshTree() })
     },
     onBodyMouseDown: function(event) {
@@ -226,9 +226,9 @@ export default {
           nodes: treeNodesIds
         }
       ).then((res) => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
       }).finally()
     },
     createTreeNode: function() {
@@ -256,9 +256,9 @@ export default {
         const node = this.zTree.getNodeByParam('id', newNode.id, parentNode)
         this.currentNodeId = node.meta.data.id || newNode.id
         this.zTree.editName(node)
-        this.$message.success(this.$t('common.createSuccessMsg'))
+        this.$message.success(this.$tc('common.createSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.createErrorMsg') + ' ' + error)
+        this.$message.error(this.$tc('common.createErrorMsg') + ' ' + error)
       })
     },
     refresh: function() {

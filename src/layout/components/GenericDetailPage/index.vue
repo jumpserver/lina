@@ -179,10 +179,10 @@ export default {
           try {
             await performDelete.bind(this)()
             done()
-            this.$message.success(this.$t('common.deleteSuccessMsg'))
+            this.$message.success(this.$tc('common.deleteSuccessMsg'))
             this.$router.push({ name: this.validActions.deleteSuccessRoute })
           } catch (error) {
-            this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+            this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
           } finally {
             instance.confirmButtonLoading = false
           }

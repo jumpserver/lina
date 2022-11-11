@@ -54,10 +54,10 @@ export default {
                 `/api/v1/xpack/change-auth-plan/plan/${this.object.id}/asset/remove/`,
                 { assets: [row.id] }
               ).then(res => {
-                this.$message.success(this.$t('common.deleteSuccessMsg'))
+                this.$message.success(this.$tc('common.deleteSuccessMsg'))
                 reload()
               }).catch(error => {
-                this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
           }
@@ -92,7 +92,7 @@ export default {
         },
         onAddSuccess: (items, that) => {
           this.$log.debug('AssetSelect value', that.assets)
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           window.location.reload()
         }
       },
@@ -119,7 +119,7 @@ export default {
         onAddSuccess: (objects, that) => {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           window.location.reload()
         },
         performDelete: (item) => {
@@ -136,7 +136,7 @@ export default {
             const i = that.select2.disabledValues.indexOf(obj.value)
             that.select2.disabledValues.splice(i, 1)
           }
-          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('common.deleteSuccessMsg'))
           this.$refs.listTable.reloadTable()
         }
       }

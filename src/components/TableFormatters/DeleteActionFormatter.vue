@@ -29,7 +29,7 @@ export default {
         this.$message.success(this.$tc('common.deleteSuccessMsg'))
         reload()
       }).catch(error => {
-        this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+        this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
       })
     },
     onDelete(col, row, cellValue, reload) {

@@ -97,7 +97,7 @@ export default {
         username_list: selectIds
       }
       if (selectIds.length === 0) {
-        this.$message.error(this.$t('setting.unselectedUser'))
+        this.$message.error(this.$tc('setting.unselectedUser'))
         this.dialogLdapUserImportLoginStatus = false
       } else {
         importLdapUser(data).then(res => {

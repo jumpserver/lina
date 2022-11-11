@@ -12,7 +12,6 @@
 <script>
 import DetailCard from '@/components/DetailCard'
 import QuickActions from '@/components/QuickActions'
-import { ACTIONS_FIELDS_MAP } from './const'
 
 export default {
   name: 'AssetPermissionDetail',
@@ -42,9 +41,9 @@ export default {
                 `/api/v1/perms/asset-permissions/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
@@ -79,12 +78,12 @@ export default {
           key: this.$t('perms.Actions'),
           value: this.object.actions,
           formatter(row, value) {
-            const actionMap = value.map(item => ACTIONS_FIELDS_MAP[item].action)
+            const actionLabels = value.map(item => item.label)
             return (
               <div>
-                {actionMap.map(item => (
+                {actionLabels.map(item => (
                   <el-tag size='mini' style={{ marginRight: '3px' }} key={item}>{item}</el-tag>
-                )) }
+                ))}
               </div>
             )
           }

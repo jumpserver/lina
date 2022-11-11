@@ -183,7 +183,7 @@ export default {
           type: 'sms'
         }
       ).then(res => {
-        this.$message.success(this.$t('common.VerificationCodeSent'))
+        this.$message.success(this.$tc('common.VerificationCodeSent'))
         let time = 60
         const interval = setInterval(() => {
           this.smsBtnText = this.$t('common.Pending') + `: ${time}`
@@ -200,7 +200,7 @@ export default {
     },
     userConfirm() {
       if (this.Select === 'otp' && this.SecretKey.length !== 6) {
-        return this.$message.error(this.$t('common.MFAErrorMsg'))
+        return this.$message.error(this.$tc('common.MFAErrorMsg'))
       }
       this.$axios.post(
         `/api/v1/authentication/confirm/`, {

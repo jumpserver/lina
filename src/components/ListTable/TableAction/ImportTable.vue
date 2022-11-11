@@ -349,7 +349,7 @@ export default {
         this.importTaskStatus = 'done'
       }
       if (this.failedCount > 0) {
-        this.$message.error(this.$t('common.imExport.hasImportErrorItemMsg') + '')
+        this.$message.error(this.$tc('common.imExport.hasImportErrorItemMsg') + '')
       }
     },
     async performUpdateObject(item) {

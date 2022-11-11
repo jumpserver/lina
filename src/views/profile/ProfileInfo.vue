@@ -305,9 +305,9 @@ export default {
         `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,
         { 'receive_backends': this.getReceiveBackendList() }
       ).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(err => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
       })
     },
     getReceiveBackendList() {
@@ -327,7 +327,7 @@ export default {
         window.location.href = url
       } else {
         this.$axios.post(url).then(res => {
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$store.dispatch('users/getProfile')
         })
       }

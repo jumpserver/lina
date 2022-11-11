@@ -109,7 +109,7 @@ export default {
       ).then((res) => {
         openTaskPage(res['task'])
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
       })
     },
     rMenuTestNodeAssetConnectivity() {
@@ -124,7 +124,7 @@ export default {
       ).then((res) => {
         openTaskPage(res['task'])
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
       })
     },
     rMenuShowAssetOnlyCurrentNode() {
@@ -156,7 +156,7 @@ export default {
           { key: 'fullName', label: this.$t('assets.FullName'), value: res.full_value }
         ]
       } catch (error) {
-        this.$message.error(this.$t('common.ErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('common.ErrorMsg' + ' ' + error))
       }
     },
     rCheckAssetsAmount() {
@@ -165,7 +165,7 @@ export default {
       ).then(res => {
         openTaskPage(res['task'])
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
       })
     },
     hideMenu() {

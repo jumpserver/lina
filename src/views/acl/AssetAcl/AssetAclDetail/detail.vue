@@ -23,7 +23,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -34,7 +35,7 @@ export default {
         objectsAjax: {
           url: '/api/v1/assets/nodes/',
           transformOption: (item) => {
-            return { label: item.full_value, value: item.id }
+            return { label: item['full_value'], value: item.id }
           }
         },
         performAdd: (items) => {
@@ -44,9 +45,9 @@ export default {
             data.push(v.value)
           })
           return this.$axios.patch(relationUrl, { nodes: data }).then(res => {
-            this.$message.success(this.$t('common.updateSuccessMsg'))
+            this.$message.success(this.$tc('common.updateSuccessMsg'))
           }).catch(err => {
-            this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+            this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
           })
         },
         onAddSuccess: () => {

@@ -175,9 +175,9 @@ export default {
                 return { pk: v.id, is_active: false }
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },
@@ -193,9 +193,9 @@ export default {
                 return { pk: v.id, is_active: true }
               })
               this.$axios.patch(`/api/v1/assets/assets/`, ids).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           },

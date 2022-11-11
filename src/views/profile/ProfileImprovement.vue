@@ -71,13 +71,13 @@ export default {
       },
       performSubmit(validValues) {
         if (!validValues.terms) {
-          this.$message.error(this.$t('common.PleaseAgreeToTheTerms'))
+          this.$message.error(this.$tc('common.PleaseAgreeToTheTerms'))
           return Promise.reject()
         }
         return this.$axios['patch'](this.url, validValues)
       },
       onPerformSuccess() {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
         setTimeout(() => this.$router.push({ name: 'ProfileInfo' }), 100)
       },
       submitMethod() {

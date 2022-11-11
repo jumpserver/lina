@@ -52,10 +52,10 @@ export default {
                 `/api/v1/xpack/change-auth-plan/app-plan/${this.object.id}/systemusers/?action=remove`,
                 { system_users: [row.id] }
               ).then(res => {
-                this.$message.success(this.$t('common.deleteSuccessMsg'))
+                this.$message.success(this.$tc('common.deleteSuccessMsg'))
                 reload()
               }).catch(error => {
-                this.$message.error(this.$t('common.deleteErrorMsg') + ' ' + error)
+                this.$message.error(this.$tc('common.deleteErrorMsg') + ' ' + error)
               })
             }.bind(this)
           }
@@ -97,7 +97,7 @@ export default {
         onAddSuccess: (objects, that) => {
           that.iHasObjects = [...that.iHasObjects, ...objects]
           that.$refs.select2.clearSelected()
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           window.location.reload()
           this.$refs.listTable.$refs.ListTable.reloadTable()
         }

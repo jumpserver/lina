@@ -26,6 +26,7 @@
 import DataForm from '../DataForm'
 import FormGroupHeader from '@/components/FormGroupHeader'
 import { FormFieldGenerator } from '@/components/AutoDataForm/utils'
+
 export default {
   name: 'AutoDataForm',
   components: {
@@ -62,8 +63,21 @@ export default {
       totalFields: [],
       loading: true,
       groups: [],
-      iForm: this.form,
       errors: {}
+    }
+  },
+  computed: {
+    iForm() {
+      const iForm = {}
+      Object.entries(this.form).forEach(([key, value]) => {
+        // 初始值是 choice 对象
+        if (value && typeof value === 'object' && value.label && value.value !== undefined) {
+          iForm[key] = value.value
+        } else {
+          iForm[key] = value
+        }
+      })
+      return iForm
     }
   },
   mounted() {

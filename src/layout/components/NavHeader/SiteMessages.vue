@@ -195,7 +195,7 @@ export default {
         }
       }
       ws.onerror = (error) => {
-        this.$message.error(this.$t('common.ConnectWebSocketError'))
+        this.$message.error(this.$tc('common.ConnectWebSocketError'))
         this.$log.debug('site message ws error: ', error)
       }
     }

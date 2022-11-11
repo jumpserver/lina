@@ -132,10 +132,10 @@ export default {
         this.iVisible = false
         this.assetsSelected = []
         $('#tree-refresh').trigger('click')
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => {
         this.$parent?.hideMenu()
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
       })
     },
     assetTreeTableDialogHandleCancel() {

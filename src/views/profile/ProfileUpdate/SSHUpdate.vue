@@ -70,7 +70,7 @@ export default {
     },
     onPerformSuccess() {
       this.$refs.GenericCreateUpdateForm.$refs.form.$refs.dataForm.resetForm('form')
-      this.$message.success(this.$t('common.updateSuccessMsg'))
+      this.$message.success(this.$tc('common.updateSuccessMsg'))
     }
   }
 }
