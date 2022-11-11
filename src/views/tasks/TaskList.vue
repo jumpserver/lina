@@ -14,12 +14,18 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'comment', 'count', 'state', 'last_published_time'
+          'name', 'display_name', 'queue', 'comment', 'count', 'state', 'last_published_time'
         ],
         columnsMeta: {
           name: {
             formatterArgs: {
               can: true
+            }
+          },
+          display_name: {
+            label: 'display_name',
+            formatter: row => {
+              return row.meta.display_name ? row.meta.display_name : '-'
             }
           },
           comment: {
