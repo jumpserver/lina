@@ -16,7 +16,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/xpack/change-auth-plan/plan/',
+        url: '/api/v1/assets/change-secret-automations/',
         columns: [
           'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
           'is_periodic', 'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
@@ -91,7 +91,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/xpack/change-auth-plan/plan-execution/`,
+                      `/api/v1/assets/automation-executions/`,
                       { plan: row.id }
                     ).then(res => {
                       openTaskPage(res['task'])

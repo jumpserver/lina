@@ -4,6 +4,7 @@ import ObjectSelect2 from '@/components/FormFields/NestedObjectSelect2'
 import NestedField from '@/components/AutoDataForm/components/NestedField'
 import Switcher from '@/components/FormFields/Switcher'
 import rules from '@/components/DataForm/rules'
+import BasicTree from '@/components/FormFields/BasicTree'
 import { assignIfNot } from '@/utils/common'
 
 export class FormFieldGenerator {
@@ -25,6 +26,10 @@ export class FormFieldGenerator {
         field.options = fieldRemoteMeta.choices
         console.log('multiple choice: ', field.options)
         type = 'checkbox-group'
+        break
+      case 'tree':
+        field.el.tree = fieldRemoteMeta.tree
+        field.component = BasicTree
         break
       case 'datetime':
         type = 'date-picker'

@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import getFields from '@/views/accounts/ChangeAuthPlan/fields'
+import { getFields } from '@/views/accounts/ChangeAuthPlan/fields'
 
 export default {
   name: 'AssetChangeAuthPlanCreateUpdate',
@@ -12,57 +12,53 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
-    const fields = getFields.bind(this)()
     return {
-      url: '/api/v1/xpack/change-auth-plan/plan/',
-      fields: [
-        [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
-        [this.$t('xpack.ChangeAuthPlan.PasswordStrategy'), ['is_password', 'password_strategy', 'password', 'password_rules']],
-        [this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'), ['is_ssh_key', 'ssh_key_strategy', 'private_key', 'passphrase']],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['recipients', 'comment']]
-      ],
       initial: {
-        password_strategy: 'custom',
-        ssh_key_strategy: 'add',
         is_periodic: true,
-        is_password: true,
-        is_ssh_key: false,
         password_rules: {
           length: 30
         },
-        interval: 24
+        interval: 24,
+        secret_type: 'password',
+        secret_strategy: 'specific'
       },
+      url: '/api/v1/assets/change-secret-automations/',
+      fields: [
+        [this.$t('common.Basic'), ['name']],
+        [this.$t('xpack.Asset'), ['assets', 'nodes']],
+        [
+          this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
+          [
+            'secret_strategy', 'secret_type', 'secret',
+            'password_rules', 'ssh_key_change_strategy', 'ssh_key',
+            'passphrase'
+          ]
+        ],
+        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
+        [this.$t('common.Other'), ['is_active', 'recipients', 'comment']]
+      ],
       fieldsMeta: {
-        username: fields.username,
-        assets: fields.assets,
-        password: fields.password,
-        passphrase: fields.passphrase,
-        password_rules: fields.asset_password_rules,
-        private_key: fields.private_key,
-        nodes: fields.nodes,
-        is_periodic: fields.is_periodic,
-        is_password: fields.is_password,
-        is_ssh_key: fields.is_ssh_key,
-        password_strategy: fields.password_strategy,
-        ssh_key_strategy: fields.ssh_key_strategy,
-        crontab: fields.crontab,
-        interval: fields.interval,
-        recipients: fields.recipients
+        ...getFields()
       },
       createSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
       updateSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
+      afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
-        if (data['password_strategy'] === 'custom') {
-          delete data['password_rules']
-        } else {
-          delete data['password']
-        }
-        if (data['interval'] === '') {
-          delete data['interval']
+        const secretType = data.secret_type || ''
+        if (secretType !== 'password') {
+          data.secret = data[secretType]
+          delete data[secretType]
         }
         return data
+      }
+    }
+  },
+  methods: {
+    handleAfterGetRemoteMeta(meta) {
+      const needSetOptionFields = ['secret_type', 'secret_strategy', 'ssh_key_change_strategy']
+      for (const i of needSetOptionFields) {
+        const field = this.fieldsMeta[i] || {}
+        field.options = meta[i]?.choices || []
       }
     }
   }
