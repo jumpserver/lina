@@ -210,56 +210,6 @@ export default [
           title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
           permissions: ['xpack.view_changeauthplanexecution']
         }
-      },
-      {
-        path: 'app-plan',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue'),
-        name: 'AppChangeAuthPlanList',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-          permissions: ['xpack.view_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan/create',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
-        name: 'AppChangeAuthPlanCreate',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanCreate'),
-          permissions: ['xpack.add_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
-        name: 'AppChangeAuthPlanDetail',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-          permissions: ['xpack.view_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan/:id/update',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
-        name: 'AppChangeAuthPlanUpdate',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanUpdate'),
-          permissions: ['xpack.change_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan-execution/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/AppChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
-        name: 'AppChangeAuthPlanExecutionDetail',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          permissions: ['xpack.view_applicationchangeauthplanexecution']
-        },
-        hidden: true
       }
     ]
   },

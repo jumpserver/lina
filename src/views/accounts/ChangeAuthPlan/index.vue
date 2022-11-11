@@ -20,12 +20,6 @@ export default {
             name: 'AssetChangeAuthPlanList',
             hidden: () => !this.$hasPerm('xpack.view_changeauthplan'),
             component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanList.vue')
-          },
-          {
-            title: this.$t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-            name: 'AppChangeAuthPlanList',
-            hidden: () => !this.$hasPerm('xpack.view_applicationchangeauthplan'),
-            component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue')
           }
         ]
       }

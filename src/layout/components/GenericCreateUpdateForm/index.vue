@@ -11,6 +11,7 @@
     v-bind="$attrs"
     v-on="$listeners"
     @submit="handleSubmit"
+    @afterRemoteMeta="handleAfterRemoteMeta"
   />
 </template>
 <script>
@@ -47,6 +48,11 @@ export default {
     cleanFormValue: {
       type: Function,
       default: (value) => value
+    },
+    // 获取 meta
+    afterGetRemoteMeta: {
+      type: Function,
+      default: null
     },
     // 当提交的时候，怎么处理
     onSubmit: {
@@ -301,6 +307,11 @@ export default {
         values[field] = value
       }
       return values
+    },
+    handleAfterRemoteMeta(meta) {
+      if (this.afterGetRemoteMeta) {
+        return this.afterGetRemoteMeta(meta)
+      }
     },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
