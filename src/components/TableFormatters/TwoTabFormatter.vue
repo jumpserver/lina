@@ -6,17 +6,17 @@
     <div v-else>
       <el-col :span="rightEmpty() ? 24 : 12">
         <div v-if="!leftEmpty()">
-          <el-alert type="info" effect="dark" :closable="false" style="width: 100%;">{{ row.leftTitle }}</el-alert>
-          <div v-for="(value, key, index) in row.left" :key="index" class="text item">
-            <el-tag type="info" :hit="true"><strong>{{ key }}: </strong>{{ value }}</el-tag>
+          <el-tag type="primary" effect="dark" :closable="false" style="width: 100%;">{{ row.leftTitle }}</el-tag>
+          <div v-for="(value, key, index) in row.left" :key="index">
+            <el-tag type="primary"><strong>{{ key }}: </strong>{{ value }}</el-tag>
           </div>
         </div>
       </el-col>
       <el-col :span="leftEmpty() ? 24 : 12">
         <div v-if="!rightEmpty()">
-          <el-alert type="success" effect="dark" :closable="false" style="width: 100%;">{{ row.rightTitle }}</el-alert>
+          <el-tag type="primary" effect="dark" :closable="false" style="width: 100%;">{{ row.rightTitle }}</el-tag>
           <div v-for="(value, key, index) in row.right" :key="index">
-            <el-tag type="info" :hit="true"><strong>{{ key }}: </strong>{{ value }}</el-tag>
+            <el-tag type="primary"><strong>{{ key }}: </strong>{{ value }}</el-tag>
           </div>
         </div>
       </el-col>
