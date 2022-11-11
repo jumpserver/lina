@@ -140,7 +140,6 @@ export default {
       window.open(url, '_blank')
     },
     importLicense() {
-      const vm = this
       if (this.licenseFile['file'] === undefined) {
         return
       }
@@ -149,7 +148,7 @@ export default {
       importLicense(formData).then(res => {
         if (res.status) {
           this.$message.success(res.msg)
-          setTimeout(() => vm.$store.commit('common/reload'), 500)
+          setTimeout(() => location.reload(), 500)
         } else {
           this.$message.error(res.msg)
         }
