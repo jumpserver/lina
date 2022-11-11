@@ -1,5 +1,5 @@
 <template>
-  <div class="asset-select-dialog">
+  <div class="asset-select-formatter">
     <Select2
       ref="select2"
       v-model="select2Config.value"
@@ -20,6 +20,7 @@
     >
       <TreeTable
         ref="ListPage"
+        class="tree-table"
         :tree-setting="treeSetting"
         :table-config="tableConfig"
         :header-actions="headerActions"
@@ -183,24 +184,34 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .el-select{
+  .el-select {
     width: 100%;
   }
-  .page  ::v-deep  .page-heading{
+
+  .page ::v-deep .page-heading {
     display: none;
   }
-  .el-dialog__wrapper  ::v-deep .el-dialog__body{
-    padding: 5px 10px;
-  }
-  .page  ::v-deep  .treebox {
-    height: inherit !important;
-  }
-  .asset-select-dialog >>> .transition-box:first-child {
-    background-color: #f3f3f3 ;
+
+  .el-dialog__wrapper ::v-deep .el-dialog__body {
+    padding: 0;
+
+    .tree-table {
+      .left {
+        padding: 5px;
+      }
+
+      .mini {
+        padding-top: 8px;
+      }
+
+      .transition-box {
+        padding: 5px;
+      }
+    }
   }
 
-  .el-dialog__wrapper  ::v-deep .el-dialog__body .wrapper-content {
-    padding: 10px;
+  .page ::v-deep .treebox {
+    height: inherit !important;
   }
 
 </style>

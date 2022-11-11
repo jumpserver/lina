@@ -1,7 +1,10 @@
 <template>
   <el-collapse-transition>
-    <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="transition-box left">
+    <div
+      class="tree-table-content"
+      style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;"
+    >
+      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="left">
         <component
           :is="component"
           ref="AutoDataZTree"
@@ -16,7 +19,10 @@
           </div>
         </component>
       </div>
-      <div :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')">
+      <div
+        class="right"
+        :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')"
+      >
         <div v-if="showTree" class="mini">
           <div style="display:block" class="mini-button" @click="iShowTree = !iShowTree">
             <i v-show="iShowTree" class="fa fa-angle-left fa-x" />
@@ -128,7 +134,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .mini-button{
+  .mini-button {
     width: 12px;
     float: right;
     text-align: center;
@@ -138,21 +144,47 @@ export default {
     color: #FFFFFF;
     border-radius: 3px;
     line-height: 1.428;
-    cursor:pointer;
+    cursor: pointer;
   }
-  .el-tree{
+
+  .el-tree {
     background-color: inherit !important;
   }
-  .mini{
+
+  .mini {
     margin-right: 5px;
     width: 12px !important;
+  }
+
+  .tree-table-content {
+    .left {
+      border-right: solid 1px #ebeef5;
+      background: #f3f3f3;
+    }
+
+    .right {
+    }
+
+    .treebox {
+      background-color: transparent;
+
+      .ztree {
+        background-color: transparent;
+
+        li {
+          background-color: transparent;
+        }
+      }
+
+      .ztree * {
+        background-color: transparent;
+      }
+    }
   }
 
   .auto-data-ztree {
     overflow: auto;
     /*border-right: solid 1px red;*/
   }
-  .transition-box.left {
-    background: #f3f3f3;
-  }
+
 </style>
