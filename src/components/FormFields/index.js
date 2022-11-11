@@ -1,6 +1,7 @@
 import Link from './Link'
 import Text from './Text'
 import Select2 from './Select2'
+import TagInput from './TagInput'
 import Switcher from './Switcher'
 import UploadKey from './UploadKey'
 import JsonEditor from './JsonEditor'
@@ -17,6 +18,7 @@ export default {
   Link,
   Switcher,
   Select2,
+  TagInput,
   UploadKey,
   JsonEditor,
   UpdateToken,
@@ -33,6 +35,7 @@ export {
   Link,
   Switcher,
   Select2,
+  TagInput,
   UploadKey,
   JsonEditor,
   UpdateToken,
