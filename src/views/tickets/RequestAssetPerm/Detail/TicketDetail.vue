@@ -121,7 +121,7 @@ export default {
         },
         {
           key: this.$tc('tickets.type'),
-          value: 'abc'
+          value: object.type.label
         },
         {
           key: this.$tc('tickets.user'),
@@ -146,27 +146,27 @@ export default {
       return [
         {
           key: this.$tc('perms.Node'),
-          value: object.apply_nodes.join(', ')
+          value: object.apply_nodes.map(item => item.value).join(', ')
         },
         {
           key: this.$tc('tickets.Asset'),
-          value: object.apply_assets.join(', ')
+          value: object.apply_assets.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('tickets.Account'),
-          value: object.apply_accounts
+          key: this.$tc('assets.Accounts'),
+          value: object.apply_accounts.join(', ')
         },
         {
           key: this.$tc('assets.Action'),
-          value: object.apply_actions
+          value: object.apply_actions.map(item => item.label).join(', ')
         },
         {
           key: this.$tc('common.DateStart'),
-          value: toSafeLocalDateStr(object.apply_date_start)
+          value: object.apply_date_start
         },
         {
           key: this.$tc('common.dateExpired'),
-          value: toSafeLocalDateStr(object.apply_date_expired)
+          value: object.apply_date_expired
         }
       ]
     },
@@ -189,27 +189,27 @@ export default {
         },
         {
           key: this.$tc('perms.Node'),
-          value: rel_snapshot.apply_nodes.join(', ')
+          value: rel_snapshot.apply_nodes.map(item => item.value).join(', ')
         },
         {
           key: this.$tc('assets.Asset'),
-          value: rel_snapshot.apply_assets.join(', ')
+          value: rel_snapshot.apply_assets.map(item => item.name).join(', ')
         },
         {
-          key: this.$tc('tickets.Account'),
-          value: rel_snapshot.apply_accounts
+          key: this.$tc('perms.Accounts'),
+          value: (rel_snapshot.apply_accounts || []).join(', ')
         },
         {
           key: this.$tc('assets.Action'),
-          value: object.apply_actions
+          value: object.apply_actions.map(item => item.label).join(', ')
         },
         {
           key: this.$tc('common.DateStart'),
-          value: toSafeLocalDateStr(object.apply_date_start)
+          value: object.apply_date_start
         },
         {
           key: this.$tc('common.dateExpired'),
-          value: toSafeLocalDateStr(object.apply_date_expired)
+          value: object.apply_date_expired
         }
       ]
     },

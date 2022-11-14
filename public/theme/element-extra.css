@@ -448,3 +448,7 @@ td .el-button.el-button--mini {
   color: $--color-text-primary;
   cursor: not-allowed;
 }
+
+.el-step__description.is-finish {
+  color: #676a6c;
+}
