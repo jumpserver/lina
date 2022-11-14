@@ -143,7 +143,7 @@ export default [
     ]
   },
   {
-    path: 'change-auth-plan',
+    path: 'change-secret-automation',
     component: empty,
     redirect: '',
     meta: {
@@ -158,7 +158,7 @@ export default [
         name: 'ChangeAuthPlanIndex',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
-          permissions: ['xpack.view_changeauthplan|xpack.view_applicationchangeauthplan']
+          permissions: ['assets.view_changesecretautomation']
         }
       },
       {
@@ -167,7 +167,7 @@ export default [
         name: 'AssetChangeAuthPlanList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          permissions: ['xpack.view_changeauthplan']
+          permissions: ['assets.view_changesecretautomation']
         },
         hidden: true
       },
@@ -178,7 +178,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
-          permissions: ['xpack.add_changeauthplan']
+          permissions: ['assets.add_changesecretautomation']
         }
       },
       {
@@ -188,7 +188,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
-          permissions: ['xpack.change_changeauthplan']
+          permissions: ['assets.change_changesecretautomation']
         }
       },
       {
@@ -198,17 +198,17 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          permissions: ['xpack.view_changeauthplan']
+          permissions: ['assets.view_changesecretautomation']
         }
       },
       {
-        path: 'plan-execution/:id',
+        path: 'execution/:id',
         component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
         name: 'ChangeAuthPlanExecutionDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          permissions: ['xpack.view_changeauthplanexecution']
+          permissions: ['assets.view_automationexecution']
         }
       }
     ]
