@@ -68,12 +68,13 @@ export default {
       const routeName = _.capitalize(row.category.value) + routeAction
       const route = {
         name: routeName,
-        params: { id: row.id },
+        params: {},
         query: {}
       }
       if (action === 'Clone') {
         route.query.clone_from = row.id
       } else if (action === 'Update') {
+        route.params.id = row.id
         route.query.platform = row.platform.id
       }
       vm.$router.push(route)
