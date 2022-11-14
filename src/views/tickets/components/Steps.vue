@@ -12,7 +12,7 @@
           </div>
         </el-step>
         <el-step
-          v-for="(item, i) in process"
+          v-for="(item, i) in process_map"
           :key="i"
           :title="$tc('tickets.HandleTicket')"
         >
@@ -38,7 +38,7 @@
         <el-step
           :title="`${this.$t('tickets.FinishedTicket')}`"
         >
-          <div v-if="isFinish" slot="description">
+          <div v-if="object['status'].value === 'closed'" slot="description">
             <div>{{ `${this.$t('common.dateFinished')}:  ${toSafeLocalDateStr(object.date_updated)}` }}</div>
           </div>
         </el-step>
@@ -65,27 +65,24 @@ export default {
   data() {
     return {
       STATUS: { open: 2, close: 3 },
-      process: this.object.process_map,
+      process_map: this.object.process_map || [],
       vm: this,
-      statusMap: STATE_MAP,
-      isFinish: false
+      statusMap: STATE_MAP
     }
   },
   computed: {
     ticketSteps() {
       let countApprove = 0
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.process.sort((a, b) => a.approval_level - b.approval_level)
-      this.process.forEach(item => {
-        // eslint-disable-next-line space-before-blocks
+      // this.process_map.sort((a, b) => a.approval_level - b.approval_level)
+      // return []
+      this.process_map.forEach(item => {
         if (item.state === 'approved') {
           countApprove += 1
         }
       })
-      if (countApprove === process.length) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.isFinish = true
-        return process.length + 2
+      if (countApprove === this.process_map.length) {
+        //   // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        return this.process_map.length + 2
       } else {
         return this.STATUS.open + countApprove
       }
