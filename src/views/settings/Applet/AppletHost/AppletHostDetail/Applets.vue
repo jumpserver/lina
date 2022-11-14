@@ -65,7 +65,21 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AppletPublicationUpdate'
+              updateRoute: 'AppletPublicationUpdate',
+              extraActions: [
+                {
+                  title: this.$t('common.Deploy'),
+                  callback: function({ row }) {
+                    this.$axios.post(
+                      `/api/v1/terminal/applet-host-deployments/applets/`,
+                      { host: row.host.id,
+                        applet_id: row.applet.id }
+                    ).then(res => {
+                      openTaskPage(res['task'])
+                    })
+                  }
+                }
+              ]
             }
           }
         }
@@ -97,8 +111,8 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
-                { action: 'refresh' }
+                `/api/v1/terminal/applet-host-deployments/applets/`,
+                { host: this.object.id }
               ).then(res => {
                 openTaskPage(res['task'])
               })
