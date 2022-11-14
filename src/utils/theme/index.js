@@ -39,6 +39,9 @@ export function changeElementColor(themeColors) {
         .el-link.el-link--${key}:after {
           border-color: ${value}!important;
         }
+        .el-tag--dark.el-tag--${key} {
+          background-color: ${value} !important;
+        }
       `
     }
   }

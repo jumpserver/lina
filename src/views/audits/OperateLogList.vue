@@ -1,6 +1,10 @@
 <template>
   <div>
-    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+    <GenericListPage
+      v-loading="loading"
+      :table-config="tableConfig"
+      :header-actions="headerActions"
+    />
     <el-dialog
       :title="this.$t('route.OperateLog')"
       :visible.sync="logDetailVisible"
@@ -30,11 +34,12 @@ export default {
     return {
       rowObj: {
         left: '',
-        rigth: '',
+        right: '',
         leftTitle: vm.$t('audits.BeforeChange'),
         rightTitle: vm.$t('audits.AfterChange')
       },
       logDetailVisible: false,
+      loading: false,
       tableConfig: {
         url: '/api/v1/audits/operate-logs/',
         columns: ['user', 'action_display', 'resource_type_display', 'resource', 'remote_addr', 'datetime', 'actions'],
@@ -74,12 +79,15 @@ export default {
                   title: this.$t('common.View'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    vm.loading = true
                     vm.$axios.get(
                       `/api/v1/audits/operate-logs/${row.id}/?type=action_detail`,
                     ).then(res => {
                       vm.rowObj.left = res.before
                       vm.rowObj.right = res.after
                       vm.logDetailVisible = true
+                    }).finally(() => {
+                      vm.loading = false
                     })
                   }
                 }

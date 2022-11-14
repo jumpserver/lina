@@ -199,7 +199,7 @@ export default {
       )
     },
     reloadPage() {
-      this.$store.commit('common/reload')
+      window.location.reload()
     }
   }
 
