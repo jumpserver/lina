@@ -9,19 +9,19 @@
     v-on="$listeners"
   >
     <el-form label-position="right" label-width="90px">
-      <el-form-item :label="this.$tc('assets.Name')">
+      <el-form-item :label="$tc('assets.Name')">
         <el-input v-model="account['asset_name']" readonly />
       </el-form-item>
-      <el-form-item :label="this.$tc('assets.Username')">
+      <el-form-item :label="$tc('assets.Username')">
         <el-input v-model="account['username']" readonly />
       </el-form-item>
-      <el-form-item :label="this.$tc('assets.Password')">
+      <el-form-item :label="$tc('assets.Password')">
         <UpdateToken v-model="authInfo.password" />
       </el-form-item>
-      <el-form-item :label="this.$tc('assets.SSHSecretKey')">
+      <el-form-item :label="$tc('assets.SSHSecretKey')">
         <UploadKey @input="getFile" />
       </el-form-item>
-      <el-form-item :label="this.$tc('assets.Passphrase')">
+      <el-form-item :label="$tc('assets.Passphrase')">
         <UpdateToken v-model="authInfo.passphrase" />
       </el-form-item>
     </el-form>
@@ -32,6 +32,7 @@
 import Dialog from '@/components/Dialog'
 import { UpdateToken, UploadKey } from '@/components/FormFields'
 import { encryptPassword } from '@/utils/crypto'
+
 export default {
   name: 'UpdateSecretInfo',
   components: {

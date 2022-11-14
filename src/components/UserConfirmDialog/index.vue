@@ -14,7 +14,7 @@
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24" :sm="24">
           <el-alert
-            :title="this.$tc('auth.ReLoginTitle')"
+            :title="$tc('auth.ReLoginTitle')"
             type="info"
             center
             :closable="false"
@@ -56,7 +56,12 @@
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
         <el-col :md="24 - smsWidth" :sm="24">
-          <el-input v-model="SecretKey" :show-password="showPassword" :placeholder="HelpText" style="margin-bottom: 20px;" />
+          <el-input
+            v-model="SecretKey"
+            :show-password="showPassword"
+            :placeholder="HelpText"
+            style="margin-bottom: 20px;"
+          />
         </el-col>
         <el-col v-if="Select === 'sms'" :md="smsWidth" :sm="24">
           <el-button
@@ -133,7 +138,9 @@ export default {
   mounted() {
     this.smsBtnText = this.$t('common.SendVerificationCode')
     this.$axios.get(`${this.url}`, { disableFlashErrorMsg: true }).then(
-      () => { this.$emit('UserConfirmDone', true) }).catch((err) => {
+      () => {
+        this.$emit('UserConfirmDone', true)
+      }).catch((err) => {
       const confirm_type = err.response.data.code
       this.$axios.get('/api/v1/authentication/confirm/', { params: { confirm_type: confirm_type }}).then((data) => {
         this.ConfirmType = data.confirm_type
@@ -146,7 +153,9 @@ export default {
               secret_key: ''
             },
             { disableFlashErrorMsg: true },
-          ).then(() => { this.$emit('UserConfirmDone', true) }).catch(() => {
+          ).then(() => {
+            this.$emit('UserConfirmDone', true)
+          }).catch(() => {
             this.title = this.$t('auth.NeedReLogin')
             this.visible = true
           })
@@ -217,11 +226,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog-content >>> .el-dialog__footer{
+  .dialog-content > > > .el-dialog__footer {
     padding: 0;
   }
 
-  .dialog-content >>> .el-dialog{
+  .dialog-content > > > .el-dialog {
     padding: 8px;
   }
 </style>

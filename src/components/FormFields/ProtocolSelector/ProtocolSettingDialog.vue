@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :title="$t('assets.PlatformProtocolConfig') + '：' + item.name"
+    :title="$tc('assets.PlatformProtocolConfig') + '：' + item.name"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
@@ -29,6 +29,7 @@
 
 <script>
 import { Dialog, AutoDataForm } from '@/components'
+
 export default {
   name: 'ProtocolSetting',
   components: {
@@ -171,14 +172,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.data-form >>> .el-form-item.form-buttons {
+.data-form > > > .el-form-item.form-buttons {
   padding-top: 10px;
   margin-bottom: 0;
 }
 
-.setting-dialog >>> .el-dialog__body {
+.setting-dialog > > > .el-dialog__body {
   padding-top: 10px;
 }
+
 .link-more {
   font-size: 10px;
   margin-left: 10px;

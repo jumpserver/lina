@@ -25,7 +25,13 @@
     <el-form-item>
       <el-radio v-model="radioValue" :label="4">
         {{ this.$t('common.CronTab.appoint') }}
-        <el-select v-model="checkboxList" clearable :placeholder="this.$tc('common.CronTab.manyChoose')" multiple style="width:100%">
+        <el-select
+          v-model="checkboxList"
+          clearable
+          :placeholder="$tc('common.CronTab.manyChoose')"
+          multiple
+          style="width:100%"
+        >
           <el-option v-for="item in 24" :key="item" :value="item-1">{{ item-1 }}</el-option>
         </el-select>
       </el-radio>
@@ -45,7 +51,8 @@ export default {
     },
     check: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -153,6 +160,6 @@ export default {
 
 <style scoped>
 	.el-form-item--small.el-form-item {
-		margin-bottom: 10px
-	}
+    margin-bottom: 10px
+  }
 </style>

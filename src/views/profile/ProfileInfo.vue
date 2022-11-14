@@ -15,13 +15,13 @@
         <el-col :md="10" :sm="24">
           <QuickActions
             type="primary"
-            :title="this.$tc('users.AuthSettings')"
+            :title="$tc('users.AuthSettings')"
             :actions="authQuickActions"
           />
           <QuickActions
             type="info"
             style="margin-top: 15px"
-            :title="this.$tc('users.MessageSubscription')"
+            :title="$tc('users.MessageSubscription')"
             fa="fa-info-circle"
             :actions="messageSubscriptionQuickActions"
           />
@@ -249,7 +249,7 @@ export default {
           formatter: (item, val) => {
             const comment = val.public_key_comment
             const md5 = val.public_key_hash_md5
-            return <span>{ comment } <br /> { md5 }</span>
+            return <span>{comment} <br/> {md5}</span>
           }
         },
         {

@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="$t('assets.SelectTemplate')"
+    :title="$tc('assets.SelectTemplate')"
     :visible.sync="iVisible"
     :destroy-on-close="true"
     width="70%"
@@ -28,6 +28,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import AutoDataTable from '@/components/AutoDataTable'
+
 export default {
   name: 'AccountTemplateDialog',
   components: {

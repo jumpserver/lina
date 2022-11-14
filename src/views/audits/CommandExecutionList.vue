@@ -1,7 +1,13 @@
 <template>
   <div>
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog v-if="relationDialog.show" :visible.sync="relationDialog.show" :title="this.$tc('audits.Hosts')" :show-cancel="false" :show-confirm="false">
+    <Dialog
+      v-if="relationDialog.show"
+      :visible.sync="relationDialog.show"
+      :title="$tc('audits.Hosts')"
+      :show-cancel="false"
+      :show-confirm="false"
+    >
       <ListTable :table-config="relationDialog.tableConfig" :header-actions="relationDialog.headerActions" />
     </Dialog>
   </div>
@@ -42,7 +48,7 @@ export default {
                 vm.relationDialog.tableConfig.url = setUrlParam(vm.relationDialog.tableConfig.url, 'commandexecution', row.id)
                 vm.relationDialog.show = true
               }
-              return <el-link onClick={onClick}>{ cellValue.length }</el-link>
+              return <el-link onClick={onClick}>{cellValue.length}</el-link>
             }
           },
           command: {
@@ -67,7 +73,7 @@ export default {
             formatter: (row) => {
               const label = this.$t('audits.View')
               const route = { to: { name: 'CeleryTaskLog', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }} target='_blank'>{ label }</router-link>
+              return <router-link {...{ attrs: route }} target='_blank'>{label}</router-link>
             }
           },
           date_start: {

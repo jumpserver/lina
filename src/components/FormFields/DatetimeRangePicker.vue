@@ -2,9 +2,9 @@
   <el-date-picker
     v-model="value"
     type="datetimerange"
-    :range-separator="this.$tc('common.To')"
-    :start-placeholder="this.$tc('common.DateStart')"
-    :end-placeholder="this.$tc('common.DateEnd')"
+    :range-separator="$tc('common.To')"
+    :start-placeholder="$tc('common.DateStart')"
+    :end-placeholder="$tc('common.DateEnd')"
     size="small"
     :clearable="false"
     class="datepicker"
@@ -92,22 +92,26 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .datepicker{
+  .datepicker {
     width: 233px;
-    &>>> .el-range__icon {
+
+    & > > > .el-range__icon {
       margin-top: 2px;
       margin-right: 3px;
     }
-    &>>> .el-range-input {
+
+    & > > > .el-range-input {
       width: 49%;
     }
   }
-  .el-input__inner{
+
+  .el-input__inner {
     border: 1px solid #dcdee2;
     border-radius: 3px;
     height: 32x;
   }
-  .el-date-editor  ::v-deep  .el-range-separator{
+
+  .el-date-editor ::v-deep .el-range-separator {
     line-height: 28px;
   }
 </style>

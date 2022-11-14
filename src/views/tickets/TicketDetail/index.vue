@@ -25,7 +25,6 @@ export default {
       ticket: {
         title: '',
         user_display: '',
-        type_display: '',
         status: '',
         assignees_display: '',
         date_created: ''

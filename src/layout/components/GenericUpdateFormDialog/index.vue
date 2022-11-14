@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :title="this.$tc('common.updateSelected')"
+    :title="$tc('common.updateSelected')"
     :visible.sync="iVisible"
     width="70%"
     top="1vh"
@@ -102,7 +102,9 @@ export default {
           const filterValue = {}
           Object.keys(value)
             .filter((key) => vm.checkedFields?.includes(key))
-            .forEach((key) => { filterValue[key] = value[key] })
+            .forEach((key) => {
+              filterValue[key] = value[key]
+            })
           const formValue = []
           let object = {}
           for (const row of vm.selectedRows) {
@@ -140,10 +142,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .el-row-divider{
+  .el-row-divider {
     margin-bottom: 20px;
   }
-  .select-prop-label{
+
+  .select-prop-label {
     float: right;
     padding-right: 30px;
   }

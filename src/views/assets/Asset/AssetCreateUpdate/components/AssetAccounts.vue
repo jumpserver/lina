@@ -3,13 +3,13 @@
     <div v-if="isUpdate(this)">{{ $t('assets.InAssetDetail') }}</div>
     <div v-else class="accounts">
       <el-table :data="accounts" style="width: 100%">
-        <el-table-column prop="username" :label="$t('assets.Username')" width="180" />
-        <el-table-column prop="privileged" :label="$t('assets.Privileged')">
+        <el-table-column prop="username" :label="$tc('assets.Username')" width="180" />
+        <el-table-column prop="privileged" :label="$tc('assets.Privileged')">
           <template v-slot="scope">
             <i class="fa text-primary" :class="scope.row['privileged'] ? 'fa-check' : ''" />
           </template>
         </el-table-column>
-        <el-table-column fixed="right" align="right" :label="$t('common.Actions')" width="135" class-name="buttons">
+        <el-table-column fixed="right" align="right" :label="$tc('common.Actions')" width="135" class-name="buttons">
           <template v-slot="scope">
             <el-button type="danger" icon="el-icon-minus" size="mini" @click="removeAccount(scope.row)" />
             <el-button type="primary" icon="el-icon-edit" size="mini" @click="onEditClick(scope.row)" />
@@ -42,6 +42,7 @@
 <script>
 import AccountTemplateDialog from './AccountTemplateDialog'
 import AddAccountDialog from './AddAccountDialog'
+
 export default {
   name: 'AssetAccounts',
   components: {
@@ -115,7 +116,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.accounts >>> .buttons .cell {
+.accounts > > > .buttons .cell {
   padding-right: 2px;
 }
 </style>

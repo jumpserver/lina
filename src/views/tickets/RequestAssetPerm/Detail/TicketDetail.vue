@@ -8,36 +8,34 @@
     :close="handleClose"
     :reject="handleReject"
   >
-    <IBox v-if="hasActionPerm&&object.status !== 'closed'" class="box">
+    <IBox v-if="hasActionPerm && object.status !== 'closed'" class="box">
       <div slot="header" class="clearfix ibox-title">
-        <i class="fa fa-edit" /> {{ $t('common.Actions') }}
+        <i class="fa fa-edit" /> {{ $tc('common.Actions') }}
       </div>
       <template>
         <el-form ref="requestForm" :model="requestForm" label-width="140px" label-position="left" class="assets">
-          <el-form-item :label="$t('assets.Node')">
+          <el-form-item :label="$tc('assets.Node')">
             <Select2 v-model="requestForm.nodes" v-bind="nodeSelect2" style="width: 50% !important" />
           </el-form-item>
-          <el-form-item :label="$t('tickets.Asset')">
+          <el-form-item :label="$tc('tickets.Asset')">
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
-          <el-form-item :label="$t('tickets.SystemUser')" :rules="isRequired">
+          <el-form-item :label="$tc('tickets.SystemUser')" :rules="isRequired">
             <Select2 v-model="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
-          <el-form-item :label="$t('common.DateStart')" required>
+          <el-form-item :label="$tc('common.DateStart')" required>
             <el-date-picker
               v-model="requestForm.apply_date_start"
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$t('common.dateExpired')" required>
+          <el-form-item :label="$tc('common.dateExpired')" required>
             <el-date-picker
               v-model="requestForm.apply_date_expired"
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$t('assets.Action')" required>
-            <PermissionFormActionField v-model="requestForm.actions" :value="requestForm.actions" style="width: 30% !important" />
-          </el-form-item>
+          <el-form-item :label="$tc('assets.Action')" required />
         </el-form>
       </template>
     </IBox>
@@ -46,15 +44,15 @@
 
 <script>
 import { formatTime, getDateTimeStamp } from '@/utils/index'
-import { toSafeLocalDateStr, forMatAction } from '@/utils/common'
+import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
 import Select2 from '@/components/FormFields/Select2'
 import IBox from '@/components/IBox'
-import PermissionFormActionField from '@/views/perms/AssetPermission/components/PermissionFormActionField'
+
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2, PermissionFormActionField },
+  components: { GenericTicketDetail, IBox, Select2 },
   props: {
     object: {
       type: Object,
@@ -111,64 +109,63 @@ export default {
       const { object } = this
       return [
         {
-          key: this.$t('common.Number'),
-          value: object.serial_num
+          key: this.$tc('common.Number'),
+          value: object['serial_num']
         },
         {
-          key: this.$t('tickets.status'),
+          key: this.$tc('tickets.status'),
           value: object.state,
           formatter: (item, val) => {
-            return <el-tag type={this.statusMap.type} size='mini'> { this.statusMap.title }</el-tag>
+            return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
           }
         },
         {
-          key: this.$t('tickets.type'),
-          value: object.type_display
+          key: this.$tc('tickets.type'),
+          value: 'abc'
         },
         {
-          key: this.$t('tickets.user'),
+          key: this.$tc('tickets.user'),
           value: object.rel_snapshot.applicant
         },
         {
-          key: this.$t('tickets.OrgName'),
+          key: this.$tc('tickets.OrgName'),
           value: object.org_name
         },
         {
-          key: this.$t('common.DateCreated'),
+          key: this.$tc('common.DateCreated'),
           value: toSafeLocalDateStr(object.date_created)
         },
         {
-          key: this.$t('common.Comment'),
+          key: this.$tc('common.Comment'),
           value: object.comment
         }
       ]
     },
     specialCardItems() {
       const { object } = this
-      const rel_snapshot = object.rel_snapshot
       return [
         {
-          key: this.$t('perms.Node'),
-          value: rel_snapshot.apply_nodes.join(', ')
+          key: this.$tc('perms.Node'),
+          value: object.apply_nodes.join(', ')
         },
         {
-          key: this.$t('tickets.Asset'),
-          value: rel_snapshot.apply_assets.join(', ')
+          key: this.$tc('tickets.Asset'),
+          value: object.apply_assets.join(', ')
         },
         {
-          key: this.$t('tickets.Account'),
-          value: rel_snapshot.apply_accounts.join(', ')
+          key: this.$tc('tickets.Account'),
+          value: object.apply_accounts
         },
         {
-          key: this.$t('assets.Action'),
-          value: forMatAction(this, object.apply_actions_display)
+          key: this.$tc('assets.Action'),
+          value: object.apply_actions
         },
         {
-          key: this.$t('common.DateStart'),
+          key: this.$tc('common.DateStart'),
           value: toSafeLocalDateStr(object.apply_date_start)
         },
         {
-          key: this.$t('common.dateExpired'),
+          key: this.$tc('common.dateExpired'),
           value: toSafeLocalDateStr(object.apply_date_expired)
         }
       ]
@@ -179,39 +176,39 @@ export default {
       const rel_snapshot = object.rel_snapshot
       return [
         {
-          key: this.$t('tickets.PermissionName'),
+          key: this.$tc('tickets.PermissionName'),
           value: object.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'AssetPermissionDetail', params: { id: object.id }, query: { oid: object.org_id }}
             if (vm.$hasPerm('perms.view_assetpermission') && object.status === 'closed' && object.state === 'approved') {
-              return <router-link to={to}>{ value }</router-link>
+              return <router-link to={to}>{value}</router-link>
             } else {
-              return <span>{ value }</span>
+              return <span>{value}</span>
             }
           }
         },
         {
-          key: this.$t('perms.Node'),
+          key: this.$tc('perms.Node'),
           value: rel_snapshot.apply_nodes.join(', ')
         },
         {
-          key: this.$t('assets.Asset'),
+          key: this.$tc('assets.Asset'),
           value: rel_snapshot.apply_assets.join(', ')
         },
         {
-          key: this.$t('tickets.Account'),
-          value: rel_snapshot.apply_accounts.join(', ')
+          key: this.$tc('tickets.Account'),
+          value: rel_snapshot.apply_accounts
         },
         {
-          key: this.$t('assets.Action'),
-          value: forMatAction(this, object.apply_actions_display)
+          key: this.$tc('assets.Action'),
+          value: object.apply_actions
         },
         {
-          key: this.$t('common.DateStart'),
+          key: this.$tc('common.DateStart'),
           value: toSafeLocalDateStr(object.apply_date_start)
         },
         {
-          key: this.$t('common.dateExpired'),
+          key: this.$tc('common.dateExpired'),
           value: toSafeLocalDateStr(object.apply_date_expired)
         }
       ]
@@ -270,19 +267,23 @@ export default {
 </script>
 
 <style scoped>
-  .assets{
+  .assets {
     margin-top: 14px;
   }
+
   .feed-activity-list .feed-element {
     border-bottom: 1px solid #e7eaec;
   }
+
   .feed-element > .pull-left {
     margin-right: 10px;
   }
+
   .feed-element .header-avatar {
     width: 38px;
     height: 38px;
   }
+
   .box {
     margin-bottom: 15px;
   }

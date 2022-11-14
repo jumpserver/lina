@@ -6,7 +6,7 @@
         v-if="hasShow"
         effect="dark"
         placement="top"
-        :content="this.$tc('common.View')"
+        :content="$tc('common.View')"
       >
         <i class="fa" :class="isShow ? 'fa-eye-slash' : 'fa-eye'" @click="onShow()" />
       </el-tooltip>
@@ -14,7 +14,7 @@
         v-if="hasDownload"
         effect="dark"
         placement="top"
-        :content="this.$tc('common.Download')"
+        :content="$tc('common.Download')"
       >
         <i class="fa fa-download" @click="onDownload()" />
       </el-tooltip>
@@ -22,7 +22,7 @@
         v-if="hasCopy"
         effect="dark"
         placement="top"
-        :content="this.$tc('common.Copy')"
+        :content="$tc('common.Copy')"
       >
         <i class="fa fa-clone" @click="onCopy()" />
       </el-tooltip>
@@ -58,10 +58,18 @@ export default {
     }
   },
   computed: {
-    hasShow: function() { return this.formatterArgs.hasShow },
-    hasDownload: function() { return this.formatterArgs.hasDownload },
-    hasCopy: function() { return this.formatterArgs.hasCopy },
-    name: function() { return this.formatterArgs.name },
+    hasShow: function() {
+      return this.formatterArgs.hasShow
+    },
+    hasDownload: function() {
+      return this.formatterArgs.hasDownload
+    },
+    hasCopy: function() {
+      return this.formatterArgs.hasCopy
+    },
+    name: function() {
+      return this.formatterArgs.name
+    },
     currentValue() {
       if (this.isShow) {
         return this.cellValue
@@ -122,6 +130,7 @@ export default {
 
       .fa {
         margin-right: 10px;
+
         &:hover {
           color: var(--color-primary);
         }

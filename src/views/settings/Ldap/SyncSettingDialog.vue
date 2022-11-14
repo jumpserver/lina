@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    :title="$t('setting.SyncSetting')"
+    :title="$tc('setting.SyncSetting')"
     :destroy-on-close="true"
     :show-cancel="false"
     :show-confirm="false"
@@ -22,6 +22,7 @@ import { Dialog } from '@/components'
 import Select2 from '@/components/FormFields/Select2'
 import { Required } from '@/components/DataForm/rules'
 import { CronTab } from '@/components'
+
 export default {
   name: 'SyncSettingDialog',
   components: {

@@ -13,7 +13,7 @@
       />
     </el-col>
     <el-col :md="9" :sm="24">
-      <IBox type="primary" :title="this.$tc('assets.Account')">
+      <IBox type="primary" :title="$tc('assets.Account')">
         <table style="width: 100%">
           <tr>
             <td colspan="2">

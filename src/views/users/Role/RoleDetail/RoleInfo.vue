@@ -4,7 +4,7 @@
       <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <IBox :title="$t('rbac.Permissions')">
+      <IBox :title="$tc('rbac.Permissions')">
         <div style="height: 10%">
           <el-button
             size="small"
@@ -299,18 +299,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree >>> .ztree * {
+.perm-tree > > > .ztree * {
   background: white;
 }
-.perm-tree >>> .ztree {
+
+.perm-tree > > > .ztree {
   background: white !important;
 }
-.perm-tree >>> .checkbox_true_disable,
-.perm-tree >>> .checkbox_false_disable {
-  cursor: not-allowed!important;
+
+.perm-tree > > > .checkbox_true_disable,
+.perm-tree > > > .checkbox_false_disable {
+  cursor: not-allowed !important;
 }
-.perm-tree >>> .checkbox_true_disable:before,
-.perm-tree >>> .checkbox_false_disable:before  {
-  color: #aaaaaa!important;
+
+.perm-tree > > > .checkbox_true_disable:before,
+.perm-tree > > > .checkbox_false_disable:before {
+  color: #aaaaaa !important;
 }
 </style>

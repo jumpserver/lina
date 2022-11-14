@@ -1,5 +1,4 @@
 import AssetSelect from '@/components/AssetSelect'
-import PermissionFormActionField from './components/PermissionFormActionField'
 
 function getFields() {
   const users = {
@@ -67,13 +66,6 @@ function getFields() {
     }
   }
 
-  const actions = {
-    label: this.$t('perms.Actions'),
-    hidden: () => false,
-    component: PermissionFormActionField,
-    helpText: this.$t('common.actionsTips')
-  }
-
   const date_start = {
     label: this.$t('common.DateStart'),
     hidden: () => false
@@ -110,7 +102,6 @@ function getFields() {
     applications: applications,
     nodes: nodes,
     system_users: system_users,
-    actions: actions,
     is_active: is_active,
     date_start: date_start,
     date_expired: date_expired

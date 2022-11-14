@@ -91,7 +91,6 @@ export default {
         },
         actions: {
           label: this.$t('perms.Actions'),
-          // component: PermissionFormActionField,
           helpText: this.$t('common.actionsTips')
         },
         date_start: {

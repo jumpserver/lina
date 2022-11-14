@@ -81,6 +81,7 @@ export class FormFieldGenerator {
     }
     // 上面重写了 type
     if (type === 'radio-group') {
+      console.log('Field: ', field)
       if (field.options.length > 4) {
         type = 'select'
         field.el.filterable = true

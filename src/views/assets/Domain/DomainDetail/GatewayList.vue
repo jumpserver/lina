@@ -3,7 +3,7 @@
     <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
     <Dialog
       v-if="dialogVisible"
-      :title="this.$tc('assets.TestGatewayTestConnection')"
+      :title="$tc('assets.TestGatewayTestConnection')"
       :visible.sync="dialogVisible"
       width="40%"
       top="35vh"
@@ -20,7 +20,13 @@
           <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
         </el-col>
         <el-col :md="4" :sm="24">
-          <el-button size="mini" type="primary" style="line-height:20px " :loading="buttonLoading" @click="dialogConfirm">{{ this.$t('common.Confirm') }}</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            style="line-height:20px "
+            :loading="buttonLoading"
+            @click="dialogConfirm"
+          >{{ this.$t('common.Confirm') }}</el-button>
         </el-col>
       </el-row>
     </Dialog>
@@ -32,6 +38,7 @@
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import DisplayFormatter from '@/components/TableFormatters/DisplayFormatter'
 import Dialog from '@/components/Dialog'
+
 export default {
   components: {
     GenericListTable,
@@ -40,7 +47,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {

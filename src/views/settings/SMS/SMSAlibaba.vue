@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS :title="$t('setting.AlibabaCloud')" :config="$data" />
+  <BaseSMS :title="$tc('setting.AlibabaCloud')" :config="$data" />
 </template>
 
 <script>
@@ -55,8 +55,7 @@ export default {
       fieldsMeta: {
         ALIBABA_VERIFY_SIGN_TMPL: {
           fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
-          fieldsMeta: {
-          }
+          fieldsMeta: {}
         },
         ALIBABA_ACCESS_KEY_SECRET: {
           component: UpdateToken
@@ -67,10 +66,8 @@ export default {
       }
     }
   },
-  computed: {
-  },
-  methods: {
-  }
+  computed: {},
+  methods: {}
 }
 </script>
 

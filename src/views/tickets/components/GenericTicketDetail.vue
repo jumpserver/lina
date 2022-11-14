@@ -1,9 +1,17 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="17" :sm="24">
-      <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
-      <Details v-if="specialCardItems.length > 0" :detail-card-items="specialCardItems" :title="$t('common.ApplyInfo')" />
-      <Details v-if="object.state === 'approved' && assignedCardItems.length > 0" :detail-card-items="assignedCardItems" :title="$t('tickets.AssignedInfo')" />
+      <Details :detail-card-items="detailCardItems" :title="$tc('common.BasicInfo')" />
+      <Details
+        v-if="specialCardItems.length > 0"
+        :detail-card-items="specialCardItems"
+        :title="$tc('common.ApplyInfo')"
+      />
+      <Details
+        v-if="object['state'] === 'approved' && assignedCardItems.length > 0"
+        :detail-card-items="assignedCardItems"
+        :title="$tc('tickets.AssignedInfo')"
+      />
       <slot id="MoreDetails" />
       <Comments :object="object" v-bind="$attrs" />
     </el-col>

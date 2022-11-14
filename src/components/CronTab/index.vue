@@ -3,7 +3,7 @@
     <div class="box">
       <el-input v-model="input" clearable @focus="showDialog" @clear="onClear" />
     </div>
-    <el-dialog :title="this.$tc('common.CronTab.newCron')" :visible.sync="showCron" top="8vh" width="580px" append-to-body>
+    <el-dialog :title="$tc('common.CronTab.newCron')" :visible.sync="showCron" top="8vh" width="580px" append-to-body>
       <Crontab
         :expression="expression"
         @hide="showCron = false"
@@ -15,6 +15,7 @@
 
 <script>
 import Crontab from './Crontab.vue'
+
 export default {
   components: { Crontab },
   props: {
@@ -51,5 +52,5 @@ export default {
 <style scoped>
   .el-dialog__body {
     padding: 12px 16px;
-}
+  }
 </style>

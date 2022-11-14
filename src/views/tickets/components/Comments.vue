@@ -7,10 +7,12 @@
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" size="30" class="header-avatar" />
+            <el-avatar :src="imageUrl" :size="30" class="header-avatar" />
           </a>
           <div class="media-body ">
-            <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
+            <strong>{{ item.user_display }}</strong> <small
+              class="text-muted"
+            >{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
             <div style="padding-top: 10px;" v-html="item.body" />
@@ -20,7 +22,7 @@
     </template>
     <slot />
     <el-form ref="comments" :model="form" label-width="45px" style="padding-top: 20px">
-      <el-form-item :label="$t('tickets.reply')">
+      <el-form-item :label="$tc('tickets.reply')">
         <el-input v-model="form.comments" :autosize="{ minRows: 4 }" type="textarea" />
       </el-form-item>
       <el-form-item style="float: right">
@@ -68,6 +70,7 @@
 import IBox from '@/components/IBox'
 import { formatTime, getDateTimeStamp } from '@/utils'
 import { toSafeLocalDateStr } from '@/utils/common'
+
 export default {
   name: 'Comments',
   components: { IBox },
@@ -156,7 +159,8 @@ export default {
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
     defaultReject() {
-      this.createComment(function() {})
+      this.createComment(function() {
+      })
       const url = `/api/v1/tickets/${this.type_api}/${this.object.id}/reject/`
       this.$axios.put(url).then(res => this.reloadPage()).catch(err => this.$message.error(err))
     },
@@ -168,7 +172,9 @@ export default {
       const commentText = this.form.comments
       const ticketId = this.object.id
       const commentUrl = `/api/v1/tickets/comments/?ticket_id=${this.object.id}`
-      if (!commentText) { return }
+      if (!commentText) {
+        return
+      }
       const body = {
         body: commentText,
         ticket: ticketId
@@ -210,16 +216,20 @@ export default {
 .box {
   margin-bottom: 15px;
 }
+
 .feed-activity-list {
   //padding-top: 20px;
   line-height: 1.5;
 }
+
 .feed-activity-list .feed-element {
   border-bottom: 1px solid #e7eaec;
 }
+
 .feed-element:first-child {
   margin-top: 0;
 }
+
 .feed-element {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -229,13 +239,16 @@ export default {
 .media-body {
   overflow: hidden;
 }
+
 .feed-element > .pull-left {
   margin-right: 10px;
 }
+
 .feed-element .header-avatar {
   width: 38px;
   height: 38px;
 }
+
 .text-muted {
   color: #888888;
 }

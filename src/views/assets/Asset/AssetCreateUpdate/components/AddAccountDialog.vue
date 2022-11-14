@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="iVisible"
-    :title="this.$tc('assets.AddAccount')"
+    :title="$tc('assets.AddAccount')"
     :visible.sync="iVisible"
     :destroy-on-close="true"
     :show-cancel="false"
@@ -20,6 +20,7 @@
 <script>
 import Dialog from '@/components/Dialog'
 import AccountCreateForm from '@/components/AccountCreateUpdateForm'
+
 export default {
   name: 'AddAccountDialog',
   components: {

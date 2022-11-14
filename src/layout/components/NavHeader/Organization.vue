@@ -3,7 +3,7 @@
     :value="currentOrgId"
     class="org-select organization"
     filterable
-    :placeholder="$t('common.Select')"
+    :placeholder="$tc('common.Select')"
     @change="changeOrg"
   >
     <template slot="prefix">
@@ -163,29 +163,29 @@ export default {
     background-color: rgba(144, 147, 152, .5);
   }
 
-  &>>> .el-input__prefix {
+  & > > > .el-input__prefix {
     left: 8px
   }
 
-  &>>> .el-input--prefix .el-input__inner {
+  & > > > .el-input--prefix .el-input__inner {
     line-height: 35px !important;
     height: 35px !important;
   }
 
-  &>>> .fa-sitemap {
+  & > > > .fa-sitemap {
     padding-left: 4px;
   }
 
-  &>>> .el-input__icon {
+  & > > > .el-input__icon {
     color: #606266;
   }
 
-  &>>> .el-input .el-select__caret {
+  & > > > .el-input .el-select__caret {
     color: #8d8f93;
   }
 }
 
-.option-group >>> .el-select-group__title {
+.option-group > > > .el-select-group__title {
   color: #909399 !important;
   padding-left: 15px;
   font-size: 12px;

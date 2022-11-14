@@ -2,17 +2,17 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$tc('route.SiteMessageList')">
+        <el-tooltip effect="dark" :content="$tc('route.SiteMessageList')">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$tc('route.WebTerminal')">
+        <el-tooltip effect="dark" :content="$tc('route.WebTerminal')">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$tc('route.SystemSetting')">
+        <el-tooltip effect="dark" :content="$tc('route.SystemSetting')">
           <SystemSetting />
         </el-tooltip>
       </li>
@@ -63,8 +63,7 @@ export default {
     SystemSetting
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapGetters([
@@ -88,6 +87,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
   $header-height: 55px;
   .navbar {
     position: relative;
@@ -98,22 +98,25 @@ export default {
 
     .navbar-left {
       float: left;
+
       .left-item {
         line-height: $header-height;
         display: inline-block;
         vertical-align: middle;
 
-        &>>> .el-submenu__title {
-          font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+        & > > > .el-submenu__title {
+          font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $header-height;
           height: $header-height;
         }
-        &>>> .org-select {
+
+        & > > > .org-select {
           padding: 0;
         }
       }
     }
+
     .navbar-right {
       float: right;
       margin-right: 10px;
@@ -135,32 +138,38 @@ export default {
       .header-icon {
         padding-left: 8px;
         padding-right: 8px;
+
         &:hover {
           background-color: #e6e6e6;
         }
-        &>>> i {
+
+        & > > > i {
           color: #7c7e7f;
           font-size: 16px;
         }
-        &>>> .svg-icon {
+
+        & > > > .svg-icon {
           color: #7c7e7f;
           font-size: 16px;
         }
       }
     }
   }
+
   ul {
     margin: 0;
     padding-inline-start: 0;
   }
+
   .is-show-menu {
     display: none;
   }
+
   .hamburger-container {
     float: left;
     height: 26px;
     margin: 12px;
-    padding: 0 10px!important;
+    padding: 0 10px !important;
     line-height: 30px;
     border-radius: 4px;
     border-color: $--color-primary;
@@ -169,11 +178,13 @@ export default {
     cursor: pointer;
     transition: .2s;
     -webkit-tap-highlight-color: transparent;
-    &>>> .svg-icon {
+
+    & > > > .svg-icon {
       font-size: 16px;
       color: #fff;
     }
   }
+
   @media screen and (max-width: 1006px) {
     .is-show-menu {
       display: block;
@@ -182,9 +193,10 @@ export default {
       display: none;
     }
   }
-  @media screen and (max-width: 480px){
+
+  @media screen and (max-width: 480px) {
     .active-menu {
-      display: none!important;;
+      display: none !important;;
     }
   }
 </style>

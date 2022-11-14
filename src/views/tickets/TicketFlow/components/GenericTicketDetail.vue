@@ -1,8 +1,12 @@
 <template>
   <el-row>
     <el-col :md="17" :sm="24">
-      <Details :detail-card-items="detailCardItems" :title="$t('common.BasicInfo')" />
-      <Details v-if="specialCardItems.length > 0" :detail-card-items="specialCardItems" :title="$t('common.ApprovaLevel')" />
+      <Details :detail-card-items="detailCardItems" :title="$tc('common.BasicInfo')" />
+      <Details
+        v-if="specialCardItems.length > 0"
+        :detail-card-items="specialCardItems"
+        :title="$tc('common.ApprovaLevel')"
+      />
       <slot id="MoreDetails" />
     </el-col>
   </el-row>
@@ -10,6 +14,7 @@
 
 <script>
 import Details from './Details'
+
 export default {
   name: 'GenericTicketDetail',
   components: { Details },

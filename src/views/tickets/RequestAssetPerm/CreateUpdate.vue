@@ -1,19 +1,23 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" :perform-submit="performSubmit" :create-success-next-route="createSuccessNextRoute" />
+  <GenericCreateUpdatePage
+    v-if="!loading"
+    v-bind="$data"
+    :perform-submit="performSubmit"
+    :create-success-next-route="createSuccessNextRoute"
+  />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
-import PermissionFormActionField from '@/views/perms/AssetPermission/components/PermissionFormActionField'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
     GenericCreateUpdatePage
   },
-
   data() {
     const now = new Date()
     const date_expired = getDaysFuture(7, now).toISOString()
@@ -26,31 +30,21 @@ export default {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
-        apply_actions: [
-          'all', 'connect', 'updownload', 'upload_file', 'download_file',
-          'clipboard_copy_paste', 'clipboard_copy', 'clipboard_paste'
-        ],
         apply_assets: [],
         org_id: '',
-        type: 'apply_asset'
+        apply_actions: ['all']
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
+        [this.$t('common.Basic'), ['title', 'org_id']],
         [this.$t('tickets.RequestPerm'), [
           'apply_nodes', 'apply_assets', 'apply_accounts',
           'apply_actions', 'apply_date_start', 'apply_date_expired'
-        ]]
+        ]],
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
-        type: {
-          hidden: () => true,
-          el: {
-            disabled: true
-          }
-        },
         apply_actions: {
           label: this.$t('perms.Actions'),
-          component: PermissionFormActionField,
           helpText: this.$t('common.actionsTips')
         },
         apply_nodes: {
@@ -76,10 +70,13 @@ export default {
             ajax: {
               url: '',
               transformOption: (item) => {
-                return { label: item.hostname + '(' + item.protocols + ')', value: item.id }
+                return { label: item.name + '(' + item.address + ')', value: item.id }
               }
             }
           }
+        },
+        apply_accounts: {
+          component: AccountFormatter
         },
         org_id: {
           component: Select2,

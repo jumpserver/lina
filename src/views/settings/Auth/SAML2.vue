@@ -2,7 +2,7 @@
   <BaseAuth
     :value="value"
     :config="settings"
-    :title="$t('setting.SAML2')"
+    :title="$tc('setting.SAML2')"
     enable-field="AUTH_SAML2"
     v-on="$listeners"
   />

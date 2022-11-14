@@ -16,10 +16,10 @@
       v-on="$listeners"
     >
       <el-form class="password-form" label-position="right" label-width="100px" :model="secretInfo">
-        <el-form-item :label="this.$tc('assets.Name')">
+        <el-form-item :label="$tc('assets.Name')">
           <span>{{ account['name'] }}</span>
         </el-form-item>
-        <el-form-item :label="this.$tc('assets.Username')">
+        <el-form-item :label="$tc('assets.Username')">
           <span>{{ account['username'] }}</span>
         </el-form-item>
         <el-form-item :label="secretTypeLabel">
@@ -30,16 +30,16 @@
             }}"
           />
         </el-form-item>
-        <el-form-item v-if="secretType === 'ssh_key'" :label="this.$tc('assets.sshKeyFingerprint')">
+        <el-form-item v-if="secretType === 'ssh_key'" :label="$tc('assets.sshKeyFingerprint')">
           <span>{{ sshKeyFingerprint }}</span>
         </el-form-item>
-        <el-form-item :label="this.$tc('common.DateCreated')">
+        <el-form-item :label="$tc('common.DateCreated')">
           <span>{{ account['date_created'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="this.$tc('common.DateUpdated')">
+        <el-form-item :label="$tc('common.DateUpdated')">
           <span>{{ account['date_updated'] | date }}</span>
         </el-form-item>
-        <el-form-item :label="this.$tc('accounts.PasswordRecord')">
+        <el-form-item :label="$tc('accounts.PasswordRecord')">
           <el-button type="text" @click="onShowPasswordHistory">{{ secretInfo.version }}</el-button>
         </el-form-item>
       </el-form>
@@ -113,9 +113,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea >>> .el-textarea__inner {
+  .item-textarea > > > .el-textarea__inner {
     height: 110px;
   }
+
   .el-form-item {
     border-bottom: 1px solid #EBEEF5;
     padding: 5px 0;
@@ -125,7 +126,7 @@ export default {
       background-color: #F5F7FA;
     }
 
-    >>> .el-form-item__label {
+    > > > .el-form-item__label {
       padding-right: 20px;
     }
   }
@@ -141,6 +142,7 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
     .title {
       color: #303133;
       font-weight: 500;

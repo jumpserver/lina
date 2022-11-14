@@ -5,6 +5,7 @@
 <script>
 import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
+
 export default {
   name: 'TicketFlow',
   components: {
@@ -16,13 +17,13 @@ export default {
       tableConfig: {
         url: '/api/v1/tickets/flows/',
         columns: [
-          'type_display', 'created_by', 'org_name',
+          'type', 'created_by', 'org_name',
           'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['actions'],
           default: [
-            'type_display', 'created_by', 'org_name',
+            'type', 'created_by', 'org_name',
             'date_created', 'date_updated', 'actions'
           ]
         },
@@ -33,11 +34,14 @@ export default {
               return currentOrg.is_root ? row.org_name : currentOrg.name
             }
           },
-          type_display: {
+          type: {
             formatter: DetailFormatter,
             formatterArgs: {
               permissions: 'tickets.view_ticketflow',
-              route: 'FlowDetail'
+              route: 'FlowDetail',
+              getTitle: function({ row }) {
+                return row.type.label
+              }
             }
           },
           actions: {
