@@ -10,11 +10,10 @@
             <el-avatar :src="imageUrl" :size="30" class="header-avatar" />
           </a>
           <div class="media-body ">
-            <strong>{{ item.user_display }}</strong> <small
-              class="text-muted"
-            >{{ formatTime(item.date_created) }}</small>
+            <strong>{{ item.user_display }}</strong>
+            <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
-            <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
+            <small class="text-muted">{{ item.date_created | date }}</small>
             <div style="padding-top: 10px;" v-html="item.body" />
           </div>
         </div>

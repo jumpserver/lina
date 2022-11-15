@@ -1,7 +1,6 @@
 <template>
   <GenericTicketDetail
     :object="object"
-    :detail-card-items="detailCardItems"
     :special-card-items="specialCardItems"
     :assigned-card-items="assignedCardItems"
     :approve="handleApprove"
@@ -104,42 +103,6 @@ export default {
         return [{ required: true }]
       }
       return [{ required: false }]
-    },
-    detailCardItems() {
-      const { object } = this
-      return [
-        {
-          key: this.$tc('common.Number'),
-          value: object['serial_num']
-        },
-        {
-          key: this.$tc('tickets.status'),
-          value: object.state,
-          formatter: (item, val) => {
-            return <el-tag type={this.statusMap.type} size='mini'> {this.statusMap.title}</el-tag>
-          }
-        },
-        {
-          key: this.$tc('tickets.type'),
-          value: object.type.label
-        },
-        {
-          key: this.$tc('tickets.user'),
-          value: object.rel_snapshot.applicant
-        },
-        {
-          key: this.$tc('tickets.OrgName'),
-          value: object.org_name
-        },
-        {
-          key: this.$tc('common.DateCreated'),
-          value: toSafeLocalDateStr(object.date_created)
-        },
-        {
-          key: this.$tc('common.Comment'),
-          value: object.comment
-        }
-      ]
     },
     specialCardItems() {
       const { object } = this

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="17" :sm="24">
-      <Details :detail-card-items="detailCardItems" :title="$tc('common.BasicInfo')" />
+      <Details :detail-card-items="iDetailCardItems" :title="$tc('common.BasicInfo')" />
       <Details
         v-if="specialCardItems.length > 0"
         :detail-card-items="specialCardItems"
@@ -42,7 +42,7 @@ export default {
     },
     detailCardItems: {
       type: Array,
-      default: () => ([])
+      default: null
     },
     assignedCardItems: {
       type: Array,
@@ -50,8 +50,59 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      statusMap: {
+        pending: 'warning',
+        approved: 'success',
+        rejected: 'danger',
+        closed: 'info',
+        reopen: 'warning'
+      }
+    }
+  },
+  computed: {
+    iDetailCardItems() {
+      if (this.detailCardItems) {
+        return this.detailCardItems
+      }
+      const { object } = this
+      return [
+        {
+          key: this.$tc('common.Number'),
+          value: object['serial_num']
+        },
+        {
+          key: this.$tc('tickets.status'),
+          value: object.state,
+          formatter: (item, val) => {
+            const tp = this.statusMap[val]
+            return <el-tag type={tp} size='small'>{this.object.state.label}</el-tag>
+          }
+        },
+        {
+          key: this.$tc('tickets.type'),
+          value: object.type.label
+        },
+        {
+          key: this.$tc('tickets.user'),
+          value: object.rel_snapshot.applicant
+        },
+        {
+          key: this.$tc('tickets.OrgName'),
+          value: object.org_name
+        },
+        {
+          key: this.$tc('common.DateCreated'),
+          value: object.date_created
+        },
+        {
+          key: this.$tc('common.Comment'),
+          value: object.comment
+        }
+      ]
+    }
   }
+
 }
 </script>
 

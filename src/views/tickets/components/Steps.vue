@@ -17,14 +17,16 @@
           :title="$tc('tickets.HandleTicket')"
         >
           <div slot="description">
-            <div style="padding-top: 15px">
-              <span v-for="assignee of item.assignees_display" :key="assignee" style="display: block">
-                {{ assignee }}
-              </span>
+            <div class="processors">
+              <div style="padding-top: 15px">
+                <span v-for="assignee of item.assignees_display" :key="assignee" style="display: block">
+                  {{ assignee }}
+                </span>
+              </div>
+              <el-button v-if="item.assignees_display.length > 5" type="text" @click="lookOver(item.assignees_display)">
+                {{ $tc('tickets.CheckViewAcceptor') }}
+              </el-button>
             </div>
-            <el-button v-if="item.assignees_display.length > 5" type="text" @click="lookOver(item.assignees_display)">
-              {{ $tc('tickets.CheckViewAcceptor') }}
-            </el-button>
           </div>
           <div v-if="item.state.value ==='closed'" slot="description">
             <div>{{ $t('tickets.Assignee') }}：{{ object.rel_snapshot.applicant }}</div>
@@ -115,5 +117,9 @@ export default {
 <style lang='less' scoped>
 .box {
   margin-bottom: 15px;
+}
+
+.processors {
+  margin-bottom: 10px;
 }
 </style>
