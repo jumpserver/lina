@@ -25,8 +25,10 @@ export default {
   data() {
     const vm = this
     const now = new Date()
-    const TicketAuthorizeDefaultTime = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
-    const date_expired = getDaysFuture(TicketAuthorizeDefaultTime, new Date()).toISOString()
+    const time = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
+    const unit = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME_UNIT']
+    const dividend = unit === 'hour' ? 24 : 1
+    const date_expired = getDaysFuture(time / dividend, new Date()).toISOString()
     const date_start = now.toISOString()
     let apply_category_type = []
 
