@@ -47,7 +47,8 @@ export default {
           this.$t('setting.Perm'),
           [
             'PERM_SINGLE_ASSET_TO_UNGROUP_NODE',
-            'TICKET_AUTHORIZE_DEFAULT_TIME'
+            'TICKET_AUTHORIZE_DEFAULT_TIME',
+            'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
           ]
         ]
       ],
