@@ -16,6 +16,7 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
 import Applets from './Applets'
 import Accounts from './Accounts'
+import Developments from './Devployments'
 
 export default {
   name: 'AssetHostDetail',
@@ -24,7 +25,8 @@ export default {
     Applets,
     TabPage,
     Detail,
-    Accounts
+    Accounts,
+    Developments
   },
   data() {
     return {
@@ -44,6 +46,10 @@ export default {
           {
             'title': this.$t('terminal.Applets'),
             'name': 'Applets'
+          },
+          {
+            'title': this.$t('terminal.Deployments'),
+            'name': 'Developments'
           }
         ],
         hasRightSide: true,

@@ -1,22 +1,18 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="16" :sm="24">
-      <ListTable :table-config="config" />
-    </el-col>
-    <el-col :md="8" :sm="24">
-      <QuickActions type="primary" :actions="quickActions" />
+      <ListTable :table-config="config" :header-actions="headerConfig" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import { ListTable, QuickActions } from '@/components'
+import { ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 export default {
-  name: 'Publications',
+  name: 'Developments',
   components: {
-    ListTable,
-    QuickActions
+    ListTable
   },
   props: {
     object: {
@@ -26,66 +22,54 @@ export default {
   },
   data() {
     return {
+      headerConfig: {
+        hasImport: false,
+        hasExport: false,
+        hasLeftActions: false
+      },
       config: {
+        hasSelection: false,
         url: `/api/v1/terminal/applet-host-deployments/?host=${this.object.id}`,
         columns: [
-          'name', 'applet', 'comment', 'date_created',
-          'date_updated', 'actions'
+          'id', 'date_start', 'date_finished', 'status', 'actions'
         ],
         columnsMeta: {
-          applet: {
+          id: {
+            type: 'index',
+            label: 'ID',
+            sortable: 'custom'
+          },
+          status: {
+            label: this.$t('common.Status'),
             formatter: (row) => {
-              return row.applet.name
+              const typeMapper = {
+                'success': 'success',
+                'error': 'danger',
+                'unknown': 'warning'
+              }
+              const tp = typeMapper[row.status] || 'info'
+              return <el-tag size='mini' type={tp}>{ row.status }</el-tag>
             }
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AppletPublicationUpdate'
+              hasClone: false,
+              hasDelete: false,
+              hasUpdate: false,
+              extraActions: [
+                {
+                  name: 'View',
+                  title: this.$t('common.View'),
+                  type: 'primary',
+                  callback: function(val) {
+                    openTaskPage(val.row.task)
+                  }
+                }
+              ]
             }
           }
-        },
-        updateInitial: (initial) => {
-          initial.deploy_options = {
-            RDS_LicensingMode: '4'
-          }
         }
-      },
-      quickActions: [
-        {
-          title: this.$t('assets.InitialDeploy'),
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Deploy')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/terminal/applet-host-deployments/`,
-                { host: this.object.id }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
-        },
-        {
-          title: '发布所有应用',
-          attrs: {
-            type: 'primary',
-            label: this.$t('common.Publish')
-          },
-          callbacks: {
-            click: function() {
-              this.$axios.post(
-                `/api/v1/assets/assets/${this.object.id}/tasks/`,
-                { action: 'refresh' }
-              ).then(res => {
-                openTaskPage(res['task'])
-              })
-            }.bind(this)
-          }
-        }
-      ]
+      }
     }
   }
 }
