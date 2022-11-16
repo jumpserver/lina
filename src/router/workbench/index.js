@@ -90,6 +90,60 @@ export default {
       },
       children: [
         {
+          path: 'job',
+          name: 'Job',
+          component: empty,
+          redirect: '',
+          meta: {
+            title: i18n.t('route.JobList'),
+            permissions: []
+          },
+          children: [
+            {
+              path: '',
+              name: 'JobList',
+              component: () => import('@/views/ops/Job'),
+              meta: {
+                title: i18n.t('route.JobList'),
+                permissions: []
+              }
+            },
+            {
+              path: 'create',
+              component: () => import('@/views/ops/Job/JobUpdateCreate'),
+              name: 'JobCreate',
+              hidden: true,
+              meta: {
+                title: i18n.t('route.JobCreate'),
+                permissions: [],
+                activeMenu: '/workbench/ops/job'
+              }
+            },
+            {
+              path: 'update',
+              component: () => import('@/views/ops/Job/JobUpdateCreate'),
+              name: 'JobUpdate',
+              hidden: true,
+              meta: {
+                title: i18n.t('route.JobUpdate'),
+                permissions: [],
+                activeMenu: '/workbench/ops/job'
+              }
+            },
+            {
+              path: ':id',
+              component: () => import('@/views/ops/Job/JobDetail'),
+              name: 'JobDetail',
+              hidden: true,
+              meta: {
+                title: i18n.t('route.JobDetail'),
+                permissions: [],
+                activeMenu: '/workbench/ops/job'
+              }
+            }
+          ]
+        },
+        {
           path: 'adhoc',
           name: 'Adhoc',
           component: () => import('@/views/ops/Adhoc'),
@@ -150,60 +204,6 @@ export default {
             permissions: [],
             activeMenu: '/workbench/ops/playbook'
           }
-        },
-        {
-          path: 'job',
-          name: 'Job',
-          component: empty,
-          redirect: '',
-          meta: {
-            title: i18n.t('route.JobList'),
-            permissions: []
-          },
-          children: [
-            {
-              path: '',
-              name: 'JobList',
-              component: () => import('@/views/ops/Job'),
-              meta: {
-                title: i18n.t('route.JobList'),
-                permissions: []
-              }
-            },
-            {
-              path: 'create',
-              component: () => import('@/views/ops/Job/JobUpdateCreate'),
-              name: 'JobCreate',
-              hidden: true,
-              meta: {
-                title: i18n.t('route.JobCreate'),
-                permissions: [],
-                activeMenu: '/workbench/ops/job'
-              }
-            },
-            {
-              path: 'update',
-              component: () => import('@/views/ops/Job/JobUpdateCreate'),
-              name: 'JobUpdate',
-              hidden: true,
-              meta: {
-                title: i18n.t('route.JobUpdate'),
-                permissions: [],
-                activeMenu: '/workbench/ops/job'
-              }
-            },
-            {
-              path: ':id',
-              component: () => import('@/views/ops/Job/JobDetail'),
-              name: 'JobDetail',
-              hidden: true,
-              meta: {
-                title: i18n.t('route.JobDetail'),
-                permissions: [],
-                activeMenu: '/workbench/ops/job'
-              }
-            }
-          ]
         }
       ]
     }

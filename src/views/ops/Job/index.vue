@@ -16,12 +16,18 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/jobs/',
         columns: [
-          'name', 'type', 'date_updated', 'date_created', 'actions'
+          'name', 'type', 'asset_amount', 'comment', 'date_updated', 'date_created', 'actions'
         ],
         columnsMeta: {
           name: {
             formatterArgs: {
               can: true
+            }
+          },
+          asset_amount: {
+            label: this.$t('ops.AssetAmount'),
+            formatter: (row) => {
+              return row.assets.length
             }
           },
           actions: {

@@ -696,7 +696,12 @@
     "AdhocDetail": "命令详情",
     "Queue": "队列",
     "State": "状态",
-    "LastPublishedTime": "最后发布时间"
+    "LastPublishedTime": "最后发布时间",
+    "Variable": "变量",
+    "Module": "模块",
+    "Asset": "资产",
+    "Plan": "计划",
+    "AssetAmount": "资产数量"
   },
   "perms": {
     "": "",

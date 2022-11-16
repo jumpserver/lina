@@ -8,6 +8,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import AssetSelect from '@/components/AssetSelect'
+import { JsonEditor } from '@/components/FormFields'
 
 export default {
   components: {
@@ -20,10 +21,11 @@ export default {
       jobType: '',
       url: '/api/v1/ops/jobs/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'type', 'instant']],
-        [this.$t('common.Task'), ['module', 'args', 'playbook']],
-        ['资产', ['assets', 'runas', 'runas_policy']],
-        [this.$t('common.Plan'), ['runAfterSave']]
+        [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
+        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
+        [this.$t('ops.Variable'), ['variables']],
+        [this.$t('ops.Plan'), ['runAfterSave', 'periodic', 'crontab']]
       ],
       initial: {
         type: 'adhoc',
@@ -31,7 +33,11 @@ export default {
         args: '',
         runas_policy: 'skip',
         runAfterSave: false,
-        instant: false
+        instant: false,
+        variables: '{}',
+        timeout: 60,
+        periodic: false,
+        crontab: '0 0 * * *'
       },
       fieldsMeta: {
         name: {
@@ -39,8 +45,8 @@ export default {
             return this.instantTask
           }
         },
-        type: {},
         module: {
+          label: this.$t('ops.Module'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           }
@@ -82,11 +88,30 @@ export default {
             return true
           }
         },
+        variables: {
+          label: this.$t('ops.Variable'),
+          component: JsonEditor
+        },
+        chdir: {
+          hidden: (formValue) => {
+            return formValue.type !== 'adhoc'
+          }
+        },
         runAfterSave: {
           label: '保存后立即执行',
           type: 'checkbox',
           hidden: (formValue) => {
             return formValue.instant
+          }
+        },
+        periodic: {
+          label: '定时执行',
+          type: 'checkbox'
+        },
+        crontab: {
+          label: '表达式',
+          hidden: (formValue) => {
+            return !formValue.periodic
           }
         }
       }
