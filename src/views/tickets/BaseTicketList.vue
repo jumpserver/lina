@@ -69,9 +69,12 @@ export default {
             }
           },
           {
-            prop: 'type_display',
+            prop: 'type',
             label: this.$t('tickets.type'),
-            width: '160px'
+            width: '160px',
+            formatter: row => {
+              return row.type.label
+            }
           },
           {
             prop: 'status',
@@ -80,7 +83,7 @@ export default {
             width: '90px',
             sortable: 'custom',
             formatter: row => {
-              if (row.status === 'open') {
+              if (row.status.value === 'open') {
                 return <el-tag type='primary' size='mini'> {this.$t('tickets.OpenStatus')}</el-tag>
               } else {
                 return <el-tag type='danger' size='mini'>  {this.$t('tickets.CloseStatus')}</el-tag>
@@ -102,7 +105,7 @@ export default {
                   {this.$t('tickets.Pending')}
                 </el-tag>
               }
-              switch (row.state) {
+              switch (row.state.value) {
                 case 'approved':
                   return <el-tag type='primary' size='mini'>
                     {this.$t('tickets.Approved')}

@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status.value === 'open' ? STATUS_MAP['notified'] : STATUS_MAP[this.object.state.value],
       imageUrl: require('@/assets/img/admin.png'),
       form: {
         comments: ''
@@ -38,7 +38,7 @@ export default {
         },
         {
           key: this.$t('tickets.type'),
-          value: object.type_display
+          value: object.type.lable
         },
         {
           key: this.$t('tickets.status'),

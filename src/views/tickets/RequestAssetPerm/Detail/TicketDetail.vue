@@ -20,7 +20,7 @@
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('tickets.SystemUser')" :rules="isRequired">
-            <Select2 v-model="requestForm.accounts" style="width: 50% !important" />
+            <AccountFormatter v-model="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('common.DateStart')" required>
             <el-date-picker
@@ -34,7 +34,15 @@
               type="datetime"
             />
           </el-form-item>
-          <el-form-item :label="$tc('assets.Action')" required />
+          <el-form-item :label="$tc('assets.Action')" required>
+            <el-tree
+              v-model="requestForm.actions"
+              :props="props"
+              :load="loadNode"
+              show-checkbox
+              @check-change="handleCheckChange"
+            />
+          </el-form-item>
         </el-form>
       </template>
     </IBox>
@@ -46,12 +54,13 @@ import { formatTime, getDateTimeStamp } from '@/utils/index'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { STATUS_MAP } from '../../const'
 import GenericTicketDetail from '@/views/tickets/components/GenericTicketDetail'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/FormFields/Select2'
 import IBox from '@/components/IBox'
 
 export default {
   name: '',
-  components: { GenericTicketDetail, IBox, Select2 },
+  components: { GenericTicketDetail, IBox, Select2, AccountFormatter },
   props: {
     object: {
       type: Object,
@@ -60,7 +69,7 @@ export default {
   },
   data() {
     return {
-      statusMap: this.object.status === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state],
+      statusMap: this.object.status.value === 'open' ? STATUS_MAP['pending'] : STATUS_MAP[this.object.state.value],
       requestForm: {
         nodes: this.object.apply_nodes,
         assets: this.object.apply_assets,
