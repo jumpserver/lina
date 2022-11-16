@@ -23,25 +23,25 @@
                   {{ assignee }}
                 </span>
               </div>
-              <el-button v-if="item.assignees_display.length > 5" type="text" @click="lookOver(item.assignees_display)">
+              <el-button v-if="item.assignees.length > 5" type="text" @click="lookOver(item.assignees_display)">
                 {{ $tc('tickets.CheckViewAcceptor') }}
               </el-button>
             </div>
           </div>
-          <div v-if="item.state.value ==='closed'" slot="description">
-            <div>{{ $t('tickets.Assignee') }}：{{ object.rel_snapshot.applicant }}</div>
+          <div v-if="item.state ==='closed'" slot="description">
+            <div>{{ $t('tickets.Assignee') }}: {{ object.rel_snapshot.applicant }}</div>
             <div>{{ $t('common.dateFinished') }}:  {{ toSafeLocalDateStr(item.approval_date) }}</div>
           </div>
-          <div v-if="item.state.value !=='pending' && item.state.value !=='closed'" slot="description">
-            <div> {{ $t('tickets.Assignee') }}：{{ item.processor_display }}</div>
+          <div v-if="item.state !=='pending' && item.state !=='closed'" slot="description">
+            <div> {{ $t('tickets.Assignee') }}: {{ item.processor_display }}</div>
             <div>{{ $t('common.dateFinished') }}: {{ toSafeLocalDateStr(item.approval_date) }}</div>
           </div>
         </el-step>
         <el-step
           :title="`${this.$t('tickets.FinishedTicket')}`"
         >
-          <div v-if="object['status'].value === 'closed'" slot="description">
-            <div>{{ `${this.$t('common.dateFinished')}:  ${toSafeLocalDateStr(object.date_updated)}` }}</div>
+          <div v-if="object.status.value === 'closed'" slot="description">
+            <div>{{ $t('common.dateFinished') }}: {{ toSafeLocalDateStr(object.date_updated) }}</div>
           </div>
         </el-step>
       </el-steps>
@@ -75,15 +75,12 @@ export default {
   computed: {
     ticketSteps() {
       let countApprove = 0
-      // this.process_map.sort((a, b) => a.approval_level - b.approval_level)
-      // return []
       this.process_map.forEach(item => {
         if (item.state === 'approved') {
           countApprove += 1
         }
       })
       if (countApprove === this.process_map.length) {
-        //   // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         return this.process_map.length + 2
       } else {
         return this.STATUS.open + countApprove

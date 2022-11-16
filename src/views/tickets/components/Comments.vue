@@ -27,7 +27,7 @@
       <el-form-item style="float: right">
         <template v-if="hasActionPerm">
           <el-button
-            :disabled="object.status === 'closed'"
+            :disabled="object.status.value === 'closed'"
             type="primary"
             size="small"
             @click="handleApprove"
@@ -35,7 +35,7 @@
             <i class="fa fa-check" /> {{ $t('tickets.Accept') }}
           </el-button>
           <el-button
-            :disabled="object.status === 'closed'"
+            :disabled="object.status.value === 'closed'"
             type="warning"
             size="small"
             @click="handleReject"
@@ -45,7 +45,7 @@
         </template>
         <el-button
           v-if="isSelfTicket"
-          :disabled="object.status === 'closed'"
+          :disabled="object.status.value === 'closed'"
           type="danger"
           size="small"
           @click="handleClose"
@@ -53,7 +53,7 @@
           <i class="fa fa-times" /> {{ $t('tickets.Close') }}
         </el-button>
         <el-button
-          :disabled="object.status === 'closed'"
+          :disabled="object.status.value === 'closed'"
           type="info"
           size="small"
           @click="handleComment"
@@ -111,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    switch (this.object.type) {
+    switch (this.object.type.value) {
       case 'login_confirm':
         this.type_api = 'apply-login-tickets'
         break

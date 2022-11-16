@@ -74,7 +74,7 @@ export default {
   },
 
   created() {
-    if (this.object.state === 'approved' && this.object.type === 'login_asset_confirm') {
+    if (this.object.state.value === 'approved' && this.object.type.value === 'login_asset_confirm') {
       this.init()
     }
   },
