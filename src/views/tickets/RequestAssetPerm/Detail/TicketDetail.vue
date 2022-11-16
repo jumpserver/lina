@@ -7,7 +7,7 @@
     :close="handleClose"
     :reject="handleReject"
   >
-    <IBox v-if="hasActionPerm && object.status !== 'closed'" class="box">
+    <IBox v-if="hasActionPerm && object.status.value !== 'closed'" class="box">
       <div slot="header" class="clearfix ibox-title">
         <i class="fa fa-edit" /> {{ $tc('common.Actions') }}
       </div>
@@ -198,12 +198,12 @@ export default {
         const nodeLength = this.requestForm.nodes.length
         if (assetLength === 0 && nodeLength === 0) {
           return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
-        } else if (this.requestForm.systemusers.length === 0) {
+        } else if (this.requestForm.accounts.length === 0) {
           return this.$message.error(this.$tc('common.RequiredSystemUserErrMsg'))
         }
       }
       this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
-        apply_system_users: this.requestForm.systemusers ? this.requestForm.systemusers : [],
+        apply_accounts: this.requestForm.accounts ? this.requestForm.accounts : [],
         apply_nodes: this.requestForm.nodes ? this.requestForm.nodes : [],
         apply_assets: this.requestForm.assets ? this.requestForm.assets : [],
         apply_actions: this.requestForm.actions,

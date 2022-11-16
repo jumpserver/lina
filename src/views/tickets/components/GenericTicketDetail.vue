@@ -8,7 +8,7 @@
         :title="$tc('common.ApplyInfo')"
       />
       <Details
-        v-if="object['state'] === 'approved' && assignedCardItems.length > 0"
+        v-if="object.state.value === 'approved' && assignedCardItems.length > 0"
         :detail-card-items="assignedCardItems"
         :title="$tc('tickets.AssignedInfo')"
       />
