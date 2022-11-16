@@ -226,11 +226,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog-content > > > .el-dialog__footer {
+  .dialog-content >>> .el-dialog__footer {
     padding: 0;
   }
 
-  .dialog-content > > > .el-dialog {
+  .dialog-content >>> .el-dialog {
     padding: 8px;
   }
 </style>
