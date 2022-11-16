@@ -94,7 +94,7 @@ export default {
     height: $header-height;
     line-height: $header-height;
     overflow: hidden;
-    background: #f3f3f4;
+    background: var(--color-primary);
 
     .navbar-left {
       float: left;
