@@ -14,50 +14,48 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'display_name', 'queue', 'comment', 'count', 'state', 'last_published_time'
+          'name', 'queue', 'count', 'comment', 'state', 'last_published_time'
         ],
         columnsMeta: {
           name: {
+            width: '500px',
             formatterArgs: {
               can: true
             }
           },
-          display_name: {
-            label: 'display_name',
-            formatter: row => {
-              return row.meta.display_name ? row.meta.display_name : '-'
-            }
-          },
-          comment: {
-            label: 'comment',
-            formatter: (row) => {
-              return row.meta.comment
-            }
-          },
           queue: {
-            label: 'queue',
+            width: '120px',
+            label: this.$t('ops.Queue'),
             formatter: (row) => {
               return row.meta.queue
             }
           },
+          comment: {
+            width: '300px',
+            label: this.$t('common.Comment'),
+            formatter: row => {
+              return row.meta.comment ? row.meta.comment : '-'
+            }
+          },
           last_published_time: {
+            label: this.$t('ops.LastPublishedTime'),
             width: '210px',
             formatter: (row) => {
               return row.last_published_time != null ? row.last_published_time : '-'
             }
           },
           count: {
-            label: 'success/total',
-            width: '120px',
+            label: `${this.$t('ops.success')}/${this.$t('ops.total')}`,
             formatter: (row) => {
               return <div>
-                <span Class='text-primary'>{row.success_count}</span>/
-                <span>{row.publish_count}</span>
+                <span Class='text-primary'>{row.summary.success}</span>/
+                <span>{row.summary.total}</span>
               </div>
             }
           },
           state: {
-            width: '60px',
+            label: this.$t('ops.State'),
+            width: '120px',
             align: 'center',
             formatter: (row) => {
               switch (row.state) {

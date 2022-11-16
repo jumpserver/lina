@@ -32,6 +32,18 @@ export default {
         {
           key: this.$t('common.Name'),
           value: this.object.name
+        },
+        {
+          key: this.$t('common.Comment'),
+          value: this.object.meta.comment
+        },
+        {
+          key: this.$t('ops.Queue'),
+          value: this.object.meta.queue
+        },
+        {
+          key: this.$t('ops.LastPublishedTime'),
+          value: this.object.last_published_time
         }
       ]
     }

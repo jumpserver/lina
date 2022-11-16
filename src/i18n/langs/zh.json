@@ -669,6 +669,7 @@
     "selectedAssets": "已选择资产:",
     "stat": "成功/失败/总",
     "success": "成功",
+    "total": "总共",
     "taskDetail": "任务详情",
     "taskName": "任务名称",
     "taskVersions": "任务各版本",
@@ -692,7 +693,10 @@
     "myAdhoc": "我的命令",
     "history": "历史记录",
     "createAdhoc": "创建命令",
-    "AdhocDetail": "命令详情"
+    "AdhocDetail": "命令详情",
+    "Queue": "队列",
+    "State": "状态",
+    "LastPublishedTime": "最后发布时间"
   },
   "perms": {
     "": "",

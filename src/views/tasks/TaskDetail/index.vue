@@ -11,6 +11,7 @@ import { GenericDetailPage, TabPage } from '@/layout/components'
 import TaskDetail from './TaskDetail'
 import TaskHistory from './TaskHistory'
 import CeleryTaskLog from '../CeleryTaskLog'
+
 export default {
   components: {
     GenericDetailPage,
@@ -23,9 +24,7 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        getTitle(row) {
-          return row['display_name']
-        },
+        url: '/api/v1/ops/tasks',
         activeMenu: 'TaskDetail',
         submenu: [
           {

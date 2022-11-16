@@ -21,23 +21,11 @@ export default {
       tableConfig: {
         url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
         columns: [
-          'id', 'state', 'is_finished', 'date_published', 'date_start', 'date_finished', 'actions'
+          'date_start', 'date_finished', 'state', 'is_finished', 'actions'
         ],
         columnsMeta: {
           state: {
-            label: this.$t('ops.state'),
-            width: '120px',
             formatter: (row) => {
-              switch (row.state) {
-                case 'PENDING':
-                  return <span><i Class='fa fa-spinner fa-spin' />{this.$t(`ops.${row.state}`)}</span>
-                case 'RUNNING':
-                  return <span><i Class='fa fa-spinner fa-spin' />{this.$t(`ops.${row.state}`)}</span>
-                case 'SUCCESS':
-                  return <span Class='text-success'><i Class='fa fa-check' />{this.$t(`ops.${row.state}`)}</span>
-                case 'FAILURE':
-                  return <span Class='text-danger'><i Class='fa fa-times' />{this.$t(`ops.${row.state}`)}</span>
-              }
             }
           },
           actions: {
