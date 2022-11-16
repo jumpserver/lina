@@ -20,7 +20,7 @@
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('tickets.SystemUser')" :rules="isRequired">
-            <AccountFormatter v-model="requestForm.accounts" style="width: 50% !important" />
+            <AccountFormatter v-model="requestForm.accounts" v-bind="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('common.DateStart')" required>
             <el-date-picker
@@ -37,10 +37,7 @@
           <el-form-item :label="$tc('assets.Action')" required>
             <el-tree
               v-model="requestForm.actions"
-              :props="props"
-              :load="loadNode"
-              show-checkbox
-              @check-change="handleCheckChange"
+              :data="requestForm.actions"
             />
           </el-form-item>
         </el-form>
@@ -152,7 +149,7 @@ export default {
           value: object.apply_permission_name,
           formatter: function(item, value) {
             const to = { name: 'AssetPermissionDetail', params: { id: object.id }, query: { oid: object.org_id }}
-            if (vm.$hasPerm('perms.view_assetpermission') && object.status === 'closed' && object.state === 'approved') {
+            if (vm.$hasPerm('perms.view_assetpermission') && object.status.value === 'closed' && object.state.value === 'approved') {
               return <router-link to={to}>{value}</router-link>
             } else {
               return <span>{value}</span>

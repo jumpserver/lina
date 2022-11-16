@@ -29,7 +29,7 @@ export default {
       return [
         {
           key: this.$t('tickets.type'),
-          value: this.object.type_display
+          value: this.object.type.label
         },
         {
           key: this.$t('tickets.ApprovalLevel'),
@@ -70,10 +70,10 @@ export default {
         }]
       this.object.rules.forEach((item, index) => {
         if (item.level === 1) {
-          approvalData[0].value = item.strategy_display
+          approvalData[0].value = item.strategy.label
           approvalData[1].value = item.assignees_display.join(',')
         } else {
-          approvalData[2].value = item.strategy_display
+          approvalData[2].value = item.strategy.label
           approvalData[3].value = item.assignees_display.join(',')
         }
       })

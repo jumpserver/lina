@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      STATUS: { open: 2, close: 3 },
+      status: { open: 2, close: 3 },
       process_map: this.object.process_map || [],
       vm: this,
       statusMap: STATE_MAP
@@ -83,7 +83,7 @@ export default {
       if (countApprove === this.process_map.length) {
         return this.process_map.length + 2
       } else {
-        return this.STATUS.open + countApprove
+        return this.status.open + countApprove
       }
     }
   },
