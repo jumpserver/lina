@@ -20,7 +20,7 @@
             <Select2 v-model="requestForm.assets" v-bind="assetSelect2" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('tickets.SystemUser')" :rules="isRequired">
-            <AccountFormatter v-model="requestForm.accounts" v-bind="requestForm.accounts" style="width: 50% !important" />
+            <AccountFormatter v-model="requestForm.accounts" style="width: 50% !important" />
           </el-form-item>
           <el-form-item :label="$tc('common.DateStart')" required>
             <el-date-picker
@@ -199,23 +199,27 @@ export default {
       window.location.reload()
     },
     handleApprove() {
+      const nodes = this.requestForm.nodes
+      const assets = this.requestForm.assets
+      const accounts = this.requestForm.accounts
+      console.log('nodes', nodes)
+      console.log('assets', assets)
+      console.log('accounts', accounts)
       if (this.object.approval_step === this.object.process_map.length) {
-        const assetLength = this.requestForm.assets.length
-        const nodeLength = this.requestForm.nodes.length
-        if (assetLength === 0 && nodeLength === 0) {
+        if (assets.length === 0 && nodes.length === 0) {
           return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
-        } else if (this.requestForm.accounts.length === 0) {
+        } else if (accounts.length === 0) {
           return this.$message.error(this.$tc('common.RequiredSystemUserErrMsg'))
         }
       }
       this.$axios.patch(`/api/v1/tickets/apply-asset-tickets/${this.object.id}/approve/`, {
-        apply_accounts: this.requestForm.accounts ? this.requestForm.accounts : [],
-        apply_nodes: this.requestForm.nodes ? this.requestForm.nodes : [],
-        apply_assets: this.requestForm.assets ? this.requestForm.assets : [],
+        apply_nodes: nodes || [],
+        apply_assets: assets || [],
+        apply_accounts: accounts || [],
+        org_id: this.object.org_id,
         apply_actions: this.requestForm.actions,
         apply_date_start: this.requestForm.apply_date_start,
-        apply_date_expired: this.requestForm.apply_date_expired,
-        org_id: this.object.org_id
+        apply_date_expired: this.requestForm.apply_date_expired
       }).then(() => {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
         this.reloadPage()

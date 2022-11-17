@@ -97,7 +97,7 @@ export default {
             width: '90px',
             sortable: 'custom',
             formatter: row => {
-              if (row.status === 'open') {
+              if (row.status.value === 'open') {
                 return <el-tag
                   type='success'
                   size='mini'
