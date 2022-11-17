@@ -55,19 +55,19 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
-        <el-col :md="24 - smsWidth" :sm="24">
-          <el-input v-model="SecretKey" :show-password="showPassword" :placeholder="HelpText" style="margin-bottom: 20px;" />
-        </el-col>
-        <el-col v-if="Select === 'sms'" :md="smsWidth" :sm="24">
-          <el-button
-            size="mini"
-            type="primary"
-            style="line-height:20px; float: right;"
-            :disabled="smsBtndisabled"
-            @click="sendChallengeCode"
-          >
-            {{ smsBtnText }}
-          </el-button>
+        <el-col :md="24" :sm="24" style="display: flex; margin-bottom: 20px;">
+          <el-input v-model="SecretKey" :show-password="showPassword" :placeholder="HelpText" />
+          <span v-if="Select === 'sms'" style="margin: -1px 0 0 20px;">
+            <el-button
+              size="mini"
+              type="primary"
+              style="line-height:20px; float: right;"
+              :disabled="smsBtndisabled"
+              @click="sendChallengeCode"
+            >
+              {{ smsBtnText }}
+            </el-button>
+          </span>
         </el-col>
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
