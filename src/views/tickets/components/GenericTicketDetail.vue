@@ -73,7 +73,7 @@ export default {
         },
         {
           key: this.$tc('tickets.status'),
-          value: object.state,
+          value: object.state.value,
           formatter: (item, val) => {
             const tp = this.statusMap[val]
             return <el-tag type={tp} size='small'>{this.object.state.label}</el-tag>
