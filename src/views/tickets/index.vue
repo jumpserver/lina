@@ -57,7 +57,7 @@ export default {
   methods: {
     getTicketOpenCount() {
       getTicketOpenCount(this.currentUser.id).then(data => {
-        this.assignedTicketCount = data.count
+        this.assignedTicketCount = data['count']
       })
     },
     getBadgeValue(props) {

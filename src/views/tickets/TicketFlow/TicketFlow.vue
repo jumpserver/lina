@@ -30,8 +30,8 @@ export default {
         columnsMeta: {
           org_name: {
             formatter: function(row, col, cell) {
-              var currentOrg = vm.$store.getters.currentOrg
-              return currentOrg.is_root ? row.org_name : currentOrg.name
+              const currentOrg = vm.$store.getters.currentOrg
+              return currentOrg['is_root'] ? row.org_name : currentOrg.name
             }
           },
           type: {
