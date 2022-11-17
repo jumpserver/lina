@@ -1,18 +1,26 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <JobRunDialog v-if="showJobRunDialog" :visible.sync="showJobRunDialog" :item="item" @submit="runJob" />
+    <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  </div>
 </template>
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 
 export default {
   components: {
+    JobRunDialog,
     GenericListPage
   },
   data() {
     return {
+      item: {},
+      runtime_parameters: {},
+      showJobRunDialog: false,
       tableConfig: {
         url: '/api/v1/ops/jobs/',
         columns: [
@@ -46,7 +54,12 @@ export default {
                   type: 'running',
                   can: true,
                   callback: ({ row }) => {
-                    this.runJob(row)
+                    if (row.parameters_define) {
+                      this.item = row
+                      this.showJobRunDialog = true
+                    } else {
+                      this.runJob(row)
+                    }
                   }
                 }
               ]
@@ -65,8 +78,12 @@ export default {
     }
   },
   methods: {
-    runJob(row) {
-      this.$axios.post('/api/v1/ops/job-executions/', { job: row.id }).then(data => {
+    runJob(row, parameters) {
+      console.log(row)
+      this.$axios.post('/api/v1/ops/job-executions/', {
+        job: row.id,
+        parameters: parameters
+      }).then(data => {
         this.$axios.get(`/api/v1/ops/job-executions/${data.id}/`).then(d => {
           openTaskPage(d.task_id)
         })

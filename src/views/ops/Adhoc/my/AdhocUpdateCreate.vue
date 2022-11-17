@@ -12,13 +12,6 @@ export default {
   },
   data() {
     return {
-      cmOptions: {
-        tabSize: 4,
-        mode: 'shell',
-        theme: 'base16-light',
-        lineNumbers: true,
-        line: true
-      },
       url: '/api/v1/ops/adhocs/',
       fields: [
         [this.$t('common.Basic'), ['name', 'module', 'args']]

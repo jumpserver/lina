@@ -701,7 +701,9 @@
     "Module": "模块",
     "Asset": "资产",
     "Plan": "计划",
-    "AssetAmount": "资产数量"
+    "AssetAmount": "资产数量",
+    "SelectAdhoc": "选择命令",
+    "SaveAdhoc": "保存命令"
   },
   "perms": {
     "": "",

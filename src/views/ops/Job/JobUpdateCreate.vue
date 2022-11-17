@@ -1,14 +1,14 @@
 <template>
   <div v-if="ready">
-    <GenericCreateUpdatePage v-bind="$data" />
+    <GenericCreateUpdatePage ref="form" v-bind="$data" />
   </div>
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import CodeEditor from '@/components/FormFields/CodeEditor'
 import AssetSelect from '@/components/AssetSelect'
 import { JsonEditor } from '@/components/FormFields'
+import JobCodeEditor from '@/views/ops/Job/JobCodeEditor'
 
 export default {
   components: {
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       ready: false,
+      showOpenAdhocDialog: false,
       instantTask: false,
       jobType: '',
       url: '/api/v1/ops/jobs/',
@@ -24,7 +25,7 @@ export default {
         [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
         [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('ops.Variable'), ['variables']],
+        [this.$t('ops.Variable'), ['parameters_define']],
         [this.$t('ops.Plan'), ['runAfterSave', 'periodic', 'crontab']]
       ],
       initial: {
@@ -34,7 +35,7 @@ export default {
         runas_policy: 'skip',
         runAfterSave: false,
         instant: false,
-        variables: '{}',
+        parameters_define: '{}',
         timeout: 60,
         periodic: false,
         crontab: '0 0 * * *'
@@ -81,14 +82,14 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           },
-          component: CodeEditor
+          component: JobCodeEditor
         },
         instant: {
           hidden: () => {
             return true
           }
         },
-        variables: {
+        parameters_define: {
           label: this.$t('ops.Variable'),
           component: JsonEditor
         },
@@ -138,6 +139,16 @@ export default {
       }
     } else {
       this.ready = true
+    }
+  },
+  methods: {
+    openAdhocSelectDialog() {
+      this.showOpenAdhocDialog = true
+    },
+    onSelectAdhoc(item) {
+
+    },
+    onOpenSaveAdhocDialog() {
     }
   }
 }

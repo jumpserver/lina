@@ -5,9 +5,11 @@
       style="height: 100%;width: 100%;vertical-align: middle;display: inline-block;background-color: #1ab394"
     >
       <template v-for="(item,index) in toolbar">
-        <el-button v-if="item.type==='button'" :key="index" size="mini">
-          <i :class="item.icon" />
-        </el-button>
+        <el-tooltip :key="index" :content="item.tip" placement="top">
+          <el-button v-if="item.type==='button'" size="mini" type="primary" @click="item.callback">
+            <i :class="item.icon" />
+          </el-button>
+        </el-tooltip>
       </template>
     </div>
     <codemirror ref="myCm" v-model="iValue" :options="cmOptions" />
@@ -64,6 +66,7 @@ export default {
         return this.value
       },
       set(val) {
+        this.$emit('update:value', val)
         this.$emit('change', val)
       }
     }
