@@ -49,7 +49,7 @@ export default {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      padding-left: 24px;
+      padding: 0 24px;
     }
   }
 

@@ -14,15 +14,21 @@
           icon-class="setting-fill"
           style="margin-right: 0;"
         />
-        <i
-          v-else
-          class="fa"
-          :class="isRouteMeta.icon"
-        />
+        <i v-else class="fa" :class="isRouteMeta.icon" />
         <span
           v-show="!isCollapse"
           style="margin-left: 3px;"
         >{{ isRouteMeta.title || '' }}</span>
+        <span v-show="!isCollapse" class="switch-view">
+          <el-popover
+            placement="right-start"
+            width="160"
+            trigger="click"
+          >
+            <ViewSwitcher :mode="'vertical'" />
+            <svg-icon slot="reference" icon-class="switch" />
+          </el-popover>
+        </span>
       </div>
     </div>
     <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
@@ -134,6 +140,7 @@ export default {
   }
 
   .nav-title {
+    position: relative;
     box-sizing: border-box;
     padding: 17px 0 17px 20px;
     font-size: 16px;
@@ -143,6 +150,18 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     background-color: var(--menu-bg);
+    .switch-view {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 1;
+      .svg-icon {
+        &:hover {
+          color: var(--submenu-active-text);
+        }
+      }
+    }
   }
 
   .collapsed {
@@ -159,11 +178,10 @@ export default {
     height: 48px;
     line-height: 48px;
     background-color: $subMenuBg;
-    border: 1px solid red;
 
     .toggle-bar {
       width: 55px;
-      height: 40px;
+      height: 100%;
       bottom: 0;
       left: 0;
       top: auto;

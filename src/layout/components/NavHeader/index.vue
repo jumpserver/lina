@@ -17,7 +17,9 @@
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <Tickets />
+        <el-tooltip effect="dark" :content="$tc('route.Ticket')">
+          <Tickets />
+        </el-tooltip>
       </li>
       <li class="header-item active-menu">
         <Help />
@@ -28,10 +30,7 @@
     </ul>
     <hamburger :is-active="sidebar.opened" class="hamburger-container is-show-menu" @toggleClick="toggleSideBar" />
     <ul class="navbar-left">
-      <li class="left-item">
-        <ViewSwitcher />
-      </li>
-      <li v-if="showOrganize()" class="left-item" style="margin-left: 12px">
+      <li v-if="showOrganize()" class="left-item" style="margin-left: 24px">
         <Organization class="organization" />
       </li>
     </ul>
@@ -46,14 +45,12 @@ import SiteMessages from './SiteMessages'
 import Help from './Help'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
-import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
 
 export default {
   components: {
     Hamburger,
-    ViewSwitcher,
     Organization,
     AccountDropdown,
     Help,
@@ -111,7 +108,7 @@ export default {
           height: $header-height;
         }
 
-        & > > > .org-select {
+        & >>> .org-select {
           padding: 0;
         }
       }
@@ -143,13 +140,13 @@ export default {
           background-color: #e6e6e6;
         }
 
-        & > > > i {
-          color: #7c7e7f;
+        & >>> i {
+          color: #FFF;
           font-size: 16px;
         }
 
-        & > > > .svg-icon {
-          color: #7c7e7f;
+        & >>> .svg-icon {
+          color: #FFF;
           font-size: 16px;
         }
       }
@@ -179,9 +176,9 @@ export default {
     transition: .2s;
     -webkit-tap-highlight-color: transparent;
 
-    & > > > .svg-icon {
-      font-size: 16px;
-      color: #fff;
+    & >>> .svg-icon {
+      font-size: 16px!important;
+      color: #fff!important;
     }
   }
 

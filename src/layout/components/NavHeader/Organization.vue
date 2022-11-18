@@ -7,8 +7,8 @@
     @change="changeOrg"
   >
     <template slot="prefix">
-      <i class="fa fa-sitemap icon" />
-      <span class="add" />
+      <svg-icon icon-class="organization" />
+      <span class="line" />
     </template>
 
     <el-option-group
@@ -25,8 +25,8 @@
         :value="item.id"
         :disabled="item.disabled"
       >
-        <span v-if="item.icon" style="float: right; font-size: 12px">
-          <i class="fa" :class="item.icon" />
+        <span v-if="item.icon" style="font-size: 15px; margin-right: 5px;">
+          <svg-icon :icon-class="item.icon" />
         </span>
         <span>{{ item.name }}</span>
       </el-option>
@@ -64,13 +64,13 @@ export default {
         options: [
           {
             id: 'create',
-            icon: 'fa-plus',
+            icon: 'create',
             disabled: !this.$hasPerm('orgs.add_organization'),
             name: this.$t('xpack.Organization.OrganizationCreate')
           },
           {
             id: 'list',
-            icon: 'fa-list-ul',
+            icon: 'list',
             disabled: !this.$hasPerm('orgs.view_organization'),
             name: this.$t('xpack.Organization.OrganizationLists')
           }
@@ -143,13 +143,12 @@ export default {
 }
 
 .icon {
-  color: #FFF;
   cursor: pointer;
 }
 
-.add {
+.line {
   width: 1px;
-  margin-left: 5px;
+  margin-left: 8px;
   border: .5px solid #FFF;
 }
 
@@ -160,27 +159,13 @@ export default {
   border-radius: 19px;
   color: #FFF;
 
-  &:after {
-    position: absolute;
-    top: 15%;
-    left: -16px;
-    content: '';
-    width: 1px;
-    height: 25px;
-    background-color: rgba(144, 147, 152, .5);
-  }
-
   &>>> .el-input__prefix {
-    left: 1px
+    left: 0;
   }
 
   &>>> .el-input--prefix .el-input__inner {
     line-height: 35px !important;
     height: 35px !important;
-  }
-
-  &>>> .fa-sitemap {
-    padding-left: 4px;
   }
 
   & >>> .el-input__icon {

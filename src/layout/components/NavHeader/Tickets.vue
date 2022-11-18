@@ -1,7 +1,9 @@
 <template>
   <div>
     <el-badge :value="assignedTicketCount" :hidden="assignedTicketCount===0" size="mini" type="primary">
-      <el-link class="el-link" target="_blank" @click="goToTickets">{{ $t('route.Ticket') }}</el-link>
+      <el-link class="el-link" target="_blank" @click="goToTickets">
+        <svg-icon icon-class="ticket" style="font-size: 16px;" />
+      </el-link>
     </el-badge>
   </div>
 </template>
@@ -47,5 +49,8 @@ export default {
 }
 .el-badge ::v-deep .el-badge__content.is-fixed{
   top:10px;
+}
+.icon {
+  color: #fff
 }
 </style>

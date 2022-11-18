@@ -71,7 +71,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .header-profile {
+    .el-dropdown {
+      color: #fff;
+    }
+  }
   .header-avatar {
     height: 24px;
     width: 24px;
