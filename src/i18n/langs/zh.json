@@ -703,7 +703,17 @@
     "Plan": "计划",
     "AssetAmount": "资产数量",
     "SelectAdhoc": "选择命令",
-    "SaveAdhoc": "保存命令"
+    "SaveAdhoc": "保存命令",
+    "RunJob": "运行作业",
+    "Parameter": "参数",
+    "Summary(success/total)": "概况( 成功/总数 )",
+    "DateLastRun": "上次运行日期",
+    "AverageTimeCost": "平均花费时间",
+    "ThisPeriodic": "这是一个周期作业",
+    "JobType": "作业类型",
+    "Comment": "备注",
+    "History": "执行历史",
+    "UseParameterDefine": "定义参数"
   },
   "perms": {
     "": "",
@@ -886,6 +896,7 @@
     "JobList": "作业列表",
     "JobCreate": "创建作业",
     "JobUpdate": "更新作业",
+    "JobDetail": "作业详情",
     "LabelCreate": "创建标签",
     "LabelList": "标签管理",
     "LabelUpdate": "更新标签",

@@ -7,7 +7,7 @@
 
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
-import { ActionsFormatter } from '@/components/TableFormatters'
+import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 
@@ -24,19 +24,54 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/jobs/',
         columns: [
-          'name', 'type', 'asset_amount', 'comment', 'date_updated', 'date_created', 'actions'
+          'name', 'type', 'summary', 'average_time_cost', 'asset_amount', 'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'type', 'asset_amount', 'average_time_cost', 'summary', 'comment', 'date_last_run', 'actions']
+        },
         columnsMeta: {
           name: {
             formatterArgs: {
               can: true
             }
           },
+          type: {
+            formatter: (row) => {
+              if (row.is_periodic) {
+                return <span>{row.type}&nbsp;
+                  <el-tooltip content={this.$t('ops.ThisPeriodic')}>
+                    <i Class='fa  fa-circle-o text-primary' />
+                  </el-tooltip>
+                </span>
+              }
+              return <span>{row.type}</span>
+            }
+          },
+          summary: {
+            label: this.$t('ops.Summary(success/total)'),
+            width: '140px',
+            formatter: (row) => {
+              return row.summary['success'] + '/' + row.summary['total']
+            }
+          },
+          average_time_cost: {
+            label: this.$t('ops.AverageTimeCost'),
+            width: '140px',
+            formatter: (row) => {
+              return row.average_time_cost.toFixed(2) + 's'
+            }
+          },
           asset_amount: {
+            width: '140px',
             label: this.$t('ops.AssetAmount'),
             formatter: (row) => {
               return row.assets.length
             }
+          },
+          date_last_run: {
+            label: this.$t('ops.DateLastRun'),
+            formatter: DateFormatter
           },
           actions: {
             formatter: ActionsFormatter,
@@ -54,7 +89,8 @@ export default {
                   type: 'running',
                   can: true,
                   callback: ({ row }) => {
-                    if (row.parameters_define) {
+                    const params = JSON.parse(row.parameters_define)
+                    if (Object.keys(params).length > 0) {
                       this.item = row
                       this.showJobRunDialog = true
                     } else {

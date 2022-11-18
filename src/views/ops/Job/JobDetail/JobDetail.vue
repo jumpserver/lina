@@ -31,6 +31,30 @@ export default {
         {
           key: this.$t('common.Name'),
           value: this.object.name
+        },
+        {
+          key: this.$t('ops.JobType'),
+          value: this.object.type
+        },
+        {
+          key: this.$t('ops.Comment'),
+          value: this.object.comment
+        },
+        {
+          key: this.$t('ops.AverageTimeCost'),
+          value: this.object.average_time_cost.toFixed(2) + 's'
+        },
+        {
+          key: this.$t('ops.DateLastRun'),
+          value: this.object.date_last_run
+        },
+        {
+          key: this.$t('common.DateUpdated'),
+          value: this.object.date_updated
+        },
+        {
+          key: this.$t('common.DateCreated'),
+          value: this.object.date_created
         }
       ]
     }

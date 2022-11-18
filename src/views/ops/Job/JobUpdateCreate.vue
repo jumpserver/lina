@@ -9,6 +9,8 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/AssetSelect'
 import { JsonEditor } from '@/components/FormFields'
 import JobCodeEditor from '@/views/ops/Job/JobCodeEditor'
+import { CronTab } from '@/components'
+import i18n from '@/i18n/i18n'
 
 export default {
   components: {
@@ -25,8 +27,8 @@ export default {
         [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
         [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('ops.Variable'), ['parameters_define']],
-        [this.$t('ops.Plan'), ['runAfterSave', 'periodic', 'crontab']]
+        [this.$t('ops.Plan'), ['runAfterSave', 'is_periodic', 'crontab']],
+        [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']]
       ],
       initial: {
         type: 'adhoc',
@@ -37,7 +39,7 @@ export default {
         instant: false,
         parameters_define: '{}',
         timeout: 60,
-        periodic: false,
+        is_periodic: false,
         crontab: '0 0 * * *'
       },
       fieldsMeta: {
@@ -91,7 +93,10 @@ export default {
         },
         parameters_define: {
           label: this.$t('ops.Variable'),
-          component: JsonEditor
+          component: JsonEditor,
+          hidden: (formValue) => {
+            return !formValue.use_parameter_define
+          }
         },
         chdir: {
           hidden: (formValue) => {
@@ -105,15 +110,21 @@ export default {
             return formValue.instant
           }
         },
-        periodic: {
-          label: '定时执行',
-          type: 'checkbox'
+        use_parameter_define: {
+          label: this.$t('ops.UseParameterDefine'),
+          type: 'switch'
+        },
+        is_periodic: {
+          type: 'switch'
         },
         crontab: {
-          label: '表达式',
+          type: 'cronTab',
+          component: CronTab,
+          label: i18n.t('xpack.RegularlyPerform'),
           hidden: (formValue) => {
-            return !formValue.periodic
-          }
+            return formValue.is_periodic === false
+          },
+          helpText: i18n.t('xpack.HelpText.CrontabOfCreateUpdatePage')
         }
       }
     }

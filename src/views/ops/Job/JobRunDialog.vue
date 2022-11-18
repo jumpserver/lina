@@ -1,7 +1,7 @@
 <template>
   <Dialog
-    v-if="iVisible"
-    :title="$tc('ops.SaveAdhoc')"
+    v-if="iVisible && ready"
+    :title="$tc('ops.RunJob')"
     :visible.sync="iVisible"
     width="50%"
     top="1vh"
@@ -10,7 +10,7 @@
   >
     <el-form ref="form" :model="form" label-width="140px">
       <el-form-item v-for="(item,key,index) in vars" :key="index" :label="item.label">
-        <template v-if="item.type === 'select'">
+        <div v-if="item.type === 'select'">
           <el-select v-model="form[key]">
             <el-option
               v-for="option in item.options"
@@ -19,10 +19,10 @@
               :value="option.value"
             />
           </el-select>
-        </template>
-        <template v-else>
+        </div>
+        <div v-else>
           <el-input v-model="form[key]" />
-        </template>
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">执行</el-button>
@@ -50,6 +50,7 @@ export default {
   },
   data() {
     return {
+      ready: false,
       vars: {},
       form: {}
     }
@@ -67,8 +68,9 @@ export default {
   mounted() {
     this.vars = JSON.parse(this.item.parameters_define)
     for (const key of Object.keys(this.vars)) {
-      this.form[key] = this.vars[key].default || ''
+      this.$set(this.form, key, this.vars[key].default || '')
     }
+    this.ready = true
   },
   methods: {
     onSubmit() {
