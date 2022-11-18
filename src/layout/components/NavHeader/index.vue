@@ -88,7 +88,7 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-  $header-height: 55px;
+  $header-height: 52px;
   .navbar {
     position: relative;
     height: $header-height;
@@ -104,7 +104,7 @@ export default {
         display: inline-block;
         vertical-align: middle;
 
-        & > > > .el-submenu__title {
+        & >>> .el-submenu__title {
           font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $header-height;

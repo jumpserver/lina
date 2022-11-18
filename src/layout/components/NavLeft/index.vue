@@ -126,22 +126,23 @@ export default {
   @import "~@/styles/variables.scss";
   .nav-header {
     overflow: hidden;
-    background: $subMenuBg url('~@/assets/img/header-profile.png') no-repeat center center;
+    background-color: var(--color-primary);
   }
 
   .nav-logo {
-    height: 55px;
+    height: 52px;
   }
 
   .nav-title {
     box-sizing: border-box;
-    margin: 17px 0 17px 20px;
-    font-size: 15px;
-    font-weight: 460;
-    color: #fff;
+    padding: 17px 0 17px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1F2329;
     overflow: hidden;
     white-space: nowrap;
     cursor: pointer;
+    background-color: var(--menu-bg);
   }
 
   .collapsed {
@@ -155,8 +156,10 @@ export default {
   .nav-footer {
     display: block;
     width: 100%;
-    height: 40px;
+    height: 48px;
+    line-height: 48px;
     background-color: $subMenuBg;
+    border: 1px solid red;
 
     .toggle-bar {
       width: 55px;
