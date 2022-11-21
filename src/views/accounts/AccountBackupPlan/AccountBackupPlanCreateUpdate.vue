@@ -18,7 +18,7 @@ export default {
       url: '/api/v1/assets/account-backup-plans/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.AccountBackupPlan.Types'), ['categories']],
+        [this.$t('xpack.AccountBackupPlan.Types'), ['types']],
         [this.$t('xpack.AccountBackupPlan.Backup'), ['recipients']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
@@ -33,7 +33,7 @@ export default {
         crontab: fields.crontab,
         interval: fields.interval,
         recipients: fields.recipients,
-        categories: {
+        types: {
           component: 'el-cascader',
           label: this.$t('xpack.AccountBackupPlan.Types'),
           remote: {
