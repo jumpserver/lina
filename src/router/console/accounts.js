@@ -154,17 +154,17 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/ChangeAuthPlan/index.vue'),
-        name: 'ChangeAuthPlanIndex',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/index.vue'),
+        name: 'ChangeSecreAtutomationIndex',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
           permissions: ['assets.view_changesecretautomation']
         }
       },
       {
-        path: 'plan',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanList.vue'),
-        name: 'AssetChangeAuthPlanList',
+        path: 'atutomation',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationList.vue'),
+        name: 'ChangeSecreAtutomationList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
           permissions: ['assets.view_changesecretautomation']
@@ -172,9 +172,9 @@ export default [
         hidden: true
       },
       {
-        path: 'plan/create',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-        name: 'AssetChangeAuthPlanCreate',
+        path: 'atutomation/create',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationCreateUpdate.vue'),
+        name: 'ChangeSecreAtutomationCreate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
@@ -182,9 +182,9 @@ export default [
         }
       },
       {
-        path: 'plan/:id/update',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-        name: 'AssetChangeAuthPlanUpdate',
+        path: 'atutomation/:id/update',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationCreateUpdate.vue'),
+        name: 'ChangeSecreAtutomationUpdate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
@@ -192,9 +192,9 @@ export default [
         }
       },
       {
-        path: 'plan/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
-        name: 'AssetChangeAuthPlanDetail',
+        path: 'atutomation/:id',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationDetail/index.vue'),
+        name: 'ChangeSecreAtutomationDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
@@ -203,7 +203,7 @@ export default [
       },
       {
         path: 'execution/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationDetail/ChangeSecreAtutomationExecution/ChangeSecreAtutomationExecutionDetail/index.vue'),
         name: 'ChangeAuthPlanExecutionDetail',
         hidden: true,
         meta: {

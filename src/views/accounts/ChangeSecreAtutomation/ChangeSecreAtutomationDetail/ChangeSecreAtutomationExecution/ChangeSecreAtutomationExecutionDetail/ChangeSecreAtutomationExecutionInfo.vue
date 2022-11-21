@@ -11,7 +11,7 @@ import DetailCard from '@/components/DetailCard'
 import { toSafeLocalDateStr } from '@/utils/common'
 
 export default {
-  name: 'ChangeAuthPlanExecutionInfo',
+  name: 'ChangeSecreAtutomationExecutionInfo',
   components: {
     DetailCard
   },

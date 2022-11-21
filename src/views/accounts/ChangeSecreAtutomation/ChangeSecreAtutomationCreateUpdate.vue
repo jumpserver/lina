@@ -4,10 +4,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { getFields } from '@/views/accounts/ChangeAuthPlan/fields'
+import { getFields } from '@/views/accounts/ChangeSecreAtutomation/fields'
 
 export default {
-  name: 'AssetChangeAuthPlanCreateUpdate',
+  name: 'ChangeSecreAtutomationCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -40,8 +40,8 @@ export default {
       fieldsMeta: {
         ...getFields()
       },
-      createSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
-      updateSuccessNextRoute: { name: 'ChangeAuthPlanIndex' },
+      createSuccessNextRoute: { name: 'ChangeSecreAtutomationIndex' },
+      updateSuccessNextRoute: { name: 'ChangeSecreAtutomationIndex' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''

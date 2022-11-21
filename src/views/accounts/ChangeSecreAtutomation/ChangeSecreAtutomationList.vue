@@ -8,7 +8,7 @@ import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'AssetChangeAuthPlanList',
+  name: 'ChangeSecreAtutomationList',
   components: {
     GenericListTable
   },
@@ -29,7 +29,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AssetChangeAuthPlanDetail'
+              route: 'ChangeSecreAtutomationDetail'
             }
           },
           username: {
@@ -65,9 +65,9 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AssetChangeAuthPlanDetail',
+              route: 'ChangeSecreAtutomationDetail',
               routeQuery: {
-                activeTab: 'AssetChangeAuthPlanExecutionList'
+                activeTab: 'ChangeSecreAtutomationExecutionList'
               }
             }
           },
@@ -78,10 +78,10 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'AssetChangeAuthPlanCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'ChangeSecreAtutomationCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'AssetChangeAuthPlanUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'ChangeSecreAtutomationUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
@@ -113,7 +113,7 @@ export default {
         hasMoreActions: false,
         createRoute: () => {
           return {
-            name: 'AssetChangeAuthPlanCreate'
+            name: 'ChangeSecreAtutomationCreate'
           }
         }
       }

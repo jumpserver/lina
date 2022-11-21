@@ -6,7 +6,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'ChangeAuthPlanExecution',
+  name: 'ChangeSecreAtutomationExecution',
   components: {
     GenericListTable
   },

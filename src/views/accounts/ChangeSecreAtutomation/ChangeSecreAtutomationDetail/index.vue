@@ -8,16 +8,16 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ChangeAuthPlanInfo from './ChangeAuthPlanInfo'
-import ChangeAuthPlanAsset from './ChangeAuthPlanAsset/index'
-import ChangeAuthPlanExecutionList from './ChangeAuthPlanExecution/ChangeAuthPlanExecutionList'
+import ChangeSecreAtutomationInfo from './ChangeSecreAtutomationInfo'
+import ChangeSecreAtutomationAsset from './ChangeSecreAtutomationAsset/index'
+import ChangeSecreAtutomationExecutionList from './ChangeSecreAtutomationExecution/ChangeSecreAtutomationExecutionList'
 
 export default {
   components: {
     GenericDetailPage,
-    ChangeAuthPlanInfo,
-    ChangeAuthPlanAsset,
-    ChangeAuthPlanExecutionList
+    ChangeSecreAtutomationInfo,
+    ChangeSecreAtutomationAsset,
+    ChangeSecreAtutomationExecutionList
   },
   data() {
     return {
@@ -28,17 +28,17 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'ChangeAuthPlanInfo',
+            name: 'ChangeSecreAtutomationInfo',
             hidden: () => !this.$hasPerm('assets.view_changesecretautomation')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
-            name: 'ChangeAuthPlanAsset',
+            name: 'ChangeSecreAtutomationAsset',
             hidden: () => !this.$hasPerm('assets.change_changesecretautomation')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'ChangeAuthPlanExecutionList',
+            name: 'ChangeSecreAtutomationExecutionList',
             hidden: () => !this.$hasPerm('assets.view_automationexecution')
           }
         ]

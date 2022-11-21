@@ -8,21 +8,21 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ChangeAuthPlanExecutionInfo from './ChangeAuthPlanExecutionInfo'
-import ChangeAuthPlanExecutionTaskList from './ChangeAuthPlanExecutionTaskList'
+import ChangeSecreAtutomationExecutionInfo from './ChangeSecreAtutomationExecutionInfo'
+import ChangeSecreAtutomationExecutionTaskList from './ChangeSecreAtutomationExecutionTaskList'
 
 export default {
   components: {
     GenericDetailPage,
-    ChangeAuthPlanExecutionInfo,
-    ChangeAuthPlanExecutionTaskList
+    ChangeSecreAtutomationExecutionInfo,
+    ChangeSecreAtutomationExecutionTaskList
   },
   data() {
     return {
       execution: { id: '' },
       config: {
         url: '/api/v1/assets/automation-executions/',
-        activeMenu: 'ChangeAuthPlanExecutionInfo',
+        activeMenu: 'ChangeSecreAtutomationExecutionInfo',
         actions: {
           hasUpdate: false,
           hasDelete: false
@@ -30,12 +30,12 @@ export default {
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'ChangeAuthPlanExecutionInfo',
+            name: 'ChangeSecreAtutomationExecutionInfo',
             hidden: () => !this.$hasPerm('assets.view_automationexecution')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.TaskList'),
-            name: 'ChangeAuthPlanExecutionTaskList',
+            name: 'ChangeSecreAtutomationExecutionTaskList',
             hidden: () => !this.$hasPerm('assets.view_changesecretrecord')
           }
         ],
