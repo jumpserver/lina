@@ -23,7 +23,7 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
-          'asset', 'account', 'date_started', 'date_finished', 'status', 'error'
+          'asset', 'account', 'date_started', 'date_finished', 'timedelta', 'status', 'error'
         ],
         columnsMeta: {
           asset: {
