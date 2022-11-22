@@ -73,8 +73,9 @@ export default {
     }
 
     & .sidebar-logo-text {
-      width: 165px;
-      height: 50px;
+      width: 150px;
+      height: 45px;
+      padding: 2px 0;
       vertical-align: middle;
       margin-right: 12px;
     }
