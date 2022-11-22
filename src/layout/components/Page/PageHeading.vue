@@ -41,8 +41,8 @@ export default {
 <style lang="scss" scoped>
   .page-heading {
     position: relative;
-    height: 52px;
-    line-height: 52px;
+    height: 50px;
+    line-height: 50px;
     background-color: #ffffff;
     .el-row {
       width: 100%;

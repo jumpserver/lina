@@ -134,7 +134,7 @@ export default {
   }
 
   .nav-logo {
-    height: 52px;
+    height: 50px;
   }
 
   .nav-title {

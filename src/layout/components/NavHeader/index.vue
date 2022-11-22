@@ -85,7 +85,7 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-  $header-height: 52px;
+  $header-height: 50px;
   .navbar {
     position: relative;
     height: $header-height;
