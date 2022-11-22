@@ -10,19 +10,23 @@
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         <svg-icon
-          v-if="isRouteMeta.view === 'settings'"
-          icon-class="setting-fill"
+          :icon-class="isRouteMeta.icon"
           style="margin-right: 0;"
-        />
-        <i
-          v-else
-          class="fa"
-          :class="isRouteMeta.icon"
         />
         <span
           v-show="!isCollapse"
           style="margin-left: 3px;"
         >{{ isRouteMeta.title || '' }}</span>
+        <span v-show="!isCollapse" class="switch-view">
+          <el-popover
+            placement="right-start"
+            width="160"
+            trigger="click"
+          >
+            <ViewSwitcher :mode="'vertical'" />
+            <svg-icon slot="reference" class="icon" icon-class="switch" />
+          </el-popover>
+        </span>
       </div>
     </div>
     <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
@@ -126,22 +130,39 @@ export default {
   @import "~@/styles/variables.scss";
   .nav-header {
     overflow: hidden;
-    background: $subMenuBg url('~@/assets/img/header-profile.png') no-repeat center center;
+    background-color: var(--color-primary);
   }
 
   .nav-logo {
-    height: 55px;
+    height: 52px;
   }
 
   .nav-title {
+    position: relative;
     box-sizing: border-box;
-    margin: 17px 0 17px 20px;
-    font-size: 15px;
-    font-weight: 460;
-    color: #fff;
+    padding: 17px 0 17px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1F2329;
     overflow: hidden;
     white-space: nowrap;
     cursor: pointer;
+    background-color: var(--menu-bg);
+    .switch-view {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 1;
+      &:hover {
+        color: var(--menu-active-text);
+      }
+      .icon {
+        &:hover {
+          color: var(--submenu-active-text);
+        }
+      }
+    }
   }
 
   .collapsed {
@@ -155,12 +176,13 @@ export default {
   .nav-footer {
     display: block;
     width: 100%;
-    height: 40px;
+    height: 48px;
+    line-height: 48px;
     background-color: $subMenuBg;
 
     .toggle-bar {
       width: 55px;
-      height: 40px;
+      height: 100%;
       bottom: 0;
       left: 0;
       top: auto;

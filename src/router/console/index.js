@@ -17,7 +17,7 @@ export default {
   redirect: '/console/dashboard',
   meta: {
     title: i18n.t('common.nav.Console'),
-    icon: 'el-icon-s-operation',
+    icon: 'console',
     view: 'console',
     type: 'view',
     showNavSwitcher: () => {
@@ -52,7 +52,7 @@ export default {
       name: 'Assets',
       meta: {
         title: i18n.t('route.Assets'),
-        icon: 'inbox'
+        icon: 'assets'
       },
       children: AssetsRoute
     },
@@ -62,7 +62,7 @@ export default {
       name: 'Accounts',
       meta: {
         title: i18n.t('route.Accounts'),
-        icon: 'address-book'
+        icon: 'accounts'
       },
       children: AccountRoutes
     },
@@ -72,7 +72,7 @@ export default {
       name: 'Perms',
       meta: {
         title: i18n.t('route.Perms'),
-        icon: 'edit'
+        icon: 'permission'
       },
       children: PermsRoute
     },
@@ -83,7 +83,7 @@ export default {
       meta: {
         licenseRequired: true,
         title: i18n.t('route.Acl'),
-        icon: 'fort-awesome'
+        icon: 'lock'
       },
       children: AclRoutes
     },

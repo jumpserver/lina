@@ -13,7 +13,7 @@ export default {
   redirect: '/audit/dashboard',
   meta: {
     title: i18n.t('common.nav.Audits'),
-    icon: 'el-icon-s-claim',
+    icon: 'audit',
     showNavSwitcher: () => {
       return store.getters.auditOrgs.length > 0
     },
@@ -38,7 +38,7 @@ export default {
       redirect: '/audit/sessions/sessions',
       meta: {
         title: i18n.t('route.SessionsAudit'),
-        icon: 'rocket',
+        icon: 'session',
         permissions: []
       },
       children: SessionRoutes
@@ -50,7 +50,7 @@ export default {
       name: 'Audits',
       meta: {
         title: i18n.t('route.LogsAudit'),
-        icon: 'history',
+        icon: 'log',
         permissions: []
       },
       children: LogRoutes

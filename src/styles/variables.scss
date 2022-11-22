@@ -23,7 +23,8 @@ $menuTextWeight: 600;
 $menuHover: var(--menu-hover);
 $subMenuBg: var(--submenu-bg);
 $subMenuHover: var(--submenu-hover);
-$sideBarWidth: 220px;
+$subMenuActiveText: var(--submenu-active-text);
+$sideBarWidth: 200px;
 
 :export {
     color-primary: $--color-primary;

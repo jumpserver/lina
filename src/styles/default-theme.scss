@@ -1,29 +1,31 @@
 :root {
-  --color-primary: #1ab394;
+  --color-primary: #2b937c;
   --color-success: #2793d7;
   --color-info: #1c84c6;
   --color-warning: #f8ac59;
   --color-danger: #ed5565;
-  --menu-bg: #2f4050;
-  --menu-text: #a7b1c2;
-  --menu-hover: #293846;
-  --submenu-bg: #1f2d3d;
-  --submenu-hover: #001528;
-  --menu-active-text: white;
-  --menu-active-left: #1ab394;
+  --menu-bg: #ffffff;
+  --menu-text: #646A73;
+  --menu-hover: #f4faf9;
+  --submenu-bg: #ffffff;
+  --submenu-hover: #f4faf9;
+  --submenu-active-text: #2b937c;
+  --menu-active-text: #1F2329;
+  --menu-active-left: #2b937c;
 }
 
 :export {
-  --color-primary: #1ab394;
+  --color-primary: #2b937c;
   --color-success: #2793d7;
   --color-info: #1c84c6;
   --color-warning: #f8ac59;
   --color-danger: #ed5565;
-  --menu-bg: #2f4050;
-  --menu-text: #a7b1c2;
-  --menu-hover: #293846;
-  --submenu-bg: #1f2d3d;
-  --submenu-hover: #001528;
-  --menu-active-text: white;
-  --menu-active-left: #1ab394;
+  --menu-bg: #ffffff;
+  --menu-text: #646A73;
+  --menu-hover: #f4faf9;
+  --submenu-bg: #ffffff;
+  --submenu-hover: #f4faf9;
+  --submenu-active-text: #2b937c;
+  --menu-active-text: #1F2329;
+  --menu-active-left: #2b937c;
 }

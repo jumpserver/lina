@@ -7,7 +7,8 @@
     @change="changeOrg"
   >
     <template slot="prefix">
-      <i class="fa fa-sitemap icon" />
+      <svg-icon icon-class="organization" />
+      <span class="line" />
     </template>
 
     <el-option-group
@@ -24,8 +25,8 @@
         :value="item.id"
         :disabled="item.disabled"
       >
-        <span v-if="item.icon" style="float: right; font-size: 12px">
-          <i class="fa" :class="item.icon" />
+        <span v-if="item.icon" style="font-size: 15px; margin-right: 5px;">
+          <svg-icon :icon-class="item.icon" />
         </span>
         <span>{{ item.name }}</span>
       </el-option>
@@ -63,13 +64,13 @@ export default {
         options: [
           {
             id: 'create',
-            icon: 'fa-plus',
+            icon: 'create',
             disabled: !this.$hasPerm('orgs.add_organization'),
             name: this.$t('xpack.Organization.OrganizationCreate')
           },
           {
             id: 'list',
-            icon: 'fa-list-ul',
+            icon: 'list',
             disabled: !this.$hasPerm('orgs.view_organization'),
             name: this.$t('xpack.Organization.OrganizationLists')
           }
@@ -142,50 +143,41 @@ export default {
 }
 
 .icon {
-  color: #606266;
   cursor: pointer;
+}
+
+.line {
+  width: 1px;
+  margin-left: 8px;
+  border: .5px solid #FFF;
 }
 
 .organization {
   height: 35px;
   line-height: 35px;
-  background: #E0E0E0;
+  background: transparent;
   border-radius: 19px;
-  color: #606266;
+  color: #FFF;
 
-  &:after {
-    position: absolute;
-    top: 15%;
-    left: -16px;
-    content: '';
-    width: 1px;
-    height: 25px;
-    background-color: rgba(144, 147, 152, .5);
+  &>>> .el-input__prefix {
+    left: 0;
   }
 
-  & > > > .el-input__prefix {
-    left: 8px
-  }
-
-  & > > > .el-input--prefix .el-input__inner {
+  &>>> .el-input--prefix .el-input__inner {
     line-height: 35px !important;
     height: 35px !important;
   }
 
-  & > > > .fa-sitemap {
-    padding-left: 4px;
-  }
-
-  & > > > .el-input__icon {
+  & >>> .el-input__icon {
     color: #606266;
   }
 
-  & > > > .el-input .el-select__caret {
-    color: #8d8f93;
+  & >>> .el-input .el-select__caret {
+    color: #FFF;
   }
 }
 
-.option-group > > > .el-select-group__title {
+.option-group >>> .el-select-group__title {
   color: #909399 !important;
   padding-left: 15px;
   font-size: 12px;

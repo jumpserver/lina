@@ -39,7 +39,7 @@
 
     &.has-logo {
       .el-scrollbar {
-        height: calc(100% - 150px);
+        height: calc(100% - 157px);
       }
     }
 
@@ -55,6 +55,7 @@
 
     .svg-icon {
       margin-right: 16px;
+      vertical-align: middle;
     }
 
     .el-menu {
@@ -99,23 +100,12 @@
       padding: 0 !important;
       position: relative;
 
-      .el-tooltip {
-        // padding: 0 !important;
-        .svg-icon {
-          margin-left: 20px;
-        }
-      }
     }
 
     .el-submenu-sidebar {
       overflow: hidden;
 
       &>.el-submenu__title {
-        // padding: 0 !important;
-
-        .svg-icon {
-          margin-left: 20px;
-        }
 
         .el-submenu__icon-arrow {
           display: none;
@@ -188,7 +178,7 @@
   // the scroll bar appears when the subMenu is too long
   >.el-menu--popup {
     max-height: 100vh;
-    overflow-y: auto;
+    overflow: hidden;
 
     &::-webkit-scrollbar-track-piece {
       background: #d3dce6;
@@ -201,6 +191,14 @@
     &::-webkit-scrollbar-thumb {
       background: #99a9bf;
       border-radius: 20px;
+    }
+
+    .el-menu-item {
+      height: 36px;
+      line-height: 36px;
+      &.is-active {
+        border-left: 4px solid $menuActiveLeft;
+      }
     }
   }
 }

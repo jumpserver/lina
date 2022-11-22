@@ -25,7 +25,7 @@ export default {
       if (this.device === 'mobile') {
         return ''
       }
-      return this.sidebar.opened ? ('margin-left: 220px;') : ('margin-left: 54px')
+      return this.sidebar.opened ? ('margin-left: 200px;') : ('margin-left: 54px')
     },
     corporation() {
       return this.publicSettings.XPACK_LICENSE_INFO.corporation
@@ -47,11 +47,12 @@ export default {
     left: 0;
     right: 0;
     z-index: 1000;
-    padding: 10px 20px;
+    padding: 0 24px;
     background: white;
     border-top: 1px solid #e7eaec;
     transition:margin-left 0.3s;
-    //border-top: 1px solid #e7eaec;
+    height: 48px;
+    line-height: 48px;
     div{
         font-size: 13px;
     }

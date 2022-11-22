@@ -8,7 +8,7 @@ export default {
   component: Layout,
   meta: {
     title: i18n.t('route.Tickets'),
-    icon: 'fa-check-square-o',
+    icon: 'ticket-list',
     view: 'tickets',
     type: 'view',
     showNavSwitcher: false,
@@ -23,7 +23,7 @@ export default {
       component: () => import('@/views/tickets/MyTicketList'),
       meta: {
         title: i18n.t('route.MyTickets'),
-        icon: 'file-text-o',
+        icon: 'ticket-apply',
         showOrganization: false,
         permissions: []
       }
@@ -35,7 +35,7 @@ export default {
       component: () => import('@/views/tickets/AssignedTicketList'),
       meta: {
         title: i18n.t('route.AssignedTicketList'),
-        icon: 'check-square-o',
+        icon: 'ticket-approval',
         showOrganization: false,
         permissions: []
       }
@@ -119,7 +119,7 @@ export default {
       redirect: '',
       meta: {
         title: i18n.t('tickets.FlowSetUp'),
-        icon: 'sort-amount-asc',
+        icon: 'ticket-flow',
         permissions: ['tickets.view_ticketflow'],
         resource: 'ticketflow'
       },

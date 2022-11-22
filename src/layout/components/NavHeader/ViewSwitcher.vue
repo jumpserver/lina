@@ -14,25 +14,14 @@
       :mode="mode"
       @select="handleSelectView"
     >
-      <el-submenu
-        index="2"
-        popper-class="view-switcher"
+      <el-menu-item
+        v-for="view of views"
+        :key="view.name"
+        :index="view.name"
       >
-        <template slot="title">
-          <span class="title-label">
-            <i class="fa fa-bars" />
-            <span>{{ $t('common.nav.View') }}</span>
-          </span>
-        </template>
-        <el-menu-item
-          v-for="view of views"
-          :key="view.name"
-          :index="view.name"
-        >
-          <i v-if="mode === 'horizontal'" class="icons" :class="view.meta.icon" />
-          <span slot="title" class="icons-title">{{ view.meta.title }}</span>
-        </el-menu-item>
-      </el-submenu>
+        <svg-icon class="icons" :icon-class="view.meta.icon" />
+        <span slot="title" class="icons-title">{{ view.meta.title }}</span>
+      </el-menu-item>
     </el-menu>
   </el-tooltip>
 </template>
@@ -133,10 +122,10 @@ export default {
 <style lang="scss" scoped>
 .menu-main.el-menu {
   background-color: transparent;
-  // margin-top: -5px;
+  border-right: none!important;
   ::v-deep .el-submenu .el-submenu__title {
-    height: 55px;
-    line-height: 55px;
+    height: 40px;
+    line-height: 40px;
     border-bottom: none;
   }
   &.el-menu--horizontal {
@@ -145,6 +134,17 @@ export default {
   &>>> .el-icon-arrow-down {
     font-size: 13px;
     color: #606266;
+  }
+  .el-menu-item {
+    height: 36px;
+    line-height: 26px;
+    padding: 4px 24px;
+    &:hover {
+      background-color: var(--menu-hover);
+    }
+    &:focus {
+      background-color: transparent;
+    }
   }
 }
 
@@ -176,9 +176,10 @@ export default {
   color: #606266!important;
 }
 .icons {
-  display: block;
-  font-size: 23px;
+  vertical-align: middle!important;
+  font-size: 16px;
   text-align: center;
+  color: #1F2329;
 }
 .icons-title {
   display: inline-block;
@@ -186,6 +187,8 @@ export default {
 }
 .el-menu-item.is-active {
   font-weight: bold;
+  color: var(--submenu-active-text);
+  border-left: 4px solid var(--menu-active-left);
 }
 .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
   right: 10px;

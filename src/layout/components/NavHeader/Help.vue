@@ -1,7 +1,7 @@
 <template>
   <el-dropdown :show-timeout="50" @command="handleCommand">
-    <span class="el-dropdown-link">
-      {{ $t('common.nav.Help') }}<i class="el-icon-arrow-down el-icon--right" />
+    <span class="el-dropdown-link" style="vertical-align: sub;">
+      <svg-icon icon-class="question-mark" style="font-size: 16px;" />
     </span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="docs">{{ $t('common.nav.Docs') }}</el-dropdown-item>
@@ -57,5 +57,7 @@ export default {
 </script>
 
 <style scoped>
-
+.icon {
+  color: #fff;
+}
 </style>

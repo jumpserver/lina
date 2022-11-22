@@ -17,7 +17,9 @@
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <Tickets />
+        <el-tooltip effect="dark" :content="$tc('route.Ticket')">
+          <Tickets />
+        </el-tooltip>
       </li>
       <li class="header-item active-menu">
         <Help />
@@ -28,10 +30,7 @@
     </ul>
     <hamburger :is-active="sidebar.opened" class="hamburger-container is-show-menu" @toggleClick="toggleSideBar" />
     <ul class="navbar-left">
-      <li class="left-item">
-        <ViewSwitcher />
-      </li>
-      <li v-if="showOrganize()" class="left-item" style="margin-left: 12px">
+      <li v-if="showOrganize()" class="left-item" style="margin-left: 24px">
         <Organization class="organization" />
       </li>
     </ul>
@@ -46,14 +45,12 @@ import SiteMessages from './SiteMessages'
 import Help from './Help'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
-import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
 
 export default {
   components: {
     Hamburger,
-    ViewSwitcher,
     Organization,
     AccountDropdown,
     Help,
@@ -88,13 +85,13 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
 
-  $header-height: 55px;
+  $header-height: 52px;
   .navbar {
     position: relative;
     height: $header-height;
     line-height: $header-height;
     overflow: hidden;
-    background: #f3f3f4;
+    background: var(--color-primary);
 
     .navbar-left {
       float: left;
@@ -104,14 +101,14 @@ export default {
         display: inline-block;
         vertical-align: middle;
 
-        & > > > .el-submenu__title {
+        & >>> .el-submenu__title {
           font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $header-height;
           height: $header-height;
         }
 
-        & > > > .org-select {
+        & >>> .org-select {
           padding: 0;
         }
       }
@@ -123,7 +120,7 @@ export default {
 
       .header-hover {
         &:hover {
-          background-color: #e6e6e6;
+          background-color: rgba(255, 255, 255, .2);
         }
       }
 
@@ -133,6 +130,9 @@ export default {
         padding-right: 10px;
         padding-left: 10px;
         vertical-align: middle;
+        &>>> .svg-icon {
+          color: #FFF!important;
+        }
       }
 
       .header-icon {
@@ -140,16 +140,16 @@ export default {
         padding-right: 8px;
 
         &:hover {
-          background-color: #e6e6e6;
+          background-color: rgba(255, 255, 255, .2);
         }
 
-        & > > > i {
-          color: #7c7e7f;
+        & >>> i {
+          color: #FFF;
           font-size: 16px;
         }
 
-        & > > > .svg-icon {
-          color: #7c7e7f;
+        & >>> .svg-icon {
+          color: #FFF;
           font-size: 16px;
         }
       }
@@ -179,9 +179,9 @@ export default {
     transition: .2s;
     -webkit-tap-highlight-color: transparent;
 
-    & > > > .svg-icon {
-      font-size: 16px;
-      color: #fff;
+    & >>> .svg-icon {
+      font-size: 16px!important;
+      color: #fff!important;
     }
   }
 

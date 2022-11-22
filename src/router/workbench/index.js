@@ -13,7 +13,7 @@ export default {
     title: i18n.t('common.nav.Workbench'),
     type: 'view',
     view: 'workbench',
-    icon: 'el-icon-user-solid',
+    icon: 'workbench',
     showNavSwitcher: () => {
       return store.getters.workbenchOrgs.length > 0
     },
@@ -27,7 +27,7 @@ export default {
       name: 'MyHome',
       component: () => import('@/views/myhome'),
       meta: {
-        icon: 'area-chart',
+        icon: 'dashboard',
         title: i18n.t('route.Overview'),
         permissions: []
       }
@@ -37,7 +37,7 @@ export default {
       name: 'MyAssets',
       component: () => import('@/views/myassets'),
       meta: {
-        icon: 'files-o',
+        icon: 'my-asset',
         title: i18n.t('route.MyAssets'),
         permissions: ['perms.view_myassets']
       }
@@ -54,7 +54,7 @@ export default {
           path: `${BASE_URL}/luna/`,
           meta: {
             title: i18n.t('route.WebTerminal'),
-            icon: 'window-maximize',
+            icon: 'web-terminal',
             activeMenu: '/assets',
             permissions: []
           }
@@ -85,7 +85,7 @@ export default {
       name: 'JobCenter',
       meta: {
         title: i18n.t('route.JobCenter'),
-        icon: 'coffee',
+        icon: 'task-center',
         permissions: []
       },
       children: [
