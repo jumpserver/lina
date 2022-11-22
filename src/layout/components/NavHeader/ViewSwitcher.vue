@@ -19,7 +19,7 @@
         :key="view.name"
         :index="view.name"
       >
-        <i class="icons" :class="view.meta.icon" />
+        <svg-icon class="icons" :icon-class="view.meta.icon" />
         <span slot="title" class="icons-title">{{ view.meta.title }}</span>
       </el-menu-item>
     </el-menu>
@@ -176,8 +176,10 @@ export default {
   color: #606266!important;
 }
 .icons {
-  font-size: 18px;
+  vertical-align: middle!important;
+  font-size: 16px;
   text-align: center;
+  color: #1F2329;
 }
 .icons-title {
   display: inline-block;

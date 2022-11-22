@@ -10,11 +10,9 @@
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         <svg-icon
-          v-if="isRouteMeta.view === 'settings'"
-          icon-class="setting-fill"
+          :icon-class="isRouteMeta.icon"
           style="margin-right: 0;"
         />
-        <i v-else class="fa" :class="isRouteMeta.icon" />
         <span
           v-show="!isCollapse"
           style="margin-left: 3px;"
@@ -26,7 +24,7 @@
             trigger="click"
           >
             <ViewSwitcher :mode="'vertical'" />
-            <svg-icon slot="reference" icon-class="switch" />
+            <svg-icon slot="reference" class="icon" icon-class="switch" />
           </el-popover>
         </span>
       </div>
@@ -156,7 +154,10 @@ export default {
       right: 0;
       transform: translateY(-50%);
       z-index: 1;
-      .svg-icon {
+      &:hover {
+        color: var(--menu-active-text);
+      }
+      .icon {
         &:hover {
           color: var(--submenu-active-text);
         }

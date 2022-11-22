@@ -120,7 +120,7 @@ export default {
 
       .header-hover {
         &:hover {
-          background-color: #e6e6e6;
+          background-color: rgba(255, 255, 255, .2);
         }
       }
 
@@ -130,6 +130,9 @@ export default {
         padding-right: 10px;
         padding-left: 10px;
         vertical-align: middle;
+        &>>> .svg-icon {
+          color: #FFF!important;
+        }
       }
 
       .header-icon {
@@ -137,7 +140,7 @@ export default {
         padding-right: 8px;
 
         &:hover {
-          background-color: #e6e6e6;
+          background-color: rgba(255, 255, 255, .2);
         }
 
         & >>> i {
