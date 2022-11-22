@@ -24,10 +24,11 @@
     color: $menuText;
     &.is-active{
       color: $subMenuActiveText;
+      background-color: $subMenuHover!important;
     }
     &:hover {
       background-color: $subMenuHover;
-      color: $--color-primary;
+      color: $subMenuActiveText;
     }
     i {
       color: $menuText;
@@ -44,8 +45,8 @@
   }
 
   .el-submenu .el-menu-item {
-    height: 48px;
-    line-height: 48px;
+    height: 38px;
+    line-height: 38px;
     padding: 0 52px;
     min-width: 200px;
   }
@@ -65,7 +66,7 @@
     height: 48px;
     line-height: 48px;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .el-menu-item:hover, .el-menu-item:focus {
@@ -81,7 +82,7 @@
   }
 
   li.is-active {
-    border-left: 4px solid $menuActiveLeft;
+    // border-left: 4px solid $menuActiveLeft;
   }
 
   .el-submenu-sidebar .el-menu-item {

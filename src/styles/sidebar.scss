@@ -19,6 +19,7 @@
     left: 0;
     z-index: 1001;
     overflow: hidden;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 
     // reset element-ui css
     .horizontal-collapse-transition {
@@ -79,7 +80,7 @@
     & .nest-menu .el-submenu-sidebar>.el-submenu__title,
     & .el-submenu-sidebar .el-menu-item {
       min-width: $sideBarWidth !important;
-      background-color: $subMenuBg !important;
+      background-color: $subMenuBg;
 
       &:hover {
         background-color: $subMenuHover !important;

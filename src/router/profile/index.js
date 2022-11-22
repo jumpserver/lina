@@ -7,7 +7,7 @@ export default {
   component: Layout,
   meta: {
     title: i18n.t('route.UserProfile'),
-    icon: 'gear',
+    icon: 'personal',
     view: 'profile',
     type: 'view',
     showNavSwitcher: false,
@@ -21,7 +21,7 @@ export default {
       component: () => import('@/views/profile/ProfileInfo'),
       meta: {
         title: i18n.t('users.AccountInformation'),
-        icon: 'adjust',
+        icon: 'attestation',
         permissions: []
       }
     },
@@ -31,7 +31,7 @@ export default {
       component: () => import('@/views/profile/ProfileUpdate/index'),
       meta: {
         title: i18n.t('users.Profile'),
-        icon: 'user-circle',
+        icon: 'personal',
         permissions: []
       }
     },
@@ -72,7 +72,7 @@ export default {
       name: 'ConnectionToken',
       meta: {
         title: i18n.t('common.nav.ConnectionToken'),
-        icon: 'map-pin',
+        icon: 'token',
         permissions: ['authentication.view_connectiontoken']
       }
     }

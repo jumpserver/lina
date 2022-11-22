@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0 15px;" @click="toggleClick">
+  <div style="padding: 0 20px;" @click="toggleClick">
     <svg-icon icon-class="arrow-to-left" class="hamburger" style="color: #ffffff;" :class="{'is-active':isActive}" />
   </div>
 </template>

@@ -178,6 +178,9 @@ export default {
     width: 100%;
     height: 48px;
     line-height: 48px;
+    margin-top: 2px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(31, 35, 41, 0.15);
     background-color: $subMenuBg;
 
     .toggle-bar {
@@ -194,12 +197,6 @@ export default {
 
     .toggle-bar:hover {
       background-color: $subMenuHover;
-    }
-
-    .hamburger-container {
-      left: 2px;
-      top: 10px;
-      position: absolute;
     }
   }
   .active-mobile {
