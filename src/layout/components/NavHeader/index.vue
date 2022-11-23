@@ -30,7 +30,12 @@
     </ul>
     <hamburger :is-active="sidebar.opened" class="hamburger-container is-show-menu" @toggleClick="toggleSideBar" />
     <ul class="navbar-left">
-      <li v-if="showOrganize()" class="left-item" style="margin-left: 24px">
+      <li class="left-item">
+        <div class="nav-logo">
+          <Logo v-if="showLogo" :collapse="false" />
+        </div>
+      </li>
+      <li v-if="showOrganize()" class="left-item" style="margin-left: 21px">
         <Organization class="organization" />
       </li>
     </ul>
@@ -47,6 +52,7 @@ import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
+import Logo from '../NavLeft/Logo'
 
 export default {
   components: {
@@ -57,7 +63,8 @@ export default {
     Tickets,
     WebTerminal,
     SiteMessages,
-    SystemSetting
+    SystemSetting,
+    Logo
   },
   data() {
     return {}
@@ -70,6 +77,9 @@ export default {
       return this.publicSettings['TICKETS_ENABLED'] &&
         this.$hasLicense() &&
         this.$hasPerm('tickets.view_ticket')
+    },
+    showLogo() {
+      return this.$store.state.settings.sidebarLogo
     }
   },
   methods: {
@@ -110,6 +120,9 @@ export default {
 
         & >>> .org-select {
           padding: 0;
+        }
+        .nav-logo {
+          width: 200px;
         }
       }
     }
