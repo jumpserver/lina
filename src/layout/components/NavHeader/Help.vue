@@ -8,6 +8,7 @@
       <el-dropdown-item command="support">{{ $t('common.nav.Support') }}</el-dropdown-item>
       <el-dropdown-item command="toolsDownload">{{ $t('common.nav.Download') }}</el-dropdown-item>
       <el-dropdown-item v-if="!hasLicence" command="enterprise">{{ $t('common.nav.EnterpriseEdition') }}</el-dropdown-item>
+      <el-dropdown-item command="github">GITHUB</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -46,6 +47,9 @@ export default {
           break
         case 'toolsDownload':
           window.open('/core/download/', '_blank')
+          break
+        case 'github':
+          window.open('https://github.com/jumpserver/jumpserver', '_blank')
           break
         default:
           window.open(this.URLSite.HELP_DOCUMENT_URL, '_blank')
