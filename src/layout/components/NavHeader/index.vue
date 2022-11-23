@@ -142,9 +142,12 @@ export default {
         display: inline-block;
         padding-right: 10px;
         padding-left: 10px;
-        vertical-align: middle;
+        vertical-align: top;
         &>>> .svg-icon {
           color: #FFF!important;
+        }
+        &>>> .el-badge {
+          vertical-align: top;
         }
       }
 
