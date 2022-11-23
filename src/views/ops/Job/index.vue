@@ -8,7 +8,6 @@
 <script>
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
-import { openTaskPage } from '@/utils/jms'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
 
 export default {
@@ -41,7 +40,7 @@ export default {
               if (row.is_periodic) {
                 return <span>{row.type}&nbsp;
                   <el-tooltip content={this.$t('ops.ThisPeriodic')}>
-                    <i Class='fa  fa-circle-o text-primary' />
+                    <i Class='fa  fa-circle-o text-primary'/>
                   </el-tooltip>
                 </span>
               }
@@ -119,10 +118,8 @@ export default {
       this.$axios.post('/api/v1/ops/job-executions/', {
         job: row.id,
         parameters: parameters
-      }).then(data => {
-        this.$axios.get(`/api/v1/ops/job-executions/${data.id}/`).then(d => {
-          openTaskPage(d.task_id)
-        })
+      }).then(() => {
+        this.$message.success(this.$tc('ops.TaskDispatch'))
       })
     }
   }
