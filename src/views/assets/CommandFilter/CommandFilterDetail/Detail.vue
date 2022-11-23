@@ -75,7 +75,7 @@ export default {
         icon: 'fa-info-circle',
         title: this.$t('assets.SystemUser'),
         objectsAjax: {
-          url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s`,
+          url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s,redis,mongodb,clickhouse`,
           transformOption: (item) => defaultTransformOption(item, 'username')
         },
         hasObjectsId: this.object.system_users,
