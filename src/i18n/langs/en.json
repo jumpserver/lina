@@ -295,6 +295,7 @@
     "ReLoginErr": "Login time has exceeded 5 minutes, please login again"
   },
   "common": {
+    "Clear": "Clear",
     "NeedAddAppsOrSystemUserErrMsg": "Please add apps or system user",
     "VerificationCodeSent": "The verification code has been sent",
     "SendVerificationCode": "Send verification code",

@@ -9,6 +9,7 @@
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
 import { UpdateToken } from '@/components/FormFields'
+import { getUpdateObjURL } from '@/utils/common'
 export default {
   name: 'AccountCreateForm',
   components: {
@@ -64,10 +65,12 @@ export default {
           hidden: (formValue) => formValue.secret_type !== 'password'
         },
         ssh_key: {
+          component: UpdateToken,
           label: this.$t('assets.PrivateKey'),
           el: {
             type: 'textarea',
-            rows: 4
+            showInput: true,
+            clearInfoObj: {}
           },
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
@@ -119,6 +122,13 @@ export default {
       this.fieldsMeta.secret_type.options = choices.filter(item => {
         return secretTypes.indexOf(item.value) > -1
       })
+      if (this.form.specific?.ssh_key_fingerprint) {
+        const url = getUpdateObjURL('/api/v1/assets/accounts/', this.form.id)
+        this.fieldsMeta.ssh_key.el.showInput = false
+        this.fieldsMeta.ssh_key.el.clearInfoObj = {
+          url: url, showClearButton: true, clearFields: ['secret']
+        }
+      }
     },
     confirm(form) {
       const secretType = form.secret_type || ''
