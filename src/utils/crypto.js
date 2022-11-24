@@ -1,4 +1,4 @@
-import { JSEncrypt } from 'jsencrypt'
+import JSEncrypt from 'jsencrypt/bin/jsencrypt.min'
 import CryptoJS from 'crypto-js'
 import VueCookie from 'vue-cookie'
 
