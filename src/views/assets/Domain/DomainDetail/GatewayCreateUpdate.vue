@@ -6,6 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import { Select2, UploadKey } from '@/components'
 import { UpdateToken } from '@/components/FormFields'
+import ProtocolSelector from '../components/ProtocolSelector'
 
 export default {
   name: 'GatewayCreateUpdate',
@@ -13,23 +14,17 @@ export default {
   data() {
     return {
       initial: {
-        protocol: 'ssh',
-        port: 22,
-        domain: this.$route.query.domain,
-        is_active: true
+        is_active: true,
+        protocols: '',
+        domain: this.$route.query.domain
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'ip', 'port', 'protocol', 'domain']],
+        [this.$t('common.Basic'), ['name', 'address']],
+        [this.$t('assets.Network'), ['domain', 'protocols']],
         [this.$t('assets.Auth'), ['username', 'password', 'private_key', 'passphrase']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        ip: {
-          type: 'input',
-          el: {
-            type: 'input'
-          }
-        },
         domain: {
           component: Select2,
           el: {
@@ -40,17 +35,25 @@ export default {
             multiple: false
           }
         },
-        protocol: {
-          helpText: this.$t('assets.GatewayProtocolHelpText')
+        protocols: {
+          component: ProtocolSelector,
+          el: {
+          },
+          hidden: (form) => {
+            const fieldsMeta = this.fieldsMeta
+            if (form['protocols']) {
+              fieldsMeta['protocols'].el.choices = form['protocols']
+            }
+          }
         },
         password: {
           component: UpdateToken
         },
-        is_active: {
-          type: 'switch'
-        },
         private_key: {
           component: UploadKey
+        },
+        is_active: {
+          type: 'switch'
         }
       },
       updateSuccessNextRoute: {
@@ -86,6 +89,9 @@ export default {
         return values
       }
     }
+  },
+  mounted() {
+    console.log('---', this.object)
   },
   methods: {
   }
