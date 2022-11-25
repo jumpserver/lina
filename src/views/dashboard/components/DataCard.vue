@@ -7,10 +7,10 @@
       <div class="add">
         <span class="add-num">
           本周新增：0
-          <i class="fa fa-line-chart" />
+          <svg-icon icon-class="broken-line" style="font-size: 18px;" />
         </span>
         <span class="add-icon">
-          <i class="fa fa-users" />
+          <svg-icon icon-class="users" style="font-size: 18px;" />
         </span>
       </div>
     </div>
@@ -27,7 +27,10 @@ export default {
     RingChart
   },
   props: {
-
+    object: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {

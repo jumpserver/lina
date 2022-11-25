@@ -2,18 +2,15 @@
   <Page>
     <div v-if="this.$hasPerm('rbac.view_console|rbac.view_audit')">
       <Announcement />
-      <!-- <ResourceSummary /> -->
-      <!-- <DatesLoginSummary /> -->
       <el-row :gutter="16">
         <el-col :lg="12" :sm="24">
-          <Left />
+          <LeftSummary />
         </el-col>
         <el-col :lg="12" :sm="24">
           <DataSummary />
         </el-col>
       </el-row>
-      <TrendSummary />
-      <TopAndLatestSummary />
+      <RankSummary />
     </div>
     <Page403 v-else />
   </Page>
@@ -22,21 +19,19 @@
 <script>
 import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
-import TopAndLatestSummary from './TopAndLatestSummary'
 import Page403 from '@/views/403'
 import DataSummary from './DataSummary'
-import Left from './Left'
-import TrendSummary from './TrendSummary'
+import LeftSummary from './LeftSummary'
+import RankSummary from './RankSummary'
 
 export default {
   name: 'Dashboard',
   components: {
     Page,
-    TopAndLatestSummary,
     Announcement,
     DataSummary,
-    Left,
-    TrendSummary,
+    LeftSummary,
+    RankSummary,
     Page403
   },
   data() {

@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/legend'
+// eslint-disable-next-line no-unused-vars
+import * as echarts from 'echarts'
 
 export default {
   name: 'LoginMetric',
