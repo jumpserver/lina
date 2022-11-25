@@ -1,21 +1,41 @@
 <template>
   <el-collapse-transition>
     <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <el-form ref="form" label-width="80px">
-        <el-form-item label="选择资产">
-          <el-input />
-        </el-form-item>
-        <el-form-item label="选择账号">
-          <el-input />
-        </el-form-item>
-      </el-form>
+      <div
+        v-show="iShowTree"
+        :style="{width: iShowTree?'20%': 0}"
+        class="transition-box tree-box"
+      >
+        <AutoDataZTree
+          ref="AutoDataZTree"
+          :key="DataZTree"
+          :setting="treeSetting"
+          class="auto-data-ztree"
+        />
+      </div>
       <div :style="iShowTree?('display: flex;width: 80%;'):('display: flex;width:100%;')">
-        <IBox class="transition-box" style="width: calc(100% - 17px);">
-          <div style="margin-bottom: 20px">
-            <CodeEditor />
+        <div class="mini">
+          <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
-          Output
+        </div>
+        <IBox class="transition-box" style="width: calc(100% - 17px);">
+          <el-form label-width="160px">
+            <el-form-item label="runas">
+              <el-input v-model="runas" />
+            </el-form-item>
+            <el-form-item label="runas policy">
+              <el-select v-model="runasPolicy">
+                <el-option v-for="(item,index) of runasPolicyOptions" :key="index" :value="item">
+                  {{ item.label }}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+
+          <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
           <Term ref="xterm" />
+          <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </IBox>
       </div>
     </div>
@@ -23,6 +43,7 @@
 </template>
 
 <script>
+import AutoDataZTree from '@/components/AutoDataZTree'
 import Term from '@/components/Term'
 import IBox from '@/components/IBox'
 import CodeEditor from '@/components/FormFields/CodeEditor'
@@ -31,37 +52,46 @@ export default {
   name: 'CommandExecution',
   components: {
     Term,
+    AutoDataZTree,
     IBox,
     CodeEditor
   },
   data() {
     return {
-      languageOptions: [
+      DataZTree: 0,
+      runas: 'root',
+      runasPolicy: 'skip',
+      command: '',
+      runasPolicyOptions: [
         {
-          label: 'Shell',
-          value: 'shell'
+          label: 'skip',
+          value: 'skip'
+        }, {
+          label: 'Privileged First',
+          value: 'privileged_first'
         },
         {
-          label: 'Python',
-          value: 'python'
-        },
-        {
-          label: 'Ruby',
-          value: 'ruby'
-        },
-        {
-          label: 'PowerShell',
-          value: 'powershell'
+          label: 'Privileged Only',
+          value: 'privileged_only'
         }
       ],
-      DataZTree: 0,
+      toolbar: [
+        {
+          type: 'button',
+          icon: 'fa  fa-play',
+          tip: 'Run command',
+          callback: () => {
+            this.execute()
+          }
+        }
+      ],
       codeMirrorOptions: {
         lineNumbers: true,
         lineWrapping: true,
         mode: 'shell'
       },
       treeSetting: {
-        treeUrl: '/api/v1/perms/users/nodes-with-assets/tree/',
+        treeUrl: '',
         showRefresh: true,
         showMenu: false,
         showSearch: true,
@@ -87,24 +117,17 @@ export default {
             isMove: true
           }
         },
-        callback: {
-          onCheck: this.onCheck.bind(this)
-        },
         async: {
           enable: false
         }
       },
       iShowTree: true,
-      actions: '',
-      options: [],
+      basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=1',
       ws: '',
       wsConnected: false
     }
   },
   computed: {
-    codemirror() {
-      return this.$refs.myCm.codemirror
-    },
     zTree() {
       return this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.zTree
     },
@@ -113,63 +136,29 @@ export default {
     }
   },
   mounted() {
-    this.fetchAccountUsernames()
-    this.xterm.write(this.$t('ops.selectAssetsMessage'))
+    this.handleSystemUserChange('')
     this.enableWS()
   },
   methods: {
-    fetchAccountUsernames() {
-      const temp = {}
-      this.$axios.get('/api/v1/assets/accounts/',).then(data => {
-        data.forEach((item) => {
-          temp[item.username] = {}
-        })
-        for (const key of Object.keys(temp)) {
-          this.accountConfig.usernameOptions.push({ 'label': key, 'value': key })
-        }
-      })
-    },
-    onChangeLanguage() {
-      this.codemirror.setOption('mode', this.scriptMeta.language)
-    },
-    onOpenScriptListDialog() {
-      this.showScriptListDialog = true
-    },
-    onOpenScriptSaveDialog() {
-      this.showScriptAddDialog = true
-    },
-    onOpenAccountPolicyDialog() {
-      this.showAccountPolicyDialog = true
-    },
-    onSelectScript(scriptId) {
-      this.$axios.get(`/api/v1/ops/scripts/${scriptId}`).then((data) => {
-        this.scriptMeta.content = data['content']
-      })
-    },
-    onSelectAccountPolicy(policy) {
-      this.accountConfig.accountPolicy = policy
+    handleSystemUserChange(id) {
+      this.treeSetting.treeUrl = this.basicUrl
+      this.xterm.clear()
+      this.DataZTree++
     },
     getSelectedAssetsNode() {
       const nodes = this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
-      const assetsNode = []
-      nodes.forEach(function(node) {
-        if (node.meta.type === 'asset' && !node.isHidden) {
-          assetsNode.push(node)
-        }
-      })
-      return assetsNode
-    },
-    onCheck(e, treeId, treeNode) {
-      const nodes = this.getSelectedAssetsNode()
-      const nodes_names = nodes.map(function(node) {
-        return node.name
-      })
-      let message = this.$t('ops.selectedAssets')
-      message += nodes_names.join(', ')
-      message += '\r\n'
-      message += this.$t('ops.inTotal') + `：${nodes_names.length} \r\n`
-      this.xterm.clear()
-      this.xterm.write(message)
+      // const assetsNodeId = []
+      // const assetsNode = []
+      // nodes.forEach(function (node) {
+      //   if (node.meta.type === 'asset' && !node.isHidden) {
+      //     const protocolsStr = node.meta.data.protocols + ''
+      //     if (assetsNodeId.indexOf(node.id) === -1 && protocolsStr.indexOf('ssh') > -1) {
+      //       assetsNodeId.push(node.id)
+      //       assetsNode.push(node)
+      //     }
+      //   }
+      // })
+      return nodes
     },
     enableWS() {
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
@@ -200,34 +189,27 @@ export default {
       this.ws.send(msg)
     },
     execute() {
-      const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
-      const url = '/api/v1/ops/command-executions/?' + size
-      const runAs = this.accountConfig.selectedUsername
-      const command = this.scriptMeta.content
+      // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
+      const url = '/api/v1/ops/jobs/?'
       const hosts = this.getSelectedAssetsNode().map(function(node) {
         return node.id
       })
-      if (hosts.length === 0) {
-        this.xterm.write(this.wrapperError(this.$t('assets.UnselectedAssets')))
-        return
-      }
-      if (!command) {
-        this.xterm.write(this.wrapperError(this.$t('assets.NoInputCommand')))
-        return
-      }
-      if (!runAs) {
-        this.xterm.write(this.wrapperError(this.$t('assets.NoSystemUserWasSelected')))
-        return
-      }
       const data = {
-        hosts: hosts,
-        run_as: runAs,
-        command: command
+        assets: hosts,
+        run_as: this.runas,
+        run_as_policy: this.runasPolicy,
+        instant: true,
+        is_periodic: false
       }
       this.$axios.post(
         url, data
       ).then(res => {
-        this.writeExecutionOutput(res.id)
+        console.log(res)
+        setTimeout(() => {
+          this.$axios.get(`/api/v1/ops/jobs/${res.id}/`).then((data) => {
+            this.writeExecutionOutput(data.task_id)
+          }, 100)
+        })
       })
     }
   }
@@ -235,11 +217,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-> > > .el-input input {
-  height: 100%;
-}
-
 .mini-button {
   width: 12px;
   float: right;
@@ -266,8 +243,8 @@ export default {
 }
 
 .vue-codemirror-wrap ::v-deep .CodeMirror {
-  //width: calc(100% - 17px);
-  height: 480px;
+  width: 600px;
+  height: 100px;
   border: 1px solid #eee;
 }
 
