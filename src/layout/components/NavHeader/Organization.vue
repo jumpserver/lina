@@ -1,7 +1,7 @@
 <template>
   <el-select
     :value="currentOrgId"
-    class="org-select organization autoWidth-select"
+    class="org-select organization"
     filterable
     :placeholder="$tc('common.Select')"
     @change="changeOrg"
@@ -9,9 +9,6 @@
     <template slot="prefix">
       <svg-icon icon-class="organization" />
       <span class="line" />
-      <span class="placeholder">
-        {{ (orgGroups.map(i => (i.options.find(item => item.id === currentOrg.id) || {}).name)).filter(Boolean) }}
-      </span>
     </template>
 
     <el-option-group
@@ -151,7 +148,7 @@ export default {
 
 .line {
   width: 1px;
-  margin-left: 6px;
+  margin-left: 8px;
   border: .5px solid #FFF;
 }
 
@@ -185,27 +182,5 @@ export default {
   padding-left: 15px;
   font-size: 12px;
   line-height: 30px;
-}
-
-.autoWidth-select {
-  min-width: 140px;
-  &>>> input{
-    position: absolute;
-  }
-  &>>> .el-input__inner{
-    margin-left: 6px;
-  }
-  &>>> .el-input__prefix{
-    position: relative;
-    left: 0px;
-    box-sizing: border-box;
-    border: 1px solid #ffffff00;
-    padding: 0 30px 0 0;
-    height: 30px;
-    line-height: 30px;
-    .placeholder {
-      visibility: hidden;
-    }
-  }
 }
 </style>
