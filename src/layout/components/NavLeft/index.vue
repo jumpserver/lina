@@ -1,9 +1,6 @@
 <template>
   <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
     <div class="nav-header">
-      <div class="nav-logo">
-        <Logo v-if="showLogo" :collapse="isCollapse" />
-      </div>
       <div class="active-mobile">
         <ViewSwitcher mode="vertical" class="mobile-view-switch" />
         <Organization v-if="$hasLicense()" class="organization" />
@@ -60,7 +57,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import Hamburger from '@/components/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
@@ -70,7 +66,6 @@ import variables from '@/styles/variables.scss'
 export default {
   components: {
     SidebarItem,
-    Logo,
     Hamburger,
     ViewSwitcher,
     Organization
@@ -140,7 +135,7 @@ export default {
   .nav-title {
     position: relative;
     box-sizing: border-box;
-    padding: 17px 0 17px 20px;
+    padding: 14px 0 13px 20px;
     font-size: 16px;
     font-weight: 500;
     color: #1F2329;

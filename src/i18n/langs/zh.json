@@ -713,7 +713,8 @@
     "JobType": "作业类型",
     "Comment": "备注",
     "History": "执行历史",
-    "UseParameterDefine": "定义参数"
+    "UseParameterDefine": "定义参数",
+    "TaskDispatch": "任务下发成功"
   },
   "perms": {
     "": "",

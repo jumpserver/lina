@@ -1,6 +1,6 @@
 <template>
-  <el-link :href="webTerminalUrl" target="_blank">
-    <svg-icon icon-class="terminal" />
+  <el-link :href="webTerminalUrl" target="_blank" style="padding-top: 1px;">
+    <svg-icon icon-class="terminal" style="font-size: 17px;" />
   </el-link>
 </template>
 

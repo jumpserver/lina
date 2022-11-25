@@ -74,9 +74,9 @@ export default {
 
     & .sidebar-logo-text {
       width: 150px;
-      height: 45px;
-      padding: 2px 0;
-      vertical-align: middle;
+      height: 50px;
+      padding: 3px 0;
+      vertical-align: top;
       margin-right: 12px;
     }
 
@@ -93,8 +93,8 @@ export default {
   }
 
   &.collapse {
-    height: 55px;
-    line-height: 55px;
+    height: 50px;
+    line-height: 46px;
     .sidebar-logo {
       margin-right: 0;
     }

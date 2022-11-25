@@ -180,6 +180,7 @@ export default {
   font-size: 16px;
   text-align: center;
   color: #1F2329;
+  margin-right: 10px;
 }
 .icons-title {
   display: inline-block;

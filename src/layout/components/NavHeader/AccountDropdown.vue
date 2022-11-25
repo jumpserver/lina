@@ -87,6 +87,7 @@ export default {
     width: 24px;
     margin-right: 5px;
     vertical-align: middle;
+    background: white;
   }
   .mobile .header-avatar {
     display: none;
