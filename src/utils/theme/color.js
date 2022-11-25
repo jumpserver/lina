@@ -65,7 +65,8 @@ export function mix(color_1, color_2, weight) {
 
 export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
-  const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
+  // const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
+  const colors = defaultThemeConfig
 
   for (const key in colors) {
     const currentColor = colors[key]
