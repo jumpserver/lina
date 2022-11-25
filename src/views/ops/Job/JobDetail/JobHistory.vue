@@ -38,9 +38,9 @@ export default {
             width: '96px',
             formatter: (row) => {
               if (row.is_finished) {
-                return <i Class='fa fa-check text-primary' />
+                return <i Class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger' />
+              return <i Class='fa fa-times text-danger'/>
             },
             formatterArgs: {
               width: '14px'
@@ -51,12 +51,12 @@ export default {
             width: '96px',
             formatter: (row) => {
               if (!row.is_finished) {
-                return <i Class='fa  fa fa-spinner fa-spin' />
+                return <i Class='fa  fa fa-spinner fa-spin'/>
               }
               if (row.is_success) {
-                return <i Class='fa fa-check text-primary' />
+                return <i Class='fa fa-check text-primary'/>
               }
-              return <i Class='fa fa-times text-danger' />
+              return <i Class='fa fa-times text-danger'/>
             },
             formatterArgs: {
               width: '14px'
