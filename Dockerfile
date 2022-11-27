@@ -6,17 +6,16 @@ WORKDIR /data
 
 RUN set -ex \
     && npm config set registry ${NPM_REGISTRY} \
-    && yarn config set registry ${NPM_REGISTRY} \
-    && yarn config set cache-folder /root/.cache/yarn/lina
+    && yarn config set registry ${NPM_REGISTRY}
 
 ADD package.json yarn.lock /data
-RUN --mount=type=cache,target=/root/.cache/yarn \
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=lina \
     yarn install
 
 ARG VERSION
 ENV VERSION=$VERSION
 ADD . /data
-RUN --mount=type=cache,target=/root/.cache/yarn \
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn,sharing=locked,id=lina \
     sed -i "s@Version <strong>.*</strong>@Version <strong>${VERSION}</strong>@g" src/layout/components/Footer/index.vue \
     && yarn build
 
