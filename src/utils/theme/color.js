@@ -67,18 +67,16 @@ export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
   const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
 
+  const colorValue = themeColors['--color-primary'].replace(/#/g, '')
+  const black = 'ffffff'
+  const menuHoverColor = mix(black, colorValue, 96)
+  elementStyle.setProperty('--menu-hover', menuHoverColor)
+
   for (const key in colors) {
     const currentColor = colors[key]
-    const colorValue = currentColor.replace(/#/g, '')
-    elementStyle.setProperty(key, currentColor)
-    const black = '000000'
-    if (key === '--menu-bg') {
-      const menuHoverColor = mix(black, colorValue, 10)
-      const subMenuBgColor = mix(black, colorValue, 20)
-      const subMenuHoverColor = mix(black, colorValue, 35)
-      elementStyle.setProperty('--menu-hover', menuHoverColor)
-      elementStyle.setProperty('--submenu-bg', subMenuBgColor)
-      elementStyle.setProperty('--submenu-hover', subMenuHoverColor)
+
+    if (key.includes('--color')) {
+      elementStyle.setProperty(key, currentColor)
     }
   }
 }
