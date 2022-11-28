@@ -1,7 +1,7 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
+    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" :url="secretUrl" />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
       :visible.sync="showUpdateSecretDialog"
@@ -84,6 +84,7 @@ export default {
       showAddDialog: false,
       iAsset: this.asset,
       account: {},
+      secretUrl: '',
       tableConfig: {
         url: this.url,
         permissions: {
@@ -146,6 +147,7 @@ export default {
                   can: this.$hasPerm('assets.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    vm.secretUrl = `/api/v1/assets/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
                     setTimeout(() => {
