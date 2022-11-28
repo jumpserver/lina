@@ -48,6 +48,16 @@ export default {
             return this.instantTask
           }
         },
+        comment: {
+          hidden: () => {
+            return this.instantTask
+          }
+        },
+        type: {
+          hidden: () => {
+            return this.instantTask
+          }
+        },
         module: {
           label: this.$t('ops.Module'),
           hidden: (formValue) => {
@@ -107,15 +117,21 @@ export default {
           label: '保存后立即执行',
           type: 'checkbox',
           hidden: (formValue) => {
-            return formValue.instant
+            return this.instantTask
           }
         },
         use_parameter_define: {
           label: this.$t('ops.UseParameterDefine'),
-          type: 'switch'
+          type: 'switch',
+          hidden: () => {
+            return this.instantTask
+          }
         },
         is_periodic: {
-          type: 'switch'
+          type: 'switch',
+          hidden: () => {
+            return this.instantTask
+          }
         },
         crontab: {
           type: 'cronTab',
@@ -153,14 +169,6 @@ export default {
     }
   },
   methods: {
-    openAdhocSelectDialog() {
-      this.showOpenAdhocDialog = true
-    },
-    onSelectAdhoc(item) {
-
-    },
-    onOpenSaveAdhocDialog() {
-    }
   }
 }
 

@@ -60,11 +60,14 @@ export default {
       default() {
         return this.$t('common.Confirm')
       }
+    },
+    maxWidth: {
+      type: String,
+      default: '1200px'
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     iWidth() {
@@ -83,8 +86,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog >>> .el-dialog {
+  .dialog > > > .el-dialog {
     border-radius: 0.3em;
+    max-width: 1500px;
 
     &__header {
       box-sizing: border-box;
@@ -104,7 +108,7 @@ export default {
     }
   }
 
-  .dialog-footer >>> button.el-button {
+  .dialog-footer > > > button.el-button {
     font-size: 13px;
     padding: 10px 20px;
   }

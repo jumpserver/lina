@@ -749,7 +749,7 @@
     "addUserGroupToThisPermission": "添加用户组",
     "addUserToThisPermission": "添加用户",
     "all": "全部",
-    "assetAndNode": "资产或节点",
+    "assetAndNode": "资产/节点",
     "assetCount": "资产数量",
     "connect": "连接",
     "databaseApp": "数据库应用",
@@ -778,7 +778,7 @@
     "clipboardPaste": "剪切板粘贴",
     "userCount": "用户数量",
     "userGroupCount": "用户组数量",
-    "usersAndUserGroups": "用户或用户组"
+    "usersAndUserGroups": "用户/用户组"
   },
   "route": {
     "": "",
