@@ -5,7 +5,7 @@
         用户/资产活跃情况
         <i class="fa fa-exclamation-circle icon" />
       </span>
-      <span class="time">更新时间：2022-11-17</span>
+      <!-- <span class="time">更新时间：2022-11-17</span> -->
     </div>
     <echarts
       ref="echarts"
@@ -37,8 +37,7 @@ export default {
       metricsData: {
         dates_metrics_date: [],
         dates_metrics_total_count_active_assets: [],
-        dates_metrics_total_count_active_users: [],
-        dates_metrics_total_count_login: []
+        dates_metrics_total_count_active_users: []
       }
     }
   },
@@ -46,13 +45,11 @@ export default {
     themeColor() {
       const documentStyle = document.documentElement.style
       return {
-        primary: documentStyle.getPropertyValue('--color-primary'),
-        info: documentStyle.getPropertyValue('--color-info'),
-        success: documentStyle.getPropertyValue('--color-success')
+        primary: documentStyle.getPropertyValue('--color-primary')
       }
     },
     options() {
-      const { primary, info, success } = this.themeColor
+      const { primary } = this.themeColor
       return {
         title: {
           show: false
@@ -84,7 +81,7 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        color: [primary, info, success],
+        color: [primary, '#F3B44B'],
         xAxis: [
           {
             type: 'category',
@@ -137,13 +134,6 @@ export default {
         animationDuration: 500,
         series: [
           {
-            name: this.$t('dashboard.LoginCount'),
-            type: 'line',
-            areaStyle: {},
-            smooth: true,
-            data: this.metricsData.dates_metrics_total_count_login
-          },
-          {
             name: this.$t('dashboard.LoginUsers'),
             type: 'line',
             areaStyle: {},
@@ -171,11 +161,17 @@ export default {
   },
   methods: {
     async getMetricData() {
-      let url = '/api/v1/index/?dates_metrics=1&'
-      if (this.range === 'monthly') {
-        url = `${url}&monthly=1`
+      const url = '/api/v1/index/?dates_metrics=1&'
+      const data = await this.$axios.get(url)
+      this.metricsData = data
+      const activeAssets = 'dates_metrics_total_count_active_assets'
+      const activeUsers = 'dates_metrics_total_count_active_users'
+      if (data[activeAssets].length < 1) {
+        this.metricsData[activeAssets] = [0]
       }
-      this.metricsData = await this.$axios.get(url)
+      if (data[activeUsers].length < 1) {
+        this.metricsData[activeUsers] = [0]
+      }
     },
     getDataUrl() {
       this.dataUrl = this.$refs.echarts.getDataURL({

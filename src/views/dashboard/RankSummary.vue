@@ -21,22 +21,37 @@ export default {
     return {
       userConfig: {
         title: '登录用户排名',
-        url: '/api/v1/users/users/',
+        url: '/api/v1/index/?dates_login_times_top10_users=1',
         note: '登录用户排名',
-        columns: ['username'],
-        columnsMeta: {
-          username: {
-            showOverflowTooltip: true
+        data: 'dates_login_times_top10_users',
+        columns: [
+          {
+            prop: 'user',
+            label: '用户名'
+          },
+          {
+            prop: 'total',
+            label: '登录次数'
           }
-        }
+        ]
       },
       assetConfig: {
         title: '活跃资产排名',
-        url: '/api/v1/assets/assets/',
+        url: '/api/v1/index/?dates_login_times_top10_assets=1',
         note: '活跃资产排名',
-        columns: ['name'],
-        columnsMeta: {}
-      }
+        data: 'dates_login_times_top10_assets',
+        columns: [
+          {
+            prop: 'asset',
+            label: '资产名称'
+          },
+          {
+            prop: 'total',
+            label: '访问次数'
+          }
+        ]
+      },
+      columnsMeta: {}
     }
   },
   methods: {

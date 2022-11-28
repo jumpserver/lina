@@ -26,16 +26,32 @@
         </el-radio-group>
       </span>
     </div>
-    <AutoDataTable class="table" :config="tableConfig" />
+    <el-table
+      :data="tableData"
+      style="width: 100%"
+      class="table"
+    >
+      <el-table-column :label="'排名'">
+        <template v-slot="scope">
+          <span>{{ scope.$index + 1 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-for="i in columns"
+        :key="i.prop"
+        :prop="i.prop"
+        :label="i.label"
+      >
+        {{ i.prop }}
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
-import AutoDataTable from '@/components/AutoDataTable'
 
 export default {
   components: {
-    AutoDataTable
   },
   props: {
     title: {
@@ -50,24 +66,20 @@ export default {
       type: String,
       default: ''
     },
+    data: {
+      type: String,
+      default: () => ''
+    },
     columns: {
       type: Array,
       default: () => []
-    },
-    columnsMeta: {
-      type: Object,
-      default: () => ({})
-    },
-    config: {
-      type: Object,
-      default: () => ({})
     },
     options: {
       type: Array,
       default: () => [
         {
           label: '今天',
-          value: 'today'
+          value: '1'
         },
         {
           label: '近7天',
@@ -82,29 +94,23 @@ export default {
   },
   data() {
     return {
-      select: 'today',
-      tableConfig: {
-        url: this.url,
-        columns: [...new Set(['index', ...this.columns])],
-        columnsMeta: {
-          index: {
-            label: '排名',
-            width: 60,
-            formatter: (row, column, value, index) => index + 1
-          },
-          ...this.columnsMeta
-        },
-        hasSelection: false,
-        paginationSize: 10
-      }
+      select: '1',
+      tableData: [],
+      tableUrl: this.url + `&days=1`
     }
   },
   created() {
-
+    this.init()
   },
   methods: {
+    init() {
+      this.$axios.get(this.tableUrl).then(res => {
+        this.tableData = this.data ? res?.[this.data] : res
+      })
+    },
     onChange() {
-      this.tableConfig.url = this.url + `?range=${this.select}`
+      this.tableUrl = this.url + `&days=${this.select}`
+      this.init()
     }
   }
 }
@@ -155,15 +161,7 @@ export default {
     }
   }
 }
-.table {
-  &>>> .el-table .el-table__header-wrapper thead {
-    th, tr {
-      height: 46px;
-      background-color: #F5F6F7!important;
-    }
-  }
-  &>>> .el-data-table .el-pagination {
-  display: none;
-}
+>>> .el-table th, .el-table tr {
+  background-color: #F5F6F7!important;
 }
 </style>
