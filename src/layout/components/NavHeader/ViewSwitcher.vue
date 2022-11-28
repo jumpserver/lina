@@ -188,8 +188,8 @@ export default {
 }
 .el-menu-item.is-active {
   font-weight: bold;
-  color: var(--submenu-active-text);
-  border-left: 4px solid var(--menu-active-left);
+  color: var(--color-primary);
+  border-left: 4px solid var(--color-primary);
 }
 .menu-main.mobile-view-switch >>> .el-submenu__icon-arrow {
   right: 10px;

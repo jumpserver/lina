@@ -150,11 +150,11 @@ export default {
       transform: translateY(-50%);
       z-index: 1;
       &:hover {
-        color: var(--menu-active-text);
+        color: var(--color-primary);
       }
       .icon {
         &:hover {
-          color: var(--submenu-active-text);
+          color: var(--color-primary);
         }
       }
     }
