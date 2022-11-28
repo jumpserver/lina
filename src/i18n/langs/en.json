@@ -592,6 +592,8 @@
     "LoginTo": "Login to",
     "LoginUsers": "Active users",
     "Monthly": "Monthly",
+    "CurrentConnections": "Current connections",
+    "TodayFailedConnections": "Connections failed today",
     "OnlineSessions": "Online sessions",
     "OnlineUsers": "Online users",
     "ConnectUsers": "Connect users",

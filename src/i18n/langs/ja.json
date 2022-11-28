@@ -603,6 +603,8 @@
     "LoginTo": "ログインしました",
     "LoginUsers": "アクティブユーザー",
     "Monthly": "月ごと",
+    "CurrentConnections": "現在の接続数",
+    "TodayFailedConnections": "今日の接続に失敗しました",
     "OnlineSessions": "オンラインセッション",
     "OnlineUsers": "オンラインユーザー",
     "ConnectUsers": "ユーザーの接続",

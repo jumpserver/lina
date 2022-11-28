@@ -2,7 +2,7 @@
   <div class="box">
     <div style="margin-bottom: 12px;">
       <span class="title">实时数据</span>
-      <span class="time">更新时间：2022-11-17</span>
+      <!-- <span class="time">更新时间：2022-11-17</span> -->
     </div>
     <div class="content">
       <el-row type="flex" justify="space-between">
@@ -25,10 +25,9 @@ export default {
   data() {
     return {
       counter: {
-        total_count_assets: '.',
-        total_count_users: '.',
+        total_count_online_sessions: '.',
         total_count_online_users: '.',
-        total_count_online_sessions: '.'
+        total_count_today_failed_sessions: '.'
       }
     }
   },
@@ -36,15 +35,15 @@ export default {
     summaryItems() {
       return [
         {
-          title: this.$t('dashboard.AssetsTotal'),
+          title: this.$t('dashboard.OnlineSessions'),
           body: {
-            route: { name: 'AssetList' },
-            count: this.counter.total_count_assets,
-            disabled: !this.$hasPerm('assets.view_asset')
+            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
+            count: this.counter.total_count_online_sessions,
+            disabled: !this.$hasPerm('terminal.view_session')
           }
         },
         {
-          title: this.$t('dashboard.ConnectUsers'),
+          title: this.$t('dashboard.CurrentConnections'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.counter.total_count_online_users,
@@ -52,11 +51,10 @@ export default {
           }
         },
         {
-          title: this.$t('dashboard.OnlineSessions'),
+          title: this.$t('dashboard.TodayFailedConnections'),
           body: {
-            route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
-            count: this.counter.total_count_online_sessions,
-            disabled: !this.$hasPerm('terminal.view_session')
+            count: this.counter.total_count_today_failed_sessions,
+            disabled: true
           }
         }
       ]
