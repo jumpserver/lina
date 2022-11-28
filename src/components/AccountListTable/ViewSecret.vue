@@ -74,6 +74,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    url: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -82,8 +86,7 @@ export default {
       secretInfo: {},
       showSecret: false,
       sshKeyFingerprint: '',
-      showPasswordHistoryDialog: false,
-      url: `/api/v1/assets/account-secrets/${this.account.id}/`
+      showPasswordHistoryDialog: false
     }
   },
   computed: {
