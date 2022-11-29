@@ -4,12 +4,14 @@
       <Announcement />
       <el-row :gutter="16">
         <el-col :lg="12" :sm="24">
-          <LeftSummary />
+          <RealTimeSummary />
+          <LineChart />
         </el-col>
         <el-col :lg="12" :sm="24">
           <DataSummary />
         </el-col>
       </el-row>
+      <AssetProportionSummary />
       <RankSummary />
     </div>
     <Page403 v-else />
@@ -21,8 +23,10 @@ import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
 import DataSummary from './DataSummary'
-import LeftSummary from './LeftSummary'
+import AssetProportionSummary from './AssetProportionSummary'
 import RankSummary from './RankSummary'
+import RealTimeSummary from './components/RealTimeSummary.vue'
+import LineChart from './components/LineChart.vue'
 
 export default {
   name: 'Dashboard',
@@ -30,8 +34,10 @@ export default {
     Page,
     Announcement,
     DataSummary,
-    LeftSummary,
+    AssetProportionSummary,
     RankSummary,
+    RealTimeSummary,
+    LineChart,
     Page403
   },
   data() {

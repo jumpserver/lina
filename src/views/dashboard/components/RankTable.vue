@@ -1,18 +1,7 @@
 <template>
   <div class="box">
     <div class="head">
-      <span class="title">
-        {{ title }}
-        <el-tooltip
-          v-if="note"
-          effect="dark"
-          :content="note"
-          placement="top"
-        >
-          <i class="fa fa-exclamation-circle icon" />
-        </el-tooltip>
-        <i v-else class="fa fa-exclamation-circle icon" />
-      </span>
+      <Title :config="config" />
       <span>
         <el-radio-group
           v-model="select"
@@ -37,80 +26,66 @@
         </template>
       </el-table-column>
       <el-table-column
-        v-for="i in columns"
+        v-for="i in config.columns"
         :key="i.prop"
         :prop="i.prop"
         :label="i.label"
-      >
-        {{ i.prop }}
-      </el-table-column>
+      />
     </el-table>
   </div>
 </template>
 
 <script>
+import Title from './Title.vue'
 
 export default {
   components: {
+    Title
   },
   props: {
-    title: {
-      type: String,
-      default: ''
+    config: {
+      type: Object,
+      default: () => {}
     },
     url: {
       type: String,
       default: ''
-    },
-    note: {
-      type: String,
-      default: ''
-    },
-    data: {
-      type: String,
-      default: () => ''
-    },
-    columns: {
-      type: Array,
-      default: () => []
-    },
-    options: {
-      type: Array,
-      default: () => [
-        {
-          label: '今天',
-          value: '1'
-        },
-        {
-          label: '近7天',
-          value: '7'
-        },
-        {
-          label: '近30天',
-          value: '30'
-        }
-      ]
     }
   },
   data() {
+    const defaultOptions = [
+      {
+        label: '今天',
+        value: '1'
+      },
+      {
+        label: '近7天',
+        value: '7'
+      },
+      {
+        label: '近30天',
+        value: '30'
+      }
+    ]
     return {
       select: '1',
       tableData: [],
-      tableUrl: this.url + `&days=1`
+      options: this.config.options || defaultOptions,
+      tableUrl: this.config.url + `&days=1`
     }
   },
   created() {
-    this.init()
+    this.getList()
   },
   methods: {
-    init() {
+    getList() {
       this.$axios.get(this.tableUrl).then(res => {
-        this.tableData = this.data ? res?.[this.data] : res
+        this.tableData = this.config.data ? res?.[this.config.data] : res
       })
     },
     onChange() {
-      this.tableUrl = this.url + `&days=${this.select}`
-      this.init()
+      this.tableUrl = this.config.url + `&days=${this.select}`
+      this.getList()
     }
   }
 }
@@ -125,17 +100,6 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
-    .title {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 26px;
-      color: #1F2329;
-    }
-    .icon {
-      color: #BBBFC4;
-      cursor: pointer;
-    }
     .switch {
       background: #EFF0F1;
       border-radius: 4px;

@@ -2,10 +2,10 @@
   <div>
     <el-row :gutter="16">
       <el-col :lg="12" :sm="24">
-        <RankTable v-bind="userConfig" />
+        <RankTable :config="userConfig" />
       </el-col>
       <el-col :lg="12" :sm="24">
-        <RankTable v-bind="assetConfig" />
+        <RankTable :config="assetConfig" />
       </el-col>
     </el-row>
   </div>
@@ -22,7 +22,7 @@ export default {
       userConfig: {
         title: '登录用户排名',
         url: '/api/v1/index/?dates_login_times_top10_users=1',
-        note: '登录用户排名',
+        tip: '登录用户排名',
         data: 'dates_login_times_top10_users',
         columns: [
           {
@@ -38,7 +38,7 @@ export default {
       assetConfig: {
         title: '活跃资产排名',
         url: '/api/v1/index/?dates_login_times_top10_assets=1',
-        note: '活跃资产排名',
+        tip: '活跃资产排名',
         data: 'dates_login_times_top10_assets',
         columns: [
           {
@@ -50,12 +50,8 @@ export default {
             label: '访问次数'
           }
         ]
-      },
-      columnsMeta: {}
+      }
     }
-  },
-  methods: {
-
   }
 }
 </script>
