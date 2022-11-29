@@ -15,7 +15,7 @@ export default {
       initial: {
       },
       fields: [
-        [this.$t('common.Basic'), ['name', 'assets', 'comment']]
+        [this.$t('common.Basic'), ['name', 'nodes', 'assets', 'comment']]
       ],
       fieldsMeta: {
         assets: {
@@ -24,6 +24,17 @@ export default {
           label: this.$t('assets.Assets'),
           el: {
             value: []
+          }
+        },
+        nodes: {
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/nodes/',
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
+              }
+            }
           }
         }
       },
