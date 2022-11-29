@@ -108,18 +108,30 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false
+        hasMoreActions: false,
+        extraActions: [
+          {
+            name: this.$t('ops.QuickJob'),
+            title: this.$t('ops.QuickJob'),
+            has: () => {
+              return true
+            },
+            callback: () => {
+              this.$router.push({ name: 'QuickJob' })
+            }
+          }
+        ]
       }
     }
   },
   methods: {
     runJob(row, parameters) {
-      console.log(row)
       this.$axios.post('/api/v1/ops/job-executions/', {
         job: row.id,
         parameters: parameters
       }).then(() => {
         this.$message.success(this.$tc('ops.TaskDispatch'))
+        this.$router.push({ name: 'Executions' })
       })
     }
   }

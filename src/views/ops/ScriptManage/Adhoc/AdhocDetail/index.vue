@@ -8,7 +8,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AdhocDetail from '@/views/ops/Adhoc/my/AdhocDetail/AdhocDetail'
+import AdhocDetail from '@/views/ops/ScriptManage/Adhoc/AdhocDetail/AdhocDetail'
 
 export default {
   components: {

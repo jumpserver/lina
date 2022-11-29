@@ -8,7 +8,7 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable'
 import { ActionsFormatter } from '@/components/TableFormatters'
-import UploadDialog from '@/views/ops/Playbook/UploadDialog'
+import UploadDialog from '@/views/ops/ScriptManage/Playbook/UploadDialog'
 
 export default {
   components: {

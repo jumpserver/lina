@@ -27,8 +27,8 @@ export default {
         [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
         [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('ops.Plan'), ['runAfterSave', 'is_periodic', 'crontab']],
-        [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']]
+        [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
+        [this.$t('ops.Plan'), ['runAfterSave', 'is_periodic', 'crontab']]
       ],
       initial: {
         type: 'adhoc',
@@ -121,7 +121,6 @@ export default {
           }
         },
         use_parameter_define: {
-          label: this.$t('ops.UseParameterDefine'),
           type: 'switch',
           hidden: () => {
             return this.instantTask
@@ -168,8 +167,7 @@ export default {
       this.ready = true
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 
 </script>

@@ -10,27 +10,27 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-import PlaybookList from '@/views/ops/Playbook/PlaybookList'
-import History from '@/views/ops/Playbook/HIstory'
+import Adhoc from '@/views/ops/ScriptManage/Adhoc'
+import Playbook from '@/views/ops/ScriptManage/Playbook'
 
 export default {
   name: 'Index',
   components: {
     TabPage,
-    PlaybookList,
-    History
+    Adhoc,
+    Playbook
   },
   data() {
     return {
-      activeMenu: 'PlaybookList',
+      activeMenu: 'Adhoc',
       submenu: [
         {
-          title: 'Playbook',
-          name: 'PlaybookList'
+          title: this.$t('ops.AdhocManage'),
+          name: 'Adhoc'
         },
         {
-          title: this.$t('ops.history'),
-          name: 'History'
+          title: this.$t('ops.PlaybookManage'),
+          name: 'Playbook'
         }
       ]
     }
