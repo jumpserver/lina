@@ -215,5 +215,12 @@ export default {
       display: none !important;;
     }
   }
+
+  >>> .el-badge__content {
+    color: var(--color-primary);
+  }
+  >>> .el-badge__content--primary {
+    background-color: #fff;
+  }
 </style>
 
