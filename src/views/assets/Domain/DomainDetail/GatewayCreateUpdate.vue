@@ -46,6 +46,11 @@ export default {
             }
           }
         },
+        username: {
+          el: {
+            type: 'text'
+          }
+        },
         password: {
           component: UpdateToken
         },
@@ -69,6 +74,10 @@ export default {
       },
       url: `/api/v1/assets/gateways/`,
       hasDetailInMsg: false,
+      afterGetFormValue(formValue) {
+        formValue.username = formValue.username_display
+        return formValue
+      },
       getNextRoute(res, method) {
         const domain = res.domain
         const route = {
@@ -91,7 +100,6 @@ export default {
     }
   },
   mounted() {
-    console.log('---', this.object)
   },
   methods: {
   }
