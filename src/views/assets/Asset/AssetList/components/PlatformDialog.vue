@@ -69,7 +69,7 @@ export default {
         macos: 'fa-apple'
       },
       bottomColors: [
-        '#1c84c6', '#23c6c8', '#2b937c', '#f8ac59',
+        '#1c84c6', '#23c6c8', '#1ab394', '#f8ac59',
         '#783887', '#fc6554'
       ]
     }

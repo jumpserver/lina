@@ -19,16 +19,10 @@
 import * as echarts from 'echarts'
 
 export default {
-  components: {
-
-  },
-  props: {
-
-  },
+  components: {},
+  props: {},
   data() {
-    return {
-
-    }
+    return {}
   },
   computed: {
     options() {
@@ -134,7 +128,7 @@ export default {
           barWidth: '20%',
           itemStyle: {
             normal: {
-              color: '#2b937c'
+              color: '#1ab394'
             }
           },
           label: {
@@ -151,9 +145,7 @@ export default {
   created() {
 
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 
@@ -162,11 +154,13 @@ export default {
   width: 100%;
   height: 272px;
 }
+
 .content {
   .head {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
+
     .title {
       font-style: normal;
       font-weight: 500;
@@ -174,10 +168,12 @@ export default {
       line-height: 26px;
       color: #1F2329;
     }
+
     .icon {
       color: #BBBFC4;
       cursor: pointer;
     }
+
     .time {
       font-weight: 400;
       font-size: 10px;
