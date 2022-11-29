@@ -17,79 +17,85 @@ export default {
 
   },
   props: {
-
+    config: {
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
-      userConnectData: {
-        dates_total_count_active_users: 0,
-        dates_total_count_disabled_users: 0,
-        dates_total_count_inactive_users: 0
-      }
     }
   },
   computed: {
-    themeColor() {
-      const documentStyle = document.documentElement.style
-      return {
-        primary: documentStyle.getPropertyValue('--color-primary'),
-        info: documentStyle.getPropertyValue('--color-info'),
-        success: documentStyle.getPropertyValue('--color-success')
-      }
-    },
     options() {
-      const { primary, info, success } = this.themeColor
+      const { total, active, title } = this.config
+      const percentage = ((active / total) * 100).toFixed(0)
       return {
+        title: [
+          {
+            text: this.config.chartTitle,
+            textStyle: {
+              color: '#646A73',
+              fontSize: 12
+            },
+            textAlign: 'center',
+            left: '48%',
+            top: '32%'
+          },
+          {
+            left: '48%',
+            top: '42%',
+            textAlign: 'center',
+            text: this.config.active,
+            textStyle: {
+              fontSize: 24,
+              color: '#646A73'
+            },
+            subtext: '占比' + percentage + '%',
+            subtextStyle: {
+              fontSize: 12,
+              color: '#646A73'
+            }
+          }
+        ],
         legend: {
           show: false
         },
-        color: [primary, info, success],
+        color: [this.config.color, 'rgba(43, 147, 124, 0.05)'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
         series: [
           {
-            name: this.$t('dashboard.UserRatio'),
+            name: title,
             type: 'pie',
-            radius: ['50%', '70%'],
+            radius: ['72%', '90%'],
             avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
+            itemStyle: {
+              normal: {
+                label: {
+                  show: false
+                },
+                labelLine: {
+                  show: false
+                }
+
+              }
             },
             emphasis: {
               label: {
-                show: true,
-                fontSize: '18',
-                fontWeight: 'bold'
+                show: false
               }
             },
             labelLine: {
               show: false
             },
-            data: [
-              { name: this.$t('dashboard.ActiveUser'), value: this.userConnectData.dates_total_count_active_users },
-              { name: this.$t('dashboard.DisabledUser'), value: this.userConnectData.dates_total_count_disabled_users },
-              { name: this.$t('dashboard.InActiveUser'), value: this.userConnectData.dates_total_count_inactive_users }
-            ]
+            startAngle: 180,
+            data: this.config.data
           }
         ]
       }
-    }
-  },
-  mounted() {
-    this.getTotalActiveRadioData()
-  },
-  methods: {
-    async getTotalActiveRadioData() {
-      let url = '/api/v1/index/?dates_total_count_users=1&dates_total_count_assets=1'
-      if (this.range === 'monthly') {
-        url = `${url}&monthly=1`
-      }
-
-      const data = await this.$axios.get(url)
-      this.userConnectData = data
     }
   }
 }

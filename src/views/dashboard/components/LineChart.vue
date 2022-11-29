@@ -1,11 +1,7 @@
 <template>
   <div class="box">
     <div class="head">
-      <span class="title">
-        用户/资产活跃情况
-        <i class="fa fa-exclamation-circle icon" />
-      </span>
-      <!-- <span class="time">更新时间：2022-11-17</span> -->
+      <Title :config="config" />
     </div>
     <echarts
       ref="echarts"
@@ -22,9 +18,11 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
+import Title from './Title.vue'
 
 export default {
   name: 'LoginMetric',
+  components: { Title },
   props: {
     range: {
       type: String,
@@ -33,6 +31,10 @@ export default {
   },
   data: function() {
     return {
+      config: {
+        title: '用户/资产活跃情况 ',
+        tip: '用户/资产活跃情况 '
+      },
       dataUrl: '',
       metricsData: {
         dates_metrics_date: [],
@@ -136,15 +138,65 @@ export default {
           {
             name: this.$t('dashboard.LoginUsers'),
             type: 'line',
-            areaStyle: {},
             smooth: true,
+            areaStyle: {
+            // 区域填充样式
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [{
+                    offset: 0,
+                    color: 'rgba(50, 220, 182, 0.6)'
+                  }, {
+                    offset: 0.6,
+                    color: 'rgba(50, 220, 182, 0.2)'
+                  },
+                  {
+                    offset: 0.8,
+                    color: 'rgba(50, 220, 182, 0.1)'
+                  }
+                  ],
+                  false
+                ),
+                shadowColor: 'rgba(50, 220, 182, 0.1)',
+                shadowBlur: 6
+              }
+            },
             data: this.metricsData.dates_metrics_total_count_active_users
           },
           {
             name: this.$t('dashboard.LoginAssets'),
             type: 'line',
-            areaStyle: {},
             smooth: true,
+            areaStyle: {
+            // 区域填充样式
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [{
+                    offset: 0,
+                    color: 'rgba(249, 199, 79, 0.6)'
+                  }, {
+                    offset: 0.6,
+                    color: 'rgba(249, 199, 79, 0.2)'
+                  },
+                  {
+                    offset: 0.8,
+                    color: 'rgba(249, 199, 79, 0.1)'
+                  }
+                  ],
+                  false
+                ),
+                shadowColor: 'rgba(249, 199, 79, 0.1)',
+                shadowBlur: 6
+              }
+            },
             data: this.metricsData.dates_metrics_total_count_active_assets
           }
         ]
@@ -161,7 +213,7 @@ export default {
   },
   methods: {
     async getMetricData() {
-      const url = '/api/v1/index/?dates_metrics=1&'
+      const url = '/api/v1/index/?dates_metrics=1&days=7'
       const data = await this.$axios.get(url)
       this.metricsData = data
       const activeAssets = 'dates_metrics_total_count_active_assets'
