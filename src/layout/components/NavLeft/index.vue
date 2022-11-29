@@ -18,7 +18,7 @@
           <el-popover
             placement="right-start"
             width="160"
-            trigger="click"
+            trigger="hover"
           >
             <ViewSwitcher :mode="'vertical'" />
             <svg-icon slot="reference" class="icon" icon-class="switch" />
