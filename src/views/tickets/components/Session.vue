@@ -28,7 +28,7 @@
         </el-col>
         <el-col>
           <span class="item-label">{{ $t('sessions.SessionState') }}：</span>
-          <span class="item-value cur-color" :style="{ 'background': session.is_finished ? '#ed5565' : '#1ab394' }" />
+          <span class="item-value cur-color" :style="{ 'background': session.is_finished ? '#ed5565' : '#2b937c' }" />
         </el-col>
       </el-row>
     </div>
@@ -62,7 +62,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -126,27 +127,34 @@ export default {
   .box {
     margin-top: 15px;
     margin-bottom: 15px;
-    &>>> .el-divider--horizontal {
+
+    & > > > .el-divider--horizontal {
       margin: 10px 0;
     }
   }
+
   .content {
     line-height: 2.5;
     font-size: 13px;
     color: #676A6C;
+
     .item-label {
       font-weight: 700;
     }
+
     .item-value {
       color: #676A6C;
     }
-    &>>> .el-col {
+
+    & > > > .el-col {
       line-height: 24px;
     }
   }
+
   .bottom-btn {
     text-align: right;
   }
+
   .cur-color {
     display: inline-block;
     width: 12px;

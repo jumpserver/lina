@@ -40,6 +40,7 @@
 
 <script>
 import Dialog from '@/components/Dialog'
+
 export default {
   name: 'PlatformDialog',
   components: {
@@ -68,7 +69,7 @@ export default {
         macos: 'fa-apple'
       },
       bottomColors: [
-        '#1c84c6', '#23c6c8', '#1ab394', '#f8ac59',
+        '#1c84c6', '#23c6c8', '#2b937c', '#f8ac59',
         '#783887', '#fc6554'
       ]
     }
@@ -78,7 +79,9 @@ export default {
       set(val) {
         this.$emit('update:visible', val)
       },
-      get() { return this.visible }
+      get() {
+        return this.visible
+      }
     },
     iPlatforms() {
       let recentPlatforms = {}
@@ -163,9 +166,11 @@ export default {
 <style lang="scss" scoped>
 .platform-item {
   margin: 5px 0;
-  & >>> .el-card__body {
+
+  & > > > .el-card__body {
     padding: 10px
   }
+
   border-left: solid 4px;
 }
 
