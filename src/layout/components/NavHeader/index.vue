@@ -101,7 +101,7 @@ export default {
     height: $header-height;
     line-height: $header-height;
     overflow: hidden;
-    background: var(--color-primary);
+    background: var(--nav-bg);
 
     .navbar-left {
       float: left;
