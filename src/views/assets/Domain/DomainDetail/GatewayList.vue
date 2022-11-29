@@ -55,21 +55,22 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
-        columns: ['name', 'ip', 'port', 'protocol', 'username', 'comment', 'actions'],
+        columns: ['name', 'address', 'port', 'username_display', 'comment', 'actions'],
         columnsMeta: {
           name: {
             sortable: 'custom',
             formatter: DisplayFormatter
           },
-          ip: {
+          address: {
             width: '140px'
           },
           port: {
-            width: '60px'
-          },
-          protocol: {
-            sortable: 'custom',
-            width: '100px'
+            width: '120px',
+            label: this.$t('assets.SshPort'),
+            formatter: (row) => {
+              console.log('row', row)
+              return row.protocols ? row.protocols[0].port : '-'
+            }
           },
           actions: {
             formatterArgs: {
