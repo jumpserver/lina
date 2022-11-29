@@ -67,7 +67,7 @@ export function changeMenuColor(themeColors) {
   const elementStyle = document.documentElement.style
   const colors = Object.keys(themeColors).length > 0 ? themeColors : defaultThemeConfig
 
-  const colorValue = themeColors['--color-primary'].replace(/#/g, '')
+  const colorValue = colors['--color-primary'].replace(/#/g, '')
   const black = 'ffffff'
   const menuHoverColor = mix(black, colorValue, 96)
   elementStyle.setProperty('--menu-hover', menuHoverColor)
