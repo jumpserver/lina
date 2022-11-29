@@ -15,17 +15,14 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/domains/',
         columns: [
-          'name', 'node_count', 'asset_count', 'application_count', 'gateway_count', 'date_created',
+          'name', 'asset_count', 'application_count', 'gateway_count', 'date_created',
           'comment', 'org_name', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'node_count', 'asset_count', 'application_count', 'gateway_count', 'comment', 'actions']
+          default: ['name', 'asset_count', 'application_count', 'gateway_count', 'comment', 'actions']
         },
         columnsMeta: {
-          node_count: {
-            label: this.$t('assets.Node')
-          },
           asset_count: {
             label: this.$t('assets.Assets')
           },
