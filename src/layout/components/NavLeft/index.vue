@@ -12,8 +12,10 @@
         />
         <span
           v-show="!isCollapse"
-          style="margin-left: 3px;"
-        >{{ isRouteMeta.title || '' }}</span>
+          style="margin-left: 10px;"
+        >
+          {{ isRouteMeta.title || '' }}
+        </span>
         <span v-show="!isCollapse" class="switch-view">
           <el-popover
             placement="right-start"
@@ -123,6 +125,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
   .nav-header {
     overflow: hidden;
     background-color: var(--color-primary);
@@ -143,15 +146,18 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     background-color: var(--menu-bg);
+
     .switch-view {
       position: absolute;
       top: 50%;
       right: 0;
       transform: translateY(-50%);
       z-index: 1;
+
       &:hover {
         color: var(--color-primary);
       }
+
       .icon {
         &:hover {
           color: var(--color-primary);
@@ -194,20 +200,25 @@ export default {
       background-color: $subMenuHover;
     }
   }
+
   .active-mobile {
     display: none;
-    &>>> .organization {
+
+    & > > > .organization {
       padding-left: 8px;
       background: transparent;
       color: #fff;
     }
-    &>>> .menu-main {
+
+    & > > > .menu-main {
       margin-left: -10px;
     }
-    &>>> .title-label {
+
+    & > > > .title-label {
       color: white !important;
     }
   }
+
   @media screen and (max-width: 992px) {
     .active-mobile {
       display: block;
