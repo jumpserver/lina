@@ -19,6 +19,7 @@
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
 import Title from './Title.vue'
+import { mix } from '@/utils/theme/color'
 
 export default {
   name: 'LoginMetric',
@@ -32,8 +33,8 @@ export default {
   data: function() {
     return {
       config: {
-        title: '用户/资产活跃情况 ',
-        tip: '用户/资产活跃情况 '
+        title: this.$t('dashboard.UserAssetActivity'),
+        tip: this.$t('dashboard.UserAssetActivity')
       },
       dataUrl: '',
       metricsData: {
@@ -44,14 +45,22 @@ export default {
     }
   },
   computed: {
-    themeColor() {
+    mixColors() {
       const documentStyle = document.documentElement.style
+      const primary = documentStyle.getPropertyValue('--color-primary')
+      const colorValue = primary.replace(/#/g, '')
+      const TwoLevelColor = mix(colorValue, 'ffffff', 38)
+      const ThreeLevelColor = mix(colorValue, 'ffffff', 20)
+      const shadowColor = mix(colorValue, 'ffffff', 1)
       return {
-        primary: documentStyle.getPropertyValue('--color-primary')
+        primary,
+        TwoLevelColor,
+        ThreeLevelColor,
+        shadowColor
       }
     },
     options() {
-      const { primary } = this.themeColor
+      const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = this.mixColors
       return {
         title: {
           show: false
@@ -149,20 +158,20 @@ export default {
                   1,
                   [{
                     offset: 0,
-                    color: 'rgba(50, 220, 182, 0.6)'
+                    color: primary
                   }, {
                     offset: 0.6,
-                    color: 'rgba(50, 220, 182, 0.2)'
+                    color: TwoLevelColor
                   },
                   {
                     offset: 0.8,
-                    color: 'rgba(50, 220, 182, 0.1)'
+                    color: ThreeLevelColor
                   }
                   ],
                   false
                 ),
-                shadowColor: 'rgba(50, 220, 182, 0.1)',
-                shadowBlur: 6
+                shadowColor: shadowColor,
+                shadowBlur: 5
               }
             },
             data: this.metricsData.dates_metrics_total_count_active_users
