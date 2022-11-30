@@ -35,7 +35,7 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasUpdate: false, // can set function(row, value)
+              hasUpdate: true, // can set function(row, value)
               hasDelete: false, // can set function(row, value)
               hasClone: this.hasClone,
               moreActionsTitle: this.$t('common.More'),
