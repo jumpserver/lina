@@ -181,7 +181,7 @@ export default {
           meta: {
             title: i18n.t('route.updateAdhoc'),
             permissions: [],
-            activeMenu: '/workbench/ops/adhoc'
+            activeMenu: '/workbench/ops/scripts'
           }
         },
         {
@@ -192,7 +192,7 @@ export default {
           meta: {
             title: i18n.t('ops.createAdhoc'),
             permissions: [],
-            activeMenu: '/workbench/ops/adhoc'
+            activeMenu: '/workbench/ops/scripts'
           }
         },
         {
@@ -203,18 +203,29 @@ export default {
           meta: {
             title: i18n.t('route.AdhocDetail'),
             permissions: [],
-            activeMenu: '/workbench/ops/adhoc'
+            activeMenu: '/workbench/ops/scripts'
           }
         },
         {
-          path: 'playbook/create',
-          name: 'PlaybookCreate',
+          path: 'playbook/:id/update',
+          name: 'PlaybookUpdate',
           hidden: true,
-          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookUpdateCreate'),
+          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookUpdate'),
           meta: {
-            title: i18n.t('route.PlaybookCreate'),
+            title: i18n.t('ops.PlaybookUpdate'),
             permissions: [],
-            activeMenu: '/workbench/ops/playbook'
+            activeMenu: '/workbench/ops/scripts'
+          }
+        },
+        {
+          path: 'playbook/:id',
+          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookDetail'),
+          name: 'PlaybookDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('ops.PlaybookDetail'),
+            permissions: [],
+            activeMenu: '/workbench/ops/scripts'
           }
         }
       ]
