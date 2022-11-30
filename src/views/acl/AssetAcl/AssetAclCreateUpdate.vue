@@ -14,24 +14,22 @@ export default {
     return {
       initial: {
         action: 'login_confirm',
-        system_users: {
-          name_group: '*',
-          protocol_group: '*',
-          username_group: '*'
-        },
         users: {
           username_group: '*'
         },
         assets: {
-          hostname_group: '*',
-          ip_group: '*'
+          name_group: '*',
+          address_group: '*'
+        },
+        accounts: {
+          username_group: '*'
         }
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['users']],
         [this.$t('acl.host'), ['assets']],
-        [this.$t('acl.system_user'), ['system_users']],
+        [this.$t('acl.account'), ['accounts']],
         [this.$t('acl.action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
@@ -40,7 +38,7 @@ export default {
           rules: [rules.Required]
         },
         assets: {
-          fields: ['hostname_group', 'ip_group']
+          fields: ['name_group', 'address_group']
         },
         users: {
           fields: ['username_group'],
@@ -48,8 +46,8 @@ export default {
 
           }
         },
-        system_users: {
-          fields: ['name_group', 'username_group', 'protocol_group']
+        accounts: {
+          fields: ['username_group']
         },
         reviewers: {
           el: {
@@ -65,30 +63,28 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       afterGetFormValue(formValue) {
-        formValue.assets.ip_group = formValue.assets.ip_group.toString()
-        formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
-        formValue.system_users.name_group = formValue.system_users.name_group.toString()
-        formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
-        formValue.system_users.username_group = formValue.system_users.username_group.toString()
+        // assets
+        formValue.assets.name_group = formValue.assets.name_group.toString()
+        formValue.assets.address_group = formValue.assets.address_group.toString()
+        // accounts
+        formValue.accounts.username_group = formValue.accounts.username_group.toString()
+        // users
         formValue.users.username_group = formValue.users.username_group.toString()
         return formValue
       },
       cleanFormValue(value) {
-        if (!Array.isArray(value.assets.ip_group)) {
-          value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
+        // assets
+        if (!Array.isArray(value.assets.name_group)) {
+          value.assets.name_group = value.assets.name_group ? value.assets.name_group.split(',') : []
         }
-        if (!Array.isArray(value.assets.hostname_group)) {
-          value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
+        if (!Array.isArray(value.assets.address_group)) {
+          value.assets.address_group = value.assets.address_group ? value.assets.address_group.split(',') : []
         }
-        if (!Array.isArray(value.system_users.protocol_group)) {
-          value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
+        // accounts
+        if (!Array.isArray(value.accounts.username_group)) {
+          value.accounts.username_group = value.accounts.username_group ? value.accounts.username_group.split(',') : []
         }
-        if (!Array.isArray(value.system_users.name_group)) {
-          value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
-        }
-        if (!Array.isArray(value.system_users.username_group)) {
-          value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
-        }
+        // users
         if (!Array.isArray(value.users.username_group)) {
           value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
         }

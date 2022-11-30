@@ -17,6 +17,7 @@
     "date_created": "Date created",
     "created_by": "Created by",
     "host": "Asset",
+    "account": "Account",
     "system_user": "System user",
     "username_group": "Username group",
     "hostname_group": "Hostname group",
