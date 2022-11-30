@@ -14,24 +14,23 @@ export default {
     return {
       initial: {
         action: 'login_confirm',
-        system_users: {
-          name_group: '*',
-          protocol_group: '*',
-          username_group: '*'
-        },
         users: {
           username_group: '*'
         },
         assets: {
           hostname_group: '*',
           ip_group: '*'
+        },
+        accounts: {
+          name_group: '*',
+          username_group: '*'
         }
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['users']],
         [this.$t('acl.host'), ['assets']],
-        [this.$t('acl.system_user'), ['system_users']],
+        [this.$t('acl.account'), ['accounts']],
         [this.$t('acl.action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
@@ -48,8 +47,8 @@ export default {
 
           }
         },
-        system_users: {
-          fields: ['name_group', 'username_group', 'protocol_group']
+        accounts: {
+          fields: ['name_group', 'username_group']
         },
         reviewers: {
           el: {
@@ -67,9 +66,8 @@ export default {
       afterGetFormValue(formValue) {
         formValue.assets.ip_group = formValue.assets.ip_group.toString()
         formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
-        formValue.system_users.name_group = formValue.system_users.name_group.toString()
-        formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
-        formValue.system_users.username_group = formValue.system_users.username_group.toString()
+        formValue.accounts.name_group = formValue.accounts.name_group.toString()
+        formValue.accounts.username_group = formValue.accounts.username_group.toString()
         formValue.users.username_group = formValue.users.username_group.toString()
         return formValue
       },
@@ -80,14 +78,11 @@ export default {
         if (!Array.isArray(value.assets.hostname_group)) {
           value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
         }
-        if (!Array.isArray(value.system_users.protocol_group)) {
-          value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
+        if (!Array.isArray(value.accounts.name_group)) {
+          value.accounts.name_group = value.accounts.name_group ? value.accounts.name_group.split(',') : []
         }
-        if (!Array.isArray(value.system_users.name_group)) {
-          value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
-        }
-        if (!Array.isArray(value.system_users.username_group)) {
-          value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
+        if (!Array.isArray(value.accounts.username_group)) {
+          value.accounts.username_group = value.accounts.username_group ? value.accounts.username_group.split(',') : []
         }
         if (!Array.isArray(value.users.username_group)) {
           value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []

@@ -20,6 +20,7 @@
     "date_created": "创建时间",
     "created_by": "创建者",
     "host": "资产信息",
+    "account": "账号信息",
     "users": "用户",
     "system_user": "系统用户",
     "username_group": "用户名",

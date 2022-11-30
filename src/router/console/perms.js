@@ -38,5 +38,45 @@ export default [
         meta: { title: i18n.t('route.AssetPermissionDetail') }
       }
     ]
+  },
+  {
+    path: 'host-acls',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.AssetAclList'),
+      licenseRequired: true,
+      app: 'acls',
+      resource: 'loginassetacl'
+    },
+    children: [
+      {
+        path: '',
+        name: 'AssetAclList',
+        component: () => import('@/views/acl/AssetAcl/AssetAclList'),
+        meta: { title: i18n.t('route.AssetAclList') }
+      },
+      {
+        path: 'create',
+        name: 'AssetAclCreate',
+        component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclCreate') }
+      },
+      {
+        path: ':id',
+        name: 'AssetAclDetail',
+        component: () => import('@/views/acl/AssetAcl/AssetAclDetail'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'AssetAclUpdate',
+        component: () => import('@/views/acl/AssetAcl/AssetAclCreateUpdate'),
+        hidden: true,
+        meta: { title: i18n.t('route.AssetAclUpdate') }
+      }
+    ]
   }
 ]
