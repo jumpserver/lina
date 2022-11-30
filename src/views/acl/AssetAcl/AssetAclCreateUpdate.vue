@@ -18,11 +18,10 @@ export default {
           username_group: '*'
         },
         assets: {
-          hostname_group: '*',
-          ip_group: '*'
+          name_group: '*',
+          address_group: '*'
         },
         accounts: {
-          name_group: '*',
           username_group: '*'
         }
       },
@@ -39,7 +38,7 @@ export default {
           rules: [rules.Required]
         },
         assets: {
-          fields: ['hostname_group', 'ip_group']
+          fields: ['name_group', 'address_group']
         },
         users: {
           fields: ['username_group'],
@@ -48,7 +47,7 @@ export default {
           }
         },
         accounts: {
-          fields: ['name_group', 'username_group']
+          fields: ['username_group']
         },
         reviewers: {
           el: {
@@ -64,26 +63,28 @@ export default {
       },
       url: '/api/v1/acls/login-asset-acls/',
       afterGetFormValue(formValue) {
-        formValue.assets.ip_group = formValue.assets.ip_group.toString()
-        formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
-        formValue.accounts.name_group = formValue.accounts.name_group.toString()
+        // assets
+        formValue.assets.name_group = formValue.assets.name_group.toString()
+        formValue.assets.address_group = formValue.assets.address_group.toString()
+        // accounts
         formValue.accounts.username_group = formValue.accounts.username_group.toString()
+        // users
         formValue.users.username_group = formValue.users.username_group.toString()
         return formValue
       },
       cleanFormValue(value) {
-        if (!Array.isArray(value.assets.ip_group)) {
-          value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
+        // assets
+        if (!Array.isArray(value.assets.name_group)) {
+          value.assets.name_group = value.assets.name_group ? value.assets.name_group.split(',') : []
         }
-        if (!Array.isArray(value.assets.hostname_group)) {
-          value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
+        if (!Array.isArray(value.assets.address_group)) {
+          value.assets.address_group = value.assets.address_group ? value.assets.address_group.split(',') : []
         }
-        if (!Array.isArray(value.accounts.name_group)) {
-          value.accounts.name_group = value.accounts.name_group ? value.accounts.name_group.split(',') : []
-        }
+        // accounts
         if (!Array.isArray(value.accounts.username_group)) {
           value.accounts.username_group = value.accounts.username_group ? value.accounts.username_group.split(',') : []
         }
+        // users
         if (!Array.isArray(value.users.username_group)) {
           value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
         }
