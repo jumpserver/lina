@@ -1,5 +1,6 @@
 const getters = {
   sidebar: state => state.app.sidebar,
+  defaultOpensMenu: state => state.app.defaultOpensMenu,
   device: state => state.app.device,
   inited: state => state.app.inited,
   isMobile: state => state.app.device === 'mobile',
