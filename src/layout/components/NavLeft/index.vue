@@ -30,6 +30,7 @@
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
+        :default-openeds="opensMenu"
         :collapse="isCollapse"
         :background-color="variables['menuBg']"
         :text-color="variables['menuText']"
@@ -97,6 +98,13 @@ export default {
       this.$log.debug('Active menu path3: ', locPath)
       return locPath
     },
+    opensMenu() {
+      const { meta } = this.$route
+      if (meta?.opensMenu) {
+        return meta.opensMenu
+      }
+      return []
+    },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
     },
@@ -146,15 +154,19 @@ export default {
     .switch-view {
       position: absolute;
       top: 50%;
-      right: 0;
+      right: 16px;
       transform: translateY(-50%);
       z-index: 1;
+      padding: 3px;
+      line-height: 10px;
+      border-radius: 3px;
       &:hover {
-        color: var(--color-primary);
+        background: var(--menu-hover)!important;
       }
       .icon {
+        margin-right: 0!important;
         &:hover {
-          color: var(--color-primary);
+          color: var(--color-primary)!important;
         }
       }
     }

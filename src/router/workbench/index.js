@@ -29,6 +29,7 @@ export default {
       meta: {
         icon: 'overview',
         title: i18n.t('route.Overview'),
+        opensMenu: ['/workbench/ops'],
         permissions: []
       }
     },
