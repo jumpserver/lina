@@ -2,8 +2,8 @@
   <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
     <div class="nav-header">
       <div class="active-mobile">
-        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
         <Organization v-if="$hasLicense()" class="organization" />
+        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         <svg-icon
@@ -16,7 +16,7 @@
         >
           {{ isRouteMeta.title || '' }}
         </span>
-        <span v-show="!isCollapse" class="switch-view">
+        <span v-show="!isCollapse" class="switch-view active-switch-view">
           <el-popover
             placement="right-start"
             width="160"
@@ -169,6 +169,9 @@ export default {
         }
       }
     }
+    .active-switch-view {
+      display: inline-block;
+    }
   }
 
   .collapsed {
@@ -213,6 +216,7 @@ export default {
       padding-left: 8px;
       background: transparent;
       color: #fff;
+      border-bottom: 1px solid rgba(31,35,41,.15);
     }
 
     & > > > .menu-main {
@@ -222,11 +226,17 @@ export default {
     & > > > .title-label {
       color: white !important;
     }
+    .mobile-view-switch >>> .el-menu-item.is-active {
+      color: #ffffff;
+    }
   }
 
   @media screen and (max-width: 992px) {
     .active-mobile {
       display: block;
+    }
+    .active-switch-view {
+      display: none!important;;
     }
   }
 </style>
