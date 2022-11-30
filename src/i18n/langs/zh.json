@@ -713,6 +713,8 @@
     "instantAdhoc": "即时命令",
     "AdhocManage": "命令管理",
     "PlaybookManage": "Playbook管理",
+    "PlaybookUpdate": "更新Playbook",
+    "PlaybookDetail": "Playbook详情",
     "history": "历史记录",
     "createAdhoc": "创建命令",
     "AdhocDetail": "命令详情",
