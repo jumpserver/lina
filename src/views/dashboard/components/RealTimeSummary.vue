@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       config: {
-        title: '实时数据',
-        tip: '实时数据'
+        title: this.$t('dashboard.RealTimeData'),
+        tip: this.$t('dashboard.RealTimeData')
       },
       counter: {
         total_count_online_sessions: '.',
