@@ -156,7 +156,6 @@ export default {
   height: 35px;
   line-height: 35px;
   background: transparent;
-  border-radius: 19px;
   color: #FFF;
 
   &>>> .el-input__prefix {
