@@ -26,19 +26,19 @@ export default {
 
     return {
       userConfig: {
-        title: '用户数据',
-        tip: '用户数据',
-        subTitle: '用户总数',
+        title: this.$t('dashboard.UserData'),
+        tip: this.$t('dashboard.UserData'),
+        subTitle: this.$t('dashboard.UsersTotal'),
         color: '#FFD260',
-        chartTitle: '今日登录用户数',
+        chartTitle: this.$t('dashboard.LoginUserToday'),
         data: []
       },
       assetConfig: {
-        title: '资产数据',
-        tip: '资产数据',
-        subTitle: '资产总数',
+        title: this.$t('dashboard.AssetData'),
+        tip: this.$t('dashboard.AssetData'),
+        subTitle: this.$t('dashboard.AssetsTotal'),
         color: themeColor,
-        chartTitle: '今日活跃资产数',
+        chartTitle: this.$t('dashboard.LoginAssetToday'),
         data: []
       }
     }
@@ -57,15 +57,15 @@ export default {
         `)
       const users = [
         { name: this.$t('dashboard.ActiveUser'), value: data.total_count_users },
-        { name: this.$t('dashboard.DisabledUser'), value: data.total_count_today_login_users }
+        { name: this.$t('dashboard.InActiveUser'), value: data.total_count_today_login_users }
       ]
       this.$set(this.userConfig, 'data', users)
       this.$set(this.userConfig, 'total', data.total_count_users)
       this.$set(this.userConfig, 'active', data.total_count_today_login_users)
       this.$set(this.userConfig, 'weekAdd', data.total_count_users_this_week)
       const assets = [
-        { name: this.$t('dashboard.ActiveUser'), value: data.total_count_assets },
-        { name: this.$t('dashboard.DisabledUser'), value: data.total_count_today_active_assets }
+        { name: this.$t('dashboard.ActiveAsset'), value: data.total_count_assets },
+        { name: this.$t('dashboard.InActiveAsset'), value: data.total_count_today_active_assets }
       ]
       this.$set(this.assetConfig, 'data', assets)
       this.$set(this.assetConfig, 'total', data.total_count_assets)

@@ -20,7 +20,7 @@
       style="width: 100%"
       class="table"
     >
-      <el-table-column :label="'排名'">
+      <el-table-column :label="$tc('dashboard.ranking')">
         <template v-slot="scope">
           <span>{{ scope.$index + 1 }}</span>
         </template>
@@ -55,15 +55,15 @@ export default {
   data() {
     const defaultOptions = [
       {
-        label: '今天',
+        label: this.$t('dashboard.Today'),
         value: '1'
       },
       {
-        label: '近7天',
+        label: this.$t('dashboard.Last7Days'),
         value: '7'
       },
       {
-        label: '近30天',
+        label: this.$t('dashboard.Last30Days'),
         value: '30'
       }
     ]
@@ -103,6 +103,7 @@ export default {
     .switch {
       background: #EFF0F1;
       border-radius: 4px;
+      padding: 0 4px;
       &>>> .el-radio-button {
         .el-radio-button__inner {
           border: none;

@@ -18,8 +18,8 @@ export default {
   data() {
     return {
       titleConfig: {
-        title: '资产类型占比',
-        tip: '资产类型占比'
+        title: this.$t('dashboard.ProportionOfAssetTypes'),
+        tip: this.$t('dashboard.ProportionOfAssetTypes')
       },
       config: {
         data: []

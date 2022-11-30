@@ -8,7 +8,7 @@
       <div class="num">{{ config.total }}</div>
       <div class="add">
         <span class="add-num">
-          本周新增：{{ config.weekAdd }}
+          {{ $tc('dashboard.WeekAdd') }}：{{ config.weekAdd }}
           <svg-icon icon-class="broken-line" style="font-size: 18px;" />
         </span>
         <span class="add-icon">

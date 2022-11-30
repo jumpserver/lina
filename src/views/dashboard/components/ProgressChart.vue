@@ -12,6 +12,8 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
+import { mix } from '@/utils/theme/color'
+
 export default {
   props: {
     colors: {
@@ -19,8 +21,10 @@ export default {
       default: () => {
         const documentStyle = document.documentElement.style
         const themeColor = documentStyle.getPropertyValue('--color-primary')
+        const colorValue = themeColor.replace(/#/g, '')
+        const subCOlor = mix(colorValue, 'ffffff', 40)
         return [
-          themeColor, '#B3D6CE', '#F3B44B', 'rgba(243, 180, 75, 0.5)',
+          themeColor, subCOlor, '#F3B44B', 'rgba(243, 180, 75, 0.5)',
           '#535C65', 'rgba(83, 92, 101, 0.5)', '#29448A', 'rgba(41, 68, 138, 0.5)'
         ]
       }

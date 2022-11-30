@@ -20,34 +20,34 @@ export default {
   data() {
     return {
       userConfig: {
-        title: '登录用户排名',
+        title: this.$t('dashboard.LoginUserRanking'),
         url: '/api/v1/index/?dates_login_times_top10_users=1',
-        tip: '登录用户排名',
+        tip: this.$t('dashboard.LoginUserRanking'),
         data: 'dates_login_times_top10_users',
         columns: [
           {
             prop: 'user',
-            label: '用户名'
+            label: this.$t('users.Username')
           },
           {
             prop: 'total',
-            label: '登录次数'
+            label: this.$t('dashboard.LoginCount')
           }
         ]
       },
       assetConfig: {
-        title: '活跃资产排名',
+        title: this.$t('dashboard.ActiveAssetRanking'),
         url: '/api/v1/index/?dates_login_times_top10_assets=1',
-        tip: '活跃资产排名',
+        tip: this.$t('dashboard.ActiveAssetRanking'),
         data: 'dates_login_times_top10_assets',
         columns: [
           {
             prop: 'asset',
-            label: '资产名称'
+            label: this.$t('dashboard.AssetName')
           },
           {
             prop: 'total',
-            label: '访问次数'
+            label: this.$t('dashboard.NumberOfVisits')
           }
         ]
       }
