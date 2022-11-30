@@ -28,7 +28,6 @@ export default {
       meta: {
         icon: 'dashboard',
         title: i18n.t('route.Dashboard'),
-        opensMenu: ['/audit/sessions', '/audit/logs'],
         permissions: []
       }
     },
