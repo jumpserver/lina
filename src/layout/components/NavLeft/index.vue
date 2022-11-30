@@ -30,6 +30,7 @@
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
+        :default-openeds="opensMenu"
         :collapse="isCollapse"
         :background-color="variables['menuBg']"
         :text-color="variables['menuText']"
@@ -75,6 +76,13 @@ export default {
       'currentViewRoute',
       'sidebar'
     ]),
+    opensMenu() {
+      const { meta } = this.$route
+      if (meta?.opensMenu) {
+        return meta.opensMenu
+      }
+      return []
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
