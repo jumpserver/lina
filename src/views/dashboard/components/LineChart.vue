@@ -1,8 +1,5 @@
 <template>
-  <div class="box">
-    <div class="head">
-      <Title :config="config" />
-    </div>
+  <div>
     <echarts
       ref="echarts"
       :options="options"
@@ -18,24 +15,38 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
-import Title from './Title.vue'
 import { mix } from '@/utils/theme/color'
 
 export default {
   name: 'LoginMetric',
-  components: { Title },
   props: {
     range: {
       type: String,
       default: 'weekly'
+    },
+    datesMetrics: {
+      type: Array,
+      default: () => []
+    },
+    primaryName: {
+      type: String,
+      default: ''
+    },
+    primaryData: {
+      type: Array,
+      default: () => []
+    },
+    secondaryName: {
+      type: String,
+      default: ''
+    },
+    secondaryData: {
+      type: Array,
+      default: () => []
     }
   },
   data: function() {
     return {
-      config: {
-        title: this.$t('dashboard.UserAssetActivity'),
-        tip: this.$t('dashboard.UserAssetActivity')
-      },
       dataUrl: '',
       metricsData: {
         dates_metrics_date: [],
@@ -79,12 +90,7 @@ export default {
           icon: 'rect',
           // 图例标记的图形宽度
           itemWidth: 10,
-          itemHeight: 10,
-          data: [
-            this.$t('dashboard.LoginCount'),
-            this.$t('dashboard.LoginUsers'),
-            this.$t('dashboard.LoginAssets')
-          ]
+          itemHeight: 10
         },
         grid: {
           left: '3%',
@@ -111,7 +117,7 @@ export default {
             axisTick: {
               show: false
             },
-            data: this.metricsData.dates_metrics_date
+            data: this.datesMetrics
           }
         ],
         yAxis: [
@@ -145,7 +151,7 @@ export default {
         animationDuration: 500,
         series: [
           {
-            name: this.$t('dashboard.LoginUsers'),
+            name: this.primaryName,
             type: 'line',
             smooth: true,
             areaStyle: {
@@ -174,10 +180,10 @@ export default {
                 shadowBlur: 5
               }
             },
-            data: this.metricsData.dates_metrics_total_count_active_users
+            data: this.primaryData
           },
           {
-            name: this.$t('dashboard.LoginAssets'),
+            name: this.secondaryName,
             type: 'line',
             smooth: true,
             areaStyle: {
@@ -206,7 +212,7 @@ export default {
                 shadowBlur: 6
               }
             },
-            data: this.metricsData.dates_metrics_total_count_active_assets
+            data: this.secondaryData
           }
         ]
       }
@@ -217,60 +223,15 @@ export default {
       this.getMetricData()
     }
   },
-  mounted() {
-    this.getMetricData()
-  },
   methods: {
-    async getMetricData() {
-      const url = '/api/v1/index/?dates_metrics=1&days=7'
-      const data = await this.$axios.get(url)
-      this.metricsData = data
-      const activeAssets = 'dates_metrics_total_count_active_assets'
-      const activeUsers = 'dates_metrics_total_count_active_users'
-      if (data[activeAssets].length < 1) {
-        this.metricsData[activeAssets] = [0]
-      }
-      if (data[activeUsers].length < 1) {
-        this.metricsData[activeUsers] = [0]
-      }
-    },
     getDataUrl() {
-      this.dataUrl = this.$refs.echarts.getDataURL({
-      })
+      this.dataUrl = this.$refs.echarts.getDataURL({})
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .box {
-    margin-top: 16px;
-    padding: 20px;
-    background: #fff;
-    .head {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      .title {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 26px;
-        color: #1F2329;
-      }
-      .icon {
-        color: #BBBFC4;
-        cursor: pointer;
-      }
-      .time {
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 26px;
-        text-align: right;
-        color: #8F959E;
-      }
-    }
-  }
   .echarts {
     width: 100%;
     height: 266px;

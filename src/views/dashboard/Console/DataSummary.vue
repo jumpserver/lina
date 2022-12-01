@@ -26,6 +26,8 @@ export default {
         title: this.$t('dashboard.UserData'),
         tip: this.$t('dashboard.UserData'),
         subTitle: this.$t('dashboard.UsersTotal'),
+        icon: 'users',
+        subIcon: 'broken-line',
         color: '#FFD260',
         chartTitle: this.$t('dashboard.LoginUserToday'),
         data: []
@@ -34,6 +36,8 @@ export default {
         title: this.$t('dashboard.AssetData'),
         tip: this.$t('dashboard.AssetData'),
         subTitle: this.$t('dashboard.AssetsTotal'),
+        icon: 'assets',
+        subIcon: 'broken-line',
         color: themeColor,
         chartTitle: this.$t('dashboard.LoginAssetToday'),
         data: []

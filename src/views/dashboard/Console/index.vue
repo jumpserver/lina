@@ -5,7 +5,7 @@
       <el-row :gutter="16">
         <el-col :lg="12" :sm="24">
           <RealTimeSummary />
-          <LineChart />
+          <UserAssetActivity />
         </el-col>
         <el-col :lg="12" :sm="24">
           <DataSummary />
@@ -23,7 +23,7 @@ import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
 import RealTimeSummary from '../components/RealTimeSummary.vue'
-import LineChart from '../components/LineChart.vue'
+import UserAssetActivity from './UserAssetActivity.vue'
 import DataSummary from './DataSummary'
 import AssetProportionSummary from './AssetProportionSummary'
 import RankSummary from './RankSummary'
@@ -37,7 +37,7 @@ export default {
     AssetProportionSummary,
     RankSummary,
     RealTimeSummary,
-    LineChart,
+    UserAssetActivity,
     Page403
   },
   data() {
@@ -48,5 +48,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -1,12 +1,5 @@
 <template>
   <div class="content">
-    <div class="head">
-      <span class="title">
-        用户/资产活跃情况
-        <i class="fa fa-exclamation-circle icon" />
-      </span>
-      <span class="time">更新时间：2022-11-17</span>
-    </div>
     <echarts
       ref="echarts"
       :options="options"
