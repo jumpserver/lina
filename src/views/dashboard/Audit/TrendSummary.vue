@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ColumnChart from './components/ColumnChart'
+import ColumnChart from '../components/ColumnChart'
 export default {
   components: {
     ColumnChart
