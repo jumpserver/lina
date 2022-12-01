@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import { DetailFormatter, SystemUserFormatter } from '@/components/TableFormatters'
+import { DetailFormatter, AccountShowFormatter } from '@/components/TableFormatters'
 import TreeTable from '../TreeTable'
 
 export default {
@@ -35,7 +35,7 @@ export default {
     getShowUrl: {
       type: Function,
       default({ row, col }) {
-        return this.tableUrl.replace('/assets/', `/assets/${row.id}/system-users/?cache_policy=1`)
+        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/?cache_policy=1`)
       }
     }
   },
@@ -59,8 +59,8 @@ export default {
         hasTree: true,
         columns: [
           {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+            prop: 'name',
+            label: this.$t('assets.Name'),
             formatter: DetailFormatter,
             sortable: true,
             formatterArgs: {
@@ -69,16 +69,16 @@ export default {
             showOverflowTooltip: true
           },
           {
-            prop: 'ip',
-            label: this.$t('assets.IP'),
+            prop: 'address',
+            label: this.$t('assets.Address'),
             width: '140px',
             sortable: 'custom'
           },
           {
-            prop: 'systemUsers',
-            label: this.$t('assets.SystemUsers'),
+            prop: 'accounts',
+            label: this.$t('assets.Account'),
             align: 'center',
-            formatter: SystemUserFormatter,
+            formatter: AccountShowFormatter,
             formatterArgs: {
               getUrl: this.getShowUrl.bind(this)
             },

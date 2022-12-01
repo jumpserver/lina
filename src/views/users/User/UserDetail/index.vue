@@ -46,12 +46,12 @@ export default {
             name: 'UserGrantedAssets',
             hidden: () => !vm.$hasPerm('perms.view_userassets')
           },
-          {
-            title: this.$t('users.tabs.grantedAccounts'),
-            name: 'UserGrantedAccounts',
-            // Todo: perms.view_useraccounts
-            hidden: () => !vm.$hasPerm('perms.view_userassets')
-          },
+          // {
+          //   title: this.$t('users.tabs.grantedAccounts'),
+          //   name: 'UserGrantedAccounts',
+          //   // Todo: perms.view_useraccounts
+          //   hidden: () => !vm.$hasPerm('perms.view_userassets')
+          // },
           {
             title: this.$t('users.tabs.assetPermissionRules'),
             name: 'UserAssetPermissionRules',

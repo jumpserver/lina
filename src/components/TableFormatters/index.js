@@ -5,7 +5,7 @@ import ChoicesFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
-import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
+import AccountShowFormatter from './GrantedAccountShowFormatter'
 import ShowKeyCopyFormatter from './ShowKeyCopyFormatter'
 import DialogDetailFormatter from './DialogDetailFormatter'
 import EditableInputFormatter from './EditableInputFormatter'
@@ -20,7 +20,7 @@ export default {
   ActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
-  SystemUserFormatter,
+  AccountShowFormatter,
   ShowKeyCopyFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
@@ -37,7 +37,7 @@ export {
   ActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
-  SystemUserFormatter,
+  AccountShowFormatter,
   ShowKeyCopyFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
