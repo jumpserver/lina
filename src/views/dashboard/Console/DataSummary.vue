@@ -12,13 +12,10 @@
 </template>
 
 <script>
-import DataCard from './components/DataCard.vue'
+import DataCard from '../components/DataCard.vue'
 export default {
   components: {
     DataCard
-  },
-  props: {
-
   },
   data() {
     const documentStyle = document.documentElement.style
