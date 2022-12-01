@@ -28,8 +28,8 @@ export default {
   },
   computed: {
     options() {
-      const { total, active, title } = this.config
-      const percentage = ((active / total) * 100).toFixed(0)
+      const { total, active = 0, title, color } = this.config
+      const percentage = active === 0 ? 0 : ((active / total) * 100).toFixed(0)
       return {
         title: [
           {
@@ -46,7 +46,7 @@ export default {
             left: '48%',
             top: '42%',
             textAlign: 'center',
-            text: this.config.active,
+            text: active,
             textStyle: {
               fontSize: 24,
               color: '#646A73'
@@ -61,7 +61,7 @@ export default {
         legend: {
           show: false
         },
-        color: [this.config.color, 'rgba(43, 147, 124, 0.05)'],
+        color: [color, 'rgba(43, 147, 124, 0.05)'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'

@@ -2,18 +2,7 @@
   <div class="box">
     <div class="head">
       <Title :config="config" />
-      <span>
-        <el-radio-group
-          v-model="select"
-          class="switch"
-          size="mini"
-          @change="onChange"
-        >
-          <el-radio-button v-for="i in options" :key="i.value" :label="i.value">
-            {{ i.label }}
-          </el-radio-button>
-        </el-radio-group>
-      </span>
+      <SwitchDate @change="onChange" />
     </div>
     <el-table
       :data="tableData"
@@ -37,10 +26,12 @@
 
 <script>
 import Title from './Title.vue'
+import SwitchDate from './SwitchDate.vue'
 
 export default {
   components: {
-    Title
+    Title,
+    SwitchDate
   },
   props: {
     config: {
@@ -53,24 +44,8 @@ export default {
     }
   },
   data() {
-    const defaultOptions = [
-      {
-        label: this.$t('dashboard.Today'),
-        value: '1'
-      },
-      {
-        label: this.$t('dashboard.Last7Days'),
-        value: '7'
-      },
-      {
-        label: this.$t('dashboard.Last30Days'),
-        value: '30'
-      }
-    ]
     return {
-      select: '1',
       tableData: [],
-      options: this.config.options || defaultOptions,
       tableUrl: this.config.url + `&days=1`
     }
   },
@@ -83,8 +58,8 @@ export default {
         this.tableData = this.config.data ? res?.[this.config.data] : res
       })
     },
-    onChange() {
-      this.tableUrl = this.config.url + `&days=${this.select}`
+    onChange(val) {
+      this.tableUrl = this.config.url + `&days=${val}`
       this.getList()
     }
   }
@@ -100,30 +75,6 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
-    .switch {
-      background: #EFF0F1;
-      border-radius: 4px;
-      padding: 0 4px;
-      &>>> .el-radio-button {
-        .el-radio-button__inner {
-          border: none;
-          color: #8F959E;
-          background: #EFF0F1;
-        }
-        &.is-active {
-          border-radius: 4px;
-          padding: 4px 0;
-          .el-radio-button__inner {
-            color: var(--color-primary);
-            background-color: #FFF;
-            border-radius: 4px;
-          }
-        }
-      }
-      &>>> .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-        box-shadow: none;
-      }
-    }
   }
 }
 >>> .el-table th, .el-table tr {
