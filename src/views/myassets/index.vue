@@ -22,22 +22,22 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/perms/my/users/assets/',
-        nodeUrl: '/api/v1/perms/my/users/nodes/',
+        url: '/api/v1/perms/users/self/users/assets/',
+        nodeUrl: '/api/v1/perms/users/self/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/perms/users/my/nodes/children/tree/?cache_policy=2',
+        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/?cache_policy=2',
         callback: {
           refresh: () => {},
           onSelected: function(event, treeNode) {
             if (treeNode.meta.type === 'node') {
               const currentNodeId = treeNode.meta.data.id
-              this.tableConfig.url = `/api/v1/perms/users/my/nodes/${currentNodeId}/assets/?cache_policy=1`
+              this.tableConfig.url = `/api/v1/perms/users/self/nodes/${currentNodeId}/assets/?cache_policy=1`
             }
           }.bind(this)
         }
       },
       tableConfig: {
-        url: '/api/v1/perms/users/my/assets/',
+        url: '/api/v1/perms/users/self/assets/',
         hasTree: true,
         columns: ['name', 'address', 'platform', 'category', 'accounts', 'type', 'comment', 'actions'],
         columnsShow: {
@@ -103,7 +103,7 @@ export default {
             formatter: AccountShowFormatter,
             formatterArgs: {
               getUrl: ({ row }) => {
-                return `/api/v1/perms/users/my/assets/${row.id}/accounts/?cache_policy=1`
+                return `/api/v1/perms/users/self/assets/${row.id}/accounts/?cache_policy=1`
               }
             }
           },
