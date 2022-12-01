@@ -9,10 +9,10 @@
       <div class="add">
         <span class="add-num">
           {{ $tc('dashboard.WeekAdd') }}：{{ config.weekAdd }}
-          <svg-icon icon-class="broken-line" style="font-size: 18px;" />
+          <svg-icon v-if="config.subIcon" :icon-class="config.subIcon" class="font" />
         </span>
         <span class="add-icon">
-          <svg-icon icon-class="users" style="font-size: 18px;" />
+          <svg-icon v-if="config.icon" :icon-class="config.icon" class="font" />
         </span>
       </div>
     </div>
@@ -76,6 +76,9 @@ export default {
       width: 100%!important;
       height: 272px!important;
     }
+  }
+  .font {
+    font-size: 18px;
   }
 }
 </style>
