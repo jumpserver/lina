@@ -26,7 +26,8 @@ export default {
         activeMenu: 'Detail',
         actions: {
           canUpdate: this.$hasPerm('assets.change_automationexecution'),
-          canDelete: this.$hasPerm('assets.delete_automationexecution')
+          canDelete: this.$hasPerm('assets.delete_automationexecution'),
+          deleteSuccessRoute: 'GatherUserListIndex'
         },
         submenu: [
           {
