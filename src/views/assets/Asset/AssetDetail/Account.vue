@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       columns: [
-        'username', 'version', 'privileged', 'connectivity',
+        'name', 'username', 'version', 'privileged', 'connectivity',
         'is_active', 'date_created', 'date_updated', 'actions'
       ]
     }
