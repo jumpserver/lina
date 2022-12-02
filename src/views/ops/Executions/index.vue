@@ -7,6 +7,7 @@
 <script>
 import { ActionsFormatter } from '@/components/TableFormatters'
 import { GenericListPage } from '@/layout/components'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -73,19 +74,19 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('详情'),
+                  title: this.$t('common.Detail'),
                   name: 'detail',
                   can: true,
                   callback: ({ row }) => {
-                    // this.$router.push({name: 'JobCreate', query: {type: 'adhoc', id: row.id}})
+                    console.log(1)
                   }
                 },
                 {
-                  title: this.$t('日志'),
-                  name: 'detail',
+                  title: this.$t('ops.output'),
+                  name: 'logging',
                   can: true,
                   callback: ({ row }) => {
-                    // this.$router.push({name: 'JobCreate', query: {type: 'adhoc', id: row.id}})
+                    openTaskPage(row.task_id)
                   }
                 }
               ]

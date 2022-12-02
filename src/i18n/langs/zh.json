@@ -661,6 +661,9 @@
     "Weekly": "按周"
   },
   "ops": {
+    "OpenCommand": "打开命令",
+    "SaveCommand": "保存命令 ",
+    "Log": "日志",
     "Execute": "执行",
     "ID": "ID",
     "No": "否",
