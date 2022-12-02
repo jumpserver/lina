@@ -1,111 +1,109 @@
 <template>
-  <GenericCreateUpdatePage v-bind="$data" />
+  <GenericCreateUpdatePage v-if="!loading" v-bind="iConfig" />
 </template>
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
-import { Select2, UploadKey } from '@/components'
-import { UpdateToken } from '@/components/FormFields'
-import ProtocolSelector from '../components/ProtocolSelector'
+import { assetFieldsMeta } from '@/views/assets/const'
 
 export default {
   name: 'GatewayCreateUpdate',
   components: { GenericCreateUpdatePage },
   data() {
     return {
-      initial: {
-        is_active: true,
-        protocols: '',
-        domain: this.$route.query.domain
-      },
-      fields: [
-        [this.$t('common.Basic'), ['name', 'address']],
-        [this.$t('assets.Network'), ['domain', 'protocols']],
-        [this.$t('assets.Auth'), ['username', 'password', 'private_key', 'passphrase']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
-      ],
-      fieldsMeta: {
-        domain: {
-          component: Select2,
-          el: {
-            ajax: {
-              url: '/api/v1/assets/domains/'
-            },
-            disabled: true,
-            multiple: false
-          }
+      loading: true,
+      platform: {},
+      defaultConfig: {
+        initial: {},
+        platform: {},
+        url: '/api/v1/assets/gateways/',
+        hasDetailInMsg: false,
+        fields: [
+          [this.$t('common.Basic'), ['name', 'address', 'platform']],
+          [this.$t('assets.Network'), ['domain', 'protocols']],
+          [this.$t('assets.Account'), ['accounts']],
+          [this.$t('assets.Node'), ['nodes']],
+          [this.$t('assets.Label'), ['labels']],
+          [this.$t('common.Other'), ['is_active', 'comment']]
+        ],
+        fieldsMeta: assetFieldsMeta(this),
+        cleanFormValue(values) {
+          const { id = '' } = this.$route.params
+          if (id) delete values['accounts']
+          return values
         },
-        protocols: {
-          component: ProtocolSelector,
-          el: {
-          },
-          hidden: (form) => {
-            const fieldsMeta = this.fieldsMeta
-            if (form['protocols']) {
-              fieldsMeta['protocols'].el.choices = form['protocols']
+        getNextRoute(res, method) {
+          const domain = res.domain.id
+          const route = {
+            name: 'DomainDetail',
+            params: {
+              id: domain
+            },
+            query: {
+              activeTab: 'GatewayList'
             }
           }
-        },
-        username: {
-          el: {
-            type: 'text'
-          }
-        },
-        password: {
-          component: UpdateToken
-        },
-        private_key: {
-          component: UploadKey
-        },
-        is_active: {
-          type: 'switch'
+          return route
         }
-      },
-      updateSuccessNextRoute: {
-        name: 'DomainDetail',
-        params: {
-          id: ''
-        }
-      },
-      createSuccessNextRoute: {
-        name: 'DomainDetail',
-        params: {
-        }
-      },
-      url: `/api/v1/assets/gateways/`,
-      hasDetailInMsg: false,
-      afterGetFormValue(formValue) {
-        formValue.username = formValue.username_display
-        return formValue
-      },
-      getNextRoute(res, method) {
-        const domain = res.domain
-        const route = {
-          name: 'DomainDetail',
-          params: {
-            id: domain
-          },
-          query: {
-            activeTab: 'GatewayList'
-          }
-        }
-        return route
-      },
-      cleanFormValue(values) {
-        if (this.$route.params.id && !values.password) {
-          delete values['password']
-        }
-        return values
       }
+
     }
   },
-  mounted() {
+  computed: {
+    iConfig() {
+      const { url, defaultConfig } = this
+      // 过滤类型为：null, undefined 的元素
+      defaultConfig.fields = defaultConfig.fields.filter(Boolean)
+      const config = _.merge(defaultConfig, { url })
+      return config
+    }
+  },
+  async created() {
+    try {
+      await this.setInitial()
+      await this.setPlatformConstrains()
+    } finally {
+      this.loading = false
+    }
   },
   methods: {
+    async setInitial() {
+      const { defaultConfig } = this
+      const { node } = this.$route?.query || {}
+      const nodesInitial = node ? [node] : []
+      const url = `/api/v1/assets/platforms/?name=Gateway`
+      this.platform = await this.$axios.get(url)
+      this.platform = this.platform[0]
+      const initial = {
+        labels: [],
+        is_active: true,
+        nodes: nodesInitial,
+        platform: parseInt(this.platform.id),
+        protocols: [],
+        domain: this.$route.query.domain
+      }
+      if (this.updateInitial) {
+        this.updateInitial(initial)
+      }
+      this.defaultConfig.initial = Object.assign({}, initial, defaultConfig.initial)
+    },
+    async setPlatformConstrains() {
+      const { platform } = this
+      const protocols = platform.protocols.filter(item => item.name === 'ssh')
+      this.defaultConfig.fieldsMeta.protocols.el.choices.splice(0, 0, ...protocols)
+      this.defaultConfig.fieldsMeta.accounts.el.platform = platform
+      this.defaultConfig.fieldsMeta.domain.disabled = true
+      const hiddenCheckFields = ['protocols', 'domain']
+
+      for (const field of hiddenCheckFields) {
+        if (platform[field + '_enabled'] === false) {
+          this.defaultConfig.fieldsMeta[field].hidden = () => true
+        }
+      }
+    }
   }
 }
 </script>
 
-<style lang='less' scoped>
-
+<style>
 </style>
