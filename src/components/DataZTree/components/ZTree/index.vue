@@ -25,16 +25,17 @@
 import $ from '@/utils/jquery-vendor.js'
 import '@ztree/ztree_v3/js/jquery.ztree.all.min.js'
 import '@/styles/ztree.css'
+import '@/styles/ztree_icon.css'
 import axiosRetry from 'axios-retry'
 
 const defaultObject = {
   type: Object,
-  default: () => {}
+  default: () => {
+  }
 }
 export default {
   name: 'ZTree',
-  components: {
-  },
+  components: {},
   props: {
     setting: defaultObject
   },
@@ -79,7 +80,9 @@ export default {
             return axiosRetry.isNetworkOrIdempotentRequestError(e) || e.response.status === 409
           },
           shouldResetTimeout: true,
-          retryDelay: () => { return 5000 }
+          retryDelay: () => {
+            return 5000
+          }
         }
       }).then(res => {
         if (!res) {
@@ -165,15 +168,18 @@ export default {
     list-style: none;
     background-clip: padding-box;
   }
+
   .dataTables_wrapper .dataTables_processing {
     opacity: .9;
     border: none;
   }
-  div.rMenu li{
+
+  div.rMenu li {
     margin: 6px 0;
     cursor: pointer;
     list-style: none outside none;
   }
+
   .dropdown-menu {
     border: medium none;
     min-width: 160px;
@@ -191,12 +197,15 @@ export default {
     top: 100%;
     z-index: 1000;
   }
-  .ztree  ::v-deep  .fa-refresh {
+
+  .ztree ::v-deep .fa-refresh {
     font: normal normal normal 14px/1 FontAwesome !important;
   }
+
   .dropdown a:hover {
     background-color: #f1f1f1
   }
+
   .dropdown-menu > li > a {
     border-radius: 3px;
     color: inherit;
@@ -209,11 +218,13 @@ export default {
     clear: both;
     white-space: nowrap;
   }
-  .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+
+  .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     color: #262626;
     text-decoration: none;
     background-color: #f5f5f5;
   }
+
   .treebox {
     height: 80vh;
     overflow: auto;
