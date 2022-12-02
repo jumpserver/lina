@@ -103,6 +103,8 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "sshkeyAccount": "密钥账号",
+    "passwordAccount": "密码账号",
     "Category": "类别",
     "AccountDetail": "账号详情",
     "Accounts": "账号列表",

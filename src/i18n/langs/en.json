@@ -99,6 +99,8 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "sshkeyAccount": "ssh key account",
+    "passwordAccount": "Password account",
     "SelectTemplate": "Select template",
     "InAssetDetail": "Update account information in asset details",
     "SecretType": "Secret type",
