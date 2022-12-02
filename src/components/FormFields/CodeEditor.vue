@@ -1,9 +1,6 @@
 <template>
   <div style="font-size: 12px">
-    <div
-      v-if="toolbar.length>0"
-      style="height: 100%;width: 100%;vertical-align: middle;display: inline-block;background-color: #1ab394"
-    >
+    <div v-if="toolbar.length>0" class="toolbar">
       <template v-for="(item,index) in toolbar">
         <el-tooltip :key="index" :content="item.tip" placement="top">
           <el-button v-if="item.type==='button'" size="mini" type="primary" @click="item.callback">
@@ -74,6 +71,18 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.toolbar {
+  height: 100%;
+  width: 100%;
+  line-height: 29px;
+  vertical-align: bottom;
+  display: inline-block;
+  border-radius: 4px 4px 0 0;
+  background-color: var(--color-primary);
+}
+>>> .CodeMirror pre.CodeMirror-line,
+>>> .CodeMirror-linenumber.CodeMirror-gutter-elt {
+  line-height: 18px!important;
+}
 </style>

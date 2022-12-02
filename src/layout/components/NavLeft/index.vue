@@ -2,8 +2,8 @@
   <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
     <div class="nav-header">
       <div class="active-mobile">
-        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
         <Organization v-if="$hasLicense()" class="organization" />
+        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         <svg-icon
@@ -12,13 +12,15 @@
         />
         <span
           v-show="!isCollapse"
-          style="margin-left: 3px;"
-        >{{ isRouteMeta.title || '' }}</span>
-        <span v-show="!isCollapse" class="switch-view">
+          style="margin-left: 10px;"
+        >
+          {{ isRouteMeta.title || '' }}
+        </span>
+        <span v-show="!isCollapse" class="switch-view active-switch-view">
           <el-popover
             placement="right-start"
             width="160"
-            trigger="click"
+            trigger="hover"
           >
             <ViewSwitcher :mode="'vertical'" />
             <svg-icon slot="reference" class="icon" icon-class="switch" />
@@ -30,6 +32,7 @@
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
+        :default-openeds="defaultOpensMenu"
         :collapse="isCollapse"
         :background-color="variables['menuBg']"
         :text-color="variables['menuText']"
@@ -73,6 +76,7 @@ export default {
   computed: {
     ...mapGetters([
       'currentViewRoute',
+      'defaultOpensMenu',
       'sidebar'
     ]),
     activeMenu() {
@@ -123,6 +127,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
   .nav-header {
     overflow: hidden;
     background-color: var(--color-primary);
@@ -143,20 +148,29 @@ export default {
     white-space: nowrap;
     cursor: pointer;
     background-color: var(--menu-bg);
+
     .switch-view {
       position: absolute;
       top: 50%;
-      right: 0;
+      right: 16px;
       transform: translateY(-50%);
       z-index: 1;
+      padding: 3px;
+      line-height: 10px;
+      border-radius: 3px;
       &:hover {
-        color: var(--color-primary);
+        background: var(--menu-hover)!important;
       }
+
       .icon {
+        margin-right: 0!important;
         &:hover {
           color: var(--color-primary);
         }
       }
+    }
+    .active-switch-view {
+      display: inline-block;
     }
   }
 
@@ -194,23 +208,35 @@ export default {
       background-color: $subMenuHover;
     }
   }
+
   .active-mobile {
     display: none;
-    &>>> .organization {
+
+    & > > > .organization {
       padding-left: 8px;
       background: transparent;
       color: #fff;
+      border-bottom: 1px solid rgba(31,35,41,.15);
     }
-    &>>> .menu-main {
+
+    & > > > .menu-main {
       margin-left: -10px;
     }
-    &>>> .title-label {
+
+    & > > > .title-label {
       color: white !important;
     }
+    .mobile-view-switch >>> .el-menu-item.is-active {
+      color: #ffffff;
+    }
   }
+
   @media screen and (max-width: 992px) {
     .active-mobile {
       display: block;
+    }
+    .active-switch-view {
+      display: none!important;;
     }
   }
 </style>

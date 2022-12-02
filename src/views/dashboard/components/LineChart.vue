@@ -1,12 +1,5 @@
 <template>
-  <div class="box">
-    <div class="head">
-      <span class="title">
-        用户/资产活跃情况
-        <i class="fa fa-exclamation-circle icon" />
-      </span>
-      <!-- <span class="time">更新时间：2022-11-17</span> -->
-    </div>
+  <div>
     <echarts
       ref="echarts"
       :options="options"
@@ -22,6 +15,7 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
+import { mix } from '@/utils/theme/color'
 
 export default {
   name: 'LoginMetric',
@@ -29,6 +23,26 @@ export default {
     range: {
       type: String,
       default: 'weekly'
+    },
+    datesMetrics: {
+      type: Array,
+      default: () => []
+    },
+    primaryName: {
+      type: String,
+      default: ''
+    },
+    primaryData: {
+      type: Array,
+      default: () => []
+    },
+    secondaryName: {
+      type: String,
+      default: ''
+    },
+    secondaryData: {
+      type: Array,
+      default: () => []
     }
   },
   data: function() {
@@ -42,14 +56,22 @@ export default {
     }
   },
   computed: {
-    themeColor() {
+    mixColors() {
       const documentStyle = document.documentElement.style
+      const primary = documentStyle.getPropertyValue('--color-primary')
+      const colorValue = primary.replace(/#/g, '')
+      const TwoLevelColor = mix(colorValue, 'ffffff', 38)
+      const ThreeLevelColor = mix(colorValue, 'ffffff', 20)
+      const shadowColor = mix(colorValue, 'ffffff', 1)
       return {
-        primary: documentStyle.getPropertyValue('--color-primary')
+        primary,
+        TwoLevelColor,
+        ThreeLevelColor,
+        shadowColor
       }
     },
     options() {
-      const { primary } = this.themeColor
+      const { primary, TwoLevelColor, ThreeLevelColor, shadowColor } = this.mixColors
       return {
         title: {
           show: false
@@ -68,12 +90,7 @@ export default {
           icon: 'rect',
           // 图例标记的图形宽度
           itemWidth: 10,
-          itemHeight: 10,
-          data: [
-            this.$t('dashboard.LoginCount'),
-            this.$t('dashboard.LoginUsers'),
-            this.$t('dashboard.LoginAssets')
-          ]
+          itemHeight: 10
         },
         grid: {
           left: '3%',
@@ -100,7 +117,7 @@ export default {
             axisTick: {
               show: false
             },
-            data: this.metricsData.dates_metrics_date
+            data: this.datesMetrics
           }
         ],
         yAxis: [
@@ -134,18 +151,68 @@ export default {
         animationDuration: 500,
         series: [
           {
-            name: this.$t('dashboard.LoginUsers'),
+            name: this.primaryName,
             type: 'line',
-            areaStyle: {},
             smooth: true,
-            data: this.metricsData.dates_metrics_total_count_active_users
+            areaStyle: {
+            // 区域填充样式
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [{
+                    offset: 0,
+                    color: primary
+                  }, {
+                    offset: 0.6,
+                    color: TwoLevelColor
+                  },
+                  {
+                    offset: 0.8,
+                    color: ThreeLevelColor
+                  }
+                  ],
+                  false
+                ),
+                shadowColor: shadowColor,
+                shadowBlur: 5
+              }
+            },
+            data: this.primaryData
           },
           {
-            name: this.$t('dashboard.LoginAssets'),
+            name: this.secondaryName,
             type: 'line',
-            areaStyle: {},
             smooth: true,
-            data: this.metricsData.dates_metrics_total_count_active_assets
+            areaStyle: {
+            // 区域填充样式
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [{
+                    offset: 0,
+                    color: 'rgba(249, 199, 79, 0.6)'
+                  }, {
+                    offset: 0.6,
+                    color: 'rgba(249, 199, 79, 0.2)'
+                  },
+                  {
+                    offset: 0.8,
+                    color: 'rgba(249, 199, 79, 0.1)'
+                  }
+                  ],
+                  false
+                ),
+                shadowColor: 'rgba(249, 199, 79, 0.1)',
+                shadowBlur: 6
+              }
+            },
+            data: this.secondaryData
           }
         ]
       }
@@ -156,60 +223,15 @@ export default {
       this.getMetricData()
     }
   },
-  mounted() {
-    this.getMetricData()
-  },
   methods: {
-    async getMetricData() {
-      const url = '/api/v1/index/?dates_metrics=1&'
-      const data = await this.$axios.get(url)
-      this.metricsData = data
-      const activeAssets = 'dates_metrics_total_count_active_assets'
-      const activeUsers = 'dates_metrics_total_count_active_users'
-      if (data[activeAssets].length < 1) {
-        this.metricsData[activeAssets] = [0]
-      }
-      if (data[activeUsers].length < 1) {
-        this.metricsData[activeUsers] = [0]
-      }
-    },
     getDataUrl() {
-      this.dataUrl = this.$refs.echarts.getDataURL({
-      })
+      this.dataUrl = this.$refs.echarts.getDataURL({})
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .box {
-    margin-top: 16px;
-    padding: 20px;
-    background: #fff;
-    .head {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      .title {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 26px;
-        color: #1F2329;
-      }
-      .icon {
-        color: #BBBFC4;
-        cursor: pointer;
-      }
-      .time {
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 26px;
-        text-align: right;
-        color: #8F959E;
-      }
-    }
-  }
   .echarts {
     width: 100%;
     height: 266px;

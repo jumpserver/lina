@@ -23,7 +23,7 @@ export default {
   children: [
     {
       path: '/audit/dashboard',
-      component: () => import('@/views/dashboard/index'),
+      component: () => import('@/views/dashboard/Audit/index'),
       name: 'AuditDashboard',
       meta: {
         icon: 'dashboard',

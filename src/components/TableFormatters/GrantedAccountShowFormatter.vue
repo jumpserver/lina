@@ -1,6 +1,6 @@
 <template>
-  <span v-if="!systemUsers"><a style="color: #1c84c6;" @click="showSystemUser">{{ this.$t('common.Show') }}</a></span>
-  <span v-else>{{ systemUsers.toString() }}</span>
+  <span v-if="!accounts"><a style="color: #1c84c6;" @click="showAccount">{{ this.$t('common.Show') }}</a></span>
+  <span v-else>{{ accounts.toString() }}</span>
 </template>
 
 <script>
@@ -20,15 +20,15 @@ export default {
   },
   data() {
     return {
-      systemUsers: null
+      accounts: null
     }
   },
   methods: {
-    async showSystemUser() {
+    async showAccount() {
       const formatterArgs = Object.assign(this.formatterArgsDefault, this.col.formatterArgs)
       const url = formatterArgs.getUrl({ row: this.row, col: this.col })
       const data = await this.$axios.get(url)
-      this.systemUsers = data.map((item) => item.name)
+      this.accounts = data.map((item) => item.name)
     }
   }
 }

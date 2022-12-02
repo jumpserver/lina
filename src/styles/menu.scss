@@ -1,8 +1,10 @@
 @import "./variables";
+
 .left-menu.el-menu {
   .el-menu--inline {
     background-color: $subMenuBg;
   }
+
   .el-menu-item, .el-submenu {
     font-weight: 600;
   }
@@ -13,9 +15,11 @@
 
     .el-submenu__title {
       color: $menuText;
+
       &:hover {
         color: $menuActiveText;
       }
+
       i {
         color: $menuActiveText;
       }
@@ -30,10 +34,10 @@
     &.submenu-title-noDropdown {
       list-style: none;
     }
-    &.is-active{
+
+    &.is-active {
       color: $subMenuActiveText;
-      background-color: $subMenuHover!important;
-      font-weight: 600;
+      background-color: $subMenuHover !important;
       list-style-type: disc;
     }
 
@@ -42,14 +46,15 @@
       color: $subMenuActiveText;
       list-style-type: disc;
     }
+
     i {
       color: $menuText;
     }
   }
 
-   i.fa {
-     margin-right: 10px;
-     width: 13px;
+  i.fa {
+    margin-right: 10px;
+    width: 13px;
   }
 
   .is-active i.fa {
@@ -98,14 +103,16 @@
   }
 
   .el-submenu-sidebar .el-menu-item {
-    background-color: $subMenuBg ;
+    background-color: $subMenuBg;
   }
 
   .el-submenu.is-opened {
     background-color: $subMenuBg;
+
     .el-submenu__title {
-      background-color: $subMenuBg!important;
+      background-color: $subMenuBg !important;
     }
+
     & .nest-menu {
       background-color: $subMenuBg;
     }

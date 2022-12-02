@@ -21,13 +21,17 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/playbooks/',
         columns: [
-          'name', 'path', 'date_updated', 'date_created', 'actions'
+          'name', 'comment', 'date_created', 'date_updated', 'creator', 'actions'
         ],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'comment', 'date_created', 'actions']
+        },
         columnsMeta: {
           name: {
             formatterArgs: {
               can: true,
-              route: 'AdhocDetail'
+              route: 'PlaybookDetail'
             }
           },
           actions: {
@@ -35,7 +39,7 @@ export default {
             formatterArgs: {
               hasUpdate: true,
               canUpdate: true,
-              updateRoute: 'AdhocUpdate',
+              updateRoute: 'PlaybookUpdate',
               hasDelete: true,
               canDelete: true,
               hasClone: false,

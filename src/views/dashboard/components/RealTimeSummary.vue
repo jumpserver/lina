@@ -1,8 +1,7 @@
 <template>
   <div class="box">
     <div style="margin-bottom: 12px;">
-      <span class="title">实时数据</span>
-      <!-- <span class="time">更新时间：2022-11-17</span> -->
+      <Title :config="config" />
     </div>
     <div class="content">
       <el-row type="flex" justify="space-between">
@@ -15,15 +14,17 @@
 </template>
 
 <script>
+import Title from './Title.vue'
 import SummaryCard from './SummaryCard'
 
 export default {
-  components: { SummaryCard },
-  props: {
-
-  },
+  components: { Title, SummaryCard },
   data() {
     return {
+      config: {
+        title: this.$t('dashboard.RealTimeData'),
+        tip: this.$t('dashboard.RealTimeData')
+      },
       counter: {
         total_count_online_sessions: '.',
         total_count_online_users: '.',
@@ -75,18 +76,6 @@ export default {
 .box {
   padding: 20px;
   background: #FFFFFF;
-  .title {
-    font-weight: 500;
-    font-size: 16px;
-    color: #1F2329;
-  }
-  .time {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 10px;
-    margin-left: 8px;
-    color: #8F959E;
-  }
   .content {
     .el-col {
       padding-left: 16px;

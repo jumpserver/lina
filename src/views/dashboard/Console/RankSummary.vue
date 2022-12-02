@@ -2,17 +2,17 @@
   <div>
     <el-row :gutter="16">
       <el-col :lg="12" :sm="24">
-        <RankTable v-bind="userConfig" />
+        <RankTable :config="userConfig" />
       </el-col>
       <el-col :lg="12" :sm="24">
-        <RankTable v-bind="assetConfig" />
+        <RankTable :config="assetConfig" />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import RankTable from './components/RankTable.vue'
+import RankTable from '../components/RankTable.vue'
 export default {
   components: {
     RankTable
@@ -20,42 +20,38 @@ export default {
   data() {
     return {
       userConfig: {
-        title: '登录用户排名',
+        title: this.$t('dashboard.LoginUserRanking'),
         url: '/api/v1/index/?dates_login_times_top10_users=1',
-        note: '登录用户排名',
+        tip: this.$t('dashboard.LoginUserRanking'),
         data: 'dates_login_times_top10_users',
         columns: [
           {
             prop: 'user',
-            label: '用户名'
+            label: this.$t('users.Username')
           },
           {
             prop: 'total',
-            label: '登录次数'
+            label: this.$t('dashboard.LoginCount')
           }
         ]
       },
       assetConfig: {
-        title: '活跃资产排名',
+        title: this.$t('dashboard.ActiveAssetRanking'),
         url: '/api/v1/index/?dates_login_times_top10_assets=1',
-        note: '活跃资产排名',
+        tip: this.$t('dashboard.ActiveAssetRanking'),
         data: 'dates_login_times_top10_assets',
         columns: [
           {
             prop: 'asset',
-            label: '资产名称'
+            label: this.$t('dashboard.AssetName')
           },
           {
             prop: 'total',
-            label: '访问次数'
+            label: this.$t('dashboard.NumberOfVisits')
           }
         ]
-      },
-      columnsMeta: {}
+      }
     }
-  },
-  methods: {
-
   }
 }
 </script>

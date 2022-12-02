@@ -36,7 +36,6 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import DisplayFormatter from '@/components/TableFormatters/DisplayFormatter'
 import Dialog from '@/components/Dialog'
 
 export default {
@@ -55,21 +54,50 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
-        columns: ['name', 'address', 'port', 'username_display', 'comment', 'actions'],
+        columns: [
+          'name', 'address', 'platform', 'password_account',
+          'ssh_key_account', 'connectivity', 'is_active', 'actions'
+        ],
         columnsMeta: {
           name: {
             sortable: 'custom',
-            formatter: DisplayFormatter
+            formatter: function(row) {
+              const to = {
+                name: 'AssetDetail',
+                params: { id: row.id }
+              }
+              return <router-link to={ to } >{ row.name }</router-link>
+            }
           },
           address: {
             width: '140px'
           },
-          port: {
-            width: '120px',
-            label: this.$t('assets.SshPort'),
-            formatter: (row) => {
-              console.log('row', row)
-              return row.protocols ? row.protocols[0].port : '-'
+          password_account: {
+            label: this.$t('assets.passwordAccount'),
+            formatter: function(row) {
+              const [accountInfo] = row.effective_accounts.filter(
+                item => item.secret_type === 'password'
+              )
+              if (!accountInfo) return <span>-</span>
+              const to = {
+                name: 'AssetAccountDetail',
+                params: { id: accountInfo.id }
+              }
+              return <router-link to={ to } >{ accountInfo.username }</router-link>
+            }
+          },
+          ssh_key_account: {
+            label: this.$t('assets.sshkeyAccount'),
+            formatter: function(row) {
+              const [accountInfo] = row.effective_accounts.filter(
+                item => item.secret_type === 'ssh_key'
+              )
+              if (!accountInfo) return <span>-</span>
+              const to = {
+                name: 'AssetAccountDetail',
+                params: { id: accountInfo.id }
+              }
+              return <router-link to={ to } >{ accountInfo.username }</router-link>
             }
           },
           actions: {
@@ -87,10 +115,11 @@ export default {
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
                     this.dialogVisible = true
-                    if (!val.row.port) {
+                    const port = val.row.protocols.find(item => item.name === 'ssh').port
+                    if (!port) {
                       return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
                     } else {
-                      this.portInput = val.row.port
+                      this.portInput = port
                       this.cellValue = val.row.id
                     }
                   }.bind(this)

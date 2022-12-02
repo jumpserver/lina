@@ -1,15 +1,17 @@
 <template>
   <Page>
-    <div v-if="this.$hasPerm('rbac.view_console|rbac.view_audit')">
+    <div v-if="this.$hasPerm('rbac.view_console')">
       <Announcement />
       <el-row :gutter="16">
         <el-col :lg="12" :sm="24">
-          <LeftSummary />
+          <RealTimeSummary />
+          <UserAssetActivity />
         </el-col>
         <el-col :lg="12" :sm="24">
           <DataSummary />
         </el-col>
       </el-row>
+      <AssetProportionSummary />
       <RankSummary />
     </div>
     <Page403 v-else />
@@ -20,8 +22,10 @@
 import { Announcement } from '@/components'
 import { Page } from '@/layout/components'
 import Page403 from '@/views/403'
+import RealTimeSummary from '../components/RealTimeSummary.vue'
+import UserAssetActivity from './UserAssetActivity.vue'
 import DataSummary from './DataSummary'
-import LeftSummary from './LeftSummary'
+import AssetProportionSummary from './AssetProportionSummary'
 import RankSummary from './RankSummary'
 
 export default {
@@ -30,8 +34,10 @@ export default {
     Page,
     Announcement,
     DataSummary,
-    LeftSummary,
+    AssetProportionSummary,
     RankSummary,
+    RealTimeSummary,
+    UserAssetActivity,
     Page403
   },
   data() {
@@ -42,5 +48,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

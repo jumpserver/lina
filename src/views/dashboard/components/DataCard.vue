@@ -1,47 +1,44 @@
 <template>
   <div class="card">
     <div>
-      <div class="title">标题</div>
-      <div class="sub">二标题11111</div>
-      <div class="num">1231231213</div>
+      <div class="title">
+        <Title :config="config" />
+      </div>
+      <div class="sub">{{ config.subTitle }}</div>
+      <div class="num">{{ config.total }}</div>
       <div class="add">
         <span class="add-num">
-          本周新增：0
-          <svg-icon icon-class="broken-line" style="font-size: 18px;" />
+          {{ $tc('dashboard.WeekAdd') }}：{{ config.weekAdd }}
+          <svg-icon v-if="config.subIcon" :icon-class="config.subIcon" class="font" />
         </span>
         <span class="add-icon">
-          <svg-icon icon-class="users" style="font-size: 18px;" />
+          <svg-icon v-if="config.icon" :icon-class="config.icon" class="font" />
         </span>
       </div>
     </div>
     <div class="ring">
-      <RingChart />
+      <RingChart :config="config" />
     </div>
   </div>
 </template>
 
 <script>
+import Title from './Title.vue'
 import RingChart from './RingChart'
 export default {
   components: {
+    Title,
     RingChart
   },
   props: {
-    object: {
+    config: {
       type: Object,
       default: () => ({})
     }
   },
   data() {
     return {
-
     }
-  },
-  created() {
-
-  },
-  methods: {
-
   }
 }
 </script>
@@ -53,10 +50,6 @@ export default {
   background-color: #FFF;
   .title {
     margin-bottom: 12px;
-    line-height: 26px;
-    font-weight: 500;
-    font-size: 16px;
-    color: #1F2329;
   }
   .sub {
     font-weight: 400;
@@ -78,11 +71,14 @@ export default {
     border-bottom: 1px solid #EFF0F1;
   }
   .ring {
-    padding: 26px 43px 10px;
+    padding: 26px 0 10px;
     & >>> .echarts {
       width: 100%!important;
       height: 272px!important;
     }
+  }
+  .font {
+    font-size: 18px;
   }
 }
 </style>
