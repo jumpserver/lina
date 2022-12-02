@@ -35,8 +35,8 @@ export default {
           actions: {
             formatter: ActionsFormatter,
             formatterArgs: {
-              hasUpdate: true, // can set function(row, value)
-              hasDelete: false, // can set function(row, value)
+              hasUpdate: true,
+              hasDelete: true,
               hasClone: this.hasClone,
               moreActionsTitle: this.$t('common.More'),
               extraActions: [
@@ -51,18 +51,6 @@ export default {
                     vm.showViewSecretDialog = false
                     setTimeout(() => {
                       vm.showViewSecretDialog = true
-                    })
-                  }
-                },
-                {
-                  name: 'Delete',
-                  title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_account'),
-                  type: 'primary',
-                  callback: ({ row }) => {
-                    this.$axios.delete(`/api/v1/assets/account-templates/${row.id}/`).then(() => {
-                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
-                      this.$refs.ListTable.reloadTable()
                     })
                   }
                 }
