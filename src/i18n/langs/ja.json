@@ -104,6 +104,8 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "sshkeyAccount": "SSHキー",
+    "passwordAccount": "パスワード",
     "SelectTemplate": "テンプレートの選択",
     "InAssetDetail": "資産詳細でのアカウント情報の更新",
     "SecretType": "機密タイプ",
