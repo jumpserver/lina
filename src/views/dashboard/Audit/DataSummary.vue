@@ -18,7 +18,7 @@ export default {
   props: {
     days: {
       type: [Number, String],
-      default: 7
+      default: '7'
     }
   },
   data() {
@@ -27,21 +27,21 @@ export default {
 
     return {
       logConfig: {
-        title: '登录日志',
-        tip: '登录日志总数',
-        subTitle: '登录日志总数',
+        title: this.$t('route.LoginLog'),
+        tip: this.$t('route.LoginLog'),
+        subTitle: this.$t('route.LoginLog') + this.$t('dashboard.Total'),
         icon: 'log',
         color: themeColor,
-        chartTitle: '登录成功日志数',
+        chartTitle: this.$t('dashboard.LogOfLoginSuccessNum'),
         data: []
       },
       assetConfig: {
-        title: '命令记录',
-        tip: '命令记录总数',
-        subTitle: '登录日志总数',
+        title: this.$t('route.Commands'),
+        tip: this.$t('route.Commands'),
+        subTitle: this.$t('route.Commands') + this.$t('dashboard.Total'),
         icon: 'session',
         color: '#ED612B',
-        chartTitle: '危险命令数',
+        chartTitle: this.$t('dashboard.DangerousCommandNum'),
         data: []
       }
     }

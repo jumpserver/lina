@@ -19,18 +19,18 @@ export default {
   props: {
     days: {
       type: [Number, String],
-      default: 7
+      default: '7'
     }
   },
   data() {
     return {
       logConfig: {
-        title: '日志数据',
-        tip: '日志数据'
+        title: this.$t('dashboard.LogData'),
+        tip: this.$t('dashboard.LogData')
       },
       sessionConfig: {
-        title: '会话数据',
-        tip: '会话数据'
+        title: this.$t('dashboard.SessionData'),
+        tip: this.$t('dashboard.SessionData')
       },
       data: {
         total_count_login_users: 0,
@@ -46,7 +46,7 @@ export default {
     LogItems() {
       return [
         {
-          title: '登录数',
+          title: this.$t('dashboard.LoginNum'),
           body: {
             route: { name: `LoginLog` },
             count: this.data.total_count_login_users,
@@ -54,7 +54,7 @@ export default {
           }
         },
         {
-          title: '操作日志数',
+          title: this.$t('dashboard.OperationLogNum'),
           body: {
             route: { name: `OperateLog` },
             count: this.data.total_count_operate_logs,
@@ -62,7 +62,7 @@ export default {
           }
         },
         {
-          title: '改密日志数',
+          title: this.$t('dashboard.DeclassificationLogNum'),
           body: {
             route: { name: `PasswordChangeLog` },
             count: this.data.total_count_change_password_logs,
@@ -74,7 +74,7 @@ export default {
     sessionItems() {
       return [
         {
-          title: '在线会话数',
+          title: this.$t('dashboard.OnlineSessions'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OnlineList' }},
             count: this.data.total_count_online_sessions,
@@ -82,7 +82,7 @@ export default {
           }
         },
         {
-          title: '历史会话数',
+          title: this.$t('dashboard.HistoricalSessionNum'),
           body: {
             route: { name: `SessionList`, params: { activeMenu: 'OfflineList' }},
             count: this.data.total_count_history_sessions,
@@ -90,7 +90,7 @@ export default {
           }
         },
         {
-          title: '文件传输数',
+          title: this.$t('dashboard.FileTransferNum'),
           body: {
             route: { name: `FtpLog` },
             count: this.data.total_count_ftp_logs,

@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <Title :config="config" style="margin-bottom: 16px;" />
-    <ColumnChart />
+    <ColumnChart v-bind="columnChartConfig" />
   </div>
 </template>
 
@@ -13,16 +13,20 @@ export default {
   props: {
     days: {
       type: [Number, String],
-      default: 7
+      default: '7'
     }
   },
   data() {
     return {
       config: {
-        title: '用户登录趋势',
-        tip: '用户登录趋势'
+        title: this.$t('dashboard.UserLoginTrend'),
+        tip: this.$t('dashboard.UserLoginTrend')
       },
-      data: {}
+      columnChartConfig: {
+        datesMetrics: [],
+        primaryData: [0],
+        primaryName: this.$t('dashboard.LoginUserToday')
+      }
     }
   },
   watch: {
@@ -35,8 +39,12 @@ export default {
   },
   methods: {
     async getData() {
-      this.data = await this.$axios.get(`/api/v1/index/?days=${this.days}
-        &total_count_login_users=1`)
+      const data = await this.$axios.get(`/api/v1/index/?dates_metrics=1&days=${this.days}`)
+      const loginTotal = data?.dates_metrics_total_count_login
+      this.columnChartConfig.datesMetrics = data.dates_metrics_date
+      if (loginTotal.length > 1) {
+        this.columnChartConfig.primaryData = loginTotal
+      }
     }
   }
 }

@@ -9,23 +9,54 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
 import * as echarts from 'echarts'
+import { mix } from '@/utils/theme/color'
 
 export default {
   components: {},
-  props: {},
+  props: {
+    datesMetrics: {
+      type: Array,
+      default: () => []
+    },
+    primaryName: {
+      type: String,
+      default: ''
+    },
+    primaryData: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {}
   },
   computed: {
+    mixColors() {
+      const documentStyle = document.documentElement.style
+      const primary = documentStyle.getPropertyValue('--color-primary')
+      const colorValue = primary.replace(/#/g, '')
+      const TwoLevelColor = mix(colorValue, 'ffffff', 48)
+      const ThreeLevelColor = mix(colorValue, 'ffffff', 6)
+      return {
+        primary,
+        TwoLevelColor,
+        ThreeLevelColor
+      }
+    },
     options() {
+      const { primary, TwoLevelColor, ThreeLevelColor } = this.mixColors
       return {
         grid: {
-          left: '2.5%',
-          top: '0%',
-          right: '2.8%',
-          bottom: '2%',
+          left: '2%',
+          top: '3%',
+          right: '2%',
+          bottom: '1%',
           containLabel: true
+        },
+        tooltip: {
+          show: true
         },
         xAxis: [{
           type: 'category',
@@ -37,19 +68,12 @@ export default {
             fontSize: '16'
           },
           axisLabel: {
-            interval: 10,
-            rotate: 30,
             textStyle: {
               color: '#8796AD',
               fontSize: '14'
             }
           },
-          data: [1,
-            2,
-            3,
-            4,
-            5
-          ],
+          data: this.datesMetrics,
           axisLine: {
             lineStyle: {
               width: 2,
@@ -89,7 +113,7 @@ export default {
         }],
         series: [{
           type: 'bar',
-          name: '',
+          name: this.primaryName,
           stack: 1,
           barWidth: '20%',
           borderWidth: 0,
@@ -97,14 +121,13 @@ export default {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(50, 220, 182, 0.5)'
+                color: TwoLevelColor
               },
               {
                 offset: 1,
-                color: 'rgba(50, 220, 182, 0)'
+                color: ThreeLevelColor
               }
               ], false)
-
             }
           },
           label: {
@@ -112,33 +135,31 @@ export default {
               show: false
             }
           },
-          data: [10, 10, 20, 99, 30]
+          data: this.primaryData
         },
         {
-          type: 'bar',
-          name: '',
-          stack: 1,
-          barWidth: '20%',
+          symbol: 'rect',
+          type: 'pictorialBar',
+          symbolSize: ['25%', 6],
+          symbolOffset: [0, -6],
+          z: 12,
           itemStyle: {
             normal: {
-              color: '#1ab394'
+              color: primary
             }
           },
           label: {
-            normal: {
-              show: false
-            }
+            show: false,
+            position: 'top',
+            fontSize: 16
           },
-          data: [1, 1, 1, 1, 1]
+          symbolPosition: 'end',
+          data: this.primaryData
         }
         ]
       }
     }
-  },
-  created() {
-
-  },
-  methods: {}
+  }
 }
 </script>
 
@@ -147,34 +168,4 @@ export default {
   width: 100%;
   height: 272px;
 }
-
-.content {
-  .head {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-
-    .title {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 26px;
-      color: #1F2329;
-    }
-
-    .icon {
-      color: #BBBFC4;
-      cursor: pointer;
-    }
-
-    .time {
-      font-weight: 400;
-      font-size: 10px;
-      line-height: 26px;
-      text-align: right;
-      color: #8F959E;
-    }
-  }
-}
-
 </style>
