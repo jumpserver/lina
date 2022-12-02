@@ -59,6 +59,10 @@ export default {
         } else {
           delete data['password']
         }
+        if (data['ssh_key_strategy'] === 'set_jms') {
+          delete data['private_key']
+          delete data['passphrase']
+        }
         if (data['interval'] === '') {
           delete data['interval']
         }
