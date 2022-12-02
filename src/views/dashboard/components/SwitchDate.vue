@@ -37,7 +37,7 @@ export default {
       }
     ]
     return {
-      select: '7',
+      select: localStorage.getItem('auditDays') || '7',
       iOptions: this.options.length > 0 ? this.options : defaultOptions
     }
   },
