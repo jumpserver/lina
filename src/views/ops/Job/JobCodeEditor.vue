@@ -35,7 +35,7 @@ export default {
         {
           type: 'button',
           icon: 'fa  fa-folder-open-o',
-          tip: 'Open Command',
+          tip: this.$t('ops.OpenCommand'),
           callback: () => {
             this.openAdhocSelectDialog()
           }
@@ -43,7 +43,7 @@ export default {
         {
           type: 'button',
           icon: 'fa  fa-save',
-          tip: 'Save Command',
+          tip: this.$t('ops.SaveCommand'),
           callback: () => {
             this.openAdhocSaveDialog()
           }

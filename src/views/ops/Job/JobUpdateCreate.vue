@@ -25,10 +25,10 @@ export default {
       url: '/api/v1/ops/jobs/',
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
-        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
         [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
-        [this.$t('ops.Plan'), ['runAfterSave', 'is_periodic', 'crontab']]
+        [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']]
       ],
       initial: {
         type: 'adhoc',
@@ -38,7 +38,6 @@ export default {
         runAfterSave: false,
         instant: false,
         parameters_define: '{}',
-        timeout: 60,
         is_periodic: false,
         crontab: '0 0 * * *'
       },
@@ -113,8 +112,7 @@ export default {
             return formValue.type !== 'adhoc'
           }
         },
-        runAfterSave: {
-          label: '保存后立即执行',
+        run_after_save: {
           type: 'checkbox',
           hidden: (formValue) => {
             return this.instantTask
