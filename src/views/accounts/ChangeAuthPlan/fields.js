@@ -107,7 +107,7 @@ function getFields() {
     label: i18n.t('assets.Passphrase'),
     component: UpdateToken,
     hidden: (formValue) => {
-      return formValue.is_ssh_key === false
+      return formValue.ssh_key_strategy === 'set_jms' || formValue.is_ssh_key === false
     }
   }
 
@@ -124,7 +124,7 @@ function getFields() {
   const private_key = {
     component: UploadKey,
     hidden: (formValue) => {
-      return formValue.is_ssh_key === false
+      return formValue.ssh_key_strategy === 'set_jms' || formValue.is_ssh_key === false
     },
     rules: [
       { required: this.$route.meta.action === 'create', message: this.$t('common.fieldRequiredError'), trigger: 'blur' }
