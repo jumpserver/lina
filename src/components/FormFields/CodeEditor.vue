@@ -71,7 +71,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .toolbar {
   height: 100%;
   width: 100%;
@@ -80,5 +80,9 @@ export default {
   display: inline-block;
   border-radius: 4px 4px 0 0;
   background-color: var(--color-primary);
+}
+>>> .CodeMirror pre.CodeMirror-line,
+>>> .CodeMirror-linenumber.CodeMirror-gutter-elt {
+  line-height: 18px!important;
 }
 </style>
