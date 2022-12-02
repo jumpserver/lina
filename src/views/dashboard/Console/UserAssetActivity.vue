@@ -3,7 +3,7 @@
     <div class="head">
       <Title :config="config" />
     </div>
-    <LineChart v-bind="metricsData" />
+    <LineChart v-bind="lineChartConfig" />
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
         title: this.$t('dashboard.UserAssetActivity'),
         tip: this.$t('dashboard.UserAssetActivity')
       },
-      metricsData: {
+      lineChartConfig: {
         datesMetrics: [],
         primaryData: [0],
         primaryName: this.$t('dashboard.LoginUsers'),
@@ -40,12 +40,14 @@ export default {
     async getMetricData() {
       const url = '/api/v1/index/?dates_metrics=1&days=7'
       const data = await this.$axios.get(url)
-      this.metricsData.datesMetrics = data.dates_metrics_date
-      if (this.metricsData.primaryData.length > 1) {
-        this.metricsData.primaryData = data.dates_metrics_total_count_active_users
+      const activeUsers = data?.dates_metrics_total_count_active_users
+      const activeAssets = data?.dates_metrics_total_count_active_assets
+      this.lineChartConfig.datesMetrics = data.dates_metrics_date
+      if (activeUsers.length > 1) {
+        this.lineChartConfig.primaryData = activeUsers
       }
-      if (this.metricsData.secondaryData.length > 1) {
-        this.metricsData.secondaryData = data.dates_metrics_total_count_active_assets
+      if (activeAssets.length > 1) {
+        this.lineChartConfig.secondaryData = activeAssets
       }
     }
   }

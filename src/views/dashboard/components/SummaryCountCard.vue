@@ -37,11 +37,6 @@ export default {
   data() {
     return {
     }
-  },
-  async mounted() {
-    console.log(this.items, 'i---------------------------------------------------------')
-  },
-  methods: {
   }
 }
 </script>

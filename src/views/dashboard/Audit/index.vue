@@ -41,7 +41,7 @@ export default {
   },
   data() {
     return {
-      days: 7
+      days: '7'
     }
   },
   methods: {

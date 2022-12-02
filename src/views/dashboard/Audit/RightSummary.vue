@@ -24,18 +24,18 @@ export default {
   props: {
     days: {
       type: [Number, String],
-      default: 7
+      default: '7'
     }
   },
   data() {
     return {
       config: {
-        title: '批量命令',
-        tip: '批量命令'
+        title: this.$t('dashboard.SessionTrend'),
+        tip: this.$t('dashboard.SessionTrend')
       },
       chartConfig: {
         datesMetrics: [],
-        secondaryName: '指标名称',
+        secondaryName: this.$t('dashboard.IndexName'),
         secondaryData: [0]
       },
       data: {
@@ -49,7 +49,7 @@ export default {
     summaryItems() {
       return [
         {
-          title: '批量命令数',
+          title: this.$t('route.BatchCommand') + this.$t('dashboard.Num'),
           body: {
             route: { name: `CommandList` },
             count: this.data.total_count_online_sessions,
@@ -57,7 +57,7 @@ export default {
           }
         },
         {
-          title: '未执行批量命令',
+          title: this.$t('dashboard.BatchCommandNotExecuted'),
           body: {
             route: { name: `CommandList` },
             count: this.data.total_count_history_sessions,
@@ -65,7 +65,7 @@ export default {
           }
         },
         {
-          title: '执行失败命令',
+          title: this.$t('dashboard.ExecuteFailedCommand'),
           body: {
             route: { name: `CommandList` },
             count: this.data.total_count_ftp_logs,
@@ -91,9 +91,10 @@ export default {
         &total_count_ftp_logs=1
         &session_dates_metrics=1
       `)
+      const totalCountSession = data.dates_metrics_total_count_session
       this.chartConfig.datesMetrics = data.dates_metrics_date
-      if (this.chartConfig.secondaryData.length > 1) {
-        this.chartConfig.secondaryData = data.dates_metrics_total_count_session
+      if (totalCountSession.length > 1) {
+        this.chartConfig.secondaryData = totalCountSession
       }
     }
   }
