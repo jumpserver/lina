@@ -34,15 +34,15 @@ export default {
           value: this.object.name
         },
         {
-          key: this.$t('acl.user_username'),
+          key: this.$t('acl.UserUsername'),
           value: this.object.users.username_group.toString()
         },
         {
-          key: this.$t('acl.asset_name'),
+          key: this.$t('acl.AssetName'),
           value: this.object.assets.name_group.toString()
         },
         {
-          key: this.$t('acl.asset_address'),
+          key: this.$t('acl.AssetAddress'),
           value: this.object.assets.address_group.toString()
         },
         {

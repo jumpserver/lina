@@ -15,7 +15,7 @@ export default {
         url: '/api/v1/acls/login-asset-acls/',
         columns: [
           'name', 'user_username_group', 'hostname_group', 'ip_group', 'name_group',
-          'protocol_group', 'systemuser_username_group', 'reviewers', 'priority',
+          'reviewers', 'priority',
           'is_active', 'comment', 'actions'
         ],
         columnsShow: {

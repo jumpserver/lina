@@ -78,5 +78,83 @@ export default [
         meta: { title: i18n.t('route.AssetAclUpdate') }
       }
     ]
+  },
+  {
+    path: 'cmd-acls',
+    component: empty,
+    redirect: '',
+    meta: {
+      title: i18n.t('route.CommandFilterAclList'),
+      app: 'acls',
+      resource: 'commandfilteracl'
+    },
+    children: [
+      // Command Filter ACL
+      {
+        path: '',
+        name: 'CommandFilterAclList',
+        component: () => import('@/views/acl/CommandAcl/index'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterAclList') }
+      },
+      {
+        path: 'create',
+        name: 'CommandFilterAclCreate',
+        component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterAclCreate') }
+      },
+      {
+        path: ':id',
+        name: 'CommandFilterAclDetail',
+        component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclDetail'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterAclDetail') }
+      },
+      {
+        path: ':id/update',
+        name: 'CommandFilterAclUpdate',
+        component: () => import('@/views/acl/CommandAcl/CommandFilterAcl/CommandFilterAclCreateUpdate'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandFilterAclUpdate') }
+      },
+      // Command Group
+      {
+        path: '',
+        name: 'CommandGroupList',
+        component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupList'),
+        meta: { title: i18n.t('route.CommandGroupList') },
+        hidden: true,
+        app: 'acls',
+        resource: 'commandgroup'
+      },
+      {
+        path: 'create',
+        name: 'CommandGroupCreate',
+        component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandGroupCreate') },
+        app: 'acls',
+        resource: 'commandgroup'
+      },
+      {
+        path: ':id',
+        name: 'CommandGroupDetail',
+        component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupDetail'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandGroupDetail') },
+        app: 'acls',
+        resource: 'commandgroup'
+      },
+      {
+        path: ':id/update',
+        name: 'CommandGroupUpdate',
+        component: () => import('@/views/acl/CommandAcl/CommandGroup/CommandGroupCreateUpdate'),
+        hidden: true,
+        meta: { title: i18n.t('route.CommandGroupUpdate') },
+        app: 'acls',
+        resource: 'commandgroup'
+      }
+    ]
   }
 ]
