@@ -4,6 +4,7 @@
 
 <script>
 import { ListTable } from '@/components'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -25,6 +26,12 @@ export default {
           default: ['name', 'content', 'actions']
         },
         columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'CommandGroupDetail'
+            }
+          },
           actions: {
             formatterArgs: {
               updateRoute: 'CommandGroupUpdate'

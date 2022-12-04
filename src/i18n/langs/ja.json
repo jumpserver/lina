@@ -9,6 +9,8 @@
     "PleaseClickLeftAssetToViewGatheredUser": "ユーザーリストを収集し、左側の資産をクリックして表示します。"
   },
   "acl": {
+    "IgnoreCase": "大文字小文字を無視する",
+    "Content": "コンテンツ",
     "CommandFilterACL": "命令フィルタリング",
     "CommandGroup": "コマンドグループ",
     "name": "名前",

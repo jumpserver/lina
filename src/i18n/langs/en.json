@@ -9,6 +9,8 @@
     "PleaseClickLeftAssetToViewGatheredUser": "Gathered user list, please click on the assets on the left to view"
   },
   "acl": {
+    "IgnoreCase": "Ignore case",
+    "Content": "Content",
     "CommandFilterACL": "Command filter",
     "CommandGroup": "Command group",
     "name": "Name",

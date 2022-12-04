@@ -4,6 +4,7 @@
 
 <script>
 import { ListTable } from '@/components'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -31,6 +32,12 @@ export default {
           ]
         },
         columnsMeta: {
+          name: {
+            formatter: DetailFormatter,
+            formatterArgs: {
+              route: 'CommandFilterAclDetail'
+            }
+          },
           user_username_group: {
             prop: 'users.username_group',
             showOverflowTooltip: true,

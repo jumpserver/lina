@@ -9,6 +9,8 @@
     "PleaseClickLeftAssetToViewGatheredUser": "收集用户列表，点击左侧资产进行查看"
   },
   "acl": {
+    "IgnoreCase": "忽略大小写",
+    "Content": "内容",
     "CommandFilterACL": "命令过滤",
     "CommandGroup": "命令组",
     "name": "名称",

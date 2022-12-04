@@ -46,7 +46,7 @@ export default {
           value: this.object.assets.address_group.toString()
         },
         {
-          key: this.$t('acl.account_username'),
+          key: this.$t('acl.AccountUsername'),
           value: this.object.accounts.username_group.toString()
         },
         {
