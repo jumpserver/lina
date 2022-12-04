@@ -4,6 +4,7 @@
     :initial="initial"
     :fields-meta="fieldsMeta"
     :url="url"
+    :create-success-next-route="createSuccessNextRoute"
     v-bind="$data"
   />
 </template>
@@ -26,6 +27,7 @@ export default {
       ],
       url: `/api/v1/acls/command-groups/`,
       createSuccessNextRoute: { name: 'CommandFilterAclList' },
+      updateSuccessNextRoute: { name: 'CommandFilterAclList' },
       fieldsMeta: {
         type: {
           on: {

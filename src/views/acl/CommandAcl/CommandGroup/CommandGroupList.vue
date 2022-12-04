@@ -18,13 +18,18 @@ export default {
           resource: 'commandgroup'
         },
         columns: [
-          'name', 'content', 'actions'
+          'name', 'type', 'ignore_case', 'content', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'content', 'actions']
         },
         columnsMeta: {
+          actions: {
+            formatterArgs: {
+              updateRoute: 'CommandGroupUpdate'
+            }
+          }
         }
       },
       headerActions: {
