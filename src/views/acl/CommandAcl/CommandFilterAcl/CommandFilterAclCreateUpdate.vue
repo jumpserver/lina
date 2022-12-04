@@ -11,6 +11,11 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import rules from '@/components/DataForm/rules'
+import {
+  UserAssetAccountFieldInitial,
+  afterGetFormValueForHandleUserAssetAccount,
+  cleanFormValueForHandleUserAssetAccount
+} from '../../common'
 
 export default {
   name: 'CommandFilterAclCreateUpdate',
@@ -20,7 +25,8 @@ export default {
   data() {
     return {
       initial: {
-        is_active: true
+        is_active: true,
+        ...UserAssetAccountFieldInitial
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
@@ -76,7 +82,9 @@ export default {
         is_active: {
           type: 'checkbox'
         }
-      }
+      },
+      afterGetFormValue: afterGetFormValueForHandleUserAssetAccount,
+      cleanFormValue: cleanFormValueForHandleUserAssetAccount
     }
   }
 }

@@ -5,6 +5,10 @@
 <script>
 import { ListTable } from '@/components'
 import { DetailFormatter } from '@/components/TableFormatters'
+import {
+  userAssetAccountFieldNames,
+  fieldsMetaListPageForUserAssetAccount
+} from '../../common'
 
 export default {
   components: {
@@ -19,16 +23,18 @@ export default {
           resource: 'commandfilteracl'
         },
         columns: [
-          'name', 'user_username_group', 'asset_name_group', 'asset_address_group',
-          'account_username_group', 'command_groups', 'action',
+          'name',
+          ...userAssetAccountFieldNames,
+          'command_groups', 'action',
           'date_created', 'created_by', 'org_name',
           'comment', 'is_active', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'user_username_group', 'asset_name_group', 'asset_address_group',
-            'account_username_group', 'command_groups', 'comment', 'actions'
+            'name',
+            ...userAssetAccountFieldNames,
+            'command_groups', 'priority', 'is_active', 'comment', 'actions'
           ]
         },
         columnsMeta: {
@@ -38,42 +44,15 @@ export default {
               route: 'CommandFilterAclDetail'
             }
           },
-          user_username_group: {
-            prop: 'users.username_group',
-            showOverflowTooltip: true,
-            formatter: function(row) {
-              return <span> {row.users.username_group.toString()} </span>
-            },
-            label: this.$t('acl.UserUsername')
-          },
-          asset_name_group: {
-            prop: 'assets.name_group',
-            showOverflowTooltip: true,
-            formatter: function(row) {
-              return <span> {row.assets.name_group.toString()} </span>
-            },
-            label: this.$t('acl.AssetName')
-          },
-          asset_address_group: {
-            prop: 'assets.address_group',
-            showOverflowTooltip: true,
-            formatter: function(row) {
-              return <span> {row.assets.address_group.toString()} </span>
-            },
-            label: this.$t('acl.AssetAddress')
-          },
-          account_username_group: {
-            prop: 'accounts.username_group',
-            showOverflowTooltip: true,
-            formatter: function(row) {
-              return <span> {row.accounts.username_group.toString()} </span>
-            },
-            label: this.$t('acl.AccountUsername')
-          },
+          ...fieldsMetaListPageForUserAssetAccount,
           command_groups: {
-            label: this.$t('acl.CommandGroup'),
             formatter: function(row) {
               return <span> { row.command_groups.length }</span>
+            }
+          },
+          reviewers: {
+            formatter: function(row) {
+              return <span> { row.reviewers.length }</span>
             }
           }
         }

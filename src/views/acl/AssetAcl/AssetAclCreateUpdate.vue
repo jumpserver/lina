@@ -5,6 +5,12 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
+import {
+  UserAssetAccountFieldInitial,
+  afterGetFormValueForHandleUserAssetAccount,
+  cleanFormValueForHandleUserAssetAccount
+} from '../common'
+
 export default {
   name: 'AclCreateUpdate',
   components: {
@@ -13,17 +19,7 @@ export default {
   data() {
     return {
       initial: {
-        action: 'login_confirm',
-        users: {
-          username_group: '*'
-        },
-        assets: {
-          name_group: '*',
-          address_group: '*'
-        },
-        accounts: {
-          username_group: '*'
-        }
+        ...UserAssetAccountFieldInitial
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
@@ -62,34 +58,8 @@ export default {
         }
       },
       url: '/api/v1/acls/login-asset-acls/',
-      afterGetFormValue(formValue) {
-        // assets
-        formValue.assets.name_group = formValue.assets.name_group.toString()
-        formValue.assets.address_group = formValue.assets.address_group.toString()
-        // accounts
-        formValue.accounts.username_group = formValue.accounts.username_group.toString()
-        // users
-        formValue.users.username_group = formValue.users.username_group.toString()
-        return formValue
-      },
-      cleanFormValue(value) {
-        // assets
-        if (!Array.isArray(value.assets.name_group)) {
-          value.assets.name_group = value.assets.name_group ? value.assets.name_group.split(',') : []
-        }
-        if (!Array.isArray(value.assets.address_group)) {
-          value.assets.address_group = value.assets.address_group ? value.assets.address_group.split(',') : []
-        }
-        // accounts
-        if (!Array.isArray(value.accounts.username_group)) {
-          value.accounts.username_group = value.accounts.username_group ? value.accounts.username_group.split(',') : []
-        }
-        // users
-        if (!Array.isArray(value.users.username_group)) {
-          value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
-        }
-        return value
-      }
+      afterGetFormValue: afterGetFormValueForHandleUserAssetAccount,
+      cleanFormValue: cleanFormValueForHandleUserAssetAccount
     }
   },
   methods: {
