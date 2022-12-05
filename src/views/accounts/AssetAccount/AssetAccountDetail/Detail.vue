@@ -32,7 +32,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('assets.PrivilegedTemplate'),
+          title: this.$t('assets.Privileged'),
           type: 'switcher',
           attrs: {
             model: vm.object.privileged,
@@ -83,7 +83,7 @@ export default {
         },
         {
           key: this.$t('assets.SecretType'),
-          value: this.object.secret_type
+          value: this.object.secret_type.label
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
