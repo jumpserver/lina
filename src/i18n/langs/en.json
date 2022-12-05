@@ -103,6 +103,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "AssetAddress": "IP/Host",
     "sshkeyAccount": "ssh key account",
     "passwordAccount": "Password account",
     "SelectTemplate": "Select template",
