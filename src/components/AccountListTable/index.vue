@@ -98,11 +98,24 @@ export default {
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'hostname', 'ip', 'username',
-            'version', 'privileged', 'actions'
+            'name', 'username', 'version', 'privileged', 'actions', 'secret_type', 'actions'
           ]
         },
         columnsMeta: {
+          name: {
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              const to = {
+                name: 'AssetAccountDetail',
+                params: { id: row.id }
+              }
+              if (vm.$hasPerm('assets.view_account')) {
+                return <router-link to={ to } >{ row.name }</router-link>
+              } else {
+                return <span>{ row.name }</span>
+              }
+            }
+          },
           asset: {
             label: this.$t('assets.Asset'),
             showOverflowTooltip: true,
