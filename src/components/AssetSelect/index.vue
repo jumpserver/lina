@@ -68,7 +68,7 @@ export default {
       multiple: true,
       clearable: true,
       ajax: {
-        url: '/api/v1/assets/assets/?fields_size=mini',
+        url: '/api/v1/assets/assets/',
         transformOption: (item) => {
           return { label: item.name + '(' + item.address + ')', value: item.id }
         }
@@ -84,7 +84,7 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/assets/assets/?fields_size=mini',
+        url: '/api/v1/assets/assets/',
         nodeUrl: '/api/v1/assets/nodes/',
         // ?assets=0不显示资产. =1显示资产
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
