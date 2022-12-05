@@ -92,7 +92,7 @@ export default {
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
-        url: '/api/v1/assets/assets/?fields_size=mini',
+        url: '/api/v1/assets/assets/',
         hasTree: true,
         hasSelection: false,
         canSelect: this.canSelect,
@@ -114,19 +114,23 @@ export default {
             }
           },
           {
-            prop: 'ip',
+            prop: 'address',
             label: this.$t('assets.ipDomain'),
             sortable: 'custom'
           },
           {
             prop: 'platform',
             label: this.$t('assets.Platform'),
-            sortable: true
+            sortable: true,
+            formatter: function(row) {
+              return row.platform.name
+            }
           },
           {
             prop: 'protocols',
             formatter: function(row) {
-              return <span> {row.protocols?.toString()} </span>
+              const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
+              return <span> {data} </span>
             },
             label: this.$t('assets.Protocols')
           }
@@ -199,34 +203,34 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .el-select {
-    width: 100%;
-  }
+.el-select {
+  width: 100%;
+}
 
-  .page ::v-deep .page-heading {
-    display: none;
-  }
+.page ::v-deep .page-heading {
+  display: none;
+}
 
-  .el-dialog__wrapper ::v-deep .el-dialog__body {
-    padding: 0;
+.el-dialog__wrapper ::v-deep .el-dialog__body {
+  padding: 0;
 
-    .tree-table {
-      .left {
-        padding: 5px;
-      }
+  .tree-table {
+    .left {
+      padding: 5px;
+    }
 
-      .mini {
-        padding-top: 8px;
-      }
+    .mini {
+      padding-top: 8px;
+    }
 
-      .transition-box {
-        padding: 5px;
-      }
+    .transition-box {
+      padding: 5px;
     }
   }
+}
 
-  .page ::v-deep .treebox {
-    height: inherit !important;
-  }
+.page ::v-deep .treebox {
+  height: inherit !important;
+}
 
 </style>
