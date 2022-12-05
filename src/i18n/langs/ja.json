@@ -108,6 +108,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "AssetAddress": "IP/ホスト名",
     "sshkeyAccount": "SSHキー",
     "passwordAccount": "パスワード",
     "SelectTemplate": "テンプレートの選択",
