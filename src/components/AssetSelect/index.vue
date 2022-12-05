@@ -31,7 +31,7 @@
 
 <script>
 import TreeTable from '@/components/TreeTable'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
 import Dialog from '@/components/Dialog'
 
@@ -109,9 +109,45 @@ export default {
             label: this.$t('assets.Name'),
             sortable: true,
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
+            formatter: DialogDetailFormatter,
             formatterArgs: {
-              route: 'AssetDetail'
+              getDialogTitle: function({ col, row }) { this.$t('assets.AssetDetail') }.bind(this),
+              getDetailItems: function({ col, row }) {
+                return [
+                  {
+                    key: this.$t('assets.Name'),
+                    value: row.name
+                  },
+                  {
+                    key: this.$t('assets.AssetAddress'),
+                    value: row.address
+                  },
+                  {
+                    key: this.$t('assets.Protocols'),
+                    value: row.protocols.map(item => item.name).join(', ')
+                  },
+                  {
+                    key: this.$t('assets.Category'),
+                    value: row.category.label
+                  },
+                  {
+                    key: this.$t('assets.Type'),
+                    value: row.type.label
+                  },
+                  {
+                    key: this.$t('assets.Platform'),
+                    value: row.platform?.name || ''
+                  },
+                  {
+                    key: this.$t('common.Active'),
+                    value: row.is_active
+                  },
+                  {
+                    key: this.$t('assets.Comment'),
+                    value: row.comment
+                  }
+                ]
+              }.bind(this)
             }
           },
           {
@@ -233,5 +269,4 @@ export default {
 .page ::v-deep .treebox {
   height: inherit !important;
 }
-
 </style>

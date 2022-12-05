@@ -107,6 +107,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "AssetAddress": "IP/主机名",
     "sshkeyAccount": "密钥账号",
     "passwordAccount": "密码账号",
     "Category": "类别",

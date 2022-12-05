@@ -68,7 +68,9 @@ export default {
 
 <style lang="scss" scoped>
 .card >>> .el-card__body {
-  padding: 0
+  padding: 0;
 }
-
+.el-card {
+  border: 0!important;
+}
 </style>
