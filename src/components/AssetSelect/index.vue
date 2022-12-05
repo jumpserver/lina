@@ -94,8 +94,15 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/?fields_size=mini',
         hasTree: true,
+        hasSelection: false,
         canSelect: this.canSelect,
         columns: [
+          {
+            type: 'selection',
+            selectable(row) {
+              return row.automation_enabled_info.change_secret_enabled
+            }
+          },
           {
             prop: 'name',
             label: this.$t('assets.Name'),
