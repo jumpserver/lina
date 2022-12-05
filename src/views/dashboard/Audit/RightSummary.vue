@@ -6,7 +6,7 @@
       </div>
       <LineChart v-bind="chartConfig" />
     </div>
-    <SummaryCountCard :config="config" :items="summaryItems" class="margin-top-16" />
+    <SummaryCountCard :config="chartTitleConfig" :items="summaryItems" class="margin-top-16" />
   </div>
 </template>
 
@@ -32,6 +32,10 @@ export default {
       config: {
         title: this.$t('dashboard.SessionTrend'),
         tip: this.$t('dashboard.SessionTrend')
+      },
+      chartTitleConfig: {
+        title: this.$t('route.BatchCommand'),
+        tip: this.$t('route.BatchCommand')
       },
       chartConfig: {
         datesMetrics: [],
