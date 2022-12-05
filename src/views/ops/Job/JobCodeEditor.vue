@@ -65,6 +65,10 @@ export default {
       this.showOpenAdhocDialog = true
     },
     openAdhocSaveDialog() {
+      if (!this.iValue.length > 0) {
+        this.$message.error(this.$tc('ops.CommandNotBeNone'))
+        return
+      }
       this.showOpenAdhocSaveDialog = true
     },
     onSelectAdhoc(adhoc) {

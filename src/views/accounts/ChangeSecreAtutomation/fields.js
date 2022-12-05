@@ -52,6 +52,11 @@ export const getFields = () => {
       rules: [
         { required: false }
       ],
+      el: {
+        canSelect: (row) => {
+          return row.enabled_info.change_secret_enabled
+        }
+      },
       label: i18n.t('xpack.Asset')
     },
     passphrase: {
