@@ -683,6 +683,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "CommandNotBeNone": "命令内容不能为空",
     "OpenCommand": "打开命令",
     "SaveCommand": "保存命令 ",
     "Log": "日志",
