@@ -54,7 +54,7 @@ export const getFields = () => {
       ],
       el: {
         canSelect: (row) => {
-          return row.automation_enabled_info.change_secret_enabled
+          return row.enabled_info.change_secret_enabled
         }
       },
       label: i18n.t('xpack.Asset')
