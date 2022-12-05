@@ -39,6 +39,14 @@ export default {
   componentName: 'AssetSelect',
   components: { TreeTable, Select2, Dialog },
   props: {
+    baseUrl: {
+      type: String,
+      default: '/api/v1/assets/assets/'
+    },
+    baseNodeUrl: {
+      type: String,
+      default: '/api/v1/assets/nodes/'
+    },
     value: {
       type: Array,
       default: () => []
@@ -68,7 +76,7 @@ export default {
       multiple: true,
       clearable: true,
       ajax: {
-        url: '/api/v1/assets/assets/',
+        url: this.baseUrl,
         transformOption: (item) => {
           return { label: item.name + '(' + item.address + ')', value: item.id }
         }
@@ -84,15 +92,15 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/assets/assets/',
-        nodeUrl: '/api/v1/assets/nodes/',
+        url: this.baseUrl,
+        nodeUrl: this.baseNodeUrl,
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+        treeUrl: `${this.baseNodeUrl}/children/tree/?assets=0`
       },
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
-        url: '/api/v1/assets/assets/',
+        url: this.baseUrl,
         hasTree: true,
         hasSelection: false,
         canSelect: this.canSelect,
