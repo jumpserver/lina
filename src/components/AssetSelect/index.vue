@@ -55,8 +55,16 @@ export default {
     }
   },
   data() {
+    const iValue = []
+    for (const item of this.value) {
+      if (typeof item === 'object') {
+        iValue.push(item.id)
+      } else {
+        iValue.push(item)
+      }
+    }
     const select2Config = {
-      value: this.value,
+      value: iValue,
       multiple: true,
       clearable: true,
       ajax: {
@@ -69,7 +77,7 @@ export default {
     const vm = this
     return {
       dialogVisible: false,
-      initialValue: _.cloneDeep(this.value),
+      initialValue: _.cloneDeep(iValue),
       rowSelected: [],
       initSelection: null,
       treeSetting: {
@@ -126,7 +134,7 @@ export default {
           }
         },
         theRowDefaultIsSelected: (row) => {
-          return this.value.indexOf(row.id) > -1
+          return iValue.indexOf(row.id) > -1
         }
       },
       headerActions: {
