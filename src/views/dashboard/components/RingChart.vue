@@ -64,7 +64,7 @@ export default {
         color: [color, 'rgba(43, 147, 124, 0.05)'],
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {d}%'
         },
         series: [
           {

@@ -1,20 +1,22 @@
 <template>
   <div class="card">
-    <div>
+    <div class="card-content">
       <div class="title">
         <Title :config="config" />
       </div>
       <div class="sub">{{ config.subTitle }}</div>
-      <div class="num">{{ config.total }}</div>
-      <div class="add">
-        <span class="add-num">
-          {{ $tc('dashboard.WeekAdd') }}：{{ config.weekAdd }}
-          <svg-icon v-if="config.subIcon" :icon-class="config.subIcon" class="font" />
-        </span>
-        <span class="add-icon">
-          <svg-icon v-if="config.icon" :icon-class="config.icon" class="font" />
-        </span>
-      </div>
+      <slot class="custom">
+        <div class="num">{{ config.total }}</div>
+        <div class="add">
+          <span class="add-num">
+            {{ $tc('dashboard.WeekAdd') }}：{{ config.weekAdd }}
+            <svg-icon v-if="config.subIcon" :icon-class="config.subIcon" class="font" />
+          </span>
+          <span class="add-icon">
+            <svg-icon v-if="config.icon" :icon-class="config.icon" class="font" />
+          </span>
+        </div>
+      </slot>
     </div>
     <div class="ring">
       <RingChart :config="config" />
@@ -48,6 +50,10 @@ export default {
   width: 100%;
   padding: 20px;
   background-color: #FFF;
+  .card-content {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #EFF0F1;
+  }
   .title {
     margin-bottom: 12px;
   }
@@ -67,8 +73,13 @@ export default {
   .add {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #EFF0F1;
+  }
+  .custom {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 32px;
+    padding-bottom: 18px;
   }
   .ring {
     padding: 26px 0 10px;
