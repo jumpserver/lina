@@ -179,6 +179,7 @@
     "DomainHelpMessage": "The domain function is added to address the fact that some environments (such as the hybrid cloud) cannot be connected directly by jumping on the gateway server.\nJMS => Domain gateway => Target assets",
     "FullName": "Full name",
     "Gateway": "Gateway",
+    "GatewayList": "Gateway",
     "GatewayProtocolHelpText": "SSH protocol gateway, support proxy SSH, RDP, VNC",
     "Hostname": "Hostname",
     "IP": "IP",

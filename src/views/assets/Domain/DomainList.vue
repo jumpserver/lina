@@ -4,6 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -32,8 +33,15 @@ export default {
           gateway_count: {
             prop: 'gateways',
             label: this.$t('assets.Gateway'),
-            formatter: function(row) {
-              return <span> { row.gateways.length } </span>
+            formatter: DetailFormatter,
+            formatterArgs: {
+              permissions: 'assets.view_gateway',
+              routeQuery: {
+                activeTab: 'GatewayList'
+              },
+              getTitle: function({ cellValue }) {
+                return cellValue.length
+              }
             }
           }
         }

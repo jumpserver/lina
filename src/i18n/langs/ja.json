@@ -181,6 +181,7 @@
     "DomainHelpMessage": "ドメイン機能は、一部の環境 (ハイブリッドクラウドなど) が直接接続できないことを解決するために追加された機能で、ゲートウェイサーバを介してジャンプ登録を行うのが原理です。JMS => ドメインゲートウェイ => ターゲット資産",
     "FullName": "フルネーム",
     "Gateway": "ゲートウェイ",
+    "GatewayList": "ゲートウェイの一覧",
     "GatewayProtocolHelpText": "SSHゲートウェイ、プロキシSSH、RDP、VNCをサポート",
     "Hostname": "ホスト名",
     "IP": "IP",

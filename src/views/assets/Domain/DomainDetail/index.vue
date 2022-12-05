@@ -28,7 +28,7 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('assets.Gateway'),
+            title: this.$t('assets.GatewayList'),
             name: 'GatewayList',
             hidden: () => !this.$hasPerm('assets.view_gateway')
           }
