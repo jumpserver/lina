@@ -108,6 +108,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "UserSwitchFrom": "用户切换自",
     "sshkeyAccount": "密钥账号",
     "passwordAccount": "密码账号",
     "Category": "类别",
@@ -452,6 +453,7 @@
     "Others": "其它",
     "Push": "推送",
     "QuickUpdate": "快速更新",
+    "QuickSelect": "快速选择",
     "RemoveSuccessMsg": "移除成功",
     "Reset": "重置",
     "Search": "搜索",

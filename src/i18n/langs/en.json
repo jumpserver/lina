@@ -103,6 +103,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "UserSwitchFrom": "User switch from",
     "sshkeyAccount": "ssh key account",
     "passwordAccount": "Password account",
     "SelectTemplate": "Select template",
@@ -411,6 +412,7 @@
     "Push": "Push",
     "Receivers": "Receivers",
     "QuickUpdate": "Quick update",
+    "QuickSelect": "Quick select",
     "RemoveSuccessMsg": "Remove success",
     "Reset": "Reset",
     "Search": "Search",
