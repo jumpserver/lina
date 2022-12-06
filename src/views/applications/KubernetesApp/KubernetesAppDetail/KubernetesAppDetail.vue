@@ -39,7 +39,7 @@ export default {
           value: this.object.attrs.cluster
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {

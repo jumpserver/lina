@@ -15,13 +15,13 @@
         <el-col :md="10" :sm="24">
           <QuickActions
             type="primary"
-            :title="this.$t('users.AuthSettings')"
+            :title="$tc('users.AuthSettings')"
             :actions="authQuickActions"
           />
           <QuickActions
             type="info"
             style="margin-top: 15px"
-            :title="this.$t('users.MessageSubscription')"
+            :title="$tc('users.MessageSubscription')"
             fa="fa-info-circle"
             :actions="messageSubscriptionQuickActions"
           />
@@ -156,7 +156,7 @@ export default {
       messageSubscriptionQuickActions: [
         {
           title: this.$t('notifications.SiteMessage'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             disabled: true,
             name: 'site_msg',
@@ -168,7 +168,7 @@ export default {
         },
         {
           title: this.$t('setting.Email'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'email',
             model: this.object?.receive_backends.indexOf('email') !== -1
@@ -179,7 +179,7 @@ export default {
         },
         {
           title: this.$t('setting.WeCom'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'wecom',
             model: this.object?.receive_backends.indexOf('wecom') !== -1
@@ -191,7 +191,7 @@ export default {
         },
         {
           title: this.$t('setting.DingTalk'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'dingtalk',
             model: this.object?.receive_backends.indexOf('dingtalk') !== -1
@@ -203,7 +203,7 @@ export default {
         },
         {
           title: this.$t('setting.FeiShu'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             name: 'feishu',
             model: this.object?.receive_backends.indexOf('feishu') !== -1
@@ -249,7 +249,7 @@ export default {
           formatter: (item, val) => {
             const comment = val.public_key_comment
             const md5 = val.public_key_hash_md5
-            return <span>{ comment } <br /> { md5 }</span>
+            return <span>{comment} <br/> {md5}</span>
           }
         },
         {
@@ -305,10 +305,10 @@ export default {
         `/api/v1/notifications/user-msg-subscription/${this.object.id}/`,
         { 'receive_backends': this.getReceiveBackendList() }
       ).then(res => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
         this.$store.dispatch('users/getProfile', true)
       }).catch(err => {
-        this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+        this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
       })
     },
     getReceiveBackendList() {
@@ -328,7 +328,7 @@ export default {
         window.location.href = url
       } else {
         this.$axios.post(url).then(res => {
-          this.$message.success(this.$t('common.updateSuccessMsg'))
+          this.$message.success(this.$tc('common.updateSuccessMsg'))
           this.$store.dispatch('users/getProfile')
         })
       }

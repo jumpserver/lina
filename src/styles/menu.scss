@@ -1,42 +1,60 @@
 @import "./variables";
+
 .left-menu.el-menu {
   .el-menu--inline {
     background-color: $subMenuBg;
   }
+
   .el-menu-item, .el-submenu {
     font-weight: 600;
   }
 
   .el-submenu, .el-menu-item.submenu-title-noDropdown {
     background-color: $menuBg;
+    border-top: solid 1px #f3f3f4;
+
     .el-submenu__title {
       color: $menuText;
+
       &:hover {
         color: $menuActiveText;
       }
+
       i {
-        color: $menuText;
+        color: $menuActiveText;
       }
     }
   }
+
   .el-menu-item, .el-submenu-sidebar .el-menu-item {
     background-color: $subMenuBg;
     color: $menuText;
-    &.is-active{
-      color: $menuActiveText;
+    list-style: circle inside;
+
+    &.submenu-title-noDropdown {
+      list-style: none;
     }
+
+    &.is-active {
+      color: $subMenuActiveText;
+      background-color: $subMenuHover !important;
+      list-style-type: disc;
+    }
+
     &:hover {
       background-color: $subMenuHover;
-      color: $menuActiveText;
+      color: $subMenuActiveText;
+      list-style-type: disc;
     }
+
     i {
       color: $menuText;
     }
   }
 
-   i.fa {
-     margin-right: 10px;
-     width: 13px;
+  i.fa {
+    margin-right: 10px;
+    width: 13px;
   }
 
   .is-active i.fa {
@@ -44,15 +62,15 @@
   }
 
   .el-submenu .el-menu-item {
-    height: 32px;
-    line-height: 2;
+    height: 38px;
+    line-height: 38px;
     padding: 0 52px;
     min-width: 200px;
   }
 
   .nest-menu .el-submenu__title {
-    height: 32px;
-    line-height: 2;
+    height: 48px;
+    line-height: 48px;
     padding: 0 52px;
     min-width: 200px;
   }
@@ -62,12 +80,14 @@
   }
 
   .el-menu-item, .el-submenu__title {
-    height: 46px;
-    line-height: 46px;
+    height: 48px;
+    line-height: 48px;
+    font-weight: 400;
+    font-size: 13px;
   }
 
   .el-menu-item:hover, .el-menu-item:focus {
-    color: white;
+    color: $subMenuActiveText;
   }
 
   .navbar li.is-active, .navbar li.is-opened {
@@ -79,18 +99,20 @@
   }
 
   li.is-active {
-    border-left: 4px solid $menuActiveLeft;
+    // border-left: 4px solid var(--color-primary);
   }
 
   .el-submenu-sidebar .el-menu-item {
-    background-color: $subMenuBg ;
+    background-color: $subMenuBg;
   }
 
   .el-submenu.is-opened {
-    background-color: $subMenuBg ;
+    background-color: $subMenuBg;
+
     .el-submenu__title {
-      background-color: $subMenuBg!important;
+      background-color: $subMenuBg !important;
     }
+
     & .nest-menu {
       background-color: $subMenuBg;
     }

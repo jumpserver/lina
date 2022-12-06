@@ -1,5 +1,6 @@
 const getters = {
   sidebar: state => state.app.sidebar,
+  defaultOpensMenu: state => state.app.defaultOpensMenu,
   device: state => state.app.device,
   inited: state => state.app.inited,
   isMobile: state => state.app.device === 'mobile',
@@ -26,6 +27,7 @@ const getters = {
   tableConfig: state => state.table.tableConfig,
   currentUserIsSuperAdmin: state => state.users.isSuperAdmin,
   currentUserIsAdmin: state => state.users.isAdmin,
-  hasValidLicense: state => state.settings.hasValidLicense
+  hasValidLicense: state => state.settings.hasValidLicense,
+  isSystemAdmin: state => state.users.profile.system_roles.includes('00000000-0000-0000-0000-000000000001')
 }
 export default getters

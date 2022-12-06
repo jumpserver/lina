@@ -38,21 +38,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .page-heading {
-    border-top: 0;
-    padding: 12px 30px 13px 25px;
+    position: relative;
+    height: 50px;
+    line-height: 50px;
     background-color: #ffffff;
-    min-height: 1px;
+    .el-row {
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0 24px;
+    }
   }
 
   .page-heading-left, h2 {
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 1.5;
-    /*margin-bottom: 12px;*/
-    height: 30px;
-    max-height: 32px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #1F2329;
   }
 
   .page-heading-right {

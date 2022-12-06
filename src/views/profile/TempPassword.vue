@@ -48,9 +48,9 @@ export default {
                     this.$axios.patch(`${ajaxUrl}${row.id}/expire/`,
                     ).then(res => {
                       this.getRefsListTable.reloadTable()
-                      this.$message.success(this.$t('common.updateSuccessMsg'))
+                      this.$message.success(this.$tc('common.updateSuccessMsg'))
                     }).catch(error => {
-                      this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                      this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
                     })
                   }.bind(this)
                 }
@@ -78,9 +78,9 @@ export default {
                 `/api/v1/authentication/temp-tokens/`
               ).then(res => {
                 this.getRefsListTable.reloadTable()
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(error => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + error))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + error))
               })
             }.bind(this)
           }

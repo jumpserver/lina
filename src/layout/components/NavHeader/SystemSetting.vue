@@ -1,6 +1,6 @@
 <template>
   <el-link @click="goto()">
-    <svg-icon icon-class="setting-fill" @click="goto()" />
+    <svg-icon icon-class="nav-setting" @click="goto()" />
   </el-link>
 </template>
 

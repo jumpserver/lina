@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-bind="$attrs"
-    :title="$t('setting.testLdapLoginTitle') "
+    :title="$tc('setting.testLdapLoginTitle') "
     :destroy-on-close="true"
     :loading-status="testLdapLoginStatus"
     :show-cancel="false"
@@ -13,18 +13,18 @@
       label-position="right"
       label-width="17%"
     >
-      <el-form-item :label="$t('setting.username')">
+      <el-form-item :label="$tc('setting.username')">
         <el-input
           v-model="userLoginForm.username"
-          :placeholder="$t('setting.usernamePlaceholder')"
+          :placeholder="$tc('setting.usernamePlaceholder')"
           autocomplete="off"
         />
       </el-form-item>
-      <el-form-item :label="$t('setting.password')">
+      <el-form-item :label="$tc('setting.password')">
         <el-input
           v-model="userLoginForm.password"
           type="password"
-          :placeholder="$t('setting.passwordPlaceholder')"
+          :placeholder="$tc('setting.passwordPlaceholder')"
           autocomplete="off"
         />
       </el-form-item>

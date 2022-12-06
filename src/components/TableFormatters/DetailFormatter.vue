@@ -1,12 +1,17 @@
 <template>
-  <el-link
-    class="detail"
-    :disabled="disabled"
-    :type="col.type || 'info'"
-    @click="goDetail"
-  >
-    {{ iTitle }}
-  </el-link>
+  <div>
+    <img v-if="icon" :src="icon" alt="icon" class="icon">
+    <el-link
+      class="detail"
+      :disabled="disabled"
+      :type="col.type || 'info'"
+      @click="goDetail"
+    >
+      <slot>
+        {{ iTitle }}
+      </slot>
+    </el-link>
+  </div>
 </template>
 
 <script>
@@ -26,6 +31,9 @@ export default {
           can: true,
           getTitle({ col, row, cellValue }) {
             return cellValue
+          },
+          getIcon({ col, row, cellValue }) {
+            return null
           }
         }
       }
@@ -51,10 +59,15 @@ export default {
         can = can(this.col)
       }
       return !can
-    }
-  },
-  methods: {
-    goDetail() {
+    },
+    icon() {
+      return this.formatterArgs.getIcon({
+        col: this.col,
+        row: this.row,
+        cellValue: this.cellValue
+      })
+    },
+    detailRoute() {
       // const defaultRoute = this.$route.name.replace('List', 'Detail')
       let route = this.formatterArgs.route
       if (this.formatterArgs.getRoute && typeof this.formatterArgs.getRoute === 'function') {
@@ -80,7 +93,12 @@ export default {
       if (routeQuery && typeof routeQuery === 'object') {
         detailRoute.query = this.formatterArgs.routeQuery
       }
-      this.$router.push(detailRoute)
+      return detailRoute
+    }
+  },
+  methods: {
+    goDetail() {
+      this.$router.push(this.detailRoute)
       // const routeName = this.formatterArgs.route
       // this.$log.debug('Will go to detail route: ', routeName)
       // this.$router.push({ name: routeName, params: { id: this.row.id }, query: routeQuery })
@@ -97,5 +115,15 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 400;
+}
+
+.detail {
+  line-height: 25px;
+  font-size: 13px;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
 }
 </style>

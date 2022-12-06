@@ -1,0 +1,79 @@
+<template>
+  <Dialog
+    v-if="iVisible"
+    :title="$tc('ops.SaveAdhoc')"
+    :visible.sync="iVisible"
+    width="40%"
+    top="1vh"
+    :show-cancel="false"
+    :show-confirm="false"
+  >
+    <GenericCreateUpdateForm v-if="ready" v-bind="$data" />
+  </Dialog>
+</template>
+
+<script>
+import Dialog from '@/components/Dialog'
+import { GenericCreateUpdateForm } from '@/layout/components'
+import CodeEditor from '@/components/FormFields/CodeEditor'
+
+export default {
+  components: {
+    Dialog, GenericCreateUpdateForm
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    args: {
+      type: String,
+      default: () => ({})
+    }
+  },
+  data() {
+    return {
+      ready: false,
+      url: '/api/v1/ops/adhocs/',
+      fields: [
+        ['', ['name', 'module', 'args']]
+      ],
+      initial: {
+        module: 'shell',
+        args: ''
+      },
+      fieldsMeta: {
+        args: {
+          label: 'content',
+          component: CodeEditor
+        }
+      }
+    }
+  },
+  computed: {
+    iVisible: {
+      set(val) {
+        this.$emit('update:visible', val)
+      },
+      get() {
+        return this.visible
+      }
+    }
+  }, mounted() {
+    this.initial.args = this.args
+    this.ready = true
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.el-row-divider {
+  margin-bottom: 20px;
+}
+
+.select-prop-label {
+  float: right;
+  padding-right: 30px;
+}
+
+</style>

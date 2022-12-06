@@ -14,7 +14,7 @@
             <li><span class="title">{{ $t('users.Email') }}</span>：<span>{{ users.email }}</span></li>
             <li>
               <span class="title">{{ $t('audits.LoginDate') }}</span>：
-              <span>{{ $moment(users.last_login, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss') }}</span>
+              <span>{{ users.last_login | date }}</span>
             </li>
           </ul>
         </el-col>

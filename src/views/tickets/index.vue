@@ -3,7 +3,7 @@
     <el-badge
       v-if="props.tab === 'AssignedTicketList'"
       slot="badge"
-      slot-scope="props"
+      v-slot="props"
       :value="getBadgeValue(props)"
       size="mini"
       type="primary"
@@ -57,7 +57,7 @@ export default {
   methods: {
     getTicketOpenCount() {
       getTicketOpenCount(this.currentUser.id).then(data => {
-        this.assignedTicketCount = data.count
+        this.assignedTicketCount = data['count']
       })
     },
     getBadgeValue(props) {

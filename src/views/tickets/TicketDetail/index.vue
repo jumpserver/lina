@@ -25,7 +25,6 @@ export default {
       ticket: {
         title: '',
         user_display: '',
-        type_display: '',
         status: '',
         assignees_display: '',
         date_created: ''
@@ -50,7 +49,6 @@ export default {
     afterGetTicket(ticket) {
       const ticketRouteMapper = {
         'apply_asset': 'AssetsTicketDetail',
-        'apply_application': 'AppsTicketDetail',
         'login_confirm': 'LoginTicketDetail',
         'login_asset_confirm': 'LoginAssetTicketDetail',
         'command_confirm': 'CommandConfirmDetail'

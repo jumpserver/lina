@@ -9,7 +9,7 @@
         :span-method="spanMethod"
         :stripe="true"
       >
-        <el-table-column :label="$t('notifications.MessageType')" width="230">
+        <el-table-column :label="$tc('notifications.MessageType')" width="230">
           <template v-slot="scope">
             <span>{{ scope.row.value }}</span>
           </template>
@@ -26,14 +26,14 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('notifications.Receivers')" show-overflow-tooltip>
+        <el-table-column :label="$tc('notifications.Receivers')" show-overflow-tooltip>
           <template v-slot="scope">
             <span v-if="!scope.row.children">
               {{ scope.row.receivers.map(item => item.name).join(', ') }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('common.Actions')" width="200">
+        <el-table-column :label="$tc('common.Actions')" width="200">
           <template v-slot="scope">
             <el-button v-if="!scope.row.children" type="small" @click="onOpenDialog(scope.row)">
               {{ $t('notifications.ChangeReceiver') }}
@@ -45,7 +45,7 @@
       <SelectDialog
         v-if="dialogVisible"
         :visible.sync="dialogVisible"
-        :title="$t('notifications.ChangeReceiver')"
+        :title="$tc('notifications.ChangeReceiver')"
         :selected-users="dialogSelectedUsers"
         @submit="onDialogSelectSubmit"
         @cancel="dialogVisible=false"
@@ -57,6 +57,7 @@
 <script>
 import Page from '@/layout/components/Page'
 import SelectDialog from './SelectDialog'
+
 export default {
   components: {
     Page,
@@ -81,7 +82,9 @@ export default {
     onCheckReceiveBackend(sub) {
       const backends = []
       for (const [name, checked] of Object.entries(sub.receiveBackends)) {
-        if (checked) { backends.push(name) }
+        if (checked) {
+          backends.push(name)
+        }
       }
 
       this.$axios.patch(

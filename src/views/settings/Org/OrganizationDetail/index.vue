@@ -47,7 +47,7 @@ export default {
                 instance.confirmButtonLoading = true
                 try {
                   await performDelete.bind(this)()
-                  this.$message.success(this.$t('common.deleteSuccessMsg'))
+                  this.$message.success(this.$tc('common.deleteSuccessMsg'))
                   this.$router.push({ name: 'OrganizationList' })
                   return done()
                 } catch (error) {

@@ -55,8 +55,8 @@ export default {
 .sidebar-logo-container {
   position: relative;
   width: 100%;
-  height: 55px;
-  line-height: 55px;
+  height: 50px;
+  line-height: 50px;
   // background: #2b2f3a;
   text-align: center;
   overflow: hidden;
@@ -73,10 +73,9 @@ export default {
     }
 
     & .sidebar-logo-text {
-      width: 165px;
-      height: 50px;
+      height: 40px;
+      padding: 5px 0;
       vertical-align: middle;
-      margin-right: 12px;
     }
 
     & .sidebar-title {
@@ -92,8 +91,8 @@ export default {
   }
 
   &.collapse {
-    height: 55px;
-    line-height: 55px;
+    height: 50px;
+    line-height: 46px;
     .sidebar-logo {
       margin-right: 0;
     }

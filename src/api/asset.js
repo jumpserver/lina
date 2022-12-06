@@ -40,3 +40,10 @@ export function getCommandFilterList(data) {
   })
 }
 
+export function getCategoryTypes() {
+  return request({
+    url: '/api/v1/assets/categories/',
+    method: 'get'
+  })
+}
+

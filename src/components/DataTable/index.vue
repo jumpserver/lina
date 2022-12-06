@@ -47,9 +47,13 @@ export default {
         buttonSize: 'mini',
         tableAttrs: {
           stripe: false, // 斑马纹表格
-          border: true, // 表格边框
+          border: false, // 表格边框
           fit: true, // 宽度自适应,
-          tooltipEffect: 'dark'
+          tooltipEffect: 'dark',
+          rowClassName: ({ row }) => {
+            const selected = this.dataTable.selected.find(item => item.id === row.id)
+            return selected ? 'selected-row' : ''
+          }
         },
         extraButtons: userTableActions.extraButtons,
         onEdit: (row) => {
@@ -103,7 +107,9 @@ export default {
       return config
     },
     iListeners() {
-      return Object.assign({}, this.$listeners, this.tableConfig.listeners)
+      const defaultListeners = {
+      }
+      return Object.assign(defaultListeners, this.$listeners, this.tableConfig.listeners)
     },
     dataTable() {
       return this.$refs.table
@@ -165,34 +171,40 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .el-table  ::v-deep  .el-table__row {
+    &.selected-row {
+      background-color: #f5f7fa;
+    }
+    &> td {
+      line-height: 1.5;
+      padding: 6px 0;
+      font-size: 13px;
 
-  .el-table  ::v-deep  .el-table__row > td {
-    line-height: 1.5;
-    padding: 8px 0;
-  }
-  .el-table  ::v-deep  .el-table__row > td> div > span {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .el-table  ::v-deep  .el-table__header > thead > tr >th {
-    padding: 8px 0;
-    background-color: #F5F5F6;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .table{
-    margin-top: 15px;
+      * {
+        vertical-align: middle;
+      }
+
+      .el-checkbox {
+        vertical-align: super;
+      }
+    }
+    .el-table  ::v-deep  .el-table__row > td> div > span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .el-table  ::v-deep  .el-table__header > thead > tr > th {
+      padding: 6px 0;
+      background-color: #F5F5F6;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .table{
+      margin-top: 15px;
+    }
   }
 
-  //分页
-  .el-pagination  ::v-deep  .el-pagination__total{
-    float: left;
-  }
-
-  .el-pagination  ::v-deep  .el-pagination__sizes{
-    float: left;
-  }
   //修改颜色
   // .el-button--text{
   //   color: #409EFF;

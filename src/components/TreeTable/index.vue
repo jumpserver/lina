@@ -1,7 +1,10 @@
 <template>
   <el-collapse-transition>
-    <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="transition-box left">
+    <div
+      class="tree-table-content"
+      style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;"
+    >
+      <div v-show="iShowTree" :style="iShowTree?('width:20%;'):('width:0;')" class="left">
         <component
           :is="component"
           ref="AutoDataZTree"
@@ -16,15 +19,25 @@
           </div>
         </component>
       </div>
-      <div :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')">
-        <div class="mini">
-          <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
-            <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+      <div
+        class="right"
+        :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')"
+      >
+        <div v-if="showTree" class="mini">
+          <div style="display:block" class="mini-button" @click="iShowTree = !iShowTree">
+            <i v-show="iShowTree" class="fa fa-angle-left fa-x" />
+            <i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
           <slot name="table">
-            <ListTable ref="ListTable" :key="componentKey" :table-config="iTableConfig" :header-actions="headerActions" v-on="$listeners" />
+            <ListTable
+              ref="ListTable"
+              :key="componentKey"
+              :table-config="iTableConfig"
+              :header-actions="headerActions"
+              v-on="$listeners"
+            />
           </slot>
         </div>
       </div>
@@ -37,6 +50,8 @@ import AutoDataZTree from '../AutoDataZTree'
 import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
+import { setUrlParam } from '@/utils/common'
+
 export default {
   name: 'TreeTable',
   components: {
@@ -74,12 +89,23 @@ export default {
       handler(val) {
       },
       deep: true
+    },
+    showTree(val) {
+      this.iShowTree = val
     }
   },
   mounted() {
     // debug(this.treeSetting)
+    this.initSetTableUrl()
   },
   methods: {
+    initSetTableUrl() {
+      const { asset = '', node = '' } = this.$route.query || {}
+      let url = this.iTableConfig.url
+      url = setUrlParam(url, 'asset', asset)
+      url = setUrlParam(url, 'node', node)
+      this.$set(this.iTableConfig, 'url', url)
+    },
     handleUrlChange(url) {
       this.$set(this.iTableConfig, 'url', url)
       this.$emit('urlChange', url)
@@ -108,7 +134,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .mini-button{
+  .mini-button {
     width: 12px;
     float: right;
     text-align: center;
@@ -118,15 +144,44 @@ export default {
     color: #FFFFFF;
     border-radius: 3px;
     line-height: 1.428;
+    cursor: pointer;
     cursor:pointer;
     height: 30px;
   }
-  .el-tree{
+
+  .el-tree {
     background-color: inherit !important;
   }
-  .mini{
+
+  .mini {
     margin-right: 5px;
     width: 12px !important;
+  }
+
+  .tree-table-content {
+    .left {
+      border-right: solid 1px #ebeef5;
+      background: #f3f3f3;
+    }
+
+    .right {
+    }
+
+    .treebox {
+      background-color: transparent;
+
+      .ztree {
+        background-color: transparent;
+
+        li {
+          background-color: transparent;
+        }
+      }
+
+      .ztree * {
+        background-color: transparent;
+      }
+    }
   }
 
   .auto-data-ztree {
@@ -139,4 +194,5 @@ export default {
     border-radius: 3px;
     margin-right: 2px;
   }
+
 </style>

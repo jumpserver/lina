@@ -32,7 +32,7 @@ export default {
           value: this.object.name
         },
         // {
-        //   key: this.$t('applications.asset'),
+        //   key: this.$t('applications.host'),
         //   value: this.object.attrs.asset_info.hostname
         // },
         {
@@ -44,7 +44,7 @@ export default {
           value: this.object.attrs.path
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {

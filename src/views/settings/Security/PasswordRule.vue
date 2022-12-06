@@ -4,7 +4,7 @@
       {{ $t('setting.Setting') }}
     </el-button>
     <Dialog
-      :title="$t('setting.PasswordCheckRule')"
+      :title="$tc('setting.PasswordCheckRule')"
       :visible.sync="visible"
       :destroy-on-close="true"
       :show-cancel="false"
@@ -44,8 +44,7 @@ export default {
         'OLD_PASSWORD_HISTORY_LIMIT_COUNT'
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
-      fieldsMeta: {
-      },
+      fieldsMeta: {},
       url: '/api/v1/settings/setting/?category=security'
     }
   },
@@ -53,7 +52,8 @@ export default {
     submitMethod() {
       return 'patch'
     },
-    onConfirm() {}
+    onConfirm() {
+    }
   }
 }
 </script>

@@ -4,7 +4,7 @@
       <DetailCard :items="detailItems" />
     </el-col>
     <el-col :md="10" :sm="24">
-      <IBox :title="$t('rbac.Permissions')">
+      <IBox :title="$tc('rbac.Permissions')">
         <div style="height: 10%">
           <el-button
             size="small"
@@ -102,7 +102,7 @@ export default {
         'assets.gateway': ['assets.view_domain'],
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
-        'assets.view_authbook': ['assets.view_node'],
+        'assets.view_account': ['assets.view_node'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
         'xpack.gatherusertaskexecution': ['xpack.view_gatherusertask'],
@@ -290,9 +290,9 @@ export default {
         permissions: permIds
       }
       this.$axios.patch(roleDetailUrl, data).then(() => {
-        this.$message.success(this.$t('common.updateSuccessMsg'))
+        this.$message.success(this.$tc('common.updateSuccessMsg'))
       }).catch(error => {
-        this.$message.error(this.$t('common.updateErrorMsg') + error)
+        this.$message.error(this.$tc('common.updateErrorMsg') + error)
         this.$log.error(error)
       })
     }
@@ -301,18 +301,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree >>> .ztree * {
+.perm-tree > > > .ztree * {
   background: white;
 }
-.perm-tree >>> .ztree {
+
+.perm-tree > > > .ztree {
   background: white !important;
 }
-.perm-tree >>> .checkbox_true_disable,
-.perm-tree >>> .checkbox_false_disable {
-  cursor: not-allowed!important;
+
+.perm-tree > > > .checkbox_true_disable,
+.perm-tree > > > .checkbox_false_disable {
+  cursor: not-allowed !important;
 }
-.perm-tree >>> .checkbox_true_disable:before,
-.perm-tree >>> .checkbox_false_disable:before  {
-  color: #aaaaaa!important;
+
+.perm-tree > > > .checkbox_true_disable:before,
+.perm-tree > > > .checkbox_false_disable:before {
+  color: #aaaaaa !important;
 }
 </style>

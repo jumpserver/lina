@@ -1,0 +1,63 @@
+<template>
+  <ListTable :table-config="tableConfig" :header-actions="headerActions" />
+</template>
+
+<script type="text/jsx">
+import ListTable from '@/components/ListTable'
+
+export default {
+  name: 'TaskHistory',
+  components: {
+    ListTable
+  },
+  props: {
+    object: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data() {
+    return {
+      tableConfig: {
+        url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
+        columns: [
+          'date_start', 'date_finished', 'state', 'is_finished', 'actions'
+        ],
+        columnsMeta: {
+          state: {
+            formatter: (row) => {
+            }
+          },
+          actions: {
+            prop: 'id',
+            formatterArgs: {
+              hasEdit: false,
+              hasDelete: false,
+              hasUpdate: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'detail',
+                  title: this.$t('ops.detail'),
+                  type: 'primary',
+                  callback: function({ row, tableData }) {
+                    return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: row.id }})
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      headerActions: {
+        hasLeftActions: false,
+        hasRightActions: false
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

@@ -1,10 +1,11 @@
 @import "./variables";
 #app {
   .main-container {
+    position: relative;
     min-height: 100%;
+    margin-top: 50px;
     transition: margin-left .28s;
     margin-left: $sideBarWidth;
-    position: relative;
   }
 
   .sidebar-container {
@@ -14,11 +15,12 @@
     height: 100%;
     position: fixed;
     font-size: 0;
-    top: 0;
+    top: 50px;
     bottom: 0;
     left: 0;
     z-index: 1001;
     overflow: hidden;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 
     // reset element-ui css
     .horizontal-collapse-transition {
@@ -55,6 +57,7 @@
 
     .svg-icon {
       margin-right: 16px;
+      vertical-align: middle;
     }
 
     .el-menu {
@@ -78,7 +81,7 @@
     & .nest-menu .el-submenu-sidebar>.el-submenu__title,
     & .el-submenu-sidebar .el-menu-item {
       min-width: $sideBarWidth !important;
-      background-color: $subMenuBg !important;
+      background-color: $subMenuBg;
 
       &:hover {
         background-color: $subMenuHover !important;
@@ -99,23 +102,12 @@
       padding: 0 !important;
       position: relative;
 
-      .el-tooltip {
-        // padding: 0 !important;
-        .svg-icon {
-          margin-left: 20px;
-        }
-      }
     }
 
     .el-submenu-sidebar {
       overflow: hidden;
 
       &>.el-submenu__title {
-        // padding: 0 !important;
-
-        .svg-icon {
-          margin-left: 20px;
-        }
 
         .el-submenu__icon-arrow {
           display: none;
@@ -188,7 +180,7 @@
   // the scroll bar appears when the subMenu is too long
   >.el-menu--popup {
     max-height: 100vh;
-    overflow-y: auto;
+    overflow: hidden;
 
     &::-webkit-scrollbar-track-piece {
       background: #d3dce6;
@@ -201,6 +193,15 @@
     &::-webkit-scrollbar-thumb {
       background: #99a9bf;
       border-radius: 20px;
+    }
+
+    .el-menu-item {
+      height: 36px;
+      line-height: 36px;
+      &.is-active {
+        color: var(--color-primary);
+        border-left: 4px solid var(--color-primary);
+      }
     }
   }
 }

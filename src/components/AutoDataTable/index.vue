@@ -26,7 +26,8 @@ import {
   DetailFormatter,
   DisplayFormatter,
   ActionsFormatter,
-  ChoicesFormatter
+  ChoicesFormatter,
+  ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
@@ -117,6 +118,23 @@ export default {
         case 'is_valid':
           col.label = i18n.t('common.Validity')
           col.formatter = ChoicesFormatter
+          col.formatterArgs = {
+            textChoices: {
+              true: i18n.t('common.Valid'),
+              false: i18n.t('common.Invalid')
+            }
+          }
+          col.align = 'center'
+          col.width = '80px'
+          break
+        case 'is_active':
+          col.formatter = ChoicesFormatter
+          col.formatterArgs = {
+            textChoices: {
+              true: i18n.t('common.Active'),
+              false: i18n.t('common.Inactive')
+            }
+          }
           col.align = 'center'
           col.width = '80px'
           break
@@ -129,11 +147,15 @@ export default {
       }
       return col
     },
-    generateColumnByType(type, col) {
+    generateColumnByType(type, col, meta) {
       switch (type) {
         case 'choice':
           col.sortable = 'custom'
           col.formatter = DisplayFormatter
+          break
+        case 'labeled_choice':
+          col.sortable = 'custom'
+          col.formatter = ChoicesFormatter
           break
         case 'boolean':
           col.formatter = ChoicesFormatter
@@ -143,7 +165,20 @@ export default {
         case 'datetime':
           col.formatter = DateFormatter
           col.width = '160px'
+          break
+        case 'object_related_field':
+          col.formatter = ObjectRelatedFormatter
+          break
+        case 'm2m_related_field':
+          col.formatter = ObjectRelatedFormatter
+          break
+        case 'field':
+          if (meta.child && meta.child.type === 'nested object') {
+            col.formatter = ObjectRelatedFormatter
+          }
+          break
       }
+      // this.$log.debug('Field: ', type, col.prop, col)
       return col
     },
     addHelpTipsIfNeed(col) {
@@ -183,15 +218,23 @@ export default {
           col.filters = column.choices.map(item => {
             if (typeof (item.value) === 'boolean') {
               if (item.value) {
-                return { text: item['display_name'], value: 'True' }
+                return { text: item['label'], value: 'True' }
               } else {
-                return { text: item['display_name'], value: 'False' }
+                return { text: item['label'], value: 'False' }
               }
             }
-            return { text: item['display_name'], value: item.value }
+            return { text: item['label'], value: item.value }
           })
           col.sortable = false
           col['column-key'] = col.prop
+        }
+      }
+      return col
+    },
+    setDefaultFormatterIfNeed(col) {
+      if (!col.formatter) {
+        col.formatter = (row, column, cellValue) => {
+          return [undefined, null, ''].indexOf(cellValue) > -1 ? '-' : cellValue
         }
       }
       return col
@@ -202,7 +245,8 @@ export default {
       let col = { prop: name, label: colMeta.label }
 
       col = this.generateColumnByName(name, col)
-      col = this.generateColumnByType(colMeta.type, col)
+      col = this.generateColumnByType(colMeta.type, col, colMeta)
+      col = this.setDefaultFormatterIfNeed(col)
       col = Object.assign(col, customMeta)
       col = this.addHelpTipsIfNeed(col)
       col = this.addFilterIfNeed(col)
@@ -211,23 +255,28 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      for (let col of config.columns) {
-        if (typeof col === 'object') {
-          columns.push(col)
-        } else if (typeof col === 'string') {
-          col = this.generateColumn(col)
-          columns.push(col)
+      const configColumns = config?.columns || []
+      if (configColumns.length > 0) {
+        for (let col of configColumns) {
+          if (typeof col === 'object') {
+            columns.push(col)
+          } else if (typeof col === 'string') {
+            col = this.generateColumn(col)
+            columns.push(col)
+          }
         }
+        columns = columns.filter(item => {
+          let has = item.has
+          if (has === undefined) {
+            has = true
+          } else if (typeof has === 'function') {
+            has = has()
+          }
+          return has
+        })
+      } else {
+        columns = Object.keys(this.meta).map(key => this.generateColumn(key))
       }
-      columns = columns.filter(item => {
-        let has = item.has
-        if (has === undefined) {
-          has = true
-        } else if (typeof has === 'function') {
-          has = has()
-        }
-        return has
-      })
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns
       config.columns = columns

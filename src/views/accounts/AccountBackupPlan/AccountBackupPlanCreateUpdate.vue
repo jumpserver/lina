@@ -5,7 +5,6 @@
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
 import getFields from '@/views/accounts/AccountBackupPlan/fields'
-import FormTypeField from './components/FormTypeField'
 
 export default {
   name: 'AccountBackupPlanUpdate',
@@ -13,6 +12,7 @@ export default {
     GenericCreateUpdatePage
   },
   data() {
+    const vm = this
     const fields = getFields.bind(this)()
     return {
       url: '/api/v1/assets/account-backup-plans/',
@@ -26,7 +26,7 @@ export default {
       initial: {
         is_periodic: true,
         interval: 24,
-        types: ['all', 'asset', 'application']
+        categories: []
       },
       fieldsMeta: {
         is_periodic: fields.is_periodic,
@@ -34,8 +34,23 @@ export default {
         interval: fields.interval,
         recipients: fields.recipients,
         types: {
+          component: 'el-cascader',
           label: this.$t('xpack.AccountBackupPlan.Types'),
-          component: FormTypeField
+          remote: {
+            request: () => vm.$axios.get('/api/v1/assets/categories/')
+          },
+          el: {
+            options: [],
+            showAllLevels: false,
+            props: {
+              multiple: true,
+              emitPath: false,
+              children: 'types'
+            },
+            style: {
+              width: '100%'
+            }
+          }
         }
       },
       createSuccessNextRoute: { name: 'AccountBackupPlanIndex' },

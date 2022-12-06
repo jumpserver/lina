@@ -78,7 +78,7 @@ export default {
                       await performDelete.bind(this)({ row: row, col: col })
                       done()
                       reload()
-                      this.$message.success(this.$t('common.deleteSuccessMsg'))
+                      this.$message.success(this.$tc('common.deleteSuccessMsg'))
                     } finally {
                       instance.confirmButtonLoading = false
                     }

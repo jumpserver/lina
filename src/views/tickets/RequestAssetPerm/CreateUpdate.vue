@@ -1,20 +1,24 @@
 <template>
-  <GenericCreateUpdatePage v-if="!loading" v-bind="$data" :perform-submit="performSubmit" :create-success-next-route="createSuccessNextRoute" />
+  <GenericCreateUpdatePage
+    v-if="!loading"
+    v-bind="$data"
+    :perform-submit="performSubmit"
+    :create-success-next-route="createSuccessNextRoute"
+  />
 </template>
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFormatter'
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
-import PermissionFormActionField from '@/views/perms/components/PermissionFormActionField'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import store from '@/store'
 
 export default {
   components: {
     GenericCreateUpdatePage
   },
-
   data() {
     const now = new Date()
     const time = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
@@ -30,20 +34,17 @@ export default {
         ips_or_not: true,
         apply_date_expired: date_expired,
         apply_date_start: date_start,
-        apply_actions: [
-          'all', 'connect', 'updownload', 'upload_file', 'download_file',
-          'clipboard_copy_paste', 'clipboard_copy', 'clipboard_paste'
-        ],
         apply_assets: [],
         org_id: '',
-        type: 'apply_asset'
+        apply_actions: ['all']
       },
       fields: [
-        [this.$t('common.Basic'), ['title', 'type', 'org_id', 'comment']],
+        [this.$t('common.Basic'), ['title', 'org_id']],
         [this.$t('tickets.RequestPerm'), [
-          'apply_nodes', 'apply_assets', 'apply_system_users',
+          'apply_nodes', 'apply_assets', 'apply_accounts',
           'apply_actions', 'apply_date_start', 'apply_date_expired'
-        ]]
+        ]],
+        [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
         title: {
@@ -59,7 +60,6 @@ export default {
         },
         apply_actions: {
           label: this.$t('perms.Actions'),
-          component: PermissionFormActionField,
           helpText: this.$t('common.actionsTips')
         },
         apply_nodes: {
@@ -85,25 +85,13 @@ export default {
             ajax: {
               url: '',
               transformOption: (item) => {
-                return { label: item.hostname + '(' + item.protocols + ')', value: item.id }
+                return { label: item.name + '(' + item.address + ')', value: item.id }
               }
             }
           }
         },
-        apply_system_users: {
-          type: 'systemUserSelect',
-          component: Select2,
-          label: this.$t('assets.SystemUser'),
-          el: {
-            value: [],
-            ajax: {
-              url: '',
-              transformOption: (item) => {
-                const username = item.username || '*'
-                return { label: item.name + '(' + username + ')', value: item.id }
-              }
-            }
-          }
+        apply_accounts: {
+          component: AccountFormatter
         },
         org_id: {
           component: Select2,
@@ -115,7 +103,6 @@ export default {
           },
           hidden: (form) => {
             const fieldsMeta = this.fieldsMeta
-            fieldsMeta.apply_system_users.el.ajax.url = `/api/v1/assets/system-users/suggestions/?oid=${form['org_id']}&protocol__in=rdp,ssh,vnc,telnet`
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
           },
@@ -132,7 +119,7 @@ export default {
       },
       cleanFormValue(value) {
         Object.keys(value).forEach((item, index, arr) => {
-          if (['apply_system_users', 'apply_assets', 'apply_nodes'].includes(item)) {
+          if (['apply_accounts', 'apply_assets', 'apply_nodes'].includes(item)) {
             if (value[item].length < 1) {
               delete value[item]
             }

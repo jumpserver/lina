@@ -141,9 +141,19 @@ export default {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
             can: () => vm.$hasPerm('users.invite_user'),
-            callback: function() { this.InviteDialogSetting.InviteDialogVisible = true }.bind(this)
+            callback: () => { this.InviteDialogSetting.InviteDialogVisible = true }
           }
         ],
+        hasBulkUpdate: true,
+        canBulkUpdate: ({ selectedRows }) => {
+          return selectedRows.length > 0 &&
+            !vm.currentOrgIsRoot &&
+            vm.$hasPerm('users.change_user')
+        },
+        handleBulkUpdate: ({ selectedRows }) => {
+          vm.updateSelectedDialogSetting.visible = true
+          vm.updateSelectedDialogSetting.selectedRows = selectedRows
+        },
         extraMoreActions: [
           {
             title: this.$t('common.removeSelected'),
@@ -163,17 +173,6 @@ export default {
             title: this.$t('common.activateSelected'),
             can: ({ selectedRows }) => selectedRows.length > 0 && vm.$hasPerm('users.change_user'),
             callback: ({ selectedRows, reloadTable }) => vm.bulkActionCallback(selectedRows, reloadTable, 'activate')
-          },
-          {
-            name: 'actionUpdateSelected',
-            title: this.$t('common.updateSelected'),
-            can: ({ selectedRows }) => selectedRows.length > 0 &&
-              !vm.currentOrgIsRoot &&
-              vm.$hasPerm('users.change_user'),
-            callback: ({ selectedRows, reloadTable }) => {
-              vm.updateSelectedDialogSetting.visible = true
-              vm.updateSelectedDialogSetting.selectedRows = selectedRows
-            }
           }
         ]
       },
@@ -242,7 +241,7 @@ export default {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
         reload()
-        this.$message.success(this.$t('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('common.removeSuccessMsg'))
       })
     },
     async bulkRemoveCallback({ selectedRows, reloadTable }) {
@@ -253,7 +252,7 @@ export default {
       const url = `${this.tableConfig.url}remove/?spm=` + data.spm
       this.$axios.post(url).then(() => {
         reloadTable()
-        this.$message.success(this.$t('common.removeSuccessMsg'))
+        this.$message.success(this.$tc('common.removeSuccessMsg'))
       })
     },
     bulkActionCallback(selectedRows, reloadTable, actionType) {

@@ -1,7 +1,12 @@
 <template>
-  <GenericDetailPage :object.sync="TaskDetail" :active-menu.sync="config.activeMenu" v-bind="config" v-on="$listeners">
+  <GenericDetailPage
+    :object.sync="asset"
+    :active-menu.sync="config.activeMenu"
+    v-bind="config"
+    v-on="$listeners"
+  >
     <keep-alive>
-      <component :is="config.activeMenu" :object="TaskDetail" />
+      <component :is="config.activeMenu" :object="asset" />
     </keep-alive>
   </GenericDetailPage>
 </template>
@@ -10,7 +15,6 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
 import Account from './Account.vue'
-import SystemUserList from './SystemUser.vue'
 import PermUserList from './PermUser.vue'
 
 export default {
@@ -20,12 +24,11 @@ export default {
     TabPage,
     Detail,
     Account,
-    SystemUserList,
     PermUserList
   },
   data() {
     return {
-      TaskDetail: {},
+      asset: {},
       config: {
         activeMenu: 'Detail',
         submenu: [
@@ -34,14 +37,9 @@ export default {
             name: 'Detail'
           },
           {
-            title: this.$t('assets.SystemUser'),
-            name: 'SystemUserList',
-            hidden: () => !this.$hasPerm('assets.view_authbook')
-          },
-          {
             title: this.$t('assets.AccountList'),
             name: 'Account',
-            hidden: () => !this.$hasPerm('assets.view_authbook')
+            hidden: () => !this.$hasPerm('assets.view_account')
           },
           {
             title: this.$t('assets.PermUserList'),
@@ -50,8 +48,16 @@ export default {
           }
         ],
         hasRightSide: true,
-        getObjectName: function(obj) {
-          return obj.hostname + '(' + obj.ip + ')'
+        actions: {
+          updateCallback: () => {
+            const category = this.asset.category.value || 'host'
+            const routerName = _.capitalize(category) + 'Update'
+            this.$router.push({
+              name: routerName,
+              params: { id: this.$route.params.id },
+              query: { platform: this.asset.platform.id }
+            })
+          }
         }
       }
     }

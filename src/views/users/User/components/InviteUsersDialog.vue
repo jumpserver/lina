@@ -1,7 +1,7 @@
 <template>
   <Dialog
     v-if="setting.InviteDialogVisible"
-    :title="this.$t('users.InviteUserInOrg')"
+    :title="$tc('users.InviteUserInOrg')"
     :visible.sync="setting.InviteDialogVisible"
     :show-cancel="false"
     :show-confirm="false"
@@ -23,6 +23,7 @@ import { Select2 } from '@/components'
 import { GenericCreateUpdateForm } from '@/layout/components'
 import { mapGetters } from 'vuex'
 import rules from '@/components/DataForm/rules'
+
 export default {
   components: {
     Dialog,

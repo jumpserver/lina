@@ -1,0 +1,75 @@
+<template>
+  <TabPage
+    :active-menu.sync="config.activeMenu"
+    :submenu="config.submenu"
+    @tab-click="handleTabClick"
+  />
+</template>
+
+<script>
+import { TabPage } from '@/layout/components'
+
+export default {
+  name: 'Index',
+  components: {
+    TabPage
+  },
+  data() {
+    return {
+      config: {
+        activeMenu: 'all',
+        submenu: [
+          {
+            title: this.$t('assets.All'),
+            name: 'all',
+            component: () => import('@/views/assets/Asset/AssetList/AllList.vue')
+          },
+          {
+            title: this.$t('applications.host'),
+            name: 'hosts',
+            component: () => import('@/views/assets/Asset/AssetList/HostList.vue')
+          },
+          {
+            title: this.$t('route.Device'),
+            name: 'devices',
+            component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
+          },
+          {
+            title: this.$t('route.Database'),
+            name: 'databases',
+            component: () => import('@/views/assets/Asset/AssetList/DatabaseList.vue')
+          },
+          {
+            title: this.$t('assets.Cloud'),
+            name: 'clouds',
+            component: () => import('@/views/assets/Asset/AssetList/CloudList.vue')
+          },
+          {
+            title: 'Web',
+            name: 'web',
+            component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
+          }
+        ]
+      }
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    handleTabClick(tab) {
+      const query = _.cloneDeep(this.$route.query)
+      const newQuery = {
+        ...query,
+        activeTab: tab.name
+      }
+      this.$nextTick(() => {
+        this.$router.replace({ query: newQuery })
+      })
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

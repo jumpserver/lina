@@ -107,7 +107,7 @@ export default {
       return config
     },
     tableUrl() {
-      return this.tableConfig.url
+      return this.tableConfig.url || ''
     },
     permissions() {
       // 获取 permissions，获取不到通过 url 解析

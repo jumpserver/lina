@@ -1,34 +1,38 @@
 <template>
   <div :class="{'has-logo': showLogo, 'show-orgs': showOrgs}">
     <div class="nav-header">
-      <div class="nav-logo">
-        <Logo v-if="showLogo" :collapse="isCollapse" />
-      </div>
       <div class="active-mobile">
-        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
         <Organization v-if="$hasLicense()" class="organization" />
+        <ViewSwitcher mode="vertical" class="mobile-view-switch" />
       </div>
       <div class="nav-title" :class="{'collapsed': isCollapse}">
         <svg-icon
-          v-if="isRouteMeta.view === 'settings'"
-          icon-class="setting-fill"
+          :icon-class="isRouteMeta.icon"
           style="margin-right: 0;"
-        />
-        <i
-          v-else
-          class="fa"
-          :class="isRouteMeta.icon"
         />
         <span
           v-show="!isCollapse"
-          style="margin-left: 3px;"
-        >{{ isRouteMeta.title || '' }}</span>
+          style="margin-left: 10px;"
+        >
+          {{ isRouteMeta.title || '' }}
+        </span>
+        <span v-show="!isCollapse" class="switch-view active-switch-view">
+          <el-popover
+            placement="right-start"
+            width="160"
+            trigger="hover"
+          >
+            <ViewSwitcher :mode="'vertical'" />
+            <svg-icon slot="reference" class="icon" icon-class="switch" />
+          </el-popover>
+        </span>
       </div>
     </div>
     <el-scrollbar class="menu-wrap" wrap-class="scrollbar-wrapper">
       <el-menu
         class="left-menu"
         :default-active="activeMenu"
+        :default-openeds="defaultOpensMenu"
         :collapse="isCollapse"
         :background-color="variables['menuBg']"
         :text-color="variables['menuText']"
@@ -56,7 +60,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import Hamburger from '@/components/Hamburger'
 import ViewSwitcher from '../NavHeader/ViewSwitcher'
@@ -66,7 +69,6 @@ import variables from '@/styles/variables.scss'
 export default {
   components: {
     SidebarItem,
-    Logo,
     Hamburger,
     ViewSwitcher,
     Organization
@@ -74,6 +76,7 @@ export default {
   computed: {
     ...mapGetters([
       'currentViewRoute',
+      'defaultOpensMenu',
       'sidebar'
     ]),
     activeMenu() {
@@ -124,24 +127,51 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
   .nav-header {
     overflow: hidden;
-    background: $subMenuBg url('~@/assets/img/header-profile.png') no-repeat center center;
+    background-color: var(--color-primary);
   }
 
   .nav-logo {
-    height: 55px;
+    height: 50px;
   }
 
   .nav-title {
+    position: relative;
     box-sizing: border-box;
-    margin: 17px 0 17px 20px;
-    font-size: 15px;
-    font-weight: 460;
-    color: #fff;
+    padding: 14px 0 13px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1F2329;
     overflow: hidden;
     white-space: nowrap;
     cursor: pointer;
+    background-color: var(--menu-bg);
+
+    .switch-view {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      z-index: 1;
+      padding: 3px;
+      line-height: 10px;
+      border-radius: 3px;
+      &:hover {
+        background: var(--menu-hover)!important;
+      }
+
+      .icon {
+        margin-right: 0!important;
+        &:hover {
+          color: var(--color-primary);
+        }
+      }
+    }
+    .active-switch-view {
+      display: inline-block;
+    }
   }
 
   .collapsed {
@@ -155,12 +185,16 @@ export default {
   .nav-footer {
     display: block;
     width: 100%;
-    height: 40px;
+    height: 48px;
+    line-height: 48px;
+    margin-top: 2px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(31, 35, 41, 0.15);
     background-color: $subMenuBg;
 
     .toggle-bar {
       width: 55px;
-      height: 40px;
+      height: 100%;
       bottom: 0;
       left: 0;
       top: auto;
@@ -173,30 +207,36 @@ export default {
     .toggle-bar:hover {
       background-color: $subMenuHover;
     }
-
-    .hamburger-container {
-      left: 2px;
-      top: 10px;
-      position: absolute;
-    }
   }
+
   .active-mobile {
     display: none;
-    &>>> .organization {
+
+    & > > > .organization {
       padding-left: 8px;
       background: transparent;
       color: #fff;
+      border-bottom: 1px solid rgba(31,35,41,.15);
     }
-    &>>> .menu-main {
+
+    & > > > .menu-main {
       margin-left: -10px;
     }
-    &>>> .title-label {
+
+    & > > > .title-label {
       color: white !important;
     }
+    .mobile-view-switch >>> .el-menu-item.is-active {
+      color: #ffffff;
+    }
   }
+
   @media screen and (max-width: 992px) {
     .active-mobile {
       display: block;
+    }
+    .active-switch-view {
+      display: none!important;;
     }
   }
 </style>

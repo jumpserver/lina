@@ -160,6 +160,7 @@ export async function startup({ to, from, next }) {
   await changeCurrentOrgIfNeed({ to, from, next })
   await generatePageRoutes({ to, from, next })
   await checkUserFirstLogin({ to, from, next })
+  await store.dispatch('assets/getAssetCategories')
   return true
 }
 

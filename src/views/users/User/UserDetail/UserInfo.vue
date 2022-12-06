@@ -35,7 +35,7 @@ export default {
       quickActions: [
         {
           title: this.$t('common.Activate'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             model: this.object.is_active,
             disabled: !vm.$hasPerm('users.change_user')

@@ -1,0 +1,77 @@
+<template>
+  <GenericListTableDialog :visible.sync="iVisible" v-bind="config" />
+</template>
+
+<script>
+import { GenericListTableDialog } from '@/layout/components'
+import { ShowKeyCopyFormatter } from '@/components/TableFormatters'
+
+export default {
+  components: {
+    GenericListTableDialog
+  },
+  props: {
+    account: {
+      type: Object,
+      default: () => ({})
+    },
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      config: {
+        title: this.$t('accounts.HistoryPassword'),
+        visible: false,
+        width: '60%',
+        tableConfig: {
+          url: `/api/v1/assets/account-secrets/${this.account.id}/histories/`,
+          columns: ['secret', 'secret_type', 'version'],
+          columnsMeta: {
+            secret: {
+              formatter: ShowKeyCopyFormatter,
+              formatterArgs: {
+                hasDownload: false,
+                name: this.account.name
+              }
+            },
+            secret_type: {
+              width: '200px'
+            },
+            version: {
+              width: '100px'
+            }
+
+          }
+        },
+        headerActions: {
+          hasImport: false,
+          hasExport: false,
+          hasLeftActions: false,
+          hasColumnSetting: false,
+          hasSearch: false,
+          searchConfig: {
+            getUrlQuery: false
+          }
+        }
+      }
+    }
+  },
+  computed: {
+    iVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

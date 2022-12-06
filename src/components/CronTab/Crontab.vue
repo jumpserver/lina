@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-tabs type="border-card">
-      <el-tab-pane v-if="shouldHide('min')" :label="this.$t('common.CronTab.min')">
+      <el-tab-pane v-if="shouldHide('min')" :label="$tc('common.CronTab.min')">
         <CrontabMin
           ref="cronmin"
           :check="checkNumber"
@@ -11,7 +11,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('hour')" :label="this.$t('common.CronTab.hour')">
+      <el-tab-pane v-if="shouldHide('hour')" :label="$tc('common.CronTab.hour')">
         <CrontabHour
           ref="cronhour"
           :check="checkNumber"
@@ -20,7 +20,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('day')" :label="this.$t('common.CronTab.day')">
+      <el-tab-pane v-if="shouldHide('day')" :label="$tc('common.CronTab.day')">
         <CrontabDay
           ref="cronday"
           :check="checkNumber"
@@ -29,7 +29,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('month')" :label="this.$t('common.CronTab.month')">
+      <el-tab-pane v-if="shouldHide('month')" :label="$tc('common.CronTab.month')">
         <CrontabMonth
           ref="cronmonth"
           :check="checkNumber"
@@ -38,7 +38,7 @@
         />
       </el-tab-pane>
 
-      <el-tab-pane v-if="shouldHide('week')" :label="this.$t('common.CronTab.week')">
+      <el-tab-pane v-if="shouldHide('week')" :label="$tc('common.CronTab.week')">
         <CrontabWeek
           ref="cronweek"
           :check="checkNumber"
@@ -390,6 +390,7 @@ export default {
   text-align: center;
   margin-top: 20px;
 }
+
 .popup-main {
   position: relative;
   margin: 10px auto 0;
@@ -398,12 +399,14 @@ export default {
   font-size: 12px;
   overflow: hidden;
 }
+
 .popup-title {
   overflow: hidden;
   line-height: 34px;
   padding-top: 6px;
   background: #f2f2f2;
 }
+
 .popup-result {
   position: relative;
   box-sizing: border-box;
@@ -413,6 +416,7 @@ export default {
   border: 1px solid #dcdfe6;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
 }
+
 .popup-result .title {
   position: absolute;
   top: -17px;
@@ -424,11 +428,13 @@ export default {
   line-height: 30px;
   background: #fff;
 }
+
 .popup-result table {
   text-align: center;
   width: 100%;
   margin: 0 auto;
 }
+
 .popup-result table span {
   display: block;
   width: 100%;
@@ -439,12 +445,14 @@ export default {
   overflow: hidden;
   border: 1px solid #e8e8e8;
 }
+
 .popup-result-scroll {
   font-size: 12px;
   line-height: 24px;
   height: 10em;
   overflow-y: auto;
 }
+
 .el-form-item--mini.el-form-item,
 .el-form-item--small.el-form-item {
   margin-bottom: 10px;

@@ -3,12 +3,12 @@ import empty from '@/layout/empty'
 
 export default [
   {
-    path: 'authbook',
+    path: 'accounts',
     component: empty,
     meta: {
       title: i18n.t('route.AssetAccount'),
       app: 'assets',
-      licenseRequired: true
+      permissions: ['assets.view_account']
     },
     redirect: '',
     children: [
@@ -19,42 +19,63 @@ export default [
         meta: {
           title: i18n.t('route.AssetAccount'),
           app: 'assets',
-          permissions: ['assets.view_authbook']
+          permissions: ['assets.view_account']
         }
       },
       {
-        path: 'history',
-        name: 'AssetAccountHistoryList',
-        component: () => import('@/views/accounts/AssetAccount/AssetAccountHistoryList'),
-        hidden: true,
-        meta: {
-          title: i18n.t('route.AssetHistoryAccount'),
-          permissions: ['assets.view_assethistoryaccount']
-        }
+        path: ':id',
+        component: () => import('@/views/accounts/AssetAccount/AssetAccountDetail/index.vue'),
+        name: 'AssetAccountDetail',
+        meta: { title: i18n.t('route.AssetAccount') },
+        hidden: true
       }
     ]
   },
   {
-    path: 'application-accounts',
+    path: 'account-template',
     component: empty,
-    redirect: '',
     meta: {
-      title: i18n.t('route.AssetAccount'),
-      permissions: ['applications.view_account'],
-      app: 'applications',
-      resource: 'account',
-      licenseRequired: true
+      title: i18n.t('route.AccountTemplate'),
+      app: 'assets',
+      permissions: ['assets.view_accounttemplate']
     },
+    redirect: '',
     children: [
       {
         path: '',
-        name: 'ApplicationAccountList',
-        component: () => import('@/views/accounts/ApplicationAccount/ApplicationAccountList'),
+        name: 'AccountTemplateList',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
         meta: {
-          title: i18n.t('route.ApplicationAccount'),
-          permissions: ['applications.view_account'],
-          resource: 'account'
+          title: i18n.t('route.AccountTemplate'),
+          permissions: ['assets.view_accounttemplate']
         }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+        name: 'AccountTemplateCreate',
+        meta: {
+          title: i18n.t('route.CreateAccountTemplate'),
+          action: 'create'
+        },
+        hidden: true
+      },
+      {
+        path: ':id/update',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateCreateUpdate.vue'),
+        name: 'AccountTemplateUpdate',
+        meta: {
+          title: i18n.t('route.UpdateAccountTemplate'),
+          action: 'update'
+        },
+        hidden: true
+      },
+      {
+        path: ':id',
+        component: () => import('@/views/accounts/AccountTemplate/AccountTemplateDetail/index.vue'),
+        name: 'AccountTemplateDetail',
+        meta: { title: i18n.t('route.AccountTemplate') },
+        hidden: true
       }
     ]
   },
@@ -88,16 +109,6 @@ export default [
         }
       },
       {
-        path: 'tasks/:id',
-        component: () => import('@/views/accounts/GatheredUser/TaskDetail/index'),
-        name: 'GatherUserTaskDetail',
-        hidden: true,
-        meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
-          permissions: ['xpack.view_gatherusertask']
-        }
-      },
-      {
         path: 'tasks/create',
         component: () => import('@/views/accounts/GatheredUser/TaskCreateUpdate'),
         name: 'GatherUserTaskCreate',
@@ -105,6 +116,16 @@ export default [
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
           permissions: ['xpack.add_gatherusertask']
+        }
+      },
+      {
+        path: 'tasks/:id',
+        component: () => import('@/views/accounts/GatheredUser/TaskDetail/index'),
+        name: 'GatherUserTaskDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
+          permissions: ['xpack.view_gatherusertask']
         }
       },
       {
@@ -122,7 +143,7 @@ export default [
     ]
   },
   {
-    path: 'change-auth-plan',
+    path: 'change-secret-automation',
     component: empty,
     redirect: '',
     meta: {
@@ -133,112 +154,62 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/ChangeAuthPlan/index.vue'),
-        name: 'ChangeAuthPlanIndex',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/index.vue'),
+        name: 'ChangeSecreAtutomationIndex',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
-          permissions: ['xpack.view_changeauthplan|xpack.view_applicationchangeauthplan']
+          permissions: ['assets.view_changesecretautomation']
         }
       },
       {
-        path: 'plan',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanList.vue'),
-        name: 'AssetChangeAuthPlanList',
+        path: 'atutomation',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationList.vue'),
+        name: 'ChangeSecreAtutomationList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          permissions: ['xpack.view_changeauthplan']
+          permissions: ['assets.view_changesecretautomation']
         },
         hidden: true
       },
       {
-        path: 'plan/create',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-        name: 'AssetChangeAuthPlanCreate',
+        path: 'atutomation/create',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationCreateUpdate.vue'),
+        name: 'ChangeSecreAtutomationCreate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
-          permissions: ['xpack.add_changeauthplan']
+          permissions: ['assets.add_changesecretautomation']
         }
       },
       {
-        path: 'plan/:id/update',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanCreateUpdate.vue'),
-        name: 'AssetChangeAuthPlanUpdate',
+        path: 'atutomation/:id/update',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationCreateUpdate.vue'),
+        name: 'ChangeSecreAtutomationUpdate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
-          permissions: ['xpack.change_changeauthplan']
+          permissions: ['assets.change_changesecretautomation']
         }
       },
       {
-        path: 'plan/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
-        name: 'AssetChangeAuthPlanDetail',
+        path: 'atutomation/:id',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationDetail/index.vue'),
+        name: 'ChangeSecreAtutomationDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          permissions: ['xpack.view_changeauthplan']
+          permissions: ['assets.view_changesecretautomation']
         }
       },
       {
-        path: 'plan-execution/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AssetChangeAuthPlan/ChangeAuthPlanDetail/ChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
+        path: 'execution/:id',
+        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationDetail/ChangeSecreAtutomationExecution/ChangeSecreAtutomationExecutionDetail/index.vue'),
         name: 'ChangeAuthPlanExecutionDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          permissions: ['xpack.view_changeauthplanexecution']
+          permissions: ['assets.view_automationexecution']
         }
-      },
-      {
-        path: 'app-plan',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanList.vue'),
-        name: 'AppChangeAuthPlanList',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-          permissions: ['xpack.view_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan/create',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
-        name: 'AppChangeAuthPlanCreate',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanCreate'),
-          permissions: ['xpack.add_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/index.vue'),
-        name: 'AppChangeAuthPlanDetail',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlan'),
-          permissions: ['xpack.view_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan/:id/update',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/AppChangeAuthPlanCreateUpdate.vue'),
-        name: 'AppChangeAuthPlanUpdate',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AppChangeAuthPlanUpdate'),
-          permissions: ['xpack.change_applicationchangeauthplan']
-        },
-        hidden: true
-      },
-      {
-        path: 'app-plan-execution/:id',
-        component: () => import('@/views/accounts/ChangeAuthPlan/AppChangeAuthPlan/ChangeAuthPlanDetail/AppChangeAuthPlanExecution/ChangeAuthPlanExecutionDetail/index.vue'),
-        name: 'AppChangeAuthPlanExecutionDetail',
-        meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          permissions: ['xpack.view_applicationchangeauthplanexecution']
-        },
-        hidden: true
       }
     ]
   },

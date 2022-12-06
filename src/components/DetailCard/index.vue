@@ -1,22 +1,11 @@
 <template>
   <IBox :title="title" fa="fa-info-circle">
-    <div class="content">
-      <el-row v-if="this.$route.params.id" :gutter="10" class="item">
-        <el-col :span="6"><div :style="{ 'text-align': align }" class="item-label"><label>ID: </label></div></el-col>
-        <el-col :span="18"><div class="item-text">{{ this.$route.params.id }}</div></el-col>
-      </el-row>
-      <el-row v-for="item in items" :key="'card-' + item.key" :gutter="10" class="item">
-        <el-col :span="6">
-          <div :style="{ 'text-align': align }" class="item-label"><label>{{ item.key }}: </label></div>
-        </el-col>
-        <el-col :span="18">
-          <div class="item-text">
-            <ItemValue :value="item.value" v-bind="item" />
-          </div>
-        </el-col>
-      </el-row>
-      <slot />
-    </div>
+    <el-form class="content" label-position="left" label-width="25%">
+      <el-form-item v-for="item in items" :key="item.key" :label="item.key">
+        <ItemValue class="item-value" :value="item.value" v-bind="item" />
+      </el-form-item>
+    </el-form>
+    <slot />
   </IBox>
 </template>
 
@@ -46,7 +35,35 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .el-card__body {
+    padding: 20px 40px;
+  }
+
+  .el-form-item {
+    border-bottom: 1px dashed #EBEEF5;
+    padding: 1px 0;
+    margin-bottom: 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+    }
+
+    >>> .el-form-item__label {
+      padding-right: 8%;
+    }
+
+    >>> .el-form-item__content {
+      font-size: 13px;
+    }
+  }
+
+  .item-value span {
+    word-break: break-word;
+  }
   .content {
     font-size: 13px;
     line-height: 2.5;

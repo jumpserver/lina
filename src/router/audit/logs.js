@@ -30,10 +30,10 @@ export default [
   },
   {
     path: 'command-execution-log',
-    name: 'BatchCommandLog',
+    name: 'tasksLog',
     component: () => import('@/views/audits/CommandExecutionList'),
     meta: {
-      title: i18n.t('route.BatchCommandLog'),
+      title: i18n.t('route.tasksLog'),
       permissions: ['ops.view_commandexecution']
     }
   }

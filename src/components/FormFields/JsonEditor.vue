@@ -18,7 +18,7 @@ export default {
   components: { JsonEditor },
   props: {
     value: {
-      type: String,
+      type: [String, Object],
       default: () => ''
     }
   },
@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.resultInfo = JSON.parse(this.value)
+    this.resultInfo = typeof this.value === 'string' ? JSON.parse(this.value) : this.value
   },
   methods: {
     // 数据改变
@@ -45,7 +45,7 @@ export default {
       }, 500)
     },
     onError: _.debounce(function(value) {
-      this.$message.error(this.$t('common.FormatError'))
+      this.$message.error(this.$tc('common.FormatError'))
     }, 1100)
   }
 }

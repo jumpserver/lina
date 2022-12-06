@@ -1,7 +1,7 @@
 <template>
   <BaseAuth
     :config="settings"
-    :title="$t('setting.FeiShu')"
+    :title="$tc('setting.FeiShu')"
     enable-field="AUTH_FEISHU"
     v-on="$listeners"
   />
@@ -66,8 +66,7 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

@@ -22,10 +22,12 @@ export default {
     return {
       TaskDetail: {},
       config: {
+        url: '/api/v1/assets/gather-account-automations/',
         activeMenu: 'Detail',
         actions: {
-          canUpdate: this.$hasPerm('xpack.change_gatherusertask'),
-          canDelete: this.$hasPerm('xpack.delete_gatherusertask')
+          canUpdate: this.$hasPerm('assets.change_automationexecution'),
+          canDelete: this.$hasPerm('assets.delete_automationexecution'),
+          deleteSuccessRoute: 'GatherUserListIndex'
         },
         submenu: [
           {
@@ -35,7 +37,7 @@ export default {
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskExecutionList'),
             name: 'TaskExecutionList',
-            hidden: !this.$hasPerm('xpack.view_gatherusertaskexecution')
+            hidden: !this.$hasPerm('assets.view_automationexecution')
           }
         ],
         hasRightSide: true

@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: 0 15px;" @click="toggleClick">
-    <svg-icon icon-class="hamburger" class="hamburger" :class="{'is-active':isActive}" />
+  <div style="padding: 0 20px;" @click="toggleClick">
+    <svg-icon icon-class="arrow-to-left" class="hamburger" style="color: #ffffff;" :class="{'is-active':isActive}" />
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
 .hamburger {
   display: inline-block;
   vertical-align: middle;
-  font-size: 20px;
+  font-size: 16px;
   color: $menuText;
 }
 .hamburger.is-active {

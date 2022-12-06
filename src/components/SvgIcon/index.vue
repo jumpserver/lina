@@ -50,7 +50,7 @@ export default {
   width: 1em;
   height: 1em;
   vertical-align: -0.15em;
-  fill: currentColor;
+  fill: currentColor!important;
   overflow: hidden;
 }
 
@@ -58,5 +58,8 @@ export default {
   background-color: currentColor;
   mask-size: cover!important;
   display: inline-block;
+}
+::v-deep path {
+  fill: inherit!important;
 }
 </style>
