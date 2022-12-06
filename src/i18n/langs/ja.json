@@ -109,6 +109,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "UserSwitchFrom": "ユーザーは",
     "sshkeyAccount": "SSHキー",
     "passwordAccount": "パスワード",
     "SelectTemplate": "テンプレートの選択",
@@ -434,6 +435,7 @@
     "Others": "その他",
     "Push": "プッシュ",
     "QuickUpdate": "クイックアップデート",
+    "QuickSelect": "クイック選択",
     "RemoveSuccessMsg": "削除に成功しました",
     "Reset": "リセット",
     "Search": "検索",

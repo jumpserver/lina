@@ -342,7 +342,7 @@ export default {
       const options = this.getSelectedOptions()
       this.$log.debug('Current select options: ', options, 'Val: ', this.value)
       this.$emit('changeOptions', options)
-      this.$emit('change', options)
+      // this.$emit('change', options) // 事件重复
     },
     onVisibleChange(visible) {
       if (!visible && this.params.search) {

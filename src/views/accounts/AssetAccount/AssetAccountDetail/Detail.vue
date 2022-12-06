@@ -5,6 +5,7 @@
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
+      <QuickActions type="success" fa="fa-info-circle" :title="$tc('common.QuickSelect')" :actions="quickActionsSelect" />
     </el-col>
   </el-row>
 </template>
@@ -67,6 +68,32 @@ export default {
             }
           })
         }
+      ],
+      quickActionsSelect: [
+        {
+          title: this.$t('assets.UserSwitchFrom'),
+          type: 'select2',
+          attrs: {
+            type: 'primary',
+            class: 'su-from-select2',
+            multiple: false,
+            clearable: true,
+            model: vm.object.su_from,
+            ajax: {
+              url: `/api/v1/assets/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            },
+            disabled: !vm.$hasPerm('assets.change_account')
+          },
+          callbacks: Object.freeze({
+            change: (value) => {
+              const relationUrl = `/api/v1/assets/accounts/${this.object.id}/`
+              return this.$axios.patch(relationUrl, { su_from: value })
+            }
+          })
+        }
       ]
     }
   },
@@ -83,7 +110,7 @@ export default {
         },
         {
           key: this.$t('assets.SecretType'),
-          value: this.object.secret_type
+          value: this.object.secret_type.label
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
@@ -103,6 +130,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  >>> .su-from-select2 .el-input__inner {
+    border-radius: 10px;
+    width: 180px;
+  }
 </style>
