@@ -5,7 +5,6 @@
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
-      <QuickActions type="success" fa="fa-info-circle" :title="$tc('common.QuickSelect')" :actions="quickActionsSelect" />
     </el-col>
   </el-row>
 </template>
@@ -67,18 +66,17 @@ export default {
               })
             }
           })
-        }
-      ],
-      quickActionsSelect: [
+        },
         {
           title: this.$t('assets.UserSwitchFrom'),
-          type: 'select2',
+          type: 'updateSelect',
           attrs: {
             type: 'primary',
             class: 'su-from-select2',
             multiple: false,
             clearable: true,
-            model: vm.object.su_from,
+            model: vm.object.su_from?.id || '',
+            label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
             ajax: {
               url: `/api/v1/assets/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
               transformOption: (item) => {
@@ -131,8 +129,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  >>> .su-from-select2 .el-input__inner {
-    border-radius: 10px;
-    width: 180px;
-  }
 </style>
