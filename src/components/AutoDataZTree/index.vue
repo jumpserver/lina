@@ -120,9 +120,9 @@ export default {
         query['asset'] = ''
         url = `${this.setting.url}${combinator}node_id=${objectId}&show_current_asset=${show_current_asset}`
       } else if (treeNode.meta.type === 'asset') {
-        query['asset'] = treeNode.meta.data.id
+        query['asset'] = treeNode.meta.data?.id || treeNode.id
         query['node'] = ''
-        url = `${this.setting.url}${combinator}asset_id=${objectId}&show_current_asset=${show_current_asset}`
+        url = `${this.setting.url}${combinator}asset_id=${query.asset}&show_current_asset=${show_current_asset}`
       }
       this.$router.push({ query })
       this.$emit('urlChange', url)
