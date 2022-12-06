@@ -110,6 +110,7 @@ export default {
           }
         },
         chdir: {
+          helpText: i18n.t('ops.ChdirHelpText'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           }

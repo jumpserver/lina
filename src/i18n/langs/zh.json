@@ -697,6 +697,8 @@
     "Weekly": "按周"
   },
   "ops": {
+    "VariableHelpText": "您可以在命令中使用 {{ key }} 读取内置变量",
+    "ChdirHelpText": "默认执行目录为执行用户的 home 目录",
     "OpenCommand": "打开命令",
     "SaveCommand": "保存命令 ",
     "Log": "日志",
@@ -1681,7 +1683,7 @@
       "BaiduCloud": "百度云",
       "JDCloud": "京东云",
       "KingSoftCloud": "金山云",
-      "Azure":"Azure(中国)",
+      "Azure": "Azure(中国)",
       "Azure_Int": "Azure(国际)",
       "HostnameStrategy": "用于生成资产主机名。例如：1. 实例名称 (instanceDemo)；2. 实例名称和部分IP(后两位) (instanceDemo-250.1)",
       "IsAlwaysUpdate": "资产信息保持最新",

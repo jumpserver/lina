@@ -1,5 +1,6 @@
 <template>
   <div>
+    <VariableHelpDialog :visible.sync="showHelpDialog" />
     <AdhocOpenDialog v-if="showOpenAdhocDialog" :visible.sync="showOpenAdhocDialog" @select="onSelectAdhoc" />
     <AdhocSaveDialog
       v-if="showOpenAdhocSaveDialog"
@@ -14,12 +15,14 @@
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
 import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
+import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
 
 export default {
   components: {
     CodeEditor,
     AdhocOpenDialog,
-    AdhocSaveDialog
+    AdhocSaveDialog,
+    VariableHelpDialog
   },
   props: {
     value: {
@@ -31,6 +34,7 @@ export default {
     return {
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
+      showHelpDialog: false,
       toolbar: [
         {
           type: 'button',
@@ -47,6 +51,14 @@ export default {
           callback: () => {
             this.openAdhocSaveDialog()
           }
+        },
+        {
+          type: 'button',
+          icon: 'fa  fa-question-circle',
+          tip: this.$t('ops.SaveCommand'),
+          callback: () => {
+            this.openHelpDialog()
+          }
         }
       ]
     }
@@ -61,6 +73,9 @@ export default {
       }
     }
   }, methods: {
+    openHelpDialog() {
+      this.showHelpDialog = true
+    },
     openAdhocSelectDialog() {
       this.showOpenAdhocDialog = true
     },
