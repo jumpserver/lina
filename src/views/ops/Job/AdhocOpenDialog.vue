@@ -31,8 +31,9 @@ export default {
         visible: false,
         width: '60%',
         tableConfig: {
+          hasSelection: false,
           url: `/api/v1/ops/adhocs/`,
-          columns: ['name', 'module', 'args', 'actions'],
+          columns: ['name', 'module', 'args', 'comment', 'actions'],
           columnsMeta: {
             actions: {
               formatter: ActionsFormatter,
@@ -42,7 +43,7 @@ export default {
                 hasDelete: false,
                 extraActions: [
                   {
-                    title: '选择',
+                    title: this.$tc('common.Select'),
                     name: 'select',
                     can: true,
                     callback: ({ row }) => {

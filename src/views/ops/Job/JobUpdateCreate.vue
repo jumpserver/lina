@@ -86,6 +86,8 @@ export default {
             required: false
           }],
           el: {
+            baseUrl: '/api/v1/perms/users/self/assets/',
+            baseNodeUrl: '/api/v1/perms/users/self/nodes/',
             value: []
           }
         },

@@ -33,7 +33,7 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('assets.PrivilegedTemplate'),
+          title: this.$t('assets.Privileged'),
           type: 'switcher',
           attrs: {
             model: vm.object.privileged,

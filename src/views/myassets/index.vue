@@ -59,7 +59,7 @@ export default {
                     value: row.name
                   },
                   {
-                    key: this.$t('assets.Address'),
+                    key: this.$t('assets.AssetAddress'),
                     value: row.address
                   },
                   {
@@ -76,7 +76,7 @@ export default {
                   },
                   {
                     key: this.$t('assets.Platform'),
-                    value: row.platform
+                    value: row.platform?.name || ''
                   },
                   {
                     key: this.$t('common.Active'),
