@@ -7426,7 +7426,7 @@ jest@^23.6.0:
     import-local "^1.0.0"
     jest-cli "^23.6.0"
 
-jquery@>=1.4.4, jquery@^3.5.0:
+jquery@>=1.4.4, jquery@^3.6.1:
   version "3.6.1"
   resolved "https://registry.npmmirror.com/jquery/-/jquery-3.6.1.tgz#fab0408f8b45fc19f956205773b62b292c147a16"
   integrity sha512-opJeO4nCucVnsjiXOE+/PcCgYw9Gwpvs/a6B1LL/lQhwWwpbVEVYDZ1FokFr8PRc7ghYlrFPuyHuiiDNTQxmcw==
@@ -8630,14 +8630,14 @@ mockjs@1.0.1-beta3:
   dependencies:
     commander "*"
 
-moment-parseformat@^3.0.0:
-  version "3.1.1"
-  resolved "https://registry.npmmirror.com/moment-parseformat/-/moment-parseformat-3.1.1.tgz#151b624f0c4c7d7a19132beafdbc4ee8b26ba484"
-  integrity sha512-uEkXh5w9WDM8xNksZYeGpbZgrcG9qlpTg+f4ftHyOIis4+U08p31zOUzk3YCv2n+c6MUpW+Nb3GLCpjoEuHqJw==
+moment-parseformat@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/moment-parseformat/-/moment-parseformat-4.0.0.tgz#44cffc3b3be3b3d033475869fbfa9066abb66cb0"
+  integrity sha512-0V4ICKnI1npglqrMSDK2y8WxOdN79DkMoIexzY3P+jr2wNfbB4J81BgjFfHsj18wBsV7FdKCWyCHcezzH0xlyg==
 
-moment@^2.19.2, moment@^2.29.1:
+moment@^2.19.2, moment@^2.29.4:
   version "2.29.4"
-  resolved "https://registry.npmmirror.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 move-concurrently@^1.0.1:
