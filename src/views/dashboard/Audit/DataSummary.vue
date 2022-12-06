@@ -1,10 +1,24 @@
 <template>
   <el-row :gutter="16">
     <el-col :lg="12" :sm="12" class="margin-top-16">
-      <DataCard :config="logConfig" />
+      <DataCard :config="logConfig">
+        <div class="custom">
+          <span>{{ logConfig.total }}</span>
+          <span>
+            <svg-icon :icon-class="logConfig.icon" class="font" />
+          </span>
+        </div>
+      </DataCard>
     </el-col>
     <el-col :lg="12" :sm="12" class="margin-top-16">
-      <DataCard :config="assetConfig" />
+      <DataCard :config="assetConfig">
+        <div class="custom">
+          <span>{{ assetConfig.total }}</span>
+          <span>
+            <svg-icon :icon-class="assetConfig.icon" class="font" />
+          </span>
+        </div>
+      </DataCard>
     </el-col>
   </el-row>
 </template>
@@ -62,17 +76,22 @@ export default {
           &total_count_commands=1
           &total_count_commands_danger=1
         `)
+      const logActive = data.total_count_user_login_success_logs === 0 ? 0 : ((data.total_count_user_login_success_logs / data.total_count_user_login_logs) * 100).toFixed(0)
+      const logTotal = logActive === 100 ? 0 : 100 - logActive
       const logs = [
-        { name: this.$t('dashboard.ActiveUser'), value: data.total_count_user_login_logs },
-        { name: this.$t('dashboard.InActiveUser'), value: data.total_count_user_login_success_logs }
+        { name: this.$t('dashboard.ActiveUser'), value: logActive },
+        { name: this.$t('dashboard.InActiveUser'), value: logTotal }
       ]
       this.$set(this.logConfig, 'data', logs)
       this.$set(this.logConfig, 'total', data.total_count_user_login_logs)
       this.$set(this.logConfig, 'active', data.total_count_user_login_success_logs)
       this.$set(this.logConfig, 'weekAdd', data.total_count_user_login_success_logs)
+
+      const assetActive = data.total_count_commands_danger === 0 ? 0 : ((data.total_count_commands_danger / data.total_count_commands) * 100).toFixed(0)
+      const assetTotal = assetActive === 100 ? 0 : 100 - assetActive
       const assets = [
-        { name: this.$t('dashboard.ActiveAsset'), value: data.total_count_commands },
-        { name: this.$t('dashboard.InActiveAsset'), value: data.total_count_commands_danger }
+        { name: this.$t('dashboard.ActiveAsset'), value: assetActive },
+        { name: this.$t('dashboard.InActiveAsset'), value: assetTotal }
       ]
       this.$set(this.assetConfig, 'data', assets)
       this.$set(this.assetConfig, 'total', data.total_count_commands)

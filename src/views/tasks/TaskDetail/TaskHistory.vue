@@ -4,6 +4,7 @@
 
 <script type="text/jsx">
 import ListTable from '@/components/ListTable'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'TaskHistory',
@@ -21,13 +22,9 @@ export default {
       tableConfig: {
         url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
         columns: [
-          'date_start', 'date_finished', 'state', 'is_finished', 'actions'
+          'date_start', 'date_finished', 'is_success', 'is_finished', 'actions'
         ],
         columnsMeta: {
-          state: {
-            formatter: (row) => {
-            }
-          },
           actions: {
             prop: 'id',
             formatterArgs: {
@@ -38,10 +35,10 @@ export default {
               extraActions: [
                 {
                   name: 'detail',
-                  title: this.$t('ops.detail'),
+                  title: this.$t('ops.output'),
                   type: 'primary',
                   callback: function({ row, tableData }) {
-                    return this.$router.push({ name: 'HistoryExecutionDetail', params: { id: row.id }})
+                    openTaskPage(row.id)
                   }
                 }
               ]

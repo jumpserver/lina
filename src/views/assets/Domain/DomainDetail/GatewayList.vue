@@ -55,8 +55,7 @@ export default {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
         columns: [
-          'name', 'address', 'platform', 'password_account',
-          'ssh_key_account', 'connectivity', 'is_active', 'actions'
+          'name', 'address', 'platform', 'connectivity', 'is_active', 'actions'
         ],
         columnsMeta: {
           name: {
@@ -71,34 +70,6 @@ export default {
           },
           address: {
             width: '140px'
-          },
-          password_account: {
-            label: this.$t('assets.passwordAccount'),
-            formatter: function(row) {
-              const [accountInfo] = row.effective_accounts.filter(
-                item => item.secret_type === 'password'
-              )
-              if (!accountInfo) return <span>-</span>
-              const to = {
-                name: 'AssetAccountDetail',
-                params: { id: accountInfo.id }
-              }
-              return <router-link to={ to } >{ accountInfo.username }</router-link>
-            }
-          },
-          ssh_key_account: {
-            label: this.$t('assets.sshkeyAccount'),
-            formatter: function(row) {
-              const [accountInfo] = row.effective_accounts.filter(
-                item => item.secret_type === 'ssh_key'
-              )
-              if (!accountInfo) return <span>-</span>
-              const to = {
-                name: 'AssetAccountDetail',
-                params: { id: accountInfo.id }
-              }
-              return <router-link to={ to } >{ accountInfo.username }</router-link>
-            }
           },
           actions: {
             formatterArgs: {
