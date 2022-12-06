@@ -3,14 +3,31 @@
     <td>{{ action.title }}:</td>
     <td>
       <span>
-        <component :is="iType" v-model="action.attrs.model" v-bind="action.attrs" v-on="callbacks">{{ label }}</component>
+        <component
+          :is="iType"
+          v-model="action.attrs.model"
+          v-bind="action.attrs"
+          v-on="callbacks"
+        >
+          {{ label }}
+        </component>
       </span>
     </td>
   </tr>
 </template>
 
 <script>
-import Switcher from '../FormFields/Swicher'
+import Switcher from '../FormFields/Switcher'
+
+class Action {
+  constructor() {
+    this.title = ''
+    this.type = ''
+    this.attrs = {}
+    this.callbacks = ''
+  }
+}
+
 export default {
   name: 'ActionItem',
   components: {
@@ -18,8 +35,8 @@ export default {
   },
   props: {
     action: {
-      type: Object,
-      default: () => ({})
+      type: [Action, Object],
+      default: () => ({ title: '' })
     }
   },
   data() {
@@ -30,6 +47,8 @@ export default {
   computed: {
     iType() {
       switch (this.action.type) {
+        case 'switch':
+          return 'Switcher'
         case 'switcher':
           return 'Switcher'
         default:

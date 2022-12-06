@@ -1,13 +1,14 @@
 <template>
   <el-dropdown :show-timeout="50" @command="handleCommand">
-    <span class="el-dropdown-link">
-      {{ $t('common.nav.Help') }}<i class="el-icon-arrow-down el-icon--right" />
+    <span class="el-dropdown-link" style="vertical-align: middle;">
+      <svg-icon icon-class="question-mark" style="font-size: 16px;" />
     </span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="docs">{{ $t('common.nav.Docs') }}</el-dropdown-item>
       <el-dropdown-item command="support">{{ $t('common.nav.Support') }}</el-dropdown-item>
       <el-dropdown-item command="toolsDownload">{{ $t('common.nav.Download') }}</el-dropdown-item>
       <el-dropdown-item v-if="!hasLicence" command="enterprise">{{ $t('common.nav.EnterpriseEdition') }}</el-dropdown-item>
+      <el-dropdown-item command="github">GITHUB</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -47,6 +48,9 @@ export default {
         case 'toolsDownload':
           window.open('/core/download/', '_blank')
           break
+        case 'github':
+          window.open('https://github.com/jumpserver/jumpserver', '_blank')
+          break
         default:
           window.open(this.URLSite.HELP_DOCUMENT_URL, '_blank')
           break
@@ -57,5 +61,7 @@ export default {
 </script>
 
 <style scoped>
-
+.icon {
+  color: #fff;
+}
 </style>

@@ -1,16 +1,22 @@
-.el-data-table  ::v-deep  .el-pagination{
-    text-align: center !important;
+.el-data-table ::v-deep .el-table td {
+  padding: 4px 0;
+}
+
+.el-data-table ::v-deep .el-table th {
+  padding: 4px 0;
+}
+
+.el-data-table ::v-deep .el-form-item {
+  margin-bottom: 10px !important;
+  margin-top: 10px;
+}
+
+.el-data-table ::v-deep .el-pagination {
+  text-align: right;
+  padding: 15px 25px 20px 15px;
+
+  .el-pagination__total {
+    float: left;
   }
-  .el-data-table  ::v-deep  .el-table td{
-    padding: 4px 0;
-  }
-  .el-data-table  ::v-deep  .el-table th{
-    padding: 4px 0;
-  }
-  .el-data-table ::v-deep  .el-form-item{
-    margin-bottom:10px !important ;
-    margin-top:10px;
-  }
-  .el-data-table ::v-deep  .el-pagination{
-    padding:15px  0 !important ;
-  }
+}
+

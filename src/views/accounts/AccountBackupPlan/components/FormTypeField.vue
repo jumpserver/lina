@@ -36,12 +36,114 @@ export default {
           label: this.$t('perms.all'),
           children: [
             {
-              id: 'asset',
-              label: this.$t('route.AssetAccount')
+              id: 'host',
+              label: this.$t('applications.host'),
+              children: [
+                {
+                  id: 'linux',
+                  label: 'Linux'
+                },
+                {
+                  id: 'windows',
+                  label: 'Windows'
+                },
+                {
+                  id: 'unix',
+                  label: 'Unix'
+                },
+                {
+                  id: 'bsd',
+                  label: 'BSD'
+                },
+                {
+                  id: 'macos',
+                  label: 'MacOS'
+                },
+                {
+                  id: 'mainframe',
+                  label: 'Mainframe'
+                },
+                {
+                  id: 'other_host',
+                  label: 'Other host'
+                }
+              ]
             },
             {
-              id: 'application',
-              label: this.$t('route.ApplicationAccount')
+              id: 'networking',
+              label: 'Device',
+              children: [
+                {
+                  id: 'switch',
+                  label: 'Switch'
+                },
+                {
+                  id: 'router',
+                  label: 'Router'
+                },
+                {
+                  id: 'firewall',
+                  label: 'Firewall'
+                },
+                {
+                  id: 'other_network',
+                  label: 'Other network'
+                }
+              ]
+            },
+            {
+              id: 'database',
+              label: this.$t('assets.Database'),
+              children: [
+                {
+                  id: 'mysql',
+                  label: 'Mysql'
+                },
+                {
+                  id: 'mariadb',
+                  label: 'MariaDB'
+                },
+                {
+                  id: 'postgresql',
+                  label: 'PostgreSQL'
+                },
+                {
+                  id: 'oracle',
+                  label: 'Oracle'
+                },
+                {
+                  id: 'sqlserver',
+                  label: 'SQLServer'
+                },
+                {
+                  id: 'mongodb',
+                  label: 'MongoDB'
+                },
+                {
+                  id: 'redis',
+                  label: 'Redis'
+                }
+              ]
+            },
+            {
+              id: 'cloud',
+              label: 'Clouding',
+              children: [
+                {
+                  id: 'k8s',
+                  label: 'Kubernetes'
+                }
+              ]
+            },
+            {
+              id: 'web',
+              label: 'Web',
+              children: [
+                {
+                  id: 'general',
+                  label: 'General'
+                }
+              ]
             }
           ]
         }

@@ -10,7 +10,7 @@
 
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
-import { SystemUserFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
+import { AccountShowFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
 export default {
   components: {
     GenericTreeListPage
@@ -22,32 +22,32 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/perms/users/assets/',
-        nodeUrl: '/api/v1/perms/users/nodes/',
+        url: '/api/v1/perms/users/self/users/assets/',
+        nodeUrl: '/api/v1/perms/users/self/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/perms/users/nodes/children/tree/?cache_policy=2',
+        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/?cache_policy=2',
         callback: {
           refresh: () => {},
           onSelected: function(event, treeNode) {
             if (treeNode.meta.type === 'node') {
               const currentNodeId = treeNode.meta.data.id
-              this.tableConfig.url = `/api/v1/perms/users/nodes/${currentNodeId}/assets/?cache_policy=1`
+              this.tableConfig.url = `/api/v1/perms/users/self/nodes/${currentNodeId}/assets/?cache_policy=1`
             }
           }.bind(this)
         }
       },
       tableConfig: {
-        url: '/api/v1/perms/users/assets/',
+        url: '/api/v1/perms/users/self/assets/',
         hasTree: true,
-        columns: ['hostname', 'ip', 'system_users', 'platform', 'comment', 'actions'],
+        columns: ['name', 'address', 'platform', 'category', 'accounts', 'type', 'comment', 'actions'],
         columnsShow: {
-          default: ['hostname', 'ip', 'system_users', 'platform', 'actions'],
-          min: ['hostname', 'actions']
+          default: ['name', 'address', 'platform', 'accounts', 'actions'],
+          min: ['name', 'address', 'actions']
         },
         columnsMeta: {
-          hostname: {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+          name: {
+            prop: 'name',
+            label: this.$t('assets.Name'),
             formatter: DialogDetailFormatter,
             showOverflowTooltip: true,
             formatterArgs: {
@@ -55,23 +55,31 @@ export default {
               getDetailItems: function({ col, row, cellValue }) {
                 return [
                   {
-                    key: this.$t('assets.Hostname'),
-                    value: row.hostname
+                    key: this.$t('assets.Name'),
+                    value: row.name
                   },
                   {
-                    key: this.$t('assets.ip'),
-                    value: row.ip
+                    key: this.$t('assets.Address'),
+                    value: row.address
                   },
                   {
                     key: this.$t('assets.Protocols'),
-                    value: row.protocols.join(', ')
+                    value: row.protocols.map(item => item.name).join(', ')
+                  },
+                  {
+                    key: this.$t('assets.Category'),
+                    value: row.category.label
+                  },
+                  {
+                    key: this.$t('assets.Type'),
+                    value: row.type.label
                   },
                   {
                     key: this.$t('assets.Platform'),
                     value: row.platform
                   },
                   {
-                    key: this.$t('common.Activate'),
+                    key: this.$t('common.Active'),
                     value: row.is_active
                   },
                   {
@@ -83,19 +91,19 @@ export default {
             },
             sortable: true
           },
-          ip: {
+          address: {
             sortable: 'custom',
             width: '150px'
           },
-          system_users: {
+          accounts: {
             showOverflowTooltip: true,
             align: 'center',
-            label: this.$t('assets.SystemUsers'),
+            label: this.$t('assets.Account'),
             width: '120px',
-            formatter: SystemUserFormatter,
+            formatter: AccountShowFormatter,
             formatterArgs: {
               getUrl: ({ row }) => {
-                return `/api/v1/perms/users/assets/${row.id}/system-users/?cache_policy=1`
+                return `/api/v1/perms/users/self/assets/${row.id}/accounts/?cache_policy=1`
               }
             }
           },

@@ -70,7 +70,7 @@ export default {
           value: this.object.created_by
         },
         {
-          key: this.$t('common.dateCreated'),
+          key: this.$t('common.DateCreated'),
           value: toSafeLocalDateStr(this.object.date_created)
         },
         {

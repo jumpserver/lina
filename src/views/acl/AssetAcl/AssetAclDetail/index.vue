@@ -8,21 +8,21 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import detail from './detail.vue'
+import Detail from './Detail.vue'
 export default {
   components: {
     GenericDetailPage,
-    detail
+    Detail
   },
   data() {
     return {
       TaskDetail: {},
       config: {
-        activeMenu: 'detail',
+        activeMenu: 'Detail',
         submenu: [
           {
             title: this.$t('acl.RuleDetail'),
-            name: 'detail'
+            name: 'Detail'
           }
         ],
         hasRightSide: true,

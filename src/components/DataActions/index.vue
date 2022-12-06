@@ -28,6 +28,7 @@
               :command="[option, action]"
               v-bind="option"
             >
+              <i v-if="option.fa" :class="'fa ' + option.fa" />
               {{ option.title }}
             </el-dropdown-item>
           </template>
@@ -44,7 +45,8 @@
       >
         <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
           <span>
-            <i v-if="action.fa" :class="'fa ' + action.fa" />{{ action.title }}
+            <svg-icon v-if="action.fa" :icon-class="action.fa" style="font-size: 14px;" />
+            {{ action.title }}
           </span>
         </el-tooltip>
       </el-button>

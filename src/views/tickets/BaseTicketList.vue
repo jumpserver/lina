@@ -11,6 +11,7 @@ import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { APPROVE, REJECT } from './const'
+
 export default {
   name: 'TicketListTable',
   components: {
@@ -44,15 +45,14 @@ export default {
             sortable: 'custom',
             formatterArgs: {
               getRoute: function({ row }) {
-                if (row.type === 'apply_asset') {
+                const type = row.type.value
+                if (type === 'apply_asset') {
                   return 'AssetsTicketDetail'
-                } else if (row.type === 'apply_application') {
-                  return 'AppsTicketDetail'
-                } else if (row.type === 'login_asset_confirm') {
+                } else if (type === 'login_asset_confirm') {
                   return 'LoginAssetTicketDetail'
-                } else if (row.type === 'login_confirm') {
+                } else if (type === 'login_confirm') {
                   return 'LoginTicketDetail'
-                } else if (row.type === 'command_confirm') {
+                } else if (type === 'command_confirm') {
                   return 'CommandConfirmDetail'
                 } else {
                   return 'TicketDetail'
@@ -69,9 +69,12 @@ export default {
             }
           },
           {
-            prop: 'type_display',
+            prop: 'type',
             label: this.$t('tickets.type'),
-            width: '160px'
+            width: '160px',
+            formatter: row => {
+              return row.type.label
+            }
           },
           {
             prop: 'status',
@@ -80,10 +83,10 @@ export default {
             width: '90px',
             sortable: 'custom',
             formatter: row => {
-              if (row.status === 'open') {
-                return <el-tag type='primary' size='mini'> { this.$t('tickets.OpenStatus') }</el-tag>
+              if (row.status.value === 'open') {
+                return <el-tag type='primary' size='mini'> {this.$t('tickets.OpenStatus')}</el-tag>
               } else {
-                return <el-tag type='danger' size='mini'>  { this.$t('tickets.CloseStatus') }</el-tag>
+                return <el-tag type='danger' size='mini'>  {this.$t('tickets.CloseStatus')}</el-tag>
               }
             }
           },
@@ -94,26 +97,26 @@ export default {
             width: '90px',
             sortable: 'custom',
             formatter: row => {
-              if (row.status === 'open') {
+              if (row.status.value === 'open') {
                 return <el-tag
                   type='success'
                   size='mini'
                 >
-                  { this.$t('tickets.Pending') }
+                  {this.$t('tickets.Pending')}
                 </el-tag>
               }
-              switch (row.state) {
+              switch (row.state.value) {
                 case 'approved':
                   return <el-tag type='primary' size='mini'>
-                    { this.$t('tickets.Approved') }
+                    {this.$t('tickets.Approved')}
                   </el-tag>
                 case 'rejected':
                   return <el-tag type='danger' size='mini'>
-                    { this.$t('tickets.Rejected') }
+                    {this.$t('tickets.Rejected')}
                   </el-tag>
                 default :
                   return <el-tag type='info' size='mini'>
-                    { this.$t('tickets.Closed') }
+                    {this.$t('tickets.Closed')}
                   </el-tag>
               }
             }
@@ -199,13 +202,6 @@ export default {
               callback: () => this.$router.push({
                 name: 'RequestAssetPermTicketCreateUpdate'
               })
-            },
-            {
-              name: 'RequestApplicationPerm',
-              title: this.$t('tickets.RequestApplicationPerm'),
-              callback: () => this.$router.push({
-                name: 'RequestApplicationPermTicketCreateUpdate'
-              })
             }
           ]
         }
@@ -217,8 +213,7 @@ export default {
       this.loading = false
     }, 500)
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

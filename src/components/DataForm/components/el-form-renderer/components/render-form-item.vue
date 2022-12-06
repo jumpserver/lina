@@ -43,16 +43,25 @@
       <template v-for="opt in options">
         <el-option
           v-if="data.type === 'select'"
-          :key="opt.value"
-          v-bind="opt"
-        />
-        <!-- TODO: 支持 el-checkbox-button 变体 -->
-        <el-checkbox
-          v-else-if="data.type === 'checkbox-group'"
           :key="opt.label"
           v-bind="opt"
+        />
+        <el-checkbox-button
+          v-else-if="data.type === 'checkbox-group' && data.style === 'button'"
+          :key="opt.value"
+          v-bind="opt"
+          :label="'value' in opt ? opt.value : opt.label"
         >
-          {{ opt.value }}
+          {{ opt.label }}
+        </el-checkbox-button>
+
+        <el-checkbox
+          v-else-if="data.type === 'checkbox-group' && data.style !== 'button'"
+          :key="opt.value"
+          v-bind="opt"
+          :label="'value' in opt ? opt.value : opt.label"
+        >
+          {{ opt.label }}
         </el-checkbox>
         <!-- WARNING: radio 用 label 属性来表示 value 的含义 -->
         <!-- FYI: radio 的 value 属性可以在没有 radio-group 时用来关联到同一个 v-model -->
@@ -229,7 +238,9 @@ export default {
           .then(resp => {
             if (isOptionsCase) {
               let formRenderer = this.$parent
-              while (formRenderer.$options._componentTag !== 'el-form-renderer') { formRenderer = formRenderer.$parent }
+              while (formRenderer.$options._componentTag !== 'el-form-renderer') {
+                formRenderer = formRenderer.$parent
+              }
               formRenderer.setOptions(this.prop, resp)
             } else {
               this.propsInner = { [prop]: resp }

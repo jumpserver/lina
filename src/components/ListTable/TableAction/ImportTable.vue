@@ -176,7 +176,7 @@ export default {
         align: 'center',
         formatter: StatusFormatter,
         formatterArgs: {
-          iconChoices: {
+          faChoices: {
             ok: 'fa-check text-primary',
             error: 'fa-times text-danger',
             pending: 'fa-clock-o'
@@ -349,7 +349,7 @@ export default {
         this.importTaskStatus = 'done'
       }
       if (this.failedCount > 0) {
-        this.$message.error(this.$t('common.imExport.hasImportErrorItemMsg') + '')
+        this.$message.error(this.$tc('common.imExport.hasImportErrorItemMsg') + '')
       }
     },
     async performUpdateObject(item) {

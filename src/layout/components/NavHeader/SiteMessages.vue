@@ -10,7 +10,7 @@
       :visible.sync="show"
       :before-close="handleClose"
       :modal="false"
-      :title="$t('notifications.SiteMessage')"
+      :title="$tc('notifications.SiteMessage')"
       custom-class="site-msg"
       :size="width"
       @open="getMessages"
@@ -60,7 +60,7 @@
       :visible.sync="msgDetailVisible"
       :title="''"
       :close-on-click-modal="false"
-      :confirm-title="$t('notifications.MarkAsRead')"
+      :confirm-title="$tc('notifications.MarkAsRead')"
       @confirm="markAsRead([currentMsg])"
       @cancel="cancelRead"
     >
@@ -195,7 +195,7 @@ export default {
         }
       }
       ws.onerror = (error) => {
-        this.$message.error(this.$t('common.ConnectWebSocketError'))
+        this.$message.error(this.$tc('common.ConnectWebSocketError'))
         this.$log.debug('site message ws error: ', error)
       }
     }
@@ -207,20 +207,22 @@ export default {
 .drawer {
   height: calc(100% - 40px);
 }
-.el-badge ::v-deep .el-badge__content.is-fixed{
-  top:10px;
+
+.el-badge ::v-deep .el-badge__content.is-fixed {
+  top: 10px;
 }
 
 .msg-list {
   padding: 0 25px 20px;
 }
 
->>> .site-msg {
+> > > .site-msg {
   .el-drawer__header {
     border-bottom: solid 1px rgb(231, 234, 239);
     margin-bottom: 0;
     padding-top: 10px;
     font-size: 16px;
+
     .msg-list-all-read-btn {
       font-size: 12px;
       float: right;
@@ -262,6 +264,7 @@ export default {
   line-height: 20px;
   color: #888;
   font-size: 12px;
+
   &:after {
     clear: both;
     content: ".";
@@ -278,9 +281,11 @@ export default {
     vertical-align: middle;
     white-space: nowrap;
   }
+
   .msg-item-head-time {
     float: right;
   }
+
   .msg-item-read-btn {
     float: right;
   }
@@ -320,5 +325,7 @@ export default {
   text-align: center;
 }
 
->>> :focus{ outline:0; }
+> > > :focus {
+  outline: 0;
+}
 </style>

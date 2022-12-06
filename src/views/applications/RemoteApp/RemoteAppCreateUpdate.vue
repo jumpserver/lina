@@ -50,7 +50,7 @@ export default {
                 ajax: {
                   url: '/api/v1/assets/assets/?platform__base=Windows',
                   transformOption: (item) => {
-                    return { label: item.hostname, value: item.id }
+                    return { label: item.name, value: item.id }
                   }
                 }
               }

@@ -2,22 +2,24 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$t('route.SiteMessageList')">
+        <el-tooltip effect="dark" :content="$tc('route.SiteMessageList')">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$t('route.WebTerminal')">
+        <el-tooltip effect="dark" :content="$tc('route.WebTerminal')">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="this.$t('route.SystemSetting')">
+        <el-tooltip effect="dark" :content="$tc('route.SystemSetting')">
           <SystemSetting />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <Tickets />
+        <el-tooltip effect="dark" :content="$tc('route.Ticket')">
+          <Tickets />
+        </el-tooltip>
       </li>
       <li class="header-item active-menu">
         <Help />
@@ -29,9 +31,11 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container is-show-menu" @toggleClick="toggleSideBar" />
     <ul class="navbar-left">
       <li class="left-item">
-        <ViewSwitcher />
+        <div class="nav-logo">
+          <Logo v-if="showLogo" :collapse="false" />
+        </div>
       </li>
-      <li v-if="showOrganize()" class="left-item" style="margin-left: 12px">
+      <li v-if="showOrganize()" class="left-item" style="margin-left: 21px">
         <Organization class="organization" />
       </li>
     </ul>
@@ -46,25 +50,24 @@ import SiteMessages from './SiteMessages'
 import Help from './Help'
 import WebTerminal from './WebTerminal'
 import Tickets from './Tickets'
-import ViewSwitcher from './ViewSwitcher'
 import Organization from './Organization'
 import SystemSetting from './SystemSetting'
+import Logo from '../NavLeft/Logo'
 
 export default {
   components: {
     Hamburger,
-    ViewSwitcher,
     Organization,
     AccountDropdown,
     Help,
     Tickets,
     WebTerminal,
     SiteMessages,
-    SystemSetting
+    SystemSetting,
+    Logo
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapGetters([
@@ -74,6 +77,9 @@ export default {
       return this.publicSettings['TICKETS_ENABLED'] &&
         this.$hasLicense() &&
         this.$hasPerm('tickets.view_ticket')
+    },
+    showLogo() {
+      return this.$store.state.settings.sidebarLogo
     }
   },
   methods: {
@@ -88,32 +94,39 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
-  $header-height: 55px;
+
+  $header-height: 50px;
   .navbar {
     position: relative;
     height: $header-height;
     line-height: $header-height;
     overflow: hidden;
-    background: #f3f3f4;
+    background: var(--nav-bg);
 
     .navbar-left {
       float: left;
+
       .left-item {
         line-height: $header-height;
         display: inline-block;
         vertical-align: middle;
 
-        &>>> .el-submenu__title {
-          font-family: "open sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+        & >>> .el-submenu__title {
+          font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
           padding: 0 8px;
           line-height: $header-height;
           height: $header-height;
         }
-        &>>> .org-select {
+
+        & >>> .org-select {
           padding: 0;
+        }
+        .nav-logo {
+          width: 200px;
         }
       }
     }
+
     .navbar-right {
       float: right;
       margin-right: 10px;
@@ -122,7 +135,7 @@ export default {
       .header-hover {
         line-height: 56px!important;
         &:hover {
-          background-color: #e6e6e6;
+          background-color: rgba(255, 255, 255, .2);
         }
       }
 
@@ -131,38 +144,50 @@ export default {
         display: inline-block;
         padding-right: 10px;
         padding-left: 10px;
-        vertical-align: middle;
+        vertical-align: top;
+        &>>> .svg-icon {
+          color: #FFF!important;
+        }
+        &>>> .el-badge {
+          vertical-align: top;
+        }
       }
 
       .header-icon {
         padding-left: 8px;
         padding-right: 8px;
+
         &:hover {
-          background-color: #e6e6e6;
+          background-color: rgba(255, 255, 255, .2);
         }
-        &>>> i {
-          color: #7c7e7f;
+
+        & >>> i {
+          color: #FFF;
           font-size: 16px;
         }
-        &>>> .svg-icon {
-          color: #7c7e7f;
+
+        & >>> .svg-icon {
+          color: #FFF;
           font-size: 16px;
         }
       }
     }
   }
+
   ul {
     margin: 0;
     padding-inline-start: 0;
   }
+
   .is-show-menu {
     display: none;
   }
+
   .hamburger-container {
     float: left;
     height: 26px;
     margin: 12px;
-    padding: 0 10px!important;
+    padding: 0 10px !important;
     line-height: 30px;
     border-radius: 4px;
     border-color: $--color-primary;
@@ -171,11 +196,13 @@ export default {
     cursor: pointer;
     transition: .2s;
     -webkit-tap-highlight-color: transparent;
-    &>>> .svg-icon {
-      font-size: 16px;
-      color: #fff;
+
+    & >>> .svg-icon {
+      font-size: 16px!important;
+      color: #fff!important;
     }
   }
+
   @media screen and (max-width: 1006px) {
     .is-show-menu {
       display: block;
@@ -184,10 +211,18 @@ export default {
       display: none;
     }
   }
-  @media screen and (max-width: 480px){
+
+  @media screen and (max-width: 480px) {
     .active-menu {
-      display: none!important;;
+      display: none !important;;
     }
+  }
+
+  >>> .el-badge__content {
+    color: var(--color-primary);
+  }
+  >>> .el-badge__content--primary {
+    background-color: #fff;
   }
 </style>
 

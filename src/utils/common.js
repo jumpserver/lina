@@ -76,21 +76,20 @@ function cleanDateStr(d) {
 }
 
 export function toSafeLocalDateStr(d) {
-  if (d === '' || d === null) {
-    return ''
+  if ([null, undefined, ''].includes(d)) {
+    return '-'
   }
   const date = safeDate(d)
-  // const date_s = date.toLocaleString(getUserLang(), { hourCycle: 'h23' })
-  const date_s =
-    date.toLocaleDateString(getUserLang(), { hourCycle: 'h23' }) +
-    ' ' +
-    date.toLocaleTimeString(getUserLang(), { hourCycle: 'h23' })
-  return date_s
+  return moment(date).format('L LTS')
 }
 
 export function forMatAction(vm, d) {
   d.forEach(function(item, index, arr) {
-    if ([vm.$t('perms.clipboardCopyPaste'), vm.$t('perms.upDownload'), vm.$t('perms.all')].includes(item)) {
+    if ([
+      vm.$t('perms.clipboardCopyPaste'),
+      vm.$t('perms.upDownload'),
+      vm.$t('perms.all')
+    ].includes(item)) {
       arr.splice(index, 1)
     }
   })
@@ -213,6 +212,19 @@ export function setUrlParam(url, name, value) {
   return url
 }
 
+export function setRouterQuery(vm, url = '') {
+  url = url || vm.tableConfig.url
+  const params = url.split('?')[1]
+  const query = Object.fromEntries(new URLSearchParams(params))
+  const newQuery = {
+    ...vm.$route.query,
+    ...query
+  }
+  vm.$nextTick(() => {
+    vm.$router.replace({ query: newQuery })
+  })
+}
+
 export function getDayFuture(days, now) {
   if (!now) {
     now = new Date()
@@ -300,10 +312,25 @@ export function groupedDropdownToCascader(group) {
   }
 }
 
-export { BASE_URL }
-
 export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
   var iTop = (window.screen.height - 30 - iHeight) / 2
   var iLeft = (window.screen.width - 10 - iWidth) / 2
   window.open(url, name, 'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft)
 }
+
+/**
+ * Download file
+ * @param  {String} content
+ * @param  {String} fileName
+ */
+export function downloadText(content, filename) {
+  const a = document.createElement('a')
+  const blob = new Blob([content])
+  const url = window.URL.createObjectURL(blob)
+  a.href = url
+  a.download = filename
+  a.click()
+  window.URL.revokeObjectURL(url)
+}
+
+export { BASE_URL }

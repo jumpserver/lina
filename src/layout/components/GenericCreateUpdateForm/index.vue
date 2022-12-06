@@ -11,6 +11,7 @@
     v-bind="$attrs"
     v-on="$listeners"
     @submit="handleSubmit"
+    @afterRemoteMeta="handleAfterRemoteMeta"
   />
 </template>
 <script>
@@ -47,6 +48,11 @@ export default {
     cleanFormValue: {
       type: Function,
       default: (value) => value
+    },
+    // 获取 meta
+    afterGetRemoteMeta: {
+      type: Function,
+      default: null
     },
     // 当提交的时候，怎么处理
     onSubmit: {
@@ -160,8 +166,6 @@ export default {
         let msgLinkName = ''
         if (res.name) {
           msgLinkName = res.name
-        } else if (res.hostname) {
-          msgLinkName = res.hostname
         }
         const h = this.$createElement
         const detailRoute = this.objectDetailRoute
@@ -207,17 +211,25 @@ export default {
     onPerformError: {
       type: Function,
       default(error, method, vm) {
-        this.$log.error('error: ', error)
-        this.$emit('submitError', error)
         const response = error.response
         const data = response.data
         if (response.status === 400) {
           for (const key of Object.keys(data)) {
-            let value = data[key]
-            if (value instanceof Array) {
-              value = value.join(';')
+            let err = ''
+            let errorTips = data[key]
+            if (errorTips instanceof Array) {
+              errorTips = _.filter(errorTips, (item) => Object.keys(item).length > 0)
+              for (const i of errorTips) {
+                if (i instanceof Object) {
+                  err += i?.port?.join(',')
+                } else {
+                  err += errorTips
+                }
+              }
+            } else {
+              err = errorTips
             }
-            this.$refs.form.setFieldError(key, value)
+            this.$refs.form.setFieldError(key, err)
           }
         }
       }
@@ -300,6 +312,11 @@ export default {
       }
       return values
     },
+    handleAfterRemoteMeta(meta) {
+      if (this.afterGetRemoteMeta) {
+        return this.afterGetRemoteMeta(meta)
+      }
+    },
     handleSubmit(values, formName, addContinue) {
       let handler = this.onSubmit || this.defaultOnSubmit
       handler = handler.bind(this)
@@ -329,6 +346,7 @@ export default {
             object.name = this.$t('common.cloneFrom') + object.name
           } else if (object['hostname']) {
             object.hostname = this.$t('common.cloneFrom') + object.hostname
+            object.name = this.$t('common.cloneFrom') + '' + object.name
           }
         } else {
           object = await this.getObjectDetail(this.iUrl)

@@ -1,5 +1,5 @@
 <template>
-  <div class="asset-select-dialog">
+  <div class="asset-select-formatter">
     <Select2
       ref="select2"
       v-model="select2Config.value"
@@ -10,7 +10,7 @@
     />
     <Dialog
       v-if="dialogVisible"
-      :title="this.$t('assets.Assets')"
+      :title="$tc('assets.Assets')"
       :visible.sync="dialogVisible"
       custom-class="asset-select-dialog"
       width="80vw"
@@ -20,6 +20,7 @@
     >
       <TreeTable
         ref="ListPage"
+        class="tree-table"
         :tree-setting="treeSetting"
         :table-config="tableConfig"
         :header-actions="headerActions"
@@ -61,7 +62,7 @@ export default {
       ajax: {
         url: '/api/v1/assets/assets/?fields_size=mini',
         transformOption: (item) => {
-          return { label: item.hostname + '(' + item.ip + ')', value: item.id }
+          return { label: item.name + '(' + item.address + ')', value: item.id }
         }
       }
     }
@@ -90,8 +91,8 @@ export default {
         canSelect: this.canSelect,
         columns: [
           {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+            prop: 'name',
+            label: this.$t('assets.Name'),
             sortable: true,
             showOverflowTooltip: true,
             formatter: DetailFormatter,
@@ -112,7 +113,7 @@ export default {
           {
             prop: 'protocols',
             formatter: function(row) {
-              return <span> {row.protocols.toString()} </span>
+              return <span> {row.protocols?.toString()} </span>
             },
             label: this.$t('assets.Protocols')
           }
@@ -185,24 +186,34 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .el-select{
+  .el-select {
     width: 100%;
   }
-  .page  ::v-deep  .page-heading{
+
+  .page ::v-deep .page-heading {
     display: none;
   }
-  .el-dialog__wrapper  ::v-deep .el-dialog__body{
-    padding: 5px 10px;
-  }
-  .page  ::v-deep  .treebox {
-    height: inherit !important;
-  }
-  .asset-select-dialog >>> .transition-box:first-child {
-    background-color: #f3f3f3 ;
+
+  .el-dialog__wrapper ::v-deep .el-dialog__body {
+    padding: 0;
+
+    .tree-table {
+      .left {
+        padding: 5px;
+      }
+
+      .mini {
+        padding-top: 8px;
+      }
+
+      .transition-box {
+        padding: 5px;
+      }
+    }
   }
 
-  .el-dialog__wrapper  ::v-deep .el-dialog__body .wrapper-content {
-    padding: 10px;
+  .page ::v-deep .treebox {
+    height: inherit !important;
   }
 
 </style>

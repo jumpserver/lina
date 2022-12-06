@@ -190,3 +190,8 @@ input[type=file] {
 .el-pagination {
   overflow: auto;
 }
+
+.el-table-filter {
+  max-height: 60vh;
+  overflow: auto;
+}

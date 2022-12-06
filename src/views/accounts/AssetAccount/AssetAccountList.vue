@@ -1,7 +1,7 @@
 <template>
-  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting">
+  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting" :table-config="tableConfig">
     <template #table>
-      <AccountListTable ref="table" :url="accountsUrl" :has-left-actions="true" />
+      <AccountListTable ref="table" v-bind="tableConfig" />
     </template>
   </GenericTreeListPage>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import AccountListTable from '@/components/AccountListTable'
-import { setUrlParam } from '@/utils/common'
+import { setUrlParam, setRouterQuery } from '@/utils/common'
 
 export default {
   name: 'AssetAccountList',
@@ -21,7 +21,10 @@ export default {
       isInit: true,
       clickedRow: null,
       iShowTree: true,
-      accountsUrl: '/api/v1/assets/accounts/',
+      tableConfig: {
+        url: '/api/v1/assets/accounts/',
+        hasLeftActions: true
+      },
       treeSetting: {
         showMenu: false,
         showRefresh: true,
@@ -46,7 +49,9 @@ export default {
         url = setUrlParam(url, 'node', '')
         url = setUrlParam(url, 'asset', assetId)
       }
-      this.accountsUrl = url
+
+      this.$set(this.tableConfig, 'url', url)
+      setRouterQuery(this)
     }
   }
 }

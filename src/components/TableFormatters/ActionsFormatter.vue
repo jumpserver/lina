@@ -1,5 +1,11 @@
 <template>
-  <ActionsGroup v-loading="loadingStatus" :size="'mini'" :actions="actions" :more-actions="moreActions" :more-actions-title="moreActionsTitle" />
+  <ActionsGroup
+    v-loading="loadingStatus"
+    :size="'mini'"
+    :actions="actions"
+    :more-actions="moreActions"
+    :more-actions-title="moreActionsTitle"
+  />
 </template>
 
 <script>
@@ -21,6 +27,8 @@ const defaultUpdateCallback = function({ row, col }) {
 
   if (typeof updateRoute === 'object') {
     route = Object.assign(route, updateRoute)
+  } else if (typeof updateRoute === 'function') {
+    route = updateRoute({ row, col })
   } else {
     route.name = updateRoute
   }
@@ -34,6 +42,8 @@ const defaultCloneCallback = function({ row, col }) {
 
   if (typeof cloneRoute === 'object') {
     route = Object.assign(route, cloneRoute)
+  } else if (typeof cloneRoute === 'function') {
+    route = cloneRoute({ row, col })
   } else {
     route.name = cloneRoute
   }
@@ -60,7 +70,7 @@ const defaultDeleteCallback = function({ row, col, cellValue, reload }) {
         await performDelete.bind(this)({ row: row, col: col })
         done()
         reload()
-        this.$message.success(this.$t('common.deleteSuccessMsg'))
+        this.$message.success(this.$tc('common.deleteSuccessMsg'))
       } finally {
         instance.confirmButtonLoading = false
       }

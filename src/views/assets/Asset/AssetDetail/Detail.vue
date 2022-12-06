@@ -39,7 +39,7 @@ export default {
       quickActions: [
         {
           title: this.$t('assets.IsActive'),
-          type: 'switcher',
+          type: 'switch',
           attrs: {
             label: this.$t('common.Test'),
             model: this.object.is_active,
@@ -51,9 +51,9 @@ export default {
                 `/api/v1/assets/assets/${this.object.id}/`,
                 { is_active: val }
               ).then(res => {
-                this.$message.success(this.$t('common.updateSuccessMsg'))
+                this.$message.success(this.$tc('common.updateSuccessMsg'))
               }).catch(err => {
-                this.$message.error(this.$t('common.updateErrorMsg' + ' ' + err))
+                this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
               })
             }.bind(this)
           }
@@ -106,7 +106,7 @@ export default {
             return { label: item.full_value, value: item.id }
           }
         },
-        hasObjectsId: this.object.nodes,
+        hasObjectsId: this.object.nodes?.map(i => i.id) || [],
         performAdd: (items) => {
           const newData = []
           const value = this.$refs.NodeRelation.iHasObjects
@@ -140,10 +140,11 @@ export default {
   },
   computed: {
     detailCardItems() {
+      console.log('this.object', this.object)
       return [
         {
-          key: this.$t('assets.Hostname'),
-          value: this.object.hostname
+          key: this.$t('assets.Name'),
+          value: this.object.name
         },
         {
           key: this.$t('assets.ip'),
@@ -151,7 +152,7 @@ export default {
         },
         {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols.toString()
+          value: this.object.protocols.map(i => i.name).join(',')
         },
         {
           key: this.$t('assets.PublicIp'),
@@ -163,7 +164,7 @@ export default {
         },
         {
           key: this.$t('assets.Domain'),
-          value: this.object.domain_display
+          value: this.object.domain?.name || ''
         },
         {
           key: this.$t('assets.Vendor'),
@@ -187,7 +188,7 @@ export default {
         },
         {
           key: this.$t('assets.Platform'),
-          value: this.object.platform
+          value: this.object.platform?.name || ''
         },
         {
           key: this.$t('assets.Os'),

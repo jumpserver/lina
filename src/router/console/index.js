@@ -5,10 +5,8 @@ import store from '@/store'
 
 import UsersRoute from './users'
 import AssetsRoute from './assets'
-import ApplicationsRoute from './applications'
 import PermsRoute from './perms'
-import OpsRoutes from './ops'
-import AclRoutes from './acls'
+import TaskRoutes from './tasks'
 import AccountRoutes from './accounts'
 
 export default {
@@ -18,7 +16,7 @@ export default {
   redirect: '/console/dashboard',
   meta: {
     title: i18n.t('common.nav.Console'),
-    icon: 'el-icon-s-operation',
+    icon: 'console',
     view: 'console',
     type: 'view',
     showNavSwitcher: () => {
@@ -29,7 +27,7 @@ export default {
   children: [
     {
       path: '/console/dashboard',
-      component: () => import('@/views/dashboard/index'),
+      component: () => import('@/views/dashboard/Console/index'),
       name: 'AdminDashboard',
       meta: {
         icon: 'dashboard',
@@ -53,28 +51,17 @@ export default {
       name: 'Assets',
       meta: {
         title: i18n.t('route.Assets'),
-        icon: 'inbox'
+        icon: 'assets'
       },
       children: AssetsRoute
-    },
-    {
-      path: '/console/applications',
-      component: empty,
-      name: 'applications',
-      meta: {
-        title: i18n.t('route.Applications'),
-        icon: 'th'
-      },
-      children: ApplicationsRoute
     },
     {
       path: '/console/accounts',
       component: empty,
       name: 'Accounts',
       meta: {
-        licenseRequired: true,
         title: i18n.t('route.Accounts'),
-        icon: 'address-book'
+        icon: 'accounts'
       },
       children: AccountRoutes
     },
@@ -84,30 +71,19 @@ export default {
       name: 'Perms',
       meta: {
         title: i18n.t('route.Perms'),
-        icon: 'edit'
+        icon: 'permission'
       },
       children: PermsRoute
     },
     {
-      path: '/console/acls',
+      path: '/console/tasks',
       component: empty,
-      name: 'Acl',
+      name: 'TaskCenter',
       meta: {
-        licenseRequired: true,
-        title: i18n.t('route.Acl'),
-        icon: 'fort-awesome'
+        title: i18n.t('route.TaskCenter'),
+        icon: 'tasks'
       },
-      children: AclRoutes
-    },
-    {
-      path: '/console/ops',
-      component: empty,
-      name: 'JobCenter',
-      meta: {
-        title: i18n.t('route.JobCenter'),
-        icon: 'coffee'
-      },
-      children: OpsRoutes
+      children: TaskRoutes
     }
   ]
 }

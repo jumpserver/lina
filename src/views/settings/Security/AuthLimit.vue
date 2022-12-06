@@ -4,7 +4,7 @@
       {{ $t('setting.Setting') }}
     </el-button>
     <Dialog
-      :title="$t('setting.AuthLimit')"
+      :title="$tc('setting.AuthLimit')"
       :visible.sync="visible"
       :destroy-on-close="true"
       :show-cancel="false"
@@ -69,8 +69,7 @@ export default {
         ]
       ],
       successUrl: { name: 'Settings', params: { activeMenu: 'EmailContent' }},
-      fieldsMeta: {
-      },
+      fieldsMeta: {},
       afterGetFormValue(validValues) {
         validValues.SECURITY_LOGIN_IP_BLACK_LIST = validValues.SECURITY_LOGIN_IP_BLACK_LIST.toString()
         validValues.SECURITY_LOGIN_IP_WHITE_LIST = validValues.SECURITY_LOGIN_IP_WHITE_LIST.toString()
@@ -94,7 +93,8 @@ export default {
     submitMethod() {
       return 'patch'
     },
-    onConfirm() {}
+    onConfirm() {
+    }
   }
 }
 </script>

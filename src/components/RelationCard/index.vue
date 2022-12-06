@@ -1,5 +1,5 @@
 <template>
-  <IBox :fa="icon" :type="type" :title="title" v-bind="$attrs">
+  <IBox :type="type" :title="title" v-bind="$attrs">
     <table style="width: 100%;table-layout:fixed;" class="CardTable">
       <tr>
         <td colspan="2">

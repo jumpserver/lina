@@ -1,26 +1,40 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ShowSecretInfo v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
-    <UpdateSecretInfo v-if="showUpdateSecretDialog" :visible.sync="showUpdateSecretDialog" :account="account" @updateAuthDone="onUpdateAuthDone" />
+    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" :url="secretUrl" />
+    <UpdateSecretInfo
+      v-if="showUpdateSecretDialog"
+      :visible.sync="showUpdateSecretDialog"
+      :account="account"
+      @updateAuthDone="onUpdateAuthDone"
+    />
+    <AccountCreateUpdate
+      v-if="showAddDialog"
+      :visible.sync="showAddDialog"
+      :asset="iAsset"
+      :account="account"
+      @add="addAccountSuccess"
+    />
   </div>
 </template>
 
 <script>
 import ListTable from '@/components/ListTable/index'
-import { ActionsFormatter, DetailFormatter, DisplayFormatter } from '@/components/TableFormatters'
-import ShowSecretInfo from './ShowSecretInfo'
+import { ActionsFormatter } from '@/components/TableFormatters'
+import ViewSecret from './ViewSecret'
 import UpdateSecretInfo from './UpdateSecretInfo'
+import AccountCreateUpdate from './AccountCreateUpdate'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-// import i18n from '@/i18n/i18n'
+import { hasUUID } from '@/utils/common'
 
 export default {
   name: 'AccountListTable',
   components: {
     ListTable,
     UpdateSecretInfo,
-    ShowSecretInfo
+    ViewSecret,
+    AccountCreateUpdate
   },
   props: {
     url: {
@@ -44,6 +58,22 @@ export default {
     hasClone: {
       type: Boolean,
       default: false
+    },
+    asset: {
+      type: Object,
+      default: () => ({})
+    },
+    columns: {
+      type: Array,
+      default: () => []
+    },
+    hasExport: {
+      type: Boolean,
+      default: true
+    },
+    hasImport: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -51,48 +81,56 @@ export default {
     return {
       showViewSecretDialog: false,
       showUpdateSecretDialog: false,
+      showAddDialog: false,
+      iAsset: this.asset,
       account: {},
+      secretUrl: '',
       tableConfig: {
         url: this.url,
         permissions: {
           app: 'assets',
-          resource: 'authbook'
+          resource: 'account'
         },
         columns: [
-          'hostname', 'ip', 'username', 'version', 'connectivity',
-          'systemuser', 'date_created', 'date_updated', 'actions'
+          'name', 'asset', 'username', 'version', 'privileged',
+          'secret_type', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
-          min: ['username', 'actions'],
-          default: ['hostname', 'ip', 'username', 'version', 'actions']
+          min: ['name', 'username', 'actions'],
+          default: [
+            'name', 'hostname', 'ip', 'username',
+            'version', 'privileged', 'actions'
+          ]
         },
         columnsMeta: {
-          hostname: {
-            prop: 'hostname',
-            label: this.$t('assets.Hostname'),
+          asset: {
+            label: this.$t('assets.Asset'),
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
-            formatterArgs: {
-              can: this.$hasPerm('assets.view_asset'),
-              getRoute({ row }) {
-                return {
-                  name: 'AssetDetail',
-                  params: { id: row.asset }
-                }
+            formatter: function(row) {
+              const to = {
+                name: 'AssetDetail',
+                params: { id: row.asset.id }
+              }
+              if (vm.$hasPerm('assets.view_asset')) {
+                return <router-link to={ to } >{ row.asset.name }</router-link>
+              } else {
+                return <span>{ row.asset.name }</span>
               }
             }
-          },
-          ip: {
-            width: '120px'
           },
           username: {
             showOverflowTooltip: true
           },
-          systemuser: {
-            formatter: DisplayFormatter
-          },
           version: {
             width: '70px'
+          },
+          privileged: {
+            label: this.$t('assets.Privileged'),
+            width: '120px',
+            formatterArgs: {
+              showText: false,
+              showFalse: false
+            }
           },
           connectivity: connectivityMeta,
           actions: {
@@ -106,9 +144,10 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_assetaccountsecret'),
+                  can: this.$hasPerm('assets.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    vm.secretUrl = `/api/v1/assets/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
                     setTimeout(() => {
@@ -119,7 +158,7 @@ export default {
                 {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_authbook'),
+                  can: this.$hasPerm('assets.delete_account'),
                   type: 'primary',
                   callback: ({ row }) => {
                     this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
@@ -131,7 +170,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_authbook'),
+                  can: this.$hasPerm('assets.test_account'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/accounts/${row.id}/verify/`,
@@ -144,26 +183,16 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
-                  can: this.$hasPerm('assets.change_assetaccountsecret') && !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('assets.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
-                    vm.showUpdateSecretDialog = false
+                    vm.$set(this.iAsset, 'platform_id', row.asset.platform_id)
+                    vm.showAddDialog = false
                     setTimeout(() => {
-                      vm.showUpdateSecretDialog = true
+                      vm.showAddDialog = true
                     })
                   }
                 }
-                // {
-                //   name: 'History',
-                //   title: i18n.t('common.History'),
-                //   can: this.$hasPerm('assets.view_assethistoryaccount') && !this.$store.getters.currentOrgIsRoot,
-                //   callback: ({ row }) => {
-                //     this.$router.push({
-                //       name: 'AssetAccountHistoryList',
-                //       query: { id: row.id }
-                //     })
-                //   }
-                // }
               ]
             }
           }
@@ -173,14 +202,26 @@ export default {
         hasLeftActions: this.hasLeftActions,
         hasMoreActions: true,
         hasCreate: false,
-        hasImport: false,
-        hasExport: this.$hasPerm('assets.view_assetaccountsecret'),
+        hasImport: true,
+        hasExport: this.hasExport && this.$hasPerm('assets.view_accountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
         },
+        extraActions: [
+          {
+            name: 'add',
+            title: this.$t('common.Add'),
+            type: 'primary',
+            can: vm.$hasPerm('assets.add_account'),
+            callback: () => {
+              this.account = null
+              this.showAddDialog = true
+            }
+          }
+        ],
         searchConfig: {
-          exclude: ['systemuser', 'asset']
+          exclude: ['asset']
         },
         hasSearch: true
       }
@@ -190,9 +231,18 @@ export default {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
       this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
+    },
+    '$route.query.asset': {
+      immediate: true,
+      handler() {
+        this.hasAccountPermission()
+      }
     }
   },
   mounted() {
+    if (this.columns.length > 0) {
+      this.tableConfig.columns = this.columns
+    }
     if (this.otherActions) {
       const actionColumn = this.tableConfig.columns[this.tableConfig.columns.length - 1]
       for (const item of this.otherActions) {
@@ -203,11 +253,31 @@ export default {
   methods: {
     onUpdateAuthDone(account) {
       Object.assign(this.account, account)
+    },
+    addAccountSuccess() {
+      this.$refs.ListTable.reloadTable()
+    },
+    async getAssetDetail() {
+      const { query: { asset }} = this.$route
+      this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
+    },
+    hasAccountPermission() {
+      const { path, query: { asset }} = this.$route
+      if (!hasUUID(path)) {
+        if (asset) this.getAssetDetail()
+        const hasPerm = this.$hasPerm('assets.add_account') && !!asset
+        this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
+      }
+    },
+    refresh() {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
 </script>
 
-<style lang='less' scoped>
-
+<style lang='scss' scoped>
+.cell a {
+  color: var(--color-info);
+}
 </style>

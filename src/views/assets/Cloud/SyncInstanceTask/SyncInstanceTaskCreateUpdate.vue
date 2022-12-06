@@ -6,7 +6,7 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import { Select2, CronTab } from '@/components'
 import rules from '@/components/DataForm/rules'
-import Protocols from '@/views/assets/Asset/components/Protocols/index'
+import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 
 export default {
   components: {
@@ -81,7 +81,7 @@ export default {
           }
         },
         protocols: {
-          component: Protocols
+          component: ProtocolSelector
         },
         is_always_update: {
           type: 'switch',

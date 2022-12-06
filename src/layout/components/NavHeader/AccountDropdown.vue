@@ -7,19 +7,24 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-user" command="profile">
+        <el-dropdown-item command="profile">
+          <svg-icon icon-class="personal" class="icon" />
           {{ $t('common.nav.Profile') }}
         </el-dropdown-item>
-        <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" icon="el-icon-key" command="apiKey">
+        <el-dropdown-item v-if="$hasPerm('authentication.view_accesskey')" command="apiKey">
+          <svg-icon icon-class="key" class="icon" />
           {{ $t('common.nav.APIKey') }}
         </el-dropdown-item>
-        <el-dropdown-item v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')" icon="el-icon-magic-stick" command="tempPassword">
+        <el-dropdown-item v-if="$store.getters.publicSettings.AUTH_TEMP_TOKEN && $hasPerm('authentication.view_temptoken')" command="tempPassword">
+          <svg-icon icon-class="personal" class="icon" />
           {{ $t('common.nav.TempPassword') }}
         </el-dropdown-item>
-        <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" icon="el-icon-place" command="connectionToken">
+        <el-dropdown-item v-if="$hasPerm('authentication.view_connectiontoken')" command="connectionToken">
+          <svg-icon icon-class="token" class="icon" />
           {{ $t('common.nav.ConnectionToken') }}
         </el-dropdown-item>
-        <el-dropdown-item divided command="logout"><svg-icon icon-class="logout" style="margin-right: 4px" />
+        <el-dropdown-item divided command="logout">
+          <svg-icon icon-class="logout" class="icon" />
           {{ $t('common.nav.Logout') }}
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -34,7 +39,7 @@ export default {
   name: 'AccountDropdown',
   data() {
     return {
-      avatarUrl: require('@/assets/img/admin.png'),
+      avatarUrl: require('@/assets/img/head-portrait.png'),
       showApiKey: false
     }
   },
@@ -71,14 +76,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .header-profile {
+    .el-dropdown {
+      color: #fff;
+    }
+  }
   .header-avatar {
     height: 24px;
     width: 24px;
     margin-right: 5px;
     vertical-align: middle;
+    background: white;
   }
   .mobile .header-avatar {
     display: none;
+  }
+  .icon {
+    font-size: 14px;
   }
 </style>

@@ -1,7 +1,13 @@
 <template>
   <div>
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog v-if="relationDialog.show" :visible.sync="relationDialog.show" :title="this.$t('audits.Hosts')" :show-cancel="false" :show-confirm="false">
+    <Dialog
+      v-if="relationDialog.show"
+      :visible.sync="relationDialog.show"
+      :title="$tc('audits.Hosts')"
+      :show-cancel="false"
+      :show-confirm="false"
+    >
       <ListTable :table-config="relationDialog.tableConfig" :header-actions="relationDialog.headerActions" />
     </Dialog>
   </div>
@@ -9,10 +15,9 @@
 
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysFuture, getDaysAgo } from '@/utils/common'
+import { getDaysAgo, getDaysFuture, setUrlParam } from '@/utils/common'
 import { Dialog, ListTable } from '@/components'
 import { DisplayFormatter } from '@/components/TableFormatters'
-import { setUrlParam } from '@/utils/common'
 
 export default {
   components: {
@@ -42,7 +47,7 @@ export default {
                 vm.relationDialog.tableConfig.url = setUrlParam(vm.relationDialog.tableConfig.url, 'commandexecution', row.id)
                 vm.relationDialog.show = true
               }
-              return <el-link class='text-link' onClick={onClick}>{ cellValue.length }</el-link>
+              return <el-link class='text-link' onClick={onClick}>{cellValue.length}</el-link>
             }
           },
           command: {
@@ -67,7 +72,7 @@ export default {
             formatter: (row) => {
               const label = this.$t('audits.View')
               const route = { to: { name: 'CeleryTaskLog', params: { id: row.id }}}
-              return <router-link class='text-link' {...{ attrs: route }} target='_blank'>{ label }</router-link>
+              return <router-link class='text-link' {...{ attrs: route }} target='_blank'>{label}</router-link>
             }
           },
           date_start: {
@@ -100,7 +105,7 @@ export default {
             options: [
               {
                 label: this.$t('audits.Hosts'),
-                value: 'hostname_ip'
+                value: 'asset__name'
               }
             ]
           },

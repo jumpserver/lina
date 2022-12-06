@@ -67,11 +67,11 @@ export default {
     DeleteReleasedAssets() {
       this.$axios.delete(`/api/v1/xpack/cloud/sync-instance-tasks/${this.object.id}/released-assets/`).then(
         res => {
-          this.$message.success(this.$t('common.deleteSuccessMsg'))
+          this.$message.success(this.$tc('common.deleteSuccessMsg'))
           this.$refs.GenericListTable.$refs.ListTable.reloadTable()
         }
       ).catch(() => {
-        this.$message.error(this.$t('common.deleteErrorMsg'))
+        this.$message.error(this.$tc('common.deleteErrorMsg'))
       })
     }
   }
