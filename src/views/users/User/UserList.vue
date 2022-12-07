@@ -115,6 +115,7 @@ export default {
           actions: {
             formatterArgs: {
               hasDelete: hasDelete,
+              canUpdate: this.$hasPerm('users.change_user'),
               extraActions: [
                 {
                   title: this.$t('users.Remove'),

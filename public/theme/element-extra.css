@@ -205,6 +205,11 @@ td .el-button.el-button--mini {
   color: white!important;
 }
 
+.el-select-dropdown__item.hover {
+  background-color: primary;
+  color: white;
+}
+
 .el-select-dropdown__item.is-disabled:hover{
   color:#c0c4cc;
 }
@@ -245,6 +250,15 @@ td .el-button.el-button--mini {
 
 .el-table .descending .sort-caret.descending {
   border-top-color: #676a6c;
+}
+
+.text-link {
+  color: info!important;
+}
+
+.text-link:hover {
+  color: info!important;
+  filter: opacity(65%)!important;
 }
 
 .text-danger {
@@ -388,9 +402,17 @@ td .el-button.el-button--mini {
   border-color: danger;
 }
 
+.el-button--danger.is-plain.is-disabled,
+.el-button--danger.is-plain.is-disabled:active,
+.el-button--danger.is-plain.is-disabled:focus,
+.el-button--danger.is-plain.is-disabled:hover {
+  color: white;
+}
+
 .el-button--danger.is-plain.is-disabled {
   background: #ffffff!important;
 }
+
 
 .el-alert .el-alert__description {
   margin: 1px 0 0;
@@ -415,6 +437,15 @@ td .el-button.el-button--mini {
 .el-dialog  .el-dialog__body {
   max-height: 90vh;
   overflow: auto;
+  padding: 30px;
+}
+
+.el-dialog .el-dialog__body form {
+  padding-right: 20px;
+}
+
+.el-dialog .el-dialog__footer {
+  padding: 10px 30px 30px;
 }
 
 .el-cascader {

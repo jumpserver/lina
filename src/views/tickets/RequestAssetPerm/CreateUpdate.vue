@@ -13,6 +13,7 @@ import AccountFormatter from '@/views/perms/AssetPermission/components/AccountFo
 import Select2 from '@/components/FormFields/Select2'
 import { getDaysFuture } from '@/utils/common'
 import { mapGetters, mapState } from 'vuex'
+import store from '@/store'
 
 export default {
   components: {
@@ -20,7 +21,10 @@ export default {
   },
   data() {
     const now = new Date()
-    const date_expired = getDaysFuture(7, now).toISOString()
+    const time = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME']
+    const unit = store.getters.publicSettings['TICKET_AUTHORIZE_DEFAULT_TIME_UNIT']
+    const dividend = unit === 'hour' ? 24 : 1
+    const date_expired = getDaysFuture(time / dividend, new Date()).toISOString()
     const date_start = now.toISOString()
     return {
       // 工单创建 隐藏提示信息中的跳转连接
@@ -43,6 +47,17 @@ export default {
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
+        title: {
+          el: {
+            type: 'input'
+          }
+        },
+        type: {
+          hidden: () => true,
+          el: {
+            disabled: true
+          }
+        },
         apply_actions: {
           label: this.$t('perms.Actions'),
           helpText: this.$t('common.actionsTips')
@@ -82,9 +97,7 @@ export default {
           component: Select2,
           el: {
             multiple: false,
-            options: this.$store.state.users.workbenchOrgs.filter(item => {
-              return item.id !== '00000000-0000-0000-0000-000000000000'
-            })?.map((item) => {
+            options: this.$store.state.users.noRootWorkbenchOrgs?.map((item) => {
               return { label: item.name, value: item.id }
             })
           },
@@ -92,6 +105,15 @@ export default {
             const fieldsMeta = this.fieldsMeta
             fieldsMeta.apply_assets.el.ajax.url = `/api/v1/assets/assets/suggestions/?oid=${form['org_id']}`
             fieldsMeta.apply_nodes.el.ajax.url = `/api/v1/assets/nodes/suggestions/?oid=${form['org_id']}`
+          },
+          on: {
+            change: ([event], updateForm) => {
+              updateForm({
+                apply_nodes: [],
+                apply_assets: [],
+                apply_system_users: []
+              })
+            }
           }
         }
       },
@@ -113,9 +135,7 @@ export default {
   },
   computed: {
     ...mapState({
-      workbenchOrgs: state => state.users.workbenchOrgs.filter(item => {
-        return item.id !== '00000000-0000-0000-0000-000000000000'
-      })
+      workbenchOrgs: state => state.users.noRootWorkbenchOrgs
     }),
     ...mapGetters(['currentOrg'])
   },

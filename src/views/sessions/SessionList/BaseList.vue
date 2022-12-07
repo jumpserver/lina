@@ -49,7 +49,7 @@ export default {
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }}>{ label }</router-link>
+              return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
             }
           },
           user: {
@@ -138,5 +138,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .link {
+    color: var(--color-info);
+  }
 </style>

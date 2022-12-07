@@ -2,8 +2,8 @@
   <Dialog
     ref="myDialog"
     :destroy-on-close="true"
-    width="770px"
-    height="700px"
+    width="790px"
+    height="720px"
     v-bind="$attrs"
     @confirm="submit"
     v-on="$listeners"

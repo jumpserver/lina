@@ -23,7 +23,10 @@ export default {
           component: AssetSelect,
           label: this.$t('assets.Assets'),
           el: {
-            value: []
+            value: [],
+            canSelect: (row) => {
+              return row.enabled_info.domain_enabled
+            }
           }
         }
       },

@@ -27,7 +27,8 @@ export default {
       initial: {
         type: storageType,
         endpoint_suffix: 'core.chinacloudapi.cn',
-        protocol: 'http'
+        protocol: 'http',
+        is_default: true
       },
       getUrl() {
         const params = this.$route.params

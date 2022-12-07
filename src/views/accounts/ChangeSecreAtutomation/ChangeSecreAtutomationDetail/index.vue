@@ -23,8 +23,8 @@ export default {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
-        activeMenu: 'ChangeAuthPlanInfo',
-        url: '/api/v1/assets/change-secret-automations/',
+        activeMenu: 'ChangeSecreAtutomationInfo',
+        url: '/api/v1/assets/change-secret-automations',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),

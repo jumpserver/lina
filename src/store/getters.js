@@ -1,5 +1,6 @@
 const getters = {
   sidebar: state => state.app.sidebar,
+  defaultOpensMenu: state => state.app.defaultOpensMenu,
   device: state => state.app.device,
   inited: state => state.app.inited,
   isMobile: state => state.app.device === 'mobile',
@@ -7,6 +8,7 @@ const getters = {
   consoleOrgs: state => state.users.consoleOrgs,
   auditOrgs: state => state.users.auditOrgs,
   workbenchOrgs: state => state.users.workbenchOrgs,
+  noRootWorkbenchOrgs: state => state.users.noRootWorkbenchOrgs,
   usingOrgs: state => state.users.usingOrgs,
   currentOrg: state => state.users.currentOrg,
   currentOrgIsDefault: state => state.users.currentOrg['is_default'],

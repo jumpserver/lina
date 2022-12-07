@@ -43,7 +43,8 @@ export default {
       InviteLoading: false,
       formConfig: {
         url: '/api/v1/users/users/invite/',
-        method: 'post',
+        getUrl: () => '/api/v1/users/users/invite/',
+        submitMethod: () => 'post',
         hasReset: false,
         hasSaveContinue: false,
         createSuccessMsg: this.$t('users.InviteSuccess'),

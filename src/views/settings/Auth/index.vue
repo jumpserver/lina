@@ -19,6 +19,7 @@ import FeiShu from './FeiShu'
 import WeCom from './WeCom'
 import SSO from './SSO'
 import SAML2 from './SAML2'
+import OAuth2 from './OAuth2'
 
 export default {
   components: {
@@ -33,7 +34,8 @@ export default {
     FeiShu,
     Radius,
     SSO,
-    SAML2
+    SAML2,
+    OAuth2
   },
   data() {
     return {
@@ -59,6 +61,10 @@ export default {
         {
           title: this.$t('setting.SAML2'),
           name: 'SAML2'
+        },
+        {
+          title: this.$t('setting.OAuth2'),
+          name: 'OAuth2'
         },
         {
           title: this.$t('setting.WeCom'),

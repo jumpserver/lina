@@ -36,7 +36,6 @@
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import DisplayFormatter from '@/components/TableFormatters/DisplayFormatter'
 import Dialog from '@/components/Dialog'
 
 export default {
@@ -55,21 +54,22 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
-        columns: ['name', 'ip', 'port', 'protocol', 'username', 'comment', 'actions'],
+        columns: [
+          'name', 'address', 'platform', 'connectivity', 'is_active', 'actions'
+        ],
         columnsMeta: {
           name: {
             sortable: 'custom',
-            formatter: DisplayFormatter
+            formatter: function(row) {
+              const to = {
+                name: 'AssetDetail',
+                params: { id: row.id }
+              }
+              return <router-link to={ to } >{ row.name }</router-link>
+            }
           },
-          ip: {
+          address: {
             width: '140px'
-          },
-          port: {
-            width: '60px'
-          },
-          protocol: {
-            sortable: 'custom',
-            width: '100px'
           },
           actions: {
             formatterArgs: {
@@ -86,10 +86,11 @@ export default {
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
                     this.dialogVisible = true
-                    if (!val.row.port) {
+                    const port = val.row.protocols.find(item => item.name === 'ssh').port
+                    if (!port) {
                       return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
                     } else {
-                      this.portInput = val.row.port
+                      this.portInput = port
                       this.cellValue = val.row.id
                     }
                   }.bind(this)

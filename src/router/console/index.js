@@ -7,7 +7,6 @@ import UsersRoute from './users'
 import AssetsRoute from './assets'
 import PermsRoute from './perms'
 import TaskRoutes from './tasks'
-import AclRoutes from './acls'
 import AccountRoutes from './accounts'
 
 export default {
@@ -28,7 +27,7 @@ export default {
   children: [
     {
       path: '/console/dashboard',
-      component: () => import('@/views/dashboard/index'),
+      component: () => import('@/views/dashboard/Console/index'),
       name: 'AdminDashboard',
       meta: {
         icon: 'dashboard',
@@ -75,17 +74,6 @@ export default {
         icon: 'permission'
       },
       children: PermsRoute
-    },
-    {
-      path: '/console/acls',
-      component: empty,
-      name: 'Acl',
-      meta: {
-        licenseRequired: true,
-        title: i18n.t('route.Acl'),
-        icon: 'lock'
-      },
-      children: AclRoutes
     },
     {
       path: '/console/tasks',

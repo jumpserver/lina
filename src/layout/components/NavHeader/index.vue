@@ -101,7 +101,7 @@ export default {
     height: $header-height;
     line-height: $header-height;
     overflow: hidden;
-    background: var(--color-primary);
+    background: var(--nav-bg);
 
     .navbar-left {
       float: left;
@@ -130,8 +130,10 @@ export default {
     .navbar-right {
       float: right;
       margin-right: 10px;
-
+      height: 55px;
+      line-height: 55px;
       .header-hover {
+        line-height: 56px!important;
         &:hover {
           background-color: rgba(255, 255, 255, .2);
         }
@@ -214,6 +216,13 @@ export default {
     .active-menu {
       display: none !important;;
     }
+  }
+
+  >>> .el-badge__content {
+    color: var(--color-primary);
+  }
+  >>> .el-badge__content--primary {
+    background-color: #fff;
   }
 </style>
 

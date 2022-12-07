@@ -15,10 +15,9 @@
 
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
-import { getDaysFuture, getDaysAgo } from '@/utils/common'
+import { getDaysAgo, getDaysFuture, setUrlParam } from '@/utils/common'
 import { Dialog, ListTable } from '@/components'
 import { DisplayFormatter } from '@/components/TableFormatters'
-import { setUrlParam } from '@/utils/common'
 
 export default {
   components: {
@@ -48,7 +47,7 @@ export default {
                 vm.relationDialog.tableConfig.url = setUrlParam(vm.relationDialog.tableConfig.url, 'commandexecution', row.id)
                 vm.relationDialog.show = true
               }
-              return <el-link onClick={onClick}>{cellValue.length}</el-link>
+              return <el-link class='text-link' onClick={onClick}>{cellValue.length}</el-link>
             }
           },
           command: {
@@ -73,7 +72,7 @@ export default {
             formatter: (row) => {
               const label = this.$t('audits.View')
               const route = { to: { name: 'CeleryTaskLog', params: { id: row.id }}}
-              return <router-link {...{ attrs: route }} target='_blank'>{label}</router-link>
+              return <router-link class='text-link' {...{ attrs: route }} target='_blank'>{label}</router-link>
             }
           },
           date_start: {
@@ -106,7 +105,7 @@ export default {
             options: [
               {
                 label: this.$t('audits.Hosts'),
-                value: 'asset__hostname'
+                value: 'asset__name'
               }
             ]
           },
@@ -144,5 +143,4 @@ export default {
 </script>
 
 <style>
-
 </style>

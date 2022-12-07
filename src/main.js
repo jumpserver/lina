@@ -47,7 +47,6 @@ Vue.use(require('vue-moment'), {
   moment
 })
 
-// logger
 import VueLogger from 'vuejs-logger'
 import loggerOptions from './utils/logger'
 Vue.use(VueLogger, loggerOptions)
@@ -56,14 +55,14 @@ import ECharts from 'vue-echarts'
 Vue.component('echarts', ECharts)
 
 import service from '@/utils/request'
+Vue.prototype.$axios = service
 
-// lodash
-// import _ from 'lodash'
 window._ = require('lodash')
 // Vue.set(Vue.prototype, '_', _)
 
-// if the table component cannot access `this.$axios`, it cannot send request
-Vue.prototype.$axios = service
+import { Message } from '@/utils/Message'
+Vue.prototype.$message = Message
+
 // 注册全局事件总线
 Vue.prototype.$eventBus = new Vue()
 new Vue({

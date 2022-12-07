@@ -90,6 +90,17 @@ export default {
       },
       children: [
         {
+          path: 'quick-job',
+          name: 'QuickJob',
+          hidden: true,
+          component: () => import('@/views/ops/Job/QuickJob'),
+          meta: {
+            title: i18n.t('ops.QuickJob'),
+            permissions: [],
+            activeMenu: '/workbench/ops/job'
+          }
+        },
+        {
           path: 'job',
           name: 'Job',
           component: empty,
@@ -144,65 +155,77 @@ export default {
           ]
         },
         {
-          path: 'adhoc',
-          name: 'Adhoc',
-          component: () => import('@/views/ops/Adhoc'),
+          path: 'scripts',
+          name: 'ScriptManage',
+          component: () => import('@/views/ops/ScriptManage'),
           meta: {
-            title: i18n.t('route.BatchCommand'),
+            title: i18n.t('route.ScriptManage'),
             permissions: []
           }
         },
         {
-          path: 'command/:id',
-          component: () => import('@/views/ops/Adhoc/my/AdhocDetail'),
+          path: 'executions',
+          name: 'Executions',
+          component: () => import('@/views/ops/Executions'),
+          meta: {
+            title: i18n.t('route.Executions'),
+            permissions: []
+          }
+        },
+
+        {
+          path: 'adhoc/:id/update',
+          name: 'AdhocUpdate',
+          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocUpdateCreate'),
+          hidden: true,
+          meta: {
+            title: i18n.t('route.updateAdhoc'),
+            permissions: [],
+            activeMenu: '/workbench/ops/scripts'
+          }
+        },
+        {
+          path: 'adhoc/create',
+          name: 'AdhocCreate',
+          hidden: true,
+          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocUpdateCreate'),
+          meta: {
+            title: i18n.t('ops.createAdhoc'),
+            permissions: [],
+            activeMenu: '/workbench/ops/scripts'
+          }
+        },
+        {
+          path: 'adhoc/:id',
+          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocDetail'),
           name: 'AdhocDetail',
           hidden: true,
           meta: {
             title: i18n.t('route.AdhocDetail'),
             permissions: [],
-            activeMenu: '/workbench/ops/adhoc'
+            activeMenu: '/workbench/ops/scripts'
           }
         },
         {
-          path: 'command/:id/update',
-          name: 'AdhocUpdate',
-          component: () => import('@/views/ops/Adhoc/my/AdhocUpdateCreate'),
+          path: 'playbook/:id/update',
+          name: 'PlaybookUpdate',
+          hidden: true,
+          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookUpdate'),
+          meta: {
+            title: i18n.t('ops.PlaybookUpdate'),
+            permissions: [],
+            activeMenu: '/workbench/ops/scripts'
+          }
+        },
+        {
+          path: 'playbook/:id',
+          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookDetail'),
+          name: 'PlaybookDetail',
           hidden: true,
           meta: {
-            title: i18n.t('route.updateAdhoc'),
+            title: i18n.t('ops.PlaybookDetail'),
             permissions: [],
-            activeMenu: '/workbench/ops/adhoc'
-          }
-        },
-        {
-          path: 'command/create',
-          name: 'AdhocCreate',
-          hidden: true,
-          component: () => import('@/views/ops/Adhoc/my/AdhocUpdateCreate'),
-          meta: {
-            title: i18n.t('ops.createAdhoc'),
-            permissions: [],
-            activeMenu: '/workbench/ops/adhoc'
-          }
-        },
-        {
-          path: 'playbook',
-          name: 'Playbook',
-          component: () => import('@/views/ops/Playbook'),
-          meta: {
-            title: i18n.t('route.BatchScript'),
-            permissions: []
-          }
-        },
-        {
-          path: 'flow/create',
-          name: 'PlaybookCreate',
-          hidden: true,
-          component: () => import('@/views/ops/Playbook/PlaybookUpdateCreate'),
-          meta: {
-            title: i18n.t('route.PlaybookCreate'),
-            permissions: [],
-            activeMenu: '/workbench/ops/playbook'
+            activeMenu: '/workbench/ops/scripts'
           }
         }
       ]

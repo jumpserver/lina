@@ -15,7 +15,7 @@ export default {
       },
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('common.Correlation'), ['users', 'user_groups', 'assets', 'applications', 'system_users']],
+        [this.$t('common.Correlation'), ['users', 'user_groups', 'nodes', 'assets', 'applications', 'system_users']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
@@ -34,6 +34,17 @@ export default {
           el: {
             value: [],
             url: '/api/v1/users/groups/'
+          }
+        },
+        nodes: {
+          el: {
+            value: [],
+            ajax: {
+              url: '/api/v1/assets/nodes/',
+              transformOption: (item) => {
+                return { label: item.full_value, value: item.id }
+              }
+            }
           }
         },
         assets: {
@@ -63,7 +74,7 @@ export default {
           el: {
             value: [],
             ajax: {
-              url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s`,
+              url: `/api/v1/assets/system-users/?protocol__in=ssh,telnet,mysql,postgresql,mariadb,oracle,sqlserver,k8s,redis,mongodb,clickhouse`,
               transformOption: (item) => {
                 if (this.$route.query.type === 'k8s') {
                   return { label: item.name, value: item.id }

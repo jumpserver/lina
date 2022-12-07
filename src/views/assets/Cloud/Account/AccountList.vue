@@ -4,7 +4,7 @@
 
 <script type="text/jsx">
 import GenericListTable from '@/layout/components/GenericListTable'
-import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, azure, azure_international, vmware, nutanix, qingcloud_private, huaweicloud_private, openstack, gcp, baiducloud, jdcloud, fc } from '../const'
+import { ACCOUNT_PROVIDER_ATTRS_MAP, aliyun, aws_china, aws_international, huaweicloud, qcloud, qcloud_lighthouse, azure, azure_international, vmware, nutanix, qingcloud_private, huaweicloud_private, ctyun_private, openstack, gcp, baiducloud, jdcloud, kingsoftcloud, fc, lan } from '../const'
 
 export default {
   name: 'AccountList',
@@ -83,6 +83,10 @@ export default {
               can: true
             },
             {
+              name: qcloud_lighthouse,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[qcloud_lighthouse].title
+            },
+            {
               name: huaweicloud,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud].title
             },
@@ -93,6 +97,10 @@ export default {
             {
               name: jdcloud,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[jdcloud].title
+            },
+            {
+              name: kingsoftcloud,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[kingsoftcloud].title
             },
             {
               name: aws_china,
@@ -128,6 +136,10 @@ export default {
               title: ACCOUNT_PROVIDER_ATTRS_MAP[huaweicloud_private].title
             },
             {
+              name: ctyun_private,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[ctyun_private].title
+            },
+            {
               name: openstack,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[openstack].title
             },
@@ -138,6 +150,10 @@ export default {
             {
               name: fc,
               title: ACCOUNT_PROVIDER_ATTRS_MAP[fc].title
+            },
+            {
+              name: lan,
+              title: ACCOUNT_PROVIDER_ATTRS_MAP[lan].title
             }
           ]
         }

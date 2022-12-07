@@ -5,6 +5,10 @@
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
+import {
+  afterGetFormValueForHandleUserAssetAccount, cleanFormValueForHandleUserAssetAccount, UserAssetAccountFieldInitial
+} from '../common'
+
 export default {
   name: 'AclCreateUpdate',
   components: {
@@ -13,25 +17,13 @@ export default {
   data() {
     return {
       initial: {
-        action: 'login_confirm',
-        system_users: {
-          name_group: '*',
-          protocol_group: '*',
-          username_group: '*'
-        },
-        users: {
-          username_group: '*'
-        },
-        assets: {
-          hostname_group: '*',
-          ip_group: '*'
-        }
+        ...UserAssetAccountFieldInitial
       },
       fields: [
         [this.$t('common.Basic'), ['name', 'priority']],
         [this.$t('acl.users'), ['users']],
         [this.$t('acl.host'), ['assets']],
-        [this.$t('acl.system_user'), ['system_users']],
+        [this.$t('acl.account'), ['accounts']],
         [this.$t('acl.action'), ['action', 'reviewers']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
@@ -40,16 +32,14 @@ export default {
           rules: [rules.Required]
         },
         assets: {
-          fields: ['hostname_group', 'ip_group']
+          fields: ['name_group', 'address_group']
         },
         users: {
           fields: ['username_group'],
-          fieldsMeta: {
-
-          }
+          fieldsMeta: {}
         },
-        system_users: {
-          fields: ['name_group', 'username_group', 'protocol_group']
+        accounts: {
+          fields: ['username_group']
         },
         reviewers: {
           el: {
@@ -64,43 +54,13 @@ export default {
         }
       },
       url: '/api/v1/acls/login-asset-acls/',
-      afterGetFormValue(formValue) {
-        formValue.assets.ip_group = formValue.assets.ip_group.toString()
-        formValue.assets.hostname_group = formValue.assets.hostname_group.toString()
-        formValue.system_users.name_group = formValue.system_users.name_group.toString()
-        formValue.system_users.protocol_group = formValue.system_users.protocol_group.toString()
-        formValue.system_users.username_group = formValue.system_users.username_group.toString()
-        formValue.users.username_group = formValue.users.username_group.toString()
-        return formValue
-      },
-      cleanFormValue(value) {
-        if (!Array.isArray(value.assets.ip_group)) {
-          value.assets.ip_group = value.assets.ip_group ? value.assets.ip_group.split(',') : []
-        }
-        if (!Array.isArray(value.assets.hostname_group)) {
-          value.assets.hostname_group = value.assets.hostname_group ? value.assets.hostname_group.split(',') : []
-        }
-        if (!Array.isArray(value.system_users.protocol_group)) {
-          value.system_users.protocol_group = value.system_users.protocol_group ? value.system_users.protocol_group.split(',') : []
-        }
-        if (!Array.isArray(value.system_users.name_group)) {
-          value.system_users.name_group = value.system_users.name_group ? value.system_users.name_group.split(',') : []
-        }
-        if (!Array.isArray(value.system_users.username_group)) {
-          value.system_users.username_group = value.system_users.username_group ? value.system_users.username_group.split(',') : []
-        }
-        if (!Array.isArray(value.users.username_group)) {
-          value.users.username_group = value.users.username_group ? value.users.username_group.split(',') : []
-        }
-        return value
-      }
+      afterGetFormValue: afterGetFormValueForHandleUserAssetAccount,
+      cleanFormValue: cleanFormValueForHandleUserAssetAccount
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
 <style>
-
 </style>

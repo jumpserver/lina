@@ -18,6 +18,7 @@
 
 <script>
 import Switcher from '../FormFields/Switcher'
+import Select2 from '../FormFields/Select2'
 
 class Action {
   constructor() {
@@ -31,7 +32,8 @@ class Action {
 export default {
   name: 'ActionItem',
   components: {
-    Switcher
+    Switcher,
+    Select2
   },
   props: {
     action: {
@@ -51,6 +53,8 @@ export default {
           return 'Switcher'
         case 'switcher':
           return 'Switcher'
+        case 'select2':
+          return 'Select2'
         default:
           return 'el-button'
       }

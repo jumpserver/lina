@@ -1,7 +1,7 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" />
+    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" :url="secretUrl" />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
       :visible.sync="showUpdateSecretDialog"
@@ -84,6 +84,7 @@ export default {
       showAddDialog: false,
       iAsset: this.asset,
       account: {},
+      secretUrl: '',
       tableConfig: {
         url: this.url,
         permissions: {
@@ -97,11 +98,24 @@ export default {
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'hostname', 'ip', 'username',
-            'version', 'privileged', 'actions'
+            'name', 'username', 'version', 'privileged', 'actions', 'secret_type', 'actions'
           ]
         },
         columnsMeta: {
+          name: {
+            showOverflowTooltip: true,
+            formatter: function(row) {
+              const to = {
+                name: 'AssetAccountDetail',
+                params: { id: row.id }
+              }
+              if (vm.$hasPerm('assets.view_account')) {
+                return <router-link to={ to } >{ row.name }</router-link>
+              } else {
+                return <span>{ row.name }</span>
+              }
+            }
+          },
           asset: {
             label: this.$t('assets.Asset'),
             showOverflowTooltip: true,
@@ -146,6 +160,7 @@ export default {
                   can: this.$hasPerm('assets.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
+                    vm.secretUrl = `/api/v1/assets/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
                     setTimeout(() => {

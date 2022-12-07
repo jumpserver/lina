@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS :title="$tc('setting.AlibabaCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$tc('setting.AlibabaCloud')" :config="$data" />
 </template>
 
 <script>
@@ -20,15 +20,18 @@ export default {
       moreButtons: [
         {
           title: this.$t('common.Test'),
-          callback: function(value, form) {
+          loading: false,
+          callback: function(value, form, btn) {
+            btn.loading = true
             vm.$axios.post(
-              `/api/v1/settings/alibaba/testing/`,
+              `/api/v1/settings/sms/alibaba/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
-            }).catch(() => {
-              this.$log.error('err occur')
-            })
+            }).catch((error) => {
+              vm.$log.error('err occur')
+              vm.$refs.baseSms.testPerformError(error)
+            }).finally(() => { btn.loading = false })
           }
         }
       ],

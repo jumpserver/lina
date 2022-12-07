@@ -18,6 +18,7 @@
 <script>
 import DataZTree from '../DataZTree'
 import $ from '@/utils/jquery-vendor'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AutoDataZTree',
@@ -37,6 +38,10 @@ export default {
         showCreate: true,
         showDelete: true,
         showUpdate: true,
+        showSearch: false,
+        // 自定义header
+        customTreeHeader: false,
+        customTreeHeaderName: this.$t('assets.AssetTree'),
         async: {
           enable: true,
           url: (process.env.VUE_APP_ENV === 'production') ? (`${this.setting.treeUrl}`) : (`${process.env.VUE_APP_BASE_API}${this.setting.treeUrl}`),
@@ -66,6 +71,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'currentOrg'
+    ]),
     treeSetting() {
       this.$log.debug('Settings: ', this.setting)
       return _.merge(this.defaultSetting, this.setting)
@@ -120,9 +128,9 @@ export default {
         query['asset'] = ''
         url = `${this.setting.url}${combinator}node_id=${objectId}&show_current_asset=${show_current_asset}`
       } else if (treeNode.meta.type === 'asset') {
-        query['asset'] = treeNode.meta.data.id
+        query['asset'] = treeNode.meta.data?.id || treeNode.id
         query['node'] = ''
-        url = `${this.setting.url}${combinator}asset_id=${objectId}&show_current_asset=${show_current_asset}`
+        url = `${this.setting.url}${combinator}asset_id=${query.asset}&show_current_asset=${show_current_asset}`
       }
       this.$router.push({ query })
       this.$emit('urlChange', url)
@@ -172,7 +180,7 @@ export default {
       const rMenuID = this.$refs.dataztree.$refs.ztree.iRMenuID
       const zTreeID = this.$refs.dataztree.$refs.ztree.iZTreeID
       const offset = $(`#${zTreeID}`).offset()
-      const scrollTop = document.querySelector('.treebox').scrollTop
+      const scrollTop = document.querySelector('.treebox')?.scrollTop
       x -= offset.left
       // Tmp
       y -= (offset.top + scrollTop) / 3 - 10
@@ -192,7 +200,7 @@ export default {
         return
       }
       // 屏蔽收藏资产
-      if (treeNode.id === '-12') {
+      if (treeNode?.id === '-12') {
         return
       }
       if (!treeNode && event.target.tagName.toLowerCase() !== 'button' && $(event.target).parents('a').length === 0) {

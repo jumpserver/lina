@@ -144,7 +144,7 @@ export default {
               valueLabel: this.$t('tickets.Pending')
             }
           },
-          exclude: ['state'],
+          exclude: ['state', 'id', 'title'],
           options: [
             {
               value: 'state',
@@ -165,6 +165,30 @@ export default {
                   label: this.$t('tickets.Rejected')
                 }
               ]
+            },
+            {
+              value: 'id',
+              label: 'ID'
+            },
+            {
+              value: 'title',
+              label: this.$t('tickets.title')
+            },
+            {
+              value: 'relevant_app',
+              label: this.$t('tickets.RelevantApp')
+            },
+            {
+              value: 'relevant_asset',
+              label: this.$t('tickets.RelevantAsset')
+            },
+            {
+              value: 'relevant_system_user',
+              label: this.$t('tickets.RelevantCommand')
+            },
+            {
+              value: 'relevant_command',
+              label: this.$t('tickets.RelevantSystemUser')
             }
           ]
         },

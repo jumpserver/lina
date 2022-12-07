@@ -31,7 +31,7 @@
 
 <script>
 import TreeTable from '@/components/TreeTable'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
 import Dialog from '@/components/Dialog'
 
@@ -39,6 +39,14 @@ export default {
   componentName: 'AssetSelect',
   components: { TreeTable, Select2, Dialog },
   props: {
+    baseUrl: {
+      type: String,
+      default: '/api/v1/assets/assets/'
+    },
+    baseNodeUrl: {
+      type: String,
+      default: '/api/v1/assets/nodes/'
+    },
     value: {
       type: Array,
       default: () => []
@@ -55,12 +63,20 @@ export default {
     }
   },
   data() {
+    const iValue = []
+    for (const item of this.value) {
+      if (typeof item === 'object') {
+        iValue.push(item.id)
+      } else {
+        iValue.push(item)
+      }
+    }
     const select2Config = {
-      value: this.value,
+      value: iValue,
       multiple: true,
       clearable: true,
       ajax: {
-        url: '/api/v1/assets/assets/?fields_size=mini',
+        url: this.baseUrl,
         transformOption: (item) => {
           return { label: item.name + '(' + item.address + ')', value: item.id }
         }
@@ -69,22 +85,22 @@ export default {
     const vm = this
     return {
       dialogVisible: false,
-      initialValue: _.cloneDeep(this.value),
+      initialValue: _.cloneDeep(iValue),
       rowSelected: [],
       initSelection: null,
       treeSetting: {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        url: '/api/v1/assets/assets/?fields_size=mini',
-        nodeUrl: '/api/v1/assets/nodes/',
+        url: this.baseUrl,
+        nodeUrl: this.baseNodeUrl,
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0'
+        treeUrl: `${this.baseNodeUrl}/children/tree/?assets=0`
       },
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
-        url: '/api/v1/assets/assets/?fields_size=mini',
+        url: this.baseUrl,
         hasTree: true,
         canSelect: this.canSelect,
         columns: [
@@ -93,25 +109,65 @@ export default {
             label: this.$t('assets.Name'),
             sortable: true,
             showOverflowTooltip: true,
-            formatter: DetailFormatter,
+            formatter: DialogDetailFormatter,
             formatterArgs: {
-              route: 'AssetDetail'
+              getDialogTitle: function({ col, row }) { this.$t('assets.AssetDetail') }.bind(this),
+              getDetailItems: function({ col, row }) {
+                return [
+                  {
+                    key: this.$t('assets.Name'),
+                    value: row.name
+                  },
+                  {
+                    key: this.$t('assets.AssetAddress'),
+                    value: row.address
+                  },
+                  {
+                    key: this.$t('assets.Protocols'),
+                    value: row.protocols.map(item => item.name).join(', ')
+                  },
+                  {
+                    key: this.$t('assets.Category'),
+                    value: row.category.label
+                  },
+                  {
+                    key: this.$t('assets.Type'),
+                    value: row.type.label
+                  },
+                  {
+                    key: this.$t('assets.Platform'),
+                    value: row.platform?.name || ''
+                  },
+                  {
+                    key: this.$t('common.Active'),
+                    value: row.is_active
+                  },
+                  {
+                    key: this.$t('assets.Comment'),
+                    value: row.comment
+                  }
+                ]
+              }.bind(this)
             }
           },
           {
-            prop: 'ip',
+            prop: 'address',
             label: this.$t('assets.ipDomain'),
             sortable: 'custom'
           },
           {
             prop: 'platform',
             label: this.$t('assets.Platform'),
-            sortable: true
+            sortable: true,
+            formatter: function(row) {
+              return row.platform.name
+            }
           },
           {
             prop: 'protocols',
             formatter: function(row) {
-              return <span> {row.protocols?.toString()} </span>
+              const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
+              return <span> {data} </span>
             },
             label: this.$t('assets.Protocols')
           }
@@ -126,7 +182,7 @@ export default {
           }
         },
         theRowDefaultIsSelected: (row) => {
-          return this.value.indexOf(row.id) > -1
+          return iValue.indexOf(row.id) > -1
         }
       },
       headerActions: {
@@ -184,34 +240,33 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .el-select {
-    width: 100%;
-  }
+.el-select {
+  width: 100%;
+}
 
-  .page ::v-deep .page-heading {
-    display: none;
-  }
+.page ::v-deep .page-heading {
+  display: none;
+}
 
-  .el-dialog__wrapper ::v-deep .el-dialog__body {
-    padding: 0;
+.el-dialog__wrapper ::v-deep .el-dialog__body {
+  padding: 0;
 
-    .tree-table {
-      .left {
-        padding: 5px;
-      }
+  .tree-table {
+    .left {
+      padding: 5px;
+    }
 
-      .mini {
-        padding-top: 8px;
-      }
+    .mini {
+      padding-top: 8px;
+    }
 
-      .transition-box {
-        padding: 5px;
-      }
+    .transition-box {
+      padding: 5px;
     }
   }
+}
 
-  .page ::v-deep .treebox {
-    height: inherit !important;
-  }
-
+.page ::v-deep .treebox {
+  height: inherit !important;
+}
 </style>

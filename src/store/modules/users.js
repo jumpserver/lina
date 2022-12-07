@@ -17,6 +17,7 @@ const getDefaultState = () => {
     auditOrgs: [],
     consoleOrgs: [],
     workbenchOrgs: [],
+    noRootWorkbenchOrgs: [],
     usingOrgs: [],
     perms: [],
     MFAVerifyAt: null,
@@ -42,6 +43,9 @@ const mutations = {
     state.perms = profile.perms
     state.consoleOrgs = profile['console_orgs']
     state.workbenchOrgs = profile['workbench_orgs']
+    state.noRootWorkbenchOrgs = profile['workbench_orgs'].filter(item => {
+      return item.id !== '00000000-0000-0000-0000-000000000000'
+    })
     state.auditOrgs = profile['audit_orgs']
     state.currentOrg = getCurrentOrgLocal(profile.username)
   },
@@ -68,6 +72,9 @@ const mutations = {
   },
   ADD_WORKBENCH_ORGS(state, org) {
     state.workbenchOrgs.push(org)
+  },
+  SET_IS_FIRST_LOGIN(state, flag) {
+    state.profile.is_first_login = flag
   }
 }
 
@@ -136,6 +143,9 @@ const actions = {
     const usingOrgs = mapper[viewName] || state.consoleOrgs
     Vue.$log.debug('Set using orgs: ', viewName, usingOrgs)
     commit('SET_USING_ORGS', usingOrgs)
+  },
+  ifFirstLogin({ commit }, flag) {
+    commit('SET_IS_FIRST_LOGIN', flag)
   }
 }
 

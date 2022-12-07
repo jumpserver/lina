@@ -1,5 +1,5 @@
 :root {
-  --color-primary: #2b937c;
+  --color-primary: #1ab394;
   --color-success: #2793d7;
   --color-info: #1c84c6;
   --color-warning: #f8ac59;
@@ -8,14 +8,11 @@
   --menu-text: #646A73;
   --menu-hover: #f4faf9;
   --submenu-bg: #ffffff;
-  --submenu-hover: #f4faf9;
-  --submenu-active-text: #2b937c;
-  --menu-active-text: #1F2329;
-  --menu-active-left: #2b937c;
+  --nav-bg: #148f76;
 }
 
 :export {
-  --color-primary: #2b937c;
+  --color-primary: #1ab394;
   --color-success: #2793d7;
   --color-info: #1c84c6;
   --color-warning: #f8ac59;
@@ -24,8 +21,5 @@
   --menu-text: #646A73;
   --menu-hover: #f4faf9;
   --submenu-bg: #ffffff;
-  --submenu-hover: #f4faf9;
-  --submenu-active-text: #2b937c;
-  --menu-active-text: #1F2329;
-  --menu-active-left: #2b937c;
+  --nav-bg: #148f76;
 }

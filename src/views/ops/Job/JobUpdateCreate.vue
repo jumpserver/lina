@@ -25,10 +25,10 @@ export default {
       url: '/api/v1/ops/jobs/',
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'instant', 'comment']],
-        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir']],
         [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
-        [this.$t('ops.Plan'), ['runAfterSave', 'is_periodic', 'crontab']],
-        [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']]
+        [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
+        [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']]
       ],
       initial: {
         type: 'adhoc',
@@ -38,13 +38,22 @@ export default {
         runAfterSave: false,
         instant: false,
         parameters_define: '{}',
-        timeout: 60,
         is_periodic: false,
         crontab: '0 0 * * *'
       },
       fieldsMeta: {
         name: {
           hidden: (formValue) => {
+            return this.instantTask
+          }
+        },
+        comment: {
+          hidden: () => {
+            return this.instantTask
+          }
+        },
+        type: {
+          hidden: () => {
             return this.instantTask
           }
         },
@@ -77,6 +86,8 @@ export default {
             required: false
           }],
           el: {
+            baseUrl: '/api/v1/perms/users/self/assets/',
+            baseNodeUrl: '/api/v1/perms/users/self/nodes/',
             value: []
           }
         },
@@ -99,23 +110,28 @@ export default {
           }
         },
         chdir: {
+          helpText: i18n.t('ops.ChdirHelpText'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           }
         },
-        runAfterSave: {
-          label: '保存后立即执行',
+        run_after_save: {
           type: 'checkbox',
           hidden: (formValue) => {
-            return formValue.instant
+            return this.instantTask
           }
         },
         use_parameter_define: {
-          label: this.$t('ops.UseParameterDefine'),
-          type: 'switch'
+          type: 'switch',
+          hidden: () => {
+            return this.instantTask
+          }
         },
         is_periodic: {
-          type: 'switch'
+          type: 'switch',
+          hidden: () => {
+            return this.instantTask
+          }
         },
         crontab: {
           type: 'cronTab',
@@ -152,16 +168,7 @@ export default {
       this.ready = true
     }
   },
-  methods: {
-    openAdhocSelectDialog() {
-      this.showOpenAdhocDialog = true
-    },
-    onSelectAdhoc(item) {
-
-    },
-    onOpenSaveAdhocDialog() {
-    }
-  }
+  methods: {}
 }
 
 </script>

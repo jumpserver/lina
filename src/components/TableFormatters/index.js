@@ -5,13 +5,14 @@ import ChoicesFormatter from './ChoicesFormatter'
 import ActionsFormatter from './ActionsFormatter'
 import DeleteActionFormatter from './DeleteActionFormatter'
 import DateFormatter from './DateFormatter'
-import SystemUserFormatter from './GrantedSystemUsersShowFormatter'
+import AccountShowFormatter from './GrantedAccountShowFormatter'
 import ShowKeyCopyFormatter from './ShowKeyCopyFormatter'
 import DialogDetailFormatter from './DialogDetailFormatter'
 import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter'
+import TwoTabFormatter from './TwoTabFormatter'
 
 export default {
   DetailFormatter,
@@ -20,14 +21,15 @@ export default {
   ActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
-  SystemUserFormatter,
+  AccountShowFormatter,
   ShowKeyCopyFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  ObjectRelatedFormatter
+  ObjectRelatedFormatter,
+  TwoTabFormatter
 }
 
 export {
@@ -37,12 +39,13 @@ export {
   ActionsFormatter,
   DeleteActionFormatter,
   DateFormatter,
-  SystemUserFormatter,
+  AccountShowFormatter,
   ShowKeyCopyFormatter,
   DialogDetailFormatter,
   ArrayFormatter,
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  ObjectRelatedFormatter
+  ObjectRelatedFormatter,
+  TwoTabFormatter
 }

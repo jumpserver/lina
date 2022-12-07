@@ -52,64 +52,82 @@ export const DATABASE_CATEGORY = 'db'
 export const SQLSERVER = 'sqlserver'
 export const REDIS = 'redis'
 export const MONGODB = 'mongodb'
+export const CLICKHOUSE = 'clickhouse'
+
+const MYSQL_ITEM = {
+  name: MYSQL,
+  title: i18n.t(`applications.applicationsType.${MYSQL}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: true,
+  group: i18n.t('applications.RDBProtocol')
+}
+
+const MARIADB_ITEM = {
+  name: MARIADB,
+  title: i18n.t(`applications.applicationsType.${MARIADB}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: true
+}
+
+const ORACLE_ITEM = {
+  name: ORACLE,
+  title: i18n.t(`applications.applicationsType.${ORACLE}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: hasLicence
+}
+
+const POSTGRESQL_ITEM = {
+  name: POSTGRESQL,
+  title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: hasLicence
+}
+
+const SQLSERVER_ITEM = {
+  name: SQLSERVER,
+  title: i18n.t(`applications.applicationsType.${SQLSERVER}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: hasLicence
+}
+
+const CLICKHOUSE_ITEM = {
+  name: CLICKHOUSE,
+  title: i18n.t(`applications.applicationsType.${CLICKHOUSE}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: hasLicence
+}
+
+const MONGODB_ITEM = {
+  name: MONGODB,
+  title: i18n.t(`applications.applicationsType.${MONGODB}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  group: i18n.t('applications.NoSQLProtocol')
+}
+
+const REDIS_ITEM = {
+  name: REDIS,
+  title: i18n.t(`applications.applicationsType.${REDIS}`),
+  type: 'primary',
+  category: DATABASE_CATEGORY,
+  has: true
+}
 
 export const DATABASE = [
-  {
-    name: MYSQL,
-    title: i18n.t(`applications.applicationsType.${MYSQL}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: true,
-    group: i18n.t('applications.RDBProtocol')
-  },
-  {
-    name: MARIADB,
-    title: i18n.t(`applications.applicationsType.${MARIADB}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: true
-  },
-  {
-    name: ORACLE,
-    title: i18n.t(`applications.applicationsType.${ORACLE}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
-  },
-  {
-    name: POSTGRESQL,
-    title: i18n.t(`applications.applicationsType.${POSTGRESQL}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
-  },
-  {
-    name: SQLSERVER,
-    title: i18n.t(`applications.applicationsType.${SQLSERVER}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: hasLicence
-  }
+  MYSQL_ITEM, MARIADB_ITEM, ORACLE_ITEM, POSTGRESQL_ITEM, SQLSERVER_ITEM, CLICKHOUSE_ITEM
 ]
 
 export const KV_DATABASE = [
-  {
-    name: REDIS,
-    title: i18n.t(`applications.applicationsType.${REDIS}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY,
-    has: true,
-    group: i18n.t('applications.NoSQLProtocol')
-  },
-  {
-    name: MONGODB,
-    title: i18n.t(`applications.applicationsType.${MONGODB}`),
-    type: 'primary',
-    category: DATABASE_CATEGORY
-  }
+  MONGODB_ITEM, REDIS_ITEM
 ]
 
-export const AppPlanDatabase = DATABASE
+export const AppPlanDatabase = [MYSQL_ITEM, MARIADB_ITEM, ORACLE_ITEM, POSTGRESQL_ITEM, SQLSERVER_ITEM, MONGODB_ITEM]
 
 export const KUBERNETES = 'k8s'
 export const CLOUD_CATEGORY = 'cloud'

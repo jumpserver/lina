@@ -79,15 +79,17 @@ export default {
       moreButtons: [
         {
           title: this.$t('setting.emailTest'),
-          callback: function(value, form) {
+          loading: false,
+          callback: function(value, form, btn) {
             const testValue = {}
             testValue['EMAIL_FROM'] = value['EMAIL_FROM']
             testValue['EMAIL_RECIPIENT'] = value['EMAIL_RECIPIENT']
+            btn.loading = true
             testEmailSetting(value).then(res => {
               vm.$message.success(res['msg'])
             }).catch(res => {
               vm.$message.error(res['response']['data']['error'])
-            })
+            }).finally(() => { btn.loading = false })
           }
         }
       ],

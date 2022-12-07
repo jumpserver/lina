@@ -1,44 +1,46 @@
 <template>
   <div class="card">
-    <div>
-      <div class="title">标题</div>
-      <div class="sub">二标题11111</div>
-      <div class="num">1231231213</div>
-      <div class="add">
-        <span class="add-num">
-          本周新增：0
-          <i class="fa fa-line-chart" />
-        </span>
-        <span class="add-icon">
-          <i class="fa fa-users" />
-        </span>
+    <div class="card-content">
+      <div class="title">
+        <Title :config="config" />
       </div>
+      <div class="sub">{{ config.subTitle }}</div>
+      <slot class="custom">
+        <div class="num">{{ config.total }}</div>
+        <div class="add">
+          <span class="add-num">
+            {{ $tc('dashboard.WeekAdd') }}：{{ config.weekAdd }}
+            <svg-icon v-if="config.subIcon" :icon-class="config.subIcon" class="font" />
+          </span>
+          <span class="add-icon">
+            <svg-icon v-if="config.icon" :icon-class="config.icon" class="font" />
+          </span>
+        </div>
+      </slot>
     </div>
     <div class="ring">
-      <RingChart />
+      <RingChart :config="config" />
     </div>
   </div>
 </template>
 
 <script>
+import Title from './Title.vue'
 import RingChart from './RingChart'
 export default {
   components: {
+    Title,
     RingChart
   },
   props: {
-
+    config: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
-
     }
-  },
-  created() {
-
-  },
-  methods: {
-
   }
 }
 </script>
@@ -48,12 +50,12 @@ export default {
   width: 100%;
   padding: 20px;
   background-color: #FFF;
+  .card-content {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #EFF0F1;
+  }
   .title {
     margin-bottom: 12px;
-    line-height: 26px;
-    font-weight: 500;
-    font-size: 16px;
-    color: #1F2329;
   }
   .sub {
     font-weight: 400;
@@ -71,15 +73,23 @@ export default {
   .add {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #EFF0F1;
+  }
+  .custom {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 32px;
+    padding-bottom: 18px;
   }
   .ring {
-    padding: 26px 43px 10px;
+    padding: 26px 0 10px;
     & >>> .echarts {
       width: 100%!important;
       height: 272px!important;
     }
+  }
+  .font {
+    font-size: 18px;
   }
 }
 </style>

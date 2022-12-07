@@ -39,7 +39,7 @@ export default {
   name: 'AccountDropdown',
   data() {
     return {
-      avatarUrl: require('@/assets/img/admin.png'),
+      avatarUrl: require('@/assets/img/head-portrait.png'),
       showApiKey: false
     }
   },

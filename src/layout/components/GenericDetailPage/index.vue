@@ -197,6 +197,10 @@ export default {
       if (typeof route === 'string') {
         route = { name: route, params: {}}
       }
+      route = {
+        ...route,
+        query: this.$route.query || {}
+      }
       route.params.id = id
       this.$router.push(route)
     },

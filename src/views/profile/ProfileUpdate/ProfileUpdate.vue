@@ -1,11 +1,8 @@
 <template>
   <IBox>
     <GenericCreateUpdateForm
-      :fields="fields"
-      :fields-meta="fieldsMeta"
       :initial="object"
-      :url="url"
-      :submit-method="submitMethod"
+      v-bind="$data"
     />
   </IBox>
 </template>
@@ -29,6 +26,7 @@ export default {
   data() {
     return {
       url: `/api/v1/users/profile/`,
+      hasDetailInMsg: false,
       fields: [
         [this.$t('users.Account'), ['username', 'name', 'email']],
         [this.$t('common.Other'), ['phone', 'wechat']]
@@ -43,12 +41,10 @@ export default {
         email: {
           disabled: true
         }
+      },
+      submitMethod() {
+        return 'patch'
       }
-    }
-  },
-  methods: {
-    submitMethod() {
-      return 'patch'
     }
   }
 }

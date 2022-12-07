@@ -1,0 +1,77 @@
+<template>
+  <span>
+    <el-radio-group
+      v-model="select"
+      class="switch"
+      size="mini"
+      @change="onChange"
+    >
+      <el-radio-button v-for="i in iOptions" :key="i.value" :label="i.value">
+        {{ i.label }}
+      </el-radio-button>
+    </el-radio-group>
+  </span>
+</template>
+
+<script>
+export default {
+  props: {
+    options: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data() {
+    const defaultOptions = [
+      {
+        label: this.$t('dashboard.Today'),
+        value: '1'
+      },
+      {
+        label: this.$t('dashboard.Last7Days'),
+        value: '7'
+      },
+      {
+        label: this.$t('dashboard.Last30Days'),
+        value: '30'
+      }
+    ]
+    return {
+      select: localStorage.getItem('auditDays') || '7',
+      iOptions: this.options.length > 0 ? this.options : defaultOptions
+    }
+  },
+  methods: {
+    onChange(val) {
+      this.$emit('change', val)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.switch {
+  background: #EFF0F1;
+  border-radius: 4px;
+  padding: 0 4px;
+  &>>> .el-radio-button {
+    .el-radio-button__inner {
+      border: none;
+      color: #8F959E;
+      background: #EFF0F1;
+    }
+    &.is-active {
+      border-radius: 4px;
+      padding: 4px 0;
+      .el-radio-button__inner {
+        color: var(--color-primary);
+        background-color: #FFF;
+        border-radius: 4px;
+      }
+    }
+  }
+  &>>> .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+    box-shadow: none;
+  }
+}
+</style>
