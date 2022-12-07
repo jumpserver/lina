@@ -409,11 +409,6 @@ td .el-button.el-button--mini {
   color: white;
 }
 
-.el-button--danger.is-plain.is-disabled {
-  background: #ffffff!important;
-}
-
-
 .el-alert .el-alert__description {
   margin: 1px 0 0;
 }
