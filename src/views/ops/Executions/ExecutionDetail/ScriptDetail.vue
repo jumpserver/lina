@@ -1,10 +1,9 @@
 <template>
-  <div />
+  <div>bbbbbbb</div>
 </template>
 
 <script>
 export default {
-  name: 'ExecutionDetailDialog'
 }
 </script>
 

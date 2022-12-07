@@ -697,6 +697,9 @@
     "Weekly": "按周"
   },
   "ops": {
+    "ExecutionDetail": "执行详情",
+    "ScriptDetail": "脚本详情",
+    "AssetResultDetail": "资产结果",
     "VariableHelpText": "您可以在命令中使用 {{ key }} 读取内置变量",
     "ChdirHelpText": "默认执行目录为执行用户的 home 目录",
     "OpenCommand": "打开命令",
