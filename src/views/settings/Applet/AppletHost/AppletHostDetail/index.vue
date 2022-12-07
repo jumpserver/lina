@@ -48,7 +48,7 @@ export default {
             'name': 'Applets'
           },
           {
-            'title': this.$t('terminal.Deployments'),
+            'title': this.$t('terminal.HostDeployment'),
             'name': 'Developments'
           }
         ],
