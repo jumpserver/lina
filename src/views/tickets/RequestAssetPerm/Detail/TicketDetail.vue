@@ -80,7 +80,7 @@ export default {
         value: this.object.apply_nodes,
         ajax: {
           url: (function(object) {
-            const oid = object.org_id === '' ? 'DEFAULT' : object.org_id
+            const oid = object.org_id
             return `/api/v1/assets/nodes/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
           }(this.object)),
           transformOption: (item) => {
@@ -93,7 +93,7 @@ export default {
         value: this.object.apply_assets,
         ajax: {
           url: (function(object) {
-            const oid = object.org_id === '' ? 'DEFAULT' : object.org_id
+            const oid = object.org_id
             return `/api/v1/assets/assets/?oid=${oid}&protocol__in=rdp,vnc,ssh,telnet`
           }(this.object)),
           transformOption: (item) => {

@@ -74,6 +74,9 @@ export default {
         hasExport: false,
         hasImport: false,
         hasCreate: false,
+        searchConfig: {
+          getUrlQuery: false
+        },
         hasMoreActions: false
       },
       assetRelationConfig: {

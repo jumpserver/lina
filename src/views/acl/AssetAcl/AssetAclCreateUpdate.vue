@@ -6,9 +6,7 @@
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
 import rules from '@/components/DataForm/rules'
 import {
-  UserAssetAccountFieldInitial,
-  afterGetFormValueForHandleUserAssetAccount,
-  cleanFormValueForHandleUserAssetAccount
+  afterGetFormValueForHandleUserAssetAccount, cleanFormValueForHandleUserAssetAccount, UserAssetAccountFieldInitial
 } from '../common'
 
 export default {
@@ -38,9 +36,7 @@ export default {
         },
         users: {
           fields: ['username_group'],
-          fieldsMeta: {
-
-          }
+          fieldsMeta: {}
         },
         accounts: {
           fields: ['username_group']
@@ -62,11 +58,9 @@ export default {
       cleanFormValue: cleanFormValueForHandleUserAssetAccount
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
 <style>
-
 </style>

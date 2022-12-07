@@ -66,6 +66,31 @@ export default {
               })
             }
           })
+        },
+        {
+          title: this.$t('assets.UserSwitchFrom'),
+          type: 'updateSelect',
+          attrs: {
+            type: 'primary',
+            class: 'su-from-select2',
+            multiple: false,
+            clearable: true,
+            model: vm.object.su_from?.id || '',
+            label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
+            ajax: {
+              url: `/api/v1/assets/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
+              transformOption: (item) => {
+                return { label: item.name + '(' + item.username + ')', value: item.id }
+              }
+            },
+            disabled: !vm.$hasPerm('assets.change_account')
+          },
+          callbacks: Object.freeze({
+            change: (value) => {
+              const relationUrl = `/api/v1/assets/accounts/${this.object.id}/`
+              return this.$axios.patch(relationUrl, { su_from: value })
+            }
+          })
         }
       ]
     }
@@ -103,6 +128,5 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
 </style>

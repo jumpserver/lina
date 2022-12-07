@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$tc('setting.AlibabaCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$t('setting.HuaweiCloud')" :config="$data" />
 </template>
 
 <script>
@@ -7,14 +7,14 @@ import BaseSMS from './Base'
 import { UpdateToken } from '@/components/FormFields'
 
 export default {
-  name: 'SMSAlibaba',
+  name: 'SMSHuawei',
   components: {
     BaseSMS
   },
   data() {
     const vm = this
     return {
-      url: `/api/v1/settings/setting/?category=alibaba`,
+      url: `/api/v1/settings/setting/?category=huawei`,
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -24,7 +24,7 @@ export default {
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
-              `/api/v1/settings/sms/alibaba/testing/`,
+              `/api/v1/settings/sms/huawei/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
@@ -39,13 +39,13 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET'
+            'HUAWEI_APP_KEY', 'HUAWEI_APP_SECRET', 'HUAWEI_SMS_ENDPOINT'
           ]
         ],
         [
           this.$t('setting.VerifySignTmpl'),
           [
-            'ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE'
+            'HUAWEI_SIGN_CHANNEL_NUM', 'HUAWEI_VERIFY_SIGN_NAME', 'HUAWEI_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
@@ -56,21 +56,30 @@ export default {
         ]
       ],
       fieldsMeta: {
-        ALIBABA_VERIFY_SIGN_TMPL: {
+        HUAWEI_VERIFY_SIGN_TMPL: {
           fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
-          fieldsMeta: {}
+          fieldsMeta: {
+          }
         },
-        ALIBABA_ACCESS_KEY_SECRET: {
+        HUAWEI_APP_SECRET: {
           component: UpdateToken
+        },
+        HUAWEI_SIGN_CHANNEL_NUM: {
+          label: this.$t('setting.SignChannelNum')
+        },
+        HUAWEI_SMS_ENDPOINT: {
+          label: this.$t('setting.AppEndpoint')
         }
       },
       submitMethod() {
-        return 'patch'
+        return 'put'
       }
     }
   },
-  computed: {},
-  methods: {}
+  computed: {
+  },
+  methods: {
+  }
 }
 </script>
 

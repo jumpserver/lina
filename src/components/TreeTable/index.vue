@@ -145,6 +145,8 @@ export default {
     border-radius: 3px;
     line-height: 1.428;
     cursor: pointer;
+    cursor:pointer;
+    height: 30px;
   }
 
   .el-tree {
@@ -185,6 +187,12 @@ export default {
   .auto-data-ztree {
     overflow: auto;
     /*border-right: solid 1px red;*/
+  }
+  .transition-box.left {
+    background: #f3f3f3;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    margin-right: 2px;
   }
 
 </style>

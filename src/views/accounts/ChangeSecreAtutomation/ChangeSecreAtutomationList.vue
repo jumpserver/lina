@@ -110,7 +110,6 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
         createRoute: () => {
           return {
             name: 'ChangeSecreAtutomationCreate'

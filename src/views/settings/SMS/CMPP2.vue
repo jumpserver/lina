@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$tc('setting.AlibabaCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$t('setting.CMPP2')" :config="$data" />
 </template>
 
 <script>
@@ -7,14 +7,14 @@ import BaseSMS from './Base'
 import { UpdateToken } from '@/components/FormFields'
 
 export default {
-  name: 'SMSAlibaba',
+  name: 'CMPP2',
   components: {
     BaseSMS
   },
   data() {
     const vm = this
     return {
-      url: `/api/v1/settings/setting/?category=alibaba`,
+      url: `/api/v1/settings/setting/?category=cmpp2`,
       hasDetailInMsg: false,
       visible: false,
       moreButtons: [
@@ -24,7 +24,7 @@ export default {
           callback: function(value, form, btn) {
             btn.loading = true
             vm.$axios.post(
-              `/api/v1/settings/sms/alibaba/testing/`,
+              `/api/v1/settings/sms/cmpp2/testing/`,
               value
             ).then(res => {
               vm.$message.success(res['msg'])
@@ -39,13 +39,8 @@ export default {
         [
           this.$t('common.BasicInfo'),
           [
-            'ALIBABA_ACCESS_KEY_ID', 'ALIBABA_ACCESS_KEY_SECRET'
-          ]
-        ],
-        [
-          this.$t('setting.VerifySignTmpl'),
-          [
-            'ALIBABA_VERIFY_SIGN_NAME', 'ALIBABA_VERIFY_TEMPLATE_CODE'
+            'CMPP2_HOST', 'CMPP2_PORT', 'CMPP2_SP_ID', 'CMPP2_SP_SECRET', 'CMPP2_SRC_ID', 'CMPP2_SERVICE_ID',
+            'CMPP2_VERIFY_SIGN_NAME', 'CMPP2_VERIFY_TEMPLATE_CODE'
           ]
         ],
         [
@@ -56,11 +51,7 @@ export default {
         ]
       ],
       fieldsMeta: {
-        ALIBABA_VERIFY_SIGN_TMPL: {
-          fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
-          fieldsMeta: {}
-        },
-        ALIBABA_ACCESS_KEY_SECRET: {
+        CMPP2_SP_SECRET: {
           component: UpdateToken
         }
       },
@@ -69,8 +60,10 @@ export default {
       }
     }
   },
-  computed: {},
-  methods: {}
+  computed: {
+  },
+  methods: {
+  }
 }
 </script>
 

@@ -12,7 +12,7 @@
       v-on="$listeners"
       @confirm="onConfirm()"
     >
-      <GenericCreateUpdateForm v-bind="iConfig" @submitSuccess="submitSuccess" />
+      <GenericCreateUpdateForm ref="form" v-bind="iConfig" @submitSuccess="submitSuccess" />
     </Dialog>
   </div>
 </template>
@@ -52,6 +52,16 @@ export default {
     submitSuccess(res) {
       this.$emit('input', !!res[this.enableField])
       this.visible = false
+    },
+    testPerformError(error) {
+      const data = error.response.data
+      for (const key of Object.keys(data)) {
+        let value = data[key]
+        if (value instanceof Array) {
+          value = value.join(';')
+        }
+        this.$refs.form.$refs.form.setFieldError(key, value)
+      }
     }
   }
 }

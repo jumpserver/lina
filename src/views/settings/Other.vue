@@ -1,7 +1,10 @@
 <template>
   <Page>
     <IBox>
-      <GenericCreateUpdateForm v-bind="$data" />
+      <GenericCreateUpdateForm
+        v-bind="$data"
+        @submitSuccess="onSubmitSuccess"
+      />
     </IBox>
   </Page>
 </template>
@@ -43,7 +46,9 @@ export default {
         [
           this.$t('setting.Perm'),
           [
-            'PERM_SINGLE_ASSET_TO_UNGROUP_NODE'
+            'PERM_SINGLE_ASSET_TO_UNGROUP_NODE',
+            'TICKET_AUTHORIZE_DEFAULT_TIME',
+            'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
           ]
         ]
       ],
@@ -81,6 +86,9 @@ export default {
   methods: {
     hasValidLicense() {
       return this.$store.getters.hasValidLicense
+    },
+    onSubmitSuccess(res) {
+      this.$store.state.settings.publicSettings.TICKET_AUTHORIZE_DEFAULT_TIME = res.TICKET_AUTHORIZE_DEFAULT_TIME
     }
   }
 }

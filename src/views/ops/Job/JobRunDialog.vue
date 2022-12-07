@@ -9,11 +9,11 @@
     :show-confirm="false"
   >
     <el-form ref="form" :model="form" label-width="140px">
-      <el-form-item v-for="(item,key,index) in vars" :key="index" :label="item.label">
-        <div v-if="item.type === 'select'">
+      <el-form-item v-for="(i, key, index) in vars" :key="index" :label="i.label">
+        <div v-if="i.type === 'select'">
           <el-select v-model="form[key]">
             <el-option
-              v-for="option in item.options"
+              v-for="option in i.options"
               :key="option.value"
               :label="option.label"
               :value="option.value"

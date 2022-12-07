@@ -12,6 +12,7 @@ import EditableInputFormatter from './EditableInputFormatter'
 import StatusFormatter from './StatusFormatter'
 import TagsFormatter from './TagsFormatter'
 import ObjectRelatedFormatter from './ObjectRelatedFormatter'
+import TwoTabFormatter from './TwoTabFormatter'
 
 export default {
   DetailFormatter,
@@ -27,7 +28,8 @@ export default {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  ObjectRelatedFormatter
+  ObjectRelatedFormatter,
+  TwoTabFormatter
 }
 
 export {
@@ -44,5 +46,6 @@ export {
   EditableInputFormatter,
   StatusFormatter,
   TagsFormatter,
-  ObjectRelatedFormatter
+  ObjectRelatedFormatter,
+  TwoTabFormatter
 }

@@ -1,6 +1,5 @@
 <template>
   <BaseAuth
-    :value="value"
     :config="settings"
     :title="$tc('setting.SAML2')"
     enable-field="AUTH_SAML2"
@@ -18,12 +17,6 @@ export default {
   name: 'SAML2',
   components: {
     BaseAuth
-  },
-  props: {
-    value: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     return {
@@ -45,9 +38,6 @@ export default {
           ]]
         ],
         fieldsMeta: {
-          AUTH_SAML2: {
-            label: this.$t('setting.enableSAML2Auth')
-          },
           SAML2_IDP_METADATA_URL: {
             component: 'el-input',
             label: this.$t('setting.authSAML2MetadataUrl'),

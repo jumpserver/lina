@@ -20,17 +20,15 @@ export default {
         url: '/api/v1/terminal/endpoints/',
         columns: [
           'name', 'host',
-          'http_port', 'https_port', 'ssh_port',
-          'rdp_port', 'mysql_port', 'mariadb_port',
-          'postgresql_port', 'redis_port',
-          'oracle_11g_port', 'oracle_12c_port',
+          'http_port', 'https_port', 'ssh_port', 'rdp_port',
+          'magnus_listen_port_range',
           'date_created', 'comment', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
             'name', 'host', 'actions',
-            'http_port', 'https_port', 'ssh_port', 'rdp_port'
+            'http_port', 'https_port', 'ssh_port', 'rdp_port', 'magnus_listen_port_range'
           ]
         },
         columnsMeta: {
@@ -39,9 +37,10 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canUpdate: this.$hasPerm('terminal.change_endpoint'),
               updateRoute: 'EndpointUpdate',
               cloneRoute: 'EndpointCreate',
-              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001'
+              canDelete: ({ row }) => row.id !== '00000000-0000-0000-0000-000000000001' && this.$hasPerm('terminal.delete_endpoint')
             }
           }
         }

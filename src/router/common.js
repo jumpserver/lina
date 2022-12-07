@@ -16,6 +16,16 @@ export default [
     }
   },
   {
+    path: '/ops/ansible/task/:id/log/',
+    component: () => import('@/views/tasks/CeleryTaskLog'),
+    name: 'AnsibleTaskLog',
+    hidden: true,
+    meta: {
+      title: i18n.t('route.CeleryTaskLog'),
+      permissions: []
+    }
+  },
+  {
     path: '/ops/task/task/:id/log/',
     component: () => import('@/views/tasks/CeleryTaskLog'),
     name: 'TaskLog',

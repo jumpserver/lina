@@ -130,8 +130,10 @@ export default {
     .navbar-right {
       float: right;
       margin-right: 10px;
-
+      height: 55px;
+      line-height: 55px;
       .header-hover {
+        line-height: 56px!important;
         &:hover {
           background-color: rgba(255, 255, 255, .2);
         }

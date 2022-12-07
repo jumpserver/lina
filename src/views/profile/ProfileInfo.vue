@@ -160,7 +160,7 @@ export default {
           attrs: {
             disabled: true,
             name: 'site_msg',
-            model: this.object.receive_backends.indexOf('site_msg') !== -1
+            model: this.object?.receive_backends.indexOf('site_msg') !== -1
           },
           callbacks: {
             change: this.updateUserReceiveBackends
@@ -171,7 +171,7 @@ export default {
           type: 'switch',
           attrs: {
             name: 'email',
-            model: this.object.receive_backends.indexOf('email') !== -1
+            model: this.object?.receive_backends.indexOf('email') !== -1
           },
           callbacks: {
             change: this.updateUserReceiveBackends
@@ -182,7 +182,7 @@ export default {
           type: 'switch',
           attrs: {
             name: 'wecom',
-            model: this.object.receive_backends.indexOf('wecom') !== -1
+            model: this.object?.receive_backends.indexOf('wecom') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_WECOM,
           callbacks: {
@@ -194,7 +194,7 @@ export default {
           type: 'switch',
           attrs: {
             name: 'dingtalk',
-            model: this.object.receive_backends.indexOf('dingtalk') !== -1
+            model: this.object?.receive_backends.indexOf('dingtalk') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_DINGTALK,
           callbacks: {
@@ -206,7 +206,7 @@ export default {
           type: 'switch',
           attrs: {
             name: 'feishu',
-            model: this.object.receive_backends.indexOf('feishu') !== -1
+            model: this.object?.receive_backends.indexOf('feishu') !== -1
           },
           has: this.$store.getters.publicSettings.AUTH_FEISHU,
           callbacks: {
@@ -306,6 +306,7 @@ export default {
         { 'receive_backends': this.getReceiveBackendList() }
       ).then(res => {
         this.$message.success(this.$tc('common.updateSuccessMsg'))
+        this.$store.dispatch('users/getProfile', true)
       }).catch(err => {
         this.$message.error(this.$tc('common.updateErrorMsg' + ' ' + err))
       })

@@ -38,6 +38,7 @@ export default {
           },
           actions: {
             formatterArgs: {
+              canUpdate: this.$hasPerm('terminal.change_endpointrule'),
               updateRoute: 'EndpointRuleUpdate',
               cloneRoute: 'EndpointRuleCreate'
             }

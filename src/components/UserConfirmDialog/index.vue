@@ -55,24 +55,19 @@
         </el-col>
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
-        <el-col :md="24 - smsWidth" :sm="24">
-          <el-input
-            v-model="SecretKey"
-            :show-password="showPassword"
-            :placeholder="HelpText"
-            style="margin-bottom: 20px;"
-          />
-        </el-col>
-        <el-col v-if="Select === 'sms'" :md="smsWidth" :sm="24">
-          <el-button
-            size="mini"
-            type="primary"
-            style="line-height:20px; float: right;"
-            :disabled="smsBtndisabled"
-            @click="sendChallengeCode"
-          >
-            {{ smsBtnText }}
-          </el-button>
+        <el-col :md="24" :sm="24" style="display: flex; margin-bottom: 20px;">
+          <el-input v-model="SecretKey" :show-password="showPassword" :placeholder="HelpText" />
+          <span v-if="Select === 'sms'" style="margin: -1px 0 0 20px;">
+            <el-button
+              size="mini"
+              type="primary"
+              style="line-height:20px; float: right;"
+              :disabled="smsBtndisabled"
+              @click="sendChallengeCode"
+            >
+              {{ smsBtnText }}
+            </el-button>
+          </span>
         </el-col>
       </el-row>
       <el-row :gutter="24" style="margin: 0 auto;">
@@ -138,9 +133,7 @@ export default {
   mounted() {
     this.smsBtnText = this.$t('common.SendVerificationCode')
     this.$axios.get(`${this.url}`, { disableFlashErrorMsg: true }).then(
-      () => {
-        this.$emit('UserConfirmDone', true)
-      }).catch((err) => {
+      () => { this.$emit('UserConfirmDone', true) }).catch((err) => {
       const confirm_type = err.response.data.code
       this.$axios.get('/api/v1/authentication/confirm/', { params: { confirm_type: confirm_type }}).then((data) => {
         this.ConfirmType = data.confirm_type
@@ -153,9 +146,7 @@ export default {
               secret_key: ''
             },
             { disableFlashErrorMsg: true },
-          ).then(() => {
-            this.$emit('UserConfirmDone', true)
-          }).catch(() => {
+          ).then(() => { this.$emit('UserConfirmDone', true) }).catch(() => {
             this.title = this.$t('auth.NeedReLogin')
             this.visible = true
           })
@@ -163,6 +154,9 @@ export default {
         }
         if (this.ConfirmType === 'mfa') {
           this.Select = this.Content.filter(item => !item.disabled)[0].name
+          if (this.Select === 'sms') {
+            this.smsWidth = 6
+          }
           this.HelpText = this.Content.filter(item => !item.disabled)[0].placeholder
         } else if (this.ConfirmType === 'password') {
           this.Select = this.$t('setting.password')
@@ -192,7 +186,7 @@ export default {
           type: 'sms'
         }
       ).then(res => {
-        this.$message.success(this.$tc('common.VerificationCodeSent'))
+        this.$message.success(this.$t('common.VerificationCodeSent'))
         let time = 60
         const interval = setInterval(() => {
           this.smsBtnText = this.$t('common.Pending') + `: ${time}`
@@ -209,7 +203,7 @@ export default {
     },
     userConfirm() {
       if (this.Select === 'otp' && this.SecretKey.length !== 6) {
-        return this.$message.error(this.$tc('common.MFAErrorMsg'))
+        return this.$message.error(this.$t('common.MFAErrorMsg'))
       }
       this.$axios.post(
         `/api/v1/authentication/confirm/`, {

@@ -45,8 +45,7 @@ export default {
         createRoute: 'AssetAclCreate',
         hasRefresh: true,
         hasExport: false,
-        hasImport: false,
-        hasMoreActions: false
+        hasImport: false
       }
     }
   }

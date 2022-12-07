@@ -154,8 +154,12 @@ export function formatDate(inputTime) {
 
 const uuidPattern = /[0-9a-zA-Z\-]{36}/
 
-export function hasUUID(s) {
-  return s.search(uuidPattern) !== -1
+export function hasUUID(path) {
+  const index = path.indexOf('?')
+  if (index !== -1) {
+    path = path.substring(0, index)
+  }
+  return path.search(uuidPattern) !== -1
 }
 
 export function replaceUUID(s, n) {
@@ -308,7 +312,11 @@ export function groupedDropdownToCascader(group) {
   }
 }
 
-export { BASE_URL }
+export function openWindow(url, name = '', iWidth = 900, iHeight = 600) {
+  var iTop = (window.screen.height - 30 - iHeight) / 2
+  var iLeft = (window.screen.width - 10 - iWidth) / 2
+  window.open(url, name, 'height=' + iHeight + ',width=' + iWidth + ',top=' + iTop + ',left=' + iLeft)
+}
 
 /**
  * Download file
@@ -324,3 +332,5 @@ export function downloadText(content, filename) {
   a.click()
   window.URL.revokeObjectURL(url)
 }
+
+export { BASE_URL }

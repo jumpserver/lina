@@ -14,7 +14,9 @@ export default {
   },
   data() {
     return {
-      initial: {},
+      initial: {
+        need_update_password: true
+      },
       user: {
         'can_public_key_auth': false
       },
@@ -168,6 +170,9 @@ export default {
         }
         if (value.update_password !== undefined) {
           delete value.update_password
+        }
+        if (value.source !== 'local') {
+          delete value.need_update_password
         }
         return value
       }
