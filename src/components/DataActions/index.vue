@@ -45,7 +45,10 @@
       >
         <el-tooltip :disabled="!action.tip" :content="action.tip" placement="top">
           <span>
-            <svg-icon v-if="action.fa" :icon-class="action.fa" style="font-size: 14px;" />
+            <span v-if="action.fa" style="vertical-align: initial;">
+              <i v-if="action.fa.startsWith('fa-')" :class="'fa ' + action.fa" />
+              <svg-icon v-else :icon-class="action.fa" style="font-size: 14px;" />
+            </span>
             {{ action.title }}
           </span>
         </el-tooltip>
