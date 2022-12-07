@@ -10,20 +10,18 @@
 import { GenericDetailPage } from '@/layout/components'
 import UserAssetPermissionRules from './UserAssetPermissionRules'
 import UserGrantedAssets from './UserGrantedAssets'
-import UserGrantedApplications from './UserGrantedApplications'
 import UserApplicationPermissionRules from './UserApplicationsPermissionRules'
 import UserLoginACLList from '@/views/acl/UserLoginACL/UserLoginACLList'
 import UserInfo from './UserInfo'
 
 export default {
   components: {
-    GenericDetailPage,
     UserInfo,
+    UserLoginACLList,
+    GenericDetailPage,
     UserGrantedAssets,
     UserAssetPermissionRules,
-    UserGrantedApplications,
-    UserApplicationPermissionRules,
-    UserLoginACLList
+    UserApplicationPermissionRules
   },
   data() {
     const vm = this
@@ -48,11 +46,6 @@ export default {
             title: this.$t('users.tabs.assetPermissionRules'),
             name: 'UserAssetPermissionRules',
             hidden: () => !vm.$hasPerm('perms.view_assetpermission')
-          },
-          {
-            title: this.$t('users.tabs.grantedApplications'),
-            name: 'UserGrantedApplications',
-            hidden: () => !vm.$hasPerm('perms.view_userapps')
           },
           {
             title: this.$t('users.tabs.ApplicationPermissionRules'),

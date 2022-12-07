@@ -4,6 +4,7 @@
 
 <script>
 import BaseAssetCreateUpdate from '@/views/assets/Asset/AssetCreateUpdate/BaseAssetCreateUpdate'
+
 export default {
   components: {
     BaseAssetCreateUpdate
@@ -27,6 +28,9 @@ export default {
           platform: {
             hidden: () => true
           },
+          domain: {
+            hidden: () => true
+          },
           nodes: {
             hidden: () => true
           },
@@ -45,8 +49,7 @@ export default {
     this.$route.query.oid = 'SYSTEM'
     this.loading = false
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
