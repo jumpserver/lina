@@ -224,5 +224,10 @@ export default {
   >>> .el-badge__content--primary {
     background-color: #fff;
   }
+  .organization {
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, .15);
+    padding-left: 10px!important;
+  }
 </style>
 
