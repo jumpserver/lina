@@ -9,6 +9,7 @@
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
 import { UpdateToken } from '@/components/FormFields'
+
 export default {
   name: 'AccountCreateForm',
   components: {
@@ -31,7 +32,7 @@ export default {
       url: '/api/v1/assets/accounts/',
       form: this.account || {},
       fields: [
-        [this.$t('common.Basic'), ['name', 'username', 'privileged']],
+        [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), ['secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase']],
         [this.$t('common.Other'), ['push_now', 'comment']]
       ],
@@ -54,6 +55,18 @@ export default {
             change: ([value], updateForm) => {
               if (this.defaultPrivilegedAccounts.indexOf(value.toLowerCase()) > -1) {
                 updateForm({ privileged: true })
+              }
+            }
+          }
+        },
+        su_from: {
+          el: {
+            multiple: false,
+            clearable: true,
+            ajax: {
+              url: `/api/v1/assets/accounts/${this.account.id}/su-from-accounts/`,
+              transformOption: (item) => {
+                return { label: `${item.name}(${item.username})`, value: item.id }
               }
             }
           }

@@ -139,6 +139,8 @@ export default {
         }
         if (val && val.constructor === Object && val.value) {
           this.$emit('input', val.value)
+        } else if (val && val.constructor === Object && val.id) {
+          this.$emit('input', val.id)
         } else {
           this.$emit('input', val)
         }
