@@ -6,7 +6,7 @@
           slot="prepend"
           v-model="item.name"
           class="prepend"
-          :disabled="cannotDisable(item)"
+          :disabled="cannotDelete(item)"
           @change="handleProtocolChange($event, item)"
         >
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
@@ -24,7 +24,7 @@
           icon="el-icon-minus"
           style="flex-shrink: 0;"
           size="mini"
-          :disabled="cannotDisable(item)"
+          :disabled="cannotDelete(item)"
           @click="handleDelete(index)"
         />
         <el-button
@@ -49,6 +49,7 @@
 
 <script>
 import ProtocolSettingDialog from './ProtocolSettingDialog'
+
 export default {
   components: {
     ProtocolSettingDialog
@@ -116,8 +117,8 @@ export default {
   },
   mounted() {
     this.setDefaultItems(this.choices)
-    console.log('Choices: -------------------------------------------', this.choices)
-    console.log('Value: ---------------------------------------------', this.value)
+    this.$log.debug('Choices: ', this.choices)
+    this.$log.debug('Value: ', this.value)
   },
   methods: {
     handleDelete(index) {
@@ -125,8 +126,11 @@ export default {
         return i !== index
       })
     },
-    cannotDisable(item) {
-      return item.primary || item.required
+    cannotDelete(item) {
+      const full = this.choices.find(choice => {
+        return choice.name === item.name
+      })
+      return full.primary || full.required
     },
     handleAdd(index) {
       this.items.push({ ...this.remainProtocols[0] })
@@ -181,6 +185,7 @@ export default {
   height: 25px;
   padding: 5px;
 }
+
 .el-input-group__append .el-button {
   font-size: 14px;
   color: #1a1a1a;

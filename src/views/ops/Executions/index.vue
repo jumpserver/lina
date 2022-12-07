@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ExecutionDetailDialog v-if="showExecutionDetailDialog" :item="item" :visible.sync="showExecutionDetailDialog" />
     <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
   </div>
 </template>
@@ -8,24 +9,39 @@
 import { ActionsFormatter } from '@/components/TableFormatters'
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms'
+import ExecutionDetailDialog from '@/views/ops/Executions/ExecutionDetail'
 
 export default {
   components: {
-    GenericListPage
+    GenericListPage,
+    ExecutionDetailDialog
   },
   data() {
     return {
+      item: {},
       uploadDialogVisible: false,
+      showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
         hasSelection: false,
         columns: [
-          'id', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+          'id', 'job_type', 'is_finished', 'is_success', 'count', 'time_cost', 'date_created', 'actions'
         ],
         columnsMeta: {
-          name: {
-            formatterArgs: {
-              can: true
+          count: {
+            width: '96px',
+            formatter: (row) => {
+              if (row.count) {
+                return <div>
+                  <el-tooltip content='success'><span Class='text-success'>{row.count.ok}&nbsp;</span></el-tooltip>
+                  <el-tooltip content='failed'><span Class='text-danger'>&nbsp;{row.count.failed}&nbsp;</span>
+                  </el-tooltip>
+                  <el-tooltip content='exclude'><span Class='text-warning'>&nbsp;{row.count.excludes}&nbsp;</span>
+                  </el-tooltip>
+                  <el-tooltip content='total'><span Class='text-primary'>&nbsp;{row.count.total}</span></el-tooltip>
+                </div>
+              }
+              return '-'
             }
           },
           job_type: {
@@ -82,7 +98,7 @@ export default {
                   name: 'detail',
                   can: true,
                   callback: ({ row }) => {
-                    console.log(1)
+                    this.$router.push({ name: 'ExecutionDetail', params: { id: row.id }})
                   }
                 },
                 {

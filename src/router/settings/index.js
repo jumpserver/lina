@@ -367,7 +367,7 @@ export default {
       component: () => import('@/views/settings/Tools'),
       meta: {
         title: i18n.t('setting.SystemTools'),
-        icon: 'wrench',
+        icon: 'tools',
         permissions: ['settings.view_setting']
       }
     },

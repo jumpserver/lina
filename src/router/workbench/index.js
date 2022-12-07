@@ -172,7 +172,17 @@ export default {
             permissions: []
           }
         },
-
+        {
+          path: 'executions/:id',
+          component: () => import('@/views/ops/Executions/ExecutionDetail'),
+          name: 'ExecutionDetail',
+          hidden: true,
+          meta: {
+            title: i18n.t('ops.ExecutionDetail'),
+            permissions: [],
+            activeMenu: '/workbench/ops/executions'
+          }
+        },
         {
           path: 'adhoc/:id/update',
           name: 'AdhocUpdate',

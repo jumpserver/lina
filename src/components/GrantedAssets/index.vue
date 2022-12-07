@@ -3,7 +3,7 @@
 </template>
 
 <script type="text/jsx">
-import { DetailFormatter, AccountShowFormatter } from '@/components/TableFormatters'
+import { AccountShowFormatter, DetailFormatter } from '@/components/TableFormatters'
 import TreeTable from '../TreeTable'
 
 export default {
@@ -35,7 +35,7 @@ export default {
     getShowUrl: {
       type: Function,
       default({ row, col }) {
-        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/?cache_policy=1`)
+        return this.tableUrl.replace('/assets/', `/assets/${row.id}/accounts/`)
       }
     }
   },
