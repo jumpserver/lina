@@ -947,6 +947,13 @@
     "Permissions": "Permissions",
     "NoPermission": "No permission"
   },
+  "terminal": {
+    "Applets": "Remote apps",
+    "AppletHosts": "Remote hosts",
+    "uploadZipTips": "Please upload zip file",
+    "HostDeployment": "Remote host deployment",
+    "TerminalStat": "CPU/MEM/DISK"
+  },
   "sessions": {
     "SetToDefaultStorage": "Set to default storage",
     "SetToDefault": "Set to default",

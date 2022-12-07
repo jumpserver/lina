@@ -17,8 +17,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { GenericListPage } from '@/layout/components'
-import { GenericUpdateFormDialog } from '@/layout/components'
+import { GenericListPage, GenericUpdateFormDialog } from '@/layout/components'
 import { createSourceIdCache } from '@/api/common'
 import { getDayFuture } from '@/utils/common'
 import InviteUsersDialog from './components/InviteUsersDialog'
@@ -48,7 +47,7 @@ export default {
         },
         columns: [
           'name', 'username', 'email', 'phone', 'wechat',
-          'groups_display', 'system_roles', 'org_roles',
+          'groups', 'system_roles', 'org_roles',
           'source', 'is_active', 'is_valid', 'login_blocked', 'mfa_enabled',
           'mfa_force_enabled', 'is_expired',
           'last_login', 'date_joined', 'date_password_last_updated',
@@ -108,10 +107,6 @@ export default {
               showFalse: false
             }
           },
-          groups_display: {
-            width: '200px',
-            showOverflowTooltip: true
-          },
           actions: {
             formatterArgs: {
               hasDelete: hasDelete,
@@ -141,7 +136,9 @@ export default {
               return !this.currentOrgIsRoot && this.publicSettings.XPACK_LICENSE_IS_VALID
             },
             can: () => vm.$hasPerm('users.invite_user'),
-            callback: () => { this.InviteDialogSetting.InviteDialogVisible = true }
+            callback: () => {
+              this.InviteDialogSetting.InviteDialogVisible = true
+            }
           }
         ],
         hasBulkUpdate: true,
