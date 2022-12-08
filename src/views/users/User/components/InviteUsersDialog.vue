@@ -83,6 +83,7 @@ export default {
   methods: {
     onSubmitSuccess(res) {
       this.setting.InviteDialogVisible = false
+      this.$emit('close', res)
       this.$store.dispatch('users/currentUserJoinNewOrg', res.users)
     }
   }
