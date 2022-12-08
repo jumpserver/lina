@@ -65,7 +65,7 @@ export default {
         },
         {
           key: this.$t('assets.SecretType'),
-          value: this.object.secret_type
+          value: this.object.secret_type?.label || '-'
         },
         {
           key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
