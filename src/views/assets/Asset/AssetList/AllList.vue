@@ -4,7 +4,9 @@
       ref="TreeList"
       :table-config="tableConfig"
       :help-message="helpMessage"
-      :tree-setting="treeSetting"
+      component="TreeTab"
+      :active-menu.sync="treeTabConfig.activeMenu"
+      :tree-tab-config="treeTabConfig"
     >
       <TreeMenu
         slot="rMenu"
@@ -59,6 +61,43 @@ export default {
       tableConfig: {
         url: '/api/v1/assets/assets/',
         category: 'all'
+      },
+      treeTabConfig: {
+        activeMenu: 'OrganizationAsset',
+        submenu: [
+          {
+            title: this.$t('assets.OrganizationAsset'),
+            name: 'OrganizationAsset',
+            treeSetting: {
+              showMenu: false,
+              showRefresh: true,
+              showAssets: false,
+              url: '/api/v1/assets/accounts/',
+              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+            }
+          },
+          {
+            title: this.$t('assets.PersonalAsset'),
+            name: 'PersonalAsset',
+            treeSetting: {
+              showMenu: true,
+              showRefresh: true,
+              showAssets: false,
+              showCreate: true,
+              showUpdate: true,
+              showDelete: true,
+              hasRightMenu: true,
+              showSearch: true,
+              // customTreeHeader: true,
+              url: '/api/v1/assets/assets/',
+              nodeUrl: '/api/v1/assets/nodes/',
+              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
+              callback: {
+                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
+              }
+            }
+          }
+        ]
       },
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }

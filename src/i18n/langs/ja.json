@@ -109,6 +109,8 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "OrganizationAsset": "組織資産",
+    "PersonalAsset": "個人資産",
     "AssetAddress": "IP/ホスト名",
     "UserSwitchFrom": "ユーザーは",
     "sshkeyAccount": "SSHキー",

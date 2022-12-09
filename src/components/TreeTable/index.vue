@@ -11,6 +11,7 @@
           :key="componentTreeKey"
           :setting="treeSetting"
           class="auto-data-ztree"
+          v-bind="treeTabConfig"
           v-on="$listeners"
           @urlChange="handleUrlChange"
         >
@@ -51,12 +52,14 @@ import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
 import { setUrlParam } from '@/utils/common'
+import TreeTab from '@/components/TreeTab'
 
 export default {
   name: 'TreeTable',
   components: {
     ListTable,
     AutoDataZTree,
+    TreeTab,
     IBox,
     Dialog
   },
@@ -74,6 +77,10 @@ export default {
     component: {
       type: String,
       default: () => 'AutoDataZTree'
+    },
+    treeTabConfig: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
