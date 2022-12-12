@@ -28,6 +28,9 @@ export default {
         ],
         columnsMeta: {
           name: {
+            formatter: row => {
+              return row?.name || '-'
+            },
             showOverflowTooltip: true
           },
           ip: {
