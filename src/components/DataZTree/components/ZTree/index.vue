@@ -22,11 +22,9 @@
               class="tree-input"
             >
           </a>
-          <i
-            class="fa fa-refresh tree-banner-icon"
-            style="margin-right: 2px;"
-            @click.stop="refresh"
-          />
+          <span v-if="treeSetting.showRefresh" class="icon-refresh" @click="refresh">
+            <svg-icon :icon-class="'refresh'" style="font-size: 14px;" />
+          </span>
         </span>
       </div>
       <ul v-show="loading" class="ztree">
@@ -38,6 +36,23 @@
       </div>
     </div>
     <div v-else class="treebox">
+      <div>
+        <el-input
+          v-if="treeSetting.showSearch"
+          v-model="treeSearchValue"
+          size="small"
+          class="fixed-tree-search"
+          :placeholder="$tc('common.Search')"
+          suffix-icon="fa fa-search"
+          @input="treeSearchHandle"
+        />
+        <div class="fixed-tree-title">
+          <span> {{ treeSetting.customTreeHeaderName }}</span>
+          <span v-if="treeSetting.showRefresh" class="icon-refresh" @click="refresh">
+            <svg-icon :icon-class="'refresh'" style="font-size: 14px;" />
+          </span>
+        </div>
+      </div>
       <ul v-show="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
       </ul>
@@ -136,9 +151,6 @@ export default {
         }
 
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
-        if (!this.treeSetting.customTreeHeader) {
-          this.rootNodeAddDom(this.zTree)
-        }
         // 手动上报事件, Tree加载完成
         this.$emit('TreeInitFinish', this.zTree)
 
@@ -152,21 +164,6 @@ export default {
         vm.loading = false
         vm.init = true
       })
-    },
-    rootNodeAddDom(ztree) {
-      const { showSearch, showRefresh } = this.treeSetting
-      const searchIcon = `<a class="tree-search" id="searchIcon">
-                            <i class='fa fa-search tree-banner-icon' onclick="treeSearch()" /></i>
-                             <input type="text" autocomplete="off" id="searchInput" class="tree-input" />
-                          </a>`
-      const refreshIcon = "<a id='tree-refresh' onclick='refresh()'><i class='fa fa-refresh'></i></a>"
-      const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
-      const icons = `<span class="">${treeActions}</span>`
-      const rootNode = ztree.getNodes()[0]
-      if (rootNode) {
-        const $rootNodeRef = $('#' + rootNode.tId + '_a')
-        $rootNodeRef.after(icons)
-      }
     },
     refresh() {
       this.treeSearchValue = ''
@@ -193,16 +190,15 @@ export default {
           searchIcon.classList.toggle('active')
         }
       }
-      searchInput.oninput = _.debounce((e) => {
-        e.stopPropagation()
-        const value = e.target.value || ''
-        if (this.treeSetting.async.enable) {
-          this.filterAssetsServer(value)
-        } else {
-          this.filterTree(value)
-        }
-      }, 600)
+      searchInput.oninput = e => this.treeSearchHandle((e.target.value || ''))
     },
+    treeSearchHandle: _.debounce(function(value) {
+      if (this.treeSetting.async.enable) {
+        this.filterAssetsServer(value)
+      } else {
+        this.filterTree(value)
+      }
+    }, 600),
     getCheckedNodes: function() {
       return this.zTree.getCheckedNodes(true)
     },
@@ -517,5 +513,33 @@ export default {
   }
   .tree-empty {
     margin-left: 4px;
+  }
+  .fixed-tree-search {
+    margin-bottom: 10px;
+    &>>> .el-input__inner {
+      border-radius: 4px;
+      background: #EFF0F1;
+    }
+    &>>> .el-input__suffix {
+      padding-right: 10px;
+    }
+  }
+  .fixed-tree-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-right: 10px;
+    color: #646A73;
+  }
+  .icon-refresh {
+    border-radius: 4px;
+    padding: 0 2px;
+    z-index: 1;
+    &:hover {
+      cursor: pointer;
+      color: #606266;
+      border-color: #d2d2d2;
+      background-color: #e6e6e6;
+    }
   }
 </style>
