@@ -13,7 +13,7 @@
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
             <br>
             <small class="text-muted">{{ toSafeLocalDateStr(item.date_created) }}</small>
-            <div style="padding-top: 10px;" v-html="item.body" />
+            <div v-dompurify-html="item.body" style="padding-top: 10px;" />
           </div>
         </div>
       </div>

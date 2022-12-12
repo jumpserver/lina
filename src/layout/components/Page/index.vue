@@ -8,7 +8,7 @@
     </PageHeading>
     <PageContent>
       <el-alert v-if="helpMessage" type="success">
-        <span class="announcement-main" v-html="helpMessage" />
+        <span v-dompurify-html="helpMessage" class="announcement-main" />
       </el-alert>
       <slot />
     </PageContent>

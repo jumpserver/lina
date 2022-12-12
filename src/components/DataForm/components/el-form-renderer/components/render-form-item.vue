@@ -8,7 +8,7 @@
   >
     <template v-if="data.helpTips" #label>
       <el-tooltip placement="bottom" effect="light" popper-class="help-tips">
-        <div slot="content" v-html="data.helpTips" />
+        <div slot="content" v-dompurify-html="data.helpTips" />
         <el-button style="padding: 0">
           <i class="fa fa-info-circle" />
         </el-button>
@@ -64,7 +64,7 @@
         >{{ opt.label }}</el-radio>
       </template>
     </custom-component>
-    <div v-if="data.helpText" class="help-block" v-html="data.helpText" />
+    <div v-if="data.helpText" v-dompurify-html="data.helpText" class="help-block" />
   </el-form-item>
 </template>
 <script>
