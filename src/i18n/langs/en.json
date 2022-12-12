@@ -520,6 +520,7 @@
     "updateErrorMsg": "Update failed",
     "ErrorMsg": "Error",
     "updateSelected": "Update selected",
+    "downloadSelected": "Download selected",
     "updateSuccessMsg": "Update success",
     "SelectProperties": "Select properties",
     "ObjectNotFoundOrDeletedMsg": "Resource lost or deleted",

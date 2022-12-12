@@ -563,6 +563,7 @@
     "updateErrorMsg": "更新失败",
     "ErrorMsg": "错误",
     "updateSelected": "更新所选",
+    "downloadSelected": "下载所选",
     "updateSuccessMsg": "更新成功",
     "SelectProperties": "选择属性",
     "ObjectNotFoundOrDeletedMsg": "没有找到对应资源或者已被删除",

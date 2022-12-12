@@ -50,6 +50,12 @@ export default {
             'TICKET_AUTHORIZE_DEFAULT_TIME',
             'TICKET_AUTHORIZE_DEFAULT_TIME_UNIT'
           ]
+        ],
+        [
+          this.$t('common.Resource'),
+          [
+            'DOWNLOAD_MEMORY_LIMIT'
+          ]
         ]
       ],
       fieldsMeta: {

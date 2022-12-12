@@ -1,9 +1,16 @@
 <template>
-  <BaseList :url="url" :extra-actions="extraActions" />
+  <div>
+    <BaseList
+      :url="url"
+      :extra-actions="extraActions"
+      :header-config="headerConfig"
+    />
+  </div>
 </template>
 
 <script>
 import BaseList from './BaseList'
+import { createSourceIdCache } from '@/api/common'
 export default {
   name: 'OfflineList',
   components: {
@@ -31,18 +38,44 @@ export default {
           type: 'primary',
           can: ({ row }) => vm.hasPerms(row, 'download'),
           callback: function({ row, tableData }) {
-            // 跳转下载页面
-            const downloadUrl = `/api/v1/terminal/sessions/${row.id}/replay/download/`
-            const a = document.createElement('a')
-            a.href = downloadUrl
-            a.click()
-            window.URL.revokeObjectURL(downloadUrl)
+            vm.download(row.id)
           }
         }
-      ]
+      ],
+      headerConfig: {
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasLeftActions: true,
+        extraMoreActions: [
+          {
+            name: 'actionDownloadSelected',
+            title: this.$t('common.downloadSelected'),
+            can: ({ selectedRows }) => {
+              return selectedRows.length > 0 &&
+                !vm.currentOrgIsRoot &&
+                vm.$hasPerm('terminal.download_sessionreplay') &&
+                selectedRows.filter((i) => {
+                  return i['can_replay']
+                }).length > 0
+            },
+            callback: async({ selectedRows }) => {
+              const ids = selectedRows.map(v => { return v.id })
+              const resp = await createSourceIdCache(ids)
+              vm.download(resp.spm)
+            }
+          }
+        ]
+      }
     }
   },
   methods: {
+    download(itemId) {
+      const downloadUrl = `/api/v1/terminal/sessions/${itemId}/replay/download/`
+      const a = document.createElement('a')
+      a.href = downloadUrl
+      a.click()
+      window.URL.revokeObjectURL(downloadUrl)
+    },
     hasPerms(row, type) {
       return row['can_replay'] && this.$hasPerm(`terminal.${type}_sessionreplay`)
     }

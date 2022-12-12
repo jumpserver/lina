@@ -545,6 +545,7 @@
     "updateErrorMsg": "更新に失敗しました",
     "ErrorMsg": "エラー",
     "updateSelected": "選択した更新",
+    "downloadSelected": "ダウンロードします",
     "updateSuccessMsg": "更新が成功しました",
     "SelectProperties": "属性の選択",
     "ObjectNotFoundOrDeletedMsg": "対応するリソースが見つかりません。または削除されました。",

@@ -19,6 +19,10 @@ export default {
     extraActions: {
       type: Array,
       default: () => []
+    },
+    headerConfig: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -118,7 +122,7 @@ export default {
           date_from: dateFrom
         }
       },
-      headerActions: {
+      headerActions: Object.assign({
         hasLeftActions: false,
         hasImport: false,
         hasDatePicker: true,
@@ -129,7 +133,7 @@ export default {
         searchConfig: {
           getUrlQuery: false
         }
-      }
+      }, this.headerConfig)
     }
   },
   methods: {
