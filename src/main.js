@@ -63,6 +63,9 @@ window._ = require('lodash')
 import { Message } from '@/utils/Message'
 Vue.prototype.$message = Message
 
+import VueDOMPurifyHTML from 'vue-dompurify-html'
+Vue.use(VueDOMPurifyHTML)
+
 // 注册全局事件总线
 Vue.prototype.$eventBus = new Vue()
 new Vue({

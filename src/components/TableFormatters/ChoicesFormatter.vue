@@ -1,7 +1,7 @@
 <template>
   <span>
     <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
-      <div slot="content" v-html="tips" />
+      <div slot="content" v-dompurify-html="tips" />
       <span :class="classes">
         <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
         <span v-if="formatterArgs.showText">{{ text }}</span>
