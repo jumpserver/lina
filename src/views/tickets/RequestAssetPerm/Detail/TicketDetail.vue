@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     isRequired() {
-      if (this.object.approval_step === this.object.process_map.length) {
+      if (this.object.approval_step.value === this.object.process_map.length) {
         return [{ required: true }]
       }
       return [{ required: false }]
@@ -183,7 +183,7 @@ export default {
       ]
     },
     hasActionPerm() {
-      const approval_step = this.object.approval_step
+      const approval_step = this.object.approval_step.value
       const current_user_id = this.$store.state.users.profile.id
       return this.object.process_map[approval_step - 1].assignees.indexOf(current_user_id) !== -1
     }
@@ -202,10 +202,7 @@ export default {
       const nodes = this.requestForm.nodes
       const assets = this.requestForm.assets
       const accounts = this.requestForm.accounts
-      console.log('nodes', nodes)
-      console.log('assets', assets)
-      console.log('accounts', accounts)
-      if (this.object.approval_step === this.object.process_map.length) {
+      if (this.object.approval_step.value === this.object.process_map.length) {
         if (assets.length === 0 && nodes.length === 0) {
           return this.$message.error(this.$tc('common.SelectAtLeastOneAssetOrNodeErrMsg'))
         } else if (accounts.length === 0) {
