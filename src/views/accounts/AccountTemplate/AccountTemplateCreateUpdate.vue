@@ -59,6 +59,15 @@ export default {
           hidden: (formValue) => formValue.secret_type !== 'access_key'
         }
       },
+      cleanFormValue(value) {
+        Object.keys(value).forEach((item, index, arr) => {
+          if (['ssh_key', 'token', 'api_key'].includes(item)) {
+            value['secret'] = value[item]
+            delete value[item]
+          }
+        })
+        return value
+      },
       createSuccessNextRoute: { name: 'AccountTemplateList' },
       updateSuccessNextRoute: { name: 'AccountTemplateList' }
     }
