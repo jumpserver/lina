@@ -9,6 +9,7 @@
 <script>
 import AutoDataForm from '@/components/AutoDataForm'
 import { UpdateToken } from '@/components/FormFields'
+import Select2 from '@/components/FormFields/Select2'
 
 export default {
   name: 'AccountCreateForm',
@@ -60,11 +61,13 @@ export default {
           }
         },
         su_from: {
+          component: Select2,
           el: {
             multiple: false,
             clearable: true,
             ajax: {
-              url: `/api/v1/assets/accounts/${this.account.id}/su-from-accounts/`,
+              url: this.account ? `/api/v1/assets/accounts/${this.account.id}/su-from-accounts/`
+                : '/api/v1/assets/accounts/',
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }
