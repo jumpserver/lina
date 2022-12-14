@@ -667,7 +667,7 @@
     "FileTransferNum": "ファイル転送数",
     "LogOfLoginSuccessNum": "ログイン成功ログ数",
     "DangerousCommandNum": "危険命令数",
-    "IndexName": "指標名",
+    "SessionsNum": "セッション数",
     "BatchCommandNotExecuted": "未実行コマンド",
     "ExecuteFailedCommand": "失敗コマンドの実行",
     "SessionTrend": "セッショントレンド",

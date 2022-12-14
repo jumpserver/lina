@@ -642,7 +642,7 @@
     "FileTransferNum": "File transfer num",
     "LogOfLoginSuccessNum": "Log of login success num",
     "DangerousCommandNum": "Dangerous command num",
-    "IndexName": "Index name",
+    "SessionsNum": "Sessions num",
     "BatchCommandNotExecuted": "Batch command not executed",
     "ExecuteFailedCommand": "Execute failed command",
     "SessionTrend": "Session trend",
