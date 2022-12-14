@@ -138,8 +138,9 @@ export default {
           data: this.primaryData
         },
         {
-          symbol: 'rect',
           type: 'pictorialBar',
+          name: this.primaryName,
+          symbol: 'rect',
           symbolSize: ['25%', 6],
           symbolOffset: [0, -6],
           z: 12,

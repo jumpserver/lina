@@ -39,7 +39,7 @@ export default {
       },
       chartConfig: {
         datesMetrics: [],
-        secondaryName: this.$t('dashboard.IndexName'),
+        secondaryName: this.$t('dashboard.SessionsNum'),
         secondaryData: [0]
       },
       data: {

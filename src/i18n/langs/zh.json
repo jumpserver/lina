@@ -685,7 +685,7 @@
     "FileTransferNum": "文件传输数",
     "LogOfLoginSuccessNum": "登录成功日志数",
     "DangerousCommandNum": "危险命令数",
-    "IndexName": "指标名称",
+    "SessionsNum": "会话数",
     "BatchCommandNotExecuted": "未执行批量命令",
     "ExecuteFailedCommand": "执行失败命令",
     "SessionTrend": "会话趋势",
