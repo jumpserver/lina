@@ -104,10 +104,10 @@ export default {
   },
   computed: {
     hasActionPerm() {
-      return this.object.process_map[this.object.approval_step - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
+      return this.object.process_map[this.object.approval_step.value - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
     },
     isSelfTicket() {
-      return this.object.applicant === this.$store.state.users.profile.id
+      return this.object.applicant.id === this.$store.state.users.profile.id
     }
   },
   mounted() {
