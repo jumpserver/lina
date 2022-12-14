@@ -32,7 +32,7 @@ export default {
     return {
       host: {},
       config: {
-        url: '/api/v1/terminal/applet-hosts/',
+        url: '/api/v1/terminal/applet-hosts',
         activeMenu: 'Detail',
         submenu: [
           {
