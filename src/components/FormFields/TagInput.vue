@@ -1,27 +1,32 @@
 <template>
-  <div class="filter-field">
-    <el-tag
-      v-for="(v, k) in filterTags"
-      :key="k"
-      closable
-      size="small"
-      :type="tagType"
-      :disable-transitions="true"
-      @close="handleTagClose(v)"
-      @click="handleTagClick(v,k)"
-    >
-      {{ v }}
-    </el-tag>
-    <el-input
-      ref="SearchInput"
-      v-model.trim="filterValue"
-      :placeholder="placeholder"
-      class="search-input"
-      @blur="focus = false"
-      @focus="focus = true"
-      @change="handleConfirm"
-      @keyup.enter.native="handleConfirm"
-    />
+  <div>
+    <div class="filter-field">
+      <el-tag
+        v-for="(v, k) in filterTags"
+        :key="k"
+        closable
+        size="small"
+        :type="tagType"
+        :disable-transitions="true"
+        @close="handleTagClose(v)"
+        @click="handleTagClick(v,k)"
+      >
+        {{ v }}
+      </el-tag>
+      <el-input
+        ref="SearchInput"
+        v-model.trim="filterValue"
+        :placeholder="placeholder"
+        class="search-input"
+        @blur="focus = false"
+        @focus="focus = true"
+        @change="handleConfirm"
+        @keyup.enter.native="handleConfirm"
+      />
+    </div>
+    <div class="help-block">
+      {{ helpText }}
+    </div>
   </div>
 </template>
 
@@ -41,6 +46,10 @@ export default {
     placeholder: {
       type: String,
       default: () => i18n.t('perms.Input')
+    },
+    helpText: {
+      type: String,
+      default: () => ''
     }
   },
   data() {

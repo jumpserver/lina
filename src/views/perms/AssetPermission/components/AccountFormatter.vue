@@ -13,6 +13,7 @@
     </el-checkbox-group>
     <TagInput
       v-if="showInput"
+      :help-text="this.$t('common.ACommaSeparatedString')"
       :value="customTags"
       @change="handleTagChange"
     />
