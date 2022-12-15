@@ -28,6 +28,7 @@ export default {
       treeSetting: {
         showMenu: false,
         showRefresh: true,
+        showSearch: true,
         showAssets: false,
         url: '/api/v1/assets/accounts/',
         treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',

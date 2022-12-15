@@ -28,6 +28,7 @@ export default {
       treeSetting: {
         showMenu: false,
         showRefresh: true,
+        showSearch: true,
         showAssets: true,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',
