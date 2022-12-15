@@ -41,20 +41,19 @@ export default {
   computed: {
     options() {
       const seriesList = []
-      const num = this.data.reduce((a, b) => a + b.total, 0)
       const labels = this.data.map(item => item.label)
       for (let i = 0; i < this.data.length; i++) {
         const current = this.data[i]
         seriesList.push({
           type: 'bar',
-          stack: '2',
+          stack: 'total',
           barWidth: 32,
           name: current.label,
           itemStyle: {
             borderRadius: 0
           },
           data: [{
-            value: ((current.total / num) * 100).toFixed(2),
+            value: current.total,
             itemStyle: {
               color: this.colors[i]
             }
