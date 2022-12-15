@@ -91,6 +91,7 @@ export default {
       treeSetting: {
         showMenu: false,
         showRefresh: true,
+        showSearch: true,
         showAssets: false,
         url: this.baseUrl,
         nodeUrl: this.baseNodeUrl,
