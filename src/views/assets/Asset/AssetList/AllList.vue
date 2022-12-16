@@ -16,6 +16,7 @@
       <BaseList
         slot="table"
         v-bind="tableConfig"
+        :add-extra-more-actions="addExtraMoreActions"
       />
     </TreeTable>
   </div>
@@ -36,6 +37,7 @@ export default {
     BaseList
   },
   data() {
+    const vm = this
     return {
       treeRef: null,
       showPlatform: false,
@@ -62,6 +64,35 @@ export default {
         url: '/api/v1/assets/assets/',
         category: 'all'
       },
+      addExtraMoreActions: [
+        {
+          name: 'RemoveFromCurrentNode',
+          title: this.$t('assets.RemoveFromCurrentNode'),
+          can: ({ selectedRows }) => {
+            if (!vm.$route.query.node) {
+              return false
+            }
+            return selectedRows.length > 0 &&
+                !vm.currentOrgIsRoot &&
+                vm.$hasPerm('assets.change_node')
+          },
+          callback: function({ selectedRows, reloadTable }) {
+            const assetsId = []
+            for (const item of selectedRows) {
+              assetsId.push(item.id)
+            }
+            const nodeId = this.$route.query.node
+            if (!nodeId) return
+            const url = `/api/v1/assets/nodes/${nodeId}/assets/remove/`
+            this.$axios.put(url, { assets: assetsId }).then(res => {
+              this.$message.success(this.$t('common.removeSuccessMsg'))
+              reloadTable()
+            }).catch(err => {
+              this.$message.error(this.$t('common.removeErrorMsg' + ' ' + err))
+            })
+          }.bind(this)
+        }
+      ],
       treeTabConfig: {
         activeMenu: 'OrganizationAsset',
         submenu: [
