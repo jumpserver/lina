@@ -542,6 +542,7 @@ export default {
     &>>> .el-input__inner {
       border-radius: 4px;
       background: #EFF0F1;
+      padding-right: 45px;
     }
     &>>> .el-input__suffix {
       padding-right: 8px;

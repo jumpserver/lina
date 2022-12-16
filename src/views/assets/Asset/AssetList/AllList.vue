@@ -42,24 +42,6 @@ export default {
       treeRef: null,
       showPlatform: false,
       category: 'all',
-      treeSetting: {
-        showMenu: true,
-        showRefresh: true,
-        showAssets: false,
-        showCreate: true,
-        showUpdate: true,
-        showDelete: true,
-        hasRightMenu: true,
-        showSearch: true,
-        customTreeHeader: true,
-        url: '/api/v1/assets/assets/',
-        nodeUrl: '/api/v1/assets/nodes/',
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
-        callback: {
-          onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
-        }
-      },
       tableConfig: {
         url: '/api/v1/assets/assets/',
         category: 'all'
@@ -100,11 +82,20 @@ export default {
             title: this.$t('assets.OrganizationAsset'),
             name: 'OrganizationAsset',
             treeSetting: {
-              showMenu: false,
+              showMenu: true,
               showRefresh: true,
               showAssets: false,
+              showCreate: true,
+              showUpdate: true,
+              showDelete: true,
+              hasRightMenu: true,
+              showSearch: true,
               url: '/api/v1/assets/assets/',
-              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
+              nodeUrl: '/api/v1/assets/nodes/',
+              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
+              callback: {
+                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
+              }
             }
           },
           {
