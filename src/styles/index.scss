@@ -5,16 +5,19 @@
 @import './fonts/font-awesome.min.css';
 
 ::-webkit-scrollbar {
-  width:14px;
+  width: 14px;
 }
+
 ::-webkit-scrollbar-track {
-  border-radius:10px;
+  border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
   box-shadow: 8px 10px 20px #C6C6C6 inset;
   border: 3px solid rgba(0, 0, 0, 0);
 }
+
 ::-webkit-scrollbar-thumb:hover {
   box-shadow: 8px 10px 20px #878787 inset;
 }
@@ -173,15 +176,17 @@ input[type=file] {
 
 .view-switcher {
   .el-menu--popup-bottom-start {
-    margin-top: 0!important;
+    margin-top: 0 !important;
   }
+
   .el-menu--popup {
-    min-width: 70px!important;
+    min-width: 70px !important;
   }
 }
 
 .el-col.el-col-sm-24 .ibox {
   margin-bottom: 10px;
+
   &:last-child {
     margin-bottom: 0;
   }

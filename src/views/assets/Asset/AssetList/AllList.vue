@@ -27,7 +27,7 @@ import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
-import { setUrlParam, setRouterQuery } from '@/utils/common'
+import { setRouterQuery, setUrlParam } from '@/utils/common'
 
 export default {
   components: {
@@ -63,11 +63,11 @@ export default {
         category: 'all'
       },
       treeTabConfig: {
-        activeMenu: 'OrganizationAsset',
+        activeMenu: 'CustomTree',
         submenu: [
           {
-            title: this.$t('assets.OrganizationAsset'),
-            name: 'OrganizationAsset',
+            title: this.$t('assets.AssetTree'),
+            name: 'CustomTree',
             treeSetting: {
               showMenu: false,
               showRefresh: true,
@@ -77,8 +77,8 @@ export default {
             }
           },
           {
-            title: this.$t('assets.PersonalAsset'),
-            name: 'PersonalAsset',
+            title: this.$t('assets.BuiltinTree'),
+            name: 'BuiltinTree',
             treeSetting: {
               showMenu: true,
               showRefresh: true,
@@ -89,9 +89,9 @@ export default {
               hasRightMenu: true,
               showSearch: true,
               // customTreeHeader: true,
-              url: '/api/v1/assets/assets/',
+              url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
+              treeUrl: '/api/v1/assets/nodes/category/tree/',
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               }
@@ -134,22 +134,27 @@ export default {
       let url = '/api/v1/assets/assets/'
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'asset', '')
         url = setUrlParam(url, 'node', nodeId)
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
-        url = setUrlParam(url, 'node', '')
         url = setUrlParam(url, 'asset', assetId)
+      } else if (treeNode.meta.type === 'category') {
+        url = setUrlParam(url, 'category', treeNode.meta.category)
+      } else if (treeNode.meta.type === 'type') {
+        url = setUrlParam(url, 'category', treeNode.meta.category)
+        url = setUrlParam(url, 'type', treeNode.meta._type)
+      } else if (treeNode.meta.type === 'platform') {
+        url = setUrlParam(url, 'platform', treeNode.id)
       }
       this.$set(this.tableConfig, 'url', url)
-      setRouterQuery(this)
+      setRouterQuery(this, url)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.asset-select-dialog >>> .transition-box:first-child {
+.asset-select-dialog > > > .transition-box:first-child {
   background-color: #f3f3f3;
 }
 </style>

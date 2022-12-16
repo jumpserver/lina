@@ -194,18 +194,21 @@ export default {
 .table-content {
   margin-top: 10px;
 
-  & >>> .el-card__body {
+  & > > > .el-card__body {
     padding: 0;
   }
-  & >>> .el-table__header thead > tr > th {
+
+  & > > > .el-table__header thead > tr > th {
     background-color: white;
   }
-  &>>> .el-table__row .cell {
+
+  & > > > .el-table__row .cell {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  &>>> .el-table__expanded-cell pre {
+
+  & > > > .el-table__expanded-cell pre {
     max-height: 500px;
     overflow-y: scroll;
   }

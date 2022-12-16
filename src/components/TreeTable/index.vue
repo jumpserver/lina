@@ -38,7 +38,11 @@
               :table-config="iTableConfig"
               :header-actions="headerActions"
               v-on="$listeners"
-            />
+            >
+              <template v-slot:left>
+                Hello world
+              </template>
+            </ListTable>
           </slot>
         </div>
       </div>
@@ -48,11 +52,11 @@
 
 <script>
 import AutoDataZTree from '../AutoDataZTree'
+import TreeTab from '../TreeTab'
 import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
 import { setUrlParam } from '@/utils/common'
-import TreeTab from '@/components/TreeTab'
 
 export default {
   name: 'TreeTable',
@@ -152,7 +156,6 @@ export default {
     border-radius: 3px;
     line-height: 1.428;
     cursor: pointer;
-    cursor:pointer;
     height: 30px;
   }
 
@@ -195,6 +198,7 @@ export default {
     overflow: auto;
     /*border-right: solid 1px red;*/
   }
+
   .transition-box.left {
     background: #f3f3f3;
     border: 1px solid #e0e0e0;

@@ -108,8 +108,9 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
-    "OrganizationAsset": "组织资产",
-    "PersonalAsset": "个人资产",
+    "AssetTree": "资产树",
+    "CustomTree": "自定义树",
+    "BuiltinTree": "类型树",
     "UserSwitchFrom": "用户切换自",
     "sshkeyAccount": "密钥账号",
     "passwordAccount": "密码账号",
