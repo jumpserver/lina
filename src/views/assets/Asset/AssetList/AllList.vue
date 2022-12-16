@@ -103,7 +103,7 @@ export default {
               showMenu: false,
               showRefresh: true,
               showAssets: false,
-              url: '/api/v1/assets/accounts/',
+              url: '/api/v1/assets/assets/',
               treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1'
             }
           },
