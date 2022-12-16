@@ -10,8 +10,10 @@
         </span>
         <span class="tree-banner-icon-zone">
           <a id="searchIcon" class="tree-search special">
-            <i
-              class="fa fa-search tree-banner-icon"
+            <svg-icon
+              :icon-class="'search'"
+              class="tree-banner-icon"
+              style="font-size: 14px;"
               @click.stop="treeSearch"
             />
             <input
@@ -38,18 +40,37 @@
     <div v-else class="treebox">
       <div>
         <el-input
-          v-if="treeSetting.showSearch"
+          v-if="treeSetting.showSearch && showTreeSearch"
           v-model="treeSearchValue"
           size="small"
           class="fixed-tree-search"
           :placeholder="$tc('common.Search')"
-          suffix-icon="fa fa-search"
           @input="treeSearchHandle"
-        />
+        >
+          <span slot="suffix">
+            <svg-icon :icon-class="'search'" class="icon" style="font-size: 14px;" />
+            <svg-icon
+              :icon-class="'close'"
+              class="icon"
+              style="font-size: 13px;"
+              @click="onSearch"
+            />
+          </span>
+        </el-input>
         <div class="fixed-tree-title">
           <span> {{ treeSetting.customTreeHeaderName }}</span>
-          <span v-if="treeSetting.showRefresh" class="icon-refresh" @click="refresh">
-            <svg-icon :icon-class="'refresh'" style="font-size: 14px;" />
+          <span>
+            <span v-if="treeSetting.showSearch && !showTreeSearch" class="icon-refresh" @click="onSearch">
+              <svg-icon :icon-class="'search'" style="font-size: 14px;" />
+            </span>
+            <span
+              v-if="treeSetting.showRefresh"
+              class="icon-refresh"
+              style="margin-left: -1px;"
+              @click="refresh"
+            >
+              <svg-icon :icon-class="'refresh'" style="font-size: 14px;" />
+            </span>
           </span>
         </div>
       </div>
@@ -99,6 +120,7 @@ export default {
       rMenu: '',
       init: false,
       loading: false,
+      showTreeSearch: localStorage.getItem('showTreeSearch') || false,
       treeSearchValue: ''
     }
   },
@@ -164,6 +186,10 @@ export default {
         vm.loading = false
         vm.init = true
       })
+    },
+    onSearch() {
+      this.showTreeSearch = !this.showTreeSearch
+      localStorage.setItem('showTreeSearch', this.showTreeSearch)
     },
     refresh() {
       this.treeSearchValue = ''
@@ -448,12 +474,9 @@ export default {
 
   ::v-deep .tree-search .tree-banner-icon {
     position: absolute;
-    top: 1px;
+    top: 4px;
     left: 6px;
-    width: 6px;
-    height: 6px;
     border-radius: 12px;
-    padding: 10px 6px;
     overflow: hidden;
     background-color: transparent!important;
     display: flex;
@@ -521,7 +544,10 @@ export default {
       background: #EFF0F1;
     }
     &>>> .el-input__suffix {
-      padding-right: 10px;
+      padding-right: 8px;
+    }
+    &>>> .el-input__suffix-inner {
+      line-height: 34px;
     }
   }
   .fixed-tree-title {
@@ -533,7 +559,7 @@ export default {
   }
   .icon-refresh {
     border-radius: 4px;
-    padding: 0 2px;
+    padding: 0 1px;
     z-index: 1;
     &:hover {
       cursor: pointer;
@@ -541,5 +567,8 @@ export default {
       border-color: #d2d2d2;
       background-color: #e6e6e6;
     }
+  }
+  .icon {
+    cursor: pointer;
   }
 </style>

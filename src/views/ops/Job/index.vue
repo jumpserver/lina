@@ -37,14 +37,15 @@ export default {
           },
           type: {
             formatter: (row) => {
-              if (row.is_periodic) {
-                return <span>{row.type}&nbsp;
-                  <el-tooltip content={this.$t('ops.ThisPeriodic')}>
-                    <i Class='fa  fa-circle-o text-primary'/>
-                  </el-tooltip>
-                </span>
-              }
-              return <span>{row.type}</span>
+              return row.type.label
+              // if (row.is_periodic) {
+              //   return <span>{row.type}&nbsp;
+              //     <el-tooltip content={this.$t('ops.ThisPeriodic')}>
+              //       <i Class='fa  fa-circle-o text-primary'/>
+              //     </el-tooltip>
+              //   </span>
+              // }
+              // return <span>{row.type}</span>
             }
           },
           summary: {
