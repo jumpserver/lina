@@ -918,7 +918,7 @@
     "TicketsTodo": "待办工单",
     "TicketsDone": "已办工单",
     "TicketsNew": "提交工单",
-    "tasksLog": "批量命令",
+    "JobExecutionLog": "作业日志",
     "CeleryTaskLog": "Celery任务日志",
     "CommandExecutions": "命令执行",
     "CommandFilterCreate": "创建命令过滤器",

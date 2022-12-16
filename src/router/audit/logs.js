@@ -29,12 +29,12 @@ export default [
     }
   },
   {
-    path: 'command-execution-log',
-    name: 'tasksLog',
-    component: () => import('@/views/audits/CommandExecutionList'),
+    path: 'job-execution-log',
+    name: 'JobExecutionLog',
+    component: () => import('@/views/audits/JobExecutionLogList'),
     meta: {
-      title: i18n.t('route.tasksLog'),
-      permissions: ['ops.view_commandexecution']
+      title: i18n.t('route.JobExecutionLog'),
+      permissions: []
     }
   }
 ]
