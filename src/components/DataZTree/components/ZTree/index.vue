@@ -52,7 +52,7 @@
             <svg-icon
               :icon-class="'close'"
               class="icon"
-              style="font-size: 13px;"
+              style="font-size: 14px;"
               @click="onSearch"
             />
           </span>
@@ -120,7 +120,7 @@ export default {
       rMenu: '',
       init: false,
       loading: false,
-      showTreeSearch: localStorage.getItem('showTreeSearch') || false,
+      showTreeSearch: JSON.parse(localStorage.getItem('showTreeSearch')) || false,
       treeSearchValue: ''
     }
   },
@@ -189,7 +189,7 @@ export default {
     },
     onSearch() {
       this.showTreeSearch = !this.showTreeSearch
-      localStorage.setItem('showTreeSearch', this.showTreeSearch)
+      localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
     },
     refresh() {
       this.treeSearchValue = ''

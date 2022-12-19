@@ -25,9 +25,12 @@
         :style="iShowTree?('display: flex;width: calc(100% - 20%);'):('display: flex;width:100%;')"
       >
         <div v-if="showTree" class="mini">
-          <div style="display:block" class="mini-button" @click="iShowTree = !iShowTree">
-            <i v-show="iShowTree" class="fa fa-angle-left fa-x" />
-            <i v-show="!iShowTree" class="fa fa-angle-right fa-x" />
+          <div class="mini-button" :class="{'is-show': iShowTree}" @click="iShowTree = !iShowTree">
+            <svg-icon
+              :icon-class="'double-left'"
+              class="icon"
+              :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
+            />
           </div>
         </div>
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -145,18 +148,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .is-show {
+    display: none;
+  }
+  .is-rotate {
+    display: block;
+    transform: rotate(180deg);
+  }
   .mini-button {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 12px;
     float: right;
     text-align: center;
     padding: 5px 0;
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    border-color: #FFFFFF;
     border-radius: 3px;
-    line-height: 1.428;
+    line-height: 21px;
     cursor: pointer;
     height: 30px;
+    &:hover {
+      display: block;
+    }
+    .icon {
+      font-size: 14px;
+    }
   }
 
   .el-tree {
@@ -164,6 +182,7 @@ export default {
   }
 
   .mini {
+    position: relative;
     margin-right: 5px;
     width: 12px !important;
   }
@@ -172,6 +191,11 @@ export default {
     .left {
       border-right: solid 1px #ebeef5;
       background: #f3f3f3;
+      &:hover {
+        ~ .right .is-show {
+          display: block!important;;
+        }
+      }
     }
 
     .right {
@@ -179,15 +203,12 @@ export default {
 
     .treebox {
       background-color: transparent;
-
       .ztree {
         background-color: transparent;
-
         li {
           background-color: transparent;
         }
       }
-
       .ztree * {
         background-color: transparent;
       }

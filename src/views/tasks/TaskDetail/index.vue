@@ -33,8 +33,7 @@ export default {
           },
           {
             title: this.$t('ops.execution'),
-            name: 'TaskHistory',
-            hidden: () => !this.$hasPerm('ops.view_adhocexecution')
+            name: 'TaskHistory'
           }
         ],
         hasRightSide: false

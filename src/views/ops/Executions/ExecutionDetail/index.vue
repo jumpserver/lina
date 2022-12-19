@@ -37,14 +37,6 @@ export default {
           {
             title: this.$t('ops.ExecutionDetail'),
             name: 'JobExecutionDetail'
-          },
-          {
-            title: this.$t('ops.ScriptDetail'),
-            name: 'ScriptDetail'
-          },
-          {
-            title: this.$t('ops.AssetResultDetail'),
-            name: 'AssetResultDetail'
           }
         ],
         hasRightSide: false

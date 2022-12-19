@@ -700,6 +700,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Run": "运行",
     "ExecutionDetail": "执行详情",
     "ScriptDetail": "脚本详情",
     "AssetResultDetail": "资产结果",

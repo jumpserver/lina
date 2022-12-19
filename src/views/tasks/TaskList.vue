@@ -12,13 +12,13 @@ export default {
   data() {
     return {
       tableConfig: {
+        hasSelection: false,
         url: '/api/v1/ops/tasks/',
         columns: [
-          'name', 'queue', 'count', 'comment', 'state', 'last_published_time'
+          'name', 'queue', 'count', 'state', 'comment', 'last_published_time'
         ],
         columnsMeta: {
           name: {
-            width: '500px',
             formatterArgs: {
               can: true
             }
@@ -45,6 +45,7 @@ export default {
             }
           },
           count: {
+            width: '80px',
             label: `${this.$t('ops.success')}/${this.$t('ops.total')}`,
             formatter: (row) => {
               return <div>
@@ -55,16 +56,16 @@ export default {
           },
           state: {
             label: this.$t('ops.State'),
-            width: '120px',
+            width: '60px',
             align: 'center',
             formatter: (row) => {
               switch (row.state) {
                 case 'green':
-                  return <i Class='fa  fa-circle-o text-primary' />
+                  return <i Class='fa  fa-circle-o text-primary'/>
                 case 'yellow':
-                  return <i Class='fa fa-circle-o text-warning' />
+                  return <i Class='fa fa-circle-o text-warning'/>
                 case 'red':
-                  return <i Class='fa fa-circle-o text-danger' />
+                  return <i Class='fa fa-circle-o text-danger'/>
               }
             }
           }
