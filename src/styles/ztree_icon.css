@@ -241,11 +241,13 @@
 }
 
 .ztree li span.button.k8s_ico_docu {
-  background: url('./icons/k8s.png') no-repeat scroll 0 0 transparent;
+  background: url('./icons/k8s-12.png') scroll 0 0 no-repeat;
+  filter: drop-shadow(0px 4px 0 #676A6C);
 }
 
 .ztree li span.button.mysql_ico_docu {
-  background: url('./icons/mysql.png') no-repeat scroll 0 0 transparent;
+  background: url('./icons/mysql-12.png') no-repeat scroll 0 0 transparent;
+  filter: drop-shadow(0px 5px 0 #676A6C);
 }
 
 .ztree li span.button.oracle_ico_docu::before {
