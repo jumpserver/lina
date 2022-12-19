@@ -153,30 +153,30 @@ export default {
 }
 
 .organization {
-  height: 35px;
-  line-height: 35px;
+  height: 32px;
+  line-height: 32px;
   background: transparent;
   color: #FFF;
 
-  &>>> .el-input__prefix {
+  & > > > .el-input__prefix {
     left: 0;
   }
 
-  &>>> .el-input--prefix .el-input__inner {
-    line-height: 35px !important;
-    height: 35px !important;
+  & > > > .el-input--prefix .el-input__inner {
+    line-height: 32px !important;
+    height: 32px !important;
   }
 
-  & >>> .el-input__icon {
+  & > > > .el-input__icon {
     color: #606266;
   }
 
-  & >>> .el-input .el-select__caret {
+  & > > > .el-input .el-select__caret {
     color: #FFF;
   }
 }
 
-.option-group >>> .el-select-group__title {
+.option-group > > > .el-select-group__title {
   color: #909399 !important;
   padding-left: 15px;
   font-size: 12px;
