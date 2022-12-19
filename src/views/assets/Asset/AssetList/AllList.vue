@@ -102,13 +102,8 @@ export default {
             title: this.$t('assets.BuiltinTree'),
             name: 'BuiltinTree',
             treeSetting: {
-              showMenu: true,
               showRefresh: true,
               showAssets: false,
-              showCreate: true,
-              showUpdate: true,
-              showDelete: true,
-              hasRightMenu: true,
               showSearch: true,
               // customTreeHeader: true,
               url: '/api/v1/assets/nodes/category/tree/',
@@ -129,10 +124,6 @@ export default {
   },
   mounted() {
     this.decorateRMenu()
-    this.treeSetting.hasRightMenu = !this.currentOrgIsRoot
-    this.treeSetting.showCreate = this.$hasPerm('assets.add_node')
-    this.treeSetting.showUpdate = this.$hasPerm('assets.change_node')
-    this.treeSetting.showDelete = this.$hasPerm('assets.delete_node')
     this.treeRef = this.$refs.TreeList
   },
   methods: {
@@ -157,8 +148,10 @@ export default {
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
         url = setUrlParam(url, 'node', nodeId)
+        url = setUrlParam(url, 'asset', '')
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
+        url = setUrlParam(url, 'node', '')
         url = setUrlParam(url, 'asset', assetId)
       } else if (treeNode.meta.type === 'category') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
