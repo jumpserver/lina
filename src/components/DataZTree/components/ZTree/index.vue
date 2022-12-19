@@ -52,7 +52,7 @@
             <svg-icon
               :icon-class="'close'"
               class="icon"
-              style="font-size: 13px;"
+              style="font-size: 14px;"
               @click="onSearch"
             />
           </span>
