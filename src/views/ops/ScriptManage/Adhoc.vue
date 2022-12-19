@@ -39,7 +39,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: this.$t('run'),
+                  title: this.$t('ops.Run'),
                   name: 'run',
                   type: 'running',
                   can: true,

@@ -4,10 +4,12 @@
       <el-collapse>
         <el-collapse-item v-for="(item,index) in detailData.detail" :key="index" :title="item.name">
           <el-form>
-            <el-form-item label="status">
+            <el-form-item :label="$tc('common.Name')">
+              {{ item.name }}
+            </el-form-item>
+            <el-form-item :label="$tc('common.Status')">
               {{ item.status }}
             </el-form-item>
-            <el-form-item label="ok" />
           </el-form>
         </el-collapse-item>
       </el-collapse>
