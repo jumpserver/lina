@@ -92,7 +92,7 @@ export default {
               showSearch: true,
               url: '/api/v1/assets/assets/',
               nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
+              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               }
@@ -105,7 +105,7 @@ export default {
               showRefresh: true,
               showAssets: false,
               showSearch: true,
-              // customTreeHeader: true,
+              customTreeHeaderName: this.$t('assets.BuiltinTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: '/api/v1/assets/nodes/',
               treeUrl: '/api/v1/assets/nodes/category/tree/',
@@ -124,6 +124,11 @@ export default {
   },
   mounted() {
     this.decorateRMenu()
+    const treeSetting = this.treeTabConfig.submenu[0].treeSetting
+    treeSetting.hasRightMenu = !this.currentOrgIsRoot
+    treeSetting.showCreate = this.$hasPerm('assets.add_node')
+    treeSetting.showUpdate = this.$hasPerm('assets.change_node')
+    treeSetting.showDelete = this.$hasPerm('assets.delete_node')
     this.treeRef = this.$refs.TreeList
   },
   methods: {
