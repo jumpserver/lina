@@ -63,25 +63,36 @@ export default {
           }
         },
         unix_admin_user: {
+          component: Select2,
           el: {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/admin-users/'
+              url: '/api/v1/assets/account-templates/'
             }
           }
         },
         windows_admin_user: {
+          component: Select2,
           el: {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/admin-users/'
+              url: '/api/v1/assets/account-templates/'
             }
           }
         },
         protocols: {
-          component: ProtocolSelector
+          component: ProtocolSelector,
+          el: {
+            showSetting: () => { return false },
+            choices: [
+              { 'name': 'ssh', 'port': 22, 'primary': true, 'default': false, 'required': false },
+              { 'name': 'telnet', 'port': 23, 'primary': false, 'default': false, 'required': false },
+              { 'name': 'vnc', 'port': 5900, 'primary': false, 'default': false, 'required': false },
+              { 'name': 'rdp', 'port': 3306, 'primary': false, 'default': false, 'required': false }
+            ]
+          }
         },
         is_always_update: {
           type: 'switch',
@@ -161,7 +172,7 @@ export default {
     // 更新获取链接
     if (params.id) {
       const form = await this.$refs.createUpdatePage.$refs.createUpdateForm.getFormValue()
-      this.fieldsMeta.regions.el.ajax.url = form.account ? `/api/v1/xpack/cloud/regions/?account_id=${form.account}` : `/api/v1/xpack/cloud/regions/`
+      this.fieldsMeta.regions.el.ajax.url = form.account?.id ? `/api/v1/xpack/cloud/regions/?account_id=${form.account.id}` : `/api/v1/xpack/cloud/regions/`
     }
   },
   methods: {

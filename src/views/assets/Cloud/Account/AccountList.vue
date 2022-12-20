@@ -39,7 +39,7 @@ export default {
               updateRoute: 'AccountUpdate',
               hasClone: false,
               onUpdate: ({ row, col }) => {
-                vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider }})
+                vm.$router.push({ name: 'AccountUpdate', params: { id: row.id }, query: { provider: row.provider?.value }})
               },
               extraActions: [
                 {
