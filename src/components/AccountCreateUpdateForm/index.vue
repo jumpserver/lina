@@ -21,12 +21,18 @@ export default {
       type: Object,
       required: true
     },
+    asset: {
+      type: Object,
+      default: null
+    },
     account: {
       type: Object,
       default: null
     }
   },
   data() {
+    const accountID = this.account ? this.account.id : ''
+    const assetID = this.asset ? this.asset.id : ''
     return {
       loading: true,
       usernameChanged: false,
@@ -66,8 +72,7 @@ export default {
             multiple: false,
             clearable: true,
             ajax: {
-              url: this.account ? `/api/v1/assets/accounts/${this.account.id}/su-from-accounts/`
-                : '/api/v1/assets/accounts/',
+              url: `/api/v1/assets/accounts/su-from-accounts/?account=${accountID}&asset=${assetID}`,
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }

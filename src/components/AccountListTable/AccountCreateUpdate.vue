@@ -14,6 +14,7 @@
       v-if="!loading"
       :platform="platform"
       :account="account"
+      :asset="asset"
       @add="addAccount"
       @edit="editAccount"
     />
