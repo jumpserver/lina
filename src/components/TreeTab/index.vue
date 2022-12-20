@@ -26,7 +26,7 @@
       <slot>
         <keep-alive v-if="flag">
           <AutoDataZTree
-            :key="new Date().toString()"
+            :key="componentKey"
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
             @urlChange="handleUrlChange"
@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       flag: false,
+      componentKey: 1,
       activeTreeSetting: {}
     }
   },
@@ -97,6 +98,7 @@ export default {
       this.$emit('urlChange', url)
     },
     handleTabClick(tab) {
+      this.componentKey += 1
       this.$emit('tab-click', tab)
       this.$emit('update:activeMenu', tab.name)
       this.$cookie.set(ACTIVE_TREE_TAB_KEY, tab.name, 1)
