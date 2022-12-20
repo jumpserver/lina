@@ -30,7 +30,11 @@
             ref="AutoDataZTree"
             :setting="activeTreeSetting"
             @urlChange="handleUrlChange"
-          />
+          >
+            <div slot="rMenu" slot-scope="{data}">
+              <slot name="rMenu" :data="data" />
+            </div>
+          </AutoDataZTree>
         </keep-alive>
       </slot>
     </transition>
@@ -94,6 +98,18 @@ export default {
     this.iActiveMenu = await this.getPropActiveTab()
   },
   methods: {
+    hideRMenu() {
+      this.$refs.AutoDataZTree.hideRMenu()
+    },
+    getSelectedNodes: function() {
+      return this.$refs.AutoDataZTree.getSelectedNodes()
+    },
+    getNodes: function() {
+      return this.$refs.AutoDataZTree.getNodes()
+    },
+    selectNode: function(node) {
+      return this.$refs.AutoDataZTree.selectNode(node)
+    },
     handleUrlChange(url) {
       this.$emit('urlChange', url)
     },
