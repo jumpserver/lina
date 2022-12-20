@@ -241,13 +241,55 @@
 }
 
 .ztree li span.button.k8s_ico_docu {
-  background: url('./icons/k8s-12.png') scroll 0 0 no-repeat;
-  filter: drop-shadow(0px 4px 0 #676A6C);
+  background: url('./icons/k8s.png') center left no-repeat;
 }
 
 .ztree li span.button.mysql_ico_docu {
-  background: url('./icons/mysql-12.png') no-repeat scroll 0 0 transparent;
-  filter: drop-shadow(0px 5px 0 #676A6C);
+  background: url('./icons/mysql.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.redis_ico_docu {
+  background: url('./icons/redis.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.mariadb_ico_docu {
+  background: url('./icons/mariadb.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.postgresql_ico_docu {
+  background: url('./icons/postgresql.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.mongodb_ico_docu {
+  background: url('./icons/mongodb.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.unix_ico_docu {
+  background: url('./icons/unix.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.private_ico_docu {
+  background: url('./icons/private.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.sqlserver_ico_docu {
+  background: url('./icons/sqlserver.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.website_ico_docu {
+  background: url('./icons/website.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.clickhouse_ico_docu {
+  background: url('./icons/clickhouse.png') no-repeat center left transparent;
+}
+
+.ztree li span.button.windows_ico_docu {
+  background: url('./icons/windows.png') no-repeat center left transparent;
+}
+
+.ztree li a > span.button {
+  filter: invert(47%) sepia(3%) saturate(412%) hue-rotate(161deg) brightness(83%) contrast(83%);
 }
 
 .ztree li span.button.oracle_ico_docu::before {
