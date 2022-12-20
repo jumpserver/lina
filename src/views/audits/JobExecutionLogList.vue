@@ -20,7 +20,7 @@ export default {
       tableConfig: {
         url: '/api/v1/audits/job-logs/',
         columns: [
-          'creator_name', 'is_finished',
+          'creator_name', 'material', 'creator_name', 'is_finished',
           'is_success', 'time_cost', 'date_start', 'date_finished'
         ],
         columnsMeta: {
