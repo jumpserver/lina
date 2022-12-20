@@ -25,7 +25,7 @@ export default {
         url: '/api/v1/ops/job-executions/',
         hasSelection: false,
         columns: [
-          'id', 'job_type', 'is_finished', 'is_success', 'count', 'time_cost', 'date_created', 'actions'
+          'id', 'job_type', 'material', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
         ],
         columnsMeta: {
           count: {
@@ -46,6 +46,9 @@ export default {
           },
           job_type: {
             width: '96px'
+          },
+          material: {
+            width: '240px'
           },
           is_finished: {
             label: this.$t('ops.isFinished'),

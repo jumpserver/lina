@@ -103,7 +103,7 @@ export default {
           }
         },
         parameters_define: {
-          label: this.$t('ops.Variable'),
+          label: '',
           component: JsonEditor,
           hidden: (formValue) => {
             return !formValue.use_parameter_define
@@ -122,6 +122,7 @@ export default {
           }
         },
         use_parameter_define: {
+          label: this.$t('ops.UseParameterDefine'),
           type: 'switch',
           hidden: () => {
             return this.instantTask

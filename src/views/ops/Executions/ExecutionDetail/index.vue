@@ -14,15 +14,11 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import JobExecutionDetail from '@/views/ops/Executions/ExecutionDetail/JobExecutionDetail'
-import ScriptDetail from '@/views/ops/Executions/ExecutionDetail/ScriptDetail'
-import AssetResultDetail from '@/views/ops/Executions/ExecutionDetail/AssetResultDetail'
 
 export default {
   components: {
     GenericDetailPage,
-    JobExecutionDetail,
-    ScriptDetail,
-    AssetResultDetail
+    JobExecutionDetail
   },
   data() {
     return {

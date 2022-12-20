@@ -700,7 +700,15 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Material": "内容",
+    "Type": "类型",
+    "DateCreated": "创建时间",
+    "DateFinished": "完成时间",
     "Run": "运行",
+    "Reason": "原因",
+    "SuccessAsset": "成功的资产",
+    "ExcludeAsset": "跳过的资产",
+    "FailedAsset": "失败的资产",
     "ExecutionDetail": "执行详情",
     "ScriptDetail": "脚本详情",
     "AssetResultDetail": "资产结果",
