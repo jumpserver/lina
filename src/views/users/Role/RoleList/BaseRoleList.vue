@@ -43,7 +43,7 @@ export default {
                 return {
                   name: 'RoleDetail',
                   query: {
-                    scope: row.scope
+                    scope: row.scope.value
                   },
                   params: {
                     id: row.id

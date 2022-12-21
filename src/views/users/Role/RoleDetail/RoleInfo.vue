@@ -147,7 +147,7 @@ export default {
       return this.$refs.tree.zTree
     },
     scope() {
-      return this.object.scope
+      return this.object.scope.value
     },
     detailItems() {
       return [
@@ -183,14 +183,14 @@ export default {
     }
   },
   mounted() {
-    this.setting.treeUrl = `/api/v1/rbac/${this.object.scope}-roles/${this.object.id}/permissions/tree/`
+    this.setting.treeUrl = `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}/permissions/tree/`
     setTimeout(() => {
       this.loading = false
     })
   },
   methods: {
     setUpdateBtn() {
-      const permRequired = `rbac.change_${this.object.scope}role`
+      const permRequired = `rbac.change_${this.object.scope.value}role`
       if (this.$hasPerm(permRequired)) {
         this.isDisabled = false
       }
