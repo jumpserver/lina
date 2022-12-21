@@ -12,7 +12,6 @@
   >
     <AccountCreateUpdateForm
       v-if="!loading"
-      :platform="platform"
       :account="account"
       :asset="asset"
       @add="addAccount"
@@ -38,7 +37,7 @@ export default {
     },
     asset: {
       type: Object,
-      default: () => ({})
+      default: null
     },
     account: {
       type: Object,
@@ -47,11 +46,10 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       platform: {}
     }
   },
-
   computed: {
     iVisible: {
       get() {
@@ -65,20 +63,27 @@ export default {
       return this.asset ? this.asset.protocol : []
     }
   },
-  async mounted() {
-    try {
-      await this.getPlatform()
-    } finally {
-      this.loading = false
-    }
-  },
   methods: {
-    async getPlatform() {
-      const platformId = this.asset?.platform?.id || this.asset?.platform_id
-      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
-    },
     addAccount(form) {
-      const data = { asset: this.asset?.id || '', ...form }
+      const formValue = Object.assign({}, form)
+      let assets = []
+      if (this.asset) {
+        assets = [this.asset.id]
+      } else {
+        assets = formValue.assets
+      }
+      delete formValue.assets
+      if (assets.length === 0) {
+        this.$message.error(this.$tc('assets.PleaseSelectAsset'))
+        return
+      }
+      const data = []
+      for (const asset of assets) {
+        data.push({
+          ...formValue,
+          asset
+        })
+      }
       this.$axios.post(`/api/v1/assets/accounts/`, data).then(() => {
         this.iVisible = false
         this.$emit('add', true)

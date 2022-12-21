@@ -1,8 +1,8 @@
 <template>
   <AutoDataForm
+    v-if="!loading"
     v-bind="$data"
     @submit="confirm"
-    @afterRemoteMeta="afterGetRemoteMeta"
   />
 </template>
 
@@ -10,6 +10,7 @@
 import AutoDataForm from '@/components/AutoDataForm'
 import { UpdateToken } from '@/components/FormFields'
 import Select2 from '@/components/FormFields/Select2'
+import AssetSelect from '@/components/AssetSelect'
 
 export default {
   name: 'AccountCreateForm',
@@ -17,10 +18,6 @@ export default {
     AutoDataForm
   },
   props: {
-    platform: {
-      type: Object,
-      required: true
-    },
     asset: {
       type: Object,
       default: null
@@ -31,25 +28,49 @@ export default {
     }
   },
   data() {
-    const accountID = this.account ? this.account.id : ''
-    const assetID = this.asset ? this.asset.id : ''
     return {
       loading: true,
       usernameChanged: false,
+      defaultPrivilegedAccounts: ['root', 'administrator'],
+      platform: {
+        automation: {},
+        protocols: [
+          {
+            name: 'ssh',
+            secret_types: ['password', 'ssh_key', 'token', 'api_key']
+          }
+        ]
+      },
       url: '/api/v1/assets/accounts/',
       form: this.account || {},
       fields: [
+        [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
-        [this.$t('assets.Secret'), ['secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase']],
+        [this.$t('assets.Secret'), [
+          'secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase'
+        ]],
         [this.$t('common.Other'), ['push_now', 'comment']]
       ],
-      defaultPrivilegedAccounts: ['root', 'administrator'],
       fieldsMeta: {
+        assets: {
+          component: AssetSelect,
+          label: this.$t('assets.Asset'),
+          el: {
+            multiple: false
+          },
+          hidden: () => {
+            return this.asset && this.asset.id
+          }
+        },
         name: {
           on: {
             input: ([value], updateForm) => {
               if (!this.usernameChanged) {
                 updateForm({ username: value })
+                const maybePrivileged = this.defaultPrivilegedAccounts.includes(value)
+                if (maybePrivileged) {
+                  updateForm({ privileged: true })
+                }
               }
             }
           }
@@ -60,7 +81,8 @@ export default {
               this.usernameChanged = true
             },
             change: ([value], updateForm) => {
-              if (this.defaultPrivilegedAccounts.indexOf(value.toLowerCase()) > -1) {
+              const maybePrivileged = this.defaultPrivilegedAccounts.includes(value)
+              if (maybePrivileged) {
                 updateForm({ privileged: true })
               }
             }
@@ -68,11 +90,17 @@ export default {
         },
         su_from: {
           component: Select2,
+          hidden: (formValue) => {
+            return formValue.assets?.length > 1
+          },
           el: {
             multiple: false,
             clearable: true,
+            hidden: () => {
+              return !this.asset.id
+            },
             ajax: {
-              url: `/api/v1/assets/accounts/su-from-accounts/?account=${accountID}&asset=${assetID}`,
+              url: `/api/v1/assets/accounts/su-from-accounts/?asset=${this.asset?.id || ''}`,
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }
@@ -127,9 +155,41 @@ export default {
       hasSaveContinue: false
     }
   },
+  async mounted() {
+    try {
+      await this.getPlatform()
+      this.setSecretTypeOptions()
+    } finally {
+      this.loading = false
+    }
+  },
   methods: {
-    afterGetRemoteMeta(meta) {
-      const choices = meta.secret_type.choices
+    async getPlatform() {
+      if (!this.asset || !this.asset.platform) {
+        return
+      }
+      const platformId = this.asset.platform.id
+      this.platform = await this.$axios.get(`/api/v1/assets/platforms/${platformId}/`)
+    },
+    setSecretTypeOptions() {
+      const choices = [
+        {
+          label: this.$t('assets.Password'),
+          value: 'password'
+        },
+        {
+          label: this.$t('assets.PrivateKey'),
+          value: 'ssh_key'
+        },
+        {
+          label: 'Token',
+          value: 'token'
+        },
+        {
+          label: this.$t('assets.ApiKey'),
+          value: 'api_key'
+        }
+      ]
       const secretTypes = []
       this.platform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])

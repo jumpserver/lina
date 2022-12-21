@@ -16,7 +16,7 @@
         v-if="!groupHidden(group, i)"
         :group="group"
         :index="i"
-        :line="i !== 0"
+        :line="i !== 0 && !groupHidden(groups[i - 1], i - 1)"
       />
     </span>
   </DataForm>

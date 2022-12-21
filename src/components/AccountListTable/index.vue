@@ -26,7 +26,6 @@ import UpdateSecretInfo from './UpdateSecretInfo'
 import AccountCreateUpdate from './AccountCreateUpdate'
 import { connectivityMeta } from './const'
 import { openTaskPage } from '@/utils/jms'
-import { hasUUID } from '@/utils/common'
 
 export default {
   name: 'AccountListTable',
@@ -61,7 +60,7 @@ export default {
     },
     asset: {
       type: Object,
-      default: () => ({})
+      default: null
     },
     columns: {
       type: Array,
@@ -98,7 +97,8 @@ export default {
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'version', 'privileged', 'actions', 'secret_type', 'actions'
+            'name', 'username', 'version', 'privileged',
+            'secret_type', 'actions'
           ]
         },
         columnsMeta: {
@@ -110,9 +110,9 @@ export default {
                 params: { id: row.id }
               }
               if (vm.$hasPerm('assets.view_account')) {
-                return <router-link to={ to } >{ row.name }</router-link>
+                return <router-link to={to}>{row.name}</router-link>
               } else {
-                return <span>{ row.name }</span>
+                return <span>{row.name}</span>
               }
             }
           },
@@ -125,9 +125,9 @@ export default {
                 params: { id: row.asset.id }
               }
               if (vm.$hasPerm('assets.view_asset')) {
-                return <router-link to={ to } >{ row.asset.name }</router-link>
+                return <router-link to={to}>{row.asset.name}</router-link>
               } else {
-                return <span>{ row.asset.name }</span>
+                return <span>{row.asset.name}</span>
               }
             }
           },
@@ -199,7 +199,7 @@ export default {
                   can: this.$hasPerm('assets.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
-                    vm.$set(this.iAsset, 'platform_id', row.asset.platform_id)
+                    vm.iAsset = row.asset
                     vm.showAddDialog = false
                     setTimeout(() => {
                       vm.showAddDialog = true
@@ -226,10 +226,14 @@ export default {
             name: 'add',
             title: this.$t('common.Add'),
             type: 'primary',
-            can: vm.$hasPerm('assets.add_account'),
-            callback: () => {
-              this.account = null
-              this.showAddDialog = true
+            can: () => {
+              return vm.$hasPerm('assets.add_account')
+            },
+            callback: async() => {
+              await this.getAssetDetail()
+              setTimeout(() => {
+                vm.showAddDialog = true
+              })
             }
           }
         ],
@@ -244,12 +248,6 @@ export default {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
       this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
-    },
-    '$route.query.asset': {
-      immediate: true,
-      handler() {
-        this.hasAccountPermission()
-      }
     }
   },
   mounted() {
@@ -272,14 +270,10 @@ export default {
     },
     async getAssetDetail() {
       const { query: { asset }} = this.$route
-      this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
-    },
-    hasAccountPermission() {
-      const { path, query: { asset }} = this.$route
-      if (!hasUUID(path)) {
-        if (asset) this.getAssetDetail()
-        const hasPerm = this.$hasPerm('assets.add_account') && !!asset
-        this.$set(this.headerActions.extraActions[0], 'can', hasPerm)
+      if (asset) {
+        this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
+      } else {
+        this.iAsset = null
       }
     },
     refresh() {

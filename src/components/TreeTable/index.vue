@@ -151,10 +151,12 @@ export default {
   .is-show {
     display: none;
   }
+
   .is-rotate {
     display: block;
     transform: rotate(180deg);
   }
+
   .mini-button {
     position: absolute;
     top: 50%;
@@ -169,9 +171,11 @@ export default {
     line-height: 21px;
     cursor: pointer;
     height: 30px;
+
     &:hover {
       display: block;
     }
+
     .icon {
       font-size: 14px;
     }
@@ -191,27 +195,15 @@ export default {
     .left {
       border-right: solid 1px #ebeef5;
       background: #f3f3f3;
+
       &:hover {
         ~ .right .is-show {
-          display: block!important;;
+          display: block !important;;
         }
       }
     }
 
     .right {
-    }
-
-    .treebox {
-      background-color: transparent;
-      .ztree {
-        background-color: transparent;
-        li {
-          background-color: transparent;
-        }
-      }
-      .ztree * {
-        background-color: transparent;
-      }
     }
   }
 

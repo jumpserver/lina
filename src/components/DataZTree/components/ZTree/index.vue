@@ -407,6 +407,7 @@ export default {
     top: 100%;
     z-index: 1000;
   }
+
   .ztree ::v-deep .fa {
     font: normal normal normal 14px/1 FontAwesome !important;
   }
@@ -436,20 +437,44 @@ export default {
 
   .treebox {
     height: 80vh;
-    overflow: auto;
+    background-color: #f3f3f3;
+    border: solid 1px #d9d8d8;
+
+    .fixed-tree-title {
+      padding: 5px 10px;
+      border-bottom: solid 1px #d9d8d8;
+    }
+
+    > > > .ztree {
+      overflow: auto;
+      background-color: transparent;
+      height: calc(100% - 50px);
+
+      li {
+        background-color: transparent !important;
+
+        ul {
+          background-color: transparent !important;
+        }
+      }
+    }
   }
+
   ::v-deep #tree-refresh {
     margin-left: 3px;
   }
+
   ::v-deep .tree-banner-icon-zone {
     position: absolute;
     right: 7px;
     height: 30px;
     overflow: hidden;
+
     .fa {
-      color: #838385!important;;
+      color: #838385 !important;;
+
       &:hover {
-        color: #606266!important;;
+        color: #606266 !important;;
       }
     }
   }
@@ -464,9 +489,11 @@ export default {
     vertical-align: sub;
     transition: .25s;
     overflow: hidden;
+
     .fa {
-      width: 13px!important;
+      width: 13px !important;
     }
+
     .fa-search {
       padding-top: 1px;
     }
@@ -478,16 +505,16 @@ export default {
     left: 6px;
     border-radius: 12px;
     overflow: hidden;
-    background-color: transparent!important;
+    background-color: transparent !important;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
   }
 
-  ::v-deep .tree-search.active  {
+  ::v-deep .tree-search.active {
     width: 160px;
-    background-color: #ffffff!important;
+    background-color: #ffffff !important;
   }
 
   ::v-deep .tree-search.active:hover {
@@ -499,7 +526,7 @@ export default {
     left: 20px;
     width: 133px;
     height: 100%;
-    background-color: #ffffff!important;
+    background-color: #ffffff !important;
     color: #606266;
     display: flex;
     justify-content: center;
@@ -507,11 +534,14 @@ export default {
     border: none;
     outline: none;
   }
+
   .tree-header {
     position: relative;
+
     .title {
       font-weight: 500;
     }
+
     .content {
       height: 30px;
       line-height: 30px;
@@ -522,35 +552,44 @@ export default {
       overflow: hidden;
       cursor: pointer;
       background-color: #D7D8DC;
+
       .rotate {
-        transition: all .1.8s;
+        transition: all .1 .8s;
         transform: rotate(-90deg);
       }
+
       .fa-caret-down {
         font-size: 16px;
       }
+
       .special {
-        top: 1px!important;
+        top: 1px !important;
       }
     }
   }
+
   .tree-empty {
     margin-left: 4px;
   }
+
   .fixed-tree-search {
     margin-bottom: 10px;
-    &>>> .el-input__inner {
+
+    & > > > .el-input__inner {
       border-radius: 4px;
       background: #EFF0F1;
       padding-right: 45px;
     }
-    &>>> .el-input__suffix {
+
+    & > > > .el-input__suffix {
       padding-right: 8px;
     }
-    &>>> .el-input__suffix-inner {
+
+    & > > > .el-input__suffix-inner {
       line-height: 34px;
     }
   }
+
   .fixed-tree-title {
     display: flex;
     justify-content: space-between;
@@ -558,10 +597,12 @@ export default {
     padding-right: 10px;
     color: #646A73;
   }
+
   .icon-refresh {
     border-radius: 4px;
     padding: 0 1px;
     z-index: 1;
+
     &:hover {
       cursor: pointer;
       color: #606266;
@@ -569,6 +610,7 @@ export default {
       background-color: #e6e6e6;
     }
   }
+
   .icon {
     cursor: pointer;
   }
