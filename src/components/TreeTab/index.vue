@@ -5,6 +5,7 @@
       slot="submenu"
       v-model="iActiveMenu"
       class="page-submenu"
+      stretch
       @tab-click="handleTabClick"
     >
       <template v-for="item in tabIndices">
@@ -44,6 +45,7 @@
 <script>
 import AutoDataZTree from '../AutoDataZTree'
 import merge from 'webpack-merge'
+
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
 
 export default {
@@ -170,7 +172,7 @@ export default {
 >>> .ztree li,
 >>> .ztree li ul,
 .tree-tab {
-  background-color: #ffffff;
+  //background-color: #ffffff;
 }
 .tree-tab {
   padding-left: 20px;
