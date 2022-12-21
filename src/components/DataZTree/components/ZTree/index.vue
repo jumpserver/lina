@@ -438,12 +438,10 @@ export default {
 
   .treebox {
     height: 80vh;
-    background-color: #f3f3f3;
-    border: solid 1px #d9d8d8;
+    background-color: transparent;
 
     .fixed-tree-title {
       padding: 5px 10px;
-      border-bottom: solid 1px #d9d8d8;
     }
 
     > > > .ztree {
