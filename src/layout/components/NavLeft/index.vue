@@ -158,17 +158,20 @@ export default {
       padding: 3px;
       line-height: 10px;
       border-radius: 3px;
+
       &:hover {
-        background: var(--menu-hover)!important;
+        background: var(--menu-hover) !important;
       }
 
       .icon {
-        margin-right: 0!important;
+        margin-right: 0 !important;
+
         &:hover {
           color: var(--color-primary);
         }
       }
     }
+
     .active-switch-view {
       display: inline-block;
     }
@@ -212,21 +215,22 @@ export default {
   .active-mobile {
     display: none;
 
-    & > > > .organization {
+    & /deep/ .organization {
       padding-left: 8px;
       background: transparent;
       color: #fff;
-      border-bottom: 1px solid rgba(31,35,41,.15);
+      border-bottom: 1px solid rgba(31, 35, 41, .15);
     }
 
-    & > > > .menu-main {
+    & /deep/ .menu-main {
       margin-left: -10px;
     }
 
-    & > > > .title-label {
+    & /deep/ .title-label {
       color: white !important;
     }
-    .mobile-view-switch >>> .el-menu-item.is-active {
+
+    .mobile-view-switch /deep/ .el-menu-item.is-active {
       color: #ffffff;
     }
   }
@@ -236,7 +240,7 @@ export default {
       display: block;
     }
     .active-switch-view {
-      display: none!important;;
+      display: none !important;;
     }
   }
 </style>

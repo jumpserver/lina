@@ -167,7 +167,7 @@ export default {
 .platform-item {
   margin: 5px 0;
 
-  & > > > .el-card__body {
+  & /deep/ .el-card__body {
     padding: 10px
   }
 

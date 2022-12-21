@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .item-textarea > > > .el-textarea__inner {
+  .item-textarea /deep/ .el-textarea__inner {
     height: 110px;
   }
 
@@ -129,7 +129,7 @@ export default {
       background-color: #F5F7FA;
     }
 
-    > > > .el-form-item__label {
+    /deep/ .el-form-item__label {
       padding-right: 20px;
     }
   }

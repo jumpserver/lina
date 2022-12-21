@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .dialog > > > .el-dialog {
+  .dialog /deep/ .el-dialog {
     border-radius: 0.3em;
     max-width: 1500px;
 
@@ -108,7 +108,7 @@ export default {
     }
   }
 
-  .dialog-footer > > > button.el-button {
+  .dialog-footer /deep/ button.el-button {
     font-size: 13px;
     padding: 10px 20px;
   }

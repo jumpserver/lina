@@ -55,8 +55,8 @@ export default {
               return false
             }
             return selectedRows.length > 0 &&
-                !vm.currentOrgIsRoot &&
-                vm.$hasPerm('assets.change_node')
+              !vm.currentOrgIsRoot &&
+              vm.$hasPerm('assets.change_node')
           },
           callback: function({ selectedRows, reloadTable }) {
             const assetsId = []
@@ -174,7 +174,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.asset-select-dialog > > > .transition-box:first-child {
+.asset-select-dialog /deep/ .transition-box:first-child {
   background-color: #f3f3f3;
 }
 </style>
