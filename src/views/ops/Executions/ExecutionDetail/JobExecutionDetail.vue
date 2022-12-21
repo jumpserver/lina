@@ -27,7 +27,7 @@
           </el-collapse-item>
         </el-collapse>
       </IBox>
-      <IBox type="danger" :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.failures).length})` ">
+      <IBox type="danger" :title="`${$tc('ops.FailedAsset')} (${Object.keys(object.summary.failures).length})` ">
         <el-collapse>
           <el-collapse-item
             v-for="(val,key,index) in object.summary.failures"
@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     hasSummary() {
-      return this.object.summary && true
+      return this.object.is_finished && Object.keys(this.object.summary).length
     },
     detailCardItems() {
       return [

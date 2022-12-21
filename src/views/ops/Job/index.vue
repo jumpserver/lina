@@ -23,11 +23,13 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/jobs/',
         columns: [
-          'name', 'type', 'summary', 'average_time_cost', 'asset_amount', 'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
+          'name', 'type', 'summary', 'average_time_cost', 'asset_amount',
+          'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'type', 'asset_amount', 'average_time_cost', 'summary', 'comment', 'date_last_run', 'actions']
+          default: ['name', 'type', 'asset_amount', 'average_time_cost',
+            'summary', 'comment', 'date_last_run', 'actions']
         },
         columnsMeta: {
           name: {
@@ -36,16 +38,15 @@ export default {
             }
           },
           type: {
+            width: '96px',
             formatter: (row) => {
               return row.type.label
-              // if (row.is_periodic) {
-              //   return <span>{row.type}&nbsp;
-              //     <el-tooltip content={this.$t('ops.ThisPeriodic')}>
-              //       <i Class='fa  fa-circle-o text-primary'/>
-              //     </el-tooltip>
-              //   </span>
-              // }
-              // return <span>{row.type}</span>
+            }
+          },
+          comment: {
+            width: '240px',
+            formatter: (row) => {
+              return row.type.label
             }
           },
           summary: {
@@ -70,6 +71,7 @@ export default {
             }
           },
           date_last_run: {
+            width: '140px',
             label: this.$t('ops.DateLastRun'),
             formatter: DateFormatter
           },
@@ -109,7 +111,7 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: false,
+        hasMoreActions: true,
         extraActions: [
           {
             name: this.$t('ops.QuickJob'),
