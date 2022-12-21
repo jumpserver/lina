@@ -301,21 +301,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.perm-tree /deep/ .ztree * {
+.perm-tree >>> .ztree * {
   background: white;
 }
 
-.perm-tree /deep/ .ztree {
+.perm-tree >>> .ztree {
   background: white !important;
 }
 
-.perm-tree /deep/ .checkbox_true_disable,
-.perm-tree /deep/ .checkbox_false_disable {
+.perm-tree >>> .checkbox_true_disable,
+.perm-tree >>> .checkbox_false_disable {
   cursor: not-allowed !important;
 }
 
-.perm-tree /deep/ .checkbox_true_disable:before,
-.perm-tree /deep/ .checkbox_false_disable:before {
+.perm-tree >>> .checkbox_true_disable:before,
+.perm-tree >>> .checkbox_false_disable:before {
   color: #aaaaaa !important;
 }
 </style>

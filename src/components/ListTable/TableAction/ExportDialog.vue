@@ -230,7 +230,7 @@ export default {
     padding: 10px 20px;
   }
 
-  .export-form /deep/ .el-form-item__label {
+  .export-form >>> .el-form-item__label {
     line-height: 2
   }
 </style>

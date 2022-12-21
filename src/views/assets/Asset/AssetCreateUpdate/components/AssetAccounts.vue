@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.accounts /deep/ .buttons .cell {
+.accounts >>> .buttons .cell {
   padding-right: 2px;
 }
 </style>

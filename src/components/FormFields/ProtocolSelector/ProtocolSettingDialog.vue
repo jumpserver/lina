@@ -162,7 +162,7 @@ export default {
   margin-bottom: 0;
 }
 
-.setting-dialog /deep/ .el-dialog__body {
+.setting-dialog >>> .el-dialog__body {
   padding-top: 10px;
 }
 

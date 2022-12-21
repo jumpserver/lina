@@ -215,22 +215,22 @@ export default {
   .active-mobile {
     display: none;
 
-    & /deep/ .organization {
+    & >>> .organization {
       padding-left: 8px;
       background: transparent;
       color: #fff;
       border-bottom: 1px solid rgba(31, 35, 41, .15);
     }
 
-    & /deep/ .menu-main {
+    & >>> .menu-main {
       margin-left: -10px;
     }
 
-    & /deep/ .title-label {
+    & >>> .title-label {
       color: white !important;
     }
 
-    .mobile-view-switch /deep/ .el-menu-item.is-active {
+    .mobile-view-switch >>> .el-menu-item.is-active {
       color: #ffffff;
     }
   }

@@ -444,7 +444,7 @@ export default {
       padding: 5px 10px;
     }
 
-    /deep/ .ztree {
+    >>> .ztree {
       overflow: auto;
       background-color: transparent;
       height: calc(100% - 50px);
@@ -574,17 +574,17 @@ export default {
   .fixed-tree-search {
     margin-bottom: 10px;
 
-    & /deep/ .el-input__inner {
+    & >>> .el-input__inner {
       border-radius: 4px;
       background: #EFF0F1;
       padding-right: 45px;
     }
 
-    & /deep/ .el-input__suffix {
+    & >>> .el-input__suffix {
       padding-right: 8px;
     }
 
-    & /deep/ .el-input__suffix-inner {
+    & >>> .el-input__suffix-inner {
       line-height: 34px;
     }
   }

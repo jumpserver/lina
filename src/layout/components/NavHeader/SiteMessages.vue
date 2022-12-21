@@ -216,7 +216,7 @@ export default {
   padding: 0 25px 20px;
 }
 
-/deep/ .site-msg {
+>>> .site-msg {
   .el-drawer__header {
     border-bottom: solid 1px rgb(231, 234, 239);
     margin-bottom: 0;
@@ -315,7 +315,7 @@ export default {
     margin-bottom: 20px;
     line-height: 25px;
 
-    & /deep/ a {
+    & >>> a {
       color: var(--color-success) !important;
     }
   }
@@ -326,7 +326,7 @@ export default {
   text-align: center;
 }
 
-/deep/ :focus {
+>>> :focus {
   outline: 0;
 }
 </style>
