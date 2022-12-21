@@ -30,12 +30,12 @@
 }
 
 .ztree li span.button.chk {
-  margin: 0px;
+  margin: 0;
   cursor: auto;
   width: 12px;
   display: inline-block;
-  padding-top: 10px;
-  padding-left: 2px;
+  padding-top: 0;
+  padding-left: 0;
 }
 
 .ztree li span.button.chk.checkbox_false_full::before {

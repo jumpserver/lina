@@ -452,6 +452,10 @@ export default {
       li {
         background-color: transparent !important;
 
+        .button {
+          background-color: rgba(0,0,0,0);
+        }
+
         ul {
           background-color: transparent !important;
         }
