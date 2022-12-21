@@ -48,7 +48,7 @@
           @input="treeSearchHandle"
         >
           <span slot="suffix">
-            <svg-icon :icon-class="'search'" class="icon" style="font-size: 14px;" />
+            <!-- <i class="fa fa-search" style="font-size: 14px; color: #676A6C;" /> -->
             <svg-icon
               :icon-class="'close'"
               class="icon"
@@ -57,22 +57,6 @@
             />
           </span>
         </el-input>
-        <div class="fixed-tree-title">
-          <span> {{ treeSetting.customTreeHeaderName }}</span>
-          <span>
-            <span v-if="treeSetting.showSearch && !showTreeSearch" class="icon-refresh" @click="onSearch">
-              <svg-icon :icon-class="'search'" style="font-size: 14px;" />
-            </span>
-            <span
-              v-if="treeSetting.showRefresh"
-              class="icon-refresh"
-              style="margin-left: -1px;"
-              @click="refresh"
-            >
-              <svg-icon :icon-class="'refresh'" style="font-size: 14px;" />
-            </span>
-          </span>
-        </div>
       </div>
       <ul v-show="loading" class="ztree">
         {{ this.$t('common.tree.Loading') }}...
@@ -131,7 +115,7 @@ export default {
   },
   mounted() {
     window.refresh = this.refresh
-    window.treeSearch = this.treeSearch
+    window.onSearch = this.onSearch
     this.initTree()
   },
   beforeDestroy() {
@@ -173,6 +157,9 @@ export default {
         }
 
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
+        if (!this.treeSetting.customTreeHeader) {
+          this.rootNodeAddDom(this.zTree)
+        }
         // 手动上报事件, Tree加载完成
         this.$emit('TreeInitFinish', this.zTree)
 
@@ -190,6 +177,20 @@ export default {
     onSearch() {
       this.showTreeSearch = !this.showTreeSearch
       localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
+    },
+    rootNodeAddDom(ztree) {
+      const { showSearch, showRefresh } = this.treeSetting
+      const searchIcon = `<a class="" onclick="onSearch()">
+                            <i class='fa fa-search tree-banner-icon' /></i>
+                          </a>`
+      const refreshIcon = "<a id='tree-refresh' onclick='refresh()'><i class='fa fa-refresh'></i></a>"
+      const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
+      const icons = `<span class="" style="float: right;">${treeActions}</span>`
+      const rootNode = ztree.getNodes()[0]
+      if (rootNode) {
+        const $rootNodeRef = $('#' + rootNode.tId + '_a')
+        $rootNodeRef.after(icons)
+      }
     },
     refresh() {
       this.treeSearchValue = ''
@@ -550,13 +551,6 @@ export default {
     &>>> .el-input__suffix-inner {
       line-height: 34px;
     }
-  }
-  .fixed-tree-title {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding-right: 10px;
-    color: #646A73;
   }
   .icon-refresh {
     border-radius: 4px;
