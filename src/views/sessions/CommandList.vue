@@ -155,7 +155,6 @@ export default {
         showMenu: false,
         showRefresh: true,
         showAssets: false,
-        customTreeHeaderName: this.$t('sessions.commandStorage'),
         // ?assets=0不显示资产. =1显示资产
         treeUrl: `/api/v1/terminal/command-storages/tree/?real=1&date_from=${dateFrom}&date_to=${dateTo}`,
         view: {
