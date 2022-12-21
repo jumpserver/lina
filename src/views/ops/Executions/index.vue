@@ -99,6 +99,7 @@ export default {
                 {
                   title: this.$t('common.Detail'),
                   name: 'detail',
+                  type: 'primary',
                   can: true,
                   callback: ({ row }) => {
                     this.$router.push({ name: 'ExecutionDetail', params: { id: row.id }})
