@@ -142,7 +142,16 @@ export default {
     },
     setDefaultItems(choices) {
       if (this.value.length > 0) {
-        this.items = this.value
+        const protocols = []
+        this.value.forEach(item => {
+          if (item?.id && item?.setting) {
+            protocols.push(item)
+          } else {
+            const protocol = choices.find(i => i.name === item.name)
+            if (protocol) protocols.push(protocol)
+          }
+        })
+        this.items = protocols
       } else {
         const defaults = choices.filter(item => (item.required || item.primary || item.default))
         this.items = defaults
