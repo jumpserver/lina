@@ -212,7 +212,7 @@ export default {
       // 如果select2的options中没有，那么可能无法显示正常的值
       if (selectOptionsHas === undefined) {
         const option = {
-          label: `${row.hostname}(${row.ip})`,
+          label: `${row.name}(${row.address})`,
           value: row.id
         }
         options.push(option)
