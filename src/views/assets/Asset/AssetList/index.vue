@@ -32,7 +32,6 @@ export default {
           {
             title: this.$t('route.Device'),
             name: 'devices',
-            hidden: () => !this.$store.getters.hasValidLicense,
             component: () => import('@/views/assets/Asset/AssetList/DeviceList.vue')
           },
           {
@@ -48,7 +47,6 @@ export default {
           {
             title: 'Web',
             name: 'web',
-            hidden: () => !this.$store.getters.hasValidLicense,
             component: () => import('@/views/assets/Asset/AssetList/WebList.vue')
           }
         ]
