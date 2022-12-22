@@ -115,10 +115,12 @@ export default {
   methods: {
     initSetTableUrl() {
       const { asset = '', node = '' } = this.$route.query || {}
-      let url = this.iTableConfig.url
-      url = setUrlParam(url, 'asset', asset)
-      url = setUrlParam(url, 'node', node)
-      this.$set(this.iTableConfig, 'url', url)
+      let url = this.iTableConfig?.url || ''
+      if (url) {
+        url = setUrlParam(url, 'asset', asset)
+        url = setUrlParam(url, 'node', node)
+        this.$set(this.iTableConfig, 'url', url)
+      }
     },
     handleUrlChange(url) {
       this.$set(this.iTableConfig, 'url', url)

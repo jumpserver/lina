@@ -1,55 +1,32 @@
 <template>
-
   <Page>
-    <el-collapse-transition>
-      <div style="display: flex;justify-items: center; flex-wrap: nowrap;justify-content:space-between;">
-        <div
-          v-show="iShowTree"
-          :style="{width: iShowTree?'20%': 0}"
-          class="transition-box tree-box"
-        >
-          <AutoDataZTree
-            ref="AutoDataZTree"
-            :key="DataZTree"
-            :setting="treeSetting"
-            class="auto-data-ztree"
-          />
-        </div>
-        <div :style="iShowTree?('display: flex;width: 80%;'):('display: flex;width:100%;')">
-          <div class="mini">
-            <div style="display:block" class="mini-button" @click="iShowTree=!iShowTree">
-              <i v-show="iShowTree" class="fa fa-angle-left fa-x" /><i
-                v-show="!iShowTree"
-                class="fa fa-angle-right fa-x"
-              />
-            </div>
-          </div>
-          <IBox class="transition-box" style="width: calc(100% - 17px);">
-            <el-form label-width="160px">
-              <el-form-item label="runas">
-                <el-input v-model="runas" />
-              </el-form-item>
-              <el-form-item label="runas policy">
-                <el-select v-model="runasPolicy">
-                  <el-option v-for="(item,index) of runasPolicyOptions" :key="index" :value="item">
-                    {{ item.label }}
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
+    <TreeTable ref="TreeTable" :tree-setting="treeSetting">
+      <template slot="table">
+        <IBox class="transition-box" style="width: calc(100% - 17px);">
+          <el-form label-width="160px">
+            <el-form-item label="runas">
+              <el-input v-model="runas" />
+            </el-form-item>
+            <el-form-item label="runas policy">
+              <el-select v-model="runasPolicy">
+                <el-option v-for="(item,index) of runasPolicyOptions" :key="index" :value="item">
+                  {{ item.label }}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
 
-            <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
-            <Term ref="xterm" />
-            <div style="display: flex;margin-top:10px;justify-content: space-between" />
-          </IBox>
-        </div>
-      </div>
-    </el-collapse-transition>
+          <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
+          <Term ref="xterm" />
+          <div style="display: flex;margin-top:10px;justify-content: space-between" />
+        </IBox>
+      </template>
+    </TreeTable>
   </Page>
 </template>
 
 <script>
-import AutoDataZTree from '@/components/AutoDataZTree'
+import { TreeTable } from '@/components'
 import Term from '@/components/Term'
 import IBox from '@/components/IBox'
 import CodeEditor from '@/components/FormFields/CodeEditor'
@@ -58,9 +35,9 @@ import Page from '@/layout/components/Page'
 export default {
   name: 'CommandExecution',
   components: {
+    TreeTable,
     Page,
     Term,
-    AutoDataZTree,
     IBox,
     CodeEditor
   },
@@ -136,9 +113,6 @@ export default {
     }
   },
   computed: {
-    zTree() {
-      return this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.zTree
-    },
     xterm() {
       return this.$refs.xterm.xterm
     }
@@ -154,7 +128,7 @@ export default {
       this.DataZTree++
     },
     getSelectedAssetsNode() {
-      const nodes = this.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
+      const nodes = this.$refs.TreeTable.getSelectedNodes()
       return nodes
     },
     enableWS() {
