@@ -87,14 +87,14 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('xpack.add_changeauthplanexecution'),
+                  can: this.$hasPerm('assets.add_changesecretexecution'),
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/automation-executions/`,
+                      `/api/v1/assets/change-secret-executions/`,
                       {
                         automation: row.id,
-                        type: row.type
+                        type: row.type.value
                       }
                     ).then(res => {
                       openTaskPage(res['task'])

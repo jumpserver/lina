@@ -21,7 +21,7 @@ export default {
     console.log('this', this)
     return {
       tableConfig: {
-        url: `/api/v1/assets/automation-executions/?automation_id=${this.object.id}`,
+        url: `/api/v1/assets/change-secret-executions/?automation_id=${this.object.id}`,
         columns: [
           'asset_amount', 'node_amount', 'status',
           'trigger_display', 'date_start', 'actions'
@@ -65,7 +65,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  can: 'xpack.view_changeauthplanexecution',
+                  can: 'assets.view_changesecretexecution',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
@@ -75,7 +75,7 @@ export default {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  can: this.$hasPerm('xpack.view_changeauthplantask'),
+                  can: this.$hasPerm('assets.view_changesecretexecution'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
