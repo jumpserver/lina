@@ -152,7 +152,8 @@ export default {
       })
     },
     onRename: function(event, treeId, treeNode, isCancel) {
-      const url = `${this.treeSetting.nodeUrl}${this.currentNodeId}/`
+      const currentNodeId = this.currentNodeId || treeNode.meta.data?.id || ''
+      const url = `${this.treeSetting.nodeUrl}${currentNodeId}/`
       if (isCancel) {
         return
       }
