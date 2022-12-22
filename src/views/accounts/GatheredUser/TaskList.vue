@@ -75,10 +75,10 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
-                  can: vm.$hasPerm('assets.add_automationexecution'),
+                  can: vm.$hasPerm('assets.add_gatheraccountsexecution'),
                   callback: function(data) {
                     this.$axios.post(
-                      `/api/v1/assets/automation-executions/`,
+                      `/api/v1/assets/gather-account-executions/`,
                       {
                         automation: data.row.id,
                         type: data.row.type

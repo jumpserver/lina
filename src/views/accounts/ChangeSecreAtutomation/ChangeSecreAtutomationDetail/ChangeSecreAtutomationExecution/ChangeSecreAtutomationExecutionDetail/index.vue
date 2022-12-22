@@ -31,7 +31,7 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'ChangeSecreAtutomationExecutionInfo',
-            hidden: () => !this.$hasPerm('assets.view_automationexecution')
+            hidden: () => !this.$hasPerm('assets.view_changesecretexecution')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.TaskList'),

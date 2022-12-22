@@ -188,7 +188,10 @@ export default {
       },
       headerActions: {
         hasLeftActions: false,
-        hasRightActions: false
+        hasRightActions: false,
+        searchConfig: {
+          getUrlQuery: false
+        }
       }
     }
   },

@@ -72,9 +72,10 @@ export default {
   },
   computed: {
     keyLabel() {
+      if (!this.filterKey) return ''
       for (const field of this.options) {
         if (field.value === this.filterKey) {
-          return field.label
+          return field?.label
         }
       }
       return ''
@@ -246,7 +247,11 @@ export default {
       return true
     },
     handleConfirm() {
-      if (this.filterValue === '') return
+      if (this.filterValue === '') {
+        this.handleTagClose(this.filterKey)
+        this.filterKey = ''
+        return
+      }
       if (this.filterValue && !this.filterKey) {
         this.filterKey = 'search' + '_' + this.filterValue
       }
