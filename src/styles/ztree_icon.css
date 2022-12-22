@@ -30,7 +30,7 @@
 }
 
 .ztree li span.button.chk {
-  margin: 0;
+  margin-right: 1px;
   cursor: auto;
   width: 12px;
   display: inline-block;

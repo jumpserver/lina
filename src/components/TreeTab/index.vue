@@ -172,11 +172,6 @@ export default {
 >>> .ztree li,
 >>> .ztree li ul,
 .tree-tab {
-  //background-color: #ffffff;
-}
-.tree-tab {
-  padding-left: 20px;
-  padding-right: 20px;
 }
 >>> .ztree {
   padding: 0;

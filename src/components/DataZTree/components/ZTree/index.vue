@@ -42,7 +42,8 @@
         <el-input
           v-if="treeSetting.showSearch && showTreeSearch"
           v-model="treeSearchValue"
-          size="small"
+          prefix-icon="el-icon-search"
+          size="mini"
           class="fixed-tree-search"
           :placeholder="$tc('common.Search')"
           @input="treeSearchHandle"
@@ -180,12 +181,16 @@ export default {
     },
     rootNodeAddDom(ztree) {
       const { showSearch, showRefresh } = this.treeSetting
-      const searchIcon = `<a class="" onclick="onSearch()">
-                            <i class='fa fa-search tree-banner-icon' /></i>
+      const searchIcon = `<a class="tree-action-btn" onclick="onSearch()">
+                            <i class='fa fa-search tree-banner-icon'></i>
                           </a>`
-      const refreshIcon = "<a id='tree-refresh' onclick='refresh()'><i class='fa fa-refresh'></i></a>"
+      const refreshIcon = `<a id='tree-refresh' class="tree-action-btn" onclick='refresh()'>
+                            <i class='fa fa-refresh'></i>
+                           </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
-      const icons = `<span class="" style="float: right;">${treeActions}</span>`
+      const icons = `<span style="float: right; margin-right: 10px">
+                        ${treeActions}
+                     </span>`
       const rootNode = ztree.getNodes()[0]
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
@@ -580,7 +585,7 @@ export default {
 
     & >>> .el-input__inner {
       border-radius: 4px;
-      background: #EFF0F1;
+      background: #fafafa;
       padding-right: 45px;
     }
 
@@ -616,5 +621,10 @@ export default {
 
   .icon {
     cursor: pointer;
+  }
+
+  .tree-action-btn {
+    padding: 0 2px;
+    color: red;
   }
 </style>

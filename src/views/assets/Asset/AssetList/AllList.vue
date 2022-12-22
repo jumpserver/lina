@@ -108,7 +108,7 @@ export default {
               customTreeHeaderName: this.$t('assets.BuiltinTree'),
               url: '/api/v1/assets/nodes/category/tree/',
               nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/category/tree/',
+              treeUrl: '/api/v1/assets/nodes/category/tree/?assets=1',
               callback: {
                 onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
               }
