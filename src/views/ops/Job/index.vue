@@ -88,7 +88,7 @@ export default {
               hasClone: false,
               extraActions: [
                 {
-                  title: '执行',
+                  title: this.$t('ops.Run'),
                   name: 'run',
                   type: 'running',
                   can: true,
@@ -113,7 +113,39 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: true
+        hasMoreActions: true,
+        moreCreates: {
+          callback: (item) => {
+            this.$router.push({
+              name: 'JobCreate',
+              query: { type: item.name }
+            })
+          },
+          dropdown: [
+            {
+              name: 'adhoc',
+              title: this.$t('ops.Command') + this.$t('ops.Job'),
+              has: true
+            },
+            {
+              name: 'playbook',
+              title: 'Playbook' + this.$t('ops.Job'),
+              has: true
+            }
+          ]
+        },
+        extraActions: [
+          {
+            name: this.$t('ops.QuickJob'),
+            title: this.$t('ops.QuickJob'),
+            has: () => {
+              return true
+            },
+            callback: () => {
+              this.$router.push({ name: 'QuickJob' })
+            }
+          }
+        ]
       }
     }
   },
