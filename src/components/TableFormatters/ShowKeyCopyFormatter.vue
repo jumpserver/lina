@@ -72,9 +72,9 @@ export default {
     },
     currentValue() {
       if (this.isShow) {
-        return this.cellValue
+        return this.cellValue || '-'
       } else {
-        return '******'
+        return this.cellValue ? '******' : '-'
       }
     }
   },
