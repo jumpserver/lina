@@ -215,7 +215,7 @@ export default {
 }
 
 //修改颜色
-// .el-button--text{
-//   color: #409EFF;
-// }
+ .el-button--text{
+   color: #409EFF;
+ }
 </style>

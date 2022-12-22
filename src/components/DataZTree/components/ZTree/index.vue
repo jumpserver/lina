@@ -181,16 +181,19 @@ export default {
     },
     rootNodeAddDom(ztree) {
       const { showSearch, showRefresh } = this.treeSetting
-      const searchIcon = `<a class="tree-action-btn" onclick="onSearch()">
-                            <i class='fa fa-search tree-banner-icon'></i>
-                          </a>`
-      const refreshIcon = `<a id='tree-refresh' class="tree-action-btn" onclick='refresh()'>
-                            <i class='fa fa-refresh'></i>
-                           </a>`
+      const searchIcon = `
+        <a class="tree-action-btn" onclick="onSearch()">
+          <i class='fa fa-search tree-banner-icon'></i>
+        </a>`
+      const refreshIcon = `
+        <a id='tree-refresh' class="tree-action-btn" onclick='refresh()'>
+          <i class='fa fa-refresh'></i>
+        </a>`
       const treeActions = `${showSearch ? searchIcon : ''}${showRefresh ? refreshIcon : ''}`
-      const icons = `<span style="float: right; margin-right: 10px">
-                        ${treeActions}
-                     </span>`
+      const icons = `
+        <span style="float: right; margin-right: 10px">
+          ${treeActions}
+        </span>`
       const rootNode = ztree.getNodes()[0]
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')

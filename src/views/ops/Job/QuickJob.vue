@@ -2,24 +2,15 @@
   <Page>
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
-        <IBox class="transition-box" style="width: calc(100% - 17px);">
-          <el-form label-width="160px">
-            <el-form-item label="runas">
-              <el-input v-model="runas" />
-            </el-form-item>
-            <el-form-item label="runas policy">
-              <el-select v-model="runasPolicy">
-                <el-option v-for="(item,index) of runasPolicyOptions" :key="index" :value="item">
-                  {{ item.label }}
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-
+        <div class="transition-box" style="width: calc(100% - 17px);">
+          <DataForm v-bind="formConfig" />
           <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
-          <Term ref="xterm" />
+          输出:  <span style="float: right">状态: ok  时间：20s</span>
+          <div style="padding-left: 30px; background-color: rgb(247 247 247)">
+            <Term ref="xterm" style="border-left: solid 1px #dddddd" />
+          </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
-        </IBox>
+        </div>
       </template>
     </TreeTable>
   </Page>
@@ -28,9 +19,9 @@
 <script>
 import { TreeTable } from '@/components'
 import Term from '@/components/Term'
-import IBox from '@/components/IBox'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
+import DataForm from '@/components/DataForm'
 
 export default {
   name: 'CommandExecution',
@@ -38,7 +29,7 @@ export default {
     TreeTable,
     Page,
     Term,
-    IBox,
+    DataForm,
     CodeEditor
   },
   data() {
@@ -47,6 +38,11 @@ export default {
       runas: 'root',
       runasPolicy: 'skip',
       command: '',
+      formConfig: {
+        fields: [
+        ],
+        hasButtons: false
+      },
       runasPolicyOptions: [
         {
           label: 'skip',
@@ -63,7 +59,7 @@ export default {
       toolbar: [
         {
           type: 'button',
-          icon: 'fa  fa-play',
+          icon: 'fa fa-play',
           tip: 'Run command',
           callback: () => {
             this.execute()
@@ -76,38 +72,20 @@ export default {
         mode: 'shell'
       },
       treeSetting: {
-        treeUrl: '',
+        treeUrl: '/api/v1/perms/users/self/nodes-with-assets/tree/',
         showRefresh: true,
         showMenu: false,
         showSearch: true,
-        customTreeHeader: true,
+        customTreeHeader: false,
         check: {
           enable: true
         },
         view: {
           dblClickExpand: false,
           showLine: true
-        },
-        data: {
-          simpleData: {
-            enable: true
-          }
-        },
-        edit: {
-          enable: true,
-          showRemoveBtn: false,
-          showRenameBtn: false,
-          drag: {
-            isCopy: true,
-            isMove: true
-          }
-        },
-        async: {
-          enable: false
         }
       },
       iShowTree: true,
-      basicUrl: '/api/v1/perms/users/nodes-with-assets/tree/?cache_policy=1',
       ws: '',
       wsConnected: false
     }

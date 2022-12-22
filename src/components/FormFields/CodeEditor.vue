@@ -1,28 +1,64 @@
 <template>
   <div style="font-size: 12px">
-    <div v-if="toolbar.length>0" class="toolbar">
-      <template v-for="(item,index) in toolbar">
-        <el-tooltip :key="index" :content="item.tip" placement="top">
-          <el-button v-if="item.type==='button'" size="mini" type="primary" @click="item.callback">
-            <i :class="item.icon" />
-          </el-button>
-        </el-tooltip>
-      </template>
+    <div class="toolbar">
+      <el-button size="mini" type="primary">
+        <i class="fa fa-play" /> 执行
+      </el-button>
+
+      <el-dropdown trigger="click">
+        <el-button type="default" size="mini">
+          <b>账号:</b> web <i class="el-icon-arrow-down el-icon--right" />
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>优先特权账号</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-dropdown trigger="click">
+        <el-button type="default" size="mini">
+          <b>账号策略:</b> 跳过 <i class="el-icon-arrow-down el-icon--right" />
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>跳过</el-dropdown-item>
+          <el-dropdown-item>仅特权账号</el-dropdown-item>
+          <el-dropdown-item>优先特权账号</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-dropdown trigger="click">
+        <el-button type="default" size="mini">
+          语言: Shell <i class="el-icon-arrow-down el-icon--right" />
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item value="shell">Shell</el-dropdown-item>
+          <el-dropdown-item value="python">Python</el-dropdown-item>
+          <el-dropdown-item>Powershell</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <div style="float: right" class="right-side">
+        <el-button size="mini" type="default">
+          <i class="fa fa-upload" />
+        </el-button>
+        <el-button size="mini" type="default">
+          <i class="fa fa-folder-open" />
+        </el-button>
+        <el-button size="mini" type="default">
+          <i class="fa fa-save" />
+        </el-button>
+      </div>
     </div>
     <codemirror ref="myCm" v-model="iValue" :options="cmOptions" />
   </div>
 </template>
 
 <script>
-
 import { codemirror } from 'vue-codemirror'
 
 import 'codemirror/mode/shell/shell'
 import 'codemirror/mode/powershell/powershell'
 import 'codemirror/mode/python/python'
-import 'codemirror/mode/ruby/ruby'
-
-// theme css
+import 'codemirror/mode/ruby/ruby' // theme css
 import 'codemirror/theme/base16-dark.css'
 import 'codemirror/theme/base16-light.css'
 import 'codemirror/theme/idea.css'
@@ -47,7 +83,6 @@ export default {
         return {
           tabSize: 4,
           mode: 'shell',
-          theme: 'base16-dark',
           lineNumbers: true,
           line: true
         }
@@ -55,7 +90,11 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      runas: '',
+      runasPolicy: 'skip',
+      lang: 'shell'
+    }
   },
   computed: {
     iValue: {
@@ -79,10 +118,31 @@ export default {
   vertical-align: bottom;
   display: inline-block;
   border-radius: 4px 4px 0 0;
-  background-color: var(--color-primary);
+  border-bottom: solid 1px #e4e7ed;
 }
 >>> .CodeMirror pre.CodeMirror-line,
 >>> .CodeMirror-linenumber.CodeMirror-gutter-elt {
-  line-height: 18px!important;
+  line-height: 18px !important;
+}
+.runas-input {
+  height: 28px;
+  >>> {
+    .el-select {
+      width: 100px;
+    }
+  }
+}
+
+.right-side {
+  .el-button {
+    border: none;
+    padding: 2px;
+    font-size: 14px;
+    width: 26px;
+    height: 26px;
+    color: #888;
+    background-color: transparent;
+    margin-left: 2px;
+  }
 }
 </style>

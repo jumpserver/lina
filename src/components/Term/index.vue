@@ -6,6 +6,7 @@
 import 'xterm/css/xterm.css'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
+
 export default {
   name: 'Term',
   data() {
@@ -22,7 +23,7 @@ export default {
         fontSize: 13,
         rightClickSelectsWord: true,
         theme: {
-          background: '#1f1b1b'
+          background: '#fff'
         }
       })
     const fitAddon = new FitAddon()

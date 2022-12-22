@@ -92,7 +92,6 @@ export default {
         {
           path: 'quick-job',
           name: 'QuickJob',
-          hidden: true,
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('ops.QuickJob'),
