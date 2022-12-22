@@ -34,12 +34,12 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('xpack.ChangeAuthPlan.Execute'),
-            disabled: !this.$hasPerm('assets.add_automationexecution')
+            disabled: !this.$hasPerm('assets.add_changesecretexection')
           },
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/automation-executions/`,
+                `/api/v1/assets/change-secret-executions/`,
                 { plan: this.object.id }
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')

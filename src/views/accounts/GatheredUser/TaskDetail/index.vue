@@ -37,7 +37,7 @@ export default {
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskExecutionList'),
             name: 'TaskExecutionList',
-            hidden: !this.$hasPerm('assets.view_automationexecution')
+            hidden: !this.$hasPerm('assets.view_gatheraccountsexecution')
           }
         ],
         hasRightSide: true
