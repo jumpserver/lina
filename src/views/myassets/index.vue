@@ -11,6 +11,7 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import { AccountShowFormatter, DialogDetailFormatter } from '@/components/TableFormatters'
+
 export default {
   components: {
     GenericTreeListPage
@@ -25,7 +26,7 @@ export default {
         url: '/api/v1/perms/users/self/users/assets/',
         nodeUrl: '/api/v1/perms/users/self/nodes/',
         // ?assets=0不显示资产. =1显示资产
-        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/?cache_policy=2',
+        treeUrl: '/api/v1/perms/users/self/nodes/children/tree/',
         callback: {
           refresh: () => {},
           onSelected: function(event, treeNode) {

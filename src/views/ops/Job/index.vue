@@ -28,8 +28,10 @@ export default {
         ],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'type', 'asset_amount', 'average_time_cost',
-            'summary', 'comment', 'date_last_run', 'actions']
+          default: [
+            'name', 'type', 'asset_amount', 'average_time_cost',
+            'summary', 'comment', 'date_last_run', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -111,19 +113,7 @@ export default {
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: true,
-        extraActions: [
-          {
-            name: this.$t('ops.QuickJob'),
-            title: this.$t('ops.QuickJob'),
-            has: () => {
-              return true
-            },
-            callback: () => {
-              this.$router.push({ name: 'QuickJob' })
-            }
-          }
-        ]
+        hasMoreActions: true
       }
     }
   },

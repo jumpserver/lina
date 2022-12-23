@@ -117,8 +117,7 @@ export default {
   line-height: 29px;
   vertical-align: bottom;
   display: inline-block;
-  border-radius: 4px 4px 0 0;
-  border-bottom: solid 1px #e4e7ed;
+  margin-bottom: 5px;
 }
 >>> .CodeMirror pre.CodeMirror-line,
 >>> .CodeMirror-linenumber.CodeMirror-gutter-elt {

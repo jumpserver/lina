@@ -195,7 +195,6 @@ export default {
 
   .tree-table-content {
     .left {
-      border-right: solid 1px #ebeef5;
       background: #f3f3f3;
 
       &:hover {

@@ -5,7 +5,17 @@
         <div class="transition-box" style="width: calc(100% - 17px);">
           <DataForm v-bind="formConfig" />
           <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
-          输出:  <span style="float: right">状态: ok  时间：20s</span>
+          <b>输出:</b>
+          <span style="float: right">
+            <span>
+              <span>状态: </span>
+              <span>ok</span>
+            </span>
+            <span>
+              <span>时间: </span>
+              <span>5s</span>
+            </span>
+          </span>
           <div style="padding-left: 30px; background-color: rgb(247 247 247)">
             <Term ref="xterm" style="border-left: solid 1px #dddddd" />
           </div>
@@ -72,7 +82,7 @@ export default {
         mode: 'shell'
       },
       treeSetting: {
-        treeUrl: '/api/v1/perms/users/self/nodes-with-assets/tree/',
+        treeUrl: '/api/v1/perms/users/self/nodes/children-with-assets/tree/',
         showRefresh: true,
         showMenu: false,
         showSearch: true,
