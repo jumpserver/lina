@@ -272,8 +272,6 @@ export default {
       const { query: { asset }} = this.$route
       if (asset) {
         this.iAsset = await this.$axios.get(`/api/v1/assets/assets/${asset}/`)
-      } else {
-        this.iAsset = null
       }
     },
     refresh() {
