@@ -147,64 +147,32 @@ export default {
           value: this.object.name
         },
         {
-          key: this.$t('assets.ip'),
-          value: this.object.ip
+          key: this.$t('assets.Category'),
+          value: this.object.category.label
+        },
+        {
+          key: this.$t('assets.Type'),
+          value: this.object.type.label
+        },
+        {
+          key: this.$t('assets.IP/Host'),
+          value: this.object.address
         },
         {
           key: this.$t('assets.Protocols'),
-          value: this.object.protocols.map(i => i.name).join(',')
-        },
-        {
-          key: this.$t('assets.PublicIp'),
-          value: this.object.public_ip
-        },
-        {
-          key: this.$t('assets.AdminUser'),
-          value: this.object.admin_user_display
+          value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
         },
         {
           key: this.$t('assets.Domain'),
           value: this.object.domain?.name || ''
         },
         {
-          key: this.$t('assets.Vendor'),
-          value: this.object.vendor
-        },
-        {
-          key: this.$t('assets.Model'),
-          value: this.object.model
-        },
-        {
-          key: this.$t('assets.Cpu'),
-          value: this.object.cpu_model
-        },
-        {
-          key: this.$t('assets.Memory'),
-          value: this.object.memory
-        },
-        {
-          key: this.$t('assets.Disk'),
-          value: this.object.disk_info
-        },
-        {
           key: this.$t('assets.Platform'),
-          value: this.object.platform?.name || ''
-        },
-        {
-          key: this.$t('assets.Os'),
-          value: this.object.os_arch
+          value: this.object.platform.label
         },
         {
           key: this.$t('assets.IsActive'),
           value: this.object.is_active
-        },
-        {
-          key: this.$t('assets.SerialNumber'),
-          value: this.object.sn
-        },
-        {
-          key: this.$t('assets.AssetNumber'),
-          value: this.object.number
         },
         {
           key: this.$t('assets.DateJoined'),

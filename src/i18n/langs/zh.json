@@ -108,6 +108,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "IP/Host": "IP/主机",
     "AssetTree": "资产树",
     "CustomTree": "自定义树",
     "BuiltinTree": "类型树",
