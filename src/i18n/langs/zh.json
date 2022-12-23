@@ -1352,7 +1352,7 @@
     "LicenseExpired": "许可证已经过期",
     "LicenseWillBe": "许可证即将在 ",
     "LicenseReachedAssetAmountLimit": "资产数量已经超过许可证数量限制",
-    "LicenseForTest": "测试用途许可证， 本许可证仅用于 开发、测试（PoC）和演示",
+    "LicenseForTest": "测试用途许可证， 本许可证仅用于 测试（PoC）和演示",
     "Expire": " 过期",
     "WeCom": "企业微信",
     "DingTalk": "钉钉",
@@ -1368,8 +1368,7 @@
     "destinationIP": "目的地址",
     "testPort": "端口",
     "testTools": "测试",
-    "testHelpText": "请输入目的地址进行测试",
-    "SMSProvider": "短信服务商 / 协议"
+    "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
     "OneAssigneeType": "一级受理人类型",

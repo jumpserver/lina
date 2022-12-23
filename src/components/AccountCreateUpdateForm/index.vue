@@ -59,6 +59,7 @@ export default {
             multiple: false
           },
           hidden: () => {
+            console.log('asset', this.asset)
             return this.asset && this.asset.id
           }
         },

@@ -9,7 +9,7 @@
     width="70%"
   >
     <AccountCreateForm
-      :platform="platform"
+      :asset="asset"
       :account="account"
       @add="addAccount"
       @edit="editAccount"
@@ -28,7 +28,7 @@ export default {
     AccountCreateForm
   },
   props: {
-    platform: {
+    asset: {
       type: Object,
       default: () => ({})
     },
