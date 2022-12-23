@@ -7,7 +7,11 @@ export default [
     path: 'assets',
     component: empty,
     redirect: '',
-    meta: { title: i18n.t('route.AssetList'), permissions: ['assets.view_asset'] },
+    meta: {
+      title: i18n.t('route.AssetList'),
+      app: 'assets',
+      resource: 'asset'
+    },
     children: [
       {
         path: '',
@@ -36,7 +40,11 @@ export default [
     component: empty,
     redirect: '',
     hidden: true,
-    meta: { title: i18n.t('route.HostList'), permissions: ['assets.view_asset'] },
+    meta: {
+      title: i18n.t('route.HostList'),
+      app: 'assets',
+      resource: 'asset'
+    },
     children: [
       {
         path: '',
@@ -66,7 +74,11 @@ export default [
     component: empty,
     redirect: '',
     hidden: true,
-    meta: { title: i18n.t('route.Databases'), permissions: ['assets.view_asset'] },
+    meta: {
+      title: i18n.t('route.Databases'),
+      app: 'assets',
+      resource: 'asset'
+    },
     children: [
       {
         path: '',
@@ -96,7 +108,11 @@ export default [
     component: empty,
     redirect: '',
     hidden: true,
-    meta: { title: i18n.t('route.devices'), permissions: ['assets.view_asset'] },
+    meta: {
+      title: i18n.t('route.devices'),
+      app: 'assets',
+      resource: 'asset'
+    },
     children: [
       {
         path: '',
@@ -126,7 +142,11 @@ export default [
     component: empty,
     redirect: '',
     hidden: true,
-    meta: { title: i18n.t('route.networking'), permissions: ['assets.view_asset'] },
+    meta: {
+      title: i18n.t('route.networking'),
+      app: 'assets',
+      resource: 'asset'
+    },
     children: [
       {
         path: '',
@@ -156,7 +176,11 @@ export default [
     component: empty,
     redirect: '',
     hidden: true,
-    meta: { title: i18n.t('route.networking'), permissions: ['assets.view_asset'] },
+    meta: {
+      title: i18n.t('route.networking'),
+      app: 'assets',
+      resource: 'asset'
+    },
     children: [
       {
         path: '',
