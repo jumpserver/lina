@@ -83,6 +83,10 @@ export default {
       showPlatform: false,
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
+        permissions: {
+          app: 'assets',
+          resource: 'asset'
+        },
         columns: [
           'name', 'address', 'category', 'type', 'platform',
           'protocols', 'is_active', 'connectivity',
