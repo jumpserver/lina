@@ -13,7 +13,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import JobExecutionDetail from '@/views/ops/Executions/ExecutionDetail/JobExecutionDetail'
+import JobExecutionDetail from '@/views/ops/Execution/ExecutionDetail/JobExecutionDetail'
 
 export default {
   components: {

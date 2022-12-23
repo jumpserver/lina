@@ -39,16 +39,18 @@ export default {
         {
           type: 'button',
           icon: 'fa-folder-open-o',
+          align: 'right',
           tip: this.$t('ops.OpenCommand'),
-          callback: () => {
+          callback: (val, setting) => {
             this.openAdhocSelectDialog()
           }
         },
         {
           type: 'button',
           icon: 'save',
+          align: 'right',
           tip: this.$t('ops.SaveCommand'),
-          callback: () => {
+          callback: (val, setting) => {
             this.openAdhocSaveDialog()
           }
         },
@@ -56,7 +58,8 @@ export default {
           type: 'button',
           icon: 'fa-question-circle',
           tip: this.$t('ops.SaveCommand'),
-          callback: () => {
+          align: 'right',
+          callback: (val, setting) => {
             this.openHelpDialog()
           }
         }

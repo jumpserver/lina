@@ -26,7 +26,7 @@
       </div>
       <AddAccountDialog
         :visible.sync="addAccountDialogVisible"
-        :asset="asset"
+        :platform="platform"
         :account="account"
         :accounts="accounts"
       />
@@ -69,10 +69,6 @@ export default {
     return {
       accounts: [],
       account: {},
-      asset: {
-        id: 'xxx',
-        platform: this.platform
-      },
       initial: false,
       addAccountDialogVisible: false,
       templateDialogVisible: false

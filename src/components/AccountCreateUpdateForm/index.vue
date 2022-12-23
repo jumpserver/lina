@@ -22,6 +22,10 @@ export default {
       type: Object,
       default: null
     },
+    platform: {
+      type: Object,
+      default: null
+    },
     account: {
       type: Object,
       default: null
@@ -32,7 +36,7 @@ export default {
       loading: true,
       usernameChanged: false,
       defaultPrivilegedAccounts: ['root', 'administrator'],
-      platform: {
+      iPlatform: {
         automation: {},
         protocols: [
           {
@@ -59,8 +63,7 @@ export default {
             multiple: false
           },
           hidden: () => {
-            console.log('asset', this.asset)
-            return this.asset && this.asset.id
+            return this.platform || this.asset
           }
         },
         name: {
@@ -92,14 +95,11 @@ export default {
         su_from: {
           component: Select2,
           hidden: (formValue) => {
-            return formValue.assets?.length > 1
+            return !this.asset?.id
           },
           el: {
             multiple: false,
             clearable: true,
-            hidden: () => {
-              return !this.asset.id
-            },
             ajax: {
               url: `/api/v1/assets/accounts/su-from-accounts/?asset=${this.asset?.id || ''}`,
               transformOption: (item) => {
@@ -149,7 +149,7 @@ export default {
         },
         push_now: {
           hidden: () => {
-            return !this.platform.automation?.['push_account_enabled']
+            return !this.iPlatform.automation?.['push_account_enabled']
           }
         }
       },
@@ -166,6 +166,9 @@ export default {
   },
   methods: {
     async getPlatform() {
+      if (this.platform) {
+        this.iPlatform = this.platform
+      }
       if (!this.asset || !this.asset.platform) {
         return
       }
@@ -192,7 +195,7 @@ export default {
         }
       ]
       const secretTypes = []
-      this.platform.protocols?.forEach(p => {
+      this.iPlatform.protocols?.forEach(p => {
         secretTypes.push(...p['secret_types'])
       })
       if (!this.form.secret_type) {

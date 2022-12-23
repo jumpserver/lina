@@ -9,7 +9,7 @@
 import { ActionsFormatter } from '@/components/TableFormatters'
 import { GenericListPage } from '@/layout/components'
 import { openTaskPage } from '@/utils/jms'
-import ExecutionDetailDialog from '@/views/ops/Executions/ExecutionDetail'
+import ExecutionDetailDialog from '@/views/ops/Execution/ExecutionDetail'
 
 export default {
   components: {
