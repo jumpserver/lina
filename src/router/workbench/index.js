@@ -95,8 +95,7 @@ export default {
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('ops.QuickJob'),
-            permissions: [],
-            activeMenu: '/workbench/ops/job'
+            permissions: []
           }
         },
         {

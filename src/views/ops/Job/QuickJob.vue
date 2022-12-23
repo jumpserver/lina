@@ -3,23 +3,28 @@
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <DataForm v-bind="formConfig" />
-          <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
-          <b>输出:</b>
-          <span style="float: right">
-            <span>
-              <span>状态: </span>
-              <span>ok</span>
-            </span>
-            <span>
-              <span>时间: </span>
-              <span>5s</span>
-            </span>
-          </span>
-          <div style="padding-left: 30px; background-color: rgb(247 247 247)">
-            <Term ref="xterm" style="border-left: solid 1px #dddddd" />
-          </div>
-          <div style="display: flex;margin-top:10px;justify-content: space-between" />
+          <IBox>
+            <DataForm v-bind="formConfig" />
+            <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
+            <div class="">
+              <b>输出:</b>
+              <span style="float: right">
+                <span>
+                  <span>状态: </span>
+                  <span>ok</span>
+                </span>
+                <span>
+                  <span>时间: </span>
+                  <span>5s</span>
+                </span>
+              </span>
+              <div class="output">
+                <Term ref="xterm" style="border-left: solid 1px #dddddd" />
+              </div>
+            </div>
+
+            <div style="display: flex;margin-top:10px;justify-content: space-between" />
+          </IBox>
         </div>
       </template>
     </TreeTable>
@@ -32,6 +37,7 @@ import Term from '@/components/Term'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
 import DataForm from '@/components/DataForm'
+import IBox from '@/components/IBox'
 
 export default {
   name: 'CommandExecution',
@@ -39,6 +45,7 @@ export default {
     TreeTable,
     Page,
     Term,
+    IBox,
     DataForm,
     CodeEditor
   },
@@ -205,5 +212,11 @@ export default {
 .tree-box {
   margin-right: 2px;
   border: 1px solid #e0e0e0;
+}
+
+.output {
+  padding-left: 30px;
+  background-color: rgb(247 247 247);
+  border: solid 1px #f3f3f3;;
 }
 </style>

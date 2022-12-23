@@ -770,7 +770,7 @@
     "privilegeOnly": "仅选择特权账号",
     "privilegeFirst": "优先选择特权账号",
     "skip": "忽略当前资产",
-    "QuickJob": "批量命令",
+    "QuickJob": "快捷命令",
     "instantAdhoc": "即时命令",
     "AdhocManage": "命令管理",
     "PlaybookManage": "Playbook管理",

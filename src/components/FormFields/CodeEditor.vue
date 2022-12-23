@@ -1,5 +1,5 @@
 <template>
-  <div style="font-size: 12px">
+  <div style="font-size: 12px" class="code-editor">
     <div class="toolbar">
       <el-button size="mini" type="primary">
         <i class="fa fa-play" /> 执行
@@ -48,7 +48,7 @@
         </el-button>
       </div>
     </div>
-    <codemirror ref="myCm" v-model="iValue" :options="cmOptions" />
+    <codemirror ref="myCm" v-model="iValue" class="editor" :options="cmOptions" />
   </div>
 </template>
 
@@ -111,12 +111,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.editor {
+  border: solid 1px #f3f3f3;
+}
 .toolbar {
   height: 100%;
   width: 100%;
   line-height: 29px;
   vertical-align: bottom;
   display: inline-block;
+  padding: 3px;
   margin-bottom: 5px;
 }
 >>> .CodeMirror pre.CodeMirror-line,
