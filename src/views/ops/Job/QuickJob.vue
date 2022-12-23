@@ -6,6 +6,7 @@
       :args="command"
       :visible.sync="showOpenAdhocSaveDialog"
     />
+    <VariableHelpDialog :visible.sync="showHelpDialog" />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
@@ -14,7 +15,7 @@
           <span v-if="executionInfo.status" style="float: right">
             <span>
               <span><b>{{ $tc('common.Status') }}: </b></span>
-              <span>{{ executionInfo.status }}</span>
+              <span type="primary">{{ executionInfo.status }}</span>
             </span>
             <span>
               <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
@@ -38,10 +39,12 @@ import CodeEditor from '@/components/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
 import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
 import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
+import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
 
 export default {
   name: 'CommandExecution',
   components: {
+    VariableHelpDialog,
     AdhocSaveDialog,
     AdhocOpenDialog,
     TreeTable,
@@ -58,7 +61,7 @@ export default {
         timeCost: 0,
         cancel: 0
       },
-
+      showHelpDialog: false,
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
       DataZTree: 0,
@@ -165,6 +168,15 @@ export default {
           callback: (val, setting) => {
             this.showOpenAdhocSaveDialog = true
           }
+        },
+        {
+          type: 'button',
+          align: 'right',
+          icon: 'fa fa-question-circle',
+          tip: this.$t('ops.Help'),
+          callback: (val, setting) => {
+            this.showHelpDialog = true
+          }
         }
       ],
       codeMirrorOptions: {
@@ -251,11 +263,11 @@ export default {
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       const url = '/api/v1/ops/jobs/?'
-      const hosts = this.getSelectedAssetsNode().map(function(node) {
-        return node.id
-      })
+      // const hosts = this.getSelectedAssetsNode().map(function(node) {
+      //   return node.id
+      // })
       const data = {
-        assets: hosts,
+        assets: ['9a39ff4e-9ddf-403f-bc63-0f0e4484aafa'],
         module: this.module,
         args: this.command,
         run_as: this.runas.join(),
@@ -263,7 +275,6 @@ export default {
         instant: true,
         is_periodic: false
       }
-      console.log(data)
       this.$axios.post(
         url, data
       ).then(res => {

@@ -15,7 +15,7 @@
           />
         </el-collapse>
       </IBox>
-      <IBox type="warning" :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` ">
+      <IBox v-if="object.summary.excludes" type="warning" :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` ">
         <el-collapse>
           <el-collapse-item
             v-for="(val,key,index) in object.summary.excludes"

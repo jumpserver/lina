@@ -29,6 +29,10 @@ export default {
     args: {
       type: String,
       default: () => ({})
+    },
+    module: {
+      type: String,
+      default: 'shell'
     }
   },
   data() {
@@ -43,9 +47,16 @@ export default {
         args: ''
       },
       fieldsMeta: {
+        module: {
+          hidden: () => {
+            return true
+          }
+        },
         args: {
-          label: 'content',
-          component: CodeEditor
+          component: CodeEditor,
+          hidden: () => {
+            return true
+          }
         }
       }
     }
