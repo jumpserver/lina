@@ -115,7 +115,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
-          permissions: ['xpack.add_gatherusertask']
+          permissions: ['assets.add_gatheraccountsautomation']
         }
       },
       {
@@ -125,7 +125,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
-          permissions: ['xpack.view_gatherusertask']
+          permissions: ['assets.view_gatheraccountsautomation']
         }
       },
       {
@@ -136,7 +136,7 @@ export default [
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'),
           action: 'update',
-          permissions: ['xpack.change_gatherusertask'],
+          permissions: ['assets.change_gatheraccountsautomation'],
           activeMenu: '/accounts/gathered-user'
         }
       }

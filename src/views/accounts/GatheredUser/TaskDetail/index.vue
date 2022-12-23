@@ -25,8 +25,6 @@ export default {
         url: '/api/v1/assets/gather-account-automations/',
         activeMenu: 'Detail',
         actions: {
-          canUpdate: this.$hasPerm('assets.change_automationexecution'),
-          canDelete: this.$hasPerm('assets.delete_automationexecution'),
           deleteSuccessRoute: 'GatherUserListIndex'
         },
         submenu: [

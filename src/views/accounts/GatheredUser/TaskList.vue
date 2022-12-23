@@ -60,7 +60,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'GatherUserTaskDetail',
-              can: vm.$hasPerm('assets.view_automationexecution'),
+              can: vm.$hasPerm('assets.view_gatheraccountsexecution'),
               routeQuery: {
                 activeTab: 'TaskExecutionList'
               }
@@ -81,7 +81,7 @@ export default {
                       `/api/v1/assets/gather-account-executions/`,
                       {
                         automation: data.row.id,
-                        type: data.row.type
+                        type: data.row.type.value
                       }
                     ).then(res => {
                       openTaskPage(res['task'])
