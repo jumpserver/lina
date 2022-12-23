@@ -42,7 +42,7 @@
         <el-input
           v-if="treeSetting.showSearch && showTreeSearch"
           v-model="treeSearchValue"
-          prefix-icon="el-icon-search"
+          prefix-icon="fa fa-search"
           size="mini"
           class="fixed-tree-search"
           :placeholder="$tc('common.Search')"
@@ -447,11 +447,6 @@ export default {
   .treebox {
     height: 80vh;
     background-color: transparent;
-
-    .fixed-tree-title {
-      padding: 5px 10px;
-    }
-
     >>> .ztree {
       overflow: auto;
       background-color: transparent;
@@ -589,24 +584,20 @@ export default {
     & >>> .el-input__inner {
       border-radius: 4px;
       background: #fafafa;
-      padding-right: 45px;
+      padding-right: 32px;
     }
 
     & >>> .el-input__suffix {
       padding-right: 8px;
     }
 
-    & >>> .el-input__suffix-inner {
-      line-height: 34px;
+    & >>> .el-input__prefix {
+      padding-left: 6px;
     }
-  }
 
-  .fixed-tree-title {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding-right: 10px;
-    color: #646A73;
+    & >>> .el-input__suffix-inner {
+      line-height: 30px;
+    }
   }
 
   .icon-refresh {
