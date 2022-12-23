@@ -70,7 +70,8 @@
         >
           <el-tooltip :content="item.tip">
             <el-button v-if="item.type ==='button'" size="mini" type="default" @click="item.callback(iValue,cmOptions)">
-              <i :class="item.icon" />
+              <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
+              <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
             </el-button>
           </el-tooltip>
         </div>

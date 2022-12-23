@@ -72,7 +72,7 @@ export default {
           type: 'button',
           name: this.$t('ops.Run'),
           align: 'left',
-          icon: 'fa fa-play',
+          icon: 'fa-play',
           tip: this.$t('ops.RunCommand'),
           el: {
             type: 'primary'
@@ -151,7 +151,7 @@ export default {
         {
           type: 'button',
           align: 'right',
-          icon: 'fa fa-folder-open',
+          icon: 'fa-folder-open',
           tip: this.$t('ops.OpenCommand'),
           callback: (val, setting) => {
             this.showOpenAdhocDialog = true
@@ -160,7 +160,7 @@ export default {
         {
           type: 'button',
           align: 'right',
-          icon: 'fa fa-save',
+          icon: 'save',
           tip: this.$t('ops.SaveCommand'),
           callback: (val, setting) => {
             this.showOpenAdhocSaveDialog = true
