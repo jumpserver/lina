@@ -1,51 +1,79 @@
 <template>
   <div style="font-size: 12px" class="code-editor">
     <div class="toolbar">
-      <el-button size="mini" type="primary">
-        <i class="fa fa-play" /> 执行
-      </el-button>
+      <div
+        v-for="(item,index) in leftToolbar"
+        :key="index"
+        style="display: inline-block;margin: 0 2px"
+      >
+        <el-tooltip :content="item.tip" placement="top" :disabled="!item.tip">
 
-      <el-dropdown trigger="click">
-        <el-button type="default" size="mini">
-          <b>账号:</b> web <i class="el-icon-arrow-down el-icon--right" />
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>优先特权账号</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          <el-button
+            v-if="item.type ==='button'"
+            size="mini"
+            :type="item.el&&item.el.type"
+            @click="item.callback(iValue,cmOptions)"
+          >
+            <i :class="item.icon" />{{ item.name }}
+          </el-button>
 
-      <el-dropdown trigger="click">
-        <el-button type="default" size="mini">
-          <b>账号策略:</b> 跳过 <i class="el-icon-arrow-down el-icon--right" />
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>跳过</el-dropdown-item>
-          <el-dropdown-item>仅特权账号</el-dropdown-item>
-          <el-dropdown-item>优先特权账号</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          <el-select
+            v-if="item.type==='select' && item.el && item.el.multiple"
+            v-model="item.value"
+            size="mini"
+            multiple
+            :allow-create="item.el.create"
+            :filterable="item.el.create"
+            :placeholder="item.name"
+            @change="item.callback(iValue,cmOptions,item.value)"
+          >
+            <el-option
+              v-for="(option,id) in item.options"
+              :key="id"
+              :label="option.label"
+              :value="option.value"
+            />
+          </el-select>
 
-      <el-dropdown trigger="click">
-        <el-button type="default" size="mini">
-          语言: Shell <i class="el-icon-arrow-down el-icon--right" />
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item value="shell">Shell</el-dropdown-item>
-          <el-dropdown-item value="python">Python</el-dropdown-item>
-          <el-dropdown-item>Powershell</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          <el-dropdown
+            v-if="item.type==='select' && (!item.el || !item.el.multiple) "
+            trigger="click"
+            @command="(command) => {
+              item.value= command
+              item.callback(iValue,cmOptions,command)
+            }"
+          >
+            <el-button type="default" size="mini">
+              <b>{{ item.name }}</b> {{ item.value }} <i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(option,i) in item.options" :key="i" :command="option.value">
+                {{ option.label }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
+          <el-switch
+            v-if="item.type === 'switch'"
+            v-model="item.value"
+            :active-text="item.name"
+            @change="item.callback(iValue,cmOptions,item.value)"
+          />
+        </el-tooltip>
+      </div>
 
       <div style="float: right" class="right-side">
-        <el-button size="mini" type="default">
-          <i class="fa fa-upload" />
-        </el-button>
-        <el-button size="mini" type="default">
-          <i class="fa fa-folder-open" />
-        </el-button>
-        <el-button size="mini" type="default">
-          <svg-icon icon-class="save" style="font-size: 14px;" />
-        </el-button>
+        <div
+          v-for="(item,index) in rightToolbar"
+          :key="index"
+          style="display: inline-block"
+        >
+          <el-tooltip :content="item.tip">
+            <el-button v-if="item.type ==='button'" size="mini" type="default" @click="item.callback(iValue,cmOptions)">
+              <i :class="item.icon" />
+            </el-button>
+          </el-tooltip>
+        </div>
       </div>
     </div>
     <codemirror ref="myCm" v-model="iValue" class="editor" :options="cmOptions" />
@@ -97,6 +125,16 @@ export default {
     }
   },
   computed: {
+    rightToolbar() {
+      return this.toolbar.filter((item) => {
+        return item.align === 'right'
+      })
+    },
+    leftToolbar() {
+      return this.toolbar.filter((item) => {
+        return item.align === 'left'
+      })
+    },
     iValue: {
       get() {
         return this.value
@@ -106,7 +144,8 @@ export default {
         this.$emit('change', val)
       }
     }
-  }
+  },
+  methods: {}
 }
 </script>
 
@@ -123,13 +162,16 @@ export default {
   padding: 3px;
   margin-bottom: 5px;
 }
->>> .CodeMirror pre.CodeMirror-line,
->>> .CodeMirror-linenumber.CodeMirror-gutter-elt {
+
+> > > .CodeMirror pre.CodeMirror-line,
+> > > .CodeMirror-linenumber.CodeMirror-gutter-elt {
   line-height: 18px !important;
 }
+
 .runas-input {
   height: 28px;
-  >>> {
+
+  > > > {
     .el-select {
       width: 100px;
     }

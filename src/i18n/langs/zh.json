@@ -701,6 +701,10 @@
     "Weekly": "按周"
   },
   "ops": {
+    "DryRun": "测试运行",
+    "Language": "语言",
+    "Job": "作业",
+    "Command": "命令",
     "Material": "内容",
     "Type": "类型",
     "DateCreated": "创建时间",
@@ -746,6 +750,7 @@
     "ratio": "比例",
     "run": "执行",
     "runAs": "运行用户",
+    "RunasPolicy": "账号策略",
     "runTimes": "执行次数",
     "selectAssetsMessage": "选择左侧资产, 选择运行的系统用户，批量执行命令",
     "selectedAssets": "已选择资产:",
@@ -1369,8 +1374,7 @@
     "destinationIP": "目的地址",
     "testPort": "端口",
     "testTools": "测试",
-    "testHelpText": "请输入目的地址进行测试",
-    "SMSProvider": "短信服务商 / 协议"
+    "testHelpText": "请输入目的地址进行测试"
   },
   "tickets": {
     "OneAssigneeType": "一级受理人类型",

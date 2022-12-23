@@ -1,30 +1,30 @@
 <template>
   <Page>
+    <AdhocOpenDialog v-if="showOpenAdhocDialog" :visible.sync="showOpenAdhocDialog" @select="onSelectAdhoc" />
+    <AdhocSaveDialog
+      v-if="showOpenAdhocSaveDialog"
+      :args="command"
+      :visible.sync="showOpenAdhocSaveDialog"
+    />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <IBox>
-            <DataForm v-bind="formConfig" />
-            <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" />
-            <div class="">
-              <b>输出:</b>
-              <span style="float: right">
-                <span>
-                  <span>状态: </span>
-                  <span>ok</span>
-                </span>
-                <span>
-                  <span>时间: </span>
-                  <span>5s</span>
-                </span>
-              </span>
-              <div class="output">
-                <Term ref="xterm" style="border-left: solid 1px #dddddd" />
-              </div>
-            </div>
-
-            <div style="display: flex;margin-top:10px;justify-content: space-between" />
-          </IBox>
+          <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" :value.sync="command" />
+          <b>{{ $tc('ops.output') }}:</b>
+          <span v-if="executionInfo.status" style="float: right">
+            <span>
+              <span><b>{{ $tc('common.Status') }}: </b></span>
+              <span>{{ executionInfo.status }}</span>
+            </span>
+            <span>
+              <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
+              <span>{{ executionInfo.timeCost.toFixed(2) }}</span>
+            </span>
+          </span>
+          <div style="padding-left: 30px; background-color: rgb(247 247 247)">
+            <Term ref="xterm" style="border-left: solid 1px #dddddd" />
+          </div>
+          <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
       </template>
     </TreeTable>
@@ -36,50 +36,134 @@ import { TreeTable } from '@/components'
 import Term from '@/components/Term'
 import CodeEditor from '@/components/FormFields/CodeEditor'
 import Page from '@/layout/components/Page'
-import DataForm from '@/components/DataForm'
-import IBox from '@/components/IBox'
+import AdhocOpenDialog from '@/views/ops/Job/AdhocOpenDialog'
+import AdhocSaveDialog from '@/views/ops/Job/AdhocSaveDialog'
 
 export default {
   name: 'CommandExecution',
   components: {
+    AdhocSaveDialog,
+    AdhocOpenDialog,
     TreeTable,
     Page,
     Term,
-    IBox,
-    DataForm,
     CodeEditor
   },
   data() {
     return {
+      currentStatus: '',
+      currentTaskID: '',
+      executionInfo: {
+        status: '',
+        timeCost: 0,
+        cancel: 0
+      },
+
+      showOpenAdhocDialog: false,
+      showOpenAdhocSaveDialog: false,
       DataZTree: 0,
-      runas: 'root',
+      runas: ['root'],
       runasPolicy: 'skip',
       command: '',
-      formConfig: {
-        fields: [
-        ],
-        hasButtons: false
-      },
-      runasPolicyOptions: [
-        {
-          label: 'skip',
-          value: 'skip'
-        }, {
-          label: 'Privileged First',
-          value: 'privileged_first'
-        },
-        {
-          label: 'Privileged Only',
-          value: 'privileged_only'
-        }
-      ],
+      module: 'shell',
+      selectedAccounts: [],
       toolbar: [
         {
           type: 'button',
+          name: this.$t('ops.Run'),
+          align: 'left',
           icon: 'fa fa-play',
-          tip: 'Run command',
-          callback: () => {
+          tip: this.$t('ops.RunCommand'),
+          el: {
+            type: 'primary'
+          },
+          callback: (val, setting) => {
             this.execute()
+          }
+        },
+        {
+          type: 'select',
+          name: this.$t('ops.runAs'),
+          align: 'left',
+          value: ['root'],
+          el: {
+            multiple: true,
+            create: true
+          },
+          options: [
+            {
+              label: 'root', value: 'root'
+            }
+          ],
+          callback: (val, setting, option) => {
+            this.runas = option
+          }
+        },
+        {
+          type: 'select',
+          name: this.$t('ops.RunasPolicy'),
+          align: 'left',
+          value: 'skip',
+          options: [
+            {
+              label: 'skip',
+              value: 'skip'
+            }, {
+              label: 'Privileged First',
+              value: 'privileged_first'
+            },
+            {
+              label: 'Privileged Only',
+              value: 'privileged_only'
+            }
+          ],
+          callback: (val, setting, option) => {
+            this.runasPolicy = option
+          }
+        },
+        {
+          type: 'select',
+          name: this.$t('ops.Language'),
+          align: 'left',
+          value: 'shell',
+          options: [
+            {
+              label: 'Shell', value: 'shell'
+            },
+            {
+              label: 'Powershell', value: 'powershell'
+            }
+          ],
+          callback: (val, setting, option) => {
+            setting.mode = option
+            this.module = option
+          }
+        },
+        {
+          type: 'switch',
+          name: this.$t('ops.DryRun'),
+          align: 'left',
+          value: false,
+          callback: (val, setting, option) => {
+            console.log(option)
+          }
+        },
+        {
+          type: 'button',
+          align: 'right',
+          icon: 'fa fa-folder-open',
+          tip: this.$t('ops.OpenCommand'),
+          callback: (val, setting) => {
+            this.showOpenAdhocDialog = true
+          }
+        },
+        {
+          type: 'button',
+          align: 'right',
+          icon: 'fa fa-save',
+          tip: this.$t('ops.SaveCommand'),
+          callback: (val, setting) => {
+            this.showOpenAdhocSaveDialog = true
           }
         }
       ],
@@ -113,14 +197,11 @@ export default {
     }
   },
   mounted() {
-    this.handleSystemUserChange('')
     this.enableWS()
   },
   methods: {
-    handleSystemUserChange(id) {
-      this.treeSetting.treeUrl = this.basicUrl
-      this.xterm.clear()
-      this.DataZTree++
+    onSelectAdhoc(adhoc) {
+      this.command = adhoc.args
     },
     getSelectedAssetsNode() {
       const nodes = this.$refs.TreeTable.getSelectedNodes()
@@ -140,9 +221,22 @@ export default {
     setWsCallback() {
       this.ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
-        let message = data.message
-        message = message.replace(/Task ops\.tasks\.run_command_execution.*/, '')
-        this.xterm.write(message)
+        if (data.hasOwnProperty('message')) {
+          let message = data.message
+          message = message.replace(/Task ops\.tasks\.run_command_execution.*/, '')
+          this.xterm.write(message)
+        }
+        if (data.hasOwnProperty('event')) {
+          const event = data.event
+          switch (event) {
+            case 'end':
+              clearInterval(this.executionInfo.cancel)
+              this.$axios.get(`/api/v1/ops/job-execution/task-detail/?task_id=${this.currentTaskID}`).then(data => {
+                this.executionInfo.status = data['is_success'] === true ? 'success' : 'failed'
+              })
+              break
+          }
+        }
       }
     },
     wrapperError(msg) {
@@ -162,14 +256,23 @@ export default {
       })
       const data = {
         assets: hosts,
-        run_as: this.runas,
+        module: this.module,
+        args: this.command,
+        run_as: this.runas.join(),
         run_as_policy: this.runasPolicy,
         instant: true,
         is_periodic: false
       }
+      console.log(data)
       this.$axios.post(
         url, data
       ).then(res => {
+        this.executionInfo.timeCost = 0
+        this.executionInfo.status = 'running'
+        this.executionInfo.cancel = setInterval(() => {
+          this.executionInfo.timeCost += 0.1
+        }, 100)
+        this.currentTaskID = res.task_id
         this.writeExecutionOutput(res.task_id)
       })
     }
