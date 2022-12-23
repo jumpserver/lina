@@ -28,7 +28,6 @@ export default {
       showLogViewer: false,
       showLogId: '',
       tableConfig: {
-        hasSelection: false,
         url: `/api/v1/ops/job-executions/`,
         columns: [
           'date_start', 'is_finished', 'is_success', 'time_cost', 'actions'

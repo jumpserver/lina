@@ -21,7 +21,6 @@ export default {
       ready: false,
       showOpenAdhocDialog: false,
       instantTask: false,
-      jobType: '',
       url: '/api/v1/ops/jobs/',
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'instant']],
@@ -54,7 +53,7 @@ export default {
         },
         type: {
           hidden: () => {
-            return this.instantTask
+            return true
           }
         },
         module: {
@@ -147,22 +146,33 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query && this.$route.query.type && this.$route.query.id) {
+    if (this.$route.query && this.$route.query.type) {
       this.initial.type = 'adhoc'
       switch (this.$route.query.type) {
         case 'adhoc':
           this.initial.type = 'adhoc'
-          this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
-            this.initial.module = data.module
-            this.initial.args = data.args
-            this.initial.instant = true
-            this.initial.runAfterSave = true
-            this.instantTask = true
-            this.createSuccessNextRoute = { name: 'Adhoc' }
+          if (this.$route.query.id) {
+            this.$axios.get(`/api/v1/ops/adhocs/${this.$route.query.id}`).then((data) => {
+              this.initial.module = data.module
+              this.initial.args = data.args
+              this.initial.instant = true
+              this.initial.runAfterSave = true
+              this.instantTask = true
+              this.createSuccessNextRoute = { name: 'Adhoc' }
+              this.ready = true
+            })
+          } else {
             this.ready = true
-          })
+          }
           break
         case 'playbook':
+          this.initial.type = 'playbook'
+          if (this.$route.query.id) {
+            this.initial.playbook = this.$route.query.id
+            this.ready = true
+          } else {
+            this.ready = true
+          }
           break
       }
     } else {

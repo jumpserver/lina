@@ -700,6 +700,8 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Job": "作业",
+    "Command": "命令",
     "Material": "内容",
     "Type": "类型",
     "DateCreated": "创建时间",

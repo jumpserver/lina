@@ -23,7 +23,6 @@ export default {
       showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
-        hasSelection: false,
         columns: [
           'id', 'job_type', 'material', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
         ],

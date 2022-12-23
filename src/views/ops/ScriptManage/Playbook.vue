@@ -50,7 +50,7 @@ export default {
                   type: 'running',
                   can: true,
                   callback: ({ row }) => {
-                    this.$router.push({ name: 'JobCreate', query: { type: 'adhoc', id: row.id }})
+                    this.$router.push({ name: 'JobCreate', query: { type: 'playbook', id: row.id }})
                   }
                 }
               ]
