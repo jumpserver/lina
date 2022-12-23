@@ -163,16 +163,16 @@ export default {
         },
         {
           path: 'executions',
-          name: 'Executions',
-          component: () => import('@/views/ops/Executions'),
+          name: 'Execution',
+          component: () => import('@/views/ops/Execution'),
           meta: {
-            title: i18n.t('route.Executions'),
+            title: i18n.t('route.Execution'),
             permissions: []
           }
         },
         {
           path: 'executions/:id',
-          component: () => import('@/views/ops/Executions/ExecutionDetail'),
+          component: () => import('@/views/ops/Execution/ExecutionDetail'),
           name: 'ExecutionDetail',
           hidden: true,
           meta: {

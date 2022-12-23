@@ -156,7 +156,7 @@ export default {
         parameters: parameters
       }).then(() => {
         this.$message.success(this.$tc('ops.TaskDispatch'))
-        this.$router.push({ name: 'Executions' })
+        this.$router.push({ name: 'Execution' })
       })
     }
   }
