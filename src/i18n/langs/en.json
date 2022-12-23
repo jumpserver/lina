@@ -103,6 +103,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "IP/Host": "IP/Host",
     "OrganizationAsset": "Organization asset",
     "PersonalAsset": "Personal asset",
     "UserSwitchFrom": "User switch from",

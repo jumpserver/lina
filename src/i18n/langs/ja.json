@@ -109,6 +109,7 @@
     "NoSQLProtocol": "非リレーショナルデータベース"
   },
   "assets": {
+    "IP/Host": "IP/ノア",
     "OrganizationAsset": "組織資産",
     "PersonalAsset": "個人資産",
     "AssetAddress": "IP/ホスト名",

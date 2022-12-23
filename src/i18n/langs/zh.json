@@ -108,6 +108,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "IP/Host": "IP/主机",
     "AssetTree": "资产树",
     "CustomTree": "自定义树",
     "BuiltinTree": "类型树",
@@ -700,6 +701,10 @@
     "Weekly": "按周"
   },
   "ops": {
+    "DryRun": "测试运行",
+    "Language": "语言",
+    "Job": "作业",
+    "Command": "命令",
     "Material": "内容",
     "Type": "类型",
     "DateCreated": "创建时间",
@@ -745,6 +750,7 @@
     "ratio": "比例",
     "run": "执行",
     "runAs": "运行用户",
+    "RunasPolicy": "账号策略",
     "runTimes": "执行次数",
     "selectAssetsMessage": "选择左侧资产, 选择运行的系统用户，批量执行命令",
     "selectedAssets": "已选择资产:",

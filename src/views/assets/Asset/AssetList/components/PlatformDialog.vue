@@ -182,4 +182,10 @@ export default {
   font-weight: 500;
   color: #303133;
 }
+>>> .el-collapse {
+  border: none;
+  .el-collapse-item:last-child .el-collapse-item__header {
+    border: none;
+  }
+}
 </style>
