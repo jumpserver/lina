@@ -48,7 +48,7 @@
         </el-button>
       </div>
     </div>
-    <codemirror ref="myCm" v-model="iValue" class="editor" :options="cmOptions" />
+    <codemirror ref="myCm" v-model="iValue" class="editor" :options="iOptions" />
   </div>
 </template>
 
@@ -59,9 +59,10 @@ import 'codemirror/mode/shell/shell'
 import 'codemirror/mode/powershell/powershell'
 import 'codemirror/mode/python/python'
 import 'codemirror/mode/ruby/ruby' // theme css
-import 'codemirror/theme/base16-dark.css'
 import 'codemirror/theme/base16-light.css'
 import 'codemirror/theme/idea.css'
+import 'codemirror/theme/mbo.css'
+import 'codemirror/theme/duotone-light.css'
 import 'codemirror/lib/codemirror.css'
 
 export default {
@@ -77,15 +78,10 @@ export default {
       type: [String, Object],
       default: () => ''
     },
-    cmOptions: {
+    options: {
       type: Object,
       default: () => {
-        return {
-          tabSize: 4,
-          mode: 'shell',
-          lineNumbers: true,
-          line: true
-        }
+        return {}
       }
     }
   },
@@ -105,6 +101,17 @@ export default {
         this.$emit('update:value', val)
         this.$emit('change', val)
       }
+    },
+    iOptions() {
+      const defaultOptions = {
+        tabSize: 4,
+        mode: 'shell',
+        lineNumbers: true,
+        theme: 'idea',
+        placeholder: 'Code goes here...',
+        autofocus: true
+      }
+      return Object.assign(defaultOptions, this.options)
     }
   }
 }
