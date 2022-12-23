@@ -38,8 +38,8 @@ export default {
       toolbar: [
         {
           type: 'button',
+          icon: 'fa-folder-open-o',
           align: 'right',
-          icon: 'fa fa-folder-open',
           tip: this.$t('ops.OpenCommand'),
           callback: (val, setting) => {
             this.openAdhocSelectDialog()
@@ -47,8 +47,8 @@ export default {
         },
         {
           type: 'button',
+          icon: 'save',
           align: 'right',
-          icon: 'fa fa-save',
           tip: this.$t('ops.SaveCommand'),
           callback: (val, setting) => {
             this.openAdhocSaveDialog()
@@ -56,9 +56,9 @@ export default {
         },
         {
           type: 'button',
+          icon: 'fa-question-circle',
+          tip: this.$t('ops.SaveCommand'),
           align: 'right',
-          icon: 'fa fa-question-circle',
-          tip: this.$t('ops.Help'),
           callback: (val, setting) => {
             this.openHelpDialog()
           }
