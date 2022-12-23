@@ -44,7 +44,7 @@
           <i class="fa fa-folder-open" />
         </el-button>
         <el-button size="mini" type="default">
-          <i class="fa fa-save" />
+          <svg-icon icon-class="save" style="font-size: 14px;" />
         </el-button>
       </div>
     </div>

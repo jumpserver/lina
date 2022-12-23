@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       users: {},
-      avatarUrl: require('@/assets/img/admin.png')
+      avatarUrl: require('@/assets/img/head-portrait.png')
     }
   },
   created() {
