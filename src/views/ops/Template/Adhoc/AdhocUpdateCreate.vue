@@ -4,6 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
+import CodeEditor from '@/components/FormFields/CodeEditor'
 
 export default {
   components: {
@@ -11,15 +12,24 @@ export default {
   },
   data() {
     return {
-      url: '/api/v1/ops/playbooks/',
+      url: '/api/v1/ops/adhocs/',
       fields: [
-        [this.$t('common.Basic'), ['name', 'comment']]
+        [this.$t('common.Basic'), ['name', 'comment', 'module', 'args']]
       ],
+      initial: {
+        module: 'shell',
+        args: ''
+      },
+      fieldsMeta: {
+        args: {
+          component: CodeEditor
+        }
+      },
       createSuccessNextRoute: {
-        name: 'ScriptManage'
+        name: 'Template'
       },
       updateSuccessNextRoute: {
-        name: 'ScriptManage'
+        name: 'Template'
       }
     }
   }

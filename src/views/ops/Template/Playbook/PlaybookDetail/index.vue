@@ -8,7 +8,7 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import PlaybookDetail from '@/views/ops/ScriptManage/Playbook/PlaybookDetail/PlaybookDetail'
+import PlaybookDetail from '@/views/ops/Template/Playbook/PlaybookDetail/PlaybookDetail'
 
 export default {
   components: {

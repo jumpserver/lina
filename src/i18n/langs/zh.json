@@ -700,8 +700,6 @@
     "Weekly": "按周"
   },
   "ops": {
-    "Job": "作业",
-    "Command": "命令",
     "Material": "内容",
     "Type": "类型",
     "DateCreated": "创建时间",
@@ -926,7 +924,7 @@
     "BatchCommand": "批量命令",
     "BatchScript": "批量脚本",
     "Executions": "执行历史",
-    "ScriptManage": "模版管理",
+    "Template": "模版管理",
     "TicketsTodo": "待办工单",
     "TicketsDone": "已办工单",
     "TicketsNew": "提交工单",

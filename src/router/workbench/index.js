@@ -153,11 +153,11 @@ export default {
           ]
         },
         {
-          path: 'scripts',
-          name: 'ScriptManage',
-          component: () => import('@/views/ops/ScriptManage'),
+          path: 'templates',
+          name: 'Template',
+          component: () => import('@/views/ops/Template'),
           meta: {
-            title: i18n.t('route.ScriptManage'),
+            title: i18n.t('route.Template'),
             permissions: []
           }
         },
@@ -184,7 +184,7 @@ export default {
         {
           path: 'adhoc/:id/update',
           name: 'AdhocUpdate',
-          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocUpdateCreate'),
+          component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           hidden: true,
           meta: {
             title: i18n.t('route.updateAdhoc'),
@@ -196,7 +196,7 @@ export default {
           path: 'adhoc/create',
           name: 'AdhocCreate',
           hidden: true,
-          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocUpdateCreate'),
+          component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           meta: {
             title: i18n.t('ops.createAdhoc'),
             permissions: [],
@@ -205,7 +205,7 @@ export default {
         },
         {
           path: 'adhoc/:id',
-          component: () => import('@/views/ops/ScriptManage/Adhoc/AdhocDetail'),
+          component: () => import('@/views/ops/Template/Adhoc/AdhocDetail'),
           name: 'AdhocDetail',
           hidden: true,
           meta: {
@@ -218,7 +218,7 @@ export default {
           path: 'playbook/:id/update',
           name: 'PlaybookUpdate',
           hidden: true,
-          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookUpdate'),
+          component: () => import('@/views/ops/Template/Playbook/PlaybookUpdate'),
           meta: {
             title: i18n.t('ops.PlaybookUpdate'),
             permissions: [],
@@ -227,7 +227,7 @@ export default {
         },
         {
           path: 'playbook/:id',
-          component: () => import('@/views/ops/ScriptManage/Playbook/PlaybookDetail'),
+          component: () => import('@/views/ops/Template/Playbook/PlaybookDetail'),
           name: 'PlaybookDetail',
           hidden: true,
           meta: {

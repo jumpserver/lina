@@ -10,8 +10,8 @@
 
 <script>
 import { TabPage } from '@/layout/components'
-import Adhoc from '@/views/ops/ScriptManage/Adhoc'
-import Playbook from '@/views/ops/ScriptManage/Playbook'
+import Adhoc from '@/views/ops/Template/Adhoc'
+import Playbook from '@/views/ops/Template/Playbook'
 
 export default {
   name: 'Index',
