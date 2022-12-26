@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 
 export default {
   name: 'AssetPermissionDetail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions
   },
   props: {
@@ -48,16 +48,10 @@ export default {
             }.bind(this)
           }
         }
-      ]
-    }
-  },
-  computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('common.Name'),
-          value: this.object.name
-        },
+      ],
+      url: `/api/v1/perms/asset-permissions/${this.object.id}`,
+      detailFields: [
+        'name',
         {
           key: this.$t('perms.userCount'),
           value: this.object.users.length
@@ -88,6 +82,14 @@ export default {
             )
           }
         },
+        'date_start', 'date_expired', 'date_created', 'created_by', 'comment'
+      ]
+    }
+  },
+  computed: {
+    detailCardItems() {
+      return [
+
         {
           key: this.$t('common.DateStart'),
           value: this.object.date_start

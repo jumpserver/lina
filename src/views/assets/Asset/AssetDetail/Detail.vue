@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -12,17 +12,16 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import RelationCard from '@/components/RelationCard'
 import QuickActions from '@/components/QuickActions'
 import LabelCard from './components/LabelCard'
-import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions,
     RelationCard,
     LabelCard
@@ -135,17 +134,10 @@ export default {
       labelConfig: {
         title: this.$t('assets.Label'),
         labels: this.object.labels
-      }
-    }
-  },
-  computed: {
-    detailCardItems() {
-      console.log('this.object', this.object)
-      return [
-        {
-          key: this.$t('assets.Name'),
-          value: this.object.name
-        },
+      },
+      url: '/api/v1/assets/assets/',
+      detailFields: [
+        'name',
         {
           key: this.$t('assets.Category'),
           value: this.object.category.label
@@ -154,10 +146,7 @@ export default {
           key: this.$t('assets.Type'),
           value: this.object.type.label
         },
-        {
-          key: this.$t('assets.IP/Host'),
-          value: this.object.address
-        },
+        'address',
         {
           key: this.$t('assets.Protocols'),
           value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
@@ -170,24 +159,11 @@ export default {
           key: this.$t('assets.Platform'),
           value: this.object.platform.name
         },
-        {
-          key: this.$t('assets.IsActive'),
-          value: this.object.is_active
-        },
-        {
-          key: this.$t('assets.DateJoined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('assets.CreatedBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        }
+        'is_active', 'date_created', 'created_by', 'comment'
       ]
     }
+  },
+  computed: {
   },
   mounted() {
   },
