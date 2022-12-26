@@ -14,7 +14,7 @@ import { QuickActions } from '@/components'
 import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
-  name: 'ChangeSecreAtutomationInfo',
+  name: 'AccountChangeSecretInfo',
   components: {
     AutoDetailCard,
     QuickActions

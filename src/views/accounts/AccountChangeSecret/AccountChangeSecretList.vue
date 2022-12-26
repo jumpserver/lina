@@ -8,7 +8,7 @@ import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'ChangeSecreAtutomationList',
+  name: 'AccountChangeSecretList',
   components: {
     GenericListTable
   },
@@ -29,7 +29,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecreAtutomationDetail'
+              route: 'AccountChangeSecretDetail'
             }
           },
           username: {
@@ -65,7 +65,7 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecreAtutomationDetail',
+              route: 'AccountChangeSecretDetail',
               routeQuery: {
                 activeTab: 'ChangeSecreAtutomationExecutionList'
               }

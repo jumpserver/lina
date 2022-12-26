@@ -80,7 +80,7 @@ export default [
     ]
   },
   {
-    path: 'gathered-user',
+    path: 'account-gather',
     component: empty,
     redirect: '',
     meta: {
@@ -91,8 +91,8 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/GatheredUser/index'),
-        name: 'GatherUserListIndex',
+        component: () => import('@/views/accounts/AccountGather/index'),
+        name: 'AccountGatherListIndex',
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUser'),
           permissions: ['assets.view_gathereduser|xpack.view_gatherusertask']
@@ -100,18 +100,18 @@ export default [
       },
       {
         path: '',
-        component: () => import('@/views/accounts/GatheredUser/GatheredUserList'),
-        name: 'GatherUserList',
+        component: () => import('@/views/accounts/AccountGather/AccountGatherList'),
+        name: 'AccountGatherList',
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserList'),
-          activeMenu: '/accounts/gathered-user'
+          activeMenu: '/accounts/account-gather'
         }
       },
       {
         path: 'tasks/create',
-        component: () => import('@/views/accounts/GatheredUser/TaskCreateUpdate'),
-        name: 'GatherUserTaskCreate',
+        component: () => import('@/views/accounts/AccountGather/TaskCreateUpdate'),
+        name: 'AccountGatherTaskCreate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
@@ -120,8 +120,8 @@ export default [
       },
       {
         path: 'tasks/:id',
-        component: () => import('@/views/accounts/GatheredUser/TaskDetail/index'),
-        name: 'GatherUserTaskDetail',
+        component: () => import('@/views/accounts/AccountGather/TaskDetail/index'),
+        name: 'AccountGatherTaskDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
@@ -130,7 +130,7 @@ export default [
       },
       {
         path: 'tasks/:id/update',
-        component: () => import('@/views/accounts/GatheredUser/TaskCreateUpdate'),
+        component: () => import('@/views/accounts/AccountGather/TaskCreateUpdate'),
         name: 'GatherUserTaskUpdate',
         hidden: true,
         meta: {
@@ -143,7 +143,7 @@ export default [
     ]
   },
   {
-    path: 'change-secret-automation',
+    path: 'account-change-secret',
     component: empty,
     redirect: '',
     meta: {
@@ -154,17 +154,17 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/ChangeSecreAtutomation/index.vue'),
-        name: 'ChangeSecreAtutomationIndex',
+        component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
+        name: 'AccountChangeSecretIndex',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
           permissions: ['assets.view_changesecretautomation']
         }
       },
       {
-        path: 'atutomation',
-        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationList.vue'),
-        name: 'ChangeSecreAtutomationList',
+        path: 'account-change-secret',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue'),
+        name: 'AccountChangeSecretList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
           permissions: ['assets.view_changesecretautomation']
@@ -172,9 +172,9 @@ export default [
         hidden: true
       },
       {
-        path: 'atutomation/create',
-        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationCreateUpdate.vue'),
-        name: 'ChangeSecreAtutomationCreate',
+        path: 'account-change-secret/create',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+        name: 'AccountChangeSecretCreate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
@@ -182,9 +182,9 @@ export default [
         }
       },
       {
-        path: 'atutomation/:id/update',
-        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationCreateUpdate.vue'),
-        name: 'ChangeSecreAtutomationUpdate',
+        path: 'account-change-secret/:id/update',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
+        name: 'AccountChangeSecretUpdate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
@@ -192,9 +192,9 @@ export default [
         }
       },
       {
-        path: 'atutomation/:id',
-        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationDetail/index.vue'),
-        name: 'ChangeSecreAtutomationDetail',
+        path: 'account-change-secret/:id',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
+        name: 'AccountChangeSecretDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
@@ -202,9 +202,9 @@ export default [
         }
       },
       {
-        path: 'execution/:id',
-        component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationDetail/ChangeSecreAtutomationExecution/ChangeSecreAtutomationExecutionDetail/index.vue'),
-        name: 'ChangeAuthPlanExecutionDetail',
+        path: 'account-change-secret-execution/:id',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
+        name: 'AccountChangeSecretExecutionDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
