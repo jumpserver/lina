@@ -11,6 +11,7 @@
             v-if="item.type ==='button'"
             size="mini"
             :type="item.el&&item.el.type"
+            :disabled="item.disabled"
             @click="item.callback(iValue, iOptions)"
           >
             <i :class="item.icon" style="margin-right: 4px;" />{{ item.name }}
@@ -45,7 +46,6 @@
               />
             </el-select>
           </div>
-
           <el-dropdown
             v-if="item.type==='select' && (!item.el || !item.el.create) "
             trigger="click"
@@ -67,6 +67,7 @@
           <el-switch
             v-if="item.type === 'switch'"
             v-model="item.value"
+            :disabled="item.disabled"
             :active-text="item.name"
             @change="item.callback(iValue, iOptions, item.value)"
           />
@@ -80,7 +81,13 @@
           style="display: inline-block"
         >
           <el-tooltip :content="item.tip">
-            <el-button v-if="item.type ==='button'" size="mini" type="default" @click="item.callback(iValue,iOptions)">
+            <el-button
+              v-if="item.type ==='button'"
+              size="mini"
+              type="default"
+              :disabled="item.disabled"
+              @click="item.callback(iValue,iOptions)"
+            >
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
               <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
             </el-button>
@@ -182,6 +189,7 @@ export default {
 .editor {
   border: solid 1px #f3f3f3;
 }
+
 .toolbar {
   height: 100%;
   width: 100%;

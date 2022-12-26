@@ -59,7 +59,6 @@ export default {
         }
       },
       headerActions: {
-        canCreate: true,
         hasRefresh: true,
         hasExport: false,
         hasImport: false,

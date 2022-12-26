@@ -108,6 +108,10 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "AccessKey": "访问密钥",
+    "Token": "令牌",
+    "SSHKey": "SSH 密钥",
+    "ApiKey": "API Key",
     "IP/Host": "IP/主机",
     "AssetTree": "资产树",
     "CustomTree": "自定义树",

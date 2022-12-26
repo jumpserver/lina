@@ -54,10 +54,17 @@ export default {
 
     >>> .el-form-item__label {
       padding-right: 8%;
+      white-space:nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     >>> .el-form-item__content {
       font-size: 13px;
+    }
+
+    >>> .el-tag--mini {
+      margin-right: 3px;
     }
   }
 
