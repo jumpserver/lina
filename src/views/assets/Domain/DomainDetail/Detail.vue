@@ -1,19 +1,18 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24" />
   </el-row>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
-import { toSafeLocalDateStr } from '@/utils/common'
+import AutoDetailCard from '@/components/DetailCard/auto'
 export default {
   name: 'Detail',
   components: {
-    DetailCard
+    AutoDetailCard
   },
   props: {
     object: {
@@ -23,37 +22,22 @@ export default {
   },
   data() {
     return {
-
-    }
-  },
-  computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('assets.Name'),
-          value: this.object.name
-        },
+      url: `/api/v1/assets/domains/${this.object.id}`,
+      detailFields: [
+        'name',
         {
           key: this.$t('assets.Assets'),
-          value: `${this.object.asset_count}`
-        },
-        {
-          key: this.$t('assets.Applications'),
-          value: `${this.object.application_count}`
+          value: `${this.object.assets.length}`
         },
         {
           key: this.$t('assets.Gateway'),
-          value: `${this.object.gateway_count}`
+          value: `${this.object.gateways.length}`
         },
-        {
-          key: this.$t('assets.date_joined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        }, {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        }
+        'date_created', 'comment'
       ]
     }
+  },
+  computed: {
   }
 }
 </script>

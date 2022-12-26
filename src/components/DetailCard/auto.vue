@@ -20,7 +20,11 @@ export default {
     },
     fields: {
       type: Array,
-      default: () => []
+      default: null
+    },
+    excludes: {
+      type: Array,
+      default: null
     }
   },
   data() {
@@ -37,8 +41,13 @@ export default {
     async optionAndGenFields() {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       const remoteMeta = data.actions['GET'] || {}
+      let fields = this.fields
       console.log('remoteMeta', remoteMeta)
-      for (const name of this.fields) {
+      fields = fields || Object.keys(remoteMeta)
+      if (this.excludes) {
+        fields = fields.filter(item => !this.excludes.includes(item))
+      }
+      for (const name of fields) {
         if (typeof name === 'object') {
           this.items.push(name)
           continue

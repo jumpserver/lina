@@ -1,19 +1,18 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
-import { toSafeLocalDateStr } from '@/utils/common'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   name: 'Detail',
   components: {
-    DetailCard
+    AutoDetailCard
   },
   props: {
     object: {
@@ -24,15 +23,9 @@ export default {
   },
   data() {
     return {
-    }
-  },
-  computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('acl.name'),
-          value: this.object.name
-        },
+      url: `/api/v1/acls/login-asset-acls/${this.object.id}`,
+      detailFields: [
+        'name',
         {
           key: this.$t('acl.UserUsername'),
           value: this.object.users.username_group.toString()
@@ -43,10 +36,6 @@ export default {
         },
         {
           key: this.$t('acl.AssetAddress'),
-          value: this.object.assets.address_group.toString()
-        },
-        {
-          key: this.$t('acl.AccountUsername'),
           value: this.object.accounts.username_group.toString()
         },
         {
@@ -55,22 +44,13 @@ export default {
         },
         {
           key: this.$t('acl.reviewer'),
-          value: this.object.reviewers.map((reviewer) => { return reviewer.name }).join(' | ')
+          value: this.object.reviewers.map(item => item.name).join(', ')
         },
-        {
-          key: this.$t('acl.priority'),
-          value: this.object.priority
-        },
-        {
-          key: this.$t('acl.date_created'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('acl.created_by'),
-          value: this.object.created_by
-        }
+        'priority', 'date_created', 'created_by'
       ]
     }
+  },
+  computed: {
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import PlatformDetailUpdateDialog from './PlatformDetailUpdateDialog'
 
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions,
     PlatformDetailUpdateDialog
   },
@@ -38,39 +38,22 @@ export default {
       AccountEnabled: ['su_enabled', 'su_method'],
       ProtocolsEnabled: ['protocols_enabled', 'protocols']
     }
-
     return {
       visible: false,
       fields: ['domain_enabled'],
-      quickActions: this.setQuickActions(myFields)
-    }
-  },
-  computed: {
-    detailCardItems() {
-      const { object } = this
-      return [
-        {
-          key: this.$t('assets.Name'),
-          value: object.name
-        },
-        {
-          key: this.$t('assets.BasePlatform'),
-          value: object.base
-        },
-        {
-          key: this.$t('assets.Charset'),
-          value: object.charset
-        },
+      quickActions: this.setQuickActions(myFields),
+      url: `/api/v1/assets/platforms/${this.object.id}`,
+      detailFields: [
+        'name', 'charset',
         {
           key: this.$t('assets.Meta'),
           value: JSON.stringify(this.object.meta)
         },
-        {
-          key: this.$t('assets.Comment'),
-          value: object.comment
-        }
+        'comment'
       ]
     }
+  },
+  computed: {
   },
   methods: {
     setQuickActions(fields = []) {
