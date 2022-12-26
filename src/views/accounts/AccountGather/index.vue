@@ -19,13 +19,13 @@ export default {
             title: this.$t('xpack.GatherUser.GatherUserList'),
             name: 'GatheredUserList',
             hidden: !this.$hasPerm('assets.view_gathereduser'),
-            component: () => import('@/views/accounts/GatheredUser/GatheredUserList.vue')
+            component: () => import('@/views/accounts/AccountGather/GatheredUserList.vue')
           },
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskList'),
             name: 'TaskList',
             hidden: !this.$hasPerm('assets.view_gatheraccountsautomation'),
-            component: () => import('@/views/accounts/GatheredUser/TaskList.vue')
+            component: () => import('@/views/accounts/AccountGather/TaskList.vue')
           }
         ]
       }

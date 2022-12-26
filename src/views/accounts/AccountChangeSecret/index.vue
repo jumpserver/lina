@@ -13,13 +13,13 @@ export default {
   data() {
     return {
       config: {
-        activeMenu: 'ChangeSecreAtutomationList',
+        activeMenu: 'ChangeSecretAutomationList',
         submenu: [
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-            name: 'ChangeSecreAtutomationList',
+            name: 'ChangeSecretAutomationList',
             hidden: () => !this.$hasPerm('assets.view_changesecretautomation'),
-            component: () => import('@/views/accounts/ChangeSecreAtutomation/ChangeSecreAtutomationList.vue')
+            component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationList.vue')
           }
         ]
       }

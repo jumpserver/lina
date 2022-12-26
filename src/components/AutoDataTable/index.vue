@@ -251,11 +251,25 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      const allColumns = Object.keys(this.meta).concat(['actions']).concat(config?.extraColumns || [])
+      const allColumns = Object.entries(this.meta)
+        .filter(([name, meta]) => {
+          return !meta.write_only
+        })
+        .map(([name, meta]) => {
+          return name
+        })
+        .concat(['actions']).concat(config?.extraColumns || [])
+        .filter(item => {
+          return item !== 'id'
+        })
       let configColumns = config?.columns || allColumns
-      if (config['excludes']) {
-        configColumns = configColumns.filter(item => !config.excludes.includes(item))
+
+      const defaultExcludes = ['id', 'org_id']
+      const excludes = (config?.excludes || []).concat(defaultExcludes)
+      if (excludes || excludes.length > 0) {
+        configColumns = configColumns.filter(item => !excludes.includes(item))
       }
+
       if (configColumns.length > 0) {
         for (let col of configColumns) {
           if (typeof col === 'object') {
@@ -274,8 +288,6 @@ export default {
           }
           return has
         })
-      } else {
-        columns = Object.keys(this.meta).map(key => this.generateColumn(key))
       }
       // 第一次初始化时记录 totalColumns
       this.totalColumns = columns

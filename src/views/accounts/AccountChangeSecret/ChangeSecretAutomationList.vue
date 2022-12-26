@@ -8,7 +8,7 @@ import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'ChangeSecreAtutomationList',
+  name: 'ChangeSecretAutomationList',
   components: {
     GenericListTable
   },
@@ -29,7 +29,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecreAtutomationDetail'
+              route: 'ChangeSecretAutomationDetail'
             }
           },
           username: {
@@ -65,9 +65,9 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecreAtutomationDetail',
+              route: 'ChangeSecretAutomationDetail',
               routeQuery: {
-                activeTab: 'ChangeSecreAtutomationExecutionList'
+                activeTab: 'ChangeSecretAutomationExecutionList'
               }
             }
           },
@@ -78,10 +78,10 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecreAtutomationCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'ChangeSecretAutomationCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecreAtutomationUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'ChangeSecretAutomationUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
@@ -112,7 +112,7 @@ export default {
         hasImport: false,
         createRoute: () => {
           return {
-            name: 'ChangeSecreAtutomationCreate'
+            name: 'ChangeSecretAutomationCreate'
           }
         }
       }

@@ -24,13 +24,26 @@ export default {
       secretUrl: '',
       tableConfig: {
         url: '/api/v1/assets/account-templates/',
-        columns: ['name', 'username', 'privileged', 'actions'],
+        columns: null,
+        excludes: ['specific'],
         columnsShow: {
-          min: ['name', 'actions']
+          min: ['name', 'actions'],
+          default: ['name', 'username', 'secret_type', 'has_secret', 'privileged', 'actions']
         },
         columnsMeta: {
           privileged: {
-            width: '100px'
+            width: '120px',
+            formatterArgs: {
+              showText: false,
+              showFalse: false
+            }
+          },
+          has_secret: {
+            width: '120px',
+            formatterArgs: {
+              showFalse: false,
+              showText: false
+            }
           },
           actions: {
             formatter: ActionsFormatter,

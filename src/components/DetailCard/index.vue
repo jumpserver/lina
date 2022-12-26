@@ -54,7 +54,7 @@ export default {
 
     >>> .el-form-item__label {
       padding-right: 8%;
-      white-space:nowrap;
+      white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
     }

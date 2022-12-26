@@ -1,7 +1,7 @@
 <template>
   <ElDatableTable
     ref="table"
-    class="el-table"
+    class="el-data-table"
     v-bind="tableConfig"
     @update="onUpdate"
     v-on="iListeners"
@@ -170,49 +170,49 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-  .el-table  ::v-deep  .el-table__row {
-    &.selected-row {
-      background-color: #f5f7fa;
+<style lang="scss" scoped>
+  .el-data-table >>> .el-table {
+    .table{
+      margin-top: 15px;
     }
-    &> td {
-      line-height: 1.5;
-      padding: 6px 0;
-      font-size: 13px;
 
-      * {
-        vertical-align: middle;
+    .el-table__row {
+      &.selected-row {
+        background-color: #f5f7fa;
       }
 
-      .el-checkbox {
-        vertical-align: super;
+      & > td {
+        line-height: 1.5;
+        padding: 6px 0;
+        font-size: 13px;
+
+        * {
+          vertical-align: middle;
+        }
+
+        .el-checkbox {
+          vertical-align: super;
+        }
+
+        & > div > span {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
       }
     }
-    .el-table  ::v-deep  .el-table__row > td> div > span {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .el-table  ::v-deep  .el-table__header > thead > tr > th {
+
+    .el-table__header > thead > tr > th {
       padding: 6px 0;
-      background-color: #F5F5F6;
+      background-color: #ffffff;
       font-size: 13px;
       line-height: 1.5;
 
       .cell {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        white-space: nowrap !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
-
-    .table{
-      margin-top: 15px;
-    }
   }
-
-  //修改颜色
-  // .el-button--text{
-  //   color: #409EFF;
-  // }
 </style>
