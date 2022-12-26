@@ -53,7 +53,6 @@ export default {
         }
       },
       headerActions: {
-        canCreate: true,
         createRoute: 'AdhocCreate',
         hasRefresh: true,
         hasExport: false,

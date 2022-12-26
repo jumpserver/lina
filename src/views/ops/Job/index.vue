@@ -9,6 +9,7 @@
 import GenericListPage from '@/layout/components/GenericListPage'
 import { ActionsFormatter, DateFormatter } from '@/components/TableFormatters'
 import JobRunDialog from '@/views/ops/Job/JobRunDialog'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -108,12 +109,10 @@ export default {
         }
       },
       headerActions: {
-        canCreate: true,
         createRoute: 'JobCreate',
         hasRefresh: true,
         hasExport: false,
         hasImport: false,
-        hasMoreActions: true,
         moreCreates: {
           callback: (item) => {
             this.$router.push({
@@ -133,21 +132,12 @@ export default {
               has: true
             }
           ]
-        },
-        extraActions: [
-          {
-            name: this.$t('ops.QuickJob'),
-            title: this.$t('ops.QuickJob'),
-            has: () => {
-              return true
-            },
-            callback: () => {
-              this.$router.push({ name: 'QuickJob' })
-            }
-          }
-        ]
+        }
       }
     }
+  },
+  computed: {
+    ...mapGetters(['currentOrgIsRoot'])
   },
   methods: {
     runJob(row, parameters) {

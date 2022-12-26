@@ -77,6 +77,7 @@ export default {
           align: 'left',
           icon: 'fa-play',
           tip: this.$t('ops.RunCommand'),
+          disabled: this.$store.getters.currentOrgIsRoot,
           el: {
             type: 'primary'
           },
@@ -135,6 +136,9 @@ export default {
             },
             {
               label: 'Powershell', value: 'powershell'
+            },
+            {
+              label: 'Python', value: 'python'
             }
           ],
           callback: (val, setting, option) => {
