@@ -14,7 +14,9 @@
             :disabled="item.disabled"
             @click="item.callback(iValue, iOptions)"
           >
-            <i :class="item.icon" />{{ item.name }}
+            <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
+            <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
+            {{ item.name }}
           </el-button>
 
           <el-select
