@@ -52,7 +52,7 @@ export default {
           'is_service_account', 'avatar_url'
         ],
         columnsShow: {
-          // min: ['name', 'username', 'actions'],
+          min: ['name', 'username', 'actions'],
           default: [
             'name', 'username', 'email', 'groups', 'system_roles', 'org_roles',
             'source', 'is_valid', 'actions'
