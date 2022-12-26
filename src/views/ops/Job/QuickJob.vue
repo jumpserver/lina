@@ -75,7 +75,7 @@ export default {
           type: 'button',
           name: this.$t('ops.Run'),
           align: 'left',
-          icon: 'fa-play',
+          icon: 'fa fa-play',
           tip: this.$t('ops.RunCommand'),
           el: {
             type: 'primary'
@@ -88,14 +88,16 @@ export default {
           type: 'select',
           name: this.$t('ops.runAs'),
           align: 'left',
-          value: ['root'],
+          value: 'root',
           el: {
-            multiple: true,
             create: true
           },
           options: [
             {
               label: 'root', value: 'root'
+            },
+            {
+              label: this.$t('ops.ManualInput'), value: 'manualInput'
             }
           ],
           callback: (val, setting, option) => {
