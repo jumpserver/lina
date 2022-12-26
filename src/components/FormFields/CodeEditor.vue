@@ -4,15 +4,14 @@
       <div
         v-for="(item,index) in leftToolbar"
         :key="index"
-        style="display: inline-block;margin: 0 2px"
+        style="display: inline-block; margin: 0 2px"
       >
         <el-tooltip :content="item.tip" placement="top" :disabled="!item.tip">
-
           <el-button
             v-if="item.type ==='button'"
             size="mini"
             :type="item.el&&item.el.type"
-            @click="item.callback(iValue,cmOptions)"
+            @click="item.callback(iValue, iOptions)"
           >
             <i :class="item.icon" />{{ item.name }}
           </el-button>
@@ -25,7 +24,7 @@
             :allow-create="item.el.create"
             :filterable="item.el.create"
             :placeholder="item.name"
-            @change="item.callback(iValue,cmOptions,item.value)"
+            @change="item.callback(iValue, iOptions, item.value)"
           >
             <el-option
               v-for="(option,id) in item.options"
@@ -40,11 +39,11 @@
             trigger="click"
             @command="(command) => {
               item.value= command
-              item.callback(iValue,cmOptions,command)
+              item.callback(iValue, iOptions, command)
             }"
           >
             <el-button type="default" size="mini">
-              <b>{{ item.name }}</b> {{ item.value }} <i class="el-icon-arrow-down el-icon--right" />
+              <b>{{ item.name }}:</b> {{ item.value }} <i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="(option,i) in item.options" :key="i" :command="option.value">
@@ -57,7 +56,7 @@
             v-if="item.type === 'switch'"
             v-model="item.value"
             :active-text="item.name"
-            @change="item.callback(iValue,cmOptions,item.value)"
+            @change="item.callback(iValue, iOptions, item.value)"
           />
         </el-tooltip>
       </div>
@@ -69,7 +68,7 @@
           style="display: inline-block"
         >
           <el-tooltip :content="item.tip">
-            <el-button v-if="item.type ==='button'" size="mini" type="default" @click="item.callback(iValue,cmOptions)">
+            <el-button v-if="item.type ==='button'" size="mini" type="default" @click="item.callback(iValue,iOptions)">
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
               <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
             </el-button>
