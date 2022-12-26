@@ -5,7 +5,7 @@
     :visible.sync="showColumnSettingPopover"
     :destroy-on-close="true"
     :show-cancel="false"
-    width="35%"
+    width="50%"
     top="10%"
     @confirm="handleColumnConfirm()"
   >
@@ -41,6 +41,7 @@
 
 <script>
 import Dialog from '@/components/Dialog/index'
+
 export default {
   name: 'ColumnSettingPopover',
   components: {
