@@ -3,7 +3,7 @@
     <div>
       <el-row :gutter="20">
         <el-col :md="14" :sm="24">
-          <DetailCard :title="cardTitle" :items="detailItems" />
+          <AutoDetailCard :url="url" :object="terminalData" />
         </el-col>
       </el-row>
     </div>
@@ -13,13 +13,13 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import DetailCard from '@/components/DetailCard/index'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   name: 'TerminalDetail',
   components: {
     GenericDetailPage,
-    DetailCard
+    AutoDetailCard
   },
   data() {
     return {
@@ -39,40 +39,13 @@ export default {
           canDelete: false,
           detailApiUrl: `/api/v1/terminal/terminals/${this.$route.params.id}/`
         }
-      }
+      },
+      url: `/api/v1/terminal/terminals/${this.$route.params.id}/`
     }
   },
   computed: {
     cardTitle() {
       return this.terminalData.name
-    },
-    detailItems() {
-      return [
-        {
-          key: this.$t('sessions.name'),
-          value: this.terminalData.name
-        },
-        {
-          key: this.$t('sessions.remoteAddr'),
-          value: this.terminalData.remote_addr
-        },
-        // {
-        //   key: this.$t('sessions.sshPort'),
-        //   value: this.terminalData.ssh_port
-        // },
-        // {
-        //   key: this.$t('sessions.httpPort'),
-        //   value: this.terminalData.http_port
-        // },
-        {
-          key: this.$t('common.DateCreated'),
-          value: this.terminalData.date_created
-        },
-        {
-          key: this.$t('sessions.comment'),
-          value: this.terminalData.comment
-        }
-      ]
     }
   }
 }

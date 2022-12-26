@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :object="object" />
     </el-col>
     <el-col v-if="hasSummary" :md="10" :sm="24">
       <IBox type="success" :title="`${$tc('ops.SuccessAsset')} (${object.summary.ok.length})` ">
@@ -44,13 +44,13 @@
 </template>
 
 <script type="text/jsx">
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import IBox from '@/components/IBox'
 
 export default {
   components: {
     IBox,
-    DetailCard
+    AutoDetailCard
   },
   props: {
     object: {
@@ -59,47 +59,13 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      url: `/api/v1/ops/job-executions/${this.object.id}/`
+    }
   },
   computed: {
     hasSummary() {
       return this.object.is_finished && Object.keys(this.object.summary).length
-    },
-    detailCardItems() {
-      return [
-        {
-          key: 'ID',
-          value: this.object.id
-        },
-        {
-          key: this.$t('ops.Type'),
-          value: this.object.job_type
-        },
-        {
-          key: this.$t('ops.isFinished'),
-          value: this.object.is_finished
-        },
-        {
-          key: this.$t('ops.isSuccess'),
-          value: this.object.is_success
-        },
-        {
-          key: this.$t('ops.DateCreated'),
-          value: this.object.date_created
-        },
-        {
-          key: this.$t('ops.DateStart'),
-          value: this.object.date_start
-        },
-        {
-          key: this.$t('ops.DateFinished'),
-          value: this.object.date_finished
-        },
-        {
-          key: this.$t('ops.Material'),
-          value: this.object.material
-        }
-      ]
     }
   },
   methods: {}

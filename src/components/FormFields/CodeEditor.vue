@@ -19,7 +19,7 @@
 
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
             <span class="filter-label">
-              {{ item.name }}
+              {{ item.name }}:
             </span>
             <el-select
               v-if="item.type==='select' && item.el && item.el.create"
@@ -181,6 +181,9 @@ export default {
       }
       return Object.assign(defaultOptions, this.options)
     }
+  },
+  mounted() {
+    console.log(this.toolbar)
   },
   methods: {}
 }
