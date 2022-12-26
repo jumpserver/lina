@@ -238,6 +238,7 @@ export default {
           }
         ],
         searchConfig: {
+          getUrlQuery: false,
           exclude: ['asset']
         },
         hasSearch: true

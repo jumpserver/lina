@@ -13,7 +13,7 @@
             <span class="detail-item-name">{{ item }}</span>
           </div>
         </div>
-        <span slot="reference">{{ cellValue.length }}</span>
+        <span slot="reference">{{ cellValue && cellValue.length }}</span>
       </el-popover>
     </template>
   </DetailFormatter>
@@ -44,10 +44,10 @@ export default {
     },
     items() {
       const getItem = this.formatterArgs.getItem || function(item) { return item.name }
-      return this.cellValue.map(item => getItem(item))
+      return this.cellValue?.map(item => getItem(item))
     },
     showItems() {
-      return this.formatterArgs.showItems !== false && this.cellValue.length > 0
+      return this.formatterArgs.showItems !== false && this.cellValue?.length > 0
     }
   },
   mounted() {
@@ -69,9 +69,6 @@ export default {
 
   &:hover {
      background-color: #F5F7FA;
-  }
-
-  .detail-item-name {
   }
 }
 
