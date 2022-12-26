@@ -19,7 +19,7 @@
 
           <div v-if="item.type==='select' && item.el && item.el.create" class="select-content">
             <span class="filter-label">
-              {{ filterLabel(item) }}
+              {{ item.name }}:
             </span>
             <el-select
               v-if="item.type==='select' && item.el && item.el.create"
@@ -148,7 +148,8 @@ export default {
       }
     },
     isManual() {
-      return () => {}
+      return () => {
+      }
     },
     rightToolbar() {
       return this.toolbar.filter((item) => {
@@ -180,6 +181,9 @@ export default {
       }
       return Object.assign(defaultOptions, this.options)
     }
+  },
+  mounted() {
+    console.log(this.toolbar)
   },
   methods: {}
 }
@@ -231,17 +235,19 @@ export default {
 .autoWidth-select {
   min-width: 100px;
 }
-.autoWidth-select >>> .el-input__prefix{
-    position: relative;
-    left: 0px;
-    box-sizing: border-box;
-    padding-left: 15px;
-    margin-right: 30px;
-    height: 28px;
-    line-height: 28px;
-    visibility: hidden;
+
+.autoWidth-select > > > .el-input__prefix {
+  position: relative;
+  left: 0px;
+  box-sizing: border-box;
+  padding-left: 15px;
+  margin-right: 30px;
+  height: 28px;
+  line-height: 28px;
+  visibility: hidden;
 }
-.autoWidth-select >>> input{
+
+.autoWidth-select > > > input {
   position: absolute;
   padding-left: 0px;
   border: none;
@@ -251,19 +257,24 @@ export default {
   font-weight: 470;
   line-height: 27px;
 }
->>> .el-select {
+
+> > > .el-select {
   top: -1px;
+
   .el-input .el-select__caret {
     color: #7a7c7f;
   }
 }
->>> .el-button.el-button--default {
+
+> > > .el-button.el-button--default {
   background-color: #e6e6e6;
 }
+
 .filter-label {
   font-size: 12px;
   font-weight: 700;
 }
+
 .select-content {
   display: inline-block;
   position: relative;
