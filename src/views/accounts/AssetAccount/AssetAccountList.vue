@@ -9,7 +9,7 @@
 <script>
 import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
 import AccountListTable from '@/components/AccountListTable'
-import { setUrlParam, setRouterQuery } from '@/utils/common'
+import { setRouterQuery, setUrlParam } from '@/utils/common'
 
 export default {
   name: 'AssetAccountList',
@@ -76,19 +76,7 @@ export default {
       }
     }
   }
-  .mini-button{
-    width: 12px;
-    float: left;
-    margin-right: 10px;
-    text-align: center;
-    padding: 9px 0;
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #FFFFFF;
-    border-radius: 5px;
-    line-height: 1.428;
-    cursor:pointer;
-  }
+
   .noDataR{
     width: 100%;
     height: 40vh;
