@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
 import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
@@ -18,7 +18,7 @@ import { openTaskPage } from '@/utils/jms'
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions
   },
   props: {
@@ -48,24 +48,10 @@ export default {
             }.bind(this)
           }
         }
-      ]
-    }
-  },
-  computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('xpack.Cloud.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('xpack.Cloud.Account'),
-          value: this.object.account_display
-        },
-        {
-          key: this.$t('xpack.Cloud.Node'),
-          value: this.object.node_display
-        },
+      ],
+      url: `/api/v1/xpack/cloud/accounts/${this.object.id}`,
+      detailFields: [
+        'name', 'account_display', 'node_display',
         {
           key: this.$t('xpack.Cloud.LinuxAdminUser'),
           value: this.object.unix_admin_user?.name
@@ -85,18 +71,7 @@ export default {
           key: this.$t('xpack.Cloud.IPNetworkSegment'),
           value: this.object.ip_network_segment_group?.join(', ')
         },
-        {
-          key: this.$t('xpack.Cloud.IsAlwaysUpdate'),
-          value: (this.object.is_always_update) ? (this.$t('xpack.Cloud.True')) : (this.$t('xpack.Cloud.False'))
-        },
-        {
-          key: this.$t('xpack.Cloud.PeriodicPerform'),
-          value: this.object.is_periodic ? (this.$t('xpack.Cloud.True')) : (this.$t('xpack.Cloud.False'))
-        },
-        {
-          key: this.$t('xpack.Cloud.Periodic'),
-          value: this.object.periodic_display
-        },
+        'is_always_update', 'is_periodic', 'periodic_display',
         {
           key: this.$t('xpack.Cloud.DateLastSync'),
           value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : ''
@@ -116,13 +91,11 @@ export default {
             </div>)
           }
         },
-        {
-          key: this.$t('xpack.Cloud.Comment'),
-          value: this.object.comment
-        }
+        'comment'
       ]
     }
-
+  },
+  computed: {
   },
   mounted() {
 

@@ -1,17 +1,17 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :title="cardTitle" :items="detailCardItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
   </el-row>
 </template>
 
 <script type="text/jsx">
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   components: {
-    DetailCard
+    AutoDetailCard
   },
   props: {
     object: {
@@ -20,23 +20,13 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      url: `/api/v1/ops/playbooks/${this.object.id}/`
+    }
   },
   computed: {
     cardTitle() {
       return this.object.name
-    },
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('common.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
-      ]
     }
   },
   methods: {}

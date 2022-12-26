@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions :actions="quickActions" type="primary" />
@@ -10,13 +10,13 @@
 </template>
 
 <script>
-import { DetailCard, QuickActions } from '@/components'
-import { toSafeLocalDateStr } from '@/utils/common'
+import { QuickActions } from '@/components'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   name: 'ChangeSecreAtutomationInfo',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions
   },
   props: {
@@ -47,16 +47,10 @@ export default {
             }.bind(this)
           }
         }
-      ]
-    }
-  },
-  computed: {
-    detailItems() {
-      return [
-        {
-          key: this.$t('xpack.ChangeAuthPlan.Name'),
-          value: this.object.name
-        },
+      ],
+      url: `/api/v1/assets/change-secret-automations/${this.object.id}`,
+      detailFields: [
+        'name',
         {
           key: this.$t('xpack.ChangeAuthPlan.Username'),
           value: this.object.accounts.join(', ')
@@ -87,20 +81,11 @@ export default {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateUpdated'),
-          value: toSafeLocalDateStr(this.object.date_updated)
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
+        'date_created', 'date_updated', 'comment'
       ]
     }
+  },
+  computed: {
   }
 }
 </script>

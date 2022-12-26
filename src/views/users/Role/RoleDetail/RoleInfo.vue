@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <IBox :title="$tc('rbac.Permissions')">
@@ -26,7 +26,7 @@
 
 <script>
 import { IBox } from '@/components'
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import AutoDataZTree from '@/components/AutoDataZTree'
 import { toSafeLocalDateStr } from '@/utils/common'
 
@@ -34,7 +34,7 @@ export default {
   name: 'RolePerms',
   components: {
     AutoDataZTree,
-    DetailCard,
+    AutoDetailCard,
     IBox
   },
   props: {
@@ -139,7 +139,24 @@ export default {
         'xpack.view_applicationchangeauthplan': ['applications.view_application', 'assets.view_systemuser'],
         'xpack.view_applicationchangeauthplantask': ['xpack.view_applicationchangeauthplan'],
         'xpack.view_applicationchangeauthplanexecution': ['xpack.view_applicationchangeauthplan']
-      }
+      },
+      url: `/api/v1/rbac/${this.object.scope.value}-roles/${this.object.id}`,
+      detailFields: [
+        'display_name', 'scope_display', 'builtin', 'created_by',
+        {
+          key: this.$t('common.DateCreated'),
+          formatter: (item, val) => {
+            return <span> { toSafeLocalDateStr(this.object.date_created) }</span>
+          }
+        },
+        {
+          key: this.$t('common.DateUpdated'),
+          formatter: (item, val) => {
+            return <span> { toSafeLocalDateStr(this.object.date_updated) }</span>
+          }
+        },
+        'comment'
+      ]
     }
   },
   computed: {
@@ -148,38 +165,6 @@ export default {
     },
     scope() {
       return this.object.scope.value
-    },
-    detailItems() {
-      return [
-        {
-          key: this.$t('common.Name'),
-          value: this.object.display_name
-        },
-        {
-          key: this.$t('common.Scope'),
-          value: this.object['scope_display']
-        },
-        {
-          key: this.$t('common.Builtin'),
-          value: this.object['builtin']
-        },
-        {
-          key: this.$t('common.CreatedBy'),
-          value: this.object.created_by
-        },
-        {
-          key: this.$t('common.DateCreated'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('common.DateUpdated'),
-          value: toSafeLocalDateStr(this.object.date_updated)
-        },
-        {
-          key: this.$t('common.Comment'),
-          value: this.object.comment
-        }
-      ]
     }
   },
   mounted() {

@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailCardItems" />
+      <AutoDetailCard :url="url" :excludes="excludes" :object="object" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -10,15 +10,14 @@
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
+import AutoDetailCard from '@/components/DetailCard/auto'
 import QuickActions from '@/components/QuickActions'
-import { toSafeLocalDateStr } from '@/utils/common'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'Detail',
   components: {
-    DetailCard,
+    AutoDetailCard,
     QuickActions
   },
   props: {
@@ -92,38 +91,15 @@ export default {
             }
           })
         }
+      ],
+      url: `/api/v1/assets/accounts/${this.object.id}`,
+      excludes: [
+        'asset', 'template', 'privileged', 'secret',
+        'passphrase', 'specific'
       ]
     }
   },
   computed: {
-    detailCardItems() {
-      return [
-        {
-          key: this.$t('assets.Name'),
-          value: this.object.name
-        },
-        {
-          key: this.$t('users.Username'),
-          value: this.object.username
-        },
-        {
-          key: this.$t('assets.SecretType'),
-          value: this.object.secret_type.label
-        },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateJoined'),
-          value: toSafeLocalDateStr(this.object.date_created)
-        },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateUpdated'),
-          value: toSafeLocalDateStr(this.object.date_updated)
-        },
-        {
-          key: this.$t('assets.Comment'),
-          value: this.object.comment
-        }
-      ]
-    }
   }
 }
 </script>

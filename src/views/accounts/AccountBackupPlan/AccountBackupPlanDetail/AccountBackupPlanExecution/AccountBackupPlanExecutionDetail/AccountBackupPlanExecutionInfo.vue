@@ -1,19 +1,18 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <DetailCard :items="detailItems" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import DetailCard from '@/components/DetailCard'
-import { toSafeLocalDateStr } from '@/utils/common'
+import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
   name: 'AccountBackupPlanExecutionInfo',
   components: {
-    DetailCard
+    AutoDetailCard
   },
   props: {
     object: {
@@ -23,27 +22,13 @@ export default {
   },
   data() {
     return {
-    }
-  },
-  computed: {
-    detailItems() {
-      return [
+      url: `/api/v1/assets/account-backup-plan-executions/${this.object.id}/`,
+      detailFields: [
         {
           key: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
           value: this.object.timedelta.toFixed(2) + 's'
         },
-        {
-          key: this.$t('xpack.ChangeAuthPlan.DateStart'),
-          value: toSafeLocalDateStr(this.object.date_start)
-        },
-        {
-          key: this.$t('xpack.AccountBackupPlan.IsSuccess'),
-          value: this.object.is_success
-        },
-        {
-          key: this.$t('xpack.AccountBackupPlan.Reason'),
-          value: this.object.reason
-        },
+        'date_start', 'is_success', 'reason',
         {
           key: this.$t('xpack.ChangeAuthPlan.MailRecipient'),
           value: this.object.recipients ? this.object.recipients.map(
@@ -51,6 +36,8 @@ export default {
         }
       ]
     }
+  },
+  computed: {
   }
 }
 </script>
