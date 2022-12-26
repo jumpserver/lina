@@ -4,10 +4,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { getFields } from '@/views/accounts/ChangeSecreAtutomation/fields'
+import { getFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
-  name: 'ChangeSecreAtutomationCreateUpdate',
+  name: 'AccountChangeSecretCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
