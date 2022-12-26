@@ -1,20 +1,24 @@
 <template>
-  <GenericTreeListPage ref="TreeTablePage" :tree-setting="treeSetting" :table-config="tableConfig">
-    <template #table>
-      <AccountListTable ref="table" v-bind="tableConfig" />
-    </template>
-  </GenericTreeListPage>
+  <Page v-bind="$attrs">
+    <AssetTreeTAble ref="TreeTablePage" :tree-setting="treeSetting" :table-config="tableConfig">
+      <template #table>
+        <AccountListTable ref="table" v-bind="tableConfig" />
+      </template>
+    </AssetTreeTAble>
+  </Page>
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import Page from '@/layout/components/Page'
+import AssetTreeTAble from '@/components/AssetTreeTAble'
 import AccountListTable from '@/components/AccountListTable'
-import { setUrlParam, setRouterQuery } from '@/utils/common'
 
 export default {
   name: 'AssetAccountList',
   components: {
-    GenericTreeListPage, AccountListTable
+    Page,
+    AssetTreeTAble,
+    AccountListTable
   },
   data() {
     return {
@@ -27,32 +31,9 @@ export default {
       },
       treeSetting: {
         showMenu: false,
-        showRefresh: true,
-        showSearch: true,
-        showAssets: false,
-        url: '/api/v1/assets/accounts/',
-        treeUrl: '/api/v1/assets/nodes/children/tree/?assets=1',
-        callback: {
-          onSelected: (event, treeNode) => this.getAccountsUrl(event, treeNode)
-        }
+        showAssets: true,
+        url: '/api/v1/assets/accounts/'
       }
-    }
-  },
-  methods: {
-    getAccountsUrl(event, treeNode) {
-      let url = '/api/v1/assets/accounts/'
-      if (treeNode.meta.type === 'node') {
-        const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'asset', '')
-        url = setUrlParam(url, 'node', nodeId)
-      } else if (treeNode.meta.type === 'asset') {
-        const assetId = treeNode.meta.data?.id || treeNode?.id
-        url = setUrlParam(url, 'node', '')
-        url = setUrlParam(url, 'asset', assetId)
-      }
-
-      this.$set(this.tableConfig, 'url', url)
-      setRouterQuery(this)
     }
   }
 }

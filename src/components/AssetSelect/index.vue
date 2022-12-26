@@ -18,10 +18,9 @@
       @confirm="handleConfirm"
       @cancel="handleCancel"
     >
-      <TreeTable
+      <AssetTreeTAble
         ref="ListPage"
         class="tree-table"
-        :tree-setting="treeSetting"
         :table-config="tableConfig"
         :header-actions="headerActions"
       />
@@ -30,14 +29,14 @@
 </template>
 
 <script>
-import TreeTable from '@/components/TreeTable'
+import AssetTreeTAble from '@/components/AssetTreeTAble'
 import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
 import Dialog from '@/components/Dialog'
 
 export default {
   componentName: 'AssetSelect',
-  components: { TreeTable, Select2, Dialog },
+  components: { AssetTreeTAble, Select2, Dialog },
   props: {
     baseUrl: {
       type: String,
@@ -88,16 +87,6 @@ export default {
       initialValue: _.cloneDeep(iValue),
       rowSelected: [],
       initSelection: null,
-      treeSetting: {
-        showMenu: false,
-        showRefresh: true,
-        showSearch: true,
-        showAssets: false,
-        url: this.baseUrl,
-        nodeUrl: this.baseNodeUrl,
-        // ?assets=0不显示资产. =1显示资产
-        treeUrl: `${this.baseNodeUrl}/children/tree/?assets=0`
-      },
       select2Config: select2Config,
       dialogSelect2Config: select2Config,
       tableConfig: {
