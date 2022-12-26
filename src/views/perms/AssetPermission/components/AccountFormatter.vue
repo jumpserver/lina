@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     isDisabled() {
-      return (item) => (['@INPUT', '@USER'].includes(item.value) && this.select.includes('@ALL'))
+      return (item) => (['@INPUT', '@USER', 'INPUT'].includes(item.value) && this.select.includes('@ALL'))
     }
   },
   created() {
@@ -89,11 +89,7 @@ export default {
       if (val && event.target.defaultValue === '@ALL') {
         this.select = Array.from(new Set([...this.select, ...this.defaultOptions]))
       }
-      if (this.select.includes('INPUT')) {
-        this.showInput = true
-      } else {
-        this.showInput = false
-      }
+      this.showInput = this.select.includes('INPUT')
       this.setValue()
     },
     handleTagChange(val) {
