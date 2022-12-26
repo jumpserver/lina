@@ -22,16 +22,12 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import {
-  DateFormatter,
-  DetailFormatter,
-  DisplayFormatter,
-  ActionsFormatter,
-  ChoicesFormatter,
-  ObjectRelatedFormatter
+  ActionsFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter, ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
 import { newURL } from '@/utils/common'
+
 export default {
   name: 'AutoDataTable',
   components: {
@@ -255,7 +251,11 @@ export default {
     generateTotalColumns() {
       const config = _.cloneDeep(this.config)
       let columns = []
-      const configColumns = config?.columns || []
+      const allColumns = Object.keys(this.meta).concat(['actions']).concat(config?.extraColumns || [])
+      let configColumns = config?.columns || allColumns
+      if (config['excludes']) {
+        configColumns = configColumns.filter(item => !config.excludes.includes(item))
+      }
       if (configColumns.length > 0) {
         for (let col of configColumns) {
           if (typeof col === 'object') {

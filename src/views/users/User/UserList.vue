@@ -45,18 +45,11 @@ export default {
         permissions: {
           resource: 'user'
         },
-        columns: [
-          'name', 'username', 'email', 'phone', 'wechat',
-          'groups', 'system_roles', 'org_roles',
-          'source', 'is_active', 'is_valid', 'login_blocked', 'mfa_enabled',
-          'mfa_force_enabled', 'is_expired',
-          'last_login', 'date_joined', 'date_password_last_updated',
-          'comment', 'created_by', 'actions'
-        ],
+        columns: null,
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'groups_display', 'total_role_display',
+            'name', 'username', 'groups', 'system_roles', 'org_roles',
             'source', 'is_valid', 'actions'
           ]
         },

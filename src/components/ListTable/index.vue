@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import AutoDataTable from '../AutoDataTable'
-import IBox from '../IBox'
-import TableAction from './TableAction'
-import Emitter from '@/mixins/emitter'
 import { getResourceFromApiUrl } from '@/utils/jms'
 import deepmerge from 'deepmerge'
 import { mapGetters } from 'vuex'
+import IBox from '../IBox'
+import TableAction from './TableAction'
+import Emitter from '@/mixins/emitter'
+import AutoDataTable from '../AutoDataTable'
 
 export default {
   name: 'ListTable',

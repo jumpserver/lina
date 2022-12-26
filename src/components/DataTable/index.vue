@@ -198,6 +198,12 @@ export default {
       background-color: #F5F5F6;
       font-size: 13px;
       line-height: 1.5;
+
+      .cell {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
     .table{
