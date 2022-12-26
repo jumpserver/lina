@@ -168,7 +168,7 @@ export default {
         },
         {
           key: this.$t('assets.Platform'),
-          value: this.object.platform.label
+          value: this.object.platform.name
         },
         {
           key: this.$t('assets.IsActive'),
