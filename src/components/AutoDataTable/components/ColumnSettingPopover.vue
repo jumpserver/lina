@@ -24,11 +24,7 @@
         >
           <el-checkbox
             :label="item.prop"
-            :disabled="
-              item.prop==='id' ||
-                item.prop==='actions' ||
-                minColumns.indexOf(item.prop)!==-1
-            "
+            :disabled="item.prop==='actions' || minColumns.indexOf(item.prop)!==-1"
           >
             {{ item.label }}
           </el-checkbox>

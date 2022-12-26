@@ -45,11 +45,16 @@ export default {
         permissions: {
           resource: 'user'
         },
-        columns: null,
+        excludes: [
+          'password', 'password_strategy', 'public_key',
+          // mfa_level 字段已经包含下面 mfa 相关的状态
+          'is_otp_secret_key_bound', 'mfa_enabled', 'mfa_force_enabled',
+          'is_service_account', 'avatar_url'
+        ],
         columnsShow: {
-          min: ['name', 'username', 'actions'],
+          // min: ['name', 'username', 'actions'],
           default: [
-            'name', 'username', 'groups', 'system_roles', 'org_roles',
+            'name', 'username', 'email', 'groups', 'system_roles', 'org_roles',
             'source', 'is_valid', 'actions'
           ]
         },
@@ -64,6 +69,7 @@ export default {
             width: '120px'
           },
           system_roles: {
+            width: '100px',
             label: this.$t('users.SystemRoles'),
             showOverflowTooltip: true,
             formatter: (row) => {
@@ -73,6 +79,7 @@ export default {
             columnKey: 'system_roles'
           },
           org_roles: {
+            width: '100px',
             label: this.$t('users.OrgRoles'),
             showOverflowTooltip: true,
             formatter: (row) => {
@@ -84,13 +91,25 @@ export default {
               return this.$store.getters.hasValidLicense
             }
           },
-          mfa_enabled: {
-            label: 'MFA',
+          login_blocked: {
+            width: '90px',
             formatterArgs: {
               showFalse: false
             }
           },
-          mfa_force_enabled: {
+          is_first_login: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          can_public_key_auth: {
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          need_update_password: {
+            width: '100px',
             formatterArgs: {
               showFalse: false
             }
