@@ -51,7 +51,8 @@ export default {
         [this.$t('assets.Asset'), ['assets']],
         [this.$t('common.Basic'), ['name', 'username', 'privileged', 'su_from']],
         [this.$t('assets.Secret'), [
-          'secret_type', 'secret', 'ssh_key', 'token', 'api_key', 'passphrase'
+          'secret_type', 'secret', 'ssh_key', 'token',
+          'api_key', 'passphrase'
         ]],
         [this.$t('common.Other'), ['push_now', 'comment']]
       ],
@@ -122,12 +123,12 @@ export default {
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         passphrase: {
-          label: 'Passphrase',
+          label: this.$t('assets.Passphrase'),
           component: UpdateToken,
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         token: {
-          label: 'Token',
+          label: this.$t('assets.Token'),
           el: {
             type: 'textarea',
             rows: 4
@@ -136,7 +137,7 @@ export default {
         },
         api_key: {
           id: 'api_key',
-          label: this.$t('assets.SecretKey'),
+          label: this.$t('assets.AccessKey'),
           el: {
             type: 'textarea',
             rows: 4
@@ -182,15 +183,15 @@ export default {
           value: 'password'
         },
         {
-          label: this.$t('assets.PrivateKey'),
+          label: this.$t('assets.SSHKey'),
           value: 'ssh_key'
         },
         {
-          label: 'Token',
+          label: this.$t('assets.Token'),
           value: 'token'
         },
         {
-          label: this.$t('assets.ApiKey'),
+          label: this.$t('assets.AccessKey'),
           value: 'api_key'
         }
       ]

@@ -13,17 +13,18 @@ export default {
   },
   data() {
     return {
-      initial: {},
+      initial: { secret_type: 'password' },
       url: '/api/v1/assets/account-templates/',
       hasDetailInMsg: false,
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'privileged']],
-        [this.$t('assets.Secret'), ['secret_type', 'secret', 'ssh_key', 'token', 'access_key', 'passphrase']],
+        [this.$t('assets.Secret'), [
+          'secret_type', 'secret', 'ssh_key', 'token',
+          'access_key', 'passphrase'
+        ]],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
-        secret_type: {
-        },
         secret: {
           label: this.$t('assets.Password'),
           component: UpdateToken,
@@ -38,12 +39,12 @@ export default {
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         passphrase: {
-          label: 'Passphrase',
+          label: this.$t('assets.Passphrase'),
           component: UpdateToken,
           hidden: (formValue) => formValue.secret_type !== 'ssh_key'
         },
         token: {
-          label: 'Token',
+          label: this.$t('assets.Token'),
           el: {
             type: 'textarea',
             rows: 4
@@ -51,7 +52,7 @@ export default {
           hidden: (formValue) => formValue.secret_type !== 'token'
         },
         access_key: {
-          label: 'access key',
+          label: this.$t('assets.AccessKey'),
           el: {
             type: 'textarea',
             rows: 4
