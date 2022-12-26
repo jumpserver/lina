@@ -135,6 +135,9 @@ export default {
             },
             {
               label: 'Powershell', value: 'powershell'
+            },
+            {
+              label: 'Python', value: 'python'
             }
           ],
           callback: (val, setting, option) => {
