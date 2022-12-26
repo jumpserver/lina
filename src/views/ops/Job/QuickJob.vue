@@ -77,6 +77,7 @@ export default {
           align: 'left',
           icon: 'fa-play',
           tip: this.$t('ops.RunCommand'),
+          disabled: this.$store.getters.currentOrgIsRoot,
           el: {
             type: 'primary'
           },
