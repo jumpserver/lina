@@ -705,6 +705,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "ManualInput": "手动输入",
     "DryRun": "测试运行",
     "Language": "语言",
     "Job": "作业",
