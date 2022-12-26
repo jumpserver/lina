@@ -42,18 +42,16 @@ export default {
       const data = await this.$store.dispatch('common/getUrlMeta', { url: this.url })
       const remoteMeta = data.actions['GET'] || {}
       let fields = this.fields
-      console.log('remoteMeta', remoteMeta)
       fields = fields || Object.keys(remoteMeta)
-      if (this.excludes) {
-        fields = fields.filter(item => !this.excludes.includes(item))
-      }
+      const defaultExcludes = ['org_id']
+      const excludes = (this.excludes || []).concat(defaultExcludes)
+      fields = fields.filter(item => !excludes.includes(item))
       for (const name of fields) {
         if (typeof name === 'object') {
           this.items.push(name)
           continue
         }
         const fieldMeta = remoteMeta[name]
-        console.log('Field meta', name, fieldMeta)
         if (!fieldMeta) {
           continue
         }
@@ -71,7 +69,7 @@ export default {
         } else if (fieldMeta.type === 'm2m_related_field') {
           value = value.map(item => item['name']).join(', ')
         } else if (fieldMeta.type === 'boolean') {
-          value = value ? this.$t('Yes') : this.$t('No')
+          value = value ? this.$t('common.Yes') : this.$t('common.No')
         }
 
         const item = {
