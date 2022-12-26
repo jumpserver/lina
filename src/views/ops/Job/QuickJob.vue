@@ -10,7 +10,7 @@
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <CodeEditor style="margin-bottom: 20px" :toolbar="toolbar" :value.sync="command" />
+          <CodeEditor v-if="ready" style="margin-bottom: 20px" :toolbar="toolbar" :value.sync="command" />
           <b>{{ $tc('ops.output') }}:</b>
           <span v-if="executionInfo.status" style="float: right">
             <span>
@@ -54,6 +54,7 @@ export default {
   },
   data() {
     return {
+      ready: false,
       currentStatus: '',
       currentTaskID: '',
       executionInfo: {
@@ -65,7 +66,7 @@ export default {
       showOpenAdhocDialog: false,
       showOpenAdhocSaveDialog: false,
       DataZTree: 0,
-      runas: ['root'],
+      runas: 'root',
       runasPolicy: 'skip',
       command: '',
       module: 'shell',
@@ -93,14 +94,7 @@ export default {
           el: {
             create: true
           },
-          options: [
-            {
-              label: 'root', value: 'root'
-            },
-            {
-              label: this.$t('ops.ManualInput'), value: 'manualInput'
-            }
-          ],
+          options: [],
           callback: (val, setting, option) => {
             this.runas = option
           }
@@ -216,8 +210,28 @@ export default {
   },
   mounted() {
     this.enableWS()
+    this.getFrequentUsernames()
   },
   methods: {
+    getFrequentUsernames() {
+      this.$axios.get('/api/v1/ops/frequent-username').then(data => {
+        this.toolbar[1].options.push({
+          label: 'root', value: 'root'
+        })
+        data.filter((item) => {
+          return item.username !== 'root'
+        }).forEach((item) => {
+          this.toolbar[1].options.push({
+            label: item.username,
+            value: item.username
+          })
+        })
+        this.toolbar[1].options.push({
+          label: this.$t('ops.ManualInput'), value: 'manualInput'
+        })
+        this.ready = true
+      })
+    },
     onSelectAdhoc(adhoc) {
       this.command = adhoc.args
     },
