@@ -1,7 +1,7 @@
 <template>
   <div>
     <AssetTreeTAble
-      ref="TreeList"
+      ref="AssetTreeTAble"
       :table-config="tableConfig"
       :help-message="helpMessage"
     >
@@ -21,7 +21,6 @@
 
 <script>
 import { AssetTreeTAble } from '@/components'
-import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
@@ -79,25 +78,10 @@ export default {
     ...mapGetters(['currentOrgIsRoot'])
   },
   mounted() {
-    this.decorateRMenu()
-    const treeSetting = this.treeTabConfig.submenu[0].treeSetting
-    treeSetting.hasRightMenu = !this.currentOrgIsRoot
-    treeSetting.showCreate = this.$hasPerm('assets.add_node')
-    treeSetting.showUpdate = this.$hasPerm('assets.change_node')
-    treeSetting.showDelete = this.$hasPerm('assets.delete_node')
-    this.treeRef = this.$refs.TreeList
+    this.treeRef = this.$refs.AssetTreeTAble.$refs.TreeList
   },
   methods: {
-    decorateRMenu() {
-      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
-      if (show_current_asset === '1') {
-        $('#m_show_asset_all_children_node').css('color', '#606266')
-        $('#m_show_asset_only_current_node').css('color', 'green')
-      } else {
-        $('#m_show_asset_all_children_node').css('color', 'green')
-        $('#m_show_asset_only_current_node').css('color', '#606266')
-      }
-    },
+
     showAll({ node, showCurrentAsset }) {
       this.$cookie.set('show_current_asset', showCurrentAsset, 1)
       this.decorateRMenu()
