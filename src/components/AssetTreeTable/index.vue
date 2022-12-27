@@ -7,12 +7,20 @@
     :tree-tab-config="treeTabConfig"
     v-bind="$attrs"
     v-on="$listeners"
-  />
+  >
+    <template #table>
+      <slot name="table" />
+    </template>
+    <div slot="rMenu" slot-scope="{data}">
+      <slot name="rMenu" :data="data" />
+    </div>
+  </TreeTable>
 </template>
 
 <script>
 import TreeTable from '../TreeTable'
 import { setRouterQuery, setUrlParam } from '@/utils/common'
+import $ from '@/utils/jquery-vendor'
 
 export default {
   components: {
@@ -91,7 +99,25 @@ export default {
       }
     }
   },
+  mounted() {
+    this.decorateRMenu()
+    const treeSetting = this.treeTabConfig.submenu[0].treeSetting
+    treeSetting.hasRightMenu = !this.currentOrgIsRoot
+    treeSetting.showCreate = this.$hasPerm('assets.add_node')
+    treeSetting.showUpdate = this.$hasPerm('assets.change_node')
+    treeSetting.showDelete = this.$hasPerm('assets.delete_node')
+  },
   methods: {
+    decorateRMenu() {
+      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
+      if (show_current_asset === '1') {
+        $('#m_show_asset_all_children_node').css('color', '#606266')
+        $('#m_show_asset_only_current_node').css('color', 'green')
+      } else {
+        $('#m_show_asset_all_children_node').css('color', 'green')
+        $('#m_show_asset_only_current_node').css('color', '#606266')
+      }
+    },
     getAssetsUrl(treeNode) {
       let url = this.treeSetting?.url || this.url
       if (treeNode.meta.type === 'node') {
