@@ -91,27 +91,17 @@ export default [
     children: [
       {
         path: '',
-        component: () => import('@/views/accounts/AccountGather/index'),
-        name: 'GatherUserListIndex',
+        component: () => import('@/views/accounts/AccountGather/AccountGatherTaskList.vue'),
+        name: 'AccountGatherTaskList',
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUser'),
-          permissions: ['assets.view_gathereduser|xpack.view_gatherusertask']
-        }
-      },
-      {
-        path: '',
-        component: () => import('@/views/accounts/AccountGather/GatheredUserList'),
-        name: 'GatherUserList',
-        hidden: true,
-        meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserList'),
-          activeMenu: '/accounts/account-gather'
+          title: i18n.t('xpack.GatherUser.GatherUserTaskList'),
+          permissions: ['assets.view_gatheraccountsautomation']
         }
       },
       {
         path: 'tasks/create',
         component: () => import('@/views/accounts/AccountGather/TaskCreateUpdate'),
-        name: 'GatherUserTaskCreate',
+        name: 'AccountGatherTaskCreate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
@@ -121,7 +111,7 @@ export default [
       {
         path: 'tasks/:id',
         component: () => import('@/views/accounts/AccountGather/TaskDetail/index'),
-        name: 'GatherUserTaskDetail',
+        name: 'AccountGatherTaskDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
@@ -131,7 +121,7 @@ export default [
       {
         path: 'tasks/:id/update',
         component: () => import('@/views/accounts/AccountGather/TaskCreateUpdate'),
-        name: 'GatherUserTaskUpdate',
+        name: 'AccountGatherTaskUpdate',
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'),
