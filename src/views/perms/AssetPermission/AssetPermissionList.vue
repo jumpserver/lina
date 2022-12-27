@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <GenericTreeListPage
+  <Page v-bind="$attrs">
+    <AssetTreeTAble
       :table-config="tableConfig"
       :header-actions="headerActions"
       :tree-setting="treeSetting"
@@ -9,26 +9,26 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
-  </div>
+  </Page>
 </template>
 
 <script>
-import GenericTreeListPage from '@/layout/components/GenericTreeListPage'
+import Page from '@/layout/components/Page'
+import AssetTreeTAble from '@/components/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    GenericTreeListPage,
+    Page,
+    AssetTreeTAble,
     PermBulkUpdateDialog
   },
   data() {
     return {
       treeSetting: {
         showMenu: false,
-        showRefresh: true,
-        showSearch: true,
         showAssets: true,
         url: '/api/v1/perms/asset-permissions/',
         nodeUrl: '/api/v1/perms/asset-permissions/',

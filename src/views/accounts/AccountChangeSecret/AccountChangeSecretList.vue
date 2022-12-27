@@ -1,16 +1,16 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'ChangeSecreAtutomationList',
+  name: 'AccountChangeSecretList',
   components: {
-    GenericListTable
+    GenericListPage
   },
   data() {
     const vm = this
@@ -29,7 +29,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecreAtutomationDetail'
+              route: 'AccountChangeSecretDetail'
             }
           },
           assets_amount: {
@@ -60,9 +60,9 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecreAtutomationDetail',
+              route: 'AccountChangeSecretDetail',
               routeQuery: {
-                activeTab: 'ChangeSecreAtutomationExecutionList'
+                activeTab: 'ChangeSecretAutomationExecutionList'
               }
             }
           },
@@ -73,10 +73,10 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecreAtutomationCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'ChangeSecretAutomationCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecreAtutomationUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'ChangeSecretAutomationUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
@@ -107,7 +107,7 @@ export default {
         hasImport: false,
         createRoute: () => {
           return {
-            name: 'ChangeSecreAtutomationCreate'
+            name: 'AccountChangeSecretCreate'
           }
         }
       }

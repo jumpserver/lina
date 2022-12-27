@@ -28,7 +28,7 @@
           <div class="mini-button" :class="{'is-show': iShowTree}" @click="iShowTree = !iShowTree">
             <svg-icon
               :icon-class="'double-left'"
-              class="icon"
+              class="icon-left"
               :style="{'transform': iShowTree ? 'none' : 'rotate(180deg)'}"
             />
           </div>
@@ -55,7 +55,7 @@
 
 <script>
 import AutoDataZTree from '../AutoDataZTree'
-import TreeTab from '../TreeTab'
+import TabTree from '../TabTree'
 import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
@@ -66,7 +66,7 @@ export default {
   components: {
     ListTable,
     AutoDataZTree,
-    TreeTab,
+    TabTree,
     IBox,
     Dialog
   },
@@ -163,23 +163,24 @@ export default {
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 12px;
+    width: 13px;
     float: right;
     text-align: center;
     padding: 5px 0;
+    border: 1px solid #DCDFE6;
     background-color: #FFFFFF;
-    border-color: #FFFFFF;
     border-radius: 3px;
-    line-height: 21px;
     cursor: pointer;
     height: 30px;
 
     &:hover {
       display: block;
+      border: 1px solid #d2d2d2;
     }
 
-    .icon {
+    .icon-left {
       font-size: 14px;
+      margin-left: -1.1px;
     }
   }
 
@@ -202,9 +203,6 @@ export default {
           display: block !important;;
         }
       }
-    }
-
-    .right {
     }
   }
 

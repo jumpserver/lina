@@ -49,3 +49,10 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.xterm {
+  padding-left: 5px;
+  background-color: #FFFFFF;
+}
+</style>

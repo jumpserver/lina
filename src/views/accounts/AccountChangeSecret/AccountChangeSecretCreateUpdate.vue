@@ -4,10 +4,10 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { getFields } from '@/views/accounts/ChangeSecreAtutomation/fields'
+import { getFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
-  name: 'ChangeSecreAtutomationCreateUpdate',
+  name: 'AccountChangeSecretCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },
@@ -40,8 +40,8 @@ export default {
       fieldsMeta: {
         ...getFields()
       },
-      createSuccessNextRoute: { name: 'ChangeSecreAtutomationIndex' },
-      updateSuccessNextRoute: { name: 'ChangeSecreAtutomationIndex' },
+      createSuccessNextRoute: { name: 'AccountChangeSecretList' },
+      updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''
@@ -55,7 +55,9 @@ export default {
   },
   methods: {
     handleAfterGetRemoteMeta(meta) {
-      const needSetOptionFields = ['secret_type', 'secret_strategy', 'ssh_key_change_strategy']
+      const needSetOptionFields = [
+        'secret_type', 'secret_strategy', 'ssh_key_change_strategy'
+      ]
       for (const i of needSetOptionFields) {
         const field = this.fieldsMeta[i] || {}
         field.options = meta[i]?.choices || []

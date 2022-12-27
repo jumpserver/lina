@@ -25,7 +25,7 @@ export default {
         url: '/api/v1/assets/gather-account-automations/',
         activeMenu: 'Detail',
         actions: {
-          deleteSuccessRoute: 'GatherUserListIndex'
+          deleteSuccessRoute: 'AccountGatherListIndex'
         },
         submenu: [
           {

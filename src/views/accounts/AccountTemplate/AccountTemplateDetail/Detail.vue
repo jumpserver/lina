@@ -49,7 +49,7 @@ export default {
           }
         }
       ],
-      url: `/api/v1/assets/account-templates/${this.object.id}`,
+      url: `/api/v1/assets/account-templates/${this.object.id}/`,
       excludes: ['privileged', 'secret', 'passphrase', 'specific']
     }
   },

@@ -1,12 +1,10 @@
 <template>
   <div>
-    <TreeTable
-      ref="TreeList"
+    <AssetTreeTAble
+      ref="AssetTreeTAble"
       :table-config="tableConfig"
+      :tree-setting="treeSetting"
       :help-message="helpMessage"
-      component="TreeTab"
-      :active-menu.sync="treeTabConfig.activeMenu"
-      :tree-tab-config="treeTabConfig"
     >
       <TreeMenu
         slot="rMenu"
@@ -18,13 +16,12 @@
         v-bind="tableConfig"
         :add-extra-more-actions="addExtraMoreActions"
       />
-    </TreeTable>
+    </AssetTreeTAble>
   </div>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
-import $ from '@/utils/jquery-vendor'
+import { AssetTreeTAble } from '@/components'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
@@ -32,7 +29,7 @@ import { setRouterQuery, setUrlParam } from '@/utils/common'
 
 export default {
   components: {
-    TreeTable,
+    AssetTreeTAble,
     TreeMenu,
     BaseList
   },
@@ -42,6 +39,9 @@ export default {
       treeRef: null,
       showPlatform: false,
       category: 'all',
+      treeSetting: {
+        showMenu: true
+      },
       tableConfig: {
         url: '/api/v1/assets/assets/',
         category: 'all'
@@ -75,47 +75,6 @@ export default {
           }.bind(this)
         }
       ],
-      treeTabConfig: {
-        activeMenu: 'CustomTree',
-        submenu: [
-          {
-            title: this.$t('assets.AssetTree'),
-            name: 'CustomTree',
-            treeSetting: {
-              showMenu: true,
-              showRefresh: true,
-              showAssets: false,
-              showCreate: true,
-              showUpdate: true,
-              showDelete: true,
-              hasRightMenu: true,
-              showSearch: true,
-              url: '/api/v1/assets/assets/',
-              nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
-              callback: {
-                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
-              }
-            }
-          },
-          {
-            title: this.$t('assets.BuiltinTree'),
-            name: 'BuiltinTree',
-            treeSetting: {
-              showRefresh: true,
-              showAssets: false,
-              showSearch: true,
-              customTreeHeaderName: this.$t('assets.BuiltinTree'),
-              url: '/api/v1/assets/nodes/category/tree/',
-              nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/category/tree/?assets=1',
-              callback: {
-                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
-              }
-            }
-          }
-        ]
-      },
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }
   },
@@ -123,25 +82,10 @@ export default {
     ...mapGetters(['currentOrgIsRoot'])
   },
   mounted() {
-    this.decorateRMenu()
-    const treeSetting = this.treeTabConfig.submenu[0].treeSetting
-    treeSetting.hasRightMenu = !this.currentOrgIsRoot
-    treeSetting.showCreate = this.$hasPerm('assets.add_node')
-    treeSetting.showUpdate = this.$hasPerm('assets.change_node')
-    treeSetting.showDelete = this.$hasPerm('assets.delete_node')
-    this.treeRef = this.$refs.TreeList
+    this.treeRef = this.$refs.AssetTreeTAble.$refs.TreeList
   },
   methods: {
-    decorateRMenu() {
-      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
-      if (show_current_asset === '1') {
-        $('#m_show_asset_all_children_node').css('color', '#606266')
-        $('#m_show_asset_only_current_node').css('color', 'green')
-      } else {
-        $('#m_show_asset_all_children_node').css('color', 'green')
-        $('#m_show_asset_only_current_node').css('color', '#606266')
-      }
-    },
+
     showAll({ node, showCurrentAsset }) {
       this.$cookie.set('show_current_asset', showCurrentAsset, 1)
       this.decorateRMenu()

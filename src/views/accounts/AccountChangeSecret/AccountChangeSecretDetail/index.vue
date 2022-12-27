@@ -8,37 +8,37 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import ChangeSecreAtutomationInfo from './ChangeSecreAtutomationInfo'
-import ChangeSecreAtutomationAsset from './ChangeSecreAtutomationAsset/index'
-import ChangeSecreAtutomationExecutionList from './ChangeSecreAtutomationExecution/ChangeSecreAtutomationExecutionList'
+import AccountChangeSecretInfo from './AccountChangeSecretInfo'
+import AccountChangeSecretAsset from './AccountChangeSecretAsset/index'
+import AccountChangeSecretExecutionList from './AccountChangeSecretExecution/AccountChangeSecretExecutionList'
 
 export default {
   components: {
     GenericDetailPage,
-    ChangeSecreAtutomationInfo,
-    ChangeSecreAtutomationAsset,
-    ChangeSecreAtutomationExecutionList
+    AccountChangeSecretInfo,
+    AccountChangeSecretAsset,
+    AccountChangeSecretExecutionList
   },
   data() {
     return {
       plan: { name: '', username: '', comment: '' },
       config: {
-        activeMenu: 'ChangeSecreAtutomationInfo',
+        activeMenu: 'AccountChangeSecretInfo',
         url: '/api/v1/assets/change-secret-automations',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'ChangeSecreAtutomationInfo',
+            name: 'AccountChangeSecretInfo',
             hidden: () => !this.$hasPerm('assets.view_changesecretautomation')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
-            name: 'ChangeSecreAtutomationAsset',
+            name: 'AccountChangeSecretAsset',
             hidden: () => !this.$hasPerm('assets.change_changesecretautomation')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
-            name: 'ChangeSecreAtutomationExecutionList',
+            name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('assets.view_changesecretexecution')
           }
         ]

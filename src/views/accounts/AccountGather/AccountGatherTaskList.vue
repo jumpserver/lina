@@ -1,15 +1,15 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
-    GenericListTable
+    GenericListPage
   },
   data() {
     const vm = this
@@ -33,7 +33,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'GatherUserTaskDetail',
+              route: 'AccountGatherTaskDetail',
               routeQuery: {
                 activeTab: 'Detail'
               }
@@ -58,7 +58,7 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'GatherUserTaskDetail',
+              route: 'AccountGatherTaskDetail',
               can: vm.$hasPerm('assets.view_gatheraccountsexecution'),
               routeQuery: {
                 activeTab: 'TaskExecutionList'
@@ -67,7 +67,7 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'GatherUserTaskUpdate',
+              updateRoute: 'AccountGatherTaskUpdate',
               hasClone: false,
               extraActions: [
                 {
@@ -99,7 +99,7 @@ export default {
         hasRefresh: false,
         hasExport: false,
         hasMoreActions: false,
-        createRoute: 'GatherUserTaskCreate',
+        createRoute: 'AccountGatherTaskCreate',
         hasColumnSetting: false,
         searchConfig: {
           getUrlQuery: false
