@@ -30,7 +30,6 @@
           </el-checkbox>
         </el-col>
       </el-row>
-
     </el-checkbox-group>
   </Dialog>
 </template>

@@ -14,7 +14,7 @@
       @confirm="handleExportConfirm()"
       @cancel="handleExportCancel()"
     >
-      <el-form label-position="left" style="padding-left: 50px">
+      <el-form label-position="left" style="padding-left: 20px">
         <el-form-item :label="$tc('common.fileType' )" :label-width="'100px'">
           <el-radio-group v-model="exportTypeOption">
             <el-radio

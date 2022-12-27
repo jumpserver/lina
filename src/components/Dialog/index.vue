@@ -98,7 +98,7 @@ export default {
     }
 
     &__body {
-      padding: 30px 40px;
+      padding: 20px 30px;
     }
 
     &__footer {

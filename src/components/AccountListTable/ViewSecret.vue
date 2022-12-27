@@ -7,12 +7,12 @@
     />
     <Dialog
       :title="dialogTitle"
-      :show-confirm="false"
       :show-cancel="false"
       :destroy-on-close="true"
       :width="'50'"
       :visible.sync="showSecret"
       v-bind="$attrs"
+      @confirm="showSecret = false"
       v-on="$listeners"
     >
       <el-form class="password-form" label-position="right" label-width="100px" :model="secretInfo">
@@ -101,7 +101,7 @@ export default {
     getAuthInfo() {
       this.$axios.get(this.url, { disableFlashErrorMsg: true }).then(resp => {
         this.secretInfo = resp
-        this.sshKeyFingerprint = resp.specific.ssh_key_fingerprint
+        this.sshKeyFingerprint = resp['specific']['ssh_key_fingerprint']
         this.showSecret = true
       })
     },
@@ -125,12 +125,21 @@ export default {
     padding: 5px 0;
     margin-bottom: 0;
 
-    &:hover {
-      background-color: #F5F7FA;
+    &:last-child {
+      border-bottom: none;
     }
 
     >>> .el-form-item__label {
       padding-right: 20px;
+      line-height: 30px;
+    }
+
+    >>> .el-form-item__content {
+      line-height: 30px;
+
+      pre {
+        margin: 0;
+      }
     }
   }
 
