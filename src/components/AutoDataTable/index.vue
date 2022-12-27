@@ -280,6 +280,9 @@ export default {
           }
         }
         columns = columns.filter(item => {
+          if (item?.showFullContent) {
+            item.className = 'show-full-content'
+          }
           let has = item.has
           if (has === undefined) {
             has = true

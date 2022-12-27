@@ -115,9 +115,10 @@ export default {
             sortable: true
           },
           protocols: {
+            showFullContent: true,
             formatter: (row) => {
               const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
-              return <span> {data} </span>
+              return <div> {data} </div>
             }
           },
           ip: {
