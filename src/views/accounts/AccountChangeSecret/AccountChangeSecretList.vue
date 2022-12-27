@@ -1,16 +1,16 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
+import { GenericListPage } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
-  name: 'ChangeSecretAutomationList',
+  name: 'AccountChangeSecretList',
   components: {
-    GenericListTable
+    GenericListPage
   },
   data() {
     const vm = this
@@ -112,7 +112,7 @@ export default {
         hasImport: false,
         createRoute: () => {
           return {
-            name: 'ChangeSecretAutomationCreate'
+            name: 'AccountChangeSecretCreate'
           }
         }
       }
