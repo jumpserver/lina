@@ -148,7 +148,7 @@ export default {
             protocols.push(item)
           } else {
             const protocol = choices.find(i => i.name === item.name)
-            if (protocol) protocols.push(protocol)
+            if (protocol) protocols.push({ ...protocol, ...item })
           }
         })
         this.items = protocols
