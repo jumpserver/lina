@@ -1,5 +1,6 @@
 <template>
   <div v-if="ready">
+    <VariableHelpDialog :visible.sync="showHelpDialog" />
     <GenericCreateUpdatePage ref="form" v-bind="$data" />
   </div>
 </template>
@@ -8,26 +9,28 @@
 import { GenericCreateUpdatePage } from '@/layout/components'
 import AssetSelect from '@/components/AssetSelect'
 import { JsonEditor } from '@/components/FormFields'
-import JobCodeEditor from '@/views/ops/Job/JobCodeEditor'
+import CodeEditor from '@/components/FormFields/CodeEditor'
 import { CronTab } from '@/components'
 import i18n from '@/i18n/i18n'
+import VariableHelpDialog from '@/views/ops/Job/VariableHelpDialog'
 
 export default {
   components: {
-    GenericCreateUpdatePage
+    GenericCreateUpdatePage,
+    VariableHelpDialog
   },
   data() {
     return {
       ready: false,
-      showOpenAdhocDialog: false,
+      showHelpDialog: false,
       instantTask: false,
       url: '/api/v1/ops/jobs/',
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'instant']],
-        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir']],
+        [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
         [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
         [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']],
-        [this.$t('common.Other'), ['is_active', 'comment']]
+        [this.$t('common.Other'), ['comment']]
       ],
       initial: {
         type: 'adhoc',
@@ -47,6 +50,11 @@ export default {
           }
         },
         comment: {
+          on: {
+            change: (val) => {
+              console.log(val)
+            }
+          },
           hidden: () => {
             return this.instantTask
           }
@@ -60,6 +68,11 @@ export default {
           label: this.$t('ops.Module'),
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
+          },
+          on: {
+            change: ([event], updateForm) => {
+              this.fieldsMeta.args.el.options.mode = event
+            }
           }
         },
         playbook: {
@@ -94,7 +107,26 @@ export default {
           hidden: (formValue) => {
             return formValue.type !== 'adhoc'
           },
-          component: JobCodeEditor
+          component: CodeEditor,
+          el: {
+            options: {
+              mode: 'shell'
+            },
+            toolbar: [
+              {
+                type: 'button',
+                icon: 'fa-question-circle',
+                tip: this.$t('ops.SaveCommand'),
+                align: 'right',
+                callback: () => {
+                  this.showHelpDialog = true
+                }
+              }
+            ]
+          }
+        },
+        timeout: {
+          helpText: i18n.t('ops.TimeoutHelpText')
         },
         instant: {
           hidden: () => {
