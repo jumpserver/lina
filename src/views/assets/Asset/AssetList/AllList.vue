@@ -3,6 +3,7 @@
     <AssetTreeTAble
       ref="AssetTreeTAble"
       :table-config="tableConfig"
+      :tree-setting="treeSetting"
       :help-message="helpMessage"
     >
       <TreeMenu
@@ -38,6 +39,9 @@ export default {
       treeRef: null,
       showPlatform: false,
       category: 'all',
+      treeSetting: {
+        showMenu: true
+      },
       tableConfig: {
         url: '/api/v1/assets/assets/',
         category: 'all'
