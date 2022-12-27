@@ -49,7 +49,7 @@ import merge from 'webpack-merge'
 const ACTIVE_TREE_TAB_KEY = 'activeTreeTab'
 
 export default {
-  name: 'TreeTab',
+  name: 'TabTree',
   components: {
     AutoDataZTree
   },

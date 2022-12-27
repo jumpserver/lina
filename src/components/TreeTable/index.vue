@@ -55,7 +55,7 @@
 
 <script>
 import AutoDataZTree from '../AutoDataZTree'
-import TreeTab from '../TreeTab'
+import TabTree from '../TabTree'
 import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
@@ -66,7 +66,7 @@ export default {
   components: {
     ListTable,
     AutoDataZTree,
-    TreeTab,
+    TabTree,
     IBox,
     Dialog
   },
