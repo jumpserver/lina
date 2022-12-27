@@ -2,6 +2,7 @@ import i18n from '@/i18n/i18n'
 import rules from '@/components/DataForm/rules'
 import { JsonEditor } from '@/components/FormFields'
 import { assetFieldsMeta } from '@/views/assets/const'
+
 const assetMeta = assetFieldsMeta()
 
 export const platformFieldsMeta = (vm) => {
@@ -14,7 +15,6 @@ export const platformFieldsMeta = (vm) => {
         'ansible_enabled', 'ansible_config',
         'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
-        'push_account_enabled', 'push_account_method',
         'change_secret_enabled', 'change_secret_method',
         'verify_account_enabled', 'verify_account_method',
         'gather_accounts_enabled', 'gather_accounts_method'
@@ -25,7 +25,6 @@ export const platformFieldsMeta = (vm) => {
           hidden: (formValue) => !formValue['ansible_enabled']
         },
         gather_facts_enabled: {
-          label: i18n.t('assets.CollectHardwareInfo')
         },
         ping_method: {},
         gather_facts_method: {},
