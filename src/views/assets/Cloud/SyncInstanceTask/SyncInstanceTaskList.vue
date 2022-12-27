@@ -19,7 +19,7 @@ export default {
         url: '/api/v1/xpack/cloud/sync-instance-tasks/',
         permissions: {
           app: 'xpack',
-          resource: 'instancetype'
+          resource: 'syncinstancetask'
         },
         columnsMeta: {
           sync_ip_type: {
