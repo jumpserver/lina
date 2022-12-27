@@ -68,9 +68,6 @@ export default {
     }
   },
   methods: {
-    onGatherUserTasks() {
-      this.$router.push({ name: 'GatherUserTaskList' })
-    }
   }
 }
 </script>

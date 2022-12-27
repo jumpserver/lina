@@ -19,7 +19,7 @@ export default {
             title: this.$t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
             name: 'ChangeSecretAutomationList',
             hidden: () => !this.$hasPerm('assets.view_changesecretautomation'),
-            component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationList.vue')
+            component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
           }
         ]
       }

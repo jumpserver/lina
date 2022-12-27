@@ -29,7 +29,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecretAutomationDetail'
+              route: 'AccountChangeSecretDetail'
             }
           },
           username: {
@@ -65,7 +65,7 @@ export default {
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'ChangeSecretAutomationDetail',
+              route: 'AccountChangeSecretDetail',
               routeQuery: {
                 activeTab: 'ChangeSecretAutomationExecutionList'
               }

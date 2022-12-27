@@ -235,10 +235,6 @@ export default {
     onSelectAdhoc(adhoc) {
       this.command = adhoc.args
     },
-    getSelectedAssetsNode() {
-      const nodes = this.$refs.TreeTable.getSelectedNodes()
-      return nodes
-    },
     enableWS() {
       const scheme = document.location.protocol === 'https:' ? 'wss' : 'ws'
       const port = document.location.port ? ':' + document.location.port : ''
@@ -280,21 +276,37 @@ export default {
       msg = JSON.stringify({ task: taskId })
       this.ws.send(msg)
     },
+    getSelectedNodes() {
+      console.log(this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes())
+      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
+    },
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
       const url = '/api/v1/ops/jobs/?'
-      // const hosts = this.getSelectedAssetsNode().map(function(node) {
-      //   return node.id
-      // })
+
+      const hosts = this.getSelectedNodes().filter((item) => {
+        return item.meta.type !== 'node'
+      }).map(function(node) {
+        return node.id
+      })
+
+      const nodes = this.getSelectedNodes().filter((item) => {
+        return item.meta.type === 'node'
+      }).map(function(node) {
+        return node.meta.data.id
+      })
+
       const data = {
-        assets: ['9a39ff4e-9ddf-403f-bc63-0f0e4484aafa'],
+        assets: hosts,
+        nodes: nodes,
         module: this.module,
         args: this.command,
-        run_as: this.runas.join(),
+        run_as: this.runas,
         run_as_policy: this.runasPolicy,
         instant: true,
         is_periodic: false
       }
+      console.log(data)
       this.$axios.post(
         url, data
       ).then(res => {

@@ -203,9 +203,6 @@ export default {
         }
       }
     }
-
-    .right {
-    }
   }
 
   .auto-data-ztree {

@@ -17,7 +17,7 @@ import AssetRelationCard from '@/components/AssetRelationCard'
 import { DeleteActionFormatter, DetailFormatter } from '@/components/TableFormatters'
 
 export default {
-  name: 'ChangeSecretAutomationAsset',
+  name: 'AccountChangeSecretAsset',
   components: {
     GenericListTable, RelationCard, AssetRelationCard
   },

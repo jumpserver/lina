@@ -7,7 +7,7 @@ import GenericListTable from '@/layout/components/GenericListTable'
 import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
-  name: 'ChangeSecretAutomationExecutionTaskList',
+  name: 'AccountChangeSecretExecutionTaskList',
   components: {
     GenericListTable
   },

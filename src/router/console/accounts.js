@@ -163,7 +163,7 @@ export default [
       },
       {
         path: 'atutomation',
-        component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationList.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue'),
         name: 'ChangeSecretAutomationList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
@@ -173,7 +173,7 @@ export default [
       },
       {
         path: 'atutomation/create',
-        component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationCreateUpdate.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
         name: 'ChangeSecretAutomationCreate',
         hidden: true,
         meta: {
@@ -183,7 +183,7 @@ export default [
       },
       {
         path: 'atutomation/:id/update',
-        component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationCreateUpdate.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
         name: 'ChangeSecretAutomationUpdate',
         hidden: true,
         meta: {
@@ -192,9 +192,9 @@ export default [
         }
       },
       {
-        path: 'atutomation/:id',
-        component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationDetail/index.vue'),
-        name: 'ChangeSecretAutomationDetail',
+        path: 'automation/:id',
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/index.vue'),
+        name: 'AccountChangeSecretDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
@@ -203,7 +203,7 @@ export default [
       },
       {
         path: 'execution/:id',
-        component: () => import('@/views/accounts/AccountChangeSecret/ChangeSecretAutomationDetail/ChangeSecretAutomationExecution/ChangeSecretAutomationExecutionDetail/index.vue'),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
         name: 'ChangeAuthPlanExecutionDetail',
         hidden: true,
         meta: {

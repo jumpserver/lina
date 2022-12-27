@@ -33,7 +33,7 @@ export default {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'GatherUserTaskDetail',
+              route: 'AccountGatherTaskDetail',
               routeQuery: {
                 activeTab: 'Detail'
               }
@@ -59,7 +59,7 @@ export default {
           executed_amount: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'GatherUserTaskDetail',
+              route: 'AccountGatherTaskDetail',
               can: vm.$hasPerm('assets.view_gatheraccountsexecution'),
               routeQuery: {
                 activeTab: 'TaskExecutionList'
@@ -68,7 +68,7 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'GatherUserTaskUpdate',
+              updateRoute: 'AccountGatherTaskUpdate',
               hasClone: false,
               extraActions: [
                 {
@@ -100,7 +100,7 @@ export default {
         hasRefresh: false,
         hasExport: false,
         hasMoreActions: false,
-        createRoute: 'GatherUserTaskCreate',
+        createRoute: 'AccountGatherTaskCreate',
         hasColumnSetting: false,
         searchConfig: {
           getUrlQuery: false

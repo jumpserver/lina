@@ -7,7 +7,7 @@ import { GenericCreateUpdatePage } from '@/layout/components'
 import { getFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
-  name: 'ChangeSecretAutomationCreateUpdate',
+  name: 'AccountChangeSecretCreateUpdate',
   components: {
     GenericCreateUpdatePage
   },

@@ -1,12 +1,9 @@
 <template>
   <div>
-    <TreeTable
+    <AssetTreeTAble
       ref="TreeList"
       :table-config="tableConfig"
       :help-message="helpMessage"
-      component="TreeTab"
-      :active-menu.sync="treeTabConfig.activeMenu"
-      :tree-tab-config="treeTabConfig"
     >
       <TreeMenu
         slot="rMenu"
@@ -18,12 +15,12 @@
         v-bind="tableConfig"
         :add-extra-more-actions="addExtraMoreActions"
       />
-    </TreeTable>
+    </AssetTreeTAble>
   </div>
 </template>
 
 <script>
-import { TreeTable } from '@/components'
+import { AssetTreeTAble } from '@/components'
 import $ from '@/utils/jquery-vendor'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
@@ -32,7 +29,7 @@ import { setRouterQuery, setUrlParam } from '@/utils/common'
 
 export default {
   components: {
-    TreeTable,
+    AssetTreeTAble,
     TreeMenu,
     BaseList
   },
@@ -75,47 +72,6 @@ export default {
           }.bind(this)
         }
       ],
-      treeTabConfig: {
-        activeMenu: 'CustomTree',
-        submenu: [
-          {
-            title: this.$t('assets.AssetTree'),
-            name: 'CustomTree',
-            treeSetting: {
-              showMenu: true,
-              showRefresh: true,
-              showAssets: false,
-              showCreate: true,
-              showUpdate: true,
-              showDelete: true,
-              hasRightMenu: true,
-              showSearch: true,
-              url: '/api/v1/assets/assets/',
-              nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/children/tree/?assets=0',
-              callback: {
-                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
-              }
-            }
-          },
-          {
-            title: this.$t('assets.BuiltinTree'),
-            name: 'BuiltinTree',
-            treeSetting: {
-              showRefresh: true,
-              showAssets: false,
-              showSearch: true,
-              customTreeHeaderName: this.$t('assets.BuiltinTree'),
-              url: '/api/v1/assets/nodes/category/tree/',
-              nodeUrl: '/api/v1/assets/nodes/',
-              treeUrl: '/api/v1/assets/nodes/category/tree/?assets=1',
-              callback: {
-                onSelected: (event, treeNode) => this.getAssetsUrl(treeNode)
-              }
-            }
-          }
-        ]
-      },
       helpMessage: this.$t('assets.AssetListHelpMessage')
     }
   },

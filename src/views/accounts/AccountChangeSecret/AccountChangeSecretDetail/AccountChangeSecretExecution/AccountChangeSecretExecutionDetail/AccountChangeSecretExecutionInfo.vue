@@ -10,7 +10,7 @@
 import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
-  name: 'ChangeSecretAutomationExecutionInfo',
+  name: 'AccountChangeSecretExecutionInfo',
   components: {
     AutoDetailCard
   },

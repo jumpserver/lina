@@ -182,9 +182,6 @@ export default {
       return Object.assign(defaultOptions, this.options)
     }
   },
-  mounted() {
-    console.log(this.toolbar)
-  },
   methods: {}
 }
 </script>
