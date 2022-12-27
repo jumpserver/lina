@@ -30,14 +30,10 @@ export default {
           name: {
             formatter: row => {
               return row?.name || '-'
-            },
-            showOverflowTooltip: true
+            }
           },
           ip: {
             width: 120
-          },
-          username: {
-            showOverflowTooltip: true
           },
           present: {
             width: 80

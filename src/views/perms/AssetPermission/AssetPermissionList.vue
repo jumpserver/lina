@@ -56,8 +56,7 @@ export default {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'
               }
-            },
-            showOverflowTooltip: true
+            }
           },
           from_ticket: {
             label: this.$t('perms.fromTicket'),

@@ -37,19 +37,14 @@ export default {
               }
             }
           },
-          user: {
-            showOverflowTooltip: true
-          },
           asset: {
-            label: this.$t('sessions.target'),
-            showOverflowTooltip: true
+            label: this.$t('sessions.target')
           },
           command_amount: {
             label: this.$t('sessions.command')
           },
           system_user: {
-            label: this.$t('acl.system_user'),
-            showOverflowTooltip: true
+            label: this.$t('acl.system_user')
           },
           remote_addr: {
             label: this.$t('sessions.remoteAddr'),

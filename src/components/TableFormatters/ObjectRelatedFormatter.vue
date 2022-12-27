@@ -5,7 +5,7 @@
 <script>
 import BaseFormatter from './base'
 export default {
-  name: 'DisplayFormatter',
+  name: 'ObjectRelatedFormatter',
   extends: BaseFormatter,
   props: {
     formatterArgsDefault: {
@@ -13,7 +13,7 @@ export default {
       default() {
         return {
           displayKey: null,
-          delimiter: ',',
+          delimiter: ', ',
           cls: ''
         }
       }
@@ -26,6 +26,9 @@ export default {
   },
   computed: {
     value() {
+      if (this.cellValue === null || this.cellValue?.length === 0) {
+        return ''
+      }
       let objects = this.cellValue
       if (!Array.isArray(this.cellValue)) {
         objects = [this.cellValue]

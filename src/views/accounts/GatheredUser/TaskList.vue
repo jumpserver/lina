@@ -53,7 +53,6 @@ export default {
           },
           periodic_display: {
             label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
-            showOverflowTooltip: true,
             width: 150
           },
           executed_amount: {

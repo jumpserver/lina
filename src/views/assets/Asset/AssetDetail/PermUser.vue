@@ -57,21 +57,13 @@ export default {
             formatter: vm.$hasPerm('users.view_user') ? DetailFormatter : '',
             formatterArgs: {
               route: 'UserDetail'
-            },
-            showOverflowTooltip: true
-          },
-          username: {
-            showOverflowTooltip: true
-          },
-          email: {
-            showOverflowTooltip: true
+            }
           },
           source: {
             width: '120px'
           },
           total_role_display: {
-            label: this.$t('users.Role'),
-            showOverflowTooltip: true
+            label: this.$t('users.Role')
           },
           mfa_enabled: {
             label: 'MFA',
@@ -90,8 +82,7 @@ export default {
             }
           },
           groups_display: {
-            width: '200px',
-            showOverflowTooltip: true
+            width: '200px'
           },
           actions: {
             formatterArgs: {
@@ -150,8 +141,7 @@ export default {
             name: {
               formatterArgs: {
                 route: 'AssetPermissionDetail'
-              },
-              showOverflowTooltip: true
+              }
             },
             users_amount: {
               label: this.$t('perms.User'),
@@ -170,9 +160,6 @@ export default {
               formatterArgs: {
                 showFalse: false
               }
-            },
-            created_by: {
-              showOverflowTooltip: true
             },
             user_groups_amount: {
               label: this.$t('perms.UserGroups'),

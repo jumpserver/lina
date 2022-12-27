@@ -32,9 +32,6 @@ export default {
               route: 'ChangeSecreAtutomationDetail'
             }
           },
-          username: {
-            showOverflowTooltip: true
-          },
           assets_amount: {
             label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
             width: '80px'
@@ -45,8 +42,7 @@ export default {
           },
           password_strategy_display: {
             label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
-            width: '220px',
-            showOverflowTooltip: true
+            width: '220px'
           },
           is_periodic: {
             label: vm.$t('xpack.ChangeAuthPlan.Timer'),
@@ -57,7 +53,6 @@ export default {
           },
           periodic_display: {
             label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
-            showOverflowTooltip: true,
             width: '150px'
           },
           run_times: {

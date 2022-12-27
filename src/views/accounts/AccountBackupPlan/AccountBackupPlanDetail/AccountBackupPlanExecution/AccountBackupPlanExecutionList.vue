@@ -32,9 +32,6 @@ export default {
               return row.timedelta.toFixed(2) + 's'
             }
           },
-          date_start: {
-            showOverflowTooltip: true
-          },
           actions: {
             formatterArgs: {
               hasDelete: false,

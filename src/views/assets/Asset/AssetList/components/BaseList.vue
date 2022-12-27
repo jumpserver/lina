@@ -15,7 +15,8 @@ import {
   ActionsFormatter,
   DetailFormatter,
   TagsFormatter,
-  ChoicesFormatter
+  ChoicesFormatter,
+  ArrayFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -87,12 +88,7 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        columns: [
-          'name', 'address', 'category', 'type', 'platform',
-          'protocols', 'is_active', 'connectivity',
-          'created_by', 'date_created', 'comment',
-          'org_name', 'actions'
-        ],
+        excludes: ['specific', 'enabled_info', 'info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -108,10 +104,10 @@ export default {
             formatterArgs: {
               route: 'AssetDetail'
             },
-            showOverflowTooltip: true,
             sortable: true
           },
           platform: {
+            width: '100px',
             sortable: true
           },
           protocols: {
@@ -120,12 +116,12 @@ export default {
               return <span> {data} </span>
             }
           },
+          nodes_display: {
+            formatter: ArrayFormatter
+          },
           ip: {
             sortable: 'custom',
             width: '140px'
-          },
-          comment: {
-            showOverflowTooltip: true
           },
           connectivity: connectivityMeta,
           labels_display: {

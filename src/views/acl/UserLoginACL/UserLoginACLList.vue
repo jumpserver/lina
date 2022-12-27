@@ -29,8 +29,7 @@ export default {
             }
           },
           ip_group: {
-            formatter: ArrayFormatter,
-            showOverflowTooltip: true
+            formatter: ArrayFormatter
           },
           action: {
             prop: 'action_display'

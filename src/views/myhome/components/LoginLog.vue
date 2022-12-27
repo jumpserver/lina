@@ -34,13 +34,9 @@ export default {
         ],
         columnsMeta: {
           city: {
-            showOverflowTooltip: true,
             formatter: (row) => {
               return <span>{ row.city }({ row.ip })</span>
             }
-          },
-          datetime: {
-            showOverflowTooltip: true
           }
         },
         hasSelection: false,

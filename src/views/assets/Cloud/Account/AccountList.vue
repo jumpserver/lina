@@ -26,7 +26,6 @@ export default {
         columnsMeta: {
           name: {
             sortable: true,
-            showOverflowTooltip: true,
             formatterArgs: {
               route: 'AccountDetail'
             }

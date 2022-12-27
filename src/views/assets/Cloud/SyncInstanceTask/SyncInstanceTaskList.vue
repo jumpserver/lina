@@ -30,7 +30,6 @@ export default {
             label: this.$t('xpack.Cloud.Account')
           },
           periodic_display: {
-            showOverflowTooltip: true,
             width: '150px'
           },
           actions: {
