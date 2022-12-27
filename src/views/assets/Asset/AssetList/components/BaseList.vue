@@ -46,14 +46,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    addColumns: {
-      type: Array,
-      default: () => []
-    },
-    addColumnsMeta: {
-      type: Object,
-      default: () => ({})
-    },
     addExtraMoreActions: {
       type: Array,
       default: () => []
@@ -223,21 +215,10 @@ export default {
   },
   computed: {
     iTableConfig() {
-      const config = _.merge(this.defaultConfig, this.tableConfig, {
+      return _.merge(this.defaultConfig, this.tableConfig, {
         url: this.url,
         ...(this.category && { category: this.category })
       })
-      if (this.addColumns.length > 0) {
-        config.columns = [
-          ...config.columns.slice(0, 2),
-          ...this.addColumns,
-          ...config.columns.slice(2)
-        ]
-      }
-      if (Object.keys(this.addColumnsMeta).length > 0) {
-        config.columnsMeta = _.merge(config.columnsMeta, this.addColumnsMeta)
-      }
-      return config
     },
     iHeaderActions() {
       const actions = _.merge({}, this.defaultHeaderActions, this.headerActions)
