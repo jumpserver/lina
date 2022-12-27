@@ -1,7 +1,7 @@
 <template>
   <TreeTable
     ref="TreeList"
-    component="TreeTab"
+    component="TabTree"
     :table-config="tableConfig"
     :active-menu.sync="treeTabConfig.activeMenu"
     :tree-tab-config="treeTabConfig"

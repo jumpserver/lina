@@ -14,7 +14,7 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import AssetTreeTAble from '@/components/AssetTreeTAble'
+import AssetTreeTAble from '@/components/AssetTreeTable'
 import PermBulkUpdateDialog from './components/PermBulkUpdateDialog'
 import AmountFormatter from '@/components/TableFormatters/AmountFormatter'
 import { mapGetters } from 'vuex'
