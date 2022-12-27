@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import AssetTreeTAble from '@/components/AssetTreeTAble'
+import AssetTreeTAble from '@/components/AssetTreeTable'
 import { DialogDetailFormatter } from '@/components/TableFormatters'
 import Select2 from '@/components/FormFields/Select2'
 import Dialog from '@/components/Dialog'

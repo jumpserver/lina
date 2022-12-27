@@ -10,8 +10,8 @@
 
 <script>
 import Page from '@/layout/components/Page'
-import AssetTreeTAble from '@/components/AssetTreeTAble'
-import AccountListTable from '@/components/AccountListTable'
+import AssetTreeTAble from '@/components/AssetTreeTable'
+import AccountListTable from '@/components/AccountListTable/AccountList'
 
 export default {
   name: 'AssetAccountList',
