@@ -46,7 +46,6 @@ export function cleanFormValueForHandleUserAssetAccount(value) {
 export const fieldsMetaListPageForUserAssetAccount = {
   user_username_group: {
     prop: 'users.username_group',
-    showOverflowTooltip: true,
     formatter: function(row) {
       return row.users.username_group.toString()
     },
@@ -54,7 +53,6 @@ export const fieldsMetaListPageForUserAssetAccount = {
   },
   asset_name_group: {
     prop: 'assets.name_group',
-    showOverflowTooltip: true,
     formatter: function(row) {
       return row.assets.name_group.toString()
     },
@@ -62,7 +60,6 @@ export const fieldsMetaListPageForUserAssetAccount = {
   },
   asset_address_group: {
     prop: 'assets.address_group',
-    showOverflowTooltip: true,
     formatter: function(row) {
       return row.assets.address_group.toString()
     },
@@ -70,7 +67,6 @@ export const fieldsMetaListPageForUserAssetAccount = {
   },
   account_username_group: {
     prop: 'accounts.username_group',
-    showOverflowTooltip: true,
     formatter: function(row) {
       return row.accounts.username_group.toString()
     },

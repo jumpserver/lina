@@ -14,7 +14,6 @@ export default {
       config: {
         category: 'database',
         url: '/api/v1/assets/databases/',
-        addColumns: ['db_name'],
         extraHeaderActions: {
           createRoute: 'DatabaseCreate'
         }

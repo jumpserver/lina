@@ -98,7 +98,6 @@ export default {
             prop: 'name',
             label: this.$t('assets.Name'),
             sortable: true,
-            showOverflowTooltip: true,
             formatter: DialogDetailFormatter,
             formatterArgs: {
               getDialogTitle: function({ col, row }) { this.$t('assets.AssetDetail') }.bind(this),

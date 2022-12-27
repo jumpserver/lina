@@ -52,25 +52,19 @@ export default {
               return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
             }
           },
-          user: {
-            showOverflowTooltip: true
-          },
           asset: {
-            label: this.$t('sessions.target'),
-            showOverflowTooltip: true
+            label: this.$t('sessions.target')
           },
           command_amount: {
             label: this.$t('sessions.command'),
             width: '90px'
           },
           system_user: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           login_from: {
             label: this.$t('sessions.loginFrom'),
-            width: '115px',
-            showOverflowTooltip: true
+            width: '115px'
           },
           remote_addr: {
             width: '140px'
@@ -82,11 +76,9 @@ export default {
             formatter: null
           },
           date_start: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           date_end: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           duration: {
@@ -95,9 +87,6 @@ export default {
               return timeOffset(row.date_start, row.date_end)
             },
             width: '80px'
-          },
-          terminal_display: {
-            showOverflowTooltip: true
           },
           actions: {
             prop: 'actions',

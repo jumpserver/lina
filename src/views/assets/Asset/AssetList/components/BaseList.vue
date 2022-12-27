@@ -15,7 +15,8 @@ import {
   ActionsFormatter,
   DetailFormatter,
   TagsFormatter,
-  ChoicesFormatter
+  ChoicesFormatter,
+  ArrayFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
@@ -42,14 +43,6 @@ export default {
       default: () => ({})
     },
     headerActions: {
-      type: Object,
-      default: () => ({})
-    },
-    addColumns: {
-      type: Array,
-      default: () => []
-    },
-    addColumnsMeta: {
       type: Object,
       default: () => ({})
     },
@@ -87,12 +80,7 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        columns: [
-          'name', 'address', 'category', 'type', 'platform',
-          'protocols', 'is_active', 'connectivity',
-          'created_by', 'date_created', 'comment',
-          'org_name', 'actions'
-        ],
+        excludes: ['specific', 'enabled_info', 'info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [
@@ -108,10 +96,10 @@ export default {
             formatterArgs: {
               route: 'AssetDetail'
             },
-            showOverflowTooltip: true,
             sortable: true
           },
           platform: {
+            width: '100px',
             sortable: true
           },
           protocols: {
@@ -121,12 +109,12 @@ export default {
               return <div> {data} </div>
             }
           },
+          nodes_display: {
+            formatter: ArrayFormatter
+          },
           ip: {
             sortable: 'custom',
             width: '140px'
-          },
-          comment: {
-            showOverflowTooltip: true
           },
           connectivity: connectivityMeta,
           labels_display: {
@@ -228,21 +216,10 @@ export default {
   },
   computed: {
     iTableConfig() {
-      const config = _.merge(this.defaultConfig, this.tableConfig, {
+      return _.merge(this.defaultConfig, this.tableConfig, {
         url: this.url,
         ...(this.category && { category: this.category })
       })
-      if (this.addColumns.length > 0) {
-        config.columns = [
-          ...config.columns.slice(0, 2),
-          ...this.addColumns,
-          ...config.columns.slice(2)
-        ]
-      }
-      if (Object.keys(this.addColumnsMeta).length > 0) {
-        config.columnsMeta = _.merge(config.columnsMeta, this.addColumnsMeta)
-      }
-      return config
     },
     iHeaderActions() {
       const actions = _.merge({}, this.defaultHeaderActions, this.headerActions)

@@ -13,16 +13,16 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/labels/',
-        columns: [
-          'name', 'value', 'asset_count',
-          'date_created', 'comment', 'org_name', 'actions'
-        ],
+        excludes: ['category'],
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: [
+            'name', 'value', 'asset_count', 'date_created', 'comment', 'org_name', 'actions'
+          ]
+        },
         columnsMeta: {
           name: {
             formatter: null
-          },
-          asset_count: {
-            label: this.$t('assets.Assets')
           }
         }
       },

@@ -75,16 +75,11 @@ export default {
               }
             }
           },
-          user: {
-            showOverflowTooltip: true
-          },
           asset: {
-            width: '140px',
-            showOverflowTooltip: true
+            width: '140px'
           },
           system_user: {
-            width: '140px',
-            showOverflowTooltip: true
+            width: '140px'
           },
           session: {
             label: this.$t('sessions.session'),

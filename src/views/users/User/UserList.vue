@@ -59,19 +59,12 @@ export default {
           ]
         },
         columnsMeta: {
-          username: {
-            showOverflowTooltip: true
-          },
-          email: {
-            showOverflowTooltip: true
-          },
           source: {
             width: '120px'
           },
           system_roles: {
             width: '100px',
             label: this.$t('users.SystemRoles'),
-            showOverflowTooltip: true,
             formatter: (row) => {
               return row['system_roles_display']
             },
@@ -81,7 +74,6 @@ export default {
           org_roles: {
             width: '100px',
             label: this.$t('users.OrgRoles'),
-            showOverflowTooltip: true,
             formatter: (row) => {
               return row['org_roles_display']
             },

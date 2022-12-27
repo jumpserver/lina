@@ -16,8 +16,7 @@ export default {
         url: '/api/v1/assets/clouds/',
         headerActions: {
           createRoute: 'CloudCreate'
-        },
-        addColumns: ['cluster']
+        }
       }
     }
   }

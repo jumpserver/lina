@@ -28,42 +28,44 @@ export default {
             }
           ]
         },
-        addColumnsMeta: {
-          actions: {
-            formatter: ActionsFormatter,
-            formatterArgs: {
-              performDelete: ({ row }) => {
-                const id = row.id
-                const url = `/api/v1/assets/hosts/${id}/`
-                return this.$axios.delete(url)
-              },
-              extraActions: [
-                {
-                  name: 'Test',
-                  title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_assetconnectivity'),
-                  callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
-                  }
+        tableConfig: {
+          columnsMeta: {
+            actions: {
+              formatter: ActionsFormatter,
+              formatterArgs: {
+                performDelete: ({ row }) => {
+                  const id = row.id
+                  const url = `/api/v1/assets/hosts/${id}/`
+                  return this.$axios.delete(url)
                 },
-                {
-                  name: 'View',
-                  title: this.$t(`common.UpdateAssetDetail`),
-                  type: 'primary',
-                  can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
-                  callback: function({ cellValue, tableData, row }) {
-                    return this.$router.push({
-                      name: 'AssetMoreInformationEdit',
-                      params: { id: row.id }
-                    })
+                extraActions: [
+                  {
+                    name: 'Test',
+                    title: this.$t('common.Test'),
+                    can: this.$hasPerm('assets.test_assetconnectivity'),
+                    callback: ({ row }) => {
+                      this.$axios.post(
+                        `/api/v1/assets/assets/${row.id}/tasks/`,
+                        { action: 'refresh' }
+                      ).then(res => {
+                        openTaskPage(res['task'])
+                      })
+                    }
+                  },
+                  {
+                    name: 'View',
+                    title: this.$t(`common.UpdateAssetDetail`),
+                    type: 'primary',
+                    can: vm.$hasPerm('assets.refresh_assethardwareinfo'),
+                    callback: function({ cellValue, tableData, row }) {
+                      return this.$router.push({
+                        name: 'AssetMoreInformationEdit',
+                        params: { id: row.id }
+                      })
+                    }
                   }
-                }
-              ]
+                ]
+              }
             }
           }
         }

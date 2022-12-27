@@ -65,8 +65,7 @@ export default {
             sortable: true,
             formatterArgs: {
               route: 'AssetDetail'
-            },
-            showOverflowTooltip: true
+            }
           },
           {
             prop: 'address',
@@ -81,8 +80,7 @@ export default {
             formatter: AccountShowFormatter,
             formatterArgs: {
               getUrl: this.getShowUrl.bind(this)
-            },
-            showOverflowTooltip: true
+            }
           }
         ]
       },

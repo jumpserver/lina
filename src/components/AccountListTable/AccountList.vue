@@ -103,7 +103,6 @@ export default {
         },
         columnsMeta: {
           name: {
-            showOverflowTooltip: true,
             formatter: function(row) {
               const to = {
                 name: 'AssetAccountDetail',
@@ -118,7 +117,6 @@ export default {
           },
           asset: {
             label: this.$t('assets.Asset'),
-            showOverflowTooltip: true,
             formatter: function(row) {
               const to = {
                 name: 'AssetDetail',
@@ -130,9 +128,6 @@ export default {
                 return <span>{row.asset.name}</span>
               }
             }
-          },
-          username: {
-            showOverflowTooltip: true
           },
           version: {
             width: '70px'

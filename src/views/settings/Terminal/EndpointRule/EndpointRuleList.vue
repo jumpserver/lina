@@ -33,8 +33,7 @@ export default {
             formatter: null
           },
           ip_group: {
-            formatter: ArrayFormatter,
-            showOverflowTooltip: true
+            formatter: ArrayFormatter
           },
           actions: {
             formatterArgs: {

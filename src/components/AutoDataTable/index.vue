@@ -238,7 +238,7 @@ export default {
     generateColumn(name) {
       const colMeta = this.meta[name] || {}
       const customMeta = this.config.columnsMeta ? this.config.columnsMeta[name] : {}
-      let col = { prop: name, label: colMeta.label }
+      let col = { prop: name, label: colMeta.label, showOverflowTooltip: true }
 
       col = this.generateColumnByName(name, col)
       col = this.generateColumnByType(colMeta.type, col, colMeta)

@@ -14,10 +14,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/domains/',
-        columns: [
-          'name', 'asset_count', 'gateway_count', 'comment',
-          'date_created', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'asset_count', 'gateway_count', 'comment', 'actions']

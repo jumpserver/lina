@@ -20,13 +20,10 @@ export default {
           app: 'xpack',
           resource: 'account'
         },
-        columns: [
-          'name', 'provider', 'validity', 'date_created', 'comment', 'actions'
-        ],
+        excludes: ['attrs'],
         columnsMeta: {
           name: {
             sortable: true,
-            showOverflowTooltip: true,
             formatterArgs: {
               route: 'AccountDetail'
             }
