@@ -15,7 +15,12 @@
           <span v-if="executionInfo.status" style="float: right">
             <span>
               <span><b>{{ $tc('common.Status') }}: </b></span>
-              <span type="primary">{{ executionInfo.status }}</span>
+              <span
+                :class="{'status_success':executionInfo.status==='success',
+                         'status_warning':executionInfo.status==='timeout',
+                         'status_danger':executionInfo.status==='failed'
+                }"
+              >{{ $tc('ops.' + executionInfo.status) }}</span>
             </span>
             <span>
               <span><b>{{ $tc('ops.timeDelta') }}: </b></span>
@@ -56,7 +61,7 @@ export default {
     return {
       ready: false,
       currentStatus: '',
-      currentTaskID: '',
+      currentTaskId: '',
       executionInfo: {
         status: '',
         timeCost: 0,
@@ -70,7 +75,7 @@ export default {
       runasPolicy: 'skip',
       command: '',
       module: 'shell',
-      selectedAccounts: [],
+      timeout: -1,
       toolbar: [
         {
           type: 'button',
@@ -143,12 +148,22 @@ export default {
           }
         },
         {
-          type: 'switch',
-          name: this.$t('ops.DryRun'),
+          type: 'select',
+          name: this.$t('ops.Timeout'),
           align: 'left',
-          value: false,
+          value: -1,
+          el: {
+            create: true
+          },
+          options: [
+            { label: '无', value: -1 },
+            { label: '10', value: 10 },
+            { label: '30', value: 30 },
+            { label: '60', value: 60 },
+            { label: this.$t('ops.ManualInput'), value: 'manualInput' }
+          ],
           callback: (val, setting, option) => {
-            console.log(option)
+            this.timeout = option
           }
         },
         {
@@ -198,9 +213,7 @@ export default {
           showLine: true
         }
       },
-      iShowTree: true,
-      ws: '',
-      wsConnected: false
+      iShowTree: true
     }
   },
   computed: {
@@ -210,9 +223,13 @@ export default {
   },
   mounted() {
     this.enableWS()
-    this.getFrequentUsernames()
+    this.initData()
   },
   methods: {
+    async initData() {
+      await this.getFrequentUsernames()
+    },
+
     getFrequentUsernames() {
       this.$axios.get('/api/v1/ops/frequent-username').then(data => {
         this.toolbar[1].options.push({
@@ -259,21 +276,24 @@ export default {
           switch (event) {
             case 'end':
               clearInterval(this.executionInfo.cancel)
-              this.$axios.get(`/api/v1/ops/job-execution/task-detail/?task_id=${this.currentTaskID}`).then(data => {
-                this.executionInfo.status = data['is_success'] === true ? 'success' : 'failed'
-              })
+              this.getTaskStatus()
               break
           }
         }
       }
     },
+    getTaskStatus() {
+      this.$axios.get(`/api/v1/ops/job-execution/task-detail/?task_id=${this.currentTaskId}`).then(data => {
+        this.executionInfo.status = data['status']
+      })
+    },
     wrapperError(msg) {
       return `\r\n${msg}\r\n`
     },
-    writeExecutionOutput(taskId) {
+    writeExecutionOutput() {
       let msg = this.$t('assets.Pending')
       this.xterm.write(msg)
-      msg = JSON.stringify({ task: taskId })
+      msg = JSON.stringify({ task: this.currentTaskId })
       this.ws.send(msg)
     },
     getSelectedNodes() {
@@ -304,9 +324,9 @@ export default {
         run_as: this.runas,
         run_as_policy: this.runasPolicy,
         instant: true,
-        is_periodic: false
+        is_periodic: false,
+        timeout: this.timeout
       }
-      console.log(data)
       this.$axios.post(
         url, data
       ).then(res => {
@@ -315,8 +335,8 @@ export default {
         this.executionInfo.cancel = setInterval(() => {
           this.executionInfo.timeCost += 0.1
         }, 100)
-        this.currentTaskID = res.task_id
-        this.writeExecutionOutput(res.task_id)
+        this.currentTaskId = res.task_id
+        this.writeExecutionOutput()
       })
     }
   }
@@ -364,5 +384,17 @@ export default {
   padding-left: 30px;
   background-color: rgb(247 247 247);
   border: solid 1px #f3f3f3;;
+}
+
+.status_success {
+  color: var(--color-success);
+}
+
+.status_warning {
+  color: var(--color-warning);
+}
+
+.status_danger {
+  color: var(--color-danger);
 }
 </style>

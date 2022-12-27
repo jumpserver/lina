@@ -200,3 +200,7 @@ input[type=file] {
   max-height: 60vh;
   overflow: auto;
 }
+
+.el-table .el-table__row .show-full-content > .cell {
+  white-space: normal!important;
+}

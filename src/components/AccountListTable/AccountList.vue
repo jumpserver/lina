@@ -92,13 +92,13 @@ export default {
         },
         columns: [
           'name', 'asset', 'username', 'version', 'privileged',
-          'secret_type', 'date_created', 'date_updated', 'actions'
+          'secret_type', 'source', 'date_created', 'date_updated', 'actions'
         ],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
             'name', 'username', 'version', 'privileged',
-            'secret_type', 'actions'
+            'secret_type', 'source', 'actions'
           ]
         },
         columnsMeta: {
@@ -136,6 +136,11 @@ export default {
           },
           version: {
             width: '70px'
+          },
+          source: {
+            formatter: function(row) {
+              return row.source.label
+            }
           },
           privileged: {
             label: this.$t('assets.Privileged'),
