@@ -705,6 +705,7 @@
     "Weekly": "按周"
   },
   "ops": {
+    "Timeout": "超时（秒）",
     "RunCommand": "运行命令",
     "ManualInput": "手动输入",
     "DryRun": "测试运行",
@@ -763,6 +764,9 @@
     "selectedAssets": "已选择资产:",
     "stat": "成功/失败/总",
     "success": "成功",
+    "failed": "失败",
+    "timeout": "超时",
+    "running": "运行中",
     "total": "总共",
     "taskDetail": "任务详情",
     "taskName": "任务名称",
