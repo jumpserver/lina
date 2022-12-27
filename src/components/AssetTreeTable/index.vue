@@ -63,7 +63,7 @@ export default {
             name: 'CustomTree',
             treeSetting: {
               showAssets,
-              showMenu: true,
+              showMenu: false,
               showRefresh: true,
               showCreate: true,
               showUpdate: true,

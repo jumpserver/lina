@@ -242,7 +242,7 @@ export default {
 }
 
 .el-dialog__wrapper ::v-deep .el-dialog__body {
-  padding: 0 0 0 3px;
+  padding: 0 0 0 6px;
   .tree-table {
     .left {
       padding: 5px;
