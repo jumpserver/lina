@@ -162,7 +162,7 @@ export default [
         }
       },
       {
-        path: 'atutomation',
+        path: 'automation',
         component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue'),
         name: 'ChangeSecretAutomationList',
         meta: {
@@ -172,7 +172,7 @@ export default [
         hidden: true
       },
       {
-        path: 'atutomation/create',
+        path: 'automation/create',
         component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
         name: 'ChangeSecretAutomationCreate',
         hidden: true,
@@ -182,7 +182,7 @@ export default [
         }
       },
       {
-        path: 'atutomation/:id/update',
+        path: 'automation/:id/update',
         component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretCreateUpdate.vue'),
         name: 'ChangeSecretAutomationUpdate',
         hidden: true,
