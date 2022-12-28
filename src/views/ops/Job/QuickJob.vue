@@ -307,7 +307,10 @@ export default {
       this.ws.send(msg)
     },
     getSelectedNodes() {
-      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
+      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes().filter(node => {
+        const status = node.getCheckStatus()
+        return status.half === false
+      })
     },
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols
