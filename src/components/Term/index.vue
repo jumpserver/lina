@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="position: absolute;z-index: 999;right: 2%">
+    <div v-if="showToolBar" style="position: absolute;z-index: 999;right: 2%">
 
       <div
         v-for="(item,index) in toolbar"
@@ -31,6 +31,14 @@ import { FitAddon } from 'xterm-addon-fit'
 
 export default {
   name: 'Term',
+  props: {
+    showToolBar: {
+      type: [Boolean, Object],
+      default: () => {
+        return false
+      }
+    }
+  },
   data() {
     return {
       xterm: new Terminal(
@@ -43,7 +51,6 @@ export default {
             background: '#fff'
           }
         }),
-      showToolBar: false,
       toolbar: [
         {
           tip: this.$tc('ops.ScrollToTop'),

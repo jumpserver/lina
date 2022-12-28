@@ -35,7 +35,7 @@
             </span>
           </span>
           <div style="padding-left: 30px; background-color: rgb(247 247 247)">
-            <Term ref="xterm" style="border-left: solid 1px #dddddd" />
+            <Term ref="xterm" style="border-left: solid 1px #dddddd" :show-tool-bar="true" />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
