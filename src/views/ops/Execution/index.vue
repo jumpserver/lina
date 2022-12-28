@@ -24,7 +24,7 @@ export default {
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
         columns: [
-          'id', 'job_type', 'material', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+          'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
         ],
         columnsMeta: {
           count: {
@@ -45,9 +45,6 @@ export default {
           },
           job_type: {
             width: '96px'
-          },
-          material: {
-            width: '240px'
           },
           is_finished: {
             label: this.$t('ops.isFinished'),

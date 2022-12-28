@@ -28,6 +28,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'type', 'instant']],
         [this.$t('common.Task'), ['module', 'args', 'playbook', 'chdir', 'timeout']],
+        [this.$t('ops.Asset'), ['assets', 'runas', 'runas_policy']],
         [this.$t('ops.Parameter'), ['use_parameter_define', 'parameters_define']],
         [this.$t('ops.Plan'), ['run_after_save', 'is_periodic', 'crontab']],
         [this.$t('common.Other'), ['comment']]
