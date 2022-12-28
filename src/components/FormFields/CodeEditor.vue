@@ -88,6 +88,7 @@
               size="mini"
               type="default"
               :disabled="item.disabled"
+              style="background-color: transparent"
               @click="item.callback()"
             >
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
