@@ -46,7 +46,7 @@ export default {
       } else {
         object = this.cellValue
       }
-      for (const key of ['name', 'value']) {
+      for (const key of ['label', 'name', 'value']) {
         if (object?.[key]) {
           return key
         }

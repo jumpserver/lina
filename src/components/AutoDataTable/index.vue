@@ -252,16 +252,17 @@ export default {
       const config = _.cloneDeep(this.config)
       let columns = []
       const allColumns = Object.entries(this.meta)
-        .filter(([name, meta]) => { return !meta.write_only })
+        .filter(([name, meta]) => { return !meta['write_only'] })
         .map(([name, meta]) => { return name })
-        .concat(['actions'])
         .concat(config?.extraColumns || [])
       let configColumns = config?.columns || allColumns
-      const excludes = (config?.excludes || [])
-      if (excludes || excludes.length > 0) {
+      const excludes = config?.excludes || []
+      if (excludes.length > 0) {
         configColumns = configColumns.filter(item => !excludes.includes(item))
       }
-
+      if (!configColumns.includes('actions')) {
+        configColumns.push('actions')
+      }
       if (configColumns.length > 0) {
         for (let col of configColumns) {
           if (typeof col === 'object') {

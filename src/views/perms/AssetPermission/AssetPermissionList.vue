@@ -37,12 +37,8 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
-        columns: [
-          'name', 'users', 'user_groups', 'assets', 'nodes', 'accounts',
-          'date_expired', 'is_valid', 'is_expired', 'is_active',
-          'from_ticket', 'created_by', 'date_created', 'comment',
-          'org_name', 'actions'
-        ],
+        excludes: ['actions'],
+        extraColumns: ['action'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
@@ -56,6 +52,17 @@ export default {
               routeQuery: {
                 activeTab: 'AssetPermissionDetail'
               }
+            }
+          },
+          action: {
+            label: this.$t('common.Action'),
+            formatter: function(row) {
+              return row.actions.map(item => { return item.label }).join(', ')
+            }
+          },
+          is_expired: {
+            formatterArgs: {
+              showFalse: false
             }
           },
           from_ticket: {
@@ -114,7 +121,7 @@ export default {
                 return item
               },
               routeQuery: {
-                activeTab: 'AssetPermissionAsset'
+                activeTab: 'AssetPermissionAccount'
               }
             }
           },
