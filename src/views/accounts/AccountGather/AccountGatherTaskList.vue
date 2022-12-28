@@ -22,12 +22,9 @@ export default {
           app: 'assets',
           resource: 'gatheraccountsautomation'
         },
-        columns: [
-          'name', 'nodes', 'is_periodic', 'periodic_display',
-          'executed_amount', 'actions'
-        ],
         columnsShow: {
-          min: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']
+          min: ['name', 'actions'],
+          default: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']
         },
         columnsMeta: {
           name: {
@@ -96,11 +93,9 @@ export default {
       headerActions: {
         hasBulkDelete: false,
         hasImport: false,
-        hasRefresh: false,
         hasExport: false,
         hasMoreActions: false,
         createRoute: 'AccountGatherTaskCreate',
-        hasColumnSetting: false,
         searchConfig: {
           getUrlQuery: false
         }
