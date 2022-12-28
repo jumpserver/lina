@@ -705,6 +705,9 @@
     "Weekly": "按周"
   },
   "ops": {
+    "ScrollToTop": "滚动到顶部",
+    "ScrollToBottom": "滚动到底部",
+    "ClearScreen": "清屏",
     "Skip": "跳过",
     "PrivilegedFirst": "优先特权账号",
     "PrivilegedOnly": "仅特权账号",
