@@ -62,6 +62,10 @@ export default {
       type: Object,
       default: null
     },
+    hasColumnActions: {
+      type: Boolean,
+      default: true
+    },
     columns: {
       type: Array,
       default: () => []
@@ -86,6 +90,7 @@ export default {
       secretUrl: '',
       tableConfig: {
         url: this.url,
+        hasColumnActions: this.hasColumnActions,
         permissions: {
           app: 'assets',
           resource: 'account'

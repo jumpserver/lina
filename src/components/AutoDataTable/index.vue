@@ -254,13 +254,15 @@ export default {
       const allColumns = Object.entries(this.meta)
         .filter(([name, meta]) => { return !meta['write_only'] })
         .map(([name, meta]) => { return name })
-        .concat(config?.extraColumns || [])
-      let configColumns = config?.columns || allColumns
-      const excludes = config?.excludes || []
+        .concat(config.extraColumns || [])
+      let configColumns = config.columns || allColumns
+      const excludes = config.excludes || []
       if (excludes.length > 0) {
         configColumns = configColumns.filter(item => !excludes.includes(item))
       }
-      if (!configColumns.includes('actions')) {
+      const hasColumnActions = config.hasColumnActions !== undefined ? config.hasColumnActions : true
+      // 解决后端 API 返回字段中包含 actions 的问题;
+      if (hasColumnActions && !configColumns.includes('actions')) {
         configColumns.push('actions')
       }
       if (configColumns.length > 0) {
