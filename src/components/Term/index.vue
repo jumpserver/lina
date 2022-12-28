@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-if="showToolBar" style="position: absolute;z-index: 999;right: 2%">
-
+    <div v-if="showToolBar" style="position: absolute;z-index: 999;right: 2%;margin-top: 4px">
       <div
         v-for="(item,index) in toolbar"
         :key="index"
