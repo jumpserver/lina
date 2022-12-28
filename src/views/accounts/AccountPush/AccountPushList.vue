@@ -1,22 +1,22 @@
 <template>
-  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
+import GenericListPage from '@/layout/components/GenericListPage'
 
 export default {
-  name: 'ChangeSecretAutomationList',
+  name: 'AccountPushList',
   components: {
-    GenericListTable
+    GenericListPage
   },
   data() {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/change-secret-automations/',
+        url: '/api/v1/assets/push-account-automations/',
         columns: [
           'name', 'username', 'assets_amount', 'nodes_amount',
           'password_strategy_display', 'is_periodic', 'periodic_display',
@@ -81,12 +81,6 @@ export default {
           actions: {
             width: '164px',
             formatterArgs: {
-              onClone: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecretAutomationCreate', query: { clone_from: row.id }})
-              },
-              onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecretAutomationUpdate', params: { id: row.id }})
-              },
               extraActions: [
                 {
                   title: vm.$t('xpack.Execute'),
@@ -113,12 +107,7 @@ export default {
       headerActions: {
         hasRefresh: true,
         hasExport: false,
-        hasImport: false,
-        createRoute: () => {
-          return {
-            name: 'ChangeSecretAutomationCreate'
-          }
-        }
+        hasImport: false
       }
     }
   }

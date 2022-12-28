@@ -6,7 +6,7 @@
     :show-cancel="false"
     :show-confirm="false"
     custom-class="asset-select-dialog"
-    width="70vw"
+    width="50vw"
     top="15vh"
     after
     :destroy-on-close="true"
