@@ -43,8 +43,7 @@ export default {
           },
           status: {
             label: this.$t('xpack.ChangeAuthPlan.Result'),
-            width: '80px',
-            showOverflowTooltip: true
+            width: '80px'
           },
           timedelta: {
             label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
@@ -52,9 +51,6 @@ export default {
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
-          },
-          date_start: {
-            showOverflowTooltip: true
           },
           actions: {
             formatterArgs: {

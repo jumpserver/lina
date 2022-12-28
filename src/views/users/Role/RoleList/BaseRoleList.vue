@@ -25,13 +25,10 @@ export default {
       scopeRole: scopeRole,
       tableConfig: {
         url: `/api/v1/rbac/${this.scope}-roles/`,
-        columns: [
-          'display_name', 'users_amount', 'builtin', 'created_by',
-          'date_create', 'date_updated', 'comment', 'actions'
-        ],
+        excludes: ['name', 'permissions'],
         columnsShow: {
-          default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions'],
-          min: ['name', 'action']
+          min: ['display_name', 'action'],
+          default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions']
         },
         columnsMeta: {
           display_name: {

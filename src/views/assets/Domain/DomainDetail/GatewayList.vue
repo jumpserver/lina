@@ -37,6 +37,13 @@
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import Dialog from '@/components/Dialog'
+import { connectivityMeta } from '@/components/AccountListTable/const'
+import {
+  DetailFormatter,
+  TagsFormatter,
+  ChoicesFormatter,
+  ArrayFormatter
+} from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -54,23 +61,43 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
-        columns: [
-          'name', 'address', 'platform', 'connectivity', 'is_active', 'actions'
-        ],
         columnsMeta: {
           name: {
-            sortable: 'custom',
-            formatter: function(row) {
-              const to = {
-                name: 'AssetDetail',
-                params: { id: row.id }
+            formatter: DetailFormatter,
+            formatterArgs: {
+              getRoute({ row }) {
+                return {
+                  name: 'AssetDetail',
+                  params: { id: row.id }
+                }
               }
-              return <router-link to={ to } >{ row.name }</router-link>
-            }
+            },
+            sortable: true
           },
+          type: { formatter: ChoicesFormatter },
+          category: { formatter: ChoicesFormatter },
           address: {
+            sortable: 'custom',
             width: '140px'
           },
+          platform: {
+            width: '100px',
+            sortable: true
+          },
+          protocols: {
+            formatter: (row) => {
+              const data = row.protocols.map(p => <el-tag size='mini'>{p.name}/{p.port} </el-tag>)
+              return <span> {data} </span>
+            }
+          },
+          nodes_display: {
+            formatter: ArrayFormatter
+          },
+
+          labels_display: {
+            formatter: TagsFormatter
+          },
+          connectivity: connectivityMeta,
           actions: {
             formatterArgs: {
               updateRoute: 'GatewayUpdate',

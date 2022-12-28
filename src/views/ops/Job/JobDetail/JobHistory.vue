@@ -30,7 +30,7 @@ export default {
       tableConfig: {
         url: `/api/v1/ops/job-executions/`,
         columns: [
-          'date_start', 'is_finished', 'is_success', 'time_cost', 'actions'
+          'material', 'date_start', 'is_finished', 'is_success', 'time_cost', 'actions'
         ],
         columnsMeta: {
           is_finished: {

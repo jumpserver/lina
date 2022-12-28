@@ -12,7 +12,7 @@
             size="mini"
             :type="item.el&&item.el.type"
             :disabled="item.disabled"
-            @click="item.callback(iValue, iOptions)"
+            @click="item.callback()"
           >
             <i :class="item.icon" style="margin-right: 4px;" />{{ item.name }}
           </el-button>
@@ -32,7 +32,7 @@
               :allow-create="item.el.create"
               :filterable="item.el.create && filterLabel(item).indexOf($tc('ops.ManualInput')) > -1"
               :placeholder="item.name"
-              @change="item.callback(iValue, iOptions, item.value)"
+              @change="item.callback(item.value)"
             >
               <template slot="prefix">
                 {{ item.label + ':' + item.value }}
@@ -51,11 +51,13 @@
             trigger="click"
             @command="(command) => {
               item.value= command
-              item.callback(iValue, iOptions, command)
+              item.callback(command)
             }"
           >
             <el-button type="default" size="mini">
-              <b>{{ item.name }}:</b> {{ item.value }} <i class="el-icon-arrow-down el-icon--right" />
+              <b>{{ item.name }}:</b> {{ getLabel(item.value, item.options) }} <i
+                class="el-icon-arrow-down el-icon--right"
+              />
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="(option,i) in item.options" :key="i" :command="option.value">
@@ -69,7 +71,7 @@
             v-model="item.value"
             :disabled="item.disabled"
             :active-text="item.name"
-            @change="item.callback(iValue, iOptions, item.value)"
+            @change="item.callback( item.value)"
           />
         </el-tooltip>
       </div>
@@ -86,7 +88,8 @@
               size="mini"
               type="default"
               :disabled="item.disabled"
-              @click="item.callback(iValue,iOptions)"
+              style="background-color: transparent"
+              @click="item.callback()"
             >
               <i v-if="item.icon.startsWith('fa')" :class="'fa ' + item.icon" />
               <svg-icon v-else :icon-class="item.icon" style="font-size: 14px;" />
@@ -133,11 +136,7 @@ export default {
     }
   },
   data() {
-    return {
-      runas: '',
-      runasPolicy: 'skip',
-      lang: 'shell'
-    }
+    return {}
   },
   computed: {
     filterLabel() {
@@ -182,7 +181,15 @@ export default {
       return Object.assign(defaultOptions, this.options)
     }
   },
-  methods: {}
+  methods: {
+    getLabel(value, items) {
+      for (const item of items) {
+        if (item.value === value) {
+          return item.label
+        }
+      }
+    }
+  }
 }
 </script>
 

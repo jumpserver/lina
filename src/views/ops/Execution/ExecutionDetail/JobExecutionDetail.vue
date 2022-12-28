@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :object="object" />
+      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
     </el-col>
     <el-col v-if="hasSummary" :md="10" :sm="24">
       <IBox type="success" :title="`${$tc('ops.SuccessAsset')} (${object.summary.ok.length})` ">
@@ -15,7 +15,11 @@
           />
         </el-collapse>
       </IBox>
-      <IBox v-if="object.summary.excludes" type="warning" :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` ">
+      <IBox
+        v-if="object.summary.excludes"
+        type="warning"
+        :title="`${$tc('ops.ExcludeAsset')} (${Object.keys(object.summary.excludes).length})` "
+      >
         <el-collapse>
           <el-collapse-item
             v-for="(val,key,index) in object.summary.excludes"
@@ -27,10 +31,13 @@
           </el-collapse-item>
         </el-collapse>
       </IBox>
-      <IBox type="danger" :title="`${$tc('ops.FailedAsset')} (${Object.keys(object.summary.failures).length})` ">
+      <IBox
+        type="danger"
+        :title="`${$tc('ops.FailedAsset')} (${Object.keys(Object.assign(object.summary.failures,object.summary.dark)).length})` "
+      >
         <el-collapse>
           <el-collapse-item
-            v-for="(val,key,index) in object.summary.failures"
+            v-for="(val,key,index) in Object.assign(object.summary.failures,object.summary.dark)"
             :key="index"
             :title="key"
             :name="index"
@@ -60,6 +67,9 @@ export default {
   },
   data() {
     return {
+      excludes: [
+        'job', 'parameters', 'summary', 'task_id', 'timedelta'
+      ],
       url: `/api/v1/ops/job-executions/${this.object.id}/`
     }
   },

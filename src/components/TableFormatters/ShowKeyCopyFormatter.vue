@@ -116,6 +116,8 @@ export default {
 
     .text {
       flex: 1;
+      margin: 0;
+      padding: 0;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

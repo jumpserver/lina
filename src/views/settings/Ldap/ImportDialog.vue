@@ -76,7 +76,6 @@ export default {
           },
           groups: {
             label: this.$t('users.UserGroups'),
-            showOverflowTooltip: true,
             formatter: function(row) {
               return <span> {row.groups.join(' | ')} </span>
             }

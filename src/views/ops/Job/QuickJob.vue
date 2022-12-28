@@ -4,13 +4,20 @@
     <AdhocSaveDialog
       v-if="showOpenAdhocSaveDialog"
       :args="command"
+      :module="module"
       :visible.sync="showOpenAdhocSaveDialog"
     />
     <VariableHelpDialog :visible.sync="showHelpDialog" />
     <TreeTable ref="TreeTable" :tree-setting="treeSetting">
       <template slot="table">
         <div class="transition-box" style="width: calc(100% - 17px);">
-          <CodeEditor v-if="ready" style="margin-bottom: 20px" :toolbar="toolbar" :value.sync="command" />
+          <CodeEditor
+            v-if="ready"
+            style="margin-bottom: 20px"
+            :toolbar="toolbar"
+            :options="cmOptions"
+            :value.sync="command"
+          />
           <b>{{ $tc('ops.output') }}:</b>
           <span v-if="executionInfo.status" style="float: right">
             <span>
@@ -28,7 +35,7 @@
             </span>
           </span>
           <div style="padding-left: 30px; background-color: rgb(247 247 247)">
-            <Term ref="xterm" style="border-left: solid 1px #dddddd" />
+            <Term ref="xterm" style="border-left: solid 1px #dddddd" :show-tool-bar="true" />
           </div>
           <div style="display: flex;margin-top:10px;justify-content: space-between" />
         </div>
@@ -76,6 +83,9 @@ export default {
       command: '',
       module: 'shell',
       timeout: -1,
+      cmOptions: {
+        mode: 'shell'
+      },
       toolbar: [
         {
           type: 'button',
@@ -87,7 +97,7 @@ export default {
           el: {
             type: 'primary'
           },
-          callback: (val, setting) => {
+          callback: () => {
             this.execute()
           }
         },
@@ -100,7 +110,7 @@ export default {
             create: true
           },
           options: [],
-          callback: (val, setting, option) => {
+          callback: (option) => {
             this.runas = option
           }
         },
@@ -111,18 +121,18 @@ export default {
           value: 'skip',
           options: [
             {
-              label: 'skip',
+              label: this.$tc('ops.Skip'),
               value: 'skip'
             }, {
-              label: 'Privileged First',
+              label: this.$tc('ops.PrivilegedFirst'),
               value: 'privileged_first'
             },
             {
-              label: 'Privileged Only',
+              label: this.$tc('ops.PrivilegedOnly'),
               value: 'privileged_only'
             }
           ],
-          callback: (val, setting, option) => {
+          callback: (option) => {
             this.runasPolicy = option
           }
         },
@@ -142,8 +152,8 @@ export default {
               label: 'Python', value: 'python'
             }
           ],
-          callback: (val, setting, option) => {
-            setting.mode = option
+          callback: (option) => {
+            this.cmOptions.mode = option
             this.module = option
           }
         },
@@ -162,7 +172,7 @@ export default {
             { label: '60', value: 60 },
             { label: this.$t('ops.ManualInput'), value: 'manualInput' }
           ],
-          callback: (val, setting, option) => {
+          callback: (option) => {
             this.timeout = option
           }
         },
@@ -297,8 +307,10 @@ export default {
       this.ws.send(msg)
     },
     getSelectedNodes() {
-      console.log(this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes())
-      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes()
+      return this.$refs.TreeTable.$refs.AutoDataZTree.$refs.dataztree.$refs.ztree.getCheckedNodes().filter(node => {
+        const status = node.getCheckStatus()
+        return status.half === false
+      })
     },
     execute() {
       // const size = 'rows=' + this.xterm.rows + '&cols=' + this.xterm.cols

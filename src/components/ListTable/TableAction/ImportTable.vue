@@ -225,7 +225,6 @@ export default {
           prop: item[1],
           label: item[0],
           minWidth: colMaxWidth + 'px',
-          showOverflowTooltip: true,
           formatter: EditableInputFormatter,
           formatterArgs: {
             onEnter: ({ row, col, oldValue, newValue }) => {

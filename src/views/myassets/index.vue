@@ -50,7 +50,6 @@ export default {
             prop: 'name',
             label: this.$t('assets.Name'),
             formatter: DialogDetailFormatter,
-            showOverflowTooltip: true,
             formatterArgs: {
               getDialogTitle: function({ col, row, cellValue }) { this.$t('assets.AssetDetail') }.bind(this),
               getDetailItems: function({ col, row, cellValue }) {
@@ -97,7 +96,6 @@ export default {
             width: '150px'
           },
           accounts: {
-            showOverflowTooltip: true,
             align: 'center',
             label: this.$t('assets.Account'),
             width: '120px',
@@ -112,7 +110,6 @@ export default {
             width: '120px'
           },
           comment: {
-            showOverflowTooltip: true,
             width: '100px'
           },
           actions: {

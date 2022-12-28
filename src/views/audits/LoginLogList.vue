@@ -26,12 +26,8 @@ export default {
           'user_agent', 'mfa', 'reason_display', 'status', 'datetime'
         ],
         columnsMeta: {
-          username: {
-            showOverflowTooltip: true
-          },
           user_agent: {
-            width: '150px',
-            showOverflowTooltip: true
+            width: '150px'
           },
           ip: {
             width: '140px'
@@ -57,9 +53,6 @@ export default {
           },
           datetime: {
             width: '160px'
-          },
-          reason: {
-            showOverflowTooltip: true
           }
         },
         extraQuery: {

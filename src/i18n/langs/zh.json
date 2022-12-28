@@ -709,6 +709,14 @@
     "Weekly": "按周"
   },
   "ops": {
+    "ScrollToTop": "滚动到顶部",
+    "ScrollToBottom": "滚动到底部",
+    "ClearScreen": "清屏",
+    "Skip": "跳过",
+    "PrivilegedFirst": "优先特权账号",
+    "PrivilegedOnly": "仅特权账号",
+    "SaveCommandSuccess": "保存命令成功",
+    "TimeoutHelpText": "当此值为-1时，不指定超时时间",
     "Timeout": "超时（秒）",
     "RunCommand": "运行命令",
     "ManualInput": "手动输入",
