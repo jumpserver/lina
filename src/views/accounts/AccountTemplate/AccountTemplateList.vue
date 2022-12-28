@@ -38,6 +38,9 @@ export default {
               showFalse: false
             }
           },
+          secret_type: {
+            width: '120px'
+          },
           has_secret: {
             width: '120px',
             formatterArgs: {
