@@ -17,13 +17,12 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/change-secret-automations/',
-        columns: [
-          'name', 'username', 'assets_amount', 'nodes_amount', 'password_strategy_display',
-          'is_periodic', 'periodic_display', 'run_times', 'comment', 'org_name', 'actions'
-        ],
+        excludes: ['password_rules'],
         columnsShow: {
           min: ['name', 'actions'],
-          default: ['name', 'username', 'password_strategy_display', 'is_periodic', 'periodic_display', 'run_times', 'actions']
+          default: [
+            'name', 'username', 'is_periodic', 'periodic_display', 'run_times', 'actions'
+          ]
         },
         columnsMeta: {
           name: {
@@ -31,6 +30,18 @@ export default {
             formatterArgs: {
               route: 'AccountChangeSecretDetail'
             }
+          },
+          has_secret: {
+            width: '120px'
+          },
+          secret_type: {
+            width: '120px'
+          },
+          secret_strategy: {
+            width: '120px'
+          },
+          ssh_key_change_strategy: {
+            width: '140px'
           },
           assets_amount: {
             label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
