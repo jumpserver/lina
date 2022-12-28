@@ -25,7 +25,11 @@ export default {
     return {
       url: `/api/v1/assets/gather-account-automations/${this.object.id}/`,
       detailFields: [
-        'name', 'is_periodic', 'periodic_display',
+        'name', 'is_periodic',
+        {
+          key: this.$t('xpack.Cloud.RegularlyPerform'),
+          value: this.object?.periodic_display || ''
+        },
         {
           key: this.$t('xpack.Cloud.DateLastSync'),
           value: this.object.date_last_sync ? toSafeLocalDateStr(this.object.date_created) : ''
