@@ -1,7 +1,12 @@
 <template>
   <div>
     <ListTable ref="ListTable" :table-config="tableConfig" :header-actions="headerActions" />
-    <ViewSecret v-if="showViewSecretDialog" :visible.sync="showViewSecretDialog" :account="account" :url="secretUrl" />
+    <ViewSecret
+      v-if="showViewSecretDialog"
+      :visible.sync="showViewSecretDialog"
+      :account="account"
+      :url="secretUrl"
+    />
     <UpdateSecretInfo
       v-if="showUpdateSecretDialog"
       :visible.sync="showUpdateSecretDialog"
@@ -97,9 +102,9 @@ export default {
         },
         excludes: ['specific'],
         columnsShow: {
-          min: ['name', 'username', 'actions'],
+          min: ['username', 'actions'],
           default: [
-            'name', 'username', 'version', 'privileged',
+            'username', 'asset', 'privileged',
             'secret_type', 'source', 'actions'
           ]
         },
@@ -246,6 +251,11 @@ export default {
                 vm.showAddDialog = true
               })
             }
+          },
+          {
+            name: 'autocreate',
+            title: this.$t('accounts.AutoCreate'),
+            type: 'default'
           }
         ],
         searchConfig: {
