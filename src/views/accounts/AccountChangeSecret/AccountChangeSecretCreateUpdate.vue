@@ -22,7 +22,7 @@ export default {
         secret_type: 'password',
         secret_strategy: 'specific'
       },
-      url: '/api/v1/assets/change-secret-automations/',
+      url: '/api/v1/accounts/change-secret-automations/',
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],

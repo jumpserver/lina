@@ -16,7 +16,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/push-account-automations/',
+        url: '/api/v1/accounts/push-account-automations/',
         columns: [
           'name', 'username', 'assets_amount', 'nodes_amount',
           'password_strategy_display', 'is_periodic', 'periodic_display',
@@ -85,11 +85,11 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('assets.add_changesecretexecution'),
+                  can: this.$hasPerm('accounts.add_changesecretautomation'),
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/change-secret-executions/`,
+                      `/api/v1/accounts/change-secret-executions/`,
                       {
                         automation: row.id,
                         type: row.type.value

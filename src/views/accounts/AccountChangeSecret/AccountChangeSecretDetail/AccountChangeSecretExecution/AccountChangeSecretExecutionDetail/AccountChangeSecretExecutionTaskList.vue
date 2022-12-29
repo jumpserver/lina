@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/assets/change-secret-records/?execution_id=${this.object.id}`,
+        url: `/api/v1/accounts/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
           'asset', 'account', 'date_started', 'date_finished', 'timedelta', 'status', 'error'
         ],
@@ -46,7 +46,7 @@ export default {
             label: this.$t('users.Username'),
             formatter: DetailFormatter,
             formatterArgs: {
-              can: this.$hasPerm('assets.view_account'),
+              can: this.$hasPerm('accounts.view_account'),
               getTitle({ row }) {
                 return row.account.name
               },

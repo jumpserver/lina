@@ -24,7 +24,7 @@ export default {
         hasSearch: false
       },
       tableConfig: {
-        url: `/api/v1/assets/gather-account-executions/?automation_id=${this.object.id}`,
+        url: `/api/v1/accounts/gather-account-executions/?automation_id=${this.object.id}`,
         columns: ['trigger_display', 'date_start', 'date_finished', 'status'],
         columnsMeta: {
           timedelta: {

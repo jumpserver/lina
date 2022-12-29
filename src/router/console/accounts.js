@@ -7,8 +7,8 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.AssetAccount'),
-      app: 'assets',
-      permissions: ['assets.view_account']
+      app: 'accounts',
+      permissions: ['accounts.view_account']
     },
     redirect: '',
     children: [
@@ -18,8 +18,8 @@ export default [
         component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
         meta: {
           title: i18n.t('route.AssetAccount'),
-          app: 'assets',
-          permissions: ['assets.view_account']
+          app: 'accounts',
+          permissions: ['accounts.view_account']
         }
       },
       {
@@ -36,8 +36,8 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.AccountTemplate'),
-      app: 'assets',
-      permissions: ['assets.view_accounttemplate']
+      app: 'accounts',
+      permissions: ['accounts.view_accounttemplate']
     },
     redirect: '',
     children: [
@@ -47,7 +47,7 @@ export default [
         component: () => import('@/views/accounts/AccountTemplate/AccountTemplateList'),
         meta: {
           title: i18n.t('route.AccountTemplate'),
-          permissions: ['assets.view_accounttemplate']
+          permissions: ['accounts.view_accounttemplate']
         }
       },
       {
@@ -85,7 +85,7 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.GatherUser.GatherUserList'),
-      app: 'assets',
+      app: 'accounts',
       licenseRequired: true
     },
     children: [
@@ -95,7 +95,7 @@ export default [
         name: 'AccountGatherTaskList',
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskList'),
-          permissions: ['assets.view_gatheraccountsautomation']
+          permissions: ['accounts.view_gatheraccountsautomation']
         }
       },
       {
@@ -105,7 +105,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
-          permissions: ['assets.add_gatheraccountsautomation']
+          permissions: ['accounts.add_gatheraccountsautomation']
         }
       },
       {
@@ -115,7 +115,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
-          permissions: ['assets.view_gatheraccountsautomation']
+          permissions: ['accounts.view_gatheraccountsautomation']
         }
       },
       {
@@ -126,7 +126,7 @@ export default [
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'),
           action: 'update',
-          permissions: ['assets.change_gatheraccountsautomation'],
+          permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
         }
       }
@@ -138,7 +138,7 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
-      app: 'assets',
+      app: 'accounts',
       licenseRequired: true
     },
     children: [
@@ -148,7 +148,7 @@ export default [
         name: 'AccountChangeSecretList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          permissions: ['assets.view_changesecretautomation']
+          permissions: ['accounts.view_changesecretautomation']
         }
       },
       {
@@ -158,7 +158,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
-          permissions: ['assets.add_changesecretautomation']
+          permissions: ['accounts.add_changesecretautomation']
         }
       },
       {
@@ -168,7 +168,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
-          permissions: ['assets.change_changesecretautomation']
+          permissions: ['accounts.change_changesecretautomation']
         }
       },
       {
@@ -178,7 +178,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
-          permissions: ['assets.view_changesecretautomation']
+          permissions: ['accounts.view_changesecretautomation']
         }
       },
       {
@@ -188,7 +188,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          permissions: ['assets.view_automationexecution']
+          permissions: ['accounts.view_automationexecution']
         }
       }
     ]
@@ -198,10 +198,10 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      app: 'assets',
+      app: 'accounts',
       name: 'AccountPushList',
       resource: 'pushaccountautomation',
-      permissions: ['assets.view_pushaccountautomation']
+      permissions: ['accounts.view_pushaccountautomation']
     },
     children: [
       {
@@ -210,7 +210,7 @@ export default [
         name: 'AccountPushList',
         meta: {
           title: i18n.t('accounts.AccountPush.AccountPushList'),
-          permissions: ['assets.view_pushaccountautomation']
+          permissions: ['accounts.view_pushaccountautomation']
         }
       },
       {
@@ -220,7 +220,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('accounts.AccountPush.AccountPushCreate'),
-          permissions: ['assets.add_pushaccountautomation']
+          permissions: ['accounts.add_pushaccountautomation']
         }
       },
       {
@@ -230,7 +230,7 @@ export default [
         hidden: true,
         meta: {
           title: i18n.t('accounts.AccountPush.AccountPushUpdate'),
-          permissions: ['assets.change_pushaccountautomation']
+          permissions: ['accounts.change_pushaccountautomation']
         }
       }
     ]
@@ -241,8 +241,8 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
-      app: 'assets',
-      resource: 'accountbackupplan',
+      app: 'accounts',
+      resource: 'accountbackupautomation',
       licenseRequired: true
     },
     children: [

@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     iUrl() {
-      return this.url || `/api/v1/assets/accounts/?asset=${this.object.id}`
+      return this.url || `/api/v1/accounts/accounts/?asset=${this.object.id}`
     }
   }
 }

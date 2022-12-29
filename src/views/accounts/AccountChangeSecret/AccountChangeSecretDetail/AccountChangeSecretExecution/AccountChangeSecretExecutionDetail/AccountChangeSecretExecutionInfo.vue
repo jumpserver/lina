@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/assets/change-secret-executions/${this.object.id}`,
+      url: `/api/v1/accounts/change-secret-executions/${this.object.id}`,
       detailFields: [
         {
           key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),

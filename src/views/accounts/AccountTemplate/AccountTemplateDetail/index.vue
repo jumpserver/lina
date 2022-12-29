@@ -14,6 +14,7 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
+
 export default {
   components: {
     GenericDetailPage,
@@ -24,7 +25,7 @@ export default {
     return {
       object: {},
       config: {
-        url: '/api/v1/assets/account-templates',
+        url: '/api/v1/accounts/account-templates',
         activeMenu: 'Detail',
         submenu: [
           {

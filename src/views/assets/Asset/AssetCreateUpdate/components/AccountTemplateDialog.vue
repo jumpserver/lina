@@ -15,7 +15,7 @@
         type="primary"
         size="small"
         style="margin-bottom: 10px;"
-        :disabled="!$hasPerm('assets.view_accounttemplate')"
+        :disabled="!$hasPerm('accounts.view_accounttemplate')"
         @click="onAddClick"
       >
         {{ $t('common.Add') }}
@@ -49,7 +49,7 @@ export default {
     return {
       accountsSelected: [],
       tableConfig: {
-        url: '/api/v1/assets/account-templates/',
+        url: '/api/v1/accounts/account-templates/',
         columns: ['name', 'username', 'privileged'],
         columnsMeta: {
           privileged: {

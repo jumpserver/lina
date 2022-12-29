@@ -45,7 +45,7 @@ export default {
           }
         ]
       },
-      url: '/api/v1/assets/accounts/',
+      url: '/api/v1/accounts/accounts/',
       form: this.account || {},
       fields: [
         [this.$t('assets.Asset'), ['assets']],
@@ -102,7 +102,7 @@ export default {
             multiple: false,
             clearable: true,
             ajax: {
-              url: `/api/v1/assets/accounts/su-from-accounts/?asset=${this.asset?.id || ''}`,
+              url: `/api/v1/accounts/accounts/su-from-accounts/?asset=${this.asset?.id || ''}`,
               transformOption: (item) => {
                 return { label: `${item.name}(${item.username})`, value: item.id }
               }

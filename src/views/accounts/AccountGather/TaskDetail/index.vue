@@ -10,6 +10,7 @@
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail'
 import TaskExecutionList from './TaskExecutionList'
+
 export default {
   name: 'SyncInstanceTaskDetail',
   components: {
@@ -22,7 +23,7 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        url: '/api/v1/assets/gather-account-automations/',
+        url: '/api/v1/accounts/gather-account-automations/',
         activeMenu: 'Detail',
         actions: {
           deleteSuccessRoute: 'AccountGatherListIndex'
@@ -35,7 +36,7 @@ export default {
           {
             title: this.$t('xpack.GatherUser.GatherUserTaskExecutionList'),
             name: 'TaskExecutionList',
-            hidden: !this.$hasPerm('assets.view_gatheraccountsexecution')
+            hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution')
           }
         ],
         hasRightSide: true

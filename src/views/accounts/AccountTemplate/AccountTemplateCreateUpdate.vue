@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       initial: { secret_type: 'password' },
-      url: '/api/v1/assets/account-templates/',
+      url: '/api/v1/accounts/account-templates/',
       hasDetailInMsg: false,
       fields: [
         [this.$t('common.Basic'), ['name', 'username', 'privileged']],

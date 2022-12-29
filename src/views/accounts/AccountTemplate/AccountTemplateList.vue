@@ -23,7 +23,7 @@ export default {
       account: {},
       secretUrl: '',
       tableConfig: {
-        url: '/api/v1/assets/account-templates/',
+        url: '/api/v1/accounts/account-templates/',
         columns: null,
         excludes: ['specific'],
         columnsShow: {
@@ -59,10 +59,10 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_accounttemplatesecret'),
+                  can: this.$hasPerm('accounts.view_accounttemplatesecret'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    vm.secretUrl = `/api/v1/assets/account-template-secrets/${row.id}/`
+                    vm.secretUrl = `/api/v1/accounts/account-template-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
                     setTimeout(() => {

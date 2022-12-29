@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { Select2, CronTab } from '@/components'
+import { CronTab, Select2 } from '@/components'
 import rules from '@/components/DataForm/rules'
 import ProtocolSelector from '@/components/FormFields/ProtocolSelector'
 
@@ -68,7 +68,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/account-templates/'
+              url: '/api/v1/accounts/account-templates/'
             }
           }
         },
@@ -78,7 +78,7 @@ export default {
             multiple: false,
             value: [],
             ajax: {
-              url: '/api/v1/assets/account-templates/'
+              url: '/api/v1/accounts/account-templates/'
             }
           }
         },

@@ -245,6 +245,10 @@ export default {
   .tree-table {
     .left {
       padding: 5px;
+
+      .treebox {
+        height: 70vh;
+      }
     }
 
     .mini {

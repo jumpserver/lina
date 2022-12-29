@@ -43,7 +43,7 @@ export default {
     exportUrl: {
       type: String,
       default() {
-        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+        return this.url.replace('/accounts/accounts/', '/accounts/account-secrets/')
       }
     },
     hasLeftActions: {
@@ -168,10 +168,10 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_accountsecret'),
+                  can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    vm.secretUrl = `/api/v1/assets/account-secrets/${row.id}/`
+                    vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
                     setTimeout(() => {
@@ -182,10 +182,10 @@ export default {
                 {
                   name: 'Delete',
                   title: this.$t('common.Delete'),
-                  can: this.$hasPerm('assets.delete_account'),
+                  can: this.$hasPerm('accounts.delete_account'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    this.$axios.delete(`/api/v1/assets/accounts/${row.id}/`).then(() => {
+                    this.$axios.delete(`/api/v1/accounts/accounts/${row.id}/`).then(() => {
                       this.$message.success(this.$tc('common.deleteSuccessMsg'))
                       this.$refs.ListTable.reloadTable()
                     })
@@ -197,7 +197,7 @@ export default {
                   can: this.$hasPerm('assets.test_account'),
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/assets/accounts/${row.id}/verify/`,
+                      `/api/v1/accounts/accounts/${row.id}/verify/`,
                       { action: 'test' }
                     ).then(res => {
                       openTaskPage(res['task'])
@@ -207,7 +207,7 @@ export default {
                 {
                   name: 'Update',
                   title: this.$t('common.Update'),
-                  can: this.$hasPerm('assets.change_account') && !this.$store.getters.currentOrgIsRoot,
+                  can: this.$hasPerm('accounts.change_account') && !this.$store.getters.currentOrgIsRoot,
                   callback: ({ row }) => {
                     vm.account = row
                     vm.iAsset = row.asset
@@ -227,7 +227,7 @@ export default {
         hasMoreActions: true,
         hasCreate: false,
         hasImport: true,
-        hasExport: this.hasExport && this.$hasPerm('assets.view_accountsecret'),
+        hasExport: this.hasExport && this.$hasPerm('accounts.view_accountsecret'),
         exportOptions: {
           url: this.exportUrl,
           mfaVerifyRequired: true
