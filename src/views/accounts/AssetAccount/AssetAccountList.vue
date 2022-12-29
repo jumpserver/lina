@@ -26,13 +26,13 @@ export default {
       clickedRow: null,
       iShowTree: true,
       tableConfig: {
-        url: '/api/v1/assets/accounts/',
+        url: '/api/v1/accounts/accounts/',
         hasLeftActions: true
       },
       treeSetting: {
         showMenu: false,
         showAssets: true,
-        url: '/api/v1/assets/accounts/'
+        url: '/api/v1/accounts/accounts/'
       }
     }
   }

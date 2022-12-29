@@ -15,7 +15,7 @@
         type="primary"
         size="small"
         style="margin-bottom: 10px;"
-        :disabled="!$hasPerm('assets.view_accounttemplate')"
+        :disabled="!$hasPerm('accounts.view_accounttemplate')"
         @click="onAddClick"
       >
         {{ $t('common.Add') }}

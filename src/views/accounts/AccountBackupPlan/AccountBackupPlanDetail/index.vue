@@ -30,7 +30,7 @@ export default {
           {
             title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
             name: 'AccountBackupPlanExecutionList',
-            hidden: () => !this.$hasPerm('assets.view_accountbackupplanexecution')
+            hidden: () => !this.$hasPerm('accounts.view_accountbackupplanexecution')
           }
         ],
         actions: {

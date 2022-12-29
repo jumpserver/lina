@@ -56,7 +56,7 @@ export default {
             formatter: DetailFormatter,
             formatterArgs: {
               route: 'AccountGatherTaskDetail',
-              can: vm.$hasPerm('assets.view_gatheraccountsexecution'),
+              can: vm.$hasPerm('accounts.view_gatheraccountsexecution'),
               routeQuery: {
                 activeTab: 'TaskExecutionList'
               }
@@ -71,7 +71,7 @@ export default {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
                   type: 'info',
-                  can: vm.$hasPerm('assets.add_gatheraccountsexecution'),
+                  can: vm.$hasPerm('accounts.add_gatheraccountsexecution'),
                   callback: function(data) {
                     this.$axios.post(
                       `/api/v1/assets/gather-account-executions/`,

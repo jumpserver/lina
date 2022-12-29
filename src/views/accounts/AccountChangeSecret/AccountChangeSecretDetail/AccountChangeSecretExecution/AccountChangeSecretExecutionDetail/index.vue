@@ -31,12 +31,12 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'AccountChangeSecretExecutionInfo',
-            hidden: () => !this.$hasPerm('assets.view_changesecretexecution')
+            hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
           },
           {
             title: this.$t('xpack.ChangeAuthPlan.TaskList'),
             name: 'AccountChangeSecretExecutionTaskList',
-            hidden: () => !this.$hasPerm('assets.view_changesecretrecord')
+            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         getTitle: this.getExecutionTitle

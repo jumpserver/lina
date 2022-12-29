@@ -33,7 +33,7 @@ export default {
           type: 'switch',
           attrs: {
             model: this.object?.privileged,
-            disabled: !this.$hasPerm('assets.change_accounttemplate')
+            disabled: !this.$hasPerm('accounts.change_accounttemplate')
           },
           callbacks: {
             change: function(val) {

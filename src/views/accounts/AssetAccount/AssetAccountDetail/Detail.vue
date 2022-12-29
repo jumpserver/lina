@@ -35,12 +35,12 @@ export default {
           type: 'switcher',
           attrs: {
             model: vm.object.privileged,
-            disabled: !vm.$hasPerm('assets.change_account')
+            disabled: !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
             change: (val) => {
               this.$axios.patch(
-                `/api/v1/assets/accounts/${this.object.id}/`,
+                `/api/v1/accounts/accounts/${this.object.id}/`,
                 { name: this.object?.name, privileged: val }
               ).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
@@ -58,7 +58,7 @@ export default {
           callbacks: Object.freeze({
             click: () => {
               this.$axios.post(
-                `/api/v1/assets/accounts/${this.object.id}/verify/`,
+                `/api/v1/accounts/accounts/${this.object.id}/verify/`,
                 { action: 'test' }
               ).then(res => {
                 openTaskPage(res['task'])
@@ -77,22 +77,22 @@ export default {
             model: vm.object.su_from?.id || '',
             label: vm.object.su_from?.name ? vm.object.su_from?.name + `(${vm.object.su_from?.username})` : '',
             ajax: {
-              url: `/api/v1/assets/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
+              url: `/api/v1/accounts/accounts/${vm.object.id}/su-from-accounts/?fields_size=mini`,
               transformOption: (item) => {
                 return { label: item.name + '(' + item.username + ')', value: item.id }
               }
             },
-            disabled: !vm.$hasPerm('assets.change_account')
+            disabled: !vm.$hasPerm('accounts.change_account')
           },
           callbacks: Object.freeze({
             change: (value) => {
-              const relationUrl = `/api/v1/assets/accounts/${this.object.id}/`
+              const relationUrl = `/api/v1/accounts/accounts/${this.object.id}/`
               return this.$axios.patch(relationUrl, { su_from: value })
             }
           })
         }
       ],
-      url: `/api/v1/assets/accounts/${this.object.id}`,
+      url: `/api/v1/accounts/accounts/${this.object.id}`,
       excludes: [
         'asset', 'template', 'privileged', 'secret',
         'passphrase', 'specific'

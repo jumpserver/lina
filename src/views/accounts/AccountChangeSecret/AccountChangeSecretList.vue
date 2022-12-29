@@ -93,7 +93,7 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('assets.add_changesecretexecution'),
+                  can: this.$hasPerm('accounts.add_changesecretautomation'),
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(

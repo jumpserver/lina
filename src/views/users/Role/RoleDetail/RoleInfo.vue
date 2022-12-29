@@ -102,7 +102,7 @@ export default {
         'assets.gateway': ['assets.view_domain'],
         'assets.add_asset': ['assets.view_platform'],
         'assets.change_asset': ['assets.view_platform'],
-        'assets.view_account': ['assets.view_node'],
+        'accounts.view_account': ['assets.view_node'],
         'assets.gathereduser': ['assets.view_node'],
         'assets.refresh_assethardwareinfo': ['assets.change_asset'],
         'xpack.gatherusertaskexecution': ['xpack.view_gatherusertask'],

@@ -34,7 +34,7 @@ export default {
           attrs: {
             type: 'primary',
             label: this.$t('xpack.ChangeAuthPlan.Execute'),
-            disabled: !this.$hasPerm('assets.add_changesecretexection')
+            disabled: !this.$hasPerm('accounts.add_changesecretexection')
           },
           callbacks: {
             click: function() {

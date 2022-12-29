@@ -59,7 +59,7 @@ export default {
                 {
                   name: 'View',
                   title: this.$t('common.View'),
-                  can: this.$hasPerm('assets.view_accounttemplatesecret'),
+                  can: this.$hasPerm('accounts.view_accounttemplatesecret'),
                   type: 'primary',
                   callback: ({ row }) => {
                     vm.secretUrl = `/api/v1/assets/account-template-secrets/${row.id}/`

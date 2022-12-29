@@ -61,7 +61,7 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  can: 'assets.view_changesecretexecution',
+                  can: 'accounts.view_changesecretexecution',
                   title: this.$t('xpack.ChangeAuthPlan.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
@@ -71,7 +71,7 @@ export default {
                   name: 'detail',
                   title: this.$t('xpack.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  can: this.$hasPerm('assets.view_changesecretexecution'),
+                  can: this.$hasPerm('accounts.view_changesecretexecution'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }
