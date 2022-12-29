@@ -54,6 +54,12 @@ export default {
             formatter: (row) => {
               return row.protocols.map(tag => <el-tag size='mini'>{tag}</el-tag>)
             }
+          },
+          actions: {
+            formatterArgs: {
+              hasUpdate: false,
+              hasClone: false
+            }
           }
         }
       },
