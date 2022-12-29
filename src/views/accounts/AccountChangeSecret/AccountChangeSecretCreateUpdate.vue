@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { getFields } from '@/views/accounts/AccountChangeSecret/fields'
+import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
   name: 'AccountChangeSecretCreateUpdate',
@@ -30,15 +30,15 @@ export default {
           this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
           [
             'secret_strategy', 'secret_type', 'secret',
-            'password_rules', 'ssh_key_change_strategy', 'ssh_key',
-            'passphrase'
+            'password_rules', 'ssh_key_change_strategy',
+            'ssh_key', 'passphrase'
           ]
         ],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['is_active', 'recipients', 'comment']]
       ],
       fieldsMeta: {
-        ...getFields()
+        ...getChangeSecretFields()
       },
       createSuccessNextRoute: { name: 'AccountChangeSecretList' },
       updateSuccessNextRoute: { name: 'AccountChangeSecretList' },

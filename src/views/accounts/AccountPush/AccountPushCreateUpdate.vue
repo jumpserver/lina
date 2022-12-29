@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import { getFields } from '@/views/accounts/AccountChangeSecret/fields'
+import { getChangeSecretFields } from '@/views/accounts/AccountChangeSecret/fields'
 
 export default {
   name: 'AccountPushCreateUpdate',
@@ -25,23 +25,20 @@ export default {
       url: '/api/v1/accounts/push-account-automations/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('assets.Username'), ['username']],
+        [this.$t('common.Username'), ['username']],
         [
-          this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
+          this.$t('assets.Secret'),
           [
-            'secret_strategy', 'secret_type', 'secret',
-            'password_rules', 'ssh_key_change_strategy', 'ssh_key',
-            'passphrase'
+            'secret_type', 'secret_strategy', 'secret',
+            'password_rules', 'ssh_key_change_strategy',
+            'ssh_key', 'passphrase'
           ]
         ],
-        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        ...getFields()
+        ...getChangeSecretFields()
       },
-      createSuccessNextRoute: { name: 'AccountChangeSecretList' },
-      updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''

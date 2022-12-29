@@ -4,7 +4,7 @@
 
 <script>
 import { GenericCreateUpdatePage } from '@/layout/components'
-import getFields from '@/views/accounts/AccountBackupPlan/fields'
+import getChangeSecretFields from '@/views/accounts/AccountBackupPlan/fields'
 
 export default {
   name: 'AccountBackupPlanUpdate',
@@ -13,7 +13,7 @@ export default {
   },
   data() {
     const vm = this
-    const fields = getFields.bind(this)()
+    const fields = getChangeSecretFields.bind(this)()
     return {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [

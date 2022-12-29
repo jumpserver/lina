@@ -8,7 +8,7 @@ const validatorInterval = (rule, value, callback) => {
   callback()
 }
 
-function getFields() {
+function getAccountBackupFields() {
   const recipients = {
     label: i18n.t('xpack.ChangeAuthPlan.Addressee'),
     helpText: i18n.t('xpack.ChangeAuthPlan.OnlyMailSend'),
@@ -56,4 +56,4 @@ function getFields() {
   }
 }
 
-export default getFields
+export default getAccountBackupFields

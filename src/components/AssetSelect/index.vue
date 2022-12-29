@@ -243,6 +243,14 @@ export default {
 .el-dialog__wrapper ::v-deep .el-dialog__body {
   padding: 0 0 0 3px;
   .tree-table {
+    .search {
+      .el-input__inner {
+        background-color: #f3f3f3;
+      }
+      .el-cascader {
+        background-color: #f3f3f3;
+      }
+    }
     .left {
       padding: 5px;
 
