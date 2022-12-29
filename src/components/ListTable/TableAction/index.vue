@@ -206,6 +206,7 @@ export default {
 
   .search.left {
     float: left;
+    padding: 0 !important;
   }
 
   .search.right {

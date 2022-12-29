@@ -44,7 +44,7 @@ function generatePasswordRulesItemsFields(obType) {
   return itemsFields
 }
 
-export const getFields = () => {
+export const getChangeSecretFields = () => {
   return {
     assets: {
       type: 'assetSelect',
@@ -54,10 +54,54 @@ export const getFields = () => {
       ],
       label: i18n.t('xpack.Asset')
     },
+    nodes: {
+      label: i18n.t('xpack.Node'),
+      el: {
+        value: [],
+        ajax: {
+          url: '/api/v1/assets/nodes/',
+          transformOption: (item) => {
+            return { label: item.full_value, value: item.id }
+          }
+        }
+      }
+    },
+    secret_type: {
+      type: 'radio-group',
+      options: []
+    },
+    secret_strategy: {
+      type: 'radio-group',
+      options: [],
+      label: i18n.t('xpack.ChangeAuthPlan.PasswordStrategy'),
+      on: ([value], updateForm) => {
+      }
+    },
+    secret: {
+      label: i18n.t('assets.Password'),
+      hidden: ({ secret_strategy, secret_type }) => {
+        return secret_strategy !== 'specific' || secret_type !== 'password'
+      }
+    },
+    ssh_key: {
+      label: i18n.t('assets.PrivateKey'),
+      el: {
+        type: 'textarea',
+        rows: 4
+      },
+      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+    },
+    ssh_key_change_strategy: {
+      type: 'radio-group',
+      options: [],
+      hidden: ({ secret_strategy, secret_type }) => (secret_type !== 'ssh_key')
+    },
     passphrase: {
       label: i18n.t('assets.Passphrase'),
       component: UpdateToken,
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+      hidden: ({ secret_strategy, secret_type }) => {
+        return (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
+      }
     },
     password_rules: {
       type: 'group',
@@ -74,24 +118,6 @@ export const getFields = () => {
             return { label: item.name + '(' + item.username + ')', value: item.id }
           }
         }
-      }
-    },
-    nodes: {
-      label: i18n.t('xpack.Node'),
-      el: {
-        value: [],
-        ajax: {
-          url: '/api/v1/assets/nodes/',
-          transformOption: (item) => {
-            return { label: item.full_value, value: item.id }
-          }
-        }
-      }
-    },
-    password_strategy: {
-      label: i18n.t('xpack.ChangeAuthPlan.PasswordStrategy'),
-      hidden: (formValue) => {
-        return formValue.is_password === false
       }
     },
     is_periodic: {
@@ -116,36 +142,12 @@ export const getFields = () => {
         { validator: validatorInterval }
       ]
     },
-    secret_strategy: {
-      type: 'radio-group',
-      options: []
-    },
-    secret_type: {
-      type: 'radio-group',
-      options: []
-    },
     accounts: {
       label: i18n.t('common.Username'),
       component: TagInput
-    },
-    secret: {
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'password')
-    },
-    ssh_key: {
-      label: i18n.t('assets.PrivateKey'),
-      el: {
-        type: 'textarea',
-        rows: 4
-      },
-      hidden: ({ secret_strategy, secret_type }) => (secret_strategy !== 'specific' || secret_type !== 'ssh_key')
-
-    },
-    ssh_key_change_strategy: {
-      type: 'radio-group',
-      options: [],
-      hidden: ({ secret_strategy, secret_type }) => (secret_type !== 'ssh_key')
     }
+
   }
 }
 
-export default getFields
+export default getChangeSecretFields

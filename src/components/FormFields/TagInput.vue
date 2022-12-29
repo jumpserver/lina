@@ -81,7 +81,7 @@ export default {
   }
   .filter-field {
     display: flex;
-    align-items:  center;
+    align-items: center;
     padding-left: 2px;
     border: 1px solid #dcdee2;
     border-radius: 1px;
@@ -100,6 +100,6 @@ export default {
     font-size: 13px;
   }
   .filter-field >>> .el-input__inner {
-    height: 30px;
+    //height: 32px;
   }
 </style>
