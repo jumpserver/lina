@@ -15,7 +15,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'nodes']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
-        [this.$t('common.Other'), ['comment']]
+        [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       url: '/api/v1/assets/gather-account-automations/',
       hasDetailInMsg: false,

@@ -5,7 +5,7 @@
         ref="ListTable"
         :asset="object"
         :url="url"
-        :columns="columns"
+        :has-column-actions="false"
         :has-clone="false"
         :has-left-actions="false"
         :has-import="false"
@@ -71,10 +71,6 @@ export default {
   data() {
     return {
       url: `/api/v1/perms/asset-permissions/${this.object.id}/accounts/`,
-      columns: [
-        'name', 'asset', 'username', 'version', 'privileged',
-        'secret_type', 'date_created', 'date_updated', 'actions'
-      ],
       relation: {
         disabled: false,
         username: ''

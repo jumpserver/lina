@@ -4,7 +4,7 @@
 
 <script>
 import { GenericListPage } from '@/layout/components'
-import { DetailFormatter } from '@/components/TableFormatters'
+import { ArrayFormatter, DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
@@ -17,9 +17,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/account-backup-plans/',
-        columns: [
-          'name', 'is_periodic', 'periodic_display', 'org_name', 'comment', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'org_name', 'is_periodic', 'periodic_display', 'actions']
@@ -30,6 +27,9 @@ export default {
             formatterArgs: {
               route: 'AccountBackupPlanDetail'
             }
+          },
+          types: {
+            formatter: ArrayFormatter
           },
           is_periodic: {
             label: vm.$t('xpack.ChangeAuthPlan.Timer'),

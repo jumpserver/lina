@@ -62,6 +62,10 @@ export default {
       type: Object,
       default: null
     },
+    hasColumnActions: {
+      type: Boolean,
+      default: true
+    },
     columns: {
       type: Array,
       default: () => []
@@ -86,14 +90,12 @@ export default {
       secretUrl: '',
       tableConfig: {
         url: this.url,
+        hasColumnActions: this.hasColumnActions,
         permissions: {
           app: 'assets',
           resource: 'account'
         },
-        columns: [
-          'name', 'asset', 'username', 'version', 'privileged',
-          'secret_type', 'source', 'date_created', 'date_updated', 'actions'
-        ],
+        excludes: ['specific'],
         columnsShow: {
           min: ['name', 'username', 'actions'],
           default: [
@@ -132,9 +134,18 @@ export default {
           version: {
             width: '70px'
           },
+          secret_type: {
+            width: '100px'
+          },
           source: {
             formatter: function(row) {
               return row.source.label
+            }
+          },
+          has_secret: {
+            width: '100px',
+            formatterArgs: {
+              showFalse: false
             }
           },
           privileged: {
