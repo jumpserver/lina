@@ -23,10 +23,6 @@ export default {
       showJobRunDialog: false,
       tableConfig: {
         url: '/api/v1/ops/jobs/',
-        columns: [
-          'name', 'type', 'summary', 'average_time_cost', 'asset_amount',
-          'date_last_run', 'comment', 'date_updated', 'date_created', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

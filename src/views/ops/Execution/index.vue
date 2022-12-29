@@ -23,9 +23,12 @@ export default {
       showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
-        columns: [
-          'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
-        ],
+        columnsShow: {
+          min: ['material', 'actions'],
+          default: [
+            'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+          ]
+        },
         columnsMeta: {
           count: {
             width: '96px',
