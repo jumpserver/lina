@@ -31,9 +31,9 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/accounts/automation/${this.object.id}/assets/`,
+        url: `/api/v1/accounts/change-secret/${this.object.id}/assets/`,
         columns: [
-          'name', 'ip', 'delete_action'
+          'name', 'address', 'delete_action'
         ],
         columnsMeta: {
           name: {
@@ -51,7 +51,7 @@ export default {
             formatter: DeleteActionFormatter,
             onDelete: function(col, row, cellValue, reload) {
               this.$axios.patch(
-                `/api/v1/accounts/automation/${this.object.id}/asset/remove/`,
+                `/api/v1/accounts/change-secret/${this.object.id}/asset/remove/`,
                 { assets: [row.id] }
               ).then(res => {
                 this.$message.success(this.$tc('common.deleteSuccessMsg'))
@@ -87,7 +87,7 @@ export default {
           return this.object.assets.indexOf(row.id) === -1
         },
         performAdd: (items, that) => {
-          const relationUrl = `/api/v1/accounts/automation/${this.object.id}/asset/add/`
+          const relationUrl = `/api/v1/accounts/change-secret/${this.object.id}/asset/add/`
           const data = {
             assets: items
           }
@@ -111,7 +111,7 @@ export default {
         disabled: this.$store.getters.currentOrgIsRoot,
         hasObjectsId: this.object.nodes,
         performAdd: (items, that) => {
-          const relationUrl = `/api/v1/accounts/automation/${this.object.id}/nodes/?action=add`
+          const relationUrl = `/api/v1/accounts/change-secret/${this.object.id}/nodes/?action=add`
           const nodes = items.map(v => v.value)
           const iHasObjects = that.iHasObjects.map(v => v.value)
           const data = {
@@ -129,7 +129,7 @@ export default {
           const data = {
             nodes: [item.value]
           }
-          const relationUrl = `/api/v1/accounts/automation/${this.object.id}/nodes/?action=remove`
+          const relationUrl = `/api/v1/accounts/change-secret/${this.object.id}/nodes/?action=remove`
           return this.$axios.patch(relationUrl, data)
         },
         onDeleteSuccess: (obj, that) => {

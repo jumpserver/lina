@@ -19,7 +19,7 @@ export default {
         name: 'TaskListTable',
         url: '/api/v1/accounts/gather-account-automations/',
         permissions: {
-          app: 'assets',
+          app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
         columnsShow: {
