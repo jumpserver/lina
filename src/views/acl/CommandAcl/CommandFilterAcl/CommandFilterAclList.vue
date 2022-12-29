@@ -18,6 +18,7 @@ export default {
           app: 'acls',
           resource: 'commandfilteracl'
         },
+        excludes: ['users', 'assets', 'accounts'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
