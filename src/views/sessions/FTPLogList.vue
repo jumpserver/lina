@@ -17,10 +17,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/ftp-logs/',
-        columns: [
-          'user', 'asset', 'system_user', 'remote_addr', 'operate',
-          'filename', 'is_success', 'date_start'
-        ],
         columnsMeta: {
           remote_addr: {
             width: '140px'
