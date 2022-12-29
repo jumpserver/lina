@@ -12,7 +12,7 @@ export default [
         path: '',
         name: 'TaskList',
         component: () => import('@/views/tasks/TaskList'),
-        meta: { title: i18n.t('route.TaskList'), permissions: [] }
+        meta: { title: i18n.t('route.TaskList'), permissions: ['ops.view_celerytask'] }
       },
       {
         path: ':id',

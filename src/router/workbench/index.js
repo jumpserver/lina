@@ -95,7 +95,7 @@ export default {
           component: () => import('@/views/ops/Job/QuickJob'),
           meta: {
             title: i18n.t('ops.QuickJob'),
-            permissions: []
+            permissions: ['ops.view_job', 'ops.add_job']
           }
         },
         {
@@ -105,7 +105,7 @@ export default {
           redirect: '',
           meta: {
             title: i18n.t('route.JobList'),
-            permissions: []
+            permissions: ['ops.view_job']
           },
           children: [
             {
@@ -114,7 +114,7 @@ export default {
               component: () => import('@/views/ops/Job'),
               meta: {
                 title: i18n.t('route.JobList'),
-                permissions: []
+                permissions: ['ops.view_job']
               }
             },
             {
@@ -124,7 +124,7 @@ export default {
               hidden: true,
               meta: {
                 title: i18n.t('route.JobCreate'),
-                permissions: [],
+                permissions: ['ops.add_job'],
                 activeMenu: '/workbench/ops/job'
               }
             },
@@ -135,7 +135,7 @@ export default {
               hidden: true,
               meta: {
                 title: i18n.t('route.JobUpdate'),
-                permissions: [],
+                permissions: ['ops.change_job'],
                 activeMenu: '/workbench/ops/job'
               }
             },
@@ -146,7 +146,7 @@ export default {
               hidden: true,
               meta: {
                 title: i18n.t('route.JobDetail'),
-                permissions: [],
+                permissions: ['ops.view_job'],
                 activeMenu: '/workbench/ops/job'
               }
             }
@@ -158,7 +158,7 @@ export default {
           component: () => import('@/views/ops/Template'),
           meta: {
             title: i18n.t('route.Template'),
-            permissions: []
+            permissions: ['ops.view_adhoc', 'ops.view_playbook']
           }
         },
         {
@@ -167,7 +167,7 @@ export default {
           component: () => import('@/views/ops/Execution'),
           meta: {
             title: i18n.t('route.Execution'),
-            permissions: []
+            permissions: ['ops.view_jobexecution']
           }
         },
         {
@@ -177,7 +177,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('ops.ExecutionDetail'),
-            permissions: [],
+            permissions: ['ops.view_jobexecution'],
             activeMenu: '/workbench/ops/executions'
           }
         },
@@ -188,7 +188,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.updateAdhoc'),
-            permissions: [],
+            permissions: ['ops.change_adhoc'],
             activeMenu: '/workbench/ops/scripts'
           }
         },
@@ -199,7 +199,7 @@ export default {
           component: () => import('@/views/ops/Template/Adhoc/AdhocUpdateCreate'),
           meta: {
             title: i18n.t('ops.createAdhoc'),
-            permissions: [],
+            permissions: ['ops.add_adhoc'],
             activeMenu: '/workbench/ops/scripts'
           }
         },
@@ -210,7 +210,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('route.AdhocDetail'),
-            permissions: [],
+            permissions: ['ops.view_adhoc'],
             activeMenu: '/workbench/ops/scripts'
           }
         },
@@ -221,7 +221,7 @@ export default {
           component: () => import('@/views/ops/Template/Playbook/PlaybookUpdate'),
           meta: {
             title: i18n.t('ops.PlaybookUpdate'),
-            permissions: [],
+            permissions: ['ops.change_playbook'],
             activeMenu: '/workbench/ops/scripts'
           }
         },
@@ -232,7 +232,7 @@ export default {
           hidden: true,
           meta: {
             title: i18n.t('ops.PlaybookDetail'),
-            permissions: [],
+            permissions: ['ops.view_playbook'],
             activeMenu: '/workbench/ops/scripts'
           }
         }
