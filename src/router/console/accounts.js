@@ -7,7 +7,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.AssetAccount'),
-      app: 'assets',
+      app: 'accounts',
       permissions: ['accounts.view_account']
     },
     redirect: '',
@@ -18,7 +18,7 @@ export default [
         component: () => import('@/views/accounts/AssetAccount/AssetAccountList'),
         meta: {
           title: i18n.t('route.AssetAccount'),
-          app: 'assets',
+          app: 'accounts',
           permissions: ['accounts.view_account']
         }
       },
@@ -36,7 +36,7 @@ export default [
     component: empty,
     meta: {
       title: i18n.t('route.AccountTemplate'),
-      app: 'assets',
+      app: 'accounts',
       permissions: ['accounts.view_accounttemplate']
     },
     redirect: '',
@@ -85,7 +85,7 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.GatherUser.GatherUserList'),
-      app: 'assets',
+      app: 'accounts',
       licenseRequired: true
     },
     children: [
@@ -138,7 +138,7 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
-      app: 'assets',
+      app: 'accounts',
       licenseRequired: true
     },
     children: [
@@ -198,7 +198,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      app: 'assets',
+      app: 'accounts',
       name: 'AccountPushList',
       resource: 'pushaccountautomation',
       permissions: ['accounts.view_pushaccountautomation']
@@ -241,7 +241,7 @@ export default [
     redirect: '',
     meta: {
       title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
-      app: 'assets',
+      app: 'accounts',
       resource: 'accountbackupplan',
       licenseRequired: true
     },

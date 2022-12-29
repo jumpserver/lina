@@ -1,6 +1,6 @@
 import i18n from '@/i18n/i18n'
 import { AssetSelect, CronTab } from '@/components'
-import { UpdateToken, TagInput } from '@/components/FormFields'
+import { TagInput, UpdateToken } from '@/components/FormFields'
 import { Required } from '@/components/DataForm/rules'
 
 var validatorInterval = (rule, value, callback) => {
@@ -52,11 +52,6 @@ export const getFields = () => {
       rules: [
         { required: false }
       ],
-      el: {
-        canSelect: (row) => {
-          return row.enabled_info.change_secret_enabled
-        }
-      },
       label: i18n.t('xpack.Asset')
     },
     passphrase: {

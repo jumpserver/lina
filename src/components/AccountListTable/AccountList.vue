@@ -43,7 +43,7 @@ export default {
     exportUrl: {
       type: String,
       default() {
-        return this.url.replace('/assets/accounts/', '/assets/account-secrets/')
+        return this.url.replace('/accounts/accounts/', '/accounts/account-secrets/')
       }
     },
     hasLeftActions: {
@@ -110,7 +110,7 @@ export default {
                 name: 'AssetAccountDetail',
                 params: { id: row.id }
               }
-              if (vm.$hasPerm('accounts.view_account')) {
+              if (vm.$hasPerm('assets.view_account')) {
                 return <router-link to={to}>{row.name}</router-link>
               } else {
                 return <span>{row.name}</span>
