@@ -30,6 +30,7 @@
       :placeholder="placeholder"
       class="search-input"
       :class="options.length < 1 ? 'search-input2': ''"
+      :validate-event="false"
       @blur="focus = false"
       @focus="focus = true"
       @change="handleConfirm"
