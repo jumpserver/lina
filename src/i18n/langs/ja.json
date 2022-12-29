@@ -981,6 +981,15 @@
     "Permissions": "権限",
     "NoPermission": "権限なし"
   },
+  "terminal": {
+    "UploadSucceed": "アップロード成功",
+    "UploadFailed": "アップロードに失敗しました",
+    "Applets": "リモートアプリケーション",
+    "AppletHosts": "アプリケーションパブリッシャ",
+    "uploadZipTips": "zip形式のファイルをアップロードしてください",
+    "HostDeployment": "パブリッシャーの導入",
+    "TerminalStat": "CPU/メモリ/ディスク"
+  },
   "sessions": {
     "SetToDefaultStorage": "デフォルトストレージに設定",
     "SetToDefault": "デフォルトに設定",

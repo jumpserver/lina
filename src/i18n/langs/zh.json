@@ -1100,6 +1100,8 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "UploadSucceed": "上传成功",
+    "UploadFailed": "上传失败",
     "Applets": "远程应用",
     "AppletHosts": "应用发布机",
     "uploadZipTips": "请上传zip格式的文件",

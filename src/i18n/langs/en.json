@@ -952,6 +952,8 @@
     "NoPermission": "No permission"
   },
   "terminal": {
+    "UploadSucceed": "Upload succeed",
+    "UploadFailed": "Upload failed",
     "Applets": "Remote apps",
     "AppletHosts": "Remote hosts",
     "uploadZipTips": "Please upload zip file",

@@ -39,6 +39,9 @@ export default {
             }
           },
           name: {
+            formatter: function(row) {
+              return <span>{row.display_name}</span>
+            },
             formatterArgs: {
               getTitle: ({ row }) => row['display_name'],
               getIcon: ({ row }) => row['icon']
