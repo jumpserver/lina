@@ -242,7 +242,7 @@ export default [
     meta: {
       title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
       app: 'accounts',
-      resource: 'accountbackupplan',
+      resource: 'accountbackupautomation',
       licenseRequired: true
     },
     children: [

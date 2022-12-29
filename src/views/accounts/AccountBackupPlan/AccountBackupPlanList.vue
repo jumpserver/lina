@@ -17,6 +17,10 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/account-backup-plans/',
+        permissions: {
+          app: 'accounts',
+          resource: 'accountbackupautomation'
+        },
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'org_name', 'is_periodic', 'periodic_display', 'actions']
