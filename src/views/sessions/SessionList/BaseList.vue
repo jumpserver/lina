@@ -28,28 +28,54 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        columns: [
-          'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
-          'command_amount', 'date_start', 'date_end', 'duration',
-          'terminal_display', 'org_name', 'actions'
-        ],
+        extraColumns: ['index'],
         columnsShow: {
-          min: ['index', 'actions'],
+          min: ['id', 'actions'],
           default: [
-            'index', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
+            'id', 'user', 'asset', 'system_user', 'remote_addr', 'protocol', 'login_from',
             'command_amount', 'date_start', 'duration', 'terminal_display', 'actions'
           ]
         },
         columnsMeta: {
-          index: {
-            prop: 'index',
-            label: this.$t('sessions.id'),
+          id: {
+            prop: 'id',
+            label: this.$t('common.Number'),
             align: 'center',
-            width: '40px',
+            width: '80px',
             formatter: function(row, column, cellValue, index) {
               const label = index + 1
               const route = { to: { name: 'SessionDetail', params: { id: row.id }}}
               return <router-link {...{ attrs: route }} class='link'>{ label }</router-link>
+            }
+          },
+          can_join: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          can_replay: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          can_terminate: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          has_command: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          is_finished: {
+            formatterArgs: {
+              showFalse: false
+            }
+          },
+          has_replay: {
+            formatterArgs: {
+              showFalse: false
             }
           },
           asset: {
@@ -59,11 +85,7 @@ export default {
             label: this.$t('sessions.command'),
             width: '90px'
           },
-          system_user: {
-            width: '100px'
-          },
           login_from: {
-            label: this.$t('sessions.loginFrom'),
             width: '115px'
           },
           remote_addr: {

@@ -56,7 +56,7 @@ export default {
   .page-heading-left, h2 {
     font-size: 16px;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 32px;
     color: #1F2329;
   }
 

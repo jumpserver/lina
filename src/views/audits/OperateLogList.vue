@@ -42,7 +42,13 @@ export default {
       loading: false,
       tableConfig: {
         url: '/api/v1/audits/operate-logs/',
-        columns: ['user', 'action_display', 'resource_type_display', 'resource', 'remote_addr', 'datetime', 'actions'],
+        columnsShow: {
+          min: ['user', 'resource'],
+          default: [
+            'user', 'action_display', 'resource_type_display', 'resource', 'remote_addr',
+            'datetime', 'actions'
+          ]
+        },
         columnsMeta: {
           resource_type: {
             width: '180px'

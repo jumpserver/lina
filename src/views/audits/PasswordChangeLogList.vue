@@ -17,7 +17,11 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/password-change-logs/',
-        columns: ['user', 'change_by', 'remote_addr', 'datetime'],
+        hasColumnActions: false,
+        columnsShow: {
+          min: ['user', 'change_by'],
+          default: ['user', 'change_by', 'remote_addr', 'datetime']
+        },
         columnsMeta: {
           remote_addr: {
             width: '140px'
