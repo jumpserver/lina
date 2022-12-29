@@ -3,8 +3,8 @@
 </template>
 
 <script type="text/jsx">
-import { AccountShowFormatter, DetailFormatter } from '@/components/TableFormatters'
 import TreeTable from '../TreeTable'
+import { DetailFormatter } from '@/components/TableFormatters'
 
 export default {
   name: 'GrantedAssets',
@@ -57,32 +57,19 @@ export default {
       tableConfig: {
         url: this.tableUrl,
         hasTree: true,
-        columns: [
-          {
-            prop: 'name',
-            label: this.$t('assets.Name'),
+        excludes: ['specific'],
+        columnShow: {
+          min: ['name', 'address', 'accounts']
+        },
+        hasColumnActions: false,
+        columnsMeta: {
+          name: {
             formatter: DetailFormatter,
-            sortable: true,
             formatterArgs: {
               route: 'AssetDetail'
             }
-          },
-          {
-            prop: 'address',
-            label: this.$t('assets.Address'),
-            width: '140px',
-            sortable: 'custom'
-          },
-          {
-            prop: 'accounts',
-            label: this.$t('assets.Account'),
-            align: 'center',
-            formatter: AccountShowFormatter,
-            formatterArgs: {
-              getUrl: this.getShowUrl.bind(this)
-            }
           }
-        ]
+        }
       },
       headerActions: {
         hasLeftActions: false,
