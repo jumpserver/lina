@@ -12,7 +12,7 @@
     <slot />
     <div slot="footer" class="dialog-footer">
       <slot name="footer">
-        <div v-if="showButton">
+        <div>
           <el-button v-if="showCancel" @click="onCancel">{{ cancelTitle }}</el-button>
           <el-button v-if="showConfirm" type="primary" :loading="loadingStatus" @click="onConfirm">
             {{ confirmTitle }}

@@ -23,7 +23,7 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        url: '/api/v1/assets/gather-account-automations/',
+        url: '/api/v1/accounts/gather-account-automations/',
         activeMenu: 'Detail',
         actions: {
           deleteSuccessRoute: 'AccountGatherListIndex'

@@ -16,7 +16,7 @@ export default {
     const vm = this
     return {
       tableConfig: {
-        url: '/api/v1/assets/change-secret-automations/',
+        url: '/api/v1/accounts/change-secret-automations/',
         excludes: ['password_rules'],
         columnsShow: {
           min: ['name', 'actions'],
@@ -97,7 +97,7 @@ export default {
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/assets/change-secret-executions/`,
+                      `/api/v1/accounts/change-secret-executions/`,
                       {
                         automation: row.id,
                         type: row.type.value

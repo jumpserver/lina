@@ -171,7 +171,7 @@ export default {
                   can: this.$hasPerm('accounts.view_accountsecret'),
                   type: 'primary',
                   callback: ({ row }) => {
-                    vm.secretUrl = `/api/v1/assets/account-secrets/${row.id}/`
+                    vm.secretUrl = `/api/v1/accounts/account-secrets/${row.id}/`
                     vm.account = row
                     vm.showViewSecretDialog = false
                     setTimeout(() => {

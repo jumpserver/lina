@@ -17,7 +17,7 @@ export default {
     return {
       tableConfig: {
         name: 'TaskListTable',
-        url: '/api/v1/assets/gather-account-automations/',
+        url: '/api/v1/accounts/gather-account-automations/',
         permissions: {
           app: 'assets',
           resource: 'gatheraccountsautomation'
@@ -74,7 +74,7 @@ export default {
                   can: vm.$hasPerm('accounts.add_gatheraccountsexecution'),
                   callback: function(data) {
                     this.$axios.post(
-                      `/api/v1/assets/gather-account-executions/`,
+                      `/api/v1/accounts/gather-account-executions/`,
                       {
                         automation: data.row.id,
                         type: data.row.type.value

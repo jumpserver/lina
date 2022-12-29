@@ -49,7 +49,7 @@ export default {
     return {
       accountsSelected: [],
       tableConfig: {
-        url: '/api/v1/assets/account-templates/',
+        url: '/api/v1/accounts/account-templates/',
         columns: ['name', 'username', 'privileged'],
         columnsMeta: {
           privileged: {

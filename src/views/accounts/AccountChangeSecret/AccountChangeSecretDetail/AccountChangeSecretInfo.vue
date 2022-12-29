@@ -39,7 +39,7 @@ export default {
           callbacks: {
             click: function() {
               this.$axios.post(
-                `/api/v1/assets/change-secret-executions/`,
+                `/api/v1/accounts/change-secret-executions/`,
                 { plan: this.object.id }
               ).then(res => {
                 window.open(`/#/ops/celery/task/${res.task}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
@@ -48,7 +48,7 @@ export default {
           }
         }
       ],
-      url: `/api/v1/assets/change-secret-automations/${this.object.id}`,
+      url: `/api/v1/accounts/change-secret-automations/${this.object.id}`,
       detailFields: [
         'name',
         {

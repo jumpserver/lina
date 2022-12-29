@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/assets/gather-account-automations/${this.object.id}/`,
+      url: `/api/v1/accounts/gather-account-automations/${this.object.id}/`,
       detailFields: [
         'name', 'is_periodic',
         {

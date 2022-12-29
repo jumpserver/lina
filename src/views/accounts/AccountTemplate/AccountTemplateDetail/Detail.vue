@@ -38,7 +38,7 @@ export default {
           callbacks: {
             change: function(val) {
               this.$axios.patch(
-                `/api/v1/assets/account-templates/${this.object.id}/`,
+                `/api/v1/accounts/account-templates/${this.object.id}/`,
                 { privileged: val }
               ).then(res => {
                 this.$message.success(this.$tc('common.updateSuccessMsg'))
@@ -49,7 +49,7 @@ export default {
           }
         }
       ],
-      url: `/api/v1/assets/account-templates/${this.object.id}/`,
+      url: `/api/v1/accounts/account-templates/${this.object.id}/`,
       excludes: ['privileged', 'secret', 'passphrase', 'specific']
     }
   },

@@ -21,7 +21,7 @@ export default {
       config: {
         activeMenu: 'AccountBackupPlanExecutionInfo',
         actions: {
-          detailApiUrl: `/api/v1/assets/account-backup-plan-executions/${this.$route.params.id}/`,
+          detailApiUrl: `/api/v1/accounts/account-backup-plan-executions/${this.$route.params.id}/`,
           hasUpdate: false,
           hasDelete: false
         },

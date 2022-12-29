@@ -24,7 +24,7 @@ export default {
       plan: { name: '', username: '', comment: '' },
       config: {
         activeMenu: 'AccountChangeSecretInfo',
-        url: '/api/v1/assets/change-secret-automations',
+        url: '/api/v1/accounts/change-secret-automations',
         submenu: [
           {
             title: this.$t('common.BasicInfo'),

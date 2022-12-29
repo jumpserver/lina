@@ -15,7 +15,7 @@ export default {
     const vm = this
     const fields = getFields.bind(this)()
     return {
-      url: '/api/v1/assets/account-backup-plans/',
+      url: '/api/v1/accounts/account-backup-plans/',
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.AccountBackupPlan.Types'), ['types']],

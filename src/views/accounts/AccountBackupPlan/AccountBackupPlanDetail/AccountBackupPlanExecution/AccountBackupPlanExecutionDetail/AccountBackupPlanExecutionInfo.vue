@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/assets/account-backup-plan-executions/${this.object.id}/`,
+      url: `/api/v1/accounts/account-backup-plan-executions/${this.object.id}/`,
       detailFields: [
         {
           key: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
