@@ -19,12 +19,15 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/audits/job-logs/',
-        columns: [
-          'created_by', 'material', 'is_finished',
-          'is_success', 'time_cost', 'date_start', 'date_finished'
-        ],
+        hasColumnActions: false,
+        columnsShow: {
+          min: ['material', 'is_success'],
+          default: [
+            'created_by', 'material', 'is_finished',
+            'is_success', 'time_cost', 'date_start', 'date_finished'
+          ]
+        },
         columnsMeta: {
-
           time_cost: {
             label: this.$t('ops.time'),
             width: '100px',
