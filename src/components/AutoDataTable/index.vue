@@ -22,7 +22,13 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import {
-  ActionsFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter, ObjectRelatedFormatter
+  ActionsFormatter,
+  ArrayFormatter,
+  ChoicesFormatter,
+  DateFormatter,
+  DetailFormatter,
+  DisplayFormatter,
+  ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
@@ -167,6 +173,9 @@ export default {
           break
         case 'm2m_related_field':
           col.formatter = ObjectRelatedFormatter
+          break
+        case 'list':
+          col.formatter = ArrayFormatter
           break
         case 'field':
           if (meta.child && meta.child.type === 'nested object') {
