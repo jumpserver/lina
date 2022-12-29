@@ -14,9 +14,6 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/adhocs/',
-        columns: [
-          'name', 'module', 'args', 'comment', 'date_updated', 'date_created', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'module', 'comment', 'args', 'comment', 'date_created', 'actions']

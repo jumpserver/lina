@@ -20,9 +20,6 @@ export default {
       uploadDialogVisible: false,
       tableConfig: {
         url: '/api/v1/ops/playbooks/',
-        columns: [
-          'name', 'comment', 'date_created', 'date_updated', 'creator', 'actions'
-        ],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'comment', 'date_created', 'actions']
