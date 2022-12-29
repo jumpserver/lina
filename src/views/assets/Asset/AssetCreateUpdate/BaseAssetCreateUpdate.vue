@@ -56,8 +56,14 @@ export default {
         ],
         fieldsMeta: assetFieldsMeta(this),
         cleanFormValue(values) {
+          // Update 的时候
           const { id = '' } = this.$route.params
           if (id) delete values['accounts']
+
+          if (values.nodes && values.nodes.length === 0) {
+            delete values['nodes']
+          }
+
           return values
         }
       }

@@ -82,7 +82,7 @@ export default {
               onClone: ({ row }) => onAction(row, 'Clone'),
               performDelete: ({ row }) => {
                 const id = row.id
-                const url = `/api/v1/assets/assets/${id}/`
+                const url = `/api/v1/terminal/applet-hosts/${id}/`
                 return this.$axios.delete(url)
               },
               extraActions: [

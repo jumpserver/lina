@@ -25,7 +25,7 @@ export default {
       url: '/api/v1/accounts/push-account-automations/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.Asset'), ['username', 'assets', 'nodes']],
+        [this.$t('assets.Username'), ['username']],
         [
           this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
           [
