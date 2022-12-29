@@ -15,7 +15,7 @@ const options = {
       return name + '="' + xss.escapeAttrValue(value) + '"'
     } else {
       if (tag === 'a') {
-        return name + '="' + value + '"'
+        return name + '="' + xss.escapeAttrValue(value) + '"'
       }
     }
   }
