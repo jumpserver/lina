@@ -33,7 +33,7 @@
             />
           </div>
         </div>
-        <div class="transition-box" style="width: calc(100% - 17px);">
+        <div class="transition-box" style="width: calc(100% - 7px);">
           <slot name="table">
             <ListTable
               ref="ListTable"
@@ -191,7 +191,7 @@ export default {
   .mini {
     position: relative;
     margin-right: 5px;
-    width: 12px !important;
+    width: 2px !important;
   }
 
   .tree-table-content {
