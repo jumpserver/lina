@@ -43,7 +43,10 @@ export default {
         permissions: {
           resource: 'commandstorage'
         },
-        columns: ['name', 'type', 'comment', 'is_default', 'actions'],
+        columnsShow: {
+          min: ['name', 'type', 'actions'],
+          default: ['name', 'type', 'comment', 'is_default', 'actions']
+        },
         columnsMeta: {
           comment: {
             sortable: 'custom'
@@ -51,11 +54,6 @@ export default {
           name: {
             formatter: function(row) {
               return row.name
-            }
-          },
-          type: {
-            formatter: function(row) {
-              return row.type
             }
           },
           is_default: {
