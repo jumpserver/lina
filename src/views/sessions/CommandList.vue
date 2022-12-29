@@ -48,10 +48,6 @@ export default {
             return 'command'
           }
         },
-        columns: [
-          'expandCol', 'input', 'risk_level', 'user', 'remote_addr',
-          'asset', 'system_user', 'session', 'timestamp'
-        ],
         extraQuery: {
           date_to: dateTo,
           date_from: dateFrom
