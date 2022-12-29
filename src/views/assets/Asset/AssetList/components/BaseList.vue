@@ -12,11 +12,7 @@
 <script>
 import { ListTable } from '@/components'
 import {
-  ActionsFormatter,
-  DetailFormatter,
-  TagsFormatter,
-  ChoicesFormatter,
-  ArrayFormatter
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter
 } from '@/components/TableFormatters'
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'

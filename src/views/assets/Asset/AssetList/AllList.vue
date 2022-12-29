@@ -85,7 +85,6 @@ export default {
     this.treeRef = this.$refs.AssetTreeTAble.$refs.TreeList
   },
   methods: {
-
     showAll({ node, showCurrentAsset }) {
       this.$cookie.set('show_current_asset', showCurrentAsset, 1)
       this.decorateRMenu()
