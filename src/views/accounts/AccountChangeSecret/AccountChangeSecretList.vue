@@ -84,10 +84,10 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecretAutomationCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecretAutomationUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'AccountChangeSecretUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {
