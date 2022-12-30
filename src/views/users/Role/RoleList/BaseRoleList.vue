@@ -25,7 +25,7 @@ export default {
       scopeRole: scopeRole,
       tableConfig: {
         url: `/api/v1/rbac/${this.scope}-roles/`,
-        excludes: ['name', 'permissions'],
+        columnsExclude: ['name', 'permissions'],
         columnsShow: {
           min: ['display_name', 'action'],
           default: ['display_name', 'users_amount', 'builtin', 'comment', 'actions']

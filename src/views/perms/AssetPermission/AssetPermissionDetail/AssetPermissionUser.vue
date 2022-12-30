@@ -32,8 +32,8 @@ export default {
       tableConfig: {
         url: `/api/v1/perms/asset-permissions/${this.object.id}/users/all/`,
         hasColumnActions: false,
-        excludes: ['user'],
-        extraColumns: ['delete_action'],
+        columnsExclude: ['user'],
+        columnsExtra: ['delete_action'],
         columnsShow: {
           min: ['user_display', 'delete_action']
         },

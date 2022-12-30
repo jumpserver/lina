@@ -76,7 +76,7 @@ export default {
           app: 'assets',
           resource: 'asset'
         },
-        excludes: ['specific', 'enabled_info', 'info'],
+        columnsExclude: ['specific', 'enabled_info', 'info'],
         columnsShow: {
           min: ['name', 'address', 'actions'],
           default: [

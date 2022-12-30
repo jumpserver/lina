@@ -16,7 +16,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/tickets/flows/',
-        excludes: ['rules'],
+        columnsExclude: ['rules'],
         columnsShow: {
           min: ['type', 'actions'],
           default: [

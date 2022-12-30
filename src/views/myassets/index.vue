@@ -40,7 +40,7 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/users/self/assets/',
         hasTree: true,
-        excludes: ['specific'],
+        columnsExclude: ['specific'],
         columnsShow: {
           default: ['name', 'address', 'platform', 'accounts', 'actions'],
           min: ['name', 'address', 'actions']

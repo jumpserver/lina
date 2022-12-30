@@ -13,8 +13,8 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
-        excludes: ['meta', 'summary'],
-        extraColumns: ['queue', 'comment', 'count'],
+        columnsExclude: ['meta', 'summary'],
+        columnsExtra: ['queue', 'comment', 'count'],
         columnsShow: {
           min: ['name', 'actions']
         },

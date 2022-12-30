@@ -25,7 +25,7 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/account-templates/',
         columns: null,
-        excludes: ['specific'],
+        columnsExclude: ['specific'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'username', 'secret_type', 'has_secret', 'privileged', 'actions']

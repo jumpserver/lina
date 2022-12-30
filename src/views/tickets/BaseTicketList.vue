@@ -32,7 +32,7 @@ export default {
       loading: true,
       ticketTableConfig: {
         url: this.url,
-        excludes: ['process_map', 'rel_snapshot'],
+        columnsExclude: ['process_map', 'rel_snapshot'],
         columnsShow: {
           min: ['title', 'type', 'state', 'actions'],
           default: ['title', 'type', 'state', 'status', 'actions']

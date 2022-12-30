@@ -17,7 +17,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
-        excludes: ['password_rules'],
+        columnsExclude: ['password_rules'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

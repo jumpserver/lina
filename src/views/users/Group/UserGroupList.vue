@@ -13,7 +13,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/users/groups/',
-        excludes: ['users'],
+        columnsExclude: ['users'],
         columnsShow: {
           default: ['name', 'users_amount', 'comment', 'actions'],
           min: ['name', 'action']

@@ -35,7 +35,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/terminal/applet-hosts/',
-        excludes: ['info'],
+        columnsExclude: ['info'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

@@ -22,7 +22,7 @@ export default {
       helpMessage: this.$t('setting.helpText.ConnectionTokenList'),
       tableConfig: {
         url: ajaxUrl,
-        excludes: ['actions'],
+        columnsExclude: ['actions'],
         columnsShow: {
           min: ['id', 'actions'],
           default: [

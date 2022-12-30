@@ -18,7 +18,7 @@ export default {
       helpMessage: this.$t('setting.EndpointListHelpMessage'),
       tableConfig: {
         url: '/api/v1/terminal/endpoints/',
-        excludes: ['magnus_listen_db_port'],
+        columnsExclude: ['magnus_listen_db_port'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

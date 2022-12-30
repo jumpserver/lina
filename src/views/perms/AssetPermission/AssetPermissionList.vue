@@ -37,8 +37,8 @@ export default {
       tableConfig: {
         url: '/api/v1/perms/asset-permissions/',
         hasTree: true,
-        excludes: ['actions'],
-        extraColumns: ['action'],
+        columnsExclude: ['actions'],
+        columnsExtra: ['action'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
