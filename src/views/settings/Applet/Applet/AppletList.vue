@@ -19,10 +19,6 @@ export default {
       uploadDialogVisible: false,
       tableConfig: {
         url: '/api/v1/terminal/applets/',
-        columns: [
-          'name', 'version', 'author', 'protocols',
-          'type', 'comment', 'date_created', 'date_updated', 'actions'
-        ],
         columnsShow: {
           min: ['icon', 'name', 'version', 'author', 'protocols', 'actions'],
           default: [
