@@ -42,6 +42,8 @@ export default {
           fields: ['username_group']
         },
         reviewers: {
+          hidden: (item) => item.action !== 'review',
+          rules: [rules.RequiredChange],
           el: {
             value: [],
             ajax: {
