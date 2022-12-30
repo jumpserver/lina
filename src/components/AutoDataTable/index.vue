@@ -269,8 +269,8 @@ export default {
       if (columnsExclude.length > 0) {
         configColumns = configColumns.filter(item => !columnsExclude.includes(item))
       }
-      const hasColumnActions = config.hasColumnActions !== undefined ? config.hasColumnActions : true
       // 解决后端 API 返回字段中包含 actions 的问题;
+      const hasColumnActions = config.hasColumnActions !== undefined ? config.hasColumnActions : true
       if (hasColumnActions && !configColumns.includes('actions')) {
         configColumns.push('actions')
       }
