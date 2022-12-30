@@ -23,6 +23,7 @@ export default {
       tableConfig: {
         url: ajaxUrl,
         columnsExclude: ['actions'],
+        columnsExtra: ['action'],
         columnsShow: {
           min: ['id', 'actions'],
           default: [
