@@ -6,7 +6,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'AccountBackupPlanExecution',
+  name: 'AccountBackupPlanExecutionList',
   components: {
     GenericListTable
   },
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: `/api/v1/accounts/account-backup-plan-executions/?plan_id=${this.object.id}`,
+        url: '/api/v1/accounts/account-backup-plan-executions/?' + `${this.object.id ? 'plan_id=' + this.object.id : ''}`,
         columns: [
           'timedelta', 'trigger_display', 'date_start', 'is_success', 'reason', 'actions'
         ],

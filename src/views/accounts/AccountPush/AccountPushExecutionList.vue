@@ -6,7 +6,7 @@
 import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'AccountChangeSecretExecutionList',
+  name: 'AccountPushExecutionList',
   components: {
     GenericListTable
   },
@@ -21,7 +21,7 @@ export default {
     console.log('this', this)
     return {
       tableConfig: {
-        url: '/api/v1/accounts/change-secret-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
+        url: '/api/v1/accounts/push-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
         columns: [
           'asset_amount', 'node_amount', 'status',
           'trigger_display', 'date_start', 'actions'

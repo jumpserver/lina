@@ -1,16 +1,16 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
-import GenericListPage from '@/layout/components/GenericListPage'
+import { GenericListTable } from '@/layout/components'
 
 export default {
   name: 'AccountPushList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this

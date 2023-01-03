@@ -40,8 +40,8 @@ export default {
       fieldsMeta: {
         ...getChangeSecretFields()
       },
-      createSuccessNextRoute: { name: 'AccountChangeSecretList' },
-      updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
+      createSuccessNextRoute: { name: 'AccountChangeSecretIndex' },
+      updateSuccessNextRoute: { name: 'AccountChangeSecretIndex' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''

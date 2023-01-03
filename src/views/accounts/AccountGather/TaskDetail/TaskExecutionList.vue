@@ -1,30 +1,26 @@
 <template>
-  <GenericListTable ref="GenericListTable" :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import GenericListTable from '@/layout/components/GenericListTable/index'
+import GenericListTable from '@/layout/components/GenericListTable'
 
 export default {
-  name: 'TaskExecutionList',
-  components: { GenericListTable },
+  name: 'AccountGatherTaskExecutionList',
+  components: {
+    GenericListTable
+  },
   props: {
     object: {
       type: Object,
-      default: () => {}
+      required: false,
+      default: () => ({})
     }
   },
   data() {
     return {
-      headerActions: {
-        hasLeftActions: false,
-        hasBulkDelete: false,
-        hasImport: false,
-        hasExport: false,
-        hasSearch: false
-      },
       tableConfig: {
-        url: `/api/v1/accounts/gather-account-executions/?automation_id=${this.object.id}`,
+        url: '/api/v1/accounts/gather-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
         columns: ['trigger_display', 'date_start', 'date_finished', 'status'],
         columnsMeta: {
           timedelta: {
@@ -38,7 +34,18 @@ export default {
             width: null
           }
         }
-
+      },
+      headerActions: {
+        hasSearch: true,
+        hasRefresh: true,
+        hasRightActions: true,
+        hasLeftActions: true,
+        hasMoreActions: false,
+        hasExport: false,
+        hasImport: false,
+        hasCreate: false,
+        hasBulkDelete: false,
+        hasBulkUpdate: false
       }
     }
   }
