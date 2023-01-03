@@ -171,14 +171,16 @@ export default {
     favor(assetId) {
       const data = { asset: assetId }
       const url = '/api/v1/assets/favorite-assets/'
-      this.$axios.post(url, data).then(
-        () => this.allFavorites.push({ asset: assetId })
-      )
+      this.$axios.post(url, data).then(() => {
+        this.allFavorites.push({ asset: assetId })
+        this.$message.success(this.$i18n.t('common.CollectionSucceed'))
+      })
     },
     disfavor(assetId) {
       const url = `/api/v1/assets/favorite-assets/?asset=${assetId}`
       this.$axios.delete(url).then(() => {
         this.allFavorites = this.allFavorites.filter(item => item['asset'] !== assetId)
+        this.$message.success(this.$i18n.t('common.CancelCollection'))
       })
     },
     toggleFavorite(assetId) {
