@@ -5,6 +5,7 @@ import NestedField from '@/components/AutoDataForm/components/NestedField'
 import Switcher from '@/components/FormFields/Switcher'
 import rules from '@/components/DataForm/rules'
 import BasicTree from '@/components/FormFields/BasicTree'
+import JsonEditor from '@/components/FormFields/JsonEditor'
 import { assignIfNot } from '@/utils/common'
 
 export class FormFieldGenerator {
@@ -17,6 +18,7 @@ export class FormFieldGenerator {
     switch (type) {
       case 'labeled_choice':
       case 'choice':
+        // Value 处理事在 AutoDataForm 中处理的
         if (!fieldRemoteMeta['read_only']) {
           field.options = fieldRemoteMeta.choices
         }
@@ -24,7 +26,6 @@ export class FormFieldGenerator {
         break
       case 'multiple choice':
         field.options = fieldRemoteMeta.choices
-        console.log('multiple choice: ', field.options)
         type = 'checkbox-group'
         break
       case 'tree':
@@ -36,6 +37,10 @@ export class FormFieldGenerator {
         field.el = {
           type: 'datetime'
         }
+        break
+      case 'json':
+        type = 'json-editor'
+        field.component = JsonEditor
         break
       case 'field':
         type = ''
@@ -81,7 +86,6 @@ export class FormFieldGenerator {
     }
     // 上面重写了 type
     if (type === 'radio-group') {
-      console.log('Field: ', field)
       if (field.options.length > 4) {
         type = 'select'
         field.el.filterable = true

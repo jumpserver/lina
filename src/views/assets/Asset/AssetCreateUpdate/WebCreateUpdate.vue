@@ -16,7 +16,7 @@ export default {
           'autofill', 'username_selector',
           'password_selector', 'submit_selector',
           'script'
-        ]]
+        ], 1]
       ],
       addFieldsMeta: {
         protocols: {

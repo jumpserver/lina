@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "DynamicUsername": "动态用户名",
     "HistoryPassword": "历史密码",
     "PasswordRecord": "密码记录",
     "AccountHistoryHelpMessage": "记录当前账号的历史版本",

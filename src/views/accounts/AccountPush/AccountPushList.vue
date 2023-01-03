@@ -17,16 +17,11 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/accounts/push-account-automations/',
-        columns: [
-          'name', 'username', 'assets_amount', 'nodes_amount',
-          'password_strategy_display', 'is_periodic', 'periodic_display',
-          'run_times', 'comment', 'org_name', 'actions'
-        ],
+        excludes: ['password_rules', 'type'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'username', 'password_strategy_display',
-            'is_periodic', 'periodic_display', 'run_times', 'actions'
+            'name', 'username', 'triggers', 'secret_type', 'actions'
           ]
         },
         columnsMeta: {
@@ -37,7 +32,14 @@ export default {
             }
           },
           username: {
-            showOverflowTooltip: true
+            showOverflowTooltip: true,
+            formatter: ({ username }) => {
+              if (username === '@USER') {
+                return this.$t('accounts.DynamicUsername')
+              } else {
+                return username
+              }
+            }
           },
           assets_amount: {
             label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
@@ -52,18 +54,6 @@ export default {
             width: '220px',
             showOverflowTooltip: true
           },
-          is_periodic: {
-            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
-            formatterArgs: {
-              showFalse: false
-            },
-            width: '80px'
-          },
-          periodic_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
-            showOverflowTooltip: true,
-            width: '150px'
-          },
           run_times: {
             label: vm.$t('xpack.ChangeAuthPlan.ExecutionTimes'),
             width: '87px',
@@ -74,6 +64,9 @@ export default {
                 activeTab: 'ChangeSecretAutomationExecutionList'
               }
             }
+          },
+          is_active: {
+            width: '87px'
           },
           comment: {
             width: '90px'

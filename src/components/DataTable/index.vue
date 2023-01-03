@@ -21,7 +21,8 @@ export default {
   props: {
     config: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -90,42 +91,37 @@ export default {
           }
           return query
         },
-        theRowDefaultIsSelected: (row) => { return false }
+        theRowDefaultIsSelected: (row) => {
+          return false
+        }
       }
     }
   },
   computed: {
+    iListeners() {
+      const defaultListeners = {}
+      return Object.assign(defaultListeners, this.$listeners, this.tableConfig?.listeners)
+    },
+    dataTable() {
+      return this.$refs.table
+    },
     tableConfig() {
       const tableDefaultConfig = this.defaultConfig
-      tableDefaultConfig.paginationSize = _.get(this.globalTableConfig, 'paginationSize', 15)
+      tableDefaultConfig.paginationSize = 15
       let tableAttrs = tableDefaultConfig.tableAttrs
       if (this.config.tableAttrs) {
         tableAttrs = Object.assign(tableAttrs, this.config.tableAttrs)
       }
       const config = Object.assign(tableDefaultConfig, this.config)
       config.tableAttrs = tableAttrs
+      this.$log.debug('elTableConfig', config)
       return config
-    },
-    iListeners() {
-      const defaultListeners = {
-      }
-      return Object.assign(defaultListeners, this.$listeners, this.tableConfig.listeners)
-    },
-    dataTable() {
-      return this.$refs.table
     },
     ...mapGetters({
       'globalTableConfig': 'tableConfig'
     })
   },
-  watch: {
-    config: {
-      handler() {
-        // this.getList()
-      },
-      deep: true
-    }
-  },
+  watch: {},
   methods: {
     getList() {
       this.$refs.table.clearSelection()
@@ -171,8 +167,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .el-data-table >>> .el-table {
-    .table{
+  .el-data-table > > > .el-table {
+    .table {
       margin-top: 15px;
     }
 

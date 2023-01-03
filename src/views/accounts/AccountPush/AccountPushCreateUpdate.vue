@@ -25,19 +25,24 @@ export default {
       url: '/api/v1/accounts/push-account-automations/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('common.Username'), ['username']],
-        [
-          this.$t('assets.Secret'),
-          [
-            'secret_type', 'secret_strategy', 'secret',
-            'password_rules', 'ssh_key_change_strategy',
-            'ssh_key', 'passphrase'
-          ]
-        ],
+        ['触发方式', ['triggers']],
+        [this.$t('assets.Account'), [
+          'username', 'dynamic_username',
+          'secret_type', 'secret_strategy', 'secret',
+          'password_rules', 'ssh_key', 'passphrase'
+        ]],
+        [this.$t('common.Action'), ['action', 'ssh_key_change_strategy']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
-        ...getChangeSecretFields()
+        ...getChangeSecretFields(),
+        username: {
+          hidden: (formValue) => formValue['dynamic_username']
+        },
+        ssh_key_change_strategy: {
+          hidden: (formValue) => formValue['action'] !== 'create_and_push' ||
+            formValue['secret_type'] !== 'ssh_key'
+        }
       },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
@@ -46,6 +51,7 @@ export default {
           data.secret = data[secretType]
           delete data[secretType]
         }
+        console.log('Data: ', data)
         return data
       }
     }
