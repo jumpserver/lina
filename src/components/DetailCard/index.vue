@@ -1,5 +1,5 @@
 <template>
-  <IBox :title="title" fa="fa-info-circle">
+  <IBox :title="title" :fa="fa">
     <el-form class="content" label-position="left" label-width="25%">
       <el-form-item v-for="item in items" :key="item.key" :label="item.key">
         <ItemValue class="item-value" :value="item.value" v-bind="item" />
@@ -22,6 +22,10 @@ export default {
       default() {
         return this.$t('common.BasicInfo')
       }
+    },
+    fa: {
+      type: String,
+      default: 'fa-info-circle'
     },
     items: {
       type: Array,

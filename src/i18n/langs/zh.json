@@ -337,6 +337,7 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "SpecificInfo": "特殊信息",
     "CollectionSucceed": "收藏成功",
     "CancelCollection": "取消收藏",
     "Version": "版本",
