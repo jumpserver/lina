@@ -57,6 +57,20 @@ export default {
         }
 
         let value = this.object[name]
+
+        if (Array.isArray(value)) {
+          value.forEach(item => {
+            const fieldName = `${name}.${item.name}`
+            if (excludes.includes(fieldName)) {
+              return
+            }
+            this.items.push({
+              key: item.label,
+              value: item.value
+            })
+          })
+          continue
+        }
         const label = fieldMeta.label
         if (value === undefined || value === null || value === '') {
           value = '-'

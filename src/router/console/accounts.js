@@ -91,8 +91,18 @@ export default [
     children: [
       {
         path: '',
+        component: () => import('@/views/accounts/AccountGather/index.vue'),
+        name: 'AccountGatherIndex',
+        meta: {
+          title: i18n.t('xpack.GatherUser.GatherUserTaskList'),
+          permissions: ['accounts.view_gatheraccountsautomation']
+        }
+      },
+      {
+        path: 'automation',
         component: () => import('@/views/accounts/AccountGather/AccountGatherTaskList.vue'),
         name: 'AccountGatherTaskList',
+        hidden: true,
         meta: {
           title: i18n.t('xpack.GatherUser.GatherUserTaskList'),
           permissions: ['accounts.view_gatheraccountsautomation']
@@ -129,6 +139,16 @@ export default [
           permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
         }
+      },
+      {
+        path: 'executions',
+        component: () => import('@/views/accounts/AccountGather/TaskDetail/TaskExecutionList.vue'),
+        name: 'AccountGatherTaskExecutionList',
+        hidden: true,
+        meta: {
+          title: i18n.t('xpack.ChangeAuthPlan.ExecutionList'),
+          permissions: ['accounts.view_gatheraccountsexecution']
+        }
       }
     ]
   },
@@ -144,12 +164,22 @@ export default [
     children: [
       {
         path: '',
+        component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
+        name: 'AccountChangeSecretIndex',
+        meta: {
+          title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
+          permissions: ['accounts.view_changesecretautomation']
+        }
+      },
+      {
+        path: 'automation',
         component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue'),
         name: 'AccountChangeSecretList',
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
           permissions: ['accounts.view_changesecretautomation']
-        }
+        },
+        hidden: true
       },
       {
         path: 'create',
@@ -182,13 +212,26 @@ export default [
         }
       },
       {
+        path: 'executions',
+        component: () => import(
+          '@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/' +
+          'AccountChangeSecretExecutionList.vue'
+          ),
+        name: 'AccountChangeSecretExecutionList',
+        hidden: true,
+        meta: {
+          title: i18n.t('xpack.ChangeAuthPlan.ExecutionList'),
+          permissions: ['accounts.view_changesecretexecution']
+        }
+      },
+      {
         path: 'executions/:id',
         component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionDetail/index.vue'),
         name: 'AccountChangeSecretExecutionDetail',
         hidden: true,
         meta: {
           title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
-          permissions: ['accounts.view_automationexecution']
+          permissions: ['accounts.view_changesecretexecution']
         }
       }
     ]
@@ -200,14 +243,23 @@ export default [
     meta: {
       app: 'accounts',
       name: 'AccountPushList',
-      resource: 'pushaccountautomation',
-      permissions: ['accounts.view_pushaccountautomation']
+      resource: 'pushaccountautomation'
     },
     children: [
       {
         path: '',
+        component: () => import('@/views/accounts/AccountPush/index.vue'),
+        name: 'AccountPushIndex',
+        meta: {
+          title: i18n.t('accounts.AccountPush.AccountPushList'),
+          permissions: ['accounts.view_pushaccountautomation']
+        }
+      },
+      {
+        path: 'automation',
         component: () => import('@/views/accounts/AccountPush/AccountPushList.vue'),
         name: 'AccountPushList',
+        hidden: true,
         meta: {
           title: i18n.t('accounts.AccountPush.AccountPushList'),
           permissions: ['accounts.view_pushaccountautomation']
@@ -232,6 +284,16 @@ export default [
           title: i18n.t('accounts.AccountPush.AccountPushUpdate'),
           permissions: ['accounts.change_pushaccountautomation']
         }
+      },
+      {
+        path: 'executions',
+        component: () => import('@/views/accounts/AccountPush/AccountPushExecutionList.vue'),
+        name: 'AccountPushExecutionList',
+        hidden: true,
+        meta: {
+          title: i18n.t('xpack.AccountPush.ExecutionList'),
+          permissions: ['accounts.view_pushaccountexecution']
+        }
       }
     ]
   },
@@ -248,6 +310,16 @@ export default [
     children: [
       {
         path: '',
+        component: () => import('@/views/accounts/AccountBackupPlan/index.vue'),
+        name: 'AccountBackupIndex',
+        meta: {
+          title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
+          permissions: ['accounts.view_accountbackupautomation']
+        }
+      },
+      {
+        path: 'automation',
+        hidden: true,
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanList.vue'),
         name: 'AccountBackupPlanList',
         meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') }
@@ -282,7 +354,7 @@ export default [
       {
         path: 'executions/:id',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
-        name: 'AccountBackupPlanExecutionDetail',
+        name: 'AccountBackupPlanExecutionList',
         meta: { title: i18n.t('xpack.AccountBackupPlan.ExecutionDetail') },
         hidden: true
       }

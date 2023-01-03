@@ -30,7 +30,7 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/assets/platforms/',
-        excludes: ['automation'],
+        columnsExclude: ['automation'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'category', 'type', 'actions']

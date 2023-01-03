@@ -13,7 +13,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/acls/login-asset-acls/',
-        excludes: ['users', 'assets', 'accounts'],
+        columnsExclude: ['users', 'assets', 'accounts'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [

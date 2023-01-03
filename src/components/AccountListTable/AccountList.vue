@@ -100,7 +100,7 @@ export default {
           app: 'assets',
           resource: 'account'
         },
-        excludes: ['specific'],
+        columnsExclude: ['specific'],
         columnsShow: {
           min: ['username', 'actions'],
           default: [

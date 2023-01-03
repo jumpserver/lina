@@ -13,7 +13,7 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/acls/login-acls/?user=${this.$route.params.id}`,
-        excludes: ['rules'],
+        columnsExclude: ['rules'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'priority', 'is_active', 'user_display', 'action', 'comment', 'actions']

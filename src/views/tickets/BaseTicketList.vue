@@ -32,14 +32,17 @@ export default {
       loading: true,
       ticketTableConfig: {
         url: this.url,
-        columns: [
-          {
-            prop: 'serial_num',
+        columnsExclude: ['process_map', 'rel_snapshot'],
+        columnsShow: {
+          min: ['title', 'type', 'state', 'actions'],
+          default: ['title', 'type', 'state', 'status', 'actions']
+        },
+        columnsMeta: {
+          serial_num: {
             label: this.$t('common.Number'),
             sortable: 'custom'
           },
-          {
-            prop: 'title',
+          title: {
             label: this.$t('tickets.title'),
             formatter: DetailFormatter,
             sortable: 'custom',
@@ -60,25 +63,21 @@ export default {
               }
             }
           },
-          {
-            prop: 'applicant',
+          applicant: {
             label: this.$t('tickets.user'),
             sortable: 'custom',
             formatter: row => {
               return row.rel_snapshot.applicant
             }
           },
-          {
-            prop: 'type',
+          type: {
             label: this.$t('tickets.type'),
             width: '160px',
             formatter: row => {
               return row.type.label
             }
           },
-          {
-            prop: 'status',
-            label: this.$t('tickets.status'),
+          status: {
             align: 'center',
             width: '90px',
             sortable: 'custom',
@@ -90,8 +89,7 @@ export default {
               }
             }
           },
-          {
-            prop: 'state',
+          state: {
             label: this.$t('tickets.action'),
             align: 'center',
             width: '90px',
@@ -121,18 +119,17 @@ export default {
               }
             }
           },
-          {
-            prop: 'date_created',
+          date_created: {
             label: this.$t('tickets.date'),
             sortable: 'custom',
             formatter: (row) => toSafeLocalDateStr(row.date_created),
             width: '160px'
           }
-        ]
+        }
       },
       ticketActions: {
+        hasExport: false,
         hasLeftActions: this.hasMoreActions,
-        hasRightActions: false,
         canCreate: this.$hasPerm('tickets.view_ticket'),
         hasBulkDelete: false,
         searchConfig: {

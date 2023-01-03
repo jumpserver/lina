@@ -22,8 +22,8 @@ export default {
         url: `/api/v1/perms/asset-permissions/?user_id=${this.object.id}`,
         hasSelection: false,
         hasTree: true,
-        excludes: ['actions'],
-        extraColumns: ['action'],
+        columnsExclude: ['actions'],
+        columnsExtra: ['action'],
         columnsMeta: {
           name: {
             formatterArgs: {

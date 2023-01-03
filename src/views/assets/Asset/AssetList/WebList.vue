@@ -18,7 +18,7 @@ export default {
           createRoute: 'WebCreate'
         },
         tableConfig: {
-          excludes: ['username_selector', 'password_selector', 'submit_selector', 'script'],
+          columnsExclude: ['username_selector', 'password_selector', 'submit_selector', 'script'],
           columnsMeta: {
             autofill: {
               width: '100px'

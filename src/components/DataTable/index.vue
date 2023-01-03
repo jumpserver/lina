@@ -211,4 +211,10 @@ export default {
       }
     }
   }
+  .el-data-table >>> .el-table .el-table__header > thead > tr .is-sortable {
+    padding: 5px 0;
+    .cell {
+      padding-top: 3px!important;
+    }
+  }
 </style>

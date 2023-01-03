@@ -28,7 +28,7 @@ export default {
     return {
       tableConfig: {
         url: this.url,
-        extraColumns: ['index'],
+        columnsExtra: ['index'],
         columnsShow: {
           min: ['id', 'actions'],
           default: [

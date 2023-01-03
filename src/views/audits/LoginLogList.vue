@@ -20,7 +20,7 @@ export default {
           app: 'audits',
           resource: 'userloginlog'
         },
-        excludes: ['backend'],
+        columnsExclude: ['backend'],
         hasColumnActions: false,
         columnsShow: {
           min: ['username', 'type'],

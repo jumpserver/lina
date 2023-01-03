@@ -20,7 +20,7 @@ export default {
           app: 'xpack',
           resource: 'account'
         },
-        excludes: ['attrs'],
+        columnsExclude: ['attrs'],
         columnsMeta: {
           name: {
             sortable: true,

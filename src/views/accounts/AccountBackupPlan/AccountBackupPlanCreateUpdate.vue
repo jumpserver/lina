@@ -53,8 +53,8 @@ export default {
           }
         }
       },
-      createSuccessNextRoute: { name: 'AccountBackupPlanList' },
-      updateSuccessNextRoute: { name: 'AccountBackupPlanList' },
+      createSuccessNextRoute: { name: 'AccountBackupIndex' },
+      updateSuccessNextRoute: { name: 'AccountBackupIndex' },
       cleanFormValue(data) {
         if (data['interval'] === '') {
           delete data['interval']

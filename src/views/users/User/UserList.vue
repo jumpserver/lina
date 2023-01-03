@@ -45,9 +45,8 @@ export default {
         permissions: {
           resource: 'user'
         },
-        excludes: [
+        columnsExclude: [
           'password', 'password_strategy', 'public_key',
-          // mfa_level 字段已经包含下面 mfa 相关的状态
           'is_otp_secret_key_bound', 'mfa_enabled', 'mfa_force_enabled',
           'is_service_account', 'avatar_url'
         ],

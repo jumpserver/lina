@@ -1,7 +1,8 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard v-bind="detailBasicConfig" />
+      <AutoDetailCard v-if="detailSpecificConfig.show" v-bind="detailSpecificConfig" />
     </el-col>
     <el-col :md="10" :sm="24">
       <QuickActions type="primary" :actions="quickActions" />
@@ -135,32 +136,44 @@ export default {
         title: this.$t('assets.Label'),
         labels: this.object.labels
       },
-      url: '/api/v1/assets/assets/',
-      detailFields: [
-        'name',
-        {
-          key: this.$t('assets.Category'),
-          value: this.object.category.label
-        },
-        {
-          key: this.$t('assets.Type'),
-          value: this.object.type.label
-        },
-        'address',
-        {
-          key: this.$t('assets.Protocols'),
-          value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
-        },
-        {
-          key: this.$t('assets.Domain'),
-          value: this.object.domain?.name || ''
-        },
-        {
-          key: this.$t('assets.Platform'),
-          value: this.object.platform.name
-        },
-        'is_active', 'date_created', 'created_by', 'comment'
-      ]
+      detailBasicConfig: {
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        fields: [
+          'name',
+          {
+            key: this.$t('assets.Category'),
+            value: this.object.category.label
+          },
+          {
+            key: this.$t('assets.Type'),
+            value: this.object.type.label
+          },
+          'address',
+          {
+            key: this.$t('assets.Protocols'),
+            value: this.object.protocols.map(i => i.name + '/' + i.port).join(',')
+          },
+          {
+            key: this.$t('assets.Domain'),
+            value: this.object.domain?.name || ''
+          },
+          {
+            key: this.$t('assets.Platform'),
+            value: this.object.platform.name
+          },
+          'is_active', 'date_created', 'created_by', 'comment'
+        ]
+      },
+      detailSpecificConfig: {
+        show: this.object['specific_info']?.length > 0,
+        fa: 'fa-podcast',
+        title: this.$t('common.SpecificInfo'),
+        url: `/api/v1/assets/assets/${this.object.id}/`,
+        object: this.object,
+        fields: ['specific_info'],
+        excludes: ['specific_info.script']
+      }
     }
   },
   computed: {

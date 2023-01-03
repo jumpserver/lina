@@ -1,23 +1,23 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountChangeSecretList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this
     return {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
-        excludes: ['password_rules'],
+        columnsExclude: ['password_rules'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
@@ -84,10 +84,10 @@ export default {
             width: '164px',
             formatterArgs: {
               onClone: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecretAutomationCreate', query: { clone_from: row.id }})
+                vm.$router.push({ name: 'AccountChangeSecretCreate', query: { clone_from: row.id }})
               },
               onUpdate: ({ row }) => {
-                vm.$router.push({ name: 'ChangeSecretAutomationUpdate', params: { id: row.id }})
+                vm.$router.push({ name: 'AccountChangeSecretUpdate', params: { id: row.id }})
               },
               extraActions: [
                 {

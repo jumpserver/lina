@@ -321,6 +321,9 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "SpecificInfo": "特別情報",
+    "CollectionSucceed": "コレクション成功",
+    "CancelCollection": "収集の取消し",
     "NoContent": "まだ内容がない",
     "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
     "VerificationCodeSent": "検証コードが送信されました",

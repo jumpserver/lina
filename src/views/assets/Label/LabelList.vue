@@ -13,7 +13,7 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/assets/labels/',
-        excludes: ['category'],
+        columnsExclude: ['category'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
