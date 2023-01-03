@@ -23,10 +23,13 @@ export default {
       showExecutionDetailDialog: false,
       tableConfig: {
         url: '/api/v1/ops/job-executions/',
+        columns: [
+          'id', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+        ],
         columnsShow: {
           min: ['material', 'actions'],
           default: [
-            'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
+            'id', 'material', 'job_type', 'is_finished', 'is_success', 'time_cost', 'date_created', 'actions'
           ]
         },
         columnsMeta: {
@@ -45,6 +48,9 @@ export default {
               }
               return '-'
             }
+          },
+          material: {
+            width: '160px'
           },
           job_type: {
             width: '96px'

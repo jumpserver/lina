@@ -13,11 +13,9 @@ export default {
     return {
       tableConfig: {
         url: '/api/v1/ops/tasks/',
-        excludes: ['meta', 'summary', 'id'],
-        extraColumns: ['queue', 'comment', 'count'],
-        columnsShow: {
-          min: ['name', 'actions']
-        },
+        columns: [
+          'name', 'queue', 'count', 'state', 'comment', 'last_published_time'
+        ],
         columnsMeta: {
           name: {
             formatterArgs: {
@@ -73,6 +71,7 @@ export default {
         }
       },
       headerActions: {
+        hasRightActions: false,
         hasLeftActions: false
       }
     }
