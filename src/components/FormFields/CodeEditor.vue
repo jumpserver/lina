@@ -29,8 +29,8 @@
               size="mini"
               default-first-option
               :multiple="item.el.multiple"
-              :allow-create="item.el.create"
-              :filterable="item.el.create"
+              :allow-create="item.el.create || false"
+              :filterable="item.el.create || false"
               :placeholder="item.name"
               @change="item.callback(item.value)"
             >
