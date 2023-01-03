@@ -253,9 +253,6 @@ export default {
             value: item.username
           })
         })
-        this.toolbar[1].options.push({
-          label: this.$t('ops.ManualInput'), value: 'manualInput'
-        })
         this.ready = true
       })
     },
