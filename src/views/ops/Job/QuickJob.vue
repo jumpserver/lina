@@ -146,7 +146,7 @@ export default {
               label: 'Shell', value: 'shell'
             },
             {
-              label: 'Powershell', value: 'powershell'
+              label: 'Powershell', value: 'win_shell'
             },
             {
               label: 'Python', value: 'python'
@@ -330,8 +330,8 @@ export default {
         nodes: nodes,
         module: this.module,
         args: this.command,
-        run_as: this.runas,
-        run_as_policy: this.runasPolicy,
+        runas: this.runas,
+        runas_policy: this.runasPolicy,
         instant: true,
         is_periodic: false,
         timeout: this.timeout
