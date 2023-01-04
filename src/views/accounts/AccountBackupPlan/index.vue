@@ -15,13 +15,13 @@ export default {
         activeMenu: 'AccountBackupPlanList',
         submenu: [
           {
-            title: this.$t('xpack.AccountBackupPlan.AccountBackupPlan'),
+            title: this.$t('accounts.AccountBackup.AccountBackup'),
             name: 'AccountBackupPlanList',
             hidden: !this.$hasPerm('accounts.view_accountbackupautomation'),
             component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanList.vue')
           },
           {
-            title: this.$t('xpack.AccountBackupPlan.ExecutionList'),
+            title: this.$t('accounts.AccountBackup.ExecutionList'),
             name: 'AccountBackupPlanExecutionList',
             hidden: !this.$hasPerm('accounts.view_accountbackupexecution'),
             component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionList.vue')

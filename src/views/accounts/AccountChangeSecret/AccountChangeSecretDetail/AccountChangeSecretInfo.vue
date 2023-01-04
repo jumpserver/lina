@@ -30,10 +30,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('xpack.ChangeAuthPlan.ManualExecutePlan'),
+          title: this.$t('accounts.AccountChangeSecret.ManualExecutePlan'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.ChangeAuthPlan.Execute'),
+            label: this.$t('accounts.AccountChangeSecret.Execute'),
             disabled: !this.$hasPerm('accounts.add_changesecretexection')
           },
           callbacks: {
@@ -52,30 +52,30 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('xpack.ChangeAuthPlan.Username'),
+          key: this.$t('accounts.AccountChangeSecret.Username'),
           value: this.object.accounts.join(', ')
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
+          key: this.$t('accounts.AccountChangeSecret.AssetAmount'),
           value: this.object.assets.length
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+          key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
           value: this.object.nodes.length
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+          key: this.$t('accounts.AccountChangeSecret.PasswordStrategy'),
           value: this.object.secret_strategy.label
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.RegularlyPerform'),
+          key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
           value: this.object.crontab,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
+          key: this.$t('accounts.AccountChangeSecret.CyclePerform'),
           value: this.object.interval,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>

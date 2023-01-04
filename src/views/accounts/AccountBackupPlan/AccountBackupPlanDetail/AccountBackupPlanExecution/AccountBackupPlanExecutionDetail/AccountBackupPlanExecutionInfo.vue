@@ -25,12 +25,12 @@ export default {
       url: `/api/v1/accounts/account-backup-plan-executions/${this.object.id}/`,
       detailFields: [
         {
-          key: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+          key: this.$t('accounts.AccountChangeSecret.TimeDelta'),
           value: this.object.timedelta.toFixed(2) + 's'
         },
         'date_start', 'is_success', 'reason',
         {
-          key: this.$t('xpack.ChangeAuthPlan.MailRecipient'),
+          key: this.$t('accounts.AccountChangeSecret.MailRecipient'),
           value: this.object.recipients ? this.object.recipients.map(
             i => `${i[0]}` + `${i[1] ? ': ' + this.$t('xpack.ChangeAuthPlan.ContainAttachment') : ''}`).join(', ') : ''
         }

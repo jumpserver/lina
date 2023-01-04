@@ -15,13 +15,13 @@ export default {
         activeMenu: 'AccountChangeSecretList',
         submenu: [
           {
-            title: this.$t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
+            title: this.$t('accounts.AccountChangeSecret.AccountChangeSecret'),
             name: 'AccountChangeSecretList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation'),
             component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretList.vue')
           },
           {
-            title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
+            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution'),
             component: () => import(

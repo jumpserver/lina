@@ -34,7 +34,7 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
           },
           {
-            title: this.$t('xpack.ChangeAuthPlan.TaskList'),
+            title: this.$t('accounts.AccountChangeSecret.TaskList'),
             name: 'AccountChangeSecretExecutionTaskList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
           }

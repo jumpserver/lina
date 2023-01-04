@@ -199,7 +199,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_account'),
+                  can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/${row.id}/verify/`,
@@ -258,6 +258,7 @@ export default {
             type: 'default'
           }
         ],
+        canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
           getUrlQuery: false,
           exclude: ['asset']
@@ -269,7 +270,7 @@ export default {
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
-      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
+      this.$set(this.headerActions.exportOptions, 'url', iNew.replace(/(.*)accounts/, '$1account-secrets'))
     }
   },
   mounted() {
