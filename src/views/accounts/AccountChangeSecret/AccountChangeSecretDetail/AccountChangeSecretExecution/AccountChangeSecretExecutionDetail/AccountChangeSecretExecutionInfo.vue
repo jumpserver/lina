@@ -25,18 +25,18 @@ export default {
       url: `/api/v1/accounts/change-secret-executions/${this.object.id}`,
       detailFields: [
         {
-          key: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
+          key: this.$t('accounts.AccountChangeSecret.AssetAmount'),
           value: this.object.snapshot.asset_amount
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+          key: this.$t('accounts.AccountChangeSecret.NodeAmount'),
           value: this.object.snapshot.node_amount
         },
         'trigger_display', 'date_start',
         {
-          key: this.$t('xpack.ChangeAuthPlan.MailRecipient'),
+          key: this.$t('accounts.AccountChangeSecret.MailRecipient'),
           value: this.object.recipients ? this.object.recipients.map(
-            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('xpack.ChangeAuthPlan.ContainAttachment') : ''}`).join(', ') : ''
+            i => `${i[0]}` + `${i[1] ? ': ' + this.$t('accounts.AccountChangeSecret.ContainAttachment') : ''}`).join(', ') : ''
         }
       ]
     }

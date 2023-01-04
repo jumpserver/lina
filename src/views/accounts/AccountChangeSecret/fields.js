@@ -5,7 +5,7 @@ import { Required } from '@/components/DataForm/rules'
 
 var validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
-    return callback(new Error(i18n.t('xpack.ChangeAuthPlan.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
+    return callback(new Error(i18n.t('accounts.AccountChangeSecret.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
   callback()
 }
@@ -15,7 +15,7 @@ function getAssetPasswordRulesItems() {
     {
       id: 'length',
       prop: 'length',
-      label: i18n.t('xpack.ChangeAuthPlan.PasswordLength'),
+      label: i18n.t('accounts.AccountChangeSecret.PasswordLength'),
       rules: [Required],
       hidden: ({ secret_strategy, secret_type }) => (secret_strategy === 'specific' || secret_type !== 'password')
     }
@@ -73,7 +73,7 @@ export const getChangeSecretFields = () => {
     secret_strategy: {
       type: 'radio-group',
       options: [],
-      label: i18n.t('xpack.ChangeAuthPlan.PasswordStrategy'),
+      label: i18n.t('accounts.AccountChangeSecret.PasswordStrategy'),
       on: ([value], updateForm) => {
       }
     },
@@ -108,8 +108,8 @@ export const getChangeSecretFields = () => {
       items: generatePasswordRulesItemsFields('asset')
     },
     recipients: {
-      label: i18n.t('xpack.ChangeAuthPlan.Addressee'),
-      helpText: i18n.t('xpack.ChangeAuthPlan.OnlyMailSend'),
+      label: i18n.t('accounts.AccountChangeSecret.Addressee'),
+      helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
       el: {
         value: [],
         ajax: {

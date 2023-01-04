@@ -27,7 +27,7 @@ export default {
         ],
         columnsMeta: {
           asset: {
-            label: this.$t('xpack.ChangeAuthPlan.Asset'),
+            label: this.$t('accounts.AccountChangeSecret.Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
@@ -59,17 +59,17 @@ export default {
             }
           },
           is_success: {
-            label: this.$t('xpack.ChangeAuthPlan.Success')
+            label: this.$t('accounts.AccountChangeSecret.Success')
           },
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
             }
           },
           reason_display: {
-            label: this.$t('xpack.AccountBackupPlan.Reason')
+            label: this.$t('accounts.AccountChangeSecret.Reason')
           }
         }
       },

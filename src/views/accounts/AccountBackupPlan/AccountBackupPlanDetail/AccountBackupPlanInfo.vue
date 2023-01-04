@@ -30,10 +30,10 @@ export default {
     return {
       quickActions: [
         {
-          title: this.$t('xpack.ChangeAuthPlan.ManualExecutePlan'),
+          title: this.$t('accounts.AccountChangeSecret.ManualExecutePlan'),
           attrs: {
             type: 'primary',
-            label: this.$t('xpack.ChangeAuthPlan.Execute')
+            label: this.$t('accounts.AccountChangeSecret.Execute')
           },
           callbacks: {
             click: function() {
@@ -51,14 +51,14 @@ export default {
       detailFields: [
         'name',
         {
-          key: this.$t('xpack.ChangeAuthPlan.RegularlyPerform'),
+          key: this.$t('accounts.AccountChangeSecret.RegularlyPerform'),
           value: this.object.crontab,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>
           }
         },
         {
-          key: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
+          key: this.$t('accounts.AccountChangeSecret.CyclePerform'),
           value: this.object.interval,
           formatter: (item, val) => {
             return <span>{this.object.is_periodic ? val : ''}</span>

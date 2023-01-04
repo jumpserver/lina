@@ -198,7 +198,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
+      title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
       app: 'accounts',
       licenseRequired: true
     },
@@ -208,7 +208,7 @@ export default [
         component: () => import('@/views/accounts/AccountChangeSecret/index.vue'),
         name: 'AccountChangeSecretList',
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ChangeAuthPlan'),
+          title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -218,7 +218,7 @@ export default [
         name: 'AccountChangeSecretCreate',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanCreate'),
+          title: i18n.t('accounts.AccountChangeSecret.AssetChangeSecretCreate'),
           permissions: ['accounts.add_changesecretautomation']
         }
       },
@@ -228,7 +228,7 @@ export default [
         name: 'AccountChangeSecretUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlanUpdate'),
+          title: i18n.t('accounts.AccountChangeSecret.AssetChangeSecretUpdate'),
           permissions: ['accounts.change_changesecretautomation']
         }
       },
@@ -238,7 +238,7 @@ export default [
         name: 'AccountChangeSecretDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.AssetChangeAuthPlan'),
+          title: i18n.t('accounts.AccountChangeSecret.AccountChangeSecret'),
           permissions: ['accounts.view_changesecretautomation']
         }
       },
@@ -251,7 +251,7 @@ export default [
         name: 'AccountChangeSecretExecutionList',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionList'),
+          title: i18n.t('accounts.AccountChangeSecret.ExecutionList'),
           permissions: ['accounts.view_changesecretexecution']
         }
       },
@@ -261,7 +261,7 @@ export default [
         name: 'AccountChangeSecretExecutionDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionDetail'),
+          title: i18n.t('accounts.AccountChangeSecret.ExecutionDetail'),
           permissions: ['accounts.view_changesecretexecution']
         }
       }
@@ -272,7 +272,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
+      title: i18n.t('accounts.AccountBackup.AccountBackup'),
       app: 'accounts',
       resource: 'accountbackupautomation',
       licenseRequired: true
@@ -283,7 +283,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackupPlan/index.vue'),
         name: 'AccountBackupList',
         meta: {
-          title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan'),
+          title: i18n.t('accounts.AccountBackup.AccountBackup'),
           permissions: ['accounts.view_accountbackupautomation']
         }
       },
@@ -292,7 +292,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
         name: 'AccountBackupPlanCreate',
         meta: {
-          title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanCreate'),
+          title: i18n.t('accounts.AccountBackup.AccountBackupCreate'),
           action: 'create'
         },
         hidden: true
@@ -302,7 +302,7 @@ export default [
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanCreateUpdate.vue'),
         name: 'AccountBackupPlanUpdate',
         meta: {
-          title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlanUpdate'),
+          title: i18n.t('accounts.AccountBackup.AccountBackupUpdate'),
           action: 'update'
         },
         hidden: true
@@ -311,14 +311,14 @@ export default [
         path: ':id',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/index.vue'),
         name: 'AccountBackupPlanDetail',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.AccountBackupPlan') },
+        meta: { title: i18n.t('accounts.AccountBackup.AccountBackup') },
         hidden: true
       },
       {
         path: 'executions/:id',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
         name: 'AccountBackupPlanExecutionList',
-        meta: { title: i18n.t('xpack.AccountBackupPlan.ExecutionDetail') },
+        meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true
       }
     ]
