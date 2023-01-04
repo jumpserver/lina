@@ -135,7 +135,7 @@ export default [
     component: empty,
     redirect: '',
     meta: {
-      title: i18n.t('xpack.GatherUser.GatherUserList'),
+      title: i18n.t('accounts.AccountGather.AccountGatherList'),
       app: 'accounts',
       licenseRequired: true
     },
@@ -145,7 +145,7 @@ export default [
         component: () => import('@/views/accounts/AccountGather/index.vue'),
         name: 'AccountGatherList',
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskList'),
+          title: i18n.t('accounts.AccountGather.AccountGatherTaskList'),
           permissions: ['accounts.view_gatheraccountsautomation']
         }
       },
@@ -155,7 +155,7 @@ export default [
         name: 'AccountGatherTaskCreate',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskCreate'),
+          title: i18n.t('accounts.AccountGather.AccountGatherTaskCreate'),
           permissions: ['accounts.add_gatheraccountsautomation']
         }
       },
@@ -165,7 +165,7 @@ export default [
         name: 'AccountGatherTaskDetail',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskDetail'),
+          title: i18n.t('accounts.AccountGather.AccountGatherTaskDetail'),
           permissions: ['accounts.view_gatheraccountsautomation']
         }
       },
@@ -175,7 +175,7 @@ export default [
         name: 'AccountGatherTaskUpdate',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.GatherUser.GatherUserTaskUpdate'),
+          title: i18n.t('accounts.AccountGather.AccountGatherTaskUpdate'),
           action: 'update',
           permissions: ['accounts.change_gatheraccountsautomation'],
           activeMenu: '/accounts/account-gather'
@@ -187,7 +187,7 @@ export default [
         name: 'AccountGatherTaskExecutionList',
         hidden: true,
         meta: {
-          title: i18n.t('xpack.ChangeAuthPlan.ExecutionList'),
+          title: i18n.t('accounts.AccountGather.ExecutionList'),
           permissions: ['accounts.view_gatheraccountsexecution']
         }
       }
@@ -267,7 +267,6 @@ export default [
       }
     ]
   },
-
   {
     path: 'account-backup',
     component: empty,
