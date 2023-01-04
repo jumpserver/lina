@@ -26,7 +26,7 @@ import {
   ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
-import { diffObject, newURL } from '@/utils/common'
+import { newURL } from '@/utils/common'
 import ColumnSettingPopover from './components/ColumnSettingPopover'
 
 export default {
@@ -65,9 +65,8 @@ export default {
   watch: {
     config: {
       handler: _.debounce(function(iNew, iOld) {
-        const diff = diffObject(iNew, iOld)
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found: ', diff)
+        this.$log.debug('AutoDataTable Config change found: ')
       }, 500),
       deep: true,
       immediate: false
