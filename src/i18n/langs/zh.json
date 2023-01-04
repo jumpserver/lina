@@ -336,6 +336,8 @@
     "ReLoginErr": "登录时长已超过 5 分钟，请重新登录"
   },
   "common": {
+    "Activity": "活动",
+    "Last8": "最近 8 次",
     "Version": "版本",
     "Publish": "发布",
     "Icon": "图标",
