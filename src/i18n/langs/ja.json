@@ -323,6 +323,9 @@
   "common": {
     "Activity": "イベント",
     "Last8": "最近 8 回です",
+    "SpecificInfo": "特別情報",
+    "CollectionSucceed": "コレクション成功",
+    "CancelCollection": "収集の取消し",
     "NoContent": "まだ内容がない",
     "NeedAddAppsOrSystemUserErrMsg": "アプリケーションまたはシステムユーザーを追加してください",
     "VerificationCodeSent": "検証コードが送信されました",

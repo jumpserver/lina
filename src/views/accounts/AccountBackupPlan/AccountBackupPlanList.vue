@@ -1,16 +1,16 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 import { ArrayFormatter, DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   name: 'AccountBackupPlanList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this

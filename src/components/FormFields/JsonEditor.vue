@@ -18,8 +18,8 @@ export default {
   components: { JsonEditor },
   props: {
     value: {
-      type: [String, Object],
-      default: () => ''
+      type: [String, Object, Array],
+      default: () => ({})
     }
   },
   data() {
@@ -53,20 +53,25 @@ export default {
 
 <style lang="scss" scoped>
   @import "~@/styles/variables.scss";
+
   .json-editor {
-    &>>> .jsoneditor {
+    & > > > .jsoneditor {
       border: 1px solid #e5e6e7;
     }
-    &>>> .jsoneditor-compact {
+
+    & > > > .jsoneditor-compact {
       display: none;
     }
-    &>>> .jsoneditor-modes {
+
+    & > > > .jsoneditor-modes {
       display: none;
     }
-    &>>> .jsoneditor-poweredBy {
+
+    & > > > .jsoneditor-poweredBy {
       display: none;
     }
-    &>>> .jsoneditor-menu {
+
+    & > > > .jsoneditor-menu {
       background: var(--color-primary);
       border-bottom: 1px solid var(--color-primary);
     }

@@ -20,6 +20,7 @@
 
 <script>
 import BaseFormatter from './base'
+
 export default {
   name: 'StatusFormatter',
   extends: BaseFormatter,

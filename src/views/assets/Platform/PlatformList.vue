@@ -98,6 +98,13 @@ export default {
         canCreate: () => {
           return this.$hasPerm('assets.add_platform')
         },
+        handleImportClick: ({ selectedRows }) => {
+          this.$eventBus.$emit('showImportDialog', {
+            selectedRows,
+            url: '/api/v1/assets/platforms/',
+            name: this?.name
+          })
+        },
         moreCreates: {
           callback: (item) => {
             this.$router.push({

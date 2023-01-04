@@ -50,8 +50,8 @@ export default {
           type: 'switch'
         }
       },
-      createSuccessNextRoute: { name: 'AccountGatherTaskList' },
-      updateSuccessNextRoute: { name: 'AccountGatherTaskList' },
+      createSuccessNextRoute: { name: 'AccountGatherIndex' },
+      updateSuccessNextRoute: { name: 'AccountGatherIndex' },
       cleanFormValue(values) {
         values.interval = values.interval || null
         return values

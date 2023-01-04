@@ -315,6 +315,9 @@
   "common": {
     "Activity": "Activity",
     "Last8": "Last 8 times",
+    "SpecificInfo": "Specific",
+    "CollectionSucceed": "Collection succeed",
+    "CancelCollection": "Cancel collection",
     "NeedAddAppsOrSystemUserErrMsg": "Please add apps or system user",
     "VerificationCodeSent": "The verification code has been sent",
     "SendVerificationCode": "Send verification code",

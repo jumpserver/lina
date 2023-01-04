@@ -22,17 +22,12 @@
 <script type="text/jsx">
 import DataTable from '../DataTable'
 import {
-  ActionsFormatter,
-  ArrayFormatter,
-  ChoicesFormatter,
-  DateFormatter,
-  DetailFormatter,
-  DisplayFormatter,
+  ActionsFormatter, ArrayFormatter, ChoicesFormatter, DateFormatter, DetailFormatter, DisplayFormatter,
   ObjectRelatedFormatter
 } from '@/components/TableFormatters'
 import i18n from '@/i18n/i18n'
-import ColumnSettingPopover from './components/ColumnSettingPopover'
 import { newURL } from '@/utils/common'
+import ColumnSettingPopover from './components/ColumnSettingPopover'
 
 export default {
   name: 'AutoDataTable',
@@ -66,15 +61,15 @@ export default {
       }
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     config: {
-      handler(iNew) {
+      handler: _.debounce(function(iNew, iOld) {
         this.optionUrlMetaAndGenCols()
-        this.$log.debug('AutoDataTable Config change found')
-      },
-      deep: true
+        this.$log.debug('AutoDataTable Config change found: ')
+      }, 500),
+      deep: true,
+      immediate: false
     }
   },
   created() {
@@ -82,7 +77,9 @@ export default {
   },
   methods: {
     async optionUrlMetaAndGenCols() {
-      if (this.config.url === '') { return }
+      if (this.config.url === '') {
+        return
+      }
       const url = (this.config.url.indexOf('?') === -1) ? `${this.config.url}?draw=1&display=1` : `${this.config.url}&draw=1&display=1`
       this.$store.dispatch('common/getUrlMeta', { url: url }).then(data => {
         const method = this.method.toUpperCase()
@@ -126,7 +123,6 @@ export default {
               false: i18n.t('common.Invalid')
             }
           }
-          col.align = 'center'
           col.width = '80px'
           break
         case 'is_active':
@@ -137,7 +133,7 @@ export default {
               false: i18n.t('common.Inactive')
             }
           }
-          col.align = 'center'
+          col.align = 'left'
           col.width = '80px'
           break
         case 'datetime':
@@ -177,6 +173,7 @@ export default {
         case 'list':
           col.formatter = ArrayFormatter
           break
+        case 'json':
         case 'field':
           if (meta.child && meta.child.type === 'nested object') {
             col.formatter = ObjectRelatedFormatter
@@ -195,9 +192,9 @@ export default {
         return (
           <span>{column.label}
             <el-tooltip placement='bottom' effect='light' popperClass='help-tips'>
-              <div slot='content' domPropsInnerHTML={helpTips} />
+              <div slot='content' domPropsInnerHTML={helpTips}/>
               <el-button style='padding: 0'>
-                <i class='fa fa-info-circle' />
+                <i class='fa fa-info-circle'/>
               </el-button>
             </el-tooltip>
           </span>
@@ -261,8 +258,8 @@ export default {
       const config = _.cloneDeep(this.config)
       let columns = []
       const allColumns = Object.entries(this.meta)
-        .filter(([name, meta]) => { return !meta['write_only'] })
-        .map(([name, meta]) => { return name })
+        .filter(([name, meta]) => !meta['write_only'])
+        .map(([name, meta]) => name)
         .concat(config.columnsExtra || [])
       let configColumns = config.columns || allColumns
       const columnsExclude = config.columnsExclude || []

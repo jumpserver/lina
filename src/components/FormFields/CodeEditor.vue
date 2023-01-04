@@ -29,8 +29,8 @@
               size="mini"
               default-first-option
               :multiple="item.el.multiple"
-              :allow-create="item.el.create"
-              :filterable="item.el.create && filterLabel(item).indexOf($tc('ops.ManualInput')) > -1"
+              :allow-create="item.el.create || false"
+              :filterable="item.el.create || false"
               :placeholder="item.name"
               @change="item.callback(item.value)"
             >
@@ -139,13 +139,6 @@ export default {
     return {}
   },
   computed: {
-    filterLabel() {
-      return (item) => {
-        const select = item.options.find(i => i.value === item.value) || {}
-        const label = (Object.keys(select).length > 0 ? select.label : this.$t('ops.ManualInput')) + ':'
-        return label
-      }
-    },
     isManual() {
       return () => {
       }
@@ -244,8 +237,6 @@ export default {
   position: relative;
   left: 0px;
   box-sizing: border-box;
-  padding-left: 15px;
-  margin-right: 30px;
   height: 28px;
   line-height: 28px;
   visibility: hidden;

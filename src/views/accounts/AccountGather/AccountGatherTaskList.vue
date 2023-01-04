@@ -1,22 +1,22 @@
 <template>
-  <GenericListPage :table-config="tableConfig" :header-actions="headerActions" />
+  <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
 </template>
 
 <script>
-import { GenericListPage } from '@/layout/components'
+import { GenericListTable } from '@/layout/components'
 import { DetailFormatter } from '@/components/TableFormatters'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
+  name: 'AccountGatherTaskList',
   components: {
-    GenericListPage
+    GenericListTable
   },
   data() {
     const vm = this
-
     return {
       tableConfig: {
-        name: 'TaskListTable',
+        name: 'AccountGatherTaskList',
         url: '/api/v1/accounts/gather-account-automations/',
         permissions: {
           app: 'accounts',

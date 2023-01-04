@@ -14,6 +14,7 @@
       <BaseList
         slot="table"
         v-bind="tableConfig"
+        :header-actions="headerActions"
         :add-extra-more-actions="addExtraMoreActions"
       />
     </AssetTreeTAble>
@@ -35,6 +36,7 @@ export default {
   },
   data() {
     const vm = this
+    const tableUrl = '/api/v1/assets/assets/'
     return {
       treeRef: null,
       showPlatform: false,
@@ -43,8 +45,17 @@ export default {
         showMenu: true
       },
       tableConfig: {
-        url: '/api/v1/assets/assets/',
+        url: tableUrl,
         category: 'all'
+      },
+      headerActions: {
+        handleImportClick: ({ selectedRows }) => {
+          this.$eventBus.$emit('showImportDialog', {
+            selectedRows,
+            url: tableUrl,
+            name: this?.name
+          })
+        }
       },
       addExtraMoreActions: [
         {
