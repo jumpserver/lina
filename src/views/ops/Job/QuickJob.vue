@@ -146,7 +146,7 @@ export default {
               label: 'Shell', value: 'shell'
             },
             {
-              label: 'Powershell', value: 'win_shell'
+              label: 'Powershell', value: 'powershell'
             },
             {
               label: 'Python', value: 'python'
@@ -328,7 +328,7 @@ export default {
       const data = {
         assets: hosts,
         nodes: nodes,
-        module: this.module,
+        module: this.module === 'powershell' ? 'win_shell' : this.module,
         args: this.command,
         runas: this.runas,
         runas_policy: this.runasPolicy,
