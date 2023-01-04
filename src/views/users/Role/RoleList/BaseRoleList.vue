@@ -57,10 +57,10 @@ export default {
           actions: {
             formatterArgs: {
               canUpdate: ({ row }) => {
-                return this.hasPermNotBuiltin(row, `rbac.change_${row.scope}role`)
+                return this.hasPermNotBuiltin(row, `rbac.change_${row.scope?.value}role`)
               },
               canDelete: ({ row }) => {
-                return this.hasPermNotBuiltin(row, `rbac.delete_${row.scope}role`)
+                return this.hasPermNotBuiltin(row, `rbac.delete_${row.scope?.value}role`)
               },
               updateRoute: {
                 name: 'RoleUpdate',
