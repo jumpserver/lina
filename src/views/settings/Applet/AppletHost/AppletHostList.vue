@@ -89,8 +89,8 @@ export default {
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' }
+                      `/api/v1/assets/assets/${row.id}/tasks/?oid=${row.org_id}`,
+                      { action: 'refresh' },
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
