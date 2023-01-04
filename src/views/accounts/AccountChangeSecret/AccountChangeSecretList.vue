@@ -44,30 +44,30 @@ export default {
             width: '140px'
           },
           assets_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
+            label: vm.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px'
           },
           nodes_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px'
           },
           password_strategy_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+            label: vm.$t('accounts.AccountChangeSecret.PasswordStrategy'),
             width: '220px'
           },
           is_periodic: {
-            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
+            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
             width: '150px'
           },
           run_times: {
-            label: vm.$t('xpack.ChangeAuthPlan.ExecutionTimes'),
+            label: vm.$t('accounts.AccountChangeSecret.ExecutionTimes'),
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {

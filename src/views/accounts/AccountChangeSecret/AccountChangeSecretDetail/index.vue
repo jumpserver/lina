@@ -32,12 +32,12 @@ export default {
             hidden: () => !this.$hasPerm('accounts.view_changesecretautomation')
           },
           {
-            title: this.$t('xpack.ChangeAuthPlan.AssetAndNode'),
+            title: this.$t('accounts.AccountChangeSecret.AssetAndNode'),
             name: 'AccountChangeSecretAsset',
             hidden: () => !this.$hasPerm('accounts.change_changesecretautomation')
           },
           {
-            title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
+            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
             name: 'AccountChangeSecretExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
           }

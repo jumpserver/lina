@@ -10,8 +10,8 @@ const validatorInterval = (rule, value, callback) => {
 
 function getAccountBackupFields() {
   const recipients = {
-    label: i18n.t('xpack.ChangeAuthPlan.Addressee'),
-    helpText: i18n.t('xpack.ChangeAuthPlan.OnlyMailSend'),
+    label: i18n.t('accounts.AccountChangeSecret.Addressee'),
+    helpText: i18n.t('accounts.AccountChangeSecret.OnlyMailSend'),
     el: {
       value: [],
       ajax: {

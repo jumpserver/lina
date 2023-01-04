@@ -42,20 +42,20 @@ export default {
             }
           },
           assets_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.AssetAmount'),
+            label: vm.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px'
           },
           nodes_amount: {
-            label: vm.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px'
           },
           password_strategy_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.PasswordStrategy'),
+            label: vm.$t('accounts.AccountChangeSecret.PasswordStrategy'),
             width: '220px',
             showOverflowTooltip: true
           },
           run_times: {
-            label: vm.$t('xpack.ChangeAuthPlan.ExecutionTimes'),
+            label: vm.$t('accounts.AccountChangeSecret.ExecutionTimes'),
             width: '87px',
             formatter: DetailFormatter,
             formatterArgs: {

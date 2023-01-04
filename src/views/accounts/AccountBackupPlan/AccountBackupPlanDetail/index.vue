@@ -28,7 +28,7 @@ export default {
             name: 'AccountBackupPlanInfo'
           },
           {
-            title: this.$t('xpack.ChangeAuthPlan.ExecutionList'),
+            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
             name: 'AccountBackupPlanExecutionList',
             hidden: () => !this.$hasPerm('accounts.view_accountbackupexecution')
           }

@@ -14,18 +14,19 @@
       "AccountPushCreate": "账号推送创建",
       "AccountPushExecutionList": "账号推送执行"
     },
-    "AccountBackupPlan": {
+    "AccountBackup": {
       "Types": "类型",
       "Backup": "备份",
-      "AccountBackupPlan": "账号备份",
-      "AccountBackupPlanCreate": "创建账号备份",
-      "AccountBackupPlanUpdate": "更新账号备份",
+      "AccountBackup": "账号备份",
+      "AccountBackupCreate": "创建账号备份",
+      "AccountBackupUpdate": "更新账号备份",
       "ExecutionDetail": "执行详情",
+      "ExecutionList": "执行列表",
       "MailRecipient": "邮件收件人",
       "IsSuccess": "是否成功",
       "Reason": "原因"
     },
-    "ChangeAuthPlan": {
+    "AccountChangeSecret": {
       "ContainAttachment": "含附件",
       "AddAsset": "添加资产",
       "MailRecipient": "邮件收件人",
@@ -40,10 +41,9 @@
       "SystemUserId": "系统用户Id",
       "AssetAmount": "资产数量",
       "AssetAndNode": "资产和节点",
-      "ChangeAuthPlan": "账号改密",
-      "AssetChangeAuthPlan": "账号改密",
-      "AssetChangeAuthPlanCreate": "创建账号改密",
-      "AssetChangeAuthPlanUpdate": "更新账号改密",
+      "AccountChangeSecret": "账号改密",
+      "AssetChangeSecretCreate": "创建账号改密",
+      "AssetChangeSecretUpdate": "更新账号改密",
       "SymbolSet": "特殊符号集合",
       "SymbolSetHelpText": "请输入此类型数据库支持的特殊符号集合，若生成的随机密码中有此类数据库不支持的特殊字符，改密计划将会失败",
       "CyclePerform": "周期执行",
