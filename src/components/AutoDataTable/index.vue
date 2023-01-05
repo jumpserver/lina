@@ -64,12 +64,11 @@ export default {
   computed: {},
   watch: {
     config: {
-      handler: _.debounce(function(iNew, iOld) {
+      handler: function(iNew, iOld) {
         this.optionUrlMetaAndGenCols()
         this.$log.debug('AutoDataTable Config change found: ')
-      }, 500),
-      deep: true,
-      immediate: false
+      },
+      deep: true
     }
   },
   created() {

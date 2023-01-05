@@ -1,18 +1,12 @@
 <template>
   <span>
-    <el-tooltip v-if="shown" :disabled="!formatterArgs.hasTips" placement="bottom" effect="dark">
-      <div slot="content" v-html="tips" />
-      <span :class="classes">
-        <i v-if="formatterArgs.showIcon && icon" :class="'fa ' + icon" />
-        <span v-if="formatterArgs.showText">{{ text }}</span>
-      </span>
-    </el-tooltip>
-    <span v-else>-</span>
+    hello
   </span>
 </template>
 
 <script>
 import BaseFormatter from './base'
+
 export default {
   name: 'ChoicesFormatter',
   extends: BaseFormatter,
@@ -88,8 +82,7 @@ export default {
       return true
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 
