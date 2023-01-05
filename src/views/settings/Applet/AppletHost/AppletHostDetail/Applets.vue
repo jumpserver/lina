@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       headerConfig: {
+        hasLeftActions: false,
         hasImport: false
       },
       config: {
@@ -65,7 +66,9 @@ export default {
           },
           actions: {
             formatterArgs: {
-              updateRoute: 'AppletPublicationUpdate',
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
               extraActions: [
                 {
                   title: this.$t('common.Deploy'),
@@ -103,7 +106,7 @@ export default {
           }
         },
         {
-          title: '发布所有应用',
+          title: this.$t('common.PublishAllApplets'),
           attrs: {
             type: 'primary',
             label: this.$t('common.Publish')

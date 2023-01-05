@@ -12,7 +12,7 @@
     "AccountPush": {
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
-      "AccountPushExecutionList": "账号推送执行"
+      "AccountPushExecutionList": "执行列表"
     },
     "AccountBackup": {
       "Types": "类型",
@@ -423,6 +423,7 @@
     "CancelCollection": "取消收藏",
     "Version": "版本",
     "Publish": "发布",
+    "PublishAllApplets": "发布所有应用",
     "Icon": "图标",
     "DisplayName": "名称",
     "Automations": "自动化",

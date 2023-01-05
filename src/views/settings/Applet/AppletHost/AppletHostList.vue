@@ -102,7 +102,10 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'AppletHostCreate'
+        createRoute: 'AppletHostCreate',
+        hasRefresh: true,
+        hasExport: false,
+        hasImport: false
       }
     }
   }

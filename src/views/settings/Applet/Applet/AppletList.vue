@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ListTable v-bind="$data" />
-    <UploadDialog :visible.sync="uploadDialogVisible" />
+    <ListTable ref="ListTable" v-bind="$data" />
+    <UploadDialog :visible.sync="uploadDialogVisible" @upload-event="handleUpload" />
   </div>
 </template>
 
@@ -65,7 +65,9 @@ export default {
       headerActions: {
         onCreate: () => {
           this.uploadDialogVisible = true
-        }
+        },
+        hasExport: false,
+        hasImport: false
         // moreCreates: {
         //   callback: (option) => {
         //     this.uploadDialogVisible = true
@@ -82,6 +84,11 @@ export default {
         //    ]
         // }
       }
+    }
+  },
+  methods: {
+    handleUpload(res) {
+      this.$refs.ListTable.reloadTable()
     }
   }
 }
