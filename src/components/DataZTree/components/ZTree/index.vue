@@ -159,7 +159,8 @@ export default {
 
         this.zTree = $.fn.zTree.init($(`#${this.iZTreeID}`), this.treeSetting, res)
         if (!this.treeSetting.customTreeHeader) {
-          this.rootNodeAddDom(this.zTree)
+          const rootNode = this.zTree.getNodes()[0]
+          this.rootNodeAddDom(rootNode)
         }
         // 手动上报事件, Tree加载完成
         this.$emit('TreeInitFinish', this.zTree)
@@ -179,7 +180,7 @@ export default {
       this.showTreeSearch = !this.showTreeSearch
       localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
     },
-    rootNodeAddDom(ztree) {
+    rootNodeAddDom(rootNode) {
       const { showSearch, showRefresh } = this.treeSetting
       const searchIcon = `
         <a class="tree-action-btn" onclick="onSearch()">
@@ -194,7 +195,6 @@ export default {
         <span style="float: right; margin-right: 10px">
           ${treeActions}
         </span>`
-      const rootNode = ztree.getNodes()[0]
       if (rootNode) {
         const $rootNodeRef = $('#' + rootNode.tId + '_a')
         $rootNodeRef.after(icons)
@@ -357,6 +357,10 @@ export default {
         const newNode = { id: 'search', name: name, isParent: true, open: true, zAsync: true }
         searchNode = this.zTree.addNodes(null, newNode)[0]
         searchNode.zAsync = true
+
+        if (!this.treeSetting.customTreeHeader) {
+          this.rootNodeAddDom(searchNode)
+        }
         const nodesGroupByOrg = this.groupBy(nodes, (node) => {
           return node.meta.data.org_name
         })
