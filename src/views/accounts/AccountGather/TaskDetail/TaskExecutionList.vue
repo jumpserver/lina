@@ -20,8 +20,8 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/accounts/gather-account-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
-        columns: ['trigger_display', 'date_start', 'date_finished', 'status'],
+        url: '/api/v1/accounts/gather-account-executions/',
+        columns: ['trigger_display', 'date_start', 'date_finished', 'status', 'actions'],
         columnsMeta: {
           timedelta: {
             label: this.$t('ops.timeDelta'),
@@ -32,6 +32,31 @@ export default {
           },
           date_start: {
             width: null
+          },
+          actions: {
+            formatterArgs: {
+              hasDelete: false,
+              hasUpdate: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  name: 'log',
+                  type: 'primary',
+                  title: this.$t('accounts.AccountChangeSecret.Log'),
+                  callback: function({ row }) {
+                    window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
+                  }
+                },
+                {
+                  name: 'detail',
+                  title: this.$t('accounts.AccountChangeSecret.Detail'),
+                  type: 'info',
+                  callback: function({ row }) {
+                    return this.$router.push({ name: 'AccountGatherExecutionDetail', params: { id: row.id }})
+                  }
+                }
+              ]
+            }
           }
         }
       },

@@ -190,6 +190,16 @@ export default [
           title: i18n.t('accounts.AccountGather.ExecutionList'),
           permissions: ['accounts.view_gatheraccountsexecution']
         }
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/accounts/AccountGather/TaskDetail/AccountGatherExecutionDetail/index.vue'),
+        name: 'AccountGatherExecutionDetail',
+        hidden: true,
+        meta: {
+          title: i18n.t('accounts.AccountGather.ExecutionDetail'),
+          permissions: ['accounts.view_gatheraccountsexecution']
+        }
       }
     ]
   },
@@ -315,9 +325,16 @@ export default [
         hidden: true
       },
       {
-        path: 'executions/:id',
+        path: 'executions',
         component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
         name: 'AccountBackupPlanExecutionList',
+        meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
+        hidden: true
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        name: 'AccountBackupPlanExecutionDetail',
         meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true
       }

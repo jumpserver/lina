@@ -30,13 +30,8 @@ export default {
         },
         submenu: [
           {
-            title: this.$t('xpack.GatherUser.GatherUserTaskDetail'),
+            title: this.$t('common.BasicInfo'),
             name: 'Detail'
-          },
-          {
-            title: this.$t('xpack.GatherUser.GatherUserTaskExecutionList'),
-            name: 'TaskExecutionList',
-            hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution')
           }
         ],
         hasRightSide: true

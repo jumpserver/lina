@@ -91,7 +91,7 @@
       "AccountGatherTaskCreate": "创建任务",
       "AccountGatherTaskList": "账号收集",
       "AccountGatherTaskUpdate": "更新任务",
-      "AccountGatherTaskDetail": "任务详情",
+      "ExecutionDetail": "任务详情",
       "AccountGatherTaskExecutionList": "任务执行列表"
     }
   },
