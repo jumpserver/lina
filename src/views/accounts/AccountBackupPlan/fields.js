@@ -3,7 +3,7 @@ import { CronTab } from '@/components'
 
 const validatorInterval = (rule, value, callback) => {
   if (parseInt(value) < 1) {
-    return callback(new Error(i18n.t('xpack.ChangeAuthPlan.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
+    return callback(new Error(i18n.t('accounts.ChangeAuthPlan.validatorMessage.EnsureThisValueIsGreaterThanOrEqualTo1')))
   }
   callback()
 }
