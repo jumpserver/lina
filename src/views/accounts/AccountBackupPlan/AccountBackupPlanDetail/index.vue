@@ -9,7 +9,7 @@
 <script>
 import { GenericDetailPage } from '@/layout/components'
 import AccountBackupPlanInfo from './AccountBackupPlanInfo'
-import AccountBackupPlanExecutionList from './AccountBackupPlanExecution/AccountBackupPlanExecutionList'
+import AccountBackupPlanExecutionList from '../AccountBackupPlanExecution/AccountBackupPlanExecutionList'
 
 export default {
   components: {
@@ -26,11 +26,6 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'AccountBackupPlanInfo'
-          },
-          {
-            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
-            name: 'AccountBackupPlanExecutionList',
-            hidden: () => !this.$hasPerm('accounts.view_accountbackupexecution')
           }
         ],
         actions: {

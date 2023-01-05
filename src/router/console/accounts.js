@@ -315,9 +315,16 @@ export default [
         hidden: true
       },
       {
-        path: 'executions/:id',
-        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanDetail/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        path: 'executions',
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
         name: 'AccountBackupPlanExecutionList',
+        meta: { title: i18n.t('accounts.AccountBackup.ExecutionList') },
+        hidden: true
+      },
+      {
+        path: 'executions/:id',
+        component: () => import('@/views/accounts/AccountBackupPlan/AccountBackupPlanExecution/AccountBackupPlanExecutionDetail/index.vue'),
+        name: 'AccountBackupPlanExecutionDetail',
         meta: { title: i18n.t('accounts.AccountBackup.ExecutionDetail') },
         hidden: true
       }

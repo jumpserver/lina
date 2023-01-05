@@ -13,7 +13,7 @@ export default {
   props: {
     object: {
       type: Object,
-      required: true,
+      required: false,
       default: () => ({})
     }
   },
