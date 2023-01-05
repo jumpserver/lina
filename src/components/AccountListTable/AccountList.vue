@@ -82,6 +82,10 @@ export default {
     hasImport: {
       type: Boolean,
       default: true
+    },
+    columnsMeta: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -224,7 +228,8 @@ export default {
                 }
               ]
             }
-          }
+          },
+          ...this.columnsMeta
         }
       },
       headerActions: {
