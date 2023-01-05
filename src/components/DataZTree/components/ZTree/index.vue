@@ -181,8 +181,8 @@ export default {
       localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
     },
     onClose() {
-      this.onSearch()
       this.refresh()
+      this.onSearch()
     },
     rootNodeAddDom(rootNode) {
       const { showSearch, showRefresh } = this.treeSetting
