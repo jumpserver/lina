@@ -4,6 +4,7 @@
       <el-col :md="16" :sm="24">
         <AccountListTable
           ref="ListTable"
+          v-bind="$attrs"
           :asset="object"
           :url="iUrl"
           :has-import="false"
