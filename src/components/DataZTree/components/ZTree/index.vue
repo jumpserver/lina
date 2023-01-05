@@ -54,7 +54,7 @@
               :icon-class="'close'"
               class="icon"
               style="font-size: 14px;"
-              @click="onSearch"
+              @click="onClose"
             />
           </span>
         </el-input>
@@ -179,6 +179,10 @@ export default {
     onSearch() {
       this.showTreeSearch = !this.showTreeSearch
       localStorage.setItem('showTreeSearch', JSON.stringify(this.showTreeSearch))
+    },
+    onClose() {
+      this.onSearch()
+      this.refresh()
     },
     rootNodeAddDom(rootNode) {
       const { showSearch, showRefresh } = this.treeSetting
@@ -362,7 +366,7 @@ export default {
           this.rootNodeAddDom(searchNode)
         }
         const nodesGroupByOrg = this.groupBy(nodes, (node) => {
-          return node.meta.data.org_name
+          return node.meta?.data?.org_name
         })
 
         for (const item of nodesGroupByOrg) {
