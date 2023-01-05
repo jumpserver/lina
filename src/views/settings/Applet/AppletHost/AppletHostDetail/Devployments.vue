@@ -9,6 +9,7 @@
 <script>
 import { ListTable } from '@/components'
 import { openTaskPage } from '@/utils/jms'
+
 export default {
   name: 'Developments',
   components: {
@@ -17,7 +18,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -43,12 +45,13 @@ export default {
             label: this.$t('common.Status'),
             formatter: (row) => {
               const typeMapper = {
-                'success': 'success',
-                'error': 'danger',
+                'pending': 'info',
+                'success': 'primary',
+                'failed': 'danger',
                 'unknown': 'warning'
               }
-              const tp = typeMapper[row.status] || 'info'
-              return <el-tag size='mini' type={tp}>{ row.status }</el-tag>
+              const tp = typeMapper[row.status.value] || 'info'
+              return <el-tag size='mini' type={tp}>{row.status.label}</el-tag>
             }
           },
           actions: {

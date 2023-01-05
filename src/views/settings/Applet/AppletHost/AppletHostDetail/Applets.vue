@@ -13,6 +13,7 @@
 import { ListTable, QuickActions } from '@/components'
 import { openTaskPage } from '@/utils/jms'
 import { DetailFormatter } from '@/components/TableFormatters'
+
 export default {
   name: 'Publications',
   components: {
@@ -22,7 +23,8 @@ export default {
   props: {
     object: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data() {
@@ -53,12 +55,13 @@ export default {
             label: this.$t('applets.PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
-                'not_match': 'warning',
-                'published': 'success',
-                'unpublished': 'danger'
+                'pending': 'info',
+                'success': 'primary',
+                'failed': 'danger',
+                'unknown': 'warning'
               }
-              const tp = typeMapper[row.status.value] || 'info'
-              return <el-tag size='mini' type={tp}>{ row.status.label }</el-tag>
+              const tp = typeMapper[row.status.value] || 'warning'
+              return <el-tag size='mini' type={tp}>{row.status.label}</el-tag>
             }
           },
           date_updated: {
@@ -75,8 +78,10 @@ export default {
                   callback: function({ row }) {
                     this.$axios.post(
                       `/api/v1/terminal/applet-host-deployments/applets/`,
-                      { host: row.host.id,
-                        applet_id: row.applet.id }
+                      {
+                        host: row.host.id,
+                        applet_id: row.applet.id
+                      }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
