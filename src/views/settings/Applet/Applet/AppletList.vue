@@ -65,7 +65,9 @@ export default {
       headerActions: {
         onCreate: () => {
           this.uploadDialogVisible = true
-        }
+        },
+        hasExport: false,
+        hasImport: false
         // moreCreates: {
         //   callback: (option) => {
         //     this.uploadDialogVisible = true
