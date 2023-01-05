@@ -26,11 +26,6 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'AccountBackupPlanInfo'
-          },
-          {
-            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
-            name: 'AccountBackupPlanExecutionList',
-            hidden: () => !this.$hasPerm('accounts.view_accountbackupexecution')
           }
         ],
         actions: {
