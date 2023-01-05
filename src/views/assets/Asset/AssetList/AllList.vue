@@ -26,6 +26,7 @@ import { AssetTreeTAble } from '@/components'
 import { mapGetters } from 'vuex'
 import TreeMenu from './components/TreeMenu'
 import BaseList from './components/BaseList'
+import $ from '@/utils/jquery-vendor'
 import { setRouterQuery, setUrlParam } from '@/utils/common'
 
 export default {
@@ -42,6 +43,7 @@ export default {
       showPlatform: false,
       category: 'all',
       treeSetting: {
+        url: '/api/v1/assets/assets/',
         showMenu: true
       },
       tableConfig: {
@@ -96,11 +98,21 @@ export default {
     this.treeRef = this.$refs.AssetTreeTAble.$refs.TreeList
   },
   methods: {
+    decorateRMenu() {
+      const show_current_asset = this.$cookie.get('show_current_asset') || '0'
+      if (show_current_asset === '1') {
+        $('#m_show_asset_all_children_node').css('color', '#606266')
+        $('#m_show_asset_only_current_node').css('color', 'green')
+      } else {
+        $('#m_show_asset_all_children_node').css('color', 'green')
+        $('#m_show_asset_only_current_node').css('color', '#606266')
+      }
+    },
     showAll({ node, showCurrentAsset }) {
       this.$cookie.set('show_current_asset', showCurrentAsset, 1)
       this.decorateRMenu()
       const url = `${this.treeSetting.url}?node_id=${node.meta.data.id}&show_current_asset=${showCurrentAsset}`
-      this.$refs.TreeList.$refs.TreeTable.handleUrlChange(url)
+      this.$refs.AssetTreeTAble.$refs.TreeList.handleUrlChange(url)
     },
     getAssetsUrl(treeNode) {
       let url = '/api/v1/assets/assets/'
