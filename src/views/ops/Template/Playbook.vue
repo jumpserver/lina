@@ -1,7 +1,7 @@
 <template>
   <div>
-    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
-    <UploadDialog :visible.sync="uploadDialogVisible" />
+    <GenericListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
+    <UploadDialog :visible.sync="uploadDialogVisible" @completed="refreshTable" />
   </div>
 </template>
 
@@ -64,6 +64,11 @@ export default {
           this.uploadDialogVisible = true
         }
       }
+    }
+  },
+  methods: {
+    refreshTable() {
+      this.$refs.list.$refs.ListTable.reloadTable()
     }
   }
 }

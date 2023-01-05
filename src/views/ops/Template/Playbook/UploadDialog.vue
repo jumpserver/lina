@@ -1,13 +1,13 @@
 <template>
   <Dialog
-    title="离线上传"
+    :title="$tc('ops.UploadPlaybook')"
     v-bind="$attrs"
+    :show-cancel="false"
     @confirm="onSubmit"
     v-on="$listeners"
   >
     <el-form label-position="top">
       <el-form-item
-        :label="$tc('common.Upload' )"
         :label-width="'100px'"
         class="file-uploader"
       >
@@ -27,10 +27,16 @@
             {{ $t('common.imExport.dragUploadFileInfo') }}
           </div>
           <div slot="tip" class="el-upload__tip">
-            <span :class="{'hasError': hasFileFormatOrSizeError }">
-              {{ $t('terminal.uploadZipTips') }}
-            </span>
+            <span :class="{'hasError': hasFileFormatOrSizeError }" />
             <div v-if="renderError" class="hasError">{{ renderError }}</div>
+            <h5>请上传包含以下示例结构目录的 .zip 压缩文件</h5>
+            <pre style="display:flex; line-height: 1.2em">
+./
+├── roles
+├── vars
+├── set_env.yml
+└── main.yml ({{ $tc('ops.RequiredEntryFile') }})
+            </pre>
           </div>
         </el-upload>
       </el-form-item>
@@ -40,6 +46,7 @@
 
 <script>
 import { Dialog } from '@/components'
+import { uploadPlaybook } from '@/api/ops'
 
 export default {
   components: {
@@ -67,18 +74,12 @@ export default {
       }
       const form = new FormData()
       form.append('path', this.file.raw)
-      this.$axios.post(
-        '/api/v1/ops/playbooks/',
-        form,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          disableFlashErrorMsg: true
-        }
-      ).then(res => {
-        this.$message.success('上传成功')
+      uploadPlaybook(form).then(res => {
         this.$emit('update:visible', false)
+        this.$emit('completed')
+        this.$message.success('上传成功')
       }).catch(err => {
-        this.$message.error(err)
+        console.log(err)
       })
     }
   }
@@ -89,7 +90,7 @@ export default {
 .file-uploader.el-form-item {
   margin-bottom: 0;
 
-  >>> .el-upload {
+  > > > .el-upload {
     width: 100%;
 
     .el-upload-dragger {
