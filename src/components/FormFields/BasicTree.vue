@@ -57,9 +57,6 @@ export default {
       const checkedKeys = checkedNodes
         .filter(item => !item.children)
         .map(node => node.value)
-      if (checkedKeys.length !== 0) {
-        checkedKeys.push('connect')
-      }
       this.$emit('input', checkedKeys)
     },
     setTreeReadonly(tree) {

@@ -1,10 +1,11 @@
-import Layout from '@/layout'
 import i18n from '@/i18n/i18n'
 import empty from '@/layout/empty'
 
+const Setting = () => import('@/views/settings/index')
+
 export default {
   path: '/settings',
-  component: Layout,
+  component: Setting,
   redirect: '/settings/basic',
   name: 'SystemSetting',
   meta: {

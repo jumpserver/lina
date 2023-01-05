@@ -89,7 +89,7 @@ export default {
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
                     this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/?oid=${row.org_id}`,
+                      `/api/v1/assets/assets/${row.id}/tasks/`,
                       { action: 'refresh' },
                     ).then(res => {
                       openTaskPage(res['task'])
@@ -110,7 +110,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host >>> .protocol {
+.applet-host > > > .protocol {
   margin-left: 3px;
 }
 
