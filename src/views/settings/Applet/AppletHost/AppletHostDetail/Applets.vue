@@ -55,7 +55,7 @@ export default {
             label: this.$t('applets.PublishStatus'),
             formatter: (row) => {
               const typeMapper = {
-                'pending': 'info',
+                'pending': 'success',
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'

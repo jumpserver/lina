@@ -45,7 +45,7 @@ export default {
             label: this.$t('common.Status'),
             formatter: (row) => {
               const typeMapper = {
-                'pending': 'info',
+                'pending': 'success',
                 'success': 'primary',
                 'failed': 'danger',
                 'unknown': 'warning'
