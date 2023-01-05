@@ -42,14 +42,14 @@ export default {
             }
           },
           is_periodic: {
-            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
+            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
             width: 150
           },
           executed_amount: {

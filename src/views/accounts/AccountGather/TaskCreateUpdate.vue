@@ -25,11 +25,11 @@ export default {
           hidden: (formValue) => {
             return !formValue.is_periodic
           },
-          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.CrontabOfCreateUpdatePage')
+          helpText: this.$t('accounts.AccountChangeSecret.HelpText.CrontabOfCreateUpdatePage')
         },
         interval: {
-          label: this.$t('xpack.ChangeAuthPlan.CyclePerform'),
-          helpText: this.$t('xpack.ChangeAuthPlan.HelpText.IntervalOfCreateUpdatePage'),
+          label: this.$t('accounts.AccountChangeSecret.CyclePerform'),
+          helpText: this.$t('accounts.AccountChangeSecret.HelpText.IntervalOfCreateUpdatePage'),
           hidden: (formValue) => {
             return !formValue.is_periodic
           }
@@ -50,8 +50,8 @@ export default {
           type: 'switch'
         }
       },
-      createSuccessNextRoute: { name: 'AccountGatherIndex' },
-      updateSuccessNextRoute: { name: 'AccountGatherIndex' },
+      createSuccessNextRoute: { name: 'AccountGatherList' },
+      updateSuccessNextRoute: { name: 'AccountGatherList' },
       cleanFormValue(values) {
         values.interval = values.interval || null
         return values
