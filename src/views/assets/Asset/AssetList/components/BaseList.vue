@@ -134,7 +134,7 @@ export default {
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' }
+                      { action: 'test' }
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
