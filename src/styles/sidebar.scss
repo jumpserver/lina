@@ -79,7 +79,7 @@
       }
 
       &:hover {
-        background-color: $menuHover !important;
+        //background-color: $menuHover !important;
       }
     }
 
@@ -91,10 +91,6 @@
     & .el-submenu-sidebar .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg;
-
-      &:hover {
-        background-color: $subMenuHover !important;
-      }
     }
   }
 

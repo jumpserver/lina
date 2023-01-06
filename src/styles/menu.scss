@@ -55,7 +55,7 @@
     }
 
     &:hover {
-      background-color: $subMenuHover;
+      background-color: $subMenuHover !important;
       color: $subMenuActiveText;
       list-style-type: disc;
     }
