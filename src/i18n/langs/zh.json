@@ -195,6 +195,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "LabelInputFormatValidation": "标签格式错误，正确格式为：name:value",
     "AccessKey": "访问密钥",
     "Token": "令牌",
     "SSHKey": "SSH 密钥",

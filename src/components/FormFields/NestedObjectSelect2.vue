@@ -24,6 +24,10 @@ export default {
     multiple: {
       type: Boolean,
       default: true
+    },
+    customKeyName: {
+      type: String,
+      default: 'name'
     }
   },
   data() {
@@ -64,7 +68,10 @@ export default {
         value = [value]
       }
       value = value.map(v => {
-        return typeof v === 'object' ? v : { pk: v }
+        // uuid v4
+        const uuid = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
+        return typeof v === 'object' ? v
+          : this.$attrs?.allowCreate && !uuid.test(v) ? { [this.customKeyName]: v } : { pk: v }
       })
       if (!this.multiple) {
         value = value[0]
@@ -78,7 +85,7 @@ export default {
       }
       val = val.map((v) => {
         if (v && typeof v === 'object') {
-          return v.pk || v.id
+          return v.pk || v.id || (this.$attrs?.allowCreate ? (v?.[this.customKeyName] + ':' + v?.value) : '')
         } else {
           return v
         }
