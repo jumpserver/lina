@@ -73,7 +73,7 @@ export default {
                   type: 'info',
                   can: this.$hasPerm('accounts.view_changesecretexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountChangeSecretExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
@@ -82,6 +82,14 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('accounts.TaskID'),
+              value: 'automation_id'
+            }
+          ]
+        },
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,
