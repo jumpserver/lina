@@ -22,6 +22,10 @@ export default {
       type: Object,
       default: () => ({})
     },
+    removeFields: {
+      type: [Array, Function],
+      default: () => []
+    },
     createSuccessNextRoute: {
       type: Object,
       default: () => ({ name: 'AssetList' })
@@ -32,7 +36,9 @@ export default {
     },
     updateInitial: {
       type: Function,
-      default: () => {}
+      default: (initial) => {
+        return initial
+      }
     }
   },
   data() {
@@ -118,7 +124,7 @@ export default {
         protocols: []
       }
       if (this.updateInitial) {
-        this.updateInitial(initial)
+        await this.updateInitial(initial)
       }
       this.defaultConfig.initial = Object.assign({}, initial, defaultConfig.initial)
     },
