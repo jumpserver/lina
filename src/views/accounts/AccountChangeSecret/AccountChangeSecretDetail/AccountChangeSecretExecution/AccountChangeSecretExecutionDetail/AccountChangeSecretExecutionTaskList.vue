@@ -23,7 +23,7 @@ export default {
       tableConfig: {
         url: `/api/v1/accounts/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
-          'asset', 'account', 'date_started', 'date_finished', 'timedelta', 'status', 'error'
+          'asset', 'account', 'date_finished', 'is_success', 'error'
         ],
         columnsMeta: {
           asset: {
@@ -52,7 +52,7 @@ export default {
               },
               getRoute({ row }) {
                 return {
-                  name: 'AssetDetail',
+                  name: 'AssetAccountDetail',
                   params: { id: row.account.id }
                 }
               }
@@ -65,11 +65,8 @@ export default {
             label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
+              return row.timedelta ? row.timedelta.toFixed(2) + 's' : 0
             }
-          },
-          reason_display: {
-            label: this.$t('accounts.AccountChangeSecret.Reason')
           }
         }
       },

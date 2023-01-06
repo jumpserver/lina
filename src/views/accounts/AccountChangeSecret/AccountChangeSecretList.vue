@@ -18,10 +18,11 @@ export default {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-automations/',
         columnsExclude: ['password_rules'],
+        columns: ['name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'run_times', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'username', 'is_periodic', 'periodic_display', 'run_times', 'actions'
+            'name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'run_times', 'actions'
           ]
         },
         columnsMeta: {
@@ -31,29 +32,19 @@ export default {
               route: 'AccountChangeSecretDetail'
             }
           },
-          has_secret: {
-            width: '120px'
+          accounts: {
+            formatter: function(row) {
+              console.log('row', row)
+              return <span> { row.accounts.join(', ') } </span>
+            }
+          },
+          secret_strategy: {
+            formatter: function(row) {
+              return <span> { row.secret_strategy.label } </span>
+            }
           },
           secret_type: {
             width: '120px'
-          },
-          secret_strategy: {
-            width: '120px'
-          },
-          ssh_key_change_strategy: {
-            width: '140px'
-          },
-          assets_amount: {
-            label: vm.$t('accounts.AccountChangeSecret.AssetAmount'),
-            width: '80px'
-          },
-          nodes_amount: {
-            label: vm.$t('accounts.AccountChangeSecret.NodeAmount'),
-            width: '80px'
-          },
-          password_strategy_display: {
-            label: vm.$t('accounts.AccountChangeSecret.PasswordStrategy'),
-            width: '220px'
           },
           is_periodic: {
             label: vm.$t('accounts.AccountChangeSecret.Timer'),

@@ -203,7 +203,7 @@ export default {
                 {
                   name: 'Test',
                   title: this.$t('common.Test'),
-                  can: this.$hasPerm('assets.test_assetconnectivity'),
+                  can: this.$hasPerm('assets.test_account'),
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/accounts/accounts/${row.id}/verify/`,
