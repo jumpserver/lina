@@ -1,49 +1,46 @@
 <template>
-  <div>
-    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog
-      v-if="dialogVisible"
-      :title="$tc('assets.TestGatewayTestConnection')"
-      :visible.sync="dialogVisible"
-      width="40%"
-      top="35vh"
-      :show-confirm="false"
-      :show-cancel="false"
-      :destroy-on-close="true"
-    >
-      <el-row :gutter="20">
-        <el-col :md="4" :sm="24">
-          <div style="line-height: 34px">{{ $t('assets.SshPort') }}</div>
-        </el-col>
-        <el-col :md="14" :sm="24">
-          <el-input v-model="portInput" />
-          <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
-        </el-col>
-        <el-col :md="4" :sm="24">
-          <el-button
-            size="mini"
-            type="primary"
-            style="line-height:20px "
-            :loading="buttonLoading"
-            @click="dialogConfirm"
-          >{{ this.$t('common.Confirm') }}</el-button>
-        </el-col>
-      </el-row>
-    </Dialog>
-  </div>
-
+  <el-row :gutter="20">
+    <el-col :md="20" :sm="24">
+      <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <Dialog
+        v-if="dialogVisible"
+        :title="$tc('assets.TestGatewayTestConnection')"
+        :visible.sync="dialogVisible"
+        width="40%"
+        top="35vh"
+        :show-confirm="false"
+        :show-cancel="false"
+        :destroy-on-close="true"
+      >
+        <el-row :gutter="20">
+          <el-col :md="4" :sm="24">
+            <div style="line-height: 34px">{{ $t('assets.SshPort') }}</div>
+          </el-col>
+          <el-col :md="14" :sm="24">
+            <el-input v-model="portInput" />
+            <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
+          </el-col>
+          <el-col :md="4" :sm="24">
+            <el-button
+              size="mini"
+              type="primary"
+              style="line-height:20px "
+              :loading="buttonLoading"
+              @click="dialogConfirm"
+            >{{ this.$t('common.Confirm') }}</el-button>
+          </el-col>
+        </el-row>
+      </Dialog>
+    </el-col>
+    <el-col :md="10" :sm="24" />
+  </el-row>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import Dialog from '@/components/Dialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
-import {
-  DetailFormatter,
-  TagsFormatter,
-  ChoicesFormatter,
-  ArrayFormatter
-} from '@/components/TableFormatters'
+import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {

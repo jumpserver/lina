@@ -195,6 +195,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "GatewayList": "网关列表",
     "AccessKey": "访问密钥",
     "Token": "令牌",
     "SSHKey": "SSH 密钥",
