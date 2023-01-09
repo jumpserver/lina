@@ -39,18 +39,7 @@ export default {
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
               canDelete: true,
-              hasClone: false,
-              extraActions: [
-                {
-                  title: '执行',
-                  name: 'run',
-                  type: 'running',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({ name: 'JobCreate', query: { type: 'playbook', id: row.id }})
-                  }
-                }
-              ]
+              hasClone: false
             }
           }
         }
