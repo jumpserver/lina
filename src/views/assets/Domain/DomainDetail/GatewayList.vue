@@ -1,20 +1,20 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="20" :sm="24">
-      <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
       <Dialog
         v-if="dialogVisible"
+        :destroy-on-close="true"
+        :show-cancel="false"
+        :show-confirm="false"
         :title="$tc('assets.TestGatewayTestConnection')"
         :visible.sync="dialogVisible"
-        width="40%"
         top="35vh"
-        :show-confirm="false"
-        :show-cancel="false"
-        :destroy-on-close="true"
+        width="40%"
       >
         <el-row :gutter="20">
           <el-col :md="4" :sm="24">
-            <div style="line-height: 34px">{{ $t('assets.SshPort') }}</div>
+            <div style="line-height: 34px">{{ $t('assets.SSHPort') }}</div>
           </el-col>
           <el-col :md="14" :sm="24">
             <el-input v-model="portInput" />
@@ -22,12 +22,14 @@
           </el-col>
           <el-col :md="4" :sm="24">
             <el-button
-              size="mini"
-              type="primary"
-              style="line-height:20px "
               :loading="buttonLoading"
+              size="mini"
+              style="line-height:20px "
+              type="primary"
               @click="dialogConfirm"
-            >{{ this.$t('common.Confirm') }}</el-button>
+            >
+              {{ this.$t('common.Confirm') }}
+            </el-button>
           </el-col>
         </el-row>
       </Dialog>
@@ -90,7 +92,6 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-
           labels_display: {
             formatter: TagsFormatter
           },
@@ -98,7 +99,7 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'GatewayUpdate',
-              performDelete: ({ row, col }) => {
+              performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
                 return this.$axios.delete(url)
@@ -120,7 +121,7 @@ export default {
                   }.bind(this)
                 }
               ],
-              onClone: function({ row, col }) {
+              onClone: function({ row }) {
                 const cloneRoute = {
                   name: 'GatewayCreate',
                   query: {
@@ -154,24 +155,21 @@ export default {
   methods: {
     dialogConfirm() {
       this.buttonLoading = true
-
       const port = parseInt(this.portInput)
 
       if (isNaN(port)) {
         this.buttonLoading = false
         return this.$message.error(this.$tc('common.TestPortErrorMsg'))
       }
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port }).then(
-        res => {
+      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port })
+        .then(() => {
           return this.$message.success(this.$tc('common.TestSuccessMsg'))
-        }
-      ).finally(() => {
-        this.portInput = ''
-        this.cellValue = ''
-        this.buttonLoading = false
-        this.dialogVisible = false
-      }
-      )
+        }).finally(() => {
+          this.portInput = ''
+          this.cellValue = ''
+          this.buttonLoading = false
+          this.dialogVisible = false
+        })
     }
   }
 }

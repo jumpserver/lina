@@ -1189,6 +1189,8 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "BasePort": "一般协议监听端口",
+    "DatabasePort": "数据库端口",
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
