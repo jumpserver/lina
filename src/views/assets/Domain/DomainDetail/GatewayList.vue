@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
+  <div>
+    <el-col :md="24" :sm="24">
       <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
       <Dialog
         v-if="dialogVisible"
@@ -32,8 +32,7 @@
         </el-row>
       </Dialog>
     </el-col>
-    <el-col :md="10" :sm="24" />
-  </el-row>
+  </div>
 </template>
 
 <script>
@@ -58,6 +57,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'address', 'protocols', 'nodes_display', 'connectivity', 'comment', 'actions']
+        },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
