@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
+  <div>
+    <el-col :md="24" :sm="24">
       <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
       <Dialog
         v-if="dialogVisible"
@@ -34,7 +34,7 @@
         </el-row>
       </Dialog>
     </el-col>
-  </el-row>
+  </div>
 </template>
 
 <script>
