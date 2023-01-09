@@ -33,18 +33,7 @@ export default {
               updateRoute: 'AdhocUpdate',
               hasDelete: true,
               canDelete: true,
-              hasClone: false,
-              extraActions: [
-                {
-                  title: this.$t('ops.Run'),
-                  name: 'run',
-                  type: 'running',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({ name: 'JobCreate', query: { type: 'adhoc', id: row.id }})
-                  }
-                }
-              ]
+              hasClone: false
             }
           }
         }

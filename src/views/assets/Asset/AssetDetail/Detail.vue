@@ -166,13 +166,13 @@ export default {
         ]
       },
       detailSpecificConfig: {
-        show: this.object['specific_info']?.length > 0,
+        show: this.object['spec_info']?.length > 0,
         fa: 'fa-podcast',
         title: this.$t('common.SpecificInfo'),
         url: `/api/v1/assets/assets/${this.object.id}/`,
         object: this.object,
-        fields: ['specific_info'],
-        excludes: ['specific_info.script']
+        fields: ['spec_info'],
+        excludes: ['spec_info.script']
       }
     }
   },

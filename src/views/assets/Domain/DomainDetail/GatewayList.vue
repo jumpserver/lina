@@ -34,7 +34,6 @@
         </el-row>
       </Dialog>
     </el-col>
-    <el-col :md="10" :sm="24" />
   </el-row>
 </template>
 
@@ -60,6 +59,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'address', 'protocols', 'nodes_display', 'connectivity', 'comment', 'actions']
+        },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,

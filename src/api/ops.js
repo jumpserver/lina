@@ -27,3 +27,12 @@ export function getJob(id) {
     method: 'get'
   })
 }
+
+export function uploadPlaybook(form) {
+  return request({
+    url: '/api/v1/ops/playbooks/',
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: form
+  })
+}

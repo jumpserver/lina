@@ -29,6 +29,7 @@ export default {
       },
       tableConfig: {
         url: '/api/v1/audits/my-login-logs/?limit=5',
+        hasColumnActions: false,
         columns: [
           'city', 'datetime'
         ],
