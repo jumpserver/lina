@@ -22,6 +22,9 @@ export default {
       tableConfig: {
         hasSelection: false,
         url: `/api/v1/ops/task-executions/?task_id=${this.object.id}`,
+        columns: [
+          'id', 'is_finished', 'is_success', 'time_cost', 'date_start', 'actions'
+        ],
         columnsMeta: {
           is_finished: {
             label: this.$t('ops.isFinished'),
