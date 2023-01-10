@@ -1,20 +1,20 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :md="20" :sm="24">
-      <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
+  <div>
+    <el-col :md="24" :sm="24">
+      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
       <Dialog
         v-if="dialogVisible"
+        :destroy-on-close="true"
+        :show-cancel="false"
+        :show-confirm="false"
         :title="$tc('assets.TestGatewayTestConnection')"
         :visible.sync="dialogVisible"
-        width="40%"
         top="35vh"
-        :show-confirm="false"
-        :show-cancel="false"
-        :destroy-on-close="true"
+        width="40%"
       >
         <el-row :gutter="20">
           <el-col :md="4" :sm="24">
-            <div style="line-height: 34px">{{ $t('assets.SshPort') }}</div>
+            <div style="line-height: 34px">{{ $t('assets.SSHPort') }}</div>
           </el-col>
           <el-col :md="14" :sm="24">
             <el-input v-model="portInput" />
@@ -22,18 +22,19 @@
           </el-col>
           <el-col :md="4" :sm="24">
             <el-button
-              size="mini"
-              type="primary"
-              style="line-height:20px "
               :loading="buttonLoading"
+              size="mini"
+              style="line-height:20px "
+              type="primary"
               @click="dialogConfirm"
-            >{{ this.$t('common.Confirm') }}</el-button>
+            >
+              {{ this.$t('common.Confirm') }}
+            </el-button>
           </el-col>
         </el-row>
       </Dialog>
     </el-col>
-    <el-col :md="10" :sm="24" />
-  </el-row>
+  </div>
 </template>
 
 <script>
@@ -41,6 +42,7 @@ import GenericListTable from '@/layout/components/GenericListTable/index'
 import Dialog from '@/components/Dialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -58,6 +60,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'address', 'protocols', 'nodes_display', 'connectivity', 'comment', 'actions']
+        },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -90,7 +96,6 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-
           labels_display: {
             formatter: TagsFormatter
           },
@@ -98,7 +103,7 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'GatewayUpdate',
-              performDelete: ({ row, col }) => {
+              performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
                 return this.$axios.delete(url)
@@ -120,7 +125,7 @@ export default {
                   }.bind(this)
                 }
               ],
-              onClone: function({ row, col }) {
+              onClone: function({ row }) {
                 const cloneRoute = {
                   name: 'GatewayCreate',
                   query: {
@@ -154,24 +159,24 @@ export default {
   methods: {
     dialogConfirm() {
       this.buttonLoading = true
-
       const port = parseInt(this.portInput)
 
       if (isNaN(port)) {
         this.buttonLoading = false
         return this.$message.error(this.$tc('common.TestPortErrorMsg'))
       }
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port }).then(
-        res => {
-          return this.$message.success(this.$tc('common.TestSuccessMsg'))
-        }
-      ).finally(() => {
-        this.portInput = ''
-        this.cellValue = ''
-        this.buttonLoading = false
-        this.dialogVisible = false
-      }
+      this.$axios.post(
+        `/api/v1/assets/gateways/${this.cellValue}/test-connective/`,
+        { port: port }
       )
+        .then((res) => {
+          openTaskPage(res['task'])
+        }).finally(() => {
+          this.portInput = ''
+          this.cellValue = ''
+          this.buttonLoading = false
+          this.dialogVisible = false
+        })
     }
   }
 }

@@ -24,7 +24,7 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Cloud.CloudSource'), ['account', 'regions']],
-        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'unix_admin_user', 'windows_admin_user', 'protocols', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
+        [this.$t('xpack.Cloud.SaveSetting'), ['hostname_strategy', 'node', 'protocols', 'ip_network_segment_group', 'sync_ip_type', 'is_always_update']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -59,26 +59,6 @@ export default {
               transformOption: (item) => {
                 return { label: item.full_value, value: item.id }
               }
-            }
-          }
-        },
-        unix_admin_user: {
-          component: Select2,
-          el: {
-            multiple: false,
-            value: [],
-            ajax: {
-              url: '/api/v1/accounts/account-templates/'
-            }
-          }
-        },
-        windows_admin_user: {
-          component: Select2,
-          el: {
-            multiple: false,
-            value: [],
-            ajax: {
-              url: '/api/v1/accounts/account-templates/'
             }
           }
         },

@@ -5,8 +5,8 @@
         <el-select
           slot="prepend"
           v-model="item.name"
-          class="prepend"
           :disabled="cannotDelete(item)"
+          class="prepend"
           @change="handleProtocolChange($event, item)"
         >
           <el-option v-for="p of remainProtocols" :key="p.name" :label="p.name" :value="p.name" />
@@ -18,31 +18,31 @@
           @click="onSettingClick(item)"
         />
       </el-input>
-      <div style="display: flex; margin-left: 20px" class="input-button">
+      <div class="input-button" style="display: flex; margin-left: 20px">
         <el-button
-          type="danger"
-          icon="el-icon-minus"
-          style="flex-shrink: 0;"
-          size="mini"
           :disabled="cannotDelete(item)"
+          icon="el-icon-minus"
+          size="mini"
+          style="flex-shrink: 0;"
+          type="danger"
           @click="handleDelete(index)"
         />
         <el-button
           v-if="index === items.length - 1"
-          type="primary"
-          icon="el-icon-plus"
-          style="flex-shrink: 0;"
-          size="mini"
           :disabled="remainProtocols.length === 0 || !item.port"
+          icon="el-icon-plus"
+          size="mini"
+          style="flex-shrink: 0;"
+          type="primary"
           @click="handleAdd(index)"
         />
       </div>
     </div>
     <ProtocolSettingDialog
       v-if="showDialog"
-      :visible.sync="showDialog"
-      :item="settingItem"
       :disabled="settingReadonly"
+      :item="settingItem"
+      :visible.sync="showDialog"
     />
   </div>
 </template>
@@ -141,21 +141,27 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
+      let protocols = []
       if (this.value.length > 0) {
-        const protocols = []
-        this.value.forEach(item => {
-          if (item?.id && item?.setting) {
-            protocols.push(item)
+        // 两种情况：1. Initial 情况有 Name port 没有 id, 2. 更新情况 有 id
+        protocols = this.value.filter(item => {
+          return choices.some(value => value.name === item.name)
+        })
+      } else {
+        protocols = choices.filter(item => {
+          return item.required || item.primary || item.default
+        }).map(item => {
+          delete item.id
+          // 资产情况
+          if (this.settingReadonly) {
+            return { name: item.name, port: item.port }
           } else {
-            const protocol = choices.find(i => i.name === item.name)
-            if (protocol) protocols.push({ ...protocol, ...item })
+          // 平台字段
+            return item
           }
         })
-        this.items = protocols
-      } else {
-        const defaults = choices.filter(item => (item.required || item.primary || item.default))
-        this.items = defaults
       }
+      this.items = protocols
     },
     onSettingClick(item) {
       this.settingItem = item

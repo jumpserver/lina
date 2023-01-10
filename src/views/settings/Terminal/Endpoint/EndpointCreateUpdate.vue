@@ -8,6 +8,7 @@
 
 <script>
 import GenericCreateUpdatePage from '@/layout/components/GenericCreateUpdatePage'
+
 export default {
   name: 'EndpointCreateUpdate',
   components: {
@@ -20,26 +21,30 @@ export default {
       fields: [
         [this.$t('common.Basic'), ['name', 'host']],
         [
-          this.$t('applications.port'),
+          this.$t('terminal.BasePort'),
           [
-            'http_port', 'https_port', 'ssh_port', 'rdp_port',
-            'magnus_listen_port_range'
+            'http_port', 'https_port', 'ssh_port', 'rdp_port'
+          ]
+        ],
+        [
+          this.$t('terminal.DatabasePort'),
+          [
+            'mysql_port', 'mariadb_port', 'postgresql_port',
+            'redis_port', 'oracle_port_range'
           ]
         ],
         [this.$t('common.Other'), ['comment']]
       ],
       fieldsMeta: {
-        magnus_listen_port_range: {
+        oracle_port_range: {
           disabled: true
         }
       },
       hasDetailInMsg: false
     }
   },
-  computed: {
-  },
-  methods: {
-  }
+  computed: {},
+  methods: {}
 }
 </script>
 

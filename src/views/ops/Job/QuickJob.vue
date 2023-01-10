@@ -148,14 +148,14 @@ export default {
                 label: 'Shell', value: 'shell'
               },
               {
-                label: 'Powershell', value: 'powershell'
+                label: 'Powershell', value: 'win_shell'
               },
               {
                 label: 'Python', value: 'python'
               }
             ],
             callback: (option) => {
-              this.cmOptions.mode = option
+              this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
           },
@@ -256,6 +256,7 @@ export default {
             this.toolbar.left.runas.value = res.runas
             this.toolbar.left.runasPolicy.value = res.runas_policy.value
             this.toolbar.left.language.value = res.module.value
+            this.toolbar.left.language.callback(res.module.value)
             this.toolbar.left.timeout.value = res.timeout
             this.command = res.args
             this.executionInfo.status = data['status']
@@ -362,10 +363,15 @@ export default {
         return node.meta.data.id
       })
 
+      if (hosts.length === 0 && nodes.length === 0) {
+        this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
+        return
+      }
+
       const data = {
         assets: hosts,
         nodes: nodes,
-        module: this.module === 'powershell' ? 'win_shell' : this.module,
+        module: this.module,
         args: this.command,
         runas: this.runas,
         runas_policy: this.runasPolicy,
