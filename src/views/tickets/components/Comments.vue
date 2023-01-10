@@ -7,7 +7,7 @@
       <div v-for="item in comments" :key="item.id" class="feed-activity-list">
         <div class="feed-element">
           <a href="#" class="pull-left">
-            <el-avatar :src="imageUrl" size="30" class="header-avatar" />
+            <el-avatar :src="imageUrl" :size="30" class="header-avatar" />
           </a>
           <div class="media-body ">
             <strong>{{ item.user_display }}</strong> <small class="text-muted">{{ formatTime(item.date_created) }}</small>
@@ -105,7 +105,9 @@ export default {
       return this.object.process_map[this.object.approval_step - 1].assignees.indexOf(this.$store.state.users.profile.id) !== -1
     },
     isSelfTicket() {
-      return this.object.applicant === this.$store.state.users.profile.id
+      const applicant = this.object.applicant.indexOf('(') > -1 ? this.object.applicant.split('(')[0] : this.object.applicant
+      const userName = this.$store.state.users.profile?.username
+      return applicant === userName
     }
   },
   mounted() {
