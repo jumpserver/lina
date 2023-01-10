@@ -41,7 +41,7 @@ export default {
                 return ''
               }
               const stat = row.stat
-              return `${stat['cpu_load']} ${stat['memory_used']}% ${stat['disk_used']}%`
+              return `${stat['cpu_load']} / ${stat['memory_used']}% / ${stat['disk_used']}%`
             }
           },
           load: {

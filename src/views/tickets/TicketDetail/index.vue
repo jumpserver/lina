@@ -53,7 +53,7 @@ export default {
         'login_asset_confirm': 'LoginAssetTicketDetail',
         'command_confirm': 'CommandConfirmDetail'
       }
-      const routeName = ticketRouteMapper[ticket.type]
+      const routeName = ticketRouteMapper[ticket.type.value]
       setTimeout(() => {
         this.$router.push({
           name: routeName,
