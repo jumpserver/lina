@@ -36,7 +36,7 @@ export default {
           {
             title: this.$t('common.Activity'),
             name: 'AssetActivity',
-            hidden: () => !this.$hasPerm('audits.view_operatelog')
+            hidden: () => !this.$hasPerm('audits.view_operatelog') || !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         actions: {

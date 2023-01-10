@@ -55,7 +55,7 @@ export default {
           {
             title: this.$t('common.Activity'),
             name: 'UserActivity',
-            hidden: () => !this.$hasPerm('audits.view_operatelog')
+            hidden: () => !this.$hasPerm('audits.view_operatelog') || !this.$hasPerm('audits.view_userloginlog')
           }
         ]
       }
