@@ -10,7 +10,6 @@
 import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
-  name: 'AccountGatherExecutionDetail',
   components: {
     AutoDetailCard
   },
@@ -24,7 +23,7 @@ export default {
     return {
       url: `/api/v1/accounts/gather-account-executions/${this.object.id}/`,
       detailFields: [
-        'date_start', 'status', 'trigger_display', 'date_start', 'date_finished'
+        'status', 'trigger_display', 'date_start', 'date_finished'
       ]
     }
   },
