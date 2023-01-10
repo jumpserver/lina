@@ -103,6 +103,7 @@
     "NoSQLProtocol": "NoSQL Protocol"
   },
   "assets": {
+    "LabelInputFormatValidation": "Format error, correct format is：name:value",
     "IP/Host": "IP/Host",
     "OrganizationAsset": "Organization asset",
     "PersonalAsset": "Personal asset",
