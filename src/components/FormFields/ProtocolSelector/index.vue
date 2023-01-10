@@ -99,10 +99,16 @@ export default {
       } else {
         return this.$t('assets.DefaultPort')
       }
+    },
+    iChoices() {
+      return this.choices.map(item => {
+        delete item?.id
+        return item
+      })
     }
   },
   watch: {
-    choices: {
+    iChoices: {
       handler(value) {
         this.setDefaultItems(value)
       }
@@ -116,7 +122,7 @@ export default {
     }
   },
   mounted() {
-    this.setDefaultItems(this.choices)
+    this.setDefaultItems(this.iChoices)
     this.$log.debug('Choices: ', this.choices)
     this.$log.debug('Value: ', this.value)
   },
@@ -141,27 +147,31 @@ export default {
       item.port = selected.port
     },
     setDefaultItems(choices) {
-      let protocols = []
       if (this.value.length > 0) {
-        // 两种情况：1. Initial 情况有 Name port 没有 id, 2. 更新情况 有 id
-        protocols = this.value.filter(item => {
-          return choices.some(value => value.name === item.name)
-        })
-      } else {
-        protocols = choices.filter(item => {
-          return item.required || item.primary || item.default
-        }).map(item => {
-          delete item.id
-          // 资产情况
-          if (this.settingReadonly) {
-            return { name: item.name, port: item.port }
+        const protocols = []
+        this.value.forEach(item => {
+          // 有默认值的情况下，设置为只读或者有id、有setting是平台
+          if (!this.settingReadonly || (item?.id && item?.setting)) {
+            protocols.push(item)
           } else {
-          // 平台字段
-            return item
+            // 获取资产协议配置
+            const assetDefaultItems = this.getAssetDefaultItems(item, choices)
+            protocols.push(...assetDefaultItems)
           }
         })
+        this.items = protocols
+      } else {
+        const defaults = choices.filter(item => (item.required || item.primary || item.default))
+        this.items = defaults
       }
-      this.items = protocols
+    },
+    getAssetDefaultItems(item, choices) {
+      const protocols = []
+      const protocol = choices.find(i => i.name === item.name)
+      if (protocol) {
+        protocols.push(protocol)
+      }
+      return protocols
     },
     onSettingClick(item) {
       this.settingItem = item
