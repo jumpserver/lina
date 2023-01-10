@@ -106,9 +106,9 @@ export default {
         },
         columnsExclude: ['specific'],
         columnsShow: {
-          min: ['username', 'actions'],
+          min: ['name', 'username', 'actions'],
           default: [
-            'username', 'asset', 'privileged',
+            'name', 'username', 'asset', 'privileged',
             'secret_type', 'source', 'actions'
           ]
         },
@@ -119,7 +119,7 @@ export default {
                 name: 'AssetAccountDetail',
                 params: { id: row.id }
               }
-              if (vm.$hasPerm('assets.view_account')) {
+              if (vm.$hasPerm('accounts.view_account')) {
                 return <router-link to={to}>{row.name}</router-link>
               } else {
                 return <span>{row.name}</span>

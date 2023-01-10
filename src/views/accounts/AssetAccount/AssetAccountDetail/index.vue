@@ -14,12 +14,14 @@
 <script>
 import { GenericDetailPage, TabPage } from '@/layout/components'
 import Detail from './Detail.vue'
+import AssetActivity from './Activity.vue'
 
 export default {
   components: {
     GenericDetailPage,
     TabPage,
-    Detail
+    Detail,
+    AssetActivity
   },
   data() {
     return {
@@ -30,6 +32,11 @@ export default {
           {
             title: this.$t('common.BasicInfo'),
             name: 'Detail'
+          },
+          {
+            title: this.$t('common.Activity'),
+            name: 'AssetActivity',
+            hidden: () => !this.$hasPerm('audits.view_operatelog') || !this.$hasPerm('accounts.view_changesecretrecord')
           }
         ],
         actions: {

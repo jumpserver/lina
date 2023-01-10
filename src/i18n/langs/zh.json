@@ -196,6 +196,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "LabelInputFormatValidation": "标签格式错误，正确格式为：name:value",
     "GatewayList": "网关列表",
     "AccessKey": "访问密钥",
     "Token": "令牌",
@@ -423,6 +424,8 @@
     "SpecificInfo": "特殊信息",
     "CollectionSucceed": "收藏成功",
     "CancelCollection": "取消收藏",
+    "Activity": "活动",
+    "Last8": "最近 8 次",
     "Version": "版本",
     "Publish": "发布",
     "PublishAllApplets": "发布所有应用",
@@ -1578,6 +1581,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "Login": "用户登录",
     "InviteSuccess": "邀请成功",
     "FileEncryptionPassword": "文件加密密码",
     "RoleUsers": "授权用户",
