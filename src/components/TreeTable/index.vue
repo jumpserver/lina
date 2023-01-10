@@ -60,12 +60,14 @@ import Dialog from '@/components/Dialog'
 import ListTable from '../ListTable'
 import IBox from '../IBox'
 import { setUrlParam } from '@/utils/common'
+import FileTree from '@/components/TreeTable/components/FileTree.vue'
 
 export default {
   name: 'TreeTable',
   components: {
     ListTable,
     AutoDataZTree,
+    FileTree,
     TabTree,
     IBox,
     Dialog
