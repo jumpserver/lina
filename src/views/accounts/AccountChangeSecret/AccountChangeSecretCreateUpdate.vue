@@ -27,7 +27,7 @@ export default {
         [this.$t('common.Basic'), ['name']],
         [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
         [
-          this.$t('xpack.ChangeAuthPlan.SecretKeyStrategy'),
+          this.$t('accounts.AccountChangeSecret.SecretKeyStrategy'),
           [
             'secret_strategy', 'secret_type', 'secret',
             'password_rules', 'ssh_key_change_strategy',
@@ -40,8 +40,8 @@ export default {
       fieldsMeta: {
         ...getChangeSecretFields()
       },
-      createSuccessNextRoute: { name: 'AccountChangeSecretIndex' },
-      updateSuccessNextRoute: { name: 'AccountChangeSecretIndex' },
+      createSuccessNextRoute: { name: 'AccountChangeSecretList' },
+      updateSuccessNextRoute: { name: 'AccountChangeSecretList' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''

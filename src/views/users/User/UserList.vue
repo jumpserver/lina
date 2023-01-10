@@ -2,12 +2,12 @@
   <div>
     <GenericListPage
       ref="GenericListPage"
-      :table-config="tableConfig"
       :header-actions="headerActions"
+      :table-config="tableConfig"
     />
     <GenericUpdateFormDialog
-      :selected-rows="updateSelectedDialogSetting.selectedRows"
       :form-setting="updateSelectedDialogSetting.formSetting"
+      :selected-rows="updateSelectedDialogSetting.selectedRows"
       :visible.sync="updateSelectedDialogSetting.visible"
       @update="handleDialogUpdate"
     />
@@ -111,7 +111,11 @@ export default {
             }
           },
           actions: {
+            el: {
+              fixed: 'right'
+            },
             formatterArgs: {
+              fixed: 'right',
               hasDelete: hasDelete,
               canUpdate: this.$hasPerm('users.change_user'),
               extraActions: [
@@ -237,7 +241,7 @@ export default {
         }
       }
     },
-    removeUserFromOrg({ row, col, reload }) {
+    removeUserFromOrg({ row, reload }) {
       const url = `/api/v1/users/users/${row.id}/remove/`
       this.$axios.post(url).then(() => {
         reload()

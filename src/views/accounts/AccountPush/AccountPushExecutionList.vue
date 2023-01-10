@@ -28,25 +28,25 @@ export default {
         ],
         columnsMeta: {
           asset_amount: {
-            label: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
+            label: this.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px',
             formatter: function(row) {
               return <span>{ row.snapshot.asset_amount }</span>
             }
           },
           node_amount: {
-            label: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            label: this.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px',
             formatter: function(row) {
               return <span>{ row.snapshot.node_amount }</span>
             }
           },
           status: {
-            label: this.$t('xpack.ChangeAuthPlan.Result'),
+            label: this.$t('accounts.AccountChangeSecret.Result'),
             width: '80px'
           },
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
@@ -61,17 +61,17 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  can: 'accounts.view_changesecretexecution',
-                  title: this.$t('xpack.ChangeAuthPlan.Log'),
+                  can: 'accounts.view_pushaccountexecution',
+                  title: this.$t('accounts.ChangeAuthPlan.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                  title: this.$t('accounts.ChangeAuthPlan.Detail'),
                   type: 'info',
-                  can: this.$hasPerm('accounts.view_changesecretexecution'),
+                  can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
                     return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
                   }

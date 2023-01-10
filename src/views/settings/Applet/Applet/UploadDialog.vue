@@ -78,6 +78,7 @@ export default {
       ).then(res => {
         this.$message.success(this.$t('terminal.UploadSucceed'))
         this.$emit('update:visible', false)
+        this.$emit('upload-event', res)
       }).catch(err => {
         const error = err.response.data?.error || this.$t('terminal.UploadFailed')
         this.$message.error(error)

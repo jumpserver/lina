@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$t('setting.HuaweiCloud')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$tc('setting.HuaweiCloud')" :config="$data" />
 </template>
 
 <script>
@@ -31,7 +31,9 @@ export default {
             }).catch((error) => {
               vm.$log.error('err occur')
               vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }
         }
       ],
@@ -58,8 +60,7 @@ export default {
       fieldsMeta: {
         HUAWEI_VERIFY_SIGN_TMPL: {
           fields: ['SIGN_NAME', 'TEMPLATE_CODE'],
-          fieldsMeta: {
-          }
+          fieldsMeta: {}
         },
         HUAWEI_APP_SECRET: {
           component: UpdateToken
@@ -76,10 +77,8 @@ export default {
       }
     }
   },
-  computed: {
-  },
-  methods: {
-  }
+  computed: {},
+  methods: {}
 }
 </script>
 

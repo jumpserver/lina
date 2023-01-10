@@ -1,17 +1,15 @@
-import { logout, getProfile as apiGetProfile } from '@/api/users'
-import {
-  getCurrentOrgLocal,
-  getTokenFromCookie,
-  saveCurrentOrgLocal
-} from '@/utils/auth'
+import { getProfile as apiGetProfile, logout } from '@/api/users'
+import { getCurrentOrgLocal, getTokenFromCookie, saveCurrentOrgLocal } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import Vue from 'vue'
+
 const _ = require('lodash')
 
 const getDefaultState = () => {
   return {
     token: getTokenFromCookie(),
     currentOrg: '',
+    preOrg: '',
     profile: {},
     username: '',
     auditOrgs: [],
@@ -64,6 +62,7 @@ const mutations = {
     state.consoleOrgs.push(org)
   },
   SET_CURRENT_ORG(state, org) {
+    state.preOrg = state.currentOrg
     state.currentOrg = org
     saveCurrentOrgLocal(state.username, org)
   },
@@ -119,6 +118,9 @@ const actions = {
   },
   setCurrentOrg({ commit }, data) {
     commit('SET_CURRENT_ORG', data)
+  },
+  setPreOrg({ commit }, data) {
+    commit('SET_PRE_ORG', data)
   },
   currentUserJoinNewOrg({ state, commit }, users) {
     const { profile, currentOrg, workbenchOrgs } = state

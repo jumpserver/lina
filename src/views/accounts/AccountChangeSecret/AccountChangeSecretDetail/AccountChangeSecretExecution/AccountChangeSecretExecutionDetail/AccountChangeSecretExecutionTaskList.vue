@@ -23,11 +23,11 @@ export default {
       tableConfig: {
         url: `/api/v1/accounts/change-secret-records/?execution_id=${this.object.id}`,
         columns: [
-          'asset', 'account', 'date_started', 'date_finished', 'timedelta', 'status', 'error'
+          'asset', 'account', 'date_finished', 'is_success', 'error'
         ],
         columnsMeta: {
           asset: {
-            label: this.$t('xpack.ChangeAuthPlan.Asset'),
+            label: this.$t('accounts.AccountChangeSecret.Asset'),
             formatter: DetailFormatter,
             formatterArgs: {
               can: this.$hasPerm('assets.view_asset'),
@@ -52,24 +52,21 @@ export default {
               },
               getRoute({ row }) {
                 return {
-                  name: 'AssetDetail',
+                  name: 'AssetAccountDetail',
                   params: { id: row.account.id }
                 }
               }
             }
           },
           is_success: {
-            label: this.$t('xpack.ChangeAuthPlan.Success')
+            label: this.$t('accounts.AccountChangeSecret.Success')
           },
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
-              return row.timedelta.toFixed(2) + 's'
+              return row.timedelta ? row.timedelta.toFixed(2) + 's' : 0
             }
-          },
-          reason_display: {
-            label: this.$t('xpack.AccountBackupPlan.Reason')
           }
         }
       },

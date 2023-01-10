@@ -27,7 +27,6 @@ export default {
     return {
       TaskDetail: {},
       config: {
-        url: '/api/v1/accounts/accounts',
         activeMenu: 'Detail',
         submenu: [
           {

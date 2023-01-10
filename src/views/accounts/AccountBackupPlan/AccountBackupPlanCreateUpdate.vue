@@ -18,8 +18,8 @@ export default {
       url: '/api/v1/accounts/account-backup-plans/',
       fields: [
         [this.$t('common.Basic'), ['name']],
-        [this.$t('xpack.AccountBackupPlan.Types'), ['types']],
-        [this.$t('xpack.AccountBackupPlan.Backup'), ['recipients']],
+        [this.$t('accounts.AccountBackup.Types'), ['types']],
+        [this.$t('accounts.AccountBackup.Backup'), ['recipients']],
         [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['comment']]
       ],
@@ -35,7 +35,7 @@ export default {
         recipients: fields.recipients,
         types: {
           component: 'el-cascader',
-          label: this.$t('xpack.AccountBackupPlan.Types'),
+          label: this.$t('accounts.AccountBackup.Types'),
           remote: {
             request: () => vm.$axios.get('/api/v1/assets/categories/')
           },
@@ -53,8 +53,8 @@ export default {
           }
         }
       },
-      createSuccessNextRoute: { name: 'AccountBackupIndex' },
-      updateSuccessNextRoute: { name: 'AccountBackupIndex' },
+      createSuccessNextRoute: { name: 'AccountBackupList' },
+      updateSuccessNextRoute: { name: 'AccountBackupList' },
       cleanFormValue(data) {
         if (data['interval'] === '') {
           delete data['interval']

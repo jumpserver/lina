@@ -1,49 +1,47 @@
 <template>
   <div>
-    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
-    <Dialog
-      v-if="dialogVisible"
-      :title="$tc('assets.TestGatewayTestConnection')"
-      :visible.sync="dialogVisible"
-      width="40%"
-      top="35vh"
-      :show-confirm="false"
-      :show-cancel="false"
-      :destroy-on-close="true"
-    >
-      <el-row :gutter="20">
-        <el-col :md="4" :sm="24">
-          <div style="line-height: 34px">{{ $t('assets.SshPort') }}</div>
-        </el-col>
-        <el-col :md="14" :sm="24">
-          <el-input v-model="portInput" />
-          <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
-        </el-col>
-        <el-col :md="4" :sm="24">
-          <el-button
-            size="mini"
-            type="primary"
-            style="line-height:20px "
-            :loading="buttonLoading"
-            @click="dialogConfirm"
-          >{{ this.$t('common.Confirm') }}</el-button>
-        </el-col>
-      </el-row>
-    </Dialog>
+    <el-col :md="24" :sm="24">
+      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
+      <Dialog
+        v-if="dialogVisible"
+        :destroy-on-close="true"
+        :show-cancel="false"
+        :show-confirm="false"
+        :title="$tc('assets.TestGatewayTestConnection')"
+        :visible.sync="dialogVisible"
+        top="35vh"
+        width="40%"
+      >
+        <el-row :gutter="20">
+          <el-col :md="4" :sm="24">
+            <div style="line-height: 34px">{{ $t('assets.SSHPort') }}</div>
+          </el-col>
+          <el-col :md="14" :sm="24">
+            <el-input v-model="portInput" />
+            <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
+          </el-col>
+          <el-col :md="4" :sm="24">
+            <el-button
+              :loading="buttonLoading"
+              size="mini"
+              style="line-height:20px "
+              type="primary"
+              @click="dialogConfirm"
+            >
+              {{ this.$t('common.Confirm') }}
+            </el-button>
+          </el-col>
+        </el-row>
+      </Dialog>
+    </el-col>
   </div>
-
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
 import Dialog from '@/components/Dialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
-import {
-  DetailFormatter,
-  TagsFormatter,
-  ChoicesFormatter,
-  ArrayFormatter
-} from '@/components/TableFormatters'
+import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
@@ -61,6 +59,10 @@ export default {
     return {
       tableConfig: {
         url: `/api/v1/assets/gateways/?domain=${this.$route.params.id}`,
+        columnsShow: {
+          min: ['name', 'actions'],
+          default: ['name', 'address', 'protocols', 'nodes_display', 'connectivity', 'comment', 'actions']
+        },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
@@ -93,7 +95,6 @@ export default {
           nodes_display: {
             formatter: ArrayFormatter
           },
-
           labels_display: {
             formatter: TagsFormatter
           },
@@ -101,7 +102,7 @@ export default {
           actions: {
             formatterArgs: {
               updateRoute: 'GatewayUpdate',
-              performDelete: ({ row, col }) => {
+              performDelete: ({ row }) => {
                 const id = row.id
                 const url = `/api/v1/assets/gateways/${id}/`
                 return this.$axios.delete(url)
@@ -109,7 +110,7 @@ export default {
               extraActions: [
                 {
                   name: 'TestConnection',
-                  can: this.$hasPerm('assets.test_gateway'),
+                  can: this.$hasPerm('assets.test_assetconnectivity'),
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
                     this.dialogVisible = true
@@ -123,7 +124,7 @@ export default {
                   }.bind(this)
                 }
               ],
-              onClone: function({ row, col }) {
+              onClone: function({ row }) {
                 const cloneRoute = {
                   name: 'GatewayCreate',
                   query: {
@@ -157,24 +158,21 @@ export default {
   methods: {
     dialogConfirm() {
       this.buttonLoading = true
-
       const port = parseInt(this.portInput)
 
       if (isNaN(port)) {
         this.buttonLoading = false
         return this.$message.error(this.$tc('common.TestPortErrorMsg'))
       }
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port }).then(
-        res => {
+      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port })
+        .then(() => {
           return this.$message.success(this.$tc('common.TestSuccessMsg'))
-        }
-      ).finally(() => {
-        this.portInput = ''
-        this.cellValue = ''
-        this.buttonLoading = false
-        this.dialogVisible = false
-      }
-      )
+        }).finally(() => {
+          this.portInput = ''
+          this.cellValue = ''
+          this.buttonLoading = false
+          this.dialogVisible = false
+        })
     }
   }
 }

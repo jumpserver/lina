@@ -18,7 +18,6 @@ export default {
     }
   },
   data() {
-    console.log('this', this)
     return {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
@@ -28,25 +27,25 @@ export default {
         ],
         columnsMeta: {
           asset_amount: {
-            label: this.$t('xpack.ChangeAuthPlan.AssetAmount'),
+            label: this.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px',
             formatter: function(row) {
-              return <span>{ row.snapshot.asset_amount }</span>
+              return <span>{row.snapshot.asset_amount}</span>
             }
           },
           node_amount: {
-            label: this.$t('xpack.ChangeAuthPlan.NodeAmount'),
+            label: this.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px',
             formatter: function(row) {
-              return <span>{ row.snapshot.node_amount }</span>
+              return <span>{row.snapshot.node_amount}</span>
             }
           },
           status: {
-            label: this.$t('xpack.ChangeAuthPlan.Result'),
+            label: this.$t('accounts.AccountChangeSecret.Result'),
             width: '80px'
           },
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
@@ -62,18 +61,18 @@ export default {
                   name: 'log',
                   type: 'primary',
                   can: 'accounts.view_changesecretexecution',
-                  title: this.$t('xpack.ChangeAuthPlan.Log'),
+                  title: this.$t('accounts.AccountChangeSecret.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                  title: this.$t('accounts.AccountChangeSecret.Detail'),
                   type: 'info',
                   can: this.$hasPerm('accounts.view_changesecretexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountChangeSecretExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
@@ -82,6 +81,14 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('accounts.TaskID'),
+              value: 'automation_id'
+            }
+          ]
+        },
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,

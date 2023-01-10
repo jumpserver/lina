@@ -2,6 +2,7 @@ import store from '@/store'
 import { hasUUID, replaceUUID } from '@/utils/common'
 
 export const DEFAULT_ORG_ID = '00000000-0000-0000-0000-000000000002'
+export const SYSTEM_ORG_ID = '00000000-0000-0000-0000-000000000004'
 
 function getPropOrg() {
   const orgs = store.getters.usingOrgs
@@ -17,7 +18,7 @@ async function change2PropOrg() {
   await changeOrg(org)
 }
 
-async function changeOrg(org) {
+async function changeOrg(org, reload = true) {
   await store.dispatch('users/setCurrentOrg', org)
   await store.dispatch('app/reset')
   let path = location.href
@@ -44,6 +45,7 @@ function hasCurrentOrgPermission() {
 export default {
   hasCurrentOrgPermission,
   DEFAULT_ORG_ID,
+  SYSTEM_ORG_ID,
   change2PropOrg,
   changeOrg,
   getPropOrg

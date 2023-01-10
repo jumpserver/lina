@@ -2,7 +2,7 @@
   <div style="font-size: 12px" class="code-editor">
     <div class="toolbar">
       <div
-        v-for="(item,index) in leftToolbar"
+        v-for="(item,index) in toolbar.left"
         :key="index"
         style="display: inline-block; margin: 0 2px"
       >
@@ -78,7 +78,7 @@
 
       <div style="float: right" class="right-side">
         <div
-          v-for="(item,index) in rightToolbar"
+          v-for="(item,index) in toolbar.right"
           :key="index"
           style="display: inline-block"
         >
@@ -121,7 +121,7 @@ export default {
   },
   props: {
     toolbar: {
-      type: Array,
+      type: [Array, Object],
       default: () => []
     },
     value: {
@@ -139,20 +139,6 @@ export default {
     return {}
   },
   computed: {
-    isManual() {
-      return () => {
-      }
-    },
-    rightToolbar() {
-      return this.toolbar.filter((item) => {
-        return item.align === 'right'
-      })
-    },
-    leftToolbar() {
-      return this.toolbar.filter((item) => {
-        return item.align === 'left'
-      })
-    },
     iValue: {
       get() {
         return this.value

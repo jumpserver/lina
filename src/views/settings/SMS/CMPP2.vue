@@ -1,5 +1,5 @@
 <template>
-  <BaseSMS ref="baseSms" :title="$t('setting.CMPP2')" :config="$data" />
+  <BaseSMS ref="baseSms" :title="$tc('setting.CMPP2')" :config="$data" />
 </template>
 
 <script>
@@ -31,7 +31,9 @@ export default {
             }).catch((error) => {
               vm.$log.error('err occur')
               vm.$refs.baseSms.testPerformError(error)
-            }).finally(() => { btn.loading = false })
+            }).finally(() => {
+              btn.loading = false
+            })
           }
         }
       ],
@@ -60,10 +62,8 @@ export default {
       }
     }
   },
-  computed: {
-  },
-  methods: {
-  }
+  computed: {},
+  methods: {}
 }
 </script>
 

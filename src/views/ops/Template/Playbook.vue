@@ -1,7 +1,7 @@
 <template>
   <div>
-    <GenericListTable :table-config="tableConfig" :header-actions="headerActions" />
-    <UploadDialog :visible.sync="uploadDialogVisible" />
+    <GenericListTable ref="list" :table-config="tableConfig" :header-actions="headerActions" />
+    <UploadDialog :visible.sync="uploadDialogVisible" @completed="refreshTable" />
   </div>
 </template>
 
@@ -39,18 +39,7 @@ export default {
               updateRoute: 'PlaybookUpdate',
               hasDelete: true,
               canDelete: true,
-              hasClone: false,
-              extraActions: [
-                {
-                  title: '执行',
-                  name: 'run',
-                  type: 'running',
-                  can: true,
-                  callback: ({ row }) => {
-                    this.$router.push({ name: 'JobCreate', query: { type: 'playbook', id: row.id }})
-                  }
-                }
-              ]
+              hasClone: false
             }
           }
         }
@@ -64,6 +53,11 @@ export default {
           this.uploadDialogVisible = true
         }
       }
+    }
+  },
+  methods: {
+    refreshTable() {
+      this.$refs.list.$refs.ListTable.reloadTable()
     }
   }
 }

@@ -82,6 +82,10 @@ export default {
     hasImport: {
       type: Boolean,
       default: true
+    },
+    columnsMeta: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
@@ -224,7 +228,8 @@ export default {
                 }
               ]
             }
-          }
+          },
+          ...this.columnsMeta
         }
       },
       headerActions: {
@@ -258,6 +263,7 @@ export default {
             type: 'default'
           }
         ],
+        canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
           getUrlQuery: false,
           exclude: ['asset']
@@ -269,7 +275,7 @@ export default {
   watch: {
     url(iNew) {
       this.$set(this.tableConfig, 'url', iNew)
-      this.$set(this.headerActions.exportOptions, 'url', iNew.replace('/accounts/', '/account-secrets/'))
+      this.$set(this.headerActions.exportOptions, 'url', iNew.replace(/(.*)accounts/, '$1account-secrets'))
     }
   },
   mounted() {

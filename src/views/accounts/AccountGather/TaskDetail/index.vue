@@ -26,17 +26,14 @@ export default {
         url: '/api/v1/accounts/gather-account-automations/',
         activeMenu: 'Detail',
         actions: {
-          deleteSuccessRoute: 'AccountGatherListIndex'
+          deleteSuccessRoute: 'AccountGatherList',
+          canUpdate: 'accounts.change_gatheraccountsautomation',
+          canDelete: 'accounts.delete_gatheraccountsautomation'
         },
         submenu: [
           {
-            title: this.$t('xpack.GatherUser.GatherUserTaskDetail'),
+            title: this.$t('common.BasicInfo'),
             name: 'Detail'
-          },
-          {
-            title: this.$t('xpack.GatherUser.GatherUserTaskExecutionList'),
-            name: 'TaskExecutionList',
-            hidden: !this.$hasPerm('accounts.view_gatheraccountsexecution')
           }
         ],
         hasRightSide: true

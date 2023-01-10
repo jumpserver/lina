@@ -1,15 +1,16 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
+      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
     </el-col>
   </el-row>
 </template>
 
-<script type="text/jsx">
+<script>
 import AutoDetailCard from '@/components/DetailCard/auto'
 
 export default {
+  name: 'AccountGatherExecutionDetail',
   components: {
     AutoDetailCard
   },
@@ -21,21 +22,17 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/ops/playbooks/${this.object.id}/`,
-      excludes: [
-        'path'
+      url: `/api/v1/accounts/gather-account-executions/${this.object.id}/`,
+      detailFields: [
+        'date_start', 'status', 'trigger_display', 'date_start', 'date_finished'
       ]
     }
   },
   computed: {
-    cardTitle() {
-      return this.object.name
-    }
-  },
-  methods: {}
+  }
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 
 </style>

@@ -8,35 +8,27 @@
 
 <script>
 import { GenericDetailPage } from '@/layout/components'
-import AccountChangeSecretExecutionInfo from './AccountChangeSecretExecutionInfo'
-import AccountChangeSecretExecutionTaskList from './AccountChangeSecretExecutionTaskList'
+import AccountBackupPlanExecutionInfo from './AccountGatherExecutionInfo'
 
 export default {
   components: {
     GenericDetailPage,
-    AccountChangeSecretExecutionInfo,
-    AccountChangeSecretExecutionTaskList
+    AccountBackupPlanExecutionInfo
   },
   data() {
     return {
       execution: { id: '' },
       config: {
-        url: '/api/v1/accounts/change-secret-executions/',
-        activeMenu: 'AccountChangeSecretExecutionInfo',
+        activeMenu: 'AccountGatherExecutionDetail',
         actions: {
+          detailApiUrl: `/api/v1/accounts/gather-account-executions/${this.$route.params.id}/`,
           hasUpdate: false,
           hasDelete: false
         },
         submenu: [
           {
             title: this.$t('common.BasicInfo'),
-            name: 'AccountChangeSecretExecutionInfo',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
-          },
-          {
-            title: this.$t('accounts.AccountChangeSecret.TaskList'),
-            name: 'AccountChangeSecretExecutionTaskList',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretrecord')
+            name: 'AccountGatherExecutionDetail'
           }
         ],
         getTitle: this.getExecutionTitle

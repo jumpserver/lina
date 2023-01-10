@@ -90,7 +90,7 @@ export default {
                   callback: ({ row }) => {
                     this.$axios.post(
                       `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'refresh' }
+                      { action: 'refresh' },
                     ).then(res => {
                       openTaskPage(res['task'])
                     })
@@ -102,7 +102,10 @@ export default {
         }
       },
       headerActions: {
-        createRoute: 'AppletHostCreate'
+        createRoute: 'AppletHostCreate',
+        hasRefresh: true,
+        hasExport: false,
+        hasImport: false
       }
     }
   }
@@ -110,7 +113,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.applet-host >>> .protocol {
+.applet-host > > > .protocol {
   margin-left: 3px;
 }
 

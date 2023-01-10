@@ -81,7 +81,7 @@ export default {
       },
       assetRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('xpack.ChangeAuthPlan.AddAsset'),
+        title: this.$t('accounts.AccountChangeSecret.AddAsset'),
         disabled: this.$store.getters.currentOrgIsRoot,
         canSelect: (row, index) => {
           return this.object.assets.indexOf(row.id) === -1
@@ -101,7 +101,7 @@ export default {
       },
       nodeRelationConfig: {
         icon: 'fa-edit',
-        title: this.$t('xpack.ChangeAuthPlan.AddNode'),
+        title: this.$t('accounts.AccountChangeSecret.AddNode'),
         objectsAjax: {
           url: `/api/v1/assets/nodes/`,
           transformOption: (item) => {

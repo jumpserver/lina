@@ -1,6 +1,7 @@
 {
   "": "",
   "accounts": {
+    "TaskID": "任务 ID",
     "DynamicUsername": "动态用户名",
     "HistoryPassword": "历史密码",
     "PasswordRecord": "密码记录",
@@ -12,20 +13,21 @@
     "AccountPush": {
       "AccountPushList": "账号推送",
       "AccountPushCreate": "账号推送创建",
-      "AccountPushExecutionList": "账号推送执行"
+      "AccountPushExecutionList": "执行列表"
     },
-    "AccountBackupPlan": {
+    "AccountBackup": {
       "Types": "类型",
       "Backup": "备份",
-      "AccountBackupPlan": "账号备份",
-      "AccountBackupPlanCreate": "创建账号备份",
-      "AccountBackupPlanUpdate": "更新账号备份",
+      "AccountBackup": "账号备份",
+      "AccountBackupCreate": "创建账号备份",
+      "AccountBackupUpdate": "更新账号备份",
       "ExecutionDetail": "执行详情",
+      "ExecutionList": "执行列表",
       "MailRecipient": "邮件收件人",
       "IsSuccess": "是否成功",
       "Reason": "原因"
     },
-    "ChangeAuthPlan": {
+    "AccountChangeSecret": {
       "ContainAttachment": "含附件",
       "AddAsset": "添加资产",
       "MailRecipient": "邮件收件人",
@@ -40,10 +42,9 @@
       "SystemUserId": "系统用户Id",
       "AssetAmount": "资产数量",
       "AssetAndNode": "资产和节点",
-      "ChangeAuthPlan": "账号改密",
-      "AssetChangeAuthPlan": "账号改密",
-      "AssetChangeAuthPlanCreate": "创建账号改密",
-      "AssetChangeAuthPlanUpdate": "更新账号改密",
+      "AccountChangeSecret": "账号改密",
+      "AssetChangeSecretCreate": "创建账号改密",
+      "AssetChangeSecretUpdate": "更新账号改密",
       "SymbolSet": "特殊符号集合",
       "SymbolSetHelpText": "请输入此类型数据库支持的特殊符号集合，若生成的随机密码中有此类数据库不支持的特殊字符，改密计划将会失败",
       "CyclePerform": "周期执行",
@@ -91,7 +92,7 @@
       "AccountGatherTaskCreate": "创建任务",
       "AccountGatherTaskList": "账号收集",
       "AccountGatherTaskUpdate": "更新任务",
-      "AccountGatherTaskDetail": "任务详情",
+      "ExecutionDetail": "任务详情",
       "AccountGatherTaskExecutionList": "任务执行列表"
     }
   },
@@ -195,6 +196,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "GatewayList": "网关列表",
     "AccessKey": "访问密钥",
     "Token": "令牌",
     "SSHKey": "SSH 密钥",
@@ -425,6 +427,7 @@
     "Last8": "最近 8 次",
     "Version": "版本",
     "Publish": "发布",
+    "PublishAllApplets": "发布所有应用",
     "Icon": "图标",
     "DisplayName": "名称",
     "Automations": "自动化",
@@ -797,6 +800,9 @@
     "Weekly": "按周"
   },
   "ops": {
+    "UploadPlaybook": "上传 Playbook",
+    "RequiredAssetOrNode": "请至少选择一个资产或节点",
+    "RequiredEntryFile": "此文件作为运行的入口文件，必须存在",
     "ScrollToTop": "滚动到顶部",
     "ScrollToBottom": "滚动到底部",
     "ClearScreen": "清屏",
@@ -1188,6 +1194,8 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
+    "BasePort": "一般协议监听端口",
+    "DatabasePort": "数据库端口",
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",

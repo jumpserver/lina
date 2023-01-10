@@ -37,6 +37,7 @@ export default {
             'SECURITY_LOGIN_CHALLENGE_ENABLED',
             'SECURITY_LOGIN_CAPTCHA_ENABLED',
             'SECURITY_PASSWORD_EXPIRATION_TIME',
+            'VERIFY_CODE_TTL',
             'SECURITY_MFA_VERIFY_TTL',
             'SECURITY_CHECK_DIFFERENT_CITY_LOGIN',
             'AuthLimit',

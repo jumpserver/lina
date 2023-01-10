@@ -144,7 +144,6 @@ export default {
         } else {
           this.$emit('input', val)
         }
-        console.log('Set value: ', val)
       },
       get() {
         return this.value

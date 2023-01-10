@@ -13,7 +13,7 @@ export default {
     return {
       loading: true,
       config: {
-        url: '/api/v1/terminal/applet-hosts/?oid=RemoteAppHost',
+        url: '/api/v1/terminal/applet-hosts/',
         addFields: [
           [this.$t('common.Automations'), ['deploy_options'], 3]
         ],
@@ -46,7 +46,6 @@ export default {
   async mounted() {
     const platform = await this.$axios.get('/api/v1/assets/platforms/RemoteAppHost/')
     this.$route.query.platform = platform['id']
-    this.$route.query.oid = 'SYSTEM'
     this.loading = false
   },
   methods: {}

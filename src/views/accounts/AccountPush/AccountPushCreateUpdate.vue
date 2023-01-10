@@ -42,6 +42,11 @@ export default {
         ssh_key_change_strategy: {
           hidden: (formValue) => formValue['action'] !== 'create_and_push' ||
             formValue['secret_type'] !== 'ssh_key'
+        },
+        triggers: {
+          el: {
+            readonly: true
+          }
         }
       },
       createSuccessNextRoute: { name: 'AccountPushIndex' },

@@ -22,6 +22,7 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
+        columns: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']
@@ -42,14 +43,14 @@ export default {
             }
           },
           is_periodic: {
-            label: vm.$t('xpack.ChangeAuthPlan.Timer'),
+            label: vm.$t('accounts.AccountChangeSecret.Timer'),
             formatterArgs: {
               showFalse: false
             },
             width: '80px'
           },
           periodic_display: {
-            label: vm.$t('xpack.ChangeAuthPlan.TimerPeriod'),
+            label: vm.$t('accounts.AccountChangeSecret.TimerPeriod'),
             width: 150
           },
           executed_amount: {

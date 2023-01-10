@@ -13,20 +13,20 @@ export default {
   props: {
     object: {
       type: Object,
-      required: true,
+      required: false,
       default: () => ({})
     }
   },
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/accounts/account-backup-plan-executions/?' + `${this.object.id ? 'plan_id=' + this.object.id : ''}`,
+        url: '/api/v1/accounts/account-backup-plan-executions/',
         columns: [
           'timedelta', 'trigger_display', 'date_start', 'is_success', 'reason', 'actions'
         ],
         columnsMeta: {
           timedelta: {
-            label: this.$t('xpack.ChangeAuthPlan.TimeDelta'),
+            label: this.$t('accounts.AccountChangeSecret.TimeDelta'),
             width: '90px',
             formatter: function(row) {
               return row.timedelta.toFixed(2) + 's'
@@ -41,14 +41,14 @@ export default {
                 {
                   name: 'log',
                   type: 'primary',
-                  title: this.$t('xpack.ChangeAuthPlan.Log'),
+                  title: this.$t('accounts.AccountChangeSecret.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('xpack.ChangeAuthPlan.Detail'),
+                  title: this.$t('accounts.AccountChangeSecret.Detail'),
                   type: 'info',
                   callback: function({ row }) {
                     return this.$router.push({ name: 'AccountBackupPlanExecutionDetail', params: { id: row.id }})
@@ -60,6 +60,14 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('accounts.TaskID'),
+              value: 'automation_id'
+            }
+          ]
+        },
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,
