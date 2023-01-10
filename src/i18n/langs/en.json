@@ -1319,6 +1319,7 @@
     "UpdateNodeAssetHardwareInfo": "Update node asset hardware information"
   },
   "users": {
+    "Login": "Users login",
     "InviteSuccess": "Invite success",
     "FileEncryptionPassword": "File encryption password",
     "OrgRoles": "Org roles",
