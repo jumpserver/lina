@@ -42,6 +42,7 @@ import GenericListTable from '@/layout/components/GenericListTable/index'
 import Dialog from '@/components/Dialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -164,9 +165,12 @@ export default {
         this.buttonLoading = false
         return this.$message.error(this.$tc('common.TestPortErrorMsg'))
       }
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port })
-        .then(() => {
-          return this.$message.success(this.$tc('common.TestSuccessMsg'))
+      this.$axios.post(
+        `/api/v1/assets/gateways/${this.cellValue}/test-connective/`,
+        { port: port }
+      )
+        .then((res) => {
+          openTaskPage(res['task'])
         }).finally(() => {
           this.portInput = ''
           this.cellValue = ''
