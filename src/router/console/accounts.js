@@ -254,10 +254,7 @@ export default [
       },
       {
         path: 'executions',
-        component: () => import(
-        '@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/' +
-        'AccountChangeSecretExecutionList.vue'
-          ),
+        component: () => import('@/views/accounts/AccountChangeSecret/AccountChangeSecretDetail/AccountChangeSecretExecution/AccountChangeSecretExecutionList.vue'),
         name: 'AccountChangeSecretExecutionList',
         hidden: true,
         meta: {

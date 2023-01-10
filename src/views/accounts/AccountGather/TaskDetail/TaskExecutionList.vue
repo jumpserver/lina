@@ -61,6 +61,14 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('accounts.TaskID'),
+              value: 'automation_id'
+            }
+          ]
+        },
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,

@@ -322,6 +322,8 @@
     "ReLoginErr": "ログイン時間が 5 分を超えました。もう一度ログインしてください"
   },
   "common": {
+    "Activity": "イベント",
+    "Last8": "最近 8 回です",
     "SpecificInfo": "特別情報",
     "CollectionSucceed": "コレクション成功",
     "CancelCollection": "収集の取消し",

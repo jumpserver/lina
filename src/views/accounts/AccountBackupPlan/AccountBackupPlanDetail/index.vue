@@ -30,7 +30,8 @@ export default {
         ],
         actions: {
           detailApiUrl: `/api/v1/accounts/account-backup-plans/${this.$route.params.id}/`,
-          deleteApiUrl: `/api/v1/accounts/account-backup-plans/${this.$route.params.id}/`
+          deleteApiUrl: `/api/v1/accounts/account-backup-plans/${this.$route.params.id}/`,
+          deleteSuccessRoute: 'AccountBackupList'
         }
       }
     }

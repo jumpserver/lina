@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :md="14" :sm="24">
-      <AutoDetailCard :url="url" :fields="detailFields" :object="object" />
+      <AutoDetailCard :url="url" :object="object" :excludes="excludes" />
     </el-col>
   </el-row>
 </template>
@@ -21,7 +21,10 @@ export default {
   },
   data() {
     return {
-      url: `/api/v1/ops/playbooks/${this.object.id}/`
+      url: `/api/v1/ops/playbooks/${this.object.id}/`,
+      excludes: [
+        'path'
+      ]
     }
   },
   computed: {

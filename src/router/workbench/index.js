@@ -189,7 +189,7 @@ export default {
           meta: {
             title: i18n.t('route.updateAdhoc'),
             permissions: ['ops.change_adhoc'],
-            activeMenu: '/workbench/ops/scripts'
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
@@ -200,7 +200,7 @@ export default {
           meta: {
             title: i18n.t('ops.createAdhoc'),
             permissions: ['ops.add_adhoc'],
-            activeMenu: '/workbench/ops/scripts'
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
@@ -211,7 +211,7 @@ export default {
           meta: {
             title: i18n.t('route.AdhocDetail'),
             permissions: ['ops.view_adhoc'],
-            activeMenu: '/workbench/ops/scripts'
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
@@ -222,7 +222,7 @@ export default {
           meta: {
             title: i18n.t('ops.PlaybookUpdate'),
             permissions: ['ops.change_playbook'],
-            activeMenu: '/workbench/ops/scripts'
+            activeMenu: '/workbench/ops/templates'
           }
         },
         {
@@ -233,7 +233,7 @@ export default {
           meta: {
             title: i18n.t('ops.PlaybookDetail'),
             permissions: ['ops.view_playbook'],
-            activeMenu: '/workbench/ops/scripts'
+            activeMenu: '/workbench/ops/templates'
           }
         }
       ]

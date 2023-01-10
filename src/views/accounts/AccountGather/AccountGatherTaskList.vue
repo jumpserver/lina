@@ -22,6 +22,7 @@ export default {
           app: 'accounts',
           resource: 'gatheraccountsautomation'
         },
+        columns: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions'],
         columnsShow: {
           min: ['name', 'actions'],
           default: ['name', 'nodes', 'is_periodic', 'periodic_display', 'executed_amount', 'actions']

@@ -362,6 +362,11 @@ export default {
         return node.meta.data.id
       })
 
+      if (hosts.length === 0 && nodes.length === 0) {
+        this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
+        return
+      }
+
       const data = {
         assets: hosts,
         nodes: nodes,

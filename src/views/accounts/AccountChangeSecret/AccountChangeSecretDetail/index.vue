@@ -35,11 +35,6 @@ export default {
             title: this.$t('accounts.AccountChangeSecret.AssetAndNode'),
             name: 'AccountChangeSecretAsset',
             hidden: () => !this.$hasPerm('accounts.change_changesecretautomation')
-          },
-          {
-            title: this.$t('accounts.AccountChangeSecret.ExecutionList'),
-            name: 'AccountChangeSecretExecutionList',
-            hidden: () => !this.$hasPerm('accounts.view_changesecretexecution')
           }
         ]
       }

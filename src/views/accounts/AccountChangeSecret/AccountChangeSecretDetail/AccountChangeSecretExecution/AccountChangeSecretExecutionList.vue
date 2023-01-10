@@ -18,7 +18,6 @@ export default {
     }
   },
   data() {
-    console.log('this', this)
     return {
       tableConfig: {
         url: '/api/v1/accounts/change-secret-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
@@ -31,14 +30,14 @@ export default {
             label: this.$t('accounts.AccountChangeSecret.AssetAmount'),
             width: '80px',
             formatter: function(row) {
-              return <span>{ row.snapshot.asset_amount }</span>
+              return <span>{row.snapshot.asset_amount}</span>
             }
           },
           node_amount: {
             label: this.$t('accounts.AccountChangeSecret.NodeAmount'),
             width: '80px',
             formatter: function(row) {
-              return <span>{ row.snapshot.node_amount }</span>
+              return <span>{row.snapshot.node_amount}</span>
             }
           },
           status: {
@@ -73,7 +72,7 @@ export default {
                   type: 'info',
                   can: this.$hasPerm('accounts.view_changesecretexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountChangeSecretExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]
@@ -82,6 +81,14 @@ export default {
         }
       },
       headerActions: {
+        searchConfig: {
+          options: [
+            {
+              label: this.$t('accounts.TaskID'),
+              value: 'automation_id'
+            }
+          ]
+        },
         hasSearch: true,
         hasRefresh: true,
         hasRightActions: true,
