@@ -133,10 +133,10 @@ export default {
       })
     },
     cannotDelete(item) {
-      const full = this.choices.find(choice => {
+      const full = this.iChoices.find(choice => {
         return choice.name === item.name
       })
-      return full.primary || full.required
+      return full?.primary || full?.required
     },
     handleAdd(index) {
       this.items.push({ ...this.remainProtocols[0] })
@@ -167,7 +167,7 @@ export default {
     },
     getAssetDefaultItems(item, choices) {
       const protocols = []
-      const protocol = choices.find(i => i.name === item.name)
+      const protocol = choices.find(i => i.name === item.name) || item
       if (protocol) {
         protocols.push(protocol)
       }
