@@ -13,9 +13,10 @@ export const platformFieldsMeta = (vm) => {
       },
       fields: [
         'ansible_enabled', 'ansible_config',
-        'push_account_enabled', 'ping_enabled', 'ping_method',
+        'ping_enabled', 'ping_method',
         'gather_facts_enabled', 'gather_facts_method',
         'change_secret_enabled', 'change_secret_method',
+        'push_account_enabled', 'push_account_method',
         'verify_account_enabled', 'verify_account_method',
         'gather_accounts_enabled', 'gather_accounts_method'
       ],
