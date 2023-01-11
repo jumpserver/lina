@@ -2,11 +2,11 @@
   <div>
     <GenericListPage
       v-loading="loading"
-      :table-config="tableConfig"
       :header-actions="headerActions"
+      :table-config="tableConfig"
     />
     <el-dialog
-      :title="this.$t('route.OperateLog')"
+      :title="this.$tc('route.OperateLog')"
       :visible.sync="logDetailVisible"
       width="70%"
     >
@@ -45,8 +45,8 @@ export default {
         columnsShow: {
           min: ['user', 'resource'],
           default: [
-            'user', 'action_display', 'resource_type_display', 'resource', 'remote_addr',
-            'datetime', 'actions'
+            'user', 'action_display', 'resource_type_display',
+            'resource', 'remote_addr', 'datetime', 'actions'
           ]
         },
         columnsMeta: {
