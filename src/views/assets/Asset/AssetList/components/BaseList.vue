@@ -6,6 +6,11 @@
       :visible.sync="updateSelectedDialogSetting.visible"
       v-bind="updateSelectedDialogSetting"
     />
+    <GatewayDialog
+      :port="GatewayPort"
+      :cell="GatewayCell"
+      :visible.sync="GatewayVisible"
+    />
   </div>
 </template>
 
@@ -17,11 +22,13 @@ import {
 import AssetBulkUpdateDialog from './AssetBulkUpdateDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import PlatformDialog from '../components/PlatformDialog'
+import GatewayDialog from '@/components/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
     ListTable,
+    GatewayDialog,
     PlatformDialog,
     AssetBulkUpdateDialog
   },
@@ -65,11 +72,15 @@ export default {
       } else if (action === 'Update') {
         route.params.id = row.id
         route.query.platform = row.platform.id
+        route.query.platform_name = row.platform.name
       }
       vm.$router.push(route)
     }
     return {
       showPlatform: false,
+      GatewayPort: 0,
+      GatewayCell: '',
+      GatewayVisible: false,
       defaultConfig: {
         url: '/api/v1/assets/hosts/',
         permissions: {
@@ -132,12 +143,23 @@ export default {
                   title: this.$t('common.Test'),
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   callback: ({ row }) => {
-                    this.$axios.post(
-                      `/api/v1/assets/assets/${row.id}/tasks/`,
-                      { action: 'test' }
-                    ).then(res => {
-                      openTaskPage(res['task'])
-                    })
+                    if (row.platform.name === 'Gateway') {
+                      this.GatewayVisible = true
+                      const port = row.protocols.find(item => item.name === 'ssh').port
+                      if (!port) {
+                        return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
+                      } else {
+                        this.GatewayPort = port
+                        this.GatewayCell = row.id
+                      }
+                    } else {
+                      this.$axios.post(
+                        `/api/v1/assets/assets/${row.id}/tasks/`,
+                        { action: 'test' }
+                      ).then(res => {
+                        openTaskPage(res['task'])
+                      })
+                    }
                   }
                 }
               ]

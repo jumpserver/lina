@@ -62,18 +62,18 @@ export default {
                   name: 'log',
                   type: 'primary',
                   can: 'accounts.view_pushaccountexecution',
-                  title: this.$t('accounts.ChangeAuthPlan.Log'),
+                  title: this.$t('accounts.AccountChangeSecret.Log'),
                   callback: function({ row }) {
                     window.open(`/#/ops/celery/task/${row.id}/log/`, '_blank', 'toolbar=yes, width=900, height=600')
                   }
                 },
                 {
                   name: 'detail',
-                  title: this.$t('accounts.ChangeAuthPlan.Detail'),
+                  title: this.$t('accounts.AccountChangeSecret.Detail'),
                   type: 'info',
                   can: this.$hasPerm('accounts.view_pushaccountexecution'),
                   callback: function({ row }) {
-                    return this.$router.push({ name: 'ChangeAuthPlanExecutionDetail', params: { id: row.id }})
+                    return this.$router.push({ name: 'AccountPushExecutionDetail', params: { id: row.id }})
                   }
                 }
               ]

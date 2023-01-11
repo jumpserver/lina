@@ -196,6 +196,7 @@
     "NoSQLProtocol": "非关系数据库"
   },
   "assets": {
+    "Secure": "安全",
     "LabelInputFormatValidation": "标签格式错误，正确格式为：name:value",
     "GatewayList": "网关列表",
     "AccessKey": "访问密钥",
@@ -803,6 +804,7 @@
   "ops": {
     "UploadPlaybook": "上传 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
+    "RequiredContent": "请输入命令",
     "RequiredEntryFile": "此文件作为运行的入口文件，必须存在",
     "ScrollToTop": "滚动到顶部",
     "ScrollToBottom": "滚动到底部",

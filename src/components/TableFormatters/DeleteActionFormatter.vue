@@ -43,7 +43,8 @@ export default {
       if (this.col.objects === 'all') {
         return false
       }
-      return this.col.objects.indexOf(this.cellValue) === -1
+      const objectIds = this.col.objects.map(i => i.id)
+      return objectIds.indexOf(this.cellValue) === -1
     }
   }
 }
