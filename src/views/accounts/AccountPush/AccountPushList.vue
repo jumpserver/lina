@@ -21,14 +21,25 @@ export default {
         columnsShow: {
           min: ['name', 'actions'],
           default: [
-            'name', 'username', 'triggers', 'secret_type', 'actions'
+            'name', 'accounts', 'secret_strategy', 'is_periodic', 'periodic_display', 'run_times', 'actions'
           ]
         },
         columnsMeta: {
           name: {
             formatter: DetailFormatter,
             formatterArgs: {
-              route: 'AccountChangeSecretDetail'
+              route: 'AccountPushDetail'
+            }
+          },
+          accounts: {
+            formatter: function(row) {
+              console.log('row', row)
+              return <span> { row.accounts.join(', ') } </span>
+            }
+          },
+          secret_strategy: {
+            formatter: function(row) {
+              return <span> { row.secret_strategy.label } </span>
             }
           },
           username: {
@@ -78,11 +89,11 @@ export default {
                 {
                   title: vm.$t('xpack.Execute'),
                   name: 'execute',
-                  can: this.$hasPerm('accounts.add_changesecretautomation'),
+                  can: this.$hasPerm('accounts.add_pushaccountexecution'),
                   type: 'info',
                   callback: function({ row }) {
                     this.$axios.post(
-                      `/api/v1/accounts/change-secret-executions/`,
+                      `/api/v1/accounts/push-account-executions/`,
                       {
                         automation: row.id,
                         type: row.type.value
