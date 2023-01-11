@@ -122,12 +122,12 @@ export default {
       let url = this.treeSetting?.url || this.url
       if (treeNode.meta.type === 'node') {
         const nodeId = treeNode.meta.data.id
-        url = setUrlParam(url, 'node', nodeId)
+        url = setUrlParam(url, 'node_id', nodeId)
         url = setUrlParam(url, 'asset', '')
       } else if (treeNode.meta.type === 'asset') {
         const assetId = treeNode.meta.data?.id || treeNode.id
         url = setUrlParam(url, 'node', '')
-        url = setUrlParam(url, 'asset', assetId)
+        url = setUrlParam(url, 'asset_id', assetId)
       } else if (treeNode.meta.type === 'category') {
         url = setUrlParam(url, 'category', treeNode.meta.category)
       } else if (treeNode.meta.type === 'type') {
