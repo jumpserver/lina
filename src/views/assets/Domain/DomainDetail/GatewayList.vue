@@ -8,7 +8,7 @@
       <GatewayDialog
         :port="port"
         :cell="cell"
-        :visible="visible"
+        :visible.sync="visible"
       />
     </el-col>
   </div>

@@ -4,7 +4,7 @@
     <GatewayDialog
       :port="GatewayPort"
       :cell="GatewayCell"
-      :visible="GatewayVisible"
+      :visible.sync="GatewayVisible"
     />
   </div>
 </template>
