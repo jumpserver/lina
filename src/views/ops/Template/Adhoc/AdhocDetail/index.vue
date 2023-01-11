@@ -22,7 +22,7 @@ export default {
         getTitle(row) {
           return row['name']
         },
-        url: '/api/v1/ops/adhocs/',
+        url: '/api/v1/ops/adhocs',
         activeMenu: 'AdhocDetail',
         submenu: [
           {

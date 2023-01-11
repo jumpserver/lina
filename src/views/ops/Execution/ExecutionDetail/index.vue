@@ -27,7 +27,7 @@ export default {
         getTitle(row) {
           return row['name']
         },
-        url: '/api/v1/ops/job-executions/',
+        url: '/api/v1/ops/job-executions',
         activeMenu: 'JobExecutionDetail',
         submenu: [
           {

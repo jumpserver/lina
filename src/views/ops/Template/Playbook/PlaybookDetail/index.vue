@@ -22,7 +22,7 @@ export default {
         getTitle(row) {
           return row['name']
         },
-        url: '/api/v1/ops/playbooks/',
+        url: '/api/v1/ops/playbooks',
         activeMenu: 'PlaybookDetail',
         submenu: [
           {
