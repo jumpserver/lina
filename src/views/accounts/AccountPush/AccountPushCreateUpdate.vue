@@ -24,14 +24,24 @@ export default {
       },
       url: '/api/v1/accounts/push-account-automations/',
       fields: [
+        // ['触发方式', ['triggers']],
+        // [this.$t('assets.Account'), [
+        //   'username', 'dynamic_username',
+        //   'secret_type', 'secret_strategy', 'secret',
+        //   'password_rules', 'ssh_key', 'passphrase'
+        // ]],
+        // [this.$t('common.Action'), ['action', 'ssh_key_change_strategy']],
         [this.$t('common.Basic'), ['name']],
-        ['触发方式', ['triggers']],
-        [this.$t('assets.Account'), [
-          'username', 'dynamic_username',
-          'secret_type', 'secret_strategy', 'secret',
-          'password_rules', 'ssh_key', 'passphrase'
-        ]],
-        [this.$t('common.Action'), ['action', 'ssh_key_change_strategy']],
+        [this.$t('xpack.Asset'), ['accounts', 'assets', 'nodes']],
+        [
+          this.$t('accounts.AccountChangeSecret.SecretKeyStrategy'),
+          [
+            'secret_strategy', 'secret_type', 'secret',
+            'password_rules', 'ssh_key_change_strategy',
+            'ssh_key', 'passphrase'
+          ]
+        ],
+        [this.$t('xpack.Timer'), ['is_periodic', 'crontab', 'interval']],
         [this.$t('common.Other'), ['is_active', 'comment']]
       ],
       fieldsMeta: {
@@ -49,8 +59,8 @@ export default {
           }
         }
       },
-      createSuccessNextRoute: { name: 'AccountPushIndex' },
-      updateSuccessNextRoute: { name: 'AccountPushIndex' },
+      createSuccessNextRoute: { name: 'AccountPushList' },
+      updateSuccessNextRoute: { name: 'AccountPushList' },
       afterGetRemoteMeta: this.handleAfterGetRemoteMeta,
       cleanFormValue(data) {
         const secretType = data.secret_type || ''
