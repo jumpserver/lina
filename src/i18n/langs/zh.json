@@ -804,6 +804,7 @@
   "ops": {
     "UploadPlaybook": "上传 Playbook",
     "RequiredAssetOrNode": "请至少选择一个资产或节点",
+    "RequiredContent": "请输入命令",
     "RequiredEntryFile": "此文件作为运行的入口文件，必须存在",
     "ScrollToTop": "滚动到顶部",
     "ScrollToBottom": "滚动到底部",
@@ -1196,8 +1197,8 @@
     "NoPermission": "暂无权限"
   },
   "terminal": {
-    "BasePort": "一般协议监听端口",
-    "DatabasePort": "数据库端口",
+    "BasePort": "监听端口",
+    "DatabasePort": "数据库协议端口",
     "UploadSucceed": "上传成功",
     "UploadFailed": "上传失败",
     "Applets": "远程应用",
@@ -1582,6 +1583,7 @@
     "UpdateNodeAssetHardwareInfo": "更新节点资产硬件信息"
   },
   "users": {
+    "Login": "用户登录",
     "InviteSuccess": "邀请成功",
     "FileEncryptionPassword": "文件加密密码",
     "RoleUsers": "授权用户",

@@ -148,14 +148,14 @@ export default {
                 label: 'Shell', value: 'shell'
               },
               {
-                label: 'Powershell', value: 'powershell'
+                label: 'Powershell', value: 'win_shell'
               },
               {
                 label: 'Python', value: 'python'
               }
             ],
             callback: (option) => {
-              this.cmOptions.mode = option
+              this.cmOptions.mode = option === 'win_shell' ? 'powershell' : option
               this.module = option
             }
           },
@@ -256,6 +256,7 @@ export default {
             this.toolbar.left.runas.value = res.runas
             this.toolbar.left.runasPolicy.value = res.runas_policy.value
             this.toolbar.left.language.value = res.module.value
+            this.toolbar.left.language.callback(res.module.value)
             this.toolbar.left.timeout.value = res.timeout
             this.command = res.args
             this.executionInfo.status = data['status']
@@ -301,17 +302,19 @@ export default {
         const data = JSON.parse(e.data)
         if (data.hasOwnProperty('message')) {
           let message = data.message
-          message = message.replace(/Task ops\.tasks\.run_command_execution.*/, '')
+          message = message.replace(/Task ops\.tasks\.run_ops_job_execution.*/, '')
           this.xterm.write(message)
         }
         if (data.hasOwnProperty('event')) {
           const event = data.event
           switch (event) {
             case 'end':
-              clearInterval(this.executionInfo.cancel)
-              this.toolbar.left.run.icon = 'fa fa-play'
-              this.toolbar.left.run.disabled = false
-              this.getTaskStatus()
+              setTimeout(() => {
+                clearInterval(this.executionInfo.cancel)
+                this.toolbar.left.run.icon = 'fa fa-play'
+                this.toolbar.left.run.disabled = false
+                this.getTaskStatus()
+              }, 500)
               break
           }
         }
@@ -366,11 +369,15 @@ export default {
         this.$message.error(this.$tc('ops.RequiredAssetOrNode'))
         return
       }
+      if (this.command.length === 0) {
+        this.$message.error(this.$tc('ops.RequiredContent'))
+        return
+      }
 
       const data = {
         assets: hosts,
         nodes: nodes,
-        module: this.module === 'powershell' ? 'win_shell' : this.module,
+        module: this.module,
         args: this.command,
         runas: this.runas,
         runas_policy: this.runasPolicy,

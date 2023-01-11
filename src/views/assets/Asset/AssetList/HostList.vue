@@ -1,19 +1,31 @@
 <template>
-  <BaseList v-bind="config" />
+  <div>
+    <BaseList v-bind="config" />
+    <GatewayDialog
+      :port="GatewayPort"
+      :cell="GatewayCell"
+      :visible="GatewayVisible"
+    />
+  </div>
 </template>
 
 <script>
 import BaseList from './components/BaseList'
 import { ActionsFormatter } from '@/components/TableFormatters'
+import GatewayDialog from '@/components/GatewayDialog'
 import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
-    BaseList
+    BaseList,
+    GatewayDialog
   },
   data() {
     const vm = this
     return {
+      GatewayPort: 0,
+      GatewayCell: '',
+      GatewayVisible: false,
       config: {
         url: '/api/v1/assets/hosts/',
         category: 'host',
@@ -44,12 +56,23 @@ export default {
                     title: this.$t('common.Test'),
                     can: this.$hasPerm('assets.test_assetconnectivity'),
                     callback: ({ row }) => {
-                      this.$axios.post(
-                        `/api/v1/assets/assets/${row.id}/tasks/`,
-                        { action: 'refresh' }
-                      ).then(res => {
-                        openTaskPage(res['task'])
-                      })
+                      if (row.platform.name === 'Gateway') {
+                        this.GatewayVisible = true
+                        const port = row.protocols.find(item => item.name === 'ssh').port
+                        if (!port) {
+                          return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
+                        } else {
+                          this.GatewayPort = port
+                          this.GatewayCell = row.id
+                        }
+                      } else {
+                        this.$axios.post(
+                          `/api/v1/assets/assets/${row.id}/tasks/`,
+                          { action: 'test' }
+                        ).then(res => {
+                          openTaskPage(res['task'])
+                        })
+                      }
                     }
                   },
                   {

@@ -47,7 +47,9 @@ export default {
           fontSize: 13,
           rightClickSelectsWord: true,
           theme: {
-            background: '#fff'
+            background: '#fff',
+            foreground: '#000',
+            selection: '#363535'
           }
         }),
       toolbar: [

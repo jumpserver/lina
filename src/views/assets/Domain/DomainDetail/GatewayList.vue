@@ -1,52 +1,29 @@
 <template>
   <div>
     <el-col :md="24" :sm="24">
-      <GenericListTable :header-actions="headerActions" :table-config="tableConfig" />
-      <Dialog
-        v-if="dialogVisible"
-        :destroy-on-close="true"
-        :show-cancel="false"
-        :show-confirm="false"
-        :title="$tc('assets.TestGatewayTestConnection')"
-        :visible.sync="dialogVisible"
-        top="35vh"
-        width="40%"
-      >
-        <el-row :gutter="20">
-          <el-col :md="4" :sm="24">
-            <div style="line-height: 34px">{{ $t('assets.SSHPort') }}</div>
-          </el-col>
-          <el-col :md="14" :sm="24">
-            <el-input v-model="portInput" />
-            <span class="help-tips help-block">{{ $t('assets.TestGatewayHelpMessage') }}</span>
-          </el-col>
-          <el-col :md="4" :sm="24">
-            <el-button
-              :loading="buttonLoading"
-              size="mini"
-              style="line-height:20px "
-              type="primary"
-              @click="dialogConfirm"
-            >
-              {{ this.$t('common.Confirm') }}
-            </el-button>
-          </el-col>
-        </el-row>
-      </Dialog>
+      <GenericListTable
+        :header-actions="headerActions"
+        :table-config="tableConfig"
+      />
+      <GatewayDialog
+        :port="port"
+        :cell="cell"
+        :visible="visible"
+      />
     </el-col>
   </div>
 </template>
 
 <script>
 import GenericListTable from '@/layout/components/GenericListTable/index'
-import Dialog from '@/components/Dialog'
+import GatewayDialog from '@/components/GatewayDialog'
 import { connectivityMeta } from '@/components/AccountListTable/const'
 import { ArrayFormatter, ChoicesFormatter, DetailFormatter, TagsFormatter } from '@/components/TableFormatters'
 
 export default {
   components: {
     GenericListTable,
-    Dialog
+    GatewayDialog
   },
   props: {
     object: {
@@ -113,13 +90,13 @@ export default {
                   can: this.$hasPerm('assets.test_assetconnectivity'),
                   title: this.$t('assets.TestConnection'),
                   callback: function(val) {
-                    this.dialogVisible = true
+                    this.visible = true
                     const port = val.row.protocols.find(item => item.name === 'ssh').port
                     if (!port) {
                       return this.$message.error(this.$tc('common.BadRequestErrorMsg'))
                     } else {
-                      this.portInput = port
-                      this.cellValue = val.row.id
+                      this.port = port
+                      this.cell = val.row.id
                     }
                   }.bind(this)
                 }
@@ -149,31 +126,12 @@ export default {
           }
         }
       },
-      dialogVisible: false,
-      portInput: '',
-      cellValue: '',
-      buttonLoading: false
+      port: 0,
+      cell: '',
+      visible: false
     }
   },
   methods: {
-    dialogConfirm() {
-      this.buttonLoading = true
-      const port = parseInt(this.portInput)
-
-      if (isNaN(port)) {
-        this.buttonLoading = false
-        return this.$message.error(this.$tc('common.TestPortErrorMsg'))
-      }
-      this.$axios.post(`/api/v1/assets/gateways/${this.cellValue}/test-connective/`, { port: port })
-        .then(() => {
-          return this.$message.success(this.$tc('common.TestSuccessMsg'))
-        }).finally(() => {
-          this.portInput = ''
-          this.cellValue = ''
-          this.buttonLoading = false
-          this.dialogVisible = false
-        })
-    }
   }
 }
 </script>

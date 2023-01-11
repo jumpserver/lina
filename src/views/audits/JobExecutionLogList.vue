@@ -7,6 +7,8 @@
 <script type="text/jsx">
 import GenericListPage from '@/layout/components/GenericListPage'
 import { getDaysAgo, getDaysFuture } from '@/utils/common'
+import { ActionsFormatter } from '@/components/TableFormatters'
+import { openTaskPage } from '@/utils/jms'
 
 export default {
   components: {
@@ -24,10 +26,34 @@ export default {
           min: ['material', 'is_success'],
           default: [
             'created_by', 'material', 'is_finished',
-            'is_success', 'time_cost', 'date_start', 'date_finished'
+            'is_success', 'time_cost', 'date_start',
+            'date_finished', 'actions'
           ]
         },
+        columns: [
+          'created_by', 'material', 'is_finished',
+          'is_success', 'time_cost', 'date_start',
+          'date_finished', 'actions'
+        ],
         columnsMeta: {
+          actions: {
+            formatter: ActionsFormatter,
+            formatterArgs: {
+              hasUpdate: false,
+              hasDelete: false,
+              hasClone: false,
+              extraActions: [
+                {
+                  title: this.$t('ops.output'),
+                  name: 'logging',
+                  can: true,
+                  callback: ({ row }) => {
+                    openTaskPage(row.task_id)
+                  }
+                }
+              ]
+            }
+          },
           time_cost: {
             label: this.$t('ops.time'),
             width: '100px',

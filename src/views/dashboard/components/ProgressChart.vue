@@ -114,8 +114,7 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'shadow',
-            color: 'red'
+            type: 'none'
           },
           formatter: () => {
             let tip = ''

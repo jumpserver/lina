@@ -1369,6 +1369,7 @@
     "UpdateNodeAssetHardwareInfo": "ノード資産ハードウェア情報の更新"
   },
   "users": {
+    "Login": "ユーザー登録",
     "InviteSuccess": "成功招待",
     "FileEncryptionPassword": "ファイル暗号化パスワード",
     "RoleUsers": "承認されたユーザー",
