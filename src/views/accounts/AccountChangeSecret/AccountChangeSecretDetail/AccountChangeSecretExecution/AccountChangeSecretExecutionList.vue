@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       tableConfig: {
-        url: '/api/v1/accounts/change-secret-executions/?' + `${this.object.id ? 'automation_id=' + this.object.id : ''}`,
+        url: '/api/v1/accounts/change-secret-executions',
         columns: [
           'asset_amount', 'node_amount', 'status',
           'trigger_display', 'date_start', 'actions'

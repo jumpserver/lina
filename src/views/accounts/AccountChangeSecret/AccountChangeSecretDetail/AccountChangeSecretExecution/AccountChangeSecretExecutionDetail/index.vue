@@ -21,7 +21,7 @@ export default {
     return {
       execution: { id: '' },
       config: {
-        url: '/api/v1/accounts/change-secret-executions/',
+        url: '/api/v1/accounts/change-secret-executionsgi',
         activeMenu: 'AccountChangeSecretExecutionInfo',
         actions: {
           hasUpdate: false,
