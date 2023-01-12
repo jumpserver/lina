@@ -6,13 +6,9 @@
         <ViewSwitcher class="mobile-view-switch" mode="vertical" />
       </div>
       <div :class="{'collapsed': isCollapse}" class="nav-title">
-        <svg-icon
-          :icon-class="isRouteMeta.icon"
-          style="margin-right: 0;"
-        />
         <span
           v-show="!isCollapse"
-          style="margin-left: 10px;"
+          style="margin-left: 5px;"
           @click="viewShown = !viewShown"
         >
           {{ isRouteMeta.title || '' }}
