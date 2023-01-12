@@ -453,7 +453,7 @@ export default {
   }
 
   .treebox {
-    height: 80vh;
+    height: 70vh;
     background-color: transparent;
     >>> .ztree {
       overflow: auto;
