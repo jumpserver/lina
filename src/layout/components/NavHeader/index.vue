@@ -2,22 +2,22 @@
   <div class="navbar">
     <ul class="navbar-right">
       <li class="header-item header-icon">
-        <el-tooltip effect="dark" :content="$tc('route.SiteMessageList')">
+        <el-tooltip :content="$tc('route.SiteMessageList')" effect="dark">
           <SiteMessages />
         </el-tooltip>
       </li>
       <li v-perms="['rbac.view_webterminal']" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="$tc('route.WebTerminal')">
+        <el-tooltip :content="$tc('route.WebTerminal')" effect="dark">
           <WebTerminal />
         </el-tooltip>
       </li>
       <li v-perms="'settings.view_setting'" class="header-item header-icon">
-        <el-tooltip effect="dark" :content="$tc('route.SystemSetting')">
+        <el-tooltip :content="$tc('route.SystemSetting')" effect="dark">
           <SystemSetting />
         </el-tooltip>
       </li>
       <li v-if="ticketsEnabled" class="header-item header-hover">
-        <el-tooltip effect="dark" :content="$tc('route.Ticket')">
+        <el-tooltip :content="$tc('route.Ticket')" effect="dark">
           <Tickets />
         </el-tooltip>
       </li>
@@ -190,7 +190,7 @@ export default {
     line-height: 30px;
     border-radius: 4px;
     border-color: $--color-primary;
-    background-color: $--color-primary;
+    background-color: white;
     color: #fff;
     cursor: pointer;
     transition: .2s;

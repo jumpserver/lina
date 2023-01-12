@@ -2,7 +2,6 @@
   <div class="tree-tab">
     <el-tabs
       v-if="tabIndices.length > 0"
-      slot="submenu"
       v-model="iActiveMenu"
       class="page-submenu"
       stretch
