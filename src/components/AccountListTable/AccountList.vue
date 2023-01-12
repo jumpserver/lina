@@ -256,12 +256,12 @@ export default {
                 vm.showAddDialog = true
               })
             }
-          },
-          {
-            name: 'autocreate',
-            title: this.$t('accounts.AutoCreate'),
-            type: 'default'
           }
+          // {
+          //   name: 'autocreate',
+          //   title: this.$t('accounts.AutoCreate'),
+          //   type: 'default'
+          // }
         ],
         canBulkDelete: vm.$hasPerm('accounts.delete_account'),
         searchConfig: {
