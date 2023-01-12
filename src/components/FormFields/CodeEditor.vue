@@ -108,6 +108,7 @@ import { codemirror } from 'vue-codemirror'
 import 'codemirror/mode/shell/shell'
 import 'codemirror/mode/powershell/powershell'
 import 'codemirror/mode/python/python'
+import 'codemirror/mode/yaml/yaml'
 import 'codemirror/mode/ruby/ruby' // theme css
 import 'codemirror/theme/base16-light.css'
 import 'codemirror/theme/idea.css'
